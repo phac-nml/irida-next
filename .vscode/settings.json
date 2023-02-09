@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["rubocop"]
+  "cSpell.words": ["rubocop"],
+  "editor.formatOnSave": true,
+  "ruby.format": "rubocop",
+  "ruby.rubocop.onSave": true,
+  "ruby.rubocop.useServer": true,
+  "[ruby]": {
+    "editor.defaultFormatter": "rebornix.ruby"
+  }
 }
