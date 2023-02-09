@@ -23,3 +23,10 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+## Running Dev UI
+
+### In separate terminals run:
+* `bundle exec guard`
+* `bin/vite dev`
+* `rails server`
