@@ -14,3 +14,8 @@
 #  $ ln -s config/Guardfile .
 #
 # and, you'll have to watch "config/Guardfile" instead of "Guardfile"
+
+guard :rails, port: 3000, host: '0.0.0.0' do
+    watch('Gemfile.lock')
+    watch(%r{^(config|lib)/.*})
+end
