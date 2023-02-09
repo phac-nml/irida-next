@@ -1,0 +1,8 @@
+{
+  "entrypoints/application.js": {
+    "file": "assets/application.b40e3d44.js",
+    "isEntry": true,
+    "src": "entrypoints/application.js",
+    "integrity": "sha384-UKaFF0vSKeeQnDFHtYl+Z5qaYW9wYokWlQGfr3qmpfQ4PV20uhr0iH4e7QPlv+W1"
+  }
+}
