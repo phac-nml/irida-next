@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import PropTypes from "prop-types";
 import style from "./HelloWorld.module.css";
 
 const HelloWorld = (props) => {
@@ -8,7 +7,7 @@ const HelloWorld = (props) => {
 
   return (
     <div>
-      <h3>Hello, {name}!</h3>
+      <h3>Hello little person, {name}!</h3>
       <hr />
       <form>
         <label className={style.bright} htmlFor="name">
