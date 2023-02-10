@@ -270,11 +270,11 @@ DEPENDENCIES
   jbuilder
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.2)
-  react_on_rails (= 13.3.1)
+  react_on_rails (~> 13.3.1)
   rubocop
   rubocop-rails
   selenium-webdriver
-  shakapacker (= 6.5.5)
+  shakapacker (~> 6.5.5)
   sprockets-rails
   sqlite3 (~> 1.4)
   stimulus-rails
