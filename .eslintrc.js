@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   env: {
     node: "true",
     browser: true,
@@ -19,7 +19,6 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
-  plugins: ["react", "jsx-a11y", "@typescript-eslint"],
   settings: {
     react: {
       version: "detect",
