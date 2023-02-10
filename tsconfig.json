@@ -8,9 +8,16 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "es5",
-    "jsx": "react",
-    "noEmit": true
+    "jsx": "react-jsx",
+    "noEmit": true,
   },
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "include": [
+    "./.eslintrc.js",
+    "./app/javascript/**/*.ts",
+    "./app/javascript/**/*.tsx",
+    "./app/javascript/**/*.js",
+    "./app/javascript/**/*.jsx"
+  ]
 }
