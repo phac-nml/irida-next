@@ -24,8 +24,4 @@ const HelloWorld = (props) => {
   );
 };
 
-HelloWorld.propTypes = {
-  name: PropTypes.string.isRequired, // this is passed from the Rails view
-};
-
 export default HelloWorld;
