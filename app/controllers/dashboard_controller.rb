@@ -4,5 +4,7 @@
 class DashboardController < ApplicationController
   layout 'irida'
 
-  def index; end
+  def index
+    @dashboard_props = { name: 'Stranger Danger' }
+  end
 end

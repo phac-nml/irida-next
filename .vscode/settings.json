@@ -5,6 +5,6 @@
   "ruby.rubocop.onSave": true,
   "ruby.rubocop.useServer": true,
   "[ruby]": {
-    "editor.defaultFormatter": "rebornix.ruby"
+    "editor.defaultFormatter": "LoranKloeze.ruby-rubocop-revived"
   }
 }
