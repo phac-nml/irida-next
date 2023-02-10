@@ -26,7 +26,6 @@ Things you may want to cover:
 
 ## Running Dev UI
 
-### In separate terminals run:
+### In a separate terminal run:
 
-- `bundle exec guard`
-- `rails server`
+foreman start -f Procfile.dev
