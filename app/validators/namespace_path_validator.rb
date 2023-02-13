@@ -24,7 +24,7 @@ class NamespacePathValidator < ActiveModel::EachValidator
     Irida::PathRegex.namespace_format_regex
   end
 
-  def format_error_message
+  def self.format_error_message
     'Namespace Path is not valid'
   end
 

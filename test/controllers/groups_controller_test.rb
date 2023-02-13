@@ -9,7 +9,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     group = groups(:group_one)
-    get "/#{group.full_path}"
+    get group_path(group.full_path)
     assert_response :success
   end
 
@@ -17,7 +17,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     subgroup = groups(:subgroup_one)
-    get "/#{subgroup.full_path}"
+    get group_path(subgroup.full_path)
     assert_response :success
   end
 
@@ -26,7 +26,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
 
     group = groups(:group_one)
     assert_raises(ActionController::RoutingError) do
-      get "/#{group.full_path}/fakesubgroup"
+      get group_path("#{group.full_path}/fakesubgroup")
     end
   end
 end

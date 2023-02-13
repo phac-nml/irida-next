@@ -9,7 +9,8 @@ module Routable
 
     path = path.to_s
 
-    route = route_scope.find_by(path:)
+    route = route_scope.find_by(routes: { path: }) ||
+            route_scope.find_by(path:)
 
     return unless route
 

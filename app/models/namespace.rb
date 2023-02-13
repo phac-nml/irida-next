@@ -45,7 +45,7 @@ class Namespace < ApplicationRecord
   def ancestors
     result = []
     ns = self
-    while parent.present?
+    while ns.parent.present?
       result.unshift(ns.parent)
       ns = ns.parent
     end

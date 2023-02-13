@@ -11,4 +11,4 @@ subgroup_one:
   path: subgroup-1
   type: Group
   description: Subgroup 1 description
-  parent: group_one (Group)
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
