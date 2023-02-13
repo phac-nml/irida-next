@@ -3,8 +3,12 @@
 require 'test_helper'
 
 class DashboardControllerTest < ActionDispatch::IntegrationTest
-  test 'should get index' do
-    get dashboard_index_url
+  include Devise::Test::IntegrationHelpers
+
+  test 'authenticated users can see dashboard' do
+    sign_in users(:john_doe)
+
+    get root_url
     assert_response :success
   end
 end
