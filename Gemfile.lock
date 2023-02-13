@@ -84,7 +84,6 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     concurrent-ruby (1.2.0)
-    connection_pool (2.3.0)
     crass (1.0.6)
     date (3.3.3)
     debug (1.7.1)
@@ -98,7 +97,6 @@ GEM
       warden (~> 1.2.3)
     docile (1.4.0)
     erubi (1.12.0)
-    execjs (2.8.1)
     globalid (1.1.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
@@ -148,8 +146,6 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.2)
-    rack-proxy (0.7.6)
-      rack
     rack-test (2.0.2)
       rack (>= 1.3)
     rails (7.0.4.2)
@@ -180,12 +176,6 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
-    react_on_rails (13.3.1)
-      addressable
-      connection_pool
-      execjs (~> 2.5)
-      rails (>= 5.2)
-      rainbow (~> 3.0)
     regexp_parser (2.7.0)
     reline (0.3.2)
       io-console (~> 0.5)
@@ -215,12 +205,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    semantic_range (3.0.0)
-    shakapacker (6.5.5)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -277,11 +261,9 @@ DEPENDENCIES
   jbuilder
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.2)
-  react_on_rails (~> 13.3.1)
   rubocop
   rubocop-rails
   selenium-webdriver
-  shakapacker (~> 6.5.5)
   simplecov
   sprockets-rails
   sqlite3 (~> 1.4)

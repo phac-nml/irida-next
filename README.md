@@ -30,9 +30,3 @@ Things you may want to cover:
 - Deployment instructions
 
 - ...
-
-## Running Dev UI
-
-### In a separate terminal run:
-
-foreman start -f Procfile.dev
