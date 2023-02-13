@@ -45,7 +45,7 @@ module Routable
 
   def build_full_path
     if parent && path
-      format('%<parent_path>s/%<path>s', parent_path: parent.full_path, path:)
+      "#{parent.full_path}/#{path}"
     else
       path
     end
@@ -55,7 +55,7 @@ module Routable
 
   def build_full_name
     if parent && name
-      format('%<parent_name>s / %<name>s', parent_name: parent.human_name, name:)
+      "#{parent.human_name} / #{name}"
     else
       name
     end
