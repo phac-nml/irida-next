@@ -18,10 +18,10 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Compile Assets
         run: |
-          bundle exec rails assets:precompile
+          bin/rails assets:precompile
       - name: Run tests
         run: |
-          bundle exec rails test
+          bin/rails test
       - name: Report coverage
         if: github.event_name == 'pull_request'
         uses: aki77/simplecov-report-action@v1
