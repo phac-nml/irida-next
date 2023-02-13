@@ -24,7 +24,7 @@ class User < ApplicationRecord
   end
 
   def build_namespace_path
-    email.to_s.sub! '@', '_at_'
+    format('%<email>s', email:).sub! '@', '_at_'
   end
 
   def ensure_namespace
