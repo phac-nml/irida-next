@@ -10,4 +10,40 @@ class GroupTest < ActiveSupport::TestCase
   test 'valid group' do
     assert @group.valid?
   end
+
+  test '#ancestors' do
+    assert_equal [], @group.ancestors
+  end
+
+  test '#human_name' do
+    assert_equal @group.route.name, @group.human_name
+  end
+
+  test '#group_namespace?' do
+    assert @group.group_namespace?
+  end
+
+  test '#user_namespace?' do
+    assert_not @group.user_namespace?
+  end
+
+  test '#owner_required?' do
+    assert_not @group.owner_required?
+  end
+
+  test '#validate_type' do
+    assert_nil @group.validate_type
+  end
+
+  test '#validate_parent_type' do
+    assert_nil @group.validate_parent_type
+  end
+
+  test '#full_name' do
+    assert_equal @group.route.name, @group.full_name
+  end
+
+  test '#full_path' do
+    assert_equal @group.route.path, @group.full_path
+  end
 end
