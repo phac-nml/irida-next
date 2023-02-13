@@ -1,0 +1,14 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+group_one:
+  name: Group 1
+  path: group-1
+  type: Group
+  description: Group 1 description
+
+subgroup_one:
+  name: Subgroup 1
+  path: subgroup-1
+  type: Group
+  description: Subgroup 1 description
+  parent: group_one (Group)

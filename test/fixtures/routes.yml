@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+group-1-route:
+  id: 1
+  name: Group 1
+  path: group-1
+  source: group-1 (Group)
+
+subgroup-1-route:
+  id: 2
+  name: Group 1 / Subgroup 1
+  path: group-1/subgroup-1
+  source: subgroup-1 (Group)
