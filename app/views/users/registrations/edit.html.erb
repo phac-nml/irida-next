@@ -44,27 +44,27 @@
       <%= render "users/shared/error_messages", resource: resource %>
       <div class="grid gap-4 mb-4 grid-cols-1 md:w-1/2">
         <div>
-          <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full" %>
+          <%= f.label :email %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-full" %>
         </div>
         <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
           <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
         <% end %>
         <div>
-          <%= f.label :password, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-          <%= f.password_field :password, autocomplete: "new-password", class: "w-full" %>
+          <%= f.label :password %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "input-full" %>
           <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Leave blank if you don't want to change it.</p>
           <% if @minimum_password_length %>
             <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium"><%= @minimum_password_length %> characters minimum</p>
             <% end %>
           </div>
           <div>
-            <%= f.label :password_confirmation, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full" %>
+            <%= f.label :password_confirmation %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-full" %>
           </div>
           <div>
-            <%= f.label :current_password, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-            <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full" %>
+            <%= f.label :current_password %>
+            <%= f.password_field :current_password, autocomplete: "current-password", class: "input-full" %>
             <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We need your current password to confirm your changes</p>
           </div>
         </div>

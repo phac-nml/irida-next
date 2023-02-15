@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 @layer components {
-  input[type="password"], input[type="text"], input[type="email"], input[type="number"], input[type="tel"], input[type="url"], input[type="search"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="time"], input[type="color"], textarea, select {
-    @apply border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:focus:ring-blue-800;
+  .input-full {
+    @apply w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:focus:ring-blue-800;
+  }
+
+  label {
+    /* block mb-2 text-sm font-medium text-gray-900 dark:text-white */
+    @apply text-gray-700 dark:text-white text-sm font-medium mb-2;
   }
 
   .btn-primary {
