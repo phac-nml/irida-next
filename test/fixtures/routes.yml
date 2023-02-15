@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+group_one_route:
+  name: Group 1
+  path: group-1
+  source: group_one (Namespace)
+
+subgroup_one_route:
+  name: Group 1 / Subgroup 1
+  path: group-1/subgroup-1
+  source: subgroup1 (Namespace)
+
+john_doe_namespace_route:
+  name: john.doe@localhost
+  path: john.doe_at_localhost
+  source: john_doe_namespace (Namespace)

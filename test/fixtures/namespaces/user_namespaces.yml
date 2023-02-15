@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+john_doe_namespace:
+  name: john.doe@localhost
+  path: john.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+jane_doe_namespace:
+  name: jane.doe@localhost
+  path: jane.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>

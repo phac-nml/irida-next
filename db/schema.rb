@@ -10,7 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_08_151744) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_09_163157) do
+  create_table "namespaces", force: :cascade do |t|
+    t.string "name"
+    t.string "path"
+    t.integer "owner_id"
+    t.string "type"
+    t.string "description"
+    t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "routes", force: :cascade do |t|
+    t.string "path"
+    t.string "name"
+    t.string "source_type"
+    t.integer "source_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_routes_on_name", unique: true
+    t.index ["path"], name: "index_routes_on_path", unique: true
+    t.index ["source_type", "source_id"], name: "index_routes_on_source"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
