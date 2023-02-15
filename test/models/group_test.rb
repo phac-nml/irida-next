@@ -11,6 +11,18 @@ class GroupTest < ActiveSupport::TestCase
     assert @group.valid?
   end
 
+  test 'invalid if parent is not a group' do
+    @group.parent = namespaces_user_namespaces(:john_doe_namespace)
+    assert_not @group.valid?
+    assert_not_nil @group.errors[:parent_id]
+  end
+
+  test 'invalid if more than 9 ancestors' do
+    @subgroup = groups(:subgroup_10)
+    assert_not @subgroup.valid?, 'subgroup is valid with more than 9 ancestors'
+    assert_not_nil @subgroup.errors[:parent_id], 'no validation error for parent'
+  end
+
   test '#ancestors' do
     assert_equal [], @group.ancestors
   end

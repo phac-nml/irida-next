@@ -16,7 +16,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
   test 'should show the sub group' do
     sign_in users(:john_doe)
 
-    subgroup = groups(:subgroup_one)
+    subgroup = groups(:subgroup_1)
     get group_path(subgroup.full_path)
     assert_response :success
   end
