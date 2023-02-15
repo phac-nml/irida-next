@@ -1,1 +1,2 @@
 <div>HELLO: <%= @name %></div>
+<%= button_to "Logout", destroy_user_session_path, method: :delete, form: {  data: { turbo: :false } } %>
