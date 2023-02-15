@@ -9,3 +9,8 @@ subgroup_one_route:
   name: Group 1 / Subgroup 1
   path: group-1/subgroup-1
   source: subgroup_one (Namespace)
+
+john_doe_namespace_route:
+  name: john.doe@localhost
+  path: john.doe_at_localhost
+  source: john_doe_namespace (Namespace)
