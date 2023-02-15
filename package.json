@@ -1,0 +1,33 @@
+{
+  "name": "irida-next-core",
+  "version": "1.0.0",
+  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
+  "main": "babel.config.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "dependencies": {
+    "deepmerge": "^4.3.0",
+    "flowbite": "^1.6.3",
+    "material-ripple-effects": "^2.0.1",
+    "mini-svg-data-uri": "^1.4.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phac-nml/irida-next-core.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phac-nml/irida-next-core/issues"
+  },
+  "homepage": "https://github.com/phac-nml/irida-next-core#readme",
+  "devDependencies": {
+    "prettier": "^2.8.4",
+    "prettier-plugin-tailwindcss": "^0.2.3"
+  }
+}
