@@ -44,3 +44,6 @@ coverage
 
 .vscode
 .idea
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
