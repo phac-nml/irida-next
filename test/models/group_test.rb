@@ -18,7 +18,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test 'invalid if more than 9 ancestors' do
-    @subgroup = groups(:subgroup_10)
+    @subgroup = groups(:subgroup10)
     assert_not @subgroup.valid?, 'subgroup is valid with more than 9 ancestors'
     assert_not_nil @subgroup.errors[:parent_id], 'no validation error for parent'
   end
