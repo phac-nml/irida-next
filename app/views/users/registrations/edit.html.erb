@@ -1,9 +1,9 @@
-<div style="display: grid; grid-template-areas: 'side content'; grid-template-columns: 200px 1fr; grid-template-rows: 1fr; grid-gap: 0; height: 100vh">
+<div style="display: grid; grid-template-areas: 'side content'; grid-template-columns: 300px 1fr; grid-template-rows: 1fr; grid-gap: 0; height: 100vh">
   <aside id="default-sidebar" aria-label="Sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
       <ul class="space-y-1">
         <li>
-          <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+          <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white bg-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
             <%= render 'icons/user_circle' %>
             <span class="ml-3">Profile</span>
           </a>
@@ -53,9 +53,9 @@
         <div>
           <%= f.label :password %>
           <%= f.password_field :password, autocomplete: "new-password", class: "input-full" %>
-          <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Leave blank if you don't want to change it.</p>
+          <p id="helper-text-explanation" class="helper-text">Leave blank if you don't want to change it.</p>
           <% if @minimum_password_length %>
-            <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium"><%= @minimum_password_length %> characters minimum</p>
+            <p class="helper-text"><span class="font-medium"><%= @minimum_password_length %></span> characters minimum</p>
             <% end %>
           </div>
           <div>
@@ -65,7 +65,7 @@
           <div>
             <%= f.label :current_password %>
             <%= f.password_field :current_password, autocomplete: "current-password", class: "input-full" %>
-            <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We need your current password to confirm your changes</p>
+            <p id="helper-text-explanation" class="helper-text">We need your current password to confirm your changes</p>
           </div>
         </div>
         <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
