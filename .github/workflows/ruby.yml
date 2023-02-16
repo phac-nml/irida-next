@@ -24,9 +24,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'pnpm'
-    - name: Install dependencies
-      run: pnpm install
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
       - name: Compile Assets
         run: |
           bin/rails assets:precompile
