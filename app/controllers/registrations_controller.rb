@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+# Devise registrations controller
 class RegistrationsController < Devise::RegistrationsController
-  layout :devise
+  layout 'devise'
+
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
