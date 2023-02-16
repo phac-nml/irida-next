@@ -50,6 +50,9 @@ gem 'devise'
 # Use Sass to process CSS
 # gem "sassc-rails"
 
+# Tailwind CSS [https://tailwindcss.com]
+gem "tailwindcss-rails", "~> 2.0"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
