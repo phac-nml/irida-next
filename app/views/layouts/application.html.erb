@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="light">
   <head>
     <title>Irida</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,9 +9,13 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
+  <body class="bg-white dark:bg-gray-900">
+    <%= render 'components/navbar'%>
+    <div class="flex overflow-hidden bg-gray-50 dark:bg-gray-900">
+      <%= render 'components/sidebar'%>
+      <div id="main-content" class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900">
+        <main><%= yield %></main>
+      </div>
+    </div>
   </body>
 </html>
