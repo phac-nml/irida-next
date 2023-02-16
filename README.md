@@ -18,15 +18,19 @@ Things you may want to cover:
 
 - How to run the test suite
 
-  1. Compile Assets
+  1. Run pnpm install
 
-  - `bin/bundle exec rails assets:precompile`
+    - `pnpm install`
 
-  2. Run Tests
+  2. Compile Assets
 
-  - `bin/rails test`
+    - `bin/bundle exec rails assets:precompile`
 
-  3. Viewing Coverage
+  3. Run Tests
+
+    - `bin/rails test`
+
+  4. Viewing Coverage
 
   - Open `coverage/index.html`
 
