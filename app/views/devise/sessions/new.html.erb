@@ -1,0 +1,27 @@
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "space-y-4 md:space-y-6"}) do |f| %>
+  <div class="form-field">
+    <%= f.label :email %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+  </div>
+  <div class="form=field">
+    <%= f.label :password %>
+    <%= f.password_field :password, autocomplete: "current-password", class: "bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+  </div>
+  <div class="flex items-center justify-between">
+    <% if devise_mapping.rememberable? %>
+      <div class="flex items-center">
+        <%= f.check_box :remember_me %>
+        <div class="ml-3"><%= f.label :remember_me, class: "field-hint" %></div>
+      </div>
+    <% end %>
+    <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+      <p class="field-hint"><%= link_to "Forgot your password?", new_password_path(resource_name) %></p>
+    </div>
+    <%= f.submit "Sign in", class: "btn-primary" %>
+  <% end %>
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <p class="field-hint">
+      Don’t have an account yet? <%= link_to "Register now", new_registration_path(resource_name) %>
+    </p>
+  <% end %>
+<% end %>
