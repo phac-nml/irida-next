@@ -18,13 +18,12 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Set up PNPM
         uses: pnpm/action-setup@v2
-        console.log("🚀 ~ file: ruby.yml:21 ~ uses", uses)
         with:
           version: 7
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 16
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16
           cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
