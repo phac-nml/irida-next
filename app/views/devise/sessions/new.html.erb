@@ -9,18 +9,18 @@
   </div>
   <div class="flex items-center justify-between">
     <% if devise_mapping.rememberable? %>
-      <div class="flex items-start">
-        <%= f.check_box :remember_me, class: "w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" %>
-        <div class="ml-3 text-sm"><%= f.label :remember_me, class: "text-gray-500 dark:text-gray-300" %></div>
+      <div class="flex items-start items-center">
+        <%= f.check_box :remember_me %>
+        <div class="ml-3"><%= f.label :remember_me, class: "field-hint" %></div>
       </div>
     <% end %>
     <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-      <%= link_to "Forgot your password?", new_password_path(resource_name), class: "text-sm font-medium text-primary-600 hover:underline dark:text-primary-500" %>
+      <p class="field-hint"><%= link_to "Forgot your password?", new_password_path(resource_name) %></p>
     </div>
     <%= f.submit "Sign in", class: "btn-primary" %>
   <% end %>
   <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-    <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+    <p class="field-hint">
       Don’t have an account yet? <%= link_to "Register now", new_registration_path(resource_name) %>
     </p>
   <% end %>
