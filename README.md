@@ -20,15 +20,15 @@ Things you may want to cover:
 
   1. Run pnpm install
 
-    - `pnpm install`
+  - `pnpm install`
 
   2. Compile Assets
 
-    - `bin/bundle exec rails assets:precompile`
+  - `bin/bundle exec rails assets:precompile`
 
   3. Run Tests
 
-    - `bin/rails test`
+  - `bin/rails test`
 
   4. Viewing Coverage
 
@@ -40,4 +40,4 @@ Things you may want to cover:
 
 - Run rails server:
   - Install UI dependencies: `pnpm install`
-  - `foreman start -f Procfile.dev`
+  - `bin/dev`
