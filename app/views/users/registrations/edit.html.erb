@@ -1,35 +1,34 @@
 <div style="display: grid; grid-template-areas: 'side content'; grid-template-columns: 300px 1fr; grid-template-rows: 1fr; grid-gap: 0; height: 100vh">
   <aside id="default-sidebar" aria-label="Sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-      <ul class="space-y-1">
+      <a href="#" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white  hover:bg-gray-100 dark:hover:bg-gray-700">
+        <svg class="w-7 h-7"  fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        <h2 class="font-semibold text-gray-900 dark:text-white">User Settins</h2>
+      </a>
+      <ul class="space-y-0">
         <li>
-          <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white bg-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-            <%= render 'icons/user_circle' %>
+          <a href="#" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white bg-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+            <%= render 'icons/user', class_names: "w-6 h-6" %>
             <span class="ml-3">Profile</span>
           </a>
         </li>
         <li>
-          <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
+          <a href="#" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <%= render "icons/cog_6_tooth", class_names: "w-6 h-6" %>
             <span class="flex-1 ml-3 whitespace-nowrap">Account</span>
           </a>
         </li>
         <li>
-          <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"></path>
-            </svg>
+          <a href="#" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <%= render "icons/lock_closed", class_names: "w-6 h-6" %>
             <span class="flex-1 ml-3 whitespace-nowrap">Password</span>
           </a>
         </li>
         <li>
-          <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path>
-            </svg>
+          <a href="#" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <%= render "icons/bell", class_names: "w-6 g-6" %>
             <span class="flex-1 ml-3 whitespace-nowrap">Notifications</span>
           </a>
         </li>
@@ -55,26 +54,27 @@
           <%= f.password_field :password, autocomplete: "new-password", class: "input-full" %>
           <p id="helper-text-explanation" class="helper-text">Leave blank if you don't want to change it.</p>
           <% if @minimum_password_length %>
-            <p class="helper-text"><span class="font-medium"><%= @minimum_password_length %></span> characters minimum</p>
-            <% end %>
-          </div>
-          <div>
-            <%= f.label :password_confirmation %>
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-full" %>
-          </div>
-          <div>
-            <%= f.label :current_password %>
-            <%= f.password_field :current_password, autocomplete: "current-password", class: "input-full" %>
-            <p id="helper-text-explanation" class="helper-text">We need your current password to confirm your changes</p>
-          </div>
+            <p class="helper-text"><span class="font-medium"><%= @minimum_password_length %></span> characters minimum
+            </p>
+          <% end %>
         </div>
-        <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
         <div>
-          <%= f.submit "Update", class: "btn-primary" %>
+          <%= f.label :password_confirmation %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-full" %>
         </div>
-      <% end %>
-      <h3>Cancel my account</h3>
-      <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-      <%= link_to "Back", :back %>
-    </div>
+        <div>
+          <%= f.label :current_password %>
+          <%= f.password_field :current_password, autocomplete: "current-password", class: "input-full" %>
+          <p id="helper-text-explanation" class="helper-text">We need your current password to confirm your changes</p>
+        </div>
+      </div>
+      <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+      <div>
+        <%= f.submit "Update", class: "btn-primary" %>
+      </div>
+    <% end %>
+    <h3>Cancel my account</h3>
+    <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+    <%= link_to "Back", :back %>
   </div>
+</div>
