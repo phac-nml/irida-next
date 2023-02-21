@@ -1,0 +1,17 @@
+<aside id="sidebar" class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width" aria-label="Sidebar">
+  <div class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
+      <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+        <a href="#" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white  hover:bg-gray-100 dark:hover:bg-gray-700">
+          <%= render 'icons/user_circle', class_names: "w-6 h-6 mr-2" %>
+          <h2 class="font-semibold text-gray-900 dark:text-white">User Settings</h2>
+        </a>
+        <ul class="pb-2 space-y-1">
+          <%= render partial: 'profiles/sidebar_item', locals: {link: profile_path, icon: "icons/user_circle", text: "Profile"} %>
+          <%= render partial: 'profiles/sidebar_item', locals: {link: edit_profile_password_path, icon: "icons/lock_closed", text: "Password" } %>
+          <%= render partial: 'profiles/sidebar_item', locals: {link: edit_profile_password_path, icon: "icons/building_library", text: "Account" } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</aside>

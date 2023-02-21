@@ -1,14 +1,21 @@
-<nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"">
-  <div class="px-3 lg:px-5">
-    <div class="flex flex-wrap items-center justify-between mx-auto">
-      <div class="flex">
-        <a href="/" class="flex items-center mr-4">
+<nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+  <div class="px-3 py-1">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center justify-start">
+        <a href="<%= root_path %>" class="flex items-center mr-4">
           <%= render "icons/beaker", class_names: "w-12 h-12 text-green-500 rotate-12" %>
           <span class="text-xl font-semibold text-gray-700 dark:text-gray-200">IRIDA Next</span>
         </a>
-        <form>
-          <div class="form-field">
-            <input type="search" id="first_name" placeholder="Search IRDA">
+       <button id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar" class="p-2 text-gray-600 rounded cursor-pointer  hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+           <%= render 'icons/bars_3', class_names: "w-6 h-6" %>
+        </button>
+        <form action="#" method="GET" class="hidden lg:block lg:pl-3.5">
+          <label for="topbar-search" class="sr-only">Search</label>
+          <div class="relative mt-1 lg:w-96">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <%= render 'icons/magnifying', class_names: "h-5 w-5" %>
+              </div>
+            <input type="text" name="email" id="topbar-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search">
           </div>
         </form>
       </div>
@@ -27,7 +34,7 @@
               </div>
               <ul aria-labelledby="dropdownDefaultButton">
                 <li>
-                  <%= link_to 'Edit profile', edit_user_registration_path %>
+                  <%= link_to 'Edit profile', profile_path %>
                 </li>
                 <li>
                   <%= link_to 'Sign Out', destroy_user_session_path, data: { turbo_method: :delete } %>

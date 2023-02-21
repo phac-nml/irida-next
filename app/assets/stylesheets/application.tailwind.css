@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 @layer components {
-  a {
+  /* a {
     @apply font-medium text-primary-600 hover:text-primary-700 dark:text-primary-600 dark:hover:text-primary-700;
-  }
+  } */
 
   .form-field label {
     @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;

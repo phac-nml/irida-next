@@ -12,9 +12,11 @@
   <body class="h-screen bg-white dark:bg-gray-900">
     <%= render 'shared/navbar'%>
     <div class="h-full pt-16 overflow-hidden bg-white dark:bg-gray-900">
-      <%= content_for?(:sidebar) ? yield(:sidebar) : "" %>
-      <div id="main-content" class="relative w-full h-full overflow-y-auto bg-white <%= class_names('lg:ml-64': content_for?(:sidebar)) %> dark:bg-gray-900">
-        <%= yield %>
+      <%= render 'profiles/sidebar' %>
+      <div id="main-content" class="relative w-full h-full overflow-y-auto bg-white lg:ml-64 dark:bg-gray-900">
+        <div class="max-w-2xl px-4 py-4">
+          <%= yield %>
+        </div>
       </div>
     </div>
   </body>
