@@ -15,9 +15,9 @@
   <% end %>
   <div><%= form_with( model: user, url: profile_path, method: :patch) do |f| %>
       <div>
-        <div class="sm:col-span-2">
-          <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:focus:ring-blue-800" %>
+        <div class="form-field sm:col-span-2">
+          <%= f.label :email %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
         </div>
         <% if Devise.mappings[:user].confirmable? && resource.pending_reconfirmation? %>
           <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %>

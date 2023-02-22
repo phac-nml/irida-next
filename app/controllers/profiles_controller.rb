@@ -21,7 +21,7 @@ class ProfilesController < ApplicationController
     else
       respond_to do |format|
         format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(@user, partial: 'profile',
+          render turbo_stream: turbo_stream.replace(@user, partial: 'form',
                                                            locals: { user: @user })
         end
 

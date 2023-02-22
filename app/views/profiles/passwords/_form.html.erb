@@ -14,20 +14,22 @@
     </div>
   <% end %>
   <%= form_with( model: user, url: profile_password_path, method: :patch) do |f| %>
-    <div class="field">
-      <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-      <%= f.password_field :current_password, autocomplete: "current-password" %>
+    <div class="form-field">
+      <%= f.label :current_password %>
+      <%= f.password_field :current_password, autofocus: true, autocomplete: "current-password" %>
+      <p class="field-hint">(we need your current password to confirm your changes)</p>
     </div>
-    <div class="field">
-      <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <div class="form-field">
+      <%= f.label :password %>
       <%= f.password_field :password, autocomplete: "new-password" %>
+      <p class="field-hint">(leave blank if you don't want to change it)</p>
       <% if @minimum_password_length %>
         <br />
         <em><%= @minimum_password_length %> characters minimum</em>
       <% end %>
     </div>
-    <div class="field">
-      <%= f.label :password_confirmation %><br />
+    <div class="form-field">
+      <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
     </div>
     <div class="my-2">
