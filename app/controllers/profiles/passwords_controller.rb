@@ -29,7 +29,7 @@ module Profiles
                                                              locals: { user: @user })
           end
 
-          format.html { render :show }
+          format.html { render :edit, status: :unprocessable_entity }
         end
 
       end

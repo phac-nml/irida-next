@@ -16,9 +16,17 @@ module Profiles
     test 'should update user password' do
       sign_in users(:john_doe)
 
-      patch profile_password_url,
+      patch profile_password_path,
             params: { user: { password: 'password', password_confirmation: 'password', current_password: 'password1' } }
       assert_response :success
+    end
+
+    test 'should not update user password with empty password' do
+      sign_in users(:john_doe)
+
+      patch profile_password_path,
+            params: { user: { password: '', password_confirmation: '', current_password: 'password1' } }
+      assert_response :unprocessable_entity
     end
   end
 end
