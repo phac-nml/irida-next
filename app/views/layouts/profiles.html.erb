@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-  <head>
-    <title>Irida</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
-  <body class="h-screen bg-white dark:bg-gray-900">
-    <%= render 'shared/navbar'%>
-    <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
-      <%= render 'profiles/sidebar' %>
-      <div id="main-content" class="relative w-full h-full overflow-y-auto bg-white lg:ml-64 dark:bg-gray-900">
-        <main>
-          <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
-            <%= turbo_frame_tag dom_id(@user) do %>
-              <%= yield %>
-            <% end %>
-          </div>
-        </main>
+<head>
+  <title>Irida</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="h-screen bg-white dark:bg-gray-900">
+<%= render 'shared/navbar' %>
+<div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
+  <%= render 'profiles/sidebar' %>
+  <div id="main-content" class="relative w-full h-full overflow-y-auto bg-white lg:ml-64 dark:bg-gray-900">
+    <main>
+      <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
+        <%= turbo_frame_tag dom_id(@user) do %>
+          <%= yield %>
+        <% end %>
       </div>
-    </div>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

@@ -3,7 +3,7 @@
   <% if user.errors.any? %>
     <%= render partial: 'shared/alert/list/danger', locals: { title: "Error updating password", messages: user.errors.full_messages } %>
   <% end %>
-  <%= form_with( model: user, url: profile_password_path, method: :patch) do |f| %>
+  <%= form_with(model: user, url: profile_password_path, method: :patch) do |f| %>
     <div class="form-field">
       <%= f.label :current_password %>
       <%= f.password_field :current_password, autofocus: true, autocomplete: "current-password" %>
@@ -25,5 +25,6 @@
       <%= f.submit "Save password", class: "btn-primary" %>
       <p class="field-hint"><%= link_to "Forgot your password?", new_password_path(@user) %></p>
     </div>
-      <% end %>
+     
+  <% end %>
 </div>
