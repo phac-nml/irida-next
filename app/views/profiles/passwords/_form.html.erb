@@ -20,7 +20,6 @@
     <div class="form-field">
       <%= f.label :password %>
       <%= f.password_field :password, autocomplete: "new-password" %>
-      <p class="field-hint">(leave blank if you don't want to change it)</p>
       <% if @minimum_password_length %>
         <br />
         <em><%= @minimum_password_length %> characters minimum</em>
