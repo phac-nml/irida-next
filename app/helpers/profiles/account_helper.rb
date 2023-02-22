@@ -1,2 +1,0 @@
-module Profiles::AccountHelper
-end

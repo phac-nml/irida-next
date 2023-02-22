@@ -2,7 +2,7 @@
 
 # Purpose: Helper methods for the profile controller
 module Profiles
-  # Purpose: Helper methods for the password controller
-  module PasswordsHelper
+  # Purpose: Helper methods for the account controller
+  module AccountsHelper
   end
 end
