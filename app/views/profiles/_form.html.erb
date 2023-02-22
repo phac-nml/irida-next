@@ -13,7 +13,8 @@
       </ul>
     </div>
   <% end %>
-  <div><%= form_with( model: user, url: profile_path, method: :patch) do |f| %>
+  <div>
+    <%= form_with( model: user, url: profile_path, method: :patch) do |f| %>
       <div>
         <div class="form-field sm:col-span-2">
           <%= f.label :email %>
@@ -24,7 +25,7 @@
           </div>
         <% end %>
         <div class="my-2">
-          <%= f.submit "Update profile settings", class: "cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" %>
+          <%= f.submit "Update profile settings", class: "btn-primary" %>
         </div>
       </div>
         <% end %></div>

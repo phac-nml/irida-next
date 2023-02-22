@@ -9,7 +9,7 @@
         <ul class="pb-2 space-y-1">
           <%= render partial: 'profiles/sidebar_item', locals: {link: profile_path, icon: "icons/user_circle", text: "Profile"} %>
           <%= render partial: 'profiles/sidebar_item', locals: {link: edit_profile_password_path, icon: "icons/lock_closed", text: "Password" } %>
-          <%= render partial: 'profiles/sidebar_item', locals: {link: profiles_account_show_path, icon: "icons/building_library", text: "Account" } %>
+          <%= render partial: 'profiles/sidebar_item', locals: {link: profile_account_path, icon: "icons/building_library", text: "Account" } %>
         </ul>
       </div>
     </div>

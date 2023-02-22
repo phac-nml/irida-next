@@ -30,7 +30,7 @@
       <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
     </div>
     <div class="my-2 flex items-center justify-between">
-      <%= f.submit "Save password", class: "cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" %>
+      <%= f.submit "Save password", class: "btn-primary" %>
       <p class="field-hint"><%= link_to "Forgot your password?", new_password_path(@user) %></p>
     </div>
       <% end %>
