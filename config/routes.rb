@@ -2,6 +2,8 @@
 
 Rails.application.routes.draw do
   namespace :profiles do
+    get 'account/show'
+    get 'account/update'
     get 'passwords/edit'
     get 'passwords/update'
   end
