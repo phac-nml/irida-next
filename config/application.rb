@@ -22,5 +22,11 @@ module Irida
     #
     # config.time_zone = "Central Time (US & Canada)"
     config.eager_load_paths << Rails.root.join('lib')
+
+    # Skip adding routes when generating a controller since we have broken
+    # our routes into separate files.
+    config.generators do |g|
+      g.skip_routes true
+    end
   end
 end
