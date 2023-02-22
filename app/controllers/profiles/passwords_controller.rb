@@ -20,13 +20,13 @@ module Profiles
         # Sign in the user bypassing validation in case his password changed
         sign_in @user, bypass: true
 
-        flash[:success] = 'Password successfully created'
+        flash[:success] = I18n.t('profiles.password.update_success')
         redirect_to edit_profile_password_path
       else
         respond_to do |format|
           format.turbo_stream do
             render turbo_stream: turbo_stream.replace(@user, partial: 'form',
-                                                             locals: { user: @user })
+                                                      locals: { user: @user })
           end
 
           format.html { render :show }
