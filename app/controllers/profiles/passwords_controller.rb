@@ -14,7 +14,7 @@ class Profiles::PasswordsController < ApplicationController
       # Sign in the user bypassing validation in case his password changed
       sign_in @user, bypass: true
 
-      redirect_to profile_path, notice: 'Profile was successfully updated'
+      redirect_to edit_profile_password_path, notice: 'Profile was successfully updated'
     else
       respond_to do |format|
         format.turbo_stream do

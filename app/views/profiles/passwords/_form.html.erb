@@ -1,8 +1,6 @@
 <div>
   <% flash.each do |type, msg| %>
-    <div class"p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert"=>
-      <%= type %> - <%= msg %>
-    </div>
+    <%= render partial: "shared/alerts/success", locals: {title: "Sucess", message: msg} %>
   <% end %>
   <% if user.errors.any? %>
     <div id="error_explanation">
@@ -17,7 +15,7 @@
     <div class="form-field">
       <%= f.label :current_password %>
       <%= f.password_field :current_password, autofocus: true, autocomplete: "current-password" %>
-      <p class="field-hint">(we need your current password to confirm your changes)</p>
+      <p class="field-hint">You must provide your current password in order to change it.</p>
     </div>
     <div class="form-field">
       <%= f.label :password %>
@@ -32,8 +30,9 @@
       <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
     </div>
-    <div class="my-2">
+    <div class="my-2 flex items-center justify-between">
       <%= f.submit "Save password", class: "cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" %>
+      <p class="field-hint"><%= link_to "Forgot your password?", new_password_path(@user) %></p>
     </div>
       <% end %>
 </div>

@@ -3,12 +3,16 @@
 @tailwind utilities;
 
 @layer components {
-  /* a {
+  form a {
     @apply font-medium text-primary-600 hover:text-primary-700 dark:text-primary-600 dark:hover:text-primary-700;
-  } */
+  }
 
   .form-field label {
-    @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;
+    @apply block mb-1 text-sm font-medium text-gray-900 dark:text-white;
+  }
+
+  .form-field {
+    @apply mb-2;
   }
 
   .form-field input[type="text"],
