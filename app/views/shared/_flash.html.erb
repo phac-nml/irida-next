@@ -1,0 +1,5 @@
+<div class="absolute top-5 right-5">
+  <% flash.each do |type, msg| %>
+    <%= render partial: "shared/toast/#{type}", locals: { message: msg} %>
+  <% end %>
+</div>

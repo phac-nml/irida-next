@@ -1,32 +1,21 @@
 <div>
-  <% flash.each do |type, msg| %>
-    <div class"p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert"=>
-      <%= type %> - <%= msg %>
-    </div>
-  <% end %>
+  <%= render 'shared/flash' %>
   <% if user.errors.any? %>
-    <div id="error_explanation">
-      <ul>
-        <% user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <%= render partial: 'shared/alert/list/danger', locals: { title: "Error updating password", messages: user.errors.full_messages } %>
+  <% end %>
+  <%= form_with( model: user, url: profile_path, method: :patch) do |f| %>
+    <div>
+      <div class="form-field sm:col-span-2">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      </div>
+      <% if Devise.mappings[:user].confirmable? && resource.pending_reconfirmation? %>
+        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %>
+        </div>
+      <% end %>
+      <div class="my-2">
+        <%= f.submit "Update profile settings", class: "btn-primary" %>
+      </div>
     </div>
   <% end %>
-  <div>
-    <%= form_with( model: user, url: profile_path, method: :patch) do |f| %>
-      <div>
-        <div class="form-field sm:col-span-2">
-          <%= f.label :email %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-        </div>
-        <% if Devise.mappings[:user].confirmable? && resource.pending_reconfirmation? %>
-          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %>
-          </div>
-        <% end %>
-        <div class="my-2">
-          <%= f.submit "Update profile settings", class: "btn-primary" %>
-        </div>
-      </div>
-        <% end %></div>
 </div>

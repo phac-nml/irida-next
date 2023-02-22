@@ -5,7 +5,10 @@ class Profiles::AccountsController < ApplicationController
 
   def show; end
 
-  def destroy; end
+  def destroy
+    @user.destroy
+    redirect_to root_path
+  end
 
   private
 

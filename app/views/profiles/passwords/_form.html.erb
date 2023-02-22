@@ -1,15 +1,7 @@
 <div>
-  <% flash.each do |type, msg| %>
-    <%= render partial: "shared/alerts/success", locals: {title: "Sucess", message: msg} %>
-  <% end %>
+  <%= render 'shared/flash' %>
   <% if user.errors.any? %>
-    <div id="error_explanation">
-      <ul>
-        <% user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <%= render partial: 'shared/alert/list/danger', locals: { title: "Error updating password", messages: user.errors.full_messages } %>
   <% end %>
   <%= form_with( model: user, url: profile_password_path, method: :patch) do |f| %>
     <div class="form-field">
