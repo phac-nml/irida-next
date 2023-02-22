@@ -26,7 +26,7 @@ module Profiles
         respond_to do |format|
           format.turbo_stream do
             render turbo_stream: turbo_stream.replace(@user, partial: 'form',
-                                                      locals: { user: @user })
+                                                             locals: { user: @user })
           end
 
           format.html { render :show }
