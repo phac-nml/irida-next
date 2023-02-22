@@ -3,7 +3,7 @@
   <% if user.errors.any? %>
     <%= render partial: 'shared/alert/list/danger', locals: { title: "Error updating password", messages: user.errors.full_messages } %>
   <% end %>
-  <%= form_with( model: user, url: profile_path, method: :patch) do |f| %>
+  <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
     <div>
       <div class="form-field sm:col-span-2">
         <%= f.label :email %>
