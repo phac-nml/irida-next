@@ -1,18 +1,27 @@
-class Profiles::AccountsController < ApplicationController
-  layout 'profiles'
+# frozen_string_literal: true
 
-  before_action :set_user
+# Purpose: To handle the user's account settings
+module Profiles
+  # Controller for the user account page
+  class AccountsController < ApplicationController
+    layout 'profiles'
 
-  def show; end
+    before_action :set_user
 
-  def destroy
-    @user.destroy
-    redirect_to root_path
-  end
+    # Get account page
+    def show
+      # No necessary code here
+    end
 
-  private
+    def destroy
+      @user.destroy
+      redirect_to root_path
+    end
 
-  def set_user
-    @user = current_user
+    private
+
+    def set_user
+      @user = current_user
+    end
   end
 end

@@ -6,8 +6,10 @@ class ProfilesController < ApplicationController
 
   before_action :set_user
 
-  # Get the show page
-  def show; end
+  # Get the profile page
+  def show
+    # No necessary code here
+  end
 
   def update
     if @user.update(update_params)

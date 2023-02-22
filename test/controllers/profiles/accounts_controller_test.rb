@@ -1,13 +1,23 @@
-require "test_helper"
+# frozen_string_literal: true
 
-class Profiles::AccountControllerTest < ActionDispatch::IntegrationTest
-  test "should get show" do
-    get profiles_account_show_url
-    assert_response :success
-  end
+require 'test_helper'
 
-  test "should get update" do
-    get profiles_account_update_url
-    assert_response :success
+module Profiles
+  class AccountsControllerTest < ActionDispatch::IntegrationTest
+    include Devise::Test::IntegrationHelpers
+
+    test 'should get show' do
+      sign_in users(:john_doe)
+
+      get profile_account_url
+      assert_response :success
+    end
+
+    test 'should delete users account' do
+      sign_in users(:john_doe)
+
+      delete profile_account_url
+      assert_response :redirect
+    end
   end
 end
