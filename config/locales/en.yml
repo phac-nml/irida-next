@@ -31,5 +31,6 @@
 
 en:
   profiles:
+    update_success: "Profile updated successfully"
     password:
       update_success: "Password updated successfully"
