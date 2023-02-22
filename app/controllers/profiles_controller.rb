@@ -6,16 +6,15 @@ class ProfilesController < ApplicationController
 
   before_action :set_user
 
+  # Get the show page
   def show; end
 
   def update
-    # Devise::Models::DatabaseAuthenticatable#update_with_password
-    # Update record attributes when :current_password matches, otherwise returns error on :current_password.
-    # It also automatically rejects :password and :password_confirmation if they are blank.
     if @user.update(update_params)
+      # TODO: Need to add a check to see if the email is the same as the current one
 
       # Sign in the user bypassing validation in case his password changed
-      sign_in @user, bypass: true
+      bypass_sign_in(@user)
 
       flash[:success] = 'Profile successfully updated'
       redirect_to profile_path
@@ -26,7 +25,7 @@ class ProfilesController < ApplicationController
                                                            locals: { user: @user })
         end
 
-        format.html { render :show }
+        format.html { render :show, status: :unprocessable_entity }
       end
 
     end
@@ -35,7 +34,7 @@ class ProfilesController < ApplicationController
   private
 
   def update_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :current_password)
+    params.require(:user).permit(:email)
   end
 
   def set_user
