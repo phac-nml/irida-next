@@ -3,14 +3,8 @@ import "@hotwired/turbo-rails";
 import "controllers";
 import "flowbite";
 import { Application } from "@hotwired/stimulus";
+import layoutController from "./controllers/layout";
 
 const application = Application.start();
 
-application.register(
-  "sidebar",
-  class extends Stimulus.Controller {
-    static get targets() {
-      return [""];
-    }
-  }
-);
+application.register("layout", layoutController);
