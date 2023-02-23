@@ -12,7 +12,7 @@
       <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
         <div class="form-field">
           <%= f.label :email %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+          <%= f.email_field :email, :required => true, autofocus: true, autocomplete: "email" %>
         </div>
         <% if Devise.mappings[:user].confirmable? && resource.pending_reconfirmation? %>
           <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %>
