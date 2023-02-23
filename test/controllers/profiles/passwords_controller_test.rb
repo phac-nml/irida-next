@@ -18,7 +18,7 @@ module Profiles
 
       patch profile_password_path,
             params: { user: { password: 'password', password_confirmation: 'password', current_password: 'password1' } }
-      assert_response :success
+      assert_response :redirect
     end
 
     test 'should not update user password with empty password' do

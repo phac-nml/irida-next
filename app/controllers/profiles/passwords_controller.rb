@@ -18,7 +18,7 @@ module Profiles
       respond_to do |format|
         if @user.update_with_password(update_password_params)
           # Sign in the user bypassing validation in case their password changed
-          sign_in @user, bypass: true
+          bypass_sign_in(@user)
           flash[:success] = I18n.t('profiles.password.update_success')
           format.html { redirect_to edit_profile_password_path }
         else

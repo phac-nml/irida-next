@@ -1,21 +1,27 @@
-<div>
+<div class="w-full">
   <%= render 'shared/flash' %>
   <% if user.errors.any? %>
     <%= render partial: 'shared/alert/list/danger', locals: { title: "Error updating password", messages: user.errors.full_messages } %>
   <% end %>
-  <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
-    <div>
-      <div class="form-field sm:col-span-2">
-        <%= f.label :email %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-      </div>
-      <% if Devise.mappings[:user].confirmable? && resource.pending_reconfirmation? %>
-        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %>
+  <div class="grid gap-4 md:gap-8 grid-cols-3">
+    <div class="md:col-span-1 col-span-3">
+      <h2 class="text-xl font-semibold">Email</h2>
+      <p class="text-gray-500 dark:text-gray-400">Email linked to this account.</p>
+    </div>
+    <div class="md:col-span-2 col-span-3">
+      <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
+        <div class="form-field">
+          <%= f.label :email %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        </div>
+        <% if Devise.mappings[:user].confirmable? && resource.pending_reconfirmation? %>
+          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %>
+          </div>
+        <% end %>
+        <div class="my-2">
+          <%= f.submit "Update profile settings", class: "btn-primary" %>
         </div>
       <% end %>
-      <div class="my-2">
-        <%= f.submit "Update profile settings", class: "btn-primary" %>
-      </div>
     </div>
-  <% end %>
+  </div>
 </div>

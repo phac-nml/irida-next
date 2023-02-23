@@ -1,29 +1,37 @@
-<div>
+<div class="w-full">
   <%= render 'shared/flash' %>
   <% if user.errors.any? %>
     <%= render partial: 'shared/alert/list/danger', locals: { title: "Error updating password", messages: user.errors.full_messages } %>
   <% end %>
-  <%= form_with(model: user, url: profile_password_path, method: :patch) do |f| %>
-    <div class="form-field">
-      <%= f.label :current_password %>
-      <%= f.password_field :current_password, autofocus: true, autocomplete: "current-password" %>
-      <p class="field-hint">You must provide your current password in order to change it.</p>
+  <div class="grid gap-4 md:gap-8 grid-cols-3">
+    <div class="md:col-span-1 col-span-3">
+      <h2 class="text-xl font-semibold">Password</h2>
+      <p class="text-gray-500 dark:text-gray-400">After a successful password update, you will be redirected to the login page where you can log in with your new password.</p>
     </div>
-    <div class="form-field">
-      <%= f.label :password %>
-      <%= f.password_field :password, autocomplete: "new-password" %>
-      <% if @minimum_password_length %>
-        <br />
-        <em><%= @minimum_password_length %> characters minimum</em>
+    <div class="md:col-span-2 col-span-3">
+      <%= form_with(model: user, url: profile_password_path, method: :patch) do |f| %>
+        <div class="form-field">
+          <%= f.label :current_password %>
+          <%= f.password_field :current_password, autofocus: true, autocomplete: "current-password" %>
+          <p class="field-hint">You must provide your current password in order to change it.</p>
+        </div>
+        <div class="form-field">
+          <%= f.label :password %>
+          <%= f.password_field :password, autocomplete: "new-password" %>
+          <% if @minimum_password_length %>
+            <br />
+            <em><%= @minimum_password_length %> characters minimum</em>
+          <% end %>
+        </div>
+        <div class="form-field">
+          <%= f.label :password_confirmation %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+        </div>
+        <div class="my-2 flex items-center justify-between">
+          <%= f.submit "Save password", class: "btn-primary" %>
+          <p class="field-hint"><%= link_to "Forgot your password?", profile_password_path(@user) %></p>
+        </div>
       <% end %>
     </div>
-    <div class="form-field">
-      <%= f.label :password_confirmation %>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-    </div>
-    <div class="my-2 flex items-center justify-between">
-      <%= f.submit "Save password", class: "btn-primary" %>
-      <p class="field-hint"><%= link_to "Forgot your password?", profile_password_path(@user) %></p>
-    </div>
-  <% end %>
+  </div>
 </div>
