@@ -15,23 +15,15 @@ module Profiles
 
     # Update the user's password
     def update
-      if @user.update_with_password(update_password_params)
-
-        # Sign in the user bypassing validation in case his password changed
-        sign_in @user, bypass: true
-
-        flash[:success] = I18n.t('profiles.password.update_success')
-        redirect_to edit_profile_password_path
-      else
-        respond_to do |format|
-          format.turbo_stream do
-            render turbo_stream: turbo_stream.replace(@user, partial: 'form',
-                                                             locals: { user: @user })
-          end
-
-          format.html { render :edit, status: :unprocessable_entity }
+      respond_to do |format|
+        if @user.update_with_password(update_password_params)
+          # Sign in the user bypassing validation in case his password changed
+          sign_in @user, bypass: true
+          flash[:success] = I18n.t('profiles.password.update_success')
+          format.html { redirect_to edit_profile_password_path }
+        else
+            format.html { render :edit, status: :unprocessable_entity, locals: { user: @user } }
         end
-
       end
     end
 
