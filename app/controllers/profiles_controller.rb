@@ -14,7 +14,7 @@ class ProfilesController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(update_params)
-        # Sign in the user bypassing validation in case his password changed
+        # Sign in the user bypassing validation in case their password changed
         bypass_sign_in(@user)
         flash[:success] = I18n.t('profiles.update_success')
         format.html { redirect_to profile_path }
