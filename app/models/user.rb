@@ -33,6 +33,7 @@ class User < ApplicationRecord
     clean_up_passwords
     result
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 
