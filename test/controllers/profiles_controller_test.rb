@@ -15,8 +15,8 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
   test 'should update a users email' do
     sign_in users(:john_doe)
 
-    patch profile_url, params: { user: { email: 'your.email+fakedata57424@gmail.com' } }
-    assert_response :success
+    patch profile_url, params: { user: { email: 'your.email@gmail.com' } }
+    assert_response :redirect
   end
 
   test 'should not update a users email with a blank email' do
