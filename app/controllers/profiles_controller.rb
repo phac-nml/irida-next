@@ -12,24 +12,15 @@ class ProfilesController < ApplicationController
   end
 
   def update
-    if @user.update(update_params)
-      # TODO: Need to add a check to see if the email is the same as the current one
-
-      # Sign in the user bypassing validation in case his password changed
-      bypass_sign_in(@user)
-
-      flash[:success] = I18n.t('profiles.update_success')
-      redirect_to profile_path
-    else
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(@user, partial: 'form',
-                                                           locals: { user: @user })
-        end
-
-        format.html { render :show, status: :unprocessable_entity }
+    respond_to do |format|
+      if @user.update(update_params)
+        # Sign in the user bypassing validation in case his password changed
+        bypass_sign_in(@user)
+        flash[:success] = I18n.t('profiles.update_success')
+        format.html { redirect_to profile_path }
+      else
+        format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
       end
-
     end
   end
 
