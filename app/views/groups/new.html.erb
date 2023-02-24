@@ -1,6 +1,12 @@
-<h2>Create group</h2>
+<div class="flex flex-row items-center pb-4">
+    <%= render 'icons/squares_plus', class_names: "h-14 w-14 text-green-500" %>
+  <div class="flex-1 pl-2">
+    <h1 class="text-2xl font-semibold leading-relaxed text-slate-900 dark:text-white py-0">Create group</h1>
+    <p class="text-gray-500 dark:text-gray-400">Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects</p>
+  </div>
+</div>
 
-<div data-controller="groups-new">
+<div data-controller="groups-new" class="grid gap-4 md:gap-8 grid-cols-3">
   <%= form_with(model: @group, url: groups_path, method: :post) do |group| %>
     <div class="form-field">
       <%= group.label :name %>
@@ -15,7 +21,8 @@
       <%= group.text_area :description %>
     </div>
     <div class="my-2">
-      <%= group.submit "Update profile settings", class: "btn-primary" %>
+      <%= group.submit "Create group", class: "btn btn-primary mr-1" %>
+      <a href="<%= groups_path %>" class="btn btn-default">Cancel</a>
     </div>
   <% end %>
 </div>
