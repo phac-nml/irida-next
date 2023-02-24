@@ -20,11 +20,22 @@
         </form>
       </div>
       <div class="flex items-center ml-3">
-        <div>
-          <button id="dropdownDefaultButton" aria-label="Account dropdown menu" data-dropdown-toggle="profile-dropdown" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
-            <%= render 'icons/user_circle', class_names: "w-6 h-6" %>
-          </button>
+        <!-- New item menu -->
+        <button id="dropdownNewItem" aria-label="New item menu" data-dropdown-toggle="new-item-dropdown" type="button" class="navbar-btn">
+          <%= render 'icons/document_plus' %>
+        </button>
+        <!-- Dropdown menu -->
+        <div id="new-item-dropdown" class="dropdown-menu">
+          <ul aria-labelledby="dropdownDefaultButton">
+            <li>
+              <%= link_to 'New group', new_group_path %>
+            </li>
+          </ul>
         </div>
+        <!-- Profile menu -->
+        <button id="dropdownDefaultButton" aria-label="Account dropdown menu" data-dropdown-toggle="profile-dropdown" type="button" class="navbar-btn">
+          <%= render 'icons/user_circle' %>
+        </button>
         <!-- Dropdown menu -->
         <div id="profile-dropdown" class="dropdown-menu">
           <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
