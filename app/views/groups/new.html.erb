@@ -1,0 +1,21 @@
+<h2>Create group</h2>
+
+<div data-controller="groups-new">
+  <%= form_with(model: @group, url: groups_path, method: :post) do |group| %>
+    <div class="form-field">
+      <%= group.label :name %>
+      <%= group.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, placeholder: "Awesome group name", required: true %>
+    </div>
+    <div class="form-field">
+      <%= group.label :path %>
+      <%= group.text_field :path, data: { "groups-new-target": "path" }, required: true %>
+    </div>
+    <div class="form-field">
+      <%= group.label :description %>
+      <%= group.text_area :description %>
+    </div>
+    <div class="my-2">
+      <%= group.submit "Update profile settings", class: "btn-primary" %>
+    </div>
+  <% end %>
+</div>
