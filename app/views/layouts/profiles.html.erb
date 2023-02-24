@@ -9,14 +9,12 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
-<body class="h-screen bg-white dark:bg-gray-900">
-<%= render 'shared/navbar' %>
-<div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
+<body class="bg-white dark:bg-gray-900">
+<div data-controller="layout" data-layout-target="layoutContainer" class="body-wrapper">
+  <%= render 'shared/navbar' %>
   <%= render 'profiles/sidebar' %>
-  <div id="main-content" class="relative w-full h-full overflow-y-auto bg-white lg:ml-64 dark:bg-gray-900">
-    <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
-      <%= yield %>
-    </div>
+  <div style="grid-area: content" class="p-4">
+    <%= yield %>
   </div>
 </div>
 </body>

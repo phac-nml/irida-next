@@ -16,8 +16,8 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
   <div class="actions">
-    <%= f.submit "Register", class: "btn-primary" %>
+    <%= f.submit "Register", class: "btn btn-primary" %>
   </div>
 <% end %>
-<p class="text-sm font-light text-gray-500 dark:text-gray-400 text-center">Already have login and
-  password? <%= link_to "Sign in", new_session_path(resource_name) %></p>
+<p class="field-hint text-center">Already have login and
+  password? <%= link_to "Sign in", new_session_path(resource_name), class: "link" %></p>

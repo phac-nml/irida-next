@@ -1,4 +1,4 @@
-<nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+<nav class="w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700" style="grid-area: header;">
   <div class="px-3 py-1">
     <div class="flex items-center justify-between">
       <div class="flex items-center justify-start">
@@ -19,30 +19,27 @@
           </div>
         </form>
       </div>
-      <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-        <ul class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-          <li>
-            <button id="dropdownDefaultButton" aria-label="Account dropdown menu" data-dropdown-toggle="profile-dropdown" type="button" class="inline-flex items-center ">
-              <%= render 'icons/user_circle', class_names: "w-6 h-6" %>
-              <%= render 'icons/chevron_down', class_names: "w-4 h-4 ml-1" %>
-            </button>
-            <!-- Dropdown menu -->
-            <div id="profile-dropdown" class="dropdown-menu">
-              <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                <div>Fred Penner</div>
-                <div class="font-medium text-slate-400 truncate"><%= current_user.email %></div>
-              </div>
-              <ul aria-labelledby="dropdownDefaultButton">
-                <li>
-                  <%= link_to 'Edit profile', profile_path %>
-                </li>
-                <li>
-                  <%= link_to 'Sign Out', destroy_user_session_path, data: { turbo_method: :delete } %>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
+      <div class="flex items-center ml-3">
+        <div>
+          <button id="dropdownDefaultButton" aria-label="Account dropdown menu" data-dropdown-toggle="profile-dropdown" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+            <%= render 'icons/user_circle', class_names: "w-6 h-6" %>
+          </button>
+        </div>
+        <!-- Dropdown menu -->
+        <div id="profile-dropdown" class="dropdown-menu">
+          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+            <div>Fred Penner</div>
+            <div class="font-medium text-slate-400 truncate"><%= current_user.email %></div>
+          </div>
+          <ul aria-labelledby="dropdownDefaultButton">
+            <li>
+              <%= link_to 'Edit profile', profile_path %>
+            </li>
+            <li>
+              <%= link_to 'Sign Out', destroy_user_session_path, data: { turbo_method: :delete } %>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
