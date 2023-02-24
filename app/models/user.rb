@@ -17,6 +17,24 @@ class User < ApplicationRecord
   before_validation :ensure_namespace
   before_save :ensure_namespace
 
+  # rubocop:disable Metrics/MethodLength
+  def update_password_with_password(params)
+    current_password = params.delete(:current_password)
+
+    result = if valid_password?(current_password)
+               update(params)
+             else
+               assign_attributes(params)
+               valid?
+               errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+               false
+             end
+
+    clean_up_passwords
+    result
+  end
+  # rubocop:enable Metrics/MethodLength
+
   private
 
   def build_namespace_name

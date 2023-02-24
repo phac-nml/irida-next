@@ -2,6 +2,7 @@
 
 john_doe:
   email: john.doe@localhost
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
 
 jane_doe:
   email: jane.doe@localhost

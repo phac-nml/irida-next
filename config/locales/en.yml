@@ -30,4 +30,7 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  profiles:
+    update_success: "Profile updated successfully"
+    password:
+      update_success: "Password updated successfully"

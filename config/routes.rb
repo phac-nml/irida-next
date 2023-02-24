@@ -6,6 +6,13 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'dashboard#index'
 
+  # Begin of the /-/ scope.
+  # Use this scope for all new global routes.
+  scope path: '-' do
+    draw :profile
+  end
+  # End of the /-/ scope.
+
   draw :user
   draw :group
 end
