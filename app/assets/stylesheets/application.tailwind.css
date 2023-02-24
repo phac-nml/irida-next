@@ -34,6 +34,8 @@
         grid-template-areas: "navigation" "collapse";
         grid-template-rows: 1fr auto;
         overflow-x: hidden;
+
+        @apply bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700;
     }
 
     form a {
@@ -63,8 +65,20 @@
         @apply text-sm text-gray-500 dark:text-gray-400;
     }
 
+    .btn {
+        @apply cursor-pointer focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center;
+    }
+
+    .btn-default  {
+        @apply text-gray-500 bg-white hover:bg-gray-100 focus:ring-gray-200 border border-gray-200 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600;
+    }
+
     .btn-primary {
-        @apply cursor-pointer text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800;
+        @apply  text-white bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800;
+    }
+
+    .btn-danger {
+        @apply text-white bg-red-600 hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-800;
     }
 
     .dropdown-menu {
