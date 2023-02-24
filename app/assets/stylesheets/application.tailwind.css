@@ -38,7 +38,7 @@
         @apply bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700;
     }
 
-    form a {
+    .link {
         @apply font-medium text-primary-600 hover:text-primary-700 dark:text-primary-600 dark:hover:text-primary-700;
     }
 
