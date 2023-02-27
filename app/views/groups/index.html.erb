@@ -1,7 +1,35 @@
-<h1>Groups</h1>
-<br/>
-<%= link_to "New group", new_group_path, class: "btn btn-primary" %> <br/>
+<div class="p-4 bg-white block sm:flex items-center justify-between lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
+  <div class="w-full">
+    <div class="flex justify-between items-center">
+      <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Your groups</h1>
 
-<% @groups.each do |group| %>
-<%= link_to group.name, group_path(group.full_path) %><br/>
-<% end %>
+      <a class="inline-flex items-center justify-center btn btn-primary" href="<%= new_group_path %>">
+        <%= render 'icons/plus', class_names: "w-5 h-5 mr-2 -ml-1" %>
+        New Group
+      </a>
+    </div>
+  </div>
+</div>
+<div class="flex flex-col">
+  <div class="overflow-x-auto">
+    <div class="inline-block min-w-full">
+      <div class="overflow-hidden shadow">
+        <table class="min-w-full table-fixed dark:divide-gray-600 border-t">
+          <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+          <% @groups.each do |group| %>
+            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+              <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+                <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                  <%= link_to group.name, group_path(group.full_path), class: "text-base font-semibold text-gray-900 dark:text-white" %>
+                  <p><%= group.description %></p>
+                </div>
+              </td>
+              <td class="px-4 py-3">buttons</td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
