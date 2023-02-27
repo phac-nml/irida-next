@@ -3,7 +3,7 @@
 # Controller actions for Groups
 class GroupsController < ApplicationController
   layout 'groups'
-  before_action :group, only: [:show]
+  before_action :group, only: %i[show destroy]
 
   def index
     @groups = Group.all
@@ -31,6 +31,11 @@ class GroupsController < ApplicationController
         format.html { render :new, status: :unprocessable_entity, locals: { group: @group } }
       end
     end
+  end
+
+  def destroy
+    @group.destroy
+    redirect_to groups_path
   end
 
   private

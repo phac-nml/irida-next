@@ -17,14 +17,36 @@
         <table class="min-w-full table-fixed dark:divide-gray-600 border-t">
           <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
           <% @groups.each do |group| %>
-            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-normal text-gray-500 dark:text-gray-400">
               <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                 <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                   <%= link_to group.name, group_path(group.full_path), class: "text-base font-semibold text-gray-900 dark:text-white" %>
                   <p><%= group.description %></p>
                 </div>
               </td>
-              <td class="px-4 py-3">buttons</td>
+              <td class="px-4 py-3">
+                <div class="flex justify-end">
+                  <div class="inline-flex items-center justify-center mr-2"><%= render "icons/plus", class_names: "w-4 h-4 mr-1" %>
+                    0
+                  </div>
+                  <div class="inline-flex items-center justify-center"><%= render "icons/users", class_names: "w-4 h-4 mr-1" %>
+                    1
+                  </div>
+                  <button data-dropdown-toggle="group-<%= group.id %>-dropdown" class="navbar-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                    </svg>
+                  </button>
+                  <!-- Dropdown menu -->
+                  <div id="group-<%= group.id %>-dropdown" class="dropdown-menu">
+                    <ul aria-labelledby="dropdownDefaultButton">
+                      <li>
+                        <%= link_to "Delete", group_path(group.full_path),  data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}  %>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </td>
             </tr>
           <% end %>
           </tbody>
