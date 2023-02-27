@@ -3,7 +3,7 @@
 # Controller actions for Groups
 class GroupsController < ApplicationController
   layout 'groups'
-  before_action :group
+  before_action :group, only: [:show]
 
   def index
     @groups = Group.all
