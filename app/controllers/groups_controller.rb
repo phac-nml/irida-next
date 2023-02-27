@@ -25,7 +25,7 @@ class GroupsController < ApplicationController
     respond_to do |format|
       @group = Group.new(group_params)
       if @group.save
-        flash[:success] = 'Group was successfully created.'
+        flash[:success] = I18n.t('groups.create_success')
         format.html { redirect_to group_path(@group.full_path) }
       else
         format.html { render :new, status: :unprocessable_entity, locals: { group: @group } }
