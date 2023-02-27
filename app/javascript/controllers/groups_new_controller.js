@@ -7,10 +7,6 @@ export default class extends Controller {
     this.pathTarget.placeholder = this.#slugify(this.nameTarget.placeholder);
   }
 
-  connect() {
-    console.log("Connected to groups_new.js");
-  }
-
   nameChanged() {
     this.pathTarget.value = this.#slugify(this.nameTarget.value);
   }
