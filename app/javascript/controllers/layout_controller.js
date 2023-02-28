@@ -5,7 +5,7 @@ export default class extends Controller {
 
   initialize() {
     // Need to determine the previous state
-    sessionStorage.getItem("layout") === "collapsed"
+    localStorage.getItem("layout") === "collapsed"
       ? this.collapsed()
       : this.expended();
   }
@@ -25,7 +25,7 @@ export default class extends Controller {
     this.linkTargets.forEach((link) => {
       link.classList.add("sr-only");
     });
-    sessionStorage.setItem("layout", "collapsed");
+    localStorage.setItem("layout", "collapsed");
   }
 
   expended() {
@@ -35,6 +35,6 @@ export default class extends Controller {
     this.linkTargets.forEach((link) => {
       link.classList.remove("sr-only");
     });
-    sessionStorage.setItem("layout", "expended");
+    localStorage.setItem("layout", "expended");
   }
 }
