@@ -53,6 +53,17 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should delete a group' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_one)
+    assert_difference('Group.count', -1) do
+      delete group_path(group)
+    end
+
+    assert_redirected_to groups_path
+  end
+
   test 'should not show a sub group that doesn\'t exist' do
     sign_in users(:john_doe)
 
