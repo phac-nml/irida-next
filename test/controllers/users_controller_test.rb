@@ -8,7 +8,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'should show the user' do
     sign_in users(:john_doe)
 
-    get user_path(users(:john_doe).namespace.full_path)
+    get user_path(users(:john_doe))
     assert_response :success
   end
 end
