@@ -3,7 +3,7 @@
 # Controller actions for Groups
 class GroupsController < ApplicationController
   layout 'groups'
-  before_action :group, only: %i[show destroy]
+  before_action :group, only: %i[edit show destroy]
 
   def index
     @groups = Group.all
@@ -21,9 +21,17 @@ class GroupsController < ApplicationController
     @group = Group.new
   end
 
+  def edit
+    respond_to do |format|
+      format.html do
+        render 'groups/edit'
+      end
+    end
+  end
+
   def create
     respond_to do |format|
-      @group = Group.new(group_params)
+      @group = Group.new(group_params.merge(owner: current_user))
       if @group.save
         flash[:success] = I18n.t('groups.create_success')
         format.html { redirect_to group_path(@group.full_path) }

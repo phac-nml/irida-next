@@ -14,6 +14,7 @@ export default class extends Controller {
   #slugify(string) {
     return string
       .toLowerCase()
+      .trim()
       .replace(/[^\w ]+/g, "")
       .replace(/ +/g, "-");
   }
