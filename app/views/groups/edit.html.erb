@@ -1,1 +1,22 @@
-<h1>EDIT</h1>
+<div class="p-4">
+  <div data-controller="groups-new" class="grid gap-4 md:gap-8 grid-cols-3">
+    <%= form_with(model: @group, url: group_path(@group), method: :patch) do |group| %>
+      <div class="form-field">
+        <%= group.label :name %>
+        <%= group.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, placeholder: "Awesome group name", required: true %>
+      </div>
+      <div class="form-field">
+        <%= group.label :path %>
+        <%= group.text_field :path, data: { "groups-new-target": "path" }, required: true, pattern: Irida::PathRegex.namespace_format_regex %>
+        <p class="field-hint">Must only contain letters, numbers, and - characters.</p>
+      </div>
+      <div class="form-field">
+        <%= group.label :description %>
+        <%= group.text_area :description %>
+      </div>
+      <div class="my-2">
+        <%= group.submit "Save changes", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

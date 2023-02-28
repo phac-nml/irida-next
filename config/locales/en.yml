@@ -36,3 +36,4 @@ en:
       update_success: "Password updated successfully"
   groups:
     create_success: "Group created successfully"
+    update_success: "Group updated successfully"

@@ -2,8 +2,8 @@
 
 # Controller actions for Groups
 class GroupsController < ApplicationController
-  layout 'groups'
-  before_action :group, only: %i[edit show destroy]
+  layout :resolve_layout
+  before_action :group, only: %i[edit show destroy update]
 
   def index
     @groups = Group.all
@@ -41,6 +41,17 @@ class GroupsController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      if group.update(group_params)
+        flash[:success] = I18n.t('groups.update_success')
+        format.html { redirect_to group_path(group) }
+      else
+        format.html { render :edit, status: :unprocessable_entity, locals: { group: } }
+      end
+    end
+  end
+
   def destroy
     @group.destroy
     redirect_to groups_path
@@ -54,5 +65,14 @@ class GroupsController < ApplicationController
 
   def group_params
     params.require(:group).permit(:name, :path, :description)
+  end
+
+  def resolve_layout
+    case action_name
+    when 'show', 'edit'
+      'groups'
+    else
+      'application'
+    end
   end
 end

@@ -17,5 +17,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do # rubocop:disable Style/R
         controller: :groups) do
     get '/', action: :show
     delete '/', action: :destroy
+    patch '/', action: :update
+    put '/', action: :update
   end
 end

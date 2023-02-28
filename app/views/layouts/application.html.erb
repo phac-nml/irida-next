@@ -10,10 +10,10 @@
   <%= javascript_importmap_tags %>
 </head>
 <body class="h-screen bg-white dark:bg-gray-900">
-<%= render 'shared/navbar' %>
-<div class="h-full pt-16 overflow-hidden bg-white dark:bg-gray-900">
-  <%= content_for?(:sidebar) ? yield(:sidebar) : "" %>
-  <div id="main-content" class="relative w-full h-full overflow-y-auto bg-white <%= class_names('lg:ml-64': content_for?(:sidebar)) %> dark:bg-gray-900">
+<div data-controller="layout" data-layout-target="layoutContainer" class="body-wrapper">
+  <%= render 'shared/navbar' %>
+  <%= render 'shared/default_sidebar' %>
+  <div style="grid-area: content">
     <%= yield %>
   </div>
 </div>
