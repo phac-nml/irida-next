@@ -37,6 +37,14 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to group_path(Group.last.full_path)
   end
 
+  test 'should update a group' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_one)
+    patch group_path(group), params: { group: { name: 'New Group Name' } }
+    assert_redirected_to group_path(group)
+  end
+
   test 'should show the sub group' do
     sign_in users(:john_doe)
 
