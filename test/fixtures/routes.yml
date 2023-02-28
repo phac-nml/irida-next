@@ -14,3 +14,8 @@ john_doe_namespace_route:
   name: john.doe@localhost
   path: john.doe_at_localhost
   source: john_doe_namespace (Namespace)
+
+project1_namespace_route:
+  name: Group 1 / Project 1
+  path: group-1/project-1
+  source: project1_namespace (Namespace)
