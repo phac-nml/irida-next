@@ -52,6 +52,10 @@ class Namespace < ApplicationRecord
     result
   end
 
+  def to_param
+    full_path
+  end
+
   def human_name
     full_name
   end
