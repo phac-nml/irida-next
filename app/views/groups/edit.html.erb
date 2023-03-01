@@ -6,14 +6,14 @@
       <% invalid = @group.errors.include?(:name) %>
       <div class="form-field <%= 'invalid' if invalid %>">
         <%= group.label :name %>
-        <%= group.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, placeholder: "Awesome group name" %>
+        <%= group.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, placeholder: "Awesome group name", required: true %>
         <%= render 'shared/form/field_errors', errors: @group.errors.full_messages_for(:name) %>
       </div>
 
       <% invalid = @group.errors.include?(:path) %>
       <div class="form-field <%= 'invalid' if invalid %>">
         <%= group.label :path %>
-        <%= group.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex.namespace_format_regex %>
+        <%= group.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex.namespace_format_regex, required: true %>
         <p class="field-hint">Must only contain letters, numbers, and - characters.</p>
         <%= render 'shared/form/field_errors', errors: @group.errors.full_messages_for(:path) %>
       </div>
