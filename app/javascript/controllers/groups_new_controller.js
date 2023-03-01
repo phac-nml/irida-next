@@ -1,21 +1,14 @@
 import { Controller } from "@hotwired/stimulus";
+import slugify from "@sindresorhus/slugify";
 
 export default class extends Controller {
   static targets = ["name", "path"];
 
   initialize() {
-    this.pathTarget.placeholder = this.#slugify(this.nameTarget.placeholder);
+    this.pathTarget.placeholder = slugify(this.nameTarget.placeholder);
   }
 
   nameChanged() {
-    this.pathTarget.value = this.#slugify(this.nameTarget.value);
-  }
-
-  #slugify(string) {
-    return string
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w ]+/g, "")
-      .replace(/ +/g, "-");
+    this.pathTarget.value = slugify(this.nameTarget.value);
   }
 }

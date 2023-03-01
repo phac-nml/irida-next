@@ -1,29 +1,29 @@
 <div class="p-4">
   <%= render partial: 'shared/page_header', locals: { title: "Create group", subtitle: "Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects" } %>
   <div data-controller="groups-new" class="grid gap-4 md:gap-8 grid-cols-2">
-    <%= form_with(model: @group, url: groups_path, method: :post) do |group| %>
+    <%= form_with(model: @group, url: groups_path, method: :post) do |form| %>
 
       <% invalid = @group.errors.include?(:name) %>
       <div class="form-field <%= 'invalid' if invalid %>">
-        <%= group.label :name %>
-        <%= group.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, placeholder: "Awesome group name" %>
+        <%= form.label :name %>
+        <%= form.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, placeholder: "Awesome group name" %>
         <%= render 'shared/form/field_errors', errors: @group.errors.full_messages_for(:name) %>
       </div>
 
       <% invalid = @group.errors.include?(:path) %>
       <div class="form-field <%= 'invalid' if invalid %>">
-        <%= group.label :path %>
-        <%= group.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex.namespace_format_regex %>
-        <p class="field-hint">Must only contain letters, numbers, and - characters.</p>
+        <%= form.label :path %>
+        <%= form.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex::PATH_REGEX_STR %>
+        <p class="field-hint">Must start with a letter or number, and must end with a letter or number. Letter, numbers, - or _ are allowed content</p>
         <%= render 'shared/form/field_errors', errors: @group.errors.full_messages_for(:path) %>
       </div>
 
       <div class="form-field">
-        <%= group.label :description %>
-        <%= group.text_area :description %>
+        <%= form.label :description %>
+        <%= form.text_area :description %>
       </div>
       <div class="my-2">
-        <%= group.submit "Create group", class: "btn btn-primary mr-1" %>
+        <%= form.submit "Create group", class: "btn btn-primary mr-1" %>
         <a href="<%= groups_path %>" class="btn btn-default">Cancel</a>
       </div>
     <% end %>
