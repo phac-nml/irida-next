@@ -30,10 +30,23 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  activerecord:
+    attributes:
+      group:
+        name: Group name
+    errors:
+      models:
+        group:
+          attributes:
+            name:
+              blank: can't be blank
+              taken: has already been taken
   profiles:
-    update_success: "Profile updated successfully"
+    update_success: Profile updated successfully
     password:
-      update_success: "Password updated successfully"
+      update_success: Password updated successfully
   groups:
-    create_success: "Group created successfully"
-    update_success: "Group updated successfully"
+    create:
+      success: Group created successfully
+    update:
+      success: Group updated successfully

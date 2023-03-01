@@ -33,7 +33,7 @@ class GroupsController < ApplicationController
     respond_to do |format|
       @group = Group.new(group_params.merge(owner: current_user))
       if @group.save
-        flash[:success] = I18n.t('groups.create_success')
+        flash[:success] = t('.success')
         format.html { redirect_to group_path(@group.full_path) }
       else
         format.html { render :new, status: :unprocessable_entity, locals: { group: @group } }
@@ -44,7 +44,7 @@ class GroupsController < ApplicationController
   def update
     respond_to do |format|
       if group.update(group_params)
-        flash[:success] = I18n.t('groups.update_success')
+        flash[:success] = t('.success')
         format.html { redirect_to group_path(group) }
       else
         format.html { render :edit, status: :unprocessable_entity, locals: { group: } }
