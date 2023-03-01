@@ -1,0 +1,19 @@
+<% invalid = @group.errors.include?(:name) %>
+<div class="form-field <%= 'invalid' if invalid %>">
+  <%= form.label :name %>
+  <%= form.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, placeholder: "Awesome group name" %>
+  <%= render 'shared/form/field_errors', errors: @group.errors.full_messages_for(:name) %>
+</div>
+
+<% invalid = @group.errors.include?(:path) %>
+<div class="form-field <%= 'invalid' if invalid %>">
+  <%= form.label :path %>
+  <%= form.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex::PATH_REGEX_STR %>
+  <p class="field-hint">Must start with a letter or number, and must end with a letter or number. Letter, numbers, - or _ are allowed content</p>
+  <%= render 'shared/form/field_errors', errors: @group.errors.full_messages_for(:path) %>
+</div>
+
+<div class="form-field">
+  <%= form.label :description %>
+  <%= form.text_area :description %>
+</div>

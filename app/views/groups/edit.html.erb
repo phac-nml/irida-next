@@ -1,46 +1,37 @@
 <div class="p-4">
-  <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">Naming and description</h2>
-  <div data-controller="groups-new" class="grid gap-4 md:gap-8 grid-cols-3">
-    <%= form_with(model: @group, url: group_path(@group), method: :patch) do |group| %>
+  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <!--Edit general details form -->
+    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+      <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white mb-4">Naming and description</h2>
+      <div data-controller="groups-new">
+        <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
 
-      <% invalid = @group.errors.include?(:name) %>
-      <div class="form-field <%= 'invalid' if invalid %>">
-        <%= group.label :name %>
-        <%= group.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, placeholder: "Awesome group name", required: true %>
-        <%= render 'shared/form/field_errors', errors: @group.errors.full_messages_for(:name) %>
-      </div>
+          <%= render partial: 'form_fields', locals: {
+            form: form
+          } %>
 
-      <% invalid = @group.errors.include?(:path) %>
-      <div class="form-field <%= 'invalid' if invalid %>">
-        <%= group.label :path %>
-        <%= group.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex.namespace_format_regex, required: true %>
-        <p class="field-hint">Must only contain letters, numbers, and - characters.</p>
-        <%= render 'shared/form/field_errors', errors: @group.errors.full_messages_for(:path) %>
+          <div class="my-2">
+            <%= form.submit "Save changes", class: "btn btn-primary" %>
+          </div>
+        <% end %>
       </div>
+    </div>
 
-      <div class="form-field">
-        <%= group.label :description %>
-        <%= group.text_area :description %>
-      </div>
-      <div class="my-2">
-        <%= group.submit "Save changes", class: "btn btn-primary" %>
-      </div>
-    <% end %>
-  </div>
-  <%= render 'shared/divider' %>
-  <div id="settings-accordion" data-accordion="collapse" class="pt-4">
-    <h2 id="settings-delete-heading" class="text-xl font-semibold leading-tight text-gray-900 dark:text-white flex justify-between items-center">
-      <span>Advanced</span>
-      <button type="button" class="btn btn-default" data-accordion-target="#accordion-collapse-body-1" aria-expanded="false" aria-controls="accordion-collapse-body-1">
-        Expand
-      </button>
-    </h2>
-    <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="settings-delete-heading">
-      <div class="p-4 mt-8 mr-12 border">
-        <h3 class="text-lg font-semibold leading-tight text-red-600">Delete group</h3>
-        <p class="text-gray-600 dark:text-gray-400">Deleting a group will remove all projects and members from the group. This action cannot be undone.</p>
-        <div class="mt-4">
-          <%= link_to "Delete", group_path(@group), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this group?" }, class: "btn btn-danger" %>
+    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+      <div id="settings-accordion" data-accordion="collapse">
+        <h2 id="settings-delete-heading" class="text-xl font-semibold leading-tight text-gray-900 dark:text-white flex justify-between items-center">
+          <span>Advanced</span>
+          <button type="button" class="btn btn-default" data-accordion-target="#accordion-collapse-body-1" aria-expanded="false" aria-controls="accordion-collapse-body-1">
+            Expand
+          </button>
+        </h2>
+        <div id="accordion-collapse-body-1" class="hidden pt-4" aria-labelledby="settings-delete-heading">
+          <h3 class="text-lg font-semibold leading-tight text-red-600">Delete group</h3>
+          <p class="text-gray-600 dark:text-gray-400">Deleting a group will remove all projects and members from the
+            group. This action cannot be undone.</p>
+          <div class="mt-4">
+            <%= link_to "Delete", group_path(@group), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this group?" }, class: "btn btn-danger" %>
+          </div>
         </div>
       </div>
     </div>
