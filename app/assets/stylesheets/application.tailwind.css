@@ -47,8 +47,11 @@
     }
 
     .link {
-        @apply font-medium text-primary-600 hover:text-primary-700 dark:text-primary-600 dark:hover:text-primary-700;
-        text-decoration: underline;
+        @apply font-medium text-blue-600 dark:text-blue-500 hover:underline
+    }
+
+    p link {
+        @apply font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline;
     }
 
     .form-field label {
