@@ -58,4 +58,17 @@ class GroupTest < ActiveSupport::TestCase
   test '#full_path' do
     assert_equal @group.route.path, @group.full_path
   end
+
+  test '#propagate_route_changes' do
+    @subgroup8 = groups(:subgroup8)
+    @subgroup9 = groups(:subgroup9)
+    old_subgroup9_path = @subgroup9.route.path
+    old_subgroup9_name = @subgroup9.route.name
+
+    @subgroup8.update(path: 'new-subgroup-8')
+    assert_not_equal old_subgroup9_path, @subgroup9.reload.route.path
+
+    @subgroup8.reload.update(name: 'New Subgroup 8')
+    assert_not_equal old_subgroup9_name, @subgroup9.reload.route.name
+  end
 end
