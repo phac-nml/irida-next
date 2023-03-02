@@ -22,6 +22,8 @@ module Routable
 
     validates :route, presence: true
 
+    after_validation :set_path_errors
+
     before_validation :prepare_route
     before_save :prepare_route
   end
@@ -51,7 +53,18 @@ module Routable
     end
   end
 
+  def saved_change_to_route?
+    route.saved_change_to_name? || route.saved_change_to_path?
+  end
+
   private
+
+  def set_path_errors
+    route_path_errors = errors.delete(:'route.path')
+    route_path_errors&.each do |msg|
+      errors.add(:path, msg)
+    end
+  end
 
   def build_full_name
     if parent && name

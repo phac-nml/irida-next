@@ -5,10 +5,17 @@ group_one_route:
   path: group-1
   source: group_one (Namespace)
 
-subgroup_one_route:
+subgroup1_route:
   name: Group 1 / Subgroup 1
   path: group-1/subgroup-1
   source: subgroup1 (Namespace)
+
+<% (Namespace::MAX_ANCESTORS-1).times do |n| %>
+subgroup<%= (n+2) %>_route:
+  name: Group 1 / <%= (n+2).times.collect{ |i| "Subgroup #{i+1}" }.join(' / ') %>
+  path: group-1/<%= (n+2).times.collect{ |i| "subgroup-#{i+1}" }.join('/') %>
+  source: subgroup<%= (n+2) %> (Namespace)
+<% end %>
 
 john_doe_namespace_route:
   name: john.doe@localhost
