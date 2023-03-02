@@ -9,25 +9,13 @@ class GroupsController < ApplicationController
     @groups = Group.all
   end
 
-  def show
-    respond_to do |format|
-      format.html do
-        render 'groups/show'
-      end
-    end
-  end
+  def show; end
 
   def new
     @group = Group.new
   end
 
-  def edit
-    respond_to do |format|
-      format.html do
-        render 'groups/edit'
-      end
-    end
-  end
+  def edit; end
 
   def create
     respond_to do |format|
