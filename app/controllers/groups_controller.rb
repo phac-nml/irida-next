@@ -9,33 +9,45 @@ class GroupsController < ApplicationController
     @groups = Group.all
   end
 
-  def show; end
-
-  def new
-    @group = Group.new
+  def show
+    # No necessary code here
   end
 
-  def edit; end
+  def new
+    @group = Group.find(params[:parent_id]) if params[:parent_id]
+    @new_group = Group.new(parent_id: @group&.id)
+    respond_to do |format|
+      if @group
+        format.html { render :new_subgroup }
+      else
+        format.html { render :new }
+      end
+    end
+  end
+
+  def edit
+    # No necessary code here
+  end
 
   def create
     respond_to do |format|
-      @group = Group.new(group_params.merge(owner: current_user))
-      if @group.save
+      @new_group = Group.new(group_params.merge(owner: current_user))
+      if @new_group.save
         flash[:success] = t('.success')
-        format.html { redirect_to group_path(@group.full_path) }
+        format.html { redirect_to group_path(@new_group.full_path) }
       else
-        format.html { render :new, status: :unprocessable_entity, locals: { group: @group } }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
 
   def update
     respond_to do |format|
-      if group.update(group_params)
+      if @group.update(group_params)
         flash[:success] = t('.success')
-        format.html { redirect_to group_path(group) }
+        format.html { redirect_to group_path(@group) }
       else
-        format.html { render :edit, status: :unprocessable_entity, locals: { group: } }
+        format.html { render :edit, status: :unprocessable_entity }
       end
     end
   end
@@ -52,13 +64,19 @@ class GroupsController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(:name, :path, :description)
+    params.require(:group).permit(:name, :path, :description, :parent_id)
   end
 
   def resolve_layout
     case action_name
     when 'show', 'edit'
       'groups'
+    when 'new'
+      if params[:parent_id]
+        'groups'
+      else
+        'application'
+      end
     else
       'application'
     end

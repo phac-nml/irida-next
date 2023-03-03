@@ -1,6 +1,7 @@
-<%= render partial: 'shared/page_header', locals: {
+<%= render layout: 'shared/page_header', locals: {
   title: @group.human_name,
   subtitle: @group.description,
-  icon: 'squares_2x2',
-  buttons: "group_action_buttons"
-} %>
+  icon: 'squares_2x2'
+} do %>
+<%= render partial: 'group_action_buttons', locals: { group: @group} %>
+<% end %>

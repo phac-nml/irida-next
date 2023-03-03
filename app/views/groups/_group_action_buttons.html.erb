@@ -1,4 +1,4 @@
 <div class="flex flex-row">
-  <button class="btn btn-default">New subgroup</button>
+  <%= link_to "New Subgroup", new_group_path(parent_id: group.id), class: "btn btn-default" %>
   <button class="btn btn-primary ml-2">New Project</button>
 </div>

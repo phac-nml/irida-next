@@ -58,10 +58,6 @@
         @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;
     }
 
-    .form-field {
-        @apply mb-4;
-    }
-
     .form-field input[type="text"],
     .form-field input[type="search"],
     .form-field input[type="password"],

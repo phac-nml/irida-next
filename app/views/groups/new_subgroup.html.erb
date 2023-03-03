@@ -1,5 +1,5 @@
 <%= render partial: 'shared/page_header', locals: {
-  title: "Create group",
+  title: "Create subgroup",
   subtitle: "Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects",
   icon: "squares_plus"
 } %>
@@ -15,7 +15,7 @@
 
         <div class="my-2">
           <%= form.submit "Create group", class: "btn btn-primary mr-1" %>
-          <a href="<%= groups_path %>" class="btn btn-default">Cancel</a>
+          <%= link_to "Cancel", group_path(@group), class: "btn btn-default" %>
         </div>
       <% end %>
     </div>
