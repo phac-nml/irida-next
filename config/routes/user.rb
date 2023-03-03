@@ -8,7 +8,7 @@ devise_for :users, controllers: {
   # confirmations: :confirmations
 }
 
-constraints(::Constraints::UserUrlConstrainer.new) do # rubocop:disable Style/RedundantConstantBase
+constraints(::Constraints::UserUrlConstrainer.new) do
   scope(path: ':username',
         as: :user,
         constraints: { username: Irida::PathRegex.root_namespace_route_regex },

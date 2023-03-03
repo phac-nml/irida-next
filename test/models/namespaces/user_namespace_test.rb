@@ -23,6 +23,10 @@ class UserNamespaceTest < ActiveSupport::TestCase
     assert_not @user_namespace.group_namespace?
   end
 
+  test '#project_namespace?' do
+    assert_not @user_namespace.project_namespace?
+  end
+
   test '#user_namespace?' do
     assert @user_namespace.user_namespace?
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_09_163157) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_27_172418) do
   create_table "namespaces", force: :cascade do |t|
     t.string "name"
     t.string "path"
@@ -18,6 +18,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_163157) do
     t.string "type"
     t.string "description"
     t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.integer "creator_id"
+    t.integer "namespace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

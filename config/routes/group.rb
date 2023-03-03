@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-constraints(::Constraints::GroupUrlConstrainer.new) do # rubocop:disable Style/RedundantConstantBase
+constraints(::Constraints::GroupUrlConstrainer.new) do
   scope(path: '-/groups/*id',
         controller: :groups,
         constraints: { id: Irida::PathRegex.full_namespace_route_regex }) do

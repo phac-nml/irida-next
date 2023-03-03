@@ -32,6 +32,8 @@ class Namespace < ApplicationRecord
       case type_name
       when Group.sti_name
         Group
+      when Namespaces::ProjectNamespace.sti_name
+        Namespaces::ProjectNamespace
       when Namespaces::UserNamespace.sti_name
         Namespaces::UserNamespace
       else
@@ -66,12 +68,26 @@ class Namespace < ApplicationRecord
     type == Group.sti_name
   end
 
+  def project_namespace?
+    type == Namespaces::ProjectNamespace.sti_name
+  end
+
   def user_namespace?
     type == Namespaces::UserNamespace.sti_name
   end
 
   def owner_required?
-    user_namespace?
+    user_namespace? || project_namespace?
+  end
+
+  def has_parent? # rubocop:disable Naming/PredicateName
+    parent_id.present? || parent.present?
+  end
+
+  def children_allowed?
+    false if project_namespace?
+
+    ancestors.count >= Namespace::MAX_ANCESTORS - 2
   end
 
   def propagate_route_changes
@@ -84,13 +100,20 @@ class Namespace < ApplicationRecord
     errors.add(:type, 'Namespace is not allowed to be directly created')
   end
 
-  def validate_parent_type
-    errors.add(:parent_id, 'User Namespaces cannot have a parent') if user_namespace? && parent.present?
+  def validate_parent_type # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    unless has_parent?
+      errors.add(:parent_id, 'must be set for a project namespace') if project_namespace?
 
-    return unless group_namespace?
-    return unless parent.present? && !parent.group_namespace?
+      return
+    end
 
-    errors.add(:parent_id, 'Groups can only be children of another Group')
+    errors.add(:parent_id, 'project namespace cannot be the parent of another namespace') if parent&.project_namespace?
+
+    if user_namespace?
+      errors.add(:parent_id, 'cannot be used for user namespace')
+    elsif group_namespace?
+      errors.add(:parent_id, 'user namespace cannot be the parent of another namespace') if parent.user_namespace?
+    end
   end
 
   def validate_nesting_level
