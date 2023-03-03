@@ -69,7 +69,7 @@ class GroupsController < ApplicationController
     when 'show', 'edit'
       'groups'
     when 'new', 'create'
-      if params[:parent_id] || group_params[:parent_id]
+      if @group
         'groups'
       else
         'application'
