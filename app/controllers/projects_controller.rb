@@ -2,7 +2,7 @@
 
 # Controller actions for Projects
 class ProjectsController < ApplicationController
-  before_action :project, only: [:show]
+  before_action :project, only: %i[show edit update activity]
 
   def show
     respond_to do |format|
@@ -20,6 +20,14 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def edit
+    respond_to do |format|
+      format.html do
+        render 'edit'
+      end
+    end
+  end
+
   def create
     @project = Projects::CreateService.new(current_user, project_params).execute
 
@@ -30,6 +38,25 @@ class ProjectsController < ApplicationController
       )
     else
       render 'new'
+    end
+  end
+
+  def update
+    if Projects::UpdateService.new(@project, current_user, project_params).execute
+      redirect_to(
+        project_path(@project),
+        notice: "Project #{@project.name} was successfully updated."
+      )
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def activity
+    respond_to do |format|
+      format.html do
+        render 'activity'
+      end
     end
   end
 

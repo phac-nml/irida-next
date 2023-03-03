@@ -19,3 +19,8 @@ project1_namespace_route:
   name: Group 1 / Project 1
   path: group-1/project-1
   source: project1_namespace (Namespace)
+
+project2_namespace_route:
+  name: Group 1 / Project 2
+  path: group-1/project-2
+  source: project2_namespace (Namespace)
