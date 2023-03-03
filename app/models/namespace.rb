@@ -82,6 +82,12 @@ class Namespace < ApplicationRecord
     parent_id.present? || parent.present?
   end
 
+  def children_allowed?
+    false if project_namespace?
+
+    ancestors.count >= Namespace::MAX_ANCESTORS - 2
+  end
+
   def validate_type
     return unless type.nil?
 

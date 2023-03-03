@@ -41,4 +41,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to project_path(projects(:project2).reload)
   end
+
+  test 'should transfer a project' do
+    sign_in users(:john_doe)
+
+    post project_transfer_path(projects(:project2)),
+         params: { new_namespace_id: groups(:subgroup1).id }
+
+    assert_redirected_to project_path(projects(:project2).reload)
+  end
 end

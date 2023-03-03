@@ -13,6 +13,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do # rubocop:disable Style
       scope '-' do
         get :activity
         get :edit
+        post :transfer
       end
     end
 

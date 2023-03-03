@@ -2,7 +2,7 @@
 
 # Controller actions for Projects
 class ProjectsController < ApplicationController
-  before_action :project, only: %i[show edit update activity]
+  before_action :project, only: %i[show edit update activity transfer]
 
   def show
     respond_to do |format|
@@ -57,6 +57,18 @@ class ProjectsController < ApplicationController
       format.html do
         render 'activity'
       end
+    end
+  end
+
+  def transfer
+    new_namespace ||= Namespace.find(params.require(:new_namespace_id))
+    if Projects::TransferService.new(@project, current_user).execute(new_namespace)
+      redirect_to(
+        project_path(@project),
+        notice: "Project #{@project.name} was successfully transferred."
+      )
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
