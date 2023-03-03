@@ -34,3 +34,10 @@ en:
     update_success: "Profile updated successfully"
     password:
       update_success: "Password updated successfully"
+  projects:
+    create:
+      success: "Project %{project_name} was successfully created"
+    update:
+      success: "Project %{project_name} was successfully updated"
+    transfer:
+      success: "Project %{project_name} was successfully transferred"

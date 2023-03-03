@@ -34,7 +34,7 @@ class ProjectsController < ApplicationController
     if @project.persisted?
       redirect_to(
         project_path(@project),
-        notice: "Project #{@project.name} was successfully created."
+        notice: t('.success', project_name: @project.name)
       )
     else
       render 'new'
@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
     if Projects::UpdateService.new(@project, current_user, project_params).execute
       redirect_to(
         project_path(@project),
-        notice: "Project #{@project.name} was successfully updated."
+        notice: t('.success', project_name: @project.name)
       )
     else
       render :edit, status: :unprocessable_entity
@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       redirect_to(
         project_path(@project),
-        notice: "Project #{@project.name} was successfully transferred."
+        notice: t('.success', project_name: @project.name)
       )
     else
       render :edit, status: :unprocessable_entity
