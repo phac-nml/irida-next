@@ -34,3 +34,5 @@ en:
     update_success: "Profile updated successfully"
     password:
       update_success: "Password updated successfully"
+  member:
+    add_success: "Member added successfully"
