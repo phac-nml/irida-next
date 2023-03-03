@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-constraints(::Constraints::GroupUrlConstrainer.new) do # rubocop:disable Style/RedundantConstantBase
+constraints(::Constraints::GroupUrlConstrainer.new) do
   scope(path: '*id',
         as: :group,
         controller: :groups) do
