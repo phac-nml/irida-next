@@ -24,3 +24,8 @@ project2_namespace_route:
   name: Group 1 / Project 2
   path: group-1/project-2
   source: project2_namespace (Namespace)
+
+john_doe_project2_namespace_route:
+  name: john.doe@localhost / Project 2
+  path: john.doe_at_localhost/project-2
+  source: john_doe_project2_namespace (Namespace)

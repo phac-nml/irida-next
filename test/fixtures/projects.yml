@@ -7,3 +7,7 @@ project1:
 project2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace) %>
+
+john_doe_project2:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace) %>
