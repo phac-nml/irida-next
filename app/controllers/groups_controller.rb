@@ -64,7 +64,7 @@ class GroupsController < ApplicationController
     params.require(:group).permit(:name, :path, :description, :parent_id)
   end
 
-  def resolve_layout # rubocop:disable Metrics/MethodLength
+  def resolve_layout
     case action_name
     when 'show', 'edit'
       'groups'
