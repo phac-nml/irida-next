@@ -10,12 +10,12 @@
   <%= javascript_importmap_tags %>
 </head>
 <body class="bg-white dark:bg-gray-900">
-<div data-controller="layout" data-layout-target="layoutContainer" class="body-wrapper">
+<div class="body-wrapper">
   <%= render 'shared/navbar' %>
-  <%= render 'groups/sidebar' %>
-  <div style="grid-area: content" class="bg-gray-50 dark:bg-gray-900">
+  <div data-controller="layout" data-layout-target="layoutContainer" class="body">
+    <%= render 'groups/sidebar' %>
     <%= render 'shared/flash' %>
-    <%= yield %>
+    <div class="content"><%= yield %></div>
   </div>
 </div>
 </body>

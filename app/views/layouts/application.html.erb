@@ -9,13 +9,15 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
-<body class="h-screen bg-white dark:bg-gray-900">
-<div data-controller="layout" data-layout-target="layoutContainer" class="body-wrapper">
+<body class="bg-white dark:bg-gray-900">
+<div class="body-wrapper">
   <%= render 'shared/navbar' %>
-  <%= render 'shared/default_sidebar' %>
-  <div style="grid-area: content" class="bg-gray-50 dark:bg-gray-900">
-    <%= render 'shared/flash' %>
-    <%= yield %>
+  <div class="body" data-controller="layout" data-layout-target="layoutContainer">
+    <%= render 'shared/default_sidebar' %>
+    <div class="content">
+      <%= render 'shared/flash' %>
+      <%= yield %>
+    </div>
   </div>
 </div>
 </body>

@@ -3,36 +3,38 @@
 @tailwind utilities;
 
 @layer components {
-    .body-wrapper {
-        display: grid;
-        grid-template-areas:
-    "header header"
-    "sidebar content";
-
-        grid-template-columns: 300px 1fr;
-        grid-template-rows: auto 1fr;
-
-        height: 100vh;
-        transition: all 0.3s ease;
+    body {
+        overflow: hidden;
     }
 
-    .body-wrapper.collapsed {
-        display: grid;
-        grid-template-areas:
-    "header header"
-    "sidebar content";
-
-        grid-template-columns: 60px 1fr;
-        grid-template-rows: auto 1fr;
-
+    .body-wrapper {
         height: 100vh;
+        width: 100vw;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 60px 1fr;
+    }
+
+    .body {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        overflow-x: hidden;
+        @apply bg-gray-100 dark:bg-gray-900;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .body.collapsed {
+        grid-template-columns: 60px 1fr;
+    }
+
+    .content {
+        overflow: auto;
     }
 
     .sidebar {
-        grid-area: sidebar;
         display: grid;
         grid-template-areas: "navigation" "collapse";
-        grid-template-rows: 1fr auto;
+        grid-template-rows: 1fr 40px;
         overflow-x: hidden;
 
         @apply bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700;
@@ -89,12 +91,12 @@
         @apply cursor-pointer focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center;
     }
 
-    .btn-default  {
+    .btn-default {
         @apply text-gray-500 bg-white hover:bg-gray-100 focus:ring-gray-200 border border-gray-200 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600;
     }
 
     .btn-primary {
-        @apply  text-white bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800;
+        @apply text-white bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800;
     }
 
     .btn-danger {
