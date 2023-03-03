@@ -6,8 +6,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         namespace_id: Irida::PathRegex.full_namespace_route_regex) do
     scope(path: ':project_id',
           constraints: { project_id: Irida::PathRegex.project_route_regex },
-          # module: :projects,
-          controller: :projects,
+          module: :projects,
           as: :project) do
       # Begin on /-/ scope.
       # Use this for all project routes.
@@ -20,6 +19,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
 
     resources(:projects,
               path: '/',
+              # Re-enable when fixed https://github.com/rails/rails/issues/47244
               constraints: { id: Irida::PathRegex.project_route_regex },
               only: %i[show update])
   end

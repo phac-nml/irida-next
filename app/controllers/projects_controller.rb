@@ -4,13 +4,7 @@
 class ProjectsController < ApplicationController
   before_action :project, only: %i[show edit update activity transfer]
 
-  def show
-    respond_to do |format|
-      format.html do
-        render 'show'
-      end
-    end
-  end
+  def show; end
 
   def new
     respond_to do |format|
