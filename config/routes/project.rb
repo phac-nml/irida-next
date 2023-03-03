@@ -19,8 +19,8 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
 
     resources(:projects,
               path: '/',
-              # Re-enable when fixed https://github.com/rails/rails/issues/47244
-              constraints: { id: Irida::PathRegex.project_route_regex },
-              only: %i[show update])
+              constraints: { id: Irida::PathRegex::NAMESPACE_FORMAT_REGEX },
+              only: %i[update])
+    # only: %i[show update])
   end
 end

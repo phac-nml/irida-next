@@ -59,9 +59,7 @@ module Irida
       @project_route_regex ||= begin
         illegal_words = Regexp.new(Regexp.union(WILDCARD_ROUTES).source, Regexp::IGNORECASE)
 
-        # Re-enable when fixed https://github.com/rails/rails/issues/47244
-        # %r{(?!(#{illegal_words})/)#{NAMESPACE_FORMAT_REGEX}}x
-        /#{NAMESPACE_FORMAT_REGEX}/x
+        %r{(?!(#{illegal_words})/)#{NAMESPACE_FORMAT_REGEX}}x
       end
     end
 
