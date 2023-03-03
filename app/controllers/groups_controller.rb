@@ -17,11 +17,7 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:parent_id]) if params[:parent_id]
     @new_group = Group.new(parent_id: @group&.id)
     respond_to do |format|
-      if @group
-        format.html { render :new_subgroup }
-      else
-        format.html { render :new }
-      end
+      format.html { render_new }
     end
   end
 
@@ -32,11 +28,12 @@ class GroupsController < ApplicationController
   def create
     respond_to do |format|
       @new_group = Group.new(group_params.merge(owner: current_user))
+      @group = @new_group.parent
       if @new_group.save
         flash[:success] = t('.success')
         format.html { redirect_to group_path(@new_group.full_path) }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render_new(status: :unprocessable_entity) }
       end
     end
   end
@@ -67,18 +64,26 @@ class GroupsController < ApplicationController
     params.require(:group).permit(:name, :path, :description, :parent_id)
   end
 
-  def resolve_layout
+  def resolve_layout # rubocop:disable Metrics/MethodLength
     case action_name
     when 'show', 'edit'
       'groups'
-    when 'new'
-      if params[:parent_id]
+    when 'new', 'create'
+      if params[:parent_id] || group_params[:parent_id]
         'groups'
       else
         'application'
       end
     else
       'application'
+    end
+  end
+
+  def render_new(options = {})
+    if @group
+      render :new_subgroup, options
+    else
+      render :new, options
     end
   end
 end
