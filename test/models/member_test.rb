@@ -27,8 +27,4 @@ class MemberTest < ActiveSupport::TestCase
   test 'group member should have a role' do
     assert_not_nil @member.role
   end
-
-  test 'group member should not have metadata role' do
-    assert_nil @member.metadata_role
-  end
 end

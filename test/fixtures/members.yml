@@ -4,10 +4,8 @@ member_one:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   role: "Group Owner"
-  metadata_role:
 
 member_two:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
   role: "Group Owner"
-  metadata_role:
