@@ -35,6 +35,10 @@ class GroupTest < ActiveSupport::TestCase
     assert @group.group_namespace?
   end
 
+  test '#project_namespace?' do
+    assert_not @group.project_namespace?
+  end
+
   test '#user_namespace?' do
     assert_not @group.user_namespace?
   end
