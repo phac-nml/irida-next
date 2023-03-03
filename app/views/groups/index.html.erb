@@ -15,7 +15,7 @@
             <% @groups.each do |group| %>
               <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-normal text-gray-500 dark:text-gray-400">
                 <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                  <%= link_to group.human_name, group_path(group), class: "link font-semibold" %>
+                  <%= link_to group.name, group_path(group), class: "link font-semibold" %>
                   <% if current_user.id == group.owner_id %>
                     <span class="bg-indigo-100 text-indigo-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300">Owner</span>
                   <% end %>

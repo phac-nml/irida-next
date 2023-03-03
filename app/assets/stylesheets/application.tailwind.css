@@ -56,6 +56,10 @@
         @apply font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline;
     }
 
+    .form-field {
+        @apply mb-4;
+    }
+
     .form-field label {
         @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;
     }
