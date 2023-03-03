@@ -1,5 +1,35 @@
 require: rubocop-rails
 
+Rails:
+  Enabled: true
+
 AllCops:
+  Exclude:
+    - "**/bin/**/**"
+    - "**/db/schema.rb"
   TargetRubyVersion: "3.2"
   NewCops: enable
+
+# https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength
+Metrics/BlockLength:
+  Exclude:
+    - "**/config/environments/*.rb"
+    - "**/config/routes.rb"
+    - "**/config/routes/**/*.rb"
+    - "**/test/**/*.rb"
+
+# https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsmodulelength
+Metrics/ModuleLength:
+  Exclude:
+    - "**/config/routes.rb"
+    - "**/config/routes/**/*.rb"
+    - "**/test/**/*.rb"
+
+# https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsmethodlength
+Metrics/MethodLength:
+  CountComments: false
+  Max: 15
+
+# https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsabcsize
+Metrics/AbcSize:
+  Max: 20

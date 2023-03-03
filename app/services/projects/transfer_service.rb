@@ -5,7 +5,7 @@ module Projects
   class TransferService < BaseProjectService
     TransferError = Class.new(StandardError)
 
-    def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def execute(new_namespace) # rubocop:disable Metrics/AbcSize
       @new_namespace = new_namespace
 
       raise TransferError, 'Please select a new namespace for your project.' if @new_namespace.blank?

@@ -100,7 +100,7 @@ class Namespace < ApplicationRecord
     errors.add(:type, 'Namespace is not allowed to be directly created')
   end
 
-  def validate_parent_type # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def validate_parent_type # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     unless has_parent?
       errors.add(:parent_id, 'must be set for a project namespace') if project_namespace?
 
