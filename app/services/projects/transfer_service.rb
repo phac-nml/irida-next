@@ -33,9 +33,6 @@ module Projects
     attr_reader :new_namespace
 
     def transfer(project)
-      @old_path = project.full_path
-      @old_group = project.namespace.parent
-
       if Namespaces::ProjectNamespace.where(parent_id: @new_namespace.id).exists?(['path = ? or name = ?', project.path,
                                                                                    project.name])
         raise TransferError, 'Project with same name or path in target namespace already exists'
