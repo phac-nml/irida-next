@@ -7,7 +7,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         module: :projects,
         as: :namespace_project) do
     get '/', action: :show
-    post '/', action: :update
+    patch '/', action: :update
     put '/', action: :update
 
     # Begin on /-/ scope.
