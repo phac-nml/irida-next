@@ -3,27 +3,31 @@
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">Password</h2>
     <p class="text-gray-500 dark:text-gray-400">Updated your account password.</p>
   </div>
-    <%= form_with(model: user, url: profile_password_path, method: :patch) do |form| %>
-      <div class="form-field">
-        <%= form.label :current_password %>
-        <%= form.password_field :current_password, :required => true, autofocus: true, autocomplete: "current-password" %>
-        <p class="field-hint">You must provide your current password in order to change it.</p>
-      </div>
-      <div class="form-field">
-        <%= form.label :password %>
-        <%= form.password_field :password, :required => true, autocomplete: "new-password" %>
-        <% if @minimum_password_length %>
-          <br />
-          <em><%= @minimum_password_length %> characters minimum</em>
-        <% end %>
-      </div>
-      <div class="form-field">
-        <%= form.label :password_confirmation %>
-        <%= form.password_field :password_confirmation, :required => true, autocomplete: "new-password" %>
-      </div>
-      <div class="my-2 flex items-center justify-between">
-        <%= form.submit "Save password", class: "btn btn-primary" %>
-        <p class="field-hint"><%= link_to "Forgot your password?", profile_password_path(@user) %></p>
-      </div>
-    <% end %>
+  <%= form_with(model: user, url: profile_password_path, method: :patch) do |form| %>
+    <% invalid_current = user.errors.include?(:current_password) %>
+    <div class="form-field <%= 'invalid' if invalid_current %>">
+      <%= form.label :current_password %>
+      <%= form.password_field :current_password, :required => true, autofocus: true, autocomplete: "current-password" %>
+      <p class="field-hint">You must provide your current password in order to change it.</p>
+      <%= render 'shared/form/field_errors', errors: user.errors.full_messages_for(:current_password) %>
+    </div>
+
+    <% invalid_password = user.errors.include?(:password) %>
+    <div class="form-field <%= 'invalid' if invalid_password %>">
+      <%= form.label :password %>
+      <%= form.password_field :password, :required => true, autocomplete: "new-password" %>
+      <%= render 'shared/form/field_errors', errors: user.errors.full_messages_for(:password) %>
+    </div>
+
+    <% invalid_password_confirmation = user.errors.include?(:password_confirmation) %>
+    <div class="form-field <%= 'invalid' if invalid_password_confirmation %>">
+      <%= form.label :password_confirmation %>
+      <%= form.password_field :password_confirmation, :required => true, autocomplete: "new-password" %>
+      <%= render 'shared/form/field_errors', errors: user.errors.full_messages_for(:password_confirmation) %>
+    </div>
+    <div class="my-2 flex items-center justify-between">
+      <%= form.submit "Save password", class: "btn btn-primary" %>
+      <p class="field-hint"><%= link_to "Forgot your password?", profile_password_path(@user) %></p>
+    </div>
+  <% end %>
 </div>

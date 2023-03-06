@@ -42,9 +42,11 @@ en:
               blank: can't be blank
               taken: has already been taken
   profiles:
-    update_success: Profile updated successfully
-    password:
-      update_success: Password updated successfully
+    update:
+      success: Profile updated successfully
+    passwords:
+      update:
+        success: Password updated successfully
   groups:
     create:
       success: Group created successfully
