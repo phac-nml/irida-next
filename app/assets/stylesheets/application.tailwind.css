@@ -54,11 +54,11 @@
   }
 
   .link {
-    @apply font-medium text-blue-600 hover:underline dark:text-blue-500;
+    @apply font-medium text-green-600 hover:underline dark:text-green-500;
   }
 
   p link {
-    @apply font-medium text-blue-600 underline hover:no-underline dark:text-blue-500;
+    @apply font-medium text-green-600 underline hover:no-underline dark:text-green-500;
   }
 
   .form-field {
@@ -73,7 +73,7 @@
   .form-field input[type="search"],
   .form-field input[type="password"],
   .form-field input[type="email"] {
-    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 shadow-sm p-2.5 focus:border-blue-500 focus:ring-blue-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500;
+    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 shadow-sm p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field.invalid label {
@@ -85,11 +85,11 @@
   }
 
   .form-field textarea {
-    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-blue-500 focus:ring-blue-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500;
+    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field input[type="checkbox"] {
-    @apply h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-primary-300 focus:ring-4 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600;
+    @apply h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-green-300 focus:ring-4 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-green-600;
   }
 
   .field-hint {
@@ -105,7 +105,7 @@
   }
 
   .btn-primary {
-    @apply text-white bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800;
+    @apply text-white bg-green-600 hover:bg-green-700 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800;
   }
 
   .btn-danger {
