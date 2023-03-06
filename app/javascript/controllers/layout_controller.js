@@ -12,7 +12,7 @@ export default class extends Controller {
 
   toggle() {
     if (this.layoutContainerTarget.classList.contains("collapsed")) {
-      this.expended();
+      this.expanded();
     } else {
       this.collapsed();
     }
@@ -28,7 +28,7 @@ export default class extends Controller {
     localStorage.setItem("layout", "collapsed");
   }
 
-  expended() {
+  expanded() {
     this.layoutContainerTarget.classList.remove("collapsed");
     this.iconCollapseTarget.classList.remove("hidden");
     this.iconExpandTarget.classList.add("hidden");
