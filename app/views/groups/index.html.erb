@@ -4,48 +4,46 @@
   subtitle: "Groups are a way to organize your projects.",
   buttons: "groups/list_buttons"
 } %>
-
 <div class="p-4">
-  <div data-controller="groups-new" class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+  <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
     <div class="flex flex-col">
       <div class="overflow-x-auto">
         <div class="shadow">
           <table class="min-w-full table-fixed dark:divide-gray-600">
             <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-            <% @groups.each do |group| %>
-              <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-normal text-gray-500 dark:text-gray-400">
-                <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                  <%= link_to group.name, group_path(group), class: "link font-semibold" %>
-                  <% if current_user.id == group.owner_id %>
-                    <span class="bg-indigo-100 text-indigo-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300">Owner</span>
-                  <% end %>
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= group.description %></div>
-
-                </td>
-                <td class="px-4 py-3">
-                  <div class="flex justify-end items-center">
-                    <div class="inline-flex items-center justify-between mr-2 w-8">
-                      <%= render "icons/folder", class_names: "w-4 h-4" %>
-                      0
+              <% @groups.each do |group| %>
+                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-normal text-gray-500 dark:text-gray-400">
+                  <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                    <%= link_to group.name, group_path(group), class: "link font-semibold" %>
+                    <% if current_user.id == group.owner_id %>
+                      <span class="bg-indigo-100 text-indigo-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300">Owner</span>
+                    <% end %>
+                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= group.description %></div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="flex justify-end items-center">
+                      <div class="inline-flex items-center justify-between mr-2 w-8">
+                        <%= render "icons/folder", class_names: "w-4 h-4" %>
+                        0
+                      </div>
+                      <div class="inline-flex items-center justify-between mr-2 w-8"><%= render "icons/users", class_names: "w-4 h-4" %>
+                        1
+                      </div>
+                      <button data-dropdown-toggle="group-<%= group.id %>-dropdown" class="navbar-btn">
+                        <%= render 'icons/ellipsis_vertical' %>
+                      </button>
+                      <!-- Dropdown menu -->
+                      <div id="group-<%= group.id %>-dropdown" class="dropdown-menu">
+                        <ul aria-labelledby="dropdownDefaultButton">
+                          <li>
+                            <%= link_to "Delete", edit_group_path(group) %>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                    <div class="inline-flex items-center justify-between mr-2 w-8"><%= render "icons/users", class_names: "w-4 h-4" %>
-                      1
-                    </div>
-                    <button data-dropdown-toggle="group-<%= group.id %>-dropdown" class="navbar-btn">
-                      <%= render 'icons/ellipsis_vertical' %>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="group-<%= group.id %>-dropdown" class="dropdown-menu">
-                      <ul aria-labelledby="dropdownDefaultButton">
-                        <li>
-                          <%= link_to "Delete", edit_group_path(group) %>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            <% end %>
+                  </td>
+                </tr>
+              <% end %>
             </tbody>
           </table>
         </div>
