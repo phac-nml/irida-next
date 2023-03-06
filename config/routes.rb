@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   scope path: '-' do
     resources :projects, only: %i[new create]
 
+    resources :members, only: %i[index new create destroy]
     draw :profile
   end
   # End of the /-/ scope.

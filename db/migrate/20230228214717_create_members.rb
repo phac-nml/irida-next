@@ -6,6 +6,8 @@ class CreateMembers < ActiveRecord::Migration[7.0]
     create_table :members do |t|
       t.integer :user_id
       t.integer :namespace_id
+      t.integer :created_by_id
+      t.string :type
       t.string :role
 
       t.timestamps

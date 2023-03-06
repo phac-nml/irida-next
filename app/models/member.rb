@@ -4,9 +4,12 @@
 class Member < ApplicationRecord
   belongs_to :user
   belongs_to :namespace, autosave: true
+  belongs_to :created_by, class_name: 'User'
 
   validates :role, presence: true
   validates :user_id, uniqueness: { scope: :namespace_id }
+
+  # validates :created_by, presence: true
 
   validate :validate_namespace
 
