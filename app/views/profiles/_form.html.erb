@@ -13,10 +13,6 @@
       <%= f.label :email %>
       <%= f.email_field :email, :required => true, autofocus: true, autocomplete: "email" %>
     </div>
-    <% if Devise.mappings[:user].confirmable? && resource.pending_reconfirmation? %>
-      <%= t (:'profiles.show.email.pending', email: resource.unconfirmed_email) %>
-      </div>
-    <% end %>
     <div class="my-2">
       <%= f.submit t(:'profiles.show.email.submit'), class: "btn btn-primary" %>
     </div>
