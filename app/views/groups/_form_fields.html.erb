@@ -41,11 +41,9 @@
   <div class="form-field <%= 'invalid' if invalid_path %>">
     <%= form.label :path %>
     <%= form.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
-    <p class="field-hint">Must start with a letter or number, and must end with a letter or number. Letter,
-      numbers,
-      -
-      or
-      _ are allowed content</p>
+    <p class="field-hint">
+      <%= t(:'groups.create.path_help') %>
+    </p>
     <%= render 'shared/form/field_errors', errors: group.errors.full_messages_for(:path) %>
   </div>
 <% end %>
