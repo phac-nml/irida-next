@@ -31,6 +31,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_214717) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "projects", force: :cascade do |t|
+    t.integer "creator_id"
+    t.integer "namespace_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "routes", force: :cascade do |t|
     t.string "path"
     t.string "name"

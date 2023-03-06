@@ -5,6 +5,7 @@ group_one:
   path: group-1
   type: Group
   description: Group 1 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 subgroup1:
   name: Subgroup 1
@@ -12,6 +13,7 @@ subgroup1:
   type: Group
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 <% (Namespace::MAX_ANCESTORS-1).times do |n| %>
 subgroup<%= (n+2) %>:
@@ -20,4 +22,5 @@ subgroup<%= (n+2) %>:
   type: Group
   description: <%= "Subgroup #{n+2} description" %>
   parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}") %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 <% end %>

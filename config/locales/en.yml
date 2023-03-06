@@ -36,3 +36,10 @@ en:
       update_success: "Password updated successfully"
   member:
     add_success: "Member added successfully"
+  projects:
+    create:
+      success: "Project %{project_name} was successfully created"
+    update:
+      success: "Project %{project_name} was successfully updated"
+    transfer:
+      success: "Project %{project_name} was successfully transferred"

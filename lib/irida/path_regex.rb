@@ -55,6 +55,14 @@ module Irida
       end
     end
 
+    def project_route_regex
+      @project_route_regex ||= begin
+        illegal_words = Regexp.new(Regexp.union(WILDCARD_ROUTES).source, Regexp::IGNORECASE)
+
+        %r{(?!(#{illegal_words})/)#{NAMESPACE_FORMAT_REGEX}}x
+      end
+    end
+
     def full_namespace_path_regex
       @full_namespace_path_regex ||= %r{\A#{full_namespace_route_regex}/\z}
     end

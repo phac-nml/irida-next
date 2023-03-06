@@ -17,7 +17,8 @@ class User < ApplicationRecord
   before_validation :ensure_namespace
   before_save :ensure_namespace
 
-  # rubocop:disable Metrics/MethodLength
+  delegate :full_path, to: :namespace
+
   def update_password_with_password(params)
     current_password = params.delete(:current_password)
 
@@ -33,7 +34,10 @@ class User < ApplicationRecord
     clean_up_passwords
     result
   end
-  # rubocop:enable Metrics/MethodLength
+
+  def to_param
+    full_path
+  end
 
   private
 

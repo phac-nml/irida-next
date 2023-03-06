@@ -9,7 +9,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     group = groups(:group_one)
-    get group_path(group.full_path)
+    get group_path(group)
     assert_response :success
   end
 
@@ -17,7 +17,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     subgroup = groups(:subgroup1)
-    get group_path(subgroup.full_path)
+    get group_path(subgroup)
     assert_response :success
   end
 

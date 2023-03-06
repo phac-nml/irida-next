@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+project1_namespace:
+  name: Project 1
+  path: project-1
+  description: Project 1 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+project2_namespace:
+  name: Project 2
+  path: project-2
+  description: Project 2 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+john_doe_project2_namespace:
+  name: Project 2
+  path: project-2
+  description: Project 2 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
