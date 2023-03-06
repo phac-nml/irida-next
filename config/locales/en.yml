@@ -52,6 +52,10 @@ en:
     passwords:
       update:
         success: Password updated successfully
+        hint: You must provide your current password to update it
+        subtitle: Update your account password
+        submit: Update password
+        forgot: Forgot your password?
   groups:
     create:
       success: Group created successfully
