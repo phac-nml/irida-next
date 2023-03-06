@@ -35,6 +35,6 @@ export default class extends Controller {
     this.linkTargets.forEach((link) => {
       link.classList.remove("sr-only");
     });
-    localStorage.setItem("layout", "expended");
+    localStorage.setItem("layout", "expanded");
   }
 }
