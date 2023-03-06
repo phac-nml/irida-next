@@ -57,6 +57,11 @@ en:
         submit: Update password
         forgot: Forgot your password?
   groups:
+    index:
+      create_group_button: New group
+    show:
+      create_subgroup_button: New subgroup
+      create_project_button: New project
     create:
       success: Group created successfully
       title: Create group
