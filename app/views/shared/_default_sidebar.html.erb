@@ -4,7 +4,7 @@
       <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
         <a href="<%= root_path %>" title="Your work" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white  hover:bg-gray-100 dark:hover:bg-gray-700">
           <div class="flex justify-center" style="width: 27px;"><%= render 'icons/inbox_stack', class_names: "w-6 h-6" %></div>
-          <h2 data-layout-target="link" class="ml-2 font-semibold text-gray-900 dark:text-white" style=" white-space: nowrap">Your Work</h2>
+          <h2 data-layout-target="link" class="ml-2 font-semibold text-gray-900 dark:text-white" style=" white-space: nowrap">Your work</h2>
         </a>
         <ul class="pt-1 space-y-1">
           <%= render partial: 'shared/sidebar_item', locals: { link: groups_path, icon: "icons/squares_2x2", text: "Groups" } %>

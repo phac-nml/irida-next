@@ -3,135 +3,134 @@
 @tailwind utilities;
 
 @layer components {
-    body {
-        overflow: hidden;
-    }
+  body {
+    overflow: hidden;
+  }
 
-    .body-wrapper {
-        height: 100vh;
-        width: 100vw;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 60px 1fr;
-    }
+  .body-wrapper {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px 1fr;
+  }
 
-    .body {
-        display: grid;
-        grid-template-columns: 250px 1fr;
-        overflow-x: hidden;
-        @apply bg-gray-100 dark:bg-gray-900;
-        transition: all 0.3s ease-in-out;
-    }
+  .body {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    overflow-x: hidden;
+    transition: all 0.3s ease-in-out;
+  }
 
-    .body.collapsed {
-        grid-template-columns: 60px 1fr;
-    }
+  .body.collapsed {
+    grid-template-columns: 60px 1fr;
+  }
 
-    .content {
-        overflow: auto;
-    }
+  .content {
+    overflow: auto;
+  }
 
-    .sidebar {
-        display: grid;
-        grid-template-areas: "navigation" "collapse";
-        grid-template-rows: 1fr 40px;
-        overflow-x: hidden;
+  .sidebar {
+    display: grid;
+    grid-template-areas: "navigation" "collapse";
+    grid-template-rows: 1fr 40px;
+    overflow-x: hidden;
 
-        @apply bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700;
-    }
+    @apply border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800;
+  }
 
-    .page-header {
-       @apply p-2 bg-white block sm:flex items-center justify-between border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-4
-    }
+  .page-header {
+    @apply block items-center justify-between border-b border-gray-200 bg-white p-2 px-4 dark:border-gray-700 dark:bg-gray-800 sm:flex;
+  }
 
-    .navbar-btn {
-        @apply text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 ml-2;
-    }
+  .navbar-btn {
+    @apply ml-2 rounded-lg text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+  }
 
-    .navbar-btn svg {
-        @apply w-6 h-6;
-    }
+  .navbar-btn svg {
+    @apply h-6 w-6;
+  }
 
-    .link {
-        @apply font-medium text-blue-600 dark:text-blue-500 hover:underline
-    }
+  .link {
+    @apply font-medium text-blue-600 hover:underline dark:text-blue-500;
+  }
 
-    p link {
-        @apply font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline;
-    }
+  p link {
+    @apply font-medium text-blue-600 underline hover:no-underline dark:text-blue-500;
+  }
 
-    .form-field {
-        @apply mb-4;
-    }
+  .form-field {
+    @apply mb-4;
+  }
 
-    .form-field label {
-        @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;
-    }
+  .form-field label {
+    @apply mb-2 block text-sm font-medium text-gray-900 dark:text-white;
+  }
 
-    .form-field input[type="text"],
-    .form-field input[type="search"],
-    .form-field input[type="password"],
-    .form-field input[type="email"] {
-        @apply shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light;
-    }
+  .form-field input[type="text"],
+  .form-field input[type="search"],
+  .form-field input[type="password"],
+  .form-field input[type="email"] {
+    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 shadow-sm p-2.5 focus:border-blue-500 focus:ring-blue-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500;
+  }
 
-    .form-field.invalid label {
-        @apply text-red-700 dark:text-red-500;
-    }
+  .form-field.invalid label {
+    @apply text-red-700 dark:text-red-500;
+  }
 
-    .form-field.invalid input[type="text"] {
-        @apply border-red-500 bg-red-50 dark:bg-red-800 placeholder-red-700 dark:placeholder-red-300 focus:ring-red-500 focus:border-red-500 dark:bg-red-100 dark:border-red-400;
-    }
+  .form-field.invalid input[type="text"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-100 dark:bg-red-800;
+  }
 
-    .form-field textarea {
-        @apply block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
-    }
+  .form-field textarea {
+    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-blue-500 focus:ring-blue-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500;
+  }
 
-    .form-field input[type="checkbox"] {
-        @apply w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-4 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800;
-    }
+  .form-field input[type="checkbox"] {
+    @apply h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-primary-300 focus:ring-4 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600;
+  }
 
-    .field-hint {
-        @apply mt-1 text-sm text-gray-500 dark:text-gray-400;
-    }
+  .field-hint {
+    @apply mt-1 text-sm text-gray-500 dark:text-gray-400;
+  }
 
-    .btn {
-        @apply cursor-pointer focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center;
-    }
+  .btn {
+    @apply cursor-pointer rounded-lg px-5 text-center text-sm font-medium py-2.5 focus:outline-none focus:ring-4;
+  }
 
-    .btn-default {
-        @apply text-gray-500 bg-white hover:bg-gray-100 focus:ring-gray-200 border border-gray-200 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600;
-    }
+  .btn-default {
+    @apply border border-gray-200 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
+  }
 
-    .btn-primary {
-        @apply text-white bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800;
-    }
+  .btn-primary {
+    @apply text-white bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800;
+  }
 
-    .btn-danger {
-        @apply text-white bg-red-600 hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-800;
-    }
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-800;
+  }
 
-    .dropdown-menu {
-        @apply z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700;
-    }
+  .dropdown-menu {
+    @apply z-10 hidden w-44 rounded-lg bg-white shadow divide-y divide-gray-100 dark:bg-gray-700;
+  }
 
-    .dropdown-menu ul {
-        @apply py-2 text-sm text-gray-700 dark:text-gray-200;
-    }
+  .dropdown-menu ul {
+    @apply py-2 text-sm text-gray-700 dark:text-gray-200;
+  }
 
-    .dropdown-menu li > a {
-        @apply block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white;
-    }
+  .dropdown-menu li > a {
+    @apply block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white;
+  }
 
-    .dropdown-menu li > a svg {
-        @apply inline-block w-5 h-5 mr-1 text-gray-400 dark:text-gray-300;
-    }
+  .dropdown-menu li > a svg {
+    @apply mr-1 inline-block h-5 w-5 text-gray-400 dark:text-gray-300;
+  }
 
-    .row-btn {
-        @apply text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm py-0 px-1;
-    }
+  .row-btn {
+    @apply px-1 py-0 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+  }
 
-    .row-btn svg {
-        @apply w-5 h-5;
-    }
+  .row-btn svg {
+    @apply h-5 w-5;
+  }
 }
