@@ -42,6 +42,11 @@ en:
               blank: can't be blank
               taken: has already been taken
   profiles:
+    show:
+      email:
+        subtitle: Email address linked to this account
+        pending: "Pending confirmation of %{email}"
+        submit: Update profile settings
     update:
       success: Profile updated successfully
     passwords:
