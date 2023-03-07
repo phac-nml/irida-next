@@ -41,6 +41,9 @@ en:
             name:
               blank: can't be blank
               taken: has already been taken
+  general:
+    expand_sidebar: Expand sidebar
+    collapse_sidebar: Collapse sidebar
   profiles:
     show:
       email:
@@ -66,6 +69,7 @@ en:
       success: Group created successfully
       title: Create group
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
+      name_placeholder: Awesome group name
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
       submit: Create group
       cancel: Cancel

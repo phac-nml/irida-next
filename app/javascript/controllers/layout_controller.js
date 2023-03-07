@@ -7,7 +7,7 @@ export default class extends Controller {
     // Need to determine the previous state
     localStorage.getItem("layout") === "collapsed"
       ? this.collapsed()
-      : this.expended();
+      : this.expanded();
   }
 
   toggle() {

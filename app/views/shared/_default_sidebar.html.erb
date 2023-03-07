@@ -16,12 +16,12 @@
     <button data-action="click->layout#toggle" class="flex items-center justify-center w-full h-10 text-sm font-medium text-gray-500 transition-colors duration-150 border-t border-gray-200 hover:text-gray-700 dark:hover:text-gray-200 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 rounded-none focus:ring-0">
       <span data-layout-target="iconCollapse" class="flex items-center">
         <%= render 'icons/chevron_double_left', class_names: "w-5 h-5" %>
-        Collapse sidebar
+        <%= t(:'general.collapse_sidebar') %>
       </span>
 
       <span data-layout-target="iconExpand" class="flex items-center">
         <%= render 'icons/chevron_double_right', class_names: "w-5 h-5" %>
-        <span class="sr-only">Expand sidebar</span>
+        <span class="sr-only"><%= t(:'general.expand_sidebar') %></span>
       </span>
     </button>
   </div>
