@@ -2,5 +2,5 @@
 
 # entity class for Member
 class GroupMember < Member
-  belongs_to :group, foreign_key: :namespace_id, inverse_of: :group
+  belongs_to :group, foreign_key: :namespace_id # rubocop:disable Rails/InverseOf
 end

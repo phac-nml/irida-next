@@ -1,8 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-group_one_member_james_doe:
+project_two_member_james_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
-  type: "GroupMember"
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace) %>
+  type: "ProjectMember"
   role: "Owner"

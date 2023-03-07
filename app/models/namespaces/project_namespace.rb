@@ -8,5 +8,8 @@ module Namespaces
     def self.sti_name
       'Project'
     end
+
+    has_many :project_members, foreign_key: :namespace_id, inverse_of: :namespace,
+                               class_name: 'ProjectMember', dependent: :destroy
   end
 end

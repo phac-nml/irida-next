@@ -15,6 +15,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_214717) do
     t.integer "user_id"
     t.integer "namespace_id"
     t.integer "created_by_id"
+    t.string "type"
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

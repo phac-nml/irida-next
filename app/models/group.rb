@@ -2,11 +2,10 @@
 
 # Namespace for Groups
 class Group < Namespace
-  # has_many :member, foreign_key: :namespace_id, inverse_of: :namespace, dependent: :destroy
+  has_many :group_members, foreign_key: :namespace_id, inverse_of: :namespace,
+                           class_name: 'GroupMember', dependent: :destroy
 
   def self.sti_name
     'Group'
   end
-
-  has_many :group_member, dependent: :destroy, as: :namespace, class_name: 'GroupMember'
 end
