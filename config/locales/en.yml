@@ -66,6 +66,8 @@ en:
       settings: Settings
     index:
       create_group_button: New group
+      group_dropdown:
+        delete: Delete group
     create:
       success: Group created successfully
       title: Create group
