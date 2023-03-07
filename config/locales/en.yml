@@ -42,11 +42,22 @@ en:
               blank: can't be blank
               taken: has already been taken
   general:
+    name: IRIDA Next
     expand_sidebar: Expand sidebar
     collapse_sidebar: Collapse sidebar
     default_sidebar:
       title: Your work
       groups: Groups
+    navbar:
+      main_dropdown:
+        groups: Groups
+      search:
+        placeholder: Search
+      new_dropdown:
+        group: New group
+      account_dropdown:
+        profile: Edit profile
+        sign_out: Sign out
   profiles:
     show:
       email:

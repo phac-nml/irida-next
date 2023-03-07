@@ -4,7 +4,9 @@
       <div class="flex items-center justify-start">
         <a href="<%= root_path %>" class="flex items-center">
           <%= render "icons/beaker", class_names: "w-12 h-12 text-green-500 rotate-12" %>
-          <span class="text-xl font-semibold text-gray-700 dark:text-gray-200">IRIDA Next</span>
+          <span class="text-xl font-semibold text-gray-700 dark:text-gray-200">
+            <%= t(:'general.name') %>
+          </span>
         </a>
         <button id="toggleMainMenu" aria-expanded="true" aria-label="Navigation dropdown" data-dropdown-toggle="main-menu-dropdown" class="navbar-btn">
           <%= render 'icons/bars_3', class_names: "w-6 h-6" %>
@@ -13,7 +15,9 @@
         <div id="main-menu-dropdown" class="dropdown-menu">
           <ul aria-labelledby="dropdownDefaultButton">
             <li>
-              <a class="flex items-center" href="<%= groups_path %>"><%= render 'icons/squares_2x2' %>Groups</a>
+              <a class="flex items-center" href="<%= groups_path %>"><%= render 'icons/squares_2x2' %>
+                <%= t(:'general.navbar.main_dropdown.groups') %>
+              </a>
             </li>
           </ul>
         </div>
@@ -23,7 +27,7 @@
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <%= render 'icons/magnifying', class_names: "h-5 w-5" %>
             </div>
-            <input type="text" name="email" id="topbar-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search">
+            <input type="text" name="email" id="topbar-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="<%= t(:'general.navbar.search.placeholder') %>">
           </div>
         </form>
       </div>
@@ -36,7 +40,7 @@
         <div id="new-item-dropdown" class="dropdown-menu">
           <ul aria-labelledby="dropdownDefaultButton">
             <li>
-              <%= link_to 'New group', new_group_path %>
+              <%= link_to t(:'general.navbar.new_dropdown.group'), new_group_path %>
             </li>
           </ul>
         </div>
@@ -52,10 +56,10 @@
           </div>
           <ul aria-labelledby="dropdownDefaultButton">
             <li>
-              <%= link_to 'Edit profile', profile_path %>
+              <%= link_to t(:'general.navbar.account_dropdown.profile'), profile_path %>
             </li>
             <li>
-              <%= link_to 'Sign Out', destroy_user_session_path, data: { turbo_method: :delete } %>
+              <%= link_to t(:'general.navbar.account_dropdown.sign_out'), destroy_user_session_path, data: { turbo_method: :delete } %>
             </li>
           </ul>
         </div>
