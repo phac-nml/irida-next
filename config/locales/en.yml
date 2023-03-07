@@ -60,6 +60,7 @@ en:
         submit: Update password
         forgot: Forgot your password?
   groups:
+    owner: Owner
     index:
       create_group_button: New group
     create:
@@ -87,6 +88,8 @@ en:
     show:
       create_subgroup_button: New subgroup
       create_project_button: New project
+      title: Your groups,
+      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
     update:
       success: Group updated successfully
   projects:
