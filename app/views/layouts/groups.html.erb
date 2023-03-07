@@ -12,12 +12,10 @@
 <body class="bg-white dark:bg-gray-900">
 <div class="body-wrapper">
   <%= render 'shared/navbar' %>
-  <div class="body" data-controller="layout" data-layout-target="layoutContainer">
-    <%= render 'shared/default_sidebar' %>
-    <div class="content">
-      <%= render 'shared/flash' %>
-      <%= yield %>
-    </div>
+  <div data-controller="layout" data-layout-target="layoutContainer" class="body">
+    <%= render 'groups/sidebar' %>
+    <%= render 'shared/flash' %>
+    <div class="content"><%= yield %></div>
   </div>
 </div>
 </body>

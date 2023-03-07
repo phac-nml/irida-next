@@ -16,7 +16,7 @@ class ProfilesController < ApplicationController
       if @user.update(update_params)
         # Sign in the user bypassing validation in case their password changed
         bypass_sign_in(@user)
-        flash[:success] = I18n.t('profiles.update_success')
+        flash[:success] = t('.success')
         format.html { redirect_to profile_path }
       else
         format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }

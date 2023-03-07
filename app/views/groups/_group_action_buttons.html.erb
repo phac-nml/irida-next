@@ -1,0 +1,6 @@
+<div class="flex flex-row">
+  <%= link_to t(:'groups.show.create_subgroup_button'), new_group_path(parent_id: group.id), class: "btn btn-default" %>
+  <button class="btn btn-primary ml-2">
+    <%= t :'groups.show.create_project_button' %>
+  </button>
+</div>
