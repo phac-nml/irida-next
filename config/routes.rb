@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   # Begin of the /-/ scope.
   # Use this scope for all new global routes.
   scope path: '-' do
+    resources :groups, only: %i[index new create]
     resources :projects, only: %i[new create]
 
     resources :members, only: %i[index new create destroy]
