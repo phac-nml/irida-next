@@ -1,6 +1,6 @@
 <%= render partial: 'shared/page_header', locals: {
-  title: "Create subgroup",
-  subtitle: "Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects",
+  title: t(:'groups.new_subgroup.title'),
+  subtitle: t(:'groups.new_subgroup.subtitle'),
   icon: "squares_plus"
 } %>
 <div class="p-4">
@@ -14,8 +14,8 @@
         } %>
 
         <div class="my-2">
-          <%= form.submit "Create group", class: "btn btn-primary mr-1" %>
-          <%= link_to "Cancel", group_path(@group), class: "btn btn-default" %>
+          <%= form.submit t(:'groups.new_subgroup.submit'), class: "btn btn-primary mr-1" %>
+          <%= link_to t(:'groups.new_subgroup.cancel'), group_path(@group), class: "btn btn-default" %>
         </div>
       <% end %>
     </div>
