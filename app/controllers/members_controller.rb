@@ -39,11 +39,11 @@ class MembersController < ApplicationController
 
   def destroy
     @member.destroy
-    redirect_to members_list_path(namespace_id: member_params[:namespace_id])
+    redirect_to members_list_path
   end
 
   def member_params
-    params.require(:member).permit(:user_id, :access_level, :type, :namespace_id)
+    params.require(:member).permit(:user_id, :access_level, :type, :namespace_id, :created_by_id)
   end
 
   private
