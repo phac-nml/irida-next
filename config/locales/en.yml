@@ -58,9 +58,14 @@ en:
         aria_label: New menu item
         group: New group
       account_dropdown:
+        aria_label: Account menu dropdown
         profile: Edit profile
         sign_out: Sign out
   profiles:
+    sidebar:
+      profile: Profile
+      password: Password
+      account: Account
     show:
       email:
         subtitle: Email address linked to this account
@@ -73,7 +78,7 @@ en:
         success: Password updated successfully
         hint: You must provide your current password to update it
         subtitle: Update your account password
-        submit: Update password
+        submit: Save password
         forgot: Forgot your password?
   groups:
     owner: Owner
