@@ -50,10 +50,12 @@ en:
       groups: Groups
     navbar:
       main_dropdown:
+        aria-label: Main navigation menu
         groups: Groups
       search:
         placeholder: Search
       new_dropdown:
+        aria_label: New menu item
         group: New group
       account_dropdown:
         profile: Edit profile

@@ -21,6 +21,9 @@ Capybara.default_max_wait_time = 10
 # Normalizes whitespaces when using `has_text?` and similar matchers
 Capybara.default_normalize_ws = true
 
+# Allowing search with aria-label
+Capybara.enable_aria_label = true
+
 # Where to store artifacts (e.g. screenshots, downloaded files, etc.)
 Capybara.save_path = ENV.fetch('CAPYBARA_ARTIFACTS', './tmp/capybara')
 
