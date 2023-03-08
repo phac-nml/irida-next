@@ -11,7 +11,7 @@ class GroupsTest < ApplicationSystemTestCase
     visit groups_url
 
     assert_selector 'h1', text: I18n.t(:'groups.show.title')
-    assert_selector 'tr', count: 11
+    assert_selector 'tr', count: groups.count
     assert_text groups(:group_one).name
     assert_text groups(:subgroup1).name
   end
@@ -70,5 +70,19 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_text I18n.t(:'groups.update.success')
     assert_selector 'h1', text: 'Edited group'
+  end
+
+  test 'can delete a group' do
+    visit group_url(groups(:subgroup6))
+
+    click_link I18n.t(:'groups.sidebar.settings')
+    click_button I18n.t(:'groups.edit.advanced.button_aria_label')
+
+    accept_alert do
+      click_link I18n.t(:'groups.edit.advanced.delete_group.submit')
+    end
+
+    assert_selector 'h1', text: I18n.t(:'groups.show.title')
+    assert_selector 'tr', count: groups.count - 1
   end
 end
