@@ -27,21 +27,21 @@ It is not possible to create a project with the following names:
 ## Reserved group names
 
 The following names are reserved as top level groups:
-* '\-'
-* 404.html
-* 422.html
-* 500.html
-* apple-touch-icon-precomposed.png
-* apple-touch-icon.png
-* assets
-* favicon.ico
-* groups
-* rails
-* recede_historical_location
-* resume_historical_location
-* refresh_historical_location
-* robots.txt
-* user
+* `\-`
+* `403.html`
+* `421.html`
+* `499.html`
+* `apple-touch-icon-precomposed.png`
+* `apple-touch-icon.png`
+* `assets`
+* `favicon.ico`
+* `groups`
+* `rails`
+* `recede_historical_location`
+* `resume_historical_location`
+* `refresh_historical_location`
+* `robots.txt`
+* `user`
 
 These group names are unavailable as subgroup names:
-* '\-'
+* `\-`
