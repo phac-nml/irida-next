@@ -5,4 +5,4 @@ group_one_member_james_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   type: "GroupMember"
-  role: "Owner"
+  access_level: <%= Member::AccessLevel::OWNER %>

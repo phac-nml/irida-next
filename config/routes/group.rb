@@ -6,6 +6,10 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         constraints: { id: Irida::PathRegex.full_namespace_route_regex }) do
     scope(path: '-') do
       get :edit, as: :edit_group
+      get '/members' => 'members#index', as: :members_list
+      get '/members/new' => 'members#new', as: :new_member
+      post '/members' => 'members#create', as: :add_new_member
+      delete '/members' => 'members#destroy', as: :destroy_member
     end
 
     get '/', action: :show, as: :group_canonical

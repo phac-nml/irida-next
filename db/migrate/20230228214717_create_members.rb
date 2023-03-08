@@ -8,7 +8,7 @@ class CreateMembers < ActiveRecord::Migration[7.0]
       t.integer :namespace_id
       t.integer :created_by_id
       t.string :type
-      t.string :role
+      t.integer :access_level
 
       t.timestamps
     end

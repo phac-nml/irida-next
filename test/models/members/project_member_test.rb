@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ProjectMemberTest < ActiveSupport::TestCase
   def setup
-    @project_member = project_members(:project_two_member_james_doe)
+    @project_member = members_project_members(:project_two_member_james_doe)
     @project = projects(:john_doe_project2)
     @created_by_user = users(:john_doe)
     @user = users(:james_doe)
@@ -26,8 +26,8 @@ class ProjectMemberTest < ActiveSupport::TestCase
     assert_equal @user, @project_member.user
   end
 
-  test '#role' do
-    assert_equal 'Owner', @project_member.role
+  test '#access_level' do
+    assert_equal Member::AccessLevel::OWNER, @project_member.access_level
   end
 
   test '#type' do

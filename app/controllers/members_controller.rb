@@ -3,27 +3,19 @@
 # Controller actions for Groups
 class MembersController < ApplicationController
   before_action :member, only: %i[destroy]
+  before_action :namespace, only: %i[index new create]
+  before_action :access_levels, only: %i[new create]
 
-  def index # rubocop:disable Metrics/AbcSize
-    @n = Namespace.where(id: request.params[:namespace_id] || request.params[:id])
-    @page_name = "#{@n.first.type} #{@n.first.name} Members"
-    @members = Member.where(namespace_id: request.params[:namespace_id] || request.params[:id])
-  end
+  layout :resolve_layout
 
-  def show
-    @member_name = 'Fred Penner'
-    respond_to do |format|
-      format.html do
-        render 'members/show'
-      end
-    end
+  def index
+    @members = Member.where(namespace_id: @namespace.id)
   end
 
   def new
-    @members = Member.where.not(namespace_id: request.params[:namespace_id])
-    @namespace_type = request.params[:type] == 'Group' ? 'Group' : 'Project'
-    @new_member = Member.new(namespace_id: request.params[:namespace_id])
-    @roles = [{ key: 'Owner', value: 'GROUP_OWNER' }, { key: 'Collaborator', value: 'GROUP_USER' }]
+    @available_users = User.where.not(id: Member.where(type: @member_type, namespace_id: @namespace.id).pluck(:user_id))
+    @new_member = Member.new(namespace_id: @namespace.id)
+
     respond_to do |format|
       format.html do
         render 'members/new'
@@ -31,14 +23,15 @@ class MembersController < ApplicationController
     end
   end
 
-  def create # rubocop:disable Metrics/AbcSize
+  def create
     respond_to do |format|
-      @new_member= Member.new(member_params.merge(created_by: current_user))
+      @new_member = Member.new(member_params.merge(created_by_id: current_user.id, type: @member_type,
+                                                   namespace_id: @namespace.id))
       if @new_member.save
-        flash[:success] = I18n.t('member.add_success')
-        format.html { redirect_to members_path(namespace_id: member_params[:namespace_id]) }
+        flash[:success] = t('.success')
+        format.html { redirect_to members_list_path }
       else
-        flash[:error] = "Nope"
+        flash[:error] = t('.error')
         format.html { render :new, status: :unprocessable_entity, locals: { member: @new_member } }
       end
     end
@@ -46,14 +39,41 @@ class MembersController < ApplicationController
 
   def destroy
     @member.destroy
-    redirect_to members_path(namespace_id: member_params[:namespace_id])
+    redirect_to members_list_path(namespace_id: member_params[:namespace_id])
   end
 
   def member_params
-    params.require(:member).permit(:user_id, :namespace_id, :role)
+    params.require(:member).permit(:user_id, :access_level, :type, :namespace_id)
   end
 
+  private
+
   def member
-    @member ||= Member.find_by(id: request.params[:id])
+    @member ||= Member.find_by(id: request.params[:member_id])
+  end
+
+  def namespace
+    @namespace ||= Namespace.find_by(path: request.params[:format] ||
+                    request.params[:id] ||
+                    request.params[:namespace_id])
+    @member_type = @namespace.type == 'Group' ? 'GroupMember' : 'ProjectMember'
+    @group = @namespace if @namespace.type == 'Group'
+  end
+
+  def access_levels
+    @access_levels = Member::AccessLevel.access_level_options
+  end
+
+  def resolve_layout
+    case action_name
+    when 'new', 'create', 'index'
+      if @namespace && @namespace.type == 'Group'
+        'groups'
+      else
+        'application'
+      end
+    else
+      'application'
+    end
   end
 end

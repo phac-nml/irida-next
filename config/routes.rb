@@ -12,7 +12,6 @@ Rails.application.routes.draw do
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[new create]
 
-    resources :members, only: %i[index new create destroy]
     draw :profile
   end
   # End of the /-/ scope.

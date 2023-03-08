@@ -41,6 +41,14 @@ en:
             name:
               blank: can't be blank
               taken: has already been taken
+    models:
+      member:
+        access_level:
+          no_access: No Access
+          guest: Guest
+          analyst: Analyst
+          maintainer: Maintainer
+          owner: Owner
   general:
     name: IRIDA Next
     expand_sidebar: Expand sidebar
@@ -124,5 +132,18 @@ en:
     transfer:
       success: "Project %{project_name} was successfully transferred"
   members:
-    add:
+    access_level:
+      level_0: No Access
+      level_10: Guest
+      level_40: Owner
+    create:
+      error: "Error adding member"
       success: "Member added successfully"
+    index:
+      add: Add New Member
+      delete: Delete
+      delete_confirmation: Are you sure you want to delete this member?
+      title: Members
+    new:
+      title: Add New Member
+      add_member_to_group: Add member to group

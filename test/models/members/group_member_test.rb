@@ -4,7 +4,7 @@ require 'test_helper'
 
 class GroupMemberTest < ActiveSupport::TestCase
   def setup
-    @group_member = group_members(:group_one_member_james_doe)
+    @group_member = members_group_members(:group_one_member_james_doe)
     @group = groups(:group_one)
     @created_by_user = users(:john_doe)
     @user = users(:james_doe)
@@ -26,8 +26,8 @@ class GroupMemberTest < ActiveSupport::TestCase
     assert_equal @user, @group_member.user
   end
 
-  test '#role' do
-    assert_equal 'Owner', @group_member.role
+  test '#access level' do
+    assert_equal Member::AccessLevel::OWNER, @group_member.access_level
   end
 
   test '#type' do

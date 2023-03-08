@@ -5,4 +5,4 @@ project_two_member_james_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace) %>
   type: "ProjectMember"
-  role: "Owner"
+  access_level: <%= Member::AccessLevel::OWNER %>
