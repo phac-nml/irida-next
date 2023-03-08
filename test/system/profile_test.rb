@@ -35,4 +35,15 @@ class ProfileTest < ApplicationSystemTestCase
 
     assert_text I18n.t(:'profiles.passwords.update.success')
   end
+
+  test 'can delete profile' do
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.account')
+
+    accept_alert do
+      click_link I18n.t(:'profiles.accounts.delete.button')
+    end
+
+    assert_text 'Register now'
+  end
 end

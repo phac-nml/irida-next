@@ -45,6 +45,7 @@ en:
     name: IRIDA Next
     expand_sidebar: Expand sidebar
     collapse_sidebar: Collapse sidebar
+    close_modal: Close modal
     default_sidebar:
       title: Your work
       groups: Groups
@@ -80,6 +81,14 @@ en:
         subtitle: Update your account password
         submit: Save password
         forgot: Forgot your password?
+    accounts:
+      delete:
+        description: Deleting your account has the following effects
+        effects:
+          - All projects and groups you own will be deleted
+          - All projects and groups you are a member of will be left intact
+        button: Delete account
+        confirm: Are you sure you want to delete your account?
   groups:
     owner: Owner
     sidebar:
