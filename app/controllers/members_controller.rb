@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Controller actions for Groups
+# Controller actions for Members
 class MembersController < ApplicationController
   before_action :member, only: %i[destroy]
   before_action :namespace, only: %i[index new create]

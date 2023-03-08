@@ -19,7 +19,7 @@
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t("members.access_level.level_#{member.access_level}")%></div>
                 </td>
                 <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400">Access granted by <%= member.created_by.email %></div>
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t('.access_granted_by', grantor_email: member.created_by.email) %></div>
                 </td>
                 <td class="px-4 py-3">
                 <div class="flex justify-end items-center">

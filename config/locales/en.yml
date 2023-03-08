@@ -144,6 +144,7 @@ en:
       delete: Delete
       delete_confirmation: Are you sure you want to delete this member?
       title: Members
+      access_granted_by: "Access granted by %{grantor_email}"
     new:
       title: Add New Member
       add_member_to_group: Add member to group
