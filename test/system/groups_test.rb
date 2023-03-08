@@ -7,6 +7,15 @@ class GroupsTest < ApplicationSystemTestCase
     login_as users(:john_doe)
   end
 
+  test 'can see the list of groups' do
+    visit groups_url
+
+    assert_selector 'h1', text: I18n.t(:'groups.show.title')
+    assert_selector 'tr', count: 11
+    assert_text groups(:group_one).name
+    assert_text groups(:subgroup1).name
+  end
+
   test 'can create a group' do
     visit groups_url
 
