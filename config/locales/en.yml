@@ -149,3 +149,5 @@ en:
     new:
       title: Add New Member
       add_member_to_group: Add member to group
+      select_user: Select a User
+      select_access_leve: Select Access Level

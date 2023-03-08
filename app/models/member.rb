@@ -9,8 +9,6 @@ class Member < ApplicationRecord
   validates :access_level, presence: true
   validates :user_id, uniqueness: { scope: :namespace_id }
 
-  # validates :created_by, presence: true
-
   validate :validate_namespace
 
   class << self
