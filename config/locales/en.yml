@@ -85,6 +85,7 @@ en:
     owner: Owner
     sidebar:
       details: Details
+      members: Members
       settings: Settings
     index:
       create_group_button: New group
