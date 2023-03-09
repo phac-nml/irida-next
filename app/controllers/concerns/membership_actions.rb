@@ -9,7 +9,7 @@ module MembershipActions
   end
 
   def new
-    @available_users = User.where.not(id: Member.where(type: @member_type, 
+    @available_users = User.where.not(id: Member.where(type: @member_type,
                                                        namespace_id: @namespace.id).pluck(:user_id))
     @new_member = Member.new(namespace_id: @namespace.id)
 
