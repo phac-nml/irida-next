@@ -37,7 +37,7 @@ Navigate in your browser to [http://localhost:3000](http://localhost:3000)
 ## Test
 
 ```bash
-bin/rails test
+bin/rails test:prepare test
 ```
 
 View Coverage:

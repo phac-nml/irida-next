@@ -29,7 +29,7 @@ jobs:
         run: pnpm install
       - name: Run tests
         run: |
-          bin/rails test
+          bin/rails test:prepare test
       - name: Report coverage
         if: github.event_name == 'pull_request'
         uses: aki77/simplecov-report-action@v1
