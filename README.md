@@ -1,43 +1,49 @@
-# README
+# IRIDA Next
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requirements
 
-Things you may want to cover:
+* [asdf](https://asdf-vm.com)
+* [asdf-node](https://github.com/asdf-vm/asdf-nodejs)
+* [asdf-pnpm](https://github.com/jonathanmorley/asdf-pnpm)
+* [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
 
-- Ruby version
-  3.2.0
+## Setup
 
-- System dependencies
+Install requirements:
 
-- Configuration
+```bash
+asdf install
+```
 
-- Database creation
+Install dependencies:
 
-- Database initialization
+```bash
+bundle && pnpm install
+```
 
-- How to run the test suite
+Initialize the database:
+```bash
+bin/rails db:create db:migrate
+```
 
-  1. Run pnpm install
+## Serve
 
-  - `pnpm install`
+```bash
+bin/dev
+```
 
-  2. Compile Assets
+Navigate in your browser to [http://localhost:3000](http://localhost:3000)
 
-  - `bin/bundle exec rails assets:precompile`
+## Test
 
-  3. Run Tests
+```bash
+bin/rails test
+```
 
-  - `bin/rails test`
+View Coverage:
 
-  4. Viewing Coverage
+Open `coverage/index.html`
 
-  - Open `coverage/index.html`
+## Documentation
 
-- Services (job queues, cache servers, search engines, etc.)
-
-- Deployment instructions
-
-- Run rails server:
-  - Install UI dependencies: `pnpm install`
-  - `bin/dev`
+See [docs](/docs/README.md).
