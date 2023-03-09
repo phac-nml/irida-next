@@ -27,11 +27,17 @@
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <%= render 'icons/magnifying', class_names: "h-5 w-5" %>
             </div>
-            <input type="text" name="email" id="topbar-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="<%= t(:'general.navbar.search.placeholder') %>">
+            <input type="text" name="email" id="topbar-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="<%= t(:'general.navbar.search.placeholder') %>">
           </div>
         </form>
       </div>
       <div class="flex items-center ml-3">
+        <% if cookies[:theme] == "light" %>
+          <%= link_to render(:partial => 'icons/moon'), root_path(theme: "dark"), class: "navbar-btn" %>
+        <% else %>
+          <%= link_to render(:partial => 'icons/sun',), root_path(theme: "light"), class: "navbar-btn" %>
+        <% end %>
+
         <!-- New item menu -->
         <button id="dropdownNewItem" aria-label="New item menu" data-dropdown-toggle="new-item-dropdown" type="button" class="navbar-btn">
           <%= render 'icons/document_plus' %>

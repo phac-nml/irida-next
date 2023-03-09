@@ -52,7 +52,7 @@
   }
 
   .navbar-btn {
-    @apply ml-2 rounded-lg text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+    @apply ml-2 rounded text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 
   .navbar-btn svg {
@@ -64,7 +64,7 @@
   }
 
   .card {
-    @apply p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800;
+    @apply p-4 bg-white border border-gray-200 rounded shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800;
   }
 
   p link {
@@ -83,7 +83,7 @@
   .form-field input[type="search"],
   .form-field input[type="password"],
   .form-field input[type="email"] {
-    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 shadow-sm p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded border border-gray-300 bg-gray-50 text-sm text-gray-900 shadow-sm p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field.invalid label {
@@ -95,7 +95,7 @@
   }
 
   .form-field textarea {
-    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field input[type="checkbox"] {
@@ -107,7 +107,7 @@
   }
 
   .btn {
-    @apply cursor-pointer rounded-lg px-5 text-center text-sm font-medium py-2.5 focus:outline-none focus:ring-4;
+    @apply cursor-pointer rounded px-5 text-center text-sm font-medium py-2.5 focus:outline-none focus:ring-4;
   }
 
   .btn-default {
@@ -123,7 +123,7 @@
   }
 
   .dropdown-menu {
-    @apply z-10 hidden w-44 rounded-lg bg-white shadow divide-y divide-gray-100 dark:bg-gray-700;
+    @apply z-10 hidden w-44 rounded bg-white shadow divide-y divide-gray-100 dark:bg-gray-700;
   }
 
   .dropdown-menu ul {

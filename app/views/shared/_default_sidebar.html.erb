@@ -2,7 +2,7 @@
   <div style="grid-area: navigation; display: flex; flex-direction: column;" class="bg-white dark:bg-gray-800 dark:border-gray-700">
     <div class="pt-2 pb-4 overflow-y-auto">
       <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-        <a href="<%= root_path %>" title="Your work" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white  hover:bg-gray-100 dark:hover:bg-gray-700">
+        <a href="<%= root_path %>" title="Your work" class="flex items-center p-1 text-base font-normal text-gray-900 rounded dark:text-white  hover:bg-gray-100 dark:hover:bg-gray-700">
           <div class="flex justify-center" style="width: 27px;"><%= render 'icons/inbox_stack', class_names: "w-6 h-6" %></div>
           <h2 data-layout-target="link" class="ml-2 font-semibold text-gray-900 dark:text-white" style=" white-space: nowrap">
             <%= t(:'general.default_sidebar.title') %>
