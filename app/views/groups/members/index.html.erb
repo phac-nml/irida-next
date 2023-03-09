@@ -16,10 +16,10 @@
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
                 </td>
                 <td class="px-4 py-3">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t("members.access_level.level_#{member.access_level}")%></div>
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_level.level_#{member.access_level}")%></div>
                 </td>
                 <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t('.access_granted_by', grantor_email: member.created_by.email) %></div>
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:'.access_granted_by', grantor_email: member.created_by.email) %></div>
                 </td>
                 <td class="px-4 py-3">
                 <div class="flex justify-end items-center">
@@ -30,7 +30,7 @@
                   <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
                     <ul aria-labelledby="dropdownDefaultButton">
                         <li>
-                          <%= link_to t(:'.delete'), destroy_member_path(member_id: member.id), data: { turbo_method: :delete, turbo_confirm: t(:'.delete_confirmation') } %>
+                          <%= link_to t(:'.delete'), member_path(member_id: member.id), data: { turbo_method: :delete, turbo_confirm: t(:'.delete_confirmation') } %>
                         </li>
                       </ul>
                     </div>
