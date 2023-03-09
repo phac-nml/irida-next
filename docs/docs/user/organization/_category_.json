@@ -1,0 +1,9 @@
+{
+    "label": "Set up your organization",
+    "position": 1,
+    "link": {
+        "type": "generated-index",
+        "slug": "/organization",
+        "description": "Configure your organization and its users. Determine user roles and give everyone access to the projects they need."
+    }
+}
