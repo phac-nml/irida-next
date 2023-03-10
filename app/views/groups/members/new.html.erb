@@ -1,0 +1,24 @@
+<div class="p-4">
+  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+      <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white mb-4">
+        <%= t(:'.title')%>
+      </h2>
+      <%= form_with(model: @new_member, url: group_members_path, method: :post) do |form| %>
+        <div class="form-field">
+          <%= form.label :user_id %>
+          <%= form.select :user_id, options_for_select(@available_users.collect { |u| [ u.email, u.id ] }, selected: params[:user_id]), { :prompt => t(:'.select_user') } %>
+        </div>
+
+        <div class="form-field">
+          <%= form.label :access_level %>
+          <%= form.select :access_level, @access_levels, { :prompt => t(:'.select_access_level') } %>
+        </div>
+
+        <div class="my-2">
+          <%= form.submit t(:'.add_member_to_group'), class: "btn btn-primary mr-1", disabled: !@available_users.count.positive? %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

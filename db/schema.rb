@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_27_172418) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_28_214717) do
+  create_table "members", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "namespace_id"
+    t.integer "created_by_id"
+    t.string "type"
+    t.integer "access_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true
+  end
+
   create_table "namespaces", force: :cascade do |t|
     t.string "name"
     t.string "path"
