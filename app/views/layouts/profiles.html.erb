@@ -9,7 +9,7 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
-<body class="bg-white dark:bg-gray-900 <%= cookies[:theme] %>">
+<body class="bg-white dark:bg-gray-900 <%= cookies[:theme] || "light" %>"">
 <div class="body-wrapper">
   <%= render 'shared/navbar' %>
   <div data-controller="layout" data-layout-target="layoutContainer" class="body">
