@@ -11,19 +11,11 @@
 if Rails.env.development?
 
   # Seed Users
-  admin = User.create!({ email: 'admin@cscscience.ca', password: '123456', password_confirmation: '123456' })
+  admin = User.create!({ email: 'admin@email.com', password: '123456', password_confirmation: '123456' })
 
-  User.create!(
-    [
-      { email: 'aaron.petkau@cscscience.ca', password: '123456', password_confirmation: '123456' },
-      { email: 'eric.enns@cscscience.ca', password: '123456', password_confirmation: '123456' },
-      { email: 'jeffrey.thiessen@cscscience.ca', password: '123456', password_confirmation: '123456' },
-      { email: 'josh.adam@cscscience.ca', password: '123456', password_confirmation: '123456' },
-      { email: 'katherine.thiessen@cscscience.ca', password: '123456', password_confirmation: '123456' },
-      { email: 'khiem.bui@cscscience.ca', password: '123456', password_confirmation: '123456' },
-      { email: 'sukhdeep.sidhu@cscscience.ca', password: '123456', password_confirmation: '123456' }
-    ]
-  )
+  1.upto(3) do |i|
+    User.create!({ email: "user#{i}@email.com", password: '123456', password_confirmation: '123456' })
+  end
 
   # Seed Groups
   1.upto(3) do |i|
