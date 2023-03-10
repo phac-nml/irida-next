@@ -33,10 +33,10 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     user = users(:john_doe)
 
     post group_members_path, params: { member: { user_id: user.id,
-                                           namespace_id: group.id,
-                                           created_by_id: user.id,
-                                           type: 'GroupMember',
-                                           access_level: Member::AccessLevel::OWNER } }
+                                                 namespace_id: group.id,
+                                                 created_by_id: user.id,
+                                                 type: 'GroupMember',
+                                                 access_level: Member::AccessLevel::OWNER } }
 
     assert_redirected_to group_members_path(group)
     assert_equal 2, group.group_members.count
