@@ -19,10 +19,10 @@ asdf install
 Verify requirements:
 
 ```bash
-$ which nodejs
+$ which node
 /home/USERNAME/.asdf/shims/node
 $ which pnpm
-/home/USERNAME/.asdf/shims/node
+/home/USERNAME/.asdf/shims/pnpm
 $ which ruby
 /home/USERNAME/.asdf/shims/ruby
 ```
