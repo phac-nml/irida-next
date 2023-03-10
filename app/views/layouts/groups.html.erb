@@ -9,7 +9,7 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
-<body class="bg-white dark:bg-gray-900" <%== %{data-controller='js'} if Rails.env.test? %>>
+<body class="bg-white dark:bg-gray-900">
 <div class="body-wrapper">
   <%= render 'shared/navbar' %>
   <div data-controller="layout" data-layout-target="layoutContainer" class="body">
