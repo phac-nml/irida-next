@@ -85,6 +85,9 @@ GEM
       xpath (~> 3.2)
     concurrent-ruby (1.2.0)
     crass (1.0.6)
+    cuprite (0.14.3)
+      capybara (~> 3.0)
+      ferrum (~> 0.13.0)
     date (3.3.3)
     debug (1.7.1)
       irb (>= 1.5.0)
@@ -97,6 +100,11 @@ GEM
       warden (~> 1.2.3)
     docile (1.4.0)
     erubi (1.12.0)
+    ferrum (0.13)
+      addressable (~> 2.5)
+      concurrent-ruby (~> 1.1)
+      webrick (~> 1.7)
+      websocket-driver (>= 0.6, < 0.8)
     globalid (1.1.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
@@ -202,11 +210,6 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
     ruby-progressbar (1.11.0)
-    rubyzip (2.3.2)
-    selenium-webdriver (4.8.0)
-      rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
-      websocket (~> 1.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -244,11 +247,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webdrivers (5.2.0)
-      nokogiri (~> 1.6)
-      rubyzip (>= 1.3.0)
-      selenium-webdriver (~> 4.0)
-    websocket (1.2.9)
+    webrick (1.8.1)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -263,6 +262,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   capybara
+  cuprite
   debug
   devise
   importmap-rails
@@ -271,7 +271,6 @@ DEPENDENCIES
   rails (~> 7.0.4, >= 7.0.4.2)
   rubocop
   rubocop-rails
-  selenium-webdriver
   simplecov
   sprockets-rails
   sqlite3 (~> 1.4)
@@ -280,7 +279,6 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   web-console
-  webdrivers
 
 RUBY VERSION
    ruby 3.2.0p0

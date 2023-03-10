@@ -4,6 +4,10 @@ import slugify from "@sindresorhus/slugify";
 export default class extends Controller {
   static targets = ["name", "path"];
 
+  connect() {
+    this.element.setAttribute("data-controller-connected", "true");
+  }
+
   /**
    * When the controller is initialized, set the placeholder for the
    * path input to be the slugified version of the name.
