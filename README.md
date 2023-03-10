@@ -1,43 +1,67 @@
-# README
+# IRIDA Next
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requirements
 
-Things you may want to cover:
+* [asdf](https://asdf-vm.com)
+* [asdf-node](https://github.com/asdf-vm/asdf-nodejs)
+* [asdf-pnpm](https://github.com/jonathanmorley/asdf-pnpm)
+* [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
+  * Note: `asdf-ruby` uses [ruby-build](https://github.com/rbenv/ruby-build) and you will need to ensure you have the os level dependencies installed, which are documented [here](https://github.com/rbenv/ruby-build/wiki#suggested-build-environment).
 
-- Ruby version
-  3.2.0
+## Setup
 
-- System dependencies
+Install requirements:
 
-- Configuration
+```bash
+asdf install
+```
 
-- Database creation
+Verify requirements:
 
-- Database initialization
+```bash
+$ which node
+/home/USERNAME/.asdf/shims/node
+$ which pnpm
+/home/USERNAME/.asdf/shims/pnpm
+$ which ruby
+/home/USERNAME/.asdf/shims/ruby
+```
 
-- How to run the test suite
+Ensure bundler installed:
 
-  1. Run pnpm install
+```bash
+gem install bundler
+```
 
-  - `pnpm install`
+Install dependencies:
 
-  2. Compile Assets
+```bash
+bundle && pnpm install
+```
 
-  - `bin/bundle exec rails assets:precompile`
+Initialize the database:
+```bash
+bin/rails db:create db:migrate
+```
 
-  3. Run Tests
+## Serve
 
-  - `bin/rails test`
+```bash
+bin/dev
+```
 
-  4. Viewing Coverage
+Navigate in your browser to [http://localhost:3000](http://localhost:3000)
 
-  - Open `coverage/index.html`
+## Test
 
-- Services (job queues, cache servers, search engines, etc.)
+```bash
+bin/rails test:prepare test
+```
 
-- Deployment instructions
+View Coverage:
 
-- Run rails server:
-  - Install UI dependencies: `pnpm install`
-  - `bin/dev`
+Open `coverage/index.html`
+
+## Documentation
+
+See [docs](/docs/README.md).
