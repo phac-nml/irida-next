@@ -15,7 +15,7 @@ module Profiles
 
     def destroy
       @user.destroy
-      redirect_to root_path
+      redirect_to new_user_session_url
     end
 
     private
