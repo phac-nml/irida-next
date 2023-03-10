@@ -8,7 +8,7 @@
             <%= t(:'general.name') %>
           </span>
         </a>
-        <button id="toggleMainMenu" aria-expanded="true" aria-label="Navigation dropdown" data-dropdown-toggle="main-menu-dropdown" class="navbar-btn">
+        <button id="toggleMainMenu" aria-expanded="true" aria-label="<%= t(:'general.navbar.main_dropdown.aria-label') %>" data-dropdown-toggle="main-menu-dropdown" class="navbar-btn">
           <%= render 'icons/bars_3', class_names: "w-6 h-6" %>
         </button>
         <!-- Dropdown menu -->
@@ -49,7 +49,7 @@
           </svg>
         </button>
         <!-- New item menu -->
-        <button id="dropdownNewItem" aria-label="New item menu" data-dropdown-toggle="new-item-dropdown" type="button" class="navbar-btn">
+        <button id="dropdownNewItem" aria-label="<%= t(:'general.navbar.new_dropdown.aria_label') %>" data-dropdown-toggle="new-item-dropdown" type="button" class="navbar-btn">
           <%= render 'icons/document_plus' %>
         </button>
         <!-- Dropdown menu -->
@@ -61,7 +61,7 @@
           </ul>
         </div>
         <!-- Profile menu -->
-        <button id="dropdownDefaultButton" aria-label="Account dropdown menu" data-dropdown-toggle="profile-dropdown" type="button" class="navbar-btn">
+        <button id="dropdownDefaultButton" aria-label="<%= t(:'general.navbar.account_dropdown.aria_label') %>>" data-dropdown-toggle="profile-dropdown" type="button" class="navbar-btn">
           <%= render 'icons/user_circle' %>
         </button>
         <!-- Dropdown menu -->

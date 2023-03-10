@@ -45,22 +45,30 @@ en:
     name: IRIDA Next
     expand_sidebar: Expand sidebar
     collapse_sidebar: Collapse sidebar
+    close_modal: Close modal
     default_sidebar:
       title: Your work
       groups: Groups
     navbar:
       main_dropdown:
+        aria-label: Main navigation menu
         groups: Groups
       search:
         placeholder: Search
       new_dropdown:
+        aria_label: New menu item
         group: New group
       account_dropdown:
+        aria_label: Account menu dropdown
         profile: Edit profile
         sign_out: Sign out
       dark_mode:
         aria_label: Toggle dark mode
   profiles:
+    sidebar:
+      profile: Profile
+      password: Password
+      account: Account
     show:
       email:
         subtitle: Email address linked to this account
@@ -73,8 +81,16 @@ en:
         success: Password updated successfully
         hint: You must provide your current password to update it
         subtitle: Update your account password
-        submit: Update password
+        submit: Save password
         forgot: Forgot your password?
+    accounts:
+      delete:
+        description: Deleting your account has the following effects
+        effects:
+          - All projects and groups you own will be deleted
+          - All projects and groups you are a member of will be left intact
+        button: Delete account
+        confirm: Are you sure you want to delete your account?
   groups:
     owner: Owner
     sidebar:
@@ -101,6 +117,7 @@ en:
         submit: Save changes
       advanced:
         title: Advanced settings
+        button_aria_label: Expand advanced settings
         delete_group:
           title: Delete group
           description: Deleting a group is permanent and cannot be undone. All projects and subgroups will be deleted along with the group

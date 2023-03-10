@@ -30,7 +30,7 @@
       <%= render 'shared/form/field_errors', errors: user.errors.full_messages_for(:password_confirmation) %>
     </div>
     <div class="my-2 flex items-center justify-between">
-      <%= form.submit "Save password", class: "btn btn-primary" %>
+      <%= form.submit t(:'profiles.passwords.update.submit'), class: "btn btn-primary" %>
       <p class="field-hint"><%= link_to t("profiles.passwords.update.forgot"), profile_password_path(@user), class: "link" %></p>
     </div>
   <% end %>
