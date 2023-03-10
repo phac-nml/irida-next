@@ -7,7 +7,7 @@ require 'test_helpers/cuprite_helpers'
 require 'test_helpers/cuprite_setup'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :cuprite, using: :chromium, screen_size: [1400, 1400]
+  driven_by :cuprite
 
   include BetterRailsSystemTests
   include CupriteHelpers
