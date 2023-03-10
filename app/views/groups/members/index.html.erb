@@ -4,7 +4,7 @@
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white mb-4">
       <%= t(:'.title')%>
     </h2>
-    <div  class="my-2"><%= link_to t(:'.add'), new_member_path(@namespace), class: "btn btn-primary" %></div>
+    <div  class="my-2"><%= link_to t(:'.add'), new_group_member_path(@namespace), class: "btn btn-primary" %></div>
     <div class="flex flex-col">
       <div class="overflow-x-auto">
         <div class="shadow">
@@ -30,7 +30,7 @@
                   <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
                     <ul aria-labelledby="dropdownDefaultButton">
                         <li>
-                          <%= link_to t(:'.delete'), member_path(member_id: member.id), data: { turbo_method: :delete, turbo_confirm: t(:'.delete_confirmation') } %>
+                          <%= link_to t(:'.delete'), group_member_path(@namespace, member), data: { turbo_method: :delete, turbo_confirm: t(:'.delete_confirmation') } %>
                         </li>
                       </ul>
                     </div>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Members
-  # entity class for Member
+  # entity class for GroupMember
   class GroupMember < Member
     belongs_to :group, foreign_key: :namespace_id # rubocop:disable Rails/InverseOf
 

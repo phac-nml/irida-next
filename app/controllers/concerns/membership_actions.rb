@@ -38,4 +38,10 @@ module MembershipActions
     @member.destroy
     redirect_to members_path
   end
+
+  protected
+
+  def members_path
+    raise NotImplementedError
+  end
 end

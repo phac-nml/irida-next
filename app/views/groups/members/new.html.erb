@@ -4,7 +4,7 @@
       <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white mb-4">
         <%= t(:'.title')%>
       </h2>
-      <%= form_with(model: @new_member, url: members_path, method: :post) do |form| %>
+      <%= form_with(model: @new_member, url: group_members_path, method: :post) do |form| %>
         <div class="form-field">
           <%= form.label :user_id %>
           <%= form.select :user_id, options_for_select(@available_users.collect { |u| [ u.email, u.id ] }, selected: params[:user_id]), { :prompt => t(:'.select_user') } %>
