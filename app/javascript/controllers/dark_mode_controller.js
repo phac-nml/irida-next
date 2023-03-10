@@ -16,8 +16,6 @@ export default class extends Controller {
   }
 
   toggleTheme() {
-    console.log("theme target clicked");
-
     this.lightIconTarget.classList.toggle("hidden");
     this.darkIconTarget.classList.toggle("hidden");
 
