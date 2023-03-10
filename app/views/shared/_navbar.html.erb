@@ -33,9 +33,9 @@
       </div>
       <div class="flex items-center ml-3">
         <% if cookies[:theme].blank? || cookies[:theme] == "light" %>
-          <%= link_to render(:partial => 'icons/moon'), root_path(theme: "dark"), class: "navbar-btn" %>
+          <%= link_to render(:partial => 'icons/moon'), root_path(theme: "dark"), class: "navbar-btn", title: t(:"general.navbar.mode.enable_dark") %>
         <% else %>
-          <%= link_to render(:partial => 'icons/sun',), root_path(theme: "light"), class: "navbar-btn" %>
+          <%= link_to render(:partial => 'icons/sun',), root_path(theme: "light"), class: "navbar-btn", title: t(:"general.navbar.mode.enable_light") %>
         <% end %>
 
         <!-- New item menu -->

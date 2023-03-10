@@ -58,6 +58,9 @@ en:
       account_dropdown:
         profile: Edit profile
         sign_out: Sign out
+      mode:
+        enable_dark: Toggle dark mode
+        enable_light: Toggle light mode
   profiles:
     show:
       email:
