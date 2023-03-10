@@ -4,7 +4,7 @@ require 'capybara/cuprite'
 
 # Then, we need to register our driver to be able to use it later
 # with #driven_by method.
-Capybara.register_driver(:cuprite) do |app|
+Capybara.register_driver(:irida_next_cuprite) do |app|
   Capybara::Cuprite::Driver.new(
     app,
     window_size: [1400, 1400],
@@ -21,4 +21,4 @@ Capybara.register_driver(:cuprite) do |app|
 end
 
 # Configure Capybara to use :cuprite driver by default
-Capybara.default_driver = Capybara.javascript_driver = :cuprite
+Capybara.default_driver = Capybara.javascript_driver = :irida_next_cuprite

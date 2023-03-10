@@ -7,7 +7,7 @@ require 'test_helpers/cuprite_helpers'
 require 'test_helpers/cuprite_setup'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :cuprite
+  driven_by :irida_next_cuprite
 
   include BetterRailsSystemTests
   include CupriteHelpers
