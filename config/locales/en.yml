@@ -58,6 +58,8 @@ en:
       account_dropdown:
         profile: Edit profile
         sign_out: Sign out
+      dark_mode:
+        aria_label: Toggle dark mode
   profiles:
     show:
       email:
