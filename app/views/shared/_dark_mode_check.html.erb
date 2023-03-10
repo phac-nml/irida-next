@@ -5,4 +5,20 @@
   } else {
     document.documentElement.classList.remove("dark");
   }
+
+  window.addEventListener("storage", function(event) {
+    if (this.localStorage.getItem("theme") === "light") {
+      if (document.documentElement.classList.contains("dark")) {
+        this.document.documentElement.classList.remove("dark");
+        this.document.querySelector("#app-darkmode-toggle>svg[data-dark-mode-target=darkIcon]").classList.remove("hidden");
+        this.document.querySelector("#app-darkmode-toggle>svg[data-dark-mode-target=lightIcon]").classList.add("hidden");
+      }
+    } else if (this.localStorage.getItem("theme") === "dark") {
+      if (!document.documentElement.classList.contains("dark")) {
+        this.document.documentElement.classList.add("dark");
+        this.document.querySelector("#app-darkmode-toggle>svg[data-dark-mode-target=darkIcon]").classList.add("hidden");
+        this.document.querySelector("#app-darkmode-toggle>svg[data-dark-mode-target=lightIcon]").classList.remove("hidden");
+      }
+    }
+  });
 </script>
