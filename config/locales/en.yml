@@ -41,6 +41,14 @@ en:
             name:
               blank: can't be blank
               taken: has already been taken
+    models:
+      member:
+        access_level:
+          no_access: No Access
+          guest: Guest
+          analyst: Analyst
+          maintainer: Maintainer
+          owner: Owner
   general:
     name: IRIDA Next
     expand_sidebar: Expand sidebar
@@ -93,6 +101,7 @@ en:
     owner: Owner
     sidebar:
       details: Details
+      members: Members
       settings: Settings
     index:
       create_group_button: New group
@@ -133,6 +142,27 @@ en:
       cancel: Cancel
     update:
       success: Group updated successfully
+    members:
+      create:
+        error: "Error adding member"
+        success: "Member added successfully"
+      index:
+        add: Add New Member
+        delete: Delete
+        delete_confirmation: Are you sure you want to delete this member?
+        title: Members
+        access_granted_by: "Access granted by %{grantor_email}"
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+      new:
+        title: Add New Member
+        add_member_to_group: Add member to group
+        select_user: Select a User
+        select_access_leve: Select Access Level
   projects:
     create:
       success: "Project %{project_name} was successfully created"
