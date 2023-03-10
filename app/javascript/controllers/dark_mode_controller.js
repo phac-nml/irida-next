@@ -5,8 +5,8 @@ export default class extends Controller {
 
   connect() {
     if (
-      localStorage.getItem("color-theme") === "dark" ||
-      (!("color-theme" in localStorage) &&
+      localStorage.getItem("theme") === "dark" ||
+      (!("theme" in localStorage) &&
         window.matchMedia("(prefers-color-scheme: dark)").matches)
     ) {
       this.lightIconTarget.classList.remove("hidden");
@@ -17,27 +17,27 @@ export default class extends Controller {
 
   toggleTheme() {
     console.log("theme target clicked");
-    localStorage.setItem("color-theme", "dark");
+
     this.lightIconTarget.classList.toggle("hidden");
     this.darkIconTarget.classList.toggle("hidden");
 
-    if (localStorage.getItem("color-theme")) {
-      if (localStorage.getItem("color-theme") === "light") {
+    if (localStorage.getItem("theme")) {
+      if (localStorage.getItem("theme") === "light") {
         document.documentElement.classList.add("dark");
-        localStorage.setItem("color-theme", "dark");
+        localStorage.setItem("theme", "dark");
       } else {
         document.documentElement.classList.remove("dark");
-        localStorage.setItem("color-theme", "light");
+        localStorage.setItem("theme", "light");
       }
 
       // if NOT set via local storage previously
     } else {
       if (document.documentElement.classList.contains("dark")) {
         document.documentElement.classList.remove("dark");
-        localStorage.setItem("color-theme", "light");
+        localStorage.setItem("theme", "light");
       } else {
         document.documentElement.classList.add("dark");
-        localStorage.setItem("color-theme", "dark");
+        localStorage.setItem("theme", "dark");
       }
     }
   }

@@ -8,8 +8,9 @@
   <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
+  <%= render "shared/dark_mode_check" %>
 </head>
-<body class="bg-white dark:bg-gray-900">
+<body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
 <div class="body-wrapper">
   <%= render 'shared/navbar' %>
   <div data-controller="layout" data-layout-target="layoutContainer" class="body">
