@@ -70,6 +70,8 @@ en:
         aria_label: Account menu dropdown
         profile: Edit profile
         sign_out: Sign out
+      dark_mode:
+        aria_label: Toggle dark mode
   profiles:
     sidebar:
       profile: Profile
