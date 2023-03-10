@@ -58,6 +58,12 @@ Navigate in your browser to [http://localhost:3000](http://localhost:3000)
 bin/rails test:all
 ```
 
+## Running tests headful
+
+```bash
+HEADLESS=false bin/rails test:system
+```
+
 View Coverage:
 
 Open `coverage/index.html`
