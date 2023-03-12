@@ -46,8 +46,7 @@ jobs:
       - name: Setup Postgres
         uses: harmon758/postgresql-action@v1
         with:
-          postgresql version: '13'
-        with:
+          postgresql version: "13"
           host port: ${{ env.POSTGRES_PORT }}
           postgres database: ${{ env.POSTGRES_DATABASE }}
           postgres user: ${{ env.POSTGRES_USER }}
