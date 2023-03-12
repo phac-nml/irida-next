@@ -9,6 +9,24 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: irida_next_test
+          POSTGRES_PASSWORD: test
+          POSTGRES_USER: test
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -25,6 +43,15 @@ jobs:
         with:
           node-version: 19
           cache: "pnpm"
+      - name: Setup Postgres
+      - uses: harmon758/postgresql-action@v1
+        with:
+          postgresql version: '13'
+        with:
+          host port: ${{ env.POSTGRES_PORT }}
+          postgres database: ${{ env.POSTGRES_DATABASE }}
+          postgres user: ${{ env.POSTGRES_USER }}
+          postgres password: ${{ env.POSTGRES_PASSWORD }}
       - name: Install dependencies
         run: pnpm install
       - name: Run tests

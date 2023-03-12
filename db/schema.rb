@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_02_28_214717) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "members", force: :cascade do |t|
     t.integer "user_id"
     t.integer "namespace_id"
@@ -44,7 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_214717) do
     t.string "path"
     t.string "name"
     t.string "source_type"
-    t.integer "source_id"
+    t.bigint "source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_routes_on_name", unique: true
