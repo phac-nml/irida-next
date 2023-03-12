@@ -17,8 +17,6 @@ jobs:
           POSTGRES_DB: irida_next_test
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
-        ports:
-          - 3800:3800
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
