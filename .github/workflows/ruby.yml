@@ -17,7 +17,7 @@ jobs:
           POSTGRES_DB: irida_next_test
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
-          POSTGRES_HOST: localhost
+          POSTGRES_HOST: postgres
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -43,14 +43,6 @@ jobs:
         with:
           node-version: 19
           cache: "pnpm"
-      - name: Setup Postgres
-        uses: harmon758/postgresql-action@v1
-        with:
-          postgresql version: "13"
-          postgresql db: ${{ env.POSTGRES_DB }}
-          postgresql user: ${{ env.POSTGRES_USER }}
-          postgresql password: ${{ env.POSTGRES_PASSWORD }}
-          postgresql host: ${{ env.POSTGRES_HOST }}
       - name: Install dependencies
         run: pnpm install
       - name: Run tests
