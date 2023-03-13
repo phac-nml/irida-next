@@ -11,6 +11,13 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     get '/', action: :show, as: :group_canonical
   end
 
+  scope(path: '-/groups/*group_id/-',
+        module: :groups,
+        as: :group,
+        constraints: { group_id: Irida::PathRegex.full_namespace_route_regex }) do
+    resources :members, only: %i[create destroy index new]
+  end
+
   scope(path: '*id',
         as: :group,
         constraints: { id: Irida::PathRegex.full_namespace_route_regex },
