@@ -2,13 +2,20 @@
 
 ## Requirements
 
-* [asdf](https://asdf-vm.com)
-* [asdf-node](https://github.com/asdf-vm/asdf-nodejs)
-* [asdf-pnpm](https://github.com/jonathanmorley/asdf-pnpm)
-* [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
-  * Note: `asdf-ruby` uses [ruby-build](https://github.com/rbenv/ruby-build) and you will need to ensure you have the os level dependencies installed, which are documented [here](https://github.com/rbenv/ruby-build/wiki#suggested-build-environment).
+- [asdf](https://asdf-vm.com)
+- [asdf-node](https://github.com/asdf-vm/asdf-nodejs)
+- [asdf-pnpm](https://github.com/jonathanmorley/asdf-pnpm)
+- [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
+- [asdf-postgres](https://github.com/smashedtoatoms/asdf-postgres)
+  - Note: `asdf-ruby` uses [ruby-build](https://github.com/rbenv/ruby-build) and you will need to ensure you have the os level dependencies installed, which are documented [here](https://github.com/rbenv/ruby-build/wiki#suggested-build-environment).
 
 ## Setup
+
+Install dependencies required by asdf managed postgres
+
+```bash
+sudo apt-get install linux-headers-$(uname -r) build-essential libssl-dev libreadline-dev zlib1g-dev libcurl4-openssl-dev uuid-dev icu-devtools
+```
 
 Install requirements:
 
@@ -25,6 +32,8 @@ $ which pnpm
 /home/USERNAME/.asdf/shims/pnpm
 $ which ruby
 /home/USERNAME/.asdf/shims/ruby
+$ which postgres
+/home/USERNAME/.asdf/shims/postgres
 ```
 
 Ensure bundler installed:
@@ -40,9 +49,26 @@ bundle && pnpm install
 ```
 
 Initialize the database:
+
 ```bash
 bin/rails db:create db:migrate
 ```
+
+## Postgres Setup
+
+Start:
+
+```bash
+/home/USERNAME/.asdf/installs/postgres/14.6/bin/pg_ctl -D /home/USERNAME/.asdf/installs/postgres/14.6/data -l logfile start
+```
+
+Create a new role(user) and set the password
+
+```bash
+createuser -s test -P -U postgres
+```
+
+When prompted for a password for the `test` role above, set the password as `test`. These are the credentials used by the development and test databases.
 
 ## Serve
 
