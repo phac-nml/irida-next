@@ -6,16 +6,11 @@
 - [asdf-node](https://github.com/asdf-vm/asdf-nodejs)
 - [asdf-pnpm](https://github.com/jonathanmorley/asdf-pnpm)
 - [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
-- [asdf-postgres](https://github.com/smashedtoatoms/asdf-postgres)
   - Note: `asdf-ruby` uses [ruby-build](https://github.com/rbenv/ruby-build) and you will need to ensure you have the os level dependencies installed, which are documented [here](https://github.com/rbenv/ruby-build/wiki#suggested-build-environment).
+- [asdf-postgres](https://github.com/smashedtoatoms/asdf-postgres)
+  - Note: `asdf-postgres` requires the following os level dependencies `linux-headers-$(uname -r) build-essential libssl-dev libreadline-dev zlib1g-dev libcurl4-openssl-dev uuid-dev icu-devtools`. These can be installed using `sudo apt-get install`
 
 ## Setup
-
-Install dependencies required by asdf managed postgres
-
-```bash
-sudo apt-get install linux-headers-$(uname -r) build-essential libssl-dev libreadline-dev zlib1g-dev libcurl4-openssl-dev uuid-dev icu-devtools
-```
 
 Install requirements:
 
