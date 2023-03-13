@@ -54,6 +54,12 @@ class Namespace < ApplicationRecord
     result
   end
 
+  def descendants
+    route_path = Route.arel_table[:path]
+
+    Namespace.joins(:route).where(route_path.matches("#{full_path}/%"))
+  end
+
   def to_param
     full_path
   end

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   draw :group
 
+  draw :api
   draw :user
   draw :project
 
