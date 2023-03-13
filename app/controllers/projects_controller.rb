@@ -4,7 +4,13 @@
 class ProjectsController < ApplicationController
   before_action :project, only: %i[show edit update activity transfer]
 
-  def show; end
+  def index
+    @projects = Project.all
+  end
+
+  def show
+    # No necessary code here
+  end
 
   def new
     respond_to do |format|

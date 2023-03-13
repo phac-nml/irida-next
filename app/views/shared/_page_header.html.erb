@@ -12,7 +12,12 @@
           </div>
         </div>
       </div>
-      <%= yield %>
+      <% if defined?(buttons) %>
+        <div class="flex flex-row justify-between items-center">
+          <%= render buttons %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
+<%= yield %>
