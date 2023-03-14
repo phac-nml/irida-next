@@ -1,0 +1,26 @@
+<%= render layout: 'shared/page_header', locals: {
+  title: t(:"projects.create.title"),
+  subtitle: t(:"projects.create.subtitle"),
+  icon: "rectangle_stack"
+} do %>
+  <div class="p-4">
+    <div class="card mb-4">
+      <%= form_with(model: @new_project, url: projects_path, method: :post) do |form| %>
+        <div class="grid gap-4">
+          <div class="form-field">
+            <%= label_tag :name, t(:"projects.create.name") %>
+            <%= text_field_tag :name, nil, class: "form-control", required: true %>
+          </div>
+          <div class="form-field">
+            <%= label_tag :description, t(:"projects.create.description") %>
+            <%= text_area_tag :description, nil, class: "form-control" %>
+          </div>
+          <div class="form-field">
+            <%= label_tag :path, "PROJECT URL" %>
+            <%= form.text_field :path, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

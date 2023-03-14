@@ -1,8 +1,10 @@
+<%= content_for :buttons do %>
+  <%= link_to t(:'groups.index.create_group_button'), new_group_path, class: "btn btn-primary" %>
+<% end %>
 <%= render layout: 'shared/page_header', locals: {
   icon: "squares_2x2",
   title: t("groups.show.title"),
   subtitle: t("groups.show.subtitle"),
-  buttons: "groups/list_buttons"
 } do %>
   <div class="bg-white  dark:bg-gray-800">
     <div class="flex flex-col">

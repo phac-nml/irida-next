@@ -13,11 +13,7 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    respond_to do |format|
-      format.html do
-        render 'new'
-      end
-    end
+    @new_project = Project.new(namespace: current_user.namespace)
   end
 
   def edit

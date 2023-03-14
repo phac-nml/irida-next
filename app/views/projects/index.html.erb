@@ -1,8 +1,10 @@
+<%= content_for :buttons do %>
+  <%= link_to t(:'projects.index.create_project_button'), new_project_path, class: "btn btn-primary" %>
+<% end %>
 <%= render layout: 'shared/page_header', locals: {
   icon: "rectangle_stack",
   title: t("projects.index.title"),
   subtitle: t("projects.index.subtitle"),
-  buttons: "projects/index_buttons"
 } do %>
   <p>JELLO ROCKS</p>
 <% end %>

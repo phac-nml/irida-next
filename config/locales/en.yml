@@ -173,6 +173,10 @@ en:
       create_project_button: New project
     create:
       success: "Project %{project_name} was successfully created"
+      title: Create project
+      subtitle: Projects are where you can store and analyze your data
+      submit: Create project
+      cancel: Cancel
     update:
       success: "Project %{project_name} was successfully updated"
     transfer:
