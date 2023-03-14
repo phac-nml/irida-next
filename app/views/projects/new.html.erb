@@ -20,6 +20,8 @@
             <%= form.text_field :path, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
           </div>
         </div>
+
+        <%= form.submit "Create Project", class: "btn btn-primary" %>
       <% end %>
     </div>
   </div>

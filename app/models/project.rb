@@ -7,7 +7,7 @@ class Project < ApplicationRecord
 
   delegate :description, to: :namespace
   delegate :name, to: :namespace
-  delegate :path, to: :namespace
+  delegate :project_path, to: :namespace
   delegate :human_name, to: :namespace
   delegate :full_path, to: :namespace
 
