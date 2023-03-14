@@ -15,7 +15,8 @@ class ProjectsController < ApplicationController
   def new
     @group = Group.find(params[:group_id])
     @namespace = @group
-    @new_project = Project.new(namespace_id: @namespace.id)
+    @new_project = Project.new
+    @new_project.build_namespace(parent: @namespace)
   end
 
   def edit
