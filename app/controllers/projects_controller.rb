@@ -13,7 +13,9 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @new_project = Project.new(namespace: current_user.namespace)
+    @group = Group.find(params[:group_id])
+    @namespace = @group
+    @new_project = Project.new(namespace_id: @namespace.id)
   end
 
   def edit
