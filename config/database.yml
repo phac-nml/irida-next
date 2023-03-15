@@ -1,11 +1,12 @@
 # PostgreSQL configuration options for development, production,
-# and test profiles. Currently using postgres version 13
+# and test profiles. Currently using postgres version 14.6
 #
 #   Ensure the PostgreSQL gem is defined in your Gemfile
 #   gem "pg"
 #
 #   Also, ensure you have postgresql installed on your machine
-#   and/or dev/prod server
+#   and/or dev/prod server either using asdf or using the OS
+#   package manager (such as apt-get for Ubuntu)
 #
 default: &default
   adapter: postgresql
@@ -30,13 +31,5 @@ test:
   database: irida_next_test
 
 production:
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: # postgres user username for production db
-  password: # postgres user password for production db
-  host: # host url for postgres production db
-  timeout: 5000
+  <<: *default
   database: irida_next_prod
