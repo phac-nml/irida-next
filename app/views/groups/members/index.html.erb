@@ -1,52 +1,51 @@
 <div class="p-4">
-  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-      <div class="flex flex-row">
-        <div class="grow h-14">
-          <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white mb-4">
-            <%= t(:'.title')%>
-          </h2>
-        </div>
-        <div class="grow-0">
-          <%= link_to t(:'.add'), new_group_member_path(@namespace), class: "btn btn-primary" %>
-        </div>
+  <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+    <div class="flex flex-row">
+      <div class="grow h-14">
+        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white mb-4">
+          <%= t(:'.title')%>
+        </h2>
       </div>
-      <div class="flex flex-col">
-        <div class="overflow-x-auto">
-          <div class="shadow">
-            <table class="min-w-full table-fixed dark:divide-gray-600">
-              <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-              <% @members.each do |member| %>
-                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-normal text-gray-500 dark:text-gray-400">
-                  <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
-                  </td>
-                  <td class="px-4 py-3">
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_level.level_#{member.access_level}")%></div>
-                  </td>
-                  <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:'.access_granted_by', grantor_email: member.created_by.email) %></div>
-                  </td>
-                  <td class="px-4 py-3">
-                  <div class="flex justify-end items-center">
-                    <button data-dropdown-toggle="member-<%= member.id %>-dropdown" class="navbar-btn member-settings-ellipsis">
-                      <%= render 'icons/ellipsis_vertical' %>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
-                      <ul aria-labelledby="dropdownDefaultButton">
-                          <li>
-                            <%= link_to t(:'.delete'), group_member_path(@namespace, member), data: { turbo_method: :delete, turbo_confirm: t(:'.delete_confirmation') } %>
-                          </li>
-                        </ul>
-                      </div>
+
+      <div class="grow-0">
+        <%= link_to t(:'.add'), new_group_member_path(@namespace), class: "btn btn-primary" %>
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <div class="overflow-x-auto">
+        <div class="shadow">
+          <table class="min-w-full table-fixed dark:divide-gray-600">
+            <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+            <% @members.each do |member| %>
+              <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-normal text-gray-500 dark:text-gray-400">
+                <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_level.level_#{member.access_level}")%></div>
+                </td>
+                <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:'.access_granted_by', grantor_email: member.created_by.email) %></div>
+                </td>
+                <td class="px-4 py-3">
+                <div class="flex justify-end items-center">
+                  <button data-dropdown-toggle="member-<%= member.id %>-dropdown" class="navbar-btn member-settings-ellipsis">
+                    <%= render 'icons/ellipsis_vertical' %>
+                  </button>
+                  <!-- Dropdown menu -->
+                  <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
+                    <ul aria-labelledby="dropdownDefaultButton">
+                        <li>
+                          <%= link_to t(:'.delete'), group_member_path(@namespace, member), data: { turbo_method: :delete, turbo_confirm: t(:'.delete_confirmation') } %>
+                        </li>
+                      </ul>
                     </div>
-                  </td>
-                </tr>
-              <% end %>
-              </tbody>
-            </table>
-          </div>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
