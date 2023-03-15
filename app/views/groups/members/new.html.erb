@@ -7,12 +7,12 @@
       <%= form_with(model: @new_member, url: group_members_path, method: :post) do |form| %>
         <div class="form-field">
           <%= form.label :user_id %>
-          <%= form.select :user_id, options_for_select(@available_users.collect { |u| [ u.email, u.id ] }, selected: params[:user_id]), { :prompt => t(:'.select_user') } %>
+          <%= form.select :user_id, options_for_select(@available_users.collect { |u| [ u.email, u.id ] }, selected: params[:user_id]), { :prompt => t(:'.select_user') }, :required => true %>
         </div>
 
         <div class="form-field">
           <%= form.label :access_level %>
-          <%= form.select :access_level, @access_levels, { :prompt => t(:'.select_access_level') } %>
+          <%= form.select :access_level, @access_levels, { :prompt => t(:'.select_access_level') }, :required => true %>
         </div>
 
         <div class="my-2">
