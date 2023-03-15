@@ -65,6 +65,10 @@ createuser -s test -P -U postgres
 
 When prompted for a password for the `test` role above, set the password as `test`. These are the credentials used by the development and test databases.
 
+Note: If using the asdf method to install and run postgres, you will need to restart the postgres server anytime the machine is rebooted.
+
+If you would like a more permanent postgres setup on Ubuntu which the system can handle rebooting for you, you can follow these [instructions](https://linuxhint.com/install-and-setup-postgresql-database-ubuntu-22-04/). After setting up postgresql you will need enable the postgresql systemctl service `sudo systemctl enable postgresql.service` and start the server `sudo systemctl start postgresql.service`
+
 ## Serve
 
 ```bash
