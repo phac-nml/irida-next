@@ -38,7 +38,7 @@ if Rails.env.development?
 
   # Projects
   project1_namespace = Namespaces::ProjectNamespace.create!({ name: 'Project 1', path: 'project-1', owner: admin,
-                                                              description: 'This is a description for project 1',
+                                                              description: 'This is a description for project 1.',
                                                               parent: group1 })
   Project.create!({ creator: admin, namespace: project1_namespace })
 
