@@ -20,8 +20,8 @@
               <%= label_tag :path, "PROJECT URL" %>
               <%= builder.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
             </div>
-            <%= form.submit "Create Project", class: "btn btn-primary" %>
           <% end %>
+          <%= form.submit "Create Project", class: "btn btn-primary" %>
         </div>
       <% end %>
     </div>
