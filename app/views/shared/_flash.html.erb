@@ -1,10 +1,5 @@
 <% flash.each do |key, value| %>
-  <div data-controller="flash" class="flex items-center fixed top-5 right-5 <%= classes_for_flash(key) %> py-3 px-5 rounded-lg">
-    <%= render icon_for_flash(key), class_names: "h-5 w-5 mr-2" %>
-    <div class="mr-4"><%= value %></div>
-    <button type="button" data-action="flash#dismiss">
-      <span class="sr-only">Close</span>
-      <%= render 'icons/x_mark', class_names: "w-5 h-5" %>
-    </button>
-  </div>
+  <%= render(FlashComponent.new(type: key)) do %>
+    <%= value %>
+  <% end %>
 <% end %>
