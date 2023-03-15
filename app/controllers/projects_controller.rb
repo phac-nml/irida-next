@@ -15,7 +15,6 @@ class ProjectsController < ApplicationController
 
   def new
     @new_project = Project.new
-    @new_project.build_namespace(parent: @namespace)
   end
 
   def edit
@@ -27,9 +26,12 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = Projects::CreateService.new(current_user,
-                                           project_params[:namespace_attributes].to_h
-                                           .merge(parent_id: @namespace.id)).execute
+    namespace_attributes = if project_params[:namespace_attributes][:parent_id]
+                             project_params[:namespace_attributes]
+                           else
+                             project_params[:namespace_attributes].merge(parent_id: @namespace.id)
+                           end
+    @project = Projects::CreateService.new(current_user, project_params.merge(namespace_attributes:)).execute
 
     if @project.persisted?
       redirect_to(
