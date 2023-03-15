@@ -11,6 +11,8 @@ module MembershipActions
   def new
     @available_users = User.where.not(id: Member.where(type: @member_type,
                                                        namespace_id: @namespace.id).pluck(:user_id))
+    # Remove current user from available users as a user cannot add themselves
+    @available_users = @available_users.to_a - [current_user]
     @new_member = Member.new(namespace_id: @namespace.id)
 
     respond_to do |format|
@@ -36,6 +38,7 @@ module MembershipActions
 
   def destroy
     @member.destroy
+    flash[:success] = t('.success')
     redirect_to members_path
   end
 
