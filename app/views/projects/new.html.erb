@@ -7,20 +7,22 @@
     <div class="card mb-4"  data-controller="groups-new">
       <%= form_with(model: @new_project, url: projects_path(namespace_id: params[:group_id]), method: :post) do |form| %>
         <div class="grid gap-4">
-          <%= form.fields_for :namespace_attributes  do |builder| %>
-            <div class="form-field">
-              <%= label_tag :name, t(:"projects.create.name") %>
-              <%= builder.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, :required => true, :autofocus => true %>
-            </div>
-            <div class="form-field">
-              <%= label_tag :description, t(:"projects.create.description") %>
-              <%= builder.text_area :description, { class: "form-control" } %>
-            </div>
-            <div class="form-field">
-              <%= label_tag :path, "PROJECT URL" %>
-              <%= builder.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
-            </div>
-          <% end %>
+          <%= turbo_frame_tag "project_form" do %>
+            <%= form.fields_for :namespace_attributes  do |builder| %>
+              <div class="form-field">
+                <%= label_tag :name, t(:"projects.create.name") %>
+                <%= builder.text_field :name, data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" }, :required => true, :autofocus => true %>
+              </div>
+              <div class="form-field">
+                <%= label_tag :description, t(:"projects.create.description") %>
+                <%= builder.text_area :description, { class: "form-control" } %>
+              </div>
+              <div class="form-field">
+                <%= label_tag :path, "PROJECT URL" %>
+                <%= builder.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
+              </div>
+            <% end %>
+          <% end%>
           <%= form.submit "Create Project", class: "btn btn-primary" %>
         </div>
       <% end %>
