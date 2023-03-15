@@ -33,7 +33,10 @@ end
 class FlashComponent < ViewComponent::Base
   include FlashHelper
 
+  # rubocop:disable Lint/MissingSuper
   def initialize(type:)
     @type = type
   end
+
+  # rubocop:enable Lint/MissingSuper
 end
