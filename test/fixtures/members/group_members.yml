@@ -6,3 +6,10 @@ group_one_member_james_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   type: "GroupMember"
   access_level: <%= Member::AccessLevel::OWNER %>
+
+group_one_member_joan_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  type: "GroupMember"
+  access_level: <%= Member::AccessLevel::MAINTAINER %>
