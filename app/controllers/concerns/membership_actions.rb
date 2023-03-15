@@ -38,6 +38,7 @@ module MembershipActions
 
   def destroy
     @member.destroy
+    flash[:success] = t('.success')
     redirect_to members_path
   end
 
