@@ -67,7 +67,19 @@ When prompted for a password for the `test` role above, set the password as `tes
 
 Note: If using the asdf method to install and run postgres, you will need to restart the postgres server anytime the machine is rebooted.
 
-If you would like a more permanent postgres setup on Ubuntu which the system can handle rebooting for you, you can follow these [instructions](https://linuxhint.com/install-and-setup-postgresql-database-ubuntu-22-04/). After setting up postgresql you will need enable the postgresql systemctl service `sudo systemctl enable postgresql.service` and start the server `sudo systemctl start postgresql.service`
+If you would like a more permanent postgres setup on Ubuntu which the system can handle rebooting for you, you can follow these [instructions](https://linuxhint.com/install-and-setup-postgresql-database-ubuntu-22-04/), then enable and start the service using the commands below.
+
+Enable postgresql service:
+
+```bash
+sudo systemctl enable postgresql.service
+```
+
+Start postgresql service:
+
+```bash
+sudo systemctl start postgresql.service
+```
 
 ## Serve
 
