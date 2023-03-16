@@ -4,6 +4,7 @@ require 'application_system_test_case'
 
 class SamplesTest < ApplicationSystemTestCase
   setup do
+    login_as users(:john_doe)
     @sample = samples(:one)
   end
 

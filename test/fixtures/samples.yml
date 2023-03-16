@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyText
-  project: one
+  name: Sample 1
+  description: Sample 1 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
 
 two:
-  name: MyString
-  description: MyText
-  project: two
+  name: Sample 2
+  description: Sample 2 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
