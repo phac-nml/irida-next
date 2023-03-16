@@ -11,13 +11,13 @@ module Groups
     test 'can see the list of group members' do
       visit group_members_url(groups(:group_one))
 
-      assert_selector 'h2', text: I18n.t(:'groups.members.index.title')
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: members_group_members.count
     end
 
     test 'can add a member to the group' do
       visit group_members_url(groups(:group_one))
-      assert_selector 'h2', text: I18n.t(:'groups.members.index.title')
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       click_link I18n.t(:'groups.members.index.add')
 
@@ -29,7 +29,7 @@ module Groups
       click_button I18n.t(:'groups.members.new.add_member_to_group')
 
       assert_text I18n.t(:'groups.members.create.success')
-      assert_selector 'h2', text: I18n.t(:'groups.members.index.title')
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: members_group_members.count + 1
     end
 
@@ -44,7 +44,7 @@ module Groups
       end
 
       assert_text I18n.t(:'groups.members.destroy.success')
-      assert_selector 'h2', text: I18n.t(:'groups.members.index.title')
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: (members_count - 1)
     end
   end
