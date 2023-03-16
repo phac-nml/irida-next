@@ -65,7 +65,7 @@ en:
         placeholder: Search
       new_dropdown:
         aria_label: New menu item
-        group: New group
+        group: Create New group
       account_dropdown:
         aria_label: Account menu dropdown
         profile: Edit profile
@@ -117,6 +117,9 @@ en:
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
       submit: Create group
       cancel: Cancel
+    destroy:
+      success: "Group %{group_name} was deleted"
+      error: "Could not delete %{group_name}"
     edit:
       details:
         title: Name and description
