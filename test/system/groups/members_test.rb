@@ -40,7 +40,7 @@ module Groups
       first('.member-settings-ellipsis').click
 
       accept_confirm do
-        click_link I18n.t(:'groups.members.index.delete')
+        click_link I18n.t(:'groups.members.index.remove')
       end
 
       assert_text I18n.t(:'groups.members.destroy.success')
