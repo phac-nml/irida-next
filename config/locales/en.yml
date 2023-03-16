@@ -65,7 +65,7 @@ en:
         placeholder: Search
       new_dropdown:
         aria_label: New menu item
-        group: New group
+        group: Create New group
       account_dropdown:
         aria_label: Account menu dropdown
         profile: Edit profile
