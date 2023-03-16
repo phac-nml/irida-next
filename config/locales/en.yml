@@ -174,6 +174,7 @@ en:
         select_user: Select a User
         select_access_leve: Select Access Level
       destroy:
+        error: "There was an error removing the member"
         success: "Member successfully removed"
   projects:
     create:
