@@ -4,7 +4,7 @@
 class FlashComponent < ViewComponent::Base
   # rubocop:disable Lint/MissingSuper
   def initialize(type:)
-    @type = type
+    @type = type.to_sym
     @icon = icon_for_flash
     @classes = classes_for_flash
   end

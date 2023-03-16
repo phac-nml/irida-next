@@ -1,4 +1,8 @@
-<div id="toast-simple" class="flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-red-900 divide-x divide-gray-200 rounded-lg shadow dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800" role="alert">
+<div data-controller="flash" class="flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 <%= @classes %> divide-x divide-gray-200 rounded-lg shadow dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800" role="alert">
   <%= render @icon, class_names: "h-5 w-5 mr-2" %>
-  <div class="pl-4 text-sm font-normal"><%= content %> WTF!!</div>
+  <div class="pl-4 text-sm font-normal"><%= content %></div>
+  <button type="button" data-action="flash#dismiss">
+    <span class="sr-only">Close</span>
+    <%= render 'icons/x_mark', class_names: "w-5 h-5" %>
+  </button>
 </div>
