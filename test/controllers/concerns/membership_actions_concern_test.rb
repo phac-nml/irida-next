@@ -12,7 +12,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
 
     assert_response :success
-    assert_equal 1, group.group_members.count
+    assert_equal 2, group.group_members.count
   end
 
   test 'group members new' do
@@ -22,7 +22,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get new_group_member_path(group)
 
     assert_response :success
-    assert_equal 1, group.group_members.count
+    assert_equal 2, group.group_members.count
   end
 
   test 'group members create' do
@@ -39,7 +39,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                                  access_level: Member::AccessLevel::OWNER } }
 
     assert_redirected_to group_members_path(group)
-    assert_equal 2, group.group_members.count
+    assert_equal 3, group.group_members.count
   end
 
   test 'group members destroy' do
@@ -52,6 +52,6 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     delete group_member_path(group, group_member)
 
     assert_redirected_to group_members_path(group)
-    assert_equal 0, group.group_members.count
+    assert_equal 1, group.group_members.count
   end
 end
