@@ -37,6 +37,26 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: 'New group'
   end
 
+  test 'can create a group from listing page' do
+    visit groups_url
+
+    click_link I18n.t(:'groups.index.create_group_button')
+
+    within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
+      fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'New group'
+
+      assert_selector %(input[data-groups-new-target="path"]) do |input|
+        assert_equal 'new-group', input['value']
+      end
+
+      fill_in 'Description', with: 'New group description'
+      click_on I18n.t(:'groups.create.submit')
+    end
+
+    assert_text I18n.t(:'groups.create.success')
+    assert_selector 'h1', text: 'New group'
+  end
+
   test 'can create a sub-group' do
     visit group_url(groups(:group_one))
 
