@@ -1,7 +1,9 @@
-<div data-controller="flash" class="flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 <%= @classes %> divide-x divide-gray-200 rounded-lg shadow dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800" role="alert">
-  <%= render @icon, class_names: "h-5 w-5 mr-2" %>
-  <div class="pl-4 text-sm font-normal"><%= content %></div>
-  <button type="button" data-action="flash#dismiss">
+<div data-controller="flash" class="fixed top-5 right-5 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+  <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg <%= @classes %>" aria-hidden="true">
+    <%= render @icon, class_names: "h-5 w-5" %>
+  </div>
+  <div class="ml-3 text-sm font-normal"><%= content %></div>
+  <button data-action="flash#dismiss" type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
     <span class="sr-only">Close</span>
     <%= render 'icons/x_mark', class_names: "w-5 h-5" %>
   </button>
