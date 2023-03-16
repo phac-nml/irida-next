@@ -1,5 +1,5 @@
-<div data-controller="flash" class="flex items-center fixed top-5 right-5 <%= classes_for_flash(@type) %> py-3 px-5 rounded-lg">
-  <%= render icon_for_flash(@type), class_names: "h-5 w-5 mr-2" %>
+<div data-controller="flash" class="flex items-center fixed top-5 right-5 <%= @classes %> py-3 px-5 rounded-lg">
+  <%= render @icon, class_names: "h-5 w-5 mr-2" %>
   <div class="mr-4"><%= content %></div>
   <button type="button" data-action="flash#dismiss">
     <span class="sr-only">Close</span>
