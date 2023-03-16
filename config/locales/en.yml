@@ -167,7 +167,7 @@ en:
         title: Add New Member
         add_member_to_group: Add member to group
         select_user: Select a User
-        select_access_leve: Select Access Level
+        select_access_level: Select Access Level
   projects:
     create:
       success: "Project %{project_name} was successfully created"
@@ -175,3 +175,10 @@ en:
       success: "Project %{project_name} was successfully updated"
     transfer:
       success: "Project %{project_name} was successfully transferred"
+  samples:
+    create:
+      success: "Sample was successfully created."
+    update:
+      success: "Sample was successfully updated."
+    destroy:
+      success: "Sample was successfully destroyed."
