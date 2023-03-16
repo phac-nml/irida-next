@@ -35,7 +35,7 @@
                   <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
                     <ul aria-labelledby="dropdownDefaultButton">
                         <li>
-                        <%= link_to t(:'.delete'), group_member_path(@namespace, member), data: { turbo_method: :delete, turbo_confirm: t(:'.delete_confirmation') }, 'aria-label': t(:'.actions.link_delete_aria_label', member: member.user.email) %>
+                        <%= link_to t(:'.delete'), group_member_path(@namespace, member), data: { turbo_method: :delete, turbo_confirm: t(:'groups.members.index.delete_confirmation') }, 'aria-label': t(:'.actions.link_delete_aria_label', member: member.user.email) %>
                         </li>
                       </ul>
                     </div>
