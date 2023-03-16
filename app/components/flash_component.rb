@@ -12,14 +12,14 @@ class FlashComponent < ViewComponent::Base
 
   def classes_for_flash
     case @type
-    when :error
-      'bg-red-100 text-red-700'
     when :success
-      'text-green-500 bg-green-100 dark:bg-green-800 dark:text-green-200'
+      'bg-green-100 dark:bg-green-800 dark:text-green-200'
+    when :error
+      'bg-red-100 dark:bg-red-800 dark:text-red-200'
     when :warning
-      'bg-yellow-100 text-yellow-700'
+      'bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-200'
     else
-      'bg-blue-100 text-blue-700'
+      'bg-blue-100 dark:bg-blue-800 dark:text-blue-200'
     end
   end
 

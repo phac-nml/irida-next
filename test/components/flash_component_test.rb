@@ -7,27 +7,27 @@ class FlashComponentTest < ViewComponent::TestCase
     message = 'Successful Message!'
     render_inline(FlashComponent.new(type: :success)) { message }
     assert_text message
-    assert_selector '.bg-green-100.text-green-700'
+    assert_selector '.bg-green-100 > svg'
   end
 
   def test_error_message
     message = 'Error Message!'
     render_inline(FlashComponent.new(type: :error)) { message }
     assert_text message
-    assert_selector '.bg-red-100.text-red-700'
+    assert_selector '.bg-red-100 > svg'
   end
 
   def test_warning_message
     message = 'Warning Message!'
     render_inline(FlashComponent.new(type: :warning)) { message }
     assert_text message
-    assert_selector '.bg-yellow-100.text-yellow-700'
+    assert_selector '.bg-yellow-100 > svg'
   end
 
   def test_info_message
     message = 'Info Message!'
     render_inline(FlashComponent.new(type: :info)) { message }
     assert_text message
-    assert_selector '.bg-blue-100.text-blue-700'
+    assert_selector '.bg-blue-100 > svg'
   end
 end
