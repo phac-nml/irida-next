@@ -185,8 +185,19 @@ en:
       success: "Project %{project_name} was successfully transferred"
   samples:
     create:
-      success: "Sample was successfully created."
+      success: Sample was successfully created.
+    index:
+      title: Samples
+      subtitle: These are the samples for project...
+      button_edit: Edit
+      button_delete: Remove
+      button_delete_confirmation: Are you sure you want to remove this sample from the project?
+      actions:
+        button_add_aria_label: Add new sample button
+        dropdown_aria_label: Dropdown options for sample %{sample_name}
+      dropdown:
+        delete: Delete sample
     update:
-      success: "Sample was successfully updated."
+      success: Sample was successfully updated.
     destroy:
-      success: "Sample was successfully destroyed."
+      success: Sample was successfully destroyed.
