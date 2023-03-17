@@ -18,7 +18,7 @@ class SamplesTest < ApplicationSystemTestCase
     click_on 'New sample'
 
     fill_in 'Description', with: @sample.description
-    fill_in 'Name', with: @sample.name
+    fill_in 'Name', with: 'New Name'
     fill_in 'Project', with: @sample.project_id
     click_on 'Create Sample'
 
@@ -31,7 +31,7 @@ class SamplesTest < ApplicationSystemTestCase
     click_on 'Edit this sample', match: :first
 
     fill_in 'Description', with: @sample.description
-    fill_in 'Name', with: @sample.name
+    fill_in 'Name', with: 'New Sample Name'
     fill_in 'Project', with: @sample.project_id
     click_on 'Update Sample'
 

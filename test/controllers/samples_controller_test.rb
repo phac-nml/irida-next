@@ -21,7 +21,7 @@ class SamplesControllerTest < ActionDispatch::IntegrationTest
   test 'should create sample' do
     assert_difference('Sample.count') do
       post samples_url,
-           params: { sample: { description: @sample.description, name: @sample.name,
+           params: { sample: { description: @sample.description, name: 'New Sample',
                                project_id: @sample.project_id } }
     end
 
@@ -40,7 +40,8 @@ class SamplesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should update sample' do
     patch sample_url(@sample),
-          params: { sample: { description: @sample.description, name: @sample.name, project_id: @sample.project_id } }
+          params: { sample: { description: @sample.description, name: 'New Sample Name',
+                              project_id: @sample.project_id } }
     assert_redirected_to sample_url(@sample)
   end
 
