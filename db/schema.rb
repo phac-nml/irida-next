@@ -58,6 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_16_180414) do
     t.integer "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name", "project_id"], name: "index_samples_on_name_and_project_id", unique: true
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
 
