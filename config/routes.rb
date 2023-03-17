@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :samples
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -12,6 +11,7 @@ Rails.application.routes.draw do
   scope path: '-' do
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[new create]
+    resources :samples
 
     draw :profile
   end
