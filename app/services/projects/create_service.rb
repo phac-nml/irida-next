@@ -11,9 +11,9 @@ module Projects
     end
 
     def execute
-      @project = Project.new(creator: current_user)
+      @project = Project.new(params.merge(creator: current_user))
 
-      @project.build_namespace(namespace_params.merge(owner: current_user, type: 'Project'))
+      @project.build_namespace(namespace_params.merge(owner: current_user))
 
       @project.save
 

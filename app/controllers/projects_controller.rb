@@ -3,7 +3,6 @@
 # Controller actions for Projects
 class ProjectsController < ApplicationController
   before_action :project, only: %i[show edit update activity transfer]
-  before_action :namespace, only: %i[new create]
 
   def index
     @projects = Project.all
@@ -15,6 +14,7 @@ class ProjectsController < ApplicationController
 
   def new
     @new_project = Project.new
+    @new_project.build_namespace
   end
 
   def edit
@@ -26,12 +26,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    namespace_attributes = if project_params[:namespace_attributes][:parent_id]
-                             project_params[:namespace_attributes]
-                           else
-                             project_params[:namespace_attributes].merge(parent_id: @namespace.id)
-                           end
-    @project = Projects::CreateService.new(current_user, project_params.merge(namespace_attributes:)).execute
+    @project = Projects::CreateService.new(current_user, project_params).execute
 
     if @project.persisted?
       redirect_to(
@@ -101,10 +96,5 @@ class ProjectsController < ApplicationController
 
     path = [params[:namespace_id], params[:project_id] || params[:id]].join('/')
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
-  end
-
-  def namespace
-    @group = Group.find_by(id: params[:namespace_id] || params[:group_id])
-    @namespace = @group
   end
 end
