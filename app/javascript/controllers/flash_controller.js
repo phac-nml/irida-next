@@ -5,9 +5,10 @@ import { Controller } from "@hotwired/stimulus";
  */
 export default class extends Controller {
   connect() {
-    setTimeout(() => {
-      this.dismiss();
-    }, 5000);
+    console.log("Flash controller connected");
+    // setTimeout(() => {
+    //   this.dismiss();
+    // }, 5000);
   }
 
   dismiss() {

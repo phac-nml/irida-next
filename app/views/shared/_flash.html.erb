@@ -1,5 +1,3 @@
-<% flash.each do |key, value| %>
-  <%= render(FlashComponent.new(type: key)) do %>
-    <%= value %>
-  <% end %>
+<% flash.each do |key, data| %>
+  <%= render(FlashComponent.new(type: key, data: data)) %>
 <% end %>

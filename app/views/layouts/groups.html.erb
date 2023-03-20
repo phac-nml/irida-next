@@ -15,9 +15,9 @@
   <%= render 'shared/navbar' %>
   <div data-controller="layout" data-layout-target="layoutContainer" class="body">
     <%= render 'groups/sidebar' %>
-    <%= render 'shared/flash' %>
     <div class="content"><%= yield %></div>
   </div>
+  <%= render 'shared/flash' %>
 </div>
 </body>
 </html>

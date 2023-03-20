@@ -3,11 +3,13 @@
 # View Component for UI flash messages
 class FlashComponent < ViewComponent::Base
   # rubocop:disable Lint/MissingSuper
-  def initialize(type:)
-    @type = type.to_sym
+  def initialize(type:, data:)
+    @type = type
+    @data = data
     @icon = icon_for_flash
     @classes = classes_for_flash
   end
+
   # rubocop:enable Lint/MissingSuper
 
   def classes_for_flash
