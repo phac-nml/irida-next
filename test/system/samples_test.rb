@@ -41,7 +41,7 @@ class SamplesTest < ApplicationSystemTestCase
 
   test 'should destroy Sample' do
     visit sample_url(@sample)
-    click_on 'Destroy this sample', match: :first
+    click_on 'Remove', match: :first
 
     assert_text 'Sample was successfully destroyed'
   end

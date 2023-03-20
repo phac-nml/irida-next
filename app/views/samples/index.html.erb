@@ -30,8 +30,8 @@
                   <div id="sample-<%= sample.id %>-dropdown" class="dropdown-menu">
                     <ul aria-labelledby="dropdownDefaultButton">
                       <li>
-                        <%= link_to t('samples.index.button_edit'), edit_sample_path(sample) %>
-                        <%= link_to t('samples.index.button_delete'), sample_path(sample), data: {turbo_method: :delete, turbo_confirm: t(:'samples.index.button_delete_confirmation')} %>
+                        <%= link_to t('samples.index.edit_button'), edit_sample_path(sample) %>
+                        <%= link_to t('samples.index.delete_button'), sample_path(sample), data: {turbo_method: :delete, turbo_confirm: t(:'samples.index.delete_button_confirmation')} %>
                       </li>
                     </ul>
                   </div>

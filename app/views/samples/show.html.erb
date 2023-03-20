@@ -1,15 +1,15 @@
-<div class="mx-auto md:w-2/3 w-full flex">
-  <div class="mx-auto">
-    <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
-    <% end %>
-
-    <%= render @sample %>
-
-    <%= link_to 'Edit this sample', edit_sample_path(@sample), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <div class="inline-block ml-2">
-      <%= button_to 'Destroy this sample', sample_path(@sample), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
-    </div>
-    <%= link_to 'Back to samples', samples_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+<%= content_for :buttons do %>
+  <div class="flex flex-row">
+    <%= link_to t('samples.show.edit_button'), edit_sample_path(@sample), class: "btn btn-default" %>
+    <%= link_to t('samples.show.delete_button'), sample_path(@sample), data: {turbo_method: :delete, turbo_confirm: t('samples.show.delete_button_confirmation')}, class: "btn btn-primary ml-2" %>
+    <%= link_to t('samples.show.back_button'), samples_path, class: "btn btn-primary ml-2" %>
   </div>
-</div>
+<% end %>
+
+<%= render layout: 'shared/page_header', locals: {
+  title: @sample.name,
+  subtitle: @sample.description,
+  icon: 'squares_2x2'
+} do %>
+  <!-- ADD CONTENT HERE -->
+<% end %>

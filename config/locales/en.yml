@@ -184,19 +184,24 @@ en:
     transfer:
       success: "Project %{project_name} was successfully transferred"
   samples:
+    show:
+      edit_button: Edit this sample
+      delete_button: Remove
+      delete_button_confirmation: Are you sure you want to remove this sample from the project?
+      back_button: Back to samples
     create:
       success: Sample was successfully created.
     new:
       title: Create sample
       subtitle: This is a subtitle to create a new project sample.
-      submit: Create sample
-      cancel: Cancel
+      submit_button: Create sample
+      cancel_button: Cancel
     index:
       title: Samples
       subtitle: This is a subtitle to list project samples.
-      button_edit: Edit
-      button_delete: Remove
-      button_delete_confirmation: Are you sure you want to remove this sample from the project?
+      edit_button: Edit
+      delete_button: Remove
+      delete_button_confirmation: Are you sure you want to remove this sample from the project?
       actions:
         button_add_aria_label: Add new sample button
         dropdown_aria_label: Dropdown options for sample %{sample_name}
@@ -207,7 +212,7 @@ en:
     edit:
       title: Edit sample
       subtitle: This is a subtitle to edit a project sample.
-      submit: Update sample
-      cancel: Cancel
+      submit_button: Update sample
+      cancel_button: Cancel
     destroy:
       success: Sample was successfully destroyed.
