@@ -1,6 +1,7 @@
 <%= content_for :buttons do %>
-  <%= link_to t(:'groups.index.create_group_button'), new_group_path, class: "btn btn-primary" %>
+  <%= link_to t(:'groups.index.create_group_button'), new_group_path, class: "inline-flex items-center justify-center btn btn-primary" %>
 <% end %>
+
 <%= render layout: 'shared/page_header', locals: {
   icon: "squares_2x2",
   title: t("groups.show.title"),
