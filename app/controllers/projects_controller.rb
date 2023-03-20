@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
 
   def new
     @new_project = Project.new
-    @new_project.build_namespace
+    @new_project.build_namespace(parent_id: params[:namespace_id] || current_user.namespace.id)
   end
 
   def edit

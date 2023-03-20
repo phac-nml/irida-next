@@ -80,7 +80,22 @@
   .form-field input[type="search"],
   .form-field input[type="password"],
   .form-field input[type="email"] {
-    @apply mt-2 rounded-md border-0 py-1.5 block w-full border-gray-300 bg-gray-50 text-sm text-gray-900 shadow-sm focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500
+  }
+
+  .form-field select.prefixed {
+    appearance: none;
+    padding: 0 1em 0 1em;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    @apply rounded-r-md border-0 p-2.5 block w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm text-gray-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+
   }
 
   .form-field.invalid label {
