@@ -20,7 +20,7 @@ class SamplesTest < ApplicationSystemTestCase
     fill_in 'Description', with: @sample.description
     fill_in 'Name', with: 'New Name'
     fill_in 'Project', with: @sample.project_id
-    click_on 'Create Sample'
+    click_on 'Create sample'
 
     assert_text 'Sample was successfully created'
     click_on 'Back'
@@ -33,7 +33,7 @@ class SamplesTest < ApplicationSystemTestCase
     fill_in 'Description', with: @sample.description
     fill_in 'Name', with: 'New Sample Name'
     fill_in 'Project', with: @sample.project_id
-    click_on 'Update Sample'
+    click_on 'Update sample'
 
     assert_text 'Sample was successfully updated'
     click_on 'Back'

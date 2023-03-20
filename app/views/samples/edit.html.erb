@@ -1,8 +1,23 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing sample</h1>
+<%= render partial: 'shared/page_header', locals: {
+  title: t(:'samples.edit.title'),
+  subtitle: t(:'samples.new.subtitle'),
+  icon: "squares_plus"
+} %>
+<div class="p-4">
+  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <div data-controller="samples-edit" class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+      <%= form_with(model: @sample, url: sample_path(@sample), method: :patch) do |form| %>
 
-  <%= render "form", sample: @sample %>
+        <%= render partial: 'form_fields', locals: {
+          form: form,
+          sample: @sample
+        } %>
 
-  <%= link_to "Show this sample", @sample, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-  <%= link_to "Back to samples", samples_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+        <div class="my-2">
+          <%= form.submit t(:'samples.edit.submit'), class: "btn btn-primary mr-1" %>
+          <%= link_to t(:'samples.edit.cancel'), samples_path(@sample), class: "btn btn-default" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>

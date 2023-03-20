@@ -186,9 +186,14 @@ en:
   samples:
     create:
       success: Sample was successfully created.
+    new:
+      title: Create sample
+      subtitle: This is a subtitle to create a new project sample.
+      submit: Create sample
+      cancel: Cancel
     index:
       title: Samples
-      subtitle: These are the samples for project...
+      subtitle: This is a subtitle to list project samples.
       button_edit: Edit
       button_delete: Remove
       button_delete_confirmation: Are you sure you want to remove this sample from the project?
@@ -199,5 +204,10 @@ en:
         delete: Delete sample
     update:
       success: Sample was successfully updated.
+    edit:
+      title: Edit sample
+      subtitle: This is a subtitle to edit a project sample.
+      submit: Update sample
+      cancel: Cancel
     destroy:
       success: Sample was successfully destroyed.
