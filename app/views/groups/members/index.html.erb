@@ -28,14 +28,14 @@
               </td>
               <td class="px-4 py-3">
                 <div class="flex justify-end items-center">
-                  <button data-dropdown-toggle="member-<%= member.id %>-dropdown" class="navbar-btn member-settings-ellipsis" aria-label=t(:'.actions.member_dropdown_aria_label', member: member.user.email)>
+                  <button data-dropdown-toggle="member-<%= member.id %>-dropdown" class="navbar-btn member-settings-ellipsis" aria-label="<%= t(:'groups.members.index.actions.member_dropdown_aria_label', member: member.user.email) %>">
                     <%= render 'icons/ellipsis_vertical' %>
                   </button>
                   <!-- Dropdown menu -->
                   <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
                     <ul aria-labelledby="dropdownDefaultButton">
                         <li>
-                        <%= link_to t(:'.delete'), group_member_path(@namespace, member), data: { turbo_method: :delete, turbo_confirm: t(:'groups.members.index.delete_confirmation') }, 'aria-label': t(:'.actions.link_delete_aria_label', member: member.user.email) %>
+                        <%= link_to t(:'groups.members.index.remove'), group_member_path(@namespace, member), data: { turbo_method: :delete, turbo_confirm: t(:'groups.members.index.remove_confirmation') }, 'aria-label': t(:'groups.members.index.actions.link_remove_aria_label', member: member.user.email) %>
                         </li>
                       </ul>
                     </div>
