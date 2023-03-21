@@ -11,7 +11,6 @@ Rails.application.routes.draw do
   scope path: '-' do
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[new create]
-    resources :samples
 
     draw :profile
   end

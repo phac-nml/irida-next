@@ -1,0 +1,15 @@
+<%= content_for :buttons do %>
+  <div class="flex flex-row">
+    <%= link_to t('projects.samples.show.edit_button'), edit_namespace_project_sample_path(id: @sample.id), class: "btn btn-default" %>
+    <%= link_to t('projects.samples.show.delete_button'), namespace_project_sample_path(id: @sample.id), data: {turbo_method: :delete, turbo_confirm: t('projects.samples.show.delete_button_confirmation')}, class: "btn btn-primary ml-2" %>
+    <%= link_to t('projects.samples.show.back_button'), namespace_project_samples_path, class: "btn btn-primary ml-2" %>
+  </div>
+<% end %>
+
+<%= render layout: 'shared/page_header', locals: {
+  title: @sample.name,
+  subtitle: @sample.description,
+  icon: 'squares_2x2'
+} do %>
+  <!-- ADD CONTENT HERE -->
+<% end %>
