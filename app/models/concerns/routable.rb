@@ -53,10 +53,6 @@ module Routable
     end
   end
 
-  def saved_change_to_route?
-    route.saved_change_to_name? || route.saved_change_to_path?
-  end
-
   private
 
   def set_path_errors

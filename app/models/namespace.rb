@@ -25,8 +25,6 @@ class Namespace < ApplicationRecord
   validate :validate_parent_type
   validate :validate_nesting_level
 
-  after_update :propagate_route_changes, if: ->(n) { n.saved_change_to_route? }
-
   class << self
     def sti_class_for(type_name)
       case type_name
@@ -88,10 +86,6 @@ class Namespace < ApplicationRecord
     false if project_namespace?
 
     ancestors.count >= Namespace::MAX_ANCESTORS - 2
-  end
-
-  def propagate_route_changes
-    children&.each(&:save)
   end
 
   def validate_type
