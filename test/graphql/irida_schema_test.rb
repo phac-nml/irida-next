@@ -20,7 +20,9 @@ class IridaSchemaTest < ActiveSupport::TestCase
   end
 
   test '#object_from_id returns the correct record, of the expected type' do
-    assert_equal groups(:group_one), IridaSchema.object_from_id(groups(:group_one).to_global_id.to_s, expected_type: Group)
+    gid_string = groups(:group_one).to_global_id.to_s
+
+    assert_equal groups(:group_one), IridaSchema.object_from_id(gid_string, expected_type: Group)
   end
 
   test '#object_from_id fails if the type does not match' do
