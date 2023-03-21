@@ -2,7 +2,6 @@
 
 # View Component for UI flash messages
 class FlashComponent < ViewComponent::Base
-  # rubocop:disable Lint/MissingSuper
   def initialize(type:, data:)
     @type = type
     @data = data
@@ -10,14 +9,12 @@ class FlashComponent < ViewComponent::Base
     @classes = classes_for_flash
   end
 
-  # rubocop:enable Lint/MissingSuper
-
   def classes_for_flash
     case @type
-    when :success
-      'bg-green-100 dark:bg-green-800 dark:text-green-200'
     when :error
       'bg-red-100 dark:bg-red-800 dark:text-red-200'
+    when :success
+      'bg-green-100 dark:bg-green-800 dark:text-green-200'
     when :warning
       'bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-200'
     else
@@ -27,14 +24,14 @@ class FlashComponent < ViewComponent::Base
 
   def icon_for_flash
     case @type
-    when :error || :warning
-      'icons/exclamation_triangle'
-    when :info
-      'icons/information_circle'
+    when :error
+      'icons/exclamation_circle'
     when :success
       'icons/check'
+    when :warning
+      'icons/exclamation_triangle'
     else
-      'icons/exclamation_circle'
+      'icons/information_circle'
     end
   end
 end
