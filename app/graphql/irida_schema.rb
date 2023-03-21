@@ -40,9 +40,24 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
     object.to_global_id
   end
 
-  # Given a string UUID, find the object
-  def self.object_from_id(global_id, _ctx)
-    # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
-    GlobalID.find(global_id)
+  # Find an object by looking it up from its global ID, passed as a string.
+  def self.object_from_id(global_id, ctx = {})
+    gid = parse_gid(global_id, ctx)
+
+    GlobalID.find(gid)
+  end
+
+  # Parse a string to a GlobalID, raising if there are problems with it.
+  def self.parse_gid(global_id, ctx = {})
+    expected_types = Array(ctx[:expected_type])
+    gid = GlobalID.parse(global_id)
+
+    raise "#{global_id} is not a valid IRIDA Next ID." unless gid
+
+    if expected_types.any? && expected_types.none? { |type| gid.model_class.ancestors.include?(type) }
+      raise "#{global_id} is not a valid ID for #{expected_types.join(', ')}"
+    end
+
+    gid
   end
 end
