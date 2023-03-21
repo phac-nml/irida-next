@@ -1,3 +1,7 @@
-<%= @project.human_name %>
+<%= render layout: 'shared/page_header', locals: {
+  icon: "clipboard_document",
+  title: @project.human_name,
+  subtitle: @project.description,
+} do %>
 
-<%= @project.description %>
+<% end %>
