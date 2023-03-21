@@ -2,11 +2,13 @@
 
 ## Requirements
 
-* [asdf](https://asdf-vm.com)
-* [asdf-node](https://github.com/asdf-vm/asdf-nodejs)
-* [asdf-pnpm](https://github.com/jonathanmorley/asdf-pnpm)
-* [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
-  * Note: `asdf-ruby` uses [ruby-build](https://github.com/rbenv/ruby-build) and you will need to ensure you have the os level dependencies installed, which are documented [here](https://github.com/rbenv/ruby-build/wiki#suggested-build-environment).
+- [asdf](https://asdf-vm.com)
+- [asdf-node](https://github.com/asdf-vm/asdf-nodejs)
+- [asdf-pnpm](https://github.com/jonathanmorley/asdf-pnpm)
+- [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
+  - Note: `asdf-ruby` uses [ruby-build](https://github.com/rbenv/ruby-build) and you will need to ensure you have the os level dependencies installed, which are documented [here](https://github.com/rbenv/ruby-build/wiki#suggested-build-environment).
+- [asdf-postgres](https://github.com/smashedtoatoms/asdf-postgres)
+  - Note: `asdf-postgres` requires that you have the os level dependencies installed, which are documented [here](https://github.com/smashedtoatoms/asdf-postgres#dependencies)
 
 ## Setup
 
@@ -25,6 +27,8 @@ $ which pnpm
 /home/USERNAME/.asdf/shims/pnpm
 $ which ruby
 /home/USERNAME/.asdf/shims/ruby
+$ which postgres
+/home/USERNAME/.asdf/shims/postgres
 ```
 
 Ensure bundler installed:
@@ -39,9 +43,54 @@ Install dependencies:
 bundle && pnpm install
 ```
 
+Note: If an error is encountered building the `pg` gem you will need to run this command. The version can be located in the .tool-versions file.
+
+```bash
+asdf shell postgres VERSION
+```
+
+After running this command to set the postgres version for the shell, you will need to re-run this command:
+
+```bash
+bundle && pnpm install
+```
+
 Initialize the database:
+
 ```bash
 bin/rails db:create db:migrate
+```
+
+## Postgres Setup
+
+Start:
+
+```bash
+/home/USERNAME/.asdf/installs/postgres/14.6/bin/pg_ctl -D /home/USERNAME/.asdf/installs/postgres/14.6/data -l logfile start
+```
+
+Create a new role(user) and set the password
+
+```bash
+createuser -s test -P -U postgres
+```
+
+When prompted for a password for the `test` role above, set the password as `test`. These are the credentials used by the development and test databases.
+
+Note: If using the asdf method to install and run postgres, you will need to restart the postgres server anytime the machine is rebooted.
+
+If you would like a more permanent postgres setup on Ubuntu which the system can handle rebooting for you, you can follow these [instructions](https://linuxhint.com/install-and-setup-postgresql-database-ubuntu-22-04/), then enable and start the service using the commands below.
+
+Enable postgresql service:
+
+```bash
+sudo systemctl enable postgresql.service
+```
+
+Start postgresql service:
+
+```bash
+sudo systemctl start postgresql.service
 ```
 
 ## Serve
