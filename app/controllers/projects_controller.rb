@@ -2,6 +2,7 @@
 
 # Controller actions for Projects
 class ProjectsController < ApplicationController
+  layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer]
 
   def index
@@ -96,5 +97,14 @@ class ProjectsController < ApplicationController
 
     path = [params[:namespace_id], params[:project_id] || params[:id]].join('/')
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+  end
+
+  def resolve_layout
+    case action_name
+    when 'show', 'edit'
+      'projects'
+    else
+      'application'
+    end
   end
 end

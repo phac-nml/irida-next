@@ -179,6 +179,9 @@ en:
         error: "There was an error removing the group member"
         success: "Group member successfully removed"
   projects:
+    edit:
+      general:
+        title: General
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data
@@ -191,6 +194,8 @@ en:
       slug: Project slug
       submit: Create project
       cancel: Cancel
+    sidebar:
+      details: Details
     update:
       success: "Project %{project_name} was successfully updated"
     transfer:
