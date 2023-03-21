@@ -66,7 +66,8 @@ en:
         placeholder: Search
       new_dropdown:
         aria_label: New menu item
-        group: Create New group
+        project: Create new project
+        group: Create new group
       account_dropdown:
         aria_label: Account menu dropdown
         profile: Edit profile
@@ -186,6 +187,8 @@ en:
       success: "Project %{project_name} was successfully created"
       title: Create project
       subtitle: Projects are where you can store and analyze your data
+      url: Project URL
+      slug: Project slug
       submit: Create project
       cancel: Cancel
     update:

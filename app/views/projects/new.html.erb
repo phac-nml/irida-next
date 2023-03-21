@@ -16,7 +16,7 @@
 
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-field">
-                  <%= builder.label :parent_id, "Project URL" %>
+                  <%= builder.label :parent_id, t(".url") %>
                   <div class="flex whitespace-nowrap items-center">
                     <div class="inline-flex items-center px-3 py-2.5 text-sm text-gray-600 bg-gray-200 dark:bg-gray-800/50 dark:text-gray-200 border border-r-0 border-gray-300 rounded-l-lg dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                       <%= root_url %>
@@ -32,11 +32,11 @@
                   </div>
                 </div>
                 <div class="form-field">
-                  <%= builder.label :path, "Project Slug" %>
+                  <%= builder.label :path, t(".slug") %>
                   <%= builder.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
                 </div>
               </div>
-              
+
               <div class="form-field">
                 <%= label_tag :description, t(:".description") %>
                 <%= builder.text_area :description, { class: "form-control" } %>
@@ -44,7 +44,7 @@
             <% end %>
         <% end %>
         <div>
-          <%= form.submit "Create Project", class: "btn btn-primary" %>
+          <%= form.submit t("projects.new.submit"), class: "btn btn-primary" %>
         </div>
         </div>
         </div>
