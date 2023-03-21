@@ -1,25 +1,35 @@
-# SQLite. Versions 3.8.0 and up are supported.
-#   gem install sqlite3
+# PostgreSQL configuration options for development, production,
+# and test profiles. Currently using postgres version 14.6
 #
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem "sqlite3"
+#   Ensure the PostgreSQL gem is defined in your Gemfile
+#   gem "pg"
+#
+#   Also, ensure you have postgresql installed on your machine
+#   and/or dev/prod server either using asdf or using the OS
+#   package manager (such as apt-get for Ubuntu)
 #
 default: &default
-  adapter: sqlite3
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: test
+  password: test
+  host: localhost
   timeout: 5000
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  database: irida_next_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: irida_next_test
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: irida_next_prod
