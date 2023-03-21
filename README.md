@@ -31,14 +31,6 @@ $ which postgres
 /home/USERNAME/.asdf/shims/postgres
 ```
 
-Set global version of postgres:
-
-This will ensure that the global version of `postgres` will persist in any new shell that is opened. The version can be found in the `.tool-versions` file. Currently we are using version `14.6`
-
-```bash
-asdf global postgres VERSION
-```
-
 Ensure bundler installed:
 
 ```bash
@@ -46,6 +38,18 @@ gem install bundler
 ```
 
 Install dependencies:
+
+```bash
+bundle && pnpm install
+```
+
+Note: If an error is encountered building the `pg` gem you will need to run this command. The version can be located in the .tool-versions file.
+
+```bash
+asdf shell postgres VERSION
+```
+
+After running this command to set the postgres version for the shell, you will need to re-run this command:
 
 ```bash
 bundle && pnpm install
