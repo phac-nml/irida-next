@@ -1,3 +1,5 @@
-<% flash.each do |key, value| %>
-  <%= render(FlashComponent.new(type: key, data: value)) %>
-<% end %>
+<div class="fixed top-5 right-6 flex flex-col ">
+  <% flash.each do |key, value| %>
+    <%= render(FlashComponent.new(type: key, data: value)) %>
+  <% end %>
+</div>

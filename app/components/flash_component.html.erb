@@ -1,11 +1,11 @@
-<div id="toast-success" class="fixed top-5 right-5 flex items-center p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800" role="alert">
-  <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-200 rounded-lg dark:bg-green-800 dark:text-green-200">
-    <%= render "icons/check", class_names: "h-5 w-5" %>
-    <span class="sr-only">Check icon</span>
+<div class="flex w-96 shadow-lg rounded-lg">
+  <div class="<%= @classes %> py-4 px-6 rounded-l-lg flex items-center">
+    <%= render @icon, class_names: "w-5 h-5 text-white dark:text-gray-400" %>
   </div>
-  <div class="ml-3 text-sm font-normal"><%= @data %></div>
-  <button type="button" class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
-    <span class="sr-only">Close</span>
-    <%= render "icons/x_mark", class_names: "h-5 w-5" %>
-  </button>
+  <div class="px-4 py-6 bg-white dark:bg-gray-800 dark:text-gray-200 rounded-r-lg flex justify-between items-center w-full">
+    <div><%= @data %></div>
+    <button>
+      <%= render "icons/x_mark", class_names: "w-5 h-5" %>
+    </button>
+  </div>
 </div>
