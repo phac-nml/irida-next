@@ -14,7 +14,7 @@
         },
         {
             "type": "rdbg",
-            "name": "Debug rails test",
+            "name": "Debug current rails test file",
             "request": "launch",
             "script": "bin/rails test ${file}",
             "useBundler": false,
