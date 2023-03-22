@@ -1,14 +1,11 @@
-<%= content_for :buttons do %>
-  <div class="flex flex-row">
-    <%= link_to t(:'groups.show.create_subgroup_button'), new_group_path(parent_id: @group.id), class: "btn btn-default" %>
-    <%= link_to t(:'groups.show.create_project_button'), new_project_path(:group_id => @group.id), class: "btn btn-primary ml-2" %>
-  </div>
-<% end %>
-
-<%= render layout: 'shared/page_header', locals: {
-  title: @group.name,
-  subtitle: @group.description,
-  icon: 'squares_2x2'
-} do %>
-  <!-- ADD CONTENT HERE -->
+<%= render PageHeaderComponent.new(title: @group.name, subtitle: @group.description) do |component| %>
+  <%= component.with_icon do %>
+    <%= render "icons/squares_2x2", class_names: "h-14 w-14 text-primary-700" %>
+  <% end %>
+  <%= component.with_buttons do %>
+    <div class="flex flex-row">
+      <%= link_to t(:'groups.show.create_subgroup_button'), new_group_path(parent_id: @group.id), class: "btn btn-default" %>
+      <%= link_to t(:'groups.show.create_project_button'), new_project_path(:group_id => @group.id), class: "btn btn-primary ml-2" %>
+    </div>
+  <% end %>
 <% end %>
