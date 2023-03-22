@@ -4,6 +4,7 @@ module Projects
   # Controller actions for Samples
   class SamplesController < ApplicationController
     before_action :set_sample, only: %i[show edit update destroy]
+    before_action :project, only: %i[create update]
 
     # GET /samples or /samples.json
     def index
@@ -23,7 +24,7 @@ module Projects
 
     # POST /samples or /samples.json
     def create
-      @sample = Sample.new(sample_params)
+      @sample = Sample.new(sample_params.merge(project: @project))
 
       respond_to do |format|
         if @sample.save
@@ -69,6 +70,10 @@ module Projects
     # Only allow a list of trusted parameters through.
     def sample_params
       params.require(:sample).permit(:name, :description, :project_id)
+    end
+
+    def project
+      @project ||= Namespaces::ProjectNamespace.find_by(path: params[:project_id]).project if params[:project_id]
     end
   end
 end

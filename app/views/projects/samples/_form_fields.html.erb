@@ -11,10 +11,3 @@
   <%= form.text_area :description, rows: 4 %>
   <%= render 'shared/form/field_errors', errors: sample.errors.full_messages_for(:description) %>
 </div>
-
-<% invalid_project = sample.errors.include?(:project) %>
-<div class="form-field <%= 'invalid' if invalid_project %>">
-  <%= form.label :project_id %>
-  <%= form.text_field :project_id %>
-  <%= render 'shared/form/field_errors', errors: sample.errors.full_messages_for(:project) %>
-</div>

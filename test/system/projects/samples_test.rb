@@ -22,7 +22,6 @@ module Projects
 
       fill_in 'Description', with: @sample.description
       fill_in 'Name', with: 'New Name'
-      fill_in 'Project', with: @sample.project_id
       click_on 'Create sample'
 
       assert_text 'Sample was successfully created'
@@ -35,7 +34,6 @@ module Projects
 
       fill_in 'Description', with: @sample.description
       fill_in 'Name', with: 'New Sample Name'
-      fill_in 'Project', with: @sample.project_id
       click_on 'Update sample'
 
       assert_text 'Sample was successfully updated'
