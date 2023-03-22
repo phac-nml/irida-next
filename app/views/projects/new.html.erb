@@ -5,26 +5,24 @@
 } do %>
   <div class="p-4">
     <div class="card mb-4" data-controller="groups-new">
-      <%= form_with(model: @new_project, url: projects_path(namespace_id: params[:group_id]), method: :post) do |form| %>
+      <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post) do |form| %>
         <%= turbo_frame_tag "project_form" do %>
           <div class="grid gap-4">
             <%= form.fields_for :namespace do |builder| %>
-
               <%= render partial: "projects/form_fields", locals: {
                 builder: builder
               } %>
-
               <div class="form-field">
                 <%= label_tag :description, t(:".description") %>
                 <%= builder.text_area :description, { class: "form-control", 'aria-label' => "Project description, not required" } %>
               </div>
             <% end %>
-        <% end %>
-        <div>
-          <%= form.submit t("projects.new.submit"), class: "btn btn-primary" %>
+          <% end %>
+          <div>
+            <%= form.submit t("projects.new.submit"), class: "btn btn-primary" %>
+          </div>
         </div>
-        </div>
-        </div>
-      <% end %>
       </div>
+    <% end %>
+  </div>
 <% end %>

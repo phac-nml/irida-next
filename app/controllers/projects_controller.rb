@@ -14,16 +14,12 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @new_project = Project.new
-    @new_project.build_namespace(parent_id: params[:namespace_id] || current_user.namespace.id)
+    @project = Project.new
+    @project.build_namespace(parent_id: params[:namespace_id] || current_user.namespace.id)
   end
 
   def edit
-    respond_to do |format|
-      format.html do
-        render 'edit'
-      end
-    end
+    # No necessary code here
   end
 
   def create
@@ -51,11 +47,7 @@ class ProjectsController < ApplicationController
   end
 
   def activity
-    respond_to do |format|
-      format.html do
-        render 'activity'
-      end
-    end
+    # No necessary code here
   end
 
   def transfer
