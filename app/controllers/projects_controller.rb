@@ -85,9 +85,9 @@ class ProjectsController < ApplicationController
   end
 
   def project
-    return unless params[:project_id] || params[:id]
+    return unless params[:project_id]
 
-    path = [params[:namespace_id], params[:project_id] || params[:id]].join('/')
+    path = [params[:namespace_id], params[:project_id]].join('/')
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
   end
 

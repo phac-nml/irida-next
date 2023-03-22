@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 constraints(::Constraints::ProjectUrlConstrainer.new) do
-  scope(path: '*namespace_id/:id',
+  scope(path: '*namespace_id/:project_id',
         constraints: { namespace_id: Irida::PathRegex.full_namespace_route_regex,
-                       id: Irida::PathRegex.project_route_regex },
+                       project_id: Irida::PathRegex.project_route_regex },
         module: :projects,
         as: :namespace_project) do
     get '/', action: :show
@@ -16,6 +16,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       get :activity
       get :edit
       post :transfer
+      resources :members, only: %i[create destroy index new]
     end
   end
 end
