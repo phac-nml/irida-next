@@ -23,7 +23,7 @@ module Projects
 
       respond_to do |format|
         if @sample.save
-          format.html { redirect_to namespace_project_sample_url(id: @sample.id), notice: t(:'.success') }
+          format.html { redirect_to namespace_project_sample_url(id: @sample.id), notice: t('.success') }
         else
           format.html { render :new, status: :unprocessable_entity }
         end
@@ -33,7 +33,7 @@ module Projects
     def update
       respond_to do |format|
         if @sample.update(sample_params)
-          format.html { redirect_to namespace_project_sample_url(id: @sample.id), notice: t(:'.success') }
+          format.html { redirect_to namespace_project_sample_url(id: @sample.id), notice: t('.success') }
         else
           format.html { render :edit, status: :unprocessable_entity }
         end
@@ -41,10 +41,12 @@ module Projects
     end
 
     def destroy
-      @sample.destroy
-
-      respond_to do |format|
-        format.html { redirect_to namespace_project_samples_url, notice: t(:'.success') }
+      if @sample.destroy
+        flash[:success] = t('.success', sample_name: @sample.name)
+        redirect_to namespace_project_samples_url
+      else
+        flash[:error] = t('.error', sample_name: @sample.name)
+        redirect_to namespace_project_sample_url(@sample)
       end
     end
 
