@@ -42,7 +42,9 @@ module Projects
 
     test 'should destroy Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample.id)
-      click_on 'Remove', match: :first
+      accept_confirm do
+        click_link 'Remove', match: :first
+      end
 
       assert_text 'Sample Sample 1 was removed'
     end
