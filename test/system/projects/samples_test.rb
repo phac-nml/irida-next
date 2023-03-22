@@ -44,7 +44,7 @@ module Projects
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample.id)
       click_on 'Remove', match: :first
 
-      assert_text 'Sample was successfully destroyed'
+      assert_text 'Sample Sample 1 was removed'
     end
   end
 end

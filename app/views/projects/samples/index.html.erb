@@ -31,7 +31,7 @@
                     <ul aria-labelledby="dropdownDefaultButton">
                       <li>
                         <%= link_to t('projects.samples.index.edit_button'), edit_namespace_project_sample_path(id: sample.id) %>
-                        <%= link_to t('projects.samples.index.delete_button'), namespace_project_sample_path(id: sample.id), data: {turbo_method: :delete, turbo_confirm: t('projects.samples.index.delete_button_confirmation')} %>
+                        <%= link_to t('projects.samples.index.remove_button'), namespace_project_sample_path(id: sample.id), data: {turbo_method: :delete, turbo_confirm: t('projects.samples.index.remove_button_confirmation')} %>
                       </li>
                     </ul>
                   </div>
