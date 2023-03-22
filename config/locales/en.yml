@@ -54,6 +54,8 @@ en:
     expand_sidebar: Expand sidebar
     collapse_sidebar: Collapse sidebar
     close_modal: Close modal
+    screen_reader:
+      close: Close
     default_sidebar:
       title: Your work
       groups: Groups
