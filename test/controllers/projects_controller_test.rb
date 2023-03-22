@@ -5,6 +5,13 @@ require 'test_helper'
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  test 'should get index' do
+    sign_in users(:john_doe)
+
+    get projects_path
+    assert_response :success
+  end
+
   test 'should show the project' do
     sign_in users(:john_doe)
 

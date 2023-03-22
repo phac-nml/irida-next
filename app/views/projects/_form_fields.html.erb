@@ -1,5 +1,5 @@
 <div class="form-field">
-  <%= label_tag :name, t(:".name") %>
+  <%= label_tag :name, t(:"projects.new.name") %>
   <%= builder.text_field :name,
                          data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" },
                          :required => true, :autofocus => true,
