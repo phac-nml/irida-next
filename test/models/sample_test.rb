@@ -3,7 +3,11 @@
 require 'test_helper'
 
 class SampleTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def setup
+    @sample = samples(:one)
+  end
+
+  test 'valid sample' do
+    assert @sample.valid?
+  end
 end
