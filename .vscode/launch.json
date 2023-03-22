@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "rdbg",
+            "name": "Debug rails",
+            "request": "launch",
+            "script": "bin/rails s",
+            "useBundler": false,
+            "command": "ruby"
+        },
+        {
+            "type": "rdbg",
+            "name": "Debug rails test",
+            "request": "launch",
+            "script": "bin/rails test ${file}",
+            "useBundler": false,
+            "command": "ruby"
+        },
+        {
+            "type": "rdbg",
+            "name": "Attach with rdbg",
+            "request": "attach"
+        }
+    ]
+}
