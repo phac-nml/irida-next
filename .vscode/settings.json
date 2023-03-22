@@ -13,5 +13,11 @@
   "files.insertFinalNewline": true,
   "editor.rulers": [
     120
-  ]
+  ],
+  "[erb]": {
+    "editor.defaultFormatter": "aliariff.vscode-erb-beautify",
+  },
+  "files.associations": {
+    "*.html.erb": "erb"
+  }
 }
