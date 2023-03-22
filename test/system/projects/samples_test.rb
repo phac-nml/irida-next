@@ -25,7 +25,7 @@ module Projects
       click_on I18n.t('projects.samples.new.submit_button')
 
       assert_text I18n.t('projects.samples.create.success')
-      click_on 'Back'
+      click_on I18n.t('projects.samples.show.back_button')
     end
 
     test 'should update Sample' do
@@ -34,7 +34,7 @@ module Projects
 
       fill_in 'Description', with: @sample.description
       fill_in 'Name', with: 'New Sample Name'
-      click_on 'Update sample'
+      click_on I18n.t('projects.samples.edit.submit_button')
 
       assert_text I18n.t('projects.samples.update.success')
       click_on I18n.t('projects.samples.show.back_button')
