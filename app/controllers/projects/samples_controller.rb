@@ -23,7 +23,8 @@ module Projects
 
       respond_to do |format|
         if @sample.save
-          format.html { redirect_to namespace_project_sample_path(id: @sample.id), notice: t('.success') }
+          flash[:success] = t('.success')
+          format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
         else
           format.html { render :new, status: :unprocessable_entity }
         end
@@ -33,7 +34,8 @@ module Projects
     def update
       respond_to do |format|
         if @sample.update(sample_params)
-          format.html { redirect_to namespace_project_sample_path(id: @sample.id), notice: t('.success') }
+          flash[:success] = t('.success')
+          format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
         else
           format.html { render :edit, status: :unprocessable_entity }
         end
