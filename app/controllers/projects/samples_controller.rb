@@ -19,7 +19,7 @@ module Projects
     def edit; end
 
     def create
-      @sample = Sample.new(sample_params.merge(project: @project))
+      @sample = Sample.new(sample_params.merge(project_id: @project.id))
 
       respond_to do |format|
         if @sample.save
