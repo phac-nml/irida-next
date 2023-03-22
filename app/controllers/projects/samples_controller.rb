@@ -69,7 +69,7 @@ module Projects
 
     # Only allow a list of trusted parameters through.
     def sample_params
-      params.require(:sample).permit(:name, :description, :project_id)
+      params.require(:sample).permit(:name, :description)
     end
 
     def project
