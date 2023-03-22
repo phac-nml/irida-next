@@ -3,7 +3,7 @@
 <% end %>
 
 <%= render layout: 'shared/page_header', locals: {
-  icon: "samples",
+  icon: 'beaker',
   title: t('.title'),
   subtitle: t('.subtitle'),
 } do %>
@@ -22,8 +22,8 @@
               </td>
               <td class="px-4 py-3">
                 <div class="flex justify-end items-center">
-                  <button data-dropdown-toggle="sample-<%= sample.id %>-dropdown" class="navbar-btn sample-settings-ellipsis" 
-                    aria-label="<%= t('projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) %>"> 
+                  <button data-dropdown-toggle="sample-<%= sample.id %>-dropdown" class="navbar-btn sample-settings-ellipsis"
+                    aria-label="<%= t('projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) %>">
                     <%= render 'icons/ellipsis_vertical' %>
                   </button>
                   <!-- Dropdown menu -->
