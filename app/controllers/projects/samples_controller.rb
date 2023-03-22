@@ -3,7 +3,7 @@
 module Projects
   # Controller actions for Samples
   class SamplesController < ApplicationController
-    before_action :set_sample, only: %i[show edit update destroy]
+    before_action :sample, only: %i[show edit update destroy]
     before_action :project, only: %i[create update]
 
     def index
@@ -52,7 +52,7 @@ module Projects
 
     private
 
-    def set_sample
+    def sample
       @sample = Sample.find(params[:id])
     end
 
