@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "shopify.ruby-lsp",
+        "koichisasada.vscode-rdbg",
+        "connorshea.vscode-ruby-test-adapter",
+        "hbenl.vscode-test-explorer"
+    ]
+}
