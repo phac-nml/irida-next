@@ -184,7 +184,7 @@ en:
     edit:
       general:
         title: General
-        
+        submit: Update project
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data
