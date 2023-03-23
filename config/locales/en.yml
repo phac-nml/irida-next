@@ -34,8 +34,9 @@ en:
     attributes:
       group:
         name: Group name
-      project:
+      namespaces/project_namespace:
         name: Project Name
+        description: FRANKER
     errors:
       models:
         group:
@@ -66,6 +67,7 @@ en:
       main_dropdown:
         aria-label: Main navigation menu
         groups: Groups
+        projects: Projects
       search:
         placeholder: Search
       new_dropdown:
@@ -196,10 +198,6 @@ en:
     new:
       title: Create project
       subtitle: Projects are where you can store and analyze your data
-      name: Project name
-      description: Project description
-      url: Project URL
-      slug: Project slug
       submit: Create project
       cancel: Cancel
     sidebar:

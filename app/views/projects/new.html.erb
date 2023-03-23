@@ -4,16 +4,16 @@
   icon: "rectangle_stack"
 } do %>
   <div class="p-4">
-    <div class="card mb-4" data-controller="groups-new">
+    <div class="mb-4 card" data-controller="groups-new">
       <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post) do |form| %>
         <%= turbo_frame_tag "project_form" do %>
           <div class="grid gap-4">
-            <%= form.fields_for :namespace do |builder| %>
+            <%= form.fields_for @project.namespace do |builder| %>
               <%= render partial: "projects/form_fields", locals: {
                 builder: builder
               } %>
               <div class="form-field">
-                <%= label_tag :description, t(:".description") %>
+                <%= label_tag :description %>
                 <%= builder.text_area :description, { class: "form-control", 'aria-label' => "Project description, not required" } %>
               </div>
             <% end %>
