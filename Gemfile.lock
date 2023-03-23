@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/nebulab/erb-formatter.git
+  revision: f9149c1f15c41887e7d2cf03a01a0d5080e8ad01
+  tag: v0.4.2
+  specs:
+    erb-formatter (0.4.2)
+      syntax_tree (~> 5.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -154,6 +162,7 @@ GEM
     parser (3.2.1.0)
       ast (~> 2.4.1)
     pg (1.4.6)
+    prettier_print (1.2.1)
     public_suffix (5.0.1)
     puma (5.6.5)
       nio4r (~> 2.0)
@@ -228,6 +237,8 @@ GEM
       sprockets (>= 3.0.0)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
+    syntax_tree (5.3.0)
+      prettier_print (>= 1.2.0)
     tailwindcss-rails (2.0.22-arm64-darwin)
       railties (>= 6.0.0)
     tailwindcss-rails (2.0.22-x86_64-darwin)
@@ -273,6 +284,7 @@ DEPENDENCIES
   cuprite
   debug
   devise
+  erb-formatter!
   importmap-rails
   jbuilder
   pg
