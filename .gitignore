@@ -37,14 +37,15 @@
 /public/packs
 /public/packs-test
 /node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
 coverage
 
+# Ignore IDE folders
 *.code-workspace
 .vscode
 .idea
+
+# Ignore Ruby LSP folder
+.ruby-lsp
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
