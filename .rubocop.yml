@@ -38,3 +38,7 @@ Style/RedundantConstantBase:
   Exclude:
     - "**/config/routes.rb"
     - "**/config/routes/**/*.rb"
+
+Lint/MissingSuper:
+  Exclude:
+    - "app/components/**/*.rb"

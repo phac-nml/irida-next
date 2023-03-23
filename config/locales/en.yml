@@ -34,13 +34,18 @@ en:
     attributes:
       group:
         name: Group name
+      namespaces/project_namespace:
+        name: Project Name
+        description: Description
+        parent_id: Project URL
+        path: Project slug
     errors:
       models:
-        group:
+        namespace:
           attributes:
             name:
-              blank: can't be blank
-              taken: has already been taken
+              blank: Can't be blank
+              taken: Has already been taken
     models:
       member:
         access_level:
@@ -54,6 +59,8 @@ en:
     expand_sidebar: Expand sidebar
     collapse_sidebar: Collapse sidebar
     close_modal: Close modal
+    screen_reader:
+      close: Close
     default_sidebar:
       title: Your work
       groups: Groups
@@ -62,6 +69,7 @@ en:
       main_dropdown:
         aria-label: Main navigation menu
         groups: Groups
+        projects: Projects
       search:
         placeholder: Search
       new_dropdown:
@@ -191,11 +199,8 @@ en:
       create_project_button: New project
     new:
       title: Create project
+      placeholder: Awesome project name
       subtitle: Projects are where you can store and analyze your data
-      name: Project name
-      description: Project description
-      url: Project URL
-      slug: Project slug
       submit: Create project
       cancel: Cancel
     sidebar:

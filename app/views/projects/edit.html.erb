@@ -1,7 +1,7 @@
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <!--Edit general details form -->
-    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800" data-controller="groups-new">
       <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-gray-100">
         <%= t(:'.general.title') %>
       </h2>
@@ -9,13 +9,9 @@
         <%= turbo_frame_tag "project_form" do %>
           <div class="grid gap-4">
             <%= form.fields_for :namespace do |builder| %>
-              <%= render partial: "projects/form_fields", locals: {
+              <%= render partial: "projects/project_namespace_fields", locals: {
                 builder: builder
               } %>
-              <div class="form-field">
-                <%= label_tag :description, t(:".description") %>
-                <%= builder.text_area :description, { class: "form-control", 'aria-label' => "Project description, not required" } %>
-              </div>
             <% end %>
             <div>
               <%= form.submit t("projects.edit.general.submit"), class: "btn btn-primary" %>

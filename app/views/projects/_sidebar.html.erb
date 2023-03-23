@@ -1,20 +1,68 @@
 <aside id="sidebar" class="sidebar" aria-label="Sidebar">
-  <div style="grid-area: navigation; display: flex; flex-direction: column;" class="bg-white dark:bg-gray-800 dark:border-gray-700">
+  <div
+    style="grid-area: navigation; display: flex; flex-direction: column;"
+    class="bg-white dark:bg-gray-800 dark:border-gray-700"
+  >
     <div class="pt-2 pb-4 overflow-y-auto">
-      <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-        <a href="<%= project_path(@project) %>" title="<%= @project.name %>" class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white  hover:bg-gray-100 dark:hover:bg-gray-700">
-          <div class="flex justify-center" style="width: 27px;"><%= render 'icons/clipboard_document', class_names: "w-6 h-6" %></div>
-          <h2 data-layout-target="link" class="ml-2 font-semibold text-gray-900 dark:text-white" style="white-space: nowrap; width: 190px; text-overflow: ellipsis; overflow: hidden"><%= @project.name %></h2>
+      <div
+        class="
+          flex-1
+          px-3
+          space-y-1
+          bg-white
+          divide-y
+          divide-gray-200
+          dark:bg-gray-800
+          dark:divide-gray-700
+        "
+      >
+        <a
+          href="<%= project_path(@project) %>"
+          title="<%= @project.name %>"
+          class="
+            flex
+            items-center
+            p-1
+            text-base
+            font-normal
+            text-gray-900
+            rounded-lg
+            dark:text-white
+            hover:bg-gray-100
+            dark:hover:bg-gray-700
+          "
+        >
+          <div class="flex justify-center" style="width: 27px;"><%= render "icons/clipboard_document", class_names: "w-6 h-6" %></div>
+          <h2
+            data-layout-target="link"
+            class="ml-2 font-semibold text-gray-900 dark:text-white"
+            style="white-space: nowrap; width: 190px; text-overflow: ellipsis; overflow: hidden"
+          ><%= @project.name %></h2>
         </a>
         <ul class="pt-1 space-y-1">
-          <%= render partial: 'shared/sidebar_item', locals: { link: project_path(@project), icon: "icons/clipboard_document", text: t(:'projects.sidebar.details') } %>
-          <%= render partial: 'shared/sidebar_item', locals: { link: namespace_project_members_path, icon: "icons/users", text: t(:'projects.sidebar.members') } %>
-          <%= render partial: 'shared/sidebar_item', locals: { link: project_edit_path(@project), icon: "icons/cog_6_tooth", text: t(:'projects.sidebar.settings') } %>
+          <%= render partial: "shared/sidebar_item",
+          locals: {
+            link: project_path(@project),
+            icon: "icons/clipboard_document",
+            text: t(:"projects.sidebar.details")
+          } %>
+          <%= render partial: 'shared/sidebar_item',
+          locals: {
+            link: namespace_project_members_path,
+            icon: "icons/users",
+            text: t(:'projects.sidebar.members')
+          } %>
+          <%= render partial: "shared/sidebar_item",
+          locals: {
+            link: project_edit_path(@project),
+            icon: "icons/cog_6_tooth",
+            text: t(:"groups.sidebar.settings")
+          } %>
         </ul>
       </div>
     </div>
   </div>
-    <div style="grid-area: collapse">
+  <div style="grid-area: collapse">
     <button
       data-action="click->layout#toggle"
       class="
