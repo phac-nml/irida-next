@@ -37,12 +37,25 @@ if Rails.env.development?
                                  access_level: Member::AccessLevel::GUEST })
 
   # Projects
-  project1_namespace = Namespaces::ProjectNamespace.create!({ name: 'Project 1', path: 'project-1', owner: admin,
-                                                              description: 'This is a description for project 1.',
-                                                              parent: group1 })
-  Project.create!({ creator: admin, namespace: project1_namespace })
+  project1_namespace = Namespaces::ProjectNamespace.new({ name: 'Project 1', path: 'project-1', owner: admin,
+                                                          description: 'This is a description for project 1.',
+                                                          parent: group1 })
+  project1 = Project.create!({ creator: admin, namespace: project1_namespace })
+
+  project2_namespace = Namespaces::ProjectNamespace.new({ name: 'Project 2', path: 'project-2', owner: admin,
+                                                          description: 'This is a description for project 2.',
+                                                          parent: group1 })
+  project2 = Project.create!({ creator: admin, namespace: project2_namespace })
 
   # Project Members
   Members::ProjectMember.create!({ user: user1, namespace: project1_namespace, created_by: admin,
                                    access_level: Member::AccessLevel::GUEST })
+  Members::ProjectMember.create!({ user: user1, namespace: project2_namespace, created_by: admin,
+                                   access_level: Member::AccessLevel::GUEST })
+
+  # Samples
+  Sample.create!({ name: 'Sample 1', description: 'This is a descriptions for sample 1.', project_id: project1.id })
+  Sample.create!({ name: 'Sample 2', description: 'This is a descriptions for sample 2.', project_id: project1.id })
+  Sample.create!({ name: 'Sample 3', description: 'This is a descriptions for sample 3.', project_id: project2.id })
+  Sample.create!({ name: 'Sample 4', description: 'This is a descriptions for sample 4.', project_id: project2.id })
 end

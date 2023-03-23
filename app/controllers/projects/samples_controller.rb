@@ -4,10 +4,10 @@ module Projects
   # Controller actions for Samples
   class SamplesController < ApplicationController
     before_action :sample, only: %i[show edit update destroy]
-    before_action :project, only: %i[create]
+    before_action :project, only: %i[index create]
 
     def index
-      @samples = Sample.all
+      @samples = Sample.where(project_id: @project.id)
     end
 
     def show; end
@@ -48,14 +48,14 @@ module Projects
         redirect_to namespace_project_samples_path
       else
         flash[:error] = t('.error', sample_name: @sample.name)
-        redirect_to namespace_project_sample_path(@sample)
+        redirect_to namespace_project_sample_path(id: @sample.id)
       end
     end
 
     private
 
     def sample
-      @sample = Sample.find(params[:id])
+      @sample = Sample.find_by(id: params[:id], project_id: project.id)
     end
 
     def sample_params
@@ -63,7 +63,10 @@ module Projects
     end
 
     def project
-      @project ||= Namespaces::ProjectNamespace.find_by(path: params[:project_id]).project if params[:project_id]
+      return unless params[:project_id]
+
+      path = [params[:namespace_id], params[:project_id]].join('/')
+      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
     end
   end
 end
