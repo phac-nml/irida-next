@@ -33,4 +33,33 @@ class GroupMemberTest < ActiveSupport::TestCase
   test '#type' do
     assert_equal 'GroupMember', @group_member.type
   end
+
+  test 'validates access level presence' do
+    @group_member.access_level = nil
+    assert_not @group_member.valid?
+  end
+
+  test '#validates access level in range' do
+    valid_access_levels = Member::AccessLevel.all_values_with_owner
+
+    @group_member.access_level = valid_access_levels.sample
+    assert @group_member.valid?
+  end
+
+  test '#validates access level out of range' do
+    valid_access_levels = Member::AccessLevel.all_values_with_owner
+
+    @group_member.access_level = valid_access_levels.sample + valid_access_levels.last
+    assert_not @group_member.valid?
+  end
+
+  test '#validates access level nil' do
+    @group_member.access_level = nil
+    assert_not @group_member.valid?
+  end
+
+  test '#validates uniquess of user in group namespace' do
+    @group_member.user_id = ActiveRecord::FixtureSet.identify(:joan_doe)
+    assert_not @group_member.valid?
+  end
 end

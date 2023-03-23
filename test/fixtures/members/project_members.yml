@@ -6,3 +6,10 @@ project_two_member_james_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace) %>
   type: "ProjectMember"
   access_level: <%= Member::AccessLevel::OWNER %>
+
+project_two_member_joan_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace) %>
+  type: "ProjectMember"
+  access_level: <%= Member::AccessLevel::OWNER %>
