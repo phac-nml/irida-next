@@ -2,7 +2,8 @@
   <%= builder.label :name %>
   <%= builder.text_field :name,
                          data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" },
-                         :required => true, :autofocus => true
+                         :required => true, :autofocus => true,
+                         placeholder: t(:"projects.new.placeholder")
   %>
 </div>
 <div class="grid grid-cols-2 gap-4">

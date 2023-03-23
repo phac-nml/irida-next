@@ -199,6 +199,7 @@ en:
       create_project_button: New project
     new:
       title: Create project
+      placeholder: Awesome project name
       subtitle: Projects are where you can store and analyze your data
       submit: Create project
       cancel: Cancel
