@@ -3,6 +3,14 @@
 require 'test_helper'
 
 class IridaSchemaTest < ActiveSupport::TestCase
+  test 'schema is up to date' do
+    current_schema = IridaSchema.to_definition
+    generated_schema = Rails.root.join('app/graphql/schema.graphql').read
+
+    assert_equal current_schema, generated_schema,
+                 'Update the generated schema with `bin/rails graphql:dump_schema`'
+  end
+
   test 'has the base mutation' do
     assert_equal Types::MutationType, IridaSchema.mutation
   end
