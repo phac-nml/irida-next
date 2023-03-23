@@ -11,4 +11,16 @@ class PageHeaderComponentTest < ViewComponent::TestCase
     assert_text title
     assert_text subtitle
   end
+
+  def test_renders_header_with_icon
+    title = 'THIS IS THE TITLE'
+    subtitle = 'THIS IS A SUBTITLE'
+    render_inline(PageHeaderComponent.new(title:, subtitle:)) do |component|
+      component.with_icon { 'ICON' }
+      component.with_buttons { 'BUTTONS' }
+    end
+
+    assert_text 'ICON'
+    assert_text 'BUTTONS'
+  end
 end
