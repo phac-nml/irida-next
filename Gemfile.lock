@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/nebulab/erb-formatter.git
+  revision: f9149c1f15c41887e7d2cf03a01a0d5080e8ad01
+  tag: v0.4.2
+  specs:
+    erb-formatter (0.4.2)
+      syntax_tree (~> 5.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -119,7 +127,6 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.6.3)
-    language_server-protocol (3.17.0.3)
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -214,10 +221,6 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
-    ruby-lsp (0.4.2)
-      language_server-protocol (~> 3.17.0)
-      sorbet-runtime
-      syntax_tree (>= 6.0.2, < 7)
     ruby-progressbar (1.11.0)
     simplecov (0.22.0)
       docile (~> 1.1)
@@ -225,7 +228,6 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    sorbet-runtime (0.5.10731)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -235,7 +237,7 @@ GEM
       sprockets (>= 3.0.0)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
-    syntax_tree (6.1.1)
+    syntax_tree (5.3.0)
       prettier_print (>= 1.2.0)
     tailwindcss-rails (2.0.22-arm64-darwin)
       railties (>= 6.0.0)
@@ -252,6 +254,10 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
+    view_component (2.82.0)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -278,6 +284,7 @@ DEPENDENCIES
   cuprite
   debug
   devise
+  erb-formatter!
   importmap-rails
   jbuilder
   pg
@@ -285,13 +292,13 @@ DEPENDENCIES
   rails (~> 7.0.4, >= 7.0.4.2)
   rubocop
   rubocop-rails
-  ruby-lsp
   simplecov
   sprockets-rails
   stimulus-rails
   tailwindcss-rails (~> 2.0)
   turbo-rails
   tzinfo-data
+  view_component
   web-console
 
 RUBY VERSION

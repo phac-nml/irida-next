@@ -1,48 +1,118 @@
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <!--Edit general details form -->
-    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-      <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white mb-4">
-        <%= t(:'groups.edit.details.title') %>
+    <div
+      class="
+        p-4
+        bg-white
+        border
+        border-gray-200
+        rounded-lg
+        shadow-sm
+        2xl:col-span-2
+        dark:border-gray-700
+        sm:p-6
+        dark:bg-gray-800
+      "
+    >
+      <h2
+        class="
+          text-xl
+          font-semibold
+          leading-tight
+          text-gray-900
+          dark:text-white
+          mb-4
+        "
+      >
+        <%= t(:"groups.edit.details.title") %>
       </h2>
       <div data-controller="groups-new">
         <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
 
-          <%= render partial: 'form_fields', locals: {
-            form: form,
-            group: @group,
-          } %>
+          <%= render partial: "form_fields", locals: { form: form, group: @group } %>
 
           <div class="my-2">
-            <%= form.submit t(:'groups.edit.details.submit'), class: "btn btn-primary" %>
+            <%= form.submit t(:"groups.edit.details.submit"), class: "btn btn-primary" %>
           </div>
         <% end %>
       </div>
     </div>
 
-    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+    <div
+      class="
+        p-4
+        bg-white
+        border
+        border-gray-200
+        rounded-lg
+        shadow-sm
+        2xl:col-span-2
+        dark:border-gray-700
+        sm:p-6
+        dark:bg-gray-800
+      "
+    >
       <div id="settings-accordion" data-accordion="collapse">
-        <h2 id="settings-delete-heading" class="text-xl font-semibold leading-tight text-gray-900 dark:text-white flex justify-between items-center">
-          <%= t(:'.advanced.title') %>
-          <button type="button" aria-label="<%= t(:'.advanced.button_aria_label') %>" class="btn btn-default" data-accordion-target="#accordion-collapse-body-1" aria-expanded="false" aria-controls="accordion-collapse-body-1">
-            <svg data-accordion-icon xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <h2
+          id="settings-delete-heading"
+          class="
+            text-xl
+            font-semibold
+            leading-tight
+            text-gray-900
+            dark:text-white
+            flex
+            justify-between
+            items-center
+          "
+        >
+          <%= t(:".advanced.title") %>
+          <button
+            type="button"
+            aria-label="<%= t(:'.advanced.button_aria_label') %>"
+            class="btn btn-default"
+            data-accordion-target="#accordion-collapse-body-1"
+            aria-expanded="false"
+            aria-controls="accordion-collapse-body-1"
+          >
+            <svg
+              data-accordion-icon
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
 
           </button>
         </h2>
-        <div id="accordion-collapse-body-1" class="hidden pt-4" aria-labelledby="settings-delete-heading">
+        <div
+          id="accordion-collapse-body-1"
+          class="hidden pt-4"
+          aria-labelledby="settings-delete-heading"
+        >
           <h3 class="text-lg font-semibold leading-tight text-red-600">
-            <%= t(:'groups.edit.advanced.delete_group.title') %>
+            <%= t(:"groups.edit.advanced.delete_group.title") %>
           </h3>
           <p class="text-gray-600 dark:text-gray-400">
-            <%= t(:'groups.edit.advanced.delete_group.description') %>
+            <%= t(:"groups.edit.advanced.delete_group.description") %>
           </p>
           <div class="mt-4">
-            <%= link_to t(:'groups.edit.advanced.delete_group.submit'), group_path(@group), data: {
+            <%= link_to t(:"groups.edit.advanced.delete_group.submit"),
+            group_path(@group),
+            data: {
               turbo_method: :delete,
-              turbo_confirm: t(:'groups.edit.advanced.delete_group.confirm') },
-                        class: "btn btn-danger" %>
+              turbo_confirm: t(:"groups.edit.advanced.delete_group.confirm")
+            },
+            class: "btn btn-danger" %>
           </div>
         </div>
       </div>

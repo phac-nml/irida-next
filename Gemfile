@@ -49,6 +49,7 @@ gem 'devise'
 
 # Tailwind CSS [https://tailwindcss.com]
 gem 'tailwindcss-rails', '~> 2.0'
+gem 'view_component'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -75,7 +76,8 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 
-  gem 'ruby-lsp', require: false
+  # erb-formatter
+  gem 'erb-formatter', git: 'https://github.com/nebulab/erb-formatter.git', tag: 'v0.4.2', require: false
 end
 
 group :test do
