@@ -6,7 +6,8 @@ module Projects
   class SamplesControllerTest < ActionDispatch::IntegrationTest
     setup do
       sign_in users(:john_doe)
-      @sample = samples(:one)
+      @sample1 = samples(:one)
+      @sample4 = samples(:four)
       @project = projects(:project1)
       @namespace = groups(:group_one)
     end
@@ -25,9 +26,9 @@ module Projects
       assert_difference('Sample.count') do
         post namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path),
              params: { sample: {
-               description: @sample.description,
+               description: @sample1.description,
                name: 'New Sample',
-               project_id: @sample.project_id
+               project_id: @sample1.project_id
              } }
       end
 
@@ -35,27 +36,32 @@ module Projects
     end
 
     test 'should show sample' do
-      get namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample.id)
+      get namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       assert_response :success
+    end
+
+    test 'should not show sample, if it does not belong to the project' do
+      get namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample4.id)
+      assert_response :error
     end
 
     test 'should get edit' do
       get edit_namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path,
-                                            id: @sample.id)
+                                            id: @sample1.id)
       assert_response :success
     end
 
     test 'should update sample' do
-      patch namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample.id),
-            params: { sample: { description: @sample.description, name: 'New Sample Name',
-                                project_id: @sample.project_id } }
+      patch namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id),
+            params: { sample: { description: @sample1.description, name: 'New Sample Name',
+                                project_id: @sample1.project_id } }
       assert_redirected_to namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path,
-                                                        id: @sample.id)
+                                                        id: @sample1.id)
     end
 
     test 'should destroy sample' do
       assert_difference('Sample.count', -1) do
-        delete namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample.id)
+        delete namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       end
 
       assert_redirected_to namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)

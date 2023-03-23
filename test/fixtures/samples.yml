@@ -9,3 +9,13 @@ two:
   name: Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
+
+three:
+  name: Sample 3
+  description: Sample 3 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project2) %>
+
+four:
+  name: Sample 4
+  description: Sample 4 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project2) %>
