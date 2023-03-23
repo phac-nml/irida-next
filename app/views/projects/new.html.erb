@@ -8,14 +8,10 @@
       <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post) do |form| %>
         <%= turbo_frame_tag "project_form" do %>
           <div class="grid gap-4">
-            <%= form.fields_for @project.namespace do |builder| %>
-              <%= render partial: "projects/form_fields", locals: {
+            <%= form.fields_for :namespace do |builder| %>
+              <%= render partial: "projects/project_namespace_fields", locals: {
                 builder: builder
               } %>
-              <div class="form-field">
-                <%= label_tag :description %>
-                <%= builder.text_area :description, { class: "form-control", 'aria-label' => "Project description, not required" } %>
-              </div>
             <% end %>
           <% end %>
           <div>

@@ -36,14 +36,16 @@ en:
         name: Group name
       namespaces/project_namespace:
         name: Project Name
-        description: FRANKER
+        description: Description
+        parent_id: Project URL
+        path: Project slug
     errors:
       models:
-        group:
+        namespace:
           attributes:
             name:
-              blank: can't be blank
-              taken: has already been taken
+              blank: Can't be blank
+              taken: Has already been taken
     models:
       member:
         access_level:

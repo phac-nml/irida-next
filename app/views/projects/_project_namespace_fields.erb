@@ -1,5 +1,5 @@
 <div class="form-field">
-  <%= label_tag :name %>
+  <%= builder.label :name %>
   <%= builder.text_field :name,
                          data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" },
                          :required => true, :autofocus => true
@@ -26,4 +26,8 @@
     <%= builder.label :path %>
     <%= builder.text_field :path, data: { "groups-new-target": "path" }, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
   </div>
+</div>
+<div class="form-field">
+  <%= builder.label :description %>
+  <%= builder.text_area :description, { class: "form-control", 'aria-label' => "Project description, not required" } %>
 </div>
