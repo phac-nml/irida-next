@@ -28,10 +28,6 @@ module Projects
       @member_type = 'ProjectMember'
     end
 
-    def access_levels
-      @access_levels = Member::AccessLevel.access_level_options
-    end
-
     protected
 
     def members_path

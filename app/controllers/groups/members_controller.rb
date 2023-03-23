@@ -27,10 +27,6 @@ module Groups
       @member_type = 'GroupMember'
     end
 
-    def access_levels
-      @access_levels = Member::AccessLevel.access_level_options
-    end
-
     protected
 
     def members_path

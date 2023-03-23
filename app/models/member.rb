@@ -20,6 +20,15 @@ class Member < ApplicationRecord
         Members::ProjectMember
       end
     end
+
+    def access_level_options(member_user, current_user_owner)
+      case current_user_owner || member_user.access_level
+      when current_user_owner || AccessLevel::OWNER
+        AccessLevel.access_level_options_owner
+      when AccessLevel::MAINTAINER
+        AccessLevel.access_level_options_maintainer
+      end
+    end
   end
 
   def validate_namespace
@@ -38,13 +47,22 @@ class Member < ApplicationRecord
     OWNER          = 40 # Full control
 
     class << self
-      def access_level_options
+      def access_level_options_owner
         {
           I18n.t('activerecord.models.member.access_level.no_access') => NO_ACCESS,
           I18n.t('activerecord.models.member.access_level.guest') => GUEST,
           I18n.t('activerecord.models.member.access_level.analyst') => ANALYST,
           I18n.t('activerecord.models.member.access_level.maintainer') => MAINTAINER,
           I18n.t('activerecord.models.member.access_level.owner') => OWNER
+        }
+      end
+
+      def access_level_options_maintainer
+        {
+          I18n.t('activerecord.models.member.access_level.no_access') => NO_ACCESS,
+          I18n.t('activerecord.models.member.access_level.guest') => GUEST,
+          I18n.t('activerecord.models.member.access_level.analyst') => ANALYST,
+          I18n.t('activerecord.models.member.access_level.maintainer') => MAINTAINER
         }
       end
     end

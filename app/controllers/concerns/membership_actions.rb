@@ -46,6 +46,13 @@ module MembershipActions
     end
   end
 
+  private
+
+  def access_levels
+    member_user = Member.find_by(user: current_user, namespace: @namespace, type: @member_type)
+    @access_levels = Member.access_level_options(member_user, current_user.id == @namespace.owner_id)
+  end
+
   protected
 
   def members_path
