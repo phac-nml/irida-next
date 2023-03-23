@@ -27,11 +27,30 @@ class ProjectsTest < ApplicationSystemTestCase
 
     within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
+      assert_selector %(input[data-groups-new-target="path"]) do |input|
+        assert_equal 'new-project', input['value']
+      end
       fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
       click_on I18n.t(:'projects.new.submit')
     end
 
     assert_selector 'h1', text: project_name
     assert_text project_description
+  end
+
+  test 'can update a project' do
+    project_name = 'Updated Project'
+
+    visit project_edit_path(projects(:project1))
+    assert_text I18n.t(:'projects.edit.general.title')
+
+    within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
+      fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
+      assert_selector %(input[data-groups-new-target="path"]) do |input|
+        assert_equal 'updated-project', input['value']
+      end
+      click_on I18n.t(:'projects.edit.general.submit')
+    end
+    assert_selector 'h1', text: project_name
   end
 end
