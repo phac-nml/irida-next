@@ -34,6 +34,8 @@ en:
     attributes:
       group:
         name: Group name
+      project:
+        name: Project Name
     errors:
       models:
         group:

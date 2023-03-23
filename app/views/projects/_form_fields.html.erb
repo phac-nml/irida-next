@@ -1,16 +1,14 @@
 <div class="form-field">
-  <%= label_tag :name, t(:"projects.new.name") %>
+  <%= label_tag :name %>
   <%= builder.text_field :name,
                          data: { "groups-new-target": "name", action: "input->groups-new#nameChanged" },
-                         :required => true, :autofocus => true,
-                         'aria-label': 'Enter project name'
+                         :required => true, :autofocus => true
   %>
 </div>
-
 <div class="grid grid-cols-2 gap-4">
   <div class="form-field">
     <%= builder.label :parent_id, t(".url") %>
-    <div class="flex whitespace-nowrap items-center">
+    <div class="flex items-center whitespace-nowrap">
       <div class="inline-flex items-center px-3 py-2.5 text-sm text-gray-600 bg-gray-200 dark:bg-gray-800/50 dark:text-gray-200 border border-r-0 border-gray-300 rounded-l-lg dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
         <%= root_url %>
       </div>
