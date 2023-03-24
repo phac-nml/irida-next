@@ -55,7 +55,7 @@ module Projects
     private
 
     def sample
-      @sample = Sample.find_by(id: params[:id], project_id: project.id)
+      @sample = Sample.find_by!(id: params[:id], project_id: project.id)
     end
 
     def sample_params

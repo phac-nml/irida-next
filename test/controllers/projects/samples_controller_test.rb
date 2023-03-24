@@ -41,8 +41,9 @@ module Projects
     end
 
     test 'should not show sample, if it does not belong to the project' do
-      get namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample4.id)
-      assert_response :error
+      assert_raises(ActiveRecord::RecordNotFound) do
+        get namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample4.id)
+      end
     end
 
     test 'should get edit' do
