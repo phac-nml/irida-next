@@ -1,0 +1,45 @@
+<%= render PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
+  <%= component.with_icon do %>
+    <%= render "icons/beaker", class_names: "h-14 w-14 text-primary-700" %>
+  <% end %>
+  <%= component.with_buttons do %>
+    <%= link_to t('projects.samples.index.new_button'), new_namespace_project_sample_path, class: "btn btn-primary", 'aria-label': t('.actions.button_add_aria_label') %>
+  <% end %>
+<% end %>
+<div class="bg-white dark:bg-gray-800">
+  <div class="flex flex-col">
+    <div class="overflow-x-auto">
+      <div class="shadow">
+        <table id= "samples-table" class="min-w-full table-fixed dark:divide-gray-600">
+          <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+          <% @samples.each do |sample| %>
+            <tr class="hover:bg-green-100 dark:hover:bg-gray-700 text-sm font-normal text-gray-500 dark:text-gray-400">
+              <td class="p-4 whitespace-nowrap">
+                <%= link_to sample.name, namespace_project_sample_path(id: sample.id), class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= sample.description %></div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex justify-end items-center">
+                  <button data-dropdown-toggle="sample-<%= sample.id %>-dropdown" class="navbar-btn sample-settings-ellipsis"
+                    aria-label="<%= t('projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) %>">
+                    <%= render 'icons/ellipsis_vertical' %>
+                  </button>
+                  <!-- Dropdown menu -->
+                  <div id="sample-<%= sample.id %>-dropdown" class="dropdown-menu">
+                    <ul aria-labelledby="dropdownDefaultButton">
+                      <li>
+                        <%= link_to t('projects.samples.index.edit_button'), edit_namespace_project_sample_path(id: sample.id) %>
+                        <%= link_to t('projects.samples.index.remove_button'), namespace_project_sample_path(id: sample.id), data: {turbo_method: :delete, turbo_confirm: t('projects.samples.index.remove_button_confirmation')} %>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
