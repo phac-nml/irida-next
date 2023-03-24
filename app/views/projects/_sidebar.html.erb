@@ -1,9 +1,9 @@
 <aside id="sidebar" class="sidebar" aria-label="Sidebar">
   <div
     style="grid-area: navigation; display: flex; flex-direction: column;"
-    class="bg-white dark:bg-gray-800 dark:border-gray-700"
+    class="bg-white dark:border-gray-700 dark:bg-gray-800"
   >
-    <div class="pt-2 pb-4 overflow-y-auto">
+    <div class="overflow-y-auto pt-2 pb-4">
       <div
         class="
           flex-1
@@ -46,17 +46,17 @@
             icon: "icons/clipboard_document",
             text: t(:"projects.sidebar.details")
           } %>
-          <%= render partial: 'shared/sidebar_item',
+          <%= render partial: "shared/sidebar_item",
           locals: {
             link: namespace_project_members_path,
             icon: "icons/users",
-            text: t(:'projects.sidebar.members')
+            text: t(:"projects.sidebar.members")
           } %>
           <%= render partial: "shared/sidebar_item",
           locals: {
             link: project_edit_path(@project),
             icon: "icons/cog_6_tooth",
-            text: t(:"groups.sidebar.settings")
+            text: t(:"projects.sidebar.settings")
           } %>
         </ul>
       </div>

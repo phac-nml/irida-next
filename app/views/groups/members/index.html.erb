@@ -1,88 +1,86 @@
-<%= content_for :buttons do %>
-  <%= link_to t(:".add"),
-  new_group_member_path(@namespace),
-  class: "btn btn-primary",
-  "aria-label": t(:".actions.button_add_aria_label") %>
+<%= render PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle', namespace_type: @namespace.type.downcase, namespace_name: @namespace.name)) do |component| %>
+  <%= component.with_icon do %>
+    <%= render "icons/users", class_names: "h-14 w-14 text-primary-700" %>
+  <% end %>
+  <%= component.with_buttons do %>
+    <%= link_to t(:".add"),
+    new_group_member_path(@namespace),
+    class: "btn btn-primary",
+    "aria-label": t(:".actions.button_add_aria_label") %>
+  <% end %>
 <% end %>
 
-<%= render layout: 'shared/page_header', locals: {
-  icon: "users",
-  title: t(:'.title'),
-  subtitle: t(:'.subtitle', namespace_type: @namespace.type.downcase, namespace_name: @namespace.name),
-} do %>
-
-  <div class="bg-white dark:bg-gray-800">
-    <div class="flex flex-col">
-      <div class="overflow-x-auto">
-        <div class="shadow">
-          <table class="min-w-full table-fixed dark:divide-gray-600">
-            <tbody
-              class="
-                bg-white
-                divide-y
-                divide-gray-200
-                dark:bg-gray-800
-                dark:divide-gray-700
-              "
-            >
-              <% @members.each do |member| %>
-                <tr
-                  class="
-                    hover:bg-green-100
-                    dark:hover:bg-gray-700
-                    text-sm
-                    font-normal
-                    text-gray-500
-                    dark:text-gray-400
-                  "
-                >
-                  <td class="p-4 whitespace-nowrap">
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
-                  </td>
-                  <td class="p-4 whitespace-nowrap">
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:"groups.members.index.access_level.level_#{member.access_level}") %></div>
-                  </td>
-                  <td class="p-4 whitespace-nowrap">
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
-                        :"groups.members.index.access_granted_by",
-                        grantor_email: member.created_by.email
-                      ) %></div>
-                  </td>
-                  <td class="px-4 py-3">
-                    <div class="flex justify-end items-center">
-                      <button
-                        data-dropdown-toggle="member-<%= member.id %>-dropdown"
-                        class="navbar-btn member-settings-ellipsis"
-                        aria-label="<%= t(:'groups.members.index.actions.member_dropdown_aria_label', member: member.user.email) %>"
-                      >
-                        <%= render "icons/ellipsis_vertical" %>
-                      </button>
-                      <!-- Dropdown menu -->
-                      <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
-                        <ul aria-labelledby="dropdownDefaultButton">
-                          <li>
-                            <%= link_to t(:"groups.members.index.remove"),
-                            group_member_path(@namespace, member),
-                            data: {
-                              turbo_method: :delete,
-                              turbo_confirm: t(:"groups.members.index.remove_confirmation")
-                            },
-                            "aria-label":
-                              t(
-                                :"groups.members.index.actions.link_remove_aria_label",
-                                member: member.user.email
-                              ) %>
-                          </li>
-                        </ul>
-                      </div>
+<div class="bg-white dark:bg-gray-800">
+  <div class="flex flex-col">
+    <div class="overflow-x-auto">
+      <div class="shadow">
+        <table class="min-w-full table-fixed dark:divide-gray-600">
+          <tbody
+            class="
+              bg-white
+              divide-y
+              divide-gray-200
+              dark:bg-gray-800
+              dark:divide-gray-700
+            "
+          >
+            <% @members.each do |member| %>
+              <tr
+                class="
+                  hover:bg-green-100
+                  dark:hover:bg-gray-700
+                  text-sm
+                  font-normal
+                  text-gray-500
+                  dark:text-gray-400
+                "
+              >
+                <td class="p-4 whitespace-nowrap">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
+                </td>
+                <td class="p-4 whitespace-nowrap">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:"groups.members.index.access_level.level_#{member.access_level}") %></div>
+                </td>
+                <td class="p-4 whitespace-nowrap">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
+                      :"groups.members.index.access_granted_by",
+                      grantor_email: member.created_by.email
+                    ) %></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex justify-end items-center">
+                    <button
+                      data-dropdown-toggle="member-<%= member.id %>-dropdown"
+                      class="navbar-btn member-settings-ellipsis"
+                      aria-label="<%= t(:'groups.members.index.actions.member_dropdown_aria_label', member: member.user.email) %>"
+                    >
+                      <%= render "icons/ellipsis_vertical" %>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
+                      <ul aria-labelledby="dropdownDefaultButton">
+                        <li>
+                          <%= link_to t(:"groups.members.index.remove"),
+                          group_member_path(@namespace, member),
+                          data: {
+                            turbo_method: :delete,
+                            turbo_confirm: t(:"groups.members.index.remove_confirmation")
+                          },
+                          "aria-label":
+                            t(
+                              :"groups.members.index.actions.link_remove_aria_label",
+                              member: member.user.email
+                            ) %>
+                        </li>
+                      </ul>
                     </div>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-<% end %>
+</div>

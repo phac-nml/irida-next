@@ -26,20 +26,21 @@ class ProjectsController < ApplicationController
     @project = Projects::CreateService.new(current_user, project_params).execute
 
     if @project.persisted?
+      flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
-        project_path(@project),
-        notice: t('.success', project_name: @project.name)
+        project_path(@project)
       )
     else
-      render 'new'
+
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
     if Projects::UpdateService.new(@project, current_user, project_params).execute
+      flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
-        project_path(@project),
-        notice: t('.success', project_name: @project.name)
+        project_path(@project)
       )
     else
       render :edit, status: :unprocessable_entity
@@ -51,7 +52,7 @@ class ProjectsController < ApplicationController
   end
 
   def transfer
-    new_namespace ||= Namespace.find(params.require(:new_namespace_id))
+    new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       redirect_to(
         project_path(@project),

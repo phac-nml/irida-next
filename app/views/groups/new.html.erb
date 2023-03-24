@@ -4,7 +4,7 @@
   icon: "squares_plus"
 } do %>
   <div class="p-4">
-    <div data-controller="groups-new" class="card">
+    <div data-controller="slugify" class="card">
       <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
         <div class="grid gap-4">
 

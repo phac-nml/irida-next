@@ -25,9 +25,9 @@ class ProjectsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'projects.new.title')
 
-    within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
-      assert_selector %(input[data-groups-new-target="path"]) do |input|
+      assert_selector %(input[data-slugify-target="path"]) do |input|
         assert_equal 'new-project', input['value']
       end
       fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
@@ -44,9 +44,9 @@ class ProjectsTest < ApplicationSystemTestCase
     visit project_edit_path(projects(:project1))
     assert_text I18n.t(:'projects.edit.general.title')
 
-    within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
-      assert_selector %(input[data-groups-new-target="path"]) do |input|
+      assert_selector %(input[data-slugify-target="path"]) do |input|
         assert_equal 'updated-project', input['value']
       end
       click_on I18n.t(:'projects.edit.general.submit')
