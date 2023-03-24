@@ -22,10 +22,10 @@ class GroupsTest < ApplicationSystemTestCase
     click_button I18n.t(:'general.navbar.new_dropdown.aria_label')
     click_link I18n.t(:'general.navbar.new_dropdown.group')
 
-    within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'New group'
 
-      assert_selector %(input[data-groups-new-target="path"]) do |input|
+      assert_selector %(input[data-slugify-target="path"]) do |input|
         assert_equal 'new-group', input['value']
       end
 
@@ -42,10 +42,10 @@ class GroupsTest < ApplicationSystemTestCase
 
     click_link I18n.t(:'groups.index.create_group_button')
 
-    within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'New group'
 
-      assert_selector %(input[data-groups-new-target="path"]) do |input|
+      assert_selector %(input[data-slugify-target="path"]) do |input|
         assert_equal 'new-group', input['value']
       end
 
@@ -62,7 +62,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     click_link I18n.t(:'groups.show.create_subgroup_button')
 
-    within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'New sub-group'
       fill_in 'Description', with: 'New sub-group description'
       click_on I18n.t(:'groups.new_subgroup.submit')
@@ -77,10 +77,10 @@ class GroupsTest < ApplicationSystemTestCase
 
     click_link I18n.t(:'groups.sidebar.settings')
 
-    within %(div[data-controller="groups-new"][data-controller-connected="true"]) do
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'Edited group'
 
-      assert_selector %(input[data-groups-new-target="path"]) do |input|
+      assert_selector %(input[data-slugify-target="path"]) do |input|
         assert_equal 'edited-group', input['value']
       end
 

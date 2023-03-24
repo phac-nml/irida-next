@@ -27,7 +27,7 @@
       >
         <%= t(:"groups.edit.details.title") %>
       </h2>
-      <div data-controller="groups-new">
+      <div data-controller="slugify">
         <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
 
           <%= render partial: "form_fields", locals: { form: form, group: @group } %>

@@ -4,8 +4,8 @@
   icon: "squares_plus"
 } do %>
   <div class="p-4">
-      <div data-controller="groups-new" class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-        <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
+    <div data-controller="slugify" class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+      <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
           <div class="grid gap-4">
 
             <%= render partial: 'form_fields', locals: {

@@ -4,7 +4,7 @@
   icon: "rectangle_stack"
 } do %>
   <div class="p-4">
-    <div class="mb-4 card" data-controller="groups-new">
+    <div class="mb-4 card" data-controller="slugify">
       <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post) do |form| %>
         <%= turbo_frame_tag "project_form" do %>
           <div class="grid gap-4">
