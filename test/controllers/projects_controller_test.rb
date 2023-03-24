@@ -76,6 +76,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project_path(projects(:project2).reload)
   end
 
+  test 'should fail to update a project with wrong params' do
+    sign_in users(:john_doe)
+
+    patch project_path(projects(:project2)),
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'a VERY wrong path' } } }
+
+    assert_response :unprocessable_entity
+  end
+
   test 'should transfer a project' do
     sign_in users(:john_doe)
 
@@ -83,5 +92,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
          params: { new_namespace_id: groups(:subgroup1).id }
 
     assert_redirected_to project_path(projects(:project2).reload)
+  end
+
+  test 'should fail to transfer a project with wrong params' do
+    sign_in users(:john_doe)
+
+    post namespace_project_transfer_path(projects(:project2), namespace_id: projects(:project2).namespace),
+         params: {
+           new_namespace_id: 'does-not-exist'
+         }
+
+    assert_response :unprocessable_entity
   end
 end
