@@ -97,7 +97,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should fail to transfer a project with wrong params' do
     sign_in users(:john_doe)
 
-    post namespace_project_transfer_path(projects(:project2), namespace_id: projects(:project2).namespace),
+    post project_transfer_path(projects(:project2)),
          params: {
            new_namespace_id: 'does-not-exist'
          }

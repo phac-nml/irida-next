@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
   end
 
   def transfer
-    new_namespace ||= Namespace.find(params.require(:new_namespace_id))
+    new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       redirect_to(
         project_path(@project),
@@ -86,8 +86,6 @@ class ProjectsController < ApplicationController
   end
 
   def project
-    return unless params[:project_id] || params[:id]
-
     path = [params[:namespace_id], params[:project_id] || params[:id]].join('/')
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
   end
