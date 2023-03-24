@@ -9,7 +9,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
     get '/', action: :show
     patch '/', action: :update
     put '/', action: :update
-
     # Begin on /-/ scope.
     # Use this for all project routes.
     scope '-' do
@@ -17,6 +16,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       get :edit
       post :transfer
       resources :members, only: %i[create destroy index new]
+      resources :samples
     end
   end
 end
