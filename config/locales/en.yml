@@ -34,7 +34,8 @@ en:
     attributes:
       group:
         name: Group name
-        path: Group URL
+        path: Group slug
+        parent_id: Group URL
       namespaces/project_namespace:
         name: Project Name
         description: Description
