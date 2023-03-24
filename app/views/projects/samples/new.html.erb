@@ -1,21 +1,35 @@
-<%= render partial: 'shared/page_header', locals: {
-  icon: 'beaker',
-  title: t('projects.samples.new.title'),
-  subtitle: t('projects.samples.new.subtitle')
+<%= render partial: "shared/page_header",
+locals: {
+  icon: "beaker",
+  title: t("projects.samples.new.title"),
+  subtitle: t("projects.samples.new.subtitle")
 } %>
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+    <div
+      class="
+        p-4
+        bg-white
+        border
+        border-gray-200
+        rounded-lg
+        shadow-sm
+        2xl:col-span-2
+        dark:border-gray-700
+        sm:p-6
+        dark:bg-gray-800
+      "
+    >
       <%= form_with(model: @sample, url: namespace_project_samples_path, method: :post) do |form| %>
 
-        <%= render partial: 'form_fields', locals: {
-          form: form,
-          sample: @sample
-        } %>
+        <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
         <div class="my-2">
-          <%= form.submit t('projects.samples.new.submit_button'), class: "btn btn-primary mr-1" %>
-          <%= link_to t('projects.sample.new.cancel_button'), namespace_project_samples_path, class: "btn btn-default" %>
+          <%= form.submit t("projects.samples.new.submit_button"),
+                      class: "btn btn-primary mr-1" %>
+          <%= link_to t("projects.sample.new.cancel_button"),
+          namespace_project_samples_path,
+          class: "btn btn-default" %>
         </div>
       <% end %>
     </div>

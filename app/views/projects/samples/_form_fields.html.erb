@@ -2,12 +2,14 @@
 <div class="form-field <%= 'invalid' if invalid_name %>">
   <%= form.label :name %>
   <%= form.text_field :name, required: true, minlength: 3, maxlength: 255 %>
-  <%= render 'shared/form/field_errors', errors: sample.errors.full_messages_for(:name) %>
+  <%= render "shared/form/field_errors",
+  errors: sample.errors.full_messages_for(:name) %>
 </div>
 
 <% invalid_description = sample.errors.include?(:description) %>
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= form.label :description %>
   <%= form.text_area :description, rows: 4 %>
-  <%= render 'shared/form/field_errors', errors: sample.errors.full_messages_for(:description) %>
+  <%= render "shared/form/field_errors",
+  errors: sample.errors.full_messages_for(:description) %>
 </div>
