@@ -10,7 +10,13 @@ module Projects
       @samples = Sample.where(project_id: @project.id)
     end
 
-    def show; end
+    def show
+      return unless @sample.nil?
+
+      render status: :unprocessable_entity, json: {
+        message: t('.error')
+      }
+    end
 
     def new
       @sample = Sample.new
@@ -44,7 +50,6 @@ module Projects
 
     def destroy
       if @sample.nil?
-        flash[:error] = t('.error')
         render status: :unprocessable_entity, json: {
           message: t('.error')
         }
