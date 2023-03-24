@@ -34,6 +34,7 @@ en:
     attributes:
       group:
         name: Group name
+        path: Group URL
       namespaces/project_namespace:
         name: Project Name
         description: Description
@@ -208,6 +209,7 @@ en:
       cancel: Cancel
     sidebar:
       details: Details
+      settings: Settings
     update:
       success: "Project %{project_name} was successfully updated"
     transfer:
