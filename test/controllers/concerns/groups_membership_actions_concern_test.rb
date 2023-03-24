@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
+class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   test 'group members index' do
@@ -58,17 +58,17 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     assert_equal 3, group.group_members.count
   end
 
-  test 'group members create invalid route post' do
+  test 'group members create invalid post data' do
     sign_in users(:john_doe)
     user = users(:john_doe)
-    group_id = 100_000
-    assert_raises(ActionController::UrlGenerationError) do
-      post group_members_path, params: { member: { user_id: user.id,
-                                                   namespace_id: group_id,
-                                                   created_by_id: user.id,
-                                                   type: 'GroupMember',
-                                                   access_level: Member::AccessLevel::OWNER } }
-    end
+    group = groups(:group_one)
+
+    post group_members_path(group), params: { member: { user_id: user.id,
+                                                        namespace_id: group.id,
+                                                        created_by_id: user.id,
+                                                        type: 'GroupMember',
+                                                        access_level: Member::AccessLevel::OWNER + 100_000 } }
+    assert_response :unprocessable_entity
   end
 
   test 'group members destroy' do
@@ -104,7 +104,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                                  namespace_id: group.id,
                                                  created_by_id: user.id,
                                                  type: 'GroupMember',
-                                                 access_level: Member::AccessLevel::OWNER + 100 } }
+                                                 access_level: Member::AccessLevel::OWNER + 100_000 } }
 
     assert_response 422 # unprocessable entity
   end

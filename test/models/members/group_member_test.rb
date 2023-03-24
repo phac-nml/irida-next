@@ -49,7 +49,7 @@ class GroupMemberTest < ActiveSupport::TestCase
   test '#validates access level out of range' do
     valid_access_levels = Member::AccessLevel.all_values_with_owner
 
-    @group_member.access_level = valid_access_levels.sample + valid_access_levels.last
+    @group_member.access_level = (valid_access_levels.sample + valid_access_levels.last)
     assert_not @group_member.valid?
   end
 
