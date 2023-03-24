@@ -53,18 +53,18 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     parent_namespace = namespaces_user_namespaces(:john_doe_namespace)
 
-    assert_no_difference('Project.count') do
-      post projects_path,
-           params: {
-             project: {
-               namespace_attributes: {
-                 name: 'My Personal Project',
-                 path: 'a VERY wrong path',
-                 parent_id: parent_namespace.id
-               }
+    post projects_path,
+         params: {
+           project: {
+             namespace_attributes: {
+               name: 'My Personal Project',
+               path: 'a VERY wrong path',
+               parent_id: parent_namespace.id
              }
            }
-    end
+         }
+
+    assert_response :unprocessable_entity
   end
 
   test 'should update a project' do
