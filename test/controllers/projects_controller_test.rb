@@ -23,7 +23,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     assert_raises(ActionController::RoutingError) do
-      get namespace_project_path(id: 'does-not-exist', namespace_id: 'does-not-exist')
+      get namespace_project_path(project_id: 'does-not-exist', namespace_id: 'does-not-exist')
     end
   end
 
