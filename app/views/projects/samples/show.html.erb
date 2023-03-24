@@ -1,0 +1,22 @@
+<%= render PageHeaderComponent.new(title: @sample.name, subtitle: @sample.description) do |component| %>
+  <%= component.with_icon do %>
+    <%= render "icons/beaker", class_names: "h-14 w-14 text-primary-700" %>
+  <% end %>
+  <%= component.with_buttons do %>
+    <div class="flex flex-row">
+      <%= link_to t("projects.samples.show.edit_button"),
+      edit_namespace_project_sample_path(id: @sample.id),
+      class: "btn btn-primary mr-1" %>
+      <%= link_to t("projects.samples.show.remove_button"),
+      namespace_project_sample_path(id: @sample.id),
+      data: {
+        turbo_method: :delete,
+        turbo_confirm: t("projects.samples.show.remove_button_confirmation")
+      },
+      class: "btn btn-default mr-1" %>
+      <%= link_to t("projects.samples.show.back_button"),
+      namespace_project_samples_path,
+      class: "btn btn-default" %>
+    </div>
+  <% end %>
+<% end %>
