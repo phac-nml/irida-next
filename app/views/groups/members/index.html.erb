@@ -1,4 +1,4 @@
-<%= render PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle', namespace_type: @namespace.type.downcase, namespace_name: @namespace.name)) do |component| %>
+<%= render PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.type.downcase, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon do %>
     <%= render "icons/users", class_names: "h-14 w-14 text-primary-700" %>
   <% end %>
