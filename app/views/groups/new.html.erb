@@ -1,8 +1,8 @@
-<%= render partial: 'shared/page_header', locals: {
-  title: t(:"groups.create.title"),
-  subtitle: t(:"groups.create.subtitle"),
-  icon: "squares_plus"
-} %>
+<%= render PageHeaderComponent.new(title: t(:"groups.create.title"), subtitle: t(:"groups.create.subtitle")) do |component| %>
+  <%= component.with_icon do %>
+    <%= render "icons/squares_plus", class_names: "h-14 w-14 text-primary-700" %>
+  <% end %>
+<% end %>
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <div data-controller="groups-new" class="card">
@@ -20,4 +20,3 @@
       <% end %>
     </div>
   </div>
-</div>
