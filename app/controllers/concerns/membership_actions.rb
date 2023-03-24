@@ -9,10 +9,6 @@ module MembershipActions
   end
 
   def new
-    @available_users = User.where.not(id: Member.where(type: @member_type,
-                                                       namespace_id: @namespace.id).pluck(:user_id))
-    # Remove current user from available users as a user cannot add themselves
-    @available_users = @available_users.to_a - [current_user]
     @new_member = Member.new(namespace_id: @namespace.id)
 
     respond_to do |format|
@@ -31,18 +27,25 @@ module MembershipActions
         format.html { redirect_to members_path }
       else
         flash[:error] = t('.error')
-        format.html { render :new, status: :unprocessable_entity, locals: { member: @new_member } }
+        format.html do
+          render :new, status: :unprocessable_entity, locals: {
+            member: @new_member
+          }
+        end
       end
     end
   end
 
   def destroy
-    if @member.destroy
+    if @member.nil?
+      flash[:error] = t('.success')
+      render status: :unprocessable_entity, json: {
+        message: t('.error')
+      }
+    else
+      @member.destroy
       flash[:success] = t('.success')
       redirect_to members_path
-
-    else
-      flash[:error] = t('.error')
     end
   end
 
@@ -51,6 +54,13 @@ module MembershipActions
   def access_levels
     member_user = Member.find_by(user: current_user, namespace: @namespace, type: @member_type)
     @access_levels = Member.access_levels(member_user, current_user.id == @namespace.owner_id)
+  end
+
+  def available_users
+    @available_users = User.where.not(id: Member.where(type: @member_type,
+                                                       namespace_id: @namespace.id).pluck(:user_id))
+    # Remove current user from available users as a user cannot add themselves
+    @available_users = @available_users.to_a - [current_user]
   end
 
   protected
