@@ -20,15 +20,16 @@
       "
     >
       <%= form_with(model: @sample, url: namespace_project_samples_path, method: :post) do |form| %>
+        <div class="grid gap-4">
+          <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
-        <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
-
-        <div class="my-2">
-          <%= form.submit t("projects.samples.new.submit_button"),
-                      class: "btn btn-primary mr-1" %>
-          <%= link_to t("projects.sample.new.cancel_button"),
-          namespace_project_samples_path,
-          class: "btn btn-default" %>
+          <div>
+            <%= form.submit t("projects.samples.new.submit_button"),
+                        class: "btn btn-primary mr-1" %>
+            <%= link_to t("projects.sample.new.cancel_button"),
+            namespace_project_samples_path,
+            class: "btn btn-default" %>
+          </div>
         </div>
       <% end %>
     </div>
