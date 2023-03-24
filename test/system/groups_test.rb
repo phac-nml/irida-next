@@ -96,7 +96,6 @@ class GroupsTest < ApplicationSystemTestCase
     visit group_url(groups(:subgroup6))
 
     click_link I18n.t(:'groups.sidebar.settings')
-    click_button I18n.t(:'groups.edit.advanced.button_aria_label')
 
     accept_alert do
       click_link I18n.t(:'groups.edit.advanced.delete_group.submit')

@@ -143,7 +143,6 @@ en:
         submit: Save changes
       advanced:
         title: Advanced settings
-        button_aria_label: Expand advanced settings
         delete_group:
           title: Delete group
           description: Deleting a group is permanent and cannot be undone. All projects and subgroups will be deleted along with the group
