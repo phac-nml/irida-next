@@ -1,9 +1,8 @@
-<%= render partial: "shared/page_header",
-locals: {
-  icon: "beaker",
-  title: t("projects.samples.new.title"),
-  subtitle: t("projects.samples.new.subtitle")
-} %>
+<%= render PageHeaderComponent.new(title: t("projects.samples.new.title"), subtitle: t("projects.samples.new.subtitle")) do |component| %>
+  <%= component.with_icon do %>
+    <%= render "icons/beaker", class_names: "h-14 w-14 text-primary-700" %>
+  <% end %>
+<% end %>
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <div

@@ -218,6 +218,8 @@ en:
       edit:
         title: Edit sample
         subtitle: This is a subtitle to edit a project sample.
+        form:
+          title: Name and Description
         submit_button: Update sample
         cancel_button: Cancel
       destroy:

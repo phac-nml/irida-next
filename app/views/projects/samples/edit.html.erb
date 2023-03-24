@@ -1,9 +1,8 @@
-<%= render partial: "shared/page_header",
-locals: {
-  icon: "beaker",
-  title: t("projects.samples.edit.title"),
-  subtitle: t("projects.samples.new.subtitle")
-} %>
+<%= render PageHeaderComponent.new(title: t("projects.samples.edit.title"), subtitle: t("projects.samples.new.subtitle")) do |component| %>
+  <%= component.with_icon do %>
+    <%= render "icons/beaker", class_names: "h-14 w-14 text-primary-700" %>
+  <% end %>
+<% end %>
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <div
@@ -20,16 +19,28 @@ locals: {
         dark:bg-gray-800
       "
     >
+      <h2
+        class="
+          text-xl
+          font-semibold
+          leading-tight
+          text-gray-900
+          dark:text-white
+          mb-4
+        "
+      >
+        <%= t("projects.samples.edit.form.title") %>
+      </h2>
       <%= form_with(model: @sample, url: namespace_project_sample_path(id: @sample.id), method: :patch) do |form| %>
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
-        </div>
-        <div>
-          <%= form.submit t("projects.samples.edit.submit_button"),
-                      class: "btn btn-primary mr-1" %>
-          <%= link_to t("projects.samples.edit.cancel_button"),
-          namespace_project_sample_path(id: @sample.id),
-          class: "btn btn-default" %>
+          <div>
+            <%= form.submit t("projects.samples.edit.submit_button"),
+                        class: "btn btn-primary mr-1" %>
+            <%= link_to t("projects.samples.edit.cancel_button"),
+            namespace_project_sample_path(id: @sample.id),
+            class: "btn btn-default" %>
+          </div>
         </div>
       <% end %>
     </div>
