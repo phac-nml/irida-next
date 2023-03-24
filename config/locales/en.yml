@@ -54,6 +54,9 @@ en:
           analyst: Analyst
           maintainer: Maintainer
           owner: Owner
+  layouts:
+    application:
+      site_title: IRIDA Next
   general:
     name: IRIDA Next
     expand_sidebar: Expand sidebar
