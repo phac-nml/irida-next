@@ -2,6 +2,7 @@
 
 # Component for displaying a page header with title, subtitle and buttons
 class PageHeaderComponent < ViewComponent::Base
+  renders_one :breadcrumbs
   renders_one :icon
   renders_one :buttons
 
