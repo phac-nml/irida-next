@@ -22,7 +22,6 @@ module MembershipActions
     respond_to do |format|
       @new_member = Member.new(member_params.merge(created_by_id: current_user.id, type: @member_type,
                                                    namespace_id: @namespace.id))
-      puts @new_member.inspect
       if @new_member.save
         flash[:success] = t('.success')
         format.html { redirect_to members_path }
@@ -39,7 +38,7 @@ module MembershipActions
 
   def destroy
     if @member.nil?
-      flash[:error] = t('.success')
+      flash[:error] = t('.error')
       render status: :unprocessable_entity, json: {
         message: t('.error')
       }
