@@ -1,22 +1,37 @@
-<nav class="w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+<nav
+  class="
+    w-full
+    bg-white
+    border-b
+    border-gray-200
+    dark:bg-gray-800
+    dark:border-gray-700
+  "
+>
   <div class="px-3 py-1">
     <div class="flex items-center justify-between">
       <div class="flex items-center justify-start">
         <a href="<%= root_path %>" class="flex items-center">
-          <%= render "icons/vomitting", class_names: "w-12 h-12 text-green-500" %>
+          <%= render "icons/beaker", class_names: "w-12 h-12 text-green-500 rotate-12" %>
           <span class="text-xl font-semibold text-gray-700 dark:text-gray-200">
-            <%= t(:'general.name') %>
+            <%= t(:"general.name") %>
           </span>
         </a>
-        <button id="toggleMainMenu" aria-expanded="true" aria-label="<%= t(:'general.navbar.main_dropdown.aria-label') %>" data-dropdown-toggle="main-menu-dropdown" class="navbar-btn">
-          <%= render 'icons/bars_3', class_names: "w-6 h-6" %>
+        <button
+          id="toggleMainMenu"
+          aria-expanded="true"
+          aria-label="<%= t(:'general.navbar.main_dropdown.aria-label') %>"
+          data-dropdown-toggle="main-menu-dropdown"
+          class="navbar-btn"
+        >
+          <%= render "icons/bars_3", class_names: "w-6 h-6" %>
         </button>
         <!-- Dropdown menu -->
         <div id="main-menu-dropdown" class="dropdown-menu">
           <ul aria-labelledby="dropdownDefaultButton">
             <li>
-              <a class="flex items-center" href="<%= groups_path %>"><%= render 'icons/squares_2x2' %>
-                <%= t(:'general.navbar.main_dropdown.groups') %>
+              <a class="flex items-center" href="<%= groups_path %>"><%= render "icons/squares_2x2" %>
+                <%= t(:"general.navbar.main_dropdown.groups") %>
               </a>
             </li>
           </ul>
@@ -24,10 +39,45 @@
         <form action="#" method="GET" class="hidden lg:block lg:pl-3.5">
           <label for="topbar-search" class="sr-only">Search</label>
           <div class="relative mt-1 lg:w-96">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <%= render 'icons/magnifying', class_names: "h-5 w-5" %>
+            <div
+              class="
+                absolute
+                inset-y-0
+                left-0
+                flex
+                items-center
+                pl-3
+                pointer-events-none
+              "
+            >
+              <%= render "icons/magnifying", class_names: "h-5 w-5" %>
             </div>
-            <input type="text" name="email" id="topbar-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="<%= t(:'general.navbar.search.placeholder') %>">
+            <input
+              type="text"
+              name="email"
+              id="topbar-search"
+              class="
+                bg-gray-50
+                border
+                border-gray-300
+                text-gray-900
+                sm:text-sm
+                rounded-lg
+                focus:ring-primary-500
+                focus:border-primary-500
+                block
+                w-full
+                pl-10
+                p-2.5
+                dark:bg-gray-700
+                dark:border-gray-600
+                dark:placeholder-gray-400
+                dark:text-white
+                dark:focus:ring-primary-500
+                dark:focus:border-primary-500
+              "
+              placeholder="<%= t(:'general.navbar.search.placeholder') %>"
+            >
           </div>
         </form>
       </div>
@@ -41,28 +91,64 @@
           data-action="click->dark-mode#toggleTheme"
           aria-label="<%= t(:'general.navbar.dark_mode.aria_label') %>"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden" data-dark-mode-target="darkIcon">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 hidden"
+            data-dark-mode-target="darkIcon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+            />
           </svg>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden" data-dark-mode-target="lightIcon">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 hidden"
+            data-dark-mode-target="lightIcon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+            />
           </svg>
         </button>
         <!-- New item menu -->
-        <button id="dropdownNewItem" aria-label="<%= t(:'general.navbar.new_dropdown.aria_label') %>" data-dropdown-toggle="new-item-dropdown" type="button" class="navbar-btn">
-          <%= render 'icons/document_plus' %>
+        <button
+          id="dropdownNewItem"
+          aria-label="<%= t(:'general.navbar.new_dropdown.aria_label') %>"
+          data-dropdown-toggle="new-item-dropdown"
+          type="button"
+          class="navbar-btn"
+        >
+          <%= render "icons/document_plus" %>
         </button>
         <!-- Dropdown menu -->
         <div id="new-item-dropdown" class="dropdown-menu">
           <ul aria-labelledby="dropdownDefaultButton">
             <li>
-              <%= link_to t(:'general.navbar.new_dropdown.group'), new_group_path %>
+              <%= link_to t(:"general.navbar.new_dropdown.group"), new_group_path %>
             </li>
           </ul>
         </div>
         <!-- Profile menu -->
-        <button id="dropdownDefaultButton" aria-label="<%= t(:'general.navbar.account_dropdown.aria_label') %>>" data-dropdown-toggle="profile-dropdown" type="button" class="navbar-btn">
-          <%= render 'icons/user_circle' %>
+        <button
+          id="dropdownDefaultButton"
+          aria-label="<%= t(:'general.navbar.account_dropdown.aria_label') %>>"
+          data-dropdown-toggle="profile-dropdown"
+          type="button"
+          class="navbar-btn"
+        >
+          <%= render "icons/user_circle" %>
         </button>
         <!-- Dropdown menu -->
         <div id="profile-dropdown" class="dropdown-menu">
@@ -72,10 +158,14 @@
           </div>
           <ul aria-labelledby="dropdownDefaultButton">
             <li>
-              <%= link_to t(:'general.navbar.account_dropdown.profile'), profile_path %>
+              <%= link_to t(:"general.navbar.account_dropdown.profile"), profile_path %>
             </li>
             <li>
-              <%= link_to t(:'general.navbar.account_dropdown.sign_out'), destroy_user_session_path, data: { turbo_method: :delete } %>
+              <%= link_to t(:"general.navbar.account_dropdown.sign_out"),
+              destroy_user_session_path,
+              data: {
+                turbo_method: :delete
+              } %>
             </li>
           </ul>
         </div>
