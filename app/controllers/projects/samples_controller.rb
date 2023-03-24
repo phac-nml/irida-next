@@ -43,19 +43,22 @@ module Projects
     end
 
     def destroy
-      if @sample.destroy
+      if @sample.nil?
+        flash[:error] = t('.error')
+        render status: :unprocessable_entity, json: {
+          message: t('.error')
+        }
+      else
+        @sample.destroy
         flash[:success] = t('.success', sample_name: @sample.name)
         redirect_to namespace_project_samples_path
-      else
-        flash[:error] = t('.error', sample_name: @sample.name)
-        redirect_to namespace_project_sample_path(id: @sample.id)
       end
     end
 
     private
 
     def sample
-      @sample = Sample.find_by!(id: params[:id], project_id: project.id)
+      @sample ||= Sample.find_by(id: params[:id], project_id: project.id)
     end
 
     def sample_params
@@ -63,8 +66,6 @@ module Projects
     end
 
     def project
-      return unless params[:project_id]
-
       path = [params[:namespace_id], params[:project_id]].join('/')
       @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
     end
