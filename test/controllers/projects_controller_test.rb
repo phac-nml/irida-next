@@ -19,6 +19,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'test should show 404 if project does not exist' do
+    sign_in users(:john_doe)
+
+    assert_raises(ActionController::RoutingError) do
+      get namespace_project_path(id: 'does-not-exist', namespace_id: 'does-not-exist')
+    end
+  end
+
   test 'should display create new project page' do
     sign_in users(:john_doe)
 
@@ -38,6 +46,25 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to project_path(Project.last)
+  end
+
+  test 'should fail to create a new project with wrong params' do
+    sign_in users(:john_doe)
+
+    parent_namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+    assert_no_difference('Project.count') do
+      post projects_path,
+           params: {
+             project: {
+               namespace_attributes: {
+                 name: 'My Personal Project',
+                 path: 'a VERY wrong path',
+                 parent_id: parent_namespace.id
+               }
+             }
+           }
+    end
   end
 
   test 'should update a project' do
