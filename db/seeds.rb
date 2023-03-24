@@ -54,8 +54,8 @@ if Rails.env.development?
                                    access_level: Member::AccessLevel::GUEST })
 
   # Samples
-  Sample.create!({ name: 'Sample 1', description: 'This is a descriptions for sample 1.', project_id: project1.id })
-  Sample.create!({ name: 'Sample 2', description: 'This is a descriptions for sample 2.', project_id: project1.id })
-  Sample.create!({ name: 'Sample 3', description: 'This is a descriptions for sample 3.', project_id: project2.id })
-  Sample.create!({ name: 'Sample 4', description: 'This is a descriptions for sample 4.', project_id: project2.id })
+  Sample.create!({ name: 'Sample 1', description: 'This is a description for sample 1.', project_id: project1.id })
+  Sample.create!({ name: 'Sample 2', description: 'This is a description for sample 2.', project_id: project1.id })
+  Sample.create!({ name: 'Sample 3', description: 'This is a description for sample 3.', project_id: project2.id })
+  Sample.create!({ name: 'Sample 4', description: 'This is a description for sample 4.', project_id: project2.id })
 end
