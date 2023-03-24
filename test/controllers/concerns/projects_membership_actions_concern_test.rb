@@ -54,11 +54,12 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     user = users(:jane_doe)
     curr_user = users(:john_doe)
 
-    post namespace_project_members_path(namespace, project), params: { member: { user_id: user.id,
-                                                                                 namespace_id: proj_namespace,
-                                                                                 created_by_id: curr_user.id,
-                                                                                 type: 'GroupMember',
-                                                                                 access_level: Member::AccessLevel::OWNER } }
+    post namespace_project_members_path(namespace, project),
+         params: { member: { user_id: user.id,
+                             namespace_id: proj_namespace,
+                             created_by_id: curr_user.id,
+                             type: 'GroupMember',
+                             access_level: Member::AccessLevel::OWNER } }
 
     assert_redirected_to namespace_project_members_path(namespace, project)
     assert_equal 3, project.namespace.project_members.count
