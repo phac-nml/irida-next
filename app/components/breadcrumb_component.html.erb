@@ -1,0 +1,18 @@
+<nav class="flex bg-white dark:bg-gray-800 py-3 px-5 border-b border-gray-200" aria-label="Breadcrumb">
+  <ol class="inline-flex items-center space-x-1 md:space-x-3">
+    <li class="inline-flex items-center">
+      <a href="<%= root_url %>" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+        <%= render "icons/home", class_names: "w-4 h-4 mr-2" %>
+        Home
+      </a>
+    </li>
+    <% @links.each do |link| %>
+      <li class="inline-flex items-center">
+        <div class="flex items-center">
+          <%= render "icons/chevron_right", class_names: "w-4 h-4 text-gray-400" %>
+          <%= link_to link[:name], [root_url, link[:path]].join(""), class: "ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400" %>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+</nav>
