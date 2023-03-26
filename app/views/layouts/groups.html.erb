@@ -11,13 +11,16 @@
     <%= render "shared/dark_mode_check" %>
   </head>
   <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-    <div class="body-wrapper">
-      <%= render 'shared/navbar' %>
-      <div data-controller="layout" data-layout-target="layoutContainer" class="body">
-        <%= render 'groups/sidebar' %>
-        <div class="content"><%= yield %></div>
+  <div class="body-wrapper">
+    <%= render 'shared/navbar' %>
+    <div data-controller="layout" data-layout-target="layoutContainer" class="body">
+      <%= render 'groups/sidebar' %>
+      <div class="content">
+        <%= render BreadcrumbComponent.new(route: @group.route) %>
+        <%= yield %>
       </div>
     </div>
-    <%= render 'shared/flash' %>
+  </div>
+  <%= render 'shared/flash' %>
   </body>
 </html>
