@@ -97,6 +97,7 @@ en:
       account: Account
     show:
       email:
+        title: Email
         subtitle: Email address linked to this account
         pending: "Pending confirmation of %{email}"
         submit: Update profile settings
