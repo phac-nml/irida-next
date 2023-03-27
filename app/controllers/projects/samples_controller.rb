@@ -4,7 +4,9 @@ module Projects
   # Controller actions for Samples
   class SamplesController < ApplicationController
     before_action :sample, only: %i[show edit update destroy]
-    before_action :project, only: %i[index create]
+    before_action :project, only: %i[index create new]
+
+    layout 'projects'
 
     def index
       @samples = Sample.where(project_id: @project.id)
@@ -13,9 +15,8 @@ module Projects
     def show
       return unless @sample.nil?
 
-      render status: :unprocessable_entity, json: {
-        message: t('.error')
-      }
+      flash[:error] = 'Sample does not exist in the project'
+      redirect_to namespace_project_samples_path
     end
 
     def new

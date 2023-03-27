@@ -48,6 +48,12 @@
           } %>
           <%= render partial: "shared/sidebar_item",
           locals: {
+            link: namespace_project_samples_path,
+            icon: "icons/clipboard_document",
+            text: "Samples"
+          } %>
+          <%= render partial: "shared/sidebar_item",
+          locals: {
             link: namespace_project_members_path,
             icon: "icons/users",
             text: t(:"projects.sidebar.members")
