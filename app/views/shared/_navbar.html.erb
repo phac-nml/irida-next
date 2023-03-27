@@ -30,9 +30,16 @@
         <div id="main-menu-dropdown" class="dropdown-menu">
           <ul aria-labelledby="dropdownDefaultButton">
             <li>
-              <a class="flex items-center" href="<%= groups_path %>"><%= render "icons/squares_2x2" %>
-                <%= t(:"general.navbar.main_dropdown.groups") %>
-              </a>
+              <%= link_to projects_path do %>
+                <%= render 'icons/rectangle_stack' %>
+                <%= t(:'general.navbar.main_dropdown.projects') %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to groups_path do %>
+                <%= render 'icons/squares_2x2' %>
+                <%= t(:'general.navbar.main_dropdown.groups') %>
+              <% end %>
             </li>
           </ul>
         </div>
@@ -135,6 +142,9 @@
         <!-- Dropdown menu -->
         <div id="new-item-dropdown" class="dropdown-menu">
           <ul aria-labelledby="dropdownDefaultButton">
+            <li>
+              <%= link_to t(:'general.navbar.new_dropdown.project'), new_project_path %>
+            </li>
             <li>
               <%= link_to t(:"general.navbar.new_dropdown.group"), new_group_path %>
             </li>

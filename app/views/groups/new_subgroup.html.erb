@@ -3,21 +3,22 @@
     <%= render "icons/squares_plus", class_names: "h-14 w-14 text-primary-700" %>
   <% end %>
 <% end %>
+
 <div class="p-4">
-  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <div data-controller="groups-new" class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-      <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
+  <div data-controller="slugify" class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+    <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
+      <div class="grid gap-4">
 
         <%= render partial: 'form_fields', locals: {
           form: form,
           group: @new_group
         } %>
 
-        <div class="my-2">
-          <%= form.submit t(:'groups.new_subgroup.submit'), class: "btn btn-primary mr-1" %>
-          <%= link_to t(:'groups.new_subgroup.cancel'), group_path(@group), class: "btn btn-default" %>
+            <div class="my-2">
+              <%= form.submit t(:'groups.new_subgroup.submit'), class: "btn btn-primary mr-1" %>
+              <%= link_to t(:'groups.new_subgroup.cancel'), group_path(@group), class: "btn btn-default" %>
+            </div>
+        <% end %>
         </div>
-      <% end %>
-    </div>
+      </div>
   </div>
-</div>

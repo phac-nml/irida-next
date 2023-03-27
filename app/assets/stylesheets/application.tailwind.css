@@ -48,6 +48,7 @@
   }
 
   .page-header {
+    overflow: hidden;
     @apply block items-center justify-between border-b border-gray-200 bg-white p-2 px-4 dark:border-gray-700 dark:bg-gray-800 sm:flex;
   }
 
@@ -64,26 +65,37 @@
   }
 
   .card {
-    @apply p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800;
+    @apply p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800;
   }
 
   p link {
     @apply font-medium text-green-600 underline hover:no-underline dark:text-green-500;
   }
 
-  .form-field {
-    @apply mb-4;
-  }
-
   .form-field label {
-    @apply mb-2 block text-sm font-medium text-gray-900 dark:text-white;
+    @apply block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200;
   }
 
   .form-field input[type="text"],
   .form-field input[type="search"],
   .form-field input[type="password"],
   .form-field input[type="email"] {
-    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 shadow-sm p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500
+  }
+
+  .form-field select.prefixed {
+    appearance: none;
+    padding: 0 1em 0 1em;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    @apply rounded-r-md border-0 p-2.5 block w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm text-gray-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+
   }
 
   .form-field.invalid label {
@@ -91,7 +103,7 @@
   }
 
   .form-field.invalid input[type="text"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-100 dark:bg-red-800;
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400  dark:bg-red-800;
   }
 
   .form-field textarea {
@@ -149,5 +161,4 @@
   .form-field select {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
-
 }

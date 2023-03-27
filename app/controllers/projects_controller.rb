@@ -2,44 +2,45 @@
 
 # Controller actions for Projects
 class ProjectsController < ApplicationController
+  layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer]
 
-  def show; end
+  def index
+    @projects = Project.all
+  end
+
+  def show
+    # No necessary code here
+  end
 
   def new
-    respond_to do |format|
-      format.html do
-        render 'new'
-      end
-    end
+    @project = Project.new
+    @project.build_namespace(parent_id: params[:namespace_id] || current_user.namespace.id)
   end
 
   def edit
-    respond_to do |format|
-      format.html do
-        render 'edit'
-      end
-    end
+    # No necessary code here
   end
 
   def create
     @project = Projects::CreateService.new(current_user, project_params).execute
 
     if @project.persisted?
+      flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
-        project_path(@project),
-        notice: t('.success', project_name: @project.name)
+        project_path(@project)
       )
     else
-      render 'new'
+
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
     if Projects::UpdateService.new(@project, current_user, project_params).execute
+      flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
-        project_path(@project),
-        notice: t('.success', project_name: @project.name)
+        project_path(@project)
       )
     else
       render :edit, status: :unprocessable_entity
@@ -47,15 +48,11 @@ class ProjectsController < ApplicationController
   end
 
   def activity
-    respond_to do |format|
-      format.html do
-        render 'activity'
-      end
-    end
+    # No necessary code here
   end
 
   def transfer
-    new_namespace ||= Namespace.find(params.require(:new_namespace_id))
+    new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       redirect_to(
         project_path(@project),
@@ -89,9 +86,16 @@ class ProjectsController < ApplicationController
   end
 
   def project
-    return unless params[:project_id] || params[:id]
-
     path = [params[:namespace_id], params[:project_id] || params[:id]].join('/')
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+  end
+
+  def resolve_layout
+    case action_name
+    when 'show', 'edit'
+      'projects'
+    else
+      'application'
+    end
   end
 end
