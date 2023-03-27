@@ -1,4 +1,6 @@
-require: rubocop-rails
+require:
+  - rubocop-rails
+  - rubocop-graphql
 
 Rails:
   Enabled: true
@@ -42,3 +44,13 @@ Style/RedundantConstantBase:
 Lint/MissingSuper:
   Exclude:
     - "app/components/**/*.rb"
+
+Style/Documentation:
+  Exclude:
+    - "test/**/*.rb"
+
+GraphQL/ObjectDescription:
+  Exclude:
+    - "app/graphql/**/base_*.rb"
+    - "app/graphql/resolvers/**/*.rb"
+    - "test/**/*.rb"

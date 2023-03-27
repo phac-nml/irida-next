@@ -1,0 +1,199 @@
+"""
+A group
+"""
+type Group {
+  """
+  List of descendant groups of this group.
+  """
+  descendantGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    List of descendant groups of the parent group.
+    """
+    includeParentDescendants: Boolean = true
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): GroupConnection
+
+  """
+  Description of the namespace.
+  """
+  description: String!
+
+  """
+  Full name of the namespace.
+  """
+  fullName: String!
+
+  """
+  Full path of the namespace.
+  """
+  fullPath: ID!
+
+  """
+  ID of the namespace.
+  """
+  id: ID!
+
+  """
+  Name of the namespace.
+  """
+  name: String!
+
+  """
+  Parent group.
+  """
+  parent: Group
+
+  """
+  Path of the namespace.
+  """
+  path: String!
+}
+
+"""
+The connection type for Group.
+"""
+type GroupConnection {
+  """
+  A list of edges.
+  """
+  edges: [GroupEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Group]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type GroupEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Group
+}
+
+"""
+The mutation root of this schema
+"""
+type Mutation {
+  """
+  An example field added by the generator
+  """
+  testField: String!
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: String
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: String
+}
+
+"""
+The query root of this schema
+"""
+type Query {
+  """
+  Get information about current user.
+  """
+  currentUser: User
+
+  """
+  Find a group.
+  """
+  group(
+    """
+    Full path of the group. For example, `pathogen/surveillance`.
+    """
+    fullPath: ID!
+  ): Group
+
+  """
+  Find groups.
+  """
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): GroupConnection!
+}
+
+"""
+A user
+"""
+type User {
+  """
+  User email.
+  """
+  email: String!
+
+  """
+  ID of the user.
+  """
+  id: ID!
+}

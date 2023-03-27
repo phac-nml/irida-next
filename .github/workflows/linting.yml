@@ -20,5 +20,5 @@ jobs:
         uses: reviewdog/action-rubocop@v2
         with:
           rubocop_version: gemfile
-          rubocop_extensions: rubocop-rails:gemfile
+          rubocop_extensions: rubocop-rails:gemfile rubocop-graphql:gemfile
           reporter: github-pr-check
