@@ -14,7 +14,7 @@
     <div class="body-wrapper">
       <%= render 'shared/navbar' %>
       <div class="body" data-controller="layout" data-layout-target="layoutContainer">
-        <%= render 'shared/default_sidebar' %>
+        <%= render Navigation::NavigationComponent.new %>
         <div class="content">
           <%= yield %>
         </div>

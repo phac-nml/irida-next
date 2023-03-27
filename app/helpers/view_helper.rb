@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ViewHelper
-  def heroicon_source(icon_name)
+  def heroicons_source(icon_name)
     path = Rails.root.join('app', 'assets', 'icons', 'heroicons', "#{icon_name}.svg")
     file = File.read(path)
     doc = Nokogiri::HTML::DocumentFragment.parse(file)
