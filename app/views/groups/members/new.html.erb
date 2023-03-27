@@ -33,21 +33,24 @@
             <%= form.select :user_id,
                         options_for_select(
                           @available_users.collect { |u| [u.email, u.id] },
-                          selected: params[:user_id]
+                          selected: @new_member.user_id
                         ),
                         { prompt: t(:".select_user") },
                         required: true %>
           </div>
 
-          <div class="form-field">
+          <% invalid_access_level = @new_member.errors.include?(:access_level) %>
+          <div class="form-field <%= 'invalid' if invalid_access_level %>">
             <%= form.label :access_level %>
             <%= form.select :access_level,
                         @access_levels,
                         { prompt: t(:".select_access_level") },
                         required: true %>
+            <%= render "shared/form/field_errors",
+            errors: @new_member.errors.full_messages_for(:access_level) %>
           </div>
 
-          <div class="my-2">
+          <div>
             <%= form.submit t(:".add_member_to_group"),
                         class: "btn btn-primary mr-1",
                         disabled: !@available_users.count.positive? %>

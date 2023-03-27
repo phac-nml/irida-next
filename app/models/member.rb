@@ -11,6 +11,7 @@ class Member < ApplicationRecord
   validates :user_id, uniqueness: { scope: :namespace_id }
 
   validate :validate_namespace
+  validate :higher_access_level_than_group
 
   class << self
     def sti_class_for(type_name)
@@ -37,6 +38,20 @@ class Member < ApplicationRecord
     return if %w[Group Project].include?(namespace.type)
 
     errors.add(namespace.type, 'namespace cannot have members')
+  end
+
+  def higher_access_level_than_group
+    return unless highest_group_member && highest_group_member.access_level > access_level
+
+    errors.add(:access_level, I18n.t('activerecord.errors.models.member.attributes.access_level.invalid',
+                                     user: user.email,
+                                     access_level: AccessLevel.human_access(highest_group_member.access_level),
+                                     group_name: highest_group_member.group.name))
+  end
+
+  # Find the user's group member with a highest access level
+  def highest_group_member
+    Members::GroupMember.where(namespace: namespace.ancestors, user_id:).order(:access_level).last
   end
 
   # class for member access levels
@@ -69,6 +84,10 @@ class Member < ApplicationRecord
         access_level_options.merge(
           I18n.t('activerecord.models.member.access_level.owner') => OWNER
         )
+      end
+
+      def human_access(access)
+        access_level_options_owner.key(access).to_s
       end
     end
   end

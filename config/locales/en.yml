@@ -44,6 +44,8 @@ en:
       sample:
         name: Name
         description: Description
+      member:
+        access_level: Access Level
     errors:
       models:
         namespace:
@@ -51,6 +53,10 @@ en:
             name:
               blank: Can't be blank
               taken: Has already been taken
+        member:
+          attributes:
+            access_level:
+              invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
     models:
       member:
         access_level:
