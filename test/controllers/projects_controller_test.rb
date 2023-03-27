@@ -5,11 +5,26 @@ require 'test_helper'
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  test 'should get index' do
+    sign_in users(:john_doe)
+
+    get projects_path
+    assert_response :success
+  end
+
   test 'should show the project' do
     sign_in users(:john_doe)
 
     get project_path(projects(:project1))
     assert_response :success
+  end
+
+  test 'test should show 404 if project does not exist' do
+    sign_in users(:john_doe)
+
+    assert_raises(ActionController::RoutingError) do
+      get namespace_project_path(project_id: 'does-not-exist', namespace_id: 'does-not-exist')
+    end
   end
 
   test 'should display create new project page' do
@@ -33,6 +48,25 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project_path(Project.last)
   end
 
+  test 'should fail to create a new project with wrong params' do
+    sign_in users(:john_doe)
+
+    parent_namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+    post projects_path,
+         params: {
+           project: {
+             namespace_attributes: {
+               name: 'My Personal Project',
+               path: 'a VERY wrong path',
+               parent_id: parent_namespace.id
+             }
+           }
+         }
+
+    assert_response :unprocessable_entity
+  end
+
   test 'should update a project' do
     sign_in users(:john_doe)
 
@@ -42,6 +76,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project_path(projects(:project2).reload)
   end
 
+  test 'should fail to update a project with wrong params' do
+    sign_in users(:john_doe)
+
+    patch project_path(projects(:project2)),
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'a VERY wrong path' } } }
+
+    assert_response :unprocessable_entity
+  end
+
   test 'should transfer a project' do
     sign_in users(:john_doe)
 
@@ -49,5 +92,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
          params: { new_namespace_id: groups(:subgroup1).id }
 
     assert_redirected_to project_path(projects(:project2).reload)
+  end
+
+  test 'should fail to transfer a project with wrong params' do
+    sign_in users(:john_doe)
+
+    post project_transfer_path(projects(:project2)),
+         params: {
+           new_namespace_id: 'does-not-exist'
+         }
+
+    assert_response :unprocessable_entity
   end
 end
