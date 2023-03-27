@@ -9,6 +9,7 @@
           </h2>
         </a>
         <ul class="pt-1 space-y-1">
+          <%= render Navigation::ItemComponent.new(icon: 'rectangle_stack', label: t(:'general.default_sidebar.projects'), url: projects_path) %>
           <%= render Navigation::ItemComponent.new(icon: 'squares2x2', label: t(:'general.default_sidebar.groups'), url: groups_path) %>
         </ul>
       </div>

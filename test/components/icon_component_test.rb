@@ -11,6 +11,6 @@ class IconComponentTest < ViewComponent::TestCase
 
   def test_with_custom_class
     render_inline(IconComponent.new(name: 'home', classes: 'w-8 h-8'))
-    assert_selector 'svg.w-8.h-8', count: 1
+    assert_selector 'span.w-8.h-8', count: 1
   end
 end
