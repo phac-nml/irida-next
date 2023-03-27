@@ -86,8 +86,9 @@ class Member < ApplicationRecord
         )
       end
 
-      def human_access(access)
-        access_level_options_owner.key(access).to_s
+      # Method to return the human readable access level (passed in as a numeric value)
+      def human_access(access_level)
+        access_level_options_owner.key(access_level).to_s
       end
     end
   end
