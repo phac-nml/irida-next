@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Icon Component for icons
-class IconComponent < Component
+class IconComponent < BaseComponent
   def initialize(name:, **system_arguments)
     @source = heroicons_source(name)
     @system_arguments = system_arguments
