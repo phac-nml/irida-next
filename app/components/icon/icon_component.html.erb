@@ -1,1 +1,7 @@
-<%= @source %>
+<%= render BaseComponent.new(tag: 'span', **@system_arguments) do %>
+  <% if @source %>
+    <%= @source %>
+  <% else %>
+    <%= content %>
+  <% end %>
+<% end %>

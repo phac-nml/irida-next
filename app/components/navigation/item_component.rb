@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Navigation
-  class ItemComponent < ViewComponent::Base
+  class ItemComponent < Component
     def initialize(label:, icon:, url:)
       @label = label
       @icon = icon
