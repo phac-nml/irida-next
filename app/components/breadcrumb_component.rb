@@ -11,17 +11,17 @@ class BreadcrumbComponent < ViewComponent::Base
     route.path.split('/').each_with_index do |_part, index|
       crumbs << crumb_for_route(route, index)
     end
-    if "/#{crumbs.last[:path]}" != request.path
-      begin
-        crumbs << crumb_for_request(request)
-      rescue I18n::MissingTranslationData
-        # Don't do shit
-      end
-    end
+    crumbs << crumb_for_current_page(request) if "/#{crumbs.last[:path]}" != request.path
     crumbs
   end
 
   private
+
+  def crumb_for_current_page(request)
+    crumb_for_request(request)
+  rescue I18n::MissingTranslationData
+    # Don't do shit
+  end
 
   def crumb_for_route(route, index)
     {
