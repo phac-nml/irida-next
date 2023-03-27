@@ -11,7 +11,9 @@ class BreadcrumbComponent < ViewComponent::Base
     route.path.split('/').each_with_index do |_part, index|
       crumbs << crumb_for_route(route, index)
     end
-    crumbs << crumb_for_current_page(request) if "/#{crumbs.last[:path]}" != request.path
+    if "/#{crumbs.last[:path]}" != request.path && request.path.exclude?('/new')
+      crumbs << crumb_for_current_page(request)
+    end
     crumbs
   end
 
@@ -20,7 +22,9 @@ class BreadcrumbComponent < ViewComponent::Base
   def crumb_for_current_page(request)
     crumb_for_request(request)
   rescue I18n::MissingTranslationData
-    # Don't do shit
+    # Don't do anything if the translation is missing
+    # This is a fallback for when the translation is missing
+    # and the breadcrumb is not needed
   end
 
   def crumb_for_route(route, index)
