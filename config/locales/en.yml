@@ -97,6 +97,7 @@ en:
       account: Account
     show:
       email:
+        title: Email
         subtitle: Email address linked to this account
         pending: "Pending confirmation of %{email}"
         submit: Update profile settings
@@ -106,6 +107,7 @@ en:
       update:
         success: Password updated successfully
         hint: You must provide your current password to update it
+        title: Password
         subtitle: Update your account password
         submit: Save password
         forgot: Forgot your password?
