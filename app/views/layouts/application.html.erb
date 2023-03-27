@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
   <head>
-    <title>Irida</title>
+    <title><%= t(:"layouts.application.site_title") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -20,6 +20,6 @@
         </div>
       </div>
     </div>
-    <%= render 'shared/flash' %>
+    <%= render "shared/flash" %>
   </body>
 </html>

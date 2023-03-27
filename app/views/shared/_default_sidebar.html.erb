@@ -9,6 +9,7 @@
           </h2>
         </a>
         <ul class="pt-1 space-y-1">
+          <%= render partial: 'shared/sidebar_item', locals: { link: projects_path, icon: "icons/rectangle_stack", text: t(:'general.default_sidebar.projects') } %>
           <%= render partial: 'shared/sidebar_item', locals: { link: groups_path, icon: "icons/squares_2x2", text: t(:'general.default_sidebar.groups') } %>
         </ul>
       </div>

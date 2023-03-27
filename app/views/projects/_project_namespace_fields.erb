@@ -1,0 +1,68 @@
+<div class="form-field">
+  <%= builder.label :name %>
+  <%= builder.text_field :name,
+                         data: {
+                           "slugify-target": "name",
+                           action: "input->slugify#nameChanged"
+                         },
+                         required: true,
+                         autofocus: true,
+                         placeholder: t(:"projects.new.placeholder") %>
+</div>
+<div class="grid grid-cols-2 gap-4">
+  <div class="form-field">
+    <%= builder.label :parent_id %>
+    <div class="flex items-center whitespace-nowrap">
+      <div
+        class="
+          inline-flex
+          items-center
+          px-3
+          py-2.5
+          text-sm
+          text-gray-600
+          bg-gray-200
+          dark:bg-gray-800/50
+          dark:text-gray-200
+          border
+          border-r-0
+          border-gray-300
+          rounded-l-lg
+          dark:bg-gray-600
+          dark:text-gray-400
+          dark:border-gray-600
+        "
+      >
+        <%= root_url %>
+      </div>
+      <%= builder.collection_select(
+        :parent_id,
+        Namespace.where(
+          type: [Group.sti_name, Namespaces::UserNamespace.sti_name],
+          owner: current_user
+        ),
+        :id,
+        :full_path,
+        {},
+        { class: "prefixed" }
+      ) %>
+      <div class="ml-4 dark:text-gray-200">/</div>
+    </div>
+  </div>
+  <div class="form-field">
+    <%= builder.label :path %>
+    <%= builder.text_field :path,
+                           data: {
+                             "slugify-target": "path"
+                           },
+                           required: true %>
+  </div>
+</div>
+<div class="form-field">
+  <%= builder.label :description %>
+  <%= builder.text_area :description,
+                    {
+                      :class => "form-control",
+                      "aria-label" => "Project description, not required"
+                    } %>
+</div>

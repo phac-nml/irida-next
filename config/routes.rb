@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   # Use this scope for all new global routes.
   scope path: '-' do
     resources :groups, only: %i[index new create]
-    resources :projects, only: %i[new create]
+    resources :projects, only: %i[index new create]
 
     draw :profile
   end
