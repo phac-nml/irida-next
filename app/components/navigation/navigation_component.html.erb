@@ -9,8 +9,8 @@
           </h2>
         </a>
         <ul class="pt-1 space-y-1">
-          <%= render partial: 'shared/sidebar_item', locals: { link: "#", icon: "icons/squares_2x2", text: t(:'general.default_sidebar.groups') } %>
-          <%= render Navigation::ItemComponent.new(icon: 'home', label: 'Home', url: "/") %>
+          <%= render Navigation::ItemComponent.new(icon: 'home', label: "HOME", url: groups_path) %>
+          <%= render Navigation::ItemComponent.new(icon: 'squares2x2', label: t(:'general.default_sidebar.groups'), url: groups_path) %>
         </ul>
       </div>
     </div>
