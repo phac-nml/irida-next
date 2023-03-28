@@ -214,6 +214,7 @@ en:
       cancel: Cancel
     sidebar:
       details: Details
+      samples: Samples
       settings: Settings
     update:
       success: "Project %{project_name} was successfully updated"
@@ -264,3 +265,7 @@ en:
       edit: Settings
     projects:
       edit: Settings
+    projects/samples:
+      index: Samples
+      show: Sample
+      edit: Edit sample

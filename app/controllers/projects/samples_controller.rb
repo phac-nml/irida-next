@@ -4,7 +4,8 @@ module Projects
   # Controller actions for Samples
   class SamplesController < ApplicationController
     before_action :sample, only: %i[show edit update destroy]
-    before_action :project, only: %i[index create]
+    before_action :project
+    layout 'projects'
 
     def index
       @samples = Sample.where(project_id: @project.id)
