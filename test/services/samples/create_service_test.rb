@@ -20,7 +20,7 @@ module Samples
     test 'create sample with invalid params' do
       invalid_params = { name: 'ne', description: '', project: nil }
 
-      assert_no_difference('Project.count') do
+      assert_no_difference('Sample.count') do
         Samples::CreateService.new(@user, invalid_params).execute
       end
     end
