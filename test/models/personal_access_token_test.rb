@@ -19,6 +19,11 @@ class PersonalAccessTokenTest < ActiveSupport::TestCase
     assert_not @valid_pat.valid?
   end
 
+  test 'invalid if scopes is not in available scopes' do
+    @valid_pat.scopes = ['made_up']
+    assert_not @valid_pat.valid?
+  end
+
   test 'should generate token before save' do
     pat = PersonalAccessToken.new(user: users(:john_doe), name: 'New PAT', expires_at: 1.year.from_now.to_date,
                                   scopes: ['api'])
