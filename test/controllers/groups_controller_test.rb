@@ -59,7 +59,9 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     group = groups(:group_one)
-    patch group_path(group), params: { group: { name: 'NG' } }
+    assert_no_changes -> { group.name } do
+      patch group_path(group), params: { group: { name: 'NG' } }
+    end
     assert_response :unprocessable_entity
   end
 

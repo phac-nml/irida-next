@@ -12,19 +12,17 @@ module Samples
     test 'update sample with valid params' do
       valid_params = { name: 'new-sample3-name', description: 'new-sample3-description' }
 
-      Samples::UpdateService.new(@sample, @user, valid_params).execute
-
-      assert_equal 'new-sample3-name', @sample.reload.name
-      assert_equal 'new-sample3-description', @sample.reload.description
+      assert_changes -> { [@sample.name, @sample.description] } do
+        Samples::UpdateService.new(@sample, @user, valid_params).execute
+      end
     end
 
-    test 'cupdate project with invalid params' do
+    test 'update project with invalid params' do
       invalid_params = { name: 'ns', description: 'new-sample3-description' }
 
-      Samples::UpdateService.new(@sample, @user, invalid_params).execute
-
-      assert_not_equal 'ns', @sample.reload.name
-      assert_not_equal 'new-sample3-description', @sample.reload.description
+      assert_no_changes -> { @sample } do
+        Samples::UpdateService.new(@sample, @user, invalid_params).execute
+      end
     end
   end
 end

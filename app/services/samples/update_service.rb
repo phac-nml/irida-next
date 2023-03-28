@@ -11,7 +11,7 @@ module Samples
     end
 
     def execute
-      @sample.update(params)
+      sample.update(params)
     end
   end
 end

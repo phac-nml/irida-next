@@ -12,19 +12,17 @@ module Groups
     test 'update group with valid params' do
       valid_params = { name: 'new-group1-name', path: 'new-group1-path' }
 
-      Groups::UpdateService.new(@group, @user, valid_params).execute
-
-      assert_equal 'new-group1-name', @group.reload.name
-      assert_equal 'new-group1-path', @group.reload.path
+      assert_changes -> { [@group.name, @group.path] } do
+        Groups::UpdateService.new(@group, @user, valid_params).execute
+      end
     end
 
     test 'update group with invalid params' do
       invalid_params = { name: 'g1', path: 'g1' }
 
-      Groups::UpdateService.new(@group, @user, invalid_params).execute
-
-      assert_not_equal 'g1', @group.reload.name
-      assert_not_equal 'g1', @group.reload.path
+      assert_no_changes -> { @group } do
+        Groups::UpdateService.new(@group, @user, invalid_params).execute
+      end
     end
   end
 end
