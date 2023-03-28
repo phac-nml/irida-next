@@ -11,7 +11,7 @@ class BreadcrumbComponent < ViewComponent::Base
     route.path.split('/').each_with_index do |_part, index|
       crumbs << crumb_for_route(route, index)
     end
-    if "/#{crumbs.last[:path]}" != request.path && request.path.exclude?('/new')
+    if "/#{crumbs.last[:path]}" != request.path
       begin
         crumbs << crumb_for_current_page(request)
       rescue I18n::MissingTranslationData
