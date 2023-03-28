@@ -46,6 +46,7 @@ en:
         description: Description
       member:
         access_level: Access Level
+        user_id: User
     errors:
       models:
         namespace:
