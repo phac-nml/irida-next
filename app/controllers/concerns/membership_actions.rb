@@ -23,16 +23,17 @@ module MembershipActions
   end
 
   def create
-    respond_to do |format|
-      @new_member = Member.new(member_params.merge(created_by_id: current_user.id, type: @member_type,
-                                                   namespace_id: @namespace.id))
-      if @new_member.save
-        flash[:success] = t('.success')
-        format.html { redirect_to members_path }
-      else
-        flash[:error] = t('.error')
-        format.html { render :new, status: :unprocessable_entity, locals: { member: @new_member } }
-      end
+    @new_member = Members::CreateService.new(current_user, member_params.merge(
+                                                             created_by_id: current_user.id, type: @member_type,
+                                                             namespace_id: @namespace.id
+                                                           )).execute
+
+    if @new_member.persisted?
+      flash[:success] = t('.success')
+      redirect_to members_path
+    else
+      flash[:error] = t('.error')
+      render :new, status: :unprocessable_entity, locals: { member: @new_member }
     end
   end
 
