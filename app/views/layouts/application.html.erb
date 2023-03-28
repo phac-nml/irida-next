@@ -16,7 +16,12 @@
       <div class="body" data-controller="layout" data-layout-target="layoutContainer">
 
         <%= render Navigation::NavigationComponent.new do |navigation| %>
-          <%= navigation.section do |section| %>
+          <% navigation.with_header(
+            label: t(:"general.default_sidebar.title"),
+            url: root_path,
+            icon: "inbox_stack"
+          ) %>
+          <%= navigation.with_section do |section| %>
             <%= render Navigation::ItemComponent.new(
               icon: "rectangle_stack",
               label: t(:"general.default_sidebar.projects"),

@@ -2,11 +2,11 @@
 
 module Navigation
   class NavigationComponent < Component
+    renders_one :header, Navigation::HeaderComponent
     renders_many :sections, Navigation::SectionComponent
     renders_many :items, Navigation::ItemComponent
 
-    def initialize(title: nil, **system_arguments)
-      @title = title
+    def initialize(**system_arguments)
       @system_arguments = system_arguments
     end
 
