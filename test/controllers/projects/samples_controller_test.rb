@@ -13,22 +13,21 @@ module Projects
     end
 
     test 'should get index' do
-      get namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      get namespace_project_samples_url(@namespace, @project)
       assert_response :success
     end
 
     test 'should get new' do
-      get new_namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path)
+      get new_namespace_project_sample_url(@namespace, @project)
       assert_response :success
     end
 
     test 'should create sample' do
       assert_difference('Sample.count') do
-        post namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path),
+        post namespace_project_samples_url(@namespace, @project),
              params: { sample: {
                description: @sample1.description,
-               name: 'New Sample',
-               project_id: @sample1.project_id
+               name: 'New Sample'
              } }
       end
 
@@ -36,42 +35,39 @@ module Projects
     end
 
     test 'should not create a sample with wrong parameters' do
-      post namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path),
+      post namespace_project_samples_url(@namespace, @project),
            params: { sample: {
              description: @sample1.description,
-             name: '?',
-             project_id: @sample1.project_id
+             name: '?'
            } }
 
       assert_response :unprocessable_entity
     end
 
     test 'should show sample' do
-      get namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      get namespace_project_sample_url(@namespace, @project, @sample1)
       assert_response :success
     end
 
     test 'should not show sample, if it does not belong to the project' do
-      get namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample4.id)
+      get namespace_project_sample_url(@namespace, @project, @sample4)
       assert_response :unprocessable_entity
     end
 
     test 'should get edit' do
-      get edit_namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path,
-                                            id: @sample1.id)
+      get edit_namespace_project_sample_url(@namespace, @project, @sample1)
       assert_response :success
     end
 
     test 'should update sample' do
-      patch namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id),
+      patch namespace_project_sample_url(@namespace, @project, @sample1),
             params: { sample: { description: @sample1.description, name: 'New Sample Name',
                                 project_id: @sample1.project_id } }
-      assert_redirected_to namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path,
-                                                        id: @sample1.id)
+      assert_redirected_to namespace_project_sample_url(@namespace, @project, @sample1)
     end
 
     test 'should not update a sample with wrong parameters' do
-      patch namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id),
+      patch namespace_project_sample_url(@namespace, @project, @sample1),
             params: { sample: { description: @sample1.description, name: '?',
                                 project_id: @sample1.project_id } }
 
@@ -80,14 +76,14 @@ module Projects
 
     test 'should destroy sample' do
       assert_difference('Sample.count', -1) do
-        delete namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+        delete namespace_project_sample_url(@namespace, @project, @sample1)
       end
 
-      assert_redirected_to namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      assert_redirected_to namespace_project_samples_url(@namespace, @project)
     end
 
     test 'should not destroy sample, if it does not belong to the project' do
-      delete namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample4.id)
+      delete namespace_project_sample_url(@namespace, @project, @sample4)
 
       assert_response :unprocessable_entity
     end
