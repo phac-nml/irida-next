@@ -5,32 +5,12 @@
   >
     <div class="pt-2 pb-4 overflow-y-auto">
       <div
-        class="
-          flex-1
-          px-3
-          space-y-1
-          bg-white
-          divide-y
-          divide-gray-200
-          dark:bg-gray-800
-          dark:divide-gray-700
-        "
+        class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200  dark:bg-gray-800 dark:divide-gray-700"
       >
         <a
           href="<%= root_path %>"
           title="Your work"
-          class="
-            flex
-            items-center
-            p-1
-            text-base
-            font-normal
-            text-gray-900
-            rounded-lg
-            dark:text-white
-            hover:bg-gray-100
-            dark:hover:bg-gray-700
-          "
+          class="flex items-center p-1 text-base font-normal text-gray-900 rounded-lg  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
         >
           <div class="flex justify-center" style="width: 27px;">
             <%= render IconComponent.new(name: "inbox_stack", classes: "w-6 h-6") %>
@@ -43,18 +23,17 @@
             <%= t(:"general.default_sidebar.title") %>
           </h2>
         </a>
-        <ul class="pt-1 space-y-1">
-          <%= render Navigation::ItemComponent.new(
-            icon: "rectangle_stack",
-            label: t(:"general.default_sidebar.projects"),
-            url: projects_path
-          ) %>
-          <%= render Navigation::ItemComponent.new(
-            icon: "squares2x2",
-            label: t(:"general.default_sidebar.groups"),
-            url: groups_path
-          ) %>
-        </ul>
+        <% if sections.present? %>
+          <% sections.each do |section| %>
+            <%= section %>
+          <% end %>
+        <% else %>
+          <%= render Navigation::SectionComponent.new do %>
+            <% items.each do |item| %>
+              <%= item %>
+            <% end %>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

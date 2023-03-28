@@ -11,16 +11,29 @@
     <%= render "shared/dark_mode_check" %>
   </head>
   <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-  <div class="body-wrapper">
-    <%= render 'shared/navbar' %>
-    <div class="body" data-controller="layout" data-layout-target="layoutContainer">
+    <div class="body-wrapper">
+      <%= render "shared/navbar" %>
+      <div class="body" data-controller="layout" data-layout-target="layoutContainer">
 
-      <%= render Navigation::NavigationComponent.new %>
-      <div class="content">
-        <%= yield %>
+        <%= render Navigation::NavigationComponent.new do |navigation| %>
+          <%= navigation.section do |section| %>
+            <%= render Navigation::ItemComponent.new(
+              icon: "rectangle_stack",
+              label: t(:"general.default_sidebar.projects"),
+              url: projects_path
+            ) %>
+            <%= render Navigation::ItemComponent.new(
+              icon: "squares2x2",
+              label: t(:"general.default_sidebar.groups"),
+              url: groups_path
+            ) %>
+          <% end %>
+        <% end %>
+        <div class="content">
+          <%= yield %>
+        </div>
       </div>
     </div>
-  </div>
-  <%= render "shared/flash" %>
+    <%= render "shared/flash" %>
   </body>
 </html>
