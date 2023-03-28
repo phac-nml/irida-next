@@ -5,7 +5,8 @@ module Navigation
     renders_many :sections, Navigation::SectionComponent
     renders_many :items, Navigation::ItemComponent
 
-    def initialize(**system_arguments)
+    def initialize(title: nil, **system_arguments)
+      @title = title
       @system_arguments = system_arguments
     end
 
