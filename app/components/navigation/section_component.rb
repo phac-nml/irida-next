@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Navigation
+  # Aside navigation section
+  # @example
+  #  <%= render Navigation::SectionComponent.new(title: 'Section title') do |section| %>
+  #   <%= section.with_item(title: 'Item title', url: '#') %>
+  #   <%= section.with_item(title: 'Item title', url: '#') %>
+  #  <% end %>
   class SectionComponent < BaseComponent
     renders_many :items, Navigation::ItemComponent
     renders_one :action, 'ActionComponent'
