@@ -27,6 +27,11 @@
               label: t(:"projects.sidebar.details")
             ) %>
             <%= render section.with_item(
+              url: project_samples_path(@project),
+              icon: "beaker",
+              label: t(:"projects.sidebar.samples")
+            ) %>
+            <%= render section.with_item(
               url: project_edit_path(@project),
               icon: "cog_6_tooth",
               label: t(:"projects.sidebar.settings")
