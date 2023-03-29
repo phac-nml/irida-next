@@ -10,52 +10,61 @@
 
 if Rails.env.development?
 
-  # Users
-  admin = User.create!({ email: 'admin@email.com', password: '123456', password_confirmation: '123456' })
+  num_users = 10
+  num_records = 20
 
-  1.upto(3) do |i|
-    User.create!({ email: "user#{i}@email.com", password: '123456', password_confirmation: '123456' })
+  # Users
+  admin = User.create!({ email: 'admin@email.com', password: 'password1', password_confirmation: 'password1' })
+
+  1.upto(num_users) do |i|
+    User.create!({ email: "user#{i}@email.com", password: 'password1', password_confirmation: 'password1' })
   end
 
-  user1 = User.where(email: 'user1@email.com').first
+  all_users = User.all
 
-  # Groups
-  1.upto(3) do |i|
-    parent_group = Group.create!(name: "Group #{i}", path: "group-#{i}",
-                                 description: "This is a description for group #{i}.", owner: admin)
-    # Subgroups
-    1.upto(3) do |j|
-      Group.create!(name: "Subgroup #{j}", path: "subgroup-#{j}",
-                    description: "This is a description for subgroup #{j}.", owner: admin, parent: parent_group)
+  all_users.each do |user| # rubocop:disable Metrics/BlockLength
+    # Groups
+    1.upto(rand(num_records)) do |i|
+      parent_group = Groups::CreateService.new(user, { name: "Group #{i}", path: "group-#{i}",
+                                                       description: "This is a description for group #{i}." }).execute
+      # Subgroups
+      1.upto(rand(num_records)) do |j|
+        Groups::CreateService.new(user, { name: "Subgroup #{j}", path: "subgroup-#{j}",
+                                          description: "This is a description for subgroup #{j}.",
+                                          parent: parent_group }).execute
+      end
+    end
+
+    available_users = all_users.to_a - [user]
+    groups = Group.where(owner: user)
+
+    groups.each do |group|
+      1.upto(rand(num_records)) do |_i|
+        available_user = available_users.sample
+        Members::CreateService.new(admin, group, { user: available_user,
+                                                   access_level: Member::AccessLevel::GUEST }).execute
+      end
+
+      1.upto(rand(num_records)) do |i|
+        project = Projects::CreateService.new(user, { namespace_attributes: {
+                                                name: "Project #{i}", path: "project-#{i}",
+                                                description: "This is a description for project #{i}.",
+                                                parent: group
+                                              } }).execute
+
+        1.upto(rand(num_records)) do |_i|
+          available_user = available_users.sample
+          Members::CreateService.new(user, project.namespace, { user: available_user,
+                                                                access_level: Member::AccessLevel::GUEST }).execute
+        end
+
+        # Samples
+        1.upto(rand(num_records)) do |j|
+          Samples::CreateService.new(user, project.namespace,
+                                     { name: "Sample #{j}}}",
+                                       description: "This is a description for sample #{j}." }).execute
+        end
+      end
     end
   end
-
-  group1 = Group.where(path: 'group-1').first
-
-  # Group Members
-  Members::GroupMember.create!({ user: user1, namespace: group1, created_by: admin,
-                                 access_level: Member::AccessLevel::GUEST })
-
-  # Projects
-  project1_namespace = Namespaces::ProjectNamespace.new({ name: 'Project 1', path: 'project-1', owner: admin,
-                                                          description: 'This is a description for project 1.',
-                                                          parent: group1 })
-  project1 = Project.create!({ creator: admin, namespace: project1_namespace })
-
-  project2_namespace = Namespaces::ProjectNamespace.new({ name: 'Project 2', path: 'project-2', owner: admin,
-                                                          description: 'This is a description for project 2.',
-                                                          parent: group1 })
-  project2 = Project.create!({ creator: admin, namespace: project2_namespace })
-
-  # Project Members
-  Members::ProjectMember.create!({ user: user1, namespace: project1_namespace, created_by: admin,
-                                   access_level: Member::AccessLevel::GUEST })
-  Members::ProjectMember.create!({ user: user1, namespace: project2_namespace, created_by: admin,
-                                   access_level: Member::AccessLevel::GUEST })
-
-  # Samples
-  Sample.create!({ name: 'Sample 1', description: 'This is a description for sample 1.', project_id: project1.id })
-  Sample.create!({ name: 'Sample 2', description: 'This is a description for sample 2.', project_id: project1.id })
-  Sample.create!({ name: 'Sample 3', description: 'This is a description for sample 3.', project_id: project2.id })
-  Sample.create!({ name: 'Sample 4', description: 'This is a description for sample 4.', project_id: project2.id })
 end
