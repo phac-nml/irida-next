@@ -1,6 +1,6 @@
 {
   "[erb]": {
-    "editor.defaultFormatter": "elia.erb-formatter",
+    "editor.defaultFormatter": "elia.erb-formatter"
   },
   "[ruby]": {
     "editor.defaultFormatter": "Shopify.ruby-lsp",
@@ -10,11 +10,10 @@
     "editor.formatOnType": true,
     "editor.semanticHighlighting.enabled": true
   },
+  "emmet.includeLanguages": { "erb": "html", "ruby": "html" },
   "editor.formatOnSave": true,
   "rubyLsp.rubyVersionManager": "asdf",
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
-  "editor.rulers": [
-    120
-  ]
+  "editor.rulers": [120]
 }
