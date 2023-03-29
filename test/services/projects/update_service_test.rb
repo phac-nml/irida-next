@@ -12,19 +12,17 @@ module Projects
     test 'update project with valid params' do
       valid_params = { namespace_attributes: { name: 'new-project1-name', path: 'new-project1-path' } }
 
-      Projects::UpdateService.new(@project, @user, valid_params).execute
-
-      assert_equal 'new-project1-name', @project.reload.name
-      assert_equal 'new-project1-path', @project.reload.path
+      assert_changes -> { [@project.name, @project.path] }, to: %w[new-project1-name new-project1-path] do
+        Projects::UpdateService.new(@project, @user, valid_params).execute
+      end
     end
 
-    test 'cupdate project with invalid params' do
+    test 'update project with invalid params' do
       invalid_params = { namespace_attributes: { name: 'p1', path: 'p1' } }
 
-      Projects::UpdateService.new(@project, @user, invalid_params).execute
-
-      assert_not_equal 'p1', @project.reload.name
-      assert_not_equal 'p1', @project.reload.path
+      assert_no_difference ['Project.count', 'Members::ProjectMember.count'] do
+        Projects::UpdateService.new(@project, @user, invalid_params).execute
+      end
     end
   end
 end
