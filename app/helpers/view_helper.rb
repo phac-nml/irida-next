@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # ViewHelper for user interface components
-class ViewHelper
+module ViewHelper
   # Get the svg file for a heroicon by name, and add the applicable classes
   def heroicons_source(icon_name, classes)
     path = Rails.root.join('app', 'assets', 'icons', 'heroicons', "#{icon_name}.svg")
