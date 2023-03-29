@@ -46,12 +46,14 @@ if Rails.env.development?
       end
 
       1.upto(rand(num_records)) do |i|
+        # Projects
         project = Projects::CreateService.new(user, { namespace_attributes: {
                                                 name: "Project #{i}", path: "project-#{i}",
                                                 description: "This is a description for project #{i}.",
                                                 parent: group
                                               } }).execute
 
+        # Project Members
         1.upto(rand(num_records)) do |_i|
           available_user = available_users.sample
           Members::CreateService.new(user, project.namespace, { user: available_user,
