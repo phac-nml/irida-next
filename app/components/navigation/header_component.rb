@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Navigation
+  # Header component for navigation.
+  # Renders a header with a label and an icon.
   class HeaderComponent < Component
     def initialize(label:, icon:, url:)
       @label = label
