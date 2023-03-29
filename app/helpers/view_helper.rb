@@ -24,4 +24,14 @@ module ViewHelper
     svg[:'aria-hidden'] = true
     doc.to_html.html_safe # rubocop:disable Rails/OutputSafety
   end
+
+  private
+
+  def class_names_from_hash(hash)
+    classes = []
+    hash.each do |class_name, value|
+      classes << class_name.to_s if value
+    end
+    classes
+  end
 end
