@@ -1,23 +1,19 @@
 # frozen_string_literal: true
 
+# ViewHelper for user interface components
 module ViewHelper
+  # Append classes to the class list ensure only unique classes are present
   def class_names(*args)
     classes = []
     args.each do |class_name|
-      case class_name
-      when String
-        classes << class_name if class_name.present?
-      when Hash
-        class_name.each do |key, value|
-          classes << key.to_s if value
-        end
-      when Array
-        classes += class_names(*class_name).presence
-      end
+      classes << class_name if class_name.is_a?(String) && class_name.present?
+      classes += class_names(*class_name) if class_name.is_a?(Array)
+      classes += class_names_from_hash(class_name) if class_name.is_a?(Hash)
     end
     classes.compact.uniq.join(' ')
   end
 
+  # Get the svg file for a heroicon by name, and add the applicable classes
   def heroicons_source(icon_name, classes)
     path = Rails.root.join('app', 'assets', 'icons', 'heroicons', "#{icon_name}.svg")
     file = File.read(path)
