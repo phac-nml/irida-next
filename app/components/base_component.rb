@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Base class for all components that require a tag and classes
+# Example:
+#   BaseComponent.new(tag: :div, classes: "bg-red-500")
+#   BaseComponent.new(tag: :div, classes: "bg-red-500", data: { controller: "my-controller" })
 class BaseComponent < Component
   def initialize(tag:, classes: nil, **system_arguments)
     @tag = tag
