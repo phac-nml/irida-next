@@ -2,4 +2,5 @@
 
 class Component < ViewComponent::Base
   include ViewHelper
+  include ClassNameHelper
 end
