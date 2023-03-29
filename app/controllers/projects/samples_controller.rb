@@ -25,7 +25,7 @@ module Projects
     def edit; end
 
     def create
-      @sample = Samples::CreateService.new(current_user, sample_params.merge(project_id: @project.id)).execute
+      @sample = Samples::CreateService.new(current_user, @project, sample_params).execute
 
       respond_to do |format|
         if @sample.save

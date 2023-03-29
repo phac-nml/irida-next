@@ -10,18 +10,18 @@ module Samples
     end
 
     test 'create sample with valid params' do
-      valid_params = { name: 'new-project2-sample', description: 'first sample for project2', project: @project }
+      valid_params = { name: 'new-project2-sample', description: 'first sample for project2' }
 
       assert_difference -> { Sample.count } => 1 do
-        Samples::CreateService.new(@user, valid_params).execute
+        Samples::CreateService.new(@user, @project, valid_params).execute
       end
     end
 
     test 'create sample with invalid params' do
-      invalid_params = { name: 'ne', description: '', project: nil }
+      invalid_params = { name: 'ne', description: '' }
 
       assert_no_difference('Sample.count') do
-        Samples::CreateService.new(@user, invalid_params).execute
+        Samples::CreateService.new(@user, @project, invalid_params).execute
       end
     end
   end

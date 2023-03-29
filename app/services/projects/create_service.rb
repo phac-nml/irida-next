@@ -17,10 +17,9 @@ module Projects
 
       @project.save
 
-      Members::CreateService.new(current_user, {
-                                   user: current_user, namespace: @project.namespace,
-                                   access_level: Member::AccessLevel::OWNER,
-                                   type: 'ProjectMember'
+      Members::CreateService.new(current_user, @project.namespace, {
+                                   user: current_user,
+                                   access_level: Member::AccessLevel::OWNER
                                  }).execute
 
       @project

@@ -23,10 +23,7 @@ module MembershipActions
   end
 
   def create
-    @new_member = Members::CreateService.new(current_user, member_params.merge(
-                                                             created_by_id: current_user.id, type: @member_type,
-                                                             namespace_id: @namespace.id
-                                                           )).execute
+    @new_member = Members::CreateService.new(current_user, @namespace, member_params).execute
 
     if @new_member.persisted?
       flash[:success] = t('.success')

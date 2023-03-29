@@ -11,10 +11,9 @@ module Groups
       @group = Group.new(params.merge(owner: current_user))
       @group.save
 
-      Members::CreateService.new(current_user, {
-                                   user: current_user, namespace: @group,
-                                   access_level: Member::AccessLevel::OWNER,
-                                   type: 'GroupMember'
+      Members::CreateService.new(current_user, @group, {
+                                   user: current_user,
+                                   access_level: Member::AccessLevel::OWNER
                                  }).execute
 
       @group
