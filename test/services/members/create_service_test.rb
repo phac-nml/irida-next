@@ -16,7 +16,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER,
                        type: 'GroupMember' }
 
-      assert_difference('Members::GroupMember.count') do
+      assert_difference -> { Members::GroupMember.count } => 1 do
         Members::CreateService.new(@user, valid_params).execute
       end
     end
@@ -26,7 +26,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER,
                        type: 'ProjectMember' }
 
-      assert_difference('Members::ProjectMember.count') do
+      assert_difference -> { Members::ProjectMember.count } => 1 do
         Members::CreateService.new(@user, valid_params).execute
       end
     end

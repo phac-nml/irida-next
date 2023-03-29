@@ -12,7 +12,7 @@ module Projects
     test 'create project with valid params' do
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
 
-      assert_difference ['Project.count', 'Members::ProjectMember.count'] do
+      assert_difference -> { Project.count } => 1, -> { Members::ProjectMember.count } => 1 do
         Projects::CreateService.new(@user, valid_params).execute
       end
     end

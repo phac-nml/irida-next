@@ -12,7 +12,7 @@ module Groups
     test 'update group with valid params' do
       valid_params = { name: 'new-group1-name', path: 'new-group1-path' }
 
-      assert_changes -> { [@group.name, @group.path] } do
+      assert_changes -> { [@group.name, @group.path] }, to: %w[new-group1-name new-group1-path] do
         Groups::UpdateService.new(@group, @user, valid_params).execute
       end
     end

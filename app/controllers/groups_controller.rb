@@ -29,12 +29,11 @@ class GroupsController < ApplicationController
     @new_group = Groups::CreateService.new(current_user, group_params).execute
 
     if @new_group.persisted?
-      @group = @new_group.parent
       flash[:success] = t('.success')
       redirect_to group_path(@new_group.full_path)
     else
-
-      render :new, status: :unprocessable_entity
+      @group = @new_group.parent
+      render_new status: :unprocessable_entity
     end
   end
 

@@ -12,7 +12,7 @@ module Samples
     test 'update sample with valid params' do
       valid_params = { name: 'new-sample3-name', description: 'new-sample3-description' }
 
-      assert_changes -> { [@sample.name, @sample.description] } do
+      assert_changes -> { [@sample.name, @sample.description] }, to: %w[new-sample3-name new-sample3-description] do
         Samples::UpdateService.new(@sample, @user, valid_params).execute
       end
     end

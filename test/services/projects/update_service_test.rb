@@ -12,7 +12,7 @@ module Projects
     test 'update project with valid params' do
       valid_params = { namespace_attributes: { name: 'new-project1-name', path: 'new-project1-path' } }
 
-      assert_changes -> { [@project.name, @project.path] } do
+      assert_changes -> { [@project.name, @project.path] }, to: %w[new-project1-name new-project1-path] do
         Projects::UpdateService.new(@project, @user, valid_params).execute
       end
     end
