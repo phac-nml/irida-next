@@ -40,6 +40,18 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'svg', count: 1
   end
 
+  def test_without_context_crumbs
+    # Mock route
+    mock_route = routes(:group_one_route)
+
+    # Mock context breadcrumb
+    context_crumbs = nil
+
+    render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+    assert_text groups(:group_one).name
+    assert_selector 'a', count: 1
+  end
+
   def test_compound_path_with_missing_translation
     # Mock route
     mock_route = routes(:group_one_route)
