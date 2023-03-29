@@ -2,32 +2,20 @@
 
 # Create breadcrumbs for current route
 class BreadcrumbComponent < ViewComponent::Base
-  def initialize(route:, request:)
-    @links = build_crumbs(route, request)
+  def initialize(route:, context_crumbs: nil)
+    @links = build_crumbs(route, context_crumbs)
   end
 
-  def build_crumbs(route, request)
+  def build_crumbs(route, context_crumbs)
     crumbs = []
     route.path.split('/').each_with_index do |_part, index|
       crumbs << crumb_for_route(route, index)
     end
-    if "/#{crumbs.last[:path]}" != request.path
-      begin
-        crumbs << crumb_for_current_page(request)
-      rescue I18n::MissingTranslationData
-        # Don't do anything if the translation is missing
-        # This is a fallback for when the translation is missing
-        # and the breadcrumb is not needed
-      end
-    end
+    crumbs += context_crumbs if context_crumbs.present? && validate_context_crumbs(context_crumbs)
     crumbs
   end
 
   private
-
-  def crumb_for_current_page(request)
-    crumb_for_request(request)
-  end
 
   def crumb_for_route(route, index)
     {
@@ -36,10 +24,13 @@ class BreadcrumbComponent < ViewComponent::Base
     }
   end
 
-  def crumb_for_request(request)
-    {
-      name: t(:"views.#{request.params[:controller]}.#{request.params[:action]}", raise: true),
-      path: request.path.sub('/', '')
-    }
+  def validate_context_crumbs(context_crumbs)
+    raise ArgumentError, 'Context crumbs must be an array' unless context_crumbs.is_a?(Array)
+
+    context_crumbs.each do |crumb|
+      raise ArgumentError, 'Context crumbs must be a hash' unless crumb.is_a?(Hash)
+      raise ArgumentError, 'Context crumbs must have a name' unless crumb.key?(:name)
+      raise ArgumentError, 'Context crumbs must have a path' unless crumb.key?(:path)
+    end
   end
 end
