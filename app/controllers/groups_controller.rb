@@ -4,6 +4,7 @@
 class GroupsController < ApplicationController
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update]
+  before_action :context_crumbs, except: %i[index new create show]
 
   def index
     @groups = Group.all
@@ -87,5 +88,12 @@ class GroupsController < ApplicationController
     else
       render :new, options
     end
+  end
+
+  def context_crumbs
+    @context_crumbs = [{
+      name: I18n.t('groups.edit.title'),
+      path: group_path
+    }]
   end
 end

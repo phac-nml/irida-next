@@ -3,7 +3,7 @@
     style="grid-area: navigation; display: flex; flex-direction: column;"
     class="bg-white dark:border-gray-700 dark:bg-gray-800"
   >
-    <div class="overflow-y-auto pt-2 pb-4">
+    <div class="pt-2 pb-4 overflow-y-auto">
       <div
         class="
           flex-1
@@ -41,17 +41,23 @@
         </a>
         <ul class="pt-1 space-y-1">
           <%= render partial: "shared/sidebar_item",
-                     locals: {
-                       link: project_path(@project),
-                       icon: "icons/clipboard_document",
-                       text: t(:"projects.sidebar.details")
-                     } %>
+          locals: {
+            link: project_path(@project),
+            icon: "icons/clipboard_document",
+            text: t(:"projects.sidebar.details")
+          } %>
           <%= render partial: "shared/sidebar_item",
-                     locals: {
-                       link: project_edit_path(@project),
-                       icon: "icons/cog_6_tooth",
-                       text: t(:"projects.sidebar.settings")
-                     } %>
+          locals: {
+            link: project_samples_path(@project),
+            icon: "icons/beaker",
+            text: t(:"projects.sidebar.samples")
+          } %>
+          <%= render partial: "shared/sidebar_item",
+          locals: {
+            link: project_edit_path(@project),
+            icon: "icons/cog_6_tooth",
+            text: t(:"projects.sidebar.settings")
+          } %>
         </ul>
       </div>
     </div>

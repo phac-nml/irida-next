@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-<head>
-  <title><%= t(:"layouts.application.site_title") %></title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= javascript_importmap_tags %>
-  <%= render "shared/dark_mode_check" %>
-</head>
-<body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-<div class="body-wrapper">
-  <%= render "shared/navbar" %>
-  <div data-controller="layout" data-layout-target="layoutContainer" class="body">
-    <%= render "projects/sidebar" %>
-    <div class="content">
-      <%= render BreadcrumbComponent.new(route: @project.namespace.route, request:) %><%= yield %></div>
-  </div>
-  <%= render "shared/flash" %>
-</div>
-</body>
+  <head>
+    <title><%= t(:"layouts.application.site_title") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= render "shared/dark_mode_check" %>
+  </head>
+  <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
+    <div class="body-wrapper">
+      <%= render "shared/navbar" %>
+      <div data-controller="layout" data-layout-target="layoutContainer" class="body">
+        <%= render "projects/sidebar" %>
+        <div class="content">
+          <%= render BreadcrumbComponent.new(
+            route: @project.namespace.route,
+            context_crumbs: @context_crumbs
+          ) %><%= yield %></div>
+      </div>
+      <%= render "shared/flash" %>
+    </div>
+  </body>
 </html>
