@@ -10,7 +10,6 @@
     "editor.formatOnType": true,
     "editor.semanticHighlighting.enabled": true
   },
-  "emmet.includeLanguages": { "erb": "html", "ruby": "html" },
   "editor.formatOnSave": true,
   "rubyLsp.rubyVersionManager": "asdf",
   "files.trimTrailingWhitespace": true,
