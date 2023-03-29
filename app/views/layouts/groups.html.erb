@@ -1,26 +1,49 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-<head>
-  <title><%= t(:"layouts.application.site_title") %></title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= javascript_importmap_tags %>
-  <%= render "shared/dark_mode_check" %>
-</head>
-<body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-<div class="body-wrapper">
-  <%= render "shared/navbar" %>
-  <div data-controller="layout" data-layout-target="layoutContainer" class="body">
-    <%= render "groups/sidebar" %>
-    <div class="content">
-      <%= render BreadcrumbComponent.new(route: @group.route, request:) %>
-      <%= yield %>
+  <head>
+    <title><%= t(:"layouts.application.site_title") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= render "shared/dark_mode_check" %>
+  </head>
+  <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
+    <div class="body-wrapper">
+      <%= render "shared/navbar" %>
+      <div data-controller="layout" data-layout-target="layoutContainer" class="body">
+        <%= render Navigation::NavigationComponent.new do |navigation| %>
+          <% navigation.with_header(
+            label: @group.name,
+            url: group_path(@group),
+            icon: "squares_2x2"
+          ) %>
+          <%= navigation.with_section do |section| %>
+            <%= render section.with_item(
+              url: group_path(@group),
+              icon: "squares_2x2",
+              label: t(:"groups.sidebar.details")
+            ) %>
+            <%= render section.with_item(
+              url: group_members_path(@group),
+              icon: "users",
+              label: t(:"groups.sidebar.members")
+            ) %>
+            <%= render section.with_item(
+              url: edit_group_path(@group),
+              icon: "cog_6_tooth",
+              label: t(:"groups.sidebar.settings")
+            ) %>
+          <% end %>
+        <% end %>
+        <div class="content">
+          <%= render BreadcrumbComponent.new(route: @group.route, request:) %>
+          <%= yield %>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<%= render "shared/flash" %>
-</body>
+    <%= render "shared/flash" %>
+  </body>
 </html>
