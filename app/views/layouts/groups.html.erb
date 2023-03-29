@@ -39,7 +39,10 @@
           <% end %>
         <% end %>
         <div class="content">
-          <%= render BreadcrumbComponent.new(route: @group.route, request:) %>
+          <%= render BreadcrumbComponent.new(
+            route: @group.route,
+            context_crumbs: @context_crumbs
+          ) %>
           <%= yield %>
         </div>
       </div>

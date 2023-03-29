@@ -34,7 +34,10 @@
           <% end %>
         <% end %>
         <div class="content">
-          <%= render BreadcrumbComponent.new(route: @project.namespace.route, request:) %><%= yield %></div>
+          <%= render BreadcrumbComponent.new(
+            route: @project.namespace.route,
+            context_crumbs: @context_crumbs
+          ) %><%= yield %></div>
       </div>
       <%= render "shared/flash" %>
     </div>
