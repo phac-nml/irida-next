@@ -37,12 +37,32 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to group_path(Group.last.full_path)
   end
 
+  test 'should not create a new group with invalid params' do
+    sign_in users(:john_doe)
+
+    assert_no_difference('Group.count') do
+      post groups_path, params: { group: { name: 'Ne', path: 'new_group', description: 'This is a new group' } }
+    end
+
+    assert_response :unprocessable_entity
+  end
+
   test 'should update a group' do
     sign_in users(:john_doe)
 
     group = groups(:group_one)
     patch group_path(group), params: { group: { name: 'New Group Name' } }
     assert_redirected_to group_path(group)
+  end
+
+  test 'should not update a group with invalid params' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_one)
+    assert_no_changes -> { group.name } do
+      patch group_path(group), params: { group: { name: 'NG' } }
+    end
+    assert_response :unprocessable_entity
   end
 
   test 'should show the sub group' do

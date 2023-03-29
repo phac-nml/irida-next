@@ -27,7 +27,7 @@ module Projects
     def edit; end
 
     def create
-      @sample = Sample.new(sample_params.merge(project_id: @project.id))
+      @sample = Samples::CreateService.new(current_user, @project, sample_params).execute
 
       respond_to do |format|
         if @sample.save
@@ -41,7 +41,7 @@ module Projects
 
     def update
       respond_to do |format|
-        if @sample.update(sample_params)
+        if Samples::UpdateService.new(@sample, current_user, sample_params).execute
           flash[:success] = t('.success')
           format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
         else
