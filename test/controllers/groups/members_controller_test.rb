@@ -31,9 +31,6 @@ module Groups
 
       assert_difference('Members::GroupMember.count') do
         post group_members_path, params: { member: { user_id: user.id,
-                                                     namespace_id: group.id,
-                                                     created_by_id: user.id,
-                                                     type: 'GroupMember',
                                                      access_level: Member::AccessLevel::OWNER } }
       end
 
