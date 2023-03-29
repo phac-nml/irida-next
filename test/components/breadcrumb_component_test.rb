@@ -17,26 +17,25 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     # Mock route
     mock_route = routes(:group_one_route)
 
-    # Mock request
-    mock_request = ActionDispatch::TestRequest.create(Rack::MockRequest.env_for("/#{mock_route.path}"))
+    # Mock context breadcrumb
+    context_crumbs = [{ name: I18n.t('groups.edit.title', raise: true), path: groups(:group_one).path }]
 
-    render_inline(BreadcrumbComponent.new(route: mock_route, request: mock_request))
+    render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     assert_text groups(:group_one).name
-    assert_no_text I18n.t('views.groups.edit', raise: true)
-    assert_selector 'a', count: 1
-    assert_none_of_selectors 'svg'
+    assert_selector 'a', count: 2
+    assert_selector 'svg', count: 1
   end
 
   def test_compound_path
     # Mock route
     mock_route = routes(:group_one_route)
 
-    # Mock request
-    mock_request = MockRequest.new(path: "/#{mock_route.path}/-/edit", controller: 'groups', action: 'edit')
+    # Mock context breadcrumb
+    context_crumbs = [{ name: I18n.t('projects.edit.title', raise: true), path: "#{groups(:group_one).path}/-/edit`" }]
 
-    render_inline(BreadcrumbComponent.new(route: mock_route, request: mock_request))
+    render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     assert_text groups(:group_one).name
-    assert_text I18n.t('views.groups.edit', raise: true)
+    assert_text I18n.t('groups.edit.title', raise: true)
     assert_selector 'a', count: 2
     assert_selector 'svg', count: 1
   end
@@ -45,11 +44,13 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     # Mock route
     mock_route = routes(:group_one_route)
 
-    # Mock request
-    mock_request = MockRequest.new(path: '/-/groups/new', controller: 'groups', action: 'new')
+    # Mock context breadcrumb
+    context_crumbs = [{ name: I18n.t('projects.edit.title', raise: true),
+                        path: "#{groups(:group_one).path}/-/groups/new`" }]
 
-    render_inline(BreadcrumbComponent.new(route: mock_route, request: mock_request))
+    render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     assert_text groups(:group_one).name
-    assert_selector 'a', count: 1
+    assert_selector 'a', count: 2
+    assert_selector 'svg', count: 1
   end
 end

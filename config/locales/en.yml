@@ -141,6 +141,7 @@ en:
       success: "Group %{group_name} was deleted"
       error: "Could not delete %{group_name}"
     edit:
+      title: Settings
       details:
         title: Name and description
         subtitle: Change the name and description of your group
@@ -171,6 +172,7 @@ en:
         error: "Error adding member"
         success: "Member added successfully"
       index:
+        title: Members
         add: Add New Member
         remove: Remove
         remove_confirmation: Are you sure you want to remove this member from the group?
@@ -199,6 +201,7 @@ en:
     create:
       success: "Project %{project_name} was successfully created"
     edit:
+      title: Settings
       general:
         title: General
         submit: Update project
@@ -258,14 +261,3 @@ en:
       destroy:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
-  views:
-    groups/members:
-      index: Members
-    groups:
-      edit: Settings
-    projects:
-      edit: Settings
-    projects/samples:
-      index: Samples
-      show: Sample
-      edit: Edit sample

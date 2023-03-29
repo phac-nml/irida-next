@@ -5,6 +5,7 @@ module Projects
   class SamplesController < ApplicationController
     before_action :sample, only: %i[show edit update destroy]
     before_action :project
+    before_action :context_crumbs
     layout 'projects'
 
     def index
@@ -74,6 +75,13 @@ module Projects
     def project
       path = [params[:namespace_id], params[:project_id]].join('/')
       @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+    end
+
+    def context_crumbs
+      @context_crumbs = [{
+        name: I18n.t('projects.samples.index.title'),
+        path: namespace_project_samples_path
+      }]
     end
   end
 end
