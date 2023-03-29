@@ -26,26 +26,23 @@ class GroupsController < ApplicationController
   end
 
   def create
-    respond_to do |format|
-      @new_group = Group.new(group_params.merge(owner: current_user))
+    @new_group = Groups::CreateService.new(current_user, group_params).execute
+
+    if @new_group.persisted?
+      flash[:success] = t('.success')
+      redirect_to group_path(@new_group.full_path)
+    else
       @group = @new_group.parent
-      if @new_group.save
-        flash[:success] = t('.success')
-        format.html { redirect_to group_path(@new_group.full_path) }
-      else
-        format.html { render_new(status: :unprocessable_entity) }
-      end
+      render_new status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      if @group.update(group_params)
-        flash[:success] = t('.success')
-        format.html { redirect_to group_path(@group) }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-      end
+    if Groups::UpdateService.new(@group, current_user, group_params).execute
+      flash[:success] = t('.success')
+      redirect_to group_path(@group)
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 

@@ -13,9 +13,9 @@ module Projects
     test 'transfer project with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
 
-      assert Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
-
-      assert_equal new_namespace, @project.namespace.reload.parent
+      assert_changes -> { @project.namespace.parent }, to: new_namespace do
+        Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
+      end
     end
 
     test 'transfer project without specifying new namespace' do
@@ -31,17 +31,17 @@ module Projects
     test 'transfer project without project permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
 
-      assert_not Projects::TransferService.new(@project, @jane_doe).execute(new_namespace)
-
-      assert_not_equal new_namespace, @project.namespace.reload.parent
+      assert_no_changes -> { @project.namespace.parent } do
+        Projects::TransferService.new(@project, @jane_doe).execute(new_namespace)
+      end
     end
 
     test 'transfer project without target namespace permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
 
-      assert_not Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
-
-      assert_not_equal new_namespace, @project.namespace.reload.parent
+      assert_no_changes -> { @project.namespace.parent } do
+        Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
+      end
     end
 
     test 'transfer project to namespace containing project with same name' do
