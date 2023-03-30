@@ -1,45 +1,81 @@
 <%= render PageHeaderComponent.new(title: t("groups.show.title"), subtitle: t("groups.show.subtitle")) do |component| %>
-  <%= component.with_icon do %>
-    <%= render "icons/squares_2x2", class_names: "h-14 w-14 text-primary-700" %>
-  <% end %>
+  <%= component.with_icon(name: "squares_2x2", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <%= link_to t(:'groups.index.create_group_button'), new_group_path, class: "inline-flex items-center justify-center btn btn-primary" %>
+    <%= link_to t(:"groups.index.create_group_button"),
+    new_group_path,
+    class: "inline-flex items-center justify-center btn btn-primary" %>
   <% end %>
 <% end %>
-<div class="bg-white  dark:bg-gray-800">
+<div class="bg-white dark:bg-gray-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
         <table class="min-w-full table-fixed dark:divide-gray-600">
-          <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+          <tbody
+            class="
+              bg-white
+              divide-y
+              divide-gray-200
+              dark:bg-gray-800
+              dark:divide-gray-700
+            "
+          >
             <% @groups.each do |group| %>
-              <tr class="hover:bg-green-100 dark:hover:bg-gray-700 text-sm font-normal text-gray-500 dark:text-gray-400">
-                <td class="p-4  whitespace-nowrap">
-                  <%= link_to group.name, group_path(group), class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+              <tr
+                class="
+                  text-sm
+                  font-normal
+                  text-gray-500
+                  hover:bg-green-100
+                  dark:hover:bg-gray-700
+                  dark:text-gray-400
+                "
+              >
+                <td class="p-4 whitespace-nowrap">
+                  <%= link_to group.name,
+                  group_path(group),
+                  class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
                   <% if current_user.id == group.owner_id %>
-                    <span class="bg-green-200 text-green-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                      <%= t(:'groups.owner') %>
+                    <span
+                      class="
+                        bg-green-200
+                        text-green-800
+                        text-xs
+                        font-medium
+                        ml-2
+                        px-2.5
+                        py-0.5
+                        rounded-full
+                        dark:bg-green-900
+                        dark:text-green-300
+                      "
+                    >
+                      <%= t(:"groups.owner") %>
                     </span>
                   <% end %>
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= group.description %></div>
                 </td>
                 <td class="px-4 py-3">
-                  <div class="flex justify-end items-center">
-                    <div class="inline-flex items-center justify-between mr-2 w-8">
-                      <%= render "icons/folder", class_names: "w-4 h-4" %>
+                  <div class="flex items-center justify-end">
+                    <div class="inline-flex items-center justify-between w-8 mr-2">
+                      <%= render IconComponent.new(name: "folder", classes: "w-4 h-4") %>
                       0
                     </div>
-                    <div class="inline-flex items-center justify-between mr-2 w-8"><%= render "icons/users", class_names: "w-4 h-4" %>
+                    <div class="inline-flex items-center justify-between w-8 mr-2">
+                      <%= render IconComponent.new(name: "users", classes: "w-4 h-4") %>
                       1
                     </div>
-                    <button data-dropdown-toggle="group-<%= group.id %>-dropdown" class="navbar-btn">
-                      <%= render 'icons/ellipsis_vertical' %>
+                    <button
+                      data-dropdown-toggle="group-<%= group.id %>-dropdown"
+                      class="navbar-btn"
+                    >
+                      <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
                     </button>
                     <!-- Dropdown menu -->
                     <div id="group-<%= group.id %>-dropdown" class="dropdown-menu">
                       <ul aria-labelledby="dropdownDefaultButton">
                         <li>
-                          <%= link_to t(:'groups.index.group_dropdown.delete'), edit_group_path(group) %>
+                          <%= link_to t(:"groups.index.group_dropdown.delete"), edit_group_path(group) %>
                         </li>
                       </ul>
                     </div>

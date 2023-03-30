@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class PageHeaderComponentTest < ViewComponent::TestCase
-  def test_renders_header
+  test 'renders header' do
     title = 'THIS IS THE TITLE'
     subtitle = 'THIS IS A SUBTITLE'
     render_inline(PageHeaderComponent.new(title:, subtitle:))
@@ -12,15 +12,15 @@ class PageHeaderComponentTest < ViewComponent::TestCase
     assert_text subtitle
   end
 
-  def test_renders_header_with_icon
+  test 'renders header with icon' do
     title = 'THIS IS THE TITLE'
     subtitle = 'THIS IS A SUBTITLE'
     render_inline(PageHeaderComponent.new(title:, subtitle:)) do |component|
-      component.with_icon { 'ICON' }
+      component.with_icon(name: 'beaker')
       component.with_buttons { 'BUTTONS' }
     end
 
-    assert_text 'ICON'
+    assert_text title
     assert_text 'BUTTONS'
   end
 end
