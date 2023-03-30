@@ -3,13 +3,13 @@
 require 'test_helper'
 
 class IconComponentTest < ViewComponent::TestCase
-  def test_default
+  test 'test default' do
     render_inline(IconComponent.new(name: 'home'))
     assert_selector 'svg', count: 1
     assert_selector '[focusable="false"]', count: 1
   end
 
-  def test_with_custom_class
+  test 'test with custom class' do
     render_inline(IconComponent.new(name: 'home', classes: 'w-8 h-8'))
     assert_selector 'svg.w-8.h-8', count: 1
   end

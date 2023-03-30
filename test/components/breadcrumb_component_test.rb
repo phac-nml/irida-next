@@ -13,7 +13,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     attr_reader :path, :params
   end
 
-  def test_single_path
+  test 'test single path' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -26,7 +26,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'svg', count: 1
   end
 
-  def test_compound_path
+  test 'test compound path' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -40,7 +40,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'svg', count: 1
   end
 
-  def test_without_context_crumbs
+  test 'test without context crumbs' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -52,7 +52,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'a', count: 1
   end
 
-  def test_compound_path_with_missing_translation
+  test 'test compound path with missing translation' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -66,7 +66,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'svg', count: 1
   end
 
-  def test_context_crumbs_not_an_array
+  test 'test context crumbs not an array' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -78,7 +78,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     end
   end
 
-  def test_context_crumbs_without_hash
+  test 'test context crumbs without hash' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -90,7 +90,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     end
   end
 
-  def test_context_crumbs_without_name
+  test 'test context crumbs without name' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -102,7 +102,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     end
   end
 
-  def test_context_crumbs_without_path
+  test 'test context crumbs without path' do
     # Mock route
     mock_route = routes(:group_one_route)
 
