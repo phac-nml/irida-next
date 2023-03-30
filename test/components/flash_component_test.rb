@@ -24,7 +24,7 @@ class FlashComponentTest < ViewComponent::TestCase
     assert_selector '.bg-yellow-600'
   end
 
-  test 'info smessage' do
+  test 'info message' do
     message = 'Info Message!'
     render_inline(FlashComponent.new(type: 'info', data: message))
     assert_text message
