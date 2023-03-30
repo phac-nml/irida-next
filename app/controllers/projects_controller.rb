@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   before_action :context_crumbs, except: %i[index new create show]
 
   def index
-    @projects = Project.all
+    @projects = Project.all.include_route
   end
 
   def show

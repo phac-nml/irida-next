@@ -9,64 +9,117 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 if Rails.env.development?
+  current_year = Time.zone.now.year
 
-  num_users = 10
-  num_records = 20
+  genus_listing = [{ Bacillus: ['Bacillus anthracis', 'Bacillus cereus'] },
+                   { Bartonella: ['Bartonella henselae', 'Bartonella quintana'] },
+                   { Bordetella: ['Bordetella pertussis'] },
+                   { Borrelia: ['Borrelia burgdorferi', 'Borrelia garinii', 'Borrelia afzelii',
+                                'Borrelia recurrentis'] },
+                   { Brucella: ['Brucella abortus', 'Brucella canis', 'Brucella melitensis', 'Brucella suis'] },
+                   { Campylobacter: ['Campylobacter jejuni'] },
+                   { 'Chlamydia and Chlamydophila': ['Chlamydia pneumoniae', 'Chlamydia trachomatis',
+                                                     'Chlamydophila psittaci'] },
+                   { Clostridium: ['Clostridium botulinum', 'Clostridium difficile', 'Clostridium perfringens',
+                                   'Clostridium tetani'] },
+                   { Corynebacterium: ['Corynebacterium diphtheriae'] },
+                   { Enterococcus: ['Enterococcus faecalis', 'Enterococcus faecium'] },
+                   { Escherichia: ['Escherichia coli'] },
+                   { Francisella: ['Francisella tularensis'] },
+                   { Haemophilus: ['Haemophilus influenzae'] },
+                   { Helicobacter: ['Helicobacter pylori'] },
+                   { Legionella: ['Legionella pneumophila'] },
+                   { Leptospira: ['Leptospira interrogans', 'Leptospira santarosai', 'Leptospira weilii',
+                                  'Leptospira noguchii'] },
+                   { Listeria: ['Listeria monocytogenes'] },
+                   { Mycobacterium: ['Mycobacterium leprae', 'Mycobacterium tuberculosis', 'Mycobacterium ulcerans'] },
+                   { Mycoplasma: ['Mycoplasma pneumoniae'] },
+                   { Neisseria: ['Neisseria gonorrhoeae', 'Neisseria meningitidis'] },
+                   { Pseudomonas: ['Pseudomonas aeruginosa'] },
+                   { Rickettsia: ['Rickettsia rickettsii'] },
+                   { Salmonella: ['Salmonella typhi', 'Salmonella typhimurium'] },
+                   { Shigella: ['Shigella sonnei'] },
+                   { Staphylococcus: ['Staphylococcus aureus', 'Staphylococcus epidermidis',
+                                      'Staphylococcus saprophyticus'] },
+                   { Streptococcus: ['Streptococcus agalactiae', 'Streptococcus pneumoniae',
+                                     'Streptococcus pyogenes'] },
+                   { Treponema: ['Treponema pallidum'] },
+                   { Ureaplasma: ['Ureaplasma urealyticum'] },
+                   { Vibrio: ['Vibrio cholerae'] },
+                   { Yersinia: ['Yersinia pestis', 'Yersinia enterocolitica', 'Yersinia pseudotuberculosis'] }]
+
+  project_listing = [{ Outbreak: [(current_year - 2).to_s, (current_year - 1).to_s] },
+                     { Surveillance: [(current_year - 2).to_s, (current_year - 1).to_s] }]
 
   # Users
-  admin = User.create!({ email: 'admin@email.com', password: 'password1', password_confirmation: 'password1' })
+  User.create!({ email: 'admin@email.com', password: 'password1', password_confirmation: 'password1' })
 
-  1.upto(num_users) do |i|
+  1.upto(10) do |i|
     User.create!({ email: "user#{i}@email.com", password: 'password1', password_confirmation: 'password1' })
   end
 
-  all_users = User.all
+  users = User.all
 
-  all_users.each do |user| # rubocop:disable Metrics/BlockLength
+  users.each do |user| # rubocop:disable Metrics/BlockLength
     # Groups
-    1.upto(rand(num_records)) do |i|
-      parent_group = Groups::CreateService.new(user, { name: "Group #{i}", path: "group-#{i}",
-                                                       description: "This is a description for group #{i}." }).execute
+    genus_listing.each do |genus|
+      group_name = "#{genus.keys.first} #{user.id}"
+      group_path = if group_name.include?(' ')
+                     group_name.downcase.gsub(' ', '-')
+                   else
+                     group_name
+                   end
+      parent_group = Groups::CreateService.new(user,
+                                               { name: group_name,
+                                                 path: group_path,
+                                                 description: "This is a description the #{group_name} group." }).execute
+      subgroup_names = genus.values.first
       # Subgroups
-      1.upto(rand(num_records)) do |j|
-        Groups::CreateService.new(user, { name: "Subgroup #{j}", path: "subgroup-#{j}",
-                                          description: "This is a description for subgroup #{j}.",
+      subgroup_names.each do |subgroup|
+        Groups::CreateService.new(user, { name: subgroup, path: subgroup.downcase.gsub(' ', '-'),
+                                          description: "This is a description for the subgroup #{subgroup}.",
                                           parent: parent_group }).execute
       end
     end
 
-    available_users = all_users.to_a - [user]
     groups = Group.where(owner: user)
+    available_users = users.to_a - [user]
 
     groups.each do |group|
-      1.upto(rand(num_records)) do |_i|
-        available_user = available_users.sample
-        Members::CreateService.new(admin, group, { user: available_user,
-                                                   access_level: Member::AccessLevel::GUEST }).execute
+      # Group Members
+      available_users.each do |available_user|
+        Members::CreateService.new(user, group, { user: available_user,
+                                                  access_level: Member::AccessLevel::GUEST }).execute
       end
 
-      1.upto(rand(num_records)) do |i|
-        # Projects
-        project = Projects::CreateService.new(user, { namespace_attributes: {
-                                                name: "Project #{i}", path: "project-#{i}",
-                                                description: "This is a description for project #{i}.",
-                                                parent: group
-                                              } }).execute
+      project_listing.each do |proj|
+        years = proj.values.first
 
-        # Project Members
-        1.upto(rand(num_records)) do |_i|
-          available_user = available_users.sample
-          Members::CreateService.new(user, project.namespace, { user: available_user,
-                                                                access_level: Member::AccessLevel::GUEST }).execute
-        end
+        years.each do |year|
+          # Projects
+          proj_name = "#{proj.keys.first} #{year}"
+          proj_path = "#{proj.keys.first.downcase}-#{year}"
+          project = Projects::CreateService.new(user, { namespace_attributes: {
+                                                  name: proj_name, path: proj_path,
+                                                  description: "This is a description for project #{proj_name}.",
+                                                  parent: group
+                                                } }).execute
 
-        # Samples
-        1.upto(rand(num_records)) do |j|
-          Samples::CreateService.new(user, project.namespace,
-                                     { name: "Sample #{j}}}",
-                                       description: "This is a description for sample #{j}." }).execute
+          # Project Members
+          available_users.each do |available_user|
+            Members::CreateService.new(user, project.namespace, { user: available_user,
+                                                                  access_level: Member::AccessLevel::GUEST }).execute
+          end
+
+          # Samples
+          1.upto(10) do |i|
+            Samples::CreateService.new(user, project,
+                                       { name: "#{group.name} #{i}",
+                                         description: "This is a description for sample #{group.name} #{i}." }).execute
+          end
         end
       end
     end
   end
+
 end
