@@ -46,15 +46,16 @@ module MembershipActions
   private
 
   def access_levels
-    member_user = Member.find_by(user: current_user, namespace: @namespace, type: @member_type)
-    @access_levels = Member.access_levels(member_user, current_user.id == @namespace.owner_id)
+    member = Member.find_by(user: current_user, namespace: @namespace, type: @member_type)
+    @access_levels = Member.access_levels(member)
   end
 
   def available_users
-    @available_users = User.where.not(id: Member.where(type: @member_type,
-                                                       namespace_id: @namespace.id).pluck(:user_id))
     # Remove current user from available users as a user cannot add themselves
-    @available_users = @available_users.to_a - [current_user]
+    @available_users = User.where.not(id: Member.where(
+      type: @member_type,
+      namespace_id: @namespace.id
+    ).pluck(:user_id)).to_a - [current_user]
   end
 
   protected

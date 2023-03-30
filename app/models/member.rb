@@ -23,9 +23,12 @@ class Member < ApplicationRecord
       end
     end
 
-    def access_levels(member_user, current_user_owner)
-      case current_user_owner || member_user.access_level
-      when current_user_owner || AccessLevel::OWNER
+    # TODO: Remove this once authorization is setup and
+    # the policy class will handle which access levels
+    # to return
+    def access_levels(member)
+      case member.access_level
+      when AccessLevel::OWNER
         AccessLevel.access_level_options_owner
       when AccessLevel::MAINTAINER
         AccessLevel.access_level_options
