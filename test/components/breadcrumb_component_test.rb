@@ -3,15 +3,6 @@
 require 'test_helper'
 
 class BreadcrumbComponentTest < ViewComponent::TestCase
-  class MockRequest
-    def initialize(path:, controller:, action:)
-      @path = path
-      @params = { controller:, action: }
-    end
-
-    attr_reader :path, :params
-  end
-
   test 'single path' do
     # Mock route
     mock_route = routes(:group_one_route)
