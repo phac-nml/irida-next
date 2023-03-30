@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class NavigationComponentTest < ViewComponent::TestCase
-  test 'test should render navigation' do
+  test 'should render navigation' do
     render_inline Navigation::NavigationComponent.new do |navigation|
       navigation.with_header(label: 'Home', url: '/', icon: 'home')
       navigation.with_section do |section|
