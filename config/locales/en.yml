@@ -92,6 +92,7 @@ en:
         aria_label: Toggle dark mode
   profiles:
     sidebar:
+      header: User Settingss
       profile: Profile
       password: Password
       account: Account

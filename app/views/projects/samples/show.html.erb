@@ -1,7 +1,5 @@
 <%= render PageHeaderComponent.new(title: @sample.name, subtitle: @sample.description) do |component| %>
-  <%= component.with_icon do %>
-    <%= render "icons/beaker", class_names: "h-14 w-14 text-primary-700" %>
-  <% end %>
+  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <div class="flex flex-row">
       <%= link_to t("projects.samples.show.edit_button"),

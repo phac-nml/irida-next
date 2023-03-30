@@ -25,13 +25,13 @@ class FlashComponent < ViewComponent::Base
   def icon_for_flash
     case @type
     when 'error'
-      'icons/exclamation_circle'
+      'exclamation_circle'
     when 'success'
-      'icons/check'
+      'check'
     when 'warning'
-      'icons/exclamation_triangle'
+      'exclamation_triangle'
     else
-      'icons/information_circle'
+      'information_circle'
     end
   end
 end
