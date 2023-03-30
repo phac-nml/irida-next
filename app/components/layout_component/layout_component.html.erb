@@ -1,0 +1,16 @@
+<div class="body-wrapper">
+  <%= render "shared/navbar" %>
+  <div
+    class="body"
+    data-controller="layout-component--layout-component"
+    data-layout-component--layout-component-target="layoutContainer"
+  >
+    <% if sidebar.present? %>
+      <%= sidebar %>
+    <% end %>
+    <div class="content">
+      <%= body %>
+    </div>
+  </div>
+</div>
+<%= render "shared/flash" %>

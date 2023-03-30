@@ -4,10 +4,8 @@
     <%= render "layouts/partials/head" %>
   </head>
   <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-    <div class="body-wrapper">
-      <%= render "shared/navbar" %>
-      <div data-controller="layout" data-layout-target="layoutContainer" class="body">
-        <%= render Navigation::NavigationComponent.new do |navigation| %>
+      <%= render LayoutComponent.new do |layout| %>
+        <% layout.sidebar do |navigation| %>
           <% navigation.with_header(
             label: @project.name,
             url: project_path(@project),
@@ -30,14 +28,15 @@
               label: t(:"projects.sidebar.settings")
             ) %>
           <% end %>
+          <% layout.body do %>
+            <%= render BreadcrumbComponent.new(
+              route: @project.namespace.route,
+              context_crumbs: @context_crumbs
+            ) %>
+            <%= yield %>
+          <% end %>
         <% end %>
-        <div class="content">
-          <%= render BreadcrumbComponent.new(
-            route: @project.namespace.route,
-            context_crumbs: @context_crumbs
-          ) %><%= yield %></div>
-      </div>
-      <%= render "shared/flash" %>
+      <% end %>
     </div>
   </body>
 </html>

@@ -4,42 +4,38 @@
     <%= render "layouts/partials/head" %>
   </head>
   <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-    <div class="body-wrapper">
-      <%= render "shared/navbar" %>
-      <div data-controller="layout" data-layout-target="layoutContainer" class="body">
-        <%= render Navigation::NavigationComponent.new do |navigation| %>
-          <% navigation.with_header(
-            label: @group.name,
+    <%= render LayoutComponent.new do |layout| %>
+      <% layout.sidebar do |navigation| %>
+        <% navigation.with_header(
+          label: @group.name,
+          url: group_path(@group),
+          icon: "squares_2x2"
+        ) %>
+        <%= navigation.with_section do |section| %>
+          <%= render section.with_item(
             url: group_path(@group),
-            icon: "squares_2x2"
+            icon: "squares_2x2",
+            label: t(:"groups.sidebar.details")
           ) %>
-          <%= navigation.with_section do |section| %>
-            <%= render section.with_item(
-              url: group_path(@group),
-              icon: "squares_2x2",
-              label: t(:"groups.sidebar.details")
-            ) %>
-            <%= render section.with_item(
-              url: group_members_path(@group),
-              icon: "users",
-              label: t(:"groups.sidebar.members")
-            ) %>
-            <%= render section.with_item(
-              url: edit_group_path(@group),
-              icon: "cog_6_tooth",
-              label: t(:"groups.sidebar.settings")
-            ) %>
-          <% end %>
+          <%= render section.with_item(
+            url: group_members_path(@group),
+            icon: "users",
+            label: t(:"groups.sidebar.members")
+          ) %>
+          <%= render section.with_item(
+            url: edit_group_path(@group),
+            icon: "cog_6_tooth",
+            label: t(:"groups.sidebar.settings")
+          ) %>
         <% end %>
-        <div class="content">
+        <% layout.body do %>
           <%= render BreadcrumbComponent.new(
             route: @group.route,
             context_crumbs: @context_crumbs
           ) %>
           <%= yield %>
-        </div>
-      </div>
-    </div>
-    <%= render "shared/flash" %>
+        <% end %>
+      <% end %>
+    <% end %>
   </body>
 </html>

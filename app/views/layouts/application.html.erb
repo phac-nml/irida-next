@@ -4,34 +4,29 @@
     <%= render "layouts/partials/head" %>
   </head>
   <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-    <div class="body-wrapper">
-      <%= render "shared/navbar" %>
-      <div class="body" data-controller="layout" data-layout-target="layoutContainer">
-
-        <%= render Navigation::NavigationComponent.new do |navigation| %>
-          <% navigation.with_header(
-            label: t(:"general.default_sidebar.title"),
-            url: root_path,
-            icon: "inbox_stack"
+    <%= render LayoutComponent.new do |layout| %>
+      <% layout.sidebar do |navigation| %>
+        <% navigation.with_header(
+          label: t(:"general.default_sidebar.title"),
+          url: root_path,
+          icon: "inbox_stack"
+        ) %>
+        <%= navigation.with_section do |section| %>
+          <%= render section.with_item(
+            icon: "rectangle_stack",
+            label: t(:"general.default_sidebar.projects"),
+            url: projects_path
           ) %>
-          <%= navigation.with_section do |section| %>
-            <%= render section.with_item(
-              icon: "rectangle_stack",
-              label: t(:"general.default_sidebar.projects"),
-              url: projects_path
-            ) %>
-            <%= render section.with_item(
-              icon: "squares_2x2",
-              label: t(:"general.default_sidebar.groups"),
-              url: groups_path
-            ) %>
-          <% end %>
+          <%= render section.with_item(
+            icon: "squares_2x2",
+            label: t(:"general.default_sidebar.groups"),
+            url: groups_path
+          ) %>
         <% end %>
-        <div class="content">
+        <% layout.body do %>
           <%= yield %>
-        </div>
-      </div>
-    </div>
-    <%= render "shared/flash" %>
+        <% end %>
+      <% end %>
+    <% end %>
   </body>
 </html>
