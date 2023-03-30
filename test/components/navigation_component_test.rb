@@ -22,7 +22,7 @@ class NavigationComponentTest < ViewComponent::TestCase
         end
       end
 
-      assert_selector 'button[data-action="click->layout#toggle"]' do
+      assert_selector 'button[data-action="click->layout-component--layout-component#toggle"]' do
         assert_selector 'svg.w-6.h-6'
       end
     end
@@ -48,7 +48,7 @@ class NavigationComponentTest < ViewComponent::TestCase
         end
       end
 
-      assert_selector 'button[data-action="click->layout#toggle"]' do
+      assert_selector 'button[data-action="click->layout-component--layout-component#toggle"]' do
         assert_selector 'svg.w-6.h-6'
       end
     end

@@ -1,12 +1,35 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require 'test_helper'
 
 class LayoutComponentTest < ViewComponent::TestCase
-  def test_component_renders_something_useful
-    # assert_equal(
-    #   %(<span>Hello, components!</span>),
-    #   render_inline(LayoutComponent.new(message: "Hello, components!")).css("span").to_html
-    # )
+  test 'should render the layout with a sidebar and a body' do
+    with_request_url '/-/projects' do
+      render_inline LayoutComponent.new do |layout|
+        layout.sidebar do |sidebar|
+          sidebar.with_header(label: 'Home', url: '/', icon: 'home')
+          sidebar.with_section do |section|
+            section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects', icon: 'home')
+            section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/groups', icon: 'cog_6_tooth')
+          end
+        end
+        layout.body do
+          'Hello, World!'
+        end
+      end
+
+      assert_selector 'aside' do
+        assert_text 'Home'
+        assert_selector 'ul' do
+          assert_selector 'li', count: 2
+          assert_selector 'a.bg-gray-100[href="/-/projects"]'
+          assert_selector 'a[href="/-/groups"]'
+        end
+      end
+
+      assert_selector '.content' do
+        assert_text 'Hello, World!'
+      end
+    end
   end
 end
