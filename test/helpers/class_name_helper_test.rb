@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ClassNameHelper < ActionView::TestCase
+class ClassNameHelperTest < ActionView::TestCase
   include ClassNameHelper
 
   test 'should combine list of classes' do
