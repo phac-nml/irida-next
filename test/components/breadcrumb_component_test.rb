@@ -1,19 +1,9 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'minitest/mock'
 
 class BreadcrumbComponentTest < ViewComponent::TestCase
-  class MockRequest
-    def initialize(path:, controller:, action:)
-      @path = path
-      @params = { controller:, action: }
-    end
-
-    attr_reader :path, :params
-  end
-
-  test 'test single path' do
+  test 'single path' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -26,7 +16,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'svg', count: 1
   end
 
-  test 'test compound path' do
+  test 'compound path' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -40,7 +30,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'svg', count: 1
   end
 
-  test 'test without context crumbs' do
+  test 'without context crumbs' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -52,7 +42,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'a', count: 1
   end
 
-  test 'test compound path with missing translation' do
+  test 'compound path with missing translation' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -66,7 +56,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     assert_selector 'svg', count: 1
   end
 
-  test 'test context crumbs not an array' do
+  test 'context crumbs not an array' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -78,7 +68,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     end
   end
 
-  test 'test context crumbs without hash' do
+  test 'context crumbs without hash' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -90,7 +80,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     end
   end
 
-  test 'test context crumbs without name' do
+  test 'context crumbs without name' do
     # Mock route
     mock_route = routes(:group_one_route)
 
@@ -102,7 +92,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     end
   end
 
-  test 'test context crumbs without path' do
+  test 'context crumbs without path' do
     # Mock route
     mock_route = routes(:group_one_route)
 
