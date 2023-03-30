@@ -1,12 +1,7 @@
 <%= render BaseComponent.new(**system_arguments) do %>
   <% if items.present? %>
     <% if @title.present? %>
-      <li class="Polaris-Navigation__SectionHeading">
-        <span class="Polaris-Navigation__Text">
-          <%= @title %>
-        </span>
-        <%= action %>
-      </li>
+      <%= @title %>
     <% end %>
     <% items.each do |item| %>
       <%= item %>

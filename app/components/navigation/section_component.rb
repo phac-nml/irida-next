@@ -10,9 +10,9 @@ module Navigation
   class SectionComponent < BaseComponent
     renders_many :items, Navigation::ItemComponent
 
-    def initialize(title: nil, seperator: false, fill: false, **system_arguments)
+    def initialize(title: nil, separator: false, fill: false, **system_arguments)
       @title = title
-      @seperator = seperator
+      @separator = separator
       @fill = fill
       @system_arguments = system_arguments
     end
