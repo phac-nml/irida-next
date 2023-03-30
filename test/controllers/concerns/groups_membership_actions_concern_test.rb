@@ -12,7 +12,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
 
     assert_response :success
-    assert_equal 2, group.group_members.count
+    assert_equal 3, group.group_members.count
   end
 
   test 'group members index invalid route get' do
@@ -30,7 +30,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get new_group_member_path(group)
 
     assert_response :success
-    assert_equal 2, group.group_members.count
+    assert_equal 3, group.group_members.count
   end
 
   test 'group members new invalid route get' do
@@ -48,14 +48,14 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
     user = users(:john_doe)
 
-    post group_members_path, params: { member: { user_id: user.id,
+    post group_members_path, params: { member: { user_id: users(:steve_doe).id,
                                                  namespace_id: group.id,
                                                  created_by_id: user.id,
                                                  type: 'GroupMember',
                                                  access_level: Member::AccessLevel::OWNER } }
 
     assert_redirected_to group_members_path(group)
-    assert_equal 3, group.group_members.count
+    assert_equal 4, group.group_members.count
   end
 
   test 'group members create invalid post data' do
@@ -81,7 +81,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     delete group_member_path(group, group_member)
 
     assert_redirected_to group_members_path(group)
-    assert_equal 1, group.group_members.count
+    assert_equal 2, group.group_members.count
   end
 
   test 'group members destroy invalid route delete' do
