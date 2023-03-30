@@ -69,10 +69,13 @@ if Rails.env.development?
                    else
                      group_name
                    end
-      parent_group = Groups::CreateService.new(user,
-                                               { name: group_name,
-                                                 path: group_path,
-                                                 description: "This is a description the #{group_name} group." }).execute
+      parent_group = Groups::CreateService.new(
+        user,
+        { name: group_name,
+          path: group_path,
+          description: "This is a description the #{group_name} group." }
+      ).execute
+
       subgroup_names = genus.values.first
       # Subgroups
       subgroup_names.each do |subgroup|
