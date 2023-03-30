@@ -19,7 +19,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'test should show 404 if project does not exist' do
+  test 'should show 404 if project does not exist' do
     sign_in users(:john_doe)
 
     assert_raises(ActionController::RoutingError) do

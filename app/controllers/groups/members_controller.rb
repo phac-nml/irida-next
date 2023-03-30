@@ -9,6 +9,7 @@ module Groups
     before_action :member, only: %i[destroy] # rubocop:disable Rails/LexicallyScopedActionFilter
     before_action :available_users, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
     before_action :access_levels, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
+    before_action :context_crumbs, only: %i[index] # rubocop:disable Rails/LexicallyScopedActionFilter
 
     layout 'groups'
 
@@ -32,6 +33,16 @@ module Groups
 
     def members_path
       group_members_path
+    end
+
+    def context_crumbs
+      case action_name
+      when 'index'
+        @context_crumbs = [{
+          name: I18n.t('groups.members.index.title'),
+          path: group_members_path
+        }]
+      end
     end
   end
 end

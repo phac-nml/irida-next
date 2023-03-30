@@ -1,0 +1,28 @@
+<aside id="sidebar" class="sidebar" aria-label="Sidebar">
+  <div
+    style="grid-area: navigation; display: flex; flex-direction: column;"
+    class="bg-white dark:bg-gray-800 dark:border-gray-700"
+  >
+    <div class="pt-2 pb-4 overflow-y-auto">
+      <div
+        class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200  dark:bg-gray-800 dark:divide-gray-700"
+      >
+        <% if header.present? %>
+          <%= header %>
+        <% end %>
+        <% if sections.present? %>
+          <% sections.each do |section| %>
+            <%= section %>
+          <% end %>
+        <% else %>
+          <%= render Navigation::SectionComponent.new do %>
+            <% items.each do |item| %>
+              <%= item %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%= render(Navigation::CollapseComponent.new) %>
+</aside>

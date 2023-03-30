@@ -4,6 +4,7 @@
 class ProjectsController < ApplicationController
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer]
+  before_action :context_crumbs, except: %i[index new create show]
 
   def index
     @projects = Project.all
@@ -98,6 +99,18 @@ class ProjectsController < ApplicationController
       'projects'
     else
       'application'
+    end
+  end
+
+  def context_crumbs
+    @context_crumbs = []
+
+    case action_name
+    when 'update', 'edit'
+      @context_crumbs = [{
+        name: I18n.t('projects.edit.title'),
+        path: namespace_project_edit_path
+      }]
     end
   end
 end

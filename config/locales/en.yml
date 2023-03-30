@@ -99,6 +99,7 @@ en:
         aria_label: Toggle dark mode
   profiles:
     sidebar:
+      header: User Settingss
       profile: Profile
       password: Password
       account: Account
@@ -148,6 +149,7 @@ en:
       success: "Group %{group_name} was deleted"
       error: "Could not delete %{group_name}"
     edit:
+      title: Settings
       details:
         title: Name and description
         subtitle: Change the name and description of your group
@@ -178,6 +180,7 @@ en:
         error: "Error adding member"
         success: "Group member added successfully"
       index:
+        title: Members
         add: Add New Member
         remove: Remove
         remove_confirmation: Are you sure you want to remove this member from the group?
@@ -206,6 +209,7 @@ en:
     create:
       success: "Project %{project_name} was successfully created"
     edit:
+      title: Settings
       general:
         title: General
         submit: Update project
@@ -222,6 +226,7 @@ en:
     sidebar:
       details: Details
       members: Members
+      samples: Samples
       settings: Settings
     update:
       success: "Project %{project_name} was successfully updated"
@@ -294,10 +299,3 @@ en:
       destroy:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
-  views:
-    groups/members:
-      index: Members
-    groups:
-      edit: Settings
-    projects:
-      edit: Settings

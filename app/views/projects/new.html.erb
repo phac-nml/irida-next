@@ -1,8 +1,7 @@
 <%= render PageHeaderComponent.new(title: t(:".title"), subtitle: t(:".subtitle")) do |component| %>
-  <%= component.with_icon do %>
-    <%= render "icons/rectangle_stack", class_names: "h-14 w-14 text-primary-700" %>
-  <% end %>
+  <%= component.with_icon(name: "rectangle_stack", classes: "h-14 w-14 text-primary-700")  %>
 <% end %>
+
 <div class="p-4">
   <div class="mb-4 card" data-controller="slugify">
     <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post) do |form| %>

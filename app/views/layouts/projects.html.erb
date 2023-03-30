@@ -1,24 +1,48 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-<head>
-  <title><%= t(:"layouts.application.site_title") %></title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= javascript_importmap_tags %>
-  <%= render "shared/dark_mode_check" %>
-</head>
-<body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-<div class="body-wrapper">
-  <%= render "shared/navbar" %>
-  <div data-controller="layout" data-layout-target="layoutContainer" class="body">
-    <%= render "projects/sidebar" %>
-    <div class="content">
-      <%= render BreadcrumbComponent.new(route: @project.namespace.route, request:) %><%= yield %></div>
-  </div>
-  <%= render "shared/flash" %>
-</div>
-</body>
+  <head>
+    <%= render "layouts/partials/head" %>
+  </head>
+  <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
+    <div class="body-wrapper">
+      <%= render "shared/navbar" %>
+      <div data-controller="layout" data-layout-target="layoutContainer" class="body">
+        <%= render Navigation::NavigationComponent.new do |navigation| %>
+          <% navigation.with_header(
+            label: @project.name,
+            url: project_path(@project),
+            icon: "clipboard_document"
+          ) %>
+          <%= navigation.with_section do |section| %>
+            <%= render section.with_item(
+              url: project_path(@project),
+              icon: "clipboard_document",
+              label: t(:"projects.sidebar.details")
+            ) %>
+            <%= render section.with_item(
+              url: namespace_project_members_path,
+              icon: "users",
+              label: t(:"projects.sidebar.members")
+            ) %>
+            <%= render section.with_item(
+              url: project_samples_path(@project),
+              icon: "beaker",
+              label: t(:"projects.sidebar.samples")
+            ) %>
+            <%= render section.with_item(
+              url: project_edit_path(@project),
+              icon: "cog_6_tooth",
+              label: t(:"projects.sidebar.settings")
+            ) %>
+          <% end %>
+        <% end %>
+        <div class="content">
+          <%= render BreadcrumbComponent.new(
+            route: @project.namespace.route,
+            context_crumbs: @context_crumbs
+          ) %><%= yield %></div>
+      </div>
+      <%= render "shared/flash" %>
+    </div>
+  </body>
 </html>

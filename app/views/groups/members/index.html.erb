@@ -1,7 +1,5 @@
 <%= render PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.type.downcase, namespace_name: @namespace.name)) do |component| %>
-  <%= component.with_icon do %>
-    <%= render "icons/users", class_names: "h-14 w-14 text-primary-700" %>
-  <% end %>
+  <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <%= link_to t(:".add"),
     new_group_member_path(@namespace),
@@ -27,11 +25,11 @@
             <% @members.each do |member| %>
               <tr
                 class="
-                  hover:bg-green-100
-                  dark:hover:bg-gray-700
                   text-sm
                   font-normal
                   text-gray-500
+                  hover:bg-green-100
+                  dark:hover:bg-gray-700
                   dark:text-gray-400
                 "
               >
@@ -39,22 +37,19 @@
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:"groups.members.index.access_level.level_#{member.access_level}") %></div>
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_level.level_#{member.access_level}") %></div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
-                      :"groups.members.index.access_granted_by",
-                      grantor_email: member.created_by.email
-                    ) %></div>
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_granted_by", grantor_email: member.created_by.email) %></div>
                 </td>
                 <td class="px-4 py-3">
-                  <div class="flex justify-end items-center">
+                  <div class="flex items-center justify-end">
                     <button
                       data-dropdown-toggle="member-<%= member.id %>-dropdown"
                       class="navbar-btn member-settings-ellipsis"
                       aria-label="<%= t(:'groups.members.index.actions.member_dropdown_aria_label', member: member.user.email) %>"
                     >
-                      <%= render "icons/ellipsis_vertical" %>
+                      <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
                     </button>
                     <!-- Dropdown menu -->
                     <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">

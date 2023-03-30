@@ -1,7 +1,5 @@
 <%= render PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle', namespace_type: @namespace.type.downcase, namespace_name: @namespace.name)) do |component| %>
-  <%= component.with_icon do %>
-    <%= render "icons/users", class_names: "h-14 w-14 text-primary-700" %>
-  <% end %>
+  <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <%= link_to t(:".add"),
     new_namespace_project_member_path,
@@ -54,7 +52,7 @@
                       class="navbar-btn member-settings-ellipsis"
                       aria-label="<%= t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) %>"
                     >
-                      <%= render "icons/ellipsis_vertical" %>
+                      <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
                     </button>
                     <!-- Dropdown menu -->
                     <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">

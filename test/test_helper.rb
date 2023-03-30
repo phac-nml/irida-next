@@ -3,9 +3,11 @@
 require 'simplecov'
 SimpleCov.start 'rails' do
   add_group 'Graphql', 'app/graphql'
+  add_group 'View Components', 'app/components'
   add_filter '/test/'
   add_filter '/vendor/'
   enable_coverage :branch
+  enable_coverage_for_eval
 end
 
 ENV['RAILS_ENV'] ||= 'test'
