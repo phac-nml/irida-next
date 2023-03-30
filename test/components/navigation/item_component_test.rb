@@ -5,10 +5,10 @@ require 'test_helper'
 module Navigation
   class ItemComponentTest < ViewComponent::TestCase
     def test_component_renders_something_useful
-      # assert_equal(
-      #   %(<span>Hello, components!</span>),
-      #   render_inline(Navigation::ItemComponent.new(message: "Hello, components!")).css("span").to_html
-      # )
+      render_inline Navigation::ItemComponent.new(label: 'Home', icon: 'home', url: '/home')
+      assert_text 'Home'
+      assert_selector 'a[href="/home"]'
+      assert_selector 'svg.w-6.h-6'
     end
   end
 end
