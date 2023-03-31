@@ -17,7 +17,7 @@ class NavigationComponentTest < ViewComponent::TestCase
         assert_text 'Home'
         assert_selector 'ul' do
           assert_selector 'li', count: 2
-          assert_selector 'a.bg-gray-100[href="/-/projects"]'
+          assert_selector 'a.active[href="/-/projects"]'
           assert_selector 'a[href="/-/groups"]'
         end
       end
@@ -43,8 +43,8 @@ class NavigationComponentTest < ViewComponent::TestCase
         assert_selector 'ul' do
           assert_selector 'li', count: 2
           assert_selector 'a[href="/-/projects"]'
-          assert_no_selector 'a.bg-gray-100[href="/-/projects"]'
-          assert_selector 'a.bg-gray-100[href="/-/groups"]'
+          assert_no_selector 'a.active[href="/-/projects"]'
+          assert_selector 'a.active[href="/-/groups"]'
         end
       end
 
@@ -82,7 +82,7 @@ class NavigationComponentTest < ViewComponent::TestCase
         assert_text 'Home'
         assert_selector 'ul' do
           assert_selector 'li', count: 2
-          assert_selector 'a.bg-gray-100[href="/-/projects"]'
+          assert_selector 'a.active[href="/-/projects"]'
           assert_selector 'a[href="/-/groups"]'
         end
       end
@@ -101,7 +101,7 @@ class NavigationComponentTest < ViewComponent::TestCase
       assert_selector 'aside' do
         assert_selector 'ul' do
           assert_selector 'li', count: 2
-          assert_selector 'a.bg-gray-100[href="/-/projects"]'
+          assert_selector 'a.active[href="/-/projects"]'
           assert_selector 'a[href="/-/groups"]'
         end
       end
