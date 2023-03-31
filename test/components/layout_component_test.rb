@@ -24,7 +24,7 @@ class LayoutComponentTest < ViewComponent::TestCase
       assert_selector 'aside' do
         assert_text 'Home'
         assert_selector 'ul.pt-1.space-y-1' do
-          assert_selector 'li', count: 2
+          assert_selector 'li.sidebar-link', count: 2
           assert_selector 'a.bg-gray-100[href="/-/projects"]'
           assert_selector 'a[href="/-/groups"]'
         end
