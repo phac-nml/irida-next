@@ -32,6 +32,8 @@ class Member < ApplicationRecord
         AccessLevel.access_level_options_owner
       when AccessLevel::MAINTAINER
         AccessLevel.access_level_options
+      else
+        {}
       end
     end
   end

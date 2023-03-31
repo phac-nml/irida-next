@@ -14,11 +14,12 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: members_project_members.count
+      assert_selector 'tr', count: @project.namespace.project_members.count
     end
 
     test 'can add a member to the project' do
       visit namespace_project_members_url(@namespace, @project)
+      members_count = @project.namespace.project_members.count
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       click_link I18n.t(:'projects.members.index.add')
@@ -32,12 +33,12 @@ module Projects
 
       assert_text I18n.t(:'projects.members.create.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: members_project_members.count + 1
+      assert_selector 'tr', count: members_count + 1
     end
 
     test 'can remove a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
-      members_count = members_project_members.count
+      members_count = @project.namespace.project_members.count
 
       first('.member-settings-ellipsis').click
 

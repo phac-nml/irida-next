@@ -76,6 +76,13 @@ class GroupMemberTest < ActiveSupport::TestCase
     assert access_levels.key?(I18n.t('activerecord.models.member.access_level.owner'))
   end
 
+  test 'should return no access levels for access level other than OWNER or MAINTAINER' do
+    assert_equal @group_member.access_level, Member::AccessLevel::OWNER
+    @group_member.access_level = Member::AccessLevel::GUEST
+    access_levels = Member.access_levels(@group_member)
+    assert access_levels.empty?
+  end
+
   test '#validates namespace' do
     # members namesapce is set to group
     assert @group_member.valid?
@@ -83,5 +90,16 @@ class GroupMemberTest < ActiveSupport::TestCase
     # members namespace set to user namespace
     @group_member.namespace = namespaces_user_namespaces(:john_doe_namespace)
     assert_not @group_member.valid?
+  end
+
+  test 'access level as human readable string' do
+    # access level = 40
+    assert_equal @group_member.access_level, Member::AccessLevel::OWNER
+    assert_equal Member::AccessLevel.human_access(@group_member.access_level),
+                 I18n.t('activerecord.models.member.access_level.owner')
+
+    group_member = members_group_members(:group_one_member_joan_doe)
+    assert_equal Member::AccessLevel.human_access(group_member.access_level),
+                 I18n.t('activerecord.models.member.access_level.maintainer')
   end
 end
