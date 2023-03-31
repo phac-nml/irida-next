@@ -161,6 +161,10 @@
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
+  .sidebar-header {
+    @apply flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700;
+  }
+
   .sidebar-item > a {
     @apply flex items-center p-1 rounded-md hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700;
   }

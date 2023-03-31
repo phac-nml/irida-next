@@ -1,19 +1,4 @@
-<a
-  href="<%= @url %>"
-  title="<%= @label %>"
-  class="
-    flex
-    items-center
-    p-1
-    text-base
-    font-normal
-    text-gray-900
-    rounded-lg
-    dark:text-white
-    hover:bg-gray-100
-    dark:hover:bg-gray-700
-  "
->
+<a href="<%= @url %>" title="<%= @label %>" class="sidebar-header">
   <div class="flex justify-center" style="width: 27px;">
     <%= render IconComponent.new(name: @icon, classes: "w-6 h-6") %>
   </div>
