@@ -9,13 +9,13 @@ module Projects
       @project = projects(:john_doe_project2)
     end
 
-    test 'delete project with valid params' do
-      assert_difference -> { Project.count } => -1, -> { Members::ProjectMember.count } => -1 do
+    test 'delete project with with correct permissions' do
+      assert_difference -> { Project.count } => -1, -> { Members::ProjectMember.count } => -3 do
         Projects::DestroyService.new(@project, @user).execute
       end
     end
 
-    test 'delete project with invalid params' do
+    test 'delete project with incorrect permissions' do
       user = users(:joan_doe)
       assert_no_difference ['Project.count', 'Members::ProjectMember.count'] do
         Projects::DestroyService.new(@project, user).execute
