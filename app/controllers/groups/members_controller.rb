@@ -5,12 +5,6 @@ module Groups
   class MembersController < ApplicationController
     include MembershipActions
 
-    before_action :namespace, only: %i[index new create destroy] # rubocop:disable Rails/LexicallyScopedActionFilter
-    before_action :member, only: %i[destroy] # rubocop:disable Rails/LexicallyScopedActionFilter
-    before_action :available_users, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
-    before_action :access_levels, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
-    before_action :context_crumbs, only: %i[index] # rubocop:disable Rails/LexicallyScopedActionFilter
-
     layout 'groups'
 
     def member_params

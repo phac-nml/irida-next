@@ -4,6 +4,14 @@
 module MembershipActions
   extend ActiveSupport::Concern
 
+  included do
+    before_action proc { namespace }, only: %i[index new create destroy]
+    before_action proc { member }, only: %i[destroy]
+    before_action proc { available_users }, only: %i[new create]
+    before_action proc { access_levels }, only: %i[new create]
+    before_action proc { context_crumbs }, only: %i[index]
+  end
+
   def index
     @members = Member.where(namespace_id: @namespace.id)
   end
@@ -61,6 +69,18 @@ module MembershipActions
   protected
 
   def members_path
+    raise NotImplementedError
+  end
+
+  def member
+    raise NotImplementedError
+  end
+
+  def namespace
+    raise NotImplementedError
+  end
+
+  def context_crumbs
     raise NotImplementedError
   end
 end
