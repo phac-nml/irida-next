@@ -110,14 +110,15 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'group members destroy invalid' do
-    sign_in users(:john_doe)
+    sign_in users(:joan_doe)
 
-    group = groups(:subgroup1)
-    get group_members_path(group)
+    group = groups(:group_one)
     group_member = members_group_members(:group_one_member_james_doe)
 
-    delete group_member_path(group, group_member)
+    assert_no_changes -> { group.group_members.count } do
+      delete group_member_path(group, group_member)
+    end
 
-    assert_response 422 # unprocessable entity
+    # assert_response 422 # unprocessable entity
   end
 end

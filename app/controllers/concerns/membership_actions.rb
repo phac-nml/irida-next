@@ -39,15 +39,14 @@ module MembershipActions
   end
 
   def destroy
-    if @member.nil?
+    if Members::DestroyService.new(@member, @namespace, current_user).execute
+      flash[:success] = t('.success')
+      redirect_to members_path
+    else
       flash[:error] = t('.error')
       render status: :unprocessable_entity, json: {
         message: t('.error')
       }
-    else
-      @member.destroy
-      flash[:success] = t('.success')
-      redirect_to members_path
     end
   end
 

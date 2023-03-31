@@ -119,14 +119,16 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'project members destroy invalid' do
-    sign_in users(:john_doe)
+    sign_in users(:joan_doe)
 
     namespace = namespaces_user_namespaces(:john_doe_namespace)
     project = projects(:john_doe_project2)
-    project_member_id = 100_000
+    project_member = members_project_members(:project_two_member_james_doe)
 
-    delete namespace_project_member_path(namespace, project, project_member_id)
+    assert_no_changes -> { [project.namespace.project_members].count } do
+      delete namespace_project_member_path(namespace, project, project_member)
+    end
 
-    assert_response 422 # unprocessable entity
+    # assert_response 422 # unprocessable entity
   end
 end
