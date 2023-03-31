@@ -4,13 +4,16 @@ require 'test_helper'
 
 class LayoutComponentTest < ViewComponent::TestCase
   test 'should render the layout with a sidebar and a body' do
+    user = users(:john_doe)
+
     with_request_url '/-/projects' do
-      render_inline LayoutComponent.new do |layout|
+      render_inline LayoutComponent.new(user:) do |layout|
         layout.sidebar do |sidebar|
           sidebar.with_header(label: 'Home', url: '/', icon: 'home')
           sidebar.with_section do |section|
             section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects', icon: 'home')
-            section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/groups', icon: 'cog_6_tooth')
+            section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/groups',
+                              icon: 'cog_6_tooth')
           end
         end
         layout.body do
@@ -20,7 +23,7 @@ class LayoutComponentTest < ViewComponent::TestCase
 
       assert_selector 'aside' do
         assert_text 'Home'
-        assert_selector 'ul' do
+        assert_selector 'ul.pt-1.space-y-1' do
           assert_selector 'li', count: 2
           assert_selector 'a.bg-gray-100[href="/-/projects"]'
           assert_selector 'a[href="/-/groups"]'

@@ -1,6 +1,5 @@
 <div class="body-wrapper">
-  <%# <%= render "shared/navbar" %>
-  %>
+  <%= render Navigation::NavbarComponent.new(user: @user) %>
   <div
     class="body"
     data-controller="layout-component--layout-component"
