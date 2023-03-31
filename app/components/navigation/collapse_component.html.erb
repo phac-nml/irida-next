@@ -1,33 +1,10 @@
-<div style="grid-area: collapse">
-  <button
-    data-action="click->layout-component--layout-component#toggle"
-    class="
-      flex
-      items-center
-      justify-center
-      w-full
-      h-10
-      text-sm
-      font-medium
-      text-gray-500
-      transition-colors
-      duration-150
-      border-t
-      border-gray-200
-      rounded-none
-      hover:text-gray-700
-      dark:hover:text-gray-200
-      dark:border-gray-700
-      dark:text-gray-400
-      dark:hover:bg-gray-700
-      focus:ring-0
-    "
-  >
+<div style="grid-area: collapse" class="sidebar-collapse">
+  <button data-action="click->layout-component--layout-component#toggle">
     <span
       data-layout-component--layout-component-target="iconCollapse"
       class="flex items-center"
     >
-      <%= render(IconComponent.new(name: "chevron_double_left", classes: "w-5 h-5")) %>
+      <%= render(IconComponent.new(name: "chevron_double_left")) %>
       <%= t(:"general.collapse_sidebar") %>
     </span>
 
@@ -35,7 +12,7 @@
       data-layout-component--layout-component-target="iconExpand"
       class="flex items-center"
     >
-      <%= render(IconComponent.new(name: "chevron_double_right", classes: "w-5 h-5")) %>
+      <%= render(IconComponent.new(name: "chevron_double_right")) %>
       <span class="sr-only"><%= t(:"general.expand_sidebar") %></span>
     </span>
   </button>
