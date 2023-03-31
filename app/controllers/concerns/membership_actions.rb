@@ -5,7 +5,7 @@ module MembershipActions
   extend ActiveSupport::Concern
 
   included do
-    before_action proc { namespace }, only: %i[index new create destroy]
+    before_action proc { namespace }
     before_action proc { member }, only: %i[destroy]
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }, only: %i[new create]
