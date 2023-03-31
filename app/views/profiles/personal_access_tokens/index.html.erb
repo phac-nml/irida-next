@@ -91,37 +91,50 @@
           count: @active_access_tokens.count
         ) %>
       </h2>
-      <table class="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead
-          class="
-            text-xs
-            text-gray-700
-            uppercase
-            bg-gray-50
-            dark:bg-gray-700
-            dark:text-gray-400
-          "
-        >
-          <tr>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.name") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.scopes") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.created_at") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.last_used_at") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.expires_at") %></th>
-          </tr>
-        </thead>
-        <tbody class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-          <% @active_access_tokens.each do |access_token| %>
+      <%= turbo_frame_tag("personal-access-tokens") do %>
+        <table class="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead
+            class="
+              text-xs
+              text-gray-700
+              uppercase
+              bg-gray-50
+              dark:bg-gray-700
+              dark:text-gray-400
+            "
+          >
             <tr>
-              <th class="px-6 py-4"><%= access_token.name %></th>
-              <th class="px-6 py-4"><%= access_token.scopes.join(", ") %></th>
-              <th class="px-6 py-4"><%= l(access_token.created_at.to_date) %></th>
-              <th class="px-6 py-4"><%= access_token.last_used_at ? l(access_token.last_used_at) : "Never" %></th>
-              <th class="px-6 py-4"><%= access_token.expires_at %></th>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.name") %></th>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.scopes") %></th>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.created_at") %></th>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.last_used_at") %></th>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.expires_at") %></th>
+              <th scope="col" class="px-6 py-3">Action</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <% @active_access_tokens.each do |access_token| %>
+              <tr id="<%= dom_id(access_token) %>">
+                <th class="px-6 py-4"><%= access_token.name %></th>
+                <th class="px-6 py-4"><%= access_token.scopes.join(", ") %></th>
+                <th class="px-6 py-4"><%= l(access_token.created_at.to_date) %></th>
+                <th class="px-6 py-4"><%= access_token.last_used_at ? l(access_token.last_used_at) : "Never" %></th>
+                <th class="px-6 py-4"><%= access_token.expires_at %></th>
+                <th><%= button_to(
+                    "Revoke",
+                    revoke_profile_personal_access_token_path(id: access_token.id),
+                    method: "delete",
+                    form: {
+                      data: {
+                        "turbo-frame": "personal-access-tokens"
+                      }
+                    }
+                  ) %></th>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
   </div>
 </div>

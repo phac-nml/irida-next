@@ -14,7 +14,14 @@ module Profiles
 
     def create; end
 
-    def revoke; end
+    def revoke
+      @personal_access_token = PersonalAccessToken.find(params[:id])
+      @personal_access_token.revoke!
+
+      respond_to do |format|
+        format.turbo_stream
+      end
+    end
 
     private
 
