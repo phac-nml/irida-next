@@ -44,6 +44,9 @@ en:
       sample:
         name: Name
         description: Description
+      member:
+        access_level: Access Level
+        user_id: User
     errors:
       models:
         namespace:
@@ -51,6 +54,10 @@ en:
             name:
               blank: Can't be blank
               taken: Has already been taken
+        member:
+          attributes:
+            access_level:
+              invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
     models:
       member:
         access_level:
@@ -171,7 +178,7 @@ en:
     members:
       create:
         error: "Error adding member"
-        success: "Member added successfully"
+        success: "Group member added successfully"
       index:
         title: Members
         add: Add New Member
@@ -218,12 +225,42 @@ en:
       cancel: Cancel
     sidebar:
       details: Details
+      members: Members
       samples: Samples
       settings: Settings
     update:
       success: "Project %{project_name} was successfully updated"
     transfer:
       success: "Project %{project_name} was successfully transferred"
+    members:
+      create:
+        error: "Error adding member"
+        success: "Project member added successfully"
+      index:
+        add: Add New Member
+        remove: Remove
+        remove_confirmation: Are you sure you want to remove this member from the project?
+        title: Members
+        subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
+        access_granted_by: "Access granted by %{grantor_email}"
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        actions:
+          button_add_aria_label: Add new project member button
+          link_remove_aria_label: "Remove project member %{member} button"
+          member_dropdown_aria_label: "Dropdown options for project member %{member}"
+      new:
+        title: Add New Member
+        add_member_to_group: Add member to project
+        select_user: Select a User
+        select_access_level: Select Access Level
+      destroy:
+        error: "There was an error removing the project member"
+        success: "Project member successfully removed"
     samples:
       show:
         edit_button: Edit this sample

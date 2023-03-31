@@ -5,7 +5,7 @@ require 'test_helper'
 module Members
   class CreateServiceTest < ActiveSupport::TestCase
     def setup
-      @user = users(:john_doe)
+      @user = users(:steve_doe)
       @project = projects(:john_doe_project2)
       @project_namespace = @project.namespace
       @group = groups(:group_one)
