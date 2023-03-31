@@ -72,15 +72,7 @@ module MembershipActions
     raise NotImplementedError
   end
 
-  def member
-    raise NotImplementedError
-  end
-
-  def namespace
-    raise NotImplementedError
-  end
-
-  def context_crumbs
+  def member_namespace
     raise NotImplementedError
   end
 end

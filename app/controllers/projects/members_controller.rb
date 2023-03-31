@@ -14,13 +14,11 @@ module Projects
     private
 
     def member
-      @member = Member.find_by(id: request.params[:id], namespace_id: @namespace.id)
+      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id)
     end
 
     def namespace
-      path = [params[:namespace_id], params[:project_id]].join('/')
-      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
-      @namespace = @project.namespace
+      @namespace = member_namespace
       @member_type = 'ProjectMember'
     end
 
@@ -38,6 +36,12 @@ module Projects
           path: namespace_project_members_path
         }]
       end
+    end
+
+    def member_namespace
+      path = [params[:namespace_id], params[:project_id]].join('/')
+      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+      @project.namespace
     end
   end
 end
