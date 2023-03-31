@@ -2,6 +2,10 @@
   <%= component.with_icon(name: "ticket", classes: "h-14 w-14 text-primary-700") %>
 <% end %>
 
+<%= turbo_frame_tag "access-token-section" do %>
+
+<% end %>
+
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <div
@@ -112,25 +116,12 @@
               <th scope="col" class="px-6 py-3">Action</th>
             </tr>
           </thead>
-          <tbody class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <% @active_access_tokens.each do |access_token| %>
-              <tr id="<%= dom_id(access_token) %>">
-                <th class="px-6 py-4"><%= access_token.name %></th>
-                <th class="px-6 py-4"><%= access_token.scopes.join(", ") %></th>
-                <th class="px-6 py-4"><%= l(access_token.created_at.to_date) %></th>
-                <th class="px-6 py-4"><%= access_token.last_used_at ? l(access_token.last_used_at) : "Never" %></th>
-                <th class="px-6 py-4"><%= access_token.expires_at %></th>
-                <th><%= button_to(
-                    "Revoke",
-                    revoke_profile_personal_access_token_path(id: access_token.id),
-                    method: "delete",
-                    form: {
-                      data: {
-                        "turbo-frame": "personal-access-tokens"
-                      }
-                    }
-                  ) %></th>
-              </tr>
+          <tbody
+            id="access-tokens-table-body"
+            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+          >
+            <% @active_access_tokens.each do |personal_access_token| %>
+              <%= render(personal_access_token) %>
             <% end %>
           </tbody>
         </table>

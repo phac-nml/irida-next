@@ -1,0 +1,6 @@
+<%= turbo_stream.append "access-tokens-table-body", @personal_access_token %>
+<%= turbo_stream.replace "access-token-section",
+                     render(
+                       "access_token_section",
+                       token: @personal_access_token.token
+                     ) %>

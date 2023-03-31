@@ -12,7 +12,13 @@ module Profiles
       @personal_access_token = PersonalAccessToken.new(user: current_user, scopes: [])
     end
 
-    def create; end
+    def create
+      @personal_access_token = PersonalAccessToken.create(personal_access_token_params.merge(user: current_user))
+
+      respond_to do |format|
+        format.turbo_stream
+      end
+    end
 
     def revoke
       @personal_access_token = PersonalAccessToken.find(params[:id])
