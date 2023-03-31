@@ -110,7 +110,7 @@
     @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
-  .form-field input[type="checkbox"] {
+  input[type="checkbox"] {
     @apply h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-primary-300 focus:ring-4 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600;
   }
 

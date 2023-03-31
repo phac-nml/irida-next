@@ -13,6 +13,11 @@ class PersonalAccessToken < ApplicationRecord
   validates :scopes, presence: true
   validate :validate_scopes
 
+  scope :active, -> { not_revoked.not_expired }
+  scope :not_revoked, -> { where(revoked: [false, nil]) }
+  scope :expired, -> { where('expires_at IS NOT NULL AND expires_at <= ?', Time.current) }
+  scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.current) }
+
   def revoke!
     update!(revoked: true)
   end

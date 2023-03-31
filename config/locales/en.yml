@@ -41,6 +41,12 @@ en:
         description: Description
         parent_id: Project URL
         path: Project slug
+      personal_access_token:
+        name: Token name
+        scopes: Scopes
+        created_at: Created
+        last_used_at: Last Used
+        expires_at: Expires
       sample:
         name: Name
         description: Description
@@ -96,6 +102,7 @@ en:
       profile: Profile
       password: Password
       account: Account
+      access_tokens: Access Tokens
     show:
       email:
         title: Email
@@ -120,6 +127,15 @@ en:
           - All projects and groups you are a member of will be left intact
         button: Delete account
         confirm: Are you sure you want to delete your account?
+    personal_access_tokens:
+      index:
+        title: Personal Access Tokens
+        subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
+        active_personal_access_tokens: Active Personal Access Tokens (%{count})
+      create:
+        title: Add a personal access token
+        subtitle: Enter the name of your application, and we'll return a unique personal access token.
+        submit: Create personal access token
   groups:
     owner: Owner
     sidebar:

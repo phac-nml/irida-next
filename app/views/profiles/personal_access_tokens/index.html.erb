@@ -1,0 +1,127 @@
+<%= render PageHeaderComponent.new(title: t("profiles.personal_access_tokens.index.title"), subtitle: t("profiles.personal_access_tokens.index.subtitle")) do |component| %>
+  <%= component.with_icon(name: "ticket", classes: "h-14 w-14 text-primary-700") %>
+<% end %>
+
+<div class="p-4">
+  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <div
+      class="
+        p-4
+        bg-white
+        border
+        border-gray-200
+        rounded-lg
+        shadow-sm
+        2xl:col-span-2
+        dark:border-gray-700
+        sm:p-6
+        dark:bg-gray-800
+      "
+    >
+      <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+        <%= t :"profiles.personal_access_tokens.create.title" %>
+      </h2>
+      <p class="text-gray-500 dark:text-gray-400">
+        <%= t :"profiles.personal_access_tokens.create.subtitle" %>
+      </p>
+      <%= form_with(model: @personal_access_token, url: profile_personal_access_tokens_path) do |f| %>
+        <div class="grid gap-4">
+          <% invalid = @personal_access_token.errors.include?(:name) %>
+          <div class="form-field <%= 'invalid' if invalid %>">
+            <%= f.label :name %>
+            <%= f.text_field :name, required: true, autofocus: true %>
+          </div>
+          <% invalid = @personal_access_token.errors.include?(:expires_at) %>
+          <div class="form-field <%= 'invalid' if invalid %>">
+            <%= f.label :expires_at %>
+            <%= f.date_select :expires_at, required: true, autofocus: true %>
+          </div>
+          <% invalid = @personal_access_token.errors.include?(:scopes) %>
+          <div class="form-field <%= 'invalid' if invalid %>">
+            <%= f.label :scopes %>
+            <% Irida::Auth.all_available_scopes.each do |scope| %>
+              <div class="flex items-center">
+                <%= check_box_tag "personal_access_token[scopes][]",
+                scope,
+                @personal_access_token.scopes.include?(scope),
+                id: "personal_access_token_scopes_#{scope}" %>
+                <%= label_tag "personal_access_token_scopes_#{scope}",
+                scope,
+                class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
+              </div>
+            <% end %>
+          </div>
+          <div class="my-2">
+            <%= f.submit t("profiles.personal_access_tokens.create.submit"),
+                     class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="p-4">
+  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <div
+      class="
+        p-4
+        bg-white
+        border
+        border-gray-200
+        rounded-lg
+        shadow-sm
+        2xl:col-span-2
+        dark:border-gray-700
+        sm:p-6
+        dark:bg-gray-800
+      "
+    >
+      <h2
+        class="
+          text-xl
+          font-semibold
+          leading-tight
+          text-gray-900
+          dark:text-gray-100
+        "
+      >
+        <%= t(
+          :"profiles.personal_access_tokens.index.active_personal_access_tokens",
+          count: @active_access_tokens.count
+        ) %>
+      </h2>
+      <table class="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead
+          class="
+            text-xs
+            text-gray-700
+            uppercase
+            bg-gray-50
+            dark:bg-gray-700
+            dark:text-gray-400
+          "
+        >
+          <tr>
+            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.name") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.scopes") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.created_at") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.last_used_at") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.expires_at") %></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <% @active_access_tokens.each do |access_token| %>
+            <tr>
+              <th class="px-6 py-4"><%= access_token.name %></th>
+              <th class="px-6 py-4"><%= access_token.scopes.join(", ") %></th>
+              <th class="px-6 py-4"><%= l(access_token.created_at.to_date) %></th>
+              <th class="px-6 py-4"><%= access_token.last_used_at ? l(access_token.last_used_at) : "Never" %></th>
+              <th class="px-6 py-4"><%= access_token.expires_at %></th>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

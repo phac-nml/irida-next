@@ -29,6 +29,11 @@
               icon: "building_library",
               label: t(:"profiles.sidebar.account")
             ) %>
+            <%= render section.with_item(
+              url: profile_personal_access_tokens_path,
+              icon: "ticket",
+              label: t(:"profiles.sidebar.access_tokens")
+            ) %>
           <% end %>
         <% end %>
         <div class="content">
