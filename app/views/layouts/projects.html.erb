@@ -20,6 +20,11 @@
               label: t(:"projects.sidebar.details")
             ) %>
             <%= render section.with_item(
+              url: namespace_project_members_path,
+              icon: "users",
+              label: t(:"projects.sidebar.members")
+            ) %>
+            <%= render section.with_item(
               url: project_samples_path(@project),
               icon: "beaker",
               label: t(:"projects.sidebar.samples")
