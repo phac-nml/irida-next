@@ -19,4 +19,4 @@ project_two_member_joan_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace) %>
   type: "ProjectMember"
-  access_level: <%= Member::AccessLevel::OWNER %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>

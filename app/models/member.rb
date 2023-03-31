@@ -66,10 +66,6 @@ class Member < ApplicationRecord
     OWNER          = 40 # Full control
 
     class << self
-      def all_values_without_owner
-        access_level_options.values
-      end
-
       def all_values_with_owner
         access_level_options_owner.values
       end
