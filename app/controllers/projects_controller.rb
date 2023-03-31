@@ -3,7 +3,7 @@
 # Controller actions for Projects
 class ProjectsController < ApplicationController
   layout :resolve_layout
-  before_action :project, only: %i[show edit update activity transfer]
+  before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
 
   def index
@@ -61,6 +61,16 @@ class ProjectsController < ApplicationController
       )
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if Projects::DestroyService.new(@project, current_user).execute
+      flash[:success] = t('.success', project_name: @project.name)
+      redirect_to projects_path
+    else
+      flash[:error] = t('.error')
+      redirect_to namespace_project_path(@project)
     end
   end
 
