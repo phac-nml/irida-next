@@ -3,9 +3,9 @@
 module Sidebar
   # Aside navigation component
   # @example
-  #  <%= render Sidebar::SidebarComponent.new do |navigation| %>
-  #   <%= navigation.with_header(label: "Home", url: root_url, icon: "home") %>
-  #   <%= navigation.with_section do |section| %>
+  #  <%= render Sidebar::SidebarComponent.new do |sidebar| %>
+  #   <%= sidebar.with_header(label: "Home", url: root_url, icon: "home") %>
+  #   <%= sidebar.with_section do |section| %>
   #    <%= section.with_item(label: "Dashboard", url: dashboard_url, icon: "dashboard") %>
   #    <%= section.with_item(label: "Settings", url: settings_url, icon: "settings") %>
   #   <% end %>
