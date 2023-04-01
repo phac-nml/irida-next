@@ -1,7 +1,7 @@
 <div style="grid-area: collapse" class="sidebar-collapse">
-  <button data-action="click->layout-component--layout-component#toggle">
+  <button data-action="click->layout--layout-component#toggle">
     <span
-      data-layout-component--layout-component-target="iconCollapse"
+      data-layout--layout-component-target="iconCollapse"
       class="flex items-center"
     >
       <%= render(IconComponent.new(name: "chevron_double_left")) %>
@@ -9,7 +9,7 @@
     </span>
 
     <span
-      data-layout-component--layout-component-target="iconExpand"
+      data-layout--layout-component-target="iconExpand"
       class="flex items-center"
     >
       <%= render(IconComponent.new(name: "chevron_double_right")) %>
