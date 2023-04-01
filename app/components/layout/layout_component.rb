@@ -3,7 +3,7 @@
 module Layout
   # This component is used to render the layout of the application.
   class LayoutComponent < Component
-    renders_one :sidebar, Navigation::NavigationComponent
+    renders_one :sidebar, Sidebar::SidebarComponent
     renders_one :body
 
     def initialize(user:, **system_arguments)
