@@ -7,7 +7,7 @@ class LayoutComponentTest < ViewComponent::TestCase
     user = users(:john_doe)
 
     with_request_url '/-/projects' do
-      render_inline LayoutComponent.new(user:) do |layout|
+      render_inline Layout::LayoutComponent.new(user:) do |layout|
         layout.sidebar do |sidebar|
           sidebar.with_header(label: 'Home', url: '/', icon: 'home')
           sidebar.with_section do |section|
