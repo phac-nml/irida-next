@@ -58,5 +58,20 @@ module Projects
 
       assert_redirected_to namespace_project_members_path(namespace, project)
     end
+
+    test 'shouldn\'t delete a member from the project' do
+      sign_in users(:joan_doe)
+
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project2)
+
+      project_member = members_project_members(:project_two_member_james_doe)
+
+      assert_no_difference('Members::GroupMember.count') do
+        delete namespace_project_member_path(namespace, project, project_member)
+      end
+
+      assert_redirected_to namespace_project_members_path(namespace, project)
+    end
   end
 end

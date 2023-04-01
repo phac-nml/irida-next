@@ -129,6 +129,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
       delete namespace_project_member_path(namespace, project, project_member)
     end
 
-    # assert_response 422 # unprocessable entity
+    assert_response 302 # Redirect back to project members page
+    assert_redirected_to namespace_project_members_path(namespace, project)
   end
 end

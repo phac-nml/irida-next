@@ -13,7 +13,7 @@ module Groups
     def execute
       # TODO: Remove the current_user == group.owner once the project-members pr is merged in which
       # adds the owner as a group member
-      if @group.group_members.find_by(user: current_user, access_level: Member::AccessLevel::OWNER) ||
+      if @group.owners.find_by(id: current_user.id) ||
          current_user == group.owner
         @group.destroy
       else

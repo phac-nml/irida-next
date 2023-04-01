@@ -15,8 +15,8 @@ module Members
       # TODO: Remove the current_user == namespace.owner once the project-members pr is merged in which adds the creator
       # as a group/project member.
       if ((current_user != member.user) &&
-         members.find_by(user: current_user,
-                         access_level: Member::AccessLevel::OWNER)) || current_user == namespace.owner
+         namespace.owners.find_by(id: current_user.id)) ||
+         current_user == namespace.owner
         @member.destroy
       elsif current_user == member.user
         @member.errors.add(:base, "You cannot remove yourself from the #{namespace.type.downcase}")

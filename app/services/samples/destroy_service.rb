@@ -13,8 +13,7 @@ module Samples
     def execute
       if @sample.nil?
         nil
-      elsif @sample.project.namespace.project_members.find_by(user: current_user,
-                                                              access_level: Member::AccessLevel::OWNER) ||
+      elsif @sample.project.namespace.owners.find_by(id: current_user.id) ||
             current_user == @sample.project.namespace.owner
         @sample.destroy
       else

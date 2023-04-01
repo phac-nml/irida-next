@@ -92,4 +92,15 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
       get group_path("#{group.full_path}/fakesubgroup")
     end
   end
+
+  test 'should not delete a group' do
+    sign_in users(:joan_doe)
+
+    group = groups(:group_one)
+    assert_no_difference('Group.count') do
+      delete group_path(group)
+    end
+
+    # assert_redirected_to group_path(@group)
+  end
 end

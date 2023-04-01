@@ -51,7 +51,8 @@ module Projects
     end
 
     def destroy
-      if Samples::DestroyService.new(@sample, current_user).execute
+      Samples::DestroyService.new(@sample, current_user).execute
+      if !@sample.nil? && @sample.destroyed?
         flash[:success] = t('.success', sample_name: @sample.name)
         redirect_to namespace_project_samples_path
       else
