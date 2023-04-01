@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Navigation
+module Layout
   # Main navigation bar component
   class NavbarComponent < ViewComponent::Base
     def initialize(user:)
