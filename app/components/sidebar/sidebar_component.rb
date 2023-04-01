@@ -11,7 +11,7 @@ module Sidebar
   #   <% end %>
   #  <% end %>
   class SidebarComponent < Component
-    renders_one :header, Navigation::HeaderComponent
+    renders_one :header, Sidebar::Header::HeaderComponent
     renders_many :sections, Navigation::SectionComponent
     renders_many :items, Navigation::ItemComponent
 
