@@ -12,8 +12,8 @@ module Sidebar
   #  <% end %>
   class SidebarComponent < Component
     renders_one :header, Sidebar::Header::HeaderComponent
-    renders_many :sections, Navigation::SectionComponent
-    renders_many :items, Navigation::ItemComponent
+    renders_many :sections, Sidebar::Section::SectionComponent
+    renders_many :items, Sidebar::Item::ItemComponent
 
     def initialize(**system_arguments)
       @system_arguments = system_arguments
