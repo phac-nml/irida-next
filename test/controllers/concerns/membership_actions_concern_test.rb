@@ -78,4 +78,16 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     assert @member.nil?
     assert_response :success
   end
+
+  test 'calling member_namespace should result in an error' do
+    sign_in users(:john_doe)
+
+    @controller = TestClassController.new
+    assert_raises(NotImplementedError) do
+      @controller.member_namespace
+    end
+
+    assert @namespace.nil?
+    assert @member.nil?
+  end
 end
