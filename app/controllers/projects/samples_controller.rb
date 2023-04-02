@@ -56,9 +56,9 @@ module Projects
         flash[:success] = t('.success', sample_name: @sample.name)
         redirect_to namespace_project_samples_path
       else
-        flash[:error] = t('.error')
+        flash[:error] = destroy_error_message
         render status: :unprocessable_entity, json: {
-          message: t('.error')
+          message: destroy_error_message
         }
       end
     end
@@ -83,6 +83,16 @@ module Projects
         name: I18n.t('projects.samples.index.title'),
         path: namespace_project_samples_path
       }]
+    end
+
+    protected
+
+    def destroy_error_message
+      if @sample.nil?
+        t('.error')
+      else
+        @sample.errors.full_messages.first
+      end
     end
   end
 end

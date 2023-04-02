@@ -87,5 +87,15 @@ module Projects
 
       assert_response :unprocessable_entity
     end
+
+    test 'should not destroy sample, if the current user is not an owner of the project' do
+      sign_in users(:joan_doe)
+
+      assert_no_difference('Sample.count') do
+        delete namespace_project_sample_url(@namespace, @project, @sample1)
+      end
+
+      assert_response :unprocessable_entity
+    end
   end
 end
