@@ -14,10 +14,7 @@
         dark:bg-gray-800
       "
     >
-      <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-        Your new personal access token
-      </h2>
-      <%= token %>
+      <%= render ClipboardComponent.new(value: token) %>
     </div>
   </div>
 </div>
