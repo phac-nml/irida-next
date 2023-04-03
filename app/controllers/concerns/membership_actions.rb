@@ -39,7 +39,8 @@ module MembershipActions
   end
 
   def destroy
-    if Members::DestroyService.new(@member, @namespace, current_user).execute
+    Members::DestroyService.new(@member, @namespace, current_user).execute
+    if @member.destroyed?
       flash[:success] = t('.success')
     else
       flash[:error] = @member.errors.full_messages.first
