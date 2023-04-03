@@ -5,7 +5,16 @@
   >
     <div class="pt-2 pb-4 overflow-y-auto">
       <div
-        class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200  dark:bg-gray-800 dark:divide-gray-700"
+        class="
+          flex-1
+          px-3
+          space-y-1
+          bg-white
+          divide-y
+          divide-gray-200
+          dark:bg-gray-800
+          dark:divide-gray-700
+        "
       >
         <% if header.present? %>
           <%= header %>
@@ -15,7 +24,7 @@
             <%= section %>
           <% end %>
         <% else %>
-          <%= render(Section::SectionComponent.new) do %>
+          <%= render(Sidebar::SectionComponent.new) do %>
             <% items.each do |item| %>
               <%= item %>
             <% end %>
@@ -26,21 +35,21 @@
   </div>
   <div style="grid-area: collapse" class="sidebar-collapse">
     <button data-action="click->layout--layout-component#toggle">
-    <span
-      data-layout--layout-component-target="iconCollapse"
-      class="flex items-center"
-    >
-      <%= render(IconComponent.new(name: "chevron_double_left")) %>
-      <%= t(:"general.collapse_sidebar") %>
-    </span>
+      <span
+        data-layout--layout-component-target="iconCollapse"
+        class="flex items-center"
+      >
+        <%= render(IconComponent.new(name: "chevron_double_left")) %>
+        <%= t(:"general.collapse_sidebar") %>
+      </span>
 
       <span
         data-layout--layout-component-target="iconExpand"
         class="flex items-center"
       >
-      <%= render(IconComponent.new(name: "chevron_double_right")) %>
+        <%= render(IconComponent.new(name: "chevron_double_right")) %>
         <span class="sr-only"><%= t(:"general.expand_sidebar") %></span>
-    </span>
+      </span>
     </button>
   </div>
 </aside>
