@@ -58,6 +58,8 @@ en:
           attributes:
             access_level:
               invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
+          destroy:
+            last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
     models:
       member:
         access_level:

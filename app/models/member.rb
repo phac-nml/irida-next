@@ -13,6 +13,8 @@ class Member < ApplicationRecord
   validate :validate_namespace
   validate :higher_access_level_than_group
 
+  before_destroy :last_namespace_owner_member
+
   class << self
     def sti_class_for(type_name)
       case type_name
@@ -43,6 +45,15 @@ class Member < ApplicationRecord
     return if %w[Group Project].include?(namespace.type)
 
     errors.add(namespace.type, 'namespace cannot have members')
+  end
+
+  # Method to ensure we don't leave a group or project without an owner
+  def last_namespace_owner_member
+    return unless namespace.owners.count == 1 && namespace.owners.include?(user)
+
+    errors.add(:base,
+               I18n.t('activerecord.errors.models.member.destroy.last_member', namespace_type: namespace.type.downcase))
+    throw(:abort)
   end
 
   def higher_access_level_than_group
