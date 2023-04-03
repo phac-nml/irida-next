@@ -6,17 +6,19 @@ module Groups
   class MembersTest < ApplicationSystemTestCase
     def setup
       login_as users(:john_doe)
+      @namespace = groups(:group_one)
+      @members_count = members_group_members.select { |member| member.namespace == @namespace }.count
     end
 
     test 'can see the list of group members' do
-      visit group_members_url(groups(:group_one))
+      visit group_members_url(@namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: members_group_members.count
+      assert_selector 'tr', count: @members_count
     end
 
     test 'can add a member to the group' do
-      visit group_members_url(groups(:group_one))
+      visit group_members_url(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       click_link I18n.t(:'groups.members.index.add')
@@ -30,14 +32,13 @@ module Groups
 
       assert_text I18n.t(:'groups.members.create.success')
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: members_group_members.count + 1
+      assert_selector 'tr', count: @members_count + 1
     end
 
     test 'can remove a member from the group' do
-      visit group_members_url(groups(:group_one))
-      members_count = members_group_members.count
+      visit group_members_url(@namespace)
 
-      first('.member-settings-ellipsis').click
+      all('.member-settings-ellipsis')[2].click
 
       accept_confirm do
         click_link I18n.t(:'groups.members.index.remove')
@@ -45,7 +46,23 @@ module Groups
 
       assert_text I18n.t(:'groups.members.destroy.success')
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: (members_count - 1)
+      assert_selector 'tr', count: @members_count - 1
+    end
+
+    test 'cannot remove themselves as a member from the group' do
+      visit group_members_url(@namespace)
+
+      first('.member-settings-ellipsis').click
+
+      accept_confirm do
+        click_link I18n.t(:'groups.members.index.remove')
+      end
+
+      assert_no_text I18n.t(:'groups.members.destroy.success')
+      assert_text I18n.t('services.members.destroy.cannot_remove_self',
+                         namespace_type: @namespace.type.downcase)
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+      assert_selector 'tr', count: @members_count
     end
   end
 end

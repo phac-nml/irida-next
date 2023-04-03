@@ -13,11 +13,14 @@ module Members
 
     def execute
       if current_user == member.user
-        member.errors.add(:base, "You cannot remove yourself from the #{namespace.type.downcase}")
+        member.errors.add(:base,
+                          I18n.t('services.members.destroy.cannot_remove_self',
+                                 namespace_type: namespace.type.downcase))
       elsif namespace.owners.include?(current_user)
         member.destroy
       else
-        member.errors.add(:base, 'You are not authorized to remove this member')
+        member.errors.add(:base,
+                          I18n.t('services.members.destroy.no_permission', namespace_type: namespace.type.downcase))
       end
     end
 

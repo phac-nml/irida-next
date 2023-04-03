@@ -20,6 +20,7 @@ module Projects
       assert_no_difference ['Project.count', 'Members::ProjectMember.count'] do
         Projects::DestroyService.new(@project, user).execute
       end
+      assert @project.errors.full_messages.include?(I18n.t('services.projects.destroy.no_permission'))
     end
   end
 end

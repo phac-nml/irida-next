@@ -24,6 +24,10 @@ module Members
       assert_no_difference ['Members::GroupMember.count'] do
         Members::DestroyService.new(@group_member, @group, user).execute
       end
+      assert @group_member.errors.full_messages.any? do |error_message|
+        error_message.include?(I18n.t('services.members.destroy.cannot_remove_self',
+                                      namespace_type: @group.type))
+      end
     end
 
     test 'remove project member with correct permissions' do
@@ -36,6 +40,10 @@ module Members
       user = users(:joan_doe)
       assert_no_difference ['Members::ProjectMember.count'] do
         Members::DestroyService.new(@project_member, @project.namespace, user).execute
+      end
+      assert @project_member.errors.full_messages.any? do |error_message|
+        error_message.include?(I18n.t('services.members.destroy.cannot_remove_self',
+                                      namespace_type: @project.namespace.type))
       end
     end
   end

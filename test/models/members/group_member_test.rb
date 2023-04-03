@@ -50,7 +50,6 @@ class GroupMemberTest < ActiveSupport::TestCase
     valid_access_levels = Member::AccessLevel.all_values_with_owner
 
     @group_member.access_level = valid_access_levels.last + 100
-    puts @group_member.inspect
     assert_not @group_member.valid?
   end
 

@@ -18,10 +18,10 @@ module Groups
 
     test 'delete group with incorrect permissions' do
       user = users(:joan_doe)
-      assert_no_difference ['Group.count'] do
+      assert_no_difference ['Group.count', 'Members::GroupMember.count'] do
         Groups::DestroyService.new(@group, user).execute
       end
-      assert @group.errors.full_messages.include?('You are not authorized to delete this group.')
+      assert @group.errors.full_messages.include?(I18n.t('services.groups.destroy.no_permission'))
     end
   end
 end

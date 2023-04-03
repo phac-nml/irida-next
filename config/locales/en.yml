@@ -299,3 +299,17 @@ en:
       destroy:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
+  services:
+    groups:
+      destroy:
+        no_permission: You do not have permission to delete this group.
+    projects:
+      destroy:
+        no_permission: You do not have permission to delete this project.
+    members:
+      destroy:
+        no_permission: "You do not have permission to remove this member from the %{namespace_type}"
+        cannot_remove_self: "You cannot remove yourself from the %{namespace_type}"
+    samples:
+      destroy:
+        no_permission: You do not have permission to remove this sample from the project.

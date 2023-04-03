@@ -14,7 +14,7 @@ module Groups
       if group.owners.include?(current_user)
         group.destroy
       else
-        group.errors.add(:base, 'You are not authorized to delete this group.')
+        group.errors.add(:base, I18n.t('services.groups.destroy.no_permission'))
       end
     end
   end
