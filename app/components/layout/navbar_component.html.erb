@@ -93,21 +93,7 @@
       </div>
       <div class="flex items-center ml-3">
         <!-- Dark Mode Toggl -->
-        <button
-          id="app-darkmode-toggle"
-          type="button"
-          class="navbar-btn"
-          data-dark-mode-target="themeToggle"
-          data-action="click->dark-mode#toggleTheme"
-          aria-label="<%= t(:'general.navbar.dark_mode.aria_label') %>"
-        >
-          <span data-dark-mode-target="darkIcon" class="hidden">
-            <%= render IconComponent.new(name: "moon", classes: "w-5 h-5") %>
-          </span>
-          <span data-dark-mode-target="lightIcon" class="hidden">
-            <%= render IconComponent.new(name: "sun", classes: "w-5 h-5") %>
-          </span>
-        </button>
+        <%= render Layout::DarkModeComponent.new %>
         <!-- New item menu -->
         <button
           id="dropdownNewItem"
