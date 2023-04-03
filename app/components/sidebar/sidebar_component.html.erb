@@ -15,7 +15,7 @@
             <%= section %>
           <% end %>
         <% else %>
-          <%= render Navigation::SectionComponent.new do %>
+          <%= render(Section::SectionComponent.new) do %>
             <% items.each do |item| %>
               <%= item %>
             <% end %>

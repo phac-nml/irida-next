@@ -2,10 +2,10 @@
 
 require 'test_helper'
 
-class NavigationComponentTest < ViewComponent::TestCase
+class SidebarComponentTest < ViewComponent::TestCase
   test 'should render navigation for projects page' do
     with_request_url '/-/projects' do
-      render_inline Navigation::NavigationComponent.new do |navigation|
+      render_inline Sidebar::SidebarComponent.new do |navigation|
         navigation.with_header(label: 'Home', url: '/', icon: 'home')
         navigation.with_section do |section|
           section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects', icon: 'home')
@@ -30,7 +30,7 @@ class NavigationComponentTest < ViewComponent::TestCase
 
   test 'should render navigation for groups page' do
     with_request_url '/-/groups' do
-      render_inline Navigation::NavigationComponent.new do |navigation|
+      render_inline Sidebar::SidebarComponent.new do |navigation|
         navigation.with_header(label: 'Home', url: '/', icon: 'home')
         navigation.with_section do |section|
           section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects', icon: 'home')
@@ -56,7 +56,7 @@ class NavigationComponentTest < ViewComponent::TestCase
 
   test 'section component should render with a title' do
     with_request_url '/-/projects' do
-      render_inline Navigation::NavigationComponent.new do |navigation|
+      render_inline Sidebar::SidebarComponent.new do |navigation|
         navigation.with_header(label: 'Home', url: '/', icon: 'home')
         navigation.with_section(title: 'Good Section') do |section|
           section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects', icon: 'home')
@@ -72,7 +72,7 @@ class NavigationComponentTest < ViewComponent::TestCase
 
   test 'render componet without section block' do
     with_request_url '/-/projects' do
-      render_inline Navigation::NavigationComponent.new do |navigation|
+      render_inline Sidebar::SidebarComponent.new do |navigation|
         navigation.with_header(label: 'Home', url: '/', icon: 'home')
         navigation.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects', icon: 'home')
         navigation.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/groups', icon: 'cog_6_tooth')
@@ -91,7 +91,7 @@ class NavigationComponentTest < ViewComponent::TestCase
 
   test 'render componet with header block' do
     with_request_url '/-/projects' do
-      render_inline Navigation::NavigationComponent.new do |navigation|
+      render_inline Sidebar::SidebarComponent.new do |navigation|
         navigation.with_section do |section|
           section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects', icon: 'home')
           section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/groups', icon: 'cog_6_tooth')
