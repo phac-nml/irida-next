@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
-class Layout::DarkModeComponent < ViewComponent::Base
-
+module Layout
+  # Component to render the dark mode toggle
+  class DarkModeComponent < ViewComponent::Base
+  end
 end
