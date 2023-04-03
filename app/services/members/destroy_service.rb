@@ -17,11 +17,11 @@ module Members
       if ((current_user != member.user) &&
          namespace.owners.find_by(id: current_user.id)) ||
          current_user == namespace.owner
-        @member.destroy
+        member.destroy
       elsif current_user == member.user
-        @member.errors.add(:base, "You cannot remove yourself from the #{namespace.type.downcase}")
+        member.errors.add(:base, "You cannot remove yourself from the #{namespace.type.downcase}")
       else
-        @member.errors.add(:base, 'You are not authorized to remove this member')
+        member.errors.add(:base, 'You are not authorized to remove this member')
       end
     end
 

@@ -13,11 +13,11 @@ module Groups
     def execute
       # TODO: Remove the current_user == group.owner once the project-members pr is merged in which
       # adds the owner as a group member
-      if @group.owners.find_by(id: current_user.id) ||
+      if group.owners.find_by(id: current_user.id) ||
          current_user == group.owner
-        @group.destroy
+        group.destroy
       else
-        @group.errors.add(:base, 'You are not authorized to delete this group.')
+        group.errors.add(:base, 'You are not authorized to delete this group.')
       end
     end
   end

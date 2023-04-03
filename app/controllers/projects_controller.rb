@@ -65,8 +65,7 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    Projects::DestroyService.new(@project, current_user).execute
-    if @project.destroyed?
+    if Projects::DestroyService.new(@project, current_user).execute
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to projects_path
     else
