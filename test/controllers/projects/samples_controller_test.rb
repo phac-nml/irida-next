@@ -85,7 +85,7 @@ module Projects
     test 'should not destroy sample, if it does not belong to the project' do
       delete namespace_project_sample_url(@namespace, @project, @sample4)
 
-      assert_response :unprocessable_entity
+      assert_redirected_to namespace_project_samples_url(@namespace, @project)
     end
 
     test 'should not destroy sample, if the current user is not an owner of the project' do
@@ -95,7 +95,7 @@ module Projects
         delete namespace_project_sample_url(@namespace, @project, @sample1)
       end
 
-      assert_response :unprocessable_entity
+      assert_redirected_to namespace_project_samples_url(@namespace, @project)
     end
   end
 end

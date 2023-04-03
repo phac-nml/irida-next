@@ -52,15 +52,12 @@ module Projects
 
     def destroy
       Samples::DestroyService.new(@sample, current_user).execute
-      if !@sample.nil? && @sample.destroyed?
-        flash[:success] = t('.success', sample_name: @sample.name)
-        redirect_to namespace_project_samples_path
-      else
-        flash[:error] = destroy_error_message
-        render status: :unprocessable_entity, json: {
-          message: destroy_error_message
-        }
-      end
+      flash[:success] = if !@sample.nil? && @sample.destroyed?
+                          t('.success', sample_name: @sample.name)
+                        else
+                          destroy_error
+                        end
+      redirect_to namespace_project_samples_path
     end
 
     private
@@ -87,7 +84,7 @@ module Projects
 
     protected
 
-    def destroy_error_message
+    def destroy_error
       if @sample.nil?
         t('.error')
       else
