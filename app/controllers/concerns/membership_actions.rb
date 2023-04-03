@@ -48,10 +48,6 @@ module MembershipActions
     redirect_to members_path
   end
 
-  def member_namespace
-    raise NotImplementedError
-  end
-
   private
 
   def access_levels
@@ -70,6 +66,10 @@ module MembershipActions
   protected
 
   def members_path
+    raise NotImplementedError
+  end
+
+  def member_namespace
     raise NotImplementedError
   end
 end

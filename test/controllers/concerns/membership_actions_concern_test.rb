@@ -84,7 +84,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     @controller = TestClassController.new
     assert_raises(NotImplementedError) do
-      @controller.member_namespace
+      @controller.send(:member_namespace)
     end
 
     assert @namespace.nil?
