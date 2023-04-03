@@ -49,7 +49,7 @@ class Member < ApplicationRecord
 
   # Method to ensure we don't leave a group or project without an owner
   def last_namespace_owner_member
-    return unless namespace.owners.count == 1 && namespace.owners.include?(user)
+    return unless !destroyed_by_association && (namespace.owners.count == 1 && namespace.owners.include?(user))
 
     errors.add(:base,
                I18n.t('activerecord.errors.models.member.destroy.last_member', namespace_type: namespace.type.downcase))
