@@ -40,15 +40,18 @@
             <%= f.label :expires_at %>
             <%= f.date_select :expires_at, required: true, autofocus: true %>
           </div>
+
+          <%= render(Form::DatepickerComponent.new(form: f, value: :expires_at)) %>
+
           <% invalid = @personal_access_token.errors.include?(:scopes) %>
           <div class="form-field <%= 'invalid' if invalid %>">
             <%= f.label :scopes %>
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex items-center">
                 <%= check_box_tag "personal_access_token[scopes][]",
-                scope,
-                @personal_access_token.scopes.include?(scope),
-                id: "personal_access_token_scopes_#{scope}" %>
+                                  scope,
+                                  @personal_access_token.scopes.include?(scope),
+                                  id: "personal_access_token_scopes_#{scope}" %>
                 <%= label_tag "personal_access_token_scopes_#{scope}",
                 scope,
                 class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
@@ -96,7 +99,7 @@
         ) %>
       </h2>
       <%= turbo_frame_tag("personal-access-tokens") do %>
-        <table class="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <table class="w-full mt-4 text-sm text-left text-gray-500 dark:text-gray-400">
           <thead
             class="
               text-xs
