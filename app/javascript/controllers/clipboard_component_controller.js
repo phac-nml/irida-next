@@ -1,9 +1,10 @@
 import { Controller } from "@hotwired/stimulus";
+import { Tooltip } from "flowbite";
 
 export default class extends Controller {
-  static targets = ["source", "visible", "hidden"];
+  static targets = ["source", "visible", "hidden", "submit"];
+
   connect() {
-    console.log("Hello, Stimulus!", this.element);
     this.visible = false;
 
     navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
@@ -14,7 +15,15 @@ export default class extends Controller {
   }
 
   copy() {
-    navigator.clipboard.writeText(this.sourceTarget.value);
+    console.log(this.submitTarget);
+    navigator.clipboard.writeText(this.sourceTarget.value).then(function () {
+      console.log("Copied to clipboard");
+      const tooltip = new Tooltip(this.submitTarget, {
+        placement: "bottom",
+        triggerType: "hover",
+      });
+      tooltip.show();
+    });
   }
 
   toggle() {

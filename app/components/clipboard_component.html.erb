@@ -1,6 +1,7 @@
 <div data-controller="clipboard-component">
-  <label for="new-access-token" class="text-xl font-semibold leading-tight text-gray-900 dark:text-white"> Your new
-    personal access token </label>
+  <label for="new-access-token" class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+    <%= @label %>
+  </label>
   <div class="flex" data-target=>
     <div class="relative w-full mr-2" data-clipboard-component-target="visible">
       <input data-clipboard-component-target="source" type="hidden" value="<%= @value %>">
@@ -15,6 +16,10 @@
         <%= render IconComponent.new(name: "eye", classes: "w-5 h-5 text-gray-500 dark:text-gray-400") %>
       </button>
     </div>
-    <button data-action="click->clipboard-component#copy" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Copy</button>
+    <button data-clipboard-component-target="submit" data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" data-action="click->clipboard-component#copy" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Copy</button>
+    <div id="tooltip-bottom" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+      Copied!
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
   </div>
 </div>
