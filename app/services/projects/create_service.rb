@@ -16,7 +16,7 @@ module Projects
       namespace = Namespace.find_by(id: namespace_params[:parent_id])
       raise CreateError, I18n.t('services.projects.create.namespace_required') if namespace.nil?
 
-      unless Project.allowed_to_create_new_project_in_namespace?(namespace)
+      unless allowed_to_create_new_project_in_namespace?(namespace)
         raise CreateError,
               I18n.t('services.projects.create.no_permission',
                      namespace_type: namespace.type.downcase)
