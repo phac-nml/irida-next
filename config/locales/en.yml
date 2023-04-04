@@ -58,6 +58,7 @@ en:
           attributes:
             access_level:
               invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
+              inclusion: "Access Level provided is not included in the list of valid access levels"
           destroy:
             last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
     models:
@@ -318,7 +319,7 @@ en:
         cannot_remove_self: "You cannot remove yourself from the %{namespace_type}"
       update:
         no_permission: You do not have permission to update this member
-        cannot_update_self: You cannot update yourself
+        cannot_update_self: "You cannot update your own %{namespace_type} role"
     samples:
       destroy:
         no_permission: You do not have permission to remove this sample from the project
