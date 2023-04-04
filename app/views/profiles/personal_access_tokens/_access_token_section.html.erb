@@ -14,7 +14,10 @@
         dark:bg-gray-800
       "
     >
-      <%= render ClipboardComponent.new(value: token) %>
+      <%= render ClipboardComponent.new(
+        value: token,
+        label: "Your new personal access token"
+      ) %>
     </div>
   </div>
 </div>
