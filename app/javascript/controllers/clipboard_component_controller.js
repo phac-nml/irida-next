@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["source", "visible", "hidden", "copy"];
+  static targets = ["source", "visible", "hidden", "tooltip"];
 
   connect() {
     this.visible = false;
@@ -14,18 +14,7 @@ export default class extends Controller {
   }
 
   copy() {
-    navigator.clipboard.writeText(this.sourceTarget.value).then(() => {
-      console.log(this.copyTarget);
-      this.copyTarget.classList.add("bg-green-300");
-      this.copyTarget.classList.add("hover:bg-green-300");
-      this.copyTarget.disabled = true;
-
-      setTimeout(() => {
-        this.copyTarget.classList.remove("bg-green-300");
-        this.copyTarget.classList.remove("hover:bg-green-300");
-        this.copyTarget.disabled = false;
-      }, 2000);
-    });
+    navigator.clipboard.writeText(this.sourceTarget.value);
   }
 
   toggle() {

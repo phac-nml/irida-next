@@ -93,6 +93,9 @@
       </button>
     </div>
     <button
+      data-tooltip-target="copied-tooltip"
+      data-tooltip-placement="bottom"
+      data-tooltip-trigger="click"
       data-action="click->clipboard-component#copy"
       data-clipboard-component-target="copy"
       type="button"
@@ -118,5 +121,30 @@
         dark:focus:ring-gray-700
       "
     ><%= render IconComponent.new(name: "document_copy", classes: "w-5 h-5") %></button>
+    <div
+      data-clipboard-component-target="tooltip"
+      id="copied-tooltip"
+      role="tooltip"
+      class="
+        absolute
+        z-10
+        invisible
+        inline-block
+        px-3
+        py-2
+        text-sm
+        font-medium
+        text-white
+        bg-green-600
+        rounded-lg
+        shadow-sm
+        opacity-0
+        tooltip
+        dark:bg-green-700
+      "
+    >
+      Copied!
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
   </div>
 </div>
