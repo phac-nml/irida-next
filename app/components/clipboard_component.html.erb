@@ -1,4 +1,7 @@
-<div data-controller="clipboard-component">
+<div
+  data-controller="clipboard-component"
+  data-clipboard-component-token-value="<%= @value %>"
+>
   <label
     for="new-access-token"
     class="text-xl font-semibold leading-tight text-gray-900 dark:text-white"
@@ -6,15 +9,14 @@
     Your new personal access token
   </label>
   <div class="flex">
-    <div class="relative w-full mr-2" data-clipboard-component-target="visible">
-      <input
-        data-clipboard-component-target="source"
-        type="hidden"
-        value="<%= @value %>"
-      >
+    <% token_id = SecureRandom.uuid %>
+
+    <div class="relative w-full mr-2">
       <input
         type="text"
         id="new-access-token"
+        arialand-describedby="<%= token_id %>"
+        data-clipboard-component-target="input"
         class="
           bg-gray-100
           border
@@ -35,61 +37,26 @@
           dark:focus:ring-blue-500
           dark:focus:border-blue-500
           font-medium
+          font-mono
         "
         value="<%= @value.gsub(/\S/, '*') %>"
-        disabled
+        disabled="true"
         readonly
       >
       <button
         class="absolute inset-y-0 top-0 flex items-center pl-3 right-3"
         data-action="click->clipboard-component#toggle"
       >
-        <%= render IconComponent.new(
-          name: "eye_slash",
-          classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
-        ) %>
-      </button>
-    </div>
-    <div
-      class="relative hidden w-full mr-2"
-      data-clipboard-component-target="hidden"
-    >
-      <input
-        type="text"
-        id="new-access-token"
-        class="
-          bg-gray-100
-          border
-          border-gray-300
-          text-gray-900
-          text-sm
-          rounded-lg
-          focus:ring-blue-500
-          focus:border-blue-500
-          block
-          w-full
-          p-2.5
-          cursor-not-allowed
-          dark:bg-gray-700
-          dark:border-gray-600
-          dark:placeholder-gray-400
-          dark:text-gray-400
-          dark:focus:ring-blue-500
-          dark:focus:border-blue-500
-          font-medium
-        "
-        value="<%= @value %>"
-        disabled
-        readonly
-      >
-      <button
-        class="absolute inset-y-0 top-0 flex items-center pl-3 right-2"
-        data-action="click->clipboard-component#toggle"
-      >
-        <%= render IconComponent.new(
-          name: "eye",
-          classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
-        ) %>
+        <span data-clipboard-component-target="visible">
+          <%= render IconComponent.new(
+            name: "eye_slash",
+            classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+          ) %></span>
+        <span data-clipboard-component-target="hidden" class="hidden">
+          <%= render IconComponent.new(
+            name: "eye",
+            classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+          ) %></span>
       </button>
     </div>
     <button
@@ -144,4 +111,7 @@
       <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
   </div>
+  <% if @description.present? %>
+    <p id="<%= token_id %>" class="mt-1 text-sm text-gray-500 dark:text-gray-400"><%= @description %></p>
+  <% end %>
 </div>

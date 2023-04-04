@@ -2,8 +2,8 @@
 
 # Clipboard Component
 class ClipboardComponent < ViewComponent::Base
-  def initialize(value:, label: nil)
+  def initialize(value:, description: nil)
     @value = value
-    @label = label
+    @description = description
   end
 end
