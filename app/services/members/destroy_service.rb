@@ -19,14 +19,6 @@ module Members
       end
     end
 
-    def members
-      if member.type == 'GroupMember'
-        namespace.group_members
-      else
-        namespace.project_members
-      end
-    end
-
     def error_message
       if current_user == member.user
         I18n.t('services.members.destroy.cannot_remove_self',
