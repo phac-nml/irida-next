@@ -11,6 +11,7 @@ class PersonalAccessToken < ApplicationRecord
   before_save :ensure_token
 
   validates :scopes, presence: true
+  validate :validate_expires_at, on: :create
   validate :validate_scopes
 
   scope :active, -> { not_revoked.not_expired }
@@ -52,6 +53,12 @@ class PersonalAccessToken < ApplicationRecord
     return if revoked || scopes.all? { |scope| valid_scopes.include?(scope.to_sym) }
 
     errors.add :scopes, 'can only contain available scopes'
+  end
+
+  def validate_expires_at
+    return if !expires? || (expires? && !expired?)
+
+    errors.add :expires_at, 'must be in the future'
   end
 
   def write_new_token

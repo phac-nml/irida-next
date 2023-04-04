@@ -1,6 +1,17 @@
-<%= turbo_stream.append "access-tokens-table-body", @personal_access_token %>
-<%= turbo_stream.replace "access-token-section",
-                     render(
-                       "access_token_section",
-                       token: @personal_access_token.token
-                     ) %>
+<% if new_personal_access_token %>
+  <%= turbo_stream.append "access-tokens-table-body",
+                      partial: "personal_access_token",
+                      locals: {
+                        personal_access_token: new_personal_access_token
+                      } %>
+  <%= turbo_stream.replace "access-token-section",
+                       partial: "access_token_section",
+                       locals: {
+                         token: new_personal_access_token.token
+                       } %>
+<% end %>
+<%= turbo_stream.replace "personal_access_token_form",
+                     partial: "form",
+                     locals: {
+                       personal_access_token: personal_access_token
+                     } %>
