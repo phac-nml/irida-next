@@ -1,20 +1,122 @@
 <div data-controller="clipboard-component">
-  <label for="new-access-token" class="text-xl font-semibold leading-tight text-gray-900 dark:text-white"> Your new
-    personal access token </label>
-  <div class="flex" data-target=>
+  <label
+    for="new-access-token"
+    class="text-xl font-semibold leading-tight text-gray-900 dark:text-white"
+  >
+    Your new personal access token
+  </label>
+  <div class="flex">
     <div class="relative w-full mr-2" data-clipboard-component-target="visible">
-      <input data-clipboard-component-target="source" type="hidden" value="<%= @value %>">
-      <input type="text" id="new-access-token" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 font-medium" value="<%= @value.gsub(/\S/, '*') %>" disabled readonly>
-      <button class="absolute inset-y-0 top-0 right-2.5 flex items-center pl-3" data-action="click->clipboard-component#toggle">
-        <%= render IconComponent.new(name: "eye_slash", classes: "w-5 h-5 text-gray-500 dark:text-gray-400") %>
+      <input
+        data-clipboard-component-target="source"
+        type="hidden"
+        value="<%= @value %>"
+      >
+      <input
+        type="text"
+        id="new-access-token"
+        class="
+          bg-gray-100
+          border
+          border-gray-300
+          text-gray-900
+          text-sm
+          rounded-lg
+          focus:ring-blue-500
+          focus:border-blue-500
+          block
+          w-full
+          p-2.5
+          cursor-not-allowed
+          dark:bg-gray-700
+          dark:border-gray-600
+          dark:placeholder-gray-400
+          dark:text-gray-400
+          dark:focus:ring-blue-500
+          dark:focus:border-blue-500
+          font-medium
+        "
+        value="<%= @value.gsub(/\S/, '*') %>"
+        disabled
+        readonly
+      >
+      <button
+        class="absolute inset-y-0 top-0 flex items-center pl-3 right-3"
+        data-action="click->clipboard-component#toggle"
+      >
+        <%= render IconComponent.new(
+          name: "eye_slash",
+          classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+        ) %>
       </button>
     </div>
-    <div class="relative hidden w-full mr-2" data-clipboard-component-target="hidden">
-      <input type="text" id="new-access-token" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 font-medium" value="<%= @value %>" disabled readonly>
-      <button class="absolute inset-y-0 top-0 right-2.5 flex items-center pl-3" data-action="click->clipboard-component#toggle">
-        <%= render IconComponent.new(name: "eye", classes: "w-5 h-5 text-gray-500 dark:text-gray-400") %>
+    <div
+      class="relative hidden w-full mr-2"
+      data-clipboard-component-target="hidden"
+    >
+      <input
+        type="text"
+        id="new-access-token"
+        class="
+          bg-gray-100
+          border
+          border-gray-300
+          text-gray-900
+          text-sm
+          rounded-lg
+          focus:ring-blue-500
+          focus:border-blue-500
+          block
+          w-full
+          p-2.5
+          cursor-not-allowed
+          dark:bg-gray-700
+          dark:border-gray-600
+          dark:placeholder-gray-400
+          dark:text-gray-400
+          dark:focus:ring-blue-500
+          dark:focus:border-blue-500
+          font-medium
+        "
+        value="<%= @value %>"
+        disabled
+        readonly
+      >
+      <button
+        class="absolute inset-y-0 top-0 flex items-center pl-3 right-2"
+        data-action="click->clipboard-component#toggle"
+      >
+        <%= render IconComponent.new(
+          name: "eye",
+          classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+        ) %>
       </button>
     </div>
-    <button data-action="click->clipboard-component#copy" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Copy</button>
+    <button
+      data-action="click->clipboard-component#copy"
+      data-clipboard-component-target="copy"
+      type="button"
+      class="
+        text-gray-900
+        bg-white
+        border
+        border-gray-300
+        focus:outline-none
+        hover:bg-gray-100
+        focus:ring-4
+        focus:ring-gray-200
+        font-medium
+        rounded-lg
+        text-sm
+        px-5
+        py-2.5
+        dark:bg-gray-800
+        dark:text-white
+        dark:border-gray-600
+        dark:hover:bg-gray-700
+        dark:hover:border-gray-600
+        dark:focus:ring-gray-700
+      "
+    ><%= render IconComponent.new(name: "document_copy", classes: "w-5 h-5") %></button>
   </div>
 </div>

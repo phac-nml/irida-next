@@ -29,6 +29,8 @@
         <%= t :"profiles.personal_access_tokens.create.subtitle" %>
       </p>
       <%= form_with(model: @personal_access_token, url: profile_personal_access_tokens_path) do |f| %>
+        <%= render ClipboardComponent.new(value: "3jskdr3sdfe") %>
+
         <div class="grid gap-4">
           <% invalid = @personal_access_token.errors.include?(:name) %>
           <div class="form-field <%= 'invalid' if invalid %>">
