@@ -101,6 +101,6 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
       delete group_path(group)
     end
 
-    # assert_redirected_to group_path(@group)
+    assert_redirected_to group_path(group)
   end
 end

@@ -115,7 +115,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       delete namespace_project_path(namespace_id: namespace.path, project_id: project.namespace.path)
     end
 
-    # assert_redirected_to group_path(@group)
+    assert_redirected_to projects_path
   end
 
   test 'should not delete a project' do
@@ -128,6 +128,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       delete namespace_project_path(namespace_id: namespace.path, project_id: project.namespace.path)
     end
 
-    # assert_redirected_to group_path(@group)
+    assert_redirected_to namespace_project_path(project)
   end
 end

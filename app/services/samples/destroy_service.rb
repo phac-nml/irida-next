@@ -16,7 +16,7 @@ module Samples
       elsif sample.project.namespace.owners.include?(current_user)
         sample.destroy
       else
-        sample.errors.add(:base, 'You are not authorized to remove this sample from the project.')
+        sample.errors.add(:base, I18n.t('services.samples.destroy.no_permission'))
       end
     end
   end
