@@ -1,11 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
-
 export default class extends Controller {
-  static targets = ["source", "visible", "hidden", "tooltip"];
+  static targets = ["source", "visible", "hidden", "copy", "tooltip"];
 
   connect() {
     this.visible = false;
-
     navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
       if (result.state === "granted" || result.state === "prompt") {
         console.info("Clipboard write access granted");
@@ -14,7 +12,16 @@ export default class extends Controller {
   }
 
   copy() {
-    navigator.clipboard.writeText(this.sourceTarget.value);
+    navigator.clipboard.writeText(this.sourceTarget.value).then(() => {
+      const tooltip = new Tooltip(this.tooltipTarget, this.copyTarget, {
+        triggerType: "click",
+      });
+      tooltip.show();
+
+      setTimeout(() => {
+        tooltip.hide();
+      }, 2000);
+    });
   }
 
   toggle() {

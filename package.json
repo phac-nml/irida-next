@@ -12,8 +12,5 @@
   "devDependencies": {
     "prettier": "^2.8.4",
     "prettier-plugin-tailwindcss": "^0.2.3"
-  },
-  "dependencies": {
-    "flowbite": "^1.6.3"
   }
 }
