@@ -23,3 +23,11 @@ john_doe_project2_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+john_doe_project3_namespace:
+  name: Project 3
+  path: project-3
+  description: Project 3 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

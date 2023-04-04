@@ -53,7 +53,7 @@ class Member < ApplicationRecord
 
     errors.add(:base,
                I18n.t('activerecord.errors.models.member.destroy.last_member', namespace_type: namespace.type.downcase))
-    throw(:abort)
+    false
   end
 
   def higher_access_level_than_group

@@ -27,3 +27,10 @@ subgroup_six_member_john_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup6) %>
   type: "GroupMember"
   access_level: <%= Member::AccessLevel::OWNER %>
+
+group_two_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two) %>
+  type: "GroupMember"
+  access_level: <%= Member::AccessLevel::OWNER %>

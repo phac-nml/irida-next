@@ -108,4 +108,15 @@ class ProjectMemberTest < ActiveSupport::TestCase
     proj_member.access_level = Member::AccessLevel::GUEST
     assert_not proj_member.valid?
   end
+
+  test '#validates that the last remaining owner of a project is not deleted' do
+    project_member = members_project_members(:project_three_member_john_doe)
+    project_namespace = projects(:project3).namespace
+    project_member.last_namespace_owner_member
+
+    project_member.errors.full_messages.include?(
+      I18n.t('activerecord.errors.models.member.destroy.last_member',
+             namespace_type: project_namespace.type.downcase)
+    )
+  end
 end
