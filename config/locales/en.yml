@@ -304,14 +304,23 @@ en:
   services:
     groups:
       destroy:
-        no_permission: You do not have permission to delete this group.
+        no_permission: You do not have permission to delete this group
+      update:
+        no_permission: You do not have permission to update this group
     projects:
       destroy:
-        no_permission: You do not have permission to delete this project.
+        no_permission: You do not have permission to delete this project
+      update:
+        no_permission: You do not have permission to update this project
     members:
       destroy:
         no_permission: "You do not have permission to remove this member from the %{namespace_type}"
         cannot_remove_self: "You cannot remove yourself from the %{namespace_type}"
+      update:
+        no_permission: You do not have permission to update this member
+        cannot_update_self: You cannot update yourself
     samples:
       destroy:
-        no_permission: You do not have permission to remove this sample from the project.
+        no_permission: You do not have permission to remove this sample from the project
+      update:
+        no_permission: You do not have permission to update this project sample

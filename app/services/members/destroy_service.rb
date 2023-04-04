@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module Members
-  # Service used to Update Members
+  # Service used to Delete Members
   class DestroyService < BaseService
+    MemberDestroyError = Class.new(StandardError)
     attr_accessor :member, :namespace
 
     def initialize(member, namespace, user = nil, params = {})
@@ -11,21 +12,22 @@ module Members
       @namespace = namespace
     end
 
-    def execute
-      if (current_user == member.user) || namespace.owners.exclude?(current_user)
-        member.errors.add(:base, error_message)
-      else
-        member.destroy
-      end
-    end
-
-    def error_message
+    def execute # rubocop:disable Metrics/AbcSize
       if current_user == member.user
-        I18n.t('services.members.destroy.cannot_remove_self',
-               namespace_type: namespace.type.downcase)
-      else
-        I18n.t('services.members.destroy.no_permission', namespace_type: namespace.type.downcase)
+        raise MemberDestroyError, I18n.t('services.members.destroy.cannot_remove_self',
+                                         namespace_type: namespace.type.downcase)
       end
+
+      if namespace.owners.exclude?(current_user)
+        raise MemberDestroyError,
+              I18n.t('services.members.destroy.no_permission',
+                     namespace_type: namespace.type.downcase)
+      end
+
+      member.destroy
+    rescue Members::DestroyService::MemberDestroyError => e
+      member.errors.add(:base, e.message)
+      false
     end
   end
 end

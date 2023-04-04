@@ -11,7 +11,11 @@ module Samples
     end
 
     def execute
-      sample.update(params)
+      if sample.project.namespace.owners.include?(current_user)
+        sample.update(params)
+      else
+        sample.errors.add(:base, I18n.t('services.samples.update.no_permission'))
+      end
     end
   end
 end

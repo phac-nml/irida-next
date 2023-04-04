@@ -11,7 +11,11 @@ module Groups
     end
 
     def execute
-      group.update(params)
+      if group.owners.include?(current_user)
+        group.update(params)
+      else
+        group.errors.add(:base, I18n.t('services.groups.update.no_permission'))
+      end
     end
   end
 end
