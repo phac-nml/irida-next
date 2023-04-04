@@ -19,14 +19,22 @@
       <div class="form-field <%= 'invalid' if invalid %>">
         <%= f.label :scopes %>
         <% Irida::Auth.all_available_scopes.each do |scope| %>
-          <div class="flex items-center">
-            <%= check_box_tag "personal_access_token[scopes][]",
-            scope,
-            personal_access_token.scopes.include?(scope),
-            id: "personal_access_token_scopes_#{scope}" %>
-            <%= label_tag "personal_access_token_scopes_#{scope}",
-            scope,
-            class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
+          <div class="flex">
+            <div class="flex items-center h-5">
+              <%= check_box_tag "personal_access_token[scopes][]",
+              scope,
+              personal_access_token.scopes.include?(scope),
+              id: "personal_access_token_scopes_#{scope}" %>
+            </div>
+            <div class="ml-2 text-sm">
+              <%= label_tag "personal_access_token_scopes_#{scope}",
+              scope,
+              class: "font-medium text-gray-900 dark:text-gray-300" %>
+              <p
+                id="personal_access_token_scopes_help-text"
+                class="text-xs font-normal text-gray-500 dark:text-gray-300"
+              ><%= t("auth.scopes.#{scope}") %></p>
+            </div>
           </div>
         <% end %>
         <%= render "shared/form/field_errors",

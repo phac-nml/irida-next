@@ -5,11 +5,15 @@
   <th class="px-6 py-4"><%= if personal_access_token.last_used_at
       l(personal_access_token.last_used_at)
     else
-      "Never"
+      t(".never")
     end %></th>
-  <th class="px-6 py-4"><%= personal_access_token.expires_at %></th>
+  <th class="px-6 py-4"><%= if personal_access_token.expires_at
+      l(personal_access_token.expires_at)
+    else
+      t(".never")
+    end %></th>
   <th><%= button_to(
-      "Revoke",
+      t(".revoke_button"),
       revoke_profile_personal_access_token_path(id: personal_access_token.id),
       method: "delete",
       form: {
