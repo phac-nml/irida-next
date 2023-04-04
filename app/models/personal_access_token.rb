@@ -51,7 +51,7 @@ class PersonalAccessToken < ApplicationRecord
 
     return if revoked || scopes.all? { |scope| valid_scopes.include?(scope.to_sym) }
 
-    errors.add :scopes, 'can only contain available scopes'
+    errors.add :scopes, :inclusion
   end
 
   def write_new_token

@@ -1,23 +1,28 @@
-<div class="p-4">
-  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <div
-      class="
-        p-4
-        bg-white
-        border
-        border-gray-200
-        rounded-lg
-        shadow-sm
-        2xl:col-span-2
-        dark:border-gray-700
-        sm:p-6
-        dark:bg-gray-800
-      "
-    >
-      <%= render ClipboardComponent.new(
-        value: token,
-        label: "Your new personal access token"
-      ) %>
+<%= turbo_frame_tag "access-token-section" do %>
+  <div class="p-4">
+    <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+      <div
+        class="
+          p-4
+          bg-white
+          border
+          border-gray-200
+          rounded-lg
+          shadow-sm
+          2xl:col-span-2
+          dark:border-gray-700
+          sm:p-6
+          dark:bg-gray-800
+        "
+      >
+        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+          <%= t(".label") %>
+        </h2>
+        <%= render ClipboardComponent.new(
+          value: token,
+          label: "Your new personal access token"
+        ) %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>

@@ -9,14 +9,24 @@ module Profiles
     before_action :active_access_tokens
 
     def index
-      @personal_access_token = PersonalAccessToken.new(user: current_user, scopes: [])
+      @personal_access_token = PersonalAccessToken.new(user: current_user, scopes: [], expires_at: 1.month.from_now)
     end
 
     def create
       @personal_access_token = PersonalAccessToken.create(personal_access_token_params.merge(user: current_user))
 
       respond_to do |format|
-        format.turbo_stream
+        if @personal_access_token.save
+          format.turbo_stream do
+            render locals: { personal_access_token: PersonalAccessToken.new(expires_at: 1.month.from_now),
+                             new_personal_access_token: @personal_access_token }
+          end
+        else
+          format.turbo_stream do
+            render locals: { personal_access_token: @personal_access_token,
+                             new_personal_access_token: nil }
+          end
+        end
       end
     end
 
