@@ -57,6 +57,10 @@ en:
             name:
               blank: Can't be blank
               taken: Has already been taken
+        personal_access_token:
+          attributes:
+            scopes:
+              inclusion: can only contain available scopes
     models:
       member:
         access_level:
