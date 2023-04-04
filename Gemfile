@@ -83,6 +83,11 @@ group :development do
 
   # erb-formatter
   gem 'erb-formatter', git: 'https://github.com/nebulab/erb-formatter.git', tag: 'v0.4.2', require: false
+
+  # LookBook
+  gem "lookbook", ">= 2.0.0.rc.1"
+  gem "listen"
+  gem "actioncable"
 end
 
 group :test do
