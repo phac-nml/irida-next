@@ -9,12 +9,46 @@
         errors: personal_access_token.errors.full_messages_for(:name) %>
       </div>
       <% invalid = personal_access_token.errors.include?(:expires_at) %>
-      <div class="form-field <%= 'invalid' if invalid %>">
+      <div
+        class="form-field datepicker <%= 'invalid' if invalid %>"
+        data-controller="datepicker"
+      >
         <%= f.label :expires_at %>
-        <%= f.date_select :expires_at, required: true, autofocus: true %>
+        <div class="relative max-w-sm">
+          <div
+            class="
+              absolute
+              inset-y-0
+              left-0
+              flex
+              items-center
+              pl-3
+              pointer-events-none
+            "
+          >
+            <svg
+              aria-hidden="true"
+              class="w-5 h-5 text-gray-500 dark:text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            ><path
+                fill-rule="evenodd"
+                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                clip-rule="evenodd"
+              ></path></svg>
+          </div>
+          <%= f.text_field :expires_at,
+                       required: true,
+                       datepicker: true,
+                       "data-datepicker-target": "datePicker",
+                       "datepicker-format": "yyyy-mm-dd",
+                       "datepicker-orientation": "bottom left" %>
+        </div>
         <%= render "shared/form/field_errors",
         errors: personal_access_token.errors.full_messages_for(:expires_at) %>
       </div>
+
       <% invalid = personal_access_token.errors.include?(:scopes) %>
       <div class="form-field <%= 'invalid' if invalid %>">
         <%= f.label :scopes %>
