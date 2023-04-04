@@ -14,12 +14,12 @@ module Members
     end
 
     def execute # rubocop:disable Metrics/AbcSize
-      if current_user == member.user
+      unless current_user != member.user
         raise MemberUpdateError, I18n.t('services.members.update.cannot_update_self',
                                         namespace_type: namespace.type.downcase)
       end
 
-      if namespace.owners.exclude?(current_user)
+      unless allowed_to_modify_members_in_namespace?(namespace)
         raise MemberUpdateError,
               I18n.t('services.members.update.no_permission', namespace_type: namespace.type.downcase)
       end

@@ -317,6 +317,8 @@ en:
       update:
         no_permission: You do not have permission to update this project
     members:
+      create:
+        no_permission: "You do not have permission to add a new member to the %{namespace_type}"
       destroy:
         no_permission: "You do not have permission to remove this member from the %{namespace_type}"
         cannot_remove_self: "You cannot remove yourself from the %{namespace_type}"

@@ -24,5 +24,14 @@ module Samples
         Samples::CreateService.new(@user, @project, invalid_params).execute
       end
     end
+
+    test 'create sample with valid params but no namespace permissions' do
+      valid_params = { name: 'new-project2-sample', description: 'first sample for project2' }
+
+      assert_no_difference('Sample.count') do
+        user = users(:michelle_doe)
+        Samples::CreateService.new(user, @project, valid_params).execute
+      end
+    end
   end
 end

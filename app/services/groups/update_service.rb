@@ -3,6 +3,7 @@
 module Groups
   # Service used to Update Groups
   class UpdateService < BaseService
+    GroupUpdateError = Class.new(StandardError)
     attr_accessor :group
 
     def initialize(group, user = nil, params = {})
@@ -11,11 +12,12 @@ module Groups
     end
 
     def execute
-      if group.owners.include?(current_user)
-        group.update(params)
-      else
-        group.errors.add(:base, I18n.t('services.groups.update.no_permission'))
-      end
+      raise GroupUpdateError, I18n.t('services.groups.update.no_permission') unless group.owners.include?(current_user)
+
+      group.update(params)
+    rescue Groups::UpdateService::GroupUpdateError => e
+      group.errors.add(:base, e.message)
+      false
     end
   end
 end

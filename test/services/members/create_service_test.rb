@@ -5,14 +5,15 @@ require 'test_helper'
 module Members
   class CreateServiceTest < ActiveSupport::TestCase
     def setup
-      @user = users(:steve_doe)
+      @user = users(:john_doe)
       @project = projects(:john_doe_project2)
       @project_namespace = @project.namespace
       @group = groups(:group_one)
     end
 
     test 'create group member with valid params' do
-      valid_params = { user: @user,
+      user = users(:steve_doe)
+      valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
       assert_difference -> { Members::GroupMember.count } => 1 do
@@ -23,7 +24,8 @@ module Members
     end
 
     test 'create project member with valid params' do
-      valid_params = { user: @user,
+      user = users(:steve_doe)
+      valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
       assert_difference -> { Members::ProjectMember.count } => 1 do
@@ -48,6 +50,16 @@ module Members
 
       assert_no_difference('Members::ProjectMember.count') do
         Members::CreateService.new(@user, @project_namespace, invalid_params).execute
+      end
+    end
+
+    test 'create group member with valid params but no permissions in namespace' do
+      user = users(:steve_doe)
+      valid_params = { user: users(:michelle_doe),
+                       access_level: Member::AccessLevel::OWNER }
+
+      assert_no_difference('Members::GroupMember.count') do
+        Members::CreateService.new(user, @group, valid_params).execute
       end
     end
   end

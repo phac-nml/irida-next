@@ -51,12 +51,16 @@ module Projects
     end
 
     def destroy
-      Samples::DestroyService.new(@sample, current_user).execute
-      flash[:success] = if !@sample.nil? && @sample.destroyed?
-                          t('.success', sample_name: @sample.name)
-                        else
-                          destroy_error
-                        end
+      if @sample.nil?
+        flash[:error] = t('.error')
+      else
+        Samples::DestroyService.new(@sample, current_user).execute
+        if @sample.destroyed?
+          flash[:success] = t('.success', sample_name: @sample.name)
+        else
+          flash[:error] = @sample.errors.full_messages.first
+        end
+      end
       redirect_to namespace_project_samples_path
     end
 
@@ -80,16 +84,6 @@ module Projects
         name: I18n.t('projects.samples.index.title'),
         path: namespace_project_samples_path
       }]
-    end
-
-    protected
-
-    def destroy_error
-      if @sample.nil?
-        t('.error')
-      else
-        @sample.errors.full_messages.first
-      end
     end
   end
 end

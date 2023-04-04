@@ -3,6 +3,7 @@
 module Samples
   # Service used to Delete Samples
   class DestroyService < BaseService
+    ProjectSampleDestroyError = Class.new(StandardError)
     attr_accessor :sample
 
     def initialize(sample, user = nil, params = {})
@@ -11,13 +12,15 @@ module Samples
     end
 
     def execute
-      if sample.nil?
-        nil
-      elsif sample.project.namespace.owners.include?(current_user)
-        sample.destroy
-      else
-        sample.errors.add(:base, I18n.t('services.samples.destroy.no_permission'))
+      unless allowed_to_modify_projects_in_namespace?(@sample.project.namespace)
+        raise ProjectSampleDestroyError,
+              I18n.t('services.samples.destroy.no_permission')
       end
+
+      sample.destroy
+    rescue Samples::DestroyService::ProjectSampleDestroyError => e
+      sample.errors.add(:base, e.message)
+      false
     end
   end
 end

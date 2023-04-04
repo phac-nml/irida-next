@@ -3,7 +3,7 @@
 module Projects
   # Service used to Create Projects
   class CreateService < BaseService
-    CreateError = Class.new(StandardError)
+    ProjectCreateError = Class.new(StandardError)
     attr_accessor :namespace_params
 
     def initialize(user = nil, params = {})
@@ -14,28 +14,18 @@ module Projects
     def execute
       @project = Project.new(params.merge(creator: current_user))
       namespace = Namespace.find_by(id: namespace_params[:parent_id])
-      raise CreateError, I18n.t('services.projects.create.namespace_required') if namespace.nil?
+      raise ProjectCreateError, I18n.t('services.projects.create.namespace_required') if namespace.nil?
 
-      unless allowed_to_create_new_project_in_namespace?(namespace)
-        raise CreateError,
+      unless allowed_to_modify_projects_in_namespace?(namespace)
+        raise ProjectCreateError,
               I18n.t('services.projects.create.no_permission',
                      namespace_type: namespace.type.downcase)
       end
       create_associations(@project)
       @project
-    rescue Projects::CreateService::CreateError => e
+    rescue Projects::CreateService::ProjectCreateError => e
       @project.errors.add(:base, e.message)
       false
-    end
-
-    def allowed_to_create_new_project_in_namespace?(namespace)
-      if namespace.group_namespace?
-        namespace.owners.include?(current_user)
-      elsif namespace.user_namespace?
-        namespace.owner == current_user
-      else
-        false
-      end
     end
 
     def create_associations(project)
