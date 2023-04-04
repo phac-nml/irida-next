@@ -309,6 +309,9 @@ en:
       update:
         no_permission: You do not have permission to update this group
     projects:
+      create:
+        no_permission: "You do not have permission to create a new project under this %{namespace_type}"
+        namespace_required: A project must belong to either a user or group namespace
       destroy:
         no_permission: You do not have permission to delete this project
       update:
