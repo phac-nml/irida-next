@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
         project_path(@project)
       )
     else
-
+      flash[:error] = @project.errors.full_messages.first
       render :new, status: :unprocessable_entity
     end
   end

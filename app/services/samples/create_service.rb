@@ -4,11 +4,12 @@ module Samples
   # Service used to Create Samples
   class CreateService < BaseService
     ProjectSampleCreateError = Class.new(StandardError)
-    attr_accessor :project
+    attr_accessor :project, :sample
 
     def initialize(user = nil, project = nil, params = {})
       super(user, params)
       @project = project
+      @sample = Sample.new(params.merge(project_id: project.id))
     end
 
     def execute
@@ -17,12 +18,11 @@ module Samples
               I18n.t('services.samples.create.no_permission')
       end
 
-      sample = Sample.new(params.merge(project_id: project.id))
       sample.save
       sample
     rescue Samples::CreateService::ProjectSampleCreateError => e
-      project.errors.add(:base, e.message)
-      false
+      sample.errors.add(:base, e.message)
+      sample
     end
   end
 end

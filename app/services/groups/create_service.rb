@@ -4,14 +4,16 @@ module Groups
   # Service used to Create Groups
   class CreateService < BaseService
     GroupCreateError = Class.new(StandardError)
+    attr_accessor :group
+
     def initialize(user = nil, params = {})
       super(user, params)
+      @group = Group.new(params.merge(owner: current_user))
     end
 
     def execute # rubocop:disable Metrics/AbcSize
-      group = Group.new(params.merge(owner: current_user))
-
-      if group.parent&.owners&.exclude?(current_user) && group.parent&.owner != current_user
+      unless (group.parent.nil? && group.owner == current_user) || group.owners.include?(current_user) ||
+             (group.parent.group_namespace? && group.parent.owners.include?(current_user))
         raise GroupCreateError, 'You do not have permission to create a group under this namespace'
       end
 
@@ -25,7 +27,7 @@ module Groups
       group
     rescue Groups::CreateService::GroupCreateError => e
       group.errors.add(:base, e.message)
-      false
+      group
     end
   end
 end

@@ -11,7 +11,7 @@ module Groups
     test 'create group with valid params' do
       valid_params = { name: 'group1', path: 'group1', parent_id: nil }
 
-      assert_difference -> { Group.count } => 1 do
+      assert_difference -> { Group.count } => 1, -> { Members::GroupMember.count } => 1 do
         Groups::CreateService.new(@user, valid_params).execute
       end
     end

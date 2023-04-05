@@ -29,13 +29,12 @@ module Projects
     def create
       @sample = Samples::CreateService.new(current_user, @project, sample_params).execute
 
-      respond_to do |format|
-        if @sample.save
-          flash[:success] = t('.success')
-          format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-        end
+      if @sample.persisted?
+        flash[:success] = t('.success')
+        redirect_to namespace_project_sample_path(id: @sample.id)
+      else
+        flash[:error] = @sample.errors.full_messages.first
+        render :new, status: :unprocessable_entity
       end
     end
 

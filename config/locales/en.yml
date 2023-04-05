@@ -326,6 +326,8 @@ en:
         no_permission: You do not have permission to update this member
         cannot_update_self: "You cannot update your own %{namespace_type} role"
     samples:
+      create:
+        no_permission: You do not have permission to create a sample in this project
       destroy:
         no_permission: You do not have permission to remove this sample from the project
       update:
