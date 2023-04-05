@@ -162,29 +162,22 @@
   }
 
   .Viral-Icon {
-    display: block;
-    height: 2rem;
-    width: 2rem;
-    max-height: 100%;
-    max-width: 100%;
-    margin: auto;
+    @apply block w-6 h-6 max-w-full max-h-full m-auto;
   }
 
   .Viral-Icon__Svg {
-    position: relative;
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    max-height: 100%;
+    @apply relative w-6 h-6 max-w-full max-h-full m-auto;
   }
 
   .Viral-Icon--colorBase {
   }
 
   .Viral-Icon--colorSubdued {
+    @apply text-gray-500;
   }
 
   .Viral-Icon--colorCritical {
+    @apply text-red-500;
   }
 
   .Viral-Icon--colorWarning {
@@ -201,10 +194,8 @@
   }
 
   .Viral-Icon--hasBackdrop {
-    @apply text-primary-500;
   }
 
   .Viral-Icon--applyColor {
-    @apply text-primary-500;
   }
 }

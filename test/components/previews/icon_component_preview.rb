@@ -5,7 +5,11 @@ class IconComponentPreview < ViewComponent::Preview
     render Viral::IconComponent.new(name: 'user')
   end
 
-  def colored
+  def primary
     render Viral::IconComponent.new(name: 'user', color: :primary)
+  end
+
+  def critical
+    render Viral::IconComponent.new(name: 'user', color: :critical)
   end
 end
