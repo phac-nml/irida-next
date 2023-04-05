@@ -44,12 +44,12 @@
     grid-template-rows: 1fr 40px;
     overflow-x: hidden;
 
-    @apply border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800;
+    @apply bg-white border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800;
   }
 
   .page-header {
     overflow: hidden;
-    @apply block items-center justify-between border-b border-gray-200 bg-white p-2 px-4 dark:border-gray-700 dark:bg-gray-800 sm:flex;
+    @apply items-center justify-between block p-2 px-4 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
   }
 
   .navbar-btn {
@@ -57,7 +57,7 @@
   }
 
   .navbar-btn svg {
-    @apply h-6 w-6;
+    @apply w-6 h-6;
   }
 
   .link {
@@ -102,7 +102,7 @@
   }
 
   .form-field.invalid input[type="text"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400  dark:bg-red-800;
+    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
   }
 
   .form-field textarea {
@@ -110,7 +110,7 @@
   }
 
   .form-field input[type="checkbox"] {
-    @apply h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-primary-300 focus:ring-4 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600;
+    @apply w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-primary-300 focus:ring-4 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600;
   }
 
   .field-hint {
@@ -122,7 +122,7 @@
   }
 
   .btn-default {
-    @apply border border-gray-200 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
+    @apply text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
   }
 
   .btn-primary {
@@ -130,11 +130,11 @@
   }
 
   .btn-danger {
-    @apply bg-red-600 text-white hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-800;
+    @apply text-white bg-red-600 hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-800;
   }
 
   .dropdown-menu {
-    @apply z-10 hidden w-44 rounded-lg bg-white shadow divide-y divide-gray-100 dark:bg-gray-700;
+    @apply z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700;
   }
 
   .dropdown-menu ul {
@@ -146,7 +146,7 @@
   }
 
   .dropdown-menu li > a svg {
-    @apply mr-1 inline-block h-5 w-5 text-gray-400 dark:text-gray-300;
+    @apply inline-block w-5 h-5 mr-1 text-gray-400 dark:text-gray-300;
   }
 
   .row-btn {
@@ -154,14 +154,14 @@
   }
 
   .row-btn svg {
-    @apply h-5 w-5;
+    @apply w-5 h-5;
   }
 
   .form-field select {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
-  .Vial-Icon {
+  .Viral-Icon {
     display: block;
     height: 2rem;
     width: 2rem;
@@ -176,7 +176,6 @@
     width: 100%;
     max-width: 100%;
     max-height: 100%;
-    @apply h-8 w-8;
   }
 
   .Viral-Icon--colorBase {
