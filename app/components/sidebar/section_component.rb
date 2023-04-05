@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-module Navigation
+module Sidebar
   # Aside navigation section
   # @example
-  #  <%= render Navigation::SectionComponent.new(title: 'Section title') do |section| %>
+  #  <%= render SideBar::SectionComponent.new(title: 'Section title') do |section| %>
   #   <%= section.with_item(title: 'Item title', url: '#') %>
   #   <%= section.with_item(title: 'Item title', url: '#') %>
   #  <% end %>
   class SectionComponent < BaseComponent
-    renders_many :items, Navigation::ItemComponent
+    renders_many :items, Sidebar::ItemComponent
 
     def initialize(title: nil, separator: false, fill: false, **system_arguments)
       @title = title
