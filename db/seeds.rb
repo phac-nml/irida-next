@@ -124,11 +124,6 @@ if Rails.env.development?
       email: 'user8@email.com',
       password: 'password1',
       password_confirmation: 'password1'
-    },
-    {
-      email: 'user9@email.com',
-      password: 'password1',
-      password_confirmation: 'password1'
     }
   ]
 
@@ -168,8 +163,7 @@ if Rails.env.development?
   member_emails_by_role = {
     Maintainer: [users[6][:email]],
     Analyst: [users[7][:email]],
-    Guest: [users[8][:email]],
-    'No Access': [users[9][:email]]
+    Guest: [users[8][:email]]
   }
 
   generic_projects = [
