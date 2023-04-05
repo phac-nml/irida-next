@@ -80,7 +80,7 @@
   .form-field input[type="search"],
   .form-field input[type="password"],
   .form-field input[type="email"] {
-    @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500
+    @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
   }
 
   .form-field select.prefixed {
@@ -95,7 +95,6 @@
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     @apply rounded-r-md border-0 p-2.5 block w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm text-gray-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
-
   }
 
   .form-field.invalid label {
@@ -160,5 +159,53 @@
 
   .form-field select {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  }
+
+  .Vial-Icon {
+    display: block;
+    height: 2rem;
+    width: 2rem;
+    max-height: 100%;
+    max-width: 100%;
+    margin: auto;
+  }
+
+  .Viral-Icon__Svg {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    @apply h-8 w-8;
+  }
+
+  .Viral-Icon--colorBase {
+  }
+
+  .Viral-Icon--colorSubdued {
+  }
+
+  .Viral-Icon--colorCritical {
+  }
+
+  .Viral-Icon--colorWarning {
+  }
+
+  .Viral-Icon--colorHighlight {
+  }
+
+  .Viral-Icon--colorSuccess {
+  }
+
+  .Viral-Icon--colorPrimary {
+    @apply text-primary-500;
+  }
+
+  .Viral-Icon--hasBackdrop {
+    @apply text-primary-500;
+  }
+
+  .Viral-Icon--applyColor {
+    @apply text-primary-500;
   }
 }

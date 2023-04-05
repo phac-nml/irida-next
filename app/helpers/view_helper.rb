@@ -13,4 +13,15 @@ module ViewHelper
     svg[:'aria-hidden'] = true
     doc.to_html.html_safe # rubocop:disable Rails/OutputSafety
   end
+
+  def viral_icon_source(name)
+    path = Rails.root.join('app', 'assets', 'icons', 'heroicons', "#{name}.svg")
+    file = File.read(path)
+    doc = Nokogiri::HTML::DocumentFragment.parse(file)
+    svg = doc.at_css 'svg'
+    svg[:class] = 'Viral-Icon__Svg'
+    svg[:focusable] = false
+    svg[:'aria-hidden'] = true
+    doc.to_html.html_safe
+  end
 end

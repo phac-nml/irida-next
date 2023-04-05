@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class IconComponentPreview < ViewComponent::Preview
-  def with_default_arguments
-    render IconComponent.new(name: 'user', classes: 'w-6 h-6')
+  def default
+    render Viral::IconComponent.new(name: 'user')
   end
 
-  def large_icon
-    render IconComponent.new(name: 'user', classes: 'w-12 h-12')
+  def colored
+    render Viral::IconComponent.new(name: 'user', color: :primary)
   end
 end
