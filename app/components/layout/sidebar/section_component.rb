@@ -2,7 +2,7 @@
 
 module Layout
   module Sidebar
-    class SectionComponent < ViewComponent::Base
+    class SectionComponent < Component
       renders_many :items, ItemComponent
 
       def initialize(title: nil, **system_arguments)

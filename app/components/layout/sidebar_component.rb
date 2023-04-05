@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Layout
-  class SidebarComponent < ViewComponent::Base
+  class SidebarComponent < Component
     renders_one :header, Sidebar::HeaderComponent
     renders_many :sections, Sidebar::SectionComponent
     renders_many :items, Sidebar::ItemComponent

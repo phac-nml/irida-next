@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Create breadcrumbs for current route
-class BreadcrumbComponent < ViewComponent::Base
+class BreadcrumbComponent < Component
   def initialize(route:, context_crumbs: nil)
     @links = build_crumbs(route, context_crumbs)
   end

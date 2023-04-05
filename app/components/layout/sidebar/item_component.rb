@@ -2,7 +2,7 @@
 
 module Layout
   module Sidebar
-    class ItemComponent < ViewComponent::Base
+    class ItemComponent < Component
       def initialize(url:, label:, icon: nil, badge: nil, selected: false, link_arguments: {}, **system_arguments)
         @url = url
         @label = label

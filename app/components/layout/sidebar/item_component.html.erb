@@ -14,7 +14,7 @@
       <%= class_names(' active': current_page?(@url)) %>
     "
   >
-    <%= render Viral::IconComponent.new(
+    <%= viral_icon(
       name: @icon,
       color: :subdued,
       style: "width: 27px;"

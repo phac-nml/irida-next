@@ -2,7 +2,7 @@
 
 module Layout
   module Sidebar
-    class HeaderComponent < ViewComponent::Base
+    class HeaderComponent < Component
       def initialize(label:, icon:, url:)
         @label = label
         @icon = icon
