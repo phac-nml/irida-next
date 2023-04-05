@@ -9,7 +9,7 @@ module MembershipActions
     before_action proc { member }, only: %i[destroy]
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }, only: %i[new create]
-    before_action proc { context_crumbs }, only: %i[index]
+    before_action proc { context_crumbs }, only: %i[index new]
   end
 
   def index
