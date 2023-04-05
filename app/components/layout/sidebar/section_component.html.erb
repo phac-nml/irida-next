@@ -1,4 +1,4 @@
-<%= render BaseComponent.new(**system_arguments) do %>
+<%= render(Viral::BaseComponent.new(**system_arguments)) do %>
   <% if items.present? %>
     <% if @title.present? %>
       <%= @title %>

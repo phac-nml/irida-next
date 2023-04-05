@@ -165,30 +165,25 @@
     @apply flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700;
   }
 
-  .sidebar-item > a {
-    @apply flex items-center p-1 rounded-md hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700;
-  }
-
   .sidebar-item > a.active {
     @apply bg-gray-100 dark:bg-gray-700;
   }
 
-  .sidebar-item > a svg,
+  /*.sidebar-item > a svg,*/
   .sidebar-collapse button svg {
     @apply w-6 h-6 py-1 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white;
   }
-
   .sidebar-collapse button {
     @apply flex items-center justify-center w-full h-10 text-sm font-medium text-gray-500 transition-colors duration-150 border-t border-gray-200 rounded-none hover:text-gray-700 dark:hover:text-gray-200 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 focus:ring-0;
   }
 
   .Viral-Icon {
-    display: block;
     height: 2rem;
     width: 2rem;
     max-height: 100%;
     max-width: 100%;
     margin: auto;
+    @apply flex justify-center align-middle;
   }
 
   .Viral-Icon__Svg {

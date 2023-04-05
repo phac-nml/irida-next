@@ -1,0 +1,26 @@
+<%= render Viral::BaseComponent.new(tag: 'li', **@system_arguments) do %>
+  <a
+    href="<%= @url %>"
+    title="<%= @label %>"
+    data-turbo-action="replace"
+    class="
+      flex
+      items-center
+      p-1
+      rounded-md
+      hover:bg-gray-100
+      dark:text-gray-200
+      dark:hover:bg-gray-700
+      <%= class_names(' active': current_page?(@url)) %>
+    "
+  >
+    <%= render Viral::IconComponent.new(
+      name: @icon,
+      color: :subdued,
+      style: "width: 27px;"
+    ) %>
+    <span class="ml-4 grow">
+      <span data-layout--layout-component-target="link"><%= @label %></span>
+    </span>
+  </a>
+<% end %>
