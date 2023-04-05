@@ -8,121 +8,367 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+def seed_project(project_params:, creator:, namespace:)
+  project = Projects::CreateService.new(creator,
+                                        {
+                                          namespace_attributes: project_params.slice(
+                                            :name,
+                                            :path
+                                          ).merge({ parent: namespace, owner: creator })
+                                        }).execute
+
+  # seed the project members
+  if project_params[:member_emails_by_role] # rubocop:disable Style/SafeNavigation
+    project_params[:member_emails_by_role].each do |access_level, email|
+      seed_members(email, access_level, project.namespace)
+    end
+  end
+
+  # see the project samples
+  seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
+end
+
+def seed_members(email, access_level, namespace)
+  Members::CreateService.new(namespace.owner,
+                             namespace,
+                             { user: User.find_by(email:),
+                               access_level: Member::AccessLevel.access_level_options[access_level.to_s] }).execute
+end
+
+def seed_samples(project, sample_count)
+  1.upto(sample_count) do |i|
+    Samples::CreateService.new(
+      project.creator, project,
+      { name: "#{project.namespace.parent.name}/#{project.name} Sample #{i}",
+        description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{i}." }
+    ).execute
+  end
+end
+
+def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  owner = User.find_by(email: group_params[:owner_email]) if group_params[:owner_email]
+
+  raise 'Attempting to seed group without an owner.' if owner.blank?
+
+  group = Groups::CreateService.new(
+    owner,
+    group_params.slice(:name, :path, :description).merge({ parent: })
+  ).execute
+
+  # seed the members using group_params[:members_by_role]
+  if group_params[:member_emails_by_role] # rubocop:disable Style/SafeNavigation
+    group_params[:member_emails_by_role].each do |access_level, email|
+      seed_members(email, access_level, group)
+    end
+  end
+
+  # seed the projects
+  if group_params[:projects] # rubocop:disable Style/SafeNavigation
+    group_params[:projects].each do |project_params|
+      seed_project(project_params:, creator: owner, namespace: group)
+    end
+  end
+
+  # seed the subgroups
+  return unless group_params[:subgroups]
+
+  group_params[:subgroups].each do |subgroup_params|
+    seed_group(group_params: subgroup_params, owner:, parent: group)
+  end
+end
+
 if Rails.env.development?
   current_year = Time.zone.now.year
 
-  genus_listing = [{ Bacillus: ['Bacillus anthracis', 'Bacillus cereus'] },
-                   { Bartonella: ['Bartonella henselae', 'Bartonella quintana'] },
-                   { Bordetella: ['Bordetella pertussis'] },
-                   { Borrelia: ['Borrelia burgdorferi', 'Borrelia garinii', 'Borrelia afzelii',
-                                'Borrelia recurrentis'] },
-                   { Brucella: ['Brucella abortus', 'Brucella canis', 'Brucella melitensis', 'Brucella suis'] },
-                   { Campylobacter: ['Campylobacter jejuni'] },
-                   { 'Chlamydia and Chlamydophila': ['Chlamydia pneumoniae', 'Chlamydia trachomatis',
-                                                     'Chlamydophila psittaci'] },
-                   { Clostridium: ['Clostridium botulinum', 'Clostridium difficile', 'Clostridium perfringens',
-                                   'Clostridium tetani'] },
-                   { Corynebacterium: ['Corynebacterium diphtheriae'] },
-                   { Enterococcus: ['Enterococcus faecalis', 'Enterococcus faecium'] },
-                   { Escherichia: ['Escherichia coli'] },
-                   { Francisella: ['Francisella tularensis'] },
-                   { Haemophilus: ['Haemophilus influenzae'] },
-                   { Helicobacter: ['Helicobacter pylori'] },
-                   { Legionella: ['Legionella pneumophila'] },
-                   { Leptospira: ['Leptospira interrogans', 'Leptospira santarosai', 'Leptospira weilii',
-                                  'Leptospira noguchii'] },
-                   { Listeria: ['Listeria monocytogenes'] },
-                   { Mycobacterium: ['Mycobacterium leprae', 'Mycobacterium tuberculosis', 'Mycobacterium ulcerans'] },
-                   { Mycoplasma: ['Mycoplasma pneumoniae'] },
-                   { Neisseria: ['Neisseria gonorrhoeae', 'Neisseria meningitidis'] },
-                   { Pseudomonas: ['Pseudomonas aeruginosa'] },
-                   { Rickettsia: ['Rickettsia rickettsii'] },
-                   { Salmonella: ['Salmonella typhi', 'Salmonella typhimurium'] },
-                   { Shigella: ['Shigella sonnei'] },
-                   { Staphylococcus: ['Staphylococcus aureus', 'Staphylococcus epidermidis',
-                                      'Staphylococcus saprophyticus'] },
-                   { Streptococcus: ['Streptococcus agalactiae', 'Streptococcus pneumoniae',
-                                     'Streptococcus pyogenes'] },
-                   { Treponema: ['Treponema pallidum'] },
-                   { Ureaplasma: ['Ureaplasma urealyticum'] },
-                   { Vibrio: ['Vibrio cholerae'] },
-                   { Yersinia: ['Yersinia pestis', 'Yersinia enterocolitica', 'Yersinia pseudotuberculosis'] }]
+  users = [
+    {
+      email: 'admin@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    },
+    {
+      email: 'user1@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    },
+    {
+      email: 'user2@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    },
+    {
+      email: 'user3@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    },
+    {
+      email: 'user4@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    },
+    {
+      email: 'user5@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    }, {
+      email: 'user6@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    },
+    {
+      email: 'user7@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    },
+    {
+      email: 'user8@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    },
+    {
+      email: 'user9@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
+    }
+  ]
 
-  project_listing = [{ Outbreak: [(current_year - 2).to_s, (current_year - 1).to_s] },
-                     { Surveillance: [(current_year - 2).to_s, (current_year - 1).to_s] }]
-
-  # Users
-  User.create!({ email: 'admin@email.com', password: 'password1', password_confirmation: 'password1' })
-
-  1.upto(10) do |i|
-    User.create!({ email: "user#{i}@email.com", password: 'password1', password_confirmation: 'password1' })
+  users.each do |user|
+    User.create_with(user.slice(:password, :password_confirmation)).find_or_create_by!(email: user[:email])
   end
 
-  users = User.all
+  # Group Params Hash
+  #
+  # {
+  #   name: String Required
+  #   path: String Required
+  #   owner_email: String Required
+  #   member_emails_by_role: Hash Optional (keys Roles, values Array of emails)
+  #   subgroups: Array Optional of Group Params Hash
+  #   projects: Array Optional of Project Params Hash
+  # }
 
-  users.each do |user| # rubocop:disable Metrics/BlockLength
-    # Groups
-    genus_listing.each do |genus|
-      group_name = "#{genus.keys.first} #{user.id}"
-      group_path = if group_name.include?(' ')
-                     group_name.downcase.gsub(' ', '-')
-                   else
-                     group_name
-                   end
-      parent_group = Groups::CreateService.new(
-        user,
-        { name: group_name,
-          path: group_path,
-          description: "This is a description the #{group_name} group." }
-      ).execute
+  # Project Params Hash
+  #
+  # {
+  #   name: String Required
+  #   path: String Required
+  #   sample_count: Integer Required
+  #   member_emails_by_role: Hash Optional (keys Roles, values Array of emails)
+  # }
 
-      subgroup_names = genus.values.first
-      # Subgroups
-      subgroup_names.each do |subgroup|
-        Groups::CreateService.new(user, { name: subgroup, path: subgroup.downcase.gsub(' ', '-'),
-                                          description: "This is a description for the subgroup #{subgroup}.",
-                                          parent: parent_group }).execute
-      end
-    end
+  group_owner_emails = [
+    users[0][:email],
+    users[1][:email],
+    users[2][:email],
+    users[3][:email],
+    users[4][:email],
+    users[5][:email]
+  ]
 
-    groups = Group.where(owner: user)
-    available_users = users.to_a - [user]
+  member_emails_by_role = {
+    Maintainer: [users[6][:email]],
+    Analyst: [users[7][:email]],
+    Guest: [users[8][:email]],
+    'No Access': [users[9][:email]]
+  }
 
-    groups.each do |group|
-      # Group Members
-      available_users.each do |available_user|
-        Members::CreateService.new(user, group, { user: available_user,
-                                                  access_level: Member::AccessLevel::GUEST }).execute
-      end
+  generic_projects = [
+    {
+      name: "Outbreak #{current_year - 2}",
+      path: "outbreak-#{current_year - 2}",
+      sample_count: 10,
+      member_emails_by_role:
 
-      project_listing.each do |proj|
-        years = proj.values.first
+    },
+    {
+      name: "Outbreak #{current_year - 1}",
+      path: "outbreak-#{current_year - 1}",
+      sample_count: 10,
+      member_emails_by_role:
+    }
+  ]
 
-        years.each do |year|
-          # Projects
-          proj_name = "#{proj.keys.first} #{year}"
-          proj_path = "#{proj.keys.first.downcase}-#{year}"
-          project = Projects::CreateService.new(user, { namespace_attributes: {
-                                                  name: proj_name, path: proj_path,
-                                                  description: "This is a description for project #{proj_name}.",
-                                                  parent: group
-                                                } }).execute
+  groups = [
+    { name: 'Bacillus', path: 'bacillus', owner_email: group_owner_emails[0],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Bacillus anthracis', path: 'bacillus-anthracis', projects: generic_projects },
+        { name: 'Bacillus cereus', path: 'bacillus-cereus', projects: generic_projects }
+      ] },
+    { name: 'Bartonella', path: 'bartonella', owner_email: group_owner_emails[1],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Bartonella henselae', path: 'bacillus-anthracis', projects: generic_projects },
+        { name: 'Bartonella quintana', path: 'bartonella-quintana', projects: generic_projects }
+      ] },
+    { name: 'Bordetella', path: 'bordetella', owner_email: group_owner_emails[2],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Bordetella pertussis', path: 'bordetella-pertussis', projects: generic_projects }
+      ] },
+    { name: 'Borrelia', path: 'borrelia', owner_email: group_owner_emails[3],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Borrelia burgdorferi', path: 'borrelia-burgdorferi', projects: generic_projects },
+        { name: 'Borrelia garinii', path: 'borrelia-garinii', projects: generic_projects },
+        { name: 'Borrelia afzelii', path: 'borrelia-afzelii', projects: generic_projects },
+        { name: 'Borrelia recurrentis', path: 'borrelia-recurrentis', projects: generic_projects }
+      ] },
+    { name: 'Brucella', path: 'brucella', owner_email: group_owner_emails[4],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Brucella abortus', path: 'brucella-abortus', projects: generic_projects },
+        { name: 'Brucella canis', path: 'brucella-canis', projects: generic_projects },
+        { name: 'Brucella melitensis', path: 'brucella-melitensis', projects: generic_projects },
+        { name: 'Brucella suis', path: 'brucella-suis', projects: generic_projects }
+      ] },
+    { name: 'Campylobacter', path: 'campylobacter', owner_email: group_owner_emails[5],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Campylobacter jejuni', path: 'campylobacter-jejuni', projects: generic_projects }
+      ] },
+    { name: 'Chlamydia and Chlamydophila', path: 'chlamydia-chlamydophila', owner_email: group_owner_emails[0],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Chlamydia pneumoniae', path: 'chlamydia-pneumoniae', projects: generic_projects },
+        { name: 'Chlamydia trachomatis', path: 'chlamydia-trachomatis', projects: generic_projects },
+        { name: 'Chlamydophila psittaci', path: 'chlamydophila-psittaci', projects: generic_projects }
+      ] },
+    { name: 'Clostridium', path: 'clostridium', owner_email: group_owner_emails[1],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Clostridium botulinum', path: 'clostridium-botulinum', projects: generic_projects },
+        { name: 'Clostridium difficile', path: 'clostridium-difficile', projects: generic_projects },
+        { name: 'Clostridium perfringens', path: 'clostridium-perfringens', projects: generic_projects },
+        { name: 'Clostridium tetani', path: 'clostridium-tetani', projects: generic_projects }
+      ] },
+    { name: 'Corynebacterium', path: 'corynebacterium', owner_email: group_owner_emails[2],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Corynebacterium diphtheriae', path: 'corynebacterium-diphtheriae', projects: generic_projects }
+      ] },
+    { name: 'Enterococcus', path: 'enterococcus', owner_email: group_owner_emails[3],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Enterococcus faecalis', path: 'enterococcus-faecalis', projects: generic_projects },
+        { name: 'Enterococcus faecium', path: 'enterococcus-faecium', projects: generic_projects }
+      ] },
+    { name: 'Escherichia', path: 'Escherichia', owner_email: group_owner_emails[4],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Escherichia coli', path: 'escherichia-coli', projects: generic_projects }
+      ] },
+    { name: 'Francisella', path: 'francisella', owner_email: group_owner_emails[5],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Francisella tularensis', path: 'francisella-tularensis', projects: generic_projects }
+      ] },
+    { name: 'Haemophilus', path: 'haemophilus', owner_email: group_owner_emails[0],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Haemophilus influenzae', path: 'haemophilus-influenzae', projects: generic_projects }
+      ] },
+    { name: 'Helicobacter', path: 'helicobacter', owner_email: group_owner_emails[1],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Helicobacter pylori', path: 'helicobacter-pylori', projects: generic_projects }
+      ] },
+    { name: 'Legionella', path: 'legionella', owner_email: group_owner_emails[2],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Legionella pneumophila', path: 'legionella-pneumophila', projects: generic_projects }
+      ] },
+    { name: 'Leptospira', path: 'leptospira', owner_email: group_owner_emails[3],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Leptospira interrogans', path: 'leptospira-interrogans', projects: generic_projects },
+        { name: 'Leptospira santarosai', path: 'leptospira-santarosai', projects: generic_projects },
+        { name: 'Leptospira weilii', path: 'leptospira-weilii', projects: generic_projects },
+        { name: 'Leptospira noguchii', path: 'leptospira-noguchii', projects: generic_projects }
+      ] },
+    { name: 'Listeria', path: 'listeria', owner_email: group_owner_emails[4],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Listeria monocytogenes', path: 'listeria-monocytogenes', projects: generic_projects }
+      ] },
+    { name: 'Mycobacterium', path: 'mycobacterium', owner_email: group_owner_emails[5],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Mycobacterium leprae', path: 'mycobacterium-leprae', projects: generic_projects },
+        { name: 'Mycobacterium tuberculosis', path: 'mycobacterium-tuberculosis', projects: generic_projects },
+        { name: 'Mycobacterium ulcerans', path: 'mycobacterium-ulcerans', projects: generic_projects }
+      ] },
+    { name: 'Mycoplasma', path: 'mycoplasma', owner_email: group_owner_emails[0],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Mycoplasma pneumoniae', path: 'mycoplasma-pneumoniae', projects: generic_projects }
+      ] },
+    { name: 'Neisseria', path: 'neisseria', owner_email: group_owner_emails[1],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Neisseria gonorrhoeae', path: 'neisseria-gonorrhoeae', projects: generic_projects },
+        { name: 'Neisseria meningitidis', path: 'neisseria-meningitidis', projects: generic_projects }
+      ] },
+    { name: 'Pseudomonas', path: 'pseudomonas', owner_email: group_owner_emails[2],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Pseudomonas aeruginosa', path: 'pseudomonas-aeruginosa', projects: generic_projects }
+      ] },
+    { name: 'Rickettsia', path: 'rickettsia', owner_email: group_owner_emails[3],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Rickettsia rickettsii', path: 'rickettsia-rickettsii', projects: generic_projects }
+      ] },
+    { name: 'Salmonella', path: 'salmonella', owner_email: group_owner_emails[4],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Salmonella typhi', path: 'salmonella-typhi', projects: generic_projects },
+        { name: 'Salmonella typhimurium', path: 'salmonella-typhimurium', projects: generic_projects }
+      ] },
+    { name: 'Shigella', path: 'shigella', owner_email: group_owner_emails[5],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Shigella sonnei', path: 'shigella-sonnei', projects: generic_projects }
+      ] },
+    { name: 'Staphylococcus', path: 'staphylococcus', owner_email: group_owner_emails[0],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Staphylococcus aureus', path: 'staphylococcus-aureus', projects: generic_projects },
+        { name: 'Staphylococcus epidermidis', path: 'staphylococcus-epidermidis', projects: generic_projects },
+        { name: 'Staphylococcus saprophyticus', path: 'staphylococcus-saprophyticus', projects: generic_projects }
+      ] },
+    { name: 'Streptococcus', path: 'streptococcus', owner_email: group_owner_emails[1],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Streptococcus agalactiae', path: 'streptococcus-agalactiae', projects: generic_projects },
+        { name: 'Streptococcus pneumoniae', path: 'streptococcus-pneumoniae', projects: generic_projects },
+        { name: 'Streptococcus pyogenes', path: 'streptococcus-pyogenes', projects: generic_projects }
+      ] },
+    { name: 'Treponema', path: 'treponema-pallidum', owner_email: group_owner_emails[2],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Treponema pallidum', path: 'treponema-pallidum', projects: generic_projects }
+      ] },
+    { name: 'Ureaplasma', path: 'Ureaplasma', owner_email: group_owner_emails[3],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Ureaplasma urealyticum', path: 'ureaplasma-urealyticum', projects: generic_projects }
+      ] },
+    { name: 'Vibrio', path: 'vibrio', owner_email: group_owner_emails[4],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Vibrio cholerae', path: 'vibrio-cholerae', projects: generic_projects }
+      ] },
+    { name: 'Yersinia', path: 'yersinia', owner_email: group_owner_emails[5],
+      member_emails_by_role:,
+      subgroups: [
+        { name: 'Yersinia pestis', path: 'yersinia-pestis', projects: generic_projects },
+        { name: 'Yersinia enterocolitica', path: 'yersinia-enterocolitica', projects: generic_projects },
+        { name: 'Yersinia pseudotuberculosis', path: 'yersinia-pseudotuberculosis', projects: generic_projects }
+      ] }
+  ]
 
-          # Project Members
-          available_users.each do |available_user|
-            Members::CreateService.new(user, project.namespace, { user: available_user,
-                                                                  access_level: Member::AccessLevel::GUEST }).execute
-          end
-
-          # Samples
-          1.upto(10) do |i|
-            Samples::CreateService.new(user, project,
-                                       { name: "#{group.name} #{i}",
-                                         description: "This is a description for sample #{group.name} #{i}." }).execute
-          end
-        end
-      end
-    end
+  groups.each do |group|
+    seed_group(group_params: group)
   end
-
 end
