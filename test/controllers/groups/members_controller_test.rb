@@ -27,7 +27,7 @@ module Groups
 
       group = groups(:group_one)
       get group_members_path(group)
-      user = users(:john_doe)
+      user = users(:steve_doe)
 
       assert_difference('Members::GroupMember.count') do
         post group_members_path, params: { member: { user_id: user.id,

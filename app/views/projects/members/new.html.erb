@@ -1,0 +1,65 @@
+<div class="p-4">
+  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <div
+      class="
+        p-4
+        bg-white
+        border
+        border-gray-200
+        rounded-lg
+        shadow-sm
+        2xl:col-span-2
+        dark:border-gray-700
+        sm:p-6
+        dark:bg-gray-800
+      "
+    >
+      <h2
+        class="
+          text-xl
+          font-semibold
+          leading-tight
+          text-gray-900
+          dark:text-white
+          mb-4
+        "
+      >
+        <%= t(:".title") %>
+      </h2>
+      <%= form_with(model: @new_member, url: namespace_project_members_path, method: :post) do |form| %>
+        <%= turbo_frame_tag "project_member_form" do %>
+          <div class="grid gap-4">
+            <div class="form-field">
+              <%= form.label :user_id %>
+              <%= form.select :user_id,
+                          options_for_select(
+                            @available_users.collect { |u| [u.email, u.id] },
+                            selected: @new_member.user_id
+                          ),
+                          { prompt: t(:".select_user") },
+                          required: true %>
+            </div>
+
+            <% invalid_access_level = @new_member.errors.include?(:access_level) %>
+            <div class="form-field <%= 'invalid' if invalid_access_level %>">
+              <%= form.label :access_level %>
+              <%= form.select :access_level,
+                          @access_levels,
+                          { prompt: t(:".select_access_level") },
+                          required: true,
+                          class: "invalid" %>
+              <%= render "shared/form/field_errors",
+              errors: @new_member.errors.full_messages_for(:access_level) %>
+            </div>
+
+            <div>
+              <%= form.submit t(:".add_member_to_group"),
+                          class: "btn btn-primary mr-1",
+                          disabled: !@available_users.count.positive? %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
