@@ -1,16 +1,27 @@
 <div data-controller="flash" class="flex rounded-lg shadow-lg w-96">
   <div class="<%= @classes %> py-4 px-6 rounded-l-lg flex items-center">
-    <%= render IconComponent.new(
+    <%= render Viral::IconComponent.new(
       name: @icon,
       classes: "w-8 h-8 text-white dark:text-gray-400"
     ) %>
   </div>
   <div
-    class="flex items-center justify-between w-full px-4 py-6 bg-white rounded-r-lg  dark:bg-gray-800 dark:text-gray-200"
+    class="
+      flex
+      items-center
+      justify-between
+      w-full
+      px-4
+      py-6
+      bg-white
+      rounded-r-lg
+      dark:bg-gray-800
+      dark:text-gray-200
+    "
   >
     <div><%= @data %></div>
     <button data-action="flash#dismiss">
-      <%= render IconComponent.new(name: "x_mark", classes: "w-5 h-5") %>
+      <%= render Viral::IconComponent.new(name: "x_mark", classes: "w-5 h-5") %>
       <span class="sr-only"><%= t(:"general.screen_reader.close") %></span>
     </button>
   </div>

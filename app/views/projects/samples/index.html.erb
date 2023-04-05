@@ -20,7 +20,7 @@
                 <div class="flex items-center justify-end">
                   <button data-dropdown-toggle="sample-<%= sample.id %>-dropdown" class="navbar-btn sample-settings-ellipsis"
                     aria-label="<%= t('projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) %>">
-                    <%= render IconComponent.new(name: 'ellipsis_vertical', classes: "w-4 h-4") %>
+                    <%= render Viral::IconComponent.new(name: 'ellipsis_vertical', classes: "w-4 h-4") %>
                   </button>
                   <!-- Dropdown menu -->
                   <div id="sample-<%= sample.id %>-dropdown" class="dropdown-menu">

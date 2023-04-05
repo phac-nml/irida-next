@@ -49,7 +49,7 @@
                       class="navbar-btn member-settings-ellipsis"
                       aria-label="<%= t(:'groups.members.index.actions.member_dropdown_aria_label', member: member.user.email) %>"
                     >
-                      <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
+                      <%= render Viral::IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
                     </button>
                     <!-- Dropdown menu -->
                     <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">

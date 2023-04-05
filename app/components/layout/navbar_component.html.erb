@@ -12,7 +12,7 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center justify-start">
         <a href="<%= root_path %>" class="flex items-center">
-          <%= render IconComponent.new(
+          <%= render Viral::IconComponent.new(
             name: "beaker",
             classes: "w-12 h-12 text-green-500 rotate-12"
           ) %>
@@ -27,20 +27,20 @@
           data-dropdown-toggle="main-menu-dropdown"
           class="navbar-btn"
         >
-          <%= render IconComponent.new(name: "bars_3", classes: "w-6 h-6") %>
+          <%= render Viral::IconComponent.new(name: "bars_3", classes: "w-6 h-6") %>
         </button>
         <!-- Dropdown menu -->
         <div id="main-menu-dropdown" class="dropdown-menu">
           <ul aria-labelledby="dropdownDefaultButton">
             <li>
               <%= link_to projects_path do %>
-                <%= render IconComponent.new(name: "rectangle_stack") %>
+                <%= render Viral::IconComponent.new(name: "rectangle_stack") %>
                 <%= t(:"general.navbar.main_dropdown.projects") %>
               <% end %>
             </li>
             <li>
               <%= link_to groups_path do %>
-                <%= render IconComponent.new(name: "squares_2x2") %>
+                <%= render Viral::IconComponent.new(name: "squares_2x2") %>
                 <%= t(:"general.navbar.main_dropdown.groups") %>
               <% end %>
             </li>
@@ -60,7 +60,7 @@
                 pointer-events-none
               "
             >
-              <%= render IconComponent.new(name: "magnifying_glass", classes: "h-5 w-5") %>
+              <%= render Viral::IconComponent.new(name: "magnifying_glass", classes: "h-5 w-5") %>
             </div>
             <input
               type="text"
@@ -102,10 +102,10 @@
           aria-label="<%= t(:'general.navbar.dark_mode.aria_label') %>"
         >
           <span data-dark-mode-target="darkIcon" class="hidden">
-            <%= render IconComponent.new(name: "moon", classes: "w-5 h-5") %>
+            <%= render Viral::IconComponent.new(name: "moon", classes: "w-5 h-5") %>
           </span>
           <span data-dark-mode-target="lightIcon" class="hidden">
-            <%= render IconComponent.new(name: "sun", classes: "w-5 h-5") %>
+            <%= render Viral::IconComponent.new(name: "sun", classes: "w-5 h-5") %>
           </span>
         </button>
         <!-- New item menu -->
@@ -116,7 +116,7 @@
           type="button"
           class="navbar-btn"
         >
-          <%= render IconComponent.new(name: "document_plus") %>
+          <%= render Viral::IconComponent.new(name: "document_plus") %>
         </button>
         <!-- Dropdown menu -->
         <div id="new-item-dropdown" class="dropdown-menu">
@@ -137,7 +137,7 @@
           type="button"
           class="navbar-btn"
         >
-          <%= render IconComponent.new(name: "user_circle") %>
+          <%= render Viral::IconComponent.new(name: "user_circle") %>
         </button>
         <!-- Dropdown menu -->
         <div id="profile-dropdown" class="dropdown-menu">

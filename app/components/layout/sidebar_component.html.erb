@@ -39,7 +39,7 @@
         data-layout--layout-component-target="iconCollapse"
         class="flex items-center"
       >
-        <%= render(IconComponent.new(name: "chevron_double_left")) %>
+        <%= render(Viral::IconComponent.new(name: "chevron_double_left")) %>
         <%= t(:"general.collapse_sidebar") %>
       </span>
 
@@ -47,7 +47,7 @@
         data-layout--layout-component-target="iconExpand"
         class="flex items-center"
       >
-        <%= render(IconComponent.new(name: "chevron_double_right")) %>
+        <%= render(Viral::IconComponent.new(name: "chevron_double_right")) %>
         <span class="sr-only"><%= t(:"general.expand_sidebar") %></span>
       </span>
     </button>
