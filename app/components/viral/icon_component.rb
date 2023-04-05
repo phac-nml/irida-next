@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Viral
+  # UI Icon Component
   class IconComponent < Viral::Component
     COLOR_DEFAULT = :default
     COLOR_MAPPINGS = {
