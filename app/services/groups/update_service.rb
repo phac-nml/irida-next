@@ -12,7 +12,7 @@ module Groups
     end
 
     def execute
-      raise GroupUpdateError, I18n.t('services.groups.update.no_permission') unless group.owners.include?(current_user)
+      raise GroupUpdateError, I18n.t('services.groups.update.no_permission') unless allowed_to_modify_group?(group)
 
       group.update(params)
     rescue Groups::UpdateService::GroupUpdateError => e

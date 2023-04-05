@@ -10,17 +10,25 @@ class BaseService
   end
 
   def allowed_to_modify_projects_in_namespace?(namespace)
-    if namespace.project_namespace? || namespace.group_namespace?
-      namespace.owners.include?(current_user)
-    elsif namespace.user_namespace?
-      namespace.owner == current_user
-    else
-      namespace.parent.owner == current_user
-    end
+    return true if namespace.owner == current_user
+    return true if namespace.project_namespace? && namespace.owners.include?(current_user)
+    return true if namespace.parent&.owner == current_user
+
+    false
   end
 
   def allowed_to_modify_members_in_namespace?(namespace)
-    return true if namespace.owners.include?(current_user) || namespace.owner == current_user
+    return true if namespace.project_namespace? && allowed_to_modify_projects_in_namespace?(namespace)
+    return true if namespace.group_namespace? && allowed_to_modify_group?(namespace)
+
+    false
+  end
+
+  def allowed_to_modify_group?(group)
+    return true if Members::GroupMember.where(namespace: group.ancestors, user: current_user,
+                                              access_level: Member::AccessLevel::OWNER).order(:access_level).last
+    return true if group.parent.nil? && group.owner == current_user
+    return true if group.owners&.include?(current_user)
 
     false
   end

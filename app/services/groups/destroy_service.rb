@@ -12,9 +12,7 @@ module Groups
     end
 
     def execute
-      unless group.owners.include?(current_user)
-        raise GroupDestroyError, I18n.t('services.groups.destroy.no_permission')
-      end
+      raise GroupDestroyError, I18n.t('services.groups.destroy.no_permission') unless allowed_to_modify_group?(group)
 
       group.destroy
     rescue Groups::DestroyService::GroupDestroyError => e
