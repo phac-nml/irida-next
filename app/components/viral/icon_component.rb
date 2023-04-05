@@ -9,7 +9,6 @@ module Viral
       :subdued => 'Viral-Icon--colorSubdued',
       :critical => 'Viral-Icon--colorCritical',
       :warning => 'Viral-Icon--colorWarning',
-      :highlight => 'Viral-Icon--colorHighlight',
       :success => 'Viral-Icon--colorSuccess',
       :primary => 'Viral-Icon--colorPrimary'
     }.freeze
@@ -17,7 +16,6 @@ module Viral
 
     def initialize(
       name: nil,
-      backdrop: false,
       color: COLOR_DEFAULT,
       **system_arguments
     )
@@ -27,9 +25,7 @@ module Viral
       @system_arguments[:classes] = class_names(
         @system_arguments[:classes],
         'Viral-Icon',
-        COLOR_MAPPINGS[color],
-        'Viral-Icon--hasBackdrop' => backdrop,
-        'Viral-Icon--applyColor' => color != :default
+        COLOR_MAPPINGS[color]
       )
     end
   end
