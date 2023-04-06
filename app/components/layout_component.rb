@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-class LayoutComponent < ViewComponent::Base
+# Overall layout component
+class LayoutComponent < Component
   renders_one :sidebar, Layout::SidebarComponent
   renders_one :body
 

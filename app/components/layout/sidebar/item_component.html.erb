@@ -1,4 +1,4 @@
-<%= render Viral::BaseComponent.new(tag: 'li', **@system_arguments) do %>
+<li class="Layout-Sidebar__Item">
   <a
     href="<%= @url %>"
     title="<%= @label %>"
@@ -23,4 +23,4 @@
       <span data-layout--layout-component-target="link"><%= @label %></span>
     </span>
   </a>
-<% end %>
+</li>

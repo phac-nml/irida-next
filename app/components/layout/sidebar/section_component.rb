@@ -15,9 +15,7 @@ module Layout
           opts[:tag] = 'ul'
           opts[:classes] = class_names(
             @system_arguments[:classes],
-            'Polaris-Navigation__Section',
-            'Polaris-Navigation__Section--fill': @fill,
-            'Polaris-Navigation__Section--withSeparator': @separator
+            'Viral-Sidebar__Section'
           )
         end
       end
