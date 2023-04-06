@@ -7,7 +7,7 @@ sidebar_position: 1
 
 ## Browse components with LookBook
 
-We have a [LookBook](https://v2.lookbook.build/guide) (only available in development mode) to browse and interact with ViewComponent previews.
+We have a [LookBook](https://v2.lookbook.build/guide) at `http://localhost:3000/rails/lookbook` (only available in development mode) to browse and interact with ViewComponent previews.
 
 ## Best practices
 
