@@ -98,12 +98,8 @@
           data-action="click->dark-mode#toggleTheme"
           aria-label="<%= t(:'general.navbar.dark_mode.aria_label') %>"
         >
-          <span data-dark-mode-target="darkIcon" class="hidden">
-            <%= viral_icon(name: "moon", classes: "w-5 h-5") %>
-          </span>
-          <span data-dark-mode-target="lightIcon" class="hidden">
-            <%= viral_icon(name: "sun", classes: "w-5 h-5") %>
-          </span>
+          <%= viral_icon(name: "moon", classes: "hidden", "data-dark-mode-target": "darkIcon") %>
+          <%= viral_icon(name: "sun", classes: "hidden", "data-dark-mode-target": "lightIcon") %>
         </button>
         <!-- New item menu -->
         <button
