@@ -23,15 +23,15 @@ module Profiles
           end
         else
           format.turbo_stream do
-            render locals: { personal_access_token: @personal_access_token,
-                             new_personal_access_token: nil }
+            render status: :unprocessable_entity, locals: { personal_access_token: @personal_access_token,
+                                                            new_personal_access_token: nil }
           end
         end
       end
     end
 
     def revoke
-      @personal_access_token = PersonalAccessToken.find(params[:id])
+      @personal_access_token = current_user.personal_access_tokens.find(params[:id])
       @personal_access_token.revoke!
 
       respond_to do |format|
