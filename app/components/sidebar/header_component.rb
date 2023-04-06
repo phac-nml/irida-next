@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Navigation
+module Sidebar
   # Header component for navigation.
   # Renders a header with a label and an icon.
   # @example

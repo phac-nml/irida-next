@@ -4,43 +4,39 @@
     <%= render "layouts/partials/head" %>
   </head>
   <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-    <div class="body-wrapper">
-      <%= render "shared/navbar" %>
-      <div data-controller="layout" data-layout-target="layoutContainer" class="body">
-        <%= render Navigation::NavigationComponent.new do |navigation| %>
-          <% navigation.with_header(
-            label: t(:"profiles.sidebar.header"),
+    <%= render Layout::LayoutComponent.new(user: current_user) do |layout| %>
+      <% layout.sidebar do |navigation| %>
+        <% navigation.with_header(
+          label: t(:"profiles.sidebar.header"),
+          url: profile_path,
+          icon: "user_circle"
+        ) %>
+        <%= navigation.with_section do |section| %>
+          <%= render section.with_item(
             url: profile_path,
-            icon: "user_circle"
+            icon: "user",
+            label: t(:"profiles.sidebar.profile")
           ) %>
-          <%= navigation.with_section do |section| %>
-            <%= render section.with_item(
-              url: profile_path,
-              icon: "user",
-              label: t(:"profiles.sidebar.profile")
-            ) %>
-            <%= render section.with_item(
-              url: edit_profile_password_path,
-              icon: "lock_closed",
-              label: t(:"profiles.sidebar.password")
-            ) %>
-            <%= render section.with_item(
-              url: profile_account_path,
-              icon: "building_library",
-              label: t(:"profiles.sidebar.account")
-            ) %>
-            <%= render section.with_item(
-              url: profile_personal_access_tokens_path,
-              icon: "ticket",
-              label: t(:"profiles.sidebar.access_tokens")
-            ) %>
-          <% end %>
+          <%= render section.with_item(
+            url: edit_profile_password_path,
+            icon: "lock_closed",
+            label: t(:"profiles.sidebar.password")
+          ) %>
+          <%= render section.with_item(
+            url: profile_account_path,
+            icon: "building_library",
+            label: t(:"profiles.sidebar.account")
+          ) %>
+          <%= render section.with_item(
+            url: profile_personal_access_tokens_path,
+            icon: "ticket",
+            label: t(:"profiles.sidebar.access_tokens")
+          ) %>
         <% end %>
-        <div class="content">
+        <% layout.body do %>
           <%= yield %>
-        </div>
-      </div>
-    </div>
-    <%= render "shared/flash" %>
+        <% end %>
+      <% end %>
+    <% end %>
   </body>
 </html>

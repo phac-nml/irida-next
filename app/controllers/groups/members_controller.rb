@@ -5,11 +5,6 @@ module Groups
   class MembersController < ApplicationController
     include MembershipActions
 
-    before_action :member, only: %i[destroy] # rubocop:disable Rails/LexicallyScopedActionFilter
-    before_action :namespace, only: %i[index new create destroy] # rubocop:disable Rails/LexicallyScopedActionFilter
-    before_action :access_levels, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
-    before_action :context_crumbs, only: %i[index] # rubocop:disable Rails/LexicallyScopedActionFilter
-
     layout 'groups'
 
     def member_params
@@ -19,17 +14,12 @@ module Groups
     private
 
     def member
-      @member = Member.find_by(id: request.params[:id])
+      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id)
     end
 
     def namespace
-      @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-      @namespace = @group
+      @namespace = member_namespace
       @member_type = 'GroupMember'
-    end
-
-    def access_levels
-      @access_levels = Member::AccessLevel.access_level_options
     end
 
     protected
@@ -46,6 +36,11 @@ module Groups
           path: group_members_path
         }]
       end
+    end
+
+    def member_namespace
+      @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
+      @group
     end
   end
 end

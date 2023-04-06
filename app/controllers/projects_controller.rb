@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   before_action :context_crumbs, except: %i[index new create show]
 
   def index
-    @projects = Project.all
+    @projects = Project.all.include_route
   end
 
   def show
@@ -87,7 +87,9 @@ class ProjectsController < ApplicationController
   end
 
   def project
-    path = [params[:namespace_id], params[:project_id] || params[:id]].join('/')
+    return unless params[:project_id]
+
+    path = [params[:namespace_id], params[:project_id]].join('/')
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
   end
 

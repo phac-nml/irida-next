@@ -1,0 +1,14 @@
+<div class="body-wrapper">
+  <%= render Layout::NavbarComponent.new(user: @user) %>
+  <div
+    class="body"
+    data-controller="layout--layout-component"
+    data-layout--layout-component-target="layoutContainer"
+  >
+    <%= sidebar %>
+    <div class="content">
+      <%= body %>
+    </div>
+  </div>
+</div>
+<%= render "shared/flash" %>
