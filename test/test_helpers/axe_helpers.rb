@@ -7,8 +7,6 @@ module AxeHelpers
   # Skip `:link-in-text-block` which is new and seems broken.
   AXE_RULES_TO_SKIP = %i[
     region
-    color-contrast
-    color-contrast-enhanced
     aria-required-children
     link-in-text-block
   ].freeze
