@@ -6,12 +6,16 @@
     class="
       flex
       items-center
-      p-1
+      my-1
+      transition-colors
+      ease-in-out
+      delay-75
       rounded-md
+      p-1
       hover:bg-gray-100
       dark:text-gray-200
       dark:hover:bg-gray-700
-      <%= class_names(' active': current_page?(@url)) %>
+      <%= class_names('bg-gray-100 dark:bg-gray-700': current_page?(@url)) %>
     "
   >
     <%= viral_icon(name: @icon, color: :subdued, style: "width: 27px;", classes: "p-1") %>
