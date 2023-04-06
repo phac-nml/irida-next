@@ -32,11 +32,9 @@
             ) %>
           </div>
           <%= f.text_field :expires_at,
-                       required: true,
-                       datepicker: true,
-                       "data-datepicker-target": "datePicker",
-                       "datepicker-format": "yyyy-mm-dd",
-                       "datepicker-orientation": "bottom left" %>
+                       placeholder: "YYYY-MM-DD",
+                       autocomplete: "off",
+                       "data-datepicker-target": "datePicker" %>
         </div>
         <%= render "shared/form/field_errors",
         errors: personal_access_token.errors.full_messages_for(:expires_at) %>
