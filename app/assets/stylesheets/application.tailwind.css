@@ -121,11 +121,20 @@
   }
 
   .btn {
-    @apply cursor-pointer rounded-lg px-5 text-center text-sm font-medium py-2.5 focus:outline-none focus:ring-4;
+    @apply text-white rounded-lg text-sm px-5 py-2.5 text-center focus:outline-none focus:ring-4;
+    
+  }
+
+  .btn-xs {
+    @apply px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none focus:ring-4;
+  }
+
+  .btn-sm {
+    @apply px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:outline-none focus:ring-4;
   }
 
   .btn-default {
-    @apply text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
+    @apply  text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
   }
 
   .btn-primary {
