@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class BreadcrumbComponentTest < ViewComponent::TestCase
+class Viral::BreadcrumbComponentTest < ViewComponent::TestCase
   test 'single path' do
     # Mock route
     mock_route = routes(:group_one_route)
@@ -10,7 +10,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     # Mock context breadcrumb
     context_crumbs = [{ name: I18n.t('groups.edit.title', raise: true), path: groups(:group_one).path }]
 
-    render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+    render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     assert_text groups(:group_one).name
     assert_selector 'a', count: 2
     assert_selector 'svg', count: 1
@@ -23,7 +23,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     # Mock context breadcrumb
     context_crumbs = [{ name: I18n.t('projects.edit.title', raise: true), path: "#{groups(:group_one).path}/-/edit`" }]
 
-    render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+    render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     assert_text groups(:group_one).name
     assert_text I18n.t('groups.edit.title', raise: true)
     assert_selector 'a', count: 2
@@ -37,7 +37,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     # Mock context breadcrumb
     context_crumbs = nil
 
-    render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+    render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     assert_text groups(:group_one).name
     assert_selector 'a', count: 1
   end
@@ -50,7 +50,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     context_crumbs = [{ name: I18n.t('projects.edit.title', raise: true),
                         path: "#{groups(:group_one).path}/-/groups/new`" }]
 
-    render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+    render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     assert_text groups(:group_one).name
     assert_selector 'a', count: 2
     assert_selector 'svg', count: 1
@@ -64,7 +64,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     context_crumbs = { name: I18n.t('groups.edit.title', raise: true), path: groups(:group_one).path }
 
     assert_raises ArgumentError do
-      render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+      render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     end
   end
 
@@ -76,7 +76,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     context_crumbs = ['FOOBAR']
 
     assert_raises ArgumentError do
-      render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+      render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     end
   end
 
@@ -88,7 +88,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     context_crumbs = [{ path: groups(:group_one).path }]
 
     assert_raises ArgumentError do
-      render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+      render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     end
   end
 
@@ -100,7 +100,7 @@ class BreadcrumbComponentTest < ViewComponent::TestCase
     context_crumbs = [{ name: I18n.t('groups.edit.title', raise: true) }]
 
     assert_raises ArgumentError do
-      render_inline(BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+      render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
     end
   end
 end

@@ -34,7 +34,7 @@
             ) %>
           <% end %>
           <% layout.body do %>
-            <%= render BreadcrumbComponent.new(
+            <%= render Viral::BreadcrumbComponent.new(
               route: @project.namespace.route,
               context_crumbs: @context_crumbs
             ) %>

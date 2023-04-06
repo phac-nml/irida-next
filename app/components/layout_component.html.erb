@@ -11,4 +11,8 @@
     </div>
   </div>
 </div>
-<%= render "shared/flash" %>
+<div class="fixed top-5 right-6 flex flex-col ">
+  <% flash.each do |key, value| %>
+    <%= viral_flash(type: key, data: value) %>
+  <% end %>
+</div>
