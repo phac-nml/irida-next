@@ -11,7 +11,7 @@
         <table id= "samples-table" class="min-w-full table-fixed dark:divide-gray-600">
           <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
           <% @samples.each do |sample| %>
-            <tr class="text-sm font-normal text-gray-500 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-gray-400">
+            <tr class="text-sm font-normal text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400">
               <td class="p-4 whitespace-nowrap">
                 <%= link_to sample.name, namespace_project_sample_path(id: sample.id), class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
                 <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= sample.description %></div>

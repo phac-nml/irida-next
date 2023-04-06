@@ -139,6 +139,7 @@ en:
     index:
       create_group_button: New group
       group_dropdown:
+        label: Actions for group %{group_name}
         delete: Delete group
     create:
       success: Group created successfully
