@@ -14,7 +14,7 @@ module Groups
     def execute # rubocop:disable Metrics/AbcSize
       unless allowed_to_modify_group?(group)
         raise GroupCreateError, I18n.t('services.groups.create.no_permission',
-                                       namespace_type: namespace.type.downcase)
+                                       namespace_type: group.type.downcase)
       end
 
       group.save
