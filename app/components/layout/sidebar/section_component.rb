@@ -2,6 +2,7 @@
 
 module Layout
   module Sidebar
+    # Sidebar section component to group items
     class SectionComponent < Component
       renders_many :items, ItemComponent
 

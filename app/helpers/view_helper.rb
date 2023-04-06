@@ -21,6 +21,6 @@ module ViewHelper
     svg[:class] = 'Viral-Icon__Svg'
     svg[:focusable] = false
     svg[:'aria-hidden'] = true
-    doc.to_html.html_safe
+    doc.to_html.html_safe # rubocop:disable Rails/OutputSafety
   end
 end
