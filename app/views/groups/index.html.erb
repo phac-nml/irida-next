@@ -20,22 +20,22 @@
               dark:divide-gray-700
             "
           >
-            <% @groups.each do |group| %>
-              <tr
-                class="
+          <% @groups.each do |group| %>
+            <tr
+              class="
                   text-sm
                   font-normal
                   text-gray-500
-                  hover:bg-green-100
+                  hover:bg-gray-50
                   dark:hover:bg-gray-700
                   dark:text-gray-400
                 "
-              >
-                <td class="p-4 whitespace-nowrap">
-                  <%= link_to group.name,
-                  group_path(group),
-                  class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                  <% if current_user.id == group.owner_id %>
+            >
+              <td class="p-4 whitespace-nowrap">
+                <%= link_to group.name,
+                            group_path(group),
+                            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                <% if current_user.id == group.owner_id %>
                     <span
                       class="
                         bg-green-200
@@ -68,6 +68,9 @@
                     <button
                       data-dropdown-toggle="group-<%= group.id %>-dropdown"
                       class="navbar-btn"
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="<%= t(:'groups.index.group_dropdown.label', group_name: group.name) %>"
                     >
                       <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
                     </button>
