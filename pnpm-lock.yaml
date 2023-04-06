@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  axe-core: ^4.6.3
   flowbite: ^1.6.4
   prettier: ^2.8.4
   prettier-plugin-tailwindcss: ^0.2.3
