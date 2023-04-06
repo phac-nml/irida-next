@@ -158,6 +158,7 @@ en:
       personal_access_token:
         never: Never
         revoke_button: Revoke
+        revoke_confirm: Are you sure you want to revoke this personal access token? This action cannot be undone.
   groups:
     owner: Owner
     sidebar:
