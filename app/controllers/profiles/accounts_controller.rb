@@ -3,7 +3,7 @@
 # Purpose: To handle the user's account settings
 module Profiles
   # Controller for the user account page
-  class AccountsController < ApplicationController
+  class AccountsController < Profiles::ApplicationController
     layout 'profiles'
 
     before_action :set_user

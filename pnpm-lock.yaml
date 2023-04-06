@@ -2,12 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   axe-core: ^4.6.3
-  flowbite: ^1.6.3
+  flowbite: ^1.6.4
   prettier: ^2.8.4
   prettier-plugin-tailwindcss: ^0.2.3
 
 dependencies:
-  flowbite: 1.6.3
+  flowbite: 1.6.4
 
 devDependencies:
   axe-core: 4.6.3
@@ -25,8 +25,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /flowbite/1.6.3:
-    resolution: {integrity: sha512-wTtAzZBLrUYqUBoTSNcMAeJrZNAcdx04EDgXWnkQ7gkKoAPFvLaq/H/Zw0JKZLVKFpKxqJ7PlvocfDApSHjhvw==}
+  /flowbite/1.6.4:
+    resolution: {integrity: sha512-//kSaigwERCcE3udumadB3+xfOXeN/ZQzcub2qVCHuB7uscB4XIm3yP9R8zL0XsEOnYG2lnroq/dydQZbzvESw==}
     dependencies:
       '@popperjs/core': 2.11.6
       mini-svg-data-uri: 1.4.4

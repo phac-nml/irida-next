@@ -82,6 +82,9 @@
   .form-field input[type="email"] {
     @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
   }
+  .form-field.datepicker input[type="text"] {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  }
 
   .form-field select.prefixed {
     appearance: none;
@@ -109,7 +112,7 @@
     @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
-  .form-field input[type="checkbox"] {
+  input[type="checkbox"] {
     @apply w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-primary-300 focus:ring-4 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600;
   }
 
@@ -118,11 +121,20 @@
   }
 
   .btn {
-    @apply cursor-pointer rounded-lg px-5 text-center text-sm font-medium py-2.5 focus:outline-none focus:ring-4;
+    @apply text-white rounded-lg text-sm px-5 py-2.5 text-center focus:outline-none focus:ring-4;
+    
+  }
+
+  .btn-xs {
+    @apply px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none focus:ring-4;
+  }
+
+  .btn-sm {
+    @apply px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:outline-none focus:ring-4;
   }
 
   .btn-default {
-    @apply text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
+    @apply  text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
   }
 
   .btn-primary {
