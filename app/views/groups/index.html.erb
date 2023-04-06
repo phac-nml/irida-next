@@ -68,6 +68,9 @@
                     <button
                       data-dropdown-toggle="group-<%= group.id %>-dropdown"
                       class="navbar-btn"
+                      aria-expanded="false"
+                      aria-haspopup="menu"
+                      aria-label="<%= t(:'groups.index.group_dropdown.label', group_name: group.name) %>"
                     >
                       <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
                     </button>
