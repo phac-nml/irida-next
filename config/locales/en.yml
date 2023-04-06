@@ -314,6 +314,12 @@ en:
         namespace_required: A project must belong to either a user or group namespace
       destroy:
         no_permission: You do not have permission to delete this project
+      transfer:
+        namespace_empty: Please select a new namespace for your project.
+        project_in_namespace: Project is already in this namespace.
+        no_permission: You don't have permission to transfer this project.
+        no_namespace_permission: You don't have permission to transfer projects into that namespace.
+        namespace_project_exists: Project with same name or path in target namespace already exists.
       update:
         no_permission: You do not have permission to update this project
     members:
