@@ -25,4 +25,8 @@ class UserTest < ActiveSupport::TestCase
     assert_not_equal namespace_path_before, @user.namespace.path
     assert_not_equal namespace_name_before, @user.namespace.name
   end
+
+  test '#personal_access_tokens' do
+    assert_equal 4, @user.personal_access_tokens.size
+  end
 end
