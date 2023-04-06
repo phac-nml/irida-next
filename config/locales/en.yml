@@ -304,6 +304,8 @@ en:
         error: The sample does not exist within the project.
   services:
     groups:
+      create:
+        no_permission: "You do not have permission to create a new group under this %{namespace_type}"
       destroy:
         no_permission: You do not have permission to delete this group
       update:

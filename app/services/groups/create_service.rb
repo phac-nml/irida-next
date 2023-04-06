@@ -11,9 +11,10 @@ module Groups
       @group = Group.new(params.merge(owner: current_user))
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       unless allowed_to_modify_group?(group)
-        raise GroupCreateError, 'You do not have permission to create a group under this namespace'
+        raise GroupCreateError, I18n.t('services.groups.create.no_permission',
+                                       namespace_type: namespace.type.downcase)
       end
 
       group.save
