@@ -97,4 +97,10 @@ module AxeHelpers
 
     assert_accessible
   end
+
+  def visit(path, **attributes)
+    super
+
+    assert_accessible
+  end
 end
