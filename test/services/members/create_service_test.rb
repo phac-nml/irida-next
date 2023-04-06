@@ -62,5 +62,27 @@ module Members
         Members::CreateService.new(user, @group, valid_params).execute
       end
     end
+
+    test 'create group member with valid params when member of a parent group with the OWNER role' do
+      user = users(:michelle_doe)
+      valid_params = { user: users(:ryan_doe),
+                       access_level: Member::AccessLevel::OWNER }
+      group = groups(:subgroup_one_group_three)
+
+      assert_difference -> { Members::GroupMember.count } => 1 do
+        Members::CreateService.new(user, group, valid_params).execute
+      end
+    end
+
+    test 'create group member with valid params when member of a parent group with the not OWNER role' do
+      user = users(:micha_doe)
+      valid_params = { user: users(:ryan_doe),
+                       access_level: Member::AccessLevel::OWNER }
+      group = groups(:subgroup_one_group_three)
+
+      assert_no_difference('Members::GroupMember.count') do
+        Members::CreateService.new(user, group, valid_params).execute
+      end
+    end
   end
 end

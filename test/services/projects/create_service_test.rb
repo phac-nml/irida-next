@@ -49,5 +49,25 @@ module Projects
         Projects::CreateService.new(user, valid_params).execute
       end
     end
+
+    test 'create project within a parent group that the user is a part of with OWNER role' do
+      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1',
+                                               parent_id: groups(:subgroup_one_group_three).id } }
+      user = users(:michelle_doe)
+
+      assert_difference -> { Project.count } => 1, -> { Members::ProjectMember.count } => 1 do
+        Projects::CreateService.new(user, valid_params).execute
+      end
+    end
+
+    test 'create project within a parent group that the user is a part of with not OWNER role' do
+      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1',
+                                               parent_id: groups(:subgroup_one_group_three).id } }
+      user = users(:micha_doe)
+
+      assert_no_difference ['Project.count', 'Members::ProjectMember.count'] do
+        Projects::CreateService.new(user, valid_params).execute
+      end
+    end
   end
 end

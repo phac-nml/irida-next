@@ -32,5 +32,23 @@ module Groups
         Groups::CreateService.new(user, valid_params).execute
       end
     end
+
+    test 'create subgroup within a parent group that the user is a part of with OWNER role' do
+      valid_params = { name: 'group1', path: 'group1', parent_id: groups(:subgroup_one_group_three).id }
+      user = users(:michelle_doe)
+
+      assert_difference -> { Group.count } => 1, -> { Members::GroupMember.count } => 1 do
+        Groups::CreateService.new(user, valid_params).execute
+      end
+    end
+
+    test 'create subgroup within a parent group that the user is a part of with not OWNER role' do
+      valid_params = { name: 'group1', path: 'group1', parent_id: groups(:subgroup_one_group_three).id }
+      user = users(:micha_doe)
+
+      assert_no_difference ['Group.count', 'Members::GroupMember.count'] do
+        Groups::CreateService.new(user, valid_params).execute
+      end
+    end
   end
 end
