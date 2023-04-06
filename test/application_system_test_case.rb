@@ -95,7 +95,20 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
     message = format_accessibility_errors(violations)
 
-    assert violations.size.empty?, message
+    assert violations.empty?, message
+  end
+
+  # Capybara Overrides to run accessibility checks when UI changes.
+  def fill_in(locator = nil, **kwargs)
+    super
+
+    assert_accessible
+  end
+
+  def click_button(locator = nil, **kwargs)
+    super
+
+    assert_accessible
   end
 
   private
