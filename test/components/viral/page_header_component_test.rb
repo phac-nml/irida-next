@@ -6,7 +6,7 @@ class PageHeaderComponentTest < ViewComponent::TestCase
   test 'renders header' do
     title = 'THIS IS THE TITLE'
     subtitle = 'THIS IS A SUBTITLE'
-    render_inline(PageHeaderComponent.new(title:, subtitle:))
+    render_inline(Viral::PageHeaderComponent.new(title:, subtitle:))
 
     assert_text title
     assert_text subtitle
@@ -15,7 +15,7 @@ class PageHeaderComponentTest < ViewComponent::TestCase
   test 'renders header with icon' do
     title = 'THIS IS THE TITLE'
     subtitle = 'THIS IS A SUBTITLE'
-    render_inline(PageHeaderComponent.new(title:, subtitle:)) do |component|
+    render_inline(Viral::PageHeaderComponent.new(title:, subtitle:)) do |component|
       component.with_icon(name: 'beaker')
       component.with_buttons { 'BUTTONS' }
     end
