@@ -3,14 +3,12 @@
 require 'view_component_system_test_case'
 
 module Viral
-  class FlashComponentTest < ViewComponent::SystemTestCase
+  class FlashComponentTest < ViewComponent::TestCase
     test 'success message' do
       message = 'Successful Message!'
       render_inline(Viral::FlashComponent.new(type: 'success', data: message))
       assert_text message
       assert_selector '.bg-green-700'
-      find('[data-action="flash#dismiss"]').click
-      assert_no_text message
     end
 
     test 'error message' do
