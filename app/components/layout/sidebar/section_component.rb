@@ -5,19 +5,8 @@ module Layout
     class SectionComponent < Component
       renders_many :items, ItemComponent
 
-      def initialize(title: nil, **system_arguments)
+      def initialize(title: nil)
         @title = title
-        @system_arguments = system_arguments
-      end
-
-      def system_arguments
-        @system_arguments.tap do |opts|
-          opts[:tag] = 'ul'
-          opts[:classes] = class_names(
-            @system_arguments[:classes],
-            'Viral-Sidebar__Section'
-          )
-        end
       end
     end
   end

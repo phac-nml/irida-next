@@ -1,4 +1,4 @@
-<%= render(Viral::BaseComponent.new(**system_arguments)) do %>
+<ul class="Layout-Sidebar__Section">
   <% if items.present? %>
     <% if @title.present? %>
       <%= @title %>
@@ -9,4 +9,4 @@
   <% else %>
     <%= content %>
   <% end %>
-<% end %>
+</ul>

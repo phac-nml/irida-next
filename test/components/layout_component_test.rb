@@ -24,9 +24,9 @@ class LayoutComponentTest < ViewComponent::TestCase
 
       assert_selector 'aside' do
         assert_text I18n.t('general.default_sidebar.title')
-        assert_selector '.Viral-Sidebar__Section' do
-          assert_selector 'Layout-Sidebar__ListItem', count: 2
-          assert_selector 'a.active[href="/-/projects"]'
+        assert_selector '.Layout-Sidebar__Section' do
+          assert_selector '.Layout-Sidebar__Item', count: 2
+          assert_selector 'a.Layout-Sidebar__Item--selected[href="/-/projects"]'
           assert_selector 'a[href="/-/groups"]'
         end
       end

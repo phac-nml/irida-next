@@ -15,7 +15,7 @@
       hover:bg-gray-100
       dark:text-gray-200
       dark:hover:bg-gray-700
-      <%= class_names('bg-gray-100 dark:bg-gray-700': current_page?(@url)) %>
+      <%= class_names('Layout-Sidebar__Item--selected bg-gray-100 dark:bg-gray-700': current_page?(@url)) %>
     "
   >
     <%= viral_icon(name: @icon, color: :subdued, style: "width: 27px;", classes: "p-1") %>
