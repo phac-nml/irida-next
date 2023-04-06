@@ -145,6 +145,7 @@ en:
     personal_access_tokens:
       access_token_section:
         label: Your new personal access token
+        description: Make sure you save it - you won't be able to access it again.
       create:
         submit: Create personal access token
         subtitle: Enter the name of your application, and we'll return a unique personal access token.

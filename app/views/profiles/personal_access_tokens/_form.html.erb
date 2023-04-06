@@ -56,7 +56,7 @@
               scope,
               class: "font-medium text-gray-900 dark:text-gray-300" %>
               <p
-                id="personal_access_token_scopes_help-text"
+                id=<%= "personal_access_token_scopes_#{scope}_help-text" %>
                 class="text-xs font-normal text-gray-500 dark:text-gray-300"
               ><%= t("auth.scopes.#{scope}") %></p>
             </div>
