@@ -23,18 +23,18 @@
             "
           >
             <% @members.each do |member| %>
-              <tr
-                class="
+            <tr
+              class="
                   text-sm
                   font-normal
                   text-gray-500
-                  hover:bg-green-100
+                  hover:bg-gray-50
                   dark:hover:bg-gray-700
                   dark:text-gray-400
                 "
-              >
-                <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
+            >
+              <td class="p-4 whitespace-nowrap">
+                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_level.level_#{member.access_level}") %></div>

@@ -7,6 +7,12 @@ class ProfileTest < ApplicationSystemTestCase
     login_as users(:john_doe)
   end
 
+  test 'is accessible' do
+    visit profile_path
+
+    assert_accessible
+  end
+
   test 'can update profile email' do
     visit profile_path
 
