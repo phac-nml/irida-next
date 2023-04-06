@@ -6,8 +6,10 @@ class BreadcrumbComponentPreview < ViewComponent::Preview
   end
 
   def breadcrumb_with_crumbs
-    render Viral::BreadcrumbComponent.new(route: Route.new(name: 'Borrelia burgdorferi / Project Name', path: 'group/project'),
-                                          context_crumbs: [{ name: 'A new group name',
-                                                             path: '/groups' }])
+    render Viral::BreadcrumbComponent.new(
+      route: Route.new(name: 'Borrelia burgdorferi / Project Name', path: 'group/project'),
+      context_crumbs: [{ name: 'A new group name',
+                         path: '/groups' }]
+    )
   end
 end
