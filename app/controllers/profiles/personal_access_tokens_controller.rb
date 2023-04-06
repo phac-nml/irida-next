@@ -14,7 +14,7 @@ module Profiles
     end
 
     def create
-      @personal_access_token = PersonalAccessToken.create(personal_access_token_params.merge(user: current_user))
+      @personal_access_token = PersonalAccessToken.new(personal_access_token_params.merge(user: current_user))
 
       respond_to do |format|
         if @personal_access_token.save
