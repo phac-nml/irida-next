@@ -25,6 +25,8 @@ class Namespace < ApplicationRecord
   validate :validate_parent_type
   validate :validate_nesting_level
 
+  scope :include_route, -> { includes(:route) }
+
   class << self
     def sti_class_for(type_name)
       case type_name

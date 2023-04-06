@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   draw :user
   draw :project
 
+  draw :development
+
   project_routes = Irida::Application.routes.set.filter_map do |route|
     route.name if route.name&.include?('namespace_project')
   end

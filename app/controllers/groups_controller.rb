@@ -7,7 +7,7 @@ class GroupsController < ApplicationController
   before_action :context_crumbs, except: %i[index new create show]
 
   def index
-    @groups = Group.all
+    @groups = Group.all.include_route
   end
 
   def show
