@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_16_180414) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_27_202710) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,6 +34,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_16_180414) do
     t.integer "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "personal_access_tokens", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "scopes"
+    t.string "name"
+    t.boolean "revoked"
+    t.date "expires_at"
+    t.string "token_digest"
+    t.datetime "last_used_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token_digest"], name: "index_personal_access_tokens_on_token_digest", unique: true
+    t.index ["user_id"], name: "index_personal_access_tokens_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -77,5 +91,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_16_180414) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "personal_access_tokens", "users"
   add_foreign_key "samples", "projects"
 end

@@ -1,0 +1,51 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+john_doe_expired_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  scopes:
+    - api
+  name: Expired PAT
+  revoked: false
+  expires_at: <%= 10.days.ago.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "byb8myzkJ7HNeFS2La-8") %>
+  last_used_at: nil
+
+john_doe_revoked_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  scopes:
+    - api
+  name: Revoked PAT
+  revoked: true
+  expires_at: <%= 10.days.from_now.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "osvR7Re6ZN_7sem8wF9z") %>
+  last_used_at: nil
+
+john_doe_valid_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  scopes:
+    - api
+  name: Valid PAT
+  revoked: false
+  expires_at: <%= 10.days.from_now.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "JQ2w5maQc4zgvC8GGMEp") %>
+  last_used_at: nil
+
+john_doe_non_expirable_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  scopes:
+    - api
+  name: Non Expirable PAT
+  revoked: false
+  expires_at: nil
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "b8rH5_yCXFi-fxirkvfz") %>
+  last_used_at: nil
+
+jane_doe_valid_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
+  scopes:
+    - api
+  name: Valid PAT
+  revoked: false
+  expires_at: <%= 10.days.from_now.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "MMx_KskxBCx9tpc5qusm") %>
+  last_used_at: nil

@@ -41,6 +41,12 @@ en:
         description: Description
         parent_id: Project URL
         path: Project slug
+      personal_access_token:
+        name: Token name
+        scopes: Scopes
+        created_at: Created
+        last_used_at: Last Used
+        expires_at: Expiration Date
       sample:
         name: Name
         description: Description
@@ -58,6 +64,10 @@ en:
           attributes:
             access_level:
               invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
+        personal_access_token:
+          attributes:
+            scopes:
+              inclusion: can only contain available scopes
     models:
       member:
         access_level:
@@ -66,6 +76,10 @@ en:
           analyst: Analyst
           maintainer: Maintainer
           owner: Owner
+  auth:
+    scopes:
+      api: Grants complete read/write access to the API.
+      read_api: Grants read access to the API.
   layouts:
     application:
       site_title: IRIDA Next
@@ -99,10 +113,11 @@ en:
         aria_label: Toggle dark mode
   profiles:
     sidebar:
-      header: User Settingss
+      header: User Settings
       profile: Profile
       password: Password
       account: Account
+      access_tokens: Access Tokens
     show:
       email:
         title: Email
@@ -127,6 +142,23 @@ en:
           - All projects and groups you are a member of will be left intact
         button: Delete account
         confirm: Are you sure you want to delete your account?
+    personal_access_tokens:
+      access_token_section:
+        label: Your new personal access token
+        description: Make sure you save it - you won't be able to access it again.
+      create:
+        submit: Create personal access token
+        subtitle: Enter the name of your application, and we'll return a unique personal access token.
+        title: Add a personal access token
+      index:
+        active_personal_access_tokens: Active Personal Access Tokens (%{count})
+        expires_at: Expires
+        subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
+        title: Personal Access Tokens
+      personal_access_token:
+        never: Never
+        revoke_button: Revoke
+        revoke_confirm: Are you sure you want to revoke this personal access token? This action cannot be undone.
   groups:
     owner: Owner
     sidebar:

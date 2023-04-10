@@ -14,6 +14,8 @@ class User < ApplicationRecord
           inverse_of: :owner,
           autosave: true
 
+  has_many :personal_access_tokens, dependent: :destroy
+
   before_validation :ensure_namespace
   before_save :ensure_namespace
 

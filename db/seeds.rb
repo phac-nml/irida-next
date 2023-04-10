@@ -84,7 +84,11 @@ if Rails.env.development?
     {
       email: 'admin@email.com',
       password: 'password1',
-      password_confirmation: 'password1'
+      password_confirmation: 'password1',
+      personal_access_tokens: [
+        { name: 'API r/w Token', scopes: ['api'], token_digest: 'zs83sKD3jeysfnr_kgu9' },
+        { name: 'API read only Token', scopes: ['read_api'], token_digest: 'yK1euURqVRtQ1D-3uKsW' }
+      ]
     },
     {
       email: 'user1@email.com',
@@ -127,8 +131,15 @@ if Rails.env.development?
     }
   ]
 
-  users.each do |user|
-    User.create_with(user.slice(:password, :password_confirmation)).find_or_create_by!(email: user[:email])
+  users.each do |user_params|
+    user = User.create_with(user_params.slice(:password,
+                                              :password_confirmation)).find_or_create_by!(email: user_params[:email])
+    next unless user_params[:personal_access_tokens]
+
+    user_params[:personal_access_tokens].each do |pat|
+      PersonalAccessToken.find_or_create_by!(name: pat[:name], scopes: pat[:scopes], user:,
+                                             token_digest: pat[:token_digest])
+    end
   end
 
   # Group Params Hash

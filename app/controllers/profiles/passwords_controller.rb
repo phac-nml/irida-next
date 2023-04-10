@@ -3,7 +3,7 @@
 # Purpose: To handle the user's password settings
 module Profiles
   # Controller for the user password page
-  class PasswordsController < ApplicationController
+  class PasswordsController < Profiles::ApplicationController
     layout 'profiles'
 
     before_action :set_user
