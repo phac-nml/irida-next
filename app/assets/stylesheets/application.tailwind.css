@@ -122,7 +122,6 @@
 
   .btn {
     @apply text-white rounded-lg text-sm px-5 py-2.5 text-center focus:outline-none focus:ring-4;
-    
   }
 
   .btn-xs {
@@ -134,7 +133,7 @@
   }
 
   .btn-default {
-    @apply  text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
+    @apply text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
   }
 
   .btn-primary {
@@ -208,5 +207,39 @@
 
   .Viral-Icon--colorPrimary {
     @apply text-primary-500;
+  }
+
+  /*
+     Add the following markup AFTER your import statements
+     Notice: this style contains only the rules for pagy-nav
+  */
+
+  .pagy-nav.pagination {
+    @apply isolate inline-flex -space-x-px rounded-md shadow-sm;
+  }
+
+  .page.next a {
+    @apply relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
+  }
+
+  .page.prev a {
+    @apply relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
+  }
+
+  .page.next.disabled {
+    @apply relative inline-flex items-center rounded-r-md border border-gray-300 bg-slate-100 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
+  }
+
+  .page.prev.disabled {
+    @apply relative inline-flex items-center rounded-l-md border border-gray-300 bg-slate-100 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20;
+  }
+
+  .page a,
+  .page.gap {
+    @apply bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20;
+  }
+
+  .page.active {
+    @apply z-10 border-indigo-500 bg-indigo-50 text-indigo-600 relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20;
   }
 }
