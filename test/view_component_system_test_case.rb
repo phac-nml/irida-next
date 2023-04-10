@@ -5,7 +5,7 @@ require 'test_helpers/capybara_setup'
 require 'test_helpers/cuprite_helpers'
 require 'test_helpers/cuprite_setup'
 
-class ViewComponentSystemTestCase < ViewComponent::SystemTestCase
+class ViewComponentSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :irida_next_cuprite
 
   include CupriteHelpers

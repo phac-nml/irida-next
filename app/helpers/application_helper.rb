@@ -2,4 +2,5 @@
 
 # Helper for Application
 module ApplicationHelper
+  include Pagy::Frontend
 end

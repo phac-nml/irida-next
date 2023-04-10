@@ -185,6 +185,7 @@ GEM
     nokogiri (1.14.1-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pagy (6.0.3)
     parallel (1.22.1)
     parser (3.2.1.0)
       ast (~> 2.4.1)
@@ -327,6 +328,7 @@ DEPENDENCIES
   jbuilder
   listen
   lookbook (>= 2.0.0.rc.1)
+  pagy (~> 6.0)
   pg
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.2)
