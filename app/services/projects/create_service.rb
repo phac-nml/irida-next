@@ -4,16 +4,16 @@ module Projects
   # Service used to Create Projects
   class CreateService < BaseService
     ProjectCreateError = Class.new(StandardError)
-    attr_accessor :namespace_params, :project
+    attr_accessor :namespace_params, :project, :namespace
 
     def initialize(user = nil, params = {})
       super(user, params)
       @namespace_params = @params.delete(:namespace_attributes)
       @project = Project.new(params.merge(creator: current_user))
+      @namespace = Namespace.find_by(id: namespace_params[:parent_id] || namespace_params[:parent])
     end
 
     def execute
-      namespace = Namespace.find_by(id: namespace_params[:parent_id])
       raise ProjectCreateError, I18n.t('services.projects.create.namespace_required') if namespace.nil?
 
       unless allowed_to_modify_projects_in_namespace?(namespace)
