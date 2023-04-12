@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Viral
-  class DropdownComponent < ViewComponent::Base
+  # Dropdown component
+  class DropdownComponent < Viral::Component
+    # renders_many :items, ItemComponent
   end
 end
