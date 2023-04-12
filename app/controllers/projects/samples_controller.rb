@@ -33,7 +33,6 @@ module Projects
         flash[:success] = t('.success')
         redirect_to namespace_project_sample_path(id: @sample.id)
       else
-        flash[:error] = @sample.errors.full_messages.first
         render :new, status: :unprocessable_entity
       end
     end

@@ -33,7 +33,6 @@ module MembershipActions
       flash[:success] = t('.success')
       redirect_to members_path
     else
-      flash[:error] = @new_member.errors.full_messages.first
       render :new, status: :unprocessable_entity, locals: { member: @new_member }
     end
   end

@@ -33,7 +33,6 @@ class GroupsController < ApplicationController
       flash[:success] = t('.success')
       redirect_to group_path(@new_group.full_path)
     else
-      flash[:error] = @new_group.errors.full_messages.first
       @group = @new_group.parent
       render_new status: :unprocessable_entity
     end
