@@ -21,7 +21,7 @@ class TestClassController < ApplicationController
 
   def access_levels
     member_user = Member.find_by(user: current_user, namespace: @namespace, type: @member_type)
-    @access_levels = Member.access_levels(member_user, current_user.id == @namespace.owner_id)
+    @access_levels = Member.access_levels(member_user)
   end
 
   def available_users
