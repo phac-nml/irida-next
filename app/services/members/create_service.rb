@@ -16,7 +16,7 @@ module Members
       unless allowed_to_modify_members_in_namespace?(namespace)
         raise MemberCreateError,
               I18n.t('services.members.create.no_permission',
-                     namespace_type: namespace.type.downcase)
+                     namespace_type: namespace.class.model_name.human)
       end
 
       member.save

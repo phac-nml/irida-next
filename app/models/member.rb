@@ -13,7 +13,7 @@ class Member < ApplicationRecord
   validate :validate_namespace
   validate :higher_access_level_than_group
 
-  before_destroy :last_namespace_owner_member
+  before_destroy :last_namespace_owner_member if proc { namespace.group_namespace? }
 
   class << self
     def sti_class_for(type_name)

@@ -44,7 +44,7 @@ module Members
       end
 
       assert @group_member.errors.full_messages.include?(I18n.t('services.members.update.cannot_update_self',
-                                                                namespace_type: @group.type.downcase))
+                                                                namespace_type: @group.class.model_name.human))
     end
 
     test 'update group member with incorrect permissions' do
@@ -56,7 +56,7 @@ module Members
       end
 
       assert @group_member.errors.full_messages.include?(I18n.t('services.members.update.no_permission',
-                                                                namespace_type: @group.type.downcase))
+                                                                namespace_type: @group.class.model_name.human))
     end
 
     test 'update project member with valid params' do
@@ -91,7 +91,7 @@ module Members
 
       assert @project_member.errors.full_messages.include?(
         I18n.t('services.members.update.cannot_update_self',
-               namespace_type: @project_namespace.type.downcase)
+               namespace_type: @project_namespace.class.model_name.human)
       )
     end
 
@@ -105,7 +105,7 @@ module Members
 
       assert @project_member.errors.full_messages.include?(
         I18n.t('services.members.update.no_permission',
-               namespace_type: @project_namespace.type.downcase)
+               namespace_type: @project_namespace.class.model_name.human)
       )
     end
   end

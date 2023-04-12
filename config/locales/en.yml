@@ -36,11 +36,15 @@ en:
         name: Group name
         path: Group slug
         parent_id: Group URL
+        one: Group
+        other: Groups
       namespaces/project_namespace:
         name: Project Name
         description: Description
         parent_id: Project URL
         path: Project slug
+        one: Project
+        other: Projects
       personal_access_token:
         name: Token name
         scopes: Scopes

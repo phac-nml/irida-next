@@ -61,7 +61,7 @@ module Projects
 
       assert_no_text I18n.t(:'projects.members.destroy.success')
       assert_text I18n.t('services.members.destroy.cannot_remove_self',
-                         namespace_type: @project.namespace.type.downcase)
+                         namespace_type: @project.namespace.class.model_name.human)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: @members_count
     end

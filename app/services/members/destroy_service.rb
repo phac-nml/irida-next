@@ -15,12 +15,12 @@ module Members
     def execute # rubocop:disable Metrics/AbcSize
       unless current_user != member.user
         raise MemberDestroyError, I18n.t('services.members.destroy.cannot_remove_self',
-                                         namespace_type: namespace.type.downcase)
+                                         namespace_type: namespace.class.model_name.human)
       end
 
       unless allowed_to_modify_members_in_namespace?(namespace)
         raise MemberDestroyError, I18n.t('services.members.destroy.no_permission',
-                                         namespace_type: namespace.type.downcase)
+                                         namespace_type: namespace.class.model_name.human)
       end
 
       member.destroy
