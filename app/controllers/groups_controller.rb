@@ -5,30 +5,32 @@ class GroupsController < ApplicationController
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update]
   before_action :context_crumbs, except: %i[index new create show]
+  verify_authorized except: %i[index create]
 
   def index
-    @groups = Group.all.include_route
+    @groups = authorized_scope(Group, type: :relation)
   end
 
   def show
-    # No necessary code here
+    authorize! @group
   end
 
   def new
     @group = Group.find(params[:parent_id]) if params[:parent_id]
     @new_group = Group.new(parent_id: @group&.id)
+    authorize! @new_group
     respond_to do |format|
       format.html { render_new }
     end
   end
 
   def edit
-    # No necessary code here
+    authorize! @group
   end
 
   def create
+    skip_verify_authorized!
     @new_group = Groups::CreateService.new(current_user, group_params).execute
-
     if @new_group.persisted?
       flash[:success] = t('.success')
       redirect_to group_path(@new_group.full_path)
@@ -39,6 +41,7 @@ class GroupsController < ApplicationController
   end
 
   def update
+    authorize! @group
     if Groups::UpdateService.new(@group, current_user, group_params).execute
       flash[:success] = t('.success')
       redirect_to group_path(@group)
@@ -48,6 +51,7 @@ class GroupsController < ApplicationController
   end
 
   def destroy
+    authorize! @group
     if @group.destroy
       flash[:success] = t('.success', group_name: @group.name)
       redirect_to groups_path

@@ -4,7 +4,7 @@ module Projects
   # Controller actions for Members
   class MembersController < ApplicationController
     include MembershipActions
-
+    verify_authorized
     layout 'projects'
 
     def member_params

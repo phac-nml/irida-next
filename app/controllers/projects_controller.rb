@@ -5,12 +5,14 @@ class ProjectsController < ApplicationController
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer]
   before_action :context_crumbs, except: %i[index new create show]
+  verify_authorized except: %i[index create]
 
   def index
-    @projects = Project.all.include_route
+    @projects = authorized_scope(Project, type: :relation)
   end
 
   def show
+    authorize! @project
     # No necessary code here
   end
 
@@ -20,10 +22,12 @@ class ProjectsController < ApplicationController
   end
 
   def edit
+    authorize! @project
     # No necessary code here
   end
 
   def create
+    skip_verify_authorized!
     @project = Projects::CreateService.new(current_user, project_params).execute
 
     if @project.persisted?
@@ -38,6 +42,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
+    authorize! @project
     if Projects::UpdateService.new(@project, current_user, project_params).execute
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
@@ -49,10 +54,12 @@ class ProjectsController < ApplicationController
   end
 
   def activity
+    authorize! @project
     # No necessary code here
   end
 
   def transfer
+    authorize! @project
     new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       redirect_to(

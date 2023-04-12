@@ -13,10 +13,12 @@ module MembershipActions
   end
 
   def index
+    authorize! @namespace
     @members = Member.where(namespace_id: @namespace.id)
   end
 
   def new
+    authorize! @namespace, to: :new?, default: Member
     @new_member = Member.new(namespace_id: @namespace.id)
 
     respond_to do |format|
@@ -27,6 +29,7 @@ module MembershipActions
   end
 
   def create
+    authorize! @namespace, to: :create?, default: Member
     @new_member = Members::CreateService.new(current_user, @namespace, member_params).execute
 
     if @new_member.persisted?
@@ -39,6 +42,7 @@ module MembershipActions
   end
 
   def destroy
+    authorize! @namespace, to: :new?, default: Member unless member.nil?
     if @member.nil?
       flash[:error] = t('.error')
       render status: :unprocessable_entity, json: {

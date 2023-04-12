@@ -4,7 +4,7 @@ module Groups
   # Controller actions for Members
   class MembersController < ApplicationController
     include MembershipActions
-
+    verify_authorized
     layout 'groups'
 
     def member_params
