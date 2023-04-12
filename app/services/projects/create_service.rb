@@ -31,6 +31,9 @@ module Projects
     def create_associations(project)
       project.build_namespace(namespace_params.merge(owner: current_user))
       project.save
+
+      return unless user_has_namespace_maintainer_access?
+
       Members::CreateService.new(current_user, project.namespace, {
                                    user: current_user,
                                    access_level: Member::AccessLevel::OWNER

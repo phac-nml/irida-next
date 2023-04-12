@@ -13,7 +13,8 @@ module Projects
     test 'create project with valid params under user namespace' do
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
 
-      assert_difference -> { Project.count } => 1, -> { Members::ProjectMember.count } => 1 do
+      # The user is already a member of a parent group so they are not added as a direct member to this project
+      assert_difference -> { Project.count } => 1, -> { Members::ProjectMember.count } => 0 do
         Projects::CreateService.new(@user, valid_params).execute
       end
     end
@@ -37,7 +38,8 @@ module Projects
     test 'create project with valid params under group namespace' do
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_group_namespace.id } }
 
-      assert_difference -> { Project.count } => 1, -> { Members::ProjectMember.count } => 1 do
+      # The user is already a member of a parent group so they are not added as a direct member to this project
+      assert_difference -> { Project.count } => 1, -> { Members::ProjectMember.count } => 0 do
         Projects::CreateService.new(@user, valid_params).execute
       end
     end
@@ -55,7 +57,8 @@ module Projects
                                                parent_id: groups(:subgroup_one_group_three).id } }
       user = users(:michelle_doe)
 
-      assert_difference -> { Project.count } => 1, -> { Members::ProjectMember.count } => 1 do
+      # The user is already a member of a parent group so they are not added as a direct member to this project
+      assert_difference -> { Project.count } => 1, -> { Members::ProjectMember.count } => 0 do
         Projects::CreateService.new(user, valid_params).execute
       end
     end

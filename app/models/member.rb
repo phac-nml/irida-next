@@ -13,8 +13,6 @@ class Member < ApplicationRecord
   validate :validate_namespace
   validate :higher_access_level_than_group
 
-  before_destroy :last_namespace_owner_member if proc { namespace.group_namespace? }
-
   class << self
     def sti_class_for(type_name)
       case type_name
@@ -47,15 +45,6 @@ class Member < ApplicationRecord
     errors.add(namespace.type, 'namespace cannot have members')
   end
 
-  # Method to ensure we don't leave a group or project without an owner
-  def last_namespace_owner_member
-    return unless !destroyed_by_association && (namespace.owners.count == 1 && namespace.owners.include?(user))
-
-    errors.add(:base,
-               I18n.t('activerecord.errors.models.member.destroy.last_member', namespace_type: namespace.type.downcase))
-    false
-  end
-
   def higher_access_level_than_group
     return unless highest_group_member && highest_group_member.access_level > access_level
 
@@ -85,7 +74,6 @@ class Member < ApplicationRecord
 
       def access_level_options
         {
-          I18n.t('activerecord.models.member.access_level.no_access') => NO_ACCESS,
           I18n.t('activerecord.models.member.access_level.guest') => GUEST,
           I18n.t('activerecord.models.member.access_level.analyst') => ANALYST,
           I18n.t('activerecord.models.member.access_level.maintainer') => MAINTAINER

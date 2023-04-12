@@ -19,10 +19,12 @@ module Groups
 
       group.save
 
-      Members::CreateService.new(current_user, group, {
-                                   user: current_user,
-                                   access_level: Member::AccessLevel::OWNER
-                                 }).execute
+      if group.parent.nil?
+        Members::CreateService.new(current_user, group, {
+                                     user: current_user,
+                                     access_level: Member::AccessLevel::OWNER
+                                   }).execute
+      end
 
       group
     rescue Groups::CreateService::GroupCreateError => e
