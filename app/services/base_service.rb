@@ -52,5 +52,7 @@ class BaseService
 
     return true if Member.where(user: current_user, namespace: namespace.self_and_ancestors,
                                 access_level: Member::AccessLevel::MAINTAINER).last
+
+    false
   end
 end

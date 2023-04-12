@@ -36,15 +36,11 @@ en:
         name: Group name
         path: Group slug
         parent_id: Group URL
-        one: Group
-        other: Groups
       namespaces/project_namespace:
         name: Project Name
         description: Description
         parent_id: Project URL
         path: Project slug
-        one: Project
-        other: Projects
       personal_access_token:
         name: Token name
         scopes: Scopes
@@ -83,6 +79,12 @@ en:
           analyst: Analyst
           maintainer: Maintainer
           owner: Owner
+      group:
+        one: Group
+        other: Groups
+      namespaces/project_namespace:
+        one: Project
+        other: Projects
   auth:
     scopes:
       api: Grants complete read/write access to the API.

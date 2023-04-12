@@ -32,7 +32,7 @@ module Projects
       project.build_namespace(namespace_params.merge(owner: current_user))
       project.save
 
-      return unless user_has_namespace_maintainer_access?
+      return unless !namespace_owners_include_user?(namespace) && user_has_namespace_maintainer_access?
 
       Members::CreateService.new(current_user, project.namespace, {
                                    user: current_user,

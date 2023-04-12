@@ -12,7 +12,9 @@ module Members
 
     # Method to ensure we don't leave a group or project without an owner
     def last_namespace_owner_member
-      return unless !destroyed_by_association && (namespace.owners.count == 1 && namespace.owners.last == user)
+      return if destroyed_by_association || Members::GroupMember.where(namespace: namespace.self_and_ancestors,
+                                                                       access_level: Member::AccessLevel::OWNER)
+                                                                .order(:access_level).many?
 
       errors.add(:base,
                  I18n.t('activerecord.errors.models.member.destroy.last_member',
