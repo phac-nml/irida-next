@@ -57,7 +57,6 @@ module MembershipActions
   def available_users
     # Remove current user from available users as a user cannot add themselves
     @available_users = User.where.not(id: Member.where(
-      type: @member_type,
       namespace_id: @namespace.id
     ).pluck(:user_id)).to_a - [current_user]
   end

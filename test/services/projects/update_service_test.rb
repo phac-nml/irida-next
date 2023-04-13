@@ -20,7 +20,7 @@ module Projects
     test 'update project with invalid params' do
       invalid_params = { namespace_attributes: { name: 'p1', path: 'p1' } }
 
-      assert_no_difference ['Project.count', 'Members::ProjectMember.count'] do
+      assert_no_difference ['Project.count', 'Member.count'] do
         Projects::UpdateService.new(@project, @user, invalid_params).execute
       end
     end
