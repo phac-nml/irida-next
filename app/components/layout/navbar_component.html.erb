@@ -18,7 +18,7 @@
           </span>
         </a>
 
-        <%= viral_dropdown(icon: "bars_3") do |dropdown| %>
+        <%= viral_dropdown(icon: "bars_3", aria: { label: t(:'general.navbar.main_dropdown.aria-label') }) do |dropdown| %>
           <%= dropdown.item(label: t(:"general.navbar.main_dropdown.projects"), url: projects_path, icon_name: "rectangle_stack") %>
           <%= dropdown.item(label: t(:"general.navbar.main_dropdown.groups"), url: groups_path, icon_name: "squares_2x2") %>
         <% end %>
@@ -83,13 +83,13 @@
         </button>
 
         <!-- New item menu -->
-        <%= viral_dropdown(icon: "document_plus") do |dropdown| %>
+        <%= viral_dropdown(icon: "document_plus", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }) do |dropdown| %>
           <%= dropdown.item(label: t(:"general.navbar.new_dropdown.project"), url: new_project_path) %>
           <%= dropdown.item(label: t(:"general.navbar.new_dropdown.group"), url: new_group_path) %>
         <% end %>
 
         <!-- Profile menu -->
-        <%= viral_dropdown(icon: "user_circle") do |dropdown| %>
+        <%= viral_dropdown(icon: "user_circle", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }) do |dropdown| %>
           <%= dropdown.item(label: t(:"general.navbar.account_dropdown.profile"), url: profile_path) %>
           <%= dropdown.item(label: t(:"general.navbar.account_dropdown.sign_out"), url: destroy_user_session_path, data: {
             turbo_method: :delete
