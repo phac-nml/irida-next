@@ -9,40 +9,20 @@
   "
 >
   <div class="px-3 py-1">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between ml-4">
       <div class="flex items-center justify-start">
-        <a href="<%= root_path %>" class="flex items-center">
+        <a href="<%= root_path %>" class="flex items-center mr-2">
           <%= viral_icon(name: "beaker", classes: "w-12 h-12 text-green-500 rotate-12") %>
           <span class="text-xl font-semibold text-gray-700 dark:text-gray-200">
             <%= t(:"general.name") %>
           </span>
         </a>
-        <button
-          id="toggleMainMenu"
-          aria-expanded="true"
-          aria-label="<%= t(:'general.navbar.main_dropdown.aria-label') %>"
-          data-dropdown-toggle="main-menu-dropdown"
-          class="navbar-btn"
-        >
-          <%= viral_icon(name: "bars_3", classes: "w-6 h-6") %>
-        </button>
-        <!-- Dropdown menu -->
-        <div id="main-menu-dropdown" class="dropdown-menu">
-          <ul aria-labelledby="dropdownDefaultButton">
-            <li>
-              <%= link_to projects_path do %>
-                <span class="flex-grow-0 mr-3"><%= viral_icon(name: "rectangle_stack", color: :subdued, classes: "w-5 h-5") %></span>
-                <%= t(:"general.navbar.main_dropdown.projects") %>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to groups_path do %>
-                <span class="flex-grow-0 mr-3"><%= viral_icon(name: "squares_2x2", color: :subdued, classes: "w-5 h-5") %></span>
-                <%= t(:"general.navbar.main_dropdown.groups") %>
-              <% end %>
-            </li>
-          </ul>
-        </div>
+
+        <%= viral_dropdown(icon: "bars_3") do |dropdown| %>
+          <%= dropdown.item(label: t(:"general.navbar.main_dropdown.projects"), url: projects_path, icon_name: "rectangle_stack") %>
+          <%= dropdown.item(label: t(:"general.navbar.main_dropdown.groups"), url: groups_path, icon_name: "squares_2x2") %>
+        <% end %>
+
         <form action="#" method="GET" class="hidden lg:block lg:pl-3.5">
           <label for="topbar-search" class="sr-only">Search</label>
           <div class="relative mt-1 lg:w-96">
@@ -88,7 +68,7 @@
           </div>
         </form>
       </div>
-      <div class="flex items-center ml-3">
+      <div class="grid gap-2 grid-cols-3 mr-8">
         <!-- Dark Mode Toggl -->
         <button
           id="app-darkmode-toggle"
@@ -101,56 +81,21 @@
           <%= viral_icon(name: "moon", classes: "hidden", "data-dark-mode-target": "darkIcon") %>
           <%= viral_icon(name: "sun", classes: "hidden", "data-dark-mode-target": "lightIcon") %>
         </button>
+
         <!-- New item menu -->
-        <button
-          id="dropdownNewItem"
-          aria-label="<%= t(:'general.navbar.new_dropdown.aria_label') %>"
-          data-dropdown-toggle="new-item-dropdown"
-          type="button"
-          class="navbar-btn"
-        >
-          <%= viral_icon(name: "document_plus") %>
-        </button>
-        <!-- Dropdown menu -->
-        <div id="new-item-dropdown" class="dropdown-menu">
-          <ul aria-labelledby="dropdownDefaultButton">
-            <li>
-              <%= link_to t(:"general.navbar.new_dropdown.project"), new_project_path %>
-            </li>
-            <li>
-              <%= link_to t(:"general.navbar.new_dropdown.group"), new_group_path %>
-            </li>
-          </ul>
-        </div>
+        <%= viral_dropdown(icon: "document_plus") do |dropdown| %>
+          <%= dropdown.item(label: t(:"general.navbar.new_dropdown.project"), url: new_project_path) %>
+          <%= dropdown.item(label: t(:"general.navbar.new_dropdown.group"), url: new_group_path) %>
+        <% end %>
+
         <!-- Profile menu -->
-        <button
-          id="dropdownDefaultButton"
-          aria-label="<%= t(:'general.navbar.account_dropdown.aria_label') %>>"
-          data-dropdown-toggle="profile-dropdown"
-          type="button"
-          class="navbar-btn"
-        >
-          <%= viral_icon(name: "user_circle") %>
-        </button>
-        <!-- Dropdown menu -->
-        <div id="profile-dropdown" class="dropdown-menu">
-          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div>Fred Penner</div>
-            <div class="font-medium truncate text-slate-400"><%= @user.email %></div>
-          </div>
-          <ul aria-labelledby="dropdownDefaultButton">
-            <li>
-              <%= link_to t(:"general.navbar.account_dropdown.profile"), profile_path %>
-            </li>
-            <li>
-              <%= link_to t(:"general.navbar.account_dropdown.sign_out"),
-              destroy_user_session_path,
-              data: {
-                turbo_method: :delete
-              } %>
-            </li>
-          </ul>
-        </div>
+        <%= viral_dropdown(icon: "user_circle") do |dropdown| %>
+          <%= dropdown.item(label: t(:"general.navbar.account_dropdown.profile"), url: profile_path) %>
+          <%= dropdown.item(label: t(:"general.navbar.account_dropdown.sign_out"), url: destroy_user_session_path, data: {
+            turbo_method: :delete
+          }) %>
+        <% end %>
+
       </div>
     </div>
   </div>
