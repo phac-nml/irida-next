@@ -1,4 +1,7 @@
-<div data-controller="viral--dropdown">
+<div
+  data-controller="viral--dropdown"
+  data-viral--dropdown-trigger-value="<%= @trigger %>"
+>
   <%= render Viral::BaseComponent.new(tag: :button, **@system_arguments) do %>
     <%= @label %>
     <% if @caret %>
