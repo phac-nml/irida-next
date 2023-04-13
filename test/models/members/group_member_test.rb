@@ -110,7 +110,7 @@ class GroupMemberTest < ActiveSupport::TestCase
 
     assert group_member.errors.full_messages.include?(
       I18n.t('activerecord.errors.models.member.destroy.last_member',
-             namespace_type: group.type.downcase)
+             namespace_type: group.class.model_name.human)
     )
   end
 end
