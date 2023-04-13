@@ -19,7 +19,7 @@ module Members
 
       errors.add(:base,
                  I18n.t('activerecord.errors.models.member.destroy.last_member',
-                        namespace_type: namespace.type.downcase))
+                        namespace_type: namespace.class.model_name.human))
       false
     end
   end
