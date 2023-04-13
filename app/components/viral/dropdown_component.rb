@@ -5,14 +5,22 @@ module Viral
   class DropdownComponent < Viral::Component
     renders_many :items, Dropdown::ItemComponent
 
-    TRIGGER_DEFAULT = :hover
+    TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
       click: 'click',
       hover: 'hover'
     }.freeze
-    TIGGER_OPTIONS = TRIGGER_MAPPINGS.keys
 
-    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, **system_arguments)
+    PLACEMENT_DEFAULT = :bottom
+    PLACEMENT_MAPPINGS = {
+      bottom: 'bottom',
+      top: 'top',
+      left: 'left',
+      right: 'right'
+    }.freeze
+
+    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, placement: PLACEMENT_DEFAULT,
+                   **system_arguments)
       @label = label
       @icon_name = icon
       @caret = caret

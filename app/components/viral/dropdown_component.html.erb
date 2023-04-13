@@ -4,6 +4,9 @@
 >
   <%= render Viral::BaseComponent.new(tag: :button, **@system_arguments) do %>
     <%= @label %>
+    <% if @icon_name.present? %>
+      <%= viral_icon(name: @icon_name, classes: "w-6 h-6") %>
+    <% end %>
     <% if @caret %>
       <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2") %>
     <% end %>
