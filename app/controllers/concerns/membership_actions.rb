@@ -50,7 +50,7 @@ module MembershipActions
   private
 
   def access_levels
-    member = Member.find_by(user: current_user, namespace: @namespace.self_and_ancestors)
+    member = Member.where(user: current_user, namespace: @namespace.self_and_ancestors).order(:access_level).last
     @access_levels = Member.access_levels(member)
   end
 
