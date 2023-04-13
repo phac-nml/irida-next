@@ -49,7 +49,7 @@ class GroupMemberTest < ActiveSupport::TestCase
   test '#validates access level out of range' do
     valid_access_levels = Member::AccessLevel.all_values_with_owner
 
-    @group_member.access_level = (valid_access_levels.sample + valid_access_levels.last)
+    @group_member.access_level = valid_access_levels.last + 100
     assert_not @group_member.valid?
   end
 
@@ -101,5 +101,16 @@ class GroupMemberTest < ActiveSupport::TestCase
     group_member = members_group_members(:group_one_member_joan_doe)
     assert_equal Member::AccessLevel.human_access(group_member.access_level),
                  I18n.t('activerecord.models.member.access_level.maintainer')
+  end
+
+  test '#validates that the last remaining owner of a group is not deleted' do
+    group_member = members_group_members(:group_two_member_john_doe)
+    group_member.last_namespace_owner_member
+    group = groups(:group_two)
+
+    assert group_member.errors.full_messages.include?(
+      I18n.t('activerecord.errors.models.member.destroy.last_member',
+             namespace_type: group.class.model_name.human)
+    )
   end
 end

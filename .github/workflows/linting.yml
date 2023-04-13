@@ -9,6 +9,7 @@ permissions:
 jobs:
   rubocop:
     name: runner / rubocop
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

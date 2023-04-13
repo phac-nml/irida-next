@@ -5,19 +5,22 @@ module Projects
   class TransferService < BaseProjectService
     TransferError = Class.new(StandardError)
 
-    def execute(new_namespace) # rubocop:disable Metrics/AbcSize
+    def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       @new_namespace = new_namespace
 
-      raise TransferError, 'Please select a new namespace for your project.' if @new_namespace.blank?
+      raise TransferError, I18n.t('services.projects.transfer.namespace_empty') if @new_namespace.blank?
 
-      raise TransferError, 'Project is already in this namespace.' if @new_namespace.id == project.namespace.parent_id
+      if @new_namespace.id == project.namespace.parent_id
+        raise TransferError,
+              I18n.t('services.projects.transfer.project_in_namespace')
+      end
 
       unless allowed_to_transfer_project?(current_user, project)
-        raise TransferError, "You don't have permission to transfer this project."
+        raise TransferError, I18n.t('services.projects.transfer.no_permission')
       end
 
       unless allowed_to_transfer_to_namespace?(current_user, @new_namespace)
-        raise TransferError, "You don't have permission to transfer projects into that namespace."
+        raise TransferError, I18n.t('services.projects.transfer.no_namespace_permission')
       end
 
       transfer(project)
@@ -35,7 +38,7 @@ module Projects
     def transfer(project)
       if Namespaces::ProjectNamespace.where(parent_id: @new_namespace.id).exists?(['path = ? or name = ?', project.path,
                                                                                    project.name])
-        raise TransferError, 'Project with same name or path in target namespace already exists'
+        raise TransferError, I18n.t('services.projects.transfer.namespace_project_exists')
       end
 
       project.namespace.update(parent_id: @new_namespace.id)
