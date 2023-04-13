@@ -1,8 +1,10 @@
-<li class="py-2 text-sm text-gray-700 dark:text-gray-200">
-  <%= link_to @url do %>
-    <% if @icon.present? %>
-      <span class="flex-grow-0 mr-3"><%= viral_icon(name: @icon, color: :subdued, classes: "w-5 h-5") %></span>
+<li>
+  <% if @url.present? %>
+    <%= link_to @url, class: "flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" do %>
+      <% if @icon.present? %>
+        <span class="flex-grow-0 mr-2"><%= viral_icon(name: @icon, color: :subdued, classes: "w-5 h-5") %></span>
+      <% end %>
+      <%= @label %>
     <% end %>
-    <%= @label %>
   <% end %>
 </li>
