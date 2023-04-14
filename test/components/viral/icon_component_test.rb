@@ -45,5 +45,13 @@ module Viral
       assert_selector 'span.Viral-Icon.Viral-Icon--colorPrimary', count: 1
       assert_selector 'svg[focusable="false"]', count: 1
     end
+
+    test 'with custom with custom content' do
+      render_inline(Viral::IconComponent.new(color: :primary)) do
+        'ANY CONTENT'
+      end
+      assert_selector 'span.Viral-Icon.Viral-Icon--colorPrimary', count: 1
+      assert_text 'ANY CONTENT'
+    end
   end
 end
