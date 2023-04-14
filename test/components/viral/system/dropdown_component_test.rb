@@ -8,7 +8,7 @@ module System
       visit('/rails/view_components/dropdown_component/with_label_and_caret')
       assert_no_text 'Item 1'
       assert_no_text 'Item 2'
-      find('.Viral-Dropdown--button').click
+      find('button.Viral-Dropdown--button').click
       assert_text 'Item 1'
       assert_text 'Item 2'
     end
@@ -17,7 +17,7 @@ module System
       visit('/rails/view_components/dropdown_component/with_icon')
       assert_no_text 'Item 1'
       assert_no_text 'Item 2'
-      find('.Viral-Dropdown--icon').click
+      find('button.Viral-Dropdown--icon').click
       assert_text 'Item 1'
       assert_text 'Item 2'
     end
