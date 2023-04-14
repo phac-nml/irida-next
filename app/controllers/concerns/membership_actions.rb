@@ -9,7 +9,7 @@ module MembershipActions
     before_action proc { member }, only: %i[destroy]
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }, only: %i[new create]
-    before_action proc { context_crumbs }, only: %i[index]
+    before_action proc { context_crumbs }, only: %i[index new]
   end
 
   def index
@@ -33,28 +33,24 @@ module MembershipActions
       flash[:success] = t('.success')
       redirect_to members_path
     else
-      flash[:error] = t('.error')
       render :new, status: :unprocessable_entity, locals: { member: @new_member }
     end
   end
 
   def destroy
-    if @member.nil?
-      flash[:error] = t('.error')
-      render status: :unprocessable_entity, json: {
-        message: t('.error')
-      }
-    else
-      @member.destroy
+    Members::DestroyService.new(@member, @namespace, current_user).execute
+    if @member.destroyed?
       flash[:success] = t('.success')
-      redirect_to members_path
+    else
+      flash[:error] = @member.errors.full_messages.first
     end
+    redirect_to members_path
   end
 
   private
 
   def access_levels
-    member = Member.find_by(user: current_user, namespace: @namespace, type: @member_type)
+    member = Member.where(user: current_user, namespace: @namespace.self_and_ancestors).order(:access_level).last
     @access_levels = Member.access_levels(member)
   end
 

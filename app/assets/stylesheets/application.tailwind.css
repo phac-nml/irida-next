@@ -1,4 +1,5 @@
 @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -53,7 +54,7 @@
   }
 
   .navbar-btn {
-    @apply ml-2 rounded-lg text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+    @apply rounded-full text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 
   .navbar-btn span {
@@ -144,18 +145,6 @@
     @apply text-white bg-red-600 hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-800;
   }
 
-  .dropdown-menu {
-    @apply z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700;
-  }
-
-  .dropdown-menu ul {
-    @apply py-2 text-sm text-gray-700 dark:text-gray-200;
-  }
-
-  .dropdown-menu a {
-    @apply flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white;
-  }
-
   .row-btn {
     @apply px-1 py-0 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
@@ -207,6 +196,14 @@
 
   .Viral-Icon--colorPrimary {
     @apply text-primary-500;
+  }
+
+  .Viral-Dropdown--button {
+    @apply flex items-center py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+  }
+
+  .Viral-Dropdown--icon {
+    @apply rounded-full text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 }
 

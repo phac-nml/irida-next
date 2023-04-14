@@ -3,9 +3,12 @@
 module Viral
   # View Component for UI flash messages
   class FlashComponent < Component
-    def initialize(type:, data:)
+    DEFAULT_TIMEOUT = 3500
+
+    def initialize(type:, data:, timeout: DEFAULT_TIMEOUT)
       @type = type
       @data = data
+      @timeout = timeout
       @icon = icon_for_flash
       @classes = classes_for_flash
     end

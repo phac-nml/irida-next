@@ -30,7 +30,7 @@ module Groups
 
     def context_crumbs
       case action_name
-      when 'index'
+      when 'index', 'new'
         @context_crumbs = [{
           name: I18n.t('groups.members.index.title'),
           path: group_members_path

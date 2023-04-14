@@ -50,5 +50,18 @@ module Groups
 
       assert_redirected_to group_members_path(group)
     end
+
+    test 'shouldn\'t delete a member from the group' do
+      sign_in users(:joan_doe)
+
+      group = groups(:group_one)
+      group_member = members_group_members(:group_one_member_james_doe)
+
+      assert_no_difference('Members::GroupMember.count') do
+        delete group_member_path(group, group_member)
+      end
+
+      assert_redirected_to group_members_path(group)
+    end
   end
 end

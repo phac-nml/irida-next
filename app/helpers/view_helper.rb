@@ -3,6 +3,7 @@
 # ViewHelper for user interface components
 module ViewHelper
   VIRAL_HELPERS = {
+    dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',
     icon: 'Viral::IconComponent'
   }.freeze

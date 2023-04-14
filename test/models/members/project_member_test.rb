@@ -49,7 +49,7 @@ class ProjectMemberTest < ActiveSupport::TestCase
   test '#validates access level out of range' do
     valid_access_levels = Member::AccessLevel.all_values_with_owner
 
-    @project_member.access_level = valid_access_levels.sample + valid_access_levels.last
+    @project_member.access_level = valid_access_levels.last + 100
     assert_not @project_member.valid?
   end
 

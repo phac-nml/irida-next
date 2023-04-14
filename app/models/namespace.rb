@@ -56,6 +56,12 @@ class Namespace < ApplicationRecord
     result
   end
 
+  def self_and_ancestors
+    result = ancestors
+    result.unshift(self)
+    result
+  end
+
   def descendants
     route_path = Route.arel_table[:path]
 
