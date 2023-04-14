@@ -5,6 +5,8 @@ require 'test_helper'
 class GroupTest < ActiveSupport::TestCase
   def setup
     @group = groups(:group_one)
+    @subgroup_one = groups(:subgroup1)
+    @group_three = groups(:group_three)
   end
 
   test 'valid group' do
@@ -23,8 +25,37 @@ class GroupTest < ActiveSupport::TestCase
     assert_not_nil @subgroup.errors[:parent_id], 'no validation error for parent'
   end
 
+  test '#ancestor_ids' do
+    assert_equal [@group.id], @subgroup_one.ancestor_ids
+  end
+
   test '#ancestors' do
-    assert_equal [], @group.ancestors
+    assert_equal [@group], @subgroup_one.ancestors
+  end
+
+  test '#self_and_ancestors' do
+    assert_includes @subgroup_one.self_and_ancestors, @subgroup_one
+    assert_includes @subgroup_one.self_and_ancestors, @group
+    assert_equal 2, @subgroup_one.self_and_ancestors.count
+  end
+
+  test '#descendant_ids' do
+    assert_includes @group_three.descendant_ids, groups(:subgroup_one_group_three).id
+    assert_includes @group_three.descendant_ids, namespaces_project_namespaces(:project4_namespace).id
+    assert_equal 2, @group_three.descendant_ids.count
+  end
+
+  test '#descendants' do
+    assert_includes @group_three.descendants, groups(:subgroup_one_group_three)
+    assert_includes @group_three.descendants, namespaces_project_namespaces(:project4_namespace)
+    assert_equal 2, @group_three.descendants.count
+  end
+
+  test '#self_and_descendants' do
+    assert_includes @group_three.self_and_descendants, @group_three
+    assert_includes @group_three.self_and_descendants, groups(:subgroup_one_group_three)
+    assert_includes @group_three.self_and_descendants, namespaces_project_namespaces(:project4_namespace)
+    assert_equal 3, @group_three.self_and_descendants.count
   end
 
   test '#human_name' do

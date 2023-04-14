@@ -46,26 +46,34 @@ class Namespace < ApplicationRecord
     end
   end
 
+  def ancestor_ids
+    ancestral_path_parts = route.split_path_parts[0...-1]
+
+    route_path = Route.arel_table[:path]
+
+    Namespace.joins(:route).where(route_path.in(ancestral_path_parts)).pluck(:id)
+  end
+
   def ancestors
-    result = []
-    ns = self
-    while ns.parent.present?
-      result.unshift(ns.parent)
-      ns = ns.parent
-    end
-    result
+    Namespace.where(id: ancestor_ids)
   end
 
   def self_and_ancestors
-    result = ancestors
-    result.unshift(self)
-    result
+    Namespace.where(id: [id] + ancestor_ids)
+  end
+
+  def descendant_ids
+    route_path = Route.arel_table[:path]
+
+    Namespace.joins(:route).where(route_path.matches("#{full_path}/%")).pluck(:id)
   end
 
   def descendants
-    route_path = Route.arel_table[:path]
+    Namespace.where(id: descendant_ids)
+  end
 
-    Namespace.joins(:route).where(route_path.matches("#{full_path}/%"))
+  def self_and_descendants
+    Namespace.find([id] + descendant_ids)
   end
 
   def to_param
@@ -125,7 +133,7 @@ class Namespace < ApplicationRecord
   end
 
   def validate_nesting_level
-    return unless ancestors.count > MAX_ANCESTORS - 1
+    return unless has_parent? && ancestors.count > MAX_ANCESTORS - 1
 
     errors.add(:parent_id, 'nesting level too deep')
   end
