@@ -12,7 +12,7 @@ module Groups
     end
 
     def execute # rubocop:disable Metrics/AbcSize
-      unless allowed_to_modify_group?(group)
+      unless group.parent.nil? || allowed_to_modify_group?(group.parent)
         raise GroupCreateError, I18n.t('services.groups.create.no_permission',
                                        namespace_type: group.class.model_name.human)
       end
