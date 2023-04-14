@@ -22,6 +22,11 @@ john_doe_namespace_route:
   path: john.doe_at_localhost
   source: john_doe_namespace (Namespace)
 
+jane_doe_namespace_route:
+  name: jane.doe@localhost
+  path: jane.doe_at_localhost
+  source: jane_doe_namespace (Namespace)
+
 project1_namespace_route:
   name: Group 1 / Project 1
   path: group-1/project-1
@@ -36,3 +41,28 @@ john_doe_project2_namespace_route:
   name: john.doe@localhost / Project 2
   path: john.doe_at_localhost/project-2
   source: john_doe_project2_namespace (Namespace)
+
+project3_namespace_route:
+  name: john.doe@localhost / Project 3
+  path: john.doe_at_localhost/project-3
+  source: john_doe_project3_namespace (Namespace)
+
+project4_namespace_route:
+  name: Group 3 / Subgroup 1 Group 3 / Project 4
+  path: group-3/subgroup-1-group-3/project-4
+  source: project4_namespace (Namespace)
+
+group_two_route:
+  name: Group 2
+  path: group-2
+  source: group_two (Namespace)
+
+group_three_route:
+  name: Group 3
+  path: group-3
+  source: group_three (Namespace)
+
+subgroup_one_group_three_route:
+  name: Group 3 / Subgroup 1 Group 3
+  path: group-3/subgroup-1-group-3
+  source: subgroup_one_group_three (Namespace)

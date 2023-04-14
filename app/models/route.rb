@@ -31,4 +31,14 @@ class Route < ApplicationRecord
       route.update_columns(attributes.merge(updated_at: Time.current)) # rubocop:disable Rails/SkipsModelValidations
     end
   end
+
+  def split_path_parts
+    paths = []
+
+    path.split('/').each_with_index do |_part, index|
+      paths << path.split('/')[0..index].join('/')
+    end
+
+    paths
+  end
 end
