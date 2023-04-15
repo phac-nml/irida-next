@@ -12,8 +12,28 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert @project_namespace.valid?
   end
 
+  test '#ancestor_ids' do
+    assert_equal [@group_one.id], @project_namespace.ancestor_ids
+  end
+
   test '#ancestors' do
     assert_equal [@group_one], @project_namespace.ancestors
+  end
+
+  test '#self_and_ancestors' do
+    assert_equal [@project_namespace, @group_one], @project_namespace.self_and_ancestors
+  end
+
+  test '#descendant_ids' do
+    assert_equal [],  @project_namespace.descendant_ids
+  end
+
+  test '#descendants' do
+    assert_equal [],  @project_namespace.descendants
+  end
+
+  test '#self_and_descendants' do
+    assert_equal [@project_namespace], @project_namespace.self_and_descendants
   end
 
   test '#human_name' do

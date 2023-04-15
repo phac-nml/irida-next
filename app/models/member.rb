@@ -74,7 +74,6 @@ class Member < ApplicationRecord
 
       def access_level_options
         {
-          I18n.t('activerecord.models.member.access_level.no_access') => NO_ACCESS,
           I18n.t('activerecord.models.member.access_level.guest') => GUEST,
           I18n.t('activerecord.models.member.access_level.analyst') => ANALYST,
           I18n.t('activerecord.models.member.access_level.maintainer') => MAINTAINER

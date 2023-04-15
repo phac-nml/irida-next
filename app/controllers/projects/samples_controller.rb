@@ -37,13 +37,11 @@ module Projects
       authorize! @project, to: :create?, default: Project
       @sample = Samples::CreateService.new(current_user, @project, sample_params).execute
 
-      respond_to do |format|
-        if @sample.save
-          flash[:success] = t('.success')
-          format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-        end
+      if @sample.persisted?
+        flash[:success] = t('.success')
+        redirect_to namespace_project_sample_path(id: @sample.id)
+      else
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -62,14 +60,16 @@ module Projects
     def destroy
       authorize! @sample unless sample.nil?
       if @sample.nil?
-        render status: :unprocessable_entity, json: {
-          message: t('.error')
-        }
+        flash[:error] = t('.error')
       else
-        @sample.destroy
-        flash[:success] = t('.success', sample_name: @sample.name)
-        redirect_to namespace_project_samples_path
+        Samples::DestroyService.new(@sample, current_user).execute
+        if @sample.destroyed?
+          flash[:success] = t('.success', sample_name: @sample.name)
+        else
+          flash[:error] = @sample.errors.full_messages.first
+        end
       end
+      redirect_to namespace_project_samples_path
     end
 
     private

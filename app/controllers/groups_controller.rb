@@ -52,11 +52,12 @@ class GroupsController < ApplicationController
 
   def destroy
     authorize! @group
-    if @group.destroy
+    Groups::DestroyService.new(@group, current_user).execute
+    if @group.destroyed?
       flash[:success] = t('.success', group_name: @group.name)
       redirect_to groups_path
     else
-      flash[:error] = t('.error')
+      flash[:error] = @group.errors.full_messages.first
       redirect_to group_path(@group)
     end
   end

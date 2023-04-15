@@ -24,3 +24,25 @@ subgroup<%= (n+2) %>:
   parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}") %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 <% end %>
+
+group_two:
+  name: Group 2
+  path: group-2
+  type: Group
+  description: Group 2 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+group_three:
+  name: Group 3
+  path: group-3
+  type: Group
+  description: Group 3 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+subgroup_one_group_three:
+  name: Subgroup 1 Group 3
+  path: subgorup-1-group-3
+  type: Group
+  description: Subgroup 1 Group 3
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>

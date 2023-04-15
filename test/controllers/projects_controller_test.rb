@@ -104,4 +104,30 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
   end
+
+  test 'should delete a project' do
+    sign_in users(:john_doe)
+
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+    project = projects(:john_doe_project2)
+
+    assert_difference('Project.count', -1) do
+      delete namespace_project_path(namespace_id: namespace.path, project_id: project.namespace.path)
+    end
+
+    assert_redirected_to projects_path
+  end
+
+  test 'should not delete a project' do
+    sign_in users(:joan_doe)
+
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+    project = projects(:john_doe_project2)
+
+    assert_no_difference('Project.count') do
+      delete namespace_project_path(namespace_id: namespace.path, project_id: project.namespace.path)
+    end
+
+    assert_redirected_to namespace_project_path(project)
+  end
 end

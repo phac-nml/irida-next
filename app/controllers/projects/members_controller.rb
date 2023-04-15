@@ -30,7 +30,7 @@ module Projects
 
     def context_crumbs
       case action_name
-      when 'index'
+      when 'index', 'new'
         @context_crumbs = [{
           name: I18n.t('projects.members.index.title'),
           path: namespace_project_members_path

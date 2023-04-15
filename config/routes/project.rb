@@ -9,6 +9,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
     get '/', action: :show
     patch '/', action: :update
     put '/', action: :update
+    delete '/', action: :destroy
     # Begin on /-/ scope.
     # Use this for all project routes.
     scope '-' do
