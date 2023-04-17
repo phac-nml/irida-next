@@ -9,5 +9,7 @@ export default class extends Controller {
     new Dropdown(this.menuTarget, this.triggerTarget, {
       triggerType: this.triggerValue,
     });
+
+    this.element.setAttribute("data-controller-connected", "true");
   }
 }
