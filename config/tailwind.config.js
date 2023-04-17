@@ -7,6 +7,7 @@ module.exports = {
     "./app/components/**/*",
     "./node_modules/flowbite/**/*.js",
     "./test/components/previews/**/*",
+    "./test/components/viral/system/**/*",
   ],
   theme: {
     extend: {

@@ -17,7 +17,8 @@ module System
       visit('/rails/view_components/dropdown_component/with_icon')
       assert_no_text 'Item 1'
       assert_no_text 'Item 2'
-      find('button.Viral-Dropdown--icon').click
+      assert_selector '.Viral-Dropdown--icon'
+      find('.Viral-Dropdown--icon').click
       assert_text 'Item 1'
       assert_text 'Item 2'
     end
