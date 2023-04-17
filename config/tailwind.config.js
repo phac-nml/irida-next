@@ -3,7 +3,7 @@ module.exports = {
   content: [
     "./app/helpers/**/*.rb",
     "./app/javascript/**/*.js",
-    "./app/views/**/*",
+    "./app/components/**/*.{erb,html}",
     "./app/components/**/*",
     "./node_modules/flowbite/**/*.js",
     "./test/components/previews/**/*",
