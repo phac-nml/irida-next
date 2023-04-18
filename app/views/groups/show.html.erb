@@ -1,13 +1,15 @@
 <%= render PageHeaderComponent.new(title: @group.name, subtitle: @group.description) do |component| %>
   <%= component.with_icon(name: "squares_2x2", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <div class="flex flex-row">
-      <%= link_to t(:"groups.show.create_subgroup_button"),
-      new_group_path(parent_id: @group.id),
-      class: "btn btn-default" %>
-      <%= link_to t(:"groups.show.create_project_button"),
-      new_project_path(group_id: @group.id),
-      class: "btn btn-primary ml-2" %>
-    </div>
+    <% if allowed_to?(:new?, @group) %>
+      <div class="flex flex-row">
+        <%= link_to t(:"groups.show.create_subgroup_button"),
+        new_group_path(parent_id: @group.id),
+        class: "btn btn-default" %>
+        <%= link_to t(:"groups.show.create_project_button"),
+        new_project_path(group_id: @group.id),
+        class: "btn btn-primary ml-2" %>
+      </div>
+    <% end %>
   <% end %>
 <% end %>

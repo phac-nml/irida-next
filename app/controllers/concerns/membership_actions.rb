@@ -10,15 +10,15 @@ module MembershipActions
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }, only: %i[new create]
     before_action proc { context_crumbs }, only: %i[index new]
+    before_action proc { authorize_view_members! }, only: %i[index]
+    before_action proc { authorize_owner_namespace! }, only: %i[create destroy new]
   end
 
   def index
-    authorize! @namespace
     @members = Member.where(namespace_id: @namespace.id)
   end
 
   def new
-    authorize! @namespace, to: :new?, default: Member
     @new_member = Member.new(namespace_id: @namespace.id)
 
     respond_to do |format|
@@ -29,7 +29,6 @@ module MembershipActions
   end
 
   def create
-    authorize! @namespace, to: :create?, default: Member
     @new_member = Members::CreateService.new(current_user, @namespace, member_params).execute
 
     if @new_member.persisted?
@@ -41,7 +40,6 @@ module MembershipActions
   end
 
   def destroy # rubocop:disable Metrics/AbcSize
-    authorize! @namespace, to: :new?, default: Member unless member.nil?
     if @member.nil?
       flash[:error] = t('.error')
       render status: :unprocessable_entity, json: {

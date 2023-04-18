@@ -1,10 +1,12 @@
 <%= render PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <%= link_to t(:".add"),
-    new_group_member_path(@namespace),
-    class: "btn btn-primary",
-    "aria-label": t(:".actions.button_add_aria_label") %>
+    <% if allowed_to?(:allowed_to_modify_group?, @namespace) %>
+      <%= link_to t(:".add"),
+      new_group_member_path(@namespace),
+      class: "btn btn-primary",
+      "aria-label": t(:".actions.button_add_aria_label") %>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -42,35 +44,37 @@
                 <td class="p-4 whitespace-nowrap">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_granted_by", grantor_email: member.created_by.email) %></div>
                 </td>
-                <td class="px-4 py-3">
-                  <div class="flex items-center justify-end">
-                    <button
-                      data-dropdown-toggle="member-<%= member.id %>-dropdown"
-                      class="navbar-btn member-settings-ellipsis"
-                      aria-label="<%= t(:'groups.members.index.actions.member_dropdown_aria_label', member: member.user.email) %>"
-                    >
-                      <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
-                      <ul aria-labelledby="dropdownDefaultButton">
-                        <li>
-                          <%= link_to t(:"groups.members.index.remove"),
-                          group_member_path(@namespace, member),
-                          data: {
-                            turbo_method: :delete,
-                            turbo_confirm: t(:"groups.members.index.remove_confirmation")
-                          },
-                          "aria-label":
-                            t(
-                              :"groups.members.index.actions.link_remove_aria_label",
-                              member: member.user.email
-                            ) %>
-                        </li>
-                      </ul>
+                <% if allowed_to?(:allowed_to_modify_group?, @namespace) %>
+                  <td class="px-4 py-3">
+                    <div class="flex items-center justify-end">
+                      <button
+                        data-dropdown-toggle="member-<%= member.id %>-dropdown"
+                        class="navbar-btn member-settings-ellipsis"
+                        aria-label="<%= t(:'groups.members.index.actions.member_dropdown_aria_label', member: member.user.email) %>"
+                      >
+                        <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
+                      </button>
+                      <!-- Dropdown menu -->
+                      <div id="member-<%= member.id %>-dropdown" class="dropdown-menu">
+                        <ul aria-labelledby="dropdownDefaultButton">
+                          <li>
+                            <%= link_to t(:"groups.members.index.remove"),
+                            group_member_path(@namespace, member),
+                            data: {
+                              turbo_method: :delete,
+                              turbo_confirm: t(:"groups.members.index.remove_confirmation")
+                            },
+                            "aria-label":
+                              t(
+                                :"groups.members.index.actions.link_remove_aria_label",
+                                member: member.user.email
+                              ) %>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>

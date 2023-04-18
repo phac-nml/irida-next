@@ -2,21 +2,20 @@
 
 module Projects
   # Controller actions for Samples
-  class SamplesController < ApplicationController
+  class SamplesController < Projects::ApplicationController
     before_action :sample, only: %i[show edit update destroy]
     before_action :project
     before_action :context_crumbs
-    verify_authorized
+    before_action :authorize_view_samples!, only: %i[show index]
+    before_action :authorize_sample_modification!, only: %i[new edit create update destroy]
 
     layout 'projects'
 
     def index
-      authorize! @project, to: :show?, default: Project
       @samples = authorized_scope(Sample, type: :relation, scope_options: { project_id: @project.id })
     end
 
     def show
-      authorize! @sample unless sample.nil?
       return unless @sample.nil?
 
       render status: :unprocessable_entity, json: {
@@ -25,16 +24,12 @@ module Projects
     end
 
     def new
-      authorize! @project, to: :new?, default: Project
       @sample = Sample.new
     end
 
-    def edit
-      authorize! @project, to: :edit?, default: Project
-    end
+    def edit; end
 
     def create
-      authorize! @project, to: :create?, default: Project
       @sample = Samples::CreateService.new(current_user, @project, sample_params).execute
 
       if @sample.persisted?
@@ -46,7 +41,6 @@ module Projects
     end
 
     def update
-      authorize! @sample
       respond_to do |format|
         if Samples::UpdateService.new(@sample, current_user, sample_params).execute
           flash[:success] = t('.success')
@@ -58,7 +52,6 @@ module Projects
     end
 
     def destroy
-      authorize! @sample unless sample.nil?
       if @sample.nil?
         flash[:error] = t('.error')
       else

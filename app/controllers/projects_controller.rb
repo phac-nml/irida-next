@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 # Controller actions for Projects
-class ProjectsController < ApplicationController
+class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-  verify_authorized except: %i[index create]
+  before_action :authorize_create_project!, only: %i[new]
+  before_action :authorize_owner_namespace!, only: %i[edit update destroy]
+  before_action :authorize_viewable_project_member!, only: %i[show]
 
   def index
     @projects = authorized_scope(Project, type: :relation)
   end
 
   def show
-    authorize! @project
     # No necessary code here
   end
 
@@ -22,7 +23,6 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    authorize! @project
     # No necessary code here
   end
 
@@ -41,7 +41,6 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    authorize! @project
     if Projects::UpdateService.new(@project, current_user, project_params).execute
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
@@ -53,12 +52,10 @@ class ProjectsController < ApplicationController
   end
 
   def activity
-    authorize! @project
     # No necessary code here
   end
 
   def transfer
-    authorize! @project
     new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       redirect_to(

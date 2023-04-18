@@ -1,35 +1,31 @@
 # frozen_string_literal: true
 
 # Controller actions for Groups
-class GroupsController < ApplicationController
+class GroupsController < Groups::ApplicationController
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update]
+  before_action :group_parent, only: %i[new]
   before_action :context_crumbs, except: %i[index new create show]
-  verify_authorized except: %i[index create]
+  before_action :authorize_owner_group!, only: %i[edit update destroy]
+  before_action :authorize_create_group!, only: %i[new]
+  before_action :authorize_viewable_group_member!, only: %i[show]
 
   def index
     @groups = authorized_scope(Group, type: :relation)
   end
 
-  def show
-    authorize! @group
-  end
+  def show; end
 
   def new
-    @group = Group.find(params[:parent_id]) if params[:parent_id]
     @new_group = Group.new(parent_id: @group&.id)
-    authorize! @new_group
     respond_to do |format|
       format.html { render_new }
     end
   end
 
-  def edit
-    authorize! @group
-  end
+  def edit; end
 
   def create
-    skip_verify_authorized!
     @new_group = Groups::CreateService.new(current_user, group_params).execute
     if @new_group.persisted?
       flash[:success] = t('.success')
@@ -41,7 +37,6 @@ class GroupsController < ApplicationController
   end
 
   def update
-    authorize! @group
     if Groups::UpdateService.new(@group, current_user, group_params).execute
       flash[:success] = t('.success')
       redirect_to group_path(@group)
@@ -51,7 +46,6 @@ class GroupsController < ApplicationController
   end
 
   def destroy
-    authorize! @group
     Groups::DestroyService.new(@group, current_user).execute
     if @group.destroyed?
       flash[:success] = t('.success', group_name: @group.name)
@@ -66,6 +60,11 @@ class GroupsController < ApplicationController
 
   def group
     @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
+  end
+
+  def group_parent
+    # Find group by parent_id
+    @group ||= Group.find(params[:parent_id]) if params[:parent_id]
   end
 
   def group_params
