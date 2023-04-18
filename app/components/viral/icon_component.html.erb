@@ -1,6 +1,6 @@
-<%= render(Viral::BaseComponent.new(tag: 'span', **@system_arguments)) do %>
-  <% if @source %>
-    <%= @source %>
+<%= render(Viral::BaseComponent.new(tag: 'span', **system_arguments)) do %>
+  <% if source %>
+    <%= source %>
   <% else %>
     <%= content %>
   <% end %>

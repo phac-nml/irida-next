@@ -3,6 +3,8 @@
 module Viral
   # UI Icon Component
   class IconComponent < Viral::Component
+    attr_reader :source
+
     COLOR_DEFAULT = :default
     COLOR_MAPPINGS = {
       COLOR_DEFAULT => '',

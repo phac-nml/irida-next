@@ -4,7 +4,7 @@
 >
   <ol class="inline-flex items-center space-x-1 md:space-x-3">
 
-    <% @links.each_with_index do |link, index| %>
+    <% links.each_with_index do |link, index| %>
       <li class="inline-flex items-center">
         <div class="flex items-center">
           <% if index > 0 %>
@@ -13,7 +13,7 @@
               classes: "w-4 h-4 text-gray-400"
             ) %>
           <% end %>
-          <% if index < @links.length - 1 %>
+          <% if index < links.length - 1 %>
             <%= link_to link[:name],
             [root_url, link[:path]].join(""),
             class: "ml-1 text-sm font-normal text-gray-500 md:ml-2 dark:text-gray-400" %>
