@@ -4,6 +4,7 @@ module Viral
   # Dropdown component
   class DropdownComponent < Viral::Component
     renders_many :items, Dropdown::ItemComponent
+    attr_reader :label, :icon_name, :caret, :trigger
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -22,27 +23,26 @@ module Viral
       @system_arguments[:data] = { 'viral--dropdown-target': 'trigger' }
       @system_arguments[:tag] = :button
 
-      @system_arguments = system_arguments_for_button if @label.present?
-
-      return if @icon_name.blank?
-
-      @system_arguments = system_arguments_for_icon
+      @system_arguments.merge!(system_arguments_for_button) if @label.present?
+      @system_arguments.merge!(system_arguments_for_icon) if @icon_name.present?
     end
 
     def system_arguments_for_button
-      @system_arguments[:classes] = class_names(
-        'Viral-Dropdown--button',
-        @system_arguments[:classes]
-      )
-      @system_arguments
+      {
+        classes: class_names(
+          'Viral-Dropdown--button',
+          system_arguments[:classes]
+        )
+      }
     end
 
     def system_arguments_for_icon
-      @system_arguments[:classes] = class_names(
-        'Viral-Dropdown--icon',
-        @system_arguments[:classes]
-      )
-      @system_arguments
+      {
+        classes: class_names(
+          'Viral-Dropdown--icon',
+          system_arguments[:classes]
+        )
+      }
     end
   end
 end

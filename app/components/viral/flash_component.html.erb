@@ -1,10 +1,10 @@
 <div
   data-controller="viral--flash"
-  data-viral--flash-timeout-value="<%= @timeout %>"
+  data-viral--flash-timeout-value="<%= timeout %>"
   class="flex rounded-lg shadow-lg w-96"
 >
-  <div class="<%= @classes %> py-4 px-6 rounded-l-lg flex items-center">
-    <%= viral_icon(name: @icon, classes: "w-8 h-8 text-white dark:text-gray-400") %>
+  <div class="<%= classes %> py-4 px-6 rounded-l-lg flex items-center">
+    <%= viral_icon(name: icon, classes: "w-8 h-8 text-white dark:text-gray-400") %>
   </div>
   <div
     class="
@@ -20,7 +20,7 @@
       dark:text-gray-200
     "
   >
-    <div><%= @data %></div>
+    <div><%= data %></div>
     <button data-action="viral--flash#dismiss">
       <%= viral_icon(name: "x_mark", classes: "w-5 h-5") %>
       <span class="sr-only"><%= t(:"general.screen_reader.close") %></span>
