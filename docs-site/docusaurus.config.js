@@ -14,12 +14,12 @@ const config = {
   url: 'https://phac-nml.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/irida-next-core/',
+  baseUrl: '/irida-next/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'phac-nml', // Usually your GitHub org/user name.
-  projectName: 'irida-next-core', // Usually your repo name.
+  projectName: 'irida-next', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -64,7 +64,7 @@ const config = {
             label: 'Docs',
           },
           {
-            href: 'https://github.com/phac-nml/irida-next-core',
+            href: 'https://github.com/phac-nml/irida-next',
             label: 'GitHub',
             position: 'right',
           },
@@ -96,12 +96,12 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/phac-nml/irida-next-core',
+                href: 'https://github.com/phac-nml/irida-next',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} IRIDA. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} IRIDA Next. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

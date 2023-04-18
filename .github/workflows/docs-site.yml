@@ -1,0 +1,30 @@
+name: Docs Site Deploy
+
+on:
+  push:
+    branches: [ main, docs-site ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs-site
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+      - name: Use Node.js 19
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - run: pnpm deploy
+        env:
+          GIT_USER: ${{ github.actor }}:${{ github.token }}
