@@ -1,6 +1,9 @@
-# Policies for projects
+# frozen_string_literal: true
+
+# Policy for projects
 class ProjectPolicy < ApplicationPolicy
-  alias_rule :create?, :destroy?, :edit?, :update?, :transfer?, :new?, to: :allowed_to_modify_project?
+  alias_rule :create?, :destroy?, :edit?, :update?, :transfer?, :new?, :allowed_to_modify_samples?,
+             to: :allowed_to_modify_project?
   alias_rule :allowed_to_view_members?, :allowed_to_view_samples?, :show?, :activity?, to: :allowed_to_view_project?
 
   def allowed_to_view_project?

@@ -5,7 +5,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorize_create_project!, only: %i[new]
   before_action :authorize_owner_namespace!, only: %i[edit update destroy]
   before_action :authorize_viewable_project_member!, only: %i[show]
 

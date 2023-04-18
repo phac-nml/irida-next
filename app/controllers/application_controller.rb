@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActionPolicy::Unauthorized do |_exception|
     respond_to do |format|
-      format.html { render file: Rails.public_path.join('403.html'), status: :not_found }
+      format.html { render file: Rails.public_path.join('403.html'), status: :unauthorized }
     end
   end
 end

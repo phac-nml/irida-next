@@ -128,6 +128,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       delete namespace_project_path(namespace_id: namespace.path, project_id: project.namespace.path)
     end
 
-    assert_redirected_to namespace_project_path(project)
+    assert_response :unauthorized
   end
 end

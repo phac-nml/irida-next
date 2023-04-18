@@ -1,4 +1,6 @@
-# Policies for groups
+# frozen_string_literal: true
+
+# Policy for groups
 class GroupPolicy < ApplicationPolicy
   alias_rule :create?, :destroy?, :edit?, :update?, :new?, to: :allowed_to_modify_group?
   alias_rule :allowed_to_view_members?, :show?, to: :allowed_to_view_group?

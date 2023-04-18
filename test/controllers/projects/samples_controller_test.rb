@@ -95,7 +95,7 @@ module Projects
         delete namespace_project_sample_url(@namespace, @project, @sample1)
       end
 
-      assert_redirected_to namespace_project_samples_url(@namespace, @project)
+      assert_response :unauthorized
     end
   end
 end

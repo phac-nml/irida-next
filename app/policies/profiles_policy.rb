@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Policies for profiles
 class ProfilesPolicy < ApplicationPolicy
   def index?

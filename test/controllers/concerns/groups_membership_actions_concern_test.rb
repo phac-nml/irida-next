@@ -119,7 +119,6 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
       delete group_member_path(group, group_member)
     end
 
-    assert_response 302 # Redirect back to group members page
-    assert_redirected_to group_members_path(group)
+    assert_response :unauthorized
   end
 end

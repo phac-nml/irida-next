@@ -1,20 +1,19 @@
 module Namespaces
   # Policies for project members
   class ProjectNamespacePolicy < ApplicationPolicy
+    alias_rule :new?, :create?, :destroy?, to: :allowed_to_modify_project_namespace?
+
     def index?
-      (record.owner == user) || record.project_members.find_by(user:)
+      return true if record.owner == user
+
+      Member.exists?(namespace: record.self_and_ancestors, user:)
     end
 
-    def new?
-      (record.owner == user) || record.owners.include?(user) || record.parent.owners.include?(user)
-    end
+    def allowed_to_modify_project_namespace?
+      return true if record.owner == user
 
-    def create?
-      (record.owner == user) || record.owners.include?(user) || record.parent.owners.include?(user)
-    end
-
-    def destroy?
-      (record.owner == user) || record.owners.include?(user) || record.parent.owners.include?(user)
+      Member.exists?(namespace: record.self_and_ancestors, user:,
+                     access_level: Member::AccessLevel::OWNER)
     end
   end
 end

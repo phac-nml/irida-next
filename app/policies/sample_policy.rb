@@ -1,4 +1,6 @@
-# Policies for samples
+# frozen_string_literal: true
+
+# Policy for samples
 class SamplePolicy < ApplicationPolicy
   def show?
     (record.project.creator == user) || record.project.namespace.project_members.find_by(user:) ||
