@@ -1,6 +1,6 @@
 <a
-  href="<%= @url %>"
-  title="<%= @label %>"
+  href="<%= url %>"
+  title="<%= label %>"
   class="
     flex
     items-center
@@ -15,13 +15,13 @@
   "
 >
   <div class="flex justify-center" style="width: 27px;">
-    <%= viral_icon(name: @icon, classes: "w-6 h-6") %>
+    <%= viral_icon(name: icon, classes: "w-6 h-6") %>
   </div>
   <h2
     data-layout--layout-component-target="link"
     class="ml-2 font-semibold text-gray-900 dark:text-white"
     style=" white-space: nowrap"
   >
-    <%= @label %>
+    <%= label %>
   </h2>
 </a>
