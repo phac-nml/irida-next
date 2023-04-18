@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Viral
-  # Base component structrue for Viral Components
+  # Base component structure for Viral Components
   class Component < ViewComponent::Base
     attr_reader :system_arguments
 
