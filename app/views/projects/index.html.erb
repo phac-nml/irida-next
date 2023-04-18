@@ -1,40 +1,53 @@
 <%= render Viral::PageHeaderComponent.new(title: t("projects.index.title"), subtitle: t("projects.index.subtitle")) do |component| %>
   <%= component.with_icon(
-        name: "rectangle_stack",
-        classes: "h-14 w-14 text-primary-700"
-      ) %>
+    name: "rectangle_stack",
+    classes: "h-14 w-14 text-primary-700"
+  ) %>
   <%= component.with_buttons do %>
     <%= link_to t(:"projects.index.create_project_button"),
-                new_project_path,
-                class: "btn btn-primary" %>
+    new_project_path,
+    class: "btn btn-primary" %>
   <% end %>
 <% end %>
 
 <div class="bg-white dark:bg-gray-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
-      <%= turbo_frame_tag 'search' do %>
+      <%= turbo_frame_tag 'project_list', src: projects_url(format: :turbo_stream, page: params[:page]), loading: "lazy"  do %>
         <table class="min-w-full table-fixed dark:divide-gray-600">
           <tbody
-            class="bg-white divide-y divide-gray-200  dark:bg-gray-800 dark:divide-gray-700"
+            class="
+              bg-white
+              divide-y
+              divide-gray-200
+              dark:bg-gray-800
+              dark:divide-gray-700
+            "
           >
-          <% @projects.each do |project| %>
-            <tr
-              class="text-sm font-normal text-gray-500  hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400"
-            >
-              <td class="p-4 whitespace-nowrap">
-                <%= link_to project.human_name,
-                            project_path(project),
-                            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= project.description %></div>
-              </td>
-            </tr>
-          <% end %>
+            <% @projects.each do |project| %>
+              <tr
+                class="
+                  text-sm
+                  font-normal
+                  text-gray-500
+                  hover:bg-gray-50
+                  dark:hover:bg-gray-700
+                  dark:text-gray-400
+                "
+              >
+                <td class="p-4 whitespace-nowrap">
+                  <%= link_to project.human_name,
+                  project_path(project),
+                  class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= project.description %></div>
+                </td>
+              </tr>
+            <% end %>
           </tbody>
         </table>
-
-        <%= render PaginationComponent.new(results: @pagy) %>
       <% end %>
+
+      <%= render PaginationComponent.new(results: @pagy) %>
     </div>
   </div>
 </div>
