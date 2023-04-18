@@ -2,6 +2,8 @@
 
 # Overall layout component
 class LayoutComponent < Component
+  attr_reader :user
+
   renders_one :sidebar, Layout::SidebarComponent
   renders_one :body
 

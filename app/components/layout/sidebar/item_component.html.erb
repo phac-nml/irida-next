@@ -1,7 +1,7 @@
 <li class="Layout-Sidebar__Item">
   <a
-    href="<%= @url %>"
-    title="<%= @label %>"
+    href="<%= url %>"
+    title="<%= label %>"
     data-turbo-action="replace"
     class="
       flex
@@ -15,12 +15,12 @@
       hover:bg-gray-100
       dark:text-gray-200
       dark:hover:bg-gray-700
-      <%= class_names('Layout-Sidebar__Item--selected bg-gray-100 dark:bg-gray-700': current_page?(@url)) %>
+      <%= class_names('Layout-Sidebar__Item--selected bg-gray-100 dark:bg-gray-700': current_page?(url)) %>
     "
   >
-    <%= viral_icon(name: @icon, color: :subdued, style: "width: 27px;", classes: "p-1") %>
+    <%= viral_icon(name: icon, color: :subdued, style: "width: 27px;", classes: "p-1") %>
     <span class="ml-2 grow">
-      <span data-layout--layout-component-target="link"><%= @label %></span>
+      <span data-layout--layout-component-target="link"><%= label %></span>
     </span>
   </a>
 </li>
