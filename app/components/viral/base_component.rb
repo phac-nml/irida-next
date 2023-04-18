@@ -3,6 +3,8 @@
 module Viral
   # Base component to be inherited from
   class BaseComponent < Viral::Component
+    attr_reader :tag, :content_tag_args
+
     def initialize(tag:, classes: nil, **system_arguments)
       @tag = tag
       @system_arguments = system_arguments
@@ -10,7 +12,7 @@ module Viral
     end
 
     def call
-      content_tag(@tag, content, @content_tag_args)
+      content_tag(tag, content, content_tag_args)
     end
 
     private
