@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Namespaces
   # Policies for project members
   class ProjectNamespacePolicy < ApplicationPolicy
