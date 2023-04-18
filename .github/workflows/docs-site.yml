@@ -25,6 +25,6 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - run: pnpm deploy
+      - run: pnpm run deploy
         env:
           GIT_USER: ${{ github.actor }}:${{ github.token }}
