@@ -23,6 +23,11 @@
             label: t(:"groups.sidebar.members")
           ) %>
           <%= render section.with_item(
+            url: group_samples_path(@group),
+            icon: "beaker",
+            label: t(:"projects.sidebar.samples")
+          ) %>
+          <%= render section.with_item(
             url: edit_group_path(@group),
             icon: "cog_6_tooth",
             label: t(:"groups.sidebar.settings")
