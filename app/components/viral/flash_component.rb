@@ -29,7 +29,7 @@ module Viral
     end
 
     def icon_for_flash
-      case @type
+      case type
       when 'error'
         'exclamation_circle'
       when 'success'
