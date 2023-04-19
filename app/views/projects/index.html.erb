@@ -5,17 +5,17 @@
   ) %>
   <%= component.with_buttons do %>
     <%= link_to t(:"projects.index.create_project_button"),
-                new_project_path,
-                class: "btn btn-primary" %>
+    new_project_path,
+    class: "btn btn-primary" %>
   <% end %>
 <% end %>
 
 <div class="bg-white dark:bg-gray-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
-      <%= turbo_frame_tag 'projects_list', src: projects_url(format: :turbo_stream, page: params[:page]), loading: :lazy do %>
+      <%= turbo_frame_tag :projects_list, src: projects_url(format: :turbo_stream, page: params[:page]) do %>
 
-        <%= render PaginationComponent.new(results: @pagy) %>
+        <h2>This gets replaced</h2>
       <% end %>
 
     </div>
