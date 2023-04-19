@@ -22,6 +22,6 @@ class ApplicationPolicy < ActionPolicy::Base
   end
 
   def can_view?(obj)
-    Member.can_modify?(user, obj)
+    Member.can_view?(user, obj)
   end
 end
