@@ -1,0 +1,18 @@
+<tr
+  id="<%= dom_id project %>"
+  class="
+                  text-sm
+                  font-normal
+                  text-gray-500
+                  hover:bg-gray-50
+                  dark:hover:bg-gray-700
+                  dark:text-gray-400
+                "
+>
+  <td class="p-4 whitespace-nowrap">
+    <%= link_to project.human_name,
+                project_path(project),
+                class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= project.description %></div>
+  </td>
+</tr>

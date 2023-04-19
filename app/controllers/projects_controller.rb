@@ -5,7 +5,6 @@ class ProjectsController < ApplicationController
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-
   def index
     @pagy, @projects = pagy(Project.all.include_route)
 
