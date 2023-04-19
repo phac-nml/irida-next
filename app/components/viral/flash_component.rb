@@ -16,7 +16,7 @@ module Viral
     end
 
     def classes_for_flash
-      case @type
+      case type
       when 'error'
         'bg-red-600 dark:bg-red-800'
       when 'success'
@@ -29,7 +29,7 @@ module Viral
     end
 
     def icon_for_flash
-      case @type
+      case type
       when 'error'
         'exclamation_circle'
       when 'success'
