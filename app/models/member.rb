@@ -36,6 +36,15 @@ class Member < ApplicationRecord
         {}
       end
     end
+
+    def can_modify?(user, object_namespace)
+      Member.exists?(namespace: object_namespace.self_and_ancestors, user:,
+                     access_level: Member::AccessLevel::OWNER)
+    end
+
+    def can_view?(user, object_namespace)
+      Member.exists?(namespace: object_namespace.self_and_ancestors, user:)
+    end
   end
 
   def validate_namespace

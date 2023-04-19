@@ -6,8 +6,6 @@ module Profiles
   class AccountsController < Profiles::ApplicationController
     layout 'profiles'
 
-    before_action :set_user
-
     # Get account page
     def show
       # No necessary code here
@@ -16,12 +14,6 @@ module Profiles
     def destroy
       @user.destroy
       redirect_to new_user_session_url
-    end
-
-    private
-
-    def set_user
-      @user = current_user
     end
   end
 end

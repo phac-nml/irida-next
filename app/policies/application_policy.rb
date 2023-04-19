@@ -15,4 +15,13 @@ class ApplicationPolicy < ActionPolicy::Base
   #  def owner?
   #    record.user_id == user.id
   #  end
+  #
+
+  def can_modify?(obj)
+    Member.can_modify?(user, obj)
+  end
+
+  def can_view?(obj)
+    Member.can_modify?(user, obj)
+  end
 end

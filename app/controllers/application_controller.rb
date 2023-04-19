@@ -2,6 +2,8 @@
 
 # Main application controller
 class ApplicationController < ActionController::Base
+  include Irida::Auth
+
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
 
@@ -10,8 +12,6 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionPolicy::Unauthorized do |_exception|
-    respond_to do |format|
-      format.html { render file: Rails.public_path.join('403.html'), status: :unauthorized }
-    end
+    render file: Rails.public_path.join('403.html'), status: :unauthorized
   end
 end

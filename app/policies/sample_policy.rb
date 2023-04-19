@@ -1,20 +1,21 @@
 # frozen_string_literal: true
 
-# Policy for samples
+# Policy for samples authorization
 class SamplePolicy < ApplicationPolicy
-  def show?
-    (record.project.creator == user) || record.project.namespace.project_members.find_by(user:) ||
-      record.project.namespace.parent == user
+  alias_rule :create?, :destroy?, :edit?, :update?, :new?,
+             to: :allowed_to_modify_samples_for_project?
+  alias_rule :show, :index, to: :allowed_to_view_samples_for_project?
+
+  def allowed_to_modify_samples_for_project?
+    return true if record.project.creator == user
+
+    can_modify?(record.project.namespace)
   end
 
-  def destroy?
-    (record.project.creator == user) || record.project.namespace.owners.include?(user) ||
-      record.project.namespace.parent == user
-  end
+  def allowed_to_view_samples_for_project?
+    return true if record.project.creator == user
 
-  def update?
-    (record.project.creator == user) || record.project.namespace.owners.include?(user) ||
-      record.projeect.namespace.parent == user
+    can_view?(record.project.namespace)
   end
 
   scope_for :relation do |relation, project_id|

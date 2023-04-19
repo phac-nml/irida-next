@@ -13,5 +13,49 @@ module Irida
         API_SCOPES
       end
     end
+
+    def authorize_owner_group!
+      authorize! @group
+    end
+
+    def authorize_create_group!
+      authorize! @group unless @group&.parent.nil?
+    end
+
+    def authorize_view_group!
+      authorize! @group
+    end
+
+    def authorize_owner_namespace!
+      if !@group.nil?
+        authorize! @group
+      elsif !@project.nil?
+        authorize! @project
+      end
+    end
+
+    def authorize_view_members!
+      if !@namespace.nil?
+        authorize! @namespace, to: :allowed_to_view_members?
+      elsif !@project.nil?
+        authorize! @project, to: :allowed_to_view_members?
+      end
+    end
+
+    def authorize_view_samples!
+      authorize! @project, to: :allowed_to_view_samples?
+    end
+
+    def authorize_sample_modification!
+      authorize! @project, to: :allowed_to_modify_samples?
+    end
+
+    def authorize_view_project!
+      authorize! @project
+    end
+
+    def authorize_user_profile_access!
+      authorize! @user
+    end
   end
 end

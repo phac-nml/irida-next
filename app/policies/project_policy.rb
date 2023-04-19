@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-# Policy for projects
+# Policy for projects authorization
 class ProjectPolicy < ApplicationPolicy
   alias_rule :create?, :destroy?, :edit?, :update?, :transfer?, :new?, :allowed_to_modify_samples?,
              to: :allowed_to_modify_project?
-  alias_rule :allowed_to_view_members?, :allowed_to_view_samples?, :show?, :activity?, to: :allowed_to_view_project?
+  alias_rule :allowed_to_view_samples?, :show?, :activity?, to: :allowed_to_view_project?
 
   def allowed_to_view_project?
     return true if record.namespace.owner == user
 
-    Member.exists?(namespace: record.namespace.self_and_ancestors, user:)
+    can_view?(record.namespace)
   end
 
   def allowed_to_modify_project?
     return true if record.namespace.owner == user
 
-    Member.exists?(namespace: record.namespace.self_and_ancestors, user:, access_level: Member::AccessLevel::OWNER)
+    can_modify?(record.namespace)
   end
 
   scope_for :relation do |relation|

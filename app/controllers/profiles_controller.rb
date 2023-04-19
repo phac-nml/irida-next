@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 # Controller for the user profile page
-class ProfilesController < ApplicationController
+class ProfilesController < Profiles::ApplicationController
   layout 'profiles'
 
   before_action :set_user
+  before_action :authorize_user_profile_access!
 
   # Get the profile page
   def show
