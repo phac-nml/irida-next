@@ -247,6 +247,10 @@ en:
       destroy:
         error: "There was an error removing the group member"
         success: "Group member successfully removed"
+    samples:
+      index:
+        title: Samples
+        subtitle: These are the samples in %{namespace_type} %{namespace_name}
   projects:
     create:
       success: "Project %{project_name} was successfully created"
