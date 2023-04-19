@@ -23,6 +23,7 @@
           <tr>
             <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.sample.name") %></th>
             <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.sample.project_id") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.project.name") %></th>
           </tr>
         </thead>
         <tbody id="group-samples-table-body">
@@ -33,6 +34,7 @@
             >
               <td class="px-6 py-3"><%= sample.name %></td>
               <td class="px-6 py-3"><%= sample.project_id %></td>
+              <td class="px-6 py-3"><%= link_to sample.project.name %></td>
             </tr>
           <% end %>
         </tbody>
