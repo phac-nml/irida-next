@@ -50,6 +50,7 @@ en:
       sample:
         name: Name
         description: Description
+        project_id: Project ID
       member:
         access_level: Access Level
         user_id: User

@@ -2,20 +2,41 @@
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
 <% end %>
 
-<table class="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
-  <thead class=" text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
-    <tr>
-      <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.sample.name") %></th>
-    </tr>
-  </thead>
-  <tbody id="group-samples-table-body">
-    <% @samples.each do |sample| %>
-      <tr
-        id="<%= dom_id(sample) %>"
-        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-      >
-        <td class="px-6 py-3"><%= sample.name %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="p-4">
+  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <div
+      class="
+        p-4
+        bg-white
+        border
+        border-gray-200
+        rounded-lg
+        shadow-sm
+        2xl:col-span-2
+        dark:border-gray-700
+        sm:p-6
+        dark:bg-gray-800
+      "
+    >
+      <table class="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class=" text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
+          <tr>
+            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.sample.name") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.sample.project_id") %></th>
+          </tr>
+        </thead>
+        <tbody id="group-samples-table-body">
+          <% @samples.each do |sample| %>
+            <tr
+              id="<%= dom_id(sample) %>"
+              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+            >
+              <td class="px-6 py-3"><%= sample.name %></td>
+              <td class="px-6 py-3"><%= sample.project_id %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
