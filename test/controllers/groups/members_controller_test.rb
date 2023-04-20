@@ -29,7 +29,7 @@ module Groups
       get group_members_path(group)
       user = users(:steve_doe)
 
-      assert_difference('Members::GroupMember.count') do
+      assert_difference('Member.count') do
         post group_members_path, params: { member: { user_id: user.id,
                                                      access_level: Member::AccessLevel::OWNER } }
       end
@@ -42,9 +42,9 @@ module Groups
 
       group = groups(:group_one)
       get group_members_path(group)
-      group_member = members_group_members(:group_one_member_james_doe)
+      group_member = members(:group_one_member_james_doe)
 
-      assert_difference('Members::GroupMember.count', -1) do
+      assert_difference('Member.count', -1) do
         delete group_member_path(group, group_member)
       end
 
@@ -55,9 +55,9 @@ module Groups
       sign_in users(:joan_doe)
 
       group = groups(:group_one)
-      group_member = members_group_members(:group_one_member_james_doe)
+      group_member = members(:group_one_member_james_doe)
 
-      assert_no_difference('Members::GroupMember.count') do
+      assert_no_difference('Member.count') do
         delete group_member_path(group, group_member)
       end
 

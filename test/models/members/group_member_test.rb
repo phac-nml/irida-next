@@ -4,7 +4,7 @@ require 'test_helper'
 
 class GroupMemberTest < ActiveSupport::TestCase
   def setup
-    @group_member = members_group_members(:group_one_member_james_doe)
+    @group_member = members(:group_one_member_james_doe)
     @group = groups(:group_one)
     @created_by_user = users(:john_doe)
     @user = users(:james_doe)
@@ -28,10 +28,6 @@ class GroupMemberTest < ActiveSupport::TestCase
 
   test '#access level' do
     assert_equal Member::AccessLevel::OWNER, @group_member.access_level
-  end
-
-  test '#type' do
-    assert_equal 'GroupMember', @group_member.type
   end
 
   test 'validates access level presence' do
@@ -64,7 +60,7 @@ class GroupMemberTest < ActiveSupport::TestCase
   end
 
   test 'should return correct access levels for access level MAINTAINER' do
-    group_member = members_group_members(:group_one_member_joan_doe)
+    group_member = members(:group_one_member_joan_doe)
     assert_equal group_member.access_level, Member::AccessLevel::MAINTAINER
     access_levels = Member.access_levels(group_member)
     assert_not access_levels.key?(I18n.t('activerecord.models.member.access_level.owner'))
@@ -98,13 +94,13 @@ class GroupMemberTest < ActiveSupport::TestCase
     assert_equal Member::AccessLevel.human_access(@group_member.access_level),
                  I18n.t('activerecord.models.member.access_level.owner')
 
-    group_member = members_group_members(:group_one_member_joan_doe)
+    group_member = members(:group_one_member_joan_doe)
     assert_equal Member::AccessLevel.human_access(group_member.access_level),
                  I18n.t('activerecord.models.member.access_level.maintainer')
   end
 
   test '#validates that the last remaining owner of a group is not deleted' do
-    group_member = members_group_members(:group_two_member_john_doe)
+    group_member = members(:group_two_member_john_doe)
     group_member.last_namespace_owner_member
     group = groups(:group_two)
 

@@ -1,0 +1,26 @@
+<li class="Layout-Sidebar__Item">
+  <a
+    href="<%= url %>"
+    title="<%= label %>"
+    data-turbo-action="replace"
+    class="
+      flex
+      items-center
+      my-1
+      transition-colors
+      ease-in-out
+      delay-75
+      rounded-md
+      p-1
+      hover:bg-gray-100
+      dark:text-gray-200
+      dark:hover:bg-gray-700
+      <%= class_names('Layout-Sidebar__Item--selected bg-gray-100 dark:bg-gray-700': current_page?(url)) %>
+    "
+  >
+    <%= viral_icon(name: icon, color: :subdued, style: "width: 27px;", classes: "p-1") %>
+    <span class="ml-2 grow">
+      <span data-layout--layout-component-target="link"><%= label %></span>
+    </span>
+  </a>
+</li>
