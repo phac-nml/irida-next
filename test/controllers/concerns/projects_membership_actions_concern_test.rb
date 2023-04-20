@@ -58,7 +58,6 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
          params: { member: { user_id: user.id,
                              namespace_id: proj_namespace,
                              created_by_id: curr_user.id,
-                             type: 'GroupMember',
                              access_level: Member::AccessLevel::OWNER } }
 
     assert_redirected_to namespace_project_members_path(namespace, project)
@@ -74,7 +73,6 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
            params: { member: { user_id: user.id,
                                namespace_id: 'does-not-exist',
                                created_by_id: users(:john_doe).id,
-                               type: 'GroupMember',
                                access_level: Member::AccessLevel::OWNER } }
     end
   end
@@ -85,7 +83,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     namespace = namespaces_user_namespaces(:john_doe_namespace)
     project = projects(:john_doe_project2)
 
-    project_member = members_project_members(:project_two_member_james_doe)
+    project_member = members(:project_two_member_james_doe)
 
     delete namespace_project_member_path(namespace, project, project_member)
 
@@ -97,7 +95,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     assert_raises(ActionController::RoutingError) do
-      project_member = members_project_members(:project_two_member_james_doe)
+      project_member = members(:project_two_member_james_doe)
       delete namespace_project_member_path('not-exists', 'not-exists', project_member)
     end
   end
@@ -112,7 +110,6 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
          params: { member: { user_id: user.id,
                              namespace_id: project.namespace.id,
                              created_by_id: users(:john_doe).id,
-                             type: 'GroupMember',
                              access_level: Member::AccessLevel::OWNER + 100_000 } }
 
     assert_response 422 # unprocessable entity
@@ -123,7 +120,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace = namespaces_user_namespaces(:john_doe_namespace)
     project = projects(:john_doe_project2)
-    project_member = members_project_members(:project_two_member_james_doe)
+    project_member = members(:project_two_member_james_doe)
 
     assert_no_changes -> { [project.namespace.project_members].count } do
       delete namespace_project_member_path(namespace, project, project_member)

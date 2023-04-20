@@ -18,7 +18,6 @@ module Groups
 
     def namespace
       @namespace = member_namespace
-      @member_type = 'GroupMember'
     end
 
     protected

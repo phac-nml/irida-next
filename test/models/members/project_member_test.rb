@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ProjectMemberTest < ActiveSupport::TestCase
   def setup
-    @project_member = members_project_members(:project_two_member_james_doe)
+    @project_member = members(:project_two_member_james_doe)
     @project = projects(:john_doe_project2)
     @created_by_user = users(:john_doe)
     @user = users(:james_doe)
@@ -28,10 +28,6 @@ class ProjectMemberTest < ActiveSupport::TestCase
 
   test '#access_level' do
     assert_equal Member::AccessLevel::OWNER, @project_member.access_level
-  end
-
-  test '#type' do
-    assert_equal 'ProjectMember', @project_member.type
   end
 
   test 'validates access level presence' do
@@ -64,7 +60,7 @@ class ProjectMemberTest < ActiveSupport::TestCase
   end
 
   test 'should return correct access levels for access level MAINTAINER' do
-    project_member = members_project_members(:project_two_member_joan_doe)
+    project_member = members(:project_two_member_joan_doe)
     assert_equal project_member.access_level, Member::AccessLevel::MAINTAINER
     access_levels = Member.access_levels(project_member)
     assert_not access_levels.key?(I18n.t('activerecord.models.member.access_level.owner'))
@@ -98,14 +94,26 @@ class ProjectMemberTest < ActiveSupport::TestCase
     assert_equal Member::AccessLevel.human_access(@project_member.access_level),
                  I18n.t('activerecord.models.member.access_level.owner')
 
-    project_member = members_project_members(:project_two_member_joan_doe)
+    project_member = members(:project_two_member_joan_doe)
     assert_equal Member::AccessLevel.human_access(project_member.access_level),
                  I18n.t('activerecord.models.member.access_level.maintainer')
   end
 
   test '#validate higher access than group' do
-    proj_member = members_project_members(:project_two_member_james_doe_wo_john_doe_namespace)
+    proj_member = members(:project_two_member_james_doe_wo_john_doe_namespace)
     proj_member.access_level = Member::AccessLevel::GUEST
     assert_not proj_member.valid?
+  end
+
+  test '#path' do
+    assert_equal @project.path, @project.namespace.path
+  end
+
+  test '#human_name' do
+    assert_equal @project.human_name, @project.namespace.human_name
+  end
+
+  test '#full_path' do
+    assert_equal @project.full_path, @project.namespace.full_path
   end
 end

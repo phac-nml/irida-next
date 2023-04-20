@@ -32,11 +32,10 @@ module Projects
       created_by_user = users(:john_doe)
       user = users(:jane_doe)
 
-      assert_difference('Members::ProjectMember.count') do
+      assert_difference('Member.count') do
         post namespace_project_members_path, params: { member: { user_id: user.id,
                                                                  namespace_id: namespace.id,
                                                                  created_by_id: created_by_user.id,
-                                                                 type: 'ProjectMember',
                                                                  access_level: Member::AccessLevel::OWNER } }
       end
 
@@ -50,9 +49,9 @@ module Projects
       project = projects(:john_doe_project2)
 
       get new_namespace_project_member_path(namespace, project)
-      project_member = members_project_members(:project_two_member_james_doe)
+      project_member = members(:project_two_member_james_doe)
 
-      assert_difference('Members::ProjectMember.count', -1) do
+      assert_difference('Member.count', -1) do
         delete namespace_project_member_path(namespace, project, project_member)
       end
 
@@ -65,9 +64,9 @@ module Projects
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project2)
 
-      project_member = members_project_members(:project_two_member_james_doe)
+      project_member = members(:project_two_member_james_doe)
 
-      assert_no_difference('Members::GroupMember.count') do
+      assert_no_difference('Member.count') do
         delete namespace_project_member_path(namespace, project, project_member)
       end
 

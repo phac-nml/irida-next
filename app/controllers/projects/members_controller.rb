@@ -18,7 +18,6 @@ module Projects
 
     def namespace
       @namespace = member_namespace
-      @member_type = 'ProjectMember'
     end
 
     protected

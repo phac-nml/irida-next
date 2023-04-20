@@ -10,4 +10,4 @@ You can use groups to manage permissions for your projects. If someone has acces
 
 You can also create subgroups.
 
-For more information about creating and managing your groups, see [Manage groups](groups/manage).
+For more information about creating and managing your groups, see [Manage groups](manage).
