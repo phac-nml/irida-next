@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Groups
-  # Controller actions for Samples
+  # Controller actions for Samples within a Group
   class SamplesController < ApplicationController
     layout 'groups'
     before_action :context_crumbs, only: %i[index]
