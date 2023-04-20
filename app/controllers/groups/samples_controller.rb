@@ -7,7 +7,7 @@ module Groups
     before_action :context_crumbs, only: %i[index]
 
     def index
-      @samples = Sample.where(project: group.descendants.where(type: 'Project')).includes(:project)
+      @samples = Sample.where(project_id: Project.where(namespace_id: group.descendant_ids)).includes(:project)
     end
 
     private

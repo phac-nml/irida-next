@@ -48,7 +48,7 @@ en:
         last_used_at: Last Used
         expires_at: Expiration Date
       sample:
-        name: Name
+        name: Sample Name
         description: Description
       project:
         name: Project Name
