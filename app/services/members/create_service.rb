@@ -9,7 +9,7 @@ module Members
     def initialize(user = nil, namespace = nil, params = {})
       super(user, params)
       @namespace = namespace
-      @member = Member.new(params.merge(created_by: current_user, namespace:, type: member_type))
+      @member = Member.new(params.merge(created_by: current_user, namespace:))
     end
 
     def execute
@@ -24,10 +24,6 @@ module Members
     rescue Members::CreateService::MemberCreateError => e
       member.errors.add(:base, e.message)
       member
-    end
-
-    def member_type
-      "#{namespace.type}Member"
     end
   end
 end

@@ -7,7 +7,7 @@ module Groups
     def setup
       login_as users(:john_doe)
       @namespace = groups(:group_one)
-      @members_count = members_group_members.select { |member| member.namespace == @namespace }.count
+      @members_count = members.select { |member| member.namespace == @namespace }.count
     end
 
     test 'can see the list of group members' do

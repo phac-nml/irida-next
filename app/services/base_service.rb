@@ -24,8 +24,8 @@ class BaseService
   def allowed_to_modify_group?(group)
     return true if group.parent.nil? && group.owner == current_user
 
-    Members::GroupMember.exists?(namespace: group.self_and_ancestors, user: current_user,
-                                 access_level: Member::AccessLevel::OWNER)
+    Member.exists?(namespace: group.self_and_ancestors, user: current_user,
+                   access_level: Member::AccessLevel::OWNER)
   end
 
   def namespace_owners_include_user?(namespace)
