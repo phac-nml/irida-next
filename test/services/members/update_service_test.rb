@@ -9,8 +9,8 @@ module Members
       @project = projects(:john_doe_project2)
       @project_namespace = @project.namespace
       @group = groups(:group_one)
-      @group_member = members_group_members(:group_one_member_joan_doe)
-      @project_member = members_project_members(:project_two_member_joan_doe)
+      @group_member = members(:group_one_member_joan_doe)
+      @project_member = members(:project_two_member_joan_doe)
     end
 
     test 'update group member with valid params' do

@@ -6,6 +6,9 @@ class Member < ApplicationRecord
   belongs_to :namespace, autosave: true
   belongs_to :created_by, class_name: 'User'
 
+  belongs_to :group, optional: true, foreign_key: :namespace_id # rubocop:disable Rails/InverseOf
+  belongs_to :project_namespace, optional: true, foreign_key: :namespace_id, class_name: 'Namespaces::ProjectNamespace' # rubocop:disable Rails/InverseOf
+
   validates :access_level, presence: true
   validates :access_level, inclusion: { in: proc { AccessLevel.all_values_with_owner } }
   validates :user_id, uniqueness: { scope: :namespace_id }
@@ -13,16 +16,11 @@ class Member < ApplicationRecord
   validate :validate_namespace
   validate :higher_access_level_than_group
 
-  class << self
-    def sti_class_for(type_name)
-      case type_name
-      when Members::GroupMember.sti_name
-        Members::GroupMember
-      when Members::ProjectMember.sti_name
-        Members::ProjectMember
-      end
-    end
+  before_destroy :last_namespace_owner_member
 
+  delegate :project, to: :project_namespace
+
+  class << self
     # TODO: Remove this once authorization is setup and
     # the policy class will handle which access levels
     # to return
@@ -56,7 +54,20 @@ class Member < ApplicationRecord
 
   # Find the user's group member with a highest access level
   def highest_group_member
-    Members::GroupMember.where(namespace: namespace.ancestors, user_id:).order(:access_level).last
+    Member.where(namespace: namespace.ancestors, user_id:).order(:access_level).last
+  end
+
+  # Method to ensure we don't leave a group or project without an owner
+  def last_namespace_owner_member
+    return if destroyed_by_association
+    return if access_level != Member::AccessLevel::OWNER
+    return if Member.where(namespace: namespace.self_and_ancestors,
+                           access_level: Member::AccessLevel::OWNER).many?
+
+    errors.add(:base,
+               I18n.t('activerecord.errors.models.member.destroy.last_member',
+                      namespace_type: namespace.class.model_name.human))
+    false
   end
 
   # class for member access levels

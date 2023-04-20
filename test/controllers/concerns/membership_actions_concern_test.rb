@@ -20,13 +20,12 @@ class TestClassController < ApplicationController
   private
 
   def access_levels
-    member_user = Member.find_by(user: current_user, namespace: @namespace, type: @member_type)
+    member_user = Member.find_by(user: current_user, namespace: @namespace)
     @access_levels = Member.access_levels(member_user)
   end
 
   def available_users
-    @available_users = User.where.not(id: Member.where(type: @member_type,
-                                                       namespace_id: @namespace.id).pluck(:user_id))
+    @available_users = User.where.not(id: Member.where(namespace_id: @namespace.id).pluck(:user_id))
     # Remove current user from available users as a user cannot add themselves
     @available_users = @available_users.to_a - [current_user]
   end

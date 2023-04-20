@@ -8,7 +8,7 @@ module Projects
       login_as users(:john_doe)
       @namespace = namespaces_user_namespaces(:john_doe_namespace)
       @project = projects(:john_doe_project2)
-      @members_count = members_project_members.select { |member| member.namespace == @project.namespace }.count
+      @members_count = members.select { |member| member.namespace == @project.namespace }.count
     end
 
     test 'can see the list of project members' do
