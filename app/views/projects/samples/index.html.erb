@@ -1,4 +1,4 @@
-<%= render PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700" ) %>
   <%= component.with_buttons do %>
     <% if allowed_to?(:new?, @project) %>
@@ -19,24 +19,23 @@
                 <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= sample.description %></div>
               </td>
               <% if allowed_to?(:destroy?, @project) %>
-                <td class="px-4 py-3">
-                  <div class="flex items-center justify-end">
-                    <button data-dropdown-toggle="sample-<%= sample.id %>-dropdown" class="navbar-btn sample-settings-ellipsis"
-                      aria-label="<%= t('projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) %>">
-                      <%= render IconComponent.new(name: 'ellipsis_vertical', classes: "w-4 h-4") %>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="sample-<%= sample.id %>-dropdown" class="dropdown-menu">
-                      <ul aria-labelledby="dropdownDefaultButton">
-                        <li>
-                          <%= link_to t('projects.samples.index.edit_button'), edit_namespace_project_sample_path(id: sample.id) %>
-                          <%= link_to t('projects.samples.index.remove_button'), namespace_project_sample_path(id: sample.id), data: {turbo_method: :delete, turbo_confirm: t('projects.samples.index.remove_button_confirmation')} %>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </td>
-                <% end %>
+                <td class="px-4 py-3 text-right">
+                   <%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
+                      <%= dropdown.item(
+                        label: t('projects.samples.index.edit_button'),
+                        url: edit_namespace_project_sample_path(id: sample.id)
+                      ) %>
+                                            <%= dropdown.item(
+                        label: t(:"projects.members.index.remove"),
+                        url: namespace_project_sample_path(id: sample.id),
+                        data: {
+                          turbo_method: :delete,
+                          turbo_confirm: t(:'projects.samples.index.remove_button_confirmation')
+                        }
+                      ) %>
+                    <% end %>
+                    </td>
+                 <% end %>
             </tr>
           <% end %>
           </tbody>

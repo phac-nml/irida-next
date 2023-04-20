@@ -35,5 +35,7 @@ module Irida
 
     # Sweep importmap cache for components
     config.importmap.cache_sweepers << Rails.root.join('app/components')
+
+    config.view_component.default_preview_layout = 'lookbook'
   end
 end

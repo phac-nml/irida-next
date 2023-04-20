@@ -3,9 +3,11 @@ module.exports = {
   content: [
     "./app/helpers/**/*.rb",
     "./app/javascript/**/*.js",
-    "./app/views/**/*",
     "./app/components/**/*",
+    "./app/views/**/*.{erb,html}",
     "./node_modules/flowbite/**/*.js",
+    "./test/components/previews/**/*",
+    "./test/components/viral/system/**/*",
   ],
   theme: {
     extend: {
