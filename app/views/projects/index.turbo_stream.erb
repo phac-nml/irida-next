@@ -1,22 +1,23 @@
 <%= turbo_stream.update("projects_list") do %>
   <table id="projects_list" class="min-w-full table-fixed dark:divide-gray-600">
     <tbody
-      class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
+      class="
+        bg-white
+        divide-y
+        divide-gray-200
+        dark:bg-gray-800
+        dark:divide-gray-700
+      "
     >
-    <%= render partial: 'projects/project', collection: @projects %>
+      <%= render partial: "projects/project", collection: @projects %>
     </tbody>
   </table>
 <% end %>
 
 <%= turbo_stream.update "projects_pagination" do %>
-  <div class=" w-full border-t border-gray-200">
-    <div class="flex items-center justify-center space-x-4 mt-6">
-      <% if @pagy.prev %>
-        <%= link_to "Prev", projects_url(page: @pagy.prev), data: { turbo_stream: true }, class: "btn btn-default" %>
-      <% end %>
-      <% if @pagy.next %>
-        <%= link_to "Next", projects_url(page: @pagy.next), data: { turbo_stream: true }, class: "btn btn-default" %>
-      <% end %>
-    </div>
-    <p class="text-center m-4 text-gray-500"><%== pagy_info @pagy %></p></div>
+  <%= render PaginationComponent.new(
+    info: pagy_info(@pagy),
+    prev_url: (@pagy.prev ? projects_url(page: @pagy.prev) : nil),
+    next_url: (@pagy.next ? projects_url(page: @pagy.next) : nil)
+  ) %>
 <% end %>
