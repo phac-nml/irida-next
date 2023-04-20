@@ -13,7 +13,7 @@
 <div class="bg-white dark:bg-gray-800">
   <div class="flex flex-col">
     <%= turbo_frame_tag "projects_list", src: projects_url(format: :turbo_stream, page: params[:page]), loading: :lazy do %>
-      <table id="projects_list" class="min-w-full table-fixed dark:divide-gray-600">
+      <table class="min-w-full table-fixed dark:divide-gray-600">
         <tbody
           class="
             bg-white
