@@ -1,4 +1,5 @@
 @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -53,10 +54,10 @@
   }
 
   .navbar-btn {
-    @apply ml-2 rounded-lg text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+    @apply rounded-md text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 
-  .navbar-btn svg {
+  .navbar-btn span {
     @apply w-6 h-6;
   }
 
@@ -122,7 +123,6 @@
 
   .btn {
     @apply text-white rounded-lg text-sm px-5 py-2.5 text-center focus:outline-none focus:ring-4;
-    
   }
 
   .btn-xs {
@@ -134,7 +134,7 @@
   }
 
   .btn-default {
-    @apply  text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
+    @apply text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600;
   }
 
   .btn-primary {
@@ -143,22 +143,6 @@
 
   .btn-danger {
     @apply text-white bg-red-600 hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-800;
-  }
-
-  .dropdown-menu {
-    @apply z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700;
-  }
-
-  .dropdown-menu ul {
-    @apply py-2 text-sm text-gray-700 dark:text-gray-200;
-  }
-
-  .dropdown-menu li > a {
-    @apply block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white;
-  }
-
-  .dropdown-menu li > a svg {
-    @apply inline-block w-5 h-5 mr-1 text-gray-400 dark:text-gray-300;
   }
 
   .row-btn {
@@ -173,24 +157,52 @@
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
-  .sidebar-header {
-    @apply flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700;
+  .Viral-Icon {
+    height: 2rem;
+    width: 2rem;
+    max-height: 100%;
+    max-width: 100%;
+    margin: auto;
+    @apply flex justify-center align-middle;
   }
 
-  .sidebar-item > a {
-    @apply flex items-center p-1 rounded-md hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700;
+  .Viral-Icon__Svg {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
   }
 
-  .sidebar-item > a.active {
-    @apply bg-gray-100 dark:bg-gray-700;
+  .Viral-Icon--colorBase {
+    @apply text-gray-900;
   }
 
-  .sidebar-item > a svg,
-  .sidebar-collapse button svg {
-    @apply w-6 h-6 py-1 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white;
+  .Viral-Icon--colorSubdued {
+    @apply text-gray-400;
   }
 
-  .sidebar-collapse button {
-    @apply flex items-center justify-center w-full h-10 text-sm font-medium text-gray-500 transition-colors duration-150 border-t border-gray-200 rounded-none hover:text-gray-700 dark:hover:text-gray-200 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 focus:ring-0;
+  .Viral-Icon--colorCritical {
+    @apply text-red-500;
+  }
+
+  .Viral-Icon--colorWarning {
+    @apply text-yellow-500;
+  }
+
+  .Viral-Icon--colorSuccess {
+    @apply text-green-500;
+  }
+
+  .Viral-Icon--colorPrimary {
+    @apply text-primary-500;
+  }
+
+  .Viral-Dropdown--button {
+    @apply flex items-center py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+  }
+
+  .Viral-Dropdown--icon {
+    @apply rounded-md text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 }

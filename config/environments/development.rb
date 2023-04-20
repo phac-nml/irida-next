@@ -72,5 +72,4 @@ Rails.application.configure do
 
   # LookBook
   config.lookbook.project_name = 'IRIDA Next'
-  config.view_component.default_preview_layout = 'lookbook'
 end

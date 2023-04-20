@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 module Layout
-  # Main navigation bar component
-  class NavbarComponent < ViewComponent::Base
-    def initialize(user:)
+  # Top level navigation bar
+  class NavbarComponent < Component
+    attr_reader :user
+
+    def initialize(user:, **system_arguments)
       @user = user
+      @system_arguments = system_arguments
     end
   end
 end

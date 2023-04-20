@@ -1,4 +1,4 @@
-<%= render PageHeaderComponent.new(title: t("groups.show.title"), subtitle: t("groups.show.subtitle")) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: t("groups.show.title"), subtitle: t("groups.show.subtitle")) do |component| %>
   <%= component.with_icon(name: "squares_2x2", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <%= link_to t(:"groups.index.create_group_button"),
@@ -58,11 +58,11 @@
                 <td class="px-4 py-3">
                   <div class="flex items-center justify-end">
                     <div class="inline-flex items-center justify-between w-8 mr-2">
-                      <%= render IconComponent.new(name: "folder", classes: "w-4 h-4") %>
+                      <%= render Viral::IconComponent.new(name: "folder", classes: "w-4 h-4") %>
                       0
                     </div>
                     <div class="inline-flex items-center justify-between w-8 mr-2">
-                      <%= render IconComponent.new(name: "users", classes: "w-4 h-4") %>
+                      <%= render Viral::IconComponent.new(name: "users", classes: "w-4 h-4") %>
                       1
                     </div>
                     <button
@@ -72,7 +72,7 @@
                       aria-haspopup="menu"
                       aria-label="<%= t(:'groups.index.group_dropdown.label', group_name: group.name) %>"
                     >
-                      <%= render IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
+                      <%= render Viral::IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
                     </button>
                     <!-- Dropdown menu -->
                     <div id="group-<%= group.id %>-dropdown" class="dropdown-menu">

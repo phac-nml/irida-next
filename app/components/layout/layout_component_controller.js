@@ -22,6 +22,7 @@ export default class extends Controller {
     this.layoutContainerTarget.classList.add("collapsed");
     this.iconCollapseTarget.classList.add("hidden");
     this.iconExpandTarget.classList.remove("hidden");
+    this.iconExpandTarget.classList.add("flex");
     this.linkTargets.forEach((link) => {
       link.classList.add("sr-only");
     });
@@ -31,6 +32,7 @@ export default class extends Controller {
   expanded() {
     this.layoutContainerTarget.classList.remove("collapsed");
     this.iconCollapseTarget.classList.remove("hidden");
+    this.iconExpandTarget.classList.remove("flex");
     this.iconExpandTarget.classList.add("hidden");
     this.linkTargets.forEach((link) => {
       link.classList.remove("sr-only");
