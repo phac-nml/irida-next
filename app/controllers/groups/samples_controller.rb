@@ -13,19 +13,14 @@ module Groups
     private
 
     def group
-      return unless params[:group_id]
-
       @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
     end
 
     def context_crumbs
-      case action_name
-      when 'index'
-        @context_crumbs = [{
-          name: I18n.t('groups.samples.index.title'),
-          path: group_samples_path
-        }]
-      end
+      @context_crumbs = [{
+        name: I18n.t('groups.samples.index.title'),
+        path: group_samples_path
+      }]
     end
   end
 end
