@@ -1,11 +1,31 @@
 # frozen_string_literal: true
 
 class IconComponentPreview < ViewComponent::Preview
-  def with_default_arguments
-    render IconComponent.new(name: 'user', classes: 'w-6 h-6')
+  def default
+    render Viral::IconComponent.new(name: 'user')
   end
 
-  def large_icon
-    render IconComponent.new(name: 'user', classes: 'w-12 h-12')
+  def larger_size_icon
+    render Viral::IconComponent.new(name: 'user', classes: 'w-16 h-16')
+  end
+
+  def primary
+    render Viral::IconComponent.new(name: 'user', color: :primary)
+  end
+
+  def critical
+    render Viral::IconComponent.new(name: 'user', color: :critical)
+  end
+
+  def subdued
+    render Viral::IconComponent.new(name: 'user', color: :subdued)
+  end
+
+  def warning
+    render Viral::IconComponent.new(name: 'user', color: :warning)
+  end
+
+  def success
+    render Viral::IconComponent.new(name: 'user', color: :success)
   end
 end
