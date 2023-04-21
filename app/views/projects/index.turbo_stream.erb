@@ -1,5 +1,5 @@
 <%= turbo_stream.update("projects_list") do %>
-  <table id="projects_list" class="min-w-full table-fixed dark:divide-gray-600">
+  <table class="min-w-full table-fixed dark:divide-gray-600">
     <tbody
       class="
         bg-white
@@ -9,7 +9,7 @@
         dark:divide-gray-700
       "
     >
-      <%= render partial: "projects/project", collection: @projects %>
+    <%= render partial: "projects/project", collection: @projects %>
     </tbody>
   </table>
 <% end %>
