@@ -39,7 +39,7 @@ module Projects
     test 'can remove a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
 
-      all('.member-settings-ellipsis')[1].click
+      all('.member-settings-ellipsis')[2].click
 
       accept_confirm do
         click_link I18n.t(:'projects.members.index.remove')
