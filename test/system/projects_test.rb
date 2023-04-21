@@ -11,8 +11,15 @@ class ProjectsTest < ApplicationSystemTestCase
     visit projects_url
 
     assert_selector 'h1', text: I18n.t(:'projects.index.title')
-    assert_selector 'tr', count: projects.count
+    assert_selector 'tr', count: 20
     assert_text projects(:project1).name
+    assert_selector 'a', text: I18n.t(:'components.pagination.next')
+    assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+
+    click_on I18n.t(:'components.pagination.next')
+    assert_selector 'tr', count: 2
+    click_on I18n.t(:'components.pagination.previous')
+    assert_selector 'tr', count: 20
   end
 
   test 'can create a project from index page' do
