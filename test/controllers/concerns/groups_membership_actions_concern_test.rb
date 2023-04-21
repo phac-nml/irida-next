@@ -18,9 +18,8 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'group members index invalid route get' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      get group_members_path(group_id: 'test-group-not-exists')
-    end
+    get group_members_path(group_id: 'test-group-not-exists')
+    assert_response :not_found
   end
 
   test 'group members new' do
@@ -36,9 +35,8 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'group members new invalid route get' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      get new_group_member_path(group_id: 'test-group-not-exists')
-    end
+    get new_group_member_path(group_id: 'test-group-not-exists')
+    assert_response :not_found
   end
 
   test 'group members create' do
@@ -85,10 +83,10 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'group members destroy invalid route delete' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      group_member = members(:group_one_member_james_doe)
-      delete group_member_path('test-group-not-exists', group_member)
-    end
+    group_member = members(:group_one_member_james_doe)
+    delete group_member_path('test-group-not-exists', group_member)
+
+    assert_response :not_found
   end
 
   test 'group members create invalid' do

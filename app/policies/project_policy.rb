@@ -7,13 +7,13 @@ class ProjectPolicy < ApplicationPolicy
   alias_rule :allowed_to_view_samples?, :show?, :activity?, to: :allowed_to_view_project?
 
   def allowed_to_view_project?
-    return true if record.namespace.owner == user
+    return true if record.namespace.parent.owner == user
 
     can_view?(record.namespace)
   end
 
   def allowed_to_modify_project?
-    return true if record.namespace.owner == user
+    return true if record.namespace.parent.owner == user
 
     can_modify?(record.namespace)
   end

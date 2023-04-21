@@ -11,7 +11,19 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
+  def not_found
+    render 'shared/error/not_found', status: :not_found
+  end
+
+  def route_not_found
+    not_found
+  end
+
   rescue_from ActionPolicy::Unauthorized do |_exception|
-    render file: Rails.public_path.join('403.html'), status: :unauthorized
+    render 'shared/error/not_authorized', status: :unauthorized
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |_exception|
+    not_found
   end
 end

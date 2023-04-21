@@ -20,9 +20,8 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'project members index invalid route get' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      get namespace_project_members_path(namespace_id: 'test-group-not-exists', project_id: 'test-proj-not-exists')
-    end
+    get namespace_project_members_path(namespace_id: 'test-group-not-exists', project_id: 'test-proj-not-exists')
+    assert_response :not_found
   end
 
   test 'project members new' do
@@ -39,9 +38,8 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'project members new invalid route get' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      get new_namespace_project_member_path(namespace_id: 'test-group-not-exists', project_id: 'test-proj-not-exists')
-    end
+    get new_namespace_project_member_path(namespace_id: 'test-group-not-exists', project_id: 'test-proj-not-exists')
+    assert_response :not_found
   end
 
   test 'project members create' do
@@ -68,13 +66,12 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
     user = users(:jane_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      post namespace_project_members_path(namespace_id: 'does-not-exist', project_id: 'does-not-exist'),
-           params: { member: { user_id: user.id,
-                               namespace_id: 'does-not-exist',
-                               created_by_id: users(:john_doe).id,
-                               access_level: Member::AccessLevel::OWNER } }
-    end
+    post namespace_project_members_path(namespace_id: 'does-not-exist', project_id: 'does-not-exist'),
+         params: { member: { user_id: user.id,
+                             namespace_id: 'does-not-exist',
+                             created_by_id: users(:john_doe).id,
+                             access_level: Member::AccessLevel::OWNER } }
+    assert_response :not_found
   end
 
   test 'project members destroy' do
@@ -94,10 +91,9 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'project members destroy invalid route delete' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      project_member = members(:project_two_member_james_doe)
-      delete namespace_project_member_path('not-exists', 'not-exists', project_member)
-    end
+    project_member = members(:project_two_member_james_doe)
+    delete namespace_project_member_path('not-exists', 'not-exists', project_member)
+    assert_response :not_found
   end
 
   test 'project members create invalid' do

@@ -60,10 +60,9 @@ module Profiles
     test 'should not revoke personal access token for another user' do
       sign_in users(:john_doe)
 
-      assert_raises(ActiveRecord::RecordNotFound) do
-        delete revoke_profile_personal_access_token_path(id: personal_access_tokens(:jane_doe_valid_pat),
-                                                         format: :turbo_stream)
-      end
+      delete revoke_profile_personal_access_token_path(id: personal_access_tokens(:jane_doe_valid_pat),
+                                                       format: :turbo_stream)
+      assert_response :not_found
     end
   end
 end

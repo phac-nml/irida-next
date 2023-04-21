@@ -88,9 +88,9 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     group = groups(:group_one)
-    assert_raises(ActionController::RoutingError) do
-      get group_path("#{group.full_path}/fakesubgroup")
-    end
+    get group_path("#{group.full_path}/fakesubgroup")
+
+    assert_response :not_found
   end
 
   test 'should not delete a group' do
