@@ -12,7 +12,7 @@ class ProjectsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'projects.index.title')
     assert_selector 'tr', count: 20
-    assert_text projects(:project1).name
+    assert_text projects(:project1).human_name
     assert_selector 'a', text: I18n.t(:'components.pagination.next')
     assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
@@ -20,6 +20,9 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_selector 'tr', count: 2
     click_on I18n.t(:'components.pagination.previous')
     assert_selector 'tr', count: 20
+
+    click_link projects(:project1).human_name
+    assert_selector 'h1', text: projects(:project1).name
   end
 
   test 'can create a project from index page' do

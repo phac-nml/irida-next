@@ -5,7 +5,8 @@ module ViewHelper
   VIRAL_HELPERS = {
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',
-    icon: 'Viral::IconComponent'
+    icon: 'Viral::IconComponent',
+    tooltip: 'Viral::TooltipComponent'
   }.freeze
 
   VIRAL_HELPERS.each do |name, component|
