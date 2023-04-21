@@ -53,7 +53,38 @@ en:
       member:
         access_level: Access Level
         user_id: User
-        data:
+    errors:
+      models:
+        namespace:
+          attributes:
+            name:
+              blank: Can't be blank
+              taken: Has already been taken
+        member:
+          attributes:
+            access_level:
+              invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
+              inclusion: "Access Level provided is not included in the list of valid access levels"
+          destroy:
+            last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
+        personal_access_token:
+          attributes:
+            scopes:
+              inclusion: can only contain available scopes
+    models:
+      member:
+        access_level:
+          no_access: No Access
+          guest: Guest
+          analyst: Analyst
+          maintainer: Maintainer
+          owner: Owner
+      group:
+        one: Group
+        other: Groups
+      namespaces/project_namespace:
+        one: Project
+        other: Projects
   datetime:
     distance_in_words:
       about_x_hours:
@@ -93,38 +124,6 @@ en:
       x_years:
         one: "%{count} year ago"
         other: "%{count} years ago"
-    errors:
-      models:
-        namespace:
-          attributes:
-            name:
-              blank: Can't be blank
-              taken: Has already been taken
-        member:
-          attributes:
-            access_level:
-              invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
-              inclusion: "Access Level provided is not included in the list of valid access levels"
-          destroy:
-            last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
-        personal_access_token:
-          attributes:
-            scopes:
-              inclusion: can only contain available scopes
-    models:
-      member:
-        access_level:
-          no_access: No Access
-          guest: Guest
-          analyst: Analyst
-          maintainer: Maintainer
-          owner: Owner
-      group:
-        one: Group
-        other: Groups
-      namespaces/project_namespace:
-        one: Project
-        other: Projects
   auth:
     scopes:
       api: Grants complete read/write access to the API.
