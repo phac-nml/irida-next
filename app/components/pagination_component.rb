@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Pagnation component using pagy gem
 class PaginationComponent < ViewComponent::Base
   attr_reader :prev_url, :next_url, :info
 
