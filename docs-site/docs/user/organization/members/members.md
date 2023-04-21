@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
-id: members
-title: Members
+id: membersship
+title: Group and Project Members
 ---
 
 In IRIDA Next, members are the users and groups which have access to your project. Each member has a role, which determines what they can do or access in the project.
@@ -41,12 +41,17 @@ For Example:
 
 Depending on their membership type, members of groups or projects are granted different visibility levels and rights into the group or project.
 
-| Action                      | Direct Member | Inherited Member |
-| :-------------------------- | :------------ | ---------------- |
-| Create/Edit/Delete Group    |               |
-| Create/Edit/Delete Subgroup | &#x2713;      |                  |
-| Create/Edit/Delete Project  |               |
-| Add/Remove Members          |               |                  |
+| Action                | Direct Member (Owner) | Inherited Member (Owner) | Direct Member (Maintainer) | Inherited Member (Maintainer) |
+| :-------------------- | :-------------------- | ------------------------ | -------------------------- | ----------------------------- |
+| Create/Edit Group     | ✓                     | ✓                        | ✓                          | ✓                             |
+| Delete Group          | ✓                     | ✓                        |                            |                               |
+| Create/Edit/ Subgroup | ✓                     | ✓                        | ✓                          | ✓                             |
+| Delete SubGroup       | ✓                     | ✓                        |                            |                               |
+| Create/Edit Project   | ✓                     | ✓                        | ✓                          | ✓                             |
+| Delete Project        | ✓                     | ✓                        |                            |                               |
+| Add/Remove Members    | ✓                     | ✓                        | ✓ (1)                      | ✓(1)                          |
+
+1. Maintainers can only add and remove members upto their role
 
 ## Add members to a group
 
