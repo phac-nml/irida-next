@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 id: membersship-permissions
 title: Permissions and Roles
 ---
@@ -27,17 +27,18 @@ Any user can remove themselves from a group, unless they are the last Owner of t
 
 The following table lists group permissions available for each role:
 
-| Action              | Guest | Analyst | Maintainer | Owner |
-| :------------------ | :---- | :------ | :--------- | :---- |
-| Create Group        |       |         | ✓          | ✓     |
-| Edit Group          |       |         | ✓          | ✓     |
-| Delete Group        |       |         |            | ✓     |
-| Create SubGroup     |       |         | ✓          | ✓     |
-| Edit SubGroup       |       |         | ✓          | ✓     |
-| Delete SubGroup     |       |         |            | ✓     |
-| Add Group Member    |       |         | ✓          | ✓     |
-| Edit Group Member   |       |         | ✓          | ✓     |
-| Remove Group Member |       |         | ✓          | ✓     |
+| Action                     | Guest | Analyst | Maintainer | Owner |
+| :------------------------- | :---- | :------ | :--------- | :---- |
+| Create Group and Subgroups |       |         | ✓          | ✓     |
+| Edit Group and Subgroups   |       |         | ✓          | ✓     |
+| Delete Group and Subgroups |       |         |            | ✓     |
+| View Group and Subgroups   | ✓     | ✓       | ✓          | ✓     |
+| Add Group Member           |       |         | ✓(1)       | ✓     |
+| Edit Group Member          |       |         | ✓(1)       | ✓     |
+| Remove Group Member        |       |         | ✓(1)       | ✓     |
+| View Group Members         | ✓     | ✓       | ✓          | ✓     |
+
+1. A user with the **Maintainer** role can only modify members upto and including their role
 
 ## Subgroup permissions
 
@@ -50,9 +51,13 @@ When you add a member to a subgroup where they are also a member of one of the p
 | Create Project        |       |         | ✓          | ✓     |
 | Edit Project          |       |         | ✓          | ✓     |
 | Delete Project        |       |         |            | ✓     |
-| Create Project        |       |         | ✓          | ✓     |
-| Edit Project          |       |         | ✓          | ✓     |
-| Delete Project        |       |         |            | ✓     |
-| Add Project Member    |       |         | ✓          | ✓     |
-| Edit Project Member   |       |         | ✓          | ✓     |
-| Remove Project Member |       |         | ✓          | ✓     |
+| View Project          | ✓     | ✓       | ✓          | ✓     |
+| Add Project Member    |       |         | ✓(1)       | ✓     |
+| Edit Project Member   |       |         | ✓(1)       | ✓     |
+| Remove Project Member |       |         | ✓(1)       | ✓     |
+| View Project Members  | ✓     | ✓       | ✓          | ✓     |
+| Create Samples        |       |         |            | ✓     |
+| Edit Samples          |       |         |            | ✓     |
+| Delete Samples        |       |         |            | ✓     |
+
+1. A user with the **Maintainer** role can only modify members upto and including their role

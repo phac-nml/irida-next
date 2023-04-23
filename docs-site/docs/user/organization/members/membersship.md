@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 id: membersship
 title: Group and Project Members
 ---
@@ -41,15 +41,16 @@ For Example:
 
 Depending on their membership type, members of groups or projects are granted different visibility levels and rights into the group or project.
 
-| Action                | Direct Member (Owner) | Inherited Member (Owner) | Direct Member (Maintainer) | Inherited Member (Maintainer) |
-| :-------------------- | :-------------------- | ------------------------ | -------------------------- | ----------------------------- |
-| Create/Edit Group     | ✓                     | ✓                        | ✓                          | ✓                             |
-| Delete Group          | ✓                     | ✓                        |                            |                               |
-| Create/Edit/ Subgroup | ✓                     | ✓                        | ✓                          | ✓                             |
-| Delete SubGroup       | ✓                     | ✓                        |                            |                               |
-| Create/Edit Project   | ✓                     | ✓                        | ✓                          | ✓                             |
-| Delete Project        | ✓                     | ✓                        |                            |                               |
-| Add/Remove Members    | ✓                     | ✓                        | ✓ (1)                      | ✓(1)                          |
+| Action                       | Direct Member (Owner) | Inherited Member (Owner) | Direct Member (Maintainer) | Inherited Member (Maintainer) |
+| :--------------------------- | :-------------------- | ------------------------ | -------------------------- | ----------------------------- |
+| Create/Edit/View Group       | ✓                     | ✓                        | ✓                          | ✓                             |
+| Delete Group                 | ✓                     | ✓                        |                            |                               |
+| Create/Edit/View Subgroup    | ✓                     | ✓                        | ✓                          | ✓                             |
+| Delete SubGroup              | ✓                     | ✓                        |                            |                               |
+| Create/Edit/View Project     | ✓                     | ✓                        | ✓                          | ✓                             |
+| Delete Project               | ✓                     | ✓                        |                            |                               |
+| Add/Edit/Remove/View Samples | ✓                     | ✓                        |                            |                               |
+| Add/Edit/Remove/View Members | ✓                     | ✓                        | ✓ (1)                      | ✓(1)                          |
 
 1. Maintainers can only add and remove members upto their role
 
@@ -129,7 +130,7 @@ Prerequisites:
 
 To remove a member from a group:
 
-1. From the left sidebar, select **Projects**, and find your project
+1. From the left sidebar, select **Groups**, and find your group
 2. From the left sidebar, select **Members**
 3. On the right hand side of the row for the member you want to remove, click the `ellipsis` and select **Remove** from the dropdown.
-4. Confirm that you would like to remove the member from the project in the popup by clicking the **OK** button
+4. Confirm that you would like to remove the member from the group in the popup by clicking the **OK** button
