@@ -2,6 +2,7 @@
 
 # Main application controller
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
 
