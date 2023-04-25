@@ -1,6 +1,6 @@
 {
-  "label": "Groups",
-  "position": 3,
+  "label": "Members",
+  "position": 2,
   "link": {
     "type": "doc",
     "id": "introduction"
