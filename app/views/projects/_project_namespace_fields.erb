@@ -1,13 +1,13 @@
 <div class="form-field">
   <%= builder.label :name %>
   <%= builder.text_field :name,
-                         data: {
-                           "slugify-target": "name",
-                           action: "input->slugify#nameChanged"
-                         },
-                         required: true,
-                         autofocus: true,
-                         placeholder: t(:"projects.new.placeholder") %>
+                     data: {
+                       "slugify-target": "name",
+                       action: "input->slugify#nameChanged"
+                     },
+                     required: true,
+                     autofocus: true,
+                     placeholder: t(:"projects.new.placeholder") %>
 </div>
 <div class="grid grid-cols-2 gap-4">
   <div class="form-field">
@@ -40,7 +40,7 @@
         Namespace.where(
           type: [Group.sti_name, Namespaces::UserNamespace.sti_name],
           owner: current_user
-        ),
+        ).include_route,
         :id,
         :full_path,
         {},
@@ -51,11 +51,7 @@
   </div>
   <div class="form-field">
     <%= builder.label :path %>
-    <%= builder.text_field :path,
-                           data: {
-                             "slugify-target": "path"
-                           },
-                           required: true %>
+    <%= builder.text_field :path, data: { "slugify-target": "path" }, required: true %>
   </div>
 </div>
 <div class="form-field">

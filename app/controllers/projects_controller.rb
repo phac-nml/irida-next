@@ -9,7 +9,12 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   before_action :authorize_view_project!, only: %i[show]
 
   def index
-    @projects = authorized_scope(Project, type: :relation)
+    @pagy, @projects = pagy(authorized_scope(Project, type: :relation).order(updated_at: :desc))
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def show
