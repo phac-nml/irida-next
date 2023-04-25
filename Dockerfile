@@ -1,4 +1,4 @@
-FROM ruby:3.2.0 as base
+FROM ruby:3.2.0-slim as base
 
 WORKDIR /rails
 
@@ -18,6 +18,7 @@ RUN apt-get update -qq && apt-get install -yq --no-install-recommends \
     build-essential \
     gnupg2 \
     libpq-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN gem update --system && gem install bundler
@@ -38,6 +39,16 @@ COPY . .
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
+
+# Install node and pnpm
+RUN curl -sL https://deb.nodesource.com/setup_19.x  | bash - \
+    && apt-get install -yq --no-install-recommends nodejs \
+    && npm install -g pnpm@7.29.1 \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+# Install node_modules
+RUN pnpm install --frozen-lockfile
 
 # Precompile assets
 # SECRET_KEY_BASE or RAILS_MASTER_KEY is required in production, but we don't
