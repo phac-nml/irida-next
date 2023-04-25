@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-id: membersship-permissions
+id: member-permissions
 title: Permissions and Roles
 ---
 
@@ -27,16 +27,17 @@ Any user can remove themselves from a group, unless they are the last Owner of t
 
 The following table lists group permissions available for each role:
 
-| Action                     | Guest | Analyst | Maintainer | Owner |
-| :------------------------- | :---- | :------ | :--------- | :---- |
-| Create Group and Subgroups |       |         | ✓          | ✓     |
-| Edit Group and Subgroups   |       |         | ✓          | ✓     |
-| Delete Group and Subgroups |       |         |            | ✓     |
-| View Group and Subgroups   | ✓     | ✓       | ✓          | ✓     |
-| Add Group Member           |       |         | ✓(1)       | ✓     |
-| Edit Group Member          |       |         | ✓(1)       | ✓     |
-| Remove Group Member        |       |         | ✓(1)       | ✓     |
-| View Group Members         | ✓     | ✓       | ✓          | ✓     |
+| Action                       | Guest | Analyst | Maintainer | Owner |
+| :--------------------------- | :---- | :------ | :--------- | :---- |
+| Create Group and Subgroups   |       |         | ✓          | ✓     |
+| Edit Group and Subgroups     |       |         | ✓          | ✓     |
+| Delete Group and Subgroups   |       |         |            | ✓     |
+| View Group and Subgroups     | ✓     | ✓       | ✓          | ✓     |
+| Transfer Group and Subgroups |       |         |            | ✓     |
+| Add Group Member             |       |         | ✓(1)       | ✓     |
+| Edit Group Member            |       |         | ✓(1)       | ✓     |
+| Remove Group Member          |       |         | ✓(1)       | ✓     |
+| View Group Members           | ✓     | ✓       | ✓          | ✓     |
 
 1. A user with the **Maintainer** role can only modify members upto and including their role
 
@@ -52,6 +53,7 @@ When you add a member to a subgroup where they are also a member of one of the p
 | Edit Project          |       |         | ✓          | ✓     |
 | Delete Project        |       |         |            | ✓     |
 | View Project          | ✓     | ✓       | ✓          | ✓     |
+| Transfer Project      |       |         |            | ✓     |
 | Add Project Member    |       |         | ✓(1)       | ✓     |
 | Edit Project Member   |       |         | ✓(1)       | ✓     |
 | Remove Project Member |       |         | ✓(1)       | ✓     |

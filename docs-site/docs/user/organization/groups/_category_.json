@@ -1,8 +1,8 @@
 {
-    "label": "Groups",
-    "position": 2,
-    "link": {
-        "type": "doc",
-        "id": "introduction"
-    }
+  "label": "Groups",
+  "position": 3,
+  "link": {
+    "type": "doc",
+    "id": "introduction"
+  }
 }

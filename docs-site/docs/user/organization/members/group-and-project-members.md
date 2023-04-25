@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-id: membersship
+id: group-and-project-members
 title: Group and Project Members
 ---
 
@@ -36,23 +36,6 @@ For Example:
 - Group 1 has a subgroup Subgroup 1
 - Project 1 belongs to Subgroup 1
 - User 0 has the inherited membership in Project 1 through the ancestor (Group 1) of Subgroup 1 with the **Maintainer** role
-
-## Membership and visibility rights
-
-Depending on their membership type, members of groups or projects are granted different visibility levels and rights into the group or project.
-
-| Action                       | Direct Member (Owner) | Inherited Member (Owner) | Direct Member (Maintainer) | Inherited Member (Maintainer) |
-| :--------------------------- | :-------------------- | ------------------------ | -------------------------- | ----------------------------- |
-| Create/Edit/View Group       | ✓                     | ✓                        | ✓                          | ✓                             |
-| Delete Group                 | ✓                     | ✓                        |                            |                               |
-| Create/Edit/View Subgroup    | ✓                     | ✓                        | ✓                          | ✓                             |
-| Delete SubGroup              | ✓                     | ✓                        |                            |                               |
-| Create/Edit/View Project     | ✓                     | ✓                        | ✓                          | ✓                             |
-| Delete Project               | ✓                     | ✓                        |                            |                               |
-| Add/Edit/Remove/View Samples | ✓                     | ✓                        |                            |                               |
-| Add/Edit/Remove/View Members | ✓                     | ✓                        | ✓ (1)                      | ✓(1)                          |
-
-1. Maintainers can only add and remove members upto their role
 
 ## Add members to a group
 
