@@ -1,27 +1,28 @@
-<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4 md:space-y-6" }) do |f| %>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
   <div class="form-field">
     <%= f.label :email %>
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
-  <div class="form=field">
+
+  <div class="form-field">
     <%= f.label :password %>
-    <%= f.password_field :password, autocomplete: "current-password", class: "bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+    <%= f.password_field :password, autocomplete: "current-password" %>
   </div>
-  <div class="flex items-center justify-between">
-    <% if devise_mapping.rememberable? %>
-      <div class="flex items-center">
-        <%= f.check_box :remember_me %>
-        <div class="ml-3"><%= f.label :remember_me, class: "field-hint" %></div>
+
+  <% if devise_mapping.rememberable? %>
+    <div class="flex items-start">
+      <div class="flex items-center h-5">
+        <%= f.check_box :remember_me, class: "w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" %>
       </div>
-    <% end %>
-    <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-      <p class="field-hint"><%= link_to "Forgot your password?", new_password_path(resource_name), class: "link" %></p>
+      <div class="ml-2 text-sm">
+        <%= f.label :remember_me %>
       </div>
-      <%= f.submit "Sign in", class: "btn btn-primary" %>
-    <% end %>
-    <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-      <p class="field-hint">
-        Don’t have an account yet? <%= link_to "Register now", new_registration_path(resource_name), class: "link" %>
-      </p>
-    <% end %>
+    </div>
+  <% end %>
+
+  <div class="flow-root">
+    <%= f.submit "Log in", class: "btn btn-primary w-full" %>
+  </div>
 <% end %>
+
+<%= render "devise/shared/links" %>
