@@ -132,17 +132,6 @@ en:
     pagination:
       previous: Prev
       next: Next
-  devise:
-    sessions:
-      new:
-        sign_in: Sign in
-    shared:
-      links:
-        forgot_password: Forgot your password?
-        sign_in: Sign in
-        create_an_account: Don't have an account?
-        create_an_account_link: Register now
-        omniauth: Sign in with %{provider}
   layouts:
     application:
       site_title: IRIDA Next
