@@ -8,6 +8,7 @@ module System
       visit('/rails/view_components/tooltip_component/default')
       assert_selector '[data-viral--tooltip-component-target="target"]', visible: false
       find('.btn').hover
+      assert_text I18n.t('auth.scopes.api')
       assert_selector '[data-viral--tooltip-component-target="target"]', visible: true
     end
   end
