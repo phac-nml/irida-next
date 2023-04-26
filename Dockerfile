@@ -77,6 +77,8 @@ USER rails:rails
 ARG DATABASE_URL
 ARG SECRET_KEY_BASE
 
+ENTRYPOINT [ "bin/docker-entrypoint.sh" ]
+
 # Start Server
 EXPOSE 3000
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
