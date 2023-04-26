@@ -20,9 +20,9 @@
               dark:divide-gray-700
             "
           >
-          <% @groups.each do |group| %>
-            <tr
-              class="
+            <% @groups.each do |group| %>
+              <tr
+                class="
                   text-sm
                   font-normal
                   text-gray-500
@@ -30,12 +30,12 @@
                   dark:hover:bg-gray-700
                   dark:text-gray-400
                 "
-            >
-              <td class="p-4 whitespace-nowrap">
-                <%= link_to group.name,
-                            group_path(group),
-                            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                <% if current_user.id == group.owner_id %>
+              >
+                <td class="p-4 whitespace-nowrap">
+                  <%= link_to group.name,
+                  group_path(group),
+                  class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                  <% if current_user.id == group.owner_id %>
                     <span
                       class="
                         bg-green-200
@@ -58,30 +58,23 @@
                 <td class="px-4 py-3">
                   <div class="flex items-center justify-end">
                     <div class="inline-flex items-center justify-between w-8 mr-2">
-                      <%= render Viral::IconComponent.new(name: "folder", classes: "w-4 h-4") %>
+                      <%= viral_icon(name: "folder", classes: "w-4 h-4") %>
                       0
                     </div>
                     <div class="inline-flex items-center justify-between w-8 mr-2">
-                      <%= render Viral::IconComponent.new(name: "users", classes: "w-4 h-4") %>
+                      <%= viral_icon(name: "users", classes: "w-4 h-4") %>
                       1
                     </div>
-                    <button
-                      data-dropdown-toggle="group-<%= group.id %>-dropdown"
-                      class="navbar-btn"
-                      aria-expanded="false"
-                      aria-haspopup="menu"
-                      aria-label="<%= t(:'groups.index.group_dropdown.label', group_name: group.name) %>"
-                    >
-                      <%= render Viral::IconComponent.new(name: "ellipsis_vertical", classes: "w-4 h-4") %>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="group-<%= group.id %>-dropdown" class="dropdown-menu">
-                      <ul aria-labelledby="dropdownDefaultButton">
-                        <li>
-                          <%= link_to t(:"groups.index.group_dropdown.delete"), edit_group_path(group) %>
-                        </li>
-                      </ul>
-                    </div>
+                    <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'groups.index.group_dropdown.label', group_name: group.name) }) do |dropdown| %>
+                      <%= dropdown.item(
+                        label: t(:"groups.index.group_dropdown.delete"),
+                        url: group_path(group),
+                        data: {
+                          turbo_method: :delete,
+                          turbo_confirm: t(:"groups.index.group_dropdown.delete_confirmation")
+                        }
+                      ) %>
+                    <% end %>
                   </div>
                 </td>
               </tr>
