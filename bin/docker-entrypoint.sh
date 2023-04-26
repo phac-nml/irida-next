@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-run_pending_migrations=${RUN_PENDING_MIGRATIONS:-false}
+run_pending_migrations="${RUN_PENDING_MIGRATIONS:-false}"
 # run any pending migrations if RUN_PENDING_MIGRATIONS=true
-if ( $run_pending_migrations = "true" ); then
+if [[ $run_pending_migrations = "true" || $run_pending_migrations = "True" || $run_pending_migrations = "1" ]]; then
     echo "Running pending migrations"
     bin/rails db:migrate
 fi
