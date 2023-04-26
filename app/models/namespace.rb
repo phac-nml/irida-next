@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Namespace base class
-class Namespace < ApplicationRecord
+class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Routable
 
   MAX_ANCESTORS = 10
@@ -43,6 +43,39 @@ class Namespace < ApplicationRecord
 
     def by_path(path)
       find_by('lower(path) = :value', value: path.downcase)
+    end
+
+    def self_and_ancestors
+      self_paths = joins(:route).pluck('routes.path')
+      ancestral_paths = []
+      self_paths.each do |path|
+        path.split('/').each_with_index do |_part, index|
+          ancestral_paths << path.split('/')[0..index].join('/')
+        end
+      end
+
+      paths = self_paths | ancestral_paths
+
+      route_path = Route.arel_table[:path]
+
+      unscoped
+        .distinct
+        .joins(:route)
+        .where(route_path.in(paths))
+    end
+
+    def self_and_descendants
+      self_paths = joins(:route).pluck('routes.path')
+      fuzzy_paths = self_paths.map { |path| "#{path}/%" }
+
+      paths = self_paths | fuzzy_paths
+
+      route_path = Route.arel_table[:path]
+
+      unscoped
+        .distinct
+        .joins(:route)
+        .where(route_path.matches_any(paths))
     end
   end
 
