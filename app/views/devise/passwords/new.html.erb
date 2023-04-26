@@ -1,10 +1,12 @@
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-4 md:space-y-6" }) do |f| %>
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-4" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
+
   <div class="form-field">
     <%= f.label :email %>
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
-  <%= f.submit "Reset password", class: "btn btn-primary" %>
+
+  <%= f.submit "Send me reset password instructions", class: "btn btn-primary w-full" %>
 <% end %>
-<p class="field-hint text-center">Already have login and
-  password? <%= link_to "Sign in", new_session_path(resource_name), class: "link" %></p>
+
+<%= render "devise/shared/links" %>
