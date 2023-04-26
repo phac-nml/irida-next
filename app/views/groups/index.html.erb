@@ -21,16 +21,7 @@
             "
           >
             <% @groups.each do |group| %>
-              <tr
-                class="
-                  text-sm
-                  font-normal
-                  text-gray-500
-                  hover:bg-gray-50
-                  dark:hover:bg-gray-700
-                  dark:text-gray-400
-                "
-              >
+              <tr class=" text-sm font-normal text-gray-500 dark:text-gray-400 ">
                 <td class="p-4 whitespace-nowrap">
                   <%= link_to group.name,
                   group_path(group),
