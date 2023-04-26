@@ -52,7 +52,7 @@ class ProfileTest < ApplicationSystemTestCase
       click_link I18n.t(:'profiles.accounts.delete.button')
     end
 
-    assert_text I18n.t('devise.registrations.destroyed')
+    assert_text I18n.t('devise.shared.links.create_an_account_link')
   end
 
   test 'can view personal access tokens' do
