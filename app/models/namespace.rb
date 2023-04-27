@@ -127,6 +127,10 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     self.class.joins(:route).where(route_path.matches_any([full_path, "#{full_path}/%"]))
   end
 
+  def self_and_descendant_ids
+    self_and_descendants.as_ids
+  end
+
   def to_param
     full_path
   end
