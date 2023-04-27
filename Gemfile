@@ -42,7 +42,7 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'bootsnap', require: false
 
 # Use devise for auth
-gem 'devise', '~> 4.8.1'
+gem 'devise', '~> 4.9.2'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
@@ -50,6 +50,9 @@ gem 'devise', '~> 4.8.1'
 # Tailwind CSS [https://tailwindcss.com]
 gem 'tailwindcss-rails', '~> 2.0'
 gem 'view_component'
+
+# Pagy
+gem 'pagy', '~> 6.0' # omit patch digit
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

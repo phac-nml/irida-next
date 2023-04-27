@@ -206,3 +206,36 @@
     @apply rounded-md text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 }
+
+.pagy-nav.pagination {
+  @apply inline-flex -space-x-px rounded-md shadow-sm isolate;
+}
+
+.page.next a {
+  @apply flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white;
+}
+
+.page.prev a {
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white;
+}
+
+.page.next.disabled {
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-gray-50 rounded-r-lg border border-gray-300 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 cursor-not-allowed;
+}
+
+.page.prev.disabled {
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-gray-50 rounded-l-lg border border-gray-300 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 cursor-not-allowed;
+}
+
+.page a,
+.page.gap {
+  @apply relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+}
+
+.page.active {
+  @apply z-10 flex items-center justify-center px-3 py-2 text-sm leading-tight border text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white;
+}
+
+.pagy-info {
+  @apply text-sm font-normal text-gray-500 dark:text-gray-400;
+}

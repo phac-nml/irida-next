@@ -12,25 +12,35 @@
 
 <div class="bg-white dark:bg-gray-800">
   <div class="flex flex-col">
-    <div class="overflow-x-auto">
+    <%= turbo_frame_tag "projects_list", src: projects_url(format: :turbo_stream, page: params[:page]), loading: :lazy do %>
       <table class="min-w-full table-fixed dark:divide-gray-600">
         <tbody
-          class="bg-white divide-y divide-gray-200  dark:bg-gray-800 dark:divide-gray-700"
+          class="
+            bg-white
+            divide-y
+            divide-gray-200
+            dark:bg-gray-800
+            dark:divide-gray-700
+          "
         >
-          <% @projects.each do |project| %>
-          <tr
-            class="text-sm font-normal text-gray-500  hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400"
-          >
-            <td class="p-4 whitespace-nowrap">
-              <%= link_to project.human_name,
-                project_path(project),
-                class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= project.description %></div>
+          <% 15.times do %>
+            <tr>
+              <td class="animate-pulse p-4">
+                <div class="flex-1 space-y-6 py-1">
+                  <div class="space-y-3">
+                    <div class="h-2 bg-slate-200 rounded w-48"></div>
+                    <div class="h-2 bg-slate-200 rounded w-32"></div>
+                  </div>
+                </div>
               </td>
             </tr>
           <% end %>
         </tbody>
       </table>
-    </div>
+    <% end %>
+    <%= turbo_frame_tag "projects_pagination",
+    data: {
+      controller: "turbo-frame-history"
+    } %>
   </div>
 </div>

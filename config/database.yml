@@ -30,6 +30,9 @@ test:
   <<: *default
   database: irida_next_test
 
+#
+#   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
+#
 production:
   <<: *default
-  database: irida_next_prod
+  url: <%= ENV['DATABASE_URL'] %>
