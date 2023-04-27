@@ -45,6 +45,10 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       find_by('lower(path) = :value', value: path.downcase)
     end
 
+    def as_ids
+      select(Arel.sql('namespaces.id'))
+    end
+
     def self_and_ancestors
       self_paths = joins(:route).pluck('routes.path')
       ancestral_paths = []
@@ -79,34 +83,38 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def ancestor_ids
-    ancestral_path_parts = route.split_path_parts[0...-1]
+  def ancestors
+    return self.class.none if parent_id.blank?
 
-    route_path = Route.arel_table[:path]
-
-    Namespace.joins(:route).where(route_path.in(ancestral_path_parts)).pluck(:id)
+    self_and_ancestors.where.not(id:)
   end
 
-  def ancestors
-    Namespace.where(id: ancestor_ids)
+  def ancestor_ids
+    ancestors.as_ids
   end
 
   def self_and_ancestors
-    Namespace.where(id: [id] + ancestor_ids)
-  end
+    return self.class.where(id:) if parent_id.blank?
 
-  def descendant_ids
+    ancestral_path_parts = route.split_path_parts
+
     route_path = Route.arel_table[:path]
 
-    Namespace.joins(:route).where(route_path.matches("#{full_path}/%")).pluck(:id)
+    self.class.joins(:route).where(route_path.in(ancestral_path_parts))
+  end
+
+  def self_and_ancestor_ids
+    self_and_ancestors.as_ids
   end
 
   def descendants
-    Namespace.where(id: descendant_ids)
+    self_and_descendants.where.not(id:)
   end
 
   def self_and_descendants
-    Namespace.find([id] + descendant_ids)
+    route_path = Route.arel_table[:path]
+
+    self.class.joins(:route).where(route_path.matches_any([full_path, "#{full_path}/%"]))
   end
 
   def to_param
