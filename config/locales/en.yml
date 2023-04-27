@@ -135,6 +135,7 @@ en:
     clipboard:
       copied: Copied!
       copy: Copy to clipboard
+      toggle_visible: Toggle visibility
   layouts:
     application:
       site_title: IRIDA Next

@@ -5,17 +5,28 @@ export default class extends Controller {
 
   connect() {
     this.visible = false;
+    this.element.setAttribute("data-controller-connected", "true");
   }
 
   copyToClipboard() {
-    navigator.clipboard.writeText(this.inputTarget.value).then(() => {
-      this.initialTarget.classList.add("hidden");
-      this.copiedTarget.classList.remove("hidden");
-      setTimeout(() => {
-        this.initialTarget.classList.remove("hidden");
-        this.copiedTarget.classList.add("hidden");
-      }, 2000);
-    });
+    navigator.permissions
+      .query({ name: "clipboard-write" })
+      .then((result) => {
+        navigator.clipboard.writeText(this.inputTarget.value);
+      })
+      .catch(() => {
+        this.inputTarget.select();
+        // NOTE: This is deprecated but works in older browsers
+        document.execCommand("copy");
+      })
+      .finally(() => {
+        this.initialTarget.classList.add("hidden");
+        this.copiedTarget.classList.remove("hidden");
+        setTimeout(() => {
+          this.initialTarget.classList.remove("hidden");
+          this.copiedTarget.classList.add("hidden");
+        }, 2000);
+      });
   }
 
   toggleVisibility() {

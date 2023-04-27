@@ -24,6 +24,7 @@
       "
       value="<%= value %>"
       readonly
+      aria-label="<%= label %>"
     >
     <button
       type="button"
@@ -39,6 +40,7 @@
       data-action="
         click->clipboard-component#toggleVisibility
       "
+      aria-label="<%= t(:'components.clipboard.toggle_visible') %>"
     >
       <span data-clipboard-component-target="hide">
         <%= viral_icon(name: "eye", classes: "w-5 h-5 text-gray-500 dark:text-gray-400") %>
