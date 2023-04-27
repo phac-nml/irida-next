@@ -7,7 +7,7 @@ module System
     test 'tooltip appears on hover' do
       visit('/rails/view_components/tooltip_component/default')
       assert_selector '[data-viral--tooltip-component-target="target"]', visible: false
-      find('.btn').hover
+      find('[data-viral--tooltip-component-target="trigger"]').hover
       assert_text I18n.t('auth.scopes.api')
       assert_selector '[data-viral--tooltip-component-target="target"]', visible: true
     end
