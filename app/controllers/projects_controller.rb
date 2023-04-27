@@ -108,7 +108,8 @@ class ProjectsController < ApplicationController # rubocop:disable Metrics/Class
   end
 
   def projects
-    Project.where(namespace: { parent: current_user.groups.self_and_descendant_ids }).include_route
+    Project.where(namespace: { parent: current_user.groups.self_and_descendant_ids })
+           .or(Project.where(namespace: { parent: current_user.namespace })).include_route
   end
 
   def resolve_layout
