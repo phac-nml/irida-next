@@ -132,6 +132,9 @@ en:
     pagination:
       previous: Prev
       next: Next
+    clipboard:
+      copied: Copied!
+      copy: Copy to clipboard
   layouts:
     application:
       site_title: IRIDA Next

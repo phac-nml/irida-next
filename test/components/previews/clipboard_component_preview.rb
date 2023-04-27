@@ -2,6 +2,6 @@
 
 class ClipboardComponentPreview < ViewComponent::Preview
   def default
-    render(ClipboardComponent.new)
+    render ClipboardComponent.new(value: 'Text to copy')
   end
 end

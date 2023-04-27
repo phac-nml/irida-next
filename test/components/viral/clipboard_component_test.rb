@@ -2,11 +2,11 @@
 
 require "test_helper"
 
-class ClipboardComponentTest < ViewComponent::TestCase
+class Viral::ClipboardComponentTest < ViewComponent::TestCase
   def test_component_renders_something_useful
     # assert_equal(
     #   %(<span>Hello, components!</span>),
-    #   render_inline(ClipboardComponent.new(message: "Hello, components!")).css("span").to_html
+    #   render_inline(Viral::ClipboardComponent.new(message: "Hello, components!")).css("span").to_html
     # )
   end
 end
