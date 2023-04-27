@@ -81,6 +81,10 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
         .joins(:route)
         .where(route_path.matches_any(paths))
     end
+
+    def self_and_descendant_ids
+      self_and_descendants.as_ids
+    end
   end
 
   def ancestors
