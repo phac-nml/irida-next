@@ -49,8 +49,11 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       select(Arel.sql('namespaces.id'))
     end
 
-    def self_and_ancestors
+    def self_and_ancestors # rubocop:disable Metrics/AbcSize
       self_paths = joins(:route).pluck('routes.path')
+
+      return none if self_paths.empty?
+
       ancestral_paths = []
       self_paths.each do |path|
         path.split('/').each_with_index do |_part, index|
@@ -70,6 +73,9 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def self_and_descendants
       self_paths = joins(:route).pluck('routes.path')
+
+      return none if self_paths.empty?
+
       fuzzy_paths = self_paths.map { |path| "#{path}/%" }
 
       paths = self_paths | fuzzy_paths
