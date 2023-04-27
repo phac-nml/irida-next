@@ -18,7 +18,11 @@
         <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
           <%= t(".label") %>
         </h2>
-        <%= render ClipboardComponent.new(value: token, classes: "my-2") %>
+        <%= render ClipboardComponent.new(
+          value: token,
+          aria_label: t(".aria_label"),
+          classes: "my-2"
+        ) %>
         <p class="text-gray-500 dark:text-gray-400"><%= t(".description") %></p>
       </div>
     </div>
