@@ -3,10 +3,11 @@
   "clipboard-component-item-value": value }) do %>
   <div class="relative mr-2 grow">
     <input
-      type="password"
+      type="text"
       data-clipboard-component-target="input"
       class="
         w-full
+        font-mono
         text-sm
         text-gray-900
         border
@@ -22,7 +23,7 @@
         dark:focus:ring-primary-500
         dark:focus:border-primary-500
       "
-      value="<%= value %>"
+      value="<%= '*' * value.length %>"
       readonly
       aria-label="<%= label %>"
     >

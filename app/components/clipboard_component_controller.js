@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["contents", "initial", "input", "copied", "hide", "view"];
+  static values = { item: String };
 
   connect() {
     this.visible = false;
@@ -12,7 +13,7 @@ export default class extends Controller {
     navigator.permissions
       .query({ name: "clipboard-write" })
       .then((result) => {
-        navigator.clipboard.writeText(this.inputTarget.value);
+        navigator.clipboard.writeText(this.itemValue);
       })
       .catch(() => {
         this.inputTarget.select();
@@ -33,11 +34,14 @@ export default class extends Controller {
     if (this.visible) {
       this.hideTarget.classList.remove("hidden");
       this.viewTarget.classList.add("hidden");
-      this.inputTarget.type = "password";
+      this.inputTarget.value = Array.prototype.join.call(
+        { length: this.itemValue.length },
+        "*"
+      );
     } else {
       this.hideTarget.classList.add("hidden");
       this.viewTarget.classList.remove("hidden");
-      this.inputTarget.type = "text";
+      this.inputTarget.value = this.itemValue;
     }
     this.visible = !this.visible;
   }
