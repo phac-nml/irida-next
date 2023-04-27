@@ -17,8 +17,7 @@ class GroupPolicy < ApplicationPolicy
     can_modify?(record)
   end
 
-  scope_for :relation do |relation|
-    relation.include_route.where(id: Member.where(user:).select(:namespace_id))
-            .or(relation.include_route.where(owner: user))
+  scope_for :relation do |_relation|
+    user.groups.self_and_descendants.include_route
   end
 end

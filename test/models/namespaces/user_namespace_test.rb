@@ -11,41 +11,24 @@ class UserNamespaceTest < ActiveSupport::TestCase
     assert @user_namespace.valid?
   end
 
-  test '#ancestor_ids' do
-    assert_equal [], @user_namespace.ancestor_ids
-  end
-
   test '#ancestors' do
     assert_equal [], @user_namespace.ancestors
+  end
+
+  test '#ancestor_ids' do
+    assert_equal [], @user_namespace.ancestor_ids
   end
 
   test '#self_and_ancestors' do
     assert_equal [@user_namespace], @user_namespace.self_and_ancestors
   end
 
-  test '#descendant_ids' do
-    assert_equal [
-      namespaces_project_namespaces(:john_doe_project2_namespace).id,
-      namespaces_project_namespaces(:john_doe_project3_namespace).id
-    ],
-                 @user_namespace.descendant_ids
-  end
-
   test '#descendants' do
-    assert_equal [
-      namespaces_project_namespaces(:john_doe_project2_namespace),
-      namespaces_project_namespaces(:john_doe_project3_namespace)
-    ],
-                 @user_namespace.descendants
+    assert_equal [], @user_namespace.descendants
   end
 
   test '#self_and_descendants' do
-    assert_equal [
-      @user_namespace,
-      namespaces_project_namespaces(:john_doe_project2_namespace),
-      namespaces_project_namespaces(:john_doe_project3_namespace)
-    ],
-                 @user_namespace.self_and_descendants
+    assert_equal [@user_namespace], @user_namespace.self_and_descendants
   end
 
   test '#human_name' do

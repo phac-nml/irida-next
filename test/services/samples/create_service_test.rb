@@ -44,8 +44,18 @@ module Samples
       end
     end
 
-    test 'create group member with valid params when member of a parent group with the not OWNER role' do
+    test 'create sample in project with valid params when member of a parent group with MAINTAINER role' do
       user = users(:micha_doe)
+      project = projects(:project4)
+      valid_params = { name: 'new-project4-sample', description: 'first sample for project4' }
+
+      assert_difference -> { Sample.count } => 1 do
+        Samples::CreateService.new(user, project, valid_params).execute
+      end
+    end
+
+    test 'create sample in project with valid params when member of a parent group with role < MAINTAINER' do
+      user = users(:ryan_doe)
       project = projects(:project4)
       valid_params = { name: 'new-project4-sample', description: 'first sample for project4' }
 

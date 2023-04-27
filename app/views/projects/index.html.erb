@@ -11,7 +11,7 @@
 <% end %>
 
 <div class="bg-white dark:bg-gray-800">
-  <div class="flex flex-col">
+  <div class="flex flex-col" data-turbo-temporary>
     <%= turbo_frame_tag "projects_list", src: projects_url(format: :turbo_stream, page: params[:page]), loading: :lazy do %>
       <table class="min-w-full table-fixed dark:divide-gray-600">
         <tbody

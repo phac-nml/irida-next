@@ -6,12 +6,13 @@ class GroupsController < Groups::ApplicationController
   before_action :group, only: %i[edit show destroy update]
   before_action :group_parent, only: %i[new]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorize_owner_group!, only: %i[edit update destroy]
+  before_action :authorize_owner_group!, only: %i[edit update]
   before_action :authorize_create_group!, only: %i[new]
+  before_action :authorize_destroy_group!, only: %i[destroy]
   before_action :authorize_view_group!, only: %i[show]
 
   def index
-    @groups = authorized_scope(Group, type: :relation)
+    @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
   end
 
   def show; end

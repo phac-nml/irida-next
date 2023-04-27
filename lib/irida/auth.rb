@@ -26,6 +26,10 @@ module Irida
       authorize! @group
     end
 
+    def authorize_destroy_group!
+      authorize! @group
+    end
+
     def authorize_owner_namespace!
       if !@group.nil?
         authorize! @group
@@ -35,11 +39,7 @@ module Irida
     end
 
     def authorize_view_members!
-      if !@namespace.nil?
-        authorize! @namespace, to: :allowed_to_view_members?
-      elsif !@project.nil?
-        authorize! @project, to: :allowed_to_view_members?
-      end
+      authorize! @namespace, to: :allowed_to_view_members?
     end
 
     def authorize_view_samples!
@@ -56,6 +56,14 @@ module Irida
 
     def authorize_user_profile_access!
       authorize! @user
+    end
+
+    def authorize_destroy_project!
+      authorize! @project
+    end
+
+    def authorize_transfer_project!
+      authorize! @project
     end
   end
 end

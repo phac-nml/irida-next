@@ -19,7 +19,8 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   scope_for :relation do |relation|
-    relation.include_route.where(id: Member.where(user:).select(:namespace_id))
-            .or(relation.include_route.where(creator: user))
+    relation.where(namespace: { parent: user.groups.self_and_descendant_ids })
+            .include_route.order(updated_at: :desc).or(relation.where(namespace: { parent: user.namespace })
+            .include_route.order(updated_at: :desc))
   end
 end

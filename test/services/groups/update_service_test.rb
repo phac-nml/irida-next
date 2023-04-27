@@ -27,7 +27,7 @@ module Groups
 
     test 'update group with incorrect permissions' do
       valid_params = { name: 'new-group1-name', path: 'new-group1-path' }
-      user = users(:joan_doe)
+      user = users(:ryan_doe)
 
       assert_no_changes -> { @group } do
         Groups::UpdateService.new(@group, user, valid_params).execute

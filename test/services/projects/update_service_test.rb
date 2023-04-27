@@ -27,7 +27,7 @@ module Projects
 
     test 'update project with incorrect permissions' do
       valid_params = { namespace_attributes: { name: 'new-project1-name', path: 'new-project1-path' } }
-      user = users(:joan_doe)
+      user = users(:ryan_doe)
 
       assert_no_changes -> { @project } do
         Projects::UpdateService.new(@project, user, valid_params).execute

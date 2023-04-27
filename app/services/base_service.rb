@@ -12,6 +12,18 @@ class BaseService
   def allowed_to_modify_projects_in_namespace?(namespace)
     return true if namespace_owner_is_user?(namespace)
 
+    Member.exists?(
+      namespace:, user: current_user,
+      access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]
+    ) || Member.exists?(
+      namespace: namespace.parent&.self_and_ancestor_ids, user: current_user,
+      access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]
+    )
+  end
+
+  def allowed_to_destroy_projects_in_namespace?(namespace)
+    return true if namespace_owner_is_user?(namespace)
+
     namespace_owners_include_user?(namespace)
   end
 
@@ -25,12 +37,22 @@ class BaseService
     return true if group.parent.nil? && group.owner == current_user
 
     Member.exists?(namespace: group.self_and_ancestors, user: current_user,
+                   access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+  end
+
+  def allowed_to_destroy_group?(group)
+    return true if group.parent.nil? && group.owner == current_user
+
+    Member.exists?(namespace: group.self_and_ancestors, user: current_user,
                    access_level: Member::AccessLevel::OWNER)
   end
 
   def namespace_owners_include_user?(namespace)
     Member.exists?(
-      namespace: namespace.self_and_ancestors, user: current_user,
+      namespace:, user: current_user,
+      access_level: Member::AccessLevel::OWNER
+    ) || Member.exists?(
+      namespace: namespace.parent&.self_and_ancestor_ids, user: current_user,
       access_level: Member::AccessLevel::OWNER
     )
   end

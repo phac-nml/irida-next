@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Namespace base class
-class Namespace < ApplicationRecord
+class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Routable
 
   MAX_ANCESTORS = 10
@@ -44,36 +44,91 @@ class Namespace < ApplicationRecord
     def by_path(path)
       find_by('lower(path) = :value', value: path.downcase)
     end
-  end
 
-  def ancestor_ids
-    ancestral_path_parts = route.split_path_parts[0...-1]
+    def as_ids
+      select(Arel.sql('namespaces.id'))
+    end
 
-    route_path = Route.arel_table[:path]
+    def self_and_ancestors # rubocop:disable Metrics/AbcSize
+      self_paths = joins(:route).pluck('routes.path')
 
-    Namespace.joins(:route).where(route_path.in(ancestral_path_parts)).pluck(:id)
+      return none if self_paths.empty?
+
+      ancestral_paths = []
+      self_paths.each do |path|
+        path.split('/').each_with_index do |_part, index|
+          ancestral_paths << path.split('/')[0..index].join('/')
+        end
+      end
+
+      paths = self_paths | ancestral_paths
+
+      route_path = Route.arel_table[:path]
+
+      unscoped
+        .distinct
+        .joins(:route)
+        .where(route_path.in(paths))
+    end
+
+    def self_and_descendants
+      self_paths = joins(:route).pluck('routes.path')
+
+      return none if self_paths.empty?
+
+      fuzzy_paths = self_paths.map { |path| "#{path}/%" }
+
+      paths = self_paths | fuzzy_paths
+
+      route_path = Route.arel_table[:path]
+
+      unscoped
+        .distinct
+        .joins(:route)
+        .where(route_path.matches_any(paths))
+    end
+
+    def self_and_descendant_ids
+      self_and_descendants.as_ids
+    end
   end
 
   def ancestors
-    Namespace.where(id: ancestor_ids)
+    return self.class.none if parent_id.blank?
+
+    self_and_ancestors.where.not(id:)
+  end
+
+  def ancestor_ids
+    ancestors.as_ids
   end
 
   def self_and_ancestors
-    Namespace.where(id: [id] + ancestor_ids)
-  end
+    return self.class.where(id:) if parent_id.blank?
 
-  def descendant_ids
+    ancestral_path_parts = route.split_path_parts
+
     route_path = Route.arel_table[:path]
 
-    Namespace.joins(:route).where(route_path.matches("#{full_path}/%")).pluck(:id)
+    self.class.joins(:route).where(route_path.in(ancestral_path_parts))
+  end
+
+  def self_and_ancestor_ids
+    self_and_ancestors.as_ids
   end
 
   def descendants
-    Namespace.where(id: descendant_ids)
+    self_and_descendants.where.not(id:)
   end
 
   def self_and_descendants
-    Namespace.find([id] + descendant_ids)
+    route_path = Route.arel_table[:path]
+
+    self.class.joins(:route).where(route_path.matches_any([full_path, "#{full_path}/%"]))
+  end
+
+  def self_and_descendant_ids
+    self_and_descendants.as_ids
   end
 
   def to_param

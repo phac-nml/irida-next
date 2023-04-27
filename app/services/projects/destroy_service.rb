@@ -6,7 +6,7 @@ module Projects
     ProjectDestroyError = Class.new(StandardError)
 
     def execute
-      unless allowed_to_modify_projects_in_namespace?(project.namespace)
+      unless allowed_to_destroy_projects_in_namespace?(project.namespace)
         raise ProjectDestroyError,
               I18n.t('services.projects.destroy.no_permission')
       end

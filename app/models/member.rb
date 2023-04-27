@@ -62,16 +62,22 @@ class Member < ApplicationRecord
   end
 
   # Find the user's group member with a highest access level
+  # Find the user's group member with a highest access level
   def highest_group_member
-    Member.where(namespace: namespace.ancestors, user_id:).order(:access_level).last
+    if namespace.project_namespace?
+      Member.where(namespace_id: namespace.parent.self_and_ancestor_ids, user_id:).order(:access_level).last
+    else
+      Member.where(namespace_id: namespace.ancestor_ids, user_id:).order(:access_level).last
+    end
   end
 
   # Method to ensure we don't leave a group or project without an owner
   def last_namespace_owner_member
     return if destroyed_by_association
     return if access_level != Member::AccessLevel::OWNER
-    return if Member.where(namespace: namespace.self_and_ancestors,
-                           access_level: Member::AccessLevel::OWNER).many?
+    return if Member.where(namespace:, access_level: Member::AccessLevel::OWNER).many?
+    return if Member.where(namespace: namespace.parent&.self_and_ancestor_ids,
+                           access_level: Member::AccessLevel::OWNER).any?
 
     errors.add(:base,
                I18n.t('activerecord.errors.models.member.destroy.last_member',

@@ -12,11 +12,15 @@ module Members
       @member = Member.new(params.merge(created_by: current_user, namespace:))
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       unless allowed_to_modify_members_in_namespace?(namespace)
         raise MemberCreateError,
               I18n.t('services.members.create.no_permission',
                      namespace_type: namespace.class.model_name.human)
+      end
+
+      if user_has_namespace_maintainer_access? && (member.access_level > Member::AccessLevel::MAINTAINER)
+        raise MemberCreateError, 'A maintainer can only add user\'s upto the Maintainer role'
       end
 
       member.save
