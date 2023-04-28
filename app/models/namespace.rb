@@ -53,7 +53,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       # build sql expression to select the route ids of the self and ancestral groups
       route_id_select =
         joins(:route)
-        .joins("LEFT JOIN routes ancestral_routes on concat(routes.path,'/') like concat(ancestral_routes.path,'/%')")
+        .joins('LEFT JOIN routes ancestral_routes on ancestral_routes.id = routes.id ' \
+               "or concat(routes.path,'/') like concat(ancestral_routes.path,'/%')")
         .select(Arel.sql('distinct routes.id')).to_sql
 
       unscoped
@@ -62,14 +63,16 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def self_and_descendants
-      # build sql expression to construct a fuzzy_path string for querying self and descendants by path
-      fuzzy_path_select = joins(:route)
-                          .select(Arel.sql("string_agg(concat('(',routes.path,'|',routes.path,'/%)'),'|')"))
-                          .to_sql
+      # build sql expression to select the route ids of the self and descendant groups
+      route_id_select =
+        joins(:route)
+        .joins('LEFT JOIN routes descendant_routes on descendant_routes.id = routes.id ' \
+               "or descendant_routes.path like concat(routes.path,'/%')")
+        .select(Arel.sql('distinct descendant_routes.id')).to_sql
 
       unscoped
         .joins(:route)
-        .where(Arel.sql(format('routes.path similar to (%s)', fuzzy_path_select)))
+        .where(Arel.sql(format('routes.id in (%s)', route_id_select)))
     end
 
     def self_and_descendant_ids
