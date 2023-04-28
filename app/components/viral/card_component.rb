@@ -3,12 +3,20 @@
 module Viral
   # Card component for rendering sections of pages.
   class CardComponent < Viral::Component
-    def initialize(**system_arguments)
+    attr_reader :sectioned, :title
+
+    renders_one :header, Viral::Card::HeaderComponent
+    renders_many :sections, Viral::Card::SectionComponent
+
+    def initialize(title: '', sectioned: true, **system_arguments)
+      @title = title
+      @sectioned = sectioned
       @system_arguments = system_arguments
     end
 
     def system_arguments
-      @system_arguments.merge(classes: 'p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800')
+      @system_arguments[:tag] = 'section'
+      @system_arguments.merge(classes: 'bg-white border border-gray-200 rounded-md shadow-md dark:border-gray-700 dark:bg-gray-800')
     end
   end
 end

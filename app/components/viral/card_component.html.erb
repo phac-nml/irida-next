@@ -1,3 +1,27 @@
-<%= render Viral::BaseComponent.new(tag: :section, **system_arguments) do %>
-  <%= content %>
+<%= render Viral::BaseComponent.new(**system_arguments) do %>
+
+  <% if header.present? %>
+    <%= header %>
+  <% end %>
+
+  <% if title.present? && !header.present? %>
+    <%= render Viral::Card::HeaderComponent.new(title: title) %>
+  <% end %>
+
+  <% if sections.present? %>
+    <% sections.each do |section| %>
+      <%= section %>
+    <% end %>
+  <% end %>
+
+  <% if content.present? %>
+    <% if sectioned %>
+      <%= render Viral::Card::SectionComponent.new do %>
+        <%= content %>
+      <% end %>
+    <% else %>
+      <%= content %>
+    <% end %>
+  <% end %>
+
 <% end %>

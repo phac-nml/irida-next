@@ -1,0 +1,22 @@
+<%= render Viral::BaseComponent.new(**system_arguments) do %>
+  <% if title.present? && title.is_a?(String) %>
+    <div class="mb-2">
+      <% if actions.present? %>
+        <div class="flex">
+          <h2 class="flex-1 font-semibold text-gray-900 dark:text-white">
+            <%= title %>
+          </h2>
+          <div>
+            actions
+          </div>
+        </div>
+      <% else %>
+        <h2 class="flex-1 text-sm font-semibold text-gray-800 dark:text-white">
+          <%= title.upcase %>
+        </h2>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= content %>
+<% end %>
