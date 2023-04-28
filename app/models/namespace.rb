@@ -50,6 +50,18 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def self_and_ancestors
+      # build sql expression to select the route ids of the self and ancestral groups
+      route_id_select =
+        joins(:route)
+        .joins("LEFT JOIN routes ancestral_routes on concat(routes.path,'/') like concat(ancestral_routes.path,'/%')")
+        .select(Arel.sql('distinct routes.id')).to_sql
+
+      unscoped
+        .joins(:route)
+        .where(Arel.sql(format('routes.id in (%s)', route_id_select)))
+    end
+
+    def self_and_ancestors_old
       self_paths = joins(:route).pluck('routes.path')
 
       return none if self_paths.empty?
@@ -77,6 +89,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
                           .to_sql
 
       unscoped
+        .distinct
         .joins(:route)
         .where(Arel.sql(format('routes.path similar to (%s)', fuzzy_path_select)))
     end
@@ -185,7 +198,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def validate_nesting_level
-    return unless has_parent? && ancestors.count > MAX_ANCESTORS - 1
+    return unless has_parent? && (parent.ancestors.count + 1) > MAX_ANCESTORS - 1
 
     errors.add(:parent_id, 'nesting level too deep')
   end
