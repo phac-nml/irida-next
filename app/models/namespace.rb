@@ -61,27 +61,6 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
         .where(Arel.sql(format('routes.id in (%s)', route_id_select)))
     end
 
-    def self_and_ancestors_old
-      self_paths = joins(:route).pluck('routes.path')
-
-      return none if self_paths.empty?
-
-      ancestral_paths = []
-      self_paths.each do |path|
-        path.split('/').each_with_index do |_part, index|
-          ancestral_paths << path.split('/')[0..index].join('/')
-        end
-      end
-
-      paths = self_paths | ancestral_paths
-
-      route_path = Route.arel_table[:path]
-
-      unscoped
-        .joins(:route)
-        .where(route_path.in(paths))
-    end
-
     def self_and_descendants
       # build sql expression to construct a fuzzy_path string for querying self and descendants by path
       fuzzy_path_select = joins(:route)
