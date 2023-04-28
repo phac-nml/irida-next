@@ -49,7 +49,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       select(Arel.sql('namespaces.id'))
     end
 
-    def self_and_ancestors # rubocop:disable Metrics/AbcSize
+    def self_and_ancestors
       self_paths = joins(:route).pluck('routes.path')
 
       return none if self_paths.empty?
@@ -66,26 +66,19 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       route_path = Route.arel_table[:path]
 
       unscoped
-        .distinct
         .joins(:route)
         .where(route_path.in(paths))
     end
 
     def self_and_descendants
-      self_paths = joins(:route).pluck('routes.path')
-
-      return none if self_paths.empty?
-
-      fuzzy_paths = self_paths.map { |path| "#{path}/%" }
-
-      paths = self_paths | fuzzy_paths
-
-      route_path = Route.arel_table[:path]
+      # build sql expression to construct a fuzzy_path string for querying self and descendants by path
+      fuzzy_path_select = joins(:route)
+                          .select(Arel.sql("string_agg(concat('(',routes.path,'|',routes.path,'/%)'),'|')"))
+                          .to_sql
 
       unscoped
-        .distinct
         .joins(:route)
-        .where(route_path.matches_any(paths))
+        .where(Arel.sql(format('routes.path similar to (%s)', fuzzy_path_select)))
     end
 
     def self_and_descendant_ids
@@ -106,11 +99,15 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def self_and_ancestors
     return self.class.where(id:) if parent_id.blank?
 
-    ancestral_path_parts = route.split_path_parts
-
-    route_path = Route.arel_table[:path]
-
-    self.class.joins(:route).where(route_path.in(ancestral_path_parts))
+    self.class
+        .joins(:route)
+        .where(
+          Arel.sql(
+            format(
+              "(select concat(path,'/') from routes where source_id = %i) like concat(routes.path, '/%%')", id
+            )
+          )
+        )
   end
 
   def self_and_ancestor_ids
