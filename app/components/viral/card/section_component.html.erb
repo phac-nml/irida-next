@@ -7,7 +7,9 @@
             <%= title %>
           </h2>
           <div>
-            actions
+            <% actions.each do |action| %>
+              <span class="ml-2"><%= action %></span>
+            <% end %>
           </div>
         </div>
       <% else %>

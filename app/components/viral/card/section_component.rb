@@ -3,11 +3,12 @@
 module Viral
   module Card
     class SectionComponent < Viral::Component
-      attr_reader :actions, :title
+      attr_reader :title
 
-      def initialize(title: '', border_top: false, border_bottom: false, flush: false, actions: [], **system_arguments) # rubocop:disable Metrics/ParameterLists
+      renders_many :actions
+
+      def initialize(title: '', border_top: false, border_bottom: false, flush: false, **system_arguments)
         @title = title
-        @actions = actions
         @system_arguments = system_arguments
         @system_arguments[:tag] = 'div'
         @system_arguments[:classes] = class_names(
@@ -15,7 +16,7 @@ module Viral
           'border-gray-200 dark:border-gray-700',
           'border-t': border_top,
           'border-b': border_bottom,
-          'p-4 pt-0': !flush
+          'p-4': !flush
         )
       end
     end

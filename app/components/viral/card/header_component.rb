@@ -10,7 +10,10 @@ module Viral
       def initialize(title: '', **system_arguments)
         @title = title
         @system_arguments = system_arguments
-        @system_arguments[:classes] = class_names('p-4')
+        @system_arguments[:classes] = class_names(
+          @system_arguments[:classes],
+          'p-4 pb-0'
+        )
       end
 
       def simple?

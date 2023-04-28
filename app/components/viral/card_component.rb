@@ -16,7 +16,7 @@ module Viral
 
     def system_arguments
       @system_arguments[:tag] = 'section'
-      @system_arguments.merge(classes: 'bg-white border border-gray-200 rounded-md shadow-md dark:border-gray-700 dark:bg-gray-800')
+      @system_arguments.merge(classes: 'Viral-Card bg-white border border-gray-200 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-800')
     end
   end
 end
