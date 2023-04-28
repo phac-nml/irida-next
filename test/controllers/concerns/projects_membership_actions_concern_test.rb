@@ -111,17 +111,19 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response 422 # unprocessable entity
   end
 
-  test 'project members destroy invalid' do
+  test 'project members destroy member with owner role when current user has a maintainer role for project' do
+    # Joan Doe has a maintainer role for john_doe_project2
     sign_in users(:joan_doe)
 
     namespace = namespaces_user_namespaces(:john_doe_namespace)
     project = projects(:john_doe_project2)
+    # James Doe has an owner role for john_doe_project2
     project_member = members(:project_two_member_james_doe)
 
     assert_no_changes -> { [project.namespace.project_members].count } do
       delete namespace_project_member_path(namespace, project, project_member)
     end
 
-    assert_response :unauthorized
+    assert_response :redirect
   end
 end

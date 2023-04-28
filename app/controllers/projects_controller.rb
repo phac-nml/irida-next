@@ -5,7 +5,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorize_owner_namespace!, only: %i[edit update destroy]
+  before_action :authorize_modify_project!, only: %i[edit update]
   before_action :authorize_view_project!, only: %i[show]
   before_action :authorize_destroy_project!, only: %i[destroy]
   before_action :authorize_transfer_project!, only: %i[transfer]
@@ -33,7 +33,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def create
-    skip_verify_authorized!
     @project = Projects::CreateService.new(current_user, project_params).execute
 
     if @project.persisted?

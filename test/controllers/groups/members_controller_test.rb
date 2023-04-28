@@ -61,7 +61,7 @@ module Groups
         delete group_member_path(group, group_member)
       end
 
-      assert_response :unauthorized
+      assert_response :redirect
     end
   end
 end

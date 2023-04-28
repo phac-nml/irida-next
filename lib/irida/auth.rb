@@ -14,32 +14,40 @@ module Irida
       end
     end
 
-    def authorize_owner_group!
-      authorize! @group
+    def authorize_modify_group!
+      action_allowed_for_user(@group)
     end
 
     def authorize_create_group!
-      authorize! @group unless @group&.parent.nil?
+      action_allowed_for_user(@group) unless @group&.parent.nil?
     end
 
     def authorize_view_group!
-      authorize! @group
+      action_allowed_for_user(@group)
     end
 
     def authorize_destroy_group!
-      authorize! @group
+      action_allowed_for_user(@group)
     end
 
     def authorize_owner_namespace!
-      if !@group.nil?
-        authorize! @group
-      elsif !@project.nil?
-        authorize! @project
+      if @group.nil?
+        action_allowed_for_user(@project)
+      else
+        action_allowed_for_user(@group)
       end
+    end
+
+    def authorize_modify_project!
+      action_allowed_for_user(@project)
     end
 
     def authorize_view_members!
       authorize! @namespace, to: :allowed_to_view_members?
+    end
+
+    def authorize_destroy_members!
+      authorize! @namespace, to: :allowed_to_modify_members?
     end
 
     def authorize_view_samples!
@@ -51,19 +59,23 @@ module Irida
     end
 
     def authorize_view_project!
-      authorize! @project
+      action_allowed_for_user(@project)
     end
 
     def authorize_user_profile_access!
-      authorize! @user
+      action_allowed_for_user(@user)
     end
 
     def authorize_destroy_project!
-      authorize! @project
+      action_allowed_for_user(@project)
     end
 
     def authorize_transfer_project!
-      authorize! @project
+      action_allowed_for_user(@project)
+    end
+
+    def action_allowed_for_user(auth_object)
+      authorize! auth_object
     end
   end
 end

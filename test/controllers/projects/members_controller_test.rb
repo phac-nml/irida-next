@@ -70,7 +70,7 @@ module Projects
         delete namespace_project_member_path(namespace, project, project_member)
       end
 
-      assert_response :unauthorized
+      assert_response :redirect
     end
   end
 end

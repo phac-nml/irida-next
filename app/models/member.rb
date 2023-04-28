@@ -37,11 +37,20 @@ class Member < ApplicationRecord
 
     def can_modify?(user, object_namespace)
       Member.exists?(namespace: object_namespace.self_and_ancestors, user:,
-                     access_level: Member::AccessLevel::OWNER)
+                     access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
     end
 
     def can_view?(user, object_namespace)
       Member.exists?(namespace: object_namespace.self_and_ancestors, user:)
+    end
+
+    def can_destroy?(user, object_namespace)
+      Member.exists?(namespace: object_namespace.self_and_ancestors, user:, access_level: Member::AccessLevel::OWNER)
+    end
+
+    def can_modify_members?(user, object_namespace)
+      Member.exists?(namespace: object_namespace.self_and_ancestors, user:,
+                     access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
     end
   end
 

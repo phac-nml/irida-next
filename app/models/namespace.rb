@@ -106,11 +106,15 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def self_and_ancestors
     return self.class.where(id:) if parent_id.blank?
 
-    ancestral_path_parts = route.split_path_parts
-
-    route_path = Route.arel_table[:path]
-
-    self.class.joins(:route).where(route_path.in(ancestral_path_parts))
+    self.class
+        .joins(:route)
+        .where(
+          Arel.sql(
+            format(
+              "(select concat(path,'/') from routes where source_id = %i) like concat(routes.path, '/%%')", id
+            )
+          )
+        )
   end
 
   def self_and_ancestor_ids
@@ -188,7 +192,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def validate_nesting_level
-    return unless has_parent? && ancestors.count > MAX_ANCESTORS - 1
+    return unless has_parent? && (parent.ancestors.count + 1) > MAX_ANCESTORS - 1
 
     errors.add(:parent_id, 'nesting level too deep')
   end

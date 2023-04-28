@@ -2,9 +2,10 @@
 
 # Policy for projects authorization
 class ProjectPolicy < ApplicationPolicy
-  alias_rule :create?, :destroy?, :edit?, :update?, :transfer?, :new?, :allowed_to_modify_samples?,
+  alias_rule :create?, :edit?, :update?, :transfer?, :new?, :allowed_to_modify_samples?,
              to: :allowed_to_modify_project?
   alias_rule :allowed_to_view_samples?, :show?, :activity?, to: :allowed_to_view_project?
+  alias_rule :destroy?, to: :allowed_to_destroy?
 
   def allowed_to_view_project?
     return true if record.namespace.parent.owner == user
@@ -16,6 +17,12 @@ class ProjectPolicy < ApplicationPolicy
     return true if record.namespace.parent.owner == user
 
     can_modify?(record.namespace)
+  end
+
+  def allowed_to_destroy?
+    return true if record.namespace.parent.owner == user
+
+    can_destroy?(record.namespace)
   end
 
   scope_for :relation do |relation|

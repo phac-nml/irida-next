@@ -30,6 +30,8 @@ module Projects
 
     def create_associations(project)
       project.build_namespace(namespace_params.merge(owner: current_user))
+      # We want to authorize that the user can create a project in the parent namespace
+      authorize! project.namespace.parent, to: :create?
       project.save
 
       return unless !namespace_owners_include_user?(namespace) && user_has_namespace_maintainer_access?

@@ -2,7 +2,11 @@
 
 # Base root class for service related classes
 class BaseService
-  attr_accessor :current_user, :params
+  include ActionPolicy::Behaviour
+
+  authorize :user, through: :current_user
+
+  attr_accessor :current_user, :user, :params
 
   def initialize(user = nil, params = {})
     @current_user = user
