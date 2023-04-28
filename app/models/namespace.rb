@@ -68,7 +68,6 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
                           .to_sql
 
       unscoped
-        .distinct
         .joins(:route)
         .where(Arel.sql(format('routes.path similar to (%s)', fuzzy_path_select)))
     end
