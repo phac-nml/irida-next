@@ -54,7 +54,7 @@ module Members
       valid_params = { user: users(:michelle_doe),
                        access_level: Member::AccessLevel::OWNER }
 
-      assert_no_difference('Member.count') do
+      assert_raises(ActionPolicy::Unauthorized) do
         Members::CreateService.new(user, @group, valid_params).execute
       end
     end

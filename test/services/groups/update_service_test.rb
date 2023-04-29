@@ -29,10 +29,7 @@ module Groups
       valid_params = { name: 'new-group1-name', path: 'new-group1-path' }
       user = users(:ryan_doe)
 
-      assert_no_changes -> { @group } do
-        Groups::UpdateService.new(@group, user, valid_params).execute
-      end
-      assert @group.errors.full_messages.include?(I18n.t('services.groups.update.no_permission'))
+      assert_raises(ActionPolicy::Unauthorized) { Groups::UpdateService.new(@group, user, valid_params).execute }
     end
   end
 end

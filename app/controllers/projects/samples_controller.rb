@@ -7,7 +7,7 @@ module Projects
     before_action :project
     before_action :context_crumbs
     before_action :authorize_view_samples!, only: %i[show index]
-    before_action :authorize_sample_modification!, only: %i[new edit create update destroy]
+    before_action :authorize_sample_modification!, only: %i[new edit]
 
     layout 'projects'
 

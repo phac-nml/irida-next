@@ -51,12 +51,9 @@ module Members
       valid_params = { user: @group_member.user, access_level: Member::AccessLevel::OWNER }
       user = users(:steve_doe)
 
-      assert_no_changes -> { @group_member } do
+      assert_raises(ActionPolicy::Unauthorized) do
         Members::UpdateService.new(@group_member, @group, user, valid_params).execute
       end
-
-      assert @group_member.errors.full_messages.include?(I18n.t('services.members.update.no_permission',
-                                                                namespace_type: @group.class.model_name.human))
     end
 
     test 'update project member with valid params' do
@@ -99,14 +96,9 @@ module Members
       valid_params = { user: @project_member.user, access_level: Member::AccessLevel::OWNER }
       user = users(:steve_doe)
 
-      assert_no_changes -> { @project_member } do
+      assert_raises(ActionPolicy::Unauthorized) do
         Members::UpdateService.new(@project_member, @project_namespace, user, valid_params).execute
       end
-
-      assert @project_member.errors.full_messages.include?(
-        I18n.t('services.members.update.no_permission',
-               namespace_type: @project_namespace.class.model_name.human)
-      )
     end
   end
 end

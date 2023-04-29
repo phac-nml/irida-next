@@ -88,8 +88,8 @@ module Projects
       assert_response :not_found
     end
 
-    test 'should not destroy sample, if the current user is not an owner of the project' do
-      sign_in users(:joan_doe)
+    test 'should not destroy sample, if the current user is not allowed to modify the project' do
+      sign_in users(:ryan_doe)
 
       assert_no_difference('Sample.count') do
         delete namespace_project_sample_url(@namespace, @project, @sample1)

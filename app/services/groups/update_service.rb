@@ -12,8 +12,7 @@ module Groups
     end
 
     def execute
-      raise GroupUpdateError, I18n.t('services.groups.update.no_permission') unless allowed_to_modify_group?(group)
-
+      authorize! group, to: :update?
       group.update(params)
     rescue Groups::UpdateService::GroupUpdateError => e
       group.errors.add(:base, e.message)

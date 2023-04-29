@@ -8,10 +8,7 @@ module Projects
     def execute
       namespace_params = params.delete(:namespace_attributes)
 
-      unless allowed_to_modify_projects_in_namespace?(project.namespace)
-        raise ProjectUpdateError,
-              I18n.t('services.projects.update.no_permission')
-      end
+      authorize! project.namespace, to: :update?
 
       project.namespace.update(namespace_params)
     rescue Projects::UpdateService::ProjectUpdateError => e

@@ -6,10 +6,7 @@ module Projects
     ProjectDestroyError = Class.new(StandardError)
 
     def execute
-      unless allowed_to_destroy_projects_in_namespace?(project.namespace)
-        raise ProjectDestroyError,
-              I18n.t('services.projects.destroy.no_permission')
-      end
+      authorize! project.namespace, to: :destroy?
 
       project.namespace.destroy
     rescue Projects::DestroyService::ProjectDestroyError => e

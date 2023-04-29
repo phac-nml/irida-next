@@ -26,10 +26,6 @@ module Irida
       action_allowed_for_user(@group)
     end
 
-    def authorize_destroy_group!
-      action_allowed_for_user(@group)
-    end
-
     def authorize_owner_namespace!
       if @group.nil?
         action_allowed_for_user(@project)
@@ -66,13 +62,11 @@ module Irida
       action_allowed_for_user(@user)
     end
 
-    def authorize_destroy_project!
-      action_allowed_for_user(@project)
-    end
-
     def authorize_transfer_project!
       action_allowed_for_user(@project)
     end
+
+    protected
 
     def action_allowed_for_user(auth_object)
       authorize! auth_object

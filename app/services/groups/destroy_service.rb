@@ -12,7 +12,7 @@ module Groups
     end
 
     def execute
-      raise GroupDestroyError, I18n.t('services.groups.destroy.no_permission') unless allowed_to_destroy_group?(group)
+      authorize! group, to: :destroy?
 
       group.destroy
     rescue Groups::DestroyService::GroupDestroyError => e

@@ -6,9 +6,8 @@ class GroupsController < Groups::ApplicationController
   before_action :group, only: %i[edit show destroy update]
   before_action :group_parent, only: %i[new]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorize_modify_group!, only: %i[edit update]
+  before_action :authorize_modify_group!, only: %i[edit]
   before_action :authorize_create_group!, only: %i[new]
-  before_action :authorize_destroy_group!, only: %i[destroy]
   before_action :authorize_view_group!, only: %i[show]
 
   def index

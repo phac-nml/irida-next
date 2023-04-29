@@ -12,10 +12,7 @@ module Samples
     end
 
     def execute
-      unless allowed_to_modify_projects_in_namespace?(sample.project.namespace)
-        raise ProjectSampleUpdateError,
-              I18n.t('services.samples.update.no_permission')
-      end
+      authorize! sample.project, to: :allowed_to_modify_samples?
 
       sample.update(params)
     rescue Samples::UpdateService::ProjectSampleUpdateError => e

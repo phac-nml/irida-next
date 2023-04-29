@@ -28,9 +28,7 @@ module Groups
       valid_params = { name: 'group1', path: 'group1', parent_id: groups(:group_one).id }
       user = users(:michelle_doe)
 
-      assert_no_difference ['Group.count', 'Member.count'] do
-        Groups::CreateService.new(user, valid_params).execute
-      end
+      assert_raises(ActionPolicy::Unauthorized) { Groups::CreateService.new(user, valid_params).execute }
     end
 
     test 'create subgroup within a parent group that the user is a part of with OWNER role' do
@@ -56,9 +54,7 @@ module Groups
       valid_params = { name: 'group1', path: 'group1', parent_id: groups(:subgroup_one_group_three).id }
       user = users(:ryan_doe)
 
-      assert_no_difference ['Group.count', 'Member.count'] do
-        Groups::CreateService.new(user, valid_params).execute
-      end
+      assert_raises(ActionPolicy::Unauthorized) { Groups::CreateService.new(user, valid_params).execute }
     end
   end
 end

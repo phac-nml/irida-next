@@ -28,11 +28,7 @@ module Projects
     test 'update project with incorrect permissions' do
       valid_params = { namespace_attributes: { name: 'new-project1-name', path: 'new-project1-path' } }
       user = users(:ryan_doe)
-
-      assert_no_changes -> { @project } do
-        Projects::UpdateService.new(@project, user, valid_params).execute
-      end
-      assert @project.errors.full_messages.include?(I18n.t('services.projects.update.no_permission'))
+      assert_raises(ActionPolicy::Unauthorized) { Projects::UpdateService.new(@project, user, valid_params).execute }
     end
   end
 end
