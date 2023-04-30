@@ -9,6 +9,12 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  # ==> From update to 4.9.2
+  # Configuring it like above would set the error and redirect statuses to 422 Unprocessable Entity
+  # and 303 See Other respectively, to match the behavior expected by Hotwire/Turbo.
+  config.responder.error_status = :unprocessable_entity
+  config.responder.redirect_status = :see_other
+
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
