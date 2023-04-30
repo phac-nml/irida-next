@@ -30,7 +30,10 @@ class BaseService
 
   def namespace_owners_include_user?(namespace)
     Member.exists?(
-      namespace: namespace.self_and_ancestors, user: current_user,
+      namespace:, user: current_user,
+      access_level: Member::AccessLevel::OWNER
+    ) || Member.exists?(
+      namespace: namespace.parent&.self_and_ancestor_ids, user: current_user,
       access_level: Member::AccessLevel::OWNER
     )
   end
