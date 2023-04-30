@@ -8,7 +8,6 @@ module Projects
     def execute
       namespace_params = params.delete(:namespace_attributes)
 
-      authorize! project.namespace, to: :update?
       action_allowed_for_user(project.namespace, :update?)
 
       project.namespace.update(namespace_params)
