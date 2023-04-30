@@ -111,11 +111,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
   end
 
-  def projects
-    Project.where(namespace: { parent: current_user.groups.self_and_descendant_ids })
-           .or(Project.where(namespace: { parent: current_user.namespace })).include_route
-  end
-
   def resolve_layout
     case action_name
     when 'show', 'edit'
