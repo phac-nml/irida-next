@@ -13,7 +13,7 @@ module Members
     end
 
     def execute
-      authorize! namespace, to: :allowed_to_modify_members?
+      action_allowed_for_user(namespace, :allowed_to_modify_members?)
 
       if Member.user_has_namespace_maintainer_access?(current_user,
                                                       namespace) &&

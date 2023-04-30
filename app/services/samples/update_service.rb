@@ -12,7 +12,7 @@ module Samples
     end
 
     def execute
-      authorize! sample.project, to: :allowed_to_modify_samples?
+      action_allowed_for_user(sample.project, :allowed_to_modify_samples?)
 
       sample.update(params)
     rescue Samples::UpdateService::ProjectSampleUpdateError => e

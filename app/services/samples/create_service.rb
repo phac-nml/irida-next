@@ -13,8 +13,7 @@ module Samples
     end
 
     def execute
-      authorize! @project, to: :allowed_to_modify_samples?
-
+      action_allowed_for_user(@project, :allowed_to_modify_samples?)
       sample.save
       sample
     rescue Samples::CreateService::ProjectSampleCreateError => e

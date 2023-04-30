@@ -12,7 +12,8 @@ module Groups
     end
 
     def execute
-      authorize! group, to: :update?
+      action_allowed_for_user(group, :update?)
+
       group.update(params)
     rescue Groups::UpdateService::GroupUpdateError => e
       group.errors.add(:base, e.message)

@@ -7,6 +7,7 @@ module Projects
 
     def execute
       authorize! project.namespace, to: :destroy?
+      action_allowed_for_user(project.namespace, :destroy?)
 
       project.namespace.destroy
     rescue Projects::DestroyService::ProjectDestroyError => e

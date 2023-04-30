@@ -12,7 +12,7 @@ module Samples
     end
 
     def execute
-      authorize! sample.project, to: :destroy?
+      action_allowed_for_user(sample.project, :destroy?)
 
       sample.destroy
     rescue Samples::DestroyService::ProjectSampleDestroyError => e

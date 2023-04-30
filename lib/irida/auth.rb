@@ -39,19 +39,19 @@ module Irida
     end
 
     def authorize_view_members!
-      authorize! @namespace, to: :allowed_to_view_members?
+      action_allowed_for_user(@namespace, :allowed_to_view_members?)
     end
 
     def authorize_destroy_members!
-      authorize! @namespace, to: :allowed_to_modify_members?
+      action_allowed_for_user(@namespace, :allowed_to_modify_members?)
     end
 
     def authorize_view_samples!
-      authorize! @project, to: :allowed_to_view_samples?
+      action_allowed_for_user(@project, :allowed_to_view_samples?)
     end
 
     def authorize_sample_modification!
-      authorize! @project, to: :allowed_to_modify_samples?
+      action_allowed_for_user(@project, :allowed_to_modify_samples?)
     end
 
     def authorize_view_project!
@@ -68,8 +68,9 @@ module Irida
 
     protected
 
-    def action_allowed_for_user(auth_object)
-      authorize! auth_object
+    def action_allowed_for_user(auth_object, auth_method = nil)
+      authorize! auth_object if auth_method.nil?
+      authorize! auth_object, to: auth_method
     end
   end
 end

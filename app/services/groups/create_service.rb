@@ -12,7 +12,7 @@ module Groups
     end
 
     def execute # rubocop:disable Metrics/AbcSize
-      authorize! group.parent, to: :create? unless group.parent.nil?
+      action_allowed_for_user(group.parent, :create?) unless group.parent.nil?
 
       group.save
 
