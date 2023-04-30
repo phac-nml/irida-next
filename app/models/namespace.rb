@@ -49,43 +49,30 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       select(Arel.sql('namespaces.id'))
     end
 
-    def self_and_ancestors # rubocop:disable Metrics/AbcSize
-      self_paths = joins(:route).pluck('routes.path')
-
-      return none if self_paths.empty?
-
-      ancestral_paths = []
-      self_paths.each do |path|
-        path.split('/').each_with_index do |_part, index|
-          ancestral_paths << path.split('/')[0..index].join('/')
-        end
-      end
-
-      paths = self_paths | ancestral_paths
-
-      route_path = Route.arel_table[:path]
+    def self_and_ancestors
+      # build sql expression to select the route ids of the self and ancestral groups
+      route_id_select =
+        joins(:route)
+        .joins('LEFT JOIN routes ancestral_routes on ancestral_routes.id = routes.id ' \
+               "or concat(routes.path,'/') like concat(ancestral_routes.path,'/%')")
+        .select(Arel.sql('distinct routes.id')).to_sql
 
       unscoped
-        .distinct
         .joins(:route)
-        .where(route_path.in(paths))
+        .where(Arel.sql(format('routes.id in (%s)', route_id_select)))
     end
 
     def self_and_descendants
-      self_paths = joins(:route).pluck('routes.path')
-
-      return none if self_paths.empty?
-
-      fuzzy_paths = self_paths.map { |path| "#{path}/%" }
-
-      paths = self_paths | fuzzy_paths
-
-      route_path = Route.arel_table[:path]
+      # build sql expression to select the route ids of the self and descendant groups
+      route_id_select =
+        joins(:route)
+        .joins('LEFT JOIN routes descendant_routes on descendant_routes.id = routes.id ' \
+               "or descendant_routes.path like concat(routes.path,'/%')")
+        .select(Arel.sql('distinct descendant_routes.id')).to_sql
 
       unscoped
-        .distinct
         .joins(:route)
-        .where(route_path.matches_any(paths))
+        .where(Arel.sql(format('routes.id in (%s)', route_id_select)))
     end
 
     def self_and_descendant_ids
