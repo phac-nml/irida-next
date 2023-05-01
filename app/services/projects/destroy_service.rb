@@ -6,7 +6,6 @@ module Projects
     ProjectDestroyError = Class.new(StandardError)
 
     def execute
-      authorize! project.namespace, to: :destroy?
       action_allowed_for_user(project.namespace, :destroy?)
 
       project.namespace.destroy

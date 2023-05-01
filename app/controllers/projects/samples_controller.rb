@@ -52,15 +52,11 @@ module Projects
     end
 
     def destroy
-      if @sample.nil?
-        flash[:error] = t('.error')
+      Samples::DestroyService.new(@sample, current_user).execute
+      if @sample.destroyed?
+        flash[:success] = t('.success', sample_name: @sample.name)
       else
-        Samples::DestroyService.new(@sample, current_user).execute
-        if @sample.destroyed?
-          flash[:success] = t('.success', sample_name: @sample.name)
-        else
-          flash[:error] = @sample.errors.full_messages.first
-        end
+        flash[:error] = @sample.errors.full_messages.first
       end
       redirect_to namespace_project_samples_path
     end

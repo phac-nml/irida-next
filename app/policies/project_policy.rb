@@ -2,7 +2,7 @@
 
 # Policy for projects authorization
 class ProjectPolicy < ApplicationPolicy
-  alias_rule :create?, :edit?, :update?, :new?, :allowed_to_modify_samples?,
+  alias_rule :create?, :edit?, :update?, :new?,
              to: :allowed_to_modify_project?
   alias_rule :index?, :show?, :activity?, to: :allowed_to_view_project?
   alias_rule :destroy?, to: :allowed_to_destroy?

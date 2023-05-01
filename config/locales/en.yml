@@ -391,40 +391,9 @@ en:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
   services:
-    groups:
-      create:
-        no_permission: "You do not have permission to create a new group under this %{namespace_type}"
-      destroy:
-        no_permission: You do not have permission to delete this group
-      update:
-        no_permission: You do not have permission to update this group
-    projects:
-      create:
-        no_permission: "You do not have permission to create a new project under this %{namespace_type}"
-        namespace_required: A project must belong to either a user or group namespace
-      destroy:
-        no_permission: You do not have permission to delete this project
-      transfer:
-        namespace_empty: Please select a new namespace for your project.
-        project_in_namespace: Project is already in this namespace.
-        no_permission: You don't have permission to transfer this project.
-        no_namespace_permission: You don't have permission to transfer projects into that namespace.
-        namespace_project_exists: Project with same name or path in target namespace already exists.
-      update:
-        no_permission: You do not have permission to update this project
     members:
-      create:
-        no_permission: "You do not have permission to add a new member to the %{namespace_type}"
       destroy:
         no_permission: "You do not have permission to remove this member from the %{namespace_type}"
         cannot_remove_self: "You cannot remove yourself from the %{namespace_type}"
       update:
-        no_permission: You do not have permission to update this member
         cannot_update_self: "You cannot update your own %{namespace_type} role"
-    samples:
-      create:
-        no_permission: You do not have permission to create a sample in this project
-      destroy:
-        no_permission: You do not have permission to remove this sample from the project
-      update:
-        no_permission: You do not have permission to update this project sample
