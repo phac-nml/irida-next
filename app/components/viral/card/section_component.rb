@@ -2,6 +2,7 @@
 
 module Viral
   module Card
+    # Section component for the card
     class SectionComponent < Viral::Component
       attr_reader :title
 

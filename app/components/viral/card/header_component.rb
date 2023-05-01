@@ -2,7 +2,8 @@
 
 module Viral
   module Card
-    class HeaderComponent < Component
+    # Header component for the card
+      class HeaderComponent < Component
       attr_reader :title
 
       renders_many :actions
