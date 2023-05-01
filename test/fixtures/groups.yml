@@ -41,7 +41,7 @@ group_three:
 
 subgroup_one_group_three:
   name: Subgroup 1 Group 3
-  path: subgorup-1-group-3
+  path: subgroup-1-group-3
   type: Group
   description: Subgroup 1 Group 3
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

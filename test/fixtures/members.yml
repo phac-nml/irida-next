@@ -30,6 +30,12 @@ group_two_member_john_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two) %>
   access_level: <%= Member::AccessLevel::OWNER %>
 
+group_three_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
 group_three_member_michelle_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
