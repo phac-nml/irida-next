@@ -30,6 +30,13 @@ class GroupPolicy < ApplicationPolicy
     can_modify_members?(record)
   end
 
+  def transfer_to_namespace?
+    return true if record.owner == user
+    return true if record.children_allowed?
+
+    false
+  end
+
   scope_for :relation do |_relation|
     user.groups.self_and_descendants.include_route
   end

@@ -62,10 +62,6 @@ module Irida
       action_allowed_for_user(@user)
     end
 
-    def authorize_transfer_project!
-      action_allowed_for_user(@project)
-    end
-
     protected
 
     def action_allowed_for_user(auth_object, auth_method = nil)

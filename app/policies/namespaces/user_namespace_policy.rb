@@ -29,5 +29,12 @@ module Namespaces
 
       can_modify_members?(record)
     end
+
+    def transfer_to_namespace?
+      return true if record.owner == user
+      return true if record.children_allowed?
+
+      false
+    end
   end
 end
