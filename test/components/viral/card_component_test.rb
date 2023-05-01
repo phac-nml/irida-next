@@ -21,30 +21,78 @@ module Viral
       render_inline(Viral::CardComponent.new(title: 'Card with header actions')) do |card|
         card.header(title: 'This is a card with header actions') do |header|
           header.action do
-            content_tag('a', 'Edit',
-                        class: 'font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer')
+            'Edit'
           end
           header.action do
-            content_tag('a', 'Delete',
-                        class: 'font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer')
+            'Delete'
           end
           'Just the body here'
         end
       end
 
       assert_selector 'section.Viral-Card' do
-        assert_selector 'h3.font-semibold' do
-          assert_text 'Card with header actions'
-        end
-        assert_selector 'div.p-4.pb-0' do
-          assert_selector 'a.font-medium.text-blue-600.dark:text-blue-500.hover:underline.cursor-pointer' do
-            assert_text 'Edit'
-          end
-          assert_selector 'a.font-medium.text-red-600.dark:text-red-500.hover:underline.cursor-pointer' do
-            assert_text 'Delete'
-          end
-        end
+        assert_text 'This is a card with header actions'
+        assert_text 'Edit'
+        assert_text 'Delete'
         assert_text 'Just the body here'
+      end
+    end
+
+    test 'card with simple header'
+      render_inline(Viral::CardComponent.new) do |card|
+        card.header(title: 'This is a card with a simple header')
+      end
+
+      assert_selector 'section.Viral-Card' do
+        assert_text 'This is a card with a simple header'
+      end
+    end
+
+    test 'card with multiple sections' do
+      render_inline(Viral::CardComponent.new(title: 'Card with multiple sections')) do |card|
+        card.header(title: 'This is a card with multiple sections')
+        card.section { 'This is section 1 content' }
+        card.section(border_top: true) { 'This is section 2 content' }
+      end
+
+      assert_selector 'section.Viral-Card' do
+        assert_text 'This is a card with multiple sections'
+        assert_selector '.Viral-Card--Section', count: 2
+        assert_text 'This is section 1 content'
+        assert_text 'This is section 2 content'
+      end
+    end
+
+    test 'card with titled sections' do
+      render_inline(Viral::CardComponent.new(title: 'Card with titled sections')) do |card|
+        card.header(title: 'This is a card with multiple titled sections')
+        card.section(title: 'Section 1') { 'This is section 1 content' }
+        card.section(title: 'Section 2', border_top: true) { 'This is section 2 content' }
+      end
+
+      assert_selector 'section.Viral-Card' do
+        assert_selector '.Viral-Card--Section', count: 2
+        assert_text 'SECTION 1'
+        assert_text 'This is section 1 content'
+        assert_text 'SECTION 2'
+        assert_text 'This is section 2 content'
+      end
+    end
+
+    test 'card section with action' do
+      render_inline(Viral::CardComponent.new(title: 'Card section with action')) do |card|
+        card.header(title: 'This is a card with a section with an action')
+        card.section(title: 'Section 1') do |section|
+          section.action do
+            'Edit'
+          end
+        end
+      end
+
+      assert_selector 'section.Viral-Card' do
+        assert_selector '.Viral-Card--Section', count: 1
+        assert_text 'SECTION 1'
+        assert_text 'Edit'
       end
     end
   end

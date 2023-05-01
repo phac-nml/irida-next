@@ -12,7 +12,7 @@ module Viral
         @system_arguments = system_arguments
         @system_arguments[:classes] = class_names(
           @system_arguments[:classes],
-          'p-4 pb-0'
+          'p-4'
         )
       end
 

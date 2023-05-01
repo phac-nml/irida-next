@@ -13,6 +13,7 @@ module Viral
         @system_arguments[:tag] = 'div'
         @system_arguments[:classes] = class_names(
           @system_arguments[:classes],
+          'Viral-Card--Section',
           'border-gray-200 dark:border-gray-700',
           'border-t': border_top,
           'border-b': border_bottom,
