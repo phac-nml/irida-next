@@ -15,13 +15,7 @@ module Projects
       @samples = Sample.where(project_id: @project.id)
     end
 
-    def show
-      return unless @sample.nil?
-
-      render status: :unprocessable_entity, json: {
-        message: t('.error')
-      }
-    end
+    def show; end
 
     def new
       @sample = Sample.new

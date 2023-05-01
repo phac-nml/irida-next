@@ -13,7 +13,7 @@ module Projects
     private
 
     def member
-      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id)
+      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id) || not_found
     end
 
     def namespace

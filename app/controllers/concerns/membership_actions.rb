@@ -47,21 +47,14 @@ module MembershipActions
     end
   end
 
-  def destroy # rubocop:disable Metrics/AbcSize
-    if @member.nil?
-      flash[:error] = t('.error')
-      render status: :unprocessable_entity, json: {
-        message: t('.error')
-      }
+  def destroy
+    Members::DestroyService.new(@member, @namespace, current_user).execute
+    if @member.destroyed?
+      flash[:success] = t('.success')
     else
-      Members::DestroyService.new(@member, @namespace, current_user).execute
-      if @member.destroyed?
-        flash[:success] = t('.success')
-      else
-        flash[:error] = @member.errors.full_messages.first
-      end
-      redirect_to members_path
+      flash[:error] = @member.errors.full_messages.first
     end
+    redirect_to members_path
   end
 
   private
