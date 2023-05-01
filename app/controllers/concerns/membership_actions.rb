@@ -10,9 +10,16 @@ module MembershipActions
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }, only: %i[new create]
     before_action proc { context_crumbs }, only: %i[index new]
-    before_action proc { authorize_view_members! }, only: %i[index]
-    before_action proc { authorize_owner_namespace! }, only: %i[create new]
-    before_action proc { authorize_destroy_members! }, only: %i[destroy]
+
+    unless @project.nil?
+      before_action proc { :authorize_view_project! }, only: %i[index]
+      before_action proc { :authorize_modify_project! }, only: %i[new]
+    end
+
+    unless @group.nil?
+      before_action proc { :authorize_view_group! }, only: %i[index]
+      before_action proc { :authorize_modify_group! }, only: %i[new]
+    end
   end
 
   def index

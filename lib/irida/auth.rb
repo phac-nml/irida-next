@@ -18,40 +18,16 @@ module Irida
       action_allowed_for_user(@group)
     end
 
-    def authorize_create_group!
-      action_allowed_for_user(@group) unless @group&.parent.nil?
-    end
-
     def authorize_view_group!
       action_allowed_for_user(@group)
     end
 
-    def authorize_owner_namespace!
-      if @group.nil?
-        action_allowed_for_user(@project)
-      else
-        action_allowed_for_user(@group)
-      end
+    def authorize_create_subgroup!
+      action_allowed_for_user(@group) unless @group.nil?
     end
 
     def authorize_modify_project!
       action_allowed_for_user(@project)
-    end
-
-    def authorize_view_members!
-      action_allowed_for_user(@namespace, :allowed_to_view_members?)
-    end
-
-    def authorize_destroy_members!
-      action_allowed_for_user(@namespace, :allowed_to_modify_members?)
-    end
-
-    def authorize_view_samples!
-      action_allowed_for_user(@project, :allowed_to_view_samples?)
-    end
-
-    def authorize_sample_modification!
-      action_allowed_for_user(@project, :allowed_to_modify_samples?)
     end
 
     def authorize_view_project!

@@ -6,13 +6,13 @@ module Projects
     before_action :sample, only: %i[show edit update destroy]
     before_action :project
     before_action :context_crumbs
-    before_action :authorize_view_samples!, only: %i[show index]
-    before_action :authorize_sample_modification!, only: %i[new edit]
+    before_action :authorize_view_project!, only: %i[show index]
+    before_action :authorize_modify_project!, only: %i[new edit]
 
     layout 'projects'
 
     def index
-      @samples = authorized_scope(Sample, type: :relation, scope_options: { project_id: @project.id })
+      @samples = Sample.where(project_id: @project.id)
     end
 
     def show

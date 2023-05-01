@@ -13,7 +13,8 @@ module Members
     end
 
     def execute
-      action_allowed_for_user(namespace, :allowed_to_modify_members?)
+      auth_method = namespace.group_namespace? ? :allowed_to_modify_group? : :allowed_to_modify_project_namespace?
+      action_allowed_for_user(namespace, auth_method)
 
       if Member.user_has_namespace_maintainer_access?(current_user,
                                                       namespace) &&

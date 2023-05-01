@@ -27,11 +27,13 @@
               icon: "beaker",
               label: t(:"projects.sidebar.samples")
             ) %>
-            <%= render section.with_item(
-              url: project_edit_path(@project),
-              icon: "cog_6_tooth",
-              label: t(:"projects.sidebar.settings")
-            ) %>
+            <% if allowed_to?(:allowed_to_modify_project?, @project) %>
+              <%= render section.with_item(
+                url: project_edit_path(@project),
+                icon: "cog_6_tooth",
+                label: t(:"projects.sidebar.settings")
+              ) %>
+            <% end %>
           <% end %>
           <% layout.body do %>
             <%= render Viral::BreadcrumbComponent.new(

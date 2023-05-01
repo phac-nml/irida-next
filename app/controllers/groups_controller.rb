@@ -7,8 +7,8 @@ class GroupsController < Groups::ApplicationController
   before_action :group_parent, only: %i[new]
   before_action :context_crumbs, except: %i[index new create show]
   before_action :authorize_modify_group!, only: %i[edit]
-  before_action :authorize_create_group!, only: %i[new]
   before_action :authorize_view_group!, only: %i[show]
+  before_action :authorize_create_subgroup!, only: %i[new]
 
   def index
     @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
