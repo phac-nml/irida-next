@@ -7,7 +7,12 @@ module Groups
     before_action :context_crumbs, only: %i[index]
 
     def index
-      @samples = Sample.where(project_id: Project.where(namespace_id: group.descendant_ids)).includes(:project)
+      @pagy, @samples = pagy(Sample.where(project_id: Project.where(namespace_id: group.descendant_ids)).includes(:project))
+
+      respond_to do |format|
+        format.html
+        format.turbo_stream
+      end
     end
 
     private

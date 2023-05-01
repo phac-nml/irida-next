@@ -1,0 +1,29 @@
+<%= turbo_stream.update "group_samples_list" do %>
+  <table class="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class=" text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
+      <tr>
+        <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.sample.name") %></th>
+        <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.project.name") %></th>
+      </tr>
+    </thead>
+    <tbody id="group-samples-table-body">
+      <% @samples.each do |sample| %>
+        <tr
+          id="<%= dom_id(sample) %>"
+          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+        >
+          <td class="px-6 py-3"><%= sample.name %></td>
+          <td class="px-6 py-3"><%= link_to sample.project.name, project_path(sample.project) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= turbo_stream.update "group_samples_pagination" do %>
+  <%= render PaginationComponent.new(
+    info: pagy_info(@pagy),
+    prev_url: (@pagy.prev ? group_samples_url(@group, page: @pagy.prev) : nil),
+    next_url: (@pagy.next ? group_samples_url(@group, page: @pagy.next) : nil)
+  ) %>
+<% end %>
