@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found
-    render 'shared/error/not_found', status: :not_found
+    render 'shared/error/not_found', status: :not_found, layout: 'application'
   end
 
   def route_not_found
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionPolicy::Unauthorized do |_exception|
-    render 'shared/error/not_authorized', status: :unauthorized
+    render 'shared/error/not_authorized', status: :unauthorized, layout: 'application'
   end
 
   rescue_from ActiveRecord::RecordNotFound do |_exception|
