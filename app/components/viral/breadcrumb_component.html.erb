@@ -1,5 +1,14 @@
 <nav
-  class="flex px-5 py-3 bg-white border-b border-gray-200 dark:bg-gray-800"
+  class="
+    flex
+    px-5
+    py-3
+    bg-white
+    border-b
+    border-gray-200
+    dark:border-gray-700
+    dark:bg-gray-800
+  "
   aria-label="Breadcrumb"
 >
   <ol class="inline-flex items-center space-x-1 md:space-x-3">
@@ -8,10 +17,7 @@
       <li class="inline-flex items-center">
         <div class="flex items-center">
           <% if index > 0 %>
-            <%= viral_icon(
-              name: "chevron_right",
-              classes: "w-4 h-4 text-gray-400"
-            ) %>
+            <%= viral_icon(name: "chevron_right", classes: "w-4 h-4 text-gray-400") %>
           <% end %>
           <% if index < links.length - 1 %>
             <%= link_to link[:name],
