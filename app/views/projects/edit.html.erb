@@ -54,7 +54,7 @@
                     dark:border-gray-600
                   "
                 >
-                  <%= project_url(@project) %>
+                  <%= @project.namespace.parent %>
                 </span>
                 <%= builder.text_field :path,
                                    class:
