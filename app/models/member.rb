@@ -36,43 +36,56 @@ class Member < ApplicationRecord
     end
 
     def can_modify?(user, object_namespace)
-      Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
-                     user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
+      if object_namespace.project_namespace?
+        Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
+                       user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
+          Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
+                         access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+      elsif object_namespace.group_namespace?
         Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
                        access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+      end
     end
 
     def can_view?(user, object_namespace)
-      Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids, user:) ||
+      if object_namespace.project_namespace?
+        Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids, user:) ||
+          Member.exists?(
+            namespace: object_namespace.self_and_ancestor_ids, user:
+          )
+      elsif object_namespace.group_namespace?
         Member.exists?(
           namespace: object_namespace.self_and_ancestor_ids, user:
         )
+      end
     end
 
     def can_destroy?(user, object_namespace)
-      Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids, user:,
-                     access_level: Member::AccessLevel::OWNER) ||
-        Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
-                       access_level: Member::AccessLevel::OWNER)
+      namespace_owners_include_user?(user, object_namespace)
     end
 
     def namespace_owners_include_user?(user, namespace)
-      Member.exists?(
-        namespace:, user:,
-        access_level: Member::AccessLevel::OWNER
-      ) || Member.exists?(
-        namespace: namespace.parent&.self_and_ancestor_ids, user:,
-        access_level: Member::AccessLevel::OWNER
-      )
+      if namespace.project_namespace?
+        Member.exists?(
+          namespace:, user:,
+          access_level: Member::AccessLevel::OWNER
+        ) || Member.exists?(
+          namespace: namespace.parent&.self_and_ancestor_ids, user:,
+          access_level: Member::AccessLevel::OWNER
+        )
+      elsif namespace.group_namespace?
+        Member.exists?(
+          namespace:, user:,
+          access_level: Member::AccessLevel::OWNER
+        )
+      end
     end
 
     def user_has_namespace_maintainer_access?(user, namespace)
       return unless namespace.group_namespace?
 
-      Member.exists?(user:, namespace: namespace.parent&.self_and_ancestors,
-                     access_level: Member::AccessLevel::MAINTAINER) ||
-        Member.exists?(user:, namespace: namespace.self_and_ancestors,
-                       access_level: Member::AccessLevel::MAINTAINER)
+      Member.exists?(user:, namespace: namespace.self_and_ancestors,
+                     access_level: Member::AccessLevel::MAINTAINER)
     end
   end
 
