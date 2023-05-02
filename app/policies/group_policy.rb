@@ -3,7 +3,7 @@
 # Policy for groups authorization
 class GroupPolicy < ApplicationPolicy
   alias_rule :create?, :edit?, :update?, :new?, to: :allowed_to_modify_group?
-  alias_rule :show?, to: :allowed_to_view_group?
+  alias_rule :show?, :index?, to: :allowed_to_view_group?
   alias_rule :destroy?, to: :allowed_to_destroy?
 
   def allowed_to_view_group?

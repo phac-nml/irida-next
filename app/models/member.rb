@@ -56,13 +56,6 @@ class Member < ApplicationRecord
                        access_level: Member::AccessLevel::OWNER)
     end
 
-    def can_modify_members?(user, object_namespace)
-      Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
-                     user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
-        Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
-                       access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
-    end
-
     def namespace_owners_include_user?(user, namespace)
       Member.exists?(
         namespace:, user:,

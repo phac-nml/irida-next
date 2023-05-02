@@ -28,8 +28,4 @@ class ApplicationPolicy < ActionPolicy::Base
   def can_destroy?(obj)
     Member.can_destroy?(user, obj)
   end
-
-  def can_modify_members?(obj)
-    Member.can_modify_members?(user, obj)
-  end
 end

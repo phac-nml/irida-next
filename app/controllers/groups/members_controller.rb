@@ -40,5 +40,13 @@ module Groups
       @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
       @group
     end
+
+    def authorize_view_members
+      authorize_view_group!
+    end
+
+    def authorize_modify_members
+      authorize_modify_group!
+    end
   end
 end

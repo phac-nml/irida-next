@@ -10,16 +10,8 @@ module MembershipActions
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }, only: %i[new create]
     before_action proc { context_crumbs }, only: %i[index new]
-
-    unless @project.nil?
-      before_action proc { :authorize_view_project! }, only: %i[index]
-      before_action proc { :authorize_modify_project! }, only: %i[new]
-    end
-
-    unless @group.nil?
-      before_action proc { :authorize_view_group! }, only: %i[index]
-      before_action proc { :authorize_modify_group! }, only: %i[new]
-    end
+    before_action proc { authorize_view_members }, only: %i[index]
+    before_action proc { authorize_modify_members }, only: %i[new]
   end
 
   def index
@@ -60,8 +52,15 @@ module MembershipActions
   private
 
   def access_levels
-    member = Member.where(user: current_user, namespace: @namespace.self_and_ancestors).order(:access_level).last
-    @access_levels = Member.access_levels(member)
+    if @namespace.parent&.user_namespace? && @namespace.parent.owner == current_user
+      @access_levels = Member::AccessLevel.access_level_options_owner
+    else
+      member = Member.where(user: current_user,
+                            namespace: @namespace.self_and_ancestors)
+                     .or(Member.where(user: current_user,
+                                      namespace: @namespace.parent&.self_and_ancestors)).order(:access_level).last
+      @access_levels = Member.access_levels(member)
+    end
   end
 
   def available_users
@@ -78,6 +77,14 @@ module MembershipActions
   end
 
   def member_namespace
+    raise NotImplementedError
+  end
+
+  def authorize_view_members
+    raise NotImplementedError
+  end
+
+  def authorize_modify_members
     raise NotImplementedError
   end
 end
