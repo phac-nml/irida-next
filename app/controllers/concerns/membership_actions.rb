@@ -50,8 +50,15 @@ module MembershipActions
   private
 
   def access_levels
-    member = Member.where(user: current_user, namespace: @namespace.self_and_ancestors).order(:access_level).last
-    @access_levels = Member.access_levels(member)
+    if @namespace.parent&.user_namespace? && @namespace.parent.owner == current_user
+      @access_levels = Member::AccessLevel.access_level_options_owner
+    else
+      member = Member.where(user: current_user,
+                            namespace: @namespace.self_and_ancestors)
+                     .or(Member.where(user: current_user,
+                                      namespace: @namespace.parent&.self_and_ancestors)).order(:access_level).last
+      @access_levels = Member.access_levels(member)
+    end
   end
 
   def available_users
