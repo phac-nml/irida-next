@@ -304,6 +304,9 @@ en:
       general:
         title: General
         submit: Update project
+      advanced:
+        title: Advanced
+        submit: Change path
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data
