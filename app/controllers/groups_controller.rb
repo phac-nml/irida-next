@@ -4,7 +4,6 @@
 class GroupsController < Groups::ApplicationController
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update]
-  before_action :group_parent, only: %i[new]
   before_action :context_crumbs, except: %i[index new create show]
   before_action :authorize_modify_group!, only: %i[edit]
   before_action :authorize_view_group!, only: %i[show]
@@ -17,6 +16,7 @@ class GroupsController < Groups::ApplicationController
   def show; end
 
   def new
+    @group = Group.find(params[:parent_id]) if params[:parent_id]
     @new_group = Group.new(parent_id: @group&.id)
     respond_to do |format|
       format.html { render_new }
@@ -60,11 +60,6 @@ class GroupsController < Groups::ApplicationController
 
   def group
     @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
-  end
-
-  def group_parent
-    # Find group by parent_id
-    @group ||= Group.find(params[:parent_id]) if params[:parent_id]
   end
 
   def group_params

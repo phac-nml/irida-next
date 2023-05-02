@@ -28,7 +28,7 @@ class GroupPolicy < ApplicationPolicy
     return true if record.owner == user
     return true if record.children_allowed?
 
-    false
+    can_transfer?(record)
   end
 
   scope_for :relation do |_relation|
