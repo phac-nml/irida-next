@@ -1,38 +1,51 @@
-FROM ruby:3.2.0-slim as base
+# syntax = docker/dockerfile:1
 
+# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
+ARG RUBY_VERSION=3.2.0
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+
+# Rails app lives here
 WORKDIR /rails
 
+# Set production environment
 ENV RAILS_ENV=production \
-    LANG=C.UTF-8 \
-    BUNDLE_JOBS=4 \
-    BUNDLE_RETRY=3 \
-    BUNDLE_PATH="/usr/local/bundle"
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development"
+
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
-# Install packages needed to build gems
-# This example intentionally does not require or install node.js
-
-RUN apt-get update -qq && apt-get install -yq --no-install-recommends \
+# Install packages needed to build gems and node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
     build-essential \
-    gnupg2 \
-    libpq-dev \
     curl \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    libpq-dev \
+    libvips \
+    node-gyp \
+    pkg-config \
+    python-is-python3
 
-RUN gem update --system && gem install bundler
+# Install JavaScript dependencies
+ARG NODE_VERSION=19.7.0
+ARG PNPM_VERSION=7.29.1
+ENV PATH=/usr/local/node/bin:$PATH
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+    /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
+    npm install -g pnpm@$PNPM_VERSION && \
+    rm -rf /tmp/node-build-master
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    bundle exec bootsnap precompile --gemfile
 
-# TODO: consolidate bundle config better, currently split between ENV and `bundle config`
-RUN bundle config frozen true \
-    && bundle config jobs 4 \
-    && bundle config deployment true \
-    && bundle config without 'development test' \
-    && bundle install \
-    && bundle exec bootsnap precompile --gemfile
+# Install node modules
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy application code
 COPY . .
@@ -40,30 +53,18 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Install node and pnpm
-RUN curl -sL https://deb.nodesource.com/setup_19.x  | bash - \
-    && apt-get install -yq --no-install-recommends nodejs \
-    && npm install -g pnpm@7.29.1 \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-
-# Install node_modules
-RUN pnpm install --frozen-lockfile
-
-# Precompile assets
-# SECRET_KEY_BASE or RAILS_MASTER_KEY is required in production, but we don't
-# want real secrets in the image or image history. The real secret is passed in
-# at run time
-ARG SECRET_KEY_BASE=fakekeyforassets
-RUN ./bin/rails assets:precompile
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+RUN SECRET_KEY_BASE=fakekeyforassets ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
 
 # Install packages needed for deployment
-RUN apt-get update -qq && apt-get install -yq --no-install-recommends \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    libvips \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
@@ -71,14 +72,12 @@ COPY --from=build /rails /rails
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --home /rails --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+    chown -R rails:rails db log storage tmp %>
 USER rails:rails
 
-ARG DATABASE_URL
-ARG SECRET_KEY_BASE
+# Entrypoint prepares the database.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-ENTRYPOINT [ "bin/docker-entrypoint.sh" ]
-
-# Start Server
+# Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+CMD ["./bin/rails", "server"]
