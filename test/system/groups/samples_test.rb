@@ -7,7 +7,7 @@ module Groups
     def setup
       login_as users(:john_doe)
       @group = groups(:group_one)
-      @namespaces = Namespace.where(parent: @group.self_and_descendant_ids)
+      @namespaces = Namespaces::ProjectNamespace.where(parent_id: @group.self_and_descendant_ids)
       @samples_count = samples.select { |sample| @namespaces.include?(sample.project.namespace) }.count
     end
 
