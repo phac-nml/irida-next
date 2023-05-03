@@ -1,13 +1,13 @@
 <%= render Viral::BaseComponent.new(tag: 'div', **system_arguments) do %>
   <% if simple? %>
-    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
       <%= title %>
-    </h3>
+    </h2>
   <% else %>
     <div class="mb-2">
       <% if actions.present? %>
         <div class="flex">
-          <h2 class="flex-1 font-semibold text-gray-900 dark:text-white">
+          <h2 class="flex-1 text-lg font-semibold text-gray-800 dark:text-white">
             <%= title %>
           </h2>
           <div>
@@ -17,7 +17,7 @@
           </div>
         </div>
       <% else %>
-        <h2 class="flex-1 text-sm font-semibold text-gray-800 dark:text-white">
+        <h2 class="flex-1 text-lg font-semibold text-gray-800 dark:text-white">
           <%= title %>
         </h2>
       <% end %>
