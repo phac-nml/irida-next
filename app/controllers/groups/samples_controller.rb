@@ -8,7 +8,7 @@ module Groups
 
     def index
       namespaces = Namespaces::ProjectNamespace.where(parent_id: group.self_and_descendant_ids)
-      @pagy, @samples = pagy(Sample.where(project_id: Project.where(namespace: Namespaces::ProjectNamespace.where(parent_id: group.self_and_descendant_ids))).includes(:project))
+      @pagy, @samples = pagy(Sample.where(project_id: Project.where(namespace: namespaces)).includes(:project))
       respond_to do |format|
         format.html
         format.turbo_stream
