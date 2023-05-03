@@ -7,7 +7,7 @@
     <div class="mb-2">
       <% if actions.present? %>
         <div class="flex">
-          <h2 class="flex-1 font-semibold font-semibold text-gray-800 dark:text-white">
+          <h2 class="flex-1 text-lg font-semibold text-gray-800 dark:text-white">
             <%= title %>
           </h2>
           <div>
@@ -17,11 +17,11 @@
           </div>
         </div>
       <% else %>
-        <h2 class="flex-1 font-semibold text-sm font-semibold text-gray-800 dark:text-white">
+        <h2 class="flex-1 text-lg font-semibold text-gray-800 dark:text-white">
           <%= title %>
         </h2>
       <% end %>
     </div>
   <% end %>
-  <%= content %>
+  <p class="text-gray-500 dark:text-gray-400"><%= content %></p>
 <% end %>
