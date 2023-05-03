@@ -4,9 +4,9 @@
 class CreateMembers < ActiveRecord::Migration[7.0]
   def change
     create_table :members do |t|
-      t.integer :user_id
-      t.integer :namespace_id
-      t.integer :created_by_id
+      t.references :user, foreign_key: true, index: true
+      t.references :namespace, foreign_key: true, index: true
+      t.references :created_by, foreign_key: { to_table: :users }
       t.string :type
       t.integer :access_level
 

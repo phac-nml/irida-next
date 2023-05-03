@@ -4,10 +4,10 @@
 class CreatePersonalAccessTokens < ActiveRecord::Migration[7.0]
   def change
     create_table :personal_access_tokens do |t|
-      t.references :user, null: false, foreign_key: true
+      t.references :user, null: false, foreign_key: true, index: true
       t.string :scopes
       t.string :name
-      t.boolean :revoked
+      t.boolean :revoked, default: false, null: false
       t.date :expires_at
       t.string :token_digest
       t.timestamp :last_used_at
