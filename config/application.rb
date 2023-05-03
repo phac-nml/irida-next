@@ -37,5 +37,8 @@ module Irida
     config.importmap.cache_sweepers << Rails.root.join('app/components')
 
     config.view_component.default_preview_layout = 'lookbook'
+    config.lookbook.preview_display_options = {
+      theme: %w[light dark]
+    }
   end
 end
