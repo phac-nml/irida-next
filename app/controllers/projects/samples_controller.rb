@@ -63,7 +63,12 @@ module Projects
     end
 
     def transfer
-      puts 'HHHHHHHHHEEEEEEEEEEEEEEELLLLLLLLLLLLLLLLLOOOOOOOOOOOOOOOOOOOOO'
+      if Samples::TransferService.new.execute
+        flash[:success] = t('.success')
+      else
+        flash[:error] = t('.error')
+      end
+      redirect_to namespace_project_samples_path
     end
 
     private
