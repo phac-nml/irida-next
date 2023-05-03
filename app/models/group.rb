@@ -2,7 +2,7 @@
 
 # Namespace for Groups
 class Group < Namespace
-  has_many :group_members, foreign_key: :namespace_id, inverse_of: :namespace,
+  has_many :group_members, foreign_key: :namespace_id, inverse_of: :group,
                            class_name: 'Member', dependent: :destroy
   has_many :project_namespaces,
            lambda {

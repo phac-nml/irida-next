@@ -6,7 +6,7 @@ class CreateMembers < ActiveRecord::Migration[7.0]
     create_table :members do |t|
       t.references :user, foreign_key: true, index: true
       t.references :namespace, foreign_key: true, index: true
-      t.references :created_by, foreign_key: { to_table: :users }
+      t.references :created_by
       t.string :type
       t.integer :access_level
 

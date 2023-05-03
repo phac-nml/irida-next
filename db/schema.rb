@@ -99,11 +99,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_221752) do
 
   add_foreign_key "members", "namespaces"
   add_foreign_key "members", "users"
-  add_foreign_key "members", "users", column: "created_by_id"
   add_foreign_key "namespaces", "namespaces", column: "parent_id"
-  add_foreign_key "namespaces", "users", column: "owner_id"
   add_foreign_key "personal_access_tokens", "users"
   add_foreign_key "projects", "namespaces"
-  add_foreign_key "projects", "users", column: "creator_id"
   add_foreign_key "samples", "projects"
 end

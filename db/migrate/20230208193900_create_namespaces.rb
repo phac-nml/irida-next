@@ -6,7 +6,7 @@ class CreateNamespaces < ActiveRecord::Migration[7.0]
     create_table :namespaces do |t|
       t.string :name
       t.string :path
-      t.references :owner, foreign_key: { to_table: :users }, index: true
+      t.references :owner, index: true
       t.string :type
       t.string :description
       t.references :parent, foreign_key: { to_table: :namespaces }, index: true
