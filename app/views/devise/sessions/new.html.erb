@@ -26,5 +26,7 @@
     <%= f.submit t(".sign_in"), class: "btn btn-primary w-full" %>
   </div>
 <% end %>
-
+<%= button_to "Sign in with DEV", "/auth/developer" %>
+<%= button_to "Sign in with SAML", "/auth/saml" %>
+<%= button_to "Sign in with AZURE", "/auth/azure_activedirectory_v2" %>
 <%= render "devise/shared/links" %>

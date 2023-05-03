@@ -44,6 +44,15 @@ gem 'bootsnap', require: false
 # Use devise for auth
 gem 'devise', '~> 4.9.2'
 
+# Use OmniAuth auth
+gem 'omniauth'
+gem 'omniauth-azure-activedirectory-v2'
+gem 'omniauth-rails_csrf_protection'
+gem 'omniauth-saml'
+
+# Use Figaro to set and organize environment variables
+gem 'figaro'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
