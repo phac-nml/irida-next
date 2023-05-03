@@ -17,7 +17,7 @@ module Viral
         )
       end
 
-      def simple?
+      def title_only?
         content.blank? && actions.blank?
       end
     end
