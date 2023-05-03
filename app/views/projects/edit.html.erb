@@ -31,7 +31,7 @@
 
     <%= viral_card do |card| %>
       <% card.header(title: t(".advanced.title")) %>
-      <% card.section do %>
+      <% card.section(title: 'Change Path') do %>
         <%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
           <%= form.fields_for :namespace, include_id: false do |builder| %>
             <div>
@@ -54,7 +54,7 @@
                     dark:border-gray-600
                   "
                 >
-                  <%= @project.namespace.parent %>
+                  <%= "#{request.protocol}#{request.host_with_port}/#{@project.namespace.parent.full_path}/" %>
                 </span>
                 <%= builder.text_field :path,
                                    class:
@@ -63,7 +63,7 @@
               </div>
             </div>
             <div>
-              <%= form.submit t("projects.edit.advanced.submit"), class: "btn btn-primary" %>
+              <%= form.submit t("projects.edit.advanced.submit"), class: "btn btn-danger" %>
             </div>
           <% end %>
         <% end %>
