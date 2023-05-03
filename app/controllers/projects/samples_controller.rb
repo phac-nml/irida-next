@@ -62,6 +62,10 @@ module Projects
       redirect_to namespace_project_samples_path
     end
 
+    def transfer
+      puts 'HHHHHHHHHEEEEEEEEEEEEEEELLLLLLLLLLLLLLLLLOOOOOOOOOOOOOOOOOOOOO'
+    end
+
     private
 
     def sample
