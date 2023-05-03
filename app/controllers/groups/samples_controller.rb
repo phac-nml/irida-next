@@ -7,8 +7,8 @@ module Groups
     before_action :context_crumbs, only: %i[index]
 
     def index
-      @pagy, @samples = pagy(Sample.where(project_id: Project.where(namespace: group.self_and_descendants)).includes(:project)) # rubocop:disable Layout/LineLength
-
+      namespaces = Namespace.where(parent: group.self_and_descendant_ids)
+      @pagy, @samples = pagy(Sample.where(project_id: Project.where(namespace_id: namespaces)).includes(:project))
       respond_to do |format|
         format.html
         format.turbo_stream
