@@ -29,7 +29,7 @@ class ApplicationPolicy < ActionPolicy::Base
     Member.can_destroy?(user, obj)
   end
 
-  def can_transfer(obj)
+  def can_transfer?(obj)
     Member.namespace_owners_include_user(user, obj)
   end
 end
