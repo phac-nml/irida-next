@@ -23,8 +23,6 @@ module Members
       end
 
       member.update(params)
-
-      raise MemberUpdateError, member.errors.full_messages.first if member.errors
     rescue Members::UpdateService::MemberUpdateError => e
       member.errors.add(:base, e.message)
       false

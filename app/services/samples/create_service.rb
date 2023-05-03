@@ -16,9 +16,6 @@ module Samples
       action_allowed_for_user(@project, :allowed_to_modify_project?)
       sample.save
       sample
-    rescue Samples::CreateService::ProjectSampleCreateError => e
-      sample.errors.add(:base, e.message)
-      sample
     end
   end
 end

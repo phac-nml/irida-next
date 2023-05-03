@@ -90,6 +90,12 @@ project_two_member_joan_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
 
+project_two_member_ryan_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace) %>
+  access_level: <%= Member::AccessLevel::GUEST %>
+
 project_two_member_james_doe_wo_john_doe_namespace:
   user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

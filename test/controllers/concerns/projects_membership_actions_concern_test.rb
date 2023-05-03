@@ -14,7 +14,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get namespace_project_members_path(namespace, project)
 
     assert_response :success
-    assert_equal 3, project.namespace.project_members.count
+    assert_equal 4, project.namespace.project_members.count
   end
 
   test 'project members index invalid route get' do
@@ -32,7 +32,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get new_namespace_project_member_path(namespace, project)
 
     assert_response :success
-    assert_equal 3, project.namespace.project_members.count
+    assert_equal 4, project.namespace.project_members.count
   end
 
   test 'project members new invalid route get' do
@@ -59,7 +59,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                              access_level: Member::AccessLevel::OWNER } }
 
     assert_redirected_to namespace_project_members_path(namespace, project)
-    assert_equal 4, project.namespace.project_members.count
+    assert_equal 5, project.namespace.project_members.count
   end
 
   test 'project members create invalid route post' do
@@ -85,7 +85,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     delete namespace_project_member_path(namespace, project, project_member)
 
     assert_redirected_to namespace_project_members_path(namespace, project)
-    assert_equal 2, project.namespace.project_members.count
+    assert_equal 3, project.namespace.project_members.count
   end
 
   test 'project members destroy invalid route delete' do

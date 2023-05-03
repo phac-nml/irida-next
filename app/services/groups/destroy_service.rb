@@ -14,9 +14,6 @@ module Groups
     def execute
       action_allowed_for_user(group, :destroy?)
       group.destroy
-    rescue Groups::DestroyService::GroupDestroyError => e
-      group.errors.add(:base, e.message)
-      false
     end
   end
 end

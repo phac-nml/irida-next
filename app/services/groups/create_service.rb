@@ -11,7 +11,7 @@ module Groups
       @group = Group.new(params.merge(owner: current_user))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute
       action_allowed_for_user(group.parent, :create?) unless group.parent.nil?
 
       group.save
@@ -23,9 +23,6 @@ module Groups
                                    }).execute
       end
 
-      group
-    rescue Groups::CreateService::GroupCreateError => e
-      group.errors.add(:base, e.message)
       group
     end
   end

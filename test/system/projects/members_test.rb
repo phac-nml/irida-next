@@ -22,6 +22,7 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
+      assert_selector 'a', text: I18n.t(:'projects.members.index.add'), count: 1
       click_link I18n.t(:'projects.members.index.add')
 
       assert_selector 'h2', text: I18n.t(:'projects.members.new.title')
@@ -102,6 +103,14 @@ module Projects
       assert_text I18n.t(:'projects.members.create.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: 1
+    end
+
+    test 'can not add a member to the project' do
+      login_as users(:ryan_doe)
+      visit namespace_project_members_url(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+
+      assert_selector 'a', text: I18n.t(:'projects.members.index.add'), count: 0
     end
   end
 end

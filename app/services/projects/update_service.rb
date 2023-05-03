@@ -11,9 +11,6 @@ module Projects
       action_allowed_for_user(project.namespace, :update?)
 
       project.namespace.update(namespace_params)
-    rescue Projects::UpdateService::ProjectUpdateError => e
-      project.errors.add(:base, e.message)
-      false
     end
   end
 end

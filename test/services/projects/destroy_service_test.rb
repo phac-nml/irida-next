@@ -10,7 +10,7 @@ module Projects
     end
 
     test 'delete project with with correct permissions' do
-      assert_difference -> { Project.count } => -1, -> { Member.count } => -3 do
+      assert_difference -> { Project.count } => -1, -> { Member.count } => -4 do
         Projects::DestroyService.new(@project, @user).execute
       end
     end

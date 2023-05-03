@@ -15,9 +15,6 @@ module Samples
       action_allowed_for_user(sample.project, :destroy?)
 
       sample.destroy
-    rescue Samples::DestroyService::ProjectSampleDestroyError => e
-      sample.errors.add(:base, e.message)
-      false
     end
   end
 end

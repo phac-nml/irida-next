@@ -103,4 +103,35 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unauthorized
   end
+
+  test 'should create a new group and subgroup' do
+    sign_in users(:john_doe)
+
+    assert_difference('Group.count') do
+      post groups_path, params: { group: { name: 'New Group', path: 'new_group', description: 'This is a new group' } }
+    end
+
+    assert_redirected_to group_path(Group.last.full_path)
+
+    assert_difference('Group.count') do
+      post groups_path,
+           params: { group: { name: 'New Group', path:
+           'new_group', description: 'This is a new group',
+                              parent_id: Group.last.id } }
+    end
+
+    assert_redirected_to group_path(Group.last.full_path)
+  end
+
+  test 'should not create a subgroup' do
+    sign_in users(:ryan_doe)
+    group = groups(:group_one)
+
+    post groups_path,
+         params: { group: { name: 'New Group', path:
+             'new_group', description: 'This is a new group',
+                            parent_id: group.id } }
+
+    assert_response :unauthorized
+  end
 end

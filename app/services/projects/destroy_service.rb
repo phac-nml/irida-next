@@ -8,10 +8,7 @@ module Projects
     def execute
       action_allowed_for_user(project.namespace, :destroy?)
 
-      project.namespace.destroy
-    rescue Projects::DestroyService::ProjectDestroyError => e
-      project.errors.add(:base, e.message)
-      false
+      project.namespace.destroy!
     end
   end
 end
