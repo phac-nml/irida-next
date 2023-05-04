@@ -56,6 +56,18 @@ module Members
       end
     end
 
+    test 'update group member to OWNER role when the current user only has the Maintainer role' do
+      group_member = members(:group_one_member_ryan_doe)
+      valid_params = { user: group_member.user, access_level: Member::AccessLevel::OWNER }
+      user = users(:joan_doe)
+
+      assert_no_changes -> { group_member } do
+        Members::UpdateService.new(group_member, @group, user, valid_params).execute
+      end
+
+      assert group_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
+    end
+
     test 'update project member with valid params' do
       valid_params = { user: @project_member.user, access_level: Member::AccessLevel::OWNER }
 

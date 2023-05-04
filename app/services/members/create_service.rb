@@ -12,14 +12,15 @@ module Members
       @member = Member.new(params.merge(created_by: current_user, namespace:))
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       auth_method = namespace.group_namespace? ? :allowed_to_modify_group? : :allowed_to_modify_project_namespace?
       action_allowed_for_user(namespace, auth_method)
 
       if Member.user_has_namespace_maintainer_access?(current_user,
                                                       namespace) &&
          (member.access_level > Member::AccessLevel::MAINTAINER)
-        raise MemberCreateError, 'A maintainer can only add user\'s upto the Maintainer role'
+        raise MemberCreateError, I18n.t('services.members.create.role_not_allowed',
+                                        namespace_type: namespace.class.model_name.human)
       end
 
       member.save

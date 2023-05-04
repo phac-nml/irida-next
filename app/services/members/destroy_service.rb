@@ -26,8 +26,7 @@ module Members
                                                            namespace) &&
                                                            member.access_level <= Member::AccessLevel::MAINTAINER)
         raise MemberDestroyError,
-              I18n.t('services.members.destroy.no_permission',
-                     namespace_type: namespace.class.model_name.human)
+              I18n.t('services.members.destroy.role_not_allowed')
       end
 
       member.destroy

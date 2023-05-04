@@ -22,6 +22,12 @@ module Members
                                         namespace_type: namespace.class.model_name.human)
       end
 
+      if Member.user_has_namespace_maintainer_access?(current_user,
+                                                      namespace) &&
+         (params[:access_level] > Member::AccessLevel::MAINTAINER)
+        raise MemberUpdateError, I18n.t('services.members.update.role_not_allowed')
+      end
+
       member.update(params)
     rescue Members::UpdateService::MemberUpdateError => e
       member.errors.add(:base, e.message)
