@@ -31,42 +31,11 @@
 
     <%= viral_card do |card| %>
       <% card.header(title: t(".advanced.title")) %>
-      <% card.section(title: 'Change Path') do %>
-        <%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
-          <%= form.fields_for :namespace, include_id: false do |builder| %>
-            <div>
-              <%= builder.label :path %>
-              <div class="flex">
-                <span
-                  class="
-                    inline-flex
-                    items-center
-                    px-3
-                    text-sm
-                    text-gray-900
-                    bg-gray-200
-                    border
-                    border-r-0
-                    border-gray-300
-                    rounded-l-md
-                    dark:bg-gray-600
-                    dark:text-gray-400
-                    dark:border-gray-600
-                  "
-                >
-                  <%= "#{request.protocol}#{request.host_with_port}/#{@project.namespace.parent.full_path}/" %>
-                </span>
-                <%= builder.text_field :path,
-                                   class:
-                                     "rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                   required: true %>
-              </div>
-            </div>
-            <div>
-              <%= form.submit t("projects.edit.advanced.submit"), class: "btn btn-danger" %>
-            </div>
-          <% end %>
-        <% end %>
+      <% card.section(title: t(".advanced.path.title"), border_bottom: true) do %>
+        <%= render "edit_advanced_path" %>
+      <% end %>
+      <% card.section(title: t(".advanced.transfer.title")) do %>
+        <%= render "edit_advanced_transfer" %>
       <% end %>
     <% end %>
   </div>

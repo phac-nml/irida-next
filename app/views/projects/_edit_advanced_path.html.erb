@@ -1,0 +1,46 @@
+<p class="mb-2 text-base text-gray-900 dark:text-white"><%= t("projects.edit.advanced.path.description") %></p>
+<ul
+  class="mb-4 space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400"
+>
+
+  <% t("projects.edit.advanced.path.points").each do |item| %>
+    <li><%= item %></li>
+  <% end %>
+</ul>
+<%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
+  <%= form.fields_for :namespace, include_id: false do |builder| %>
+    <div>
+      <%= builder.label :path,
+                    class:
+                      "block mb-1 text-sm font-medium text-gray-900 dark:text-white" %>
+      <div class="flex">
+        <span
+          class="
+            inline-flex
+            items-center
+            px-3
+            text-sm
+            text-gray-600
+            bg-gray-200
+            border
+            border-r-0
+            border-gray-300
+            dark:bg-gray-800/50
+            rounded-l-md
+            dark:text-gray-400
+            dark:border-gray-600
+          "
+        >
+          <%= "#{root_url}/#{@project.namespace.parent.full_path}/" %>
+        </span>
+        <%= builder.text_field :path,
+                           class:
+                             "rounded-r-md bg-gray-50 border text-gray-900 focus:ring-primary-500 focus:border-primary-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                           required: true %>
+      </div>
+    </div>
+    <div>
+      <%= form.submit t("projects.edit.advanced.path.submit"), class: "btn btn-danger" %>
+    </div>
+  <% end %>
+<% end %>

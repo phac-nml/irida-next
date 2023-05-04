@@ -1,0 +1,55 @@
+<% t("projects.edit.advanced.transfer.descriptions").each do |description| %>
+  <p class="mb-2 text-base text-gray-900 dark:text-white"><%= description %></p>
+<% end %>
+<ul
+  class="mb-4 space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400"
+>
+
+  <% t("projects.edit.advanced.transfer.points").each do |item| %>
+    <li><%= item %></li>
+  <% end %>
+</ul>
+<%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
+  <%= form.fields_for :namespace, include_id: false do |builder| %>
+    <div class="form-field">
+      <%= builder.label :parent_id %>
+      <div class="flex items-center whitespace-nowrap">
+        <div
+          class="
+            inline-flex
+            items-center
+            px-3
+            py-2.5
+            text-sm
+            text-gray-600
+            bg-gray-200
+            dark:bg-gray-800/50
+            border
+            border-r-0
+            border-gray-300
+            rounded-l-md
+            dark:text-gray-400
+            dark:border-gray-600
+          "
+        >
+          <%= root_url %>
+        </div>
+        <%= builder.collection_select(
+          :parent_id,
+          Namespace.where(
+            type: [Group.sti_name, Namespaces::UserNamespace.sti_name],
+            owner: current_user
+          ).include_route,
+          :id,
+          :full_path,
+          {},
+          { class: "prefixed" }
+        ) %>
+      </div>
+    </div>
+    <div>
+      <%= form.submit t("projects.edit.advanced.transfer.submit"),
+                  class: "btn btn-default" %>
+    </div>
+  <% end %>
+<% end %>
