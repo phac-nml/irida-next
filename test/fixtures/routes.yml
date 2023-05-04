@@ -66,3 +66,8 @@ subgroup_one_group_three_route:
   name: Group 3 / Subgroup 1 Group 3
   path: group-3/subgroup-1-group-3
   source: subgroup_one_group_three (Namespace)
+
+john_doe_project4_namespace_route:
+  name: john.doe@localhost / Project 4
+  path: john.doe_at_localhost/project-4
+  source: john_doe_project4_namespace (Namespace)

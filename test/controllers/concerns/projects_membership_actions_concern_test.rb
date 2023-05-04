@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
+class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   include Devise::Test::IntegrationHelpers
 
   test 'project members index' do
@@ -125,5 +125,25 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :redirect
+  end
+
+  test 'project members create with maintainer role' do
+    user = users(:joan_doe)
+    sign_in user
+
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+    proj_namespace = namespaces_project_namespaces(:john_doe_project4_namespace)
+    project = projects(:john_doe_project4)
+
+    user_new = users(:jane_doe)
+
+    post namespace_project_members_path(namespace, project),
+         params: { member: { user_id: user_new.id,
+                             namespace_id: proj_namespace,
+                             created_by_id: user.id,
+                             access_level: Member::AccessLevel::ANALYST } }
+
+    assert_redirected_to namespace_project_members_path(namespace, project)
+    assert_equal 2, project.namespace.project_members.count
   end
 end

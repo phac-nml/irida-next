@@ -16,6 +16,10 @@ john_doe_project3:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project3_namespace) %>
 
+john_doe_project4:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project4_namespace) %>
+
 project4:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project4_namespace) %>
