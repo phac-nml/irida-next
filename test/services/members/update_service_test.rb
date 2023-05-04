@@ -112,5 +112,19 @@ module Members
         Members::UpdateService.new(@project_member, @project_namespace, user, valid_params).execute
       end
     end
+
+    test 'update project member to OWNER role when the current user only has the Maintainer role' do
+      project = projects(:project1)
+      project_namespace = project.namespace
+      project_member = members(:project_one_member_ryan_doe)
+      valid_params = { user: project_member.user, access_level: Member::AccessLevel::OWNER }
+      user = users(:joan_doe)
+
+      assert_no_changes -> { project_member } do
+        Members::UpdateService.new(project_member, project_namespace, user, valid_params).execute
+      end
+
+      assert project_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
+    end
   end
 end

@@ -16,9 +16,9 @@ module Members
       auth_method = namespace.group_namespace? ? :allowed_to_modify_group? : :allowed_to_modify_project_namespace?
       action_allowed_for_user(namespace, auth_method)
 
-      if Member.user_has_namespace_maintainer_access?(current_user,
-                                                      namespace) &&
-         (member.access_level > Member::AccessLevel::MAINTAINER)
+      if current_user != member.user && (Member.user_has_namespace_maintainer_access?(current_user,
+                                                                                      namespace) &&
+           (member.access_level > Member::AccessLevel::MAINTAINER))
         raise MemberCreateError, I18n.t('services.members.create.role_not_allowed',
                                         namespace_type: namespace.class.model_name.human)
       end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for Member
-class Member < ApplicationRecord
+class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :user
   belongs_to :namespace, autosave: true
   belongs_to :created_by, class_name: 'User'
@@ -39,7 +39,7 @@ class Member < ApplicationRecord
       if object_namespace.project_namespace?
         Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
                        user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
-          Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
+          Member.exists?(namespace: object_namespace, user:,
                          access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
       elsif object_namespace.group_namespace?
         Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
@@ -51,7 +51,7 @@ class Member < ApplicationRecord
       if object_namespace.project_namespace?
         Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids, user:) ||
           Member.exists?(
-            namespace: object_namespace.self_and_ancestor_ids, user:
+            namespace: object_namespace, user:
           )
       elsif object_namespace.group_namespace?
         Member.exists?(
@@ -82,10 +82,18 @@ class Member < ApplicationRecord
     end
 
     def user_has_namespace_maintainer_access?(user, namespace)
-      return unless namespace.group_namespace?
-
-      Member.exists?(user:, namespace: namespace.self_and_ancestors,
-                     access_level: Member::AccessLevel::MAINTAINER)
+      if namespace.project_namespace?
+        Member.exists?(
+          namespace:, user:,
+          access_level: Member::AccessLevel::MAINTAINER
+        ) || Member.exists?(
+          namespace: namespace.parent&.self_and_ancestor_ids, user:,
+          access_level: Member::AccessLevel::MAINTAINER
+        )
+      else
+        Member.exists?(user:, namespace: namespace.self_and_ancestor_ids,
+                       access_level: Member::AccessLevel::MAINTAINER)
+      end
     end
   end
 
