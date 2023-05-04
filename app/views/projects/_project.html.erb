@@ -9,7 +9,7 @@
 >
   <td class="p-4 whitespace-nowrap">
     <%= link_to project.human_name,
-    namespace_project_path(project.namespace, project),
+    namespace_project_path(project.namespace.parent, project),
     data: {
       turbo: false
     },
