@@ -283,13 +283,13 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
     config.omniauth :saml,
                     idp_cert_fingerprint: ENV.fetch('SAML_IDP_CERT_FINGERPRINT', nil),
                     idp_sso_service_url: ENV.fetch('SAML_IDP_SSO_SERVICE_URL', nil),
-                    sp_entity_id: ENV.fetch('SAML_SP_ENTITY_ID', nil),
+                    sp_entity_id: ENV.fetch('SAML_SP_ENTITY_ID', nil)
   end
   if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
     config.omniauth :azure_activedirectory_v2,
                     client_id: ENV.fetch('AZURE_CLIENT_ID', nil),
                     client_secret: ENV.fetch('AZURE_CLIENT_SECRET', nil),
-                    tenant_id: ENV.fetch('AZURE_TENANT_ID', nil),
+                    tenant_id: ENV.fetch('AZURE_TENANT_ID', nil)
   end
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
