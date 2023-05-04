@@ -18,14 +18,14 @@
             label: t(:"groups.sidebar.details")
           ) %>
           <%= render section.with_item(
-            url: group_members_path(@group),
-            icon: "users",
-            label: t(:"groups.sidebar.members")
-          ) %>
-          <%= render section.with_item(
             url: group_samples_path(@group),
             icon: "beaker",
             label: t(:"projects.sidebar.samples")
+          ) %>
+          <%= render section.with_item(
+            url: group_members_path(@group),
+            icon: "users",
+            label: t(:"groups.sidebar.members")
           ) %>
           <%= render section.with_item(
             url: edit_group_path(@group),
