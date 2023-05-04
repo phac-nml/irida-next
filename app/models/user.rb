@@ -8,7 +8,8 @@ class User < ApplicationRecord
          :registerable,
          :recoverable,
          :rememberable,
-         :validatable
+         :validatable,
+         :omniauthable
 
   has_one :namespace,
           class_name: 'Namespaces::UserNamespace',
@@ -45,22 +46,22 @@ class User < ApplicationRecord
   #   end
   # end
 
-  def self.from_omniauth(auth)
-    # I don't think this is secure, or is correct in any way, but it lets me sign in
-    user = User.find_by('email = ?', auth['info']['email'])
-    if user.blank?
-      user = User.new(
-        {
-          provider: auth.provider,
-          uid: auth.uid,
-          email: auth.info.email,
-          password: Devise.friendly_token[0, 20]
-        }
-      )
-      user.save!
-    end
-    user
-  end
+  # def self.from_omniauth(auth)
+  #   # I don't think this is secure, or is correct in any way, but it lets me sign in
+  #   user = User.find_by('email = ?', auth['info']['email'])
+  #   if user.blank?
+  #     user = User.new(
+  #       {
+  #         provider: auth.provider,
+  #         uid: auth.uid,
+  #         email: auth.info.email,
+  #         password: Devise.friendly_token[0, 20]
+  #       }
+  #     )
+  #     user.save!
+  #   end
+  #   user
+  # end
 
   def update_password_with_password(params)
     current_password = params.delete(:current_password)

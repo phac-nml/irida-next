@@ -8,7 +8,7 @@
 #
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
-Devise.setup do |config|
+Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   # ==> From update to 4.9.2
   # Configuring it like above would set the error and redirect statuses to 422 Unprocessable Entity
   # and 303 See Other respectively, to match the behavior expected by Hotwire/Turbo.
@@ -278,7 +278,18 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-
+  # if (ENV['OMNIAUTH_PROVIDERS'] || '').split(',').include? 'developer'
+  config.omniauth :developer if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
+  if ENV['OMNIAUTH_PROVIDERS'].include? 'saml'
+    config.omniauth :saml,
+                    idp_cert_fingerprint: ENV.fetch('IDP_CERT_FINGERPRINT', nil),
+                    idp_sso_service_url: ENV.fetch('IDP_SSO_SERVICE_URL', nil)
+  end
+  if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
+    config.omniauth :azure_activedirectory_v2,
+                    client_id: ENV.fetch('AZURE_CLIENT_ID', nil),
+                    client_secret: ENV.fetch('AZURE_CLIENT_SECRET', nil)
+  end
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

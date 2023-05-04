@@ -26,13 +26,5 @@
     <%= f.submit t(".sign_in"), class: "btn btn-primary w-full" %>
   </div>
 <% end %>
-<% if ENV.fetch('OMNIAUTH_MODES').include? 'developer'%>
-  <%= button_to "Sign in with DEV", "/auth/developer" %>
-<% end %>
-<% if ENV.fetch('OMNIAUTH_MODES').include? 'saml'%>
-  <%= button_to "Sign in with SAML", "/auth/saml" %>
-<% end %>
-<% if ENV.fetch('OMNIAUTH_MODES').include? 'azure_activedirectory_v2'%>
-  <%= button_to "Sign in with AZURE", "/auth/azure_activedirectory_v2" %>
-<% end %>
+
 <%= render "devise/shared/links" %>
