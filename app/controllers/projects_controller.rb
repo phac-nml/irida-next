@@ -5,12 +5,17 @@ class ProjectsController < ApplicationController # rubocop:disable Metrics/Class
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-  def index
-    @pagy, @projects = pagy(projects.order(updated_at: :desc))
 
+  def index
     respond_to do |format|
-      format.html
-      format.turbo_stream
+      format.html do
+        @has_projects = Project.joins(:namespace).exists?(namespace: { parent: current_user.namespace }) ||
+                        Project.joins(:namespace)
+                               .exists?(namespace: { parent: current_user.groups.self_and_descendant_ids })
+      end
+      format.turbo_stream do
+        @pagy, @projects = pagy(projects.order(updated_at: :desc))
+      end
     end
   end
 
