@@ -1,6 +1,22 @@
 <%= turbo_stream.update "group_samples_list" do %>
-  <table class="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
-    <thead class=" text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
+  <table
+    class="
+      min-w-full
+      divide-y
+      divide-gray-200
+      table-fixed
+      dark:divide-gray-600
+    "
+  >
+    <thead
+      class="
+        text-gray-700
+        bg-gray-50
+        dark:bg-gray-700
+        dark:text-gray-400
+        text-left
+      "
+    >
       <tr>
         <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.sample.name") %></th>
         <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.project.name") %></th>
@@ -10,10 +26,31 @@
       <% @samples.each do |sample| %>
         <tr
           id="<%= dom_id(sample) %>"
-          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+          class="
+            text-sm
+            font-normal
+            text-gray-500
+            dark:text-gray-400
+          "
         >
-          <td class="px-6 py-3"><%= sample.name %></td>
-          <td class="px-6 py-3"><%= link_to sample.project.name, project_path(sample.project) %></td>
+          <td class="px-6 py-4"><%= link_to sample.name,
+            namespace_project_sample_path(
+              id: sample.id,
+              namespace_id: @group.path + "/" + sample.project.namespace.parent.path, #TODO
+              project_id: sample.project.path
+            ),
+            data: {
+              turbo: false
+            },
+            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+            <div><%= sample.description %></div></td>
+
+          <td class="px-6 py-4"><%= link_to sample.project.name,
+            project_path(sample.project),
+            data: {
+              turbo: false
+            },
+            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %></td>
         </tr>
       <% end %>
     </tbody>
