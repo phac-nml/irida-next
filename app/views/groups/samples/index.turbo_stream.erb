@@ -36,7 +36,7 @@
           <td class="px-6 py-4"><%= link_to sample.name,
             namespace_project_sample_path(
               id: sample.id,
-              namespace_id: @group.path + "/" + sample.project.namespace.parent.path, #TODO
+              namespace_id: sample.project.namespace.parent.full_path,
               project_id: sample.project.path
             ),
             data: {

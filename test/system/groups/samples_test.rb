@@ -23,8 +23,8 @@ module Groups
       click_on I18n.t(:'components.pagination.previous')
       assert_selector 'tbody > tr', count: 20
 
-      # click_link samples(:sample3).name
-      # assert_selector 'h1', text: samples(:sample3).name
+      click_link samples(:sample3).name
+      assert_selector 'h1', text: samples(:sample3).name
     end
   end
 end
