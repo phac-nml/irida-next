@@ -21,6 +21,7 @@ module Members
                                                        namespace) &&
             (member.access_level > Member::AccessLevel::MAINTAINER))
         raise MemberCreateError, I18n.t('services.members.create.role_not_allowed',
+                                        namespace_name: namespace.name,
                                         namespace_type: namespace.class.model_name.human)
       end
 

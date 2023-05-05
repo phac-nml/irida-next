@@ -393,10 +393,10 @@ en:
   services:
     members:
       create:
-        role_not_allowed: "A maintainer can only add members to the %{namespace_type} upto the Maintainer role"
+        role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"
       destroy:
         cannot_remove_self: "You cannot remove yourself from the %{namespace_type}"
-        role_not_allowed: A maintainer can only remove a member' upto the Maintainer role
+        role_not_allowed: A maintainer can only remove a member up to the Maintainer role
       update:
         cannot_update_self: "You cannot update your own %{namespace_type} role"
-        role_not_allowed: "A maintainer can only update a member's role upto the Maintainer role"
+        role_not_allowed: "A maintainer can only update a member's role up to the Maintainer role"
