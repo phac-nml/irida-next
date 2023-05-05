@@ -29,7 +29,7 @@ module Projects
       find('#member_user_id').find(:xpath, 'option[2]').select_option
       find('#member_access_level').find(:xpath, 'option[5]').select_option
 
-      click_button I18n.t(:'projects.members.new.add_member_to_group')
+      click_button I18n.t(:'projects.members.new.add_member_to_project')
 
       assert_text I18n.t(:'projects.members.create.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
@@ -64,6 +64,44 @@ module Projects
                          namespace_type: @project.namespace.class.model_name.human)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: @members_count
+    end
+
+    test 'can create a project under namespace and add a new member to project' do
+      project_name = 'New Project'
+      project_description = 'New Project Description'
+
+      visit projects_url
+
+      click_on I18n.t(:'projects.index.create_project_button')
+
+      assert_selector 'h1', text: I18n.t(:'projects.new.title')
+
+      within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+        fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
+        assert_selector %(input[data-slugify-target="path"]) do |input|
+          assert_equal 'new-project', input['value']
+        end
+        fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
+        click_on I18n.t(:'projects.new.submit')
+      end
+
+      assert_selector 'h1', text: project_name
+      assert_text project_description
+
+      click_link 'Members'
+
+      click_link I18n.t(:'projects.members.index.add')
+
+      assert_selector 'h2', text: I18n.t(:'projects.members.new.title')
+
+      find('#member_user_id').find(:xpath, 'option[2]').select_option
+      find('#member_access_level').find(:xpath, 'option[5]').select_option
+
+      click_button I18n.t(:'projects.members.new.add_member_to_project')
+
+      assert_text I18n.t(:'projects.members.create.success')
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+      assert_selector 'tr', count: 1
     end
   end
 end
