@@ -31,7 +31,7 @@ module Projects
     test 'transfer project without project permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
 
-      assert_no_changes -> { @project.namespace.parent } do
+      assert_raises(ActionPolicy::Unauthorized) do
         Projects::TransferService.new(@project, @jane_doe).execute(new_namespace)
       end
     end
@@ -39,7 +39,7 @@ module Projects
     test 'transfer project without target namespace permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
 
-      assert_no_changes -> { @project.namespace.parent } do
+      assert_raises(ActionPolicy::Unauthorized) do
         Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
       end
     end

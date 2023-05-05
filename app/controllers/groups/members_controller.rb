@@ -2,9 +2,8 @@
 
 module Groups
   # Controller actions for Members
-  class MembersController < ApplicationController
+  class MembersController < Groups::ApplicationController
     include MembershipActions
-
     layout 'groups'
 
     def member_params
@@ -14,7 +13,7 @@ module Groups
     private
 
     def member
-      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id)
+      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id) || not_found
     end
 
     def namespace
@@ -40,6 +39,14 @@ module Groups
     def member_namespace
       @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
       @group
+    end
+
+    def authorize_view_members
+      authorize_view_group!
+    end
+
+    def authorize_modify_members
+      authorize_modify_group!
     end
   end
 end

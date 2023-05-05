@@ -2,23 +2,20 @@
 
 module Projects
   # Controller actions for Samples
-  class SamplesController < ApplicationController
+  class SamplesController < Projects::ApplicationController
     before_action :sample, only: %i[show edit update destroy]
     before_action :project
     before_action :context_crumbs
+    before_action :authorize_view_project!, only: %i[show index]
+    before_action :authorize_modify_project!, only: %i[new edit]
+
     layout 'projects'
 
     def index
       @samples = Sample.where(project_id: @project.id)
     end
 
-    def show
-      return unless @sample.nil?
-
-      render status: :unprocessable_entity, json: {
-        message: t('.error')
-      }
-    end
+    def show; end
 
     def new
       @sample = Sample.new
@@ -49,15 +46,11 @@ module Projects
     end
 
     def destroy
-      if @sample.nil?
-        flash[:error] = t('.error')
+      Samples::DestroyService.new(@sample, current_user).execute
+      if @sample.destroyed?
+        flash[:success] = t('.success', sample_name: @sample.name)
       else
-        Samples::DestroyService.new(@sample, current_user).execute
-        if @sample.destroyed?
-          flash[:success] = t('.success', sample_name: @sample.name)
-        else
-          flash[:error] = @sample.errors.full_messages.first
-        end
+        flash[:error] = @sample.errors.full_messages.first
       end
       redirect_to namespace_project_samples_path
     end
@@ -65,7 +58,7 @@ module Projects
     private
 
     def sample
-      @sample ||= Sample.find_by(id: params[:id], project_id: project.id)
+      @sample = Sample.find_by(id: params[:id], project_id: project.id) || not_found
     end
 
     def sample_params

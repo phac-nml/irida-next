@@ -54,7 +54,7 @@ module Members
       valid_params = { user: users(:michelle_doe),
                        access_level: Member::AccessLevel::OWNER }
 
-      assert_no_difference('Member.count') do
+      assert_raises(ActionPolicy::Unauthorized) do
         Members::CreateService.new(user, @group, valid_params).execute
       end
     end
@@ -70,14 +70,40 @@ module Members
       end
     end
 
-    test 'create group member with valid params when member of a parent group with the not OWNER role' do
+    test 'create group member with valid params when member of a parent group with MAINTAINER role' do
+      user = users(:micha_doe)
+      valid_params = { user: users(:ryan_doe),
+                       access_level: Member::AccessLevel::MAINTAINER }
+      group = groups(:subgroup_one_group_three)
+
+      assert_difference -> { Member.count } => 1 do
+        Members::CreateService.new(user, group, valid_params).execute
+      end
+    end
+
+    test 'create group member with valid params when member of a parent group with MAINTAINER role and group member
+    has OWNER role' do
       user = users(:micha_doe)
       valid_params = { user: users(:ryan_doe),
                        access_level: Member::AccessLevel::OWNER }
       group = groups(:subgroup_one_group_three)
 
-      assert_no_difference('Member.count') do
+      assert_no_difference ['Member.count'] do
         Members::CreateService.new(user, group, valid_params).execute
+      end
+    end
+
+    test 'create project member with valid params when member of a parent group with MAINTAINER role and project member
+    has OWNER role' do
+      project = projects(:project1)
+      project_namespace = project.namespace
+      user = users(:joan_doe)
+
+      valid_params = { user: users(:steve_doe),
+                       access_level: Member::AccessLevel::OWNER }
+
+      assert_no_difference ['Member.count'] do
+        Members::CreateService.new(user, project_namespace, valid_params).execute
       end
     end
   end

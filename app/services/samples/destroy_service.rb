@@ -12,15 +12,9 @@ module Samples
     end
 
     def execute
-      unless allowed_to_modify_projects_in_namespace?(@sample.project.namespace)
-        raise ProjectSampleDestroyError,
-              I18n.t('services.samples.destroy.no_permission')
-      end
+      action_allowed_for_user(sample.project, :destroy?)
 
       sample.destroy
-    rescue Samples::DestroyService::ProjectSampleDestroyError => e
-      sample.errors.add(:base, e.message)
-      false
     end
   end
 end

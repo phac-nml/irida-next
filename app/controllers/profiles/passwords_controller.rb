@@ -6,8 +6,6 @@ module Profiles
   class PasswordsController < Profiles::ApplicationController
     layout 'profiles'
 
-    before_action :set_user
-
     # Get password page
     def edit
       # No necessary code here
@@ -31,10 +29,6 @@ module Profiles
 
     def update_password_params
       params.require(:user).permit(:password, :password_confirmation, :current_password)
-    end
-
-    def set_user
-      @user = current_user
     end
   end
 end

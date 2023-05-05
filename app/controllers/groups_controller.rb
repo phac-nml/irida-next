@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 # Controller actions for Groups
-class GroupsController < ApplicationController
+class GroupsController < Groups::ApplicationController
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update]
   before_action :context_crumbs, except: %i[index new create show]
+  before_action :authorize_modify_group!, only: %i[edit]
+  before_action :authorize_view_group!, only: %i[show]
+  before_action :authorize_create_subgroup!, only: %i[new]
 
   def index
-    @groups = current_user.groups.self_and_descendants.include_route
+    @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
   end
 
-  def show
-    # No necessary code here
-  end
+  def show; end
 
   def new
     @group = Group.find(params[:parent_id]) if params[:parent_id]
@@ -22,13 +23,10 @@ class GroupsController < ApplicationController
     end
   end
 
-  def edit
-    # No necessary code here
-  end
+  def edit; end
 
   def create
     @new_group = Groups::CreateService.new(current_user, group_params).execute
-
     if @new_group.persisted?
       flash[:success] = t('.success')
       redirect_to group_path(@new_group.full_path)

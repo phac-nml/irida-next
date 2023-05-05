@@ -13,15 +13,8 @@ module Samples
     end
 
     def execute
-      unless allowed_to_modify_projects_in_namespace?(@project.namespace)
-        raise ProjectSampleCreateError,
-              I18n.t('services.samples.create.no_permission')
-      end
-
+      action_allowed_for_user(@project, :allowed_to_modify_project?)
       sample.save
-      sample
-    rescue Samples::CreateService::ProjectSampleCreateError => e
-      sample.errors.add(:base, e.message)
       sample
     end
   end

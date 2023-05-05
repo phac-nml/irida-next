@@ -10,17 +10,15 @@ module Projects
     end
 
     test 'delete project with with correct permissions' do
-      assert_difference -> { Project.count } => -1, -> { Member.count } => -3 do
+      assert_difference -> { Project.count } => -1, -> { Member.count } => -4 do
         Projects::DestroyService.new(@project, @user).execute
       end
     end
 
     test 'delete project with incorrect permissions' do
       user = users(:joan_doe)
-      assert_no_difference ['Project.count', 'Member.count'] do
-        Projects::DestroyService.new(@project, user).execute
-      end
-      assert @project.errors.full_messages.include?(I18n.t('services.projects.destroy.no_permission'))
+
+      assert_raises(ActionPolicy::Unauthorized) { Projects::DestroyService.new(@project, user).execute }
     end
   end
 end

@@ -22,9 +22,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show 404 if project does not exist' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      get namespace_project_path(project_id: 'does-not-exist', namespace_id: 'does-not-exist')
-    end
+    get namespace_project_path(project_id: 'does-not-exist', namespace_id: 'does-not-exist')
+    assert_response :not_found
   end
 
   test 'should display create new project page' do
@@ -128,6 +127,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       delete namespace_project_path(namespace_id: namespace.path, project_id: project.namespace.path)
     end
 
-    assert_redirected_to namespace_project_path(project)
+    assert_response :unauthorized
   end
 end

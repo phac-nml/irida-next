@@ -2,9 +2,8 @@
 
 module Projects
   # Controller actions for Members
-  class MembersController < ApplicationController
+  class MembersController < Projects::ApplicationController
     include MembershipActions
-
     layout 'projects'
 
     def member_params
@@ -14,7 +13,7 @@ module Projects
     private
 
     def member
-      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id)
+      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id) || not_found
     end
 
     def namespace
@@ -41,6 +40,14 @@ module Projects
       path = [params[:namespace_id], params[:project_id]].join('/')
       @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
       @project.namespace
+    end
+
+    def authorize_view_members
+      authorize_view_project!
+    end
+
+    def authorize_modify_members
+      authorize_modify_project!
     end
   end
 end
