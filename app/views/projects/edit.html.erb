@@ -37,6 +37,9 @@
       <% card.section(title: t(".advanced.transfer.title")) do %>
         <%= render "edit_advanced_transfer" %>
       <% end %>
+      <% card.section(title: t(".advanced.delete.title"), classes: "bg-red-100 dark:bg-red-900 border-l-red-600 pb-6") do %>
+        <%= render "edit_advanced_delete", project: @project %>
+      <% end %>
     <% end %>
   </div>
 </div>

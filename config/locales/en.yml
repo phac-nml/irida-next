@@ -323,6 +323,10 @@ en:
             - Be careful! Changing a project's namespace can have unintended side effects.
             - You can only transfer projects to groups where you have sufficient permissions.
             - Project visibility level will change to match namespace rules when transferring to a group.
+        delete:
+          title: Delete this project
+          description: "This action deletes <code class='underline'>%{project_name}</code> on %{date}. <b>There is no going back.</b>"
+          link: Delete project
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data

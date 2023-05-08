@@ -7,7 +7,7 @@
     <li><%= item %></li>
   <% end %>
 </ul>
-<%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
+<%= form_with(model: @project, url: namespace_project_path, method: :post, class: "grid gap-4") do |form| %>
   <%= form.fields_for :namespace, include_id: false do |builder| %>
     <div>
       <%= builder.label :path,

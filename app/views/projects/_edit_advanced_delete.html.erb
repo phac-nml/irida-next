@@ -1,0 +1,11 @@
+<p class="mb-4 text-base text-gray-900 dark:text-white">
+  <%= raw t(
+    "projects.edit.advanced.delete.description",
+    project_name: @project.name,
+    date: l(Time.now, format: :short)
+  ) %>
+</p>
+<%= link_to t("projects.edit.advanced.delete.link"),
+namespace_project_path,
+method: :delete,
+class: "btn btn-danger" %>
