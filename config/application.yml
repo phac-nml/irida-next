@@ -20,3 +20,4 @@ AZURE_TENANT_ID: some-tenant-id
 SAML_IDP_CERT_FINGERPRINT: some-fingerprint-value
 SAML_IDP_SSO_SERVICE_URL: some-sso-service-url
 SAML_SP_ENTITY_ID: some-entity-it
+SAML_IDP_CERT: -----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
