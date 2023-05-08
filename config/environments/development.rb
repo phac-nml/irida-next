@@ -72,4 +72,7 @@ Rails.application.configure do
 
   # LookBook
   config.lookbook.project_name = 'IRIDA Next'
+  config.lookbook.preview_display_options = {
+    theme: %w[light dark]
+  }
 end

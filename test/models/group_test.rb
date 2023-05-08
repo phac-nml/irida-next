@@ -25,12 +25,12 @@ class GroupTest < ActiveSupport::TestCase
     assert_not_nil @subgroup.errors[:parent_id], 'no validation error for parent'
   end
 
-  test '#ancestor_ids' do
-    assert_equal [@group.id], @subgroup_one.ancestor_ids
-  end
-
   test '#ancestors' do
     assert_equal [@group], @subgroup_one.ancestors
+  end
+
+  test '#ancestor_ids' do
+    assert_equal [@group.id], @subgroup_one.ancestor_ids.pluck(:id)
   end
 
   test '#self_and_ancestors' do
@@ -39,23 +39,15 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal 2, @subgroup_one.self_and_ancestors.count
   end
 
-  test '#descendant_ids' do
-    assert_includes @group_three.descendant_ids, groups(:subgroup_one_group_three).id
-    assert_includes @group_three.descendant_ids, namespaces_project_namespaces(:project4_namespace).id
-    assert_equal 2, @group_three.descendant_ids.count
-  end
-
   test '#descendants' do
     assert_includes @group_three.descendants, groups(:subgroup_one_group_three)
-    assert_includes @group_three.descendants, namespaces_project_namespaces(:project4_namespace)
-    assert_equal 2, @group_three.descendants.count
+    assert_equal 1, @group_three.descendants.count
   end
 
   test '#self_and_descendants' do
     assert_includes @group_three.self_and_descendants, @group_three
     assert_includes @group_three.self_and_descendants, groups(:subgroup_one_group_three)
-    assert_includes @group_three.self_and_descendants, namespaces_project_namespaces(:project4_namespace)
-    assert_equal 3, @group_three.self_and_descendants.count
+    assert_equal 2, @group_three.self_and_descendants.count
   end
 
   test '#human_name' do

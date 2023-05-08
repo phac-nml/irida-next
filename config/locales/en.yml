@@ -132,6 +132,10 @@ en:
     pagination:
       previous: Prev
       next: Next
+    clipboard:
+      copied: Copied!
+      copy: Copy to clipboard
+      toggle_visible: Toggle visibility
   layouts:
     application:
       site_title: IRIDA Next
@@ -198,6 +202,7 @@ en:
       access_token_section:
         label: Your new personal access token
         description: Make sure you save it - you won't be able to access it again.
+        aria_label: Personal access token, copy to clipboard
       create:
         submit: Create personal access token
         subtitle: Enter the name of your application, and we'll return a unique personal access token.
@@ -341,7 +346,7 @@ en:
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
       new:
         title: Add New Member
-        add_member_to_group: Add member to project
+        add_member_to_project: Add member to project
         select_user: Select a User
         select_access_level: Select Access Level
       destroy:

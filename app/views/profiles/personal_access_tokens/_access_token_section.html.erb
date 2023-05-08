@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "access-token-section" do %>
-  <div class="p-4">
+  <div class="p-4" data-turbo-temporary>
     <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
       <div
         class="
@@ -18,8 +18,12 @@
         <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
           <%= t(".label") %>
         </h2>
-        <%= token %>
-        <p><%= t(".description") %></p>
+        <%= render ClipboardComponent.new(
+          value: token,
+          aria_label: t(".aria_label"),
+          classes: "my-2"
+        ) %>
+        <p class="text-gray-500 dark:text-gray-400"><%= t(".description") %></p>
       </div>
     </div>
   </div>

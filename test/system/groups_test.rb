@@ -4,14 +4,16 @@ require 'application_system_test_case'
 
 class GroupsTest < ApplicationSystemTestCase
   def setup
-    login_as users(:john_doe)
+    @user = users(:john_doe)
+    @groups_count = @user.groups.self_and_descendant_ids.count
+    login_as @user
   end
 
   test 'can see the list of groups' do
     visit groups_url
 
     assert_selector 'h1', text: I18n.t(:'groups.show.title')
-    assert_selector 'tr', count: groups.count
+    assert_selector 'tr', count: @groups_count
     assert_text groups(:group_one).name
     assert_text groups(:subgroup1).name
   end
@@ -102,6 +104,6 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     assert_selector 'h1', text: I18n.t(:'groups.show.title')
-    assert_selector 'tr', count: groups.count - 1
+    assert_selector 'tr', count: @groups_count - 1
   end
 end
