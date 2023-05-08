@@ -298,6 +298,8 @@ en:
   projects:
     create:
       success: "Project %{project_name} was successfully created"
+    destroy:
+      success: "Project %{project_name} was deleted"
     edit:
       title: Settings
       general:
@@ -327,6 +329,7 @@ en:
           title: Delete this project
           description: "This action deletes <code class='underline'>%{project_name}</code> on %{date}. <b>There is no going back.</b>"
           link: Delete project
+          confirm: Are you ABSOLUTELY sure?
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data
