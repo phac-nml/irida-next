@@ -2,8 +2,10 @@
 
 # Add provider and uid to User for omniauth
 class AddOmniauthToUsers < ActiveRecord::Migration[7.0]
-  def change_table :users
-    add_column :provider, :string
-    add_column :uid, :string
+  def change
+    change_table :users, bulk: true do |t|
+      t.string :provider
+      t.string :uid
+    end
   end
 end
