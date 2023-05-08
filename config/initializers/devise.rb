@@ -284,7 +284,13 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
                     idp_cert_fingerprint: ENV.fetch('SAML_IDP_CERT_FINGERPRINT', nil),
                     idp_sso_service_url: ENV.fetch('SAML_IDP_SSO_SERVICE_URL', nil),
                     sp_entity_id: ENV.fetch('SAML_SP_ENTITY_ID', nil),
-                    idp_cert: ENV.fetch('SAML_IDP_CERT', nil)
+                    idp_cert: ENV.fetch('SAML_IDP_CERT', nil),
+                    attribute_statements: {
+                      name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+                      email: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+                      first_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
+                      last_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
+                    }
   end
   if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
     config.omniauth :azure_activedirectory_v2,

@@ -14,7 +14,7 @@ module Users
         set_flash_message(:notice, :success, kind: 'DEVELOPER') if is_navigational_format?
       else
         # Removing extra as it can overflow some session stores
-        session['devise.developer_data'] = request.env['omniauth.auth'].except(:extra)
+        session['devise.omniauth_data'] = request.env['omniauth.auth'].except(:extra)
         redirect_to new_user_registration_url
       end
     end
@@ -28,7 +28,7 @@ module Users
         set_flash_message(:notice, :success, kind: 'SAML') if is_navigational_format?
       else
         # Removing extra as it can overflow some session stores
-        session['devise.saml_data'] = request.env['omniauth.auth'].except(:extra)
+        session['devise.omniauth_data'] = request.env['omniauth.auth'].except(:extra)
         redirect_to new_user_registration_url
       end
     end
@@ -41,8 +41,7 @@ module Users
         sign_in_and_redirect @user, event: :authentication # this will throw if @user is not activated
         set_flash_message(:notice, :success, kind: 'Azure') if is_navigational_format?
       else
-        # Removing extra as it can overflow some session stores
-        session['devise.azure_activedirectory_v2_data'] = request.env['omniauth.auth'].except(:extra)
+        session['devise.omniauth_data'] = request.env['omniauth.auth'].except(:extra)
         redirect_to new_user_registration_url
       end
     end
