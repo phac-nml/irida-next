@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Users
+  # Handles callbacks from Omniauth providers
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # See https://github.com/omniauth/omniauth/wiki/FAQ#rails-session-is-clobbered-after-callback-on-developer-strategy
     skip_before_action :verify_authenticity_token
