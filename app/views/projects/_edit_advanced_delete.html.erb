@@ -6,7 +6,7 @@
   ) %>
 </p>
 <%= link_to t("projects.edit.advanced.delete.link"),
-namespace_project_path,
+namespace_project_path(params: { format: :html }),
 data: {
   turbo_method: :delete,
   turbo_confirm: t("projects.edit.advanced.delete.confirm")
