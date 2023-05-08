@@ -85,4 +85,18 @@ class GroupTest < ActiveSupport::TestCase
   test '#full_path' do
     assert_equal @group.route.path, @group.full_path
   end
+
+  test '#destroy removes descendant groups, project namespaces, projects, and members' do
+    self_and_descendants_count = @group_three.self_and_descendants.count
+    projects_count = Namespaces::ProjectNamespace.where(parent: @group_three.self_and_descendants).count
+    members_count = Member.where(namespace: @group_three.self_and_descendants).count + Member.where(namespace: Namespaces::ProjectNamespace.where(parent: @group_three.self_and_descendants)).count
+    assert_difference(
+      -> { Group.count } => (self_and_descendants_count * -1),
+      -> { Namespaces::ProjectNamespace.count } => (projects_count * -1),
+      -> { Project.count } => (projects_count * -1),
+      -> { Member.count } => (members_count * -1)
+    ) do
+      @group_three.destroy
+    end
+  end
 end
