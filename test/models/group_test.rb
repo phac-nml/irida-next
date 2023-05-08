@@ -88,10 +88,10 @@ class GroupTest < ActiveSupport::TestCase
 
   test '#destroy removes descendant groups, project namespaces, projects, and members' do
     self_and_descendants_count = @group_three.self_and_descendants.count
-    self_and_descendant_project_namespaces = Namespaces::ProjectNamespace.where(parent: @group_three.self_and_descendants)
-    projects_count = self_and_descendant_project_namespaces.count
+    project_namespaces = Namespaces::ProjectNamespace.where(parent: @group_three.self_and_descendants)
+    projects_count = project_namespaces.count
     members_count = Member.where(namespace: @group_three.self_and_descendants).count +
-                    Member.where(namespace: self_and_descendant_project_namespaces).count
+                    Member.where(namespace: project_namespaces).count
     assert_difference(
       -> { Group.count } => (self_and_descendants_count * -1),
       -> { Namespaces::ProjectNamespace.count } => (projects_count * -1),
