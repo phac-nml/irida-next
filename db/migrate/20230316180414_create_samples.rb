@@ -6,7 +6,7 @@ class CreateSamples < ActiveRecord::Migration[7.0]
     create_table :samples do |t|
       t.string :name
       t.text :description
-      t.references :project, null: false, foreign_key: true
+      t.references :project, null: false, foreign_key: true, index: true
 
       t.timestamps
     end

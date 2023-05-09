@@ -29,4 +29,15 @@ class UserTest < ActiveSupport::TestCase
   test '#personal_access_tokens' do
     assert_equal 4, @user.personal_access_tokens.size
   end
+
+  test '#destroy removes dependant user namespace, and projects' do
+    projects_count = @user.namespace.project_namespaces.count
+    assert_difference(
+      -> { User.count } => -1,
+      -> { Namespaces::ProjectNamespace.count } => (projects_count * -1),
+      -> { Project.count } => (projects_count * -1)
+    ) do
+      @user.destroy
+    end
+  end
 end

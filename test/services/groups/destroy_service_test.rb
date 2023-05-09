@@ -6,7 +6,7 @@ module Groups
   class DestroyServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
-      @group = groups(:group_one)
+      @group = groups(:group_two)
     end
 
     test 'delete group with correct permissions' do

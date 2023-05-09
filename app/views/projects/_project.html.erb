@@ -9,11 +9,11 @@
 >
   <td class="p-4 whitespace-nowrap">
     <%= link_to project.human_name,
-                project_path(project),
-                data: {
-                  turbo: false
-                },
-                class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+    namespace_project_path(project.namespace.parent, project),
+    data: {
+      turbo: false
+    },
+    class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
     <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= project.description %></div>
   </td>
   <td class="p-4 whitespace-nowrap text-right">

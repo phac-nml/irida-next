@@ -3,6 +3,7 @@
 # ViewHelper for user interface components
 module ViewHelper
   VIRAL_HELPERS = {
+    alert: 'Viral::AlertComponent',
     card: 'Viral::CardComponent',
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',

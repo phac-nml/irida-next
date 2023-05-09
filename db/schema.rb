@@ -15,31 +15,36 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_221752) do
   enable_extension "plpgsql"
 
   create_table "members", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "namespace_id"
-    t.integer "created_by_id"
+    t.bigint "user_id"
+    t.bigint "namespace_id"
+    t.bigint "created_by_id"
     t.integer "access_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_members_on_created_by_id"
+    t.index ["namespace_id"], name: "index_members_on_namespace_id"
     t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true
+    t.index ["user_id"], name: "index_members_on_user_id"
   end
 
   create_table "namespaces", force: :cascade do |t|
     t.string "name"
     t.string "path"
-    t.integer "owner_id"
+    t.bigint "owner_id"
     t.string "type"
     t.string "description"
-    t.integer "parent_id"
+    t.bigint "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_namespaces_on_owner_id"
+    t.index ["parent_id"], name: "index_namespaces_on_parent_id"
   end
 
   create_table "personal_access_tokens", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "scopes"
     t.string "name"
-    t.boolean "revoked"
+    t.boolean "revoked", default: false, null: false
     t.date "expires_at"
     t.string "token_digest"
     t.datetime "last_used_at", precision: nil
@@ -50,10 +55,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_221752) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.integer "creator_id"
-    t.integer "namespace_id"
+    t.bigint "creator_id"
+    t.bigint "namespace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_projects_on_creator_id"
+    t.index ["namespace_id"], name: "index_projects_on_namespace_id"
   end
 
   create_table "routes", force: :cascade do |t|
@@ -90,6 +97,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_221752) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "members", "namespaces"
+  add_foreign_key "members", "users"
+  add_foreign_key "namespaces", "namespaces", column: "parent_id"
   add_foreign_key "personal_access_tokens", "users"
+  add_foreign_key "projects", "namespaces"
   add_foreign_key "samples", "projects"
 end
