@@ -3,8 +3,13 @@
 module Users
   # Handles callbacks from Omniauth providers
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+    # TODO: We should do something different than skipping token authenticity.
+    # OpenID (SAML) need a ca cert
+    # See https://github.com/omniauth/omniauth/wiki/FAQ#rails-session-is-clobbered-after-callback-on-openid-providers
+    # Skip should only be for developer
+    # skip_before_action :verify_authenticity_token, only: :developer
     # See https://github.com/omniauth/omniauth/wiki/FAQ#rails-session-is-clobbered-after-callback-on-developer-strategy
-    skip_before_action :verify_authenticity_token
+    skip_before_action :verify_authenticity_token#, only: :developer
 
     def developer
       Rails.logger.debug('Omniauth callback developer')
