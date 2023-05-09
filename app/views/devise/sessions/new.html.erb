@@ -1,7 +1,3 @@
-<% flash.each do |type, msg| %>
-  <%= viral_alert(type: type, message: msg) %>
-<% end %>
-
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
   <div class="form-field">
     <%= f.label :email %>
