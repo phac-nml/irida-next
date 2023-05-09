@@ -1,14 +1,11 @@
 <p class="mb-4 text-base text-gray-900 dark:text-white">
   <%= raw t(
-    "projects.edit.advanced.delete.description",
-    project_name: @project.name,
-    date: l(Time.now, format: :short)
-  ) %>
+            "projects.edit.advanced.delete.description",
+            project_name: @project.name,
+            date: l(Time.now, format: :short)
+          ) %>
 </p>
-<%= link_to t("projects.edit.advanced.delete.link"),
-namespace_project_path(params: { format: :html }),
-data: {
-  turbo_method: :delete,
-  turbo_confirm: t("projects.edit.advanced.delete.confirm")
-},
-class: "btn btn-danger" %>
+
+<%= form_with url: namespace_project_path, method: :delete, data: { turbo: false } do |form| %>
+  <%= form.submit t("projects.edit.advanced.delete.link") %>
+<% end %>
