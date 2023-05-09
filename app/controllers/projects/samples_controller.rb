@@ -8,6 +8,12 @@ module Projects
     before_action :context_crumbs
     layout 'projects'
 
+    def modal
+      respond_to do |format|
+        format.html
+      end
+    end
+
     def index
       @samples = Sample.where(project_id: @project.id)
     end
