@@ -281,7 +281,6 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   config.omniauth :developer if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
   if ENV['OMNIAUTH_PROVIDERS'].include? 'saml'
     config.omniauth :saml,
-                    idp_cert_fingerprint: ENV.fetch('SAML_IDP_CERT_FINGERPRINT', nil),
                     idp_sso_service_url: ENV.fetch('SAML_IDP_SSO_SERVICE_URL', nil),
                     sp_entity_id: ENV.fetch('SAML_SP_ENTITY_ID', nil),
                     idp_cert: ENV.fetch('SAML_IDP_CERT', nil),
