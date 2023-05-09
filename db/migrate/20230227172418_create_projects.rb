@@ -4,8 +4,8 @@
 class CreateProjects < ActiveRecord::Migration[7.0]
   def change
     create_table :projects do |t|
-      t.integer :creator_id
-      t.integer :namespace_id
+      t.references :creator, index: true
+      t.references :namespace, foreign_key: true, index: true
 
       t.timestamps
     end

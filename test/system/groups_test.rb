@@ -95,7 +95,7 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'can delete a group' do
-    visit group_url(groups(:subgroup6))
+    visit group_url(groups(:group_two))
 
     click_link I18n.t(:'groups.sidebar.settings')
 

@@ -128,6 +128,11 @@ if Rails.env.development?
       email: 'user8@email.com',
       password: 'password1',
       password_confirmation: 'password1'
+    },
+    {
+      email: 'user9@email.com',
+      password: 'password1',
+      password_confirmation: 'password1'
     }
   ]
 
