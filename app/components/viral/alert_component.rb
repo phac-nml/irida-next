@@ -3,7 +3,7 @@
 module Viral
   # View Component for alert messages (flash messages)
   class AlertComponent < Component
-    attr_reader :type, :message, :icon, :classes
+    attr_reader :type, :message, :classes
 
     def initialize(type: 'info', message: nil)
       @type = type
