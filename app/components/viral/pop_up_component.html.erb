@@ -11,9 +11,22 @@
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <!-- Modal header -->
-        <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-600">
-          <%= content %>
+        <% if header %>
+          <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-600">
+            <%= header %>
+          </div>
+        <% end %>
+
+        <!-- Modal body -->
+        <div class="p-6 space-y-6">
+          <%= body %>
         </div>
+
+        <% if footer? %>
+          <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <%= footer %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

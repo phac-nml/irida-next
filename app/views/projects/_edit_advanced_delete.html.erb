@@ -7,7 +7,19 @@
 </p>
 
 <%= viral_popup(button_text: t("projects.edit.advanced.delete.link"), classes: "btn btn-danger") do |popup| %>
-  <%= form_with url: namespace_project_path, method: :delete, data: { turbo: false } do |form| %>
-    <%= form.submit t("projects.edit.advanced.delete.link"), class: "btn btn-danger" %>
+  <% popup.header do %>
+    <h3 class="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
+      Are you absolutely sure?
+    </h3>
+  <% end %>
+  <% popup.body do %>
+    Enter the following to confirm: <strong><%= @project.name %></strong>
+  <% end %>
+
+  <% popup.footer do %>
+    <%= form_with url: namespace_project_path, method: :delete, data: { turbo: false } do |form| %>
+      <%= form.submit t("projects.edit.advanced.delete.link"), class: "btn btn-danger" %>
+    <% end %>
+    <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600">Decline</button>
   <% end %>
 <% end %>
