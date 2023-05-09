@@ -76,7 +76,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
   test 'should delete a group' do
     sign_in users(:john_doe)
 
-    group = groups(:group_one)
+    group = groups(:group_two)
     assert_difference('Group.count', -1) do
       delete group_path(group)
     end

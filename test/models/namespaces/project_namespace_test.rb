@@ -67,4 +67,15 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
   test '#full_path' do
     assert_equal @project_namespace.route.path, @project_namespace.full_path
   end
+
+  test '#destroy removes dependant project, and members' do
+    members_count = @project_namespace.project_members.count
+    assert_difference(
+      -> { Namespaces::ProjectNamespace.count } => -1,
+      -> { Project.count } => -1,
+      -> { Member.count } => (members_count * -1)
+    ) do
+      @project_namespace.destroy
+    end
+  end
 end

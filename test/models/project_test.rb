@@ -34,4 +34,10 @@ class ProjectTest < ActiveSupport::TestCase
   test '#full_path' do
     assert_equal @project.namespace.full_path, @project.full_path
   end
+
+  test '#destroy removes dependant project namespace' do
+    assert_difference(-> { Namespaces::ProjectNamespace.count } => -1) do
+      @project.destroy
+    end
+  end
 end
