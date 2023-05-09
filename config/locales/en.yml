@@ -352,7 +352,7 @@ en:
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
       new:
         title: Add New Member
-        add_member_to_group: Add member to project
+        add_member_to_project: Add member to project
         select_user: Select a User
         select_access_level: Select Access Level
       destroy:
