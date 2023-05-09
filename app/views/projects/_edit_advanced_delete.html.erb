@@ -6,6 +6,8 @@
           ) %>
 </p>
 
-<%= form_with url: namespace_project_path, method: :delete, data: { turbo: false } do |form| %>
-  <%= form.submit t("projects.edit.advanced.delete.link") %>
+<%= viral_popup(button_text: t("projects.edit.advanced.delete.link"), classes: "btn btn-danger") do |popup| %>
+  <%= form_with url: namespace_project_path, method: :delete, data: { turbo: false } do |form| %>
+    <%= form.submit t("projects.edit.advanced.delete.link"), class: "btn btn-danger" %>
+  <% end %>
 <% end %>

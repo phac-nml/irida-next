@@ -1,0 +1,20 @@
+<div data-controller="viral--pop-up-component">
+  <%= render Viral::BaseComponent.new(tag: :button, **system_arguments, data: {
+    action: "click->viral--pop-up-component#open",
+  }) do %>
+    <%= button_text %>
+  <% end %>
+
+  <div
+    data-viral--pop-up-component-target="targetEl" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <!-- Modal header -->
+        <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-600">
+          <%= content %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
