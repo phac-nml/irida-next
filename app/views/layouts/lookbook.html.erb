@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html
+  class="<%= params.has_key?(:lookbook) ? params[:lookbook][:display][:theme] : 'light' %>"
+>
   <head>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body>
-  <div class="p-6 max-w-7xl max-auto Viral-Preview">
-    <%= yield %>
+  <body class="bg-white dark:bg-gray-900">
+    <div class="p-6 max-w-7xl max-auto Viral-Preview">
+      <%= yield %>
     </div>
   </body>
 </html>

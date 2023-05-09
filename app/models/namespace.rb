@@ -9,7 +9,11 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :owner, class_name: 'User', optional: true
 
   belongs_to :parent, class_name: 'Namespace', optional: true
-  has_many :children, -> { where(type: Group.sti_name) }, class_name: 'Namespace', foreign_key: :parent_id # rubocop:disable Rails/InverseOf,Rails/HasManyOrHasOneDependent
+  has_many :children,
+           lambda {
+             where(type: Group.sti_name)
+           },
+           class_name: 'Namespace', foreign_key: :parent_id, inverse_of: :parent, dependent: :destroy
 
   validates :owner, presence: true, if: ->(n) { n.owner_required? }
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }

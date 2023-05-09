@@ -9,11 +9,15 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   before_action :authorize_view_project!, only: %i[show]
 
   def index
-    @pagy, @projects = pagy(authorized_scope(Project, type: :relation).order(updated_at: :desc))
-
     respond_to do |format|
-      format.html
-      format.turbo_stream
+      format.html do
+        @has_projects = Project.joins(:namespace).exists?(namespace: { parent: current_user.namespace }) ||
+                        Project.joins(:namespace)
+                               .exists?(namespace: { parent: current_user.groups.self_and_descendant_ids })
+      end
+      format.turbo_stream do
+        @pagy, @projects = pagy(authorized_scope(Project, type: :relation).order(updated_at: :desc))
+      end
     end
   end
 
