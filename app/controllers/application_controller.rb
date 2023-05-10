@@ -12,8 +12,11 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
-  def not_found
-    render 'shared/error/not_found', status: :not_found, layout: 'application'
+  def not_found(err_msg)
+    respond_to do |format|
+      format.html { render 'shared/error/not_found', status: :not_found, layout: 'application' }
+      format.turbo_stream { render 'shared/error/not_found', locals: { type: 'alert', message: err_msg } }
+    end
   end
 
   def route_not_found
@@ -21,10 +24,12 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionPolicy::Unauthorized do |_exception|
-    render 'shared/error/not_authorized', status: :unauthorized, layout: 'application'
+    respond_to do |_format|
+      format.html { render 'shared/error/not_authorized', status: :unauthorized, layout: 'application' }
+    end
   end
 
-  rescue_from ActiveRecord::RecordNotFound do |_exception|
-    not_found
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    not_found(exception)
   end
 end

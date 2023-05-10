@@ -30,13 +30,15 @@ module Profiles
 
     def revoke
       @personal_access_token = current_user.personal_access_tokens.find(params[:id])
-      if @personal_access_token.revoke!
 
-        respond_to do |format|
-          format.turbo_stream
+      respond_to do |format|
+        if @personal_access_token.revoke!
+          respond_to do |format|
+            format.turbo_stream
+          end
+        else
+          format.turbo_stream { render 'shared/error/not_found' }
         end
-      else
-        format.turbo_stream { render 'shared/error/not_found' }
       end
     end
 

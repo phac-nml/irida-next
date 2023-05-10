@@ -1,2 +1,2 @@
-<%= turbo_stream.replace "personal-access-tokens-revoke-errors",
-                     partial: "revoke_errors" %>
+<%= turbo_stream.append "personal-access-token-revoke-errors",
+                    viral_alert(type:, message:) %>
