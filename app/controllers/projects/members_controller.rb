@@ -4,7 +4,6 @@ module Projects
   # Controller actions for Members
   class MembersController < Projects::ApplicationController
     include MembershipActions
-    layout 'projects'
 
     def member_params
       params.require(:member).permit(:user_id, :access_level, :type, :namespace_id, :created_by_id)

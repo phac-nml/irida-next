@@ -4,8 +4,6 @@
 module Profiles
   # Controller for the user personal access tokens page
   class PersonalAccessTokensController < Profiles::ApplicationController
-    layout 'profiles'
-
     before_action :active_access_tokens
 
     def index

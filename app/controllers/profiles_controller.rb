@@ -2,8 +2,6 @@
 
 # Controller for the user profile page
 class ProfilesController < Profiles::ApplicationController
-  layout 'profiles'
-
   before_action :set_user
   before_action :authorize_user_profile_access!
 

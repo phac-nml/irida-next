@@ -4,8 +4,6 @@
 module Profiles
   # Controller for the user password page
   class PasswordsController < Profiles::ApplicationController
-    layout 'profiles'
-
     # Get password page
     def edit
       # No necessary code here
