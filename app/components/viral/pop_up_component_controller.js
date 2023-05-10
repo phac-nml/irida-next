@@ -6,14 +6,18 @@ export default class extends Controller {
 
   connect() {
     this.modal = new Modal(this.targetElTarget, {
-      backdrop: 'dynamic',
-      backdropClasses: "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
+      backdrop: "dynamic",
+      backdropClasses:
+        "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
       closable: true,
     });
   }
 
   open() {
-    console.log("open");
     this.modal.show();
+  }
+
+  close() {
+    this.modal.hide();
   }
 }

@@ -64,7 +64,11 @@
                       "project-edit-advanced-delete-target": "submitBtn"
                     } %>
       <% end %>
-      <button type="button" class=" btn btn-default">
+      <button
+        type="button"
+        class=" btn btn-default"
+        data-action="viral--pop-up-component#close"
+      >
         <%= t("projects.edit.advanced.delete.cancel_btn") %>
       </button>
     <% end %>
