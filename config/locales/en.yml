@@ -330,8 +330,12 @@ en:
           description: "This action deletes <code class='underline'>%{project_name}</code> on %{date}. <b>There is no going back.</b>"
           link: Delete project
           confirm: Are you absolutely sure?
+          message: "The following items will be permanently deleted:"
+          label: "Enter the following to confirm deletion:"
           points:
             - All samples will be deleted.
+          confirm_btn: Yes, delete project
+          cancel_btn: Cancel, keep project
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data

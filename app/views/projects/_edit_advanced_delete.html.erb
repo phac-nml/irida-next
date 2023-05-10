@@ -1,59 +1,71 @@
-<p class="mb-4 text-base text-gray-900 dark:text-white">
-  <%= raw t(
-    "projects.edit.advanced.delete.description",
-    project_name: @project.name,
-    date: l(Time.now, format: :short)
-  ) %>
-</p>
+<div
+  data-controller="project-edit-advanced-delete"
+  data-project-edit-advanced-delete-name-value="<%= @project.name %>"
+>
+  <p class="mb-4 text-base text-gray-900 dark:text-white">
+    <%= raw t(
+      "projects.edit.advanced.delete.description",
+      project_name: @project.name,
+      date: l(Time.now, format: :short)
+    ) %>
+  </p>
 
-<%= viral_popup(button_text: t("projects.edit.advanced.delete.link"), classes: "btn btn-danger") do |popup| %>
-  <% popup.header do %>
-    <h3 class="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
-      <%= t("projects.edit.advanced.delete.confirm") %>
-    </h3>
-  <% end %>
-  <% popup.body do %>
-    <%= viral_alert(type: "alert", message: "You are about to delete this project containing:") do %>
-      <ul class="max-w-md space-y-1 list-disc list-inside">
-        <% t("projects.edit.advanced.delete.points").each do |point| %>
-          <li>
-            <%= point %>
-          </li>
-        <% end %>
-      </ul>
+  <%= viral_popup(button_text: t("projects.edit.advanced.delete.link"), classes: "btn btn-danger") do |popup| %>
+    <% popup.header do %>
+      <h3 class="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
+        <%= t("projects.edit.advanced.delete.confirm") %>
+      </h3>
     <% end %>
-    Enter the following to confirm:
-    <code><%= @project.name %></code>
-  <% end %>
+    <% popup.body do %>
+      <%= viral_alert(type: "alert", message: t("projects.edit.advanced.delete.message")) do %>
+        <ul class="max-w-md space-y-1 list-disc list-inside">
+          <% t("projects.edit.advanced.delete.points").each do |point| %>
+            <li>
+              <%= point %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+      <p class="block mb-2 font-medium text-gray-900 dark:text-white">
+        <%= t("projects.edit.advanced.delete.label") %>
+      </p>
+      <code class="text-gray-900 dark:text-white"><%= @project.name %></code>
+      <input
+        type="text"
+        class="
+          bg-gray-50
+          border
+          border-gray-300
+          text-gray-900
+          text-sm
+          rounded-md
+          focus:ring-primary-500
+          focus:border-primary-500
+          block
+          w-full
+          p-2.5
+          dark:bg-gray-700
+          dark:border-gray-600
+          dark:placeholder-gray-400
+          dark:text-white
+          dark:focus:ring-primary-500
+          dark:focus:border-primary-500
+        "
+        data-action="input->project-edit-advanced-delete#validateName"
+      >
+    <% end %>
 
-  <% popup.footer do %>
-    <%= form_with url: namespace_project_path, method: :delete, data: { turbo: false } do |form| %>
-      <%= form.submit t("projects.edit.advanced.delete.link"), class: "btn btn-danger" %>
+    <% popup.footer do %>
+      <%= form_with url: namespace_project_path, method: :delete, data: { turbo: false } do |form| %>
+        <%= form.submit t("projects.edit.advanced.delete.confirm_btn"),
+                    disabled: true,
+                    class: "btn btn-danger",
+                    data: {
+                      "project-edit-advanced-delete-target": "submitBtn"
+                    } %>
+      <% end %>
+      <button type="button" class=" btn btn-default">
+        <%= t("projects.edit.advanced.delete.cancel_btn") %>
+      </button>
     <% end %>
-    <button
-      type="button"
-      class="
-        text-gray-500
-        bg-white
-        hover:bg-gray-100
-        focus:ring-4
-        focus:outline-none
-        focus:ring-blue-300
-        rounded-lg
-        border
-        border-gray-200
-        text-sm
-        font-medium
-        px-5
-        py-2.5
-        hover:text-gray-900
-        focus:z-10
-        dark:bg-gray-700
-        dark:text-gray-300
-        dark:border-gray-500
-        dark:hover:text-white
-        dark:hover:bg-gray-600
-      "
-    >Decline</button>
-  <% end %>
-<% end %>
+  <% end %></div>
