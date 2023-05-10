@@ -1,25 +1,59 @@
 <p class="mb-4 text-base text-gray-900 dark:text-white">
   <%= raw t(
-            "projects.edit.advanced.delete.description",
-            project_name: @project.name,
-            date: l(Time.now, format: :short)
-          ) %>
+    "projects.edit.advanced.delete.description",
+    project_name: @project.name,
+    date: l(Time.now, format: :short)
+  ) %>
 </p>
 
 <%= viral_popup(button_text: t("projects.edit.advanced.delete.link"), classes: "btn btn-danger") do |popup| %>
   <% popup.header do %>
     <h3 class="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
-      Are you absolutely sure?
+      <%= t("projects.edit.advanced.delete.confirm") %>
     </h3>
   <% end %>
   <% popup.body do %>
-    Enter the following to confirm: <strong><%= @project.name %></strong>
+    <%= viral_alert(type: "alert", message: "You are about to delete this project containing:") do %>
+      <ul class="max-w-md space-y-1 list-disc list-inside">
+        <% t("projects.edit.advanced.delete.points").each do |point| %>
+          <li>
+            <%= point %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+    Enter the following to confirm:
+    <code><%= @project.name %></code>
   <% end %>
 
   <% popup.footer do %>
     <%= form_with url: namespace_project_path, method: :delete, data: { turbo: false } do |form| %>
       <%= form.submit t("projects.edit.advanced.delete.link"), class: "btn btn-danger" %>
     <% end %>
-    <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600">Decline</button>
+    <button
+      type="button"
+      class="
+        text-gray-500
+        bg-white
+        hover:bg-gray-100
+        focus:ring-4
+        focus:outline-none
+        focus:ring-blue-300
+        rounded-lg
+        border
+        border-gray-200
+        text-sm
+        font-medium
+        px-5
+        py-2.5
+        hover:text-gray-900
+        focus:z-10
+        dark:bg-gray-700
+        dark:text-gray-300
+        dark:border-gray-500
+        dark:hover:text-white
+        dark:hover:bg-gray-600
+      "
+    >Decline</button>
   <% end %>
 <% end %>
