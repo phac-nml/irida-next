@@ -400,3 +400,9 @@ en:
       update:
         cannot_update_self: "You cannot update your own %{namespace_type} role"
         role_not_allowed: "A maintainer can only update a member's role up to the Maintainer role"
+  application:
+    errors:
+      access_denied: Access Denied.
+      not_authorized: You are not authorized to access the requested resource on this server.
+      resource_not_found: Resource Not Found.
+      not_found_on_server: The requested resource could not be found on the server.
