@@ -15,13 +15,17 @@ module Users
       else
         # Removing extra and credentials as it can overflow some session stores
         session['devise.omniauth_data'] = request.env['omniauth.auth'].except(:extra, :credentials)
-        # TODO: somehow alert failed sign in?
-        redirect_to root_path
+        failure
       end
     end
 
     alias developer all
     alias saml all
     alias azure_activedirectory_v2 all
+
+    def failure
+      # TODO: somehow alert failed sign in?
+      redirect_to root_path
+    end
   end
 end
