@@ -2,8 +2,6 @@
 
 # Overall layout component
 class LayoutComponent < Component
-  include Turbo::FramesHelper
-
   attr_reader :user
 
   renders_one :sidebar, Layout::SidebarComponent

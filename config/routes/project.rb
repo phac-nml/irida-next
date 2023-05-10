@@ -20,7 +20,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       resources :samples do
         collection do
           post :transfer
-          get :modal
         end
       end
     end
