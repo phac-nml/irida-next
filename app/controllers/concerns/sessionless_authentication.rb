@@ -12,6 +12,8 @@ module SessionlessAuthentication
     pat = user.personal_access_tokens.find_by_token(access_token) # rubocop:disable Rails/DynamicFindBy
     return unless pat&.active?
 
+    pat.touch(:last_used_at) # rubocop:disable Rails/SkipsModelValidations
+
     sessionless_sign_in(user)
   end
 

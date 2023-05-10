@@ -86,8 +86,10 @@ if Rails.env.development?
       password: 'password1',
       password_confirmation: 'password1',
       personal_access_tokens: [
-        { name: 'API r/w Token', scopes: ['api'], token_digest: 'zs83sKD3jeysfnr_kgu9' },
-        { name: 'API read only Token', scopes: ['read_api'], token_digest: 'yK1euURqVRtQ1D-3uKsW' }
+        { name: 'API r/w Token', scopes: ['api'],
+          token_digest: Devise.token_generator.digest(PersonalAccessToken, :token_digest, 'zs83sKD3jeysfnr_kgu9') },
+        { name: 'API read only Token', scopes: ['read_api'],
+          token_digest: Devise.token_generator.digest(PersonalAccessToken, :token_digest, 'yK1euURqVRtQ1D-3uKsW') }
       ]
     },
     {
