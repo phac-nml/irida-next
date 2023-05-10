@@ -29,17 +29,19 @@
       <% end %>
     <% end %>
 
-    <%= viral_card do |card| %>
-      <% card.header(title: t(".advanced.title")) %>
-      <% card.section(title: t(".advanced.path.title"), border_bottom: true) do %>
-        <%= render "edit_advanced_path" %>
-      <% end %>
-      <% card.section(title: t(".advanced.transfer.title")) do %>
-        <%= render "edit_advanced_transfer" %>
-      <% end %>
-      <% card.section(title: t(".advanced.delete.title"), classes: "bg-red-100 dark:bg-red-900 border-l-red-600 pb-6") do %>
-        <%= render "edit_advanced_delete", project: @project %>
-      <% end %>
+    <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
+
+    <%= viral_card(title: t(".advanced.path.title")) do %>
+      <%= render "edit_advanced_path" %>
     <% end %>
+
+    <%= viral_card(title: t(".advanced.transfer.title")) do %>
+      <%= render "edit_advanced_transfer" %>
+    <% end %>
+
+    <%= viral_card(title: t(".advanced.delete.title"), classes: "bg-red-100 dark:bg-red-900") do %>
+      <%= render "edit_advanced_delete", project: @project %>
+    <% end %>
+
   </div>
 </div>
