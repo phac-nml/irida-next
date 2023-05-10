@@ -12,9 +12,10 @@ module Members
       @member = Member.new(params.merge(created_by: current_user, namespace:))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
       auth_method = namespace.group_namespace? ? :allowed_to_modify_group? : :allowed_to_modify_project_namespace?
-      action_allowed_for_user(namespace, auth_method)
+
+      action_allowed_for_user(namespace, auth_method) unless namespace.parent.nil? && namespace.owner == current_user
 
       if member.namespace.owner != current_user &&
          (Member.user_has_namespace_maintainer_access?(current_user,

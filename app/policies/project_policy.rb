@@ -9,29 +9,27 @@ class ProjectPolicy < ApplicationPolicy
   alias_rule :transfer?, to: :allowed_to_transfer?
 
   def allowed_to_view_project?
-    return true if record.namespace.parent.owner == user
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
 
     can_view?(record.namespace)
   end
 
   def allowed_to_modify_project?
-    return true if record.namespace.parent.owner == user
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
 
     can_modify?(record.namespace)
   end
 
   def allowed_to_destroy?
-    return true if record.namespace.parent.owner == user
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
 
     can_destroy?(record.namespace)
   end
 
   def allowed_to_transfer?
-    return true if record.creator == user
-    return true if record.namespace.owner == user
-    return true if record.namespace.parent.owner == user
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
 
-    false
+    can_transfer?(record.namespace)
   end
 
   scope_for :relation do |relation|

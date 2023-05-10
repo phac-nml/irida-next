@@ -75,7 +75,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
         )
       elsif namespace.group_namespace?
         Member.exists?(
-          namespace:, user:,
+          namespace: namespace.self_and_ancestor_ids, user:,
           access_level: Member::AccessLevel::OWNER
         )
       end
