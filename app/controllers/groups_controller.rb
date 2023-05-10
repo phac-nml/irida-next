@@ -8,6 +8,7 @@ class GroupsController < Groups::ApplicationController
   before_action :authorize_modify_group!, only: %i[edit]
   before_action :authorize_view_group!, only: %i[show]
   before_action :authorize_create_subgroup!, only: %i[new]
+  before_action :authorized_namespaces, only: %i[edit new update create]
 
   def index
     @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
@@ -64,6 +65,10 @@ class GroupsController < Groups::ApplicationController
 
   def group_params
     params.require(:group).permit(:name, :path, :description, :parent_id)
+  end
+
+  def authorized_namespaces
+    @authorized_namespaces = authorized_scope(Namespace, type: :relation, as: :manageable)
   end
 
   def resolve_layout

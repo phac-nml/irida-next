@@ -7,6 +7,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   before_action :context_crumbs, except: %i[index new create show]
   before_action :authorize_modify_project!, only: %i[edit]
   before_action :authorize_view_project!, only: %i[show]
+  before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
     respond_to do |format|
@@ -112,6 +113,10 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
     path = [params[:namespace_id], params[:project_id]].join('/')
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+  end
+
+  def authorized_namespaces
+    @authorized_namespaces = authorized_scope(Namespace, type: :relation, as: :manageable)
   end
 
   def resolve_layout

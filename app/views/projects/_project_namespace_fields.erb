@@ -37,26 +37,7 @@
       </div>
       <%= builder.collection_select(
         :parent_id,
-        Namespace
-          .where(
-            type: [Group.sti_name, Namespaces::UserNamespace.sti_name],
-            owner: current_user
-          )
-          .include_route
-          .or(
-            Namespace.where(
-              type: [Group.sti_name, Namespaces::UserNamespace.sti_name],
-              id:
-                Member.where(
-                  user: current_user,
-                  access_level: [
-                    Member::AccessLevel::MAINTAINER,
-                    Member::AccessLevel::OWNER
-                  ]
-                ).pluck(:namespace_id)
-            )
-          )
-          .include_route,
+        authorized_namespaces,
         :id,
         :full_path,
         { selected: params[:group_id] || @project.namespace.parent.id },
