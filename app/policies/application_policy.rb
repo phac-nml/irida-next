@@ -30,19 +30,18 @@ class ApplicationPolicy < ActionPolicy::Base
   end
 
   def can_transfer?(obj)
-    Member.namespace_owners_include_user(user, obj)
+    Member.namespace_owners_include_user?(user, obj)
   end
 
   scope_for :relation, :manageable do |relation|
     relation
       .where(
-        type: [Group.sti_name, Namespaces::UserNamespace.sti_name],
+        type: [Namespaces::UserNamespace.sti_name],
         owner: user
-      )
-      .include_route
+      ).self_and_descendants.where.not(type: Project.sti_name).include_route
       .or(
         relation.where(
-          type: [Group.sti_name, Namespaces::UserNamespace.sti_name],
+          type: [Group.sti_name],
           id:
             Member.where(
               user:,
@@ -51,8 +50,7 @@ class ApplicationPolicy < ActionPolicy::Base
                 Member::AccessLevel::OWNER
               ]
             ).select(:namespace_id)
-        )
-      )
-      .include_route
+        ).self_and_descendants.where.not(type: Project.sti_name)
+      ).include_route
   end
 end
