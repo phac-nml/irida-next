@@ -13,12 +13,13 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found(err_msg = 'Resource not found')
-    match_data = err_msg.message.match(/Couldn't find (\w+) with 'id'=(\d+)/)
-    if match_data
-      err_msg = I18n.t("activerecord.exceptions.#{match_data[1].underscore}.not_found",
-                       token_id: match_data[2])
+    if defined?(err_msg.message)
+      match_data = err_msg.message.match(/Couldn't find (\w+) with 'id'=(\d+)/)
+      if match_data
+        err_msg = I18n.t("activerecord.exceptions.#{match_data[1].underscore}.not_found",
+                         token_id: match_data[2])
+      end
     end
-
     respond_to do |format|
       format.html { render 'shared/error/not_found', status: :not_found, layout: 'application' }
       format.turbo_stream do
