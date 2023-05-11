@@ -1,10 +1,18 @@
 # frozen_string_literal: true
 
 module OmniauthDeveloperHelper
+  RESPONSE = {
+    provider: 'developer',
+    uid: '12345',
+    info: {
+      email: 'jeff@irida.ca',
+      name: 'jeff'
+    }
+  }.freeze
+
   def valid_developer_login_setup
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:developer] =
-      OmniAuth::AuthHash.new({ provider: 'developer', uid: '12345', info: { email: 'jeff@irida.ca', name: 'jeff' } })
+    OmniAuth.config.mock_auth[:developer] = OmniAuth::AuthHash.new(RESPONSE)
     Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:developer]
   end
 
@@ -16,10 +24,30 @@ module OmniauthDeveloperHelper
 end
 
 module OmniauthAzureHelper
+  RESPONSE = {
+    provider: 'azure_activedirectory_v2',
+    uid: '12345678-90-abcd-ef12-34567890abcd',
+    info: {
+      email: 'jeff@irida.ca',
+      name: 'Jeff Thiessen',
+      nickname: 'jthiessen@internal.domain',
+      first_name: 'Jeff',
+      last_name: 'Thiessen'
+    },
+    credentials: {
+      token: 'somelongbinary',
+      expires_at: 1_683_822_607,
+      expires: true
+    },
+    extra: {
+      these: 'fields',
+      not: 'relavent'
+    }
+  }.freeze
+
   def valid_azure_login_setup
     OmniAuth.config.test_mode = true
-    # OmniAuth.config.mock_auth[:azure_activedirectory_v2] =
-    #   OmniAuth::AuthHash.new({ provider: 'developer', uid: '12345', info: { email: 'jeff@irida.ca', name: 'jeff' } })
+    OmniAuth.config.mock_auth[:azure_activedirectory_v2] = OmniAuth::AuthHash.new(RESPONSE)
     Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory_v2]
   end
 
@@ -31,10 +59,25 @@ module OmniauthAzureHelper
 end
 
 module OmniauthSamlHelper
+  RESPONSE = {
+    provider: 'saml',
+    uid: 'jthiessen@internal.domain',
+    info: {
+      email: 'jeff@irida.ca',
+      name: 'jthiessen@internal.domain',
+      first_name: 'Jeff',
+      last_name: 'Thiessen'
+    },
+    credentials: {},
+    extra: {
+      these: 'fields',
+      not: 'relavent'
+    }
+  }.freeze
+
   def valid_saml_login_setup
     OmniAuth.config.test_mode = true
-    # OmniAuth.config.mock_auth[:saml] =
-    #   OmniAuth::AuthHash.new({ provider: 'developer', uid: '12345', info: { email: 'jeff@irida.ca', name: 'jeff' } })
+    OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(RESPONSE)
     Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:saml]
   end
 
