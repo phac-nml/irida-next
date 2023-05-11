@@ -48,10 +48,8 @@ en:
         last_used_at: Last Used
         expires_at: Expiration Date
       sample:
-        name: Sample Name
+        name: Name
         description: Description
-      project:
-        name: Project Name
       member:
         access_level: Access Level
         user_id: User
@@ -302,6 +300,10 @@ en:
       index:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
+        table:
+          headers:
+            sample_name: Sample Name
+            project_name: Project Name
   projects:
     create:
       success: "Project %{project_name} was successfully created"
