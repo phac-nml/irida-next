@@ -25,13 +25,13 @@ module SessionlessAuthentication
 
   def token_from_basic_authorization(request)
     pattern = /^Basic /i
-    header = request.authorization
+    header = request.authorization&.strip
     token_from_basic_header(header, pattern) if header&.match(pattern)
   end
 
   def username_from_basic_authorization(request)
     pattern = /^Basic /i
-    header = request.authorization
+    header = request.authorization&.strip
     username_from_basic_header(header, pattern) if header&.match(pattern)
   end
 

@@ -38,10 +38,10 @@ class SessionlessAuthenticationConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'request with valid HTTP Basic Authorization header sets current_user' do
-    @basic_auth = Base64.encode64("#{users(:john_doe).email}:JQ2w5maQc4zgvC8GGMEp")
-    @authorization_header = "Basic #{@basic_auth}"
+    basic_auth = Base64.encode64("#{users(:john_doe).email}:JQ2w5maQc4zgvC8GGMEp")
+    authorization_header = "Basic #{basic_auth}"
 
-    post fake_action_path, headers: { Authorization: @authorization_header }
+    post fake_action_path, headers: { Authorization: authorization_header }
     assert_response :success
     response_hash = response.parsed_body
 
@@ -51,10 +51,10 @@ class SessionlessAuthenticationConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'request with invalid HTTP Basic Authorization header does not set current_user' do
-    @basic_auth = Base64.encode64("#{users(:jane_doe).email}:JQ2w5maQc4zgvC8GGMEp")
-    @authorization_header = "Basic #{@basic_auth}"
+    basic_auth = Base64.encode64("#{users(:jane_doe).email}:JQ2w5maQc4zgvC8GGMEp")
+    authorization_header = "Basic #{basic_auth}"
 
-    post fake_action_path, headers: { Authorization: @authorization_header }
+    post fake_action_path, headers: { Authorization: authorization_header }
     assert_response :success
     response_hash = response.parsed_body
 
@@ -64,10 +64,10 @@ class SessionlessAuthenticationConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'request with malformed HTTP Basic Authorization header does not set current_user' do
-    @basic_auth = Base64.encode64('MALFORMED')
-    @authorization_header = "Basic #{@basic_auth}"
+    basic_auth = Base64.encode64('MALFORMED')
+    authorization_header = "Basic #{basic_auth}"
 
-    post fake_action_path, headers: { Authorization: @authorization_header }
+    post fake_action_path, headers: { Authorization: authorization_header }
     assert_response :success
     response_hash = response.parsed_body
 
