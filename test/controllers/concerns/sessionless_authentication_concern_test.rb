@@ -17,8 +17,6 @@ class SessionlessAuthController < ApplicationController
 end
 
 class SessionlessAuthenticationConcernTest < ActionDispatch::IntegrationTest
-  include Devise::Test::IntegrationHelpers
-
   setup do
     Rails.application.routes.draw do
       post 'fake_action' => 'sessionless_auth#fake_action'
