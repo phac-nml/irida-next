@@ -11,7 +11,7 @@ module Users
 
       if @user.persisted?
         sign_in_and_redirect @user, event: :authentication # this will throw if @user is not activated
-        set_flash_message(:notice, :success, kind: action_name)
+        set_flash_message(:notice, :success, kind: OmniAuth::Utils.camelize(action_name))
       else
         # Removing extra and credentials as it can overflow some session stores
         session['devise.omniauth_data'] = request.env['omniauth.auth'].except(:extra, :credentials)
@@ -24,8 +24,11 @@ module Users
     alias azure_activedirectory_v2 all
 
     def failure
-      # TODO: somehow alert failed sign in?
-      redirect_to root_path
+      if @user.errors.present? && @user.errors.full_messages.present?
+        set_flash_message :alert, :failure, kind: OmniAuth::Utils.camelize(action_name),
+                                            reason: @user.errors.full_messages.to_sentence
+      end
+      redirect_to new_session_path(resource_name)
     end
   end
 end
