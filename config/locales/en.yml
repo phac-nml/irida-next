@@ -71,6 +71,9 @@ en:
           attributes:
             scopes:
               inclusion: can only contain available scopes
+    exceptions:
+      personal_access_token:
+        not_found: "Could not find personal access token with id %{token_id}"
     models:
       member:
         access_level:
