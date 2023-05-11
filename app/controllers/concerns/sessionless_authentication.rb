@@ -37,7 +37,7 @@ module SessionlessAuthentication
 
   def token_from_basic_header(header, pattern)
     encoded_header = header.gsub(pattern, '')
-    decode_basic_credentials_token(encoded_header) if is_base64?(encoded_header)
+    decode_basic_credentials_token(encoded_header) if base64?(encoded_header)
   end
 
   def decode_basic_credentials_token(encoded_header)
@@ -46,14 +46,14 @@ module SessionlessAuthentication
 
   def username_from_basic_header(header, pattern)
     encoded_header = header.gsub(pattern, '')
-    decode_basic_credentials_username(encoded_header) if is_base64?(encoded_header)
+    decode_basic_credentials_username(encoded_header) if ibase64?(encoded_header)
   end
 
   def decode_basic_credentials_username(encoded_header)
     Base64.decode64(encoded_header).split(/:/, 2).first
   end
 
-  def is_base64?(value)
+  def base64?(value)
     Base64.strict_encode64(Base64.decode64(value)) == value
   end
 end
