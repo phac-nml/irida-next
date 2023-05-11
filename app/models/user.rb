@@ -21,7 +21,7 @@ class User < ApplicationRecord
   has_many :personal_access_tokens, dependent: :destroy
 
   # Groups
-  has_many :members, dependent: :destroy
+  has_many :members, inverse_of: :user, dependent: :destroy
   has_many :groups, through: :members
 
   before_validation :ensure_namespace
