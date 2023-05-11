@@ -62,4 +62,17 @@ class SessionlessAuthenticationConcernTest < ActionDispatch::IntegrationTest
     assert response_hash['current_user'].key?('email')
     assert_not_equal users(:john_doe).email, response_hash['current_user']['email']
   end
+
+  test 'request with malformed HTTP Basic Authorization header does not set current_user' do
+    @basic_auth = Base64.encode64('MALFORMED')
+    @authorization_header = "Basic #{@basic_auth}"
+
+    post fake_action_path, headers: { Authorization: @authorization_header }
+    assert_response :success
+    response_hash = response.parsed_body
+
+    assert response_hash.key?('current_user')
+    assert response_hash['current_user'].key?('email')
+    assert_nil response_hash['current_user']['email']
+  end
 end
