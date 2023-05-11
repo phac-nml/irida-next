@@ -12,7 +12,7 @@ module Groups
           @has_samples = Sample.joins(project: [:namespace]).exists?(namespace: { parent_id: group.self_and_descendant_ids }) # rubocop:disable Layout/LineLength
         end
         format.turbo_stream do
-          @pagy, @samples = pagy(Sample.where(project_id: Project.where(namespace: Namespaces::ProjectNamespace.where(parent_id: group.self_and_descendant_ids))).includes(:project)) # rubocop:disable Layout/LineLength
+          @pagy, @samples = pagy(Sample.joins(project: [:namespace]).where(namespace: { parent_id: group.self_and_descendant_ids }).includes(:project)) # rubocop:disable Layout/LineLength
         end
       end
     end
