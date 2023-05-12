@@ -22,7 +22,6 @@
               dark:divide-gray-700
             "
           >
-            <%= turbo_frame_tag("member-update-error") %>
             <% @members.each do |member| %>
               <tr
                 class="
@@ -38,23 +37,28 @@
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <div class="form-field">
-                    <% if member.user != current_user && (Member.exists?(namespace_id: member.namespace.ancestor_ids, user: current_user, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
-                     member.access_level < Member::AccessLevel::OWNER) %>
-                      <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
-                        <%= render partial: "groups/members/access_level",
-                        locals: {
-                          member: member,
-                          access_levels: @access_levels
-                        } %>
-                      <% end %>
-                    <% else %>
-                      <%= t(:".access_level.level_#{member.access_level}") %>
+                  <% if member.user != current_user && Member.exists?(namespace_id: member.namespace.self_and_ancestor_ids, user: current_user, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) %>
+                    <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
+                      <%= render partial: "groups/members/access_level",
+                      locals: {
+                        member: member,
+                        access_levels: @access_levels
+                      } %>
                     <% end %>
-                  </div>
+                    <%= turbo_frame_tag("member-#{member.id}-access-level-error") %>
+                  <% else %>
+                    <%= t(:".access_level.level_#{member.access_level}") %>
+                  <% end %>
                 </td>
                 <td class="p-4 whitespace-nowrap">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_granted_by", grantor_email: member.created_by.email) %></div>
+                </td>
+                <td class="p-4 whitespace-nowrap">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                    <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
+                      <%= member.updated_at %>
+                    <% end %>
+                  </div>
                 </td>
                 <td class="px-4 py-3 text-right">
                   <%= viral_dropdown(icon: "ellipsis_vertical",
