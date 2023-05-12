@@ -6,8 +6,8 @@ module Projects
   class SamplesTest < ApplicationSystemTestCase
     setup do
       login_as users(:john_doe)
-      @sample1 = samples(:one)
-      @sample2 = samples(:two)
+      @sample1 = samples(:sample1)
+      @sample2 = samples(:sample2)
       @project = projects(:project1)
       @namespace = groups(:group_one)
     end
