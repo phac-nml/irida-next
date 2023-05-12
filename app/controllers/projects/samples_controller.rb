@@ -63,6 +63,8 @@ module Projects
     end
 
     def transfer
+      puts '---------------------------------IDS---------------------------------------'
+      puts params
       if Samples::TransferService.new.execute
         flash[:success] = t('.success')
       else
