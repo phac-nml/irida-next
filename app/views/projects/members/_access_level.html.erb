@@ -1,0 +1,18 @@
+<%= form_with(model: member, url: namespace_project_member_path(id: member.id), method: :patch,
+                        data: {
+                          remote: true
+                        }
+                      ) do |form| %>
+  <%= form.select(
+    :access_level,
+    access_levels,
+    {},
+    {
+      id: "member-#{member.id}-access-level",
+      value: member.access_level,
+      onchange: "this.form.submit();",
+      "aria-label": "Access Level"
+    }
+  ) %>
+  <input type="hidden" name="format" value="turbo_stream"/>
+<% end %>

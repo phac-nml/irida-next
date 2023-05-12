@@ -6,9 +6,9 @@ module MembershipActions
 
   included do
     before_action proc { namespace }
-    before_action proc { member }, only: %i[destroy]
+    before_action proc { member }, only: %i[destroy update]
     before_action proc { available_users }, only: %i[new create]
-    before_action proc { access_levels }, only: %i[new create]
+    before_action proc { access_levels }, only: %i[new create index update]
     before_action proc { context_crumbs }, only: %i[index new]
   end
 
@@ -45,6 +45,21 @@ module MembershipActions
       flash[:error] = @member.errors.full_messages.first
     end
     redirect_to members_path
+  end
+
+  def update
+    updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
+    respond_to do |format|
+      if updated
+        format.turbo_stream do
+          render locals: { member: @member, access_levels: @access_levels }
+        end
+      else
+        format.turbo_stream do
+          render locals: { member: @member, type: 'alert', message: @member.errors.full_messages.first }
+        end
+      end
+    end
   end
 
   private

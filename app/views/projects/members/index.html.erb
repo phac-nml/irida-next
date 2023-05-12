@@ -16,6 +16,7 @@
           <tbody
             class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
           >
+          <%= turbo_frame_tag("member-update-error") %>
           <% @members.each do |member| %>
             <tr
               class="text-sm font-normal text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400"
@@ -24,7 +25,19 @@
                 <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
               </td>
               <td class="p-4 whitespace-nowrap">
-                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:"projects.members.index.access_level.level_#{member.access_level}") %></div>
+                <div class="form-field">
+                    <% if member.user != current_user  %>
+                      <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
+                        <%= render partial: "projects/members/access_level",
+                        locals: {
+                          member: member,
+                          access_levels: @access_levels
+                        } %>
+                      <% end %>
+                    <% else %>
+                    <%= t(:"projects.members.index.access_level.level_#{member.access_level}") %>
+                  <% end %>
+                </div>
               </td>
               <td class="p-4 whitespace-nowrap">
                 <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
