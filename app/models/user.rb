@@ -31,7 +31,6 @@ class User < ApplicationRecord
 
   def self.from_omniauth(auth)
     find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
-      Rails.logger.debug auth
       # # provider specific attributes can be configured here
       # case provider
       # when 'developer'
