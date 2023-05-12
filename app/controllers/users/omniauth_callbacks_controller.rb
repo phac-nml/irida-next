@@ -24,11 +24,11 @@ module Users
     alias azure_activedirectory_v2 all
 
     def failure
-      if @user.errors.present? && @user.errors.full_messages.present?
+      if @user.respond_to?(:errors) && @user.errors.present? && @user.errors.full_messages.present?
         set_flash_message :alert, :failure, kind: OmniAuth::Utils.camelize(action_name),
                                             reason: @user.errors.full_messages.to_sentence
       end
-      redirect_to new_session_path(resource_name)
+      redirect_to new_user_session_path
     end
   end
 end

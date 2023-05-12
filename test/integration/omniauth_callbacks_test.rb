@@ -18,7 +18,7 @@ class OmniauthCallbacksDeveloperTest < OmniauthIntegrationTestCase
 
     assert_equal :invalid_credentials, request.env['omniauth.error.type']
     assert_not session.key? 'warden.user.user.key'
-    assert_redirected_to root_path
+    assert_redirected_to new_user_session_path
   end
 end
 
@@ -38,7 +38,7 @@ class OmniauthCallbacksAzureTest < OmniauthIntegrationTestCase
 
     assert_equal :invalid_credentials, request.env['omniauth.error.type']
     assert_not session.key? 'warden.user.user.key'
-    assert_redirected_to root_path
+    assert_redirected_to new_user_session_path
   end
 end
 
@@ -58,6 +58,6 @@ class OmniauthCallbacksSamlTest < OmniauthIntegrationTestCase
 
     assert_equal :invalid_credentials, request.env['omniauth.error.type']
     assert_not session.key? 'warden.user.user.key'
-    assert_redirected_to root_path
+    assert_redirected_to new_user_session_path
   end
 end
