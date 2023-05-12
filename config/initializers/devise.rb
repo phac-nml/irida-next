@@ -297,6 +297,10 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
                     client_secret: ENV.fetch('AZURE_CLIENT_SECRET', nil),
                     tenant_id: ENV.fetch('AZURE_TENANT_ID', nil)
   end
+
+  # Have Rails logger handle OmniAuth logs
+  OmniAuth.config.logger = Rails.logger
+
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
