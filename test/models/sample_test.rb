@@ -4,7 +4,7 @@ require 'test_helper'
 
 class SampleTest < ActiveSupport::TestCase
   def setup
-    @sample = samples(:one)
+    @sample = samples(:sample1)
   end
 
   test 'valid sample' do

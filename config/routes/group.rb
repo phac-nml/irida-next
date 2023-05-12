@@ -16,6 +16,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         as: :group,
         constraints: { group_id: Irida::PathRegex.full_namespace_route_regex }) do
     resources :members, only: %i[create destroy index new]
+    resources :samples, only: %i[index]
   end
 
   scope(path: '*id',

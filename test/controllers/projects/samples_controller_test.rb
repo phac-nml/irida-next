@@ -6,8 +6,8 @@ module Projects
   class SamplesControllerTest < ActionDispatch::IntegrationTest
     setup do
       sign_in users(:john_doe)
-      @sample1 = samples(:one)
-      @sample4 = samples(:four)
+      @sample1 = samples(:sample1)
+      @sample23 = samples(:sample23)
       @project = projects(:project1)
       @namespace = groups(:group_one)
     end
@@ -50,7 +50,7 @@ module Projects
     end
 
     test 'should not show sample, if it does not belong to the project' do
-      get namespace_project_sample_url(@namespace, @project, @sample4)
+      get namespace_project_sample_url(@namespace, @project, @sample23)
       assert_response :not_found
     end
 
@@ -83,7 +83,7 @@ module Projects
     end
 
     test 'should not destroy sample, if it does not belong to the project' do
-      delete namespace_project_sample_url(@namespace, @project, @sample4)
+      delete namespace_project_sample_url(@namespace, @project, @sample23)
 
       assert_response :not_found
     end

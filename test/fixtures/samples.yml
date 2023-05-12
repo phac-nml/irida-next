@@ -1,21 +1,23 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: Sample 1
+sample1:
+  name: Project 1 Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
 
-two:
-  name: Sample 2
+sample2:
+  name: Project 1 Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
 
-three:
-  name: Sample 3
-  description: Sample 3 description.
+<% (3..22).each do |n| %>
+sample<%= (n) %>:
+  name: <%= "Project 2 Sample #{n}" %>
+  description: <%= "Sample #{n} description." %>
   project_id: <%= ActiveRecord::FixtureSet.identify(:project2) %>
+<% end %>
 
-four:
-  name: Sample 4
-  description: Sample 4 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project2) %>
+sample23:
+  name: Project 3 Sample 23
+  description: Sample 23 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project4) %>

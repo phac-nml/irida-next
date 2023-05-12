@@ -1,0 +1,18 @@
+<%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @group.class.model_name.human, namespace_name: @group.name)) do |component| %>
+  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
+<% end %>
+
+<div class="bg-white dark:bg-gray-800">
+  <div class="flex flex-col">
+    <div class="overflow-x-auto">
+      <div class="shadow">
+        <% if @has_samples %>
+          <%= turbo_frame_tag "group_samples_list",
+          src: group_samples_path(@group, format: :turbo_stream, page: params[:page]),
+          loading: :lazy %>
+          <%= turbo_frame_tag "group_samples_pagination" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
