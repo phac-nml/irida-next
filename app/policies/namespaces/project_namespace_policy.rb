@@ -2,7 +2,7 @@
 
 module Namespaces
   # Policy for authorization under project_namespace
-  class ProjectNamespacePolicy < ApplicationPolicy
+  class ProjectNamespacePolicy < NamespacePolicy
     alias_rule :new?, :create?, :update?, to: :allowed_to_modify_project_namespace?
     alias_rule :index?, to: :allowed_to_view_project_namespace?
     alias_rule :destroy?, to: :allowed_to_destroy?

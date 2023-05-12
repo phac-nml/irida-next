@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Policy for projects authorization
-class ProjectPolicy < ApplicationPolicy
+class ProjectPolicy < NamespacePolicy
   alias_rule :create?, :edit?, :update?, :new?,
              to: :allowed_to_modify_project?
   alias_rule :index?, :show?, :activity?, to: :allowed_to_view_project?

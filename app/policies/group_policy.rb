@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Policy for groups authorization
-class GroupPolicy < ApplicationPolicy
+class GroupPolicy < NamespacePolicy
   alias_rule :create?, :edit?, :update?, :new?, to: :allowed_to_modify_group?
   alias_rule :show?, :index?, to: :allowed_to_view_group?
   alias_rule :destroy?, to: :allowed_to_destroy?

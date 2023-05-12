@@ -9,8 +9,6 @@ module Projects
     before_action :authorize_view_project!, only: %i[show index]
     before_action :authorize_modify_project!, only: %i[new edit]
 
-    layout 'projects'
-
     def index
       @samples = Sample.where(project_id: @project.id)
     end
