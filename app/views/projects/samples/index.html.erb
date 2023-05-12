@@ -2,7 +2,7 @@
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <div class="flex flex-row">
-      <%= render ModalComponent.new(button_text: "Transfer Samples", title: "Modal Title") do |modal| %>
+      <%= render Viral::ModalComponent.new(button_text: "Transfer Samples", title: "Modal Title") do |modal| %>
         <% modal.with_body do %>
           <div>I'm the body</div>
         <% end %>

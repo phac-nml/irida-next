@@ -1,7 +1,7 @@
-<div data-controller="modal_component">
+<div data-controller="viral--modal-component">
   <!-- Modal toggle -->
   <button
-    data-action="click->modal_component#open"
+    data-action="click->viral--modal-component#open"
     class="
       block
       text-white
@@ -26,7 +26,7 @@
   </button>
   <!-- Main modal -->
   <div
-    data-modal_component-target="modal"
+    data-viral--modal-component-target="modal"
     tabindex="-1"
     aria-hidden="true"
     class="
@@ -82,7 +82,7 @@
               dark:hover:bg-gray-600
               dark:hover:text-white
             "
-            data-action="click->modal_component#close"
+            data-action="click->viral--modal-component#close"
           >
             <%= viral_icon(name: "x_mark", classes: "w-5 h-5") %>
             <span class="sr-only">Close modal</span>
