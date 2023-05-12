@@ -1,0 +1,66 @@
+<%= turbo_stream.update "group_samples_list" do %>
+  <table
+    class="
+      min-w-full
+      divide-y
+      divide-gray-200
+      table-fixed
+      dark:divide-gray-600
+    "
+  >
+    <thead
+      class="
+        text-gray-700
+        bg-gray-50
+        dark:bg-gray-700
+        dark:text-gray-400
+        text-left
+      "
+    >
+      <tr>
+        <th scope="col" class="px-6 py-3"><%= t("activerecord.models.sample.one") %></th>
+        <th scope="col" class="px-6 py-3"><%= t("activerecord.models.namespaces/project_namespace.one") %></th>
+      </tr>
+    </thead>
+    <tbody id="group-samples-table-body">
+      <% @samples.each do |sample| %>
+        <tr
+          id="<%= dom_id(sample) %>"
+          class="
+            text-sm
+            font-normal
+            text-gray-500
+            dark:text-gray-400
+          "
+        >
+          <td class="px-6 py-4"><%= link_to sample.name,
+            namespace_project_sample_path(
+              id: sample.id,
+              namespace_id: sample.project.namespace.parent.full_path,
+              project_id: sample.project.path
+            ),
+            data: {
+              turbo: false
+            },
+            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+            <div><%= sample.description %></div></td>
+
+          <td class="px-6 py-4"><%= link_to sample.project.name,
+            project_path(sample.project),
+            data: {
+              turbo: false
+            },
+            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= turbo_stream.update "group_samples_pagination" do %>
+  <%= render PaginationComponent.new(
+    info: pagy_info(@pagy),
+    prev_url: (@pagy.prev ? group_samples_url(@group, page: @pagy.prev) : nil),
+    next_url: (@pagy.next ? group_samples_url(@group, page: @pagy.next) : nil)
+  ) %>
+<% end %>

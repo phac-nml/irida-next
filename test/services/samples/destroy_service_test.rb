@@ -6,7 +6,7 @@ module Samples
   class DestroyServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
-      @sample = samples(:three)
+      @sample = samples(:sample23)
     end
 
     test 'destroy sample with correct permissions' do
