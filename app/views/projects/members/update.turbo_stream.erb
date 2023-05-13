@@ -1,12 +1,10 @@
 <% if member.errors.include?(:access_level) %>
-  <%= turbo_stream.update "member-#{member.id}-access-level-error",
-                      partial: "shared/form/field_errors",
-                      locals: {
-                        errors: member.errors.full_messages_for(:access_level)
-                      } %>
+  <%= turbo_stream.update "member-update-error",
+    viral_alert(type: 'alert', message:member.errors.full_messages.first) %>
 <% else %>
-  <%= turbo_stream.update "member-#{member.id}-access-level-error", "" %>
+  <%= turbo_stream.update "member-update-error", "" %>
 <% end %>
+
 
 <%= turbo_stream.update "member-#{member.id}-access-level",
                     partial: "projects/members/access_level",

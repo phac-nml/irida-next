@@ -16,6 +16,7 @@
           <tbody
             class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
           >
+          <%= turbo_frame_tag("member-update-error") %>
           <% @members.each do |member| %>
             <tr
               class="text-sm font-normal text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400"
@@ -53,7 +54,6 @@
                         access_levels: @access_levels
                       } %>
                     <% end %>
-                    <%= turbo_frame_tag("member-#{member.id}-access-level-error") %>
                   <% else %>
                   <%= t(:"projects.members.index.access_level.level_#{member.access_level}") %>
                 <% end %>
