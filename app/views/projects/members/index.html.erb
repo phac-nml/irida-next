@@ -21,7 +21,26 @@
               class="text-sm font-normal text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400"
             >
               <td class="p-4 whitespace-nowrap">
-                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
+                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %>
+                  <% if current_user == member.user %>
+                    <span
+                      class="
+                        bg-green-200
+                        text-green-800
+                        text-xs
+                        font-medium
+                        ml-2
+                        px-2.5
+                        py-0.5
+                        rounded-full
+                        dark:bg-green-900
+                        dark:text-green-300
+                      "
+                    >
+                      It's you
+                    </span>
+                  <% end %>
+                </div>
               </td>
               <td class="p-4 whitespace-nowrap">
                   <% if member.user != current_user &&
