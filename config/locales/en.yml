@@ -399,6 +399,19 @@ en:
       general:
         title: General
         submit: Update project
+      advanced:
+        title: Advanced settings
+        transfer:
+          title: Transfer project
+          submit: Transfer project
+          descriptions:
+            - Transfer your project into another namespace.
+            - When you transfer your project to a group, you can easily manage multiple projects and users.
+            - "Things to be aware of before transferring your project:"
+          points:
+            - Be careful! Changing a project's namespace can have unintended side effects.
+            - You can only transfer projects to groups where you have sufficient permissions.
+            - Project visibility level will change to match namespace rules when transferring to a group.
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data

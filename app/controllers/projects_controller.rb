@@ -122,10 +122,10 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def resolve_layout
     case action_name
-    when 'show', 'edit'
-      'projects'
-    else
+    when 'new', 'create', 'index'
       'application'
+    else
+      'projects'
     end
   end
 
