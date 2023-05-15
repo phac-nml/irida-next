@@ -1,0 +1,9 @@
+<%= render Viral::ModalComponent.new(title: "Transfer Samples") do |modal| %>
+  <% modal.with_body do %>
+    <h2>Transfer Samples to Project</h2>
+
+    <% @projects.each do |project| %>
+      <li><%= project.human_name %></li>
+    <% end %>
+  <% end %>
+<% end %>

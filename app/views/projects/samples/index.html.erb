@@ -1,36 +1,31 @@
-<%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
-  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
-  <%= component.with_buttons do %>
-    <div class="flex flex-row">
-      <%= render Viral::ModalComponent.new(button_text: "Transfer Samples", title: "Modal Title") do |modal| %>
-        <% modal.with_body do %>
-          <div>I'm the body</div>
-        <% end %>
-      <% end %>
-      <%# <%= submit_tag "Submit", class: "btn btn-default" %>
-      <%= link_to t("projects.samples.index.new_button"),
-      new_namespace_project_sample_path,
-      class: "btn btn-primary ml-2",
-      "aria-label": t(".actions.button_add_aria_label") %>
-    </div>
+<%= form_tag transfer_namespace_project_samples_path, method: :post do %>
+  <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
+    <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
+    <%= component.with_buttons do %>
+      <div class="flex flex-row">
+        <%= submit_tag "Submit", class: "btn btn-default" %>
+        <%= link_to t("projects.samples.index.new_button"),
+        new_namespace_project_sample_path,
+        class: "btn btn-primary ml-2",
+        "aria-label": t(".actions.button_add_aria_label") %>
+      </div>
+    <% end %>
   <% end %>
-<% end %>
 
-<div class="bg-white dark:bg-gray-800">
-  <div class="flex flex-col">
-    <div class="overflow-x-auto">
-      <div class="shadow">
-        <table id="samples-table" class="min-w-full table-fixed dark:divide-gray-600">
-          <tbody
-            class="
-              bg-white
-              divide-y
-              divide-gray-200
-              dark:bg-gray-800
-              dark:divide-gray-700
-            "
-          >
-            <%= form_tag transfer_namespace_project_samples_path, method: :post do %>
+  <div class="bg-white dark:bg-gray-800">
+    <div class="flex flex-col">
+      <div class="overflow-x-auto">
+        <div class="shadow">
+          <table id="samples-table" class="min-w-full table-fixed dark:divide-gray-600">
+            <tbody
+              class="
+                bg-white
+                divide-y
+                divide-gray-200
+                dark:bg-gray-800
+                dark:divide-gray-700
+              "
+            >
               <% @samples.each do |sample| %>
                 <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
                   <td class="ps-4">
@@ -66,10 +61,10 @@
                   </td>
                 </tr>
               <% end %>
-            <% end %>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>

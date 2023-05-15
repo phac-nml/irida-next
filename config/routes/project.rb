@@ -22,6 +22,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           post :transfer
         end
       end
+      resources :samples_transfer, only: %i[new create]
     end
   end
 end
