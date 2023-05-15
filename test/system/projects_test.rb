@@ -46,7 +46,7 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_text project_description
   end
 
-  test 'can update a project' do
+  test 'can update a project name' do
     project_name = 'Updated Project'
 
     visit project_edit_path(projects(:project1))
