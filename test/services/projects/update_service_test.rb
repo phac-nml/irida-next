@@ -28,7 +28,24 @@ module Projects
     test 'update project with incorrect permissions' do
       valid_params = { namespace_attributes: { name: 'new-project1-name', path: 'new-project1-path' } }
       user = users(:ryan_doe)
-      assert_raises(ActionPolicy::Unauthorized) { Projects::UpdateService.new(@project, user, valid_params).execute }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Projects::UpdateService.new(@project, user, valid_params).execute
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :allowed_to_modify_project_namespace?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'valid authorization to update project' do
+      valid_params = { namespace_attributes: { name: 'new-project1-name', path: 'new-project1-path' } }
+
+      assert_authorized_to(:allowed_to_modify_project_namespace?, @project.namespace, with: Namespaces::ProjectNamespacePolicy,
+                                                                                      context: { user: @user }) do
+        Projects::UpdateService.new(@project, @user,
+                                    valid_params).execute
+      end
     end
   end
 end

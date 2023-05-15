@@ -4,6 +4,8 @@ require 'test_helper'
 
 module Samples
   class UpdateServiceTest < ActiveSupport::TestCase
+    include ActionPolicy::TestHelper
+
     def setup
       @user = users(:john_doe)
       @sample = samples(:sample23)
@@ -17,11 +19,34 @@ module Samples
       end
     end
 
-    test 'update project with invalid params' do
+    test 'update sample with invalid params' do
       invalid_params = { name: 'ns', description: 'new-sample3-description' }
 
       assert_no_changes -> { @sample } do
         Samples::UpdateService.new(@sample, @user, invalid_params).execute
+      end
+    end
+
+    test 'update sample in project with valid params when member of a parent group with role < MAINTAINER' do
+      user = users(:ryan_doe)
+      sample = samples(:sample1)
+      valid_params = { name: 'new-name-for-sample', description: 'New name sample for project1' }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Samples::UpdateService.new(sample, user, valid_params).execute
+      end
+
+      assert_equal ProjectPolicy, exception.policy
+      assert_equal :allowed_to_modify_project?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'valid authorization to update sample' do
+      valid_params = { name: 'new-sample3-name', description: 'new-sample3-description' }
+
+      assert_authorized_to(:allowed_to_modify_project?, @sample.project, with: ProjectPolicy,
+                                                                         context: { user: @user }) do
+        Samples::UpdateService.new(@sample, @user, valid_params).execute
       end
     end
   end

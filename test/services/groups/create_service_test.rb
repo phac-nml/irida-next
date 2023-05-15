@@ -28,7 +28,13 @@ module Groups
       valid_params = { name: 'group1', path: 'group1', parent_id: groups(:group_one).id }
       user = users(:michelle_doe)
 
-      assert_raises(ActionPolicy::Unauthorized) { Groups::CreateService.new(user, valid_params).execute }
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Groups::CreateService.new(user, valid_params).execute
+      end
+
+      assert_equal GroupPolicy, exception.policy
+      assert_equal :allowed_to_modify_group?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
     test 'create subgroup within a parent group that the user is a part of with OWNER role' do
@@ -54,7 +60,25 @@ module Groups
       valid_params = { name: 'group1', path: 'group1', parent_id: groups(:subgroup_one_group_three).id }
       user = users(:ryan_doe)
 
-      assert_raises(ActionPolicy::Unauthorized) { Groups::CreateService.new(user, valid_params).execute }
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Groups::CreateService.new(user, valid_params).execute
+      end
+
+      assert_equal GroupPolicy, exception.policy
+      assert_equal :allowed_to_modify_group?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'valid authorization to create group' do
+      group = groups(:group_one)
+      valid_params = { name: 'group1', path: 'group1', parent_id: group.id }
+      user = users(:michelle_doe)
+
+      assert_authorized_to(:allowed_to_modify_group?, group,
+                           with: GroupPolicy,
+                           context: { user: }) do
+        Groups::CreateService.new(user, valid_params).execute
+      end
     end
   end
 end

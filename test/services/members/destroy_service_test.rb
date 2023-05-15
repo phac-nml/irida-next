@@ -30,6 +30,18 @@ module Members
       end
     end
 
+    test 'remove group member when user does not have direct or inherited membership' do
+      user = users(:david_doe)
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Members::DestroyService.new(@group_member, @group, user).execute
+      end
+
+      assert_equal GroupPolicy, exception.policy
+      assert_equal :allowed_to_modify_group?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
     test 'remove group member with OWNER role when the current user only has the Maintainer role' do
       group_member = members(:group_one_member_james_doe)
       user = users(:joan_doe)
@@ -69,6 +81,18 @@ module Members
       end
 
       assert project_member.errors.full_messages.include?(I18n.t('services.members.destroy.role_not_allowed'))
+    end
+
+    test 'remove project member when user does not have direct or inherited membership' do
+      user = users(:david_doe)
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Members::DestroyService.new(@project_member, @project_namespace, user).execute
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :allowed_to_modify_project_namespace?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
   end
 end

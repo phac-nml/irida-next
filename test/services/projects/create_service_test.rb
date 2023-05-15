@@ -32,6 +32,14 @@ module Projects
       user = users(:steve_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { Projects::CreateService.new(user, valid_params).execute }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Projects::CreateService.new(user, valid_params).execute
+      end
+
+      assert_equal Namespaces::UserNamespacePolicy, exception.policy
+      assert_equal :allowed_to_modify_projects_under_namespace?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
     test 'create project with valid params under group namespace' do
@@ -76,7 +84,23 @@ module Projects
                                                parent_id: groups(:subgroup_one_group_three).id } }
       user = users(:ryan_doe)
 
-      assert_raises(ActionPolicy::Unauthorized) { Projects::CreateService.new(user, valid_params).execute }
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Projects::CreateService.new(user, valid_params).execute
+      end
+
+      assert_equal GroupPolicy, exception.policy
+      assert_equal :allowed_to_modify_group?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'valid authorization to create project' do
+      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
+
+      assert_authorized_to(:allowed_to_modify_projects_under_namespace?, @parent_namespace,
+                           with: Namespaces::UserNamespacePolicy,
+                           context: { user: @user }) do
+        Projects::CreateService.new(@user, valid_params).execute
+      end
     end
   end
 end

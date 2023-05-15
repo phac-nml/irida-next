@@ -19,6 +19,24 @@ module Projects
       user = users(:joan_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { Projects::DestroyService.new(@project, user).execute }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Projects::DestroyService.new(@project, user).execute
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :allowed_to_destroy?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'valid authorization to destroy project' do
+      assert_authorized_to(:allowed_to_destroy?, @project.namespace,
+                           with: Namespaces::ProjectNamespacePolicy,
+                           context: { user: @user }) do
+        Projects::DestroyService.new(
+          @project, @user
+        ).execute
+      end
     end
   end
 end
