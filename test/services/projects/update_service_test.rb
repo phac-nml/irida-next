@@ -41,8 +41,9 @@ module Projects
     test 'valid authorization to update project' do
       valid_params = { namespace_attributes: { name: 'new-project1-name', path: 'new-project1-path' } }
 
-      assert_authorized_to(:allowed_to_modify_project_namespace?, @project.namespace, with: Namespaces::ProjectNamespacePolicy,
-                                                                                      context: { user: @user }) do
+      assert_authorized_to(:allowed_to_modify_project_namespace?, @project.namespace,
+                           with: Namespaces::ProjectNamespacePolicy,
+                           context: { user: @user }) do
         Projects::UpdateService.new(@project, @user,
                                     valid_params).execute
       end

@@ -4,7 +4,7 @@ module Projects
   # Service used to Delete Projects
   class DestroyService < BaseProjectService
     def execute
-      action_allowed_for_user(project.namespace, :destroy?)
+      action_allowed_for_user(project, :destroy?)
 
       project.namespace.destroy!
     end
