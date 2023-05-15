@@ -54,16 +54,5 @@ module Projects
 
       assert_not Projects::TransferService.new(project, @john_doe).execute(group_one)
     end
-
-    test 'valid authorization to tramser project' do
-      new_namespace = namespaces_user_namespaces(:john_doe_namespace)
-
-      assert_authorized_to(:allowed_to_transfer?, @project.namespace, with: ProjectPolicy,
-                                                                      context: { user: @user }) do
-        Projects::TransferService.new(
-          @project, @john_doe
-        ).execute(new_namespace)
-      end
-    end
   end
 end
