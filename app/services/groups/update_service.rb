@@ -3,7 +3,6 @@
 module Groups
   # Service used to Update Groups
   class UpdateService < BaseService
-    GroupUpdateError = Class.new(StandardError)
     attr_accessor :group
 
     def initialize(group, user = nil, params = {})

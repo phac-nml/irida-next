@@ -3,7 +3,6 @@
 module Samples
   # Service used to Create Samples
   class CreateService < BaseService
-    ProjectSampleCreateError = Class.new(StandardError)
     attr_accessor :project, :sample
 
     def initialize(user = nil, project = nil, params = {})

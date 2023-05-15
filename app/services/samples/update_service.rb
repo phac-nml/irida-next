@@ -3,7 +3,6 @@
 module Samples
   # Service used to Update Samples
   class UpdateService < BaseService
-    ProjectSampleUpdateError = Class.new(StandardError)
     attr_accessor :sample
 
     def initialize(sample, user = nil, params = {})

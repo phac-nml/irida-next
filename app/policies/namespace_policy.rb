@@ -7,7 +7,7 @@ class NamespacePolicy < ApplicationPolicy
       .where(
         type: [Namespaces::UserNamespace.sti_name],
         owner: user
-      ).self_and_descendants.where.not(type: Project.sti_name).include_route
+      ).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name).include_route
       .or(
         relation.where(
           type: [Group.sti_name],
@@ -19,7 +19,7 @@ class NamespacePolicy < ApplicationPolicy
                 Member::AccessLevel::OWNER
               ]
             ).select(:namespace_id)
-        ).self_and_descendants.where.not(type: Project.sti_name)
+        ).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name)
       ).include_route
   end
 end

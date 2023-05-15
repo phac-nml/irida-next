@@ -3,7 +3,6 @@
 module Samples
   # Service used to Delete Samples
   class DestroyService < BaseService
-    ProjectSampleDestroyError = Class.new(StandardError)
     attr_accessor :sample
 
     def initialize(sample, user = nil, params = {})

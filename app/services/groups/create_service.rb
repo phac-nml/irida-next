@@ -3,7 +3,6 @@
 module Groups
   # Service used to Create Groups
   class CreateService < BaseService
-    GroupCreateError = Class.new(StandardError)
     attr_accessor :group
 
     def initialize(user = nil, params = {})

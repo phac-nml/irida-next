@@ -3,7 +3,6 @@
 module Groups
   # Service used to Delete Groups
   class DestroyService < BaseService
-    GroupDestroyError = Class.new(StandardError)
     attr_accessor :group
 
     def initialize(group, user = nil, params = {})

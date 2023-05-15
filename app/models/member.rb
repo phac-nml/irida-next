@@ -114,7 +114,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   # Find the user's group member with a highest access level
-  # Find the user's group member with a highest access level
   def highest_group_member
     if namespace.project_namespace?
       Member.where(namespace_id: namespace.parent.self_and_ancestor_ids, user_id:).order(:access_level).last
