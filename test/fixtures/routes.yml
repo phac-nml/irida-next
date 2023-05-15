@@ -71,3 +71,13 @@ john_doe_project4_namespace_route:
   name: john.doe@localhost / Project 4
   path: john.doe_at_localhost/project-4
   source: john_doe_project4_namespace (Namespace)
+
+david_doe_namespace_route:
+  name: david.doe@localhost
+  path: david.doe_at_localhost
+  source: david_doe_namespace (Namespace)
+
+david_doe_group_four_route:
+  name: Group 4
+  path: group-4
+  source: david_doe_group_four (Namespace)

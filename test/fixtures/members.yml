@@ -125,3 +125,9 @@ project_four_member_joan_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project4_namespace) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
+
+group_four_member_david_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
