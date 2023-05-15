@@ -39,4 +39,16 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     assert_equal :allowed_to_transfer?, @policy.resolve_rule(:transfer?)
   end
+
+  test 'scope' do
+    scoped_projects = @policy.apply_scope(Project, type: :relation)
+    # John Doe has access to 23 projects
+    assert_equal scoped_projects.count, 23
+
+    user = users(:david_doe)
+    policy = ProjectPolicy.new(user:)
+    scoped_projects = policy.apply_scope(Project, type: :relation)
+    # David Doe has access to 0 projects
+    assert_equal scoped_projects.count, 0
+  end
 end
