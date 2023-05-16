@@ -1,10 +1,4 @@
-<% if member.errors.include?(:access_level) %>
-  <%= turbo_stream.update "member-update-error",
-    viral_alert(type: 'alert', message:member.errors.full_messages.first) %>
-<% else %>
-  <%= turbo_stream.update "member-update-error", "" %>
-<% end %>
-
+<%= turbo_stream.update "member-update-alert", viral_alert(type:, message:) %>
 
 <%= turbo_stream.update "member-#{member.id}-access-level",
                     partial: "projects/members/access_level",
