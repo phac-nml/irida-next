@@ -1,0 +1,28 @@
+# Add configuration values here, as shown below.
+#
+# pusher_app_id: "2954"
+# pusher_key: 7381a978f7dd7f9a1117
+# pusher_secret: abdc3b896a0ffb85d373
+# stripe_api_key: sk_test_2J0l093xOyW72XUYJHE4Dv2r
+# stripe_publishable_key: pk_test_ro9jV5SNwGb1yYlQfzG17LHK
+#
+# production:
+#   stripe_api_key: sk_live_EeHnL644i6zo4Iyq4v1KdV9H
+#   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
+
+# Available omniauth providers: developer, saml, azure_activedirectory_v2
+test:
+  OMNIAUTH_PROVIDERS: "developer,saml,azure_activedirectory_v2"
+development:
+  OMNIAUTH_PROVIDERS: "developer"
+production:
+  OMNIAUTH_PROVIDERS: ""
+
+# TODO: The lines below will be moved to credentials.yml.enc in a future PR
+AZURE_CLIENT_ID: some-id
+AZURE_CLIENT_SECRET: some-secret-0Ru8cEB
+AZURE_TENANT_ID: some-tenant-id
+
+SAML_IDP_SSO_SERVICE_URL: some-sso-service-url
+SAML_SP_ENTITY_ID: some-entity-it
+SAML_IDP_CERT: -----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
