@@ -1,4 +1,4 @@
-<%= form_tag transfer_namespace_project_samples_path, method: :post do %>
+<%= form_tag new_namespace_project_samples_transfer_path, method: :get do %>
   <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
     <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
     <%= component.with_buttons do %>

@@ -53,10 +53,6 @@ module Projects
       redirect_to namespace_project_samples_path
     end
 
-    def transfer
-      redirect_to new_namespace_project_samples_transfer_path
-    end
-
     private
 
     def sample

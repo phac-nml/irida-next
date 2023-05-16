@@ -3,9 +3,12 @@
 module Projects
   # Controller actions for Project Samples Transer
   class SamplesTransferController < ApplicationController
+    before_action :project
     before_action :projects, only: [:new]
 
     def new
+      puts '-------- I AM HERE --------'
+      puts params
       @sample_transfer = SampleTransfer.new
     end
 
@@ -27,6 +30,11 @@ module Projects
 
     def sample_transfer_params
       params.require(:sample_transfer).permit(:project, :samples)
+    end
+
+    def project
+      path = [params[:namespace_id], params[:project_id]].join('/')
+      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
     end
 
     def projects
