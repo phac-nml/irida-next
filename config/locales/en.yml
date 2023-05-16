@@ -30,6 +30,8 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  action_policy:
+    unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:
       group:
