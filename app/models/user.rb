@@ -4,8 +4,12 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  devise :database_authenticatable,
+         :registerable,
+         :recoverable,
+         :rememberable,
+         :validatable,
+         :omniauthable
 
   has_one :namespace,
           class_name: 'Namespaces::UserNamespace',
@@ -24,6 +28,30 @@ class User < ApplicationRecord
   before_save :ensure_namespace
 
   delegate :full_path, to: :namespace
+
+  def self.from_omniauth(auth)
+    find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
+      # # provider specific attributes can be configured here
+      # case provider
+      # when 'developer'
+      #   user.name = auth.info.name
+      # when 'saml'
+      #   user.first_name = auth.info.first_name
+      #   user.last_name = auth.info.last_name
+      #   user.name = auth.info.name
+      # when 'azure_activedirectory_v2'
+      #   user.first_name = auth.info.first_name
+      #   user.last_name = auth.info.last_name
+      #   user.name = auth.info.name
+      # end
+      user.email = auth.info.email
+      user.password = Devise.friendly_token[0, 20]
+      # user.image = auth.info.image # assuming the user model has an image
+      # If you are using confirmable and the provider(s) you use validate emails,
+      # uncomment the line below to skip the confirmation emails.
+      # user.skip_confirmation!
+    end
+  end
 
   def update_password_with_password(params)
     current_password = params.delete(:current_password)

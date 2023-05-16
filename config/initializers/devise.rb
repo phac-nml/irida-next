@@ -8,7 +8,7 @@
 #
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
-Devise.setup do |config|
+Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   # ==> From update to 4.9.2
   # Configuring it like above would set the error and redirect statuses to 422 Unprocessable Entity
   # and 303 See Other respectively, to match the behavior expected by Hotwire/Turbo.
@@ -278,6 +278,28 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  config.omniauth :developer if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
+  if ENV['OMNIAUTH_PROVIDERS'].include? 'saml'
+    config.omniauth :saml,
+                    idp_sso_service_url: ENV.fetch('SAML_IDP_SSO_SERVICE_URL', nil),
+                    sp_entity_id: ENV.fetch('SAML_SP_ENTITY_ID', nil),
+                    idp_cert: ENV.fetch('SAML_IDP_CERT', nil),
+                    attribute_statements: {
+                      name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+                      email: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+                      first_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
+                      last_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
+                    }
+  end
+  if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
+    config.omniauth :azure_activedirectory_v2,
+                    client_id: ENV.fetch('AZURE_CLIENT_ID', nil),
+                    client_secret: ENV.fetch('AZURE_CLIENT_SECRET', nil),
+                    tenant_id: ENV.fetch('AZURE_TENANT_ID', nil)
+  end
+
+  # Have Rails logger handle OmniAuth logs
+  OmniAuth.config.logger = Rails.logger
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
