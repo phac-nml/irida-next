@@ -402,6 +402,13 @@ en:
       transfer:
         success: The sample transfer was successful.
         error: The sample transfer failed.
+    samples_transfer:
+      new:
+        title: Transfer Samples
+        submit_button: Submit
+      create:
+        success: success message
+        error: error message
   services:
     members:
       create:

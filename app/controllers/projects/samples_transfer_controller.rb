@@ -7,29 +7,25 @@ module Projects
     before_action :projects, only: [:new]
 
     def new
-      puts '-------- I AM HERE --------'
-      puts params
       @sample_transfer = SampleTransfer.new
     end
 
     def create
-      @sample_transfer = SampleTransfer.new(params[:sample_transfer])
-      if @sample_transfer.valid?
-        if Samples::TransferService.new.execute
-          flash[:success] = t('.success')
-        else
-          flash[:error] = t('.error')
-        end
+      @sample_transfer = SampleTransfer.new(sample_transfer_params)
+      return unless @sample_transfer.valid?
+
+      if Samples::TransferService.new.execute
+        flash[:success] = t('.success')
         redirect_to namespace_project_samples_path
       else
-        render :new
+        flash[:error] = t('.error')
       end
     end
 
     private
 
     def sample_transfer_params
-      params.require(:sample_transfer).permit(:project, :samples)
+      params.require(:sample_transfer).permit(:project_id, sample_ids: [])
     end
 
     def project
