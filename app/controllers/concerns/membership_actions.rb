@@ -54,12 +54,14 @@ module MembershipActions
     respond_to do |format|
       if updated
         format.turbo_stream do
-          render locals: { member: @member, access_levels: @access_levels, type: 'success',
-                           message: t('.success', user_email: @member.user.email) }
+          render status: :ok, locals: { member: @member, access_levels: @access_levels, type: 'success',
+                                        message: t('.success', user_email: @member.user.email) }
         end
       else
         format.turbo_stream do
-          render locals: { member: @member, type: 'alert', message: @member.errors.full_messages.first }
+          render status: :bad_request,
+                 locals: { member: @member, type: 'alert',
+                           message: @member.errors.full_messages.first }
         end
       end
     end
