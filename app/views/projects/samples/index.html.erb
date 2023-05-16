@@ -4,7 +4,11 @@
     <%= component.with_buttons do %>
       <% if allowed_to?(:allowed_to_modify_project?, @project) %>
         <div class="flex flex-row">
-          <%= submit_tag "Submit", class: "btn btn-default" %>
+          <%= submit_tag "Transfer samples",
+          class: "btn btn-default",
+          data: {
+            turbo_frame: "modal"
+          } %>
           <%= link_to t("projects.samples.index.new_button"),
           new_namespace_project_sample_path,
           class: "btn btn-primary ml-2",
