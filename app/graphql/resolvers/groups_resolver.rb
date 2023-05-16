@@ -6,7 +6,7 @@ module Resolvers
     type Types::GroupType.connection_type, null: true
 
     def resolve
-      Group.all
+      authorized_scope Group, type: :relation
     end
   end
 end

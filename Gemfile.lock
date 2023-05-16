@@ -11,6 +11,10 @@ GEM
   specs:
     action_policy (0.6.5)
       ruby-next-core (>= 0.14.0)
+    action_policy-graphql (0.5.3)
+      action_policy (>= 0.5.0)
+      graphql (>= 1.9.3)
+      ruby-next-core (>= 0.10.0)
     actioncable (7.0.4.3)
       actionpack (= 7.0.4.3)
       activesupport (= 7.0.4.3)
@@ -315,6 +319,7 @@ PLATFORMS
 
 DEPENDENCIES
   action_policy
+  action_policy-graphql
   actioncable
   bootsnap
   capybara
