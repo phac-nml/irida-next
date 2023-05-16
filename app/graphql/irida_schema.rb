@@ -69,7 +69,8 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
   def self.unauthorized_field(error)
     # Add a top-level error to the response instead of returning nil:
     raise GraphQL::ExecutionError,
-          "The field #{error.field.graphql_name} on an object of type #{error.type.graphql_name} was hidden due to permissions"
+          "The field #{error.field.graphql_name} on an object of type " \
+          "#{error.type.graphql_name} was hidden due to permissions"
   end
 
   rescue_from(ActionPolicy::Unauthorized) do |exp|
