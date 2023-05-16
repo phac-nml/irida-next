@@ -62,6 +62,7 @@ class GroupsTest < ApplicationSystemTestCase
   test 'can create a sub-group' do
     visit group_url(groups(:group_one))
 
+    assert_selector 'a', text: I18n.t(:'groups.show.create_subgroup_button'), count: 1
     click_link I18n.t(:'groups.show.create_subgroup_button')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
@@ -99,11 +100,37 @@ class GroupsTest < ApplicationSystemTestCase
 
     click_link I18n.t(:'groups.sidebar.settings')
 
+    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete_group.submit'), count: 1
+
     accept_alert do
       click_link I18n.t(:'groups.edit.advanced.delete_group.submit')
     end
 
     assert_selector 'h1', text: I18n.t(:'groups.show.title')
     assert_selector 'tr', count: @groups_count - 1
+  end
+
+  test 'cannot create subgroup' do
+    login_as users(:ryan_doe)
+
+    visit group_url(groups(:group_one))
+
+    assert_selector 'a', text: I18n.t(:'groups.show.create_subgroup_button'), count: 0
+  end
+
+  test 'cannot see settings' do
+    login_as users(:ryan_doe)
+    visit group_url(groups(:group_one))
+
+    assert_selector 'a', text: I18n.t(:'groups.sidebar.settings'), count: 0
+  end
+
+  test 'can view settings but cannot delete a group' do
+    login_as users(:joan_doe)
+    visit group_url(groups(:group_one))
+
+    click_link I18n.t(:'groups.sidebar.settings')
+
+    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete_group.submit'), count: 0
   end
 end

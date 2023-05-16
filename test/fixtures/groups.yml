@@ -46,3 +46,10 @@ subgroup_one_group_three:
   description: Subgroup 1 Group 3
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>
+
+david_doe_group_four:
+  name: Group 4
+  path: group-4
+  type: Group
+  description: David's first group
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>

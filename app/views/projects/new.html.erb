@@ -9,7 +9,8 @@
         <div class="grid gap-4">
           <%= form.fields_for :namespace do |builder| %>
             <%= render partial: "projects/project_namespace_fields", locals: {
-              builder: builder
+              builder: builder,
+              authorized_namespaces: @authorized_namespaces
             } %>
           <% end %>
       <% end %>

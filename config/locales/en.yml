@@ -71,6 +71,9 @@ en:
           attributes:
             scopes:
               inclusion: can only contain available scopes
+    exceptions:
+      personal_access_token:
+        not_found: "Could not find personal access token with id %{token_id}"
     models:
       member:
         access_level:
@@ -400,40 +403,18 @@ en:
         success: The sample transfer was successful.
         error: The sample transfer failed.
   services:
-    groups:
-      create:
-        no_permission: "You do not have permission to create a new group under this %{namespace_type}"
-      destroy:
-        no_permission: You do not have permission to delete this group
-      update:
-        no_permission: You do not have permission to update this group
-    projects:
-      create:
-        no_permission: "You do not have permission to create a new project under this %{namespace_type}"
-        namespace_required: A project must belong to either a user or group namespace
-      destroy:
-        no_permission: You do not have permission to delete this project
-      transfer:
-        namespace_empty: Please select a new namespace for your project.
-        project_in_namespace: Project is already in this namespace.
-        no_permission: You don't have permission to transfer this project.
-        no_namespace_permission: You don't have permission to transfer projects into that namespace.
-        namespace_project_exists: Project with same name or path in target namespace already exists.
-      update:
-        no_permission: You do not have permission to update this project
     members:
       create:
-        no_permission: "You do not have permission to add a new member to the %{namespace_type}"
+        role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"
       destroy:
-        no_permission: "You do not have permission to remove this member from the %{namespace_type}"
         cannot_remove_self: "You cannot remove yourself from the %{namespace_type}"
+        role_not_allowed: A maintainer can only remove a member up to the Maintainer role
       update:
-        no_permission: You do not have permission to update this member
         cannot_update_self: "You cannot update your own %{namespace_type} role"
-    samples:
-      create:
-        no_permission: You do not have permission to create a sample in this project
-      destroy:
-        no_permission: You do not have permission to remove this sample from the project
-      update:
-        no_permission: You do not have permission to update this project sample
+        role_not_allowed: "A maintainer can only update a member's role up to the Maintainer role"
+  application:
+    errors:
+      access_denied: Access Denied.
+      not_authorized: You are not authorized to access the requested resource on this server.
+      resource_not_found: Resource Not Found.
+      not_found_on_server: The requested resource could not be found on the server.

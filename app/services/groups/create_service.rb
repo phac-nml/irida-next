@@ -3,7 +3,6 @@
 module Groups
   # Service used to Create Groups
   class CreateService < BaseService
-    GroupCreateError = Class.new(StandardError)
     attr_accessor :group
 
     def initialize(user = nil, params = {})
@@ -11,11 +10,8 @@ module Groups
       @group = Group.new(params.merge(owner: current_user))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
-      unless group.parent.nil? || allowed_to_modify_group?(group.parent)
-        raise GroupCreateError, I18n.t('services.groups.create.no_permission',
-                                       namespace_type: group.class.model_name.human)
-      end
+    def execute
+      action_allowed_for_user(group.parent, :create?) unless group.parent.nil?
 
       group.save
 
@@ -26,9 +22,6 @@ module Groups
                                    }).execute
       end
 
-      group
-    rescue Groups::CreateService::GroupCreateError => e
-      group.errors.add(:base, e.message)
       group
     end
   end

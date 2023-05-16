@@ -9,7 +9,8 @@
 
         <%= render partial: 'form_fields', locals: {
           form: form,
-          group: @new_group
+          group: @new_group,
+          authorized_namespaces: @authorized_namespaces
         } %>
 
             <div class="my-2">

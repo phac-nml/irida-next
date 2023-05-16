@@ -89,4 +89,28 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     assert @namespace.nil?
     assert @member.nil?
   end
+
+  test 'calling authorize_view_members should result in an error' do
+    sign_in users(:john_doe)
+
+    @controller = TestClassController.new
+    assert_raises(NotImplementedError) do
+      @controller.send(:authorize_view_members)
+    end
+
+    assert @namespace.nil?
+    assert @member.nil?
+  end
+
+  test 'calling authorize_modify_members should result in an error' do
+    sign_in users(:john_doe)
+
+    @controller = TestClassController.new
+    assert_raises(NotImplementedError) do
+      @controller.send(:authorize_modify_members)
+    end
+
+    assert @namespace.nil?
+    assert @member.nil?
+  end
 end

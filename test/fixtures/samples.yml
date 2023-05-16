@@ -20,4 +20,4 @@ sample<%= (n) %>:
 sample23:
   name: Project 3 Sample 23
   description: Sample 23 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project3) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project4) %>

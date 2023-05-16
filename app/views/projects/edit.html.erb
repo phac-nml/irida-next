@@ -32,7 +32,9 @@
           <%= form.fields_for :namespace, include_id: false do |builder| %>
             <%= render partial: "projects/project_namespace_fields",
             locals: {
-              builder: builder
+              builder: builder,
+              project: @project,
+              authorized_namespaces: @authorized_namespaces
             } %>
           <% end %>
           <div>

@@ -4,8 +4,6 @@
 module Profiles
   # Controller for the user personal access tokens page
   class PersonalAccessTokensController < Profiles::ApplicationController
-    layout 'profiles'
-
     before_action :active_access_tokens
 
     def index
@@ -32,10 +30,13 @@ module Profiles
 
     def revoke
       @personal_access_token = current_user.personal_access_tokens.find(params[:id])
-      @personal_access_token.revoke!
 
-      respond_to do |format|
-        format.turbo_stream
+      if @personal_access_token.revoke!
+        respond_to do |format|
+          format.turbo_stream
+        end
+      else
+        format.turbo_stream { render 'shared/error/not_found' }
       end
     end
 

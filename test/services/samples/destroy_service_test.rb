@@ -17,8 +17,21 @@ module Samples
 
     test 'destroy sample with incorrect permissions' do
       @user = users(:joan_doe)
-      assert_no_difference ['Sample.count'] do
-        Samples::UpdateService.new(@sample, @user).execute
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Samples::DestroyService.new(@sample, @user).execute
+      end
+
+      assert_equal ProjectPolicy, exception.policy
+      assert_equal :allowed_to_destroy?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'valid authorization to destroy sample' do
+      assert_authorized_to(:allowed_to_destroy?, @sample.project, with: ProjectPolicy,
+                                                                  context: { user: @user }) do
+        Samples::DestroyService.new(@sample,
+                                    @user).execute
       end
     end
   end

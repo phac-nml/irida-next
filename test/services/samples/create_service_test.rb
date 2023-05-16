@@ -27,11 +27,15 @@ module Samples
 
     test 'create sample with valid params but no namespace permissions' do
       valid_params = { name: 'new-project2-sample', description: 'first sample for project2' }
+      user = users(:michelle_doe)
 
-      assert_no_difference('Sample.count') do
-        user = users(:michelle_doe)
+      exception = assert_raises(ActionPolicy::Unauthorized) do
         Samples::CreateService.new(user, @project, valid_params).execute
       end
+
+      assert_equal ProjectPolicy, exception.policy
+      assert_equal :allowed_to_modify_project?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
     test 'create sample in project with valid params when member of a parent group with the OWNER role' do
@@ -44,13 +48,37 @@ module Samples
       end
     end
 
-    test 'create group member with valid params when member of a parent group with the not OWNER role' do
+    test 'create sample in project with valid params when member of a parent group with MAINTAINER role' do
       user = users(:micha_doe)
       project = projects(:project4)
       valid_params = { name: 'new-project4-sample', description: 'first sample for project4' }
 
-      assert_no_difference('Sample.count') do
+      assert_difference -> { Sample.count } => 1 do
         Samples::CreateService.new(user, project, valid_params).execute
+      end
+    end
+
+    test 'create sample in project with valid params when member of a parent group with role < MAINTAINER' do
+      user = users(:ryan_doe)
+      project = projects(:project4)
+      valid_params = { name: 'new-project4-sample', description: 'first sample for project4' }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Samples::CreateService.new(user, project, valid_params).execute
+      end
+
+      assert_equal ProjectPolicy, exception.policy
+      assert_equal :allowed_to_modify_project?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'valid authorization to create sample' do
+      valid_params = { name: 'new-project2-sample', description: 'first sample for project2' }
+
+      assert_authorized_to(:allowed_to_modify_project?, @project, with: ProjectPolicy,
+                                                                  context: { user: @user }) do
+        Samples::CreateService.new(@user, @project,
+                                   valid_params).execute
       end
     end
   end
