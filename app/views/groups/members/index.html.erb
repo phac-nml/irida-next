@@ -1,10 +1,12 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <%= link_to t(:".add"),
-    new_group_member_path(@namespace),
-    class: "btn btn-primary",
-    "aria-label": t(:".actions.button_add_aria_label") %>
+    <% if allowed_to?(:allowed_to_modify_group?, @namespace) %>
+      <%= link_to t(:".add"),
+      new_group_member_path(@namespace),
+      class: "btn btn-primary",
+      "aria-label": t(:".actions.button_add_aria_label") %>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -51,13 +53,13 @@
                         dark:text-green-300
                       "
                     >
-                      It's you
+                      <%= t(:'activerecord.models.member.its_you') %>
                     </span>
                   <% end %>
                   </div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <% if member.user != current_user && Member.exists?(namespace_id: member.namespace.self_and_ancestor_ids, user: current_user, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) %>
+                  <% if member.user != current_user && allowed_to?(:allowed_to_modify_group?, @namespace) %>
                     <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
                       <%= render partial: "groups/members/access_level",
                       locals: {
@@ -75,32 +77,34 @@
                 <td class="p-4 whitespace-nowrap">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                     <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
-                      <%= member.updated_at %>
+                      <%= I18n.l(member.updated_at, format: :default) %>
                     <% end %>
                   </div>
                 </td>
-                <td class="px-4 py-3 text-right">
-                  <%= viral_dropdown(icon: "ellipsis_vertical",
+                <% if allowed_to?(:allowed_to_modify_group?, @namespace) %>
+                  <td class="px-4 py-3 text-right">
+                    <%= viral_dropdown(icon: "ellipsis_vertical",
                                      classes: "member-settings-ellipsis",
                                      aria: { label: t(:'groups.members.index.actions.member_dropdown_aria_label',
                                      member: member.user.email) }) do |dropdown| %>
-                    <%= dropdown.item(
-                      label: t(:"groups.members.index.remove"),
-                      url: group_member_path(@namespace, member),
-                      data: {
-                        turbo_method: :delete,
-                        turbo_confirm: t(:"groups.members.index.remove_confirmation")
-                      },
-                      aria: {
-                        label:
-                          t(
-                            :"groups.members.index.actions.link_remove_aria_label",
-                            member: member.user.email
-                          )
-                      }
-                    ) %>
-                  <% end %>
-                </td>
+                      <%= dropdown.item(
+                        label: t(:"groups.members.index.remove"),
+                        url: group_member_path(@namespace, member),
+                        data: {
+                          turbo_method: :delete,
+                          turbo_confirm: t(:"groups.members.index.remove_confirmation")
+                        },
+                        aria: {
+                          label:
+                            t(
+                              :"groups.members.index.actions.link_remove_aria_label",
+                              member: member.user.email
+                            )
+                        }
+                      ) %>
+                    <% end %>
+                  </td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>

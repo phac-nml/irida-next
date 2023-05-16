@@ -30,7 +30,12 @@
       <div data-controller="slugify">
         <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
           <div class="grid gap-4">
-            <%= render partial: "form_fields", locals: { form: form, group: @group } %>
+            <%= render partial: "form_fields",
+            locals: {
+              form: form,
+              group: @group,
+              authorized_namespaces: @authorized_namespaces
+            } %>
 
             <div>
               <%= form.submit t(:"groups.edit.details.submit"), class: "btn btn-primary" %>
@@ -40,57 +45,56 @@
       </div>
     </div>
 
-    <div
-      class="
-        p-4
-        bg-white
-        border
-        border-gray-200
-        rounded-lg
-        shadow-sm
-        2xl:col-span-2
-        dark:border-gray-700
-        sm:p-6
-        dark:bg-gray-800
-      "
-    >
-      <div id="settings-accordion" data-accordion="collapse">
-        <h2
-          id="settings-delete-heading"
-          class="
-            text-xl
-            font-semibold
-            leading-tight
-            text-gray-900
-            dark:text-white
-            flex
-            justify-between
-            items-center
-          "
-        >
-          <%= t(:".advanced.title") %>
-        </h2>
-        <div
-          class="pt-4"
-          aria-labelledby="settings-delete-heading"
-        >
-          <h3 class="text-lg font-semibold leading-tight text-red-600">
-            <%= t(:"groups.edit.advanced.delete_group.title") %>
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            <%= t(:"groups.edit.advanced.delete_group.description") %>
-          </p>
-          <div class="mt-4">
-            <%= link_to t(:"groups.edit.advanced.delete_group.submit"),
-                        group_path(@group),
-                        data: {
-                          turbo_method: :delete,
-                          turbo_confirm: t(:"groups.edit.advanced.delete_group.confirm")
-                        },
-                        class: "btn btn-danger" %>
+    <% if allowed_to?(:allowed_to_destroy?, @group) %>
+      <div
+        class="
+          p-4
+          bg-white
+          border
+          border-gray-200
+          rounded-lg
+          shadow-sm
+          2xl:col-span-2
+          dark:border-gray-700
+          sm:p-6
+          dark:bg-gray-800
+        "
+      >
+        <div id="settings-accordion" data-accordion="collapse">
+          <h2
+            id="settings-delete-heading"
+            class="
+              text-xl
+              font-semibold
+              leading-tight
+              text-gray-900
+              dark:text-white
+              flex
+              justify-between
+              items-center
+            "
+          >
+            <%= t(:".advanced.title") %>
+          </h2>
+          <div class="pt-4" aria-labelledby="settings-delete-heading">
+            <h3 class="text-lg font-semibold leading-tight text-red-600">
+              <%= t(:"groups.edit.advanced.delete_group.title") %>
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              <%= t(:"groups.edit.advanced.delete_group.description") %>
+            </p>
+            <div class="mt-4">
+              <%= link_to t(:"groups.edit.advanced.delete_group.submit"),
+              group_path(@group),
+              data: {
+                turbo_method: :delete,
+                turbo_confirm: t(:"groups.edit.advanced.delete_group.confirm")
+              },
+              class: "btn btn-danger" %>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    <% end %>
   </div>
 </div>

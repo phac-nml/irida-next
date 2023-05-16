@@ -10,6 +10,8 @@ module MembershipActions
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }, only: %i[new create index update]
     before_action proc { context_crumbs }, only: %i[index new]
+    before_action proc { authorize_view_members }, only: %i[index]
+    before_action proc { authorize_modify_members }, only: %i[new]
   end
 
   def index
@@ -96,6 +98,14 @@ module MembershipActions
   end
 
   def member_namespace
+    raise NotImplementedError
+  end
+
+  def authorize_view_members
+    raise NotImplementedError
+  end
+
+  def authorize_modify_members
     raise NotImplementedError
   end
 end

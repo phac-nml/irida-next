@@ -27,11 +27,13 @@
             icon: "users",
             label: t(:"groups.sidebar.members")
           ) %>
-          <%= render section.with_item(
-            url: edit_group_path(@group),
-            icon: "cog_6_tooth",
-            label: t(:"groups.sidebar.settings")
-          ) %>
+          <% if allowed_to?(:allowed_to_modify_group?, @group) %>
+            <%= render section.with_item(
+              url: edit_group_path(@group),
+              icon: "cog_6_tooth",
+              label: t(:"groups.sidebar.settings")
+            ) %>
+          <% end %>
         <% end %>
         <% layout.body do %>
           <%= render Viral::BreadcrumbComponent.new(
