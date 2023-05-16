@@ -8,4 +8,4 @@
                     } %>
 
 <%= turbo_stream.update "member-#{member.id}-access-level-updated",
-                    member.updated_at %>
+                    I18n.l(member.updated_at, format: :default) %>

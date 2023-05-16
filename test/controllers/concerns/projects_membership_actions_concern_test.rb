@@ -147,8 +147,27 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # r
     assert_equal 2, project.namespace.project_members.count
   end
 
-  test 'update project member access role' do
+  test 'update project member access role with current user as owner' do
     sign_in users(:john_doe)
+
+    project = projects(:project22)
+    namespace = groups(:group_five)
+    project_member = members(:project_twenty_two_member_michelle_doe)
+
+    patch namespace_project_member_path(namespace, project, project_member),
+          params: { member: {
+            access_level: Member::AccessLevel::ANALYST
+          }, format: :turbo_stream }
+
+    assert_equal Member.find_by(user_id: project_member.user.id,
+                                namespace_id: project_member.namespace.id).access_level,
+                 Member::AccessLevel::ANALYST
+
+    assert_response :success
+  end
+
+  test 'update project member access role with current user as maintainer' do
+    sign_in users(:micha_doe)
 
     project = projects(:project22)
     namespace = groups(:group_five)

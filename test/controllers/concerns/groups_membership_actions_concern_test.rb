@@ -117,8 +117,26 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # rub
     assert_response :redirect
   end
 
-  test 'update group member access role' do
+  test 'update group member access role as owner' do
     sign_in users(:john_doe)
+
+    group = groups(:group_five)
+    group_member = members(:group_five_member_michelle_doe)
+
+    patch group_member_path(group, group_member),
+          params: { member: {
+            access_level: Member::AccessLevel::ANALYST
+          }, format: :turbo_stream }
+
+    assert_equal Member.find_by(user_id: group_member.user.id,
+                                namespace_id: group_member.namespace.id).access_level,
+                 Member::AccessLevel::ANALYST
+
+    assert_response :success
+  end
+
+  test 'update group member access role as maintainer' do
+    sign_in users(:micha_doe)
 
     group = groups(:group_five)
     group_member = members(:group_five_member_michelle_doe)
