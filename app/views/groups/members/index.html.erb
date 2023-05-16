@@ -38,28 +38,29 @@
               >
                 <td class="p-4 whitespace-nowrap">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %>
-                  <% if current_user == member.user %>
-                    <span
-                      class="
-                        bg-green-200
-                        text-green-800
-                        text-xs
-                        font-medium
-                        ml-2
-                        px-2.5
-                        py-0.5
-                        rounded-full
-                        dark:bg-green-900
-                        dark:text-green-300
-                      "
-                    >
-                      <%= t(:'activerecord.models.member.its_you') %>
-                    </span>
-                  <% end %>
+                    <% if current_user == member.user %>
+                      <span
+                        class="
+                          bg-green-200
+                          text-green-800
+                          text-xs
+                          font-medium
+                          ml-2
+                          px-2.5
+                          py-0.5
+                          rounded-full
+                          dark:bg-green-900
+                          dark:text-green-300
+                        "
+                      >
+                        <%= t(:"activerecord.models.member.its_you") %>
+                      </span>
+                    <% end %>
                   </div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <% if member.user != current_user && allowed_to?(:allowed_to_modify_group?, @namespace) %>
+                  <% if member.user != current_user && allowed_to?(:allowed_to_modify_group?, @namespace) &&
+                   member.access_level <= @access_levels.values.last %>
                     <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
                       <%= render partial: "groups/members/access_level",
                       locals: {

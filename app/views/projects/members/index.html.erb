@@ -53,13 +53,14 @@
                           dark:text-green-300
                         "
                       >
-                        <%= t(:'activerecord.models.member.its_you') %>
+                        <%= t(:"activerecord.models.member.its_you") %>
                       </span>
                     <% end %>
                   </div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <% if member.user != current_user && allowed_to?(:allowed_to_modify_project_namespace?, @namespace) %>
+                  <% if member.user != current_user && allowed_to?(:allowed_to_modify_project_namespace?, @namespace) &&
+                    member.access_level <= @access_levels.values.last %>
                     <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
                       <%= render partial: "projects/members/access_level",
                       locals: {
