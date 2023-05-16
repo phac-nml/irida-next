@@ -51,7 +51,7 @@ module Projects
 
     test 'should not show sample, if it does not belong to the project' do
       get namespace_project_sample_url(@namespace, @project, @sample23)
-      assert_response :unprocessable_entity
+      assert_response :not_found
     end
 
     test 'should get edit' do
@@ -85,17 +85,17 @@ module Projects
     test 'should not destroy sample, if it does not belong to the project' do
       delete namespace_project_sample_url(@namespace, @project, @sample23)
 
-      assert_redirected_to namespace_project_samples_url(@namespace, @project)
+      assert_response :not_found
     end
 
-    test 'should not destroy sample, if the current user is not an owner of the project' do
-      sign_in users(:joan_doe)
+    test 'should not destroy sample, if the current user is not allowed to modify the project' do
+      sign_in users(:ryan_doe)
 
       assert_no_difference('Sample.count') do
         delete namespace_project_sample_url(@namespace, @project, @sample1)
       end
 
-      assert_redirected_to namespace_project_samples_url(@namespace, @project)
+      assert_response :unauthorized
     end
   end
 end

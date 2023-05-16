@@ -1,10 +1,12 @@
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <%= link_to t(:".add"),
-                new_namespace_project_member_path,
-                class: "btn btn-primary",
-                "aria-label": t(:".actions.button_add_aria_label") %>
+    <% if allowed_to?(:allowed_to_modify_project_namespace?, @namespace) %>
+      <%= link_to t(:".add"),
+      new_namespace_project_member_path,
+      class: "btn btn-primary",
+      "aria-label": t(:".actions.button_add_aria_label") %>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -14,35 +16,53 @@
       <div class="shadow">
         <table class="min-w-full table-fixed dark:divide-gray-600">
           <tbody
-            class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
+            class="
+              bg-white
+              divide-y
+              divide-gray-200
+              dark:bg-gray-800
+              dark:divide-gray-700
+            "
           >
-          <% @members.each do |member| %>
-            <tr
-              class="text-sm font-normal text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400"
-            >
-              <td class="p-4 whitespace-nowrap">
-                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
-              </td>
-              <td class="p-4 whitespace-nowrap">
-                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:"projects.members.index.access_level.level_#{member.access_level}") %></div>
-              </td>
-              <td class="p-4 whitespace-nowrap">
-                <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
-                                                                                        :"projects.members.index.access_granted_by",
-                                                                                        grantor_email: member.created_by.email
-                                                                                      ) %></div>
-              </td>
-              <td class="px-4 py-3 text-right">
-                <%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
-                  <%= dropdown.item(label: t(:"projects.members.index.remove"), url: namespace_project_member_path(id: member.id),
-                                    data: {
-                                      turbo_method: :delete,
-                                      turbo_confirm: t(:"projects.members.index.remove_confirmation")
-                                    },) %>
+            <% @members.each do |member| %>
+              <tr
+                class="
+                  text-sm
+                  font-normal
+                  text-gray-500
+                  hover:bg-gray-50
+                  dark:hover:bg-gray-700
+                  dark:text-gray-400
+                "
+              >
+                <td class="p-4 whitespace-nowrap">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
+                </td>
+                <td class="p-4 whitespace-nowrap">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:"projects.members.index.access_level.level_#{member.access_level}") %></div>
+                </td>
+                <td class="p-4 whitespace-nowrap">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
+                      :"projects.members.index.access_granted_by",
+                      grantor_email: member.created_by.email
+                    ) %></div>
+                </td>
+                <% if allowed_to?(:allowed_to_modify_project_namespace?, @namespace) %>
+                  <td class="px-4 py-3 text-right">
+                    <%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
+                      <%= dropdown.item(
+                        label: t(:"projects.members.index.remove"),
+                        url: namespace_project_member_path(id: member.id),
+                        data: {
+                          turbo_method: :delete,
+                          turbo_confirm: t(:"projects.members.index.remove_confirmation")
+                        }
+                      ) %>
+                    <% end %>
+                  </td>
                 <% end %>
-
-            </tr>
-          <% end %>
+              </tr>
+            <% end %>
           </tbody>
         </table>
       </div>

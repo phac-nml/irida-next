@@ -12,15 +12,14 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
 
     assert_response :success
-    assert_equal 3, group.group_members.count
+    assert_equal 4, group.group_members.count
   end
 
   test 'group members index invalid route get' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      get group_members_path(group_id: 'test-group-not-exists')
-    end
+    get group_members_path(group_id: 'test-group-not-exists')
+    assert_response :not_found
   end
 
   test 'group members new' do
@@ -30,15 +29,14 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get new_group_member_path(group)
 
     assert_response :success
-    assert_equal 3, group.group_members.count
+    assert_equal 4, group.group_members.count
   end
 
   test 'group members new invalid route get' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      get new_group_member_path(group_id: 'test-group-not-exists')
-    end
+    get new_group_member_path(group_id: 'test-group-not-exists')
+    assert_response :not_found
   end
 
   test 'group members create' do
@@ -54,7 +52,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                                  access_level: Member::AccessLevel::OWNER } }
 
     assert_redirected_to group_members_path(group)
-    assert_equal 4, group.group_members.count
+    assert_equal 5, group.group_members.count
   end
 
   test 'group members create invalid post data' do
@@ -79,16 +77,16 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     delete group_member_path(group, group_member)
 
     assert_redirected_to group_members_path(group)
-    assert_equal 2, group.group_members.count
+    assert_equal 3, group.group_members.count
   end
 
   test 'group members destroy invalid route delete' do
     sign_in users(:john_doe)
 
-    assert_raises(ActionController::RoutingError) do
-      group_member = members(:group_one_member_james_doe)
-      delete group_member_path('test-group-not-exists', group_member)
-    end
+    group_member = members(:group_one_member_james_doe)
+    delete group_member_path('test-group-not-exists', group_member)
+
+    assert_response :not_found
   end
 
   test 'group members create invalid' do
@@ -116,7 +114,6 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
       delete group_member_path(group, group_member)
     end
 
-    assert_response 302 # Redirect back to group members page
-    assert_redirected_to group_members_path(group)
+    assert_response :redirect
   end
 end

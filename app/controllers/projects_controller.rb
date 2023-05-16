@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 # Controller actions for Projects
-class ProjectsController < ApplicationController # rubocop:disable Metrics/ClassLength
+class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
+  before_action :authorize_modify_project!, only: %i[edit]
+  before_action :authorize_view_project!, only: %i[show]
+  before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
     respond_to do |format|
@@ -14,7 +17,7 @@ class ProjectsController < ApplicationController # rubocop:disable Metrics/Class
                                .exists?(namespace: { parent: current_user.groups.self_and_descendant_ids })
       end
       format.turbo_stream do
-        @pagy, @projects = pagy(projects.order(updated_at: :desc))
+        @pagy, @projects = pagy(authorized_scope(Project, type: :relation).order(updated_at: :desc))
       end
     end
   end
@@ -112,9 +115,8 @@ class ProjectsController < ApplicationController # rubocop:disable Metrics/Class
     @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
   end
 
-  def projects
-    Project.where(namespace: { parent: current_user.groups.self_and_descendant_ids })
-           .or(Project.where(namespace: { parent: current_user.namespace })).include_route
+  def authorized_namespaces
+    @authorized_namespaces = authorized_scope(Namespace, type: :relation, as: :manageable)
   end
 
   def resolve_layout

@@ -2,16 +2,20 @@
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <div class="flex flex-row">
-      <%= link_to t("projects.samples.show.edit_button"),
-      edit_namespace_project_sample_path(id: @sample.id),
-      class: "btn btn-primary mr-1" %>
-      <%= link_to t("projects.samples.show.remove_button"),
-      namespace_project_sample_path(id: @sample.id),
-      data: {
-        turbo_method: :delete,
-        turbo_confirm: t("projects.samples.show.remove_button_confirmation")
-      },
-      class: "btn btn-default mr-1" %>
+      <% if allowed_to?(:new?, @project) %>
+        <%= link_to t("projects.samples.show.edit_button"),
+        edit_namespace_project_sample_path(id: @sample.id),
+        class: "btn btn-primary mr-1" %>
+      <% end %>
+      <% if allowed_to?(:allowed_to_destroy?, @project) %>
+        <%= link_to t("projects.samples.show.remove_button"),
+        namespace_project_sample_path(id: @sample.id),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: t("projects.samples.show.remove_button_confirmation")
+        },
+        class: "btn btn-default mr-1" %>
+      <% end %>
       <%= link_to t("projects.samples.show.back_button"),
       namespace_project_samples_path,
       class: "btn btn-default" %>

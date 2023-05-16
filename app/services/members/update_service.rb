@@ -14,19 +14,21 @@ module Members
     end
 
     def execute # rubocop:disable Metrics/AbcSize
+      auth_method = namespace.group_namespace? ? :allowed_to_modify_group? : :allowed_to_modify_project_namespace?
+      action_allowed_for_user(namespace, auth_method)
+
       unless current_user != member.user
         raise MemberUpdateError, I18n.t('services.members.update.cannot_update_self',
                                         namespace_type: namespace.class.model_name.human)
       end
 
-      unless allowed_to_modify_members_in_namespace?(namespace)
-        raise MemberUpdateError,
-              I18n.t('services.members.update.no_permission', namespace_type: namespace.class.model_name.human)
+      if Member.user_has_namespace_maintainer_access?(current_user,
+                                                      namespace) &&
+         (params[:access_level] > Member::AccessLevel::MAINTAINER)
+        raise MemberUpdateError, I18n.t('services.members.update.role_not_allowed')
       end
 
       member.update(params)
-
-      raise MemberUpdateError, member.errors.full_messages.first if member.errors
     rescue Members::UpdateService::MemberUpdateError => e
       member.errors.add(:base, e.message)
       false

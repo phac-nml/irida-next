@@ -21,6 +21,8 @@ module Groups
       visit group_members_url(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
+      assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 1
+
       click_link I18n.t(:'groups.members.index.add')
 
       assert_selector 'h2', text: I18n.t(:'groups.members.new.title')
@@ -63,6 +65,14 @@ module Groups
                          namespace_type: @namespace.class.model_name.human)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: @members_count
+    end
+
+    test 'can not add a member to the group' do
+      login_as users(:ryan_doe)
+      visit group_members_url(@namespace)
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 0
     end
   end
 end

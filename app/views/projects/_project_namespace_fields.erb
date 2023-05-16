@@ -37,13 +37,10 @@
       </div>
       <%= builder.collection_select(
         :parent_id,
-        Namespace.where(
-          type: [Group.sti_name, Namespaces::UserNamespace.sti_name],
-          owner: current_user
-        ).include_route,
+        authorized_namespaces,
         :id,
         :full_path,
-        {},
+        { selected: params[:group_id] || @project.namespace.parent.id },
         { class: "prefixed" }
       ) %>
       <div class="ml-4 dark:text-gray-200">/</div>

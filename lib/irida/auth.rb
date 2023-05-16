@@ -13,5 +13,36 @@ module Irida
         API_SCOPES
       end
     end
+
+    def authorize_modify_group!
+      action_allowed_for_user(@group)
+    end
+
+    def authorize_view_group!
+      action_allowed_for_user(@group)
+    end
+
+    def authorize_create_subgroup!
+      action_allowed_for_user(@group) unless @group.nil?
+    end
+
+    def authorize_modify_project!
+      action_allowed_for_user(@project)
+    end
+
+    def authorize_view_project!
+      action_allowed_for_user(@project)
+    end
+
+    def authorize_user_profile_access!
+      action_allowed_for_user(@user)
+    end
+
+    protected
+
+    def action_allowed_for_user(auth_object, auth_method = nil)
+      authorize! auth_object if auth_method.nil?
+      authorize! auth_object, to: auth_method
+    end
   end
 end

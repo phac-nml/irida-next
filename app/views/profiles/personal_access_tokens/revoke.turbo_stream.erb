@@ -3,4 +3,5 @@
                       :"profiles.personal_access_tokens.index.active_personal_access_tokens",
                       count: @active_access_tokens.count
                     ) %>
+
 <%= turbo_stream.remove dom_id(@personal_access_token) %>

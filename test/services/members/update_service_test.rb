@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Members
-  class UpdateServiceTest < ActiveSupport::TestCase
+  class UpdateServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
     def setup
       @user = users(:john_doe)
       @project = projects(:john_doe_project2)
@@ -51,12 +51,25 @@ module Members
       valid_params = { user: @group_member.user, access_level: Member::AccessLevel::OWNER }
       user = users(:steve_doe)
 
-      assert_no_changes -> { @group_member } do
+      exception = assert_raises(ActionPolicy::Unauthorized) do
         Members::UpdateService.new(@group_member, @group, user, valid_params).execute
       end
 
-      assert @group_member.errors.full_messages.include?(I18n.t('services.members.update.no_permission',
-                                                                namespace_type: @group.class.model_name.human))
+      assert_equal GroupPolicy, exception.policy
+      assert_equal :allowed_to_modify_group?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'update group member to OWNER role when the current user only has the Maintainer role' do
+      group_member = members(:group_one_member_ryan_doe)
+      valid_params = { user: group_member.user, access_level: Member::AccessLevel::OWNER }
+      user = users(:joan_doe)
+
+      assert_no_changes -> { group_member } do
+        Members::UpdateService.new(group_member, @group, user, valid_params).execute
+      end
+
+      assert group_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
     end
 
     test 'update project member with valid params' do
@@ -99,14 +112,49 @@ module Members
       valid_params = { user: @project_member.user, access_level: Member::AccessLevel::OWNER }
       user = users(:steve_doe)
 
-      assert_no_changes -> { @project_member } do
+      exception = assert_raises(ActionPolicy::Unauthorized) do
         Members::UpdateService.new(@project_member, @project_namespace, user, valid_params).execute
       end
 
-      assert @project_member.errors.full_messages.include?(
-        I18n.t('services.members.update.no_permission',
-               namespace_type: @project_namespace.class.model_name.human)
-      )
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :allowed_to_modify_project_namespace?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'update project member to OWNER role when the current user only has the Maintainer role' do
+      project = projects(:project1)
+      project_namespace = project.namespace
+      project_member = members(:project_one_member_ryan_doe)
+      valid_params = { user: project_member.user, access_level: Member::AccessLevel::OWNER }
+      user = users(:joan_doe)
+
+      assert_no_changes -> { project_member } do
+        Members::UpdateService.new(project_member, project_namespace, user, valid_params).execute
+      end
+
+      assert project_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
+    end
+
+    test 'valid authorization to update group member' do
+      valid_params = { user: @group_member.user, access_level: Member::AccessLevel::OWNER }
+
+      assert_authorized_to(:allowed_to_modify_group?, @group, with: GroupPolicy,
+                                                              context: { user: @user }) do
+        Members::UpdateService.new(
+          @group_member, @group, @user, valid_params
+        ).execute
+      end
+    end
+
+    test 'valid authorization to update project member' do
+      valid_params = { user: @project_member.user, access_level: Member::AccessLevel::OWNER }
+
+      assert_authorized_to(:allowed_to_modify_project_namespace?, @project_namespace,
+                           with: Namespaces::ProjectNamespacePolicy,
+                           context: { user: @user }) do
+        Members::UpdateService.new(@project_member,
+                                   @project_namespace, @user, valid_params).execute
+      end
     end
   end
 end

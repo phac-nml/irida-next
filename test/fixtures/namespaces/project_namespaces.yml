@@ -175,3 +175,11 @@ project21_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+john_doe_project4_namespace:
+  name: Project 4
+  path: project-4
+  description: Project 4 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

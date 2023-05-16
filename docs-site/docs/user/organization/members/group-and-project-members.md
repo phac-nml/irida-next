@@ -88,7 +88,7 @@ If a user is:
 Prerequisites:
 
 - To remove direct members that have the:
-  - Maintainer, Developer, Reporter, or Guest role, you must have the Maintainer role.
+  - Maintainer, Developer, Analyst, or Guest role, you must have the Maintainer role.
   - Owner role, you must have the Owner role.
 
 To remove a member from a project:
@@ -108,7 +108,7 @@ If a user is:
 Prerequisites:
 
 - To remove direct members that have the:
-  - Maintainer, Developer, Reporter, or Guest role, you must have the Maintainer role.
+  - Maintainer, Developer, Analyst, or Guest role, you must have the Maintainer role.
   - Owner role, you must have the Owner role.
 
 To remove a member from a group:

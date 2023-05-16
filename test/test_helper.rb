@@ -4,6 +4,7 @@ require 'simplecov'
 SimpleCov.start 'rails' do
   add_group 'Graphql', 'app/graphql'
   add_group 'View Components', 'app/components'
+  add_group 'Policies', 'app/policies'
   add_filter '/test/'
   add_filter '/vendor/'
   enable_coverage :branch
@@ -13,6 +14,7 @@ end
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
+require 'action_policy/test_helper'
 
 module ActiveSupport
   class TestCase
@@ -32,5 +34,6 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     include Devise::Test::IntegrationHelpers
+    include ActionPolicy::TestHelper
   end
 end
