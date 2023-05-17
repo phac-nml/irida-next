@@ -185,5 +185,24 @@ module Members
                                    @project_namespace, @user, valid_params).execute
       end
     end
+
+    test 'update access level of group member to a higher level than they have in a project' do
+      group = groups(:group_six)
+      group_member = members(:group_six_member_james_doe)
+      project_member = members(:project_twenty_three_member_james_doe)
+
+      valid_params = { user: group_member.user, access_level: Member::AccessLevel::MAINTAINER }
+
+      assert_equal group_member.access_level, Member::AccessLevel::GUEST
+      assert_equal project_member.access_level, Member::AccessLevel::GUEST
+
+      assert_changes -> { group_member.access_level }, to: Member::AccessLevel::MAINTAINER do
+        Members::UpdateService.new(group_member, group, @user, valid_params).execute
+      end
+
+      # group member is also a member of a descendant of the group so their access level is updated
+      # to the same access level for the project membership
+      assert_equal Member::AccessLevel::MAINTAINER, Member.find_by(id: project_member.id).access_level
+    end
   end
 end
