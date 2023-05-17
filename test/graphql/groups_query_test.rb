@@ -12,6 +12,7 @@ class GroupsQueryTest < ActiveSupport::TestCase
           description
           id
         }
+        totalCount
       }
     }
   GRAPHQL
@@ -30,5 +31,20 @@ class GroupsQueryTest < ActiveSupport::TestCase
 
     assert_not_empty data, 'groups type should work'
     assert_not_empty data['nodes']
+  end
+
+  test 'groups query only returns scoped groups' do
+    groups_count = @user.groups.self_and_descendant_ids.count
+    result = IridaSchema.execute(GROUPS_QUERY, context: { current_user: @user },
+                                               variables: { first: 20 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['groups']
+
+    assert_not_empty data, 'groups type should work'
+    assert_not_empty data['nodes']
+
+    assert_equal groups_count, data['totalCount']
   end
 end
