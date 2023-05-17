@@ -6,6 +6,7 @@
       <% card.section do %>
         <%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
           <%= form.fields_for :namespace, include_id: false do |builder| %>
+
             <div class="form-field">
               <%= builder.label :name %>
               <%= builder.text_field :name,
