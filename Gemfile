@@ -78,6 +78,7 @@ gem 'pg'
 
 # Authorization
 gem 'action_policy'
+gem 'action_policy-graphql'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

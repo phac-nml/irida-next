@@ -33,6 +33,8 @@ en:
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
+  action_policy:
+    unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:
       group:
