@@ -14,7 +14,7 @@ module Members
     end
 
     def execute # rubocop:disable Metrics/AbcSize
-      auth_method = namespace.group_namespace? ? :allowed_to_modify_group? : :allowed_to_modify_project_namespace?
+      auth_method = namespace.group_namespace? ? :manage? : :manage?
       action_allowed_for_user(namespace, auth_method)
 
       unless current_user != member.user

@@ -33,7 +33,7 @@ module Groups
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :allowed_to_modify_group?, exception.rule
+      assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
@@ -65,7 +65,7 @@ module Groups
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :allowed_to_modify_group?, exception.rule
+      assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
@@ -74,7 +74,7 @@ module Groups
       valid_params = { name: 'group1', path: 'group1', parent_id: group.id }
       user = users(:michelle_doe)
 
-      assert_authorized_to(:allowed_to_modify_group?, group,
+      assert_authorized_to(:manage?, group,
                            with: GroupPolicy,
                            context: { user: }) do
         Groups::CreateService.new(user, valid_params).execute

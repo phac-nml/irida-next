@@ -38,7 +38,7 @@ module Members
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :allowed_to_modify_group?, exception.rule
+      assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
@@ -91,7 +91,7 @@ module Members
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :allowed_to_modify_project_namespace?, exception.rule
+      assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
   end

@@ -1,7 +1,7 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <% if allowed_to?(:allowed_to_modify_group?, @namespace) %>
+    <% if allowed_to?(:manage?, @namespace) %>
       <%= link_to t(:".add"),
       new_group_member_path(@namespace),
       class: "btn btn-primary",
@@ -44,7 +44,7 @@
                 <td class="p-4 whitespace-nowrap">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_granted_by", grantor_email: member.created_by.email) %></div>
                 </td>
-                <% if allowed_to?(:allowed_to_modify_group?, @namespace) %>
+                <% if allowed_to?(:manage?, @namespace) %>
                   <td class="px-4 py-3 text-right">
                     <%= viral_dropdown(icon: "ellipsis_vertical",
                                      classes: "member-settings-ellipsis",

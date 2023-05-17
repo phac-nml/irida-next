@@ -12,7 +12,7 @@ module Samples
     end
 
     def execute
-      action_allowed_for_user(@project, :allowed_to_modify_project?)
+      action_allowed_for_user(@project, :manage?)
       sample.save
       sample
     end

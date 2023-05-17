@@ -9,28 +9,28 @@ class GroupPolicyTest < ActiveSupport::TestCase
     @policy = GroupPolicy.new(@group, user: @user)
   end
 
-  test '#allowed_to_view_group?' do
-    assert @policy.allowed_to_view_group?
+  test '#view?' do
+    assert @policy.view?
   end
 
-  test '#allowed_to_modify_group?' do
-    assert @policy.allowed_to_modify_group?
+  test '#manage?' do
+    assert @policy.manage?
   end
 
-  test '#allowed_to_destroy?' do
-    assert @policy.allowed_to_destroy?
+  test '#destroy?' do
+    assert @policy.destroy?
   end
 
   test 'aliases' do
-    assert_equal :allowed_to_modify_group?, @policy.resolve_rule(:create?)
-    assert_equal :allowed_to_modify_group?, @policy.resolve_rule(:edit?)
-    assert_equal :allowed_to_modify_group?, @policy.resolve_rule(:update?)
-    assert_equal :allowed_to_modify_group?, @policy.resolve_rule(:new?)
+    assert_equal :manage?, @policy.resolve_rule(:create?)
+    assert_equal :manage?, @policy.resolve_rule(:edit?)
+    assert_equal :manage?, @policy.resolve_rule(:update?)
+    assert_equal :manage?, @policy.resolve_rule(:new?)
 
-    assert_equal :allowed_to_view_group?, @policy.resolve_rule(:show?)
-    assert_equal :allowed_to_view_group?, @policy.resolve_rule(:index?)
+    assert_equal :view?, @policy.resolve_rule(:show?)
+    assert_equal :view?, @policy.resolve_rule(:index?)
 
-    assert_equal :allowed_to_destroy?, @policy.resolve_rule(:destroy?)
+    assert_equal :destroy?, @policy.resolve_rule(:destroy?)
   end
 
   test 'scope' do

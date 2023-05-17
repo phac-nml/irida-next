@@ -3,33 +3,39 @@
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy
   alias_rule :create?, :edit?, :update?, :new?,
-             to: :allowed_to_modify_project?
-  alias_rule :index?, :show?, :activity?, to: :allowed_to_view_project?
-  alias_rule :destroy?, to: :allowed_to_destroy?
-  alias_rule :transfer?, to: :allowed_to_transfer?
+             to: :manage?
+  alias_rule :index?, :show?, :activity?, to: :view?
 
-  def allowed_to_view_project?
+  def view?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if can_view?(record.namespace) == true
 
-    can_view?(record.namespace)
+    details[:name] = record.name
+    false
   end
 
-  def allowed_to_modify_project?
+  def manage?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if can_modify?(record.namespace) == true
 
-    can_modify?(record.namespace)
+    details[:name] = record.name
+    false
   end
 
-  def allowed_to_destroy?
+  def destroy?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if can_destroy?(record.namespace) == true
 
-    can_destroy?(record.namespace)
+    details[:name] = record.name
+    false
   end
 
-  def allowed_to_transfer?
+  def transfer?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if can_transfer?(record.namespace)
 
-    can_transfer?(record.namespace)
+    details[:name] = record.name
+    false
   end
 
   scope_for :relation do |relation|

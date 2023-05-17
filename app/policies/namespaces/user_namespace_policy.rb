@@ -3,17 +3,20 @@
 module Namespaces
   # Policy for authorization under user_namespace
   class UserNamespacePolicy < NamespacePolicy
-    alias_rule :new?, :create?, to: :allowed_to_modify_projects_under_namespace?
+    alias_rule :new?, :create?, to: :manage?
 
-    def allowed_to_modify_projects_under_namespace?
+    def manage?
       return true if record.owner == user
+      return true if can_modify?(record) == true
 
-      can_modify?(record)
+      details[:name] = record.name
+      false
     end
 
     def transfer_to_namespace?
       return true if record.owner == user
 
+      details[:name] = record.name
       false
     end
   end

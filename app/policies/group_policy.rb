@@ -2,24 +2,35 @@
 
 # Policy for groups authorization
 class GroupPolicy < NamespacePolicy
-  alias_rule :create?, :edit?, :update?, :new?, to: :allowed_to_modify_group?
-  alias_rule :show?, :index?, to: :allowed_to_view_group?
-  alias_rule :destroy?, to: :allowed_to_destroy?
+  alias_rule :create?, :edit?, :update?, :new?, to: :manage?
+  alias_rule :show?, :index?, to: :view?
 
-  def allowed_to_view_group?
-    can_view?(record)
+  def view?
+    return true if can_view?(record) == true
+
+    details[:name] = record.name
+    false
   end
 
-  def allowed_to_modify_group?
-    can_modify?(record)
+  def manage?
+    return true if can_modify?(record) == true
+
+    details[:name] = record.name
+    false
   end
 
-  def allowed_to_destroy?
-    can_destroy?(record)
+  def destroy?
+    return true if can_destroy?(record) == true
+
+    details[:name] = record.name
+    false
   end
 
   def transfer_to_namespace?
-    can_transfer?(record)
+    return true if can_transfer?(record)
+
+    details[:name] = record.name
+    false
   end
 
   scope_for :relation do |_relation|

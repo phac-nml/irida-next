@@ -59,7 +59,7 @@ module Members
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :allowed_to_modify_group?, exception.rule
+      assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
@@ -116,7 +116,7 @@ module Members
       group = groups(:subgroup1)
       valid_params = { user:, access_level: Member::AccessLevel::OWNER }
 
-      assert_authorized_to(:allowed_to_modify_group?, group,
+      assert_authorized_to(:manage?, group,
                            with: GroupPolicy,
                            context: { user: @user }) do
         Members::CreateService.new(@user, group, valid_params).execute
@@ -128,7 +128,7 @@ module Members
       valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
-      assert_authorized_to(:allowed_to_modify_project_namespace?, @project_namespace,
+      assert_authorized_to(:manage?, @project_namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
         Members::CreateService.new(@user, @project_namespace, valid_params).execute

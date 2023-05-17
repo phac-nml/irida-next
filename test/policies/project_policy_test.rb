@@ -7,37 +7,38 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     @user = users(:john_doe)
     @project = projects(:project1)
     @policy = ProjectPolicy.new(@project, user: @user)
+    @details = {}
   end
 
-  test '#allowed_to_view_project?' do
-    assert @policy.allowed_to_view_project?
+  test '#view?' do
+    assert @policy.view?
   end
 
-  test '#allowed_to_modify_project?' do
-    assert @policy.allowed_to_modify_project?
+  test '#manage?' do
+    assert @policy.manage?
   end
 
-  test '#allowed_to_destroy?' do
-    assert @policy.allowed_to_destroy?
+  test '#destroy?' do
+    assert @policy.destroy?
   end
 
-  test '#allowed_to_transfer?' do
-    assert @policy.allowed_to_transfer?
+  test '#transfer?' do
+    assert @policy.transfer?
   end
 
   test 'aliases' do
-    assert_equal :allowed_to_modify_project?, @policy.resolve_rule(:create?)
-    assert_equal :allowed_to_modify_project?, @policy.resolve_rule(:edit?)
-    assert_equal :allowed_to_modify_project?, @policy.resolve_rule(:update?)
-    assert_equal :allowed_to_modify_project?, @policy.resolve_rule(:new?)
+    assert_equal :manage?, @policy.resolve_rule(:create?)
+    assert_equal :manage?, @policy.resolve_rule(:edit?)
+    assert_equal :manage?, @policy.resolve_rule(:update?)
+    assert_equal :manage?, @policy.resolve_rule(:new?)
 
-    assert_equal :allowed_to_view_project?, @policy.resolve_rule(:index?)
-    assert_equal :allowed_to_view_project?, @policy.resolve_rule(:show?)
-    assert_equal :allowed_to_view_project?, @policy.resolve_rule(:activity?)
+    assert_equal :view?, @policy.resolve_rule(:index?)
+    assert_equal :view?, @policy.resolve_rule(:show?)
+    assert_equal :view?, @policy.resolve_rule(:activity?)
 
-    assert_equal :allowed_to_destroy?, @policy.resolve_rule(:destroy?)
+    assert_equal :destroy?, @policy.resolve_rule(:destroy?)
 
-    assert_equal :allowed_to_transfer?, @policy.resolve_rule(:transfer?)
+    assert_equal :transfer?, @policy.resolve_rule(:transfer?)
   end
 
   test 'scope' do
