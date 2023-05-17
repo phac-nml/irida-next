@@ -404,6 +404,7 @@ en:
         transfer:
           title: Transfer project
           submit: Transfer project
+          new_namespace_id: Path
           descriptions:
             - Transfer your project into another namespace.
             - When you transfer your project to a group, you can easily manage multiple projects and users.

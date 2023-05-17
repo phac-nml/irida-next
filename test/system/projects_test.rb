@@ -46,19 +46,36 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_text project_description
   end
 
-  test 'can update a project name' do
-    project_name = 'Updated Project'
+  test 'can update project name and description' do
+    project_name = 'New Project'
+    project_description = 'New Project Description'
 
     visit project_edit_path(projects(:project1))
     assert_text I18n.t(:'projects.edit.general.title')
 
-    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-      fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
-      assert_equal 'updated-project',
-                   find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
-      click_on I18n.t(:'projects.edit.general.submit')
-    end
+    fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
+    fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
+    assert_equal 'updated-project',
+                   find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).valueclick_on I18n.t(:'projects.edit.general.submit')
     assert_selector 'h1', text: project_name
+    assert_text project_description
+  end
+
+  test 'can update a project namespace' do
+    full_path = namespaces_user_namespaces(:john_doe_namespace).full_path
+
+    visit project_edit_path(projects(:project1))
+    assert_text I18n.t(:'projects.edit.general.title')
+
+    select full_path,
+           from: I18n.t(:'projects.edit.advanced.transfer.new_namespace_id')
+    click_on I18n.t(:'projects.edit.advanced.transfer.submit')
+    assert_selector 'h1', text: projects(:project1).name
+    click_on I18n.t(:'projects.sidebar.settings')
+
+    assert_selector 'select#new_namespace_id' do |input|
+      assert_equal full_path, input.find('option[selected]').text
+    end
   end
 
   test 'can view project' do

@@ -11,7 +11,7 @@
 </ul>
 <%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4") do |form| %>
   <div class="form-field">
-    <%= form.label :parent_id %>
+    <%= form.label :new_namespace_id, t(:'projects.edit.advanced.transfer.new_namespace_id') %>
     <div class="flex items-center whitespace-nowrap">
       <div
         class="
