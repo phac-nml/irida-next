@@ -14,7 +14,7 @@ module Projects
       @sample_transfer = SampleTransfer.new(sample_transfer_params)
       return unless @sample_transfer.valid?
 
-      if Samples::TransferService.new.execute
+      if Samples::TransferService.new(current_user).execute(@sample_transfer)
         flash[:success] = t('.success')
         redirect_to namespace_project_samples_path
       else
