@@ -4,7 +4,7 @@ require 'application_system_test_case'
 
 module Projects
   class SamplesTest < ApplicationSystemTestCase
-    setup do
+    def setup
       @user = users(:john_doe)
       login_as @user
       @sample1 = samples(:sample1)

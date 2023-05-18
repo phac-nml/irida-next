@@ -6,9 +6,11 @@ module Samples
     def execute(sample_transfer)
       @sample_transfer = sample_transfer
 
-      @sample_transfer.sample_ids.each do |sample_id|
-        sample = Sample.find_by(id: sample_id)
-        sample.update(project_id: @sample_transfer.project_id)
+      ActiveRecord::Base.transaction do
+        JSON.parse(@sample_transfer.sample_ids.first).each do |sample_id|
+          sample = Sample.find_by(id: sample_id)
+          sample.update(project_id: @sample_transfer.project_id)
+        end
       end
 
       true

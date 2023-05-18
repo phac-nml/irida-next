@@ -1,11 +1,10 @@
 <%= render Viral::ModalComponent.new(title: t(".title")) do |modal| %>
   <% modal.with_body do %>
     <%= form_with(model: @sample_transfer, url: namespace_project_samples_transfer_index_path, method: :post, data: {
-              turbo: false
+              turbo: false,
+              controller: "form"
             }) do |form| %>
-      <% params[:sample_ids].each do |sample_id| %>
-        <%= form.hidden_field "sample_ids", multiple: true, value: sample_id %>
-      <% end %>
+      <%= form.hidden_field "sample_ids", multiple: true, data: { form_target: "field" } %>
       <div class="form-field">
         <%= form.label :project_id %>
         <%= form.collection_select(:project_id, @projects, :id, :full_path) %>
