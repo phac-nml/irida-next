@@ -16,7 +16,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       get :activity
       get :edit
       post :transfer
-      resources :members, only: %i[create destroy index new]
+      resources :members, only: %i[create destroy index new update]
       resources :samples
     end
   end

@@ -239,3 +239,7 @@
 .pagy-info {
   @apply text-sm font-normal text-gray-500 dark:text-gray-400;
 }
+
+div.field_with_errors > :is(select) {
+  @apply border-red-700 text-red-900 placeholder-red-300;
+}

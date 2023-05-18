@@ -30,6 +30,9 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M:%S"
   action_policy:
     unauthorized: You are not authorized to perform this action
   activerecord:
@@ -66,7 +69,7 @@ en:
           attributes:
             access_level:
               invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
-              inclusion: "Access Level provided is not included in the list of valid access levels"
+              inclusion: "provided is not included in the list of valid access levels"
           destroy:
             last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
         personal_access_token:
@@ -84,6 +87,7 @@ en:
           analyst: Analyst
           maintainer: Maintainer
           owner: Owner
+        its_you: It's you
       group:
         one: Group
         other: Groups
@@ -295,6 +299,8 @@ en:
           button_add_aria_label: Add new group member button
           link_remove_aria_label: "Remove group member %{member} button"
           member_dropdown_aria_label: "Dropdown options for group member %{member}"
+      update:
+        success: "Group member %{user_email} updated successfully"
       new:
         title: Add New Member
         add_member_to_group: Add member to group
@@ -355,6 +361,8 @@ en:
           button_add_aria_label: Add new project member button
           link_remove_aria_label: "Remove project member %{member} button"
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
+      update:
+        success: "Project member %{user_email} updated successfully"
       new:
         title: Add New Member
         add_member_to_project: Add member to project

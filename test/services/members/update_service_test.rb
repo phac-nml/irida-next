@@ -72,6 +72,20 @@ module Members
       assert group_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
     end
 
+    test 'update group member to role lower than owner when they have owner role in the parent group' do
+      group = groups(:group_five)
+      group_member = members(:subgroup_one_group_five_member_james_doe)
+      valid_params = { user: group_member.user, access_level: Member::AccessLevel::ANALYST }
+
+      assert_no_changes -> { group_member } do
+        Members::UpdateService.new(group_member, group, @user, valid_params).execute
+      end
+
+      assert_not_equal Member.find_by(user_id: group_member.user_id,
+                                      namespace_id: group_member.namespace_id).access_level,
+                       Member::AccessLevel::ANALYST
+    end
+
     test 'update project member with valid params' do
       valid_params = { user: @project_member.user, access_level: Member::AccessLevel::OWNER }
 
@@ -135,6 +149,21 @@ module Members
       assert project_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
     end
 
+    test 'update project member to role lower than owner when they have owner role in the parent group' do
+      project = projects(:project22)
+      project_namespace = project.namespace
+      project_member = members(:project_twenty_two_member_james_doe)
+      valid_params = { user: project_member.user, access_level: Member::AccessLevel::ANALYST }
+
+      assert_no_changes -> { project_member } do
+        Members::UpdateService.new(project_member, project_namespace, @user, valid_params).execute
+      end
+
+      assert_not_equal Member.find_by(user_id: project_member.user_id,
+                                      namespace_id: project_member.namespace_id).access_level,
+                       Member::AccessLevel::ANALYST
+    end
+
     test 'valid authorization to update group member' do
       valid_params = { user: @group_member.user, access_level: Member::AccessLevel::OWNER }
 
@@ -155,6 +184,25 @@ module Members
         Members::UpdateService.new(@project_member,
                                    @project_namespace, @user, valid_params).execute
       end
+    end
+
+    test 'update access level of group member to a higher level than they have in a project' do
+      group = groups(:group_six)
+      group_member = members(:group_six_member_james_doe)
+      project_member = members(:project_twenty_three_member_james_doe)
+
+      valid_params = { user: group_member.user, access_level: Member::AccessLevel::MAINTAINER }
+
+      assert_equal group_member.access_level, Member::AccessLevel::GUEST
+      assert_equal project_member.access_level, Member::AccessLevel::GUEST
+
+      assert_changes -> { group_member.access_level }, to: Member::AccessLevel::MAINTAINER do
+        Members::UpdateService.new(group_member, group, @user, valid_params).execute
+      end
+
+      # group member is also a member of a descendant of the group so their access level is updated
+      # to the same access level for the project membership
+      assert_equal Member::AccessLevel::MAINTAINER, Member.find_by(id: project_member.id).access_level
     end
   end
 end

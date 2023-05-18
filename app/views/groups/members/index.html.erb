@@ -14,6 +14,7 @@
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
+        <%= turbo_frame_tag("member-update-alert") %>
         <table class="min-w-full table-fixed dark:divide-gray-600">
           <tbody
             class="
@@ -36,13 +37,50 @@
                 "
               >
                 <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %></div>
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %>
+                    <% if current_user == member.user %>
+                      <span
+                        class="
+                          bg-green-200
+                          text-green-800
+                          text-xs
+                          font-medium
+                          ml-2
+                          px-2.5
+                          py-0.5
+                          rounded-full
+                          dark:bg-green-900
+                          dark:text-green-300
+                        "
+                      >
+                        <%= t(:"activerecord.models.member.its_you") %>
+                      </span>
+                    <% end %>
+                  </div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_level.level_#{member.access_level}") %></div>
+                  <% if member.user != current_user && allowed_to?(:allowed_to_modify_group?, @namespace) &&
+                   member.access_level <= @access_levels.values.last %>
+                    <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
+                      <%= render partial: "groups/members/access_level",
+                      locals: {
+                        member: member,
+                        access_levels: @access_levels
+                      } %>
+                    <% end %>
+                  <% else %>
+                    <%= t(:".access_level.level_#{member.access_level}") %>
+                  <% end %>
                 </td>
                 <td class="p-4 whitespace-nowrap">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(:".access_granted_by", grantor_email: member.created_by.email) %></div>
+                </td>
+                <td class="p-4 whitespace-nowrap">
+                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                    <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
+                      <%= I18n.l(member.updated_at, format: :default) %>
+                    <% end %>
+                  </div>
                 </td>
                 <% if allowed_to?(:allowed_to_modify_group?, @namespace) %>
                   <td class="px-4 py-3 text-right">
