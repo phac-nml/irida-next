@@ -53,3 +53,25 @@ david_doe_group_four:
   type: Group
   description: David's first group
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
+
+group_five:
+  name: Group 5
+  path: group-5
+  type: Group
+  description: Group 5 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+subgroup_one_group_five:
+  name: Subgroup 1 Group 5
+  path: subgroup-1-group-5
+  type: Group
+  description: Subgroup 1 Group 5
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
+
+group_six:
+  name: Group 6
+  path: group-6
+  type: Group
+  description: Group 6 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

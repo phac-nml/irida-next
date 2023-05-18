@@ -86,3 +86,28 @@ david_doe_group_four_route:
   name: Group 4
   path: group-4
   source: david_doe_group_four (Namespace)
+
+group_five_route:
+  name: Group 5
+  path: group-5
+  source: group_five (Namespace)
+
+project22_namespace_route:
+  name: Group 5 / Project 22
+  path: group-5/project-22
+  source: project22_namespace (Namespace)
+
+subgroup_one_group_five_route:
+  name: Group 5 / Subgroup 1 Group 5
+  path: group-5/subgroup-1-group-5
+  source: subgroup_one_group_five (Namespace)
+
+group_six_route:
+  name: Group 6
+  path: group-6
+  source: group_six (Namespace)
+
+project23_namespace_route:
+  name: Group 6 / Project 23
+  path: group-6/project-23
+  source: project23_namespace (Namespace)

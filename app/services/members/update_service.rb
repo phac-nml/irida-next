@@ -23,7 +23,7 @@ module Members
 
       if Member.user_has_namespace_maintainer_access?(current_user,
                                                       namespace) &&
-         (params[:access_level] > Member::AccessLevel::MAINTAINER)
+         (params[:access_level].to_i > Member::AccessLevel::MAINTAINER)
         raise MemberUpdateError, I18n.t('services.members.update.role_not_allowed')
       end
 

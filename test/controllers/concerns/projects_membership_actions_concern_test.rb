@@ -146,4 +146,84 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # r
     assert_redirected_to namespace_project_members_path(namespace, project)
     assert_equal 2, project.namespace.project_members.count
   end
+
+  test 'update project member access role with current user as owner' do
+    sign_in users(:john_doe)
+
+    project = projects(:project22)
+    namespace = groups(:group_five)
+    project_member = members(:project_twenty_two_member_michelle_doe)
+
+    patch namespace_project_member_path(namespace, project, project_member),
+          params: { member: {
+            access_level: Member::AccessLevel::ANALYST
+          }, format: :turbo_stream }
+
+    assert_equal Member.find_by(user_id: project_member.user.id,
+                                namespace_id: project_member.namespace.id).access_level,
+                 Member::AccessLevel::ANALYST
+
+    assert_response :success
+  end
+
+  test 'update project member access role with current user as maintainer' do
+    sign_in users(:micha_doe)
+
+    project = projects(:project22)
+    namespace = groups(:group_five)
+    project_member = members(:project_twenty_two_member_michelle_doe)
+
+    patch namespace_project_member_path(namespace, project, project_member),
+          params: { member: {
+            access_level: Member::AccessLevel::ANALYST
+          }, format: :turbo_stream }
+
+    assert_equal Member.find_by(user_id: project_member.user.id,
+                                namespace_id: project_member.namespace.id).access_level,
+                 Member::AccessLevel::ANALYST
+
+    assert_response :success
+  end
+
+  test 'update project member access role to lower level than group' do
+    sign_in users(:john_doe)
+
+    project = projects(:project22)
+    namespace = groups(:group_five)
+    project_member = members(:project_twenty_two_member_james_doe)
+
+    assert_no_changes -> { project_member.access_level } do
+      patch namespace_project_member_path(namespace, project, project_member),
+            params: { member: {
+              access_level: Member::AccessLevel::ANALYST
+            }, format: :turbo_stream }
+    end
+
+    assert_not_equal Member.find_by(user_id: project_member.user.id,
+                                    namespace_id: project_member.namespace.id).access_level,
+                     Member::AccessLevel::ANALYST
+
+    assert_response :bad_request
+  end
+
+  test 'update project member access role to non existent access level' do
+    sign_in users(:john_doe)
+
+    project = projects(:project22)
+    namespace = groups(:group_five)
+    project_member = members(:project_twenty_two_member_james_doe)
+
+    assert_no_changes -> { project_member.access_level } do
+      patch namespace_project_member_path(namespace, project, project_member),
+            params: { member: {
+              access_level: 100_000
+            }, format: :turbo_stream }
+    end
+
+    assert_not_equal Member.find_by(user_id: project_member.user.id,
+                                    namespace_id: project_member.namespace.id).access_level,
+                     100_000
+
+    assert_response :bad_request
+  end
 end

@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
+class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   include Devise::Test::IntegrationHelpers
 
   test 'group members index' do
@@ -115,5 +115,81 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :redirect
+  end
+
+  test 'update group member access role as owner' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_five)
+    group_member = members(:group_five_member_michelle_doe)
+
+    patch group_member_path(group, group_member),
+          params: { member: {
+            access_level: Member::AccessLevel::ANALYST
+          }, format: :turbo_stream }
+
+    assert_equal Member.find_by(user_id: group_member.user.id,
+                                namespace_id: group_member.namespace.id).access_level,
+                 Member::AccessLevel::ANALYST
+
+    assert_response :success
+  end
+
+  test 'update group member access role as maintainer' do
+    sign_in users(:micha_doe)
+
+    group = groups(:group_five)
+    group_member = members(:group_five_member_michelle_doe)
+
+    patch group_member_path(group, group_member),
+          params: { member: {
+            access_level: Member::AccessLevel::ANALYST
+          }, format: :turbo_stream }
+
+    assert_equal Member.find_by(user_id: group_member.user.id,
+                                namespace_id: group_member.namespace.id).access_level,
+                 Member::AccessLevel::ANALYST
+
+    assert_response :success
+  end
+
+  test 'update project member access role to lower level than group' do
+    sign_in users(:john_doe)
+
+    group = groups(:subgroup_one_group_five)
+    group_member = members(:subgroup_one_group_five_member_james_doe)
+
+    assert_no_changes -> { group_member.access_level } do
+      patch group_member_path(group, group_member),
+            params: { member: {
+              access_level: Member::AccessLevel::ANALYST
+            }, format: :turbo_stream }
+    end
+
+    assert_not_equal Member.find_by(user_id: group_member.user.id,
+                                    namespace_id: group_member.namespace.id).access_level,
+                     Member::AccessLevel::ANALYST
+
+    assert_response :bad_request
+  end
+
+  test 'update project member access role to non existent access level' do
+    sign_in users(:john_doe)
+
+    group = groups(:subgroup_one_group_five)
+    group_member = members(:subgroup_one_group_five_member_james_doe)
+
+    assert_no_changes -> { group_member.access_level } do
+      patch group_member_path(group, group_member),
+            params: { member: {
+              access_level: 100_000
+            }, format: :turbo_stream }
+    end
+
+    assert_not_equal Member.find_by(user_id: group_member.user.id,
+                                    namespace_id: group_member.namespace.id).access_level,
+                     100_000
+
+    assert_response :bad_request
   end
 end
