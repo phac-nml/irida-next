@@ -15,10 +15,10 @@
 
     <%= form.collection_select(
           :new_namespace_id,
-          @authorized_namespaces,
+          @authorized_namespaces.to_a - [@project.namespace.parent],
           :id,
           :full_name,
-          { selected: params[:group_id] || @project.namespace.parent.id },
+          { :prompt => t(:'projects.edit.advanced.transfer.new_namespace_id') }
         ) %>
   </div>
 

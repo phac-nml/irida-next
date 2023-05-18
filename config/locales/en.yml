@@ -531,6 +531,9 @@ en:
         empty_new_project_id: The new project id is empty.
         empty_sample_ids: The sample ids are empty.
         same_project: The samples already exist in the project. Please select a different project.
+    projects:
+      transfer:
+        namespace_project_exists: Project with the same name already exists in the target namespace.
   application:
     errors:
       access_denied: Access Denied.

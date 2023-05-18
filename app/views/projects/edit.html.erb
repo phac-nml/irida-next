@@ -10,17 +10,17 @@
             <div class="form-field">
               <%= builder.label :name %>
               <%= builder.text_field :name,
-                                 required: true,
-                                 autofocus: true,
-                                 placeholder: t(:"projects.new.placeholder") %>
+                                     required: true,
+                                     autofocus: true,
+                                     placeholder: t(:"projects.new.placeholder") %>
             </div>
             <div class="form-field">
               <%= builder.label :description %>
               <%= builder.text_area :description,
-                                {
-                                  :class => "form-control",
-                                  "aria-label" => "Project description, not required"
-                                } %>
+                                    {
+                                      :class => "form-control",
+                                      "aria-label" => "Project description, not required"
+                                    } %>
             </div>
             <div>
               <%= form.submit t("projects.edit.general.submit"), class: "btn btn-default" %>
@@ -30,10 +30,12 @@
       <% end %>
     <% end %>
 
-    <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
+    <%- if allowed_to?(:transfer?, @project) %>
+      <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
 
-    <%= viral_card(title: t(".advanced.transfer.title")) do %>
-      <%= render "edit_advanced_transfer" %>
+      <%= viral_card(title: t(".advanced.transfer.title")) do %>
+        <%= render "edit_advanced_transfer" %>
+      <% end %>
     <% end %>
 
   </div>

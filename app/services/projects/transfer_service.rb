@@ -34,8 +34,8 @@ module Projects
     attr_reader :new_namespace
 
     def transfer(project)
-      if Namespaces::ProjectNamespace.where(parent_id: @new_namespace.id).exists?(['path = ? or name = ?', project.path,
-                                                                                   project.name])
+      if Namespaces::ProjectNamespace.where(parent_id: @new_namespace.id).exists?(['path LIKE ? or name LIKE ?',
+                                                                                   project.path, project.name])
         raise TransferError, I18n.t('services.projects.transfer.namespace_project_exists')
       end
 

@@ -22,4 +22,23 @@ class NamespacePolicy < ApplicationPolicy
         ).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name)
       ).include_route
   end
+
+  scope_for :relation, :transferable do |relation, options|
+    relation
+      .where(
+        type: [Namespaces::UserNamespace.sti_name],
+        owner: user
+      ).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name).include_route
+      .or(
+        relation.where(
+          type: [Group.sti_name],
+          id:
+            Member.where(
+              user:,
+              access_level: Member::AccessLevel::OWNER
+            ).select(:namespace_id)
+        )
+                .self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name)
+      ).include_route - [options[:namespace]]
+  end
 end
