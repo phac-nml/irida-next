@@ -25,6 +25,8 @@ module Samples
       assert_equal ProjectPolicy, exception.policy
       assert_equal :destroy?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.project.destroy?', name: @sample.project.name),
+                   exception.result.message
     end
 
     test 'valid authorization to destroy sample' do

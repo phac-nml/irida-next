@@ -63,4 +63,35 @@ class ProjectsTest < ApplicationSystemTestCase
     end
     assert_selector 'h1', text: project_name
   end
+
+  test 'can view project' do
+    visit namespace_project_url(groups(:group_one), projects(:project1))
+
+    assert_selector 'h1', text: 'Project 1'
+  end
+
+  test 'can not view project' do
+    login_as users(:david_doe)
+
+    group = groups(:group_one)
+    project = projects(:project1)
+    visit namespace_project_url(group, project)
+
+    assert_text I18n.t(:'action_policy.policy.project.view?', name: project.name)
+  end
+
+  test 'can access edit project' do
+    visit project_edit_path(projects(:project1))
+
+    assert_text I18n.t(:'projects.edit.general.title')
+  end
+
+  test 'cannot access edit project' do
+    login_as users(:david_doe)
+
+    project = projects(:project1)
+    visit project_edit_path(project)
+
+    assert_text I18n.t(:'action_policy.policy.project.manage?', name: project.name)
+  end
 end

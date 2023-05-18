@@ -36,6 +36,8 @@ module Samples
       assert_equal ProjectPolicy, exception.policy
       assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.project.manage?', name: @project.name),
+                   exception.result.message
     end
 
     test 'create sample in project with valid params when member of a parent group with the OWNER role' do
@@ -70,6 +72,8 @@ module Samples
       assert_equal ProjectPolicy, exception.policy
       assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.project.manage?', name: project.name),
+                   exception.result.message
     end
 
     test 'valid authorization to create sample' do

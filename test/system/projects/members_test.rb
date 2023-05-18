@@ -18,6 +18,14 @@ module Projects
       assert_selector 'tr', count: @members_count
     end
 
+    test 'cannot access project members' do
+      login_as users(:david_doe)
+
+      visit namespace_project_members_url(@namespace, @project)
+
+      assert_text I18n.t(:'action_policy.policy.project.view?', name: @project.name)
+    end
+
     test 'can add a member to the project' do
       visit namespace_project_members_url(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')

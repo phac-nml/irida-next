@@ -38,6 +38,9 @@ module Projects
       assert_equal ProjectPolicy, exception.policy
       assert_equal :transfer?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.project.transfer?',
+                          name: @project.name),
+                   exception.result.message
     end
 
     test 'transfer project without target namespace permission' do

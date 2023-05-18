@@ -26,5 +26,13 @@ module Groups
       click_link samples(:sample3).name
       assert_selector 'h1', text: samples(:sample3).name
     end
+
+    test 'cannot access group samples' do
+      login_as users(:david_doe)
+
+      visit group_samples_url(@group)
+
+      assert_text I18n.t(:'action_policy.policy.group.view?', name: @group.name)
+    end
   end
 end

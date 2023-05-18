@@ -23,6 +23,14 @@ module Projects
       assert_selector 'button.Viral-Dropdown--icon', count: 5
     end
 
+    test 'cannot access project samples' do
+      login_as users(:david_doe)
+
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_text I18n.t(:'action_policy.policy.project.view?', name: @project.name)
+    end
+
     test 'should create sample' do
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1

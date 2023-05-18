@@ -36,6 +36,8 @@ module Projects
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
       assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.manage?', name: @project.name),
+                   exception.result.message
     end
 
     test 'valid authorization to update project' do

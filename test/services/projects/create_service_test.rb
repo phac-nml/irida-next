@@ -40,6 +40,8 @@ module Projects
       assert_equal Namespaces::UserNamespacePolicy, exception.policy
       assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/user_namespace.manage?', name: @parent_namespace.name),
+                   exception.result.message
     end
 
     test 'create project with valid params under group namespace' do
@@ -80,8 +82,9 @@ module Projects
     end
 
     test 'create project within a parent group that the user is a part of with role < MAINTAINER' do
+      parent_namespace = groups(:subgroup_one_group_three)
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1',
-                                               parent_id: groups(:subgroup_one_group_three).id } }
+                                               parent_id: parent_namespace.id } }
       user = users(:ryan_doe)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
@@ -91,6 +94,8 @@ module Projects
       assert_equal GroupPolicy, exception.policy
       assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.group.manage?', name: parent_namespace.name),
+                   exception.result.message
     end
 
     test 'valid authorization to create project' do

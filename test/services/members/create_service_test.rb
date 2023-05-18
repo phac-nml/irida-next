@@ -61,6 +61,8 @@ module Members
       assert_equal GroupPolicy, exception.policy
       assert_equal :manage?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.group.manage?', name: @group.name),
+                   exception.result.message
     end
 
     test 'create group member with valid params when member of a parent group with the OWNER role' do
@@ -109,6 +111,25 @@ module Members
       assert_no_difference ['Member.count'] do
         Members::CreateService.new(user, project_namespace, valid_params).execute
       end
+    end
+
+    test 'create project member with valid params but no permissions in namespace' do
+      project = projects(:project1)
+      project_namespace = project.namespace
+      user = users(:david_doe)
+
+      valid_params = { user: users(:steve_doe),
+                       access_level: Member::AccessLevel::OWNER }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Members::CreateService.new(user, project_namespace, valid_params).execute
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :manage?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.manage?', name: project.name),
+                   exception.result.message
     end
 
     test 'valid authorization to create group member' do
