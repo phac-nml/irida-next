@@ -61,7 +61,7 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_text project_description
   end
 
-  test 'can update a project namespace' do
+  test 'can update a project path' do
     full_path = namespaces_user_namespaces(:john_doe_namespace).full_path
 
     visit project_edit_path(projects(:project1))

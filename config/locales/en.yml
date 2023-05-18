@@ -401,10 +401,15 @@ en:
         submit: Update project
       advanced:
         title: Advanced settings
+        path:
+          title: Change path
+          description: A project's path is a unique identifier where it can be accessed in the URL
+          points:
+            - Be careful! Changing a project's path can have unintended side effects.
         transfer:
           title: Transfer project
           submit: Transfer project
-          new_namespace_id: Path
+          new_namespace_id: Select a new namespace
           descriptions:
             - Transfer your project into another namespace.
             - When you transfer your project to a group, you can easily manage multiple projects and users.
