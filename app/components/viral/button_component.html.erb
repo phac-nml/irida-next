@@ -1,0 +1,7 @@
+<%= render Viral::BaseComponent.new(tag: tag, **system_arguments) do %>
+  <% if content.present? %>
+    <div>
+      <%= content %>
+    </div>
+  <% end %>
+<% end %>
