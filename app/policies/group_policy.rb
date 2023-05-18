@@ -27,7 +27,7 @@ class GroupPolicy < NamespacePolicy
   end
 
   def transfer_to_namespace?
-    return true if can_transfer?(record)
+    return true if can_transfer?(record) == true
 
     details[:name] = record.name
     false

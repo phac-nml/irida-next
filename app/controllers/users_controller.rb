@@ -3,6 +3,7 @@
 # Controller actions for Users
 class UsersController < ApplicationController
   before_action :user
+  before_action :authorize_user_profile_access!
 
   def show
     respond_to do |format|

@@ -27,6 +27,11 @@ jane_doe_namespace_route:
   path: jane.doe_at_localhost
   source: jane_doe_namespace (Namespace)
 
+james_doe_namespace_route:
+  name: james.doe@localhost
+  path: james.doe_at_localhost
+  source: james_doe_namespace (Namespace)
+
 project1_namespace_route:
   name: Group 1 / Project 1
   path: group-1/project-1

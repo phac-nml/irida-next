@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ProjectsControllerTest < ActionDispatch::IntegrationTest
+class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   include Devise::Test::IntegrationHelpers
 
   test 'should get index' do
@@ -17,6 +17,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     get project_path(projects(:project1))
     assert_response :success
+  end
+
+  test 'should not show the project' do
+    sign_in users(:micha_doe)
+
+    get project_path(projects(:project1))
+    assert_response :unauthorized
   end
 
   test 'should show 404 if project does not exist' do
@@ -91,6 +98,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
          params: { new_namespace_id: groups(:subgroup1).id }
 
     assert_redirected_to project_path(projects(:project2).reload)
+  end
+
+  test 'should not transfer a project' do
+    sign_in users(:john_doe)
+
+    post project_transfer_path(projects(:project2)),
+         params: { new_namespace_id: groups(:david_doe_group_four).id }
+
+    assert_response :unauthorized
   end
 
   test 'should fail to transfer a project with wrong params' do
