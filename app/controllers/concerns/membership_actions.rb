@@ -6,9 +6,9 @@ module MembershipActions
 
   included do
     before_action proc { namespace }
-    before_action proc { member }, only: %i[destroy]
+    before_action proc { member }, only: %i[destroy update]
     before_action proc { available_users }, only: %i[new create]
-    before_action proc { access_levels }, only: %i[new create]
+    before_action proc { access_levels }, only: %i[new create index update]
     before_action proc { context_crumbs }, only: %i[index new]
     before_action proc { authorize_view_members }, only: %i[index]
     before_action proc { authorize_modify_members }, only: %i[new]
@@ -47,6 +47,24 @@ module MembershipActions
       flash[:error] = @member.errors.full_messages.first
     end
     redirect_to members_path
+  end
+
+  def update
+    updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
+    respond_to do |format|
+      if updated
+        format.turbo_stream do
+          render status: :ok, locals: { member: @member, access_levels: @access_levels, type: 'success',
+                                        message: t('.success', user_email: @member.user.email) }
+        end
+      else
+        format.turbo_stream do
+          render status: :bad_request,
+                 locals: { member: @member, type: 'alert',
+                           message: @member.errors.full_messages.first }
+        end
+      end
+    end
   end
 
   private

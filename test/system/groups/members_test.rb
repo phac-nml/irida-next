@@ -5,7 +5,8 @@ require 'application_system_test_case'
 module Groups
   class MembersTest < ApplicationSystemTestCase
     def setup
-      login_as users(:john_doe)
+      @user = users(:john_doe)
+      login_as @user
       @namespace = groups(:group_one)
       @members_count = members.select { |member| member.namespace == @namespace }.count
     end
@@ -73,6 +74,39 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 0
+    end
+
+    test 'can update member\'s access level to another access level' do
+      namespace = groups(:group_five)
+      group_member = members(:group_five_member_michelle_doe)
+
+      visit group_members_url(namespace)
+
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      find("#member-#{group_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
+
+      within %(turbo-frame[id="member-update-alert"]) do
+        assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)
+      end
+    end
+
+    test 'cannot update member\'s access level to a lower level than what they have assigned in parent group' do
+      namespace = groups(:subgroup_one_group_five)
+      group_member = members(:subgroup_one_group_five_member_james_doe)
+
+      visit group_members_url(namespace)
+
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      find("#member-#{group_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
+
+      within %(turbo-frame[id="member-update-alert"]) do
+        assert_text I18n.t('activerecord.errors.models.member.attributes.access_level.invalid',
+                           user: group_member.user.email,
+                           access_level: Member::AccessLevel.human_access(Member::AccessLevel::OWNER),
+                           group_name: 'Group 5')
+      end
     end
   end
 end

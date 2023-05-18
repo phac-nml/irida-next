@@ -17,6 +17,7 @@ class GroupQueryTest < ActiveSupport::TestCase
             name
             path
           }
+          totalCount
         }
       }
     }
@@ -57,5 +58,20 @@ class GroupQueryTest < ActiveSupport::TestCase
     assert_equal group.name, data['name']
 
     assert_equal group.to_global_id.to_s, data['id'], 'id should be GlobalID'
+  end
+
+  test 'group query should not return a result when unauthorized' do
+    group = groups(:group_one)
+
+    result = IridaSchema.execute(GROUP_QUERY, context: { current_user: users(:jane_doe) },
+                                              variables: { groupPath: group.full_path })
+
+    assert_nil result['data']['group']
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal I18n.t('action_policy.unauthorized'), error_message
   end
 end

@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module Projects
-  class MembersTest < ApplicationSystemTestCase
+  class MembersTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
     def setup
       login_as users(:john_doe)
       @namespace = namespaces_user_namespaces(:john_doe_namespace)
@@ -111,6 +111,41 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       assert_selector 'a', text: I18n.t(:'projects.members.index.add'), count: 0
+    end
+
+    test 'can update member\'s access level to another access level' do
+      project = projects(:project22)
+      namespace = groups(:group_five)
+      project_member = members(:project_twenty_two_member_michelle_doe)
+
+      visit namespace_project_members_url(namespace, project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+
+      find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
+
+      within %(turbo-frame[id="member-update-alert"]) do
+        assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)
+      end
+    end
+
+    test 'cannot update member\'s access level to a lower level than what they have assigned in parent group' do
+      project = projects(:project22)
+      namespace = groups(:group_five)
+      project_member = members(:project_twenty_two_member_james_doe)
+
+      visit namespace_project_members_url(namespace, project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+
+      find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
+
+      within %(turbo-frame[id="member-update-alert"]) do
+        assert_text I18n.t('activerecord.errors.models.member.attributes.access_level.invalid',
+                           user: project_member.user.email,
+                           access_level: Member::AccessLevel.human_access(Member::AccessLevel::OWNER),
+                           group_name: 'Group 5')
+      end
     end
   end
 end

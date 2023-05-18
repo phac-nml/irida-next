@@ -16,7 +16,7 @@ module Resolvers
       return Group.none if parent.blank?
 
       if args[:include_parent_descendants]
-        parent.descendants.where(type: Group.sti_name)
+        parent.descendants
       else
         parent.children
       end
