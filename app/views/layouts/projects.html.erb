@@ -40,6 +40,7 @@
               route: @project.namespace.route,
               context_crumbs: @context_crumbs
             ) %>
+      <%= turbo_frame_tag("errors") %>
             <%= yield %>
           <% end %>
         <% end %>

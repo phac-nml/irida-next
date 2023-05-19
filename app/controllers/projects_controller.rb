@@ -72,7 +72,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         notice: t('.success', project_name: @project.name)
       )
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity, locals: { type: 'alert', message: 'Well, you did something stupid!' }
     end
   end
 
