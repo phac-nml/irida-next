@@ -65,13 +65,15 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def transfer
-    new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
+    id = params.require(:new_namespace_id)
+    new_namespace ||= Namespace.find_by(id:)
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       redirect_to(
         project_path(@project),
         notice: t('.success', project_name: @project.name)
       )
     else
+      @value = id
       render :edit, status: :unprocessable_entity,
                     locals: { type: 'alert', message: @project.errors.messages.values.flatten.first }
     end
