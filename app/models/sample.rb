@@ -2,6 +2,7 @@
 
 # entity class for Sample
 class Sample < ApplicationRecord
+  has_logidze
   belongs_to :project
 
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }

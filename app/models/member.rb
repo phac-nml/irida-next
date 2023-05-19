@@ -2,6 +2,7 @@
 
 # entity class for Member
 class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  has_logidze
   belongs_to :user
   belongs_to :namespace, autosave: true
   belongs_to :created_by, class_name: 'User'
