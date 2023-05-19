@@ -533,7 +533,7 @@ en:
         same_project: The samples already exist in the project. Please select a different project.
     projects:
       transfer:
-        namespace_project_exists: Project with the same name already exists in the target namespace.
+        namespace_project_exists: Project with the same name or path already exists in the target namespace.
   application:
     errors:
       access_denied: Access Denied.
