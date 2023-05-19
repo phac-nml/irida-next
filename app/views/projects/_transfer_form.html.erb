@@ -4,11 +4,13 @@
 
     <%= form.collection_select(
           :new_namespace_id,
-          @authorized_namespaces.to_a - [@project.namespace.parent],
+          @authorized_namespaces,
           :id,
 
           :full_name,
-          { :prompt => t(:'projects.edit.advanced.transfer.new_namespace_id'), :selected => @value },
+          {
+            :prompt => t(:'projects.edit.advanced.transfer.new_namespace_id'),
+            :selected => @value },
           { :class => @value.present? ? "error" : "" }
         ) %>
   </div>
