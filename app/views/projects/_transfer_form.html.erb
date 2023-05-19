@@ -1,22 +1,15 @@
 <%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4") do |form| %>
+  <%= form.label :new_namespace_id, t(:"projects.edit.advanced.transfer.new_namespace_id") %>
   <div class="form-field">
-    <%= form.label :new_namespace_id, t(:'projects.edit.advanced.transfer.new_namespace_id') %>
-
     <%= form.collection_select(
           :new_namespace_id,
           @authorized_namespaces,
           :id,
-
           :full_name,
-          {
-            :prompt => t(:'projects.edit.advanced.transfer.new_namespace_id'),
-            :selected => @value },
-          { :class => @value.present? ? "error" : "" }
-        ) %>
+          { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
+          { class: @value.present? ? "error" : "" }) %>
   </div>
-
   <div>
-    <%= form.submit t("projects.edit.advanced.transfer.submit"),
-                    class: "btn btn-default" %>
+    <%= form.submit t("projects.edit.advanced.transfer.submit"), class: "btn btn-default" %>
   </div>
 <% end %>

@@ -10,4 +10,6 @@
   <% end %>
 </ul>
 
-<%= render "transfer_form", project: @project %>
+<%= turbo_frame_tag("edit_advanced_transfer") do %>
+  <%= render "transfer_form", project: @project %>
+<% end %>
