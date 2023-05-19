@@ -35,26 +35,31 @@ en:
       default: "%Y-%m-%d %H:%M:%S"
   action_policy:
     policy:
+      create?: You are not authorized to create this resource on this server
       view?: You are not authorized to view the requested resource on this server
       manage?: You are not authorized to manage the requested resource on this server.
       destroy?: You are not authorized to remove the requested resource from this server.
       transfer_to_namespace?: You are not authorized to transfer to the requested namespace
       group:
+        create?: You are not authorized to create group %{name} or it's associations on this server.
         view?: You are not authorized to view group %{name} or it's associations on this server.
         manage?: You are not authorized to manage group %{name} or it's associations on this server.
         destroy?: You are not authorized to remove group %{name} or it's associations on this server.
         transfer_to_namespace?: You are not authorized to transfer into namespace %{name}
       project:
+        create?: You are not authorized to create project %{name} or it's associations on this server.
         view?: You are not authorized to view project %{name} or it's associations on this server.
         manage?: You are not authorized to manage project %{name} or it's associations on this server.
         destroy?: You are not authorized to remove project %{name} or it's associations on this server.
         transfer?: You are not authorized to transfer project %{name}
       namespaces/project_namespace:
+        create?: You are not authorized to create resources under this namespace
         manage?: You are not authorized to manage the namespace for project %{name}
       namespaces/user_namespace:
-        manage?: You are not authorized to manage the namespace for user %{name}
-        transfer_to_namespace?: You are not authorized to transfer to the user namespace
+        create?: You are not authorized to create resources under the %{name} namespace
+        transfer_to_namespace?: You are not authorized to transfer to the user %{name} namespace
       user:
+        create?: You are not authorized to create user %{name}
         manage?: You are not authorized to manage user %{name}
     unauthorized: You are not authorized to perform this action
   activerecord:

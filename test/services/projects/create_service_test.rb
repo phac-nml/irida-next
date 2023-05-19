@@ -38,9 +38,9 @@ module Projects
       end
 
       assert_equal Namespaces::UserNamespacePolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :create?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.namespaces/user_namespace.manage?', name: @parent_namespace.name),
+      assert_equal I18n.t(:'action_policy.policy.namespaces/user_namespace.create?', name: @parent_namespace.name),
                    exception.result.message
     end
 
@@ -92,16 +92,16 @@ module Projects
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :create?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.manage?', name: parent_namespace.name),
+      assert_equal I18n.t(:'action_policy.policy.group.create?', name: parent_namespace.name),
                    exception.result.message
     end
 
     test 'valid authorization to create project' do
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
 
-      assert_authorized_to(:manage?, @parent_namespace,
+      assert_authorized_to(:create?, @parent_namespace,
                            with: Namespaces::UserNamespacePolicy,
                            context: { user: @user }) do
         Projects::CreateService.new(@user, valid_params).execute

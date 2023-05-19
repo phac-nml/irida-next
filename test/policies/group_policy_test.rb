@@ -17,15 +17,20 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.manage?
   end
 
+  test '#create?' do
+    assert @policy.create?
+  end
+
   test '#destroy?' do
     assert @policy.destroy?
   end
 
   test 'aliases' do
-    assert_equal :manage?, @policy.resolve_rule(:create?)
+    assert_equal :create?, @policy.resolve_rule(:create?)
+    assert_equal :create?, @policy.resolve_rule(:new?)
+
     assert_equal :manage?, @policy.resolve_rule(:edit?)
     assert_equal :manage?, @policy.resolve_rule(:update?)
-    assert_equal :manage?, @policy.resolve_rule(:new?)
 
     assert_equal :view?, @policy.resolve_rule(:show?)
     assert_equal :view?, @policy.resolve_rule(:index?)

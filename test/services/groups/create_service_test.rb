@@ -34,9 +34,9 @@ module Groups
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :create?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.manage?', name: group.name), exception.result.message
+      assert_equal I18n.t(:'action_policy.policy.group.create?', name: group.name), exception.result.message
     end
 
     test 'create subgroup within a parent group that the user is a part of with OWNER role' do
@@ -68,9 +68,9 @@ module Groups
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :create?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.manage?', name: group.name), exception.result.message
+      assert_equal I18n.t(:'action_policy.policy.group.create?', name: group.name), exception.result.message
     end
 
     test 'valid authorization to create group' do
@@ -78,7 +78,7 @@ module Groups
       valid_params = { name: 'group1', path: 'group1', parent_id: group.id }
       user = users(:michelle_doe)
 
-      assert_authorized_to(:manage?, group,
+      assert_authorized_to(:create?, group,
                            with: GroupPolicy,
                            context: { user: }) do
         Groups::CreateService.new(user, valid_params).execute

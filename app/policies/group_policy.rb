@@ -2,11 +2,19 @@
 
 # Policy for groups authorization
 class GroupPolicy < NamespacePolicy
-  alias_rule :create?, :edit?, :update?, :new?, to: :manage?
+  alias_rule :edit?, :update?, to: :manage?
   alias_rule :show?, :index?, to: :view?
+  alias_rule :new?, to: :create?
 
   def view?
     return true if can_view?(record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def create?
+    return true if can_modify?(record) == true
 
     details[:name] = record.name
     false

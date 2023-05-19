@@ -2,13 +2,21 @@
 
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy
-  alias_rule :create?, :edit?, :update?, :new?,
-             to: :manage?
+  alias_rule :edit?, :update?, to: :manage?
   alias_rule :index?, :show?, :activity?, to: :view?
+  alias_rule :new?, to: :create?
 
   def view?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if can_view?(record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def create?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if can_modify?(record.namespace) == true
 
     details[:name] = record.name
     false

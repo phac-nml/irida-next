@@ -3,9 +3,9 @@
 module Namespaces
   # Policy for authorization under user_namespace
   class UserNamespacePolicy < NamespacePolicy
-    alias_rule :new?, :create?, to: :manage?
+    alias_rule :new?, to: :create?
 
-    def manage?
+    def create?
       return true if record.owner == user
       return true if can_modify?(record) == true
 

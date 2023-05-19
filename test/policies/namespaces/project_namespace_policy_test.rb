@@ -14,9 +14,14 @@ module Namespaces
       assert @policy.manage?
     end
 
+    test '#create?' do
+      assert @policy.create?
+    end
+
     test 'aliases' do
-      assert_equal :manage?, @policy.resolve_rule(:new?)
-      assert_equal :manage?, @policy.resolve_rule(:create?)
+      assert_equal :create?, @policy.resolve_rule(:new?)
+      assert_equal :create?, @policy.resolve_rule(:create?)
+
       assert_equal :manage?, @policy.resolve_rule(:update?)
     end
   end
