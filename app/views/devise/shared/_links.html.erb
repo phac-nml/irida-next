@@ -43,7 +43,7 @@
       <span class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900"><%= t(".omniauth") %></span>
     </div>
     <%- resource_class.omniauth_providers.each do |provider| %>
-      <a href="<%= omniauth_authorize_path(resource_name, provider) %>" class="btn btn-default w-full">
+      <a href="<%= omniauth_authorize_path(resource_name, provider) %>" class="btn btn-default w-full" data-turbo="false">
         <div class="text-center inline-flex items-center">
           <%= viral_icon(name: provider, classes: "w-4 h-4 mr-2 -ml-1") %>
           <%= OmniAuth::Utils.camelize(provider) %>
