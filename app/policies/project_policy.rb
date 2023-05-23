@@ -76,7 +76,7 @@ class ProjectPolicy < NamespacePolicy
 
   def create_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.namespace_owners_include_user?(user, record.namespace) == true
+    return true if Member.can_create?(user, record.namespace) == true
 
     details[:name] = record.name
     false
@@ -84,7 +84,7 @@ class ProjectPolicy < NamespacePolicy
 
   def update_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.namespace_owners_include_user?(user, record.namespace) == true
+    return true if Member.can_modify?(user, record.namespace) == true
 
     details[:name] = record.name
     false
