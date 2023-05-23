@@ -56,7 +56,7 @@ module Members
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :update_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
@@ -131,7 +131,7 @@ module Members
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :update_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
@@ -167,8 +167,8 @@ module Members
     test 'valid authorization to update group member' do
       valid_params = { user: @group_member.user, access_level: Member::AccessLevel::OWNER }
 
-      assert_authorized_to(:manage?, @group, with: GroupPolicy,
-                                             context: { user: @user }) do
+      assert_authorized_to(:update_member?, @group, with: GroupPolicy,
+                                                    context: { user: @user }) do
         Members::UpdateService.new(
           @group_member, @group, @user, valid_params
         ).execute
@@ -178,7 +178,7 @@ module Members
     test 'valid authorization to update project member' do
       valid_params = { user: @project_member.user, access_level: Member::AccessLevel::OWNER }
 
-      assert_authorized_to(:manage?, @project_namespace,
+      assert_authorized_to(:update_member?, @project_namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
         Members::UpdateService.new(@project_member,

@@ -34,16 +34,16 @@ module Projects
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :update?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.manage?', name: @project.name),
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update?', name: @project.name),
                    exception.result.message
     end
 
     test 'valid authorization to update project' do
       valid_params = { namespace_attributes: { name: 'new-project1-name', path: 'new-project1-path' } }
 
-      assert_authorized_to(:manage?, @project.namespace,
+      assert_authorized_to(:update?, @project.namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
         Projects::UpdateService.new(@project, @user,

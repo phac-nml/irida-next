@@ -2,29 +2,49 @@
 
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy
-  alias_rule :edit?, :update?, to: :manage?
-  alias_rule :index?, :show?, :activity?, to: :view?
-  alias_rule :new?, to: :create?
-
-  def view?
+  def show?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if can_view?(record.namespace) == true
+    return true if Member.can_view?(user, record.namespace) == true
 
     details[:name] = record.name
+    false
+  end
+
+  def edit?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_modify?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def new?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_create?(user, record.namespace) == true
+
+    details[:name] = record.namespace.parent.name
     false
   end
 
   def create?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if can_modify?(record.namespace) == true
+    return true if Member.can_create?(user, record.namespace) == true
 
     details[:name] = record.name
     false
   end
 
-  def manage?
+  def update?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if can_modify?(record.namespace) == true
+    return true if Member.can_modify?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def activity?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_view?(user, record.namespace) == true
 
     details[:name] = record.name
     false
@@ -32,7 +52,7 @@ class ProjectPolicy < NamespacePolicy
 
   def destroy?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if can_destroy?(record.namespace) == true
+    return true if Member.can_destroy?(user, record.namespace) == true
 
     details[:name] = record.name
     false
@@ -40,7 +60,47 @@ class ProjectPolicy < NamespacePolicy
 
   def transfer?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if can_transfer?(record.namespace)
+    return true if Member.can_transfer?(user, record.namespace)
+
+    details[:name] = record.name
+    false
+  end
+
+  def sample_listing?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_view?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def create_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.namespace_owners_include_user?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def update_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.namespace_owners_include_user?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def destroy_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.namespace_owners_include_user?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def show_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_view?(user, record.namespace) == true
 
     details[:name] = record.name
     false

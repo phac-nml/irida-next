@@ -39,28 +39,55 @@ en:
       view?: You are not authorized to view the requested resource on this server
       manage?: You are not authorized to manage the requested resource on this server.
       destroy?: You are not authorized to remove the requested resource from this server.
-      transfer_to_namespace?: You are not authorized to transfer to the requested namespace
+      transfer_into_namespace?: You are not authorized to transfer to the requested namespace
       group:
-        create?: You are not authorized to create group %{name} or it's associations on this server.
-        view?: You are not authorized to view group %{name} or it's associations on this server.
-        manage?: You are not authorized to manage group %{name} or it's associations on this server.
-        destroy?: You are not authorized to remove group %{name} or it's associations on this server.
-        transfer_to_namespace?: You are not authorized to transfer into namespace %{name}
+        show?: You are not authorized to view group %{name} on this server.
+        edit?: You are not authorized to modify group %{name} on this server.
+        update?: You are not authorized to update group %{name} on this server.
+        destroy?: You are not authorized to remove group %{name} from this server.
+        create?: You are not authorized to create a project under group %{name} on this server.
+        create_subgroup?: You are not authorized to create a subgroup within group %{name} on this server.
+        transfer_into_namespace?: You are not authorized to transfer into the group namespace %{name} on this server.
+        create_member?: You are not authorized to create members for group %{name} on this server.
+        update_member?: You are not authorized to update members for group %{name} on this server.
+        destroy_member?: You are not authorized to remove members for group %{name} on this server.
+        member_listing?: You are not authorized to view members for group %{name} on this server.
+        sample_listing?: You are not authorized to view samples for group %{name} on this server.
       project:
-        create?: You are not authorized to create project %{name} or it's associations on this server.
-        view?: You are not authorized to view project %{name} or it's associations on this server.
-        manage?: You are not authorized to manage project %{name} or it's associations on this server.
-        destroy?: You are not authorized to remove project %{name} or it's associations on this server.
-        transfer?: You are not authorized to transfer project %{name}
+        show?: You are not authorized to view project %{name} on this server.
+        edit?: You are not authorized to modify %{name} on this server.
+        update?: You are not authorized to update project %{name} on this server.
+        destroy?: You are not authorized to remove project %{name} from this server.
+        new?: You are not authorized to create a project under the %{name} namespace on this server.
+        create?: You are not authorized to create a project under the %{name} namespace on this server.
+        activity?: You are not authorized to view the activity for project %{name} on this server.
+        transfer?: You are not authorized to transfer project %{name} on this server.
+        sample_listing?: You are not authorized to view samples for project %{name} on this server.
+        create_sample?: You are not authorized to create samples for project %{name} on this server.
+        update_sample?: You are not authorized to update samples for project %{name} on this server.
+        destroy_sample?: You are not authorized to remove samples from project %{name} on this server.
+        show_sample?: You are not authorized to view this sample for project %{name} on this server.
       namespaces/project_namespace:
-        create?: You are not authorized to create resources under this namespace
-        manage?: You are not authorized to manage the namespace for project %{name}
+        create?: You are not authorized to create resources under the namespace %{name} on this server.
+        new?: You are not authorized to create resources under the namespace %{name} on this server.
+        update?: You are not authorized to update resources under the namespace %{name} on this server.
+        create_member?: You are not authorized to create members for the namespace %{name} on this server.
+        update_member?: You are not authorized to update members for the namespace %{name} on this server.
+        destroy_member?: You are not authorized to remove members from the namespace %{name} on this server.
+        member_listing?: You are not authorized to view members for the namespace %{name} on this server.
       namespaces/user_namespace:
+        new?: You are not authorized to create resources under the %{name} namespace
         create?: You are not authorized to create resources under the %{name} namespace
-        transfer_to_namespace?: You are not authorized to transfer to the user %{name} namespace
+        transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
       user:
-        create?: You are not authorized to create user %{name}
-        manage?: You are not authorized to manage user %{name}
+        update?: You are not authorized to update user %{name} on this server.
+        edit?: You are not authorized to update user %{name} on this server.
+        destroy?: You are not authorized to remove user %{name} from this server.
+        revoke?: You are not authorized to revoke personal access tokens for user %{name} on this server.
+        show?: You are not authorized to view profile for user %{name} on this server.
+        index?: You are not authorized to view listing of users on this server.
+        new?: You are not authorized to create a user on this server.
+        create?: You are not authorized to create a user on this server.
     unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:

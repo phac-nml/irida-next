@@ -2,40 +2,92 @@
 
 # Policy for groups authorization
 class GroupPolicy < NamespacePolicy
-  alias_rule :edit?, :update?, to: :manage?
-  alias_rule :show?, :index?, to: :view?
-  alias_rule :new?, to: :create?
+  def show?
+    return true if Member.can_view?(user, record) == true
 
-  def view?
-    return true if can_view?(record) == true
+    details[:name] = record.name
+    false
+  end
+
+  def new?
+    return true if Member.can_create?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def edit?
+    return true if Member.can_modify?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
   def create?
-    return true if can_modify?(record) == true
+    return true if Member.can_create?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
-  def manage?
-    return true if can_modify?(record) == true
+  def update?
+    return true if Member.can_modify?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
   def destroy?
-    return true if can_destroy?(record) == true
+    return true if Member.can_destroy?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
-  def transfer_to_namespace?
-    return true if can_transfer?(record) == true
+  def create_subgroup?
+    return true if Member.can_create?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def transfer_into_namespace?
+    return true if Member.can_transfer_into_namespace?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def create_member?
+    return true if Member.can_create?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def update_member?
+    return true if Member.can_modify?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def destroy_member?
+    return true if Member.can_modify?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def member_listing?
+    return true if Member.can_view?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def sample_listing?
+    return true if Member.can_view?(user, record) == true
 
     details[:name] = record.name
     false

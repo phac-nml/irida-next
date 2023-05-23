@@ -28,7 +28,7 @@ module Projects
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_text I18n.t(:'action_policy.policy.project.view?', name: @project.name)
+      assert_text I18n.t(:'action_policy.policy.project.sample_listing?', name: @project.name)
     end
 
     test 'should create sample' do

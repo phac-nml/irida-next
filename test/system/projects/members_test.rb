@@ -23,7 +23,7 @@ module Projects
 
       visit namespace_project_members_url(@namespace, @project)
 
-      assert_text I18n.t(:'action_policy.policy.project.view?', name: @project.name)
+      assert_text I18n.t(:'action_policy.policy.namespaces/project_namespace.member_listing?', name: @project.name)
     end
 
     test 'can add a member to the project' do

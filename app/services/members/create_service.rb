@@ -13,7 +13,7 @@ module Members
     end
 
     def execute # rubocop:disable Metrics/AbcSize
-      action_allowed_for_user(namespace, :manage?) unless namespace.parent.nil? && namespace.owner == current_user
+      authorize! @namespace, to: :create_member? unless namespace.parent.nil? && namespace.owner == current_user
 
       if member.namespace.owner != current_user &&
          (Member.user_has_namespace_maintainer_access?(current_user,

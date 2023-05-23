@@ -3,20 +3,57 @@
 module Namespaces
   # Policy for authorization under project_namespace
   class ProjectNamespacePolicy < NamespacePolicy
-    alias_rule :update?, to: :manage?
-    alias_rule :new?, to: :create?
-
-    def create?
+    def new?
       return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if can_modify?(record) == true
+      return true if Member.can_create?(user, record) == true
 
       details[:name] = record.name
       false
     end
 
-    def manage?
+    def create?
       return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if can_modify?(record) == true
+      return true if Member.can_create?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def update?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def create_member?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_create?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def update_member?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def destroy_member?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def member_listing?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_view?(user, record) == true
 
       details[:name] = record.name
       false

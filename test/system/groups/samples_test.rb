@@ -32,7 +32,7 @@ module Groups
 
       visit group_samples_url(@group)
 
-      assert_text I18n.t(:'action_policy.policy.group.view?', name: @group.name)
+      assert_text I18n.t(:'action_policy.policy.group.sample_listing?', name: @group.name)
     end
   end
 end

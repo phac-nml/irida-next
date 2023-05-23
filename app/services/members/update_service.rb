@@ -14,7 +14,7 @@ module Members
     end
 
     def execute # rubocop:disable Metrics/AbcSize
-      action_allowed_for_user(namespace, :manage?)
+      authorize! @namespace, to: :update_member?
 
       unless current_user != member.user
         raise MemberUpdateError, I18n.t('services.members.update.cannot_update_self',

@@ -34,15 +34,15 @@ module Groups
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :update?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.manage?', name: @group.name), exception.result.message
+      assert_equal I18n.t(:'action_policy.policy.group.update?', name: @group.name), exception.result.message
     end
 
     test 'valid authorization to update group' do
       valid_params = { name: 'new-group1-name', path: 'new-group1-path' }
 
-      assert_authorized_to(:manage?, @group,
+      assert_authorized_to(:update?, @group,
                            with: GroupPolicy,
                            context: { user: @user }) do
         Groups::UpdateService.new(@group, @user, valid_params).execute

@@ -10,17 +10,16 @@ module Namespaces
       @policy = Namespaces::UserNamespacePolicy.new(@project.namespace, user: @user)
     end
 
+    test '#new?' do
+      assert @policy.new?
+    end
+
     test '#create?' do
       assert @policy.create?
     end
 
-    test '#transfer_to_namespace?' do
-      assert @policy.transfer_to_namespace?
-    end
-
-    test 'aliases' do
-      assert_equal :create?, @policy.resolve_rule(:new?)
-      assert_equal :create?, @policy.resolve_rule(:create?)
+    test '#transfer_into_namespace?' do
+      assert @policy.transfer_into_namespace?
     end
   end
 end

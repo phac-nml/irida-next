@@ -9,33 +9,56 @@ class GroupPolicyTest < ActiveSupport::TestCase
     @policy = GroupPolicy.new(@group, user: @user)
   end
 
-  test '#view?' do
-    assert @policy.view?
+  test '#show?' do
+    assert @policy.show?
   end
 
-  test '#manage?' do
-    assert @policy.manage?
+  test '#new?' do
+    assert @policy.new?
+  end
+
+  test '#edit?' do
+    assert @policy.edit?
   end
 
   test '#create?' do
     assert @policy.create?
   end
 
+  test '#update?' do
+    assert @policy.update?
+  end
+
   test '#destroy?' do
     assert @policy.destroy?
   end
 
-  test 'aliases' do
-    assert_equal :create?, @policy.resolve_rule(:create?)
-    assert_equal :create?, @policy.resolve_rule(:new?)
+  test '#create_subgroup?' do
+    assert @policy.create_subgroup?
+  end
 
-    assert_equal :manage?, @policy.resolve_rule(:edit?)
-    assert_equal :manage?, @policy.resolve_rule(:update?)
+  test '#transfer_into_namespace?' do
+    assert @policy.transfer_into_namespace?
+  end
 
-    assert_equal :view?, @policy.resolve_rule(:show?)
-    assert_equal :view?, @policy.resolve_rule(:index?)
+  test '#create_member?' do
+    assert @policy.create_member?
+  end
 
-    assert_equal :destroy?, @policy.resolve_rule(:destroy?)
+  test '#update_member?' do
+    assert @policy.update_member?
+  end
+
+  test '#destroy_member?' do
+    assert @policy.destroy_member?
+  end
+
+  test '#member_listing?' do
+    assert @policy.member_listing?
+  end
+
+  test '#sample_listing?' do
+    assert @policy.sample_listing?
   end
 
   test 'scope' do

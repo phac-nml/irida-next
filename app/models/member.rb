@@ -48,6 +48,18 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
+    def can_create?(user, object_namespace)
+      if object_namespace.project_namespace?
+        Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
+                       user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
+          Member.exists?(namespace: object_namespace, user:,
+                         access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+      elsif object_namespace.group_namespace?
+        Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
+                       access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+      end
+    end
+
     def can_view?(user, object_namespace)
       if object_namespace.project_namespace?
         Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids, user:) ||
@@ -63,6 +75,22 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def can_destroy?(user, object_namespace)
       namespace_owners_include_user?(user, object_namespace)
+    end
+
+    def can_transfer?(user, object_namespace)
+      namespace_owners_include_user?(user, object_namespace)
+    end
+
+    def can_transfer_into_namespace?(user, object_namespace)
+      if object_namespace.project_namespace?
+        Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
+                       user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
+          Member.exists?(namespace: object_namespace, user:,
+                         access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+      elsif object_namespace.group_namespace?
+        Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
+                       access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+      end
     end
 
     def namespace_owners_include_user?(user, namespace)

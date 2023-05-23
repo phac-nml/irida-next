@@ -3,9 +3,9 @@
 # Controller actions for Users
 class UsersController < ApplicationController
   before_action :user
-  before_action :authorize_user_profile_access!
 
   def show
+    authorize! @user
     respond_to do |format|
       format.html do
         render 'users/show'

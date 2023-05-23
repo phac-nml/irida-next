@@ -10,19 +10,32 @@ module Namespaces
       @policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
     end
 
-    test '#manage?' do
-      assert @policy.manage?
+    test '#new?' do
+      assert @policy.new?
     end
 
     test '#create?' do
       assert @policy.create?
     end
 
-    test 'aliases' do
-      assert_equal :create?, @policy.resolve_rule(:new?)
-      assert_equal :create?, @policy.resolve_rule(:create?)
+    test '#update?' do
+      assert @policy.update?
+    end
 
-      assert_equal :manage?, @policy.resolve_rule(:update?)
+    test '#create_member?' do
+      assert @policy.create_member?
+    end
+
+    test '#update_member?' do
+      assert @policy.update_member?
+    end
+
+    test '#destroy_member?' do
+      assert @policy.destroy_member?
+    end
+
+    test '#member_listing?' do
+      assert @policy.member_listing?
     end
   end
 end

@@ -6,10 +6,11 @@ module Profiles
   class AccountsController < Profiles::ApplicationController
     # Get account page
     def show
-      # No necessary code here
+      authorize! @user
     end
 
     def destroy
+      authorize! @user
       @user.destroy
       redirect_to new_user_session_url
     end

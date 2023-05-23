@@ -12,7 +12,8 @@ module Samples
     end
 
     def execute
-      action_allowed_for_user(@project, :manage?)
+      authorize! @project, to: :create_sample?
+
       sample.save
       sample
     end

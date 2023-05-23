@@ -59,9 +59,9 @@ module Members
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :create_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.manage?', name: @group.name),
+      assert_equal I18n.t(:'action_policy.policy.group.create_member?', name: @group.name),
                    exception.result.message
     end
 
@@ -126,9 +126,9 @@ module Members
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :create_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.manage?', name: project.name),
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.create_member?', name: project.name),
                    exception.result.message
     end
 
@@ -137,7 +137,7 @@ module Members
       group = groups(:subgroup1)
       valid_params = { user:, access_level: Member::AccessLevel::OWNER }
 
-      assert_authorized_to(:manage?, group,
+      assert_authorized_to(:create_member?, group,
                            with: GroupPolicy,
                            context: { user: @user }) do
         Members::CreateService.new(@user, group, valid_params).execute
@@ -149,7 +149,7 @@ module Members
       valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
-      assert_authorized_to(:manage?, @project_namespace,
+      assert_authorized_to(:create_member?, @project_namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
         Members::CreateService.new(@user, @project_namespace, valid_params).execute

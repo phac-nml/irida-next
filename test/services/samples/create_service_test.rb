@@ -34,9 +34,9 @@ module Samples
       end
 
       assert_equal ProjectPolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :create_sample?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.project.manage?', name: @project.name),
+      assert_equal I18n.t(:'action_policy.policy.project.create_sample?', name: @project.name),
                    exception.result.message
     end
 
@@ -70,17 +70,17 @@ module Samples
       end
 
       assert_equal ProjectPolicy, exception.policy
-      assert_equal :manage?, exception.rule
+      assert_equal :create_sample?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.project.manage?', name: project.name),
+      assert_equal I18n.t(:'action_policy.policy.project.create_sample?', name: project.name),
                    exception.result.message
     end
 
     test 'valid authorization to create sample' do
       valid_params = { name: 'new-project2-sample', description: 'first sample for project2' }
 
-      assert_authorized_to(:manage?, @project, with: ProjectPolicy,
-                                               context: { user: @user }) do
+      assert_authorized_to(:create_sample?, @project, with: ProjectPolicy,
+                                                      context: { user: @user }) do
         Samples::CreateService.new(@user, @project,
                                    valid_params).execute
       end

@@ -27,7 +27,7 @@
               icon: "beaker",
               label: t(:"projects.sidebar.samples")
             ) %>
-            <% if allowed_to?(:manage?, @project) %>
+            <% if allowed_to?(:update?, @project) %>
               <%= render section.with_item(
                 url: project_edit_path(@project),
                 icon: "cog_6_tooth",

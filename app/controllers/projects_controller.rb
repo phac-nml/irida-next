@@ -5,8 +5,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorize_modify_project!, only: %i[edit]
-  before_action :authorize_view_project!, only: %i[show]
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
@@ -23,7 +21,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def show
-    # No necessary code here
+    authorize! @project
   end
 
   def new
@@ -32,7 +30,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def edit
-    # No necessary code here
+    authorize! @project
   end
 
   def create

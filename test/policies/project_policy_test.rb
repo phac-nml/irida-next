@@ -10,16 +10,28 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     @details = {}
   end
 
-  test '#view?' do
-    assert @policy.view?
+  test '#show?' do
+    assert @policy.show?
   end
 
-  test '#manage?' do
-    assert @policy.manage?
+  test '#edit?' do
+    assert @policy.edit?
+  end
+
+  test '#new?' do
+    assert @policy.new?
   end
 
   test '#create?' do
     assert @policy.create?
+  end
+
+  test '#update?' do
+    assert @policy.update?
+  end
+
+  test '#activity?' do
+    assert @policy.activity?
   end
 
   test '#destroy?' do
@@ -30,20 +42,24 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.transfer?
   end
 
-  test 'aliases' do
-    assert_equal :create?, @policy.resolve_rule(:create?)
-    assert_equal :create?, @policy.resolve_rule(:new?)
+  test '#sample_listing?' do
+    assert @policy.sample_listing?
+  end
 
-    assert_equal :manage?, @policy.resolve_rule(:edit?)
-    assert_equal :manage?, @policy.resolve_rule(:update?)
+  test '#create_sample?' do
+    assert @policy.create_sample?
+  end
 
-    assert_equal :view?, @policy.resolve_rule(:index?)
-    assert_equal :view?, @policy.resolve_rule(:show?)
-    assert_equal :view?, @policy.resolve_rule(:activity?)
+  test '#update_sample?' do
+    assert @policy.update_sample?
+  end
 
-    assert_equal :destroy?, @policy.resolve_rule(:destroy?)
+  test '#destroy_sample?' do
+    assert @policy.destroy_sample?
+  end
 
-    assert_equal :transfer?, @policy.resolve_rule(:transfer?)
+  test '#show_sample?' do
+    assert @policy.destroy_sample?
   end
 
   test 'scope' do

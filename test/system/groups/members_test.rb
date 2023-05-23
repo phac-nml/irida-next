@@ -23,7 +23,7 @@ module Groups
 
       visit group_members_url(@namespace)
 
-      assert_text I18n.t(:'action_policy.policy.group.view?', name: @namespace.name)
+      assert_text I18n.t(:'action_policy.policy.group.member_listing?', name: @namespace.name)
     end
 
     test 'can add a member to the group' do

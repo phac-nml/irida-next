@@ -3,17 +3,23 @@
 module Namespaces
   # Policy for authorization under user_namespace
   class UserNamespacePolicy < NamespacePolicy
-    alias_rule :new?, to: :create?
-
-    def create?
+    def new?
       return true if record.owner == user
-      return true if can_modify?(record) == true
+      return true if Member.can_create?(user, record) == true
 
       details[:name] = record.name
       false
     end
 
-    def transfer_to_namespace?
+    def create?
+      return true if record.owner == user
+      return true if Member.can_create?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def transfer_into_namespace?
       return true if record.owner == user
 
       details[:name] = record.name

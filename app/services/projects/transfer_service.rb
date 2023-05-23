@@ -16,10 +16,10 @@ module Projects
       end
 
       # Authorize if user can transfer project
-      action_allowed_for_user(project, :transfer?)
+      authorize! @project, to: :transfer?
 
       # Authorize if user can transfer project to namespace
-      action_allowed_for_user(@new_namespace, :transfer_to_namespace?)
+      authorize! @new_namespace, to: :transfer_into_namespace?
 
       transfer(project)
 
