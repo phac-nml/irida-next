@@ -22,9 +22,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   delegate :project, to: :project_namespace
 
   class << self
-    # TODO: Remove this once authorization is setup and
-    # the policy class will handle which access levels
-    # to return
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
