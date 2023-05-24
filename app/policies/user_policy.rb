@@ -4,30 +4,18 @@
 class UserPolicy < ApplicationPolicy
   def update?
     return true if record == user
-
-    details[:name] = record.email
-    false
   end
 
   def edit?
     return true if record == user
-
-    details[:name] = record.email
-    false
   end
 
   def destroy?
     return true if record == user
-
-    details[:name] = record.email
-    false
   end
 
   def revoke?
     return true if record == user
-
-    details[:name] = record.email
-    false
   end
 
   def show?
@@ -39,22 +27,13 @@ class UserPolicy < ApplicationPolicy
 
   def index?
     return true if record == user
-
-    details[:name] = record.email
-    false
   end
 
   def new?
     return true if record == user
-
-    details[:name] = record.email
-    false
   end
 
   def create?
     return true if record == user
-
-    details[:name] = record.email
-    false
   end
 end

@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GroupsControllerTest < ActionDispatch::IntegrationTest
+class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   include Devise::Test::IntegrationHelpers
 
   test 'should get index' do
