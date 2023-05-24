@@ -14,7 +14,7 @@
 test:
   OMNIAUTH_PROVIDERS: "developer,saml,azure_activedirectory_v2"
 development:
-  OMNIAUTH_PROVIDERS: "developer"
+  OMNIAUTH_PROVIDERS: "developer,saml,azure_activedirectory_v2"
 production:
   OMNIAUTH_PROVIDERS: ""
 
