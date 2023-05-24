@@ -15,7 +15,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
     scope '-' do
       get :activity
       get :edit
-      post :transfer, only: %i[create new]
+      post :transfer
       resources :members, only: %i[create destroy index new update]
       resources :samples
     end
