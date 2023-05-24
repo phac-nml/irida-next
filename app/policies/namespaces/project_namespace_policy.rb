@@ -11,17 +11,17 @@ module Namespaces
       false
     end
 
-    def create_member?
+    def member_listing?
       return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if Member.can_create?(user, record) == true
+      return true if Member.can_view?(user, record) == true
 
       details[:name] = record.name
       false
     end
 
-    def update_member?
+    def create_member?
       return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if Member.can_modify?(user, record) == true
+      return true if Member.can_create?(user, record) == true
 
       details[:name] = record.name
       false
@@ -35,9 +35,9 @@ module Namespaces
       false
     end
 
-    def member_listing?
+    def update_member?
       return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if Member.can_view?(user, record) == true
+      return true if Member.can_modify?(user, record) == true
 
       details[:name] = record.name
       false

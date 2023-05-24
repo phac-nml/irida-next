@@ -2,7 +2,11 @@
 
 # Policy for profiles authorization
 class UserPolicy < ApplicationPolicy
-  def update?
+  def create?
+    return true if record == user
+  end
+
+  def destroy?
     return true if record == user
   end
 
@@ -10,7 +14,11 @@ class UserPolicy < ApplicationPolicy
     return true if record == user
   end
 
-  def destroy?
+  def index?
+    return true if record == user
+  end
+
+  def new?
     return true if record == user
   end
 
@@ -25,15 +33,7 @@ class UserPolicy < ApplicationPolicy
     false
   end
 
-  def index?
-    return true if record == user
-  end
-
-  def new?
-    return true if record == user
-  end
-
-  def create?
+  def update?
     return true if record == user
   end
 end
