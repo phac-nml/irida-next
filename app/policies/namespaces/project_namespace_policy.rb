@@ -3,22 +3,6 @@
 module Namespaces
   # Policy for authorization under project_namespace
   class ProjectNamespacePolicy < NamespacePolicy
-    def new?
-      return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if Member.can_create?(user, record) == true
-
-      details[:name] = record.name
-      false
-    end
-
-    def create?
-      return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if Member.can_create?(user, record) == true
-
-      details[:name] = record.name
-      false
-    end
-
     def update?
       return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_modify?(user, record) == true

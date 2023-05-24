@@ -3,17 +3,8 @@
 module Namespaces
   # Policy for authorization under user_namespace
   class UserNamespacePolicy < NamespacePolicy
-    def new?
-      return true if record.owner == user
-      return true if Member.can_create?(user, record) == true
-
-      details[:name] = record.name
-      false
-    end
-
     def create?
       return true if record.owner == user
-      return true if Member.can_create?(user, record) == true
 
       details[:name] = record.name
       false

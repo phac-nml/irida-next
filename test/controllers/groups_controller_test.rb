@@ -134,4 +134,22 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unauthorized
   end
+
+  test 'should not show the group edit page' do
+    sign_in users(:david_doe)
+    group = groups(:group_one)
+
+    get edit_group_path(group)
+
+    assert_response :unauthorized
+  end
+
+  test 'should show the group edit page' do
+    sign_in users(:john_doe)
+    group = groups(:group_one)
+
+    get edit_group_path(group)
+
+    assert_response :success
+  end
 end

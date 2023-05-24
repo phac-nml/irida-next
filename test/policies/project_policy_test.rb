@@ -22,10 +22,6 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.new?
   end
 
-  test '#create?' do
-    assert @policy.create?
-  end
-
   test '#update?' do
     assert @policy.update?
   end

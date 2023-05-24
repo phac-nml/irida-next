@@ -27,7 +27,7 @@ class GroupsController < Groups::ApplicationController
   end
 
   def edit
-    authorize! @group, to: :update?
+    authorize! @group
   end
 
   def create

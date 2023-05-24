@@ -26,14 +26,6 @@ class ProjectPolicy < NamespacePolicy
     false
   end
 
-  def create?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_create?(user, record.namespace) == true
-
-    details[:name] = record.name
-    false
-  end
-
   def update?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_modify?(user, record.namespace) == true

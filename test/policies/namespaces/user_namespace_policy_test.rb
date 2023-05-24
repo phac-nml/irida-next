@@ -10,10 +10,6 @@ module Namespaces
       @policy = Namespaces::UserNamespacePolicy.new(@project.namespace, user: @user)
     end
 
-    test '#new?' do
-      assert @policy.new?
-    end
-
     test '#create?' do
       assert @policy.create?
     end

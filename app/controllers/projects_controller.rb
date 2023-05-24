@@ -27,6 +27,8 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   def new
     @project = Project.new
     @project.build_namespace(parent_id: params[:namespace_id] || current_user.namespace.id)
+
+    authorize! @project
   end
 
   def edit
@@ -58,6 +60,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def activity
+    authorize! @project
     # No necessary code here
   end
 
