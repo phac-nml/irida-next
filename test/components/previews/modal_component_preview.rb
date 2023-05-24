@@ -8,4 +8,28 @@ class ModalComponentPreview < ViewComponent::Preview
       end
     end
   end
+
+  def small
+    render Viral::ModalComponent.new(title: 'This is a modal title', size: :small) do |modal|
+      modal.body do
+        'This is a modal body'
+      end
+    end
+  end
+
+  def large
+    render Viral::ModalComponent.new(title: 'This is a modal title', size: :large) do |modal|
+      modal.body do
+        'This is a modal body'
+      end
+    end
+  end
+
+  def extra_large
+    render Viral::ModalComponent.new(title: 'This is a modal title', size: :extra_large) do |modal|
+      modal.body do
+        'This is a modal body'
+      end
+    end
+  end
 end
