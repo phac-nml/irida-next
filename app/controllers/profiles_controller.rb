@@ -6,7 +6,7 @@ class ProfilesController < Profiles::ApplicationController
 
   # Get the profile page
   def show
-    authorize! @user
+    authorize! @user, to: :read?
     # No necessary code here
   end
 

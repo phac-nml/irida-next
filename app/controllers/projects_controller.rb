@@ -21,7 +21,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def show
-    authorize! @project
+    authorize! @project, to: :read?
   end
 
   def new

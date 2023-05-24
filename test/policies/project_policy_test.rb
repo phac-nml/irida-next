@@ -10,8 +10,8 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     @details = {}
   end
 
-  test '#show?' do
-    assert @policy.show?
+  test '#read?' do
+    assert @policy.read?
   end
 
   test '#edit?' do
@@ -54,7 +54,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.destroy_sample?
   end
 
-  test '#show_sample?' do
+  test '#read_sample?' do
     assert @policy.destroy_sample?
   end
 

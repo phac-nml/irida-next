@@ -144,6 +144,6 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     group = groups(:david_doe_group_four)
     visit group_url(group)
 
-    assert_text I18n.t(:'action_policy.policy.group.show?', name: group.name)
+    assert_text I18n.t(:'action_policy.policy.group.read?', name: group.name)
   end
 end

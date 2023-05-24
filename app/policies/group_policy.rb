@@ -37,7 +37,7 @@ class GroupPolicy < NamespacePolicy
     false
   end
 
-  def show?
+  def read?
     return true if Member.can_view?(user, record) == true
 
     details[:name] = record.name

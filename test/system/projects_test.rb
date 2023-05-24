@@ -77,7 +77,7 @@ class ProjectsTest < ApplicationSystemTestCase
     project = projects(:project1)
     visit namespace_project_url(group, project)
 
-    assert_text I18n.t(:'action_policy.policy.project.show?', name: project.name)
+    assert_text I18n.t(:'action_policy.policy.project.read?', name: project.name)
   end
 
   test 'can access edit project' do

@@ -34,7 +34,7 @@ class ProjectPolicy < NamespacePolicy
     false
   end
 
-  def show?
+  def read?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_view?(user, record.namespace) == true
 
@@ -82,7 +82,7 @@ class ProjectPolicy < NamespacePolicy
     false
   end
 
-  def show_sample?
+  def read_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_view?(user, record.namespace) == true
 

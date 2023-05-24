@@ -24,8 +24,8 @@ class UserPolicyTest < ActiveSupport::TestCase
     assert @policy.revoke?
   end
 
-  test '#show?' do
-    assert @policy.show?
+  test '#read?' do
+    assert @policy.read?
   end
 
   test '#index?' do

@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_action :user
 
   def show
-    authorize! @user
+    authorize! @user, to: :read?
     respond_to do |format|
       format.html do
         render 'users/show'

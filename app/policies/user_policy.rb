@@ -26,7 +26,7 @@ class UserPolicy < ApplicationPolicy
     return true if record == user
   end
 
-  def show?
+  def read?
     return true if record == user
 
     details[:name] = record.email

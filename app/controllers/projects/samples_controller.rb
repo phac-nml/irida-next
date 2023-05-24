@@ -14,7 +14,7 @@ module Projects
     end
 
     def show
-      authorize! @sample.project, to: :show_sample?
+      authorize! @sample.project, to: :read_sample?
     end
 
     def new

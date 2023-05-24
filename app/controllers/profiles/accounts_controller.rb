@@ -6,7 +6,7 @@ module Profiles
   class AccountsController < Profiles::ApplicationController
     # Get account page
     def show
-      authorize! @user
+      authorize! @user, to: :read?
     end
 
     def destroy

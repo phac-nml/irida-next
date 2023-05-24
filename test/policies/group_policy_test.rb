@@ -9,8 +9,8 @@ class GroupPolicyTest < ActiveSupport::TestCase
     @policy = GroupPolicy.new(@group, user: @user)
   end
 
-  test '#show?' do
-    assert @policy.show?
+  test '#read?' do
+    assert @policy.read?
   end
 
   test '#new?' do

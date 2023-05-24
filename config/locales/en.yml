@@ -40,7 +40,7 @@ en:
       edit?: You are not authorized to update this resource on this server.
       index?: You are not authorized to view the listing of resourcs on this server.
       new?: You are not authorized to create this resource on this server.
-      show?: You are not authorized to view this resource on this server.
+      read?: You are not authorized to view this resource on this server.
       transfer?: You are not authorized to transfer the requested resource.
       transfer_into_namespace?: You are not authorized to transfer to the requested namespace.
       update?: You are not authorized to update this resource on this server.
@@ -50,7 +50,7 @@ en:
         destroy?: You are not authorized to remove group %{name} from this server.
         edit?: You are not authorized to modify group %{name} on this server.
         new?: You are not authorized to create a project under group %{name} on this server.
-        show?: You are not authorized to view group %{name} on this server.
+        read?: You are not authorized to view group %{name} on this server.
         transfer_into_namespace?: You are not authorized to transfer into the group namespace %{name} on this server.
         update?: You are not authorized to update group %{name} on this server.
         member_listing?: You are not authorized to view members for group %{name} on this server.
@@ -63,13 +63,13 @@ en:
         destroy?: You are not authorized to remove project %{name} from this server.
         edit?: You are not authorized to modify project %{name} on this server.
         new?: You are not authorized to create a project under the %{name} namespace on this server.
-        show?: You are not authorized to view project %{name} on this server.
+        read?: You are not authorized to view project %{name} on this server.
         transfer?: You are not authorized to transfer project %{name} on this server.
         update?: You are not authorized to update project %{name} on this server.
         sample_listing?: You are not authorized to view samples for project %{name} on this server.
         create_sample?: You are not authorized to create samples for project %{name} on this server.
         destroy_sample?: You are not authorized to remove samples from project %{name} on this server.
-        show_sample?: You are not authorized to view this sample for project %{name} on this server.
+        read_sample?: You are not authorized to view this sample for project %{name} on this server.
         update_sample?: You are not authorized to update samples for project %{name} on this server.
       namespaces/project_namespace:
         update?: You are not authorized to update the namespace for project %{name} on this server.
@@ -87,7 +87,7 @@ en:
         index?: You are not authorized to view listing of users on this server.
         new?: You are not authorized to create a user on this server.
         revoke?: You are not authorized to revoke personal access tokens for user %{name} on this server.
-        show?: You are not authorized to view profile for user %{name} on this server.
+        read?: You are not authorized to view profile for user %{name} on this server.
         update?: You are not authorized to update user %{name} on this server.
     unauthorized: You are not authorized to perform this action
   activerecord:

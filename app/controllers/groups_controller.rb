@@ -12,7 +12,7 @@ class GroupsController < Groups::ApplicationController
   end
 
   def show
-    authorize! @group
+    authorize! @group, to: :read?
   end
 
   def new

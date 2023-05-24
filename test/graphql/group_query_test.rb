@@ -72,6 +72,6 @@ class GroupQueryTest < ActiveSupport::TestCase
 
     error_message = result['errors'][0]['message']
 
-    assert_equal I18n.t('action_policy.policy.group.show?', name: group.name), error_message
+    assert_equal I18n.t('action_policy.policy.group.read?', name: group.name), error_message
   end
 end
