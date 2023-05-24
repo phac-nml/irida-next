@@ -8,6 +8,7 @@ module ViewHelper
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',
     icon: 'Viral::IconComponent',
+    modal: 'Viral::ModalComponent',
     tooltip: 'Viral::TooltipComponent'
   }.freeze
 
