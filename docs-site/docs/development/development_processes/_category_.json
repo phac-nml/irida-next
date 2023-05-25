@@ -1,8 +1,4 @@
 {
   "label": "Development Processes",
-  "position": 1,
-  "link": {
-    "type": "generated-index",
-    "slug": "/development_processes"
-  }
+  "position": 1
 }

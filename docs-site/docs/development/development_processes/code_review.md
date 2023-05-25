@@ -28,7 +28,7 @@ Using checklists improves quality in software engineering. This checklist is a s
 #### Quality
 
 1. You have self-reviewed this PR per [code review guidelines](./code_review).
-1. For the code that this change impacts, you beloeve that the automated tests validated functionality that is highly important to users.
+1. For the code that this change impacts, you believe that the automated tests validate functionality that is highly important to users.
 1. If the existing automated tests do not cover the above functionality, you have added the necessary tests or added an issue to describe the automation testing gap and linked it to this PR.
 1. You have considered the technical aspects of this change's impact on IRIDA Next.
 1. You have considered the impact of this change on the frontend, backend, and database portions of the system where appropriate and applied the `~ux`, `~frontend`, `~backend`, and `~database` labels accordingly.
@@ -45,7 +45,7 @@ Using checklists improves quality in software engineering. This checklist is a s
 
 #### Security
 
-1. You have confirmed that if thsi PR contains a change to processing or storing credentials or tokens, authorization and authentication methods, you have added the `~security` label.
+1. You have confirmed that if this PR contains a change to processing or storing credentials or tokens, authorization and authentication methods, you have added the `~security` label.
 
 ## Best practices
 
@@ -61,7 +61,7 @@ Using checklists improves quality in software engineering. This checklist is a s
 * Be humble. ("I'm not sure - let's look it up.")
 * Don't use hyperbole. ("always", "never", "endlessly", "nothing")
 * Be careful about the use of sarcasm. Everything we do is public; what seems like good-natured ribbing to you and a long-time colleague might come off as mean and unwelcoming to a person new to the project.
-* Consider one-on-one chats or video valls if there are too many "I didn't understand" or "Alternative solution:" comments. Post a follow-up comment summarizing one-on-one discussion.
+* Consider one-on-one chats or video calls if there are too many "I didn't understand" or "Alternative solution:" comments. Post a follow-up comment summarizing one-on-one discussion.
 * If you ask a question to a specific person, always start the comment by mentioning them.
 
 ### Having your pull request reviewed
@@ -69,7 +69,7 @@ Using checklists improves quality in software engineering. This checklist is a s
 Please keep in mind that code review is a process that can take multiple iterations, and reviewers may spot things later that they may not have seen the first time.
 
 * The first reviewer of your code is *you*. Before you perform that first push of your shiny new branch, read through the entire diff. Does it make sense? Did you include something unrelated to the overall purpose of the changes? Did you forget to remove any debugging code?
-* Write a detailed description as outlined in the [pull request guidelines](./pull_request_workflow). SOme reviewers may not be familiar with the feature or area of the codebase. Thorough descriptions help all reviewers understand your request and test effectively.
+* Write a detailed description as outlined in the [pull request guidelines](./pull_request_workflow). Some reviewers may not be familiar with the feature or area of the codebase. Thorough descriptions help all reviewers understand your request and test effectively.
 * If you know your change depends on another being merge first, note it in the description and set a dependency.
 * Be grateful for reviewer's suggestions. ("Good call. I'll make that change.")
 * Don't take it personally. The review is of the code, not of you.

@@ -27,7 +27,7 @@ To make sure that your pull request can be approved, please ensure that it meets
 1. If the pull request contains more than 500 changes:
    * Explain the reason
 1. Mention any major breaking changes.
-1. Inlcude proper test and make sure all tests pass (unless it contains a test exposing a bug in existing code). Every new class should have corresponding unit tests, even if the class is exercised at a higher level, such as a feature test.
+1. Include proper tests and make sure all tests pass (unless it contains a test exposing a bug in existing code). Every new class should have corresponding unit tests, even if the class is exercised at a higher level, such as a feature test.
    * If a failing CI build seems to be unrelated to your contribution, you can try restarting the failing CI job, rebasing on top of target branch to bring in updates that may resolve the failure, or if it has not been fixed yet, ask a developer to help you fix the test.
 1. The PR contains a few logically organized commits, or has squashing commits enabled.
 1. The changes can merge without problems. If not, you should rebase if you're the only one working on your feature branch, otherwise merge the default branch into the PR branch.
@@ -65,7 +65,7 @@ If a regression occurs, we prefer you revert the change. Your contribution is *i
 
 1. Use available components from the IRIDA Next Design System, Viral.
 1. The PR must include *Before* and *After* screenshots if UI changes are made.
-1. If the PR changes CSS classes, please include the list of affects pages, which can be found by running `grep css-class ./app -R`.
+1. If the PR changes CSS classes, please include the list of affected pages, which can be found by running `grep css-class ./app -R`.
 
 ### Description of changes
 
@@ -76,8 +76,8 @@ If a regression occurs, we prefer you revert the change. Your contribution is *i
 
 1. The [PR acceptance checklist](./code_review#acceptance-checklist) has been checked as confirmed in the PR.
 1. Reviewed by relevant reviewers, and all concerns are addressed for Availability, Regressions, and Security. Documentation reviews should take place as soon as possible, but they should not block a merge request.
-1. You pull request has at least 1 approval, but depending on your changes might need additional approvals.
-  * You don't have to select any specific reviewers, but you can if you really want specific people to approve your pull request.
+1. Your pull request has at least 1 approval, but depending on your changes might need additional approvals.
+   * You don't have to select any specific reviewers, but you can if you really want specific people to approve your pull request.
 1. Merged by a project maintainer.
 
 ## Related topics
