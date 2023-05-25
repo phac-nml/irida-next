@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class ModalComponentPreview < ViewComponent::Preview
+  def try_me
+    render 'components/modal'
+  end
+
   def default
     render Viral::ModalComponent.new(title: 'This is a modal title') do |modal|
       modal.body do
