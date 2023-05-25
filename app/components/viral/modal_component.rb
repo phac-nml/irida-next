@@ -3,7 +3,7 @@
 module Viral
   # A component for displaying a modal.
   class ModalComponent < Component
-    attr_reader :title, :size
+    attr_reader :title, :size, :label
 
     renders_one :body
 
@@ -15,9 +15,10 @@ module Viral
       extra_large: 'max-w-7xl'
     }.freeze
 
-    def initialize(title:, size: SIZE_DEFAULT)
+    def initialize(title:, size: SIZE_DEFAULT, label: nil)
       @title = title
       @size = SIZE_MAPPINGS[size]
+      @label = label
     end
   end
 end
