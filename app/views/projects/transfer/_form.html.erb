@@ -8,7 +8,7 @@
           :id,
           :full_name,
           { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
-          { class: @value.present? ? "error" : "" }
+          { class: @error.present? ? "error" : "" }
         ) %>
     <% if @error.present? %>
       <p class="text-sm text-red-500 dark:text-red-400"><%= @error %></p>
