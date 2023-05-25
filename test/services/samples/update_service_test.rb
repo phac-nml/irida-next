@@ -37,15 +37,17 @@ module Samples
       end
 
       assert_equal ProjectPolicy, exception.policy
-      assert_equal :allowed_to_modify_project?, exception.rule
+      assert_equal :update_sample?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.project.update_sample?', name: sample.project.name),
+                   exception.result.message
     end
 
     test 'valid authorization to update sample' do
       valid_params = { name: 'new-sample3-name', description: 'new-sample3-description' }
 
-      assert_authorized_to(:allowed_to_modify_project?, @sample.project, with: ProjectPolicy,
-                                                                         context: { user: @user }) do
+      assert_authorized_to(:update_sample?, @sample.project, with: ProjectPolicy,
+                                                             context: { user: @user }) do
         Samples::UpdateService.new(@sample, @user, valid_params).execute
       end
     end

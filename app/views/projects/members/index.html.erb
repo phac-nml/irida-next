@@ -1,7 +1,7 @@
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <% if allowed_to?(:allowed_to_modify_project_namespace?, @namespace) %>
+    <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
       new_namespace_project_member_path,
       class: "btn btn-primary",
@@ -59,7 +59,7 @@
                   </div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <% if member.user != current_user && allowed_to?(:allowed_to_modify_project_namespace?, @namespace) &&
+                  <% if member.user != current_user && allowed_to?(:update_member?, @namespace) &&
                     member.access_level <= @access_levels.values.last %>
                     <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
                       <%= render partial: "projects/members/access_level",
@@ -85,7 +85,7 @@
                     <% end %>
                   </div>
                 </td>
-                <% if allowed_to?(:allowed_to_modify_project_namespace?, @namespace) %>
+                <% if allowed_to?(:destroy_member?, @namespace) %>
                   <td class="px-4 py-3 text-right">
                     <%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
                       <%= dropdown.item(

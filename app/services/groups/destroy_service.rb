@@ -11,7 +11,7 @@ module Groups
     end
 
     def execute
-      action_allowed_for_user(group, :destroy?)
+      authorize! @group, to: :destroy?
       group.destroy
     end
   end

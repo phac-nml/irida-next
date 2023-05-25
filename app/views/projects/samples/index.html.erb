@@ -1,7 +1,7 @@
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <% if allowed_to?(:allowed_to_modify_project?, @project) %>
+    <% if allowed_to?(:create_sample?, @project) %>
       <%= link_to t("projects.samples.index.new_button"),
       new_namespace_project_sample_path,
       class: "btn btn-primary",
@@ -31,7 +31,7 @@
                   class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= sample.description %></div>
                 </td>
-                <% if allowed_to?(:allowed_to_modify_project?, @project) %>
+                <% if allowed_to?(:update_sample?, @project) %>
                   <td class="px-4 py-3">
                     <div class="flex items-center justify-end">
                       <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
@@ -39,7 +39,7 @@
                           label: t(:"projects.samples.index.edit_button"),
                           url: edit_namespace_project_sample_path(id: sample.id)
                         ) %>
-                        <% if allowed_to?(:destroy?, @project) %>
+                        <% if allowed_to?(:destroy_sample?, @project) %>
                           <%= dropdown.item(
                             label: t(:"projects.samples.index.remove_button"),
                             url: namespace_project_sample_path(id: sample.id),

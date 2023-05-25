@@ -11,7 +11,7 @@ module Samples
     end
 
     def execute
-      action_allowed_for_user(sample.project, :destroy?)
+      authorize! sample.project, to: :destroy_sample?
 
       sample.destroy
     end

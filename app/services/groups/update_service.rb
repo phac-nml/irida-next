@@ -11,8 +11,7 @@ module Groups
     end
 
     def execute
-      action_allowed_for_user(group, :update?)
-
+      authorize! @group, to: :update?
       group.update(params)
     end
   end

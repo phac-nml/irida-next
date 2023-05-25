@@ -27,7 +27,7 @@
             icon: "users",
             label: t(:"groups.sidebar.members")
           ) %>
-          <% if allowed_to?(:allowed_to_modify_group?, @group) %>
+          <% if allowed_to?(:update?, @group) %>
             <%= render section.with_item(
               url: edit_group_path(@group),
               icon: "cog_6_tooth",

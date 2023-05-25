@@ -11,7 +11,7 @@ module Samples
     end
 
     def execute
-      action_allowed_for_user(sample.project, :allowed_to_modify_project?)
+      authorize! sample.project, to: :update_sample?
 
       sample.update(params)
     end

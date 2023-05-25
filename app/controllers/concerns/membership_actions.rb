@@ -10,15 +10,15 @@ module MembershipActions
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }, only: %i[new create index update]
     before_action proc { context_crumbs }, only: %i[index new]
-    before_action proc { authorize_view_members }, only: %i[index]
-    before_action proc { authorize_modify_members }, only: %i[new]
   end
 
   def index
+    authorize! @namespace, to: :member_listing?
     @members = Member.where(namespace_id: @namespace.id)
   end
 
   def new
+    authorize! @namespace, to: :create_member? unless @namespace.parent.nil? && @namespace.owner == current_user
     @new_member = Member.new(namespace_id: @namespace.id)
 
     respond_to do |format|
@@ -69,7 +69,7 @@ module MembershipActions
 
   private
 
-  def access_levels # rubocop:disable Metrics/AbcSize
+  def access_levels # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
     if @namespace.parent&.user_namespace? && @namespace.parent.owner == current_user
       @access_levels = Member::AccessLevel.access_level_options_owner
     else
@@ -83,7 +83,7 @@ module MembershipActions
                                         namespace: @namespace.parent&.self_and_ancestors)).order(:access_level).last
 
       end
-      @access_levels = Member.access_levels(member)
+      @access_levels = Member.access_levels(member) unless member.nil?
     end
   end
 

@@ -38,8 +38,10 @@ module Projects
       end
 
       assert_equal Namespaces::UserNamespacePolicy, exception.policy
-      assert_equal :allowed_to_modify_projects_under_namespace?, exception.rule
+      assert_equal :create?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/user_namespace.create?', name: @parent_namespace.name),
+                   exception.result.message
     end
 
     test 'create project with valid params under group namespace' do
@@ -80,8 +82,9 @@ module Projects
     end
 
     test 'create project within a parent group that the user is a part of with role < MAINTAINER' do
+      parent_namespace = groups(:subgroup_one_group_three)
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1',
-                                               parent_id: groups(:subgroup_one_group_three).id } }
+                                               parent_id: parent_namespace.id } }
       user = users(:ryan_doe)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
@@ -89,14 +92,16 @@ module Projects
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :allowed_to_modify_group?, exception.rule
+      assert_equal :create?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.group.create?', name: parent_namespace.name),
+                   exception.result.message
     end
 
     test 'valid authorization to create project' do
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
 
-      assert_authorized_to(:allowed_to_modify_projects_under_namespace?, @parent_namespace,
+      assert_authorized_to(:create?, @parent_namespace,
                            with: Namespaces::UserNamespacePolicy,
                            context: { user: @user }) do
         Projects::CreateService.new(@user, valid_params).execute

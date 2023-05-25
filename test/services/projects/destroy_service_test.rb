@@ -25,12 +25,13 @@ module Projects
       end
 
       assert_equal ProjectPolicy, exception.policy
-      assert_equal :allowed_to_destroy?, exception.rule
+      assert_equal :destroy?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.project.destroy?', name: @project.name), exception.result.message
     end
 
     test 'valid authorization to destroy project' do
-      assert_authorized_to(:allowed_to_destroy?, @project,
+      assert_authorized_to(:destroy?, @project,
                            with: ProjectPolicy,
                            context: { user: @user }) do
         Projects::DestroyService.new(

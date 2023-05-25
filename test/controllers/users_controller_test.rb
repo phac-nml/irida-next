@@ -11,4 +11,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get user_path(users(:john_doe))
     assert_response :success
   end
+
+  test 'should not show the user' do
+    sign_in users(:john_doe)
+
+    get user_path(users(:james_doe))
+    assert_response :unauthorized
+  end
 end

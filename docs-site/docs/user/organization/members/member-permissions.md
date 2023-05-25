@@ -58,8 +58,8 @@ When you add a member to a subgroup where they are also a member of one of the p
 | Edit Project Member   |       |         | ✓(1)       | ✓     |
 | Remove Project Member |       |         | ✓(1)       | ✓     |
 | View Project Members  | ✓     | ✓       | ✓          | ✓     |
-| Create Samples        |       |         |            | ✓     |
-| Edit Samples          |       |         |            | ✓     |
+| Create Samples        |       |         | ✓          | ✓     |
+| Edit Samples          |       |         | ✓          | ✓     |
 | Delete Samples        |       |         |            | ✓     |
 
 1. A user with the **Maintainer** role can only modify members upto and including their role

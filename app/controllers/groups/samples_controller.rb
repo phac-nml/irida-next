@@ -6,9 +6,9 @@ module Groups
     layout 'groups'
     before_action :context_crumbs, only: %i[index]
     before_action :group, only: %i[index]
-    before_action :authorize_view_group!, only: %i[index]
 
     def index
+      authorize! @group, to: :sample_listing?
       respond_to do |format|
         format.html do
           @has_samples = Sample.joins(project: [:namespace]).exists?(namespace: { parent_id: @group.self_and_descendant_ids }) # rubocop:disable Layout/LineLength
