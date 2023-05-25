@@ -64,6 +64,7 @@ If a regression occurs, we prefer you revert the change. Your contribution is *i
 ### UI changes
 
 1. Use available components from the IRIDA Next Design System, Viral.
+   * If adding a new Component it is preferred to submit that as a separate PR.
 1. The PR must include *Before* and *After* screenshots if UI changes are made.
 1. If the PR changes CSS classes, please include the list of affected pages, which can be found by running `grep css-class ./app -R`.
 
