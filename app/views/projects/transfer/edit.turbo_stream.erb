@@ -1,5 +1,3 @@
 <%= turbo_stream.update("edit_advanced_transfer") do %>
   <%= render "form" %>
 <% end %>
-
-<%= turbo_stream.replace "errors", viral_alert(type:, message:) %>

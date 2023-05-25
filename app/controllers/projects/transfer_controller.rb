@@ -3,19 +3,22 @@
 module Projects
   class TransferController < Projects::ApplicationController
     before_action :project, only: %i[create]
+    before_action :authorized_namespaces, only: %i[create]
 
     def create
       id = params.require(:new_namespace_id)
       new_namespace ||= Namespace.find_by(id:)
       if Projects::TransferService.new(@project, current_user).execute(new_namespace)
-        redirect_to(
-          project_path(@project),
-          notice: t('.success', project_name: @project.name)
-        )
+        flash[:success] = t('.success', project_name: @project.name)
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to project_path(@project) }
+        end
       else
         @value = id
-        render :edit_transfer, status: :unprocessable_entity,
-                               locals: { type: 'alert', message: @project.errors.messages.values.flatten.first }
+        @error = @project.errors.messages.values.flatten.first
+        render :edit, status: :unprocessable_entity,
+                      locals: { type: 'alert', message: @project.errors.messages.values.flatten.first }
       end
     end
 
@@ -50,7 +53,7 @@ module Projects
 
     def authorized_namespaces
       @authorized_namespaces = case action_name
-                               when 'edit', 'transfer'
+                               when 'create'
                                  authorized_scope(Namespace, type: :relation, as: :transferable,
                                                              scope_options: { namespace: @project.namespace.parent })
                                end
