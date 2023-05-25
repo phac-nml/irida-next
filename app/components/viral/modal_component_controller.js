@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { Modal } from "flowbite";
 
 export default class extends Controller {
-  static targets = ["modal"];
+  static targets = ["modal", "button"];
 
   connect() {
     this.modal = new Modal(this.modalTarget, {
@@ -10,7 +10,13 @@ export default class extends Controller {
       backdropClasses:
         "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
     });
-    this.modal.show();
+
+    if (this.buttonTarget.innerHTML) {
+      this.buttonTarget.classList.remove("hidden");
+      this.close();
+    } else {
+      this.open();
+    }
   }
 
   open() {
