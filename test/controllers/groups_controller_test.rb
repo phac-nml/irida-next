@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GroupsControllerTest < ActionDispatch::IntegrationTest
+class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   include Devise::Test::IntegrationHelpers
 
   test 'should get index' do
@@ -133,5 +133,23 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
                             parent_id: group.id } }
 
     assert_response :unauthorized
+  end
+
+  test 'should not show the group edit page' do
+    sign_in users(:david_doe)
+    group = groups(:group_one)
+
+    get edit_group_path(group)
+
+    assert_response :unauthorized
+  end
+
+  test 'should show the group edit page' do
+    sign_in users(:john_doe)
+    group = groups(:group_one)
+
+    get edit_group_path(group)
+
+    assert_response :success
   end
 end

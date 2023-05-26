@@ -8,17 +8,35 @@ class UserPolicyTest < ActiveSupport::TestCase
     @policy = UserPolicy.new(@user, user: @user)
   end
 
-  test '#profile_owner?' do
-    assert @policy.profile_owner?
+  test '#update?' do
+    assert @policy.update?
   end
 
-  test 'aliases' do
-    assert_equal :profile_owner?, @policy.resolve_rule(:show?)
-    assert_equal :profile_owner?, @policy.resolve_rule(:create?)
-    assert_equal :profile_owner?, @policy.resolve_rule(:update?)
-    assert_equal :profile_owner?, @policy.resolve_rule(:edit?)
-    assert_equal :profile_owner?, @policy.resolve_rule(:index?)
-    assert_equal :profile_owner?, @policy.resolve_rule(:destroy?)
-    assert_equal :profile_owner?, @policy.resolve_rule(:revoke?)
+  test '#edit?' do
+    assert @policy.edit?
+  end
+
+  test '#destroy?' do
+    assert @policy.destroy?
+  end
+
+  test '#revoke?' do
+    assert @policy.revoke?
+  end
+
+  test '#read?' do
+    assert @policy.read?
+  end
+
+  test '#index?' do
+    assert @policy.index?
+  end
+
+  test '#new?' do
+    assert @policy.new?
+  end
+
+  test '#create?' do
+    assert @policy.create?
   end
 end

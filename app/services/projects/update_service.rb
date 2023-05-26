@@ -4,9 +4,9 @@ module Projects
   # Service used to Update Projects
   class UpdateService < BaseProjectService
     def execute
-      namespace_params = params.delete(:namespace_attributes)
+      authorize! project.namespace, to: :update?
 
-      action_allowed_for_user(project.namespace, :update?)
+      namespace_params = params.delete(:namespace_attributes)
 
       project.namespace.update(namespace_params)
     end

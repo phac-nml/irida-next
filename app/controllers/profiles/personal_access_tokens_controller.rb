@@ -7,10 +7,12 @@ module Profiles
     before_action :active_access_tokens
 
     def index
+      authorize! @user
       @personal_access_token = PersonalAccessToken.new(scopes: [])
     end
 
     def create
+      authorize! @user
       @personal_access_token = PersonalAccessToken.new(personal_access_token_params.merge(user: current_user))
 
       respond_to do |format|
@@ -29,6 +31,7 @@ module Profiles
     end
 
     def revoke
+      authorize! @user
       @personal_access_token = current_user.personal_access_tokens.find(params[:id])
 
       if @personal_access_token.revoke!

@@ -3,14 +3,16 @@
 # Controller for the user profile page
 class ProfilesController < Profiles::ApplicationController
   before_action :set_user
-  before_action :authorize_user_profile_access!
 
   # Get the profile page
   def show
+    authorize! @user, to: :read?
     # No necessary code here
   end
 
   def update
+    authorize! @user
+
     respond_to do |format|
       if @user.update(update_params)
         # Sign in the user bypassing validation in case their password changed

@@ -38,12 +38,34 @@
   <% end %>
 
   <%- if devise_mapping.omniauthable? %>
+    <div class="inline-flex items-center justify-center w-full">
+      <hr class="w-64 h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+      <span
+        class="
+          absolute
+          px-3
+          font-medium
+          text-gray-900
+          -translate-x-1/2
+          bg-white
+          left-1/2
+          dark:text-white
+          dark:bg-gray-900
+        "
+      ><%= t(".omniauth") %></span>
+    </div>
     <%- resource_class.omniauth_providers.each do |provider| %>
-      <%= button_to t(".omniauth", provider: OmniAuth::Utils.camelize(provider)),
-      omniauth_authorize_path(resource_name, provider),
+      <%= button_to omniauth_authorize_path(resource_name, provider),
       data: {
         turbo: false
-      } %>
+      },
+      class: "btn btn-default w-full" do %>
+        <div class="inline-flex items-center text-center">
+          <%= viral_icon(name: provider, classes: "w-4 h-4 mr-2 -ml-1") %>
+          <%= OmniAuth::Utils.camelize(provider) %>
+        </div>
+      <% end %>
+
     <% end %>
   <% end %>
 </div>

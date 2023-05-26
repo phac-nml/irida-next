@@ -6,20 +6,26 @@ module Projects
     before_action :sample, only: %i[show edit update destroy]
     before_action :project
     before_action :context_crumbs
-    before_action :authorize_view_project!, only: %i[show index]
-    before_action :authorize_modify_project!, only: %i[new edit]
 
     def index
+      authorize! @project, to: :sample_listing?
+
       @samples = Sample.where(project_id: @project.id)
     end
 
-    def show; end
+    def show
+      authorize! @sample.project, to: :read_sample?
+    end
 
     def new
+      authorize! @project, to: :create_sample?
+
       @sample = Sample.new
     end
 
-    def edit; end
+    def edit
+      authorize! @sample.project, to: :update_sample?
+    end
 
     def create
       @sample = Samples::CreateService.new(current_user, @project, sample_params).execute

@@ -38,8 +38,9 @@ module Members
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :allowed_to_modify_group?, exception.rule
+      assert_equal :destroy_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.group.destroy_member?', name: @group.name), exception.result.message
     end
 
     test 'remove group member with OWNER role when the current user only has the Maintainer role' do
@@ -91,8 +92,11 @@ module Members
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :allowed_to_modify_project_namespace?, exception.rule
+      assert_equal :destroy_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.destroy_member?',
+                          name: @project_namespace.name),
+                   exception.result.message
     end
   end
 end

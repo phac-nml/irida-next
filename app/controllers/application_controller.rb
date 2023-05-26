@@ -32,8 +32,10 @@ class ApplicationController < ActionController::Base
     not_found
   end
 
-  rescue_from ActionPolicy::Unauthorized do |_exception|
-    render 'shared/error/not_authorized', status: :unauthorized, layout: 'application'
+  rescue_from ActionPolicy::Unauthorized do |exception|
+    render 'shared/error/not_authorized', status: :unauthorized, layout: 'application', locals: {
+      authorization_message: exception.result.message
+    }
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|

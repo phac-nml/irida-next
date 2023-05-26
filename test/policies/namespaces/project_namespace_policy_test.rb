@@ -10,14 +10,24 @@ module Namespaces
       @policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
     end
 
-    test '#allowed_to_modify_project_namespace?' do
-      assert @policy.allowed_to_modify_project_namespace?
+    test '#update?' do
+      assert @policy.update?
     end
 
-    test 'aliases' do
-      assert_equal :allowed_to_modify_project_namespace?, @policy.resolve_rule(:new?)
-      assert_equal :allowed_to_modify_project_namespace?, @policy.resolve_rule(:create?)
-      assert_equal :allowed_to_modify_project_namespace?, @policy.resolve_rule(:update?)
+    test '#create_member?' do
+      assert @policy.create_member?
+    end
+
+    test '#update_member?' do
+      assert @policy.update_member?
+    end
+
+    test '#destroy_member?' do
+      assert @policy.destroy_member?
+    end
+
+    test '#member_listing?' do
+      assert @policy.member_listing?
     end
   end
 end

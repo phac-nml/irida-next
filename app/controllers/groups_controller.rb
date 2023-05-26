@@ -5,26 +5,30 @@ class GroupsController < Groups::ApplicationController
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorize_modify_group!, only: %i[edit]
-  before_action :authorize_view_group!, only: %i[show]
-  before_action :authorize_create_subgroup!, only: %i[new]
   before_action :authorized_namespaces, only: %i[edit new update create]
 
   def index
     @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
   end
 
-  def show; end
+  def show
+    authorize! @group, to: :read?
+  end
 
   def new
     @group = Group.find(params[:parent_id]) if params[:parent_id]
+
+    authorize! @group, to: :create_subgroup? if params[:parent_id]
+
     @new_group = Group.new(parent_id: @group&.id)
     respond_to do |format|
       format.html { render_new }
     end
   end
 
-  def edit; end
+  def edit
+    authorize! @group
+  end
 
   def create
     @new_group = Groups::CreateService.new(current_user, group_params).execute

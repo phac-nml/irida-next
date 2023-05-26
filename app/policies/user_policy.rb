@@ -2,9 +2,38 @@
 
 # Policy for profiles authorization
 class UserPolicy < ApplicationPolicy
-  alias_rule :show?, :create?, :update?, :edit?, :index?, :destroy?, :revoke?, to: :profile_owner?
+  def create?
+    return true if record == user
+  end
 
-  def profile_owner?
-    record == user
+  def destroy?
+    return true if record == user
+  end
+
+  def edit?
+    return true if record == user
+  end
+
+  def index?
+    return true if record == user
+  end
+
+  def new?
+    return true if record == user
+  end
+
+  def revoke?
+    return true if record == user
+  end
+
+  def read?
+    return true if record == user
+
+    details[:name] = record.email
+    false
+  end
+
+  def update?
+    return true if record == user
   end
 end

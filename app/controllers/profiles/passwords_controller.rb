@@ -6,11 +6,12 @@ module Profiles
   class PasswordsController < Profiles::ApplicationController
     # Get password page
     def edit
-      # No necessary code here
+      authorize! @user
     end
 
     # Update the user's password
     def update
+      authorize! @user
       respond_to do |format|
         if @user.update_password_with_password(update_password_params)
           # Sign in the user bypassing validation in case their password changed

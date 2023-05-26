@@ -11,7 +11,7 @@ module Groups
     end
 
     def execute
-      action_allowed_for_user(group.parent, :create?) unless group.parent.nil?
+      authorize! group.parent, to: :create_subgroup? if params[:parent_id]
 
       group.save
 
