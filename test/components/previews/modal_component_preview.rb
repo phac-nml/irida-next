@@ -9,14 +9,6 @@ class ModalComponentPreview < ViewComponent::Preview
     end
   end
 
-  def with_button
-    render Viral::ModalComponent.new(title: 'This is a modal title', label: 'Open modal') do |modal|
-      modal.body do
-        'This is a modal body'
-      end
-    end
-  end
-
   def small
     render Viral::ModalComponent.new(title: 'This is a modal title', size: :small) do |modal|
       modal.body do
