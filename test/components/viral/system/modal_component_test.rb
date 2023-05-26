@@ -16,7 +16,7 @@ module System
       body = 'This is a modal body'
       visit('rails/view_components/modal_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
-        assert_selector 'div > div > div > div:nth-child(2)' do
+        assert_selector(:xpath, '/html/body/div[1]/div/div/div/div/div[2]') do
           assert_text body
         end
       end
