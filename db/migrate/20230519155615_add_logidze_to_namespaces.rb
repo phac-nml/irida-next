@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# migration to add logidze logging column
 class AddLogidzeToNamespaces < ActiveRecord::Migration[7.0]
   def change
     add_column :namespaces, :log_data, :jsonb

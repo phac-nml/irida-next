@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# migration to add logidze logging column
 class AddLogidzeToPersonalAccessTokens < ActiveRecord::Migration[7.0]
   def change
     add_column :personal_access_tokens, :log_data, :jsonb
