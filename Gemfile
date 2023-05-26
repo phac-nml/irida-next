@@ -81,10 +81,10 @@ gem 'action_policy'
 gem 'action_policy-graphql'
 
 # Auditing
-gem 'logidze', '~> 1.2.3'
+gem 'logidze'
 
 # Database functions
-gem 'fx', '~> 0.8.0'
+gem 'fx'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

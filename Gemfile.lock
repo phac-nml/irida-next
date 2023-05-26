@@ -376,13 +376,13 @@ DEPENDENCIES
   devise (~> 4.9.2)
   erb-formatter!
   figaro
-  fx (~> 0.8.0)
+  fx
   graphiql-rails
   graphql
   importmap-rails
   jbuilder
   listen
-  logidze (~> 1.2.3)
+  logidze
   lookbook (>= 2.0.0.rc.1)
   omniauth
   omniauth-azure-activedirectory-v2
