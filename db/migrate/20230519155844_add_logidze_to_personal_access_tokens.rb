@@ -11,7 +11,7 @@ class AddLogidzeToPersonalAccessTokens < ActiveRecord::Migration[7.0]
       end
 
       dir.down do
-        execute <<~SQL
+        execute <<~SQL.squish
           DROP TRIGGER IF EXISTS "logidze_on_personal_access_tokens" on "personal_access_tokens";
         SQL
       end

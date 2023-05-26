@@ -11,7 +11,7 @@ class AddLogidzeToUsers < ActiveRecord::Migration[7.0]
       end
 
       dir.down do
-        execute <<~SQL
+        execute <<~SQL.squish
           DROP TRIGGER IF EXISTS "logidze_on_users" on "users";
         SQL
       end
