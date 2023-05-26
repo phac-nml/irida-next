@@ -4,6 +4,7 @@
 module ViewHelper
   VIRAL_HELPERS = {
     alert: 'Viral::AlertComponent',
+    breadcrumb: 'Viral::BreadcrumbComponent',
     card: 'Viral::CardComponent',
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',
