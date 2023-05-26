@@ -59,8 +59,10 @@ module Members
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :allowed_to_modify_group?, exception.rule
+      assert_equal :create_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.group.create_member?', name: @group.name),
+                   exception.result.message
     end
 
     test 'create group member with valid params when member of a parent group with the OWNER role' do
@@ -111,12 +113,31 @@ module Members
       end
     end
 
+    test 'create project member with valid params but no permissions in namespace' do
+      project = projects(:project1)
+      project_namespace = project.namespace
+      user = users(:david_doe)
+
+      valid_params = { user: users(:steve_doe),
+                       access_level: Member::AccessLevel::OWNER }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Members::CreateService.new(user, project_namespace, valid_params).execute
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :create_member?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.create_member?', name: project.name),
+                   exception.result.message
+    end
+
     test 'valid authorization to create group member' do
       user = users(:steve_doe)
       group = groups(:subgroup1)
       valid_params = { user:, access_level: Member::AccessLevel::OWNER }
 
-      assert_authorized_to(:allowed_to_modify_group?, group,
+      assert_authorized_to(:create_member?, group,
                            with: GroupPolicy,
                            context: { user: @user }) do
         Members::CreateService.new(@user, group, valid_params).execute
@@ -128,7 +149,7 @@ module Members
       valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
-      assert_authorized_to(:allowed_to_modify_project_namespace?, @project_namespace,
+      assert_authorized_to(:create_member?, @project_namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
         Members::CreateService.new(@user, @project_namespace, valid_params).execute

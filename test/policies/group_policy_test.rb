@@ -9,28 +9,56 @@ class GroupPolicyTest < ActiveSupport::TestCase
     @policy = GroupPolicy.new(@group, user: @user)
   end
 
-  test '#allowed_to_view_group?' do
-    assert @policy.allowed_to_view_group?
+  test '#read?' do
+    assert @policy.read?
   end
 
-  test '#allowed_to_modify_group?' do
-    assert @policy.allowed_to_modify_group?
+  test '#new?' do
+    assert @policy.new?
   end
 
-  test '#allowed_to_destroy?' do
-    assert @policy.allowed_to_destroy?
+  test '#edit?' do
+    assert @policy.edit?
   end
 
-  test 'aliases' do
-    assert_equal :allowed_to_modify_group?, @policy.resolve_rule(:create?)
-    assert_equal :allowed_to_modify_group?, @policy.resolve_rule(:edit?)
-    assert_equal :allowed_to_modify_group?, @policy.resolve_rule(:update?)
-    assert_equal :allowed_to_modify_group?, @policy.resolve_rule(:new?)
+  test '#create?' do
+    assert @policy.create?
+  end
 
-    assert_equal :allowed_to_view_group?, @policy.resolve_rule(:show?)
-    assert_equal :allowed_to_view_group?, @policy.resolve_rule(:index?)
+  test '#update?' do
+    assert @policy.update?
+  end
 
-    assert_equal :allowed_to_destroy?, @policy.resolve_rule(:destroy?)
+  test '#destroy?' do
+    assert @policy.destroy?
+  end
+
+  test '#create_subgroup?' do
+    assert @policy.create_subgroup?
+  end
+
+  test '#transfer_into_namespace?' do
+    assert @policy.transfer_into_namespace?
+  end
+
+  test '#create_member?' do
+    assert @policy.create_member?
+  end
+
+  test '#update_member?' do
+    assert @policy.update_member?
+  end
+
+  test '#destroy_member?' do
+    assert @policy.destroy_member?
+  end
+
+  test '#member_listing?' do
+    assert @policy.member_listing?
+  end
+
+  test '#sample_listing?' do
+    assert @policy.sample_listing?
   end
 
   test 'scope' do

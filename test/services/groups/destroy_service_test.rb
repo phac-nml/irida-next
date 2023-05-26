@@ -24,12 +24,13 @@ module Groups
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :allowed_to_destroy?, exception.rule
+      assert_equal :destroy?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.group.destroy?', name: @group.name), exception.result.message
     end
 
     test 'valid authorization to destroy group' do
-      assert_authorized_to(:allowed_to_destroy?, @group,
+      assert_authorized_to(:destroy?, @group,
                            with: GroupPolicy,
                            context: { user: @user }) do
         Groups::DestroyService.new(@group, @user).execute

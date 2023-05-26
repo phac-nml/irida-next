@@ -2,7 +2,7 @@
 
 require 'application_system_test_case'
 
-class GroupsTest < ApplicationSystemTestCase
+class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
   def setup
     @user = users(:john_doe)
     @groups_count = @user.groups.self_and_descendant_ids.count
@@ -132,5 +132,18 @@ class GroupsTest < ApplicationSystemTestCase
     click_link I18n.t(:'groups.sidebar.settings')
 
     assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete_group.submit'), count: 0
+  end
+
+  test 'can view group' do
+    visit group_url(groups(:group_one))
+
+    assert_selector 'h1', text: 'Group 1'
+  end
+
+  test 'can not view group' do
+    group = groups(:david_doe_group_four)
+    visit group_url(group)
+
+    assert_text I18n.t(:'action_policy.policy.group.read?', name: group.name)
   end
 end

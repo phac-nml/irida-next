@@ -16,20 +16,4 @@ class ApplicationPolicy < ActionPolicy::Base
   #    record.user_id == user.id
   #  end
   #
-
-  def can_modify?(obj)
-    Member.can_modify?(user, obj)
-  end
-
-  def can_view?(obj)
-    Member.can_view?(user, obj)
-  end
-
-  def can_destroy?(obj)
-    Member.can_destroy?(user, obj)
-  end
-
-  def can_transfer?(obj)
-    Member.namespace_owners_include_user?(user, obj)
-  end
 end

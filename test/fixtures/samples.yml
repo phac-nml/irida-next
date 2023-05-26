@@ -21,3 +21,8 @@ sample23:
   name: Project 3 Sample 23
   description: Sample 23 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project4) %>
+
+sample24:
+  name: John Doe Project 2 Sample 1
+  description: John Doe Project 2 Sample 1 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2) %>

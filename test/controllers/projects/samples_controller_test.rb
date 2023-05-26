@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Projects
-  class SamplesControllerTest < ActionDispatch::IntegrationTest
+  class SamplesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
     setup do
       sign_in users(:john_doe)
       @sample1 = samples(:sample1)
@@ -12,8 +12,16 @@ module Projects
       @namespace = groups(:group_one)
     end
 
-    test 'should get index' do
+    test 'should get index where member in parent group' do
       get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+    end
+
+    test 'should get index where project is under user\'s namespace' do
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project2)
+
+      get namespace_project_samples_url(namespace, project)
       assert_response :success
     end
 
@@ -44,9 +52,28 @@ module Projects
       assert_response :unprocessable_entity
     end
 
-    test 'should show sample' do
+    test 'should show sample when user is a member of a parent group of the project' do
       get namespace_project_sample_url(@namespace, @project, @sample1)
       assert_response :success
+    end
+
+    test 'should show sample when project is in user\'s namespace' do
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project2)
+      sample = samples(:sample24)
+
+      get namespace_project_sample_url(namespace, project, sample)
+      assert_response :success
+    end
+
+    test 'should not show sample for a member who does not have access to the project' do
+      sign_in users(:david_doe)
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project2)
+      sample = samples(:sample24)
+
+      get namespace_project_sample_url(namespace, project, sample)
+      assert_response :unauthorized
     end
 
     test 'should not show sample, if it does not belong to the project' do
@@ -59,11 +86,22 @@ module Projects
       assert_response :success
     end
 
-    test 'should update sample' do
+    test 'should update sample in which the user is a member in a parent group with a role >= Maintainer' do
       patch namespace_project_sample_url(@namespace, @project, @sample1),
             params: { sample: { description: @sample1.description, name: 'New Sample Name',
                                 project_id: @sample1.project_id } }
       assert_redirected_to namespace_project_sample_url(@namespace, @project, @sample1)
+    end
+
+    test 'should update sample in which the the project is in the user\'s namespace' do
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project2)
+      sample = samples(:sample24)
+
+      patch namespace_project_sample_url(namespace, project, sample),
+            params: { sample: { description: sample.description, name: 'New Sample Name',
+                                project_id: sample.project_id } }
+      assert_redirected_to namespace_project_sample_url(namespace, project, sample)
     end
 
     test 'should not update a sample with wrong parameters' do

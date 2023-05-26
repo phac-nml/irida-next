@@ -36,8 +36,11 @@ module Projects
       end
 
       assert_equal ProjectPolicy, exception.policy
-      assert_equal :allowed_to_transfer?, exception.rule
+      assert_equal :transfer?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.project.transfer?',
+                          name: @project.name),
+                   exception.result.message
     end
 
     test 'transfer project without target namespace permission' do
@@ -58,7 +61,7 @@ module Projects
     test 'authorize allowed to transfer project with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
 
-      assert_authorized_to(:allowed_to_transfer?, @project,
+      assert_authorized_to(:transfer?, @project,
                            with: ProjectPolicy,
                            context: { user: @john_doe }) do
         Projects::TransferService.new(@project,
@@ -69,7 +72,7 @@ module Projects
     test 'authorize allowed to transfer to namespace' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
 
-      assert_authorized_to(:transfer_to_namespace?, new_namespace,
+      assert_authorized_to(:transfer_into_namespace?, new_namespace,
                            with: Namespaces::UserNamespacePolicy,
                            context: { user: @john_doe }) do
         Projects::TransferService.new(@project,

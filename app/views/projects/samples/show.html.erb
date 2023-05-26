@@ -7,7 +7,7 @@
         edit_namespace_project_sample_path(id: @sample.id),
         class: "btn btn-primary mr-1" %>
       <% end %>
-      <% if allowed_to?(:allowed_to_destroy?, @project) %>
+      <% if allowed_to?(:destroy?, @project) %>
         <%= link_to t("projects.samples.show.remove_button"),
         namespace_project_sample_path(id: @sample.id),
         data: {

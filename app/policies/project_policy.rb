@@ -2,34 +2,100 @@
 
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy
-  alias_rule :create?, :edit?, :update?, :new?,
-             to: :allowed_to_modify_project?
-  alias_rule :index?, :show?, :activity?, to: :allowed_to_view_project?
-  alias_rule :destroy?, to: :allowed_to_destroy?
-  alias_rule :transfer?, to: :allowed_to_transfer?
-
-  def allowed_to_view_project?
+  def activity?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_view?(user, record.namespace) == true
 
-    can_view?(record.namespace)
+    details[:name] = record.name
+    false
   end
 
-  def allowed_to_modify_project?
+  def destroy?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_destroy?(user, record.namespace) == true
 
-    can_modify?(record.namespace)
+    details[:name] = record.name
+    false
   end
 
-  def allowed_to_destroy?
+  def edit?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_modify?(user, record.namespace) == true
 
-    can_destroy?(record.namespace)
+    details[:name] = record.name
+    false
   end
 
-  def allowed_to_transfer?
+  def new?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_create?(user, record.namespace) == true
 
-    can_transfer?(record.namespace)
+    details[:name] = record.namespace.parent.name
+    false
+  end
+
+  def read?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_view?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def transfer?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_transfer?(user, record.namespace)
+
+    details[:name] = record.name
+    false
+  end
+
+  def update?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_modify?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def sample_listing?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_view?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def create_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_create?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def destroy_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.namespace_owners_include_user?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def read_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_view?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def update_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_modify?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
   end
 
   scope_for :relation do |relation|

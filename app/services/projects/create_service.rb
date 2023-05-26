@@ -26,7 +26,7 @@ module Projects
     def create_associations(project) # rubocop:disable Metrics/AbcSize
       project.build_namespace(namespace_params.merge(owner: current_user))
       # We want to authorize that the user can create a project in the parent namespace
-      action_allowed_for_user(project.namespace.parent, :create?)
+      authorize! project.namespace.parent, to: :create?
 
       project.save
 

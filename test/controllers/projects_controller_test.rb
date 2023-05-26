@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ProjectsControllerTest < ActionDispatch::IntegrationTest
+class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   include Devise::Test::IntegrationHelpers
 
   test 'should get index' do
@@ -17,6 +17,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     get project_path(projects(:project1))
     assert_response :success
+  end
+
+  test 'should not show the project' do
+    sign_in users(:micha_doe)
+
+    get project_path(projects(:project1))
+    assert_response :unauthorized
   end
 
   test 'should show 404 if project does not exist' do
@@ -47,6 +54,20 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project_path(Project.last)
   end
 
+  test 'should not create a new project under another user\'s namespace' do
+    sign_in users(:david_doe)
+
+    parent_namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+    assert_no_difference('Project.count') do
+      post projects_path,
+           params: { project: { namespace_attributes: { name: 'My Personal Project', path: 'my-personal-project',
+                                                        parent_id: parent_namespace.id } } }
+    end
+
+    assert_response :unauthorized
+  end
+
   test 'should fail to create a new project with wrong params' do
     sign_in users(:john_doe)
 
@@ -66,13 +87,35 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test 'should update a project' do
+  test 'should update a project which is a part of a parent group and of which the user is a member' do
     sign_in users(:john_doe)
 
     patch project_path(projects(:project2)),
           params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
 
     assert_redirected_to project_path(projects(:project2).reload)
+  end
+
+  test 'should update a project which which is under the user\'s namespace' do
+    sign_in users(:john_doe)
+
+    project = projects(:john_doe_project2)
+
+    patch project_path(project),
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
+
+    assert_redirected_to project_path(project.reload)
+  end
+
+  test 'should not update a project which which is under another user\'s namespace' do
+    sign_in users(:david_doe)
+
+    project = projects(:john_doe_project2)
+
+    patch project_path(project),
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
+
+    assert_response :unauthorized
   end
 
   test 'should fail to update a project with wrong params' do
@@ -91,6 +134,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
          params: { new_namespace_id: groups(:subgroup1).id }
 
     assert_redirected_to project_path(projects(:project2).reload)
+  end
+
+  test 'should not transfer a project' do
+    sign_in users(:john_doe)
+
+    post project_transfer_path(projects(:project2)),
+         params: { new_namespace_id: groups(:david_doe_group_four).id }
+
+    assert_response :unauthorized
   end
 
   test 'should fail to transfer a project with wrong params' do
@@ -126,6 +178,77 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference('Project.count') do
       delete namespace_project_path(namespace_id: namespace.path, project_id: project.namespace.path)
     end
+
+    assert_response :unauthorized
+  end
+
+  test 'should not show the project edit page' do
+    sign_in users(:david_doe)
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+    project = projects(:john_doe_project2)
+
+    get namespace_project_edit_path(namespace, project)
+
+    assert_response :unauthorized
+  end
+
+  test 'should show the group edit page' do
+    sign_in users(:john_doe)
+
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+    project = projects(:john_doe_project2)
+
+    get namespace_project_edit_path(namespace, project)
+
+    assert_response :success
+  end
+
+  test 'should show the new project page' do
+    sign_in users(:john_doe)
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+    get new_project_path(namespace:)
+
+    assert_response :success
+  end
+
+  test 'should show the project activity page' do
+    sign_in users(:john_doe)
+
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+    project = projects(:john_doe_project2)
+
+    get namespace_project_activity_path(namespace, project)
+
+    assert_response :success
+  end
+
+  test 'should not show the project activity page' do
+    sign_in users(:david_doe)
+
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+    project = projects(:john_doe_project2)
+
+    get namespace_project_activity_path(namespace, project)
+
+    assert_response :unauthorized
+  end
+
+  test 'should not create a project under another user\'s namespace' do
+    sign_in users(:david_doe)
+
+    parent_namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+    post projects_path,
+         params: {
+           project: {
+             namespace_attributes: {
+               name: 'My Personal Project',
+               path: 'my-personal-project',
+               parent_id: parent_namespace.id
+             }
+           }
+         }
 
     assert_response :unauthorized
   end
