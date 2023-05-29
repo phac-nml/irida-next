@@ -9,6 +9,7 @@ module System
       visit('rails/view_components/modal_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_text title
+        assert_accessible
       end
     end
 
@@ -17,6 +18,7 @@ module System
       visit('rails/view_components/modal_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_text body
+        assert_accessible
       end
     end
   end
