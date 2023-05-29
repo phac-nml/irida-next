@@ -20,6 +20,7 @@ module Viral
       @trigger = TRIGGER_MAPPINGS[trigger]
 
       @system_arguments = system_arguments
+      @system_arguments[:id] ||= "dd-#{SecureRandom.hex(4)}"
       @system_arguments[:data] = { 'viral--dropdown-target': 'trigger' }
       @system_arguments[:tag] = :button
 
