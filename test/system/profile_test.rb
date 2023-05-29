@@ -19,11 +19,9 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
 
     within %(form[action="/-/profile"]) do
-      assert_selector %(input[id="user_email"]) do |input|
-        assert_equal @user.email, input['value']
-      end
+      assert_equal @user.email, find_field(I18n.t('activerecord.attributes.user.email')).value
 
-      fill_in 'Email', with: 'fred_doe@gmail.com'
+      fill_in I18n.t('activerecord.attributes.user.email'), with: 'fred_doe@gmail.com'
       click_button I18n.t(:'profiles.show.email.submit')
     end
 
