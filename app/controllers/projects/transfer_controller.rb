@@ -11,14 +11,12 @@ module Projects
       if Projects::TransferService.new(@project, current_user).execute(new_namespace)
         flash[:success] = t('.success', project_name: @project.name)
         respond_to do |format|
-          format.turbo_stream
-          format.html { redirect_to project_path(@project) }
+          format.turbo_stream { redirect_to project_path(@project) }
         end
       else
         @value = id
         @error = @project.errors.messages.values.flatten.first
-        render :edit, status: :unprocessable_entity,
-                      locals: { type: 'alert', message: @project.errors.messages.values.flatten.first }
+        render :edit, status: :unprocessable_entity
       end
     end
 
