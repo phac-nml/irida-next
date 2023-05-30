@@ -6,6 +6,8 @@ module Projects
     before_action :project, only: %i[create]
     before_action :authorized_namespaces, only: %i[create]
 
+    def new; end
+
     def create
       if Projects::TransferService.new(@project, current_user).execute(new_namespace)
         flash[:success] = t('.success', project_name: @project.name)
