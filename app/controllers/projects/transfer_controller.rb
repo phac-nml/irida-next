@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 module Projects
+  # Controller for transferring projects to another namespace
   class TransferController < Projects::ApplicationController
     before_action :project, only: %i[create]
     before_action :authorized_namespaces, only: %i[create]
 
     def create
-      id = params.require(:new_namespace_id)
-      new_namespace ||= Namespace.find_by(id:)
       if Projects::TransferService.new(@project, current_user).execute(new_namespace)
         flash[:success] = t('.success', project_name: @project.name)
         respond_to do |format|
@@ -24,6 +23,11 @@ module Projects
     def project_params
       params.require(:project)
             .permit(project_params_attributes)
+    end
+
+    def new_namespace
+      id = params.require(:new_namespace_id)
+      Namespace.find_by(id:)
     end
 
     def namespace_attributes
