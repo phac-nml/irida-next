@@ -5,6 +5,10 @@
       data-viral--modal-component-target="modal"
       tabindex="-1"
       aria-hidden="true"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="dialog_label"
+      aria-describedby="dialog_desc"
       class="
         fixed
         top-0
@@ -21,12 +25,11 @@
         max-h-full
       "
     >
-      <div class="relative w-full max-w-2xl max-h-full">
+      <div class="relative w-full <%= size %> max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
           <!-- Modal header -->
           <div
-            id="Viral-Modal-Header"
             class="
               flex
               items-start
@@ -37,7 +40,10 @@
               dark:border-gray-600
             "
           >
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+            <h3
+              id="dialog_label"
+              class="text-xl font-semibold text-gray-900 dark:text-white"
+            >
               <%= title %>
             </h3>
             <button
@@ -59,11 +65,11 @@
               data-action="click->viral--modal-component#close"
             >
               <%= viral_icon(name: "x_mark", classes: "w-5 h-5") %>
-              <span class="sr-only">Close modal</span>
+              <span class="sr-only"><%= t("components.modal.close") %></span>
             </button>
           </div>
           <!-- Modal body -->
-          <div id="Viral-Modal-Body" class="p-6 space-y-6">
+          <div class="p-6 space-y-6 text-gray-500 dark:text-gray-400">
             <%= body %>
           </div>
         </div>
