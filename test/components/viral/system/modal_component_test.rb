@@ -7,7 +7,7 @@ module System
     test 'with title' do
       title = 'This is a modal title'
       visit('rails/view_components/modal_component/default')
-      within('.Viral-Preview > [data-controller-connected="true"]') do
+      within('.Viral-Preview > #modal > [data-controller-connected="true"]') do
         assert_text title
         assert_accessible
       end
@@ -16,7 +16,7 @@ module System
     test 'with title and body' do
       body = 'This is a modal body'
       visit('rails/view_components/modal_component/default')
-      within('.Viral-Preview > [data-controller-connected="true"]') do
+      within('.Viral-Preview > #modal > [data-controller-connected="true"]') do
         assert_text body
         assert_accessible
       end
