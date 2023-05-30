@@ -14,7 +14,6 @@ module Projects
           format.turbo_stream { redirect_to project_path(@project) }
         end
       else
-        @value = id
         @error = @project.errors.messages.values.flatten.first
         render :edit, status: :unprocessable_entity
       end
