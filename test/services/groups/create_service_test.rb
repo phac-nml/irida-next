@@ -84,5 +84,17 @@ module Groups
         Groups::CreateService.new(user, valid_params).execute
       end
     end
+
+    test 'create group logged using logidze' do
+      valid_params = { name: 'new-group1-name', path: 'new-group1-path' }
+      group = Groups::CreateService.new(@user, valid_params).execute
+
+      group.create_logidze_snapshot!
+
+      assert_equal 1, group.log_data.version
+      assert_equal 1, group.log_data.size
+      assert_equal 'new-group1-name', group.at(version: 1).name
+      assert_equal 'new-group1-path', group.at(version: 1).path
+    end
   end
 end

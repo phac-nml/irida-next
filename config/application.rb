@@ -40,8 +40,8 @@ module Irida
 
     config.active_record.schema_format = :sql
 
-    # Version has_many and belongs_to associations
-    config.logidze.associations_versioning = true
+    # Version has_many and belongs_to associations (This feature is experimental due to the number of edge cases)
+    # config.logidze.associations_versioning = true
 
     # Only load log data on demand
     # config.logidze.ignore_log_data_by_default = true
