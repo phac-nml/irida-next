@@ -22,10 +22,13 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
   end
 
   # Union and Interface Resolution
-  def self.resolve_type(type, object, ctx)
-    return if type.respond_to?(:assignable?) && type.assignable?(object)
-
-    super
+  def self.resolve_type(_type, object, _ctx)
+    case object
+    when Group
+      Types::GroupType
+    else
+      raise("Unexpected object: #{obj}")
+    end
   end
 
   # Stop validating when it encounters this many errors:
@@ -34,7 +37,7 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
   # Relay-style Object Identification:
 
   # Return a string UUID for `object`
-  def self.id_from_object(object, _type: nil, _ctx: nil)
+  def self.id_from_object(object, _type = nil, _ctx = nil)
     raise "#{object} does not implement `to_global_id`." unless object.respond_to?(:to_global_id)
 
     object.to_global_id
