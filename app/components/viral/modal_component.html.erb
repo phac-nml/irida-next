@@ -4,7 +4,10 @@
     data-viral--modal-component-target="modal"
     tabindex="-1"
     aria-hidden="true"
-    aria-label="Modal"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="dialog_label"
+    aria-describedby="dialog_desc"
     class="
       fixed
       top-0
@@ -36,7 +39,10 @@
             dark:border-gray-600
           "
         >
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          <h3
+            id="dialog_label"
+            class="text-xl font-semibold text-gray-900 dark:text-white"
+          >
             <%= title %>
           </h3>
           <button
@@ -62,7 +68,7 @@
           </button>
         </div>
         <!-- Modal body -->
-        <div class="p-6 space-y-6 text-gray-500 dark:text-gray-400">
+        <div id="dialog_desc" class="p-6 space-y-6 text-gray-500 dark:text-gray-400">
           <%= body %>
         </div>
       </div>
