@@ -113,6 +113,8 @@ en:
       member:
         access_level: Access Level
         user_id: User
+      user:
+        email: Email
     errors:
       models:
         namespace:
