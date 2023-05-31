@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Projects
-  # Controller actions for Project Samples Transer
+  # Controller actions for Project Samples Transfer
   class SamplesTransferController < ApplicationController
     before_action :project
     before_action :projects, only: [:new]
@@ -12,11 +12,10 @@ module Projects
 
     def create
       @sample_transfer = SampleTransfer.new(sample_transfer_params)
-      if Samples::TransferService.new(current_user).execute(@sample_transfer)
-        flash[:success] = t('.success')
-      else
-        flash[:error] = t('.error')
-      end
+
+      return unless Samples::TransferService.new(current_user).execute(@sample_transfer)
+
+      flash[:success] = t('.success')
       redirect_to namespace_project_samples_path
     end
 
