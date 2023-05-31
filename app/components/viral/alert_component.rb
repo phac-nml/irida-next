@@ -5,17 +5,26 @@ module Viral
   class AlertComponent < Component
     attr_reader :type, :message, :classes
 
-    def initialize(type: 'info', message: nil)
-      @type = type
+    TYPE_DEFAULT = :info
+    TYPE_MAPPINGS = {
+      alert: 'danger',
+      notice: 'info',
+      success: 'success',
+      info: 'info',
+      danger: 'danger'
+    }.freeze
+
+    def initialize(type: TYPE_DEFAULT, message: nil)
+      @type = TYPE_MAPPINGS[type.to_sym] || TYPE_DEFAULT
       @message = message
       @classes = classes_for_alert
     end
 
     def classes_for_alert
       case type
-      when 'alert'
+      when 'danger'
         'text-red-800 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800'
-      when 'notice'
+      when 'info'
         'text-blue-800 border-blue-300 bg-blue-50 dark:text-blue-400 dark:bg-gray-800 dark:border-blue-800'
       when 'success'
         'text-green-800 border border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800'
