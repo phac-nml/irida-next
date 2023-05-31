@@ -1,0 +1,10 @@
+<%= viral_card(title: "Card with multiple sections") do |card| %>
+  <% card.section(border_bottom: true, border_top: true) do %>
+    <h1 class="text-3xl font-bold dark:text-white">Section 1</h1>
+    <p class="text-base text-gray-900 dark:text-white">Some content</p>
+  <% end %>
+  <% card.section do %>
+    <h1 class="text-3xl font-bold dark:text-white">Section 2</h1>
+    <p class="text-base text-gray-900 dark:text-white">Some content</p>
+  <% end %>
+<% end %>

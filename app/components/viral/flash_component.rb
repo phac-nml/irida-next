@@ -16,13 +16,13 @@ module Viral
     end
 
     def classes_for_flash
-      case type
+      case type.to_s
       when 'error'
         'bg-red-600 dark:bg-red-800'
       when 'success'
         'bg-green-700 dark:bg-green-900'
       when 'warning'
-        'bg-yellow-600 dark:bg-yellow-900'
+        'bg-yellow-300 dark:bg-yellow-800'
       else
         'bg-blue-600 dark:bg-blue-800'
       end
