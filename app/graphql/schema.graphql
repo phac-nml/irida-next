@@ -1,7 +1,7 @@
 """
 A group
 """
-type Group {
+type Group implements Node {
   """
   List of descendant groups of this group.
   """
@@ -48,7 +48,7 @@ type Group {
   fullPath: ID!
 
   """
-  ID of the namespace.
+  ID of the object.
   """
   id: ID!
 
@@ -119,6 +119,16 @@ type Mutation {
 }
 
 """
+An object with an ID.
+"""
+interface Node {
+  """
+  ID of the object.
+  """
+  id: ID!
+}
+
+"""
 Information about pagination in a connection.
 """
 type PageInfo {
@@ -186,6 +196,26 @@ type Query {
     """
     last: Int
   ): GroupConnection!
+
+  """
+  Fetches an object given its ID.
+  """
+  node(
+    """
+    ID of the object.
+    """
+    id: ID!
+  ): Node
+
+  """
+  Fetches a list of objects given a list of IDs.
+  """
+  nodes(
+    """
+    IDs of the objects.
+    """
+    ids: [ID!]!
+  ): [Node]!
 }
 
 """

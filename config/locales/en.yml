@@ -113,6 +113,8 @@ en:
       member:
         access_level: Access Level
         user_id: User
+      user:
+        email: Email
     errors:
       models:
         namespace:
@@ -202,6 +204,8 @@ en:
       copied: Copied!
       copy: Copy to clipboard
       toggle_visible: Toggle visibility
+    modal:
+      close: Close modal
   layouts:
     application:
       site_title: IRIDA Next
@@ -209,7 +213,6 @@ en:
     name: IRIDA Next
     expand_sidebar: Expand sidebar
     collapse_sidebar: Collapse sidebar
-    close_modal: Close modal
     screen_reader:
       close: Close
     default_sidebar:
