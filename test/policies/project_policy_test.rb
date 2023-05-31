@@ -50,12 +50,20 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.update_sample?
   end
 
+  test '#transfer_sample?' do
+    assert @policy.transfer_sample?
+  end
+
   test '#destroy_sample?' do
     assert @policy.destroy_sample?
   end
 
   test '#read_sample?' do
     assert @policy.destroy_sample?
+  end
+
+  test '#transfer_sample_into_project?' do
+    assert @policy.transfer_sample_into_project?
   end
 
   test 'scope' do

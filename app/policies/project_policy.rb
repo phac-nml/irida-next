@@ -106,6 +106,14 @@ class ProjectPolicy < NamespacePolicy
     false
   end
 
+  def transfer_sample_into_project?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_transfer_into_namespace?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation|
     relation.where(namespace: { parent: user.groups.self_and_descendant_ids })
             .include_route.order(updated_at: :desc).or(relation.where(namespace: { parent: user.namespace })
