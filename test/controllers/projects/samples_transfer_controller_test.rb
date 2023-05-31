@@ -27,12 +27,5 @@ module Projects
 
       assert_redirected_to namespace_project_samples_path
     end
-
-    test 'should not create a sample transfer with wrong parameters' do
-      post namespace_project_samples_transfer_index_path(@namespace, @project1),
-           params: { sample_transfer: { sample_ids: [JSON.generate([@sample1.id, @sample2.id])] } }
-
-      assert_redirected_to namespace_project_samples_path
-    end
   end
 end

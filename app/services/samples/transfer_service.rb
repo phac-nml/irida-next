@@ -5,6 +5,7 @@ module Samples
   class TransferService < BaseService
     def execute(sample_transfer)
       @sample_transfer = sample_transfer
+      return false unless @sample_transfer
 
       # Authorize if user can transfer samples to project
       project = Project.find_by(id: @sample_transfer.project_id)
