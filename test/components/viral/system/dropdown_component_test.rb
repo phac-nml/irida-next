@@ -5,26 +5,30 @@ require 'application_system_test_case'
 module System
   class DropdownComponentTest < ApplicationSystemTestCase
     test 'dropdown component with label' do
-      visit('/rails/view_components/dropdown_component/with_label_and_caret')
+      visit('/rails/view_components/viral_dropdown_component/with_caret')
       within('.Viral-Preview > [data-controller-connected="true"]') do
-        assert_no_text 'Item 1'
-        assert_no_text 'Item 2'
+        assert_no_text 'Aspergillus awamori'
+        assert_no_text 'Bacillus cereus'
+        assert_no_text 'Pseudomonas aeruginosa'
         assert_selector '.Viral-Dropdown--button'
-        find('.Viral-Dropdown--button').click
-        assert_text 'Item 1'
-        assert_text 'Item 2'
+        click_on 'Organism'
+        assert_text 'Aspergillus awamori'
+        assert_text 'Bacillus cereus'
+        assert_text 'Pseudomonas aeruginosa'
       end
     end
 
     test 'dropdown component with icon' do
-      visit('/rails/view_components/dropdown_component/with_icon')
-      within('.Viral-Preview  > [data-controller-connected="true"]') do
-        assert_no_text 'Item 1'
-        assert_no_text 'Item 2'
+      visit('/rails/view_components/viral_dropdown_component/with_icon')
+      within('.Viral-Preview > [data-controller-connected="true"]') do
+        assert_no_text 'Aspergillus awamori'
+        assert_no_text 'Bacillus cereus'
+        assert_no_text 'Pseudomonas aeruginosa'
         assert_selector '.Viral-Dropdown--icon'
-        find('.Viral-Dropdown--icon').click
-        assert_text 'Item 1'
-        assert_text 'Item 2'
+        click_on 'Organism'
+        assert_text 'Aspergillus awamori'
+        assert_text 'Bacillus cereus'
+        assert_text 'Pseudomonas aeruginosa'
       end
     end
   end

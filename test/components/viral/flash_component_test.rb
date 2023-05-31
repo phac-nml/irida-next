@@ -22,7 +22,7 @@ module Viral
       message = 'Warning Message!'
       render_inline(Viral::FlashComponent.new(type: 'warning', data: message))
       assert_text message
-      assert_selector '.bg-yellow-600'
+      assert_selector '.bg-yellow-300'
     end
 
     test 'info message' do

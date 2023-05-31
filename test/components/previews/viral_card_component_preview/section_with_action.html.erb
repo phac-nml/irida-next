@@ -1,0 +1,8 @@
+<%= viral_card(title: "Card with multiple titled sections") do |card| %>
+  <% card.section(title: "First Sections", border_top: true) do |section| %>
+    <% section.action do %>
+      <%= link_to "Delete", "#", class: "text-red-500 dark:text-red-400" %>
+    <% end %>
+    <p class="text-base text-gray-900 dark:text-white">First Section Content</p>
+  <% end %>
+<% end %>
