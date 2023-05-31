@@ -14,7 +14,7 @@ module System
     end
 
     test 'with title and body' do
-      body = 'This is a modal body'
+      body = 'This is the modal body'
       visit('rails/view_components/viral_modal_component/default')
       within('.Viral-Preview > #modal > [data-controller-connected="true"]') do
         assert_text body
