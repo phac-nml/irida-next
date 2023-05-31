@@ -3,6 +3,8 @@
 class ViralButtonComponentPreview < ViewComponent::Preview
   def basic; end
 
+  def full_width; end
+
   # def primary
   #   render Viral::ButtonComponent.new(type: :primary) do
   #     'Primary Button'
