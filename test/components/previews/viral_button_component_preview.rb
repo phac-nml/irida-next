@@ -12,4 +12,6 @@ class ViralButtonComponentPreview < ViewComponent::Preview
   def small; end
 
   def large; end
+
+  def disclosure; end
 end

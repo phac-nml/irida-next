@@ -2,7 +2,7 @@
 
 module Viral
   class ButtonComponent < Viral::Component
-    attr_reader :primary, :tag, :url
+    attr_reader :disclosure, :tag, :url
 
     TYPE_DEFAULT = :default
     TYPE_MAPPINGS = {
@@ -18,10 +18,17 @@ module Viral
       :large => 'text-sm px-5 py-2.5 font-medium'
     }.freeze
 
-    def initialize(url: nil, type: TYPE_DEFAULT, size: SIZE_DEFAULT, full_width: false, **system_arguments)
-      @tag = url.present? ? 'a' : 'button'
-      @system_arguments = system_arguments
+    DISCLOSURE_DEFAULT = false
+    DISCLOSURE_OPTIONS = [true, false, :down, :up, :select, :horizontal_dots].freeze
 
+    def initialize(url: nil, type: TYPE_DEFAULT, size: SIZE_DEFAULT, full_width: false, disclosure: DISCLOSURE_DEFAULT,
+                   **system_arguments)
+      @tag = url.present? ? 'a' : 'button'
+
+      @disclosure = disclosure
+      @disclosure = :down if disclosure == true
+
+      @system_arguments = system_arguments
       @system_arguments[:classes] = class_names(
         @system_arguments[:classes],
         TYPE_MAPPINGS[type],

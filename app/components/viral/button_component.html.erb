@@ -1,7 +1,20 @@
 <%= render Viral::BaseComponent.new(tag: tag, **system_arguments) do %>
-  <% if content.present? %>
+  <span class="flex justify-center">
+    <% if content.present? %>
     <div>
       <%= content %>
     </div>
   <% end %>
-<% end %>
+
+  <% if disclosure.present? %>
+    <% case disclosure %>
+      <% when :down %>
+        <%= viral_icon(name: "chevron_down", classes: "ml-2 w-4 h-4") %>
+      <% when :up %>
+        <%= viral_icon(name: "chevron_up", classes: "ml-2 w-4 h-4") %>
+      <% when :right %>
+        <%= viral_icon(name: "chevron_right", classes: "ml-2 w-4 h-4") %>
+      <% end %>
+    <% end %>
+    </span>
+  <% end %>
