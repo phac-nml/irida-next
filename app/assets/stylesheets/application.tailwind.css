@@ -207,7 +207,7 @@
   }
 
   .button {
-    @apply flex items-center font-medium border rounded-md focus:z-10 focus:ring-4;
+    @apply flex items-center justify-center font-medium border rounded-md focus:z-10 focus:ring-4;
   }
 
   .button--size-default {
