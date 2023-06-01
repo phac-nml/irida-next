@@ -3,15 +3,15 @@
 class ViralButtonComponentPreview < ViewComponent::Preview
   def basic; end
 
-  def full_width; end
-
-  def primary; end
-
   def destructive; end
 
-  def small; end
+  def disclosure; end
+
+  def full_width; end
 
   def large; end
 
-  def disclosure; end
+  def primary; end
+
+  def small; end
 end
