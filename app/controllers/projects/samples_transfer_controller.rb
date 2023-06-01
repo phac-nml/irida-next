@@ -4,7 +4,7 @@ module Projects
   # Controller actions for Project Samples Transfer
   class SamplesTransferController < ApplicationController
     before_action :project
-    before_action :projects, only: [:new]
+    before_action :projects
 
     def new
       @sample_transfer = SampleTransfer.new
@@ -13,10 +13,12 @@ module Projects
     def create
       @sample_transfer = SampleTransfer.new(sample_transfer_params)
 
-      return unless Samples::TransferService.new(current_user).execute(@sample_transfer)
-
-      flash[:success] = t('.success')
-      redirect_to namespace_project_samples_path
+      if Samples::TransferService.new(@project, current_user).execute(@sample_transfer)
+        flash[:success] = t('.success')
+        redirect_to namespace_project_samples_path
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
 
     private
