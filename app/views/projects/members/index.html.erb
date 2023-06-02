@@ -109,17 +109,42 @@
                     <% end %>
                   </div>
                 </td>
-                <% if !member_source.key?(:inherited_namespace_path) && allowed_to?(:destroy_member?, @namespace) %>
-                  <td class="px-6 py-4 text-right">
-                    <%= viral_dropdown(icon: "ellipsis_vertical",
-                                      aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label',
-                                      member: member.user.email) }) do |dropdown| %>
+                <% if current_user == member.user || allowed_to?(:destroy_member?, @namespace) %>
+                  <td class="px-4 py-3 text-right">
+                    <%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
                       <%= dropdown.item(
-                        label: t(:"projects.members.index.remove"),
+                        label:
+                          (
+                            if current_user == member.user
+                              t(:"projects.members.index.leave_project")
+                            else
+                              t(:"projects.members.index.remove")
+                            end
+                          ),
                         url: namespace_project_member_path(id: member.id),
                         data: {
                           turbo_method: :delete,
-                          turbo_confirm: t(:"projects.members.index.remove_confirmation")
+                          turbo_confirm:
+                            (
+                              if current_user == member.user
+                                t(:"projects.members.index.leave_confirmation")
+                              else
+                                t(:"projects.members.index.remove_confirmation")
+                              end
+                            )
+                        },
+                        aria: {
+                          label:
+                            (
+                              if current_user == member.user
+                                t(:"projects.members.index.actions.link_leave_project_aria_label")
+                              else
+                                t(
+                                  :"projects.members.index.actions.link_remove_aria_label",
+                                  member: member.user.email
+                                )
+                              end
+                            )
                         }
                       ) %>
                     <% end %>

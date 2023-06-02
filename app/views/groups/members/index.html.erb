@@ -108,24 +108,43 @@
                     <% end %>
                   </div>
                 </td>
-
-                <% if !member_source.key?(:inherited_namespace_path) && allowed_to?(:destroy_member?, @namespace) %>
+                <% if current_user == member.user || allowed_to?(:destroy_member?, @namespace) %>
                   <td class="px-4 py-3 text-right">
                     <%= viral_dropdown(icon: "ellipsis_vertical",
                                      aria: { label: t(:'groups.members.index.actions.member_dropdown_aria_label',
                                      member: member.user.email) }) do |dropdown| %>
                       <%= dropdown.item(
-                        label: t(:"groups.members.index.remove"),
+                        label:
+                          (
+                            if current_user == member.user
+                              t(:"groups.members.index.leave_group")
+                            else
+                              t(:"groups.members.index.remove")
+                            end
+                          ),
                         url: group_member_path(@namespace, member),
                         data: {
                           turbo_method: :delete,
-                          turbo_confirm: t(:"groups.members.index.remove_confirmation")
+                          turbo_confirm:
+                            (
+                              if current_user == member.user
+                                t(:"groups.members.index.leave_confirmation")
+                              else
+                                t(:"groups.members.index.remove_confirmation")
+                              end
+                            )
                         },
                         aria: {
                           label:
-                            t(
-                              :"groups.members.index.actions.link_remove_aria_label",
-                              member: member.user.email
+                            (
+                              if current_user == member.user
+                                t(:"groups.members.index.actions.link_leave_group_aria_label")
+                              else
+                                t(
+                                  :"groups.members.index.actions.link_remove_aria_label",
+                                  member: member.user.email
+                                )
+                              end
                             )
                         }
                       ) %>

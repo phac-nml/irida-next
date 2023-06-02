@@ -170,7 +170,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     errors.add(:base,
                I18n.t('activerecord.errors.models.member.destroy.last_member',
                       namespace_type: namespace.class.model_name.human))
-    false
+    throw :abort
   end
 
   # Method to update descendant membership access levels so they aren't less than the parent group

@@ -107,25 +107,22 @@ module Projects
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
 
-    test 'cannot remove themselves as a member from the project' do
+    test 'can remove themselves as a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
 
       table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
-        first('button.Viral-Dropdown--icon').click
-        click_link I18n.t(:'projects.members.index.remove')
+        first('.member-settings-ellipsis').click
+        click_link I18n.t(:'projects.members.index.leave_project')
       end
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_no_text I18n.t(:'projects.members.destroy.success')
-      assert_text I18n.t('services.members.destroy.cannot_remove_self',
-                         namespace_type: @project.namespace.class.model_name.human)
-      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count + header_row_count
+      assert_text I18n.t(:'projects.members.destroy.success')
+      assert_no_selector 'h1', text: I18n.t(:'projects.members.index.title')
     end
 
     test 'can create a project under namespace and add a new member to project' do
