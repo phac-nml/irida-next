@@ -33,8 +33,7 @@ module Projects
     end
 
     def projects
-      @projects = Project.where(namespace: { parent: current_user.groups.self_and_descendant_ids })
-                         .or(Project.where(namespace: { parent: current_user.namespace })).include_route
+      @projects = authorized_scope(Project, type: :relation)
     end
   end
 end

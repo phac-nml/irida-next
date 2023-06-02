@@ -40,18 +40,20 @@
           >
             <% @samples.each do |sample| %>
               <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                <td class="ps-4">
-                  <%= check_box_tag "sample_ids[]",
-                  sample.id,
-                  nil,
-                  id: "sample_ids_#{sample.id}",
-                  "aria-label": "placeholder_#{sample.id}",
-                  data: {
-                    action: "input->table#update",
-                    table_target: "rowSelection"
-                  } %>
-                </td>
-                <td class="py-3 whitespace-nowrap">
+                <% if allowed_to?(:transfer_sample?, @project) %>
+                  <td class="ps-4">
+                    <%= check_box_tag "sample_ids[]",
+                    sample.id,
+                    nil,
+                    id: "sample_ids_#{sample.id}",
+                    "aria-label": "placeholder_#{sample.id}",
+                    data: {
+                      action: "input->table#update",
+                      table_target: "rowSelection"
+                    } %>
+                  </td>
+                <% end %>
+                <td class="p-4 whitespace-nowrap">
                   <%= link_to sample.name,
                   namespace_project_sample_path(id: sample.id),
                   class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
