@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_01_145011) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -23,7 +23,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
+    t.datetime "deleted_at"
     t.index ["created_by_id"], name: "index_members_on_created_by_id"
+    t.index ["deleted_at"], name: "index_members_on_deleted_at"
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
     t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true
     t.index ["user_id"], name: "index_members_on_user_id"
@@ -39,6 +41,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_namespaces_on_deleted_at"
     t.index ["owner_id"], name: "index_namespaces_on_owner_id"
     t.index ["parent_id"], name: "index_namespaces_on_parent_id"
   end
@@ -54,6 +58,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_personal_access_tokens_on_deleted_at"
     t.index ["token_digest"], name: "index_personal_access_tokens_on_token_digest", unique: true
     t.index ["user_id"], name: "index_personal_access_tokens_on_user_id"
   end
@@ -63,7 +69,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
     t.bigint "namespace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["creator_id"], name: "index_projects_on_creator_id"
+    t.index ["deleted_at"], name: "index_projects_on_deleted_at"
     t.index ["namespace_id"], name: "index_projects_on_namespace_id"
   end
 
@@ -74,6 +82,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
     t.bigint "source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_routes_on_deleted_at"
     t.index ["name"], name: "index_routes_on_name", unique: true
     t.index ["path"], name: "index_routes_on_path", unique: true
     t.index ["source_type", "source_id"], name: "index_routes_on_source"
@@ -86,6 +96,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_samples_on_deleted_at"
     t.index ["name", "project_id"], name: "index_samples_on_name_and_project_id", unique: true
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
@@ -101,6 +113,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
     t.string "provider"
     t.string "uid"
     t.jsonb "log_data"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
