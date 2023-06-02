@@ -4,6 +4,8 @@
 class Project < ApplicationRecord
   acts_as_paranoid
 
+  after_destroy :destroy_namespace
+
   belongs_to :creator, class_name: 'User'
   belongs_to :namespace, autosave: true, class_name: 'Namespaces::ProjectNamespace'
 
@@ -21,5 +23,13 @@ class Project < ApplicationRecord
 
   def to_param
     path
+  end
+
+  private
+
+  def destroy_namespace
+    return if destroyed_by_association
+
+    namespace.destroy
   end
 end
