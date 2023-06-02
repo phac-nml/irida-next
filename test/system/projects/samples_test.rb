@@ -78,7 +78,16 @@ module Projects
       assert_selector 'table#samples-table tr', count: 0
     end
 
-    test 'user should not be able to see the transfer samples button' do
+    test 'user with maintainer access should not be able to see the transfer samples button' do
+      user = users(:joan_doe)
+      login_as user
+
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.transfer_button'), count: 0
+    end
+
+    test 'user with guest access should not be able to see the transfer samples button' do
       user = users(:ryan_doe)
       login_as user
 
