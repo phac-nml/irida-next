@@ -45,27 +45,11 @@
           >
             <%= title %>
           </h3>
-          <button
-            type="button"
-            class="
-              text-gray-400
-              bg-transparent
-              hover:bg-gray-200
-              hover:text-gray-900
-              rounded-lg
-              text-sm
-              p-1.5
-              ml-auto
-              inline-flex
-              items-center
-              dark:hover:bg-gray-600
-              dark:hover:text-white
-            "
-            data-action="click->viral--modal-component#close"
-          >
-            <%= viral_icon(name: "x_mark", classes: "w-5 h-5") %>
-            <span class="sr-only"><%= t("components.modal.close") %></span>
-          </button>
+          <% if closable %>
+            <%= render(Viral::BaseComponent.new(**close_button_arguments)) do %>
+              <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
+            <% end %>
+          <% end %>
         </div>
         <!-- Modal body -->
         <div class="p-6 space-y-6 text-gray-500 dark:text-gray-400">
