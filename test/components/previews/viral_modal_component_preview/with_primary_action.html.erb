@@ -1,0 +1,6 @@
+<%= viral_modal(title: 'This is a modal title') do |modal| %>
+  <%= modal.body do %>
+    <p>This is the modal body</p>
+  <% end %>
+  <%= modal.primary_action { "Create new project" } %>
+<% end %>

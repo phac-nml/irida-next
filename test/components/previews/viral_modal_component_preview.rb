@@ -8,4 +8,6 @@ class ViralModalComponentPreview < ViewComponent::Preview
   def large; end
 
   def extra_large; end
+
+  def with_primary_action; end
 end

@@ -14,7 +14,15 @@
     <div class="modal--dialog">
       <!-- Modal header -->
       <div
-        class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
+        class="
+          flex
+          items-start
+          justify-between
+          p-4
+          border-b
+          rounded-t
+          dark:border-gray-600
+        "
       >
         <h3
           id="dialog_label"
@@ -32,6 +40,12 @@
       <div class="p-6 space-y-6 text-gray-500 dark:text-gray-400">
         <%= body %>
       </div>
+
+      <% if render_footer? %>
+        <div class="modal--footer">
+          footer
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
