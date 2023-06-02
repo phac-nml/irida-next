@@ -9,10 +9,10 @@ module Viral
 
     SIZE_DEFAULT = :default
     SIZE_MAPPINGS = {
-      small: 'max-w-md',
-      default: 'max-w-lg',
-      large: 'max-w-4xl',
-      extra_large: 'max-w-7xl'
+      small: 'modal--size-sm',
+      default: 'modal--size-md',
+      large: 'modal--size-lg',
+      extra_large: 'modal--size-xl'
     }.freeze
 
     def initialize(title:, closable: true, size: SIZE_DEFAULT)

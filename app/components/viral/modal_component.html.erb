@@ -9,20 +9,12 @@
   aria-describedby="dialog_desc"
   class="modal--backdrop"
 >
-  <div class="relative w-full <%= size %> max-h-full">
+  <div class="modal--size <%= size %>">
     <!-- Modal content -->
-    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+    <div class="modal--dialog">
       <!-- Modal header -->
       <div
-        class="
-          flex
-          items-start
-          justify-between
-          p-4
-          border-b
-          rounded-t
-          dark:border-gray-600
-        "
+        class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
       >
         <h3
           id="dialog_label"
