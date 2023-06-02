@@ -3,7 +3,7 @@
   <%= component.with_buttons do %>
     <div>
       <% if allowed_to?(:transfer_sample?, @project) %>
-        <%= link_to "Transfer Samples",
+        <%= link_to t("projects.samples.index.transfer_button"),
         new_namespace_project_samples_transfer_path,
         class: "btn btn-default mr-1",
         data: {
