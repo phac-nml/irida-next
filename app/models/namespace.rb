@@ -197,6 +197,6 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   # Method to restore namespace routes when the namespace is restored
   def restore_routes
-    Route.restore(source_id: id, recursive: true)
+    Route.restore(id, recursive: true)
   end
 end

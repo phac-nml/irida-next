@@ -37,7 +37,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test '#destroy removes dependant project namespace' do
     assert_difference(-> { Namespaces::ProjectNamespace.count } => -1) do
-      @project.destroy
+      @project.namespace.destroy
     end
   end
 end
