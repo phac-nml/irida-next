@@ -205,6 +205,11 @@
   .Viral-Dropdown--icon {
     @apply rounded-md text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
+
+  /* VIRAL MODAL */
+  .modal--backdrop {
+    @apply fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full;
+  }
 }
 
 .pagy-nav.pagination {
@@ -241,5 +246,5 @@
 }
 
 div.field_with_errors > :is(select) {
-  @apply border-red-700 text-red-900 placeholder-red-300;
+  @apply text-red-900 placeholder-red-300 border-red-700;
 }
