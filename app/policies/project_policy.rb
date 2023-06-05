@@ -119,4 +119,16 @@ class ProjectPolicy < NamespacePolicy
             .include_route.order(updated_at: :desc).or(relation.where(namespace: { parent: user.namespace })
             .include_route.order(updated_at: :desc))
   end
+
+  scope_for :relation, :transferable do |relation|
+    relation
+      .where(namespace_id: Namespace.where(
+        id: Member.where(
+          user:,
+          access_level: Member::AccessLevel::OWNER
+        ).select(:namespace_id)
+      ).self_and_descendants.select(:id)).include_route.order(updated_at: :desc)
+      .or(relation.where(namespace: { parent: user.namespace }))
+      .include_route.order(updated_at: :desc)
+  end
 end

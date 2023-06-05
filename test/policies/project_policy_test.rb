@@ -77,4 +77,10 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     # David Doe has access to 0 projects
     assert_equal scoped_projects.count, 0
   end
+
+  test 'transferable scope' do
+    scoped_projects = @policy.apply_scope(Project, type: :relation, name: :transferable)
+
+    assert_equal 8, scoped_projects.count
+  end
 end

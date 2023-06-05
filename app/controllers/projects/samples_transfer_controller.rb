@@ -33,7 +33,7 @@ module Projects
     end
 
     def projects
-      @projects = authorized_scope(Project, type: :relation)
+      @projects = authorized_scope(Project, type: :relation, as: :transferable)
     end
   end
 end
