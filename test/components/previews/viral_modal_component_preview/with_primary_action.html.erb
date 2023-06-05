@@ -3,4 +3,7 @@
     <p>This is the modal body</p>
   <% end %>
   <%= modal.primary_action { "Create new project" } %>
+  <%= modal.secondary_action do %>
+    <button class="btn btn-default">FOOBAR</button>
+  <% end %>
 <% end %>

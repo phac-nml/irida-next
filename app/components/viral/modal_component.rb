@@ -6,9 +6,10 @@ module Viral
     attr_reader :closable, :close_button_arguments, :title, :size
 
     renders_one :body
-    renders_one :primary_action, lambda { |primary: true, **system_arguments|
+    renders_one :primary_action, lambda { |**system_arguments|
       Viral::BaseComponent.new(tag: 'button', classes: 'btn btn-primary', **system_arguments)
     }
+    renders_many :secondary_actions
 
     SIZE_DEFAULT = :default
     SIZE_MAPPINGS = {
@@ -23,17 +24,22 @@ module Viral
       @closable = closable
       @size = SIZE_MAPPINGS[size]
 
+      @close_button_arguments = close_button_arguments
+    end
+
+    def close_button_arguments
       @close_button_arguments = {
         tag: 'button',
         type: 'button',
         data: { action: 'click->viral--modal-component#close' },
-        classes: 'text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white',
+        classes: 'modal--dialog-close',
         aria: { label: t('components.modal.close') }
       }
+      @close_button_arguments
     end
 
     def render_footer?
-      primary_action.present?
+      primary_action.present? || secondary_actions.any?
     end
   end
 end
