@@ -5,6 +5,7 @@ module ViewHelper
   VIRAL_HELPERS = {
     alert: 'Viral::AlertComponent',
     breadcrumb: 'Viral::BreadcrumbComponent',
+    button: 'Viral::ButtonComponent',
     card: 'Viral::CardComponent',
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',
@@ -25,7 +26,7 @@ module ViewHelper
     file = File.read(path)
     doc = Nokogiri::HTML::DocumentFragment.parse(file)
     svg = doc.at_css 'svg'
-    svg[:class] = 'Viral-Icon__Svg'
+    svg[:class] = "Viral-Icon__Svg icon-#{name}"
     svg[:focusable] = false
     svg[:'aria-hidden'] = true
     doc.to_html.html_safe # rubocop:disable Rails/OutputSafety
