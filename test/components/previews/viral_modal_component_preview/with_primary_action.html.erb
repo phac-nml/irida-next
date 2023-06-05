@@ -4,6 +4,8 @@
   <% end %>
   <%= modal.primary_action { "Create new project" } %>
   <%= modal.secondary_action do %>
-    <button class="btn btn-default">FOOBAR</button>
+    <%= viral_button(type: :default) do %>
+      Cancel
+    <% end %>
   <% end %>
 <% end %>

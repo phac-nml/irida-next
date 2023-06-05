@@ -7,7 +7,7 @@ module Viral
 
     renders_one :body
     renders_one :primary_action, lambda { |**system_arguments|
-      Viral::BaseComponent.new(tag: 'button', classes: 'btn btn-primary', **system_arguments)
+      Viral::ButtonComponent.new(type: :primary, **system_arguments)
     }
     renders_many :secondary_actions
 
@@ -24,10 +24,6 @@ module Viral
       @closable = closable
       @size = SIZE_MAPPINGS[size]
 
-      @close_button_arguments = close_button_arguments
-    end
-
-    def close_button_arguments
       @close_button_arguments = {
         tag: 'button',
         type: 'button',
@@ -35,7 +31,6 @@ module Viral
         classes: 'modal--dialog-close',
         aria: { label: t('components.modal.close') }
       }
-      @close_button_arguments
     end
 
     def render_footer?
