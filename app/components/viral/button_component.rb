@@ -29,9 +29,10 @@ module Viral
       @disclosure = :down if disclosure == true
 
       @system_arguments = system_arguments
+      existing_classes = @system_arguments[:classes]
       @system_arguments[:classes] = class_names(
         'button',
-        @system_arguments[:classes],
+        existing_classes,
         TYPE_MAPPINGS[type],
         SIZE_MAPPINGS[size],
         'w-full': full_width
