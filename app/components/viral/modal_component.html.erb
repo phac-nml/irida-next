@@ -43,7 +43,9 @@
 
       <% if render_footer? %>
         <div class="modal--footer">
-          footer
+          <% if primary_action %>
+            <%= primary_action %>
+          <% end %>
         </div>
       <% end %>
     </div>
