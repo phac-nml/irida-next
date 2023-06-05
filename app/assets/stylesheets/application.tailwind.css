@@ -206,6 +206,34 @@
     @apply rounded-md text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 
+  .button {
+    @apply flex items-center justify-center font-medium border rounded-md focus:z-10 focus:ring-4;
+  }
+
+  .button--size-default {
+    @apply text-sm px-5 py-2.5;
+  }
+
+  .button--size-small {
+    @apply px-3 py-2 text-xs;
+  }
+
+  .button--size-large {
+    @apply py-3 text-lg px-7;
+  }
+
+  .button--state-default {
+    @apply text-gray-900 bg-white border-gray-200 focus:outline-none hover:bg-gray-100 hover:text-gray-950 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+  }
+
+  .button--state-destructive {
+    @apply text-white bg-red-700 border-red-800 focus:outline-none hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700;
+  }
+
+  .button--state-primary {
+    @apply text-white border-primary-800 bg-primary-700 focus:outline-none hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-600 dark:text-white dark:border-primary-600 dark:hover:bg-primary-700;
+  }
+
   /* VIRAL MODAL */
   .modal--backdrop {
     @apply fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full;
