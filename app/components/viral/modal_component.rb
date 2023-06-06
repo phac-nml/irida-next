@@ -5,6 +5,7 @@ module Viral
   class ModalComponent < Viral::Component
     attr_reader :closable, :close_button_arguments, :title, :size
 
+    renders_one :trigger
     renders_one :body
     renders_one :primary_action, lambda { |**system_arguments|
       Viral::ButtonComponent.new(type: :primary, **system_arguments)
