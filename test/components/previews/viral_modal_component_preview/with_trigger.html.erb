@@ -1,5 +1,10 @@
-<%= viral_modal(title: 'This is a modal title') do |modal| %>
-  <%= modal.body do %>
+<%= viral_modal do |modal| %>
+  <%= modal.trigger do %>
+    <%= viral_button(data: {action: "click->viral--modal-component#open"}) do %>
+      Open modal
+    <% end %>
+  <% end %>
+  <%= modal.window(title: "This is a modal with a trigger") do %>
     <p>This is the modal body</p>
   <% end %>
 <% end %>

@@ -1,10 +1,5 @@
-<div
-  data-controller="viral--modal-component"
-  data-viral--modal-component-open-value="true"
->
-  <%= viral_modal(title: 'This is a modal title') do |modal| %>
-    <%= modal.body do %>
-      <p>This is the modal body</p>
-    <% end %>
+<%= viral_modal(open: true) do |modal| %>
+  <% modal.window(title: "This is the default modal") do %>
+    Jello
   <% end %>
-</div>
+<% end %>

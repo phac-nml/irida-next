@@ -1,59 +1,9 @@
-<div
-  tabindex="-1"
-  aria-hidden="true"
-  role="alertdialog"
-  aria-modal="true"
-  aria-labelledby="dialog_label"
-  aria-describedby="dialog_desc"
-  class="modal--backdrop"
-  data-viral--modal-component-target="modal"
+<span
+  data-controller="viral--modal-component"
+  data-viral--modal-component-open-value="<%= open %>"
 >
-  <div class="modal--size <%= size %>">
-    <!-- Modal content -->
-    <div class="modal--dialog">
-      <!-- Modal header -->
-      <div
-        class="
-          flex
-          items-start
-          justify-between
-          p-4
-          border-b
-          rounded-t
-          dark:border-gray-600
-        "
-      >
-        <h3
-          id="dialog_label"
-          class="text-xl font-semibold text-gray-900 dark:text-white"
-        >
-          <%= title %>
-        </h3>
-        <% if closable %>
-          <%= render(Viral::BaseComponent.new(**close_button_arguments)) do %>
-            <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-          <% end %>
-        <% end %>
-      </div>
-      <!-- Modal body -->
-      <div class="p-6 space-y-6 text-gray-500 dark:text-gray-400">
-        <%= body %>
-      </div>
-
-      <% if render_footer? %>
-        <div class="modal--footer">
-
-          <% if primary_action %>
-            <%= primary_action %>
-          <% end %>
-
-          <% if secondary_actions %>
-            <% secondary_actions.each do |action| %>
-              <%= action %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div>
+  <% if trigger %>
+    <%= trigger %>
+  <% end %>
+  <%= window %>
+</span>
