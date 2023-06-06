@@ -2,7 +2,8 @@
 
 module Viral
   module Modal
-    class ContentComponent < Viral::Component
+    # Component to actual display the modal window.
+    class WindowComponent < Viral::Component
       attr_reader :closable, :close_button_arguments, :title, :size
 
       renders_one :body

@@ -239,6 +239,10 @@
     @apply fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full;
   }
 
+  .modal--dialog-header {
+    @apply flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600;
+  }
+
   .modal--size {
     @apply relative w-full max-h-full;
   }

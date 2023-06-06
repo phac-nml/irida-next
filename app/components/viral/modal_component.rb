@@ -6,7 +6,7 @@ module Viral
     attr_reader :open
 
     renders_one :trigger
-    renders_one :window, 'Viral::Modal::ContentComponent'
+    renders_one :window, 'Viral::Modal::WindowComponent'
 
     def initialize(open: false)
       @open = open
