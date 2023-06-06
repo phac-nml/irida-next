@@ -98,9 +98,37 @@ class ProjectPolicy < NamespacePolicy
     false
   end
 
+  def transfer_sample?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_transfer?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def transfer_sample_into_project?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_transfer?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation|
     relation.where(namespace: { parent: user.groups.self_and_descendant_ids })
             .include_route.order(updated_at: :desc).or(relation.where(namespace: { parent: user.namespace })
             .include_route.order(updated_at: :desc))
+  end
+
+  scope_for :relation, :transferable do |relation|
+    relation
+      .where(namespace_id: Namespace.where(
+        id: Member.where(
+          user:,
+          access_level: Member::AccessLevel::OWNER
+        ).select(:namespace_id)
+      ).self_and_descendants.select(:id)).include_route.order(updated_at: :desc)
+      .or(relation.where(namespace: { parent: user.namespace }))
+      .include_route.order(updated_at: :desc)
   end
 end

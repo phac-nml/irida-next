@@ -71,6 +71,8 @@ en:
         destroy_sample?: You are not authorized to remove samples from project %{name} on this server.
         read_sample?: You are not authorized to view this sample for project %{name} on this server.
         update_sample?: You are not authorized to update samples for project %{name} on this server.
+        transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
+        transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
       namespaces/project_namespace:
         update?: You are not authorized to update the namespace for project %{name} on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
@@ -476,10 +478,10 @@ en:
         role_not_allowed: A maintainer can only remove a member up to the Maintainer role
       update:
         cannot_update_self: "You cannot update your own %{namespace_type} role"
-        role_not_allowed: "A maintainer can only update a member's role up to the Maintainer role"
-  application:
-    errors:
-      access_denied: Access Denied.
-      not_authorized: You are not authorized to access the requested resource on this server.
-      resource_not_found: Resource Not Found.
-      not_found_on_server: The requested resource could not be found on the server.
+    samples:
+      create:
+        no_permission: You do not have permission to create a sample in this project
+      destroy:
+        no_permission: You do not have permission to remove this sample from the project
+      update:
+        no_permission: You do not have permission to update this project sample

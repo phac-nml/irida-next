@@ -61,5 +61,6 @@ When you add a member to a subgroup where they are also a member of one of the p
 | Create Samples        |       |         | ✓          | ✓     |
 | Edit Samples          |       |         | ✓          | ✓     |
 | Delete Samples        |       |         |            | ✓     |
+| Transfer Samples      |       |         |            | ✓     |
 
 1. A user with the **Maintainer** role can only modify members upto and including their role
