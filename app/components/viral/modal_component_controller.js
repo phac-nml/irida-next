@@ -7,7 +7,7 @@ export default class extends Controller {
 
   connect() {
     this.modal = new Modal(this.modalTarget, {});
-    if (this.openValue) this.modal.show();
+    if (this.openValue) this.open();
     this.element.setAttribute("data-controller-connected", "true");
   }
 

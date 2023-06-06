@@ -1,7 +1,4 @@
 <div
-  data-controller="viral--modal-component"
-  data-viral--modal-component-target="modal"
-  data-viral--modal-component-open-value="<%= open %>"
   tabindex="-1"
   aria-hidden="true"
   role="alertdialog"
@@ -9,6 +6,7 @@
   aria-labelledby="dialog_label"
   aria-describedby="dialog_desc"
   class="modal--backdrop"
+  data-viral--modal-component-target="modal"
 >
   <div class="modal--size <%= size %>">
     <!-- Modal content -->

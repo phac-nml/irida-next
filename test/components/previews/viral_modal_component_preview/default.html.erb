@@ -1,5 +1,10 @@
-<%= viral_modal(title: 'This is a modal title', open: true) do |modal| %>
-  <%= modal.body do %>
-    <p>This is the modal body</p>
+<div
+  data-controller="viral--modal-component"
+  data-viral--modal-component-open-value="true"
+>
+  <%= viral_modal(title: 'This is a modal title') do |modal| %>
+    <%= modal.body do %>
+      <p>This is the modal body</p>
+    <% end %>
   <% end %>
-<% end %>
+</div>
