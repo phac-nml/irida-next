@@ -3,7 +3,7 @@
 module Viral
   # A component for displaying a modal.
   class ModalComponent < Viral::Component
-    attr_reader :closable, :close_button_arguments, :title, :size
+    attr_reader :closable, :close_button_arguments, :title, :open, :size
 
     renders_one :trigger
     renders_one :body
@@ -20,10 +20,11 @@ module Viral
       extra_large: 'modal--size-xl'
     }.freeze
 
-    def initialize(title:, closable: true, size: SIZE_DEFAULT)
-      @title = title
+    def initialize(title:, open: false, closable: true, size: SIZE_DEFAULT)
       @closable = closable
+      @open = open
       @size = SIZE_MAPPINGS[size]
+      @title = title
 
       @close_button_arguments = {
         tag: 'button',

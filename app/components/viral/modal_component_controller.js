@@ -3,14 +3,11 @@ import { Modal } from "flowbite";
 
 export default class extends Controller {
   static targets = ["modal"];
+  static values = { open: Boolean };
 
   connect() {
-    this.modal = new Modal(this.modalTarget, {
-      backdrop: "static",
-      backdropClasses:
-        "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-    });
-    this.modal.show();
+    this.modal = new Modal(this.modalTarget, {});
+    if (this.openValue) this.modal.show();
     this.element.setAttribute("data-controller-connected", "true");
   }
 

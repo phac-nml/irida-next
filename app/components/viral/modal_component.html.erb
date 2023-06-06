@@ -1,11 +1,7 @@
-<% if trigger %>
-  <%= render(Viral::BaseComponent.new(**trigger_button_arguments)) do %>
-    <%= trigger %>
-  <% end %>
-<% end %>
 <div
   data-controller="viral--modal-component"
   data-viral--modal-component-target="modal"
+  data-viral--modal-component-open-value="<%= open %>"
   tabindex="-1"
   aria-hidden="true"
   role="alertdialog"
