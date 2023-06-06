@@ -1,0 +1,17 @@
+<div class="pt-4" aria-labelledby="settings-delete-heading">
+  <h3 class="text-lg font-semibold leading-tight text-red-600">
+    <%= t(:"groups.edit.advanced.delete.title") %>
+  </h3>
+  <p class="text-gray-600 dark:text-gray-400">
+    <%= t(:"groups.edit.advanced.delete.description") %>
+  </p>
+  <div class="mt-4">
+    <%= link_to t(:"groups.edit.advanced.delete.submit"),
+    group_path(@group),
+    data: {
+      turbo_method: :delete,
+      turbo_confirm: t(:"groups.edit.advanced.delete.confirm")
+    },
+    class: "btn btn-danger" %>
+  </div>
+</div>

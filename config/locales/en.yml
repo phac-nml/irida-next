@@ -318,7 +318,7 @@ en:
         submit: Save changes
       advanced:
         title: Advanced settings
-        delete_group:
+        delete:
           title: Delete group
           description: Deleting a group is permanent and cannot be undone. All projects and subgroups will be deleted along with the group
           submit: Delete

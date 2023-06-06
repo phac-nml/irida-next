@@ -100,10 +100,10 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
 
     click_link I18n.t(:'groups.sidebar.settings')
 
-    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete_group.submit'), count: 1
+    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete.submit'), count: 1
 
     accept_alert do
-      click_link I18n.t(:'groups.edit.advanced.delete_group.submit')
+      click_link I18n.t(:'groups.edit.advanced.delete.submit')
     end
 
     assert_selector 'h1', text: I18n.t(:'groups.show.title')
@@ -131,7 +131,7 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
 
     click_link I18n.t(:'groups.sidebar.settings')
 
-    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete_group.submit'), count: 0
+    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete.submit'), count: 0
   end
 
   test 'can view group' do
