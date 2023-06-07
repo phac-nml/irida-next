@@ -27,7 +27,7 @@
         <table
           id="samples-table"
           class="min-w-full table-fixed dark:divide-gray-600"
-          data-controller="table"
+          data-controller="selection"
         >
           <tbody
             class="
@@ -48,8 +48,8 @@
                     id: "sample_ids_#{sample.id}",
                     "aria-label": "placeholder_#{sample.id}",
                     data: {
-                      action: "input->table#update",
-                      table_target: "rowSelection"
+                      action: "input->selection#toggle",
+                      selection_target: "rowSelection"
                     } %>
                   </td>
                 <% end %>
