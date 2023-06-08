@@ -26,6 +26,7 @@
             "
           >
             <% @members.each do |member| %>
+              <% member_source = Member.membership_source(@namespace, member.user) %>
               <tr
                 class="
                   text-sm
@@ -59,8 +60,8 @@
                   </div>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <% if member.user != current_user && allowed_to?(:update_member?, @namespace) &&
-                    member.access_level <= @access_levels.values.last %>
+                  <% if (member.user != current_user && allowed_to?(:update_member?, @namespace) &&
+                    member.access_level <= @access_levels.values.last) && member_source.instance_of?(String) %>
                     <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
                       <%= render partial: "projects/members/access_level",
                       locals: {
@@ -73,11 +74,12 @@
                   <% end %>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <% member_source = Member.membership_source(@namespace, member.user) %>
                   <% if member_source.instance_of?(String) %>
                     <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member_source %></div>
                   <% else %>
-                    <%= link_to member_source[:name], member_source[:path] %>
+                    <%= link_to member_source[:name],
+                    member_source[:path],
+                    class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
                   <% end %>
                 </td>
                 <td class="p-4 whitespace-nowrap">
