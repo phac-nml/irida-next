@@ -4,6 +4,7 @@
 class Project < ApplicationRecord
   acts_as_paranoid
 
+  before_restore :restore_namespace
   after_destroy :destroy_namespace
 
   belongs_to :creator, class_name: 'User'
@@ -31,5 +32,12 @@ class Project < ApplicationRecord
     return if destroyed_by_association
 
     namespace.destroy
+  end
+
+  def restore_namespace
+    namespace_to_restore = Namespace.only_deleted.find_by(id: namespace_id)
+    return if namespace_to_restore.nil?
+
+    Namespace.restore(namespace_to_restore.id, recursive: true)
   end
 end
