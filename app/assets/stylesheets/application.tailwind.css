@@ -239,6 +239,10 @@
     @apply w-full max-w-2xl max-h-full p-0 bg-white rounded-lg shadow dark:bg-gray-700 focus:outline-none;
   }
 
+  dialog::backdrop {
+    @apply bg-gray-400/30 backdrop-blur-sm;
+  }
+
   .dialog--header {
     @apply flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600;
   }
@@ -253,6 +257,10 @@
 
   .dialog--section {
     @apply p-5;
+  }
+
+  .dialog--footer {
+    @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
   }
 
   .modal--backdrop {
@@ -293,10 +301,6 @@
 
   .modal--dialog-close {
     @apply text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white;
-  }
-
-  .modal--footer {
-    @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
   }
 }
 

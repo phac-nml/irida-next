@@ -7,6 +7,10 @@ module Viral
 
     renders_one :header, Viral::Modal::HeaderComponent
     renders_many :sections, Viral::Modal::SectionComponent
+    renders_one :primary_action, lambda { |**system_arguments|
+      Viral::ButtonComponent.new(type: :primary, **system_arguments)
+    }
+    renders_many :secondary_actions
 
     SIZE_DEFAULT = :default
     SIZE_MAPPINGS = {
@@ -22,6 +26,10 @@ module Viral
       @title = title
       @open = open
       @modal_size = SIZE_MAPPINGS[size]
+    end
+
+    def render_footer?
+      primary_action.present? || secondary_actions.any?
     end
   end
 end
