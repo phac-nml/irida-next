@@ -41,7 +41,7 @@
             <% @samples.each do |sample| %>
               <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
                 <% if allowed_to?(:transfer_sample?, @project) %>
-                  <td class="ps-4">
+                  <td class="ps-4 w-10">
                     <%= check_box_tag "sample_ids[]",
                     sample.id,
                     nil,
