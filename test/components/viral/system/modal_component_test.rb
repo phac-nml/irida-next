@@ -4,12 +4,12 @@ require 'application_system_test_case'
 
 module System
   class ModalComponentTest < ApplicationSystemTestCase
-    test 'with title' do
-      title = 'This is a modal title'
+    test 'default' do
       visit('rails/view_components/viral_modal_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
-        assert_text title
         assert_accessible
+
+        assert_text 'This is the default modal'
       end
     end
 

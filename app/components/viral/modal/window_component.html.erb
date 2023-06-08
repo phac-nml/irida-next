@@ -3,8 +3,7 @@
   aria-hidden="true"
   role="alertdialog"
   aria-modal="true"
-  aria-labelledby="dialog_label"
-  aria-describedby="dialog_desc"
+  aria-labelledby="modal--dialog-title"
   class="modal--backdrop"
   data-viral--modal-component-target="modal"
 >
@@ -13,7 +12,7 @@
     <div class="modal--dialog">
       <!-- Modal header -->
       <div class="modal--dialog-header">
-        <h3 class="modal--dialog-title">
+        <h3 class="modal--dialog-title" id="modal--dialog-title">
           <%= title %>
         </h3>
         <% if closable %>
