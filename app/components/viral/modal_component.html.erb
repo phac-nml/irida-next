@@ -2,8 +2,15 @@
   data-controller="viral--modal-component"
   data-viral--modal-component-open-value="<%= open %>"
 >
-  <% if trigger %>
-    <%= trigger %>
-  <% end %>
-  <%= window %>
+  <dialog id="dialog" class="<%= modal_size %>">
+    <% if header.present? %>
+      <%= header %>
+    <% end %>
+
+    <% if sections.present? %>
+      <% sections.each do |section| %>
+        <%= section %>
+      <% end %>
+    <% end %>
+  </dialog>
 </span>

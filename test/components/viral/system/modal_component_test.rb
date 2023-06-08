@@ -6,7 +6,7 @@ module System
   class ModalComponentTest < ApplicationSystemTestCase
     test 'default' do
       visit('rails/view_components/viral_modal_component/default')
-      within('.Viral-Preview > [data-controller-connected="true"]') do
+      within('dialog') do
         assert_accessible
 
         assert_text 'This is the default modal'

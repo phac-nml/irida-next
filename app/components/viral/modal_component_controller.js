@@ -1,21 +1,19 @@
 import { Controller } from "@hotwired/stimulus";
-import { Modal } from "flowbite";
 
 export default class extends Controller {
-  static targets = ["modal"];
   static values = { open: Boolean };
-
   connect() {
-    this.modal = new Modal(this.modalTarget, {});
+    this.modal = document.getElementById("dialog");
+    console.log(this.openValue);
     if (this.openValue) this.open();
     this.element.setAttribute("data-controller-connected", "true");
   }
 
   open() {
-    this.modal.show();
+    this.modal.showModal();
   }
 
   close() {
-    this.modal.hide();
+    this.modal.close();
   }
 }
