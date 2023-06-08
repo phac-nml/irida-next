@@ -21,7 +21,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   delegate :project, to: :project_namespace
 
-  class << self
+  class << self # rubocop:disable Metrics/ClassLength
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -119,6 +119,26 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       else
         Member.exists?(user:, namespace: namespace.self_and_ancestor_ids,
                        access_level: Member::AccessLevel::MAINTAINER)
+      end
+    end
+
+    def membership_source(namespace, user)
+      if Member.exists?(
+        namespace:, user:
+      )
+        'Direct Member'
+      else
+        source_namespaces = if namespace.project_namespace?
+                              namespace.parent&.self_and_ancestor_ids
+                            else
+                              namespace.self_and_ancestor_ids
+                            end
+
+        source_namespace = Namespace.find_by(id: Member.where(namespace: source_namespaces,
+                                                              user:).pluck(:namespace_id))
+
+        { path: Rails.application.routes.url_helpers.group_url(source_namespace, only_path: true),
+          name: source_namespace.name }
       end
     end
   end

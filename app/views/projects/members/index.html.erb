@@ -73,6 +73,14 @@
                   <% end %>
                 </td>
                 <td class="p-4 whitespace-nowrap">
+                  <% member_source = Member.membership_source(@namespace, member.user) %>
+                  <% if member_source.instance_of?(String) %>
+                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member_source %></div>
+                  <% else %>
+                    <%= link_to member_source[:name], member_source[:path] %>
+                  <% end %>
+                </td>
+                <td class="p-4 whitespace-nowrap">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
                       :"projects.members.index.access_granted_by",
                       grantor_email: member.created_by.email

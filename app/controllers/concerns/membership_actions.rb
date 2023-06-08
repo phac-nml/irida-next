@@ -14,7 +14,12 @@ module MembershipActions
 
   def index
     authorize! @namespace, to: :member_listing?
-    @members = Member.where(namespace_id: @namespace.id)
+    if @namespace.project_namespace?
+      @members = Member.where(namespace_id: @namespace.parent&.self_and_ancestor_ids) ||
+                 Member.where(namespace_id: @namespace.self_and_ancestor_ids)
+    elsif @namespace.group_namespace?
+      @members =  Member.where(namespace_id: @namespace.self_and_ancestor_ids)
+    end
   end
 
   def new
