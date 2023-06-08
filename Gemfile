@@ -83,6 +83,7 @@ gem 'action_policy-graphql'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'lookbook', '>= 2.0.0.rc.1'
 end
 
 group :development do
@@ -103,7 +104,6 @@ group :development do
   # LookBook
   gem 'actioncable'
   gem 'listen'
-  gem 'lookbook', '>= 2.0.0.rc.1'
 end
 
 group :test do
