@@ -240,7 +240,7 @@
   }
 
   dialog::backdrop {
-    @apply bg-gray-400/30 backdrop-blur-sm;
+    @apply bg-gray-400/30 dark:bg-gray-900/40 backdrop-blur-sm;
   }
 
   .dialog--header {
