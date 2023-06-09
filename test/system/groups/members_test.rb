@@ -4,6 +4,8 @@ require 'application_system_test_case'
 
 module Groups
   class MembersTest < ApplicationSystemTestCase
+    header_row_count = 1
+
     def setup
       @user = users(:john_doe)
       login_as @user
@@ -15,7 +17,18 @@ module Groups
       visit group_members_url(@namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: @members_count
+      assert_selector 'tr', count: @members_count + header_row_count
+    end
+
+    test 'can see list of group members for subgroup which are inherited from parent group' do
+      namespace = groups(:subgroup1)
+
+      visit group_members_url(namespace)
+
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+      assert_selector 'tr', count: @members_count + header_row_count
+
+      assert_no_text 'Direct member'
     end
 
     test 'cannot access group members' do
@@ -43,7 +56,7 @@ module Groups
 
       assert_text I18n.t(:'groups.members.create.success')
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: @members_count + 1
+      assert_selector 'tr', count: (@members_count + 1) + header_row_count
     end
 
     test 'can remove a member from the group' do
@@ -57,7 +70,7 @@ module Groups
 
       assert_text I18n.t(:'groups.members.destroy.success')
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: @members_count - 1
+      assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
 
     test 'cannot remove themselves as a member from the group' do
@@ -73,7 +86,7 @@ module Groups
       assert_text I18n.t('services.members.destroy.cannot_remove_self',
                          namespace_type: @namespace.class.model_name.human)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: @members_count
+      assert_selector 'tr', count: @members_count + header_row_count
     end
 
     test 'can not add a member to the group' do

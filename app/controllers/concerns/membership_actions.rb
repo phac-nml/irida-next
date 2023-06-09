@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common Members actions
-module MembershipActions
+module MembershipActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
@@ -17,9 +17,14 @@ module MembershipActions
     if @namespace.project_namespace?
 
       direct_namespace_members = Member.where(namespace: @namespace)
-      inherited_namespace_members = Member.where('namespace_id IN (?) AND user_id NOT IN (?)',
-                                                 @namespace.parent&.self_and_ancestor_ids,
-                                                 direct_namespace_members.pluck(:user_id))
+
+      if direct_namespace_members.count.positive?
+        inherited_namespace_members = Member.where('namespace_id IN (?) AND user_id NOT IN (?)',
+                                                   @namespace.parent&.self_and_ancestor_ids,
+                                                   direct_namespace_members.pluck(:user_id))
+      else
+        inherited_namespace_members = Member.where(namespace_id: @namespace.parent&.self_and_ancestor_ids)
+      end
 
       @members = direct_namespace_members.or(inherited_namespace_members)
 

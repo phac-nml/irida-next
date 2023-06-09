@@ -4,6 +4,8 @@ require 'application_system_test_case'
 
 module Projects
   class MembersTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+    header_row_count = 1
+
     def setup
       login_as users(:john_doe)
       @namespace = namespaces_user_namespaces(:john_doe_namespace)
@@ -15,7 +17,20 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count
+      assert_selector 'tr', count: @members_count + header_row_count
+    end
+
+    test 'can see list of project members which are inherited from parent group' do
+      project = projects(:project21)
+      parent_namespace = groups(:group_one)
+      members_count = members.select { |member| member.namespace == parent_namespace }.count
+
+      visit namespace_project_members_url(parent_namespace, project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+      assert_selector 'tr', count: members_count + header_row_count
+
+      assert_no_text 'Direct member'
     end
 
     test 'cannot access project members' do
@@ -42,7 +57,7 @@ module Projects
 
       assert_text I18n.t(:'projects.members.create.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count + 1
+      assert_selector 'tr', count: (@members_count + 1) + header_row_count
     end
 
     test 'can remove a member from the project' do
@@ -56,7 +71,7 @@ module Projects
 
       assert_text I18n.t(:'projects.members.destroy.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count - 1
+      assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
 
     test 'cannot remove themselves as a member from the project' do
@@ -72,7 +87,7 @@ module Projects
       assert_text I18n.t('services.members.destroy.cannot_remove_self',
                          namespace_type: @project.namespace.class.model_name.human)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count
+      assert_selector 'tr', count: @members_count + header_row_count
     end
 
     test 'can create a project under namespace and add a new member to project' do
@@ -109,7 +124,7 @@ module Projects
 
       assert_text I18n.t(:'projects.members.create.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: 1
+      assert_selector 'tr', count: 1 + header_row_count
     end
 
     test 'can not add a member to the project' do

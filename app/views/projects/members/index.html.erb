@@ -16,22 +16,21 @@
       <div class="shadow">
         <%= turbo_frame_tag("member-update-alert") %>
         <table class="min-w-full table-fixed dark:divide-gray-600">
-            <thead>
-              <tr class="
-                  text-sm
-                  font-normal
-                  text-gray-500
-                  hover:bg-gray-50
-                  dark:hover:bg-gray-700
-                  dark:text-gray-400
-                ">
-                <th class="p-4 whitespace-nowrap text-left">Username</th>
-                <th class="p-4 whitespace-nowrap text-left">Access Level</th>
-                <th class="p-4 whitespace-nowrap text-left">Source</th>
-                <th class="p-4 whitespace-nowrap text-left">Access Granted by</th>
-                <th class="p-4 whitespace-nowrap text-left"></th>
-              </tr>
-            </thead>
+          <thead>
+            <tr class="
+                text-sm
+                font-normal
+                text-gray-500
+                hover:bg-gray-50
+                dark:hover:bg-gray-700
+                dark:text-gray-400
+              ">
+              <th class="p-4 whitespace-nowrap text-left">Username</th>
+              <th class="p-4 whitespace-nowrap text-left">Access Level</th>
+              <th class="p-4 whitespace-nowrap text-left">Source</th>
+              <th class="p-4 whitespace-nowrap text-left">Access Granted by</th>
+            </tr>
+          </thead>
           <tbody
             class="
               bg-white
@@ -43,7 +42,6 @@
           >
             <% @members.each do |member| %>
               <% member_source = Member.membership_source(@namespace, member.user) %>
-
               <tr
                 class="
                   text-sm
