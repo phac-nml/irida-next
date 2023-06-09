@@ -1,17 +1,19 @@
 <table data-controller="selection">
   <tbody>
-    <tr>
-      <td>
-        <input
-          type="checkbox"
-          id="row1"
-          name="row1"
-          value="row1"
-          data-action="input->selection#toggle"
-          data-selection-target="rowSelection"
-        >
-      </td>
-      <td>Row 1</td>
-    </tr>
+    <% (0...3).each do |index| %>
+      <tr>
+        <td>
+          <input
+            type="checkbox"
+            id="row<%=index%>"
+            name="row<%=index%>"
+            value="row<%=index%>"
+            data-action="input->selection#toggle"
+            data-selection-target="rowSelection"
+          >
+        </td>
+        <td><%= "Row#{index}" %></td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
