@@ -145,6 +145,7 @@ en:
           maintainer: Maintainer
           owner: Owner
         its_you: It's you
+        direct: Direct member
       group:
         one: Group
         other: Groups
@@ -357,6 +358,7 @@ en:
           button_add_aria_label: Add new group member button
           link_remove_aria_label: "Remove group member %{member} button"
           member_dropdown_aria_label: "Dropdown options for group member %{member}"
+        inherited_from: "Inherited from:"
       update:
         success: "Group member %{user_email} updated successfully"
       new:
@@ -419,6 +421,7 @@ en:
           button_add_aria_label: Add new project member button
           link_remove_aria_label: "Remove project member %{member} button"
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
+        inherited_from: "Inherited from:"
       update:
         success: "Project member %{user_email} updated successfully"
       new:

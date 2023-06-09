@@ -126,7 +126,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       if Member.exists?(
         namespace:, user:
       )
-        'Direct Member'
+        { label: I18n.t('activerecord.models.member.direct') }
       else
         source_namespaces = if namespace.project_namespace?
                               namespace.parent&.self_and_ancestor_ids
@@ -137,8 +137,8 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
         source_namespace = Namespace.find_by(id: Member.where(namespace: source_namespaces,
                                                               user:).pluck(:namespace_id))
 
-        { path: Rails.application.routes.url_helpers.group_url(source_namespace, only_path: true),
-          name: source_namespace.name }
+        { inherited_namespace_path: Rails.application.routes.url_helpers.group_path(source_namespace, only_path: true),
+          label: source_namespace.name }
       end
     end
   end

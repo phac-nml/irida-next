@@ -16,6 +16,22 @@
       <div class="shadow">
         <%= turbo_frame_tag("member-update-alert") %>
         <table class="min-w-full table-fixed dark:divide-gray-600">
+            <thead>
+              <tr class="
+                  text-sm
+                  font-normal
+                  text-gray-500
+                  hover:bg-gray-50
+                  dark:hover:bg-gray-700
+                  dark:text-gray-400
+                ">
+                <th class="p-4 whitespace-nowrap text-left">Username</th>
+                <th class="p-4 whitespace-nowrap text-left">Access Level</th>
+                <th class="p-4 whitespace-nowrap text-left">Source</th>
+                <th class="p-4 whitespace-nowrap text-left">Access Granted by</th>
+                <th class="p-4 whitespace-nowrap text-left"></th>
+              </tr>
+            </thead>
           <tbody
             class="
               bg-white
@@ -27,6 +43,7 @@
           >
             <% @members.each do |member| %>
               <% member_source = Member.membership_source(@namespace, member.user) %>
+
               <tr
                 class="
                   text-sm
@@ -61,7 +78,7 @@
                 </td>
                 <td class="p-4 whitespace-nowrap">
                   <% if (member.user != current_user && allowed_to?(:update_member?, @namespace) &&
-                    member.access_level <= @access_levels.values.last) && member_source.instance_of?(String) %>
+                    member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
                     <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
                       <%= render partial: "projects/members/access_level",
                       locals: {
@@ -74,24 +91,33 @@
                   <% end %>
                 </td>
                 <td class="p-4 whitespace-nowrap">
-                  <% if member_source.instance_of?(String) %>
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member_source %></div>
+                  <% if !member_source.key?(:inherited_namespace_path) %>
+                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member_source[:label] %></div>
                   <% else %>
-                    <%= link_to member_source[:name],
-                    member_source[:path],
-                    class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                    <%= viral_tooltip(title: t(:"projects.members.index.inherited_from")) do %>
+                      <%= link_to member_source[:label],
+                      member_source[:inherited_namespace_path],
+                      class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                    <% end %>
                   <% end %>
                 </td>
-                <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
-                      :"projects.members.index.access_granted_by",
-                      grantor_email: member.created_by.email
-                    ) %></div>
-                </td>
-                <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
-                      <%= I18n.l(member.updated_at, format: :default) %>
+                  <td class="p-4 whitespace-nowrap">
+                  <div>
+                    <% if member.user.email != member.created_by.email %>
+                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %>
+                        by</span>
+                      <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                        <%= member.created_by.email %>
+                      </div>
+                    <% else %>
+                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %></span>
+                    <% end %>
+
+                    <% if member.created_at != member.updated_at %>
+                      <span class="text-sm">Updated:
+                        <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
+                          <%= distance_of_time_in_words(Time.now, member.updated_at) %></span>
+                        <% end %>
                     <% end %>
                   </div>
                 </td>

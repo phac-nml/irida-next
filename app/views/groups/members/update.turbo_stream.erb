@@ -8,4 +8,4 @@
                     } %>
 
 <%= turbo_stream.update "member-#{member.id}-access-level-updated",
-                    I18n.l(member.updated_at, format: :default) %>
+                    distance_of_time_in_words(Time.now, member.updated_at) %>
