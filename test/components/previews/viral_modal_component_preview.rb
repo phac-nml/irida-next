@@ -12,4 +12,6 @@ class ViralModalComponentPreview < ViewComponent::Preview
   def with_primary_action; end
 
   def with_trigger; end
+
+  def with_multiple_sections; end
 end

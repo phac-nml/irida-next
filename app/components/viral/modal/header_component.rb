@@ -2,6 +2,7 @@
 
 module Viral
   module Modal
+    # Header component for modal dialog
     class HeaderComponent < Viral::BaseComponent
       attr_reader :title
 
