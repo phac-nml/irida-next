@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common Members actions
-module MembershipActions # rubocop:disable Metrics/ModuleLength
+module MembershipActions
   extend ActiveSupport::Concern
 
   included do
@@ -14,23 +14,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def index
     authorize! @namespace, to: :member_listing?
-    if @namespace.project_namespace?
-
-      direct_namespace_members = Member.where(namespace: @namespace)
-
-      if direct_namespace_members.count.positive?
-        inherited_namespace_members = Member.where('namespace_id IN (?) AND user_id NOT IN (?)',
-                                                   @namespace.parent&.self_and_ancestor_ids,
-                                                   direct_namespace_members.pluck(:user_id))
-      else
-        inherited_namespace_members = Member.where(namespace_id: @namespace.parent&.self_and_ancestor_ids)
-      end
-
-      @members = direct_namespace_members.or(inherited_namespace_members)
-
-    elsif @namespace.group_namespace?
-      @members =  Member.where(namespace_id: @namespace.self_and_ancestor_ids)
-    end
+    @members = authorized_scope(Member, type: :relation, scope_options: { namespace: @namespace })
   end
 
   def new
