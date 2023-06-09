@@ -15,8 +15,14 @@ module MembershipActions
   def index
     authorize! @namespace, to: :member_listing?
     if @namespace.project_namespace?
-      @members = Member.where(namespace_id: @namespace.parent&.self_and_ancestor_ids) ||
-                 Member.where(namespace_id: @namespace.self_and_ancestor_ids)
+
+      direct_namespace_members = Member.where(namespace: @namespace)
+      inherited_namespace_members = Member.where('namespace_id IN (?) AND user_id NOT IN (?)',
+                                                 @namespace.parent&.self_and_ancestor_ids,
+                                                 direct_namespace_members.pluck(:user_id))
+
+      @members = direct_namespace_members.or(inherited_namespace_members)
+
     elsif @namespace.group_namespace?
       @members =  Member.where(namespace_id: @namespace.self_and_ancestor_ids)
     end
