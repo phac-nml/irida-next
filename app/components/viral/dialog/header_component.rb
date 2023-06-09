@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Viral
-  module Modal
-    # Header component for modal dialog
+  module Dialog
+    # Header component for dialog dialog
     class HeaderComponent < Viral::BaseComponent
       attr_reader :title
 

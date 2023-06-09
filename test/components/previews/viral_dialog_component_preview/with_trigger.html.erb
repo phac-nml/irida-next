@@ -1,11 +1,11 @@
-<%= viral_modal do |modal| %>
-  <%= modal.trigger do %>
-    <%= viral_button(data: { action: "click->viral--modal-component#open" }) do %>
-      Open modal
+<%= viral_dialog do |dialog| %>
+  <%= dialog.trigger do %>
+    <%= viral_button(data: { action: "click->viral--dialog-component#open" }) do %>
+      Open dialog
     <% end %>
   <% end %>
-  <%= modal.header(title: "This is a modal with a trigger") %>
-  <%= modal.section do %>
+  <%= dialog.header(title: "This is a dialog with a trigger") %>
+  <%= dialog.section do %>
     <p class="mb-3 text-gray-500 dark:text-gray-400">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
       tempor incididunt ut labore et dolore magna aliqua. Dignissim cras

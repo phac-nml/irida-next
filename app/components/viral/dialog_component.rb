@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Viral
-  # A component for displaying a modal.
-  class ModalComponent < Viral::Component
-    attr_reader :open, :modal_size, :title
+  # A component for displaying a dialog.
+  class DialogComponent < Viral::Component
+    attr_reader :open, :dialog_size, :title
 
-    renders_one :header, Viral::Modal::HeaderComponent
-    renders_many :sections, Viral::Modal::SectionComponent
+    renders_one :header, Viral::Dialog::HeaderComponent
+    renders_many :sections, Viral::Dialog::SectionComponent
     renders_one :primary_action, lambda { |**system_arguments|
       Viral::ButtonComponent.new(type: :primary, **system_arguments)
     }
@@ -14,10 +14,10 @@ module Viral
 
     SIZE_DEFAULT = :default
     SIZE_MAPPINGS = {
-      small: 'modal--size-sm',
-      default: 'modal--size-md',
-      large: 'modal--size-lg',
-      extra_large: 'modal--size-xl'
+      small: 'dialog--size-sm',
+      default: 'dialog--size-md',
+      large: 'dialog--size-lg',
+      extra_large: 'dialog--size-xl'
     }.freeze
 
     renders_one :trigger
@@ -25,7 +25,7 @@ module Viral
     def initialize(title: '', size: SIZE_DEFAULT, open: false)
       @title = title
       @open = open
-      @modal_size = SIZE_MAPPINGS[size]
+      @dialog_size = SIZE_MAPPINGS[size]
     end
 
     def render_footer?

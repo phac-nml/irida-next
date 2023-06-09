@@ -1,11 +1,11 @@
 <span
-  data-controller="viral--modal-component"
-  data-viral--modal-component-open-value="<%= open %>"
+  data-controller="viral--dialog-component"
+  data-viral--dialog-component-open-value="<%= open %>"
 >
   <% if trigger.present? %>
     <%= trigger %>
   <% end %>
-  <dialog id="dialog" class="<%= modal_size %>">
+  <dialog id="dialog" class="<%= dialog_size %>">
     <% if header.present? %>
       <%= header %>
     <% end %>

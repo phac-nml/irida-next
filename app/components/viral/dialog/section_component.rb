@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Viral
-  module Modal
-    # Section component for a modal dialog.
+  module Dialog
+    # Section component for a dialog.
     class SectionComponent < Viral::Component
       def initialize(**system_arguments)
         @system_arguments = system_arguments

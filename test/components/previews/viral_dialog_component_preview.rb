@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ViralModalComponentPreview < ViewComponent::Preview
+class ViralDialogComponentPreview < ViewComponent::Preview
   def default; end
 
   def small; end

@@ -1,6 +1,6 @@
-<%= viral_modal(open: true) do |modal| %>
-  <%= modal.header(title: "This modal has action buttons") %>
-  <%= modal.section do %>
+<%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
+  <%= dialog.header(title: "This is the extra large dialog") %>
+  <%= dialog.section do %>
     <p class="mb-3 text-gray-500 dark:text-gray-400">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
       tempor incididunt ut labore et dolore magna aliqua. Dignissim cras
@@ -15,11 +15,5 @@
       mattis ullamcorper velit sed ullamcorper morbi. In ante metus dictum at
       tempor commodo ullamcorper.
     </p>
-  <% end %>
-  <%= modal.primary_action { "Primary button" } %>
-  <% modal.secondary_action do %>
-    <%= viral_button(data: { action: 'click->viral--modal-component#close' }) do %>
-      Secondary button
-    <% end %>
   <% end %>
 <% end %>
