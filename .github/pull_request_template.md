@@ -8,6 +8,6 @@ _Screenshots are required for UI changes, and strongly recommended for all other
 _Numbered steps to set up and validate the change are strongly suggested._
 
 ## PR acceptance checklist
-This checklist encourages us to confirm any changes have been analyzed to reduce risks in quality, performance, reliability, security, and maintainability.
+[This checklist](https://phac-nml.github.io/irida-next/docs/development/development_processes/code_review#acceptance-checklist) encourages us to confirm any changes have been analyzed to reduce risks in quality, performance, reliability, security, and maintainability.
 
 - [ ] I have evaluated the PR acceptance checklist for this PR.
