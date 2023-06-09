@@ -2,4 +2,16 @@
   <h3 class="text-lg font-semibold leading-tight text-red-600">
     <%= t(:"groups.edit.advanced.path.title") %>
   </h3>
+  <div data-controller="slugify">
+    <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
+      <div class="grid gap-4">
+        <%= render partial: "path_form_fields",
+        locals: {
+          form: form,
+          group: @group,
+          authorized_namespaces: @authorized_namespaces
+        } %>
+      </div>
+    <% end %>
+  </div>
 </div>

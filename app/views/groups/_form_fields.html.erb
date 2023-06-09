@@ -11,12 +11,14 @@
   <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:name) %>
 </div>
 
-<%= render partial: "path_form_fields",
-locals: {
-  form: form,
-  group: group,
-  authorized_namespaces: authorized_namespaces
-} %>
+<% if group.new_record? %>
+  <%= render partial: "path_form_fields",
+  locals: {
+    form: form,
+    group: group,
+    authorized_namespaces: authorized_namespaces
+  } %>
+<% end %>
 
 <div class="form-field">
   <%= form.label :description %>

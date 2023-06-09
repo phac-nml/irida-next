@@ -2,7 +2,7 @@
 
 require 'application_system_test_case'
 
-class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+class GroupsTest < ApplicationSystemTestCase
   def setup
     @user = users(:john_doe)
     @groups_count = @user.groups.self_and_descendant_ids.count
@@ -80,12 +80,8 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
 
     click_link I18n.t(:'groups.sidebar.settings')
 
-    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+    within first('form[action="/group-1"]') do
       fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'Edited group'
-
-      assert_selector %(input[data-slugify-target="path"]) do |input|
-        assert_equal 'edited-group', input['value']
-      end
 
       fill_in 'Description', with: 'Edited group description'
       click_on I18n.t(:'groups.edit.details.submit')
