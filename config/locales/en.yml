@@ -359,6 +359,12 @@ en:
           link_remove_aria_label: "Remove group member %{member} button"
           member_dropdown_aria_label: "Dropdown options for group member %{member}"
         inherited_from: "Inherited from:"
+        table_header:
+          username: Username
+          access_level: Access Level
+          source: Source
+          access_granted: Access Granted
+        updated: Updated
       update:
         success: "Group member %{user_email} updated successfully"
       new:
@@ -422,6 +428,12 @@ en:
           link_remove_aria_label: "Remove project member %{member} button"
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
         inherited_from: "Inherited from:"
+        table_header:
+          username: Username
+          access_level: Access Level
+          source: Source
+          access_granted_by: Access Granted
+        updated: Updated
       update:
         success: "Project member %{user_email} updated successfully"
       new:
