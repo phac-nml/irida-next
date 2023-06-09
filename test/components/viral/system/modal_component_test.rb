@@ -55,5 +55,13 @@ module System
         find('button[aria-label="Close modal"]').click
       end
     end
+
+    test 'with multiple sections' do
+      visit('rails/view_components/viral_modal_component/with_multiple_sections')
+      within('dialog') do
+        assert_accessible
+        assert_selector 'hr', count: 1
+      end
+    end
   end
 end
