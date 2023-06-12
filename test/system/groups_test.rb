@@ -2,7 +2,7 @@
 
 require 'application_system_test_case'
 
-class GroupsTest < ApplicationSystemTestCase
+class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
   def setup
     @user = users(:john_doe)
     @groups_count = @user.groups.self_and_descendant_ids.count
@@ -80,7 +80,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     click_link I18n.t(:'groups.sidebar.settings')
 
-    within first('form[action="/group-1"]') do
+    within all('form[action="/group-1"]')[0] do
       fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'Edited group'
 
       fill_in 'Description', with: 'Edited group description'
@@ -89,6 +89,21 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_text I18n.t(:'groups.update.success')
     assert_selector 'h1', text: 'Edited group'
+  end
+
+  test 'can edit a group path' do
+    visit group_url(groups(:group_one))
+
+    click_link I18n.t(:'groups.sidebar.settings')
+
+    within all('form[action="/group-1"]')[1] do
+      fill_in I18n.t(:'activerecord.attributes.group.path'), with: 'group-1-edited'
+
+      click_on I18n.t(:'groups.edit.advanced.path.submit')
+    end
+
+    assert_text I18n.t(:'groups.update.success')
+    assert_current_path '/group-1-edited'
   end
 
   test 'can delete a group' do

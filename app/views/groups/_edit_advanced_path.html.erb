@@ -9,6 +9,9 @@
           group: @group,
           authorized_namespaces: @authorized_namespaces
         } %>
+        <div>
+          <%= form.submit t(:"groups.edit.advanced.path.submit"), class: "btn btn-primary" %>
+        </div>
       </div>
     <% end %>
   <% end %>
