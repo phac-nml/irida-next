@@ -1,8 +1,6 @@
-<div class="pt-4">
-  <h3 class="text-lg font-semibold leading-tight text-red-600">
-    <%= t(:"groups.edit.advanced.path.title") %>
-  </h3>
-  <div data-controller="slugify">
+<%= viral_card do |card| %>
+  <% card.header(title: t(:"groups.edit.advanced.path.title")) %>
+  <% card.section do %>
     <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
       <div class="grid gap-4">
         <%= render partial: "path_form_fields",
@@ -13,5 +11,5 @@
         } %>
       </div>
     <% end %>
-  </div>
-</div>
+  <% end %>
+<% end %>
