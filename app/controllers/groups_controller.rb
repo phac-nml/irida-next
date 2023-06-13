@@ -61,6 +61,11 @@ class GroupsController < Groups::ApplicationController
     end
   end
 
+  def transfer
+    puts 'Groups Controller'
+    Groups::TransferService.new.execute
+  end
+
   private
 
   def group

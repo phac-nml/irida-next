@@ -320,6 +320,8 @@ en:
         title: Advanced settings
         transfer:
           title: Transfer group
+          submit: Transfer group
+          new_namespace_id: Select a new namespace
         delete:
           title: Delete group
           description: Deleting a group is permanent and cannot be undone. All projects and subgroups will be deleted along with the group
