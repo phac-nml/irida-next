@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ViralDialogComponentPreview < ViewComponent::Preview
+  def confirmation; end
+
   def default; end
 
   def small; end

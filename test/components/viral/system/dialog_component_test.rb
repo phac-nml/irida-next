@@ -4,6 +4,16 @@ require 'application_system_test_case'
 
 module System
   class DialogComponentTest < ApplicationSystemTestCase
+    test 'confirmation' do
+      visit('rails/view_components/viral_dialog_component/confirmation')
+      within('span[data-controller-connected="true"] dialog') do
+        assert_accessible
+        assert_text 'Confirmation required'
+        assert_selector 'button.button--state-primary', count: 1
+        assert_selector 'button.button--state-default', count: 1
+      end
+    end
+
     test 'default' do
       visit('rails/view_components/viral_dialog_component/default')
       within('span[data-controller-connected="true"] dialog') do
