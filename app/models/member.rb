@@ -135,7 +135,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                             end
 
         source_namespace = Namespace.find_by(id: Member.where(namespace: source_namespaces,
-                                                              user:).pluck(:namespace_id))
+                                                              user:).order(:access_level).last.namespace_id)
 
         { inherited_namespace_path: Rails.application.routes.url_helpers.group_path(source_namespace, only_path: true),
           label: source_namespace.name }
