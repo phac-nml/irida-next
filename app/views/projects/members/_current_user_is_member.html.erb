@@ -1,0 +1,13 @@
+<%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
+  <%= dropdown.item(
+    label: (t(:"projects.members.index.leave_project")),
+    url: namespace_project_member_path(id: member.id),
+    data: {
+      turbo_method: :delete,
+      turbo_confirm: (t(:"projects.members.index.leave_confirmation"))
+    },
+    aria: {
+      label: (t(:"projects.members.index.actions.link_leave_project_aria_label"))
+    }
+  ) %>
+<% end %>
