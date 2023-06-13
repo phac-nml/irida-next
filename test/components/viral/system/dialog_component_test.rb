@@ -48,8 +48,10 @@ module System
 
     test 'with trigger' do
       visit('rails/view_components/viral_dialog_component/with_trigger')
-      click_button('Open dialog')
-      within('span[data-controller-connected="true"] dialog') do
+      within('span[data-controller-connected="true"]') do
+        click_button('Open dialog')
+      end
+      within('dialog') do
         assert_accessible
         assert_text 'This is a dialog with a trigger'
         find('button[aria-label="Close dialog"]').click
