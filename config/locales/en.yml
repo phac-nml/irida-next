@@ -432,7 +432,7 @@ en:
           username: Username
           access_level: Access Level
           source: Source
-          access_granted_by: Access Granted
+          access_granted: Access Granted
         updated: Updated
       update:
         success: "Project member %{user_email} updated successfully"

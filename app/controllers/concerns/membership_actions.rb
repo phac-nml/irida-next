@@ -88,9 +88,14 @@ module MembershipActions
   end
 
   def available_users
+    namespaces_to_search = if @namespace.group_namespace?
+                             @namespace.self_and_ancestor_ids
+                           else
+                             @namespace.self_and_ancestor_ids + @namespace.parent&.self_and_ancestor_ids
+                           end
     # Remove current user from available users as a user cannot add themselves
     @available_users = User.where.not(id: Member.where(
-      namespace_id: @namespace.id
+      namespace: namespaces_to_search
     ).pluck(:user_id)).to_a - [current_user]
   end
 
