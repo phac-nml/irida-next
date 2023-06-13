@@ -37,8 +37,8 @@ module System
       end
     end
 
-    test 'with primary action' do
-      visit('rails/view_components/viral_dialog_component/with_primary_action')
+    test 'with action buttons' do
+      visit('rails/view_components/viral_dialog_component/with_action_buttons')
       within('span[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_selector 'button.button--state-primary', count: 1
@@ -56,6 +56,7 @@ module System
         assert_text 'This is a dialog with a trigger'
         find('button[aria-label="Close dialog"]').click
       end
+      assert_selector 'dialog', count: 0
     end
 
     test 'with multiple sections' do
