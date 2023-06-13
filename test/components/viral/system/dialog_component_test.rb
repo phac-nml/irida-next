@@ -6,7 +6,7 @@ module System
   class DialogComponentTest < ApplicationSystemTestCase
     test 'default' do
       visit('rails/view_components/viral_dialog_component/default')
-      within('dialog') do
+      within('span[data-controller-connected="true"] dialog') do
         assert_accessible
 
         assert_text 'This is the default dialog'
@@ -15,7 +15,7 @@ module System
 
     test 'small' do
       visit('rails/view_components/viral_dialog_component/small')
-      within('dialog.dialog--size-sm') do
+      within('span[data-controller-connected="true"] dialog.dialog--size-sm') do
         assert_accessible
         assert_text 'This is the small dialog'
       end
@@ -23,7 +23,7 @@ module System
 
     test 'large' do
       visit('rails/view_components/viral_dialog_component/large')
-      within('dialog.dialog--size-lg') do
+      within('span[data-controller-connected="true"] dialog.dialog--size-lg') do
         assert_accessible
         assert_text 'This is the large dialog'
       end
@@ -31,7 +31,7 @@ module System
 
     test 'extra large' do
       visit('rails/view_components/viral_dialog_component/extra_large')
-      within('dialog.dialog--size-xl') do
+      within('span[data-controller-connected="true"] dialog.dialog--size-xl') do
         assert_accessible
         assert_text 'This is the extra large dialog'
       end
@@ -39,7 +39,7 @@ module System
 
     test 'with primary action' do
       visit('rails/view_components/viral_dialog_component/with_primary_action')
-      within('dialog') do
+      within('span[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_selector 'button.button--state-primary', count: 1
         assert_selector 'button.button--state-default', count: 1
@@ -49,7 +49,7 @@ module System
     test 'with trigger' do
       visit('rails/view_components/viral_dialog_component/with_trigger')
       click_button('Open dialog')
-      within('dialog') do
+      within('span[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_text 'This is a dialog with a trigger'
         find('button[aria-label="Close dialog"]').click
@@ -58,7 +58,7 @@ module System
 
     test 'with multiple sections' do
       visit('rails/view_components/viral_dialog_component/with_multiple_sections')
-      within('dialog') do
+      within('span[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_selector 'hr', count: 1
       end
