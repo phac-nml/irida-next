@@ -277,25 +277,32 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-  config.omniauth :developer if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
-  if ENV['OMNIAUTH_PROVIDERS'].include? 'saml'
-    config.omniauth :saml,
-                    idp_sso_service_url: ENV.fetch('SAML_IDP_SSO_SERVICE_URL', nil),
-                    sp_entity_id: ENV.fetch('SAML_SP_ENTITY_ID', nil),
-                    idp_cert: ENV.fetch('SAML_IDP_CERT', nil),
-                    attribute_statements: {
-                      name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
-                      email: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-                      first_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
-                      last_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
-                    }
+  if Rails.env.test?
+    # Setup providers so that we can mock and test them in our integration tests
+    config.omniauth :developer
+    config.omniauth :saml
+    config.omniauth :azure_activedirectory_v2
   end
-  if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
-    config.omniauth :azure_activedirectory_v2,
-                    client_id: ENV.fetch('AZURE_CLIENT_ID', nil),
-                    client_secret: ENV.fetch('AZURE_CLIENT_SECRET', nil),
-                    tenant_id: ENV.fetch('AZURE_TENANT_ID', nil)
+  # expected format of OMNIAUTH_PROVIDERS = 'developer,saml,azure_activedirectory_v2'
+  if ENV['OMNIAUTH_PROVIDERS']
+    config.omniauth :developer if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
+    if ENV['OMNIAUTH_PROVIDERS'].include? 'saml'
+      saml_options = {
+        attribute_statements: {
+          name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+          email: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+          first_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
+          last_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
+        }
+      }
+      # expected keys are: [:idp_sso_service_url, :sp_entity_id, ;idp_cert]
+      config.omniauth :saml, saml_options.merge(Rails.application.credentials.saml)
+
+    end
+    if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
+      # expected keys are: [:client_id, :client_secret, :tenant_id]
+      config.omniauth :azure_activedirectory_v2, Rails.application.credentials.azure
+    end
   end
 
   # Have Rails logger handle OmniAuth logs
