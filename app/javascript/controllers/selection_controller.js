@@ -10,6 +10,8 @@ export default class extends Controller {
   };
 
   connect() {
+    this.element.setAttribute("data-controller-connected", "true");
+
     if (sessionStorage.getItem(this.storageKeyValue)) {
       this.rowSelectionTargets.map((row) => {
         if (

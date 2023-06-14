@@ -13,7 +13,7 @@
     "
   >
     <tr>
-      <th scope="col" class="p-4"/>
+      <th scope="col" class="p-4">Selections</th>
       <th scope="col" class="px-6 py-3">
         Rows
       </th>
@@ -50,7 +50,17 @@
             <label for="row<%=index%>" class="sr-only">checkbox</label>
           </div>
         </td>
-        <td class="px-6 py-4"><%= "Row #{index}" %></td>
+        <th
+          scope="row"
+          class="
+            px-6
+            py-4
+            font-medium
+            text-gray-900
+            whitespace-nowrap
+            dark:text-white
+          "
+        ><%= "Row #{index}" %></th>
       </tr>
     <% end %>
   </tbody>
