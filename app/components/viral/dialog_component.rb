@@ -22,10 +22,11 @@ module Viral
 
     renders_one :trigger
 
-    def initialize(title: '', size: SIZE_DEFAULT, open: false)
+    def initialize(title: '', size: SIZE_DEFAULT, open: false, **system_arguments)
       @title = title
       @open = open
       @dialog_size = SIZE_MAPPINGS[size]
+      @system_arguments = system_arguments
     end
 
     def render_footer?
