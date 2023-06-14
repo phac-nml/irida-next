@@ -10,10 +10,10 @@ export default class extends Controller {
   };
 
   connect() {
-    if (localStorage.getItem(this.storageKeyValue)) {
+    if (sessionStorage.getItem(this.storageKeyValue)) {
       this.rowSelectionTargets.map((row) => {
         if (
-          new Map(JSON.parse(localStorage.getItem(this.storageKeyValue))).get(
+          new Map(JSON.parse(sessionStorage.getItem(this.storageKeyValue))).get(
             row.value
           )
         ) {
@@ -21,25 +21,25 @@ export default class extends Controller {
         }
       });
     } else {
-      let newLocalStorageValue = new Map();
+      let newStorageValue = new Map();
       this.rowSelectionTargets.map((row) => {
-        newLocalStorageValue.set(row.value, row.checked);
+        newStorageValue.set(row.value, row.checked);
       });
-      this.save(newLocalStorageValue);
+      this.save(newStorageValue);
     }
   }
 
   toggle(event) {
-    let newLocalStorageValue = new Map(
-      JSON.parse(localStorage.getItem(this.storageKeyValue))
+    let newStorageValue = new Map(
+      JSON.parse(sessionStorage.getItem(this.storageKeyValue))
     ).set(event.target.value, event.target.checked);
-    this.save(newLocalStorageValue);
+    this.save(newStorageValue);
   }
 
-  save(localStorageValue) {
-    localStorage.setItem(
+  save(storageValue) {
+    sessionStorage.setItem(
       this.storageKeyValue,
-      JSON.stringify([...localStorageValue])
+      JSON.stringify([...storageValue])
     );
   }
 }
