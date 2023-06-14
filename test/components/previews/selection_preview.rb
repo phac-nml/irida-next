@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SelectionPreview < Lookbook::Preview
+class SelectionPreview < ViewComponent::Preview
   # The selection controller stores the values of checkboxes in local storage. The local storage key is the url.
   # When a user toggles a checkbox, the value is updated in local storage.
   def default; end
