@@ -2,12 +2,16 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["rowSelection"];
+  static values = {
+    storageKey: {
+      type: String,
+      default: location.protocol + "//" + location.host + location.pathname,
+    },
+  };
 
   connect() {
-    this.localStorageKey =
-      location.protocol + "//" + location.host + location.pathname;
     this.localStorageValue = new Map(
-      JSON.parse(localStorage.getItem(this.localStorageKey))
+      JSON.parse(localStorage.getItem(this.storageKeyValue))
     );
 
     if (this.localStorageValue.size === 0) {
@@ -31,7 +35,7 @@ export default class extends Controller {
 
   save() {
     localStorage.setItem(
-      this.localStorageKey,
+      this.storageKeyValue,
       JSON.stringify([...this.localStorageValue])
     );
   }
