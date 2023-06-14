@@ -10,33 +10,36 @@ export default class extends Controller {
   };
 
   connect() {
-    this.localStorageValue = new Map(
-      JSON.parse(localStorage.getItem(this.storageKeyValue))
-    );
-
-    if (this.localStorageValue.size === 0) {
+    if (localStorage.getItem(this.storageKeyValue)) {
       this.rowSelectionTargets.map((row) => {
-        this.localStorageValue.set(row.value, row.checked);
-      });
-      this.save();
-    } else {
-      this.rowSelectionTargets.map((row) => {
-        if (this.localStorageValue.get(row.value)) {
+        if (
+          new Map(JSON.parse(localStorage.getItem(this.storageKeyValue))).get(
+            row.value
+          )
+        ) {
           row.checked = true;
         }
       });
+    } else {
+      let newLocalStorageValue = new Map();
+      this.rowSelectionTargets.map((row) => {
+        newLocalStorageValue.set(row.value, row.checked);
+      });
+      this.save(newLocalStorageValue);
     }
   }
 
   toggle(event) {
-    this.localStorageValue.set(event.target.value, event.target.checked);
-    this.save();
+    let newLocalStorageValue = new Map(
+      JSON.parse(localStorage.getItem(this.storageKeyValue))
+    ).set(event.target.value, event.target.checked);
+    this.save(newLocalStorageValue);
   }
 
-  save() {
+  save(localStorageValue) {
     localStorage.setItem(
       this.storageKeyValue,
-      JSON.stringify([...this.localStorageValue])
+      JSON.stringify([...localStorageValue])
     );
   }
 }
