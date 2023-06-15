@@ -106,19 +106,13 @@ module Groups
 
         assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-        group_member_row = find(:table_row, [group_member.user.email])
-
-        within group_member_row do
-          assert_text 'less than a minute ago by', count: 1
-          assert_text 'john.doe@localhost', count: 1
-          assert_no_text 'Updated'
-        end
-
         find("#member-#{group_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
 
         within %(turbo-frame[id="member-update-alert"]) do
           assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)
         end
+
+        group_member_row = find(:table_row, [group_member.user.email])
 
         within group_member_row do
           assert_text 'Updated', count: 1

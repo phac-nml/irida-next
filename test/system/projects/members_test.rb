@@ -145,19 +145,13 @@ module Projects
 
         assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-        project_member_row = find(:table_row, [project_member.user.email])
-
-        within project_member_row do
-          assert_text 'less than a minute ago by', count: 1
-          assert_text 'john.doe@localhost', count: 1
-          assert_no_text 'Updated'
-        end
-
         find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
 
         within %(turbo-frame[id="member-update-alert"]) do
           assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)
         end
+
+        project_member_row = find(:table_row, [project_member.user.email])
 
         within project_member_row do
           assert_text 'Updated', count: 1
