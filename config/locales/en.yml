@@ -418,6 +418,12 @@ en:
             - Be careful! Changing a project's namespace can have unintended side effects.
             - You can only transfer projects to groups where you have sufficient permissions.
             - Project visibility level will change to match namespace rules when transferring to a group.
+          confirm:
+            title: Confirmation required
+            warning_html: You are going to transfer <span class="font-semibold">%{project_name}</span> to another namespace. Once you confirm, this action cannot be undone.
+            points_html:
+              - To prevent accidental actions we ask you to confirm your intention.
+              - Please type <code class="p-1 bg-gray-100 rounded-md dark:bg-gray-800">%{project}</code> to proceed or close this dialog to cancel
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data
