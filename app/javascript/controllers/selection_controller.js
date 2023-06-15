@@ -12,29 +12,40 @@ export default class extends Controller {
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
 
-    if (sessionStorage.getItem(this.storageKeyValue)) {
+    const storageValue = JSON.parse(
+      sessionStorage.getItem(this.storageKeyValue)
+    );
+
+    if (storageValue) {
       this.rowSelectionTargets.map((row) => {
-        if (
-          new Map(JSON.parse(sessionStorage.getItem(this.storageKeyValue))).get(
-            row.value
-          )
-        ) {
+        if (storageValue.indexOf(row.value) > -1) {
           row.checked = true;
         }
       });
     } else {
-      let newStorageValue = new Map();
+      const newStorageValue = [];
       this.rowSelectionTargets.map((row) => {
-        newStorageValue.set(row.value, row.checked);
+        if (row.checked) {
+          newStorageValue.push(row.value);
+        }
       });
       this.save(newStorageValue);
     }
   }
 
   toggle(event) {
-    let newStorageValue = new Map(
-      JSON.parse(sessionStorage.getItem(this.storageKeyValue))
-    ).set(event.target.value, event.target.checked);
+    const newStorageValue = JSON.parse(
+      sessionStorage.getItem(this.storageKeyValue)
+    );
+
+    if (event.target.checked) {
+      newStorageValue.push(event.target.value);
+    } else {
+      const index = newStorageValue.indexOf(event.target.value);
+      if (index > -1) {
+        newStorageValue.splice(index, 1);
+      }
+    }
     this.save(newStorageValue);
   }
 
