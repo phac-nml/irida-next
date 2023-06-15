@@ -140,14 +140,19 @@ module Projects
       namespace = groups(:group_five)
       project_member = members(:project_twenty_two_member_michelle_doe)
 
-      visit namespace_project_members_url(namespace, project)
+      Timecop.travel(Time.zone.now + 5) do
+        visit namespace_project_members_url(namespace, project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+        assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
+        find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
 
-      within %(turbo-frame[id="member-update-alert"]) do
-        assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)
+        within %(turbo-frame[id="member-update-alert"]) do
+          assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)
+        end
+
+        assert_text 'Updated:', count: 1
+        assert_text 'less than a minute ago'
       end
     end
 

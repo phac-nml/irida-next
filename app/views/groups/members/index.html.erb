@@ -17,19 +17,22 @@
         <%= turbo_frame_tag("member-update-alert") %>
         <table class="min-w-full table-fixed dark:divide-gray-600">
           <thead>
-            <tr class="
+            <tr
+              class="
                 text-sm
                 font-normal
                 text-gray-500
                 hover:bg-gray-50
                 dark:hover:bg-gray-700
                 dark:text-gray-400
-                border-b-2 border-grey-500
-              ">
-              <th class="p-4 whitespace-nowrap text-left"><%= t(:'groups.members.index.table_header.username') %></th>
-              <th class="p-4 whitespace-nowrap text-left"><%= t(:'groups.members.index.table_header.access_level') %></th>
-              <th class="p-4 whitespace-nowrap text-left"><%= t(:'groups.members.index.table_header.source') %></th>
-              <th class="p-4 whitespace-nowrap text-left"><%= t(:'groups.members.index.table_header.access_granted') %></th>
+                border-b-2
+                border-grey-500
+              "
+            >
+              <th class="p-4 whitespace-nowrap text-left"><%= t(:"groups.members.index.table_header.username") %></th>
+              <th class="p-4 whitespace-nowrap text-left"><%= t(:"groups.members.index.table_header.access_level") %></th>
+              <th class="p-4 whitespace-nowrap text-left"><%= t(:"groups.members.index.table_header.source") %></th>
+              <th class="p-4 whitespace-nowrap text-left"><%= t(:"groups.members.index.table_header.access_granted") %></th>
             </tr>
           </thead>
           <tbody
@@ -112,11 +115,10 @@
                       <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %></span>
                     <% end %>
 
-                    <% if member.created_at != member.updated_at %>
-                      <span class="text-sm"><%= t(:"groups.members.index.updated")%>:
-                        <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
-                          <%= distance_of_time_in_words(Time.now, member.updated_at) %></span>
-                        <% end %>
+                    <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
+                      <% if member.created_at < member.updated_at %>
+                        <%= render partial: "groups/members/updated_at", locals: { member: member } %>
+                      <% end %>
                     <% end %>
                   </div>
                 </td>

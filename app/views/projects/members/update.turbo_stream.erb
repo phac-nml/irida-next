@@ -8,4 +8,7 @@
                     } %>
 
 <%= turbo_stream.update "member-#{member.id}-access-level-updated",
-                    distance_of_time_in_words(Time.now, member.updated_at) %>
+                    partial: "projects/members/updated_at",
+                    locals: {
+                      member:
+                    } %>

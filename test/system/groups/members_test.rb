@@ -101,14 +101,19 @@ module Groups
       namespace = groups(:group_five)
       group_member = members(:group_five_member_michelle_doe)
 
-      visit group_members_url(namespace)
+      Timecop.travel(Time.zone.now + 5) do
+        visit group_members_url(namespace)
 
-      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+        assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      find("#member-#{group_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
+        find("#member-#{group_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
 
-      within %(turbo-frame[id="member-update-alert"]) do
-        assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)
+        within %(turbo-frame[id="member-update-alert"]) do
+          assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)
+        end
+
+        assert_text 'Updated:', count: 1
+        assert_text 'less than a minute ago'
       end
     end
 
