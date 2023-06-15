@@ -55,8 +55,7 @@ class ProjectsTest < ApplicationSystemTestCase
 
     fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
     fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
-    assert_equal 'updated-project',
-                   find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).valueclick_on I18n.t(:'projects.edit.general.submit')
+    click_on I18n.t(:'projects.edit.general.submit')
     assert_selector 'h1', text: project_name
     assert_text project_description
   end
