@@ -106,11 +106,9 @@
                 <td class="p-4 whitespace-nowrap">
                   <div>
                     <% if member.user.email != member.created_by.email %>
-                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %>
-                        by</span>
-                      <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %> by <span class="block">
                         <%= member.created_by.email %>
-                      </div>
+                      </span>
                     <% else %>
                       <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %></span>
                     <% end %>
