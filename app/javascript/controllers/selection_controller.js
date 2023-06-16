@@ -23,13 +23,7 @@ export default class extends Controller {
         }
       });
     } else {
-      const newStorageValue = [];
-      this.rowSelectionTargets.map((row) => {
-        if (row.checked) {
-          newStorageValue.push(row.value);
-        }
-      });
-      this.save(newStorageValue);
+      this.save([]);
     }
   }
 
