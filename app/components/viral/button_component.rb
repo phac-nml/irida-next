@@ -22,13 +22,13 @@ module Viral
     DISCLOSURE_DEFAULT = false
     DISCLOSURE_OPTIONS = [true, false, :down, :up, :select, :horizontal_dots].freeze
 
-    def initialize(type: TYPE_DEFAULT, size: SIZE_DEFAULT, full_width: false, disclosure: DISCLOSURE_DEFAULT,
-                   **system_arguments)
-
+    def initialize(button_type: 'button', type: TYPE_DEFAULT, size: SIZE_DEFAULT, full_width: false,
+                   disclosure: DISCLOSURE_DEFAULT, **system_arguments)
       @disclosure = disclosure
-      @disclosure = :down if disclosure == true
+      @disclosure = :down if disclosure
 
       @system_arguments = system_arguments
+      @system_arguments[:type] = button_type unless button_type.nil?
       user_defined_classes = @system_arguments[:classes]
       @system_arguments[:classes] = class_names(
         'button',
