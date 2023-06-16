@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_19_155460) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_19_155854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155460) do
     t.integer "access_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "log_data"
     t.index ["created_by_id"], name: "index_members_on_created_by_id"
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
     t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true
@@ -37,6 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155460) do
     t.bigint "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "log_data"
     t.index ["owner_id"], name: "index_namespaces_on_owner_id"
     t.index ["parent_id"], name: "index_namespaces_on_parent_id"
   end
@@ -51,6 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155460) do
     t.datetime "last_used_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "log_data"
     t.index ["token_digest"], name: "index_personal_access_tokens_on_token_digest", unique: true
     t.index ["user_id"], name: "index_personal_access_tokens_on_user_id"
   end
@@ -82,6 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155460) do
     t.bigint "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "log_data"
     t.index ["name", "project_id"], name: "index_samples_on_name_and_project_id", unique: true
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
@@ -96,6 +100,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155460) do
     t.datetime "updated_at", null: false
     t.string "provider"
     t.string "uid"
+    t.jsonb "log_data"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -476,4 +481,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_155460) do
       $function$
   SQL
 
+
+  create_trigger :logidze_on_users, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_users BEFORE INSERT OR UPDATE ON public.users FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_namespaces, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_namespaces BEFORE INSERT OR UPDATE ON public.namespaces FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_members, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_members BEFORE INSERT OR UPDATE ON public.members FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_samples, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_samples BEFORE INSERT OR UPDATE ON public.samples FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_personal_access_tokens, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_personal_access_tokens BEFORE INSERT OR UPDATE ON public.personal_access_tokens FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
 end

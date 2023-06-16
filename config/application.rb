@@ -38,8 +38,6 @@ module Irida
 
     config.view_component.default_preview_layout = 'lookbook'
 
-    config.active_record.schema_format = :sql
-
     # Version has_many and belongs_to associations (This feature is experimental due to the number of edge cases)
     # config.logidze.associations_versioning = true
 
