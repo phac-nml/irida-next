@@ -2,6 +2,7 @@
 
 # Namespace base class
 class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  has_logidze
   include Routable
 
   MAX_ANCESTORS = 10
