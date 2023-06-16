@@ -1,0 +1,22 @@
+<%# This should be loaded once into the layout %>
+<%= render ConfirmationComponent.new %>
+<%# ------------------------------------------ %>
+
+<div id="confirmation-content" class="hidden">
+  <%= viral_alert(message: "THIS IS CUSTOM") %>
+</div>
+
+<%= button_to "Confirmation",
+"#",
+data: {
+  turbo_confirm: "Custom modal text here!",
+  turbo_content: "#confirmation-content"
+},
+class: "button button--state-destructive button--size-default" %>
+
+<%= button_to "Confirmation again",
+"#",
+data: {
+  turbo_confirm: "Something different here!"
+},
+class: "button button--state-destructive button--size-default" %>

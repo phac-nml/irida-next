@@ -1,51 +1,13 @@
-<%= content %>
-<dialog id="turbo-confirm" class="p-6">
-  <div
-    data-controller="confirmation-component"
-    data-confirmation-component-compare-value="<%= value %>"
-  >
-    <h3 class="mb-4 dialog--title">
-      <%= title %>
-    </h3>
-    <%= message %>
+<dialog id="turbo-confirm">
+  <div class="dialog--header">
+    <h3 class="dialog--title">Confirmation required</h3>
+  </div>
+  <div class="dialog--section">
+    <p class="text-base text-gray-900 dark:text-white">Are you sure?</p>
     <form method="dialog">
-
-      <input
-        data-action="input->confirmation-component#inputChanged"
-        class="
-          bg-gray-50
-          mb-4
-          border
-          border-gray-300
-          text-gray-900
-          text-sm
-          rounded-lg
-          focus:ring-primary-500
-          focus:border-primary-500
-          block
-          w-full
-          p-2.5
-          dark:bg-gray-700
-          dark:border-gray-600
-          dark:placeholder-gray-400
-          dark:text-white
-          dark:focus:ring-primary-500
-          dark:focus:border-primary-500
-        "
-        type="text"
-      />
-
-      <div class="flex items-center">
-        <button
-          class="mr-4 button button--size-default button--state-default"
-          value="cancel"
-        >Cancel</button>
-        <button
-          class="button button--size-default button--state-destructive"
-          value="confirm"
-          disabled
-          data-confirmation-component-target="confirm"
-        >Confirm</button>
+      <div class="flex flex-row-reverse items-center mt-6">
+        <button class="button button--state-destructive button--size-default" value="confirm">Confirm</button>
+        <button class="button button--state-default button--size-default mr-2" value="cancel">Cancel</button>
       </div>
     </form>
   </div>

@@ -3,14 +3,36 @@ import "@hotwired/turbo-rails";
 import "controllers";
 
 Turbo.setConfirmMethod((message, element) => {
-  let dialog = document.getElementById("turbo-confirm");
+  const dialog = document.getElementById("turbo-confirm");
+  if (!dialog) {
+    console.error(
+      "Missing #turbo-confirm dialog. Please add it to your layout."
+    );
+  }
+
+  // Save the default dialog content to reset when closing
+  const defaultState = dialog.innerHTML;
+
+  // Determine if custom content is provided
+  const contentIdElement = element.querySelector("[data-turbo-content]");
+
+  if (contentIdElement) {
+    let contentId = contentIdElement.getAttribute("data-turbo-content");
+    dialog.querySelector(".dialog--section").innerHTML =
+      document.querySelector(contentId).innerHTML;
+  } else {
+    dialog.querySelector("p").textContent = message;
+  }
+
   dialog.showModal();
 
   return new Promise((resolve, reject) => {
     dialog.addEventListener(
       "close",
       () => {
-        resolve(dialog.returnValue == "confirm");
+        // Reset the dialog content
+        dialog.innerHTML = defaultState;
+        resolve(dialog.returnValue === "confirm");
       },
       { once: true }
     );
