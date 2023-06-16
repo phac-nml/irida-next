@@ -44,6 +44,6 @@ module Irida
     # config.logidze.associations_versioning = true
 
     # Only load log data on demand
-    # config.logidze.ignore_log_data_by_default = true
+    config.logidze.ignore_log_data_by_default = true
   end
 end
