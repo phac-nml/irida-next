@@ -90,6 +90,14 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
+    def can_transfer_sample?(user, object_namespace)
+      namespace_owners_include_user?(user, object_namespace)
+    end
+
+    def can_transfer_sample_to_project?(user, object_namespace)
+      can_transfer_into_namespace?(user, object_namespace)
+    end
+
     def namespace_owners_include_user?(user, namespace)
       if namespace.project_namespace?
         Member.exists?(

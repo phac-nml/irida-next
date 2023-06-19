@@ -100,15 +100,14 @@ class ProjectPolicy < NamespacePolicy
 
   def transfer_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_transfer?(user, record.namespace) == true
+    return true if Member.can_transfer_sample?(user, record.namespace) == true
 
     details[:name] = record.name
     false
   end
 
   def transfer_sample_into_project?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_transfer?(user, record.namespace) == true
+    return true if Member.can_transfer_sample_to_project?(user, record.namespace) == true
 
     details[:name] = record.name
     false
