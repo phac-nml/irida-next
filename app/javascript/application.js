@@ -18,7 +18,7 @@ Turbo.setConfirmMethod((message, element) => {
 
   if (contentIdElement) {
     let contentId = contentIdElement.getAttribute("data-turbo-content");
-    dialog.querySelector(".dialog--section").innerHTML =
+    dialog.querySelector(".dialog--section p").outerHTML =
       document.querySelector(contentId).innerHTML;
   } else {
     dialog.querySelector("p").textContent = message;
