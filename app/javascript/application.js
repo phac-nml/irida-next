@@ -18,10 +18,18 @@ Turbo.setConfirmMethod((message, element) => {
 
   if (contentIdElement) {
     let contentId = contentIdElement.getAttribute("data-turbo-content");
-    dialog.querySelector(".dialog--section p").outerHTML =
+    dialog.querySelector(".dialog--content").innerHTML =
       document.querySelector(contentId).innerHTML;
   } else {
     dialog.querySelector("p").textContent = message;
+  }
+
+  // See if there is a custom form to display
+  const formIdElement = element.querySelector("[data-turbo-form]");
+  if (formIdElement) {
+    let formId = formIdElement.getAttribute("data-turbo-form");
+    dialog.querySelector(".dialog--form").innerHTML =
+      document.querySelector(formId).innerHTML;
   }
 
   dialog.showModal();
