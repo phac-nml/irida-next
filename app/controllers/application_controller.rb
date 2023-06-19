@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
-  around_action :use_logidze_responsible, only: %i[create update] # rubocop:disable Rails/LexicallyScopedActionFilter
+  around_action :use_logidze_responsible, only: %i[create destroy update] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   def use_logidze_responsible(&)
     Logidze.with_responsible(current_user&.id, &)
