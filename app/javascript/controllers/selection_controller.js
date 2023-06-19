@@ -2,36 +2,51 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["rowSelection"];
+  static values = {
+    storageKey: {
+      type: String,
+      default: location.protocol + "//" + location.host + location.pathname,
+    },
+  };
 
   connect() {
-    this.localStorageKey = window.location;
-    this.localStorageValue = new Map(
-      JSON.parse(localStorage.getItem(window.location))
+    this.element.setAttribute("data-controller-connected", "true");
+
+    const storageValue = JSON.parse(
+      sessionStorage.getItem(this.storageKeyValue)
     );
 
-    if (this.localStorageValue.size === 0) {
+    if (storageValue) {
       this.rowSelectionTargets.map((row) => {
-        this.localStorageValue.set(row.value, row.checked);
-      });
-      this.save();
-    } else {
-      this.rowSelectionTargets.map((row) => {
-        if (this.localStorageValue.get(row.value)) {
+        if (storageValue.indexOf(row.value) > -1) {
           row.checked = true;
         }
       });
+    } else {
+      this.save([]);
     }
   }
 
   toggle(event) {
-    this.localStorageValue.set(event.target.value, event.target.checked);
-    this.save();
+    const newStorageValue = JSON.parse(
+      sessionStorage.getItem(this.storageKeyValue)
+    );
+
+    if (event.target.checked) {
+      newStorageValue.push(event.target.value);
+    } else {
+      const index = newStorageValue.indexOf(event.target.value);
+      if (index > -1) {
+        newStorageValue.splice(index, 1);
+      }
+    }
+    this.save(newStorageValue);
   }
 
-  save() {
-    localStorage.setItem(
-      this.localStorageKey,
-      JSON.stringify([...this.localStorageValue])
+  save(storageValue) {
+    sessionStorage.setItem(
+      this.storageKeyValue,
+      JSON.stringify([...storageValue])
     );
   }
 }
