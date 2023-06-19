@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Policy for projects authorization
-class ProjectPolicy < NamespacePolicy
+class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def activity?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_view?(user, record.namespace) == true
@@ -119,14 +119,18 @@ class ProjectPolicy < NamespacePolicy
             .include_route.order(updated_at: :desc))
   end
 
-  scope_for :relation, :transferable do |relation|
+  scope_for :relation, :manageable do |relation|
     relation
       .where(namespace_id: Namespace.where(
         id: Member.where(
           user:,
-          access_level: Member::AccessLevel::OWNER
+          access_level: [
+            Member::AccessLevel::MAINTAINER,
+            Member::AccessLevel::OWNER
+          ]
         ).select(:namespace_id)
-      ).self_and_descendants.select(:id)).include_route.order(updated_at: :desc)
+      ).self_and_descendants.where(type: Namespaces::ProjectNamespace.sti_name).select(:id))
+      .include_route.order(updated_at: :desc)
       .or(relation.where(namespace: { parent: user.namespace }))
       .include_route.order(updated_at: :desc)
   end

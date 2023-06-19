@@ -78,8 +78,8 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert_equal scoped_projects.count, 0
   end
 
-  test 'transferable scope' do
-    scoped_projects = @policy.apply_scope(Project, type: :relation, name: :transferable)
+  test 'manageable scope' do
+    scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
     assert_equal 8, scoped_projects.count
   end
