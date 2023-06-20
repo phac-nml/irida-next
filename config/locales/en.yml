@@ -206,6 +206,9 @@ en:
       toggle_visible: Toggle visibility
     dialog:
       close: Close dialog
+    confirmation:
+      cancel: Cancel
+      confirm: Confirm
   layouts:
     application:
       site_title: IRIDA Next

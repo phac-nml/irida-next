@@ -49,9 +49,11 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
 
       all('.member-settings-ellipsis')[2].click
+      click_link I18n.t(:'projects.members.index.remove')
 
-      accept_confirm do
-        click_link I18n.t(:'projects.members.index.remove')
+      assert_selector 'dialog'
+      within('#turbo-confirm') do
+        click_button 'Confirm'
       end
 
       assert_text I18n.t(:'projects.members.destroy.success')

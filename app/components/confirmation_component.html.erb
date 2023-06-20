@@ -12,11 +12,15 @@
           <button
             class="button button--state-destructive button--size-default"
             value="confirm"
-          >Confirm</button>
+          ><%= t(:'components.confirmation.confirm') %>
+          </button>
           <button
             class="mr-2 button button--state-default button--size-default"
+            formmethod="dialog"
             value="cancel"
-          >Cancel</button>
+          >
+            <%= t(:'components.confirmation.cancel') %>
+          </button>
         </div>
       </form>
     </div>
