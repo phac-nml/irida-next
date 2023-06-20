@@ -18,5 +18,4 @@ class UpdatedComponentTest < ViewComponent::TestCase
 
     assert_text 'Updated 17 minutes ago'
   end
-
 end
