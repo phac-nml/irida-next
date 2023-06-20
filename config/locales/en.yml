@@ -364,6 +364,7 @@ en:
           access_level: Access Level
           source: Source
           access_granted: Access Granted
+          action: Action
         updated: Updated
       update:
         success: "Group member %{user_email} updated successfully"
@@ -433,6 +434,7 @@ en:
           access_level: Access Level
           source: Source
           access_granted: Access Granted
+          action: Action
         updated: Updated
       update:
         success: "Project member %{user_email} updated successfully"
