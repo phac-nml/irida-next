@@ -49,7 +49,7 @@ class ProfileTest < ApplicationSystemTestCase
     click_link I18n.t(:'profiles.accounts.delete.button')
 
     within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+      click_on I18n.t(:'components.confirmation.confirm')
     end
 
     assert_text I18n.t('devise.shared.links.create_an_account_link')
