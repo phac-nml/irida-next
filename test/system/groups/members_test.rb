@@ -52,8 +52,7 @@ module Groups
       all('.member-settings-ellipsis')[2].click
       click_link I18n.t(:'groups.members.index.remove')
 
-      assert_selector 'dialog'
-      within('#turbo-confirm') do
+      within('#turbo-confirm[open]') do
         click_button 'Confirm'
       end
 
