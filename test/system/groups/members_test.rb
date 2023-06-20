@@ -50,9 +50,10 @@ module Groups
       visit group_members_url(@namespace)
 
       all('.member-settings-ellipsis')[2].click
+      click_link 'Remove'
 
-      accept_confirm do
-        click_link I18n.t(:'groups.members.index.remove')
+      assert_selector 'dialog[open]' do
+        click_button 'Confirm'
       end
 
       assert_text I18n.t(:'groups.members.destroy.success')
