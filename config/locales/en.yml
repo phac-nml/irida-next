@@ -481,7 +481,9 @@ en:
         role_not_allowed: "A maintainer can only update a member's role up to the Maintainer role"
     samples:
       transfer:
-        duplicate_project: Please select a different project.
+        empty_new_project_id: The new project id is empty.
+        empty_sample_ids: The sample ids are empty.
+        same_project: The samples already exist in the project. Please select a different project.
   application:
     errors:
       access_denied: Access Denied.
