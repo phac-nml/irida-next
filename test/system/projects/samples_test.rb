@@ -63,7 +63,7 @@ module Projects
       click_link I18n.t(:'projects.samples.index.remove_button')
 
       within('#turbo-confirm[open]') do
-        click_button i18n.t(:'components.confirmation.confirm')
+        click_button I18n.t(:'components.confirmation.confirm')
       end
 
       assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name)
