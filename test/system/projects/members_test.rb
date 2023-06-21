@@ -52,7 +52,7 @@ module Projects
       click_link I18n.t(:'projects.members.index.remove')
 
       within('#turbo-confirm[open]') do
-        click_button 'Confirm'
+        click_button I18n.t(:'components.confirmation.confirm')
       end
 
       assert_text I18n.t(:'projects.members.destroy.success')
