@@ -385,6 +385,7 @@ en:
       destroy:
         error: "There was an error removing the group member"
         success: "Group member successfully removed"
+        leave_success: "You have successfully left the group %{name}"
     samples:
       index:
         title: Samples
@@ -457,6 +458,7 @@ en:
       destroy:
         error: "There was an error removing the project member"
         success: "Project member successfully removed"
+        leave_success: "You have successfully left the project %{name}"
     samples:
       show:
         edit_button: Edit this sample

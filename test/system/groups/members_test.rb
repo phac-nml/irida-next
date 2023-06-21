@@ -118,8 +118,7 @@ module Groups
         click_button 'Confirm'
       end
 
-      assert_text I18n.t(:'groups.members.destroy.success')
-      assert_no_selector 'h1', text: I18n.t(:'groups.members.index.title')
+      assert_text I18n.t(:'groups.members.destroy.leave_success', name: @namespace.name)
     end
 
     test 'can not add a member to the group' do
