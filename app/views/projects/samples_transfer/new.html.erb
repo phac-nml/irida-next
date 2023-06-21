@@ -1,15 +1,15 @@
 <%= render Viral::ModalComponent.new(title: t(".title")) do |modal| %>
   <% modal.with_body do %>
-    <%= form_with(model: @sample_transfer, url: namespace_project_samples_transfer_index_path, method: :post, data: {
+    <%= form_with(url: namespace_project_samples_transfer_index_path, method: :post, data: {
               turbo: false,
               controller: "form"
             }) do |form| %>
       <%= form.hidden_field "sample_ids", multiple: true, data: { form_target: "field" } %>
       <div class="form-field">
-        <%= form.label :project_id %>
-        <%= form.collection_select(:project_id, @projects, :id, :full_path) %>
+        <%= form.label :new_project_id %>
+        <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
         <%= render "shared/form/field_errors",
-        errors: @sample_transfer.errors.full_messages_for(:project_id) %>
+        errors: @project.errors.full_messages_for(:base) %>
       </div>
       <div class="my-2">
         <%= form.submit t(".submit_button"), class: "btn btn-primary" %>

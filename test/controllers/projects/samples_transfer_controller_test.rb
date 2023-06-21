@@ -20,10 +20,10 @@ module Projects
 
     test 'should create sample transfer for a member that is an owner' do
       post namespace_project_samples_transfer_index_path(@namespace, @project1),
-           params: { sample_transfer: {
-             project_id: @project2.id,
+           params: {
+             new_project_id: @project2.id,
              sample_ids: [JSON.generate([@sample1.id, @sample2.id])]
-           } }
+           }
 
       assert_redirected_to namespace_project_samples_path
     end
@@ -33,10 +33,10 @@ module Projects
       login_as user
 
       post namespace_project_samples_transfer_index_path(@namespace, @project1),
-           params: { sample_transfer: {
-             project_id: @project2.id,
+           params: {
+             new_project_id: @project2.id,
              sample_ids: [JSON.generate([@sample1.id, @sample2.id])]
-           } }
+           }
       assert_response :unauthorized
     end
 
@@ -45,19 +45,19 @@ module Projects
       login_as user
 
       post namespace_project_samples_transfer_index_path(@namespace, @project1),
-           params: { sample_transfer: {
-             project_id: @project2.id,
+           params: {
+             new_project_id: @project2.id,
              sample_ids: [JSON.generate([@sample1.id, @sample2.id])]
-           } }
+           }
       assert_response :unauthorized
     end
 
     test 'should not create sample transfer within the same project' do
       post namespace_project_samples_transfer_index_path(@namespace, @project1),
-           params: { sample_transfer: {
-             project_id: @project1.id,
+           params: {
+             new_project_id: @project1.id,
              sample_ids: [JSON.generate([@sample1.id, @sample2.id])]
-           } }
+           }
 
       assert_response :unprocessable_entity
     end

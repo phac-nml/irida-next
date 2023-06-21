@@ -6,14 +6,11 @@ module Projects
     before_action :project
     before_action :projects
 
-    def new
-      @sample_transfer = SampleTransfer.new
-    end
+    def new; end
 
     def create
-      @sample_transfer = SampleTransfer.new(sample_transfer_params)
-
-      if Samples::TransferService.new(@project, current_user).execute(@sample_transfer)
+      if Samples::TransferService.new(@project, current_user).execute(sample_transfer_params[:new_project_id],
+                                                                      sample_transfer_params[:sample_ids])
         flash[:success] = t('.success')
         redirect_to namespace_project_samples_path
       else
@@ -24,7 +21,7 @@ module Projects
     private
 
     def sample_transfer_params
-      params.require(:sample_transfer).permit(:project_id, sample_ids: [])
+      params.permit(:new_project_id, sample_ids: [])
     end
 
     def project
