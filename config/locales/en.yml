@@ -33,6 +33,7 @@ en:
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
+    updated: Updated
   action_policy:
     policy:
       create?: You are not authorized to create this resource on this server.
@@ -365,7 +366,6 @@ en:
           source: Source
           access_granted: Access Granted
           action: Action
-        updated: Updated
       update:
         success: "Group member %{user_email} updated successfully"
       new:
@@ -435,7 +435,6 @@ en:
           source: Source
           access_granted: Access Granted
           action: Action
-        updated: Updated
       update:
         success: "Project member %{user_email} updated successfully"
       new:

@@ -104,7 +104,9 @@
 
                     <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
                       <% if member.created_at < member.updated_at %>
-                        <%= render partial: "projects/members/updated_at", locals: { member: member } %>
+                        <%= render UpdatedComponent.new(
+                          updated_at: member.updated_at
+                        ) %>
                       <% end %>
                     <% end %>
                   </div>

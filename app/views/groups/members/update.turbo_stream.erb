@@ -7,8 +7,6 @@
                       access_levels: @access_levels
                     } %>
 
-<%= turbo_stream.update "member-#{member.id}-access-level-updated",
-                    partial: "groups/members/updated_at",
-                    locals: {
-                      member:
-                    } %>
+<%= turbo_stream.update "member-#{member.id}-access-level-updated" do %>
+  <%= render UpdatedComponent.new(updated_at: member.updated_at) %>
+<% end %>
