@@ -1,10 +1,14 @@
 <dialog id="turbo-confirm" aria-labelledby="confirm--title">
   <div class="dialog--header">
-    <h3 id="confirm--title" class="dialog--title">Confirmation required</h3>
+    <h3 id="confirm--title" class="dialog--title">
+      <%= t(:'components.confirmation.title') %>
+    </h3>
   </div>
   <div class="dialog--section">
     <div class="dialog--content">
-      <p class="text-base text-gray-900 dark:text-white">Are you sure?</p>
+      <p class="text-base text-gray-900 dark:text-white">
+        <%= t(:'components.confirmation.default_message') %>
+      </p>
     </div>
     <div class="dialog--form">
       <form method="dialog">
