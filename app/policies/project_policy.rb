@@ -119,7 +119,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
             .include_route.order(updated_at: :desc))
   end
 
-  scope_for :relation, :manageable do |relation|
+  scope_for :relation, :receivable do |relation|
     relation
       .where(namespace_id: Namespace.where(
         id: Member.where(
