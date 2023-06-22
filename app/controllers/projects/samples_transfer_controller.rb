@@ -9,8 +9,9 @@ module Projects
     def new; end
 
     def create
-      if Samples::TransferService.new(@project, current_user).execute(sample_transfer_params[:new_project_id],
-                                                                      sample_transfer_params[:sample_ids])
+      new_project_id = sample_transfer_params[:new_project_id]
+      sample_ids = JSON.parse(sample_transfer_params[:sample_ids].first)
+      if Samples::TransferService.new(@project, current_user).execute(new_project_id, sample_ids)
         flash[:success] = t('.success')
         redirect_to namespace_project_samples_path
       else
