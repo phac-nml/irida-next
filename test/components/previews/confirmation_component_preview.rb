@@ -14,10 +14,8 @@ class ConfirmationComponentPreview < ViewComponent::Preview
 
   # Custom Confirmation Dialog Form
   # -------------------------------
-  # The entire contents of the modal can be overridden with the `data-turbo-form` attribute
-  # This accepts the **id** for the form to be rendered
-  # Buttons must be provided in the form
-  #   <button value='cancel'>Cancel</button>
-  #   <button value='confirm'>Confirm</button>
+  # This is used when you want to force the user to confirm that they want to continue
+  # by making them enter a specific value into the input.
+  # Example: If they want to delete the project, they will need to enter the project name
   def with_confirm_value; end
 end
