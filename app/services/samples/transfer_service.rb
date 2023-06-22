@@ -38,7 +38,7 @@ module Samples
 
     def transfer(new_project_id, sample_ids)
       ActiveRecord::Base.transaction do
-        JSON.parse(sample_ids.first).each do |sample_id|
+        sample_ids.each do |sample_id|
           sample = Sample.find_by(id: sample_id)
           sample.update(project_id: new_project_id)
         end
