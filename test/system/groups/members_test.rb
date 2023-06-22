@@ -67,11 +67,12 @@ module Groups
 
       accept_confirm do
         click_link I18n.t(:'groups.members.index.remove')
+        assert_no_text I18n.t(:'groups.members.destroy.success')
       end
 
-      assert_no_text I18n.t(:'groups.members.destroy.success')
       assert_text I18n.t('services.members.destroy.cannot_remove_self',
                          namespace_type: @namespace.class.model_name.human)
+
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: @members_count
     end
