@@ -1,40 +1,14 @@
 <div
   data-controller="confirmation"
-  data-confirm-projectName-value="<%= @project.name %>"
+  data-confirmation-project-value="<%= @project.name %>"
 >
-  <%= form_with(url: namespace_project_transfer_index_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer") do |form| %>
-    <div class="form-field">
-      <%= form.label :new_namespace_id,
-                 t(:"projects.edit.advanced.transfer.new_namespace_id") %>
-      <%= form.collection_select(
-        :new_namespace_id,
-        @authorized_namespaces,
-        :id,
-        :full_name,
-        { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
-        {
-          data: {
-            action: "confirmation#onChange"
-          },
-          class: @error.present? ? "error" : ""
-        }
-      ) %>
-      <% if @error.present? %>
-        <p class="text-sm text-red-500 dark:text-red-400"><%= @error %></p>
-      <% end %>
-    </div>
 
-    <%= viral_dialog(size: :large) do |dialog| %>
-      <%= dialog.trigger do %>
-        <%= viral_button(data: { action: "click->viral--dialog-component#open", 'confirmation-target': 'submitButton' }, type: :destructive, disabled: true) do %>
-          <%= t("projects.edit.advanced.transfer.submit") %>
-        <% end %>
-      <% end %>
-      <%= dialog.header(title: "This is a dialog with a trigger") %>
-      <%= dialog.section do %>
-        <div>
-          <div
-            class="
+  <div class="hidden confirm-transfer">
+    <div
+      data-controller="confirmation"
+      data-confirmation-project-value="<%= @project.name %>">
+      <div
+        class="
               flex
               p-4
               mb-4
@@ -44,33 +18,74 @@
               dark:bg-gray-800
               dark:text-red-400
             "
-            role="alert"
-          >
-            <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
-            <span class="flex-1 ml-4"><%= t(
-                "projects.edit.advanced.transfer.confirm.warning_html",
-                project_name: @project.human_name
-              ) %></span>
-          </div>
-          <div class="mb-4">
-            <% t("projects.edit.advanced.transfer.confirm.points_html", project: @project.name).each do |item| %>
-              <p class="mb-2 text-base text-gray-900 dark:text-white"><%= item %></p>
-            <% end %>
-          </div>
-          <input autofocus data-action="input->confirmation#inputChanged"
-          class=" bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm
+      >
+        <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
+        <span class="flex-1 ml-4"><%= t(
+                                        "projects.edit.advanced.transfer.confirm.warning_html",
+                                        project_name: @project.human_name
+                                      ) %></span>
+      </div>
+      <div class="mb-4">
+        <% t("projects.edit.advanced.transfer.confirm.points_html", project: @project.name).each do |item| %>
+          <p class="mb-2 text-base text-gray-900 dark:text-white"><%= item %></p>
+        <% end %>
+      </div>
+      <input autofocus data-action="input->confirmation#inputChanged"
+             class=" bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm
           rounded-lg focus:ring-primary-500 focus:border-primary-500 block
           w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
           dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500
-          dark:focus:border-primary-500 type="text" />
+          dark:focus:border-primary-500" type="text" />
+      <form method="dialog">
+        <div class="flex flex-row-reverse items-center mt-4">
+          <button
+            value="cancel"
+            class="button button--state-default button--size-default"
+          >Cancel
+          </button>
+          <button
+            value="confirm"
+            disabled="disabled"
+            data-confirmation-target="confirmButton"
+            class="mr-2 button button--state-primary button--size-default"
+          >Create
+          </button>
         </div>
-        <%= form.submit t("projects.edit.advanced.transfer.submit"),
-                    disabled: true,
-                    data: {
-                      "confirmation-target": "confirmButton"
-                    },
-                    class: "button button--size-default button--state-destructive" %>
+      </form>
+    </div>
+  </div>
+
+  <%= form_with(url: namespace_project_transfer_index_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer", data: { turbo_confirm: "", turbo_form: ".confirm-transfer" }) do |form| %>
+    <div class="form-field">
+      <%= form.label :new_namespace_id,
+                     t(:"projects.edit.advanced.transfer.new_namespace_id") %>
+      <%= form.collection_select(
+            :new_namespace_id,
+            @authorized_namespaces,
+            :id,
+            :full_name,
+            { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
+            {
+              data: {
+                action: "confirmation#onChange"
+              },
+              class: @error.present? ? "error" : ""
+            }
+          ) %>
+      <% if @error.present? %>
+        <p class="text-sm text-red-500 dark:text-red-400"><%= @error %></p>
       <% end %>
-    <% end %>
+    </div>
+
+    <div>
+      <%= form.submit t(:'projects.edit.advanced.transfer.submit'),
+                      class: "button button--state-destructive button--size-default",
+                      disabled: true,
+                      data: {
+                        "confirmation-target": "submitButton"
+                      }
+      %>
+    </div>
+
   <% end %>
 </div>
