@@ -60,8 +60,10 @@ module Projects
     test 'should destroy Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       assert_selector 'a', text: I18n.t('projects.samples.index.remove_button'), count: 1
-      accept_confirm do
-        click_link I18n.t('projects.samples.index.remove_button'), match: :first
+      click_link I18n.t(:'projects.samples.index.remove_button')
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
       end
 
       assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name)
