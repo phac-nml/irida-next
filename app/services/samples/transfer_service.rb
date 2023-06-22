@@ -37,12 +37,14 @@ module Samples
     end
 
     def transfer(new_project_id, sample_ids)
-      ActiveRecord::Base.transaction do
-        sample_ids.each do |sample_id|
-          sample = Sample.find_by(id: sample_id, project_id: @project.id)
-          sample.update(project_id: new_project_id)
-        end
+      errors = {}
+      sample_ids.each do |sample_id|
+        sample = Sample.find_by(id: sample_id, project_id: @project.id)
+        sample.update!(project_id: new_project_id)
+      rescue StandardError => e
+        errors[sample_id] = e.message
       end
+      raise TransferError, I18n.t('services.samples.transfer.error') unless errors.empty?
     end
   end
 end

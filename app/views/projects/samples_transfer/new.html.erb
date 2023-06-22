@@ -14,7 +14,11 @@
         errors: @project.errors.full_messages_for(:base) %>
       </div>
       <div class="my-2">
-        <%= form.submit t(".submit_button"), class: "btn btn-primary" %>
+        <%= form.submit t(".submit_button"),
+                    class: "btn btn-primary",
+                    data: {
+                      action: "click->form#clear"
+                    } %>
       </div>
     <% end %>
   <% end %>

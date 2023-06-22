@@ -13,4 +13,8 @@ export default class extends Controller {
     const storageValue = sessionStorage.getItem(this.storageKeyValue);
     this.fieldTarget.value = storageValue;
   }
+
+  clear() {
+    sessionStorage.removeItem(this.storageKeyValue);
+  }
 }
