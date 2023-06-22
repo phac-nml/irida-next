@@ -208,7 +208,6 @@ en:
       close: Close dialog
     confirmation:
       title: Confirmation required
-      default_message: Are you sure?
       cancel: Cancel
       confirm: Confirm
   layouts:

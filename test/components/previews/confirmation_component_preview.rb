@@ -19,5 +19,5 @@ class ConfirmationComponentPreview < ViewComponent::Preview
   # Buttons must be provided in the form
   #   <button value='cancel'>Cancel</button>
   #   <button value='confirm'>Confirm</button>
-  def with_custom_form; end
+  def with_confirm_value; end
 end
