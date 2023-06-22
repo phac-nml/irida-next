@@ -63,12 +63,8 @@ module Projects
     test 'cannot remove themselves as a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
 
-      table_row = find(:xpath, '//table/tbody/tr[1]/td[5]')
-
-      within table_row do
-        first('.member-settings-ellipsis').click
-        click_link I18n.t(:'projects.members.index.remove')
-      end
+      first('.member-settings-ellipsis').click
+      click_link I18n.t(:'projects.members.index.remove')
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
