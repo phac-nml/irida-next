@@ -49,7 +49,9 @@ module Groups
     test 'can remove a member from the group' do
       visit group_members_url(@namespace)
 
+      pause
       all('.member-settings-ellipsis')[2].click
+      pause
       click_link I18n.t(:'groups.members.index.remove')
 
       within('#turbo-confirm[open]') do
@@ -64,7 +66,7 @@ module Groups
     test 'cannot remove themselves as a member from the group' do
       visit group_members_url(@namespace)
 
-      first('.member-settings-ellipsis').click
+      all('.member-settings-ellipsis')[0].click
       click_link I18n.t(:'projects.members.index.remove')
 
       within('#turbo-confirm[open]') do

@@ -15,9 +15,6 @@ module Members
     def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! @namespace, to: :destroy_member?
 
-      puts current_user.inspect
-      puts @member.user.inspect
-
       unless current_user != member.user
         raise MemberDestroyError, I18n.t('services.members.destroy.cannot_remove_self',
                                          namespace_type: namespace.class.model_name.human)
