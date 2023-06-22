@@ -37,5 +37,11 @@ module Irida
     config.importmap.cache_sweepers << Rails.root.join('app/components')
 
     config.view_component.default_preview_layout = 'lookbook'
+
+    # Version has_many and belongs_to associations (This feature is experimental due to the number of edge cases)
+    # config.logidze.associations_versioning = true
+
+    # Only load log data on demand
+    config.logidze.ignore_log_data_by_default = true
   end
 end

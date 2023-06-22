@@ -2,6 +2,7 @@
 
 # Personal Access Token class
 class PersonalAccessToken < ApplicationRecord
+  has_logidze
   serialize :scopes, Array
 
   attr_reader :token

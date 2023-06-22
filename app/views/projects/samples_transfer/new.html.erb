@@ -1,8 +1,10 @@
-<%= render Viral::ModalComponent.new(title: t(".title")) do |modal| %>
-  <% modal.with_body do %>
+<%= viral_dialog(open: true) do |dialog| %>
+  <%= dialog.header(title: t(".title")) %>
+  <%= dialog.section do %>
     <%= form_with(url: namespace_project_samples_transfer_index_path, method: :post, data: {
               turbo: false,
-              controller: "form"
+              controller: "form",
+              "form-storage-key-value": namespace_project_samples_url
             }) do |form| %>
       <%= form.hidden_field "sample_ids", multiple: true, data: { form_target: "field" } %>
       <div class="form-field">

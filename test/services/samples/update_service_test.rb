@@ -51,5 +51,58 @@ module Samples
         Samples::UpdateService.new(@sample, @user, valid_params).execute
       end
     end
+
+    test 'project sample update changes logged using logidze' do
+      @sample.create_logidze_snapshot!
+
+      assert_equal 1, @sample.log_data.version
+      assert_equal 1, @sample.log_data.size
+
+      valid_params = { name: 'new-sample23-name', description: 'new-sample23-description' }
+
+      assert_changes -> { [@sample.name, @sample.description] }, to: %w[new-sample23-name new-sample23-description] do
+        Samples::UpdateService.new(@sample, @user, valid_params).execute
+      end
+
+      @sample.create_logidze_snapshot!
+
+      assert_equal 2, @sample.log_data.version
+      assert_equal 2, @sample.log_data.size
+
+      assert_equal 'Project 3 Sample 23', @sample.at(version: 1).name
+      assert_equal 'Sample 23 description.', @sample.at(version: 1).description
+
+      assert_equal 'new-sample23-name', @sample.at(version: 2).name
+      assert_equal 'new-sample23-description', @sample.at(version: 2).description
+    end
+
+    test 'project sample update changes logged using logidze switch version' do
+      @sample.create_logidze_snapshot!
+
+      assert_equal 1, @sample.log_data.version
+      assert_equal 1, @sample.log_data.size
+
+      valid_params = { name: 'new-sample23-name', description: 'new-sample23-description' }
+
+      assert_changes -> { [@sample.name, @sample.description] }, to: %w[new-sample23-name new-sample23-description] do
+        Samples::UpdateService.new(@sample, @user, valid_params).execute
+      end
+
+      @sample.create_logidze_snapshot!
+
+      assert_equal 2, @sample.log_data.version
+      assert_equal 2, @sample.log_data.size
+
+      assert_equal 'Project 3 Sample 23', @sample.at(version: 1).name
+      assert_equal 'Sample 23 description.', @sample.at(version: 1).description
+
+      assert_equal 'new-sample23-name', @sample.at(version: 2).name
+      assert_equal 'new-sample23-description', @sample.at(version: 2).description
+
+      @sample.switch_to!(1)
+
+      assert_equal 'Project 3 Sample 23', @sample.name
+      assert_equal 'Sample 23 description.', @sample.description
+    end
   end
 end

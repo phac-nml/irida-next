@@ -5,10 +5,7 @@
       <% if allowed_to?(:transfer_sample?, @project) %>
         <%= link_to t("projects.samples.index.transfer_button"),
         new_namespace_project_samples_transfer_path,
-        class: "btn btn-default mr-1",
-        data: {
-          turbo_frame: "modal"
-        } %>
+        class: "btn btn-default mr-1" %>
       <% end %>
       <% if allowed_to?(:create_sample?, @project) %>
         <%= link_to t("projects.samples.index.new_button"),

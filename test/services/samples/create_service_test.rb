@@ -85,5 +85,17 @@ module Samples
                                    valid_params).execute
       end
     end
+
+    test 'create project sample logged using logidze' do
+      valid_params = { name: 'new-project2-sample', description: 'first sample for project2' }
+      sample = Samples::CreateService.new(@user, @project, valid_params).execute
+
+      sample.create_logidze_snapshot!
+
+      assert_equal 1, sample.log_data.version
+      assert_equal 1, sample.log_data.size
+      assert_equal 'new-project2-sample', sample.at(version: 1).name
+      assert_equal 'first sample for project2', sample.at(version: 1).description
+    end
   end
 end

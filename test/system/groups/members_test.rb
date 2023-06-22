@@ -50,9 +50,10 @@ module Groups
       visit group_members_url(@namespace)
 
       all('.member-settings-ellipsis')[2].click
+      click_link I18n.t(:'groups.members.index.remove')
 
-      accept_confirm do
-        click_link I18n.t(:'groups.members.index.remove')
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
       end
 
       assert_text I18n.t(:'groups.members.destroy.success')
@@ -64,9 +65,10 @@ module Groups
       visit group_members_url(@namespace)
 
       first('.member-settings-ellipsis').click
+      click_link I18n.t(:'projects.members.index.remove')
 
-      accept_confirm do
-        click_link I18n.t(:'groups.members.index.remove')
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
       end
 
       assert_no_text I18n.t(:'groups.members.destroy.success')
