@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_01_145011) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_22_175933) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_01_145011) do
     t.index ["created_by_id"], name: "index_members_on_created_by_id"
     t.index ["deleted_at"], name: "index_members_on_deleted_at"
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
-    t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true
+    t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
@@ -98,7 +98,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_01_145011) do
     t.jsonb "log_data"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_samples_on_deleted_at"
-    t.index ["name", "project_id"], name: "index_samples_on_name_and_project_id", unique: true
+    t.index ["name", "project_id"], name: "index_samples_on_name_and_project_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
 
