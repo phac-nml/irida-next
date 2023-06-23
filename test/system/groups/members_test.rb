@@ -96,7 +96,7 @@ module Groups
       end
 
       within('#turbo-confirm[open]') do
-        click_on 'Confirm'
+        click_button 'Confirm'
       end
 
       assert_text I18n.t(:'groups.members.destroy.success')
