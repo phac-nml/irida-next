@@ -1,4 +1,4 @@
-<%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
+<%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
   <%= dropdown.item(
     label: (t(:"projects.members.index.leave_project")),
     url: namespace_project_member_path(id: member.id),
