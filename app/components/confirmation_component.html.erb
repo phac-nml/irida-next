@@ -1,14 +1,13 @@
 <dialog id="turbo-confirm" aria-labelledby="confirm--title">
   <div class="dialog--header">
     <h3 id="confirm--title" class="dialog--title">
-      <%= t(:'components.confirmation.title') %>
+      <%= t(:"components.confirmation.title") %>
     </h3>
   </div>
   <div class="dialog--section">
+    <p class="text-base text-gray-900 dark:text-white">
+    </p>
     <div class="dialog--content">
-      <p class="text-base text-gray-900 dark:text-white">
-        <%= t(:'components.confirmation.default_message') %>
-      </p>
     </div>
     <div class="dialog--form">
       <form method="dialog">
@@ -16,14 +15,61 @@
           <button
             class="button button--state-destructive button--size-default"
             value="confirm"
-          ><%= t(:'components.confirmation.confirm') %>
+          ><%= t(:"components.confirmation.confirm") %>
           </button>
           <button
             class="mr-2 button button--state-default button--size-default"
             formmethod="dialog"
             value="cancel"
           >
-            <%= t(:'components.confirmation.cancel') %>
+            <%= t(:"components.confirmation.cancel") %>
+          </button>
+        </div>
+      </form>
+    </div>
+    <div
+      class="hidden mt-4 dialog--form--validate"
+      data-controller="confirmation-component"
+    >
+
+      <form method="dialog">
+        <input
+          type="text"
+          data-action="confirmation-component#inputChange"
+          class="
+            bg-gray-50
+            border
+            border-gray-300
+            text-gray-900
+            text-sm
+            rounded-lg
+            focus:ring-primary-500
+            focus:border-primary-500
+            block
+            w-full
+            p-2.5
+            dark:bg-gray-700
+            dark:border-gray-600
+            dark:placeholder-gray-400
+            dark:text-white
+            dark:focus:ring-primary-500
+            dark:focus:border-primary-500
+          "
+        />
+        <div class="flex flex-row-reverse items-center mt-6">
+          <button
+            class="button button--state-destructive button--size-default"
+            value="confirm"
+            disabled="disabled"
+            data-confirmation-component-target="confirmButton"
+          ><%= t(:"components.confirmation.confirm") %>
+          </button>
+          <button
+            class="mr-2 button button--state-default button--size-default"
+            formmethod="dialog"
+            value="cancel"
+          >
+            <%= t(:"components.confirmation.cancel") %>
           </button>
         </div>
       </form>

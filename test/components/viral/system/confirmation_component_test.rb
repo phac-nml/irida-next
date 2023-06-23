@@ -21,12 +21,12 @@ class ConfirmationComponentTest < ApplicationSystemTestCase
     assert_no_selector 'dialog'
   end
 
-  test 'confirmation component with custom form' do
-    visit('/rails/view_components/confirmation_component/with_custom_form')
-    find('button', text: 'Create project').click
+  test 'confirmation component with custom value' do
+    visit('/rails/view_components/confirmation_component/with_confirm_value')
+    find('button', text: 'Delete project').click
+    assert_selector 'button.button--state-destructive:disabled'
     assert_text 'Confirmation required'
-    assert_selector 'input[type=text]'
-    find('button', text: 'Cancel').click
-    assert_no_selector 'dialog'
+    find('input').set 'Project X'
+    assert_selector 'button.button--state-destructive'
   end
 end
