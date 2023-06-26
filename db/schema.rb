@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_22_204135) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_26_190220) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -84,8 +84,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_22_204135) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_routes_on_deleted_at"
-    t.index ["name"], name: "index_routes_on_name", unique: true
-    t.index ["path"], name: "index_routes_on_path", unique: true
+    t.index ["name"], name: "index_routes_on_name", unique: true, where: "(deleted_at IS NULL)"
+    t.index ["path"], name: "index_routes_on_path", unique: true, where: "(deleted_at IS NULL)"
     t.index ["source_type", "source_id"], name: "index_routes_on_source"
   end
 
