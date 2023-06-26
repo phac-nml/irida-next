@@ -126,8 +126,6 @@ GEM
       webrick (~> 1.7)
       websocket-driver (>= 0.6, < 0.8)
     ffi (1.15.5)
-    figaro (1.2.0)
-      thor (>= 0.14.0, < 2)
     fx (0.8.0)
       activerecord (>= 6.0.0)
       railties (>= 6.0.0)
@@ -375,7 +373,6 @@ DEPENDENCIES
   debug
   devise (~> 4.9.2)
   erb-formatter!
-  figaro
   fx
   graphiql-rails
   graphql
