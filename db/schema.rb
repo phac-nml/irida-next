@@ -15,6 +15,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_145212) do
   enable_extension "hstore"
   enable_extension "plpgsql"
 
+  create_table "group_group_links", force: :cascade do |t|
+    t.bigint "shared_group_id", null: false
+    t.bigint "shared_with_group_id", null: false
+    t.date "expires_at"
+    t.integer "group_access_level", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shared_group_id", "shared_with_group_id"], name: "index_group_link_shared_group_id_with_shared_with_group_id", unique: true
+  end
+
   create_table "members", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "namespace_id"
