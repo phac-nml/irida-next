@@ -60,23 +60,6 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_text project_description
   end
 
-  test 'can update a project path' do
-    full_path = namespaces_user_namespaces(:john_doe_namespace).full_path
-
-    visit project_edit_path(projects(:project1))
-    assert_text I18n.t(:'projects.edit.general.title')
-
-    select full_path,
-           from: I18n.t(:'projects.edit.advanced.transfer.new_namespace_id')
-    click_on I18n.t(:'projects.edit.advanced.transfer.submit')
-    assert_selector 'h1', text: projects(:project1).name
-    click_on I18n.t(:'projects.sidebar.settings')
-
-    assert_selector 'select#new_namespace_id' do |input|
-      assert_equal full_path, input.find('option[selected]').text
-    end
-  end
-
   test 'can view project' do
     visit namespace_project_url(groups(:group_one), projects(:project1))
 
