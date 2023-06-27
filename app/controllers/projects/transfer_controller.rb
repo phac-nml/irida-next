@@ -53,11 +53,8 @@ module Projects
     end
 
     def authorized_namespaces
-      @authorized_namespaces = case action_name
-                               when 'create'
-                                 authorized_scope(Namespace, type: :relation, as: :transferable,
-                                                             scope_options: { namespace: @project.namespace.parent })
-                               end
+      @authorized_namespaces = authorized_scope(Namespace, type: :relation,
+                                                           as: :manageable).where.not(id: @project.namespace.parent.id)
     end
   end
 end

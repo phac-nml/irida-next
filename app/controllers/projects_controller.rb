@@ -105,11 +105,10 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def authorized_namespaces
-    @authorized_namespaces = case action_name
-                             when 'edit', 'transfer'
-                               authorized_scope(Namespace, type: :relation, as: :transferable,
-                                                           scope_options: { namespace: @project.namespace.parent })
-                             end
+    @authorized_namespaces = authorized_scope(Namespace, type: :relation, as: :manageable)
+    return unless @project
+
+    @authorized_namespaces = @authorized_namespaces.where.not(id: @project.namespace.parent.id)
   end
 
   def resolve_layout
