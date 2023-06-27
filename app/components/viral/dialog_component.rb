@@ -8,7 +8,7 @@ module Viral
     renders_one :header, Viral::Dialog::HeaderComponent
     renders_many :sections, Viral::Dialog::SectionComponent
     renders_one :primary_action, lambda { |**system_arguments|
-      Viral::ButtonComponent.new(type: :primary, **system_arguments)
+      Viral::ButtonComponent.new(state: :primary, **system_arguments)
     }
     renders_many :secondary_actions
 

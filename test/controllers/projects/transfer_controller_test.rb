@@ -17,5 +17,12 @@ module Projects
 
       assert_response :redirect
     end
+
+    test 'should not create a new transfer with wrong parameters' do
+      post namespace_project_transfer_index_path(@old_namespace, @project),
+           params: { new_namespace_id: 0 }, as: :turbo_stream
+
+      assert_response :unprocessable_entity
+    end
   end
 end
