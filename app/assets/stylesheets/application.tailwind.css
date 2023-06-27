@@ -233,6 +233,55 @@
   .button--state-primary {
     @apply text-white border-primary-800 bg-primary-700 focus:outline-none hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-600 dark:text-white dark:border-primary-600 dark:hover:bg-primary-700;
   }
+
+  /* VIRAL DIALOG */
+  dialog {
+    @apply w-full max-w-2xl max-h-full p-0 bg-white rounded-lg shadow dark:bg-gray-700 focus:outline-none;
+  }
+
+  dialog::backdrop {
+    @apply bg-gray-400/30 dark:bg-gray-900/40 backdrop-blur-sm;
+  }
+
+  .dialog--size {
+    @apply relative w-full max-h-full;
+  }
+
+  .dialog--size-sm {
+    @apply max-w-md;
+  }
+
+  .dialog--size-md {
+    @apply max-w-xl;
+  }
+
+  .dialog--size-lg {
+    @apply max-w-3xl;
+  }
+
+  .dialog--size-xl {
+    @apply max-w-7xl;
+  }
+
+  .dialog--header {
+    @apply flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600;
+  }
+
+  .dialog--title {
+    @apply text-xl font-semibold text-gray-900 dark:text-white;
+  }
+
+  .dialog--close {
+    @apply text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700;
+  }
+
+  .dialog--section {
+    @apply p-5;
+  }
+
+  .dialog--footer {
+    @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
+  }
 }
 
 .pagy-nav.pagination {

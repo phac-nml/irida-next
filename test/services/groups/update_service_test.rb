@@ -48,5 +48,64 @@ module Groups
         Groups::UpdateService.new(@group, @user, valid_params).execute
       end
     end
+
+    test 'group update changes logged using logidze' do
+      @group.create_logidze_snapshot!
+
+      assert_equal 1, @group.log_data.version
+      assert_equal 1, @group.log_data.size
+
+      valid_params = { name: 'new-group1-name', path: 'new-group1-path' }
+
+      assert_changes -> { [@group.name, @group.path] }, to: %w[new-group1-name new-group1-path] do
+        Groups::UpdateService.new(@group, @user, valid_params).execute
+      end
+
+      @group.create_logidze_snapshot!
+
+      assert_equal 2, @group.log_data.version
+      assert_equal 2, @group.log_data.size
+
+      assert_equal 'Group 1', @group.at(version: 1).name
+      assert_equal 'group-1', @group.at(version: 1).path
+
+      assert_equal 'new-group1-name', @group.at(version: 2).name
+      assert_equal 'new-group1-path', @group.at(version: 2).path
+
+      # Description was not updated so it should not be in the changes log
+      assert_nil @group.diff_from(version: 1)['changes']['description']
+    end
+
+    test 'group update changes logged using logidze switch version' do
+      @group.create_logidze_snapshot!
+
+      assert_equal 1, @group.log_data.version
+      assert_equal 1, @group.log_data.size
+
+      valid_params = { name: 'new-group1-name', path: 'new-group1-path' }
+
+      assert_changes -> { [@group.name, @group.path] }, to: %w[new-group1-name new-group1-path] do
+        Groups::UpdateService.new(@group, @user, valid_params).execute
+      end
+
+      @group.create_logidze_snapshot!
+
+      assert_equal 2, @group.log_data.version
+      assert_equal 2, @group.log_data.size
+
+      assert_equal 'Group 1', @group.at(version: 1).name
+      assert_equal 'group-1', @group.at(version: 1).path
+
+      assert_equal 'new-group1-name', @group.at(version: 2).name
+      assert_equal 'new-group1-path', @group.at(version: 2).path
+
+      @group.switch_to!(1)
+
+      assert_equal 1, @group.log_data.version
+      assert_equal 2, @group.log_data.size
+
+      assert_equal 'Group 1', @group.name
+      assert_equal 'group-1', @group.path
+    end
   end
 end

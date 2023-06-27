@@ -2,6 +2,7 @@
 
 # entity class for User
 class User < ApplicationRecord
+  has_logidze
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable,
