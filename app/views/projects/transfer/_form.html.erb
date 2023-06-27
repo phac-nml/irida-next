@@ -1,55 +1,36 @@
-<div data-controller="projects--transfer">
-  <div class="hidden confirm-transfer">
-    <div
-      class="flex p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-    >
-      <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
-      <span class="flex-1 ml-4"><%= t(
-                                      "projects.edit.advanced.transfer.confirm.warning_html",
-                                      project_name: @project.human_name
-                                    ) %></span>
-    </div>
-    <div class="mb-4">
-      <% t("projects.edit.advanced.transfer.confirm.points_html", project: @project.name).each do |item| %>
-        <p class="mb-2 text-base text-gray-900 dark:text-white"><%= item %></p>
-      <% end %>
-    </div>
+<%= form_with(url: namespace_project_transfer_index_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
+              data: { turbo_confirm: "" }) do |form| %>
+  <div class="form-field">
+    <%= form.label :new_namespace_id,
+                   t(:"projects.edit.advanced.transfer.new_namespace_id") %>
+    <%= form.collection_select(
+          :new_namespace_id,
+          @authorized_namespaces,
+          :id,
+          :full_name,
+          { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
+          {
+            data: {
+              action: "projects--transfer#onChange"
+            },
+            class: @error.present? ? "error" : ""
+          }
+        ) %>
+    <% if @error.present? %>
+      <p class="text-sm text-red-500 dark:text-red-400"><%= @error %></p>
+    <% end %>
   </div>
 
-  <%= form_with(url: namespace_project_transfer_index_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
-                data: { turbo_confirm: "" }) do |form| %>
-    <div class="form-field">
-      <%= form.label :new_namespace_id,
-                     t(:"projects.edit.advanced.transfer.new_namespace_id") %>
-      <%= form.collection_select(
-            :new_namespace_id,
-            @authorized_namespaces,
-            :id,
-            :full_name,
-            { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
-            {
-              data: {
-                action: "projects--transfer#onChange"
-              },
-              class: @error.present? ? "error" : ""
-            }
-          ) %>
-      <% if @error.present? %>
-        <p class="text-sm text-red-500 dark:text-red-400"><%= @error %></p>
-      <% end %>
-    </div>
+  <div>
+    <%= form.submit t(:'projects.edit.advanced.transfer.submit'),
+                    class: "button button--state-destructive button--size-default",
+                    disabled: true,
+                    data: {
+                      "projects--transfer-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: @project.name
+                    }
+    %>
+  </div>
 
-    <div>
-      <%= form.submit t(:'projects.edit.advanced.transfer.submit'),
-                      class: "button button--state-destructive button--size-default",
-                      disabled: true,
-                      data: {
-                        "projects--transfer-target": "submitButton",
-                        turbo_content: ".confirm-transfer",
-                        confirm_value: @project.name
-                      }
-      %>
-    </div>
-
-  <% end %>
-</div>
+<% end %>
