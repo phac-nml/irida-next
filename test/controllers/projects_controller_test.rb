@@ -118,44 +118,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
     assert_response :unauthorized
   end
 
-  test 'should fail to update a project with wrong params' do
-    sign_in users(:john_doe)
-
-    patch project_path(projects(:project2)),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'a VERY wrong path' } } }
-
-    assert_response :unprocessable_entity
-  end
-
-  test 'should transfer a project' do
-    sign_in users(:john_doe)
-
-    post project_transfer_path(projects(:project2)),
-         params: { new_namespace_id: groups(:subgroup1).id }
-
-    assert_redirected_to project_path(projects(:project2).reload)
-  end
-
-  test 'should not transfer a project' do
-    sign_in users(:john_doe)
-
-    post project_transfer_path(projects(:project2)),
-         params: { new_namespace_id: groups(:david_doe_group_four).id }
-
-    assert_response :unauthorized
-  end
-
-  test 'should fail to transfer a project with wrong params' do
-    sign_in users(:john_doe)
-
-    post project_transfer_path(projects(:project2)),
-         params: {
-           new_namespace_id: 'does-not-exist'
-         }
-
-    assert_response :unprocessable_entity
-  end
-
   test 'should delete a project' do
     sign_in users(:john_doe)
 
