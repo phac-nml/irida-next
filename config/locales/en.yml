@@ -398,6 +398,7 @@ en:
       title: Settings
       general:
         title: General
+        heading: Project name and description
         submit: Update project
       advanced:
         title: Advanced settings

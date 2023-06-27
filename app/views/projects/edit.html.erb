@@ -1,8 +1,11 @@
 <div class="p-4 md:container md:mx-auto">
   <div class="grid gap-4">
 
+    <h2 class="text-2xl font-extrabold dark:text-white">
+      <%= t(".general.title") %>
+    </h2>
     <%= viral_card do |card| %>
-      <% card.header(title: t(".general.title")) %>
+      <% card.header(title: t(".general.heading")) %>
       <% card.section do %>
         <%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
           <%= form.fields_for :namespace, include_id: false do |builder| %>
