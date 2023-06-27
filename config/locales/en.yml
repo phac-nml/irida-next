@@ -344,6 +344,8 @@ en:
       cancel: Cancel
     update:
       success: Group updated successfully
+    transfer:
+      success: Group transferred successfully
     members:
       create:
         error: "Error adding member"
@@ -477,6 +479,10 @@ en:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
   services:
+    groups:
+      transfer:
+        namespace_empty: The new namespace is empty.
+        group_in_namespace: The group already exists within the new namespace.
     members:
       create:
         role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"

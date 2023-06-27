@@ -3,9 +3,9 @@
 # Controller actions for Groups
 class GroupsController < Groups::ApplicationController
   layout :resolve_layout
-  before_action :group, only: %i[edit show destroy update]
+  before_action :group, only: %i[edit show destroy update transfer]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorized_namespaces, only: %i[edit new update create]
+  before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
     @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
@@ -62,8 +62,13 @@ class GroupsController < Groups::ApplicationController
   end
 
   def transfer
-    puts 'Groups Controller'
-    Groups::TransferService.new.execute
+    new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
+    if Groups::TransferService.new(@group, current_user).execute(new_namespace)
+      flash[:success] = t('.success')
+      redirect_to group_path(@group)
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private
