@@ -24,7 +24,8 @@ module Viral
 
     def initialize(state: STATE_DEFAULT, size: SIZE_DEFAULT, full_width: false,
                    disclosure: DISCLOSURE_DEFAULT, **system_arguments)
-      @disclosure = disclosure ? :down : disclosure
+      @disclosure = disclosure
+      @disclosure = :down if @disclosure == true
 
       @system_arguments = system_arguments
       @system_arguments[:type] = 'button' if @system_arguments[:type].blank?
