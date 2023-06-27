@@ -20,29 +20,9 @@ module Projects
 
     private
 
-    def project_params
-      params.require(:project)
-            .permit(project_params_attributes)
-    end
-
     def new_namespace
       id = params.require(:new_namespace_id)
       Namespace.find_by(id:)
-    end
-
-    def namespace_attributes
-      %i[
-        name
-        path
-        description
-        parent_id
-      ]
-    end
-
-    def project_params_attributes
-      [
-        namespace_attributes:
-      ]
     end
 
     def project
