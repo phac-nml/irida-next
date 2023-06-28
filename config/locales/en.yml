@@ -51,6 +51,7 @@ en:
         edit?: You are not authorized to modify group %{name} on this server.
         new?: You are not authorized to create a project under group %{name} on this server.
         read?: You are not authorized to view group %{name} on this server.
+        transfer?: You are not authorized to transfer group %{name} on this server.
         transfer_into_namespace?: You are not authorized to transfer into the group namespace %{name} on this server.
         update?: You are not authorized to update group %{name} on this server.
         member_listing?: You are not authorized to view members for group %{name} on this server.
@@ -482,6 +483,7 @@ en:
     groups:
       transfer:
         namespace_empty: The new namespace is empty.
+        same_group_and_namespace: The new namespace must be different from the group.
         group_in_namespace: The group already exists within the new namespace.
     members:
       create:
