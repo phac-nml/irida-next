@@ -9,10 +9,18 @@ module Groups
       @new_namespace = new_namespace
       raise TransferError, I18n.t('services.groups.transfer.namespace_empty') if @new_namespace.blank?
 
-      if @new_namespace.id == group.id
+      if @new_namespace.id == @group.parent_id
         raise TransferError,
               I18n.t('services.groups.transfer.group_in_namespace')
       end
+
+      # Authorize if user can transfer group
+      authorize! @group, to: :transfer?
+
+      # Authorize if user can transfer group into namespace
+      authorize! @new_namespace, to: :transfer_into_namespace?
+
+      group.update(parent_id: @new_namespace.id)
 
       true
     rescue Groups::TransferService::TransferError => e
