@@ -137,6 +137,16 @@ en:
           attributes:
             scopes:
               inclusion: can only contain available scopes
+        group_group_link:
+          attributes:
+            shared_group_id:
+              blank: Shared group must exist
+              taken: The group has already been shared with this group
+            shared_with_group_id:
+              blank: Shared with group must exist
+              taken: The group has already been shared with this group
+            group_access_level:
+              inclusion: "provided is not included in the list of valid access levels"
     exceptions:
       personal_access_token:
         not_found: "Could not find personal access token with id %{token_id}"

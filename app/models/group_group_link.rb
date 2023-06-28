@@ -5,8 +5,7 @@ class GroupGroupLink < ApplicationRecord
   belongs_to :shared_group, class_name: 'Group'
   belongs_to :shared_with_group, class_name: 'Group'
 
-  validates :shared_group_id, uniqueness: { scope: [:shared_with_group_id],
-                                            message: 'The group has already been shared with this group' }
+  validates :shared_group_id, uniqueness: { scope: [:shared_with_group_id] }
 
   validates :group_access_level, inclusion: { in: Member::AccessLevel.all_values_with_owner },
                                  presence: true
