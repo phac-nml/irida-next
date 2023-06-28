@@ -25,7 +25,7 @@ class GroupGroupLinkTest < ActiveSupport::TestCase
                                           group_access_level: Member::AccessLevel::ANALYST)
 
     assert_not group_group_link.save
-    assert group_group_link.errors.messages.values.flatten.include?(
+    group_group_link.errors.full_messages.include?(
       I18n.t('activerecord.errors.models.group_group_link.attributes.shared_group_id.taken')
     )
   end
@@ -36,7 +36,7 @@ class GroupGroupLinkTest < ActiveSupport::TestCase
 
     assert_not group_group_link.save
     group_group_link.errors.full_messages.include?(
-      'Group access level provided is not included in the list of valid access levels'
+      I18n.t('activerecord.errors.models.group_group_link.attributes.group_access_level.inclusion')
     )
   end
 
@@ -46,7 +46,7 @@ class GroupGroupLinkTest < ActiveSupport::TestCase
 
     assert_not group_group_link.save
     assert group_group_link.errors.full_messages.include?(
-      'Shared group must exist'
+      I18n.t('activerecord.errors.models.group_group_link.attributes.shared_group_id.blank')
     )
   end
 
@@ -56,7 +56,7 @@ class GroupGroupLinkTest < ActiveSupport::TestCase
 
     assert_not group_group_link.save
     assert group_group_link.errors.full_messages.include?(
-      'Shared with group must exist'
+      I18n.t('activerecord.errors.models.group_group_link.attributes.shared_with_group_id.blank')
     )
   end
 end
