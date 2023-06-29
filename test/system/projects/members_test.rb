@@ -33,7 +33,8 @@ module Projects
       assert_no_text 'Direct member'
     end
 
-    test 'lists the correct membership when user is a direct member of the project as well as an inherited member through a group' do
+    test 'lists the correct membership when user is a direct member of the project as well as an inherited member
+    through a group' do
       project = projects(:project24)
       parent_namespace = groups(:group_one)
 

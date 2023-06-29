@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module Groups
-  class MembersTest < ApplicationSystemTestCase
+  class MembersTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
     header_row_count = 1
 
     def setup
@@ -29,6 +29,30 @@ module Groups
       assert_selector 'tr', count: @members_count + header_row_count
 
       assert_no_text 'Direct member'
+    end
+
+    test 'lists the correct membership when user is a direct member of the group as well as an inherited member
+    through a group' do
+      namespace = groups(:subgroup_one_group_three)
+
+      visit group_members_url(namespace)
+
+      group_member = members(:group_three_member_micha_doe)
+      subgroup_member = members(:subgroup_one_group_three_member_micha_doe)
+
+      assert_equal subgroup_member.user, group_member.user
+
+      # User has membership in group and in subgroup with same access level
+      assert_equal Member::AccessLevel::MAINTAINER, group_member.access_level
+      assert_equal Member::AccessLevel::MAINTAINER, subgroup_member.access_level
+
+      table_row = find(:table_row, [subgroup_member.user.email])
+
+      within table_row do
+        # Should display member as Direct member of subgroup
+        assert_text 'Direct member'
+        assert_no_text 'Group 3'
+      end
     end
 
     test 'cannot access group members' do
