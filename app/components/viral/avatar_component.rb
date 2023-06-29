@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Viral
+  # Avatar component to display on items first letter
   class AvatarComponent < Viral::Component
     attr_reader :initials, :size, :font_styles
 
