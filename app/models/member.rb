@@ -21,7 +21,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   delegate :project, to: :project_namespace
 
-  class << self # rubocop:disable Metrics/ClassLength
+  class << self
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -122,23 +122,12 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
-    def membership_source(namespace, user)
-      if Member.exists?(
-        namespace:, user:
-      )
+    def membership_source(namespace, member)
+      if member.namespace_id == namespace.id
         { label: I18n.t('activerecord.models.member.direct') }
       else
-        source_namespaces = if namespace.project_namespace?
-                              namespace.parent&.self_and_ancestor_ids
-                            else
-                              namespace.self_and_ancestor_ids
-                            end
-
-        source_namespace = Namespace.find_by(id: Member.where(namespace: source_namespaces,
-                                                              user:).order(:access_level).last.namespace_id)
-
-        { inherited_namespace_path: Rails.application.routes.url_helpers.group_path(source_namespace, only_path: true),
-          label: source_namespace.name }
+        { inherited_namespace_path: Rails.application.routes.url_helpers.group_url(member.namespace, only_path: true),
+          label: member.namespace.name }
       end
     end
   end

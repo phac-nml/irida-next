@@ -203,3 +203,15 @@ project_twenty_three_member_james_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project23_namespace) %>
   access_level: <%= Member::AccessLevel::GUEST %>
+
+project_twenty_four_member_ryan_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace) %>
+  access_level: <%= Member::AccessLevel::GUEST %>
+
+project_twenty_four_member_michelle_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace) %>
+  access_level: <%= Member::AccessLevel::ANALYST %>

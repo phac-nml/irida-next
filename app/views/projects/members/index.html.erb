@@ -35,7 +35,7 @@
             "
           >
             <% @members.each do |member| %>
-              <% member_source = Member.membership_source(@namespace, member.user) %>
+              <% member_source = Member.membership_source(@namespace, member) %>
               <tr
 
                 class="
@@ -61,9 +61,7 @@
                           dark:bg-green-900
                           dark:text-green-300
                         "
-                      >
-                        <%= t(:"activerecord.models.member.its_you") %>
-                      </span>
+                      ><%= t(:"activerecord.models.member.its_you") %></span>
                     <% end %>
                   </div>
                 </td>
