@@ -110,7 +110,7 @@ module Groups
       table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
-        first('.member-settings-ellipsis').click
+        first('button.Viral-Dropdown--icon').click
         click_link I18n.t(:'groups.members.index.leave_group')
       end
 

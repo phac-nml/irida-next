@@ -121,7 +121,7 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t(:'projects.members.destroy.success')
+      assert_text I18n.t(:'projects.members.destroy.leave_success', name: @project.name)
       assert_no_selector 'h1', text: I18n.t(:'projects.members.index.title')
     end
 
