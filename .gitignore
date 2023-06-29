@@ -51,6 +51,3 @@ coverage
 !/app/assets/builds/.keep
 
 logfile
-
-# Ignore figaro env config
-config/application.yml

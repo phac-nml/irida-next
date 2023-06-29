@@ -51,7 +51,7 @@ module Projects
 
     def destroy
       Samples::DestroyService.new(@sample, current_user).execute
-      if @sample.destroyed?
+      if @sample.deleted?
         flash[:success] = t('.success', sample_name: @sample.name)
       else
         flash[:error] = @sample.errors.full_messages.first

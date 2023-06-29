@@ -52,7 +52,7 @@ class GroupsController < Groups::ApplicationController
 
   def destroy
     Groups::DestroyService.new(@group, current_user).execute
-    if @group.destroyed?
+    if @group.deleted?
       flash[:success] = t('.success', group_name: @group.name)
       redirect_to groups_path
     else
