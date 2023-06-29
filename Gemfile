@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.0'
+ruby '3.2.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.4', '>= 7.0.4.2'
@@ -50,9 +50,6 @@ gem 'omniauth-azure-activedirectory-v2'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
 
-# Use Figaro to set and organize environment variables
-gem 'figaro'
-
 # Use Sass to process CSS
 # gem "sassc-rails"
 
@@ -85,6 +82,8 @@ gem 'logidze'
 
 # Database functions
 gem 'fx'
+# Soft delete records
+gem 'paranoia'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

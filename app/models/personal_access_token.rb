@@ -7,6 +7,8 @@ class PersonalAccessToken < ApplicationRecord
 
   attr_reader :token
 
+  acts_as_paranoid
+
   belongs_to :user
 
   before_save :ensure_token

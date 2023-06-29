@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.2.0
+ARG RUBY_VERSION=3.2.2
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 # Rails app lives here
@@ -64,6 +64,11 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     libvips \
     postgresql-client \
+    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Upgrade all packages
+RUN apt-get update -qq && \
+    apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
