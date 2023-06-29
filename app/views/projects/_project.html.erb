@@ -3,35 +3,19 @@
   class="text-sm font-normal text-gray-500 dark:text-gray-400"
 >
   <td class="w-16 p-2 whitespace-nowrap">
-    <%= link_to(namespace_project_path(project.namespace.parent, project)) do %>
-      <div
-        class="
-          relative
-          inline-flex
-          items-center
-          justify-center
-          w-12
-          h-12
-          overflow-hidden
-          bg-gray-100
-          rounded-md
-          dark:bg-gray-600
-        "
-        style="background-color: <%= generate_hsla_color_from_string(project.human_name) %>"
-      >
-        <span class="font-semibold text-xl text-gray-600 dark:text-gray-300">
-          <%= project.name.chr %>
-        </span>
-      </div>
-    <% end %>
+    <%= viral_avatar(
+      initials: project.name.chr,
+      colour_string: "project.name-#{project.id}"
+    ) %>
+
   </td>
   <td class="p-4 whitespace-nowrap">
     <%= link_to project.human_name,
-                namespace_project_path(project.namespace.parent, project),
-                data: {
-                  turbo: false
-                },
-                class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+    namespace_project_path(project.namespace.parent, project),
+    data: {
+      turbo: false
+    },
+    class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
     <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= project.description %></div>
   </td>
   <td class="p-4 text-right whitespace-nowrap">

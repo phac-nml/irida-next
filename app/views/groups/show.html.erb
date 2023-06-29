@@ -1,4 +1,11 @@
-<%= render Viral::PageHeaderComponent.new(title: @group.name, subtitle: @group.description, avatar: @group.name) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: @group.name, subtitle: @group.description) do |component| %>
+  <%= component.icon do %>
+    <%= viral_avatar(
+      initials: @group.name.chr,
+      colour_string: "#{@group.name}-#{@group.id}",
+      size: :large
+    ) %>
+  <% end %>
   <%= component.with_buttons do %>
     <% if allowed_to?(:new?, @group) %>
       <div class="flex flex-row">

@@ -4,6 +4,7 @@
 module ViewHelper
   VIRAL_HELPERS = {
     alert: 'Viral::AlertComponent',
+    avatar: 'Viral::AvatarComponent',
     breadcrumb: 'Viral::BreadcrumbComponent',
     button: 'Viral::ButtonComponent',
     card: 'Viral::CardComponent',
@@ -30,10 +31,5 @@ module ViewHelper
     svg[:focusable] = false
     svg[:'aria-hidden'] = true
     doc.to_html.html_safe # rubocop:disable Rails/OutputSafety
-  end
-
-  def generate_hsla_color_from_string(name)
-    h = name.hash.abs % 360
-    "hsla(#{h}, 100%, 75%, .4)"
   end
 end

@@ -1,8 +1,7 @@
 <%= render Viral::PageHeaderComponent.new(title: t("projects.index.title"), subtitle: t("projects.index.subtitle")) do |component| %>
-  <%= component.with_icon(
-    name: "rectangle_stack",
-    classes: "h-14 w-14 text-primary-700"
-  ) %>
+  <%= component.with_icon do %>
+    <%= viral_icon(name: "rectangle_stack", classes: "h-14 w-14 text-primary-700") %>
+  <% end %>
   <%= component.with_buttons do %>
     <%= link_to t(:"projects.index.create_project_button"),
     new_project_path,

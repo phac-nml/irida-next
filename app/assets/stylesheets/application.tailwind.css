@@ -296,6 +296,10 @@
     @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
   }
 
+  .avatar {
+    @apply relative inline-flex items-center justify-center overflow-hidden bg-gray-100 rounded-md dark:bg-gray-600;
+  }
+
   strong {
     @apply font-semibold;
   }

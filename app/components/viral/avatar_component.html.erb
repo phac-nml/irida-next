@@ -1,0 +1,7 @@
+<%= render Viral::BaseComponent.new(**system_arguments) do %>
+  <% if initials.present? %>
+    <span class="<%= font_styles %> text-gray-600 dark:text-gray-700">
+      <%= initials %>
+    </span>
+  <% end %>
+<% end %>
