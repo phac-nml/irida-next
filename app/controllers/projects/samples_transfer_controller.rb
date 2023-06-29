@@ -31,7 +31,7 @@ module Projects
     end
 
     def projects
-      @projects = authorized_scope(Project, type: :relation, as: :receivable)
+      @projects = authorized_scope(Project, type: :relation, as: :manageable).where.not(namespace_id: project.namespace_id)
     end
   end
 end
