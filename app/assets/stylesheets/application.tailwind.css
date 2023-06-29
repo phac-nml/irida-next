@@ -54,7 +54,7 @@
 
   .page-header {
     overflow: hidden;
-    @apply items-center justify-between block p-2 px-4 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
+    @apply items-center justify-between block p-2 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
   }
 
   .navbar-btn {

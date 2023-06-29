@@ -1,5 +1,5 @@
 <div class="page-header">
-  <div class="w-full mb-1">
+  <div class="w-full">
     <div
       class="
         items-center
@@ -13,7 +13,9 @@
     >
       <div class="flex flex-row justify-between">
         <div class="flex items-center">
-          <%= icon %>
+          <% unless avatar.present? and icon %>
+            <%= icon %>
+          <% end %>
           <%- if avatar.present? %>
             <div
               class="
