@@ -155,5 +155,35 @@ module Members
         Members::CreateService.new(@user, @project_namespace, valid_params).execute
       end
     end
+
+    test 'create group member logged using logidze' do
+      user = users(:steve_doe)
+      valid_params = { user:,
+                       access_level: Member::AccessLevel::OWNER }
+
+      group_member = Members::CreateService.new(@user, @group, valid_params).execute
+
+      group_member.create_logidze_snapshot!
+
+      assert_equal 1, group_member.log_data.version
+      assert_equal 1, group_member.log_data.size
+      assert_equal user.id, group_member.at(version: 1).user_id
+      assert_equal Member::AccessLevel::OWNER, group_member.at(version: 1).access_level
+    end
+
+    test 'create project member logged using logidze' do
+      user = users(:steve_doe)
+      valid_params = { user:,
+                       access_level: Member::AccessLevel::OWNER }
+
+      project_member = Members::CreateService.new(@user, @project_namespace, valid_params).execute
+
+      project_member.create_logidze_snapshot!
+
+      assert_equal 1,  project_member.log_data.version
+      assert_equal 1,  project_member.log_data.size
+      assert_equal user.id, project_member.at(version: 1).user_id
+      assert_equal Member::AccessLevel::OWNER, project_member.at(version: 1).access_level
+    end
   end
 end

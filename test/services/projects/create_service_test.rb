@@ -107,5 +107,18 @@ module Projects
         Projects::CreateService.new(@user, valid_params).execute
       end
     end
+
+    test 'create project logged using logidze' do
+      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
+      project = Projects::CreateService.new(@user, valid_params).execute
+      project_namespace = project.namespace
+
+      project_namespace.create_logidze_snapshot!
+
+      assert_equal 1, project_namespace.log_data.version
+      assert_equal 1, project_namespace.log_data.size
+      assert_equal 'proj1', project_namespace.at(version: 1).name
+      assert_equal 'proj1', project_namespace.at(version: 1).path
+    end
   end
 end

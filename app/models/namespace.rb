@@ -2,6 +2,9 @@
 
 # Namespace base class
 class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  has_logidze
+  acts_as_paranoid
+
   include Routable
 
   MAX_ANCESTORS = 10
@@ -30,6 +33,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :validate_nesting_level
 
   scope :include_route, -> { includes(:route) }
+
+  after_restore :restore_routes
 
   class << self
     def sti_class_for(type_name)
@@ -186,5 +191,12 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return unless has_parent? && (parent.ancestors.count + 1) > MAX_ANCESTORS - 1
 
     errors.add(:parent_id, 'nesting level too deep')
+  end
+
+  private
+
+  # Method to restore namespace routes when the namespace is restored
+  def restore_routes
+    Route.restore(Route.only_deleted.find_by(source_id: id).id, recursive: true)
   end
 end

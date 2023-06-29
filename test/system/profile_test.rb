@@ -46,8 +46,10 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.account')
 
-    accept_alert do
-      click_link I18n.t(:'profiles.accounts.delete.button')
+    click_link I18n.t(:'profiles.accounts.delete.button')
+
+    within('#turbo-confirm[open]') do
+      click_on I18n.t(:'components.confirmation.confirm')
     end
 
     assert_text I18n.t('devise.shared.links.create_an_account_link')
@@ -90,9 +92,11 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text token_to_revoke.name
 
     within %(tr[id=personal_access_token_#{token_to_revoke.id}]) do
-      accept_alert do
-        click_button I18n.t(:'profiles.personal_access_tokens.personal_access_token.revoke_button')
-      end
+      click_button I18n.t(:'profiles.personal_access_tokens.personal_access_token.revoke_button')
+    end
+
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
     end
 
     assert_no_text token_to_revoke.name

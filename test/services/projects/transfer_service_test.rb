@@ -79,5 +79,55 @@ module Projects
                                       @john_doe).execute(new_namespace)
       end
     end
+
+    test 'project transfer changes logged using logidze' do
+      project_namespace = @project.namespace
+      project_namespace.create_logidze_snapshot!
+
+      new_namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+      assert_equal 1, project_namespace.log_data.version
+      assert_equal 1, project_namespace.log_data.size
+
+      assert_changes -> { project_namespace.parent }, to: new_namespace do
+        Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
+      end
+
+      project_namespace.create_logidze_snapshot!
+
+      assert_equal 2, project_namespace.log_data.version
+      assert_equal 2, project_namespace.log_data.size
+
+      assert_equal groups(:group_one), project_namespace.at(version: 1).parent
+
+      assert_equal new_namespace, project_namespace.at(version: 2).parent
+    end
+
+    test 'project transfer changes logged using logidze switch version' do
+      project_namespace = @project.namespace
+      project_namespace.create_logidze_snapshot!
+
+      new_namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+      assert_equal 1, project_namespace.log_data.version
+      assert_equal 1, project_namespace.log_data.size
+
+      assert_changes -> { project_namespace.parent }, to: new_namespace do
+        Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
+      end
+
+      project_namespace.create_logidze_snapshot!
+
+      assert_equal 2, project_namespace.log_data.version
+      assert_equal 2, project_namespace.log_data.size
+
+      assert_equal groups(:group_one), project_namespace.at(version: 1).parent
+
+      assert_equal new_namespace, project_namespace.at(version: 2).parent
+
+      project_namespace.switch_to!(1)
+
+      assert_equal groups(:group_one), project_namespace.parent
+    end
   end
 end

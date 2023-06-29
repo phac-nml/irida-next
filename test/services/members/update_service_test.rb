@@ -204,5 +204,107 @@ module Members
       # to the same access level for the project membership
       assert_equal Member::AccessLevel::MAINTAINER, Member.find_by(id: project_member.id).access_level
     end
+
+    test 'group member update changes logged using logidze' do
+      @group_member.create_logidze_snapshot!
+
+      assert_equal 1, @group_member.log_data.version
+      assert_equal 1, @group_member.log_data.size
+
+      valid_params = { user: @group_member.user, access_level: Member::AccessLevel::OWNER }
+
+      assert_changes -> { @group_member.access_level }, to: Member::AccessLevel::OWNER do
+        Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
+      end
+
+      @group_member.create_logidze_snapshot!
+
+      assert_equal 2, @group_member.log_data.version
+      assert_equal 2, @group_member.log_data.size
+
+      assert_equal Member::AccessLevel::MAINTAINER, @group_member.at(version: 1).access_level
+
+      assert_equal Member::AccessLevel::OWNER, @group_member.at(version: 2).access_level
+    end
+
+    test 'group member update changes logged using logidze switch version' do
+      @group_member.create_logidze_snapshot!
+
+      assert_equal 1, @group_member.log_data.version
+      assert_equal 1, @group_member.log_data.size
+
+      valid_params = { user: @group_member.user, access_level: Member::AccessLevel::OWNER }
+
+      assert_changes -> { @group_member.access_level }, to: Member::AccessLevel::OWNER do
+        Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
+      end
+
+      @group_member.create_logidze_snapshot!
+
+      assert_equal 2, @group_member.log_data.version
+      assert_equal 2, @group_member.log_data.size
+
+      assert_equal Member::AccessLevel::MAINTAINER, @group_member.at(version: 1).access_level
+
+      assert_equal Member::AccessLevel::OWNER, @group_member.at(version: 2).access_level
+
+      @group_member.switch_to!(1)
+
+      assert_equal 1, @group_member.log_data.version
+      assert_equal 2, @group_member.log_data.size
+
+      assert_equal Member::AccessLevel::MAINTAINER, @group_member.access_level
+    end
+
+    test 'project member update changes logged using logidze' do
+      @project_member.create_logidze_snapshot!
+
+      assert_equal 1, @project_member.log_data.version
+      assert_equal 1, @project_member.log_data.size
+
+      valid_params = { user: @project_member.user, access_level: Member::AccessLevel::OWNER }
+
+      assert_changes -> { @project_member.access_level }, to: Member::AccessLevel::OWNER do
+        Members::UpdateService.new(@project_member, @project_namespace, @user, valid_params).execute
+      end
+
+      @project_member.create_logidze_snapshot!
+
+      assert_equal 2, @project_member.log_data.version
+      assert_equal 2, @project_member.log_data.size
+
+      assert_equal Member::AccessLevel::MAINTAINER, @project_member.at(version: 1).access_level
+
+      assert_equal Member::AccessLevel::OWNER, @project_member.at(version: 2).access_level
+    end
+
+    test 'project member update changes logged using logidze switch version' do
+      @project_member.create_logidze_snapshot!
+
+      assert_equal 1, @project_member.log_data.version
+      assert_equal 1, @project_member.log_data.size
+
+      valid_params = { user: @project_member.user, access_level: Member::AccessLevel::OWNER }
+
+      assert_changes -> { @project_member.access_level }, to: Member::AccessLevel::OWNER do
+        Members::UpdateService.new(@project_member, @project_namespace, @user, valid_params).execute
+      end
+
+      @project_member.create_logidze_snapshot!
+
+      assert_equal 2, @project_member.log_data.version
+      assert_equal 2, @project_member.log_data.size
+
+      assert_equal Member::AccessLevel::MAINTAINER, @project_member.at(version: 1).access_level
+
+      assert_equal Member::AccessLevel::OWNER, @project_member.at(version: 2).access_level
+
+      @project_member.switch_to!(1)
+
+      assert_equal 1, @project_member.log_data.version
+      assert_equal 2, @project_member.log_data.size
+
+      assert_equal Member::AccessLevel::MAINTAINER, @project_member.access_level
+    end
   end
 end
