@@ -59,6 +59,32 @@ module Projects
       end
     end
 
+    test 'lists the correct membership when user is a direct member of the project as well as an inherited member
+    through a group' do
+      project = projects(:project24)
+      parent_namespace = groups(:group_one)
+
+      visit namespace_project_members_url(parent_namespace, project)
+
+      group_member = members(:group_one_member_ryan_doe)
+
+      project_member = members(:project_twenty_four_member_ryan_doe)
+
+      assert_equal project_member.user, group_member.user
+
+      # User has membership in group and in project with same access level
+      assert_equal Member::AccessLevel::GUEST, group_member.access_level
+      assert_equal Member::AccessLevel::GUEST, project_member.access_level
+
+      table_row = find(:table_row, [project_member.user.email])
+
+      within table_row do
+        # Should display member as Direct member of project
+        assert_text 'Direct member'
+        assert_no_text 'Group 1'
+      end
+    end
+
     test 'cannot access project members' do
       login_as users(:david_doe)
 
@@ -94,6 +120,7 @@ module Projects
 
       within table_row do
         first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.members.index.remove')
       end
 
       within('#turbo-confirm[open]') do
@@ -112,9 +139,11 @@ module Projects
 
       within table_row do
         first('button.Viral-Dropdown--icon').click
-        accept_confirm do
-          click_link I18n.t(:'projects.members.index.remove')
-        end
+        click_link I18n.t(:'projects.members.index.remove')
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
       end
 
       assert_no_text I18n.t(:'projects.members.destroy.success')
