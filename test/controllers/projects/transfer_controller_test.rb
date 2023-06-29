@@ -27,7 +27,8 @@ module Projects
 
     test 'should not transfer a project to unowned namespace' do
       post namespace_project_transfer_index_path(@old_namespace, @project),
-           params: { new_namespace_id: groups(:david_doe_group_four).id }
+           params: { new_namespace_id: groups(:david_doe_group_four).id },
+           as: :turbo_stream
 
       assert_response :unauthorized
     end
