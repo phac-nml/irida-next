@@ -64,16 +64,20 @@ module Groups
     test 'cannot remove themselves as a member from the group' do
       visit group_members_url(@namespace)
 
-      first('.member-settings-ellipsis').click
-      click_link I18n.t(:'projects.members.index.remove')
+      table_row = find(:table_row, ["It's you"])
+
+      within table_row do
+        first('.member-settings-ellipsis').click
+        click_link I18n.t(:'projects.members.index.remove')
+      end
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
       end
 
-      assert_no_text I18n.t(:'groups.members.destroy.success')
       assert_text I18n.t('services.members.destroy.cannot_remove_self',
                          namespace_type: @namespace.class.model_name.human)
+
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: @members_count
     end

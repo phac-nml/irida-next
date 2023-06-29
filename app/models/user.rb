@@ -19,6 +19,8 @@ class User < ApplicationRecord
           inverse_of: :owner,
           autosave: true
 
+  acts_as_paranoid
+
   has_many :personal_access_tokens, dependent: :destroy
 
   # Groups

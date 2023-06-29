@@ -116,4 +116,14 @@ class ProjectMemberTest < ActiveSupport::TestCase
   test '#full_path' do
     assert_equal @project.full_path, @project.namespace.full_path
   end
+
+  test '#destroy removes member, then is restored' do
+    assert_difference(-> { Member.count } => -1) do
+      @project_member.destroy
+    end
+
+    assert_difference(-> { Member.count } => +1) do
+      Member.restore(@project_member.id, recursive: true)
+    end
+  end
 end
