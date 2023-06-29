@@ -125,6 +125,16 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     assert_text I18n.t(:'groups.transfer.success')
   end
 
+  test 'user with maintainer access should not be able to see the transfer group section' do
+    login_as users(:joan_doe)
+
+    visit group_url(groups(:group_one))
+
+    click_link I18n.t(:'groups.sidebar.settings')
+
+    assert_selector 'h3', text: I18n.t(:'groups.edit.advanced.transfer.title'), count: 0
+  end
+
   test 'cannot create subgroup' do
     login_as users(:ryan_doe)
 
