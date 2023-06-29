@@ -55,6 +55,13 @@ module Groups
       end
     end
 
+    test 'transfer group to namespace containing a group with the same name' do
+      group_six = groups(:group_six)
+      subgroup_one_group_six = groups(:subgroup_one_group_six)
+
+      assert_not Groups::TransferService.new(subgroup_one_group_six, @john_doe).execute(group_six)
+    end
+
     test 'authorize allowed to transfer group with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
 

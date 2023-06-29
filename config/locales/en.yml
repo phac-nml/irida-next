@@ -484,7 +484,7 @@ en:
       transfer:
         namespace_empty: The new namespace is empty.
         same_group_and_namespace: The new namespace must be different from the group.
-        group_in_namespace: The group already exists within the new namespace.
+        namespace_group_exists: A group with the same name/path already exists in the new namespace.
     members:
       create:
         role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"

@@ -75,3 +75,11 @@ group_six:
   type: Group
   description: Group 6 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+subgroup_one_group_six:
+  name: Group 6
+  path: group-6
+  type: Group
+  description: Subgroup 1 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

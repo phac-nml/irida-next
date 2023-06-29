@@ -14,11 +14,11 @@ module Groups
       # Authorize if user can transfer group into namespace
       authorize! new_namespace, to: :transfer_into_namespace?
 
-      group.update(parent_id: new_namespace.id)
+      @group.update(parent_id: new_namespace.id)
 
       true
     rescue Groups::TransferService::TransferError => e
-      group.errors.add(:new_namespace, e.message)
+      @group.errors.add(:new_namespace, e.message)
       false
     end
 
@@ -32,10 +32,10 @@ module Groups
               I18n.t('services.groups.transfer.same_group_and_namespace')
       end
 
-      return unless new_namespace.id == @group.parent_id
-
-      raise TransferError,
-            I18n.t('services.groups.transfer.group_in_namespace')
+      if Group.where(parent_id: new_namespace.id).exists?(['path = ? or name = ?', @group.path,
+                                                           @group.name])
+        raise TransferError, I18n.t('services.groups.transfer.namespace_group_exists')
+      end
     end
   end
 end
