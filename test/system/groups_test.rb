@@ -111,6 +111,20 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     assert_selector 'tr', count: @groups_count - 1
   end
 
+  test 'can transfer a group' do
+    visit group_url(groups(:group_one))
+
+    click_link I18n.t(:'groups.sidebar.settings')
+    assert_selector 'h3', text: I18n.t(:'groups.edit.advanced.transfer.title')
+
+    within %(form[action="/group-1/transfer"]) do
+      find('#new_namespace_id').find(:xpath, 'option[14]').select_option
+      click_on I18n.t(:'groups.edit.advanced.transfer.submit')
+    end
+
+    assert_text I18n.t(:'groups.transfer.success')
+  end
+
   test 'cannot create subgroup' do
     login_as users(:ryan_doe)
 
