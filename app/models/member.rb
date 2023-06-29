@@ -124,15 +124,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                        access_level: Member::AccessLevel::MAINTAINER)
       end
     end
-
-    def membership_source(namespace, member)
-      if member.namespace_id == namespace.id
-        { label: I18n.t('activerecord.models.member.direct') }
-      else
-        { inherited_namespace_path: Rails.application.routes.url_helpers.group_url(member.namespace, only_path: true),
-          label: member.namespace.name }
-      end
-    end
   end
 
   def validate_namespace
