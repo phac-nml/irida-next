@@ -31,4 +31,9 @@ module ViewHelper
     svg[:'aria-hidden'] = true
     doc.to_html.html_safe # rubocop:disable Rails/OutputSafety
   end
+
+  def generate_hsla_color_from_string(name)
+    h = name.hash.abs % 360
+    "hsla(#{h}, 100%, 75%, .4)"
+  end
 end
