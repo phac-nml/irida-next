@@ -86,8 +86,14 @@ module Groups
     test 'can remove a member from the group' do
       visit group_members_url(@namespace)
 
-      all('.member-settings-ellipsis')[2].click
-      click_link I18n.t(:'groups.members.index.remove')
+      group_member = members(:group_one_member_joan_doe)
+
+      table_row = find(:table_row, { 'Username' => group_member.user.email })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'groups.members.index.remove')
+      end
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
@@ -101,11 +107,11 @@ module Groups
     test 'cannot remove themselves as a member from the group' do
       visit group_members_url(@namespace)
 
-      table_row = find(:table_row, ["It's you"])
+      table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
-        first('.member-settings-ellipsis').click
-        click_link I18n.t(:'projects.members.index.remove')
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'groups.members.index.remove')
       end
 
       within('#turbo-confirm[open]') do

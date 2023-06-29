@@ -111,7 +111,9 @@
                 </td>
                 <% if !member_source.key?(:inherited_namespace_path) && allowed_to?(:destroy_member?, @namespace) %>
                   <td class="px-6 py-4 text-right">
-                    <%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
+                    <%= viral_dropdown(icon: "ellipsis_vertical",
+                                      aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label',
+                                      member: member.user.email) }) do |dropdown| %>
                       <%= dropdown.item(
                         label: t(:"projects.members.index.remove"),
                         url: namespace_project_member_path(id: member.id),

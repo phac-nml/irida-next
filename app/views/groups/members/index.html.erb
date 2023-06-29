@@ -112,7 +112,6 @@
                 <% if !member_source.key?(:inherited_namespace_path) && allowed_to?(:destroy_member?, @namespace) %>
                   <td class="px-4 py-3 text-right">
                     <%= viral_dropdown(icon: "ellipsis_vertical",
-                                     classes: "member-settings-ellipsis",
                                      aria: { label: t(:'groups.members.index.actions.member_dropdown_aria_label',
                                      member: member.user.email) }) do |dropdown| %>
                       <%= dropdown.item(
