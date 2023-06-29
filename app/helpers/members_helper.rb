@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Append classes to the class list ensure only unique classes are present
+# View helper to display either if they member is a direct member or a link to the group they are inherited from
 module MembersHelper
   def membership_source(namespace, member)
     if member.namespace_id == namespace.id
