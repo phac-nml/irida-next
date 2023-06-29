@@ -78,4 +78,23 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
       @project_namespace.destroy
     end
   end
+
+  test '#destroy removes dependant project, and members, then they are restored' do
+    members_count = @project_namespace.project_members.count
+    assert_difference(
+      -> { Namespaces::ProjectNamespace.count } => -1,
+      -> { Project.count } => -1,
+      -> { Member.count } => (members_count * -1)
+    ) do
+      @project_namespace.destroy
+    end
+
+    assert_difference(
+      -> { Namespaces::ProjectNamespace.count } => +1,
+      -> { Project.count } => +1,
+      -> { Member.count } => (members_count * +1)
+    ) do
+      Namespaces::ProjectNamespace.restore(@project_namespace.id, recursive: true)
+    end
+  end
 end

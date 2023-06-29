@@ -109,4 +109,20 @@ class GroupMemberTest < ActiveSupport::TestCase
              namespace_type: group.class.model_name.human)
     )
   end
+
+  test '#destroy removes member' do
+    assert_difference(-> { Member.count } => -1) do
+      @group_member.destroy
+    end
+  end
+
+  test '#destroy removes member, then is restored' do
+    assert_difference(-> { Member.count } => -1) do
+      @group_member.destroy
+    end
+
+    assert_difference(-> { Member.count } => +1) do
+      Member.restore(@group_member.id, recursive: true)
+    end
+  end
 end

@@ -204,8 +204,12 @@ en:
       copied: Copied!
       copy: Copy to clipboard
       toggle_visible: Toggle visibility
-    modal:
-      close: Close modal
+    dialog:
+      close: Close dialog
+    confirmation:
+      title: Confirmation required
+      cancel: Cancel
+      confirm: Confirm
   layouts:
     application:
       site_title: IRIDA Next

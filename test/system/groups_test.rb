@@ -112,9 +112,10 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     click_link I18n.t(:'groups.sidebar.settings')
 
     assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete.submit'), count: 1
+    click_link I18n.t(:'groups.edit.advanced.delete.submit')
 
-    accept_alert do
-      click_link I18n.t(:'groups.edit.advanced.delete.submit')
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
     end
 
     assert_selector 'h1', text: I18n.t(:'groups.show.title')

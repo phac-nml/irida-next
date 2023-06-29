@@ -50,5 +50,66 @@ module Projects
                                     valid_params).execute
       end
     end
+
+    test 'project update changes logged using logidze' do
+      project_namespace = @project.namespace
+      project_namespace.create_logidze_snapshot!
+
+      assert_equal 1, project_namespace.log_data.version
+      assert_equal 1, project_namespace.log_data.size
+
+      valid_params = { namespace_attributes: { name: 'new-project-name', path: 'new-project-path' } }
+
+      assert_changes -> { [@project.name, @project.path] }, to: %w[new-project-name new-project-path] do
+        Projects::UpdateService.new(@project, @user, valid_params).execute
+      end
+
+      project_namespace.create_logidze_snapshot!
+
+      assert_equal 2, project_namespace.log_data.version
+      assert_equal 2, project_namespace.log_data.size
+
+      assert_equal 'Project 1', project_namespace.at(version: 1).name
+      assert_equal 'project-1', project_namespace.at(version: 1).path
+
+      assert_equal 'new-project-name', project_namespace.at(version: 2).name
+      assert_equal 'new-project-path', project_namespace.at(version: 2).path
+
+      # Description was not updated so it should not be in the changes log
+      assert_nil project_namespace.diff_from(version: 1)['changes']['description']
+    end
+
+    test 'project update changes logged using logidze switch version' do
+      project_namespace = @project.namespace
+      project_namespace.create_logidze_snapshot!
+
+      assert_equal 1, project_namespace.log_data.version
+      assert_equal 1, project_namespace.log_data.size
+
+      valid_params = { namespace_attributes: { name: 'new-project-name', path: 'new-project-path' } }
+
+      assert_changes -> { [@project.name, @project.path] }, to: %w[new-project-name new-project-path] do
+        Projects::UpdateService.new(@project, @user, valid_params).execute
+      end
+
+      project_namespace.create_logidze_snapshot!
+
+      assert_equal 2, project_namespace.log_data.version
+      assert_equal 2, project_namespace.log_data.size
+
+      assert_equal 'Project 1', project_namespace.at(version: 1).name
+      assert_equal 'project-1', project_namespace.at(version: 1).path
+
+      assert_equal 'new-project-name', project_namespace.at(version: 2).name
+      assert_equal 'new-project-path', project_namespace.at(version: 2).path
+
+      project_namespace.switch_to!(1)
+
+      assert_equal 1, project_namespace.log_data.version
+      assert_equal 2, project_namespace.log_data.size
+
+      assert_equal 'Project 1', @project.name
+      assert_equal 'project-1', @project.path
+    end
   end
 end
