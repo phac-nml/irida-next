@@ -11,9 +11,10 @@ module Viral
       large: 'w-16 h-16'
     }.freeze
 
-    def initialize(initials: nil, colour_string: nil, size: SIZE_DEFAULT, **system_arguments)
-      @initials = initials
-      @colours = generate_hsla_colour(colour_string || initials)
+    def initialize(name: nil, colour_string: nil, size: SIZE_DEFAULT, **system_arguments)
+      @name = name
+      @initials = name.chr
+      @colours = generate_hsla_colour(colour_string || name)
       @size = size
       @font_styles = if size == :small
                        'text-lg font-medium'
@@ -33,6 +34,7 @@ module Viral
         opts[:tag] = :div
         opts[:role] = :img
         opts[:style] = "background-color: #{@colours[:light]}; border: 1px solid #{@colours[:dark]};"
+        opts[:aria] = { label: @name }
         opts[:classes] = class_names(
           'avatar',
           SIZE_MAPPINGS[@size]
