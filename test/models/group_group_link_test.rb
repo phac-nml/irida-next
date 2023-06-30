@@ -40,7 +40,7 @@ class GroupGroupLinkTest < ActiveSupport::TestCase
     )
   end
 
-  test '#validates valid group to share' do
+  test '#validates invalid group to share' do
     group_group_link = GroupGroupLink.new(shared_group_id: nil, shared_with_group_id: @group.id,
                                           group_access_level: Member::AccessLevel::ANALYST)
 
@@ -50,7 +50,7 @@ class GroupGroupLinkTest < ActiveSupport::TestCase
     )
   end
 
-  test '#validates valid group to share with' do
+  test '#validates invalid group to share with' do
     group_group_link = GroupGroupLink.new(shared_group_id: @group_to_share.id, shared_with_group_id: nil,
                                           group_access_level: Member::AccessLevel::ANALYST)
 
