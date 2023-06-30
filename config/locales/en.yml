@@ -132,6 +132,7 @@ en:
               inclusion: "provided is not included in the list of valid access levels"
           destroy:
             last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
+            last_member_self: "You cannot remove yourself as this would leave the %{namespace_type} without an owner."
         personal_access_token:
           attributes:
             scopes:

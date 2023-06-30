@@ -49,7 +49,9 @@ module MembershipActions
         flash[:success] = t('.success')
       end
     else
-      flash[:error] = @member.errors.full_messages.first
+      flash[:error] = @member.errors.full_messages.first if @member.user != current_user
+      flash[:error] = I18n.t('activerecord.errors.models.member.destroy.last_member_self',
+                             namespace_type: @namespace.class.model_name.human)
     end
     redirect_to members_path
   end
