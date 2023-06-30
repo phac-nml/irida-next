@@ -36,7 +36,6 @@ class User < ApplicationRecord
     find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
-      # user.image = auth.info.image # assuming the user model has an image
       # If you are using confirmable and the provider(s) you use validate emails,
       # uncomment the line below to skip the confirmation emails.
       # user.skip_confirmation!
@@ -60,6 +59,7 @@ class User < ApplicationRecord
         self.last_name = auth.info.last_name
         self.username = auth.info.nickname
     end
+    # user.image = auth.info.image # assuming the user model has an image
     self.save
   end
 
