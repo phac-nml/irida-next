@@ -39,7 +39,7 @@ en:
       create?: You are not authorized to create this resource on this server.
       destroy?: You are not authorized to remove the requested resource from this server.
       edit?: You are not authorized to update this resource on this server.
-      index?: You are not authorized to view the listing of resourcs on this server.
+      index?: You are not authorized to view the listing of resources on this server.
       new?: You are not authorized to create this resource on this server.
       read?: You are not authorized to view this resource on this server.
       transfer?: You are not authorized to transfer the requested resource.
@@ -398,7 +398,33 @@ en:
       title: Settings
       general:
         title: General
+        heading: Project name and description
         submit: Update project
+      advanced:
+        title: Advanced settings
+        path:
+          title: Change path
+          description: A project's path is a unique identifier that can be accessed via the URL
+          points:
+            - Be careful! Changing a project's path can have unintended side effects.
+        transfer:
+          title: Transfer project
+          submit: Transfer project
+          new_namespace_id: Select a new namespace
+          descriptions:
+            - Transfer your project into another namespace.
+            - When you transfer your project to a group, you can easily manage multiple projects and users.
+            - "Things to be aware of before transferring your project:"
+          points:
+            - Be careful! Changing a project's namespace can have unintended side effects.
+            - You can only transfer projects to groups where you have sufficient permissions.
+            - Project visibility level will change to match namespace rules when transferring to a group.
+          confirm:
+            title: Confirmation required
+            warning_html: You are going to transfer <strong>%{project_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
+            points_html:
+              - To prevent accidental actions we ask you to confirm your intention.
+              - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
     index:
       title: Your projects
       subtitle: Projects are where you can store and analyze your data
@@ -406,6 +432,7 @@ en:
     new:
       title: Create project
       placeholder: Awesome project name
+      description: Project description, not required
       subtitle: Projects are where you can store and analyze your data
       submit: Create project
       cancel: Cancel
@@ -512,6 +539,9 @@ en:
         empty_new_project_id: The new project id is empty.
         empty_sample_ids: The sample ids are empty.
         same_project: The samples already exist in the project. Please select a different project.
+    projects:
+      transfer:
+        namespace_project_exists: Project with the same name or path already exists in the target namespace.
   application:
     errors:
       access_denied: Access Denied.
