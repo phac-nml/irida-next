@@ -126,4 +126,66 @@ class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
       Group.restore(@group_three.id, recursive: true)
     end
   end
+
+  test 'gets self and ancestors for which a group has been shared with' do
+    top_level_group_to_share = groups(:group_one)
+    subgroup_to_share = groups(:subgroup1)
+    group = groups(:david_doe_group_four)
+
+    group_group_link = GroupGroupLink.create(shared_group_id: subgroup_to_share.id, shared_with_group_id: group.id,
+                                             group_access_level: Member::AccessLevel::ANALYST)
+    group_group_link2 = GroupGroupLink.create(shared_group_id: top_level_group_to_share.id,
+                                              shared_with_group_id: group.id,
+                                              group_access_level: Member::AccessLevel::ANALYST)
+
+    group_group_links = subgroup_to_share.shared_with_group_links.of_ancestors_and_self
+
+    assert_equal 2, group_group_links.count
+
+    assert group_group_links.include?(group_group_link)
+    assert group_group_links.include?(group_group_link2)
+  end
+
+  test 'gets ancestors only (not self) for which a group has been shared with' do
+    group_to_share = groups(:david_doe_group_four)
+    group_group_link = GroupGroupLink.create(shared_group_id: group_to_share.id, shared_with_group_id: @group.id,
+                                             group_access_level: Member::AccessLevel::ANALYST)
+    group_group_links = group_to_share.shared_with_group_links.of_ancestors
+
+    assert_equal 0, group_group_links.count
+    assert_not group_group_links.include?(group_group_link)
+  end
+
+  test 'gets any ancestors (group to share has parent) for which a group has been shared with' do
+    top_level_group_to_share = groups(:group_one)
+    subgroup_to_share = groups(:subgroup1)
+    group = groups(:david_doe_group_four)
+
+    group_group_link = GroupGroupLink.create(shared_group_id: subgroup_to_share.id, shared_with_group_id: group.id,
+                                             group_access_level: Member::AccessLevel::ANALYST)
+    group_group_link2 = GroupGroupLink.create(shared_group_id: top_level_group_to_share.id,
+                                              shared_with_group_id: group.id,
+                                              group_access_level: Member::AccessLevel::ANALYST)
+
+    group_group_links = subgroup_to_share.shared_with_group_links.of_ancestors
+
+    assert_equal 1, group_group_links.count
+
+    assert_not group_group_links.include?(group_group_link)
+    assert group_group_links.include?(group_group_link2)
+  end
+
+  test 'gets any ancestors (group to share has no parent) for which a group has been shared with' do
+    group_to_share = groups(:group_one)
+    group = groups(:david_doe_group_four)
+
+    group_group_link = GroupGroupLink.create(shared_group_id: group_to_share.id, shared_with_group_id: group.id,
+                                             group_access_level: Member::AccessLevel::ANALYST)
+
+    group_group_links = group_to_share.shared_with_group_links.of_ancestors_and_self
+
+    assert_equal 1, group_group_links.count
+
+    assert group_group_links.include?(group_group_link)
+  end
 end
