@@ -285,7 +285,12 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   end
   # expected format of OMNIAUTH_PROVIDERS = 'developer,saml,azure_activedirectory_v2'
   if ENV['OMNIAUTH_PROVIDERS']
-    config.omniauth :developer if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
+    if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
+      config.omniauth :developer,
+        :fields => [:email, :username, :first_name, :last_name, :phone_number],
+        :uid_field => :email
+    end
+
     if ENV['OMNIAUTH_PROVIDERS'].include? 'saml'
       saml_options = {
         attribute_statements: {
@@ -297,8 +302,8 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
       }
       # expected keys are: [:idp_sso_service_url, :sp_entity_id, ;idp_cert]
       config.omniauth :saml, saml_options.merge(Rails.application.credentials.saml)
-
     end
+
     if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
       # expected keys are: [:client_id, :client_secret, :tenant_id]
       config.omniauth :azure_activedirectory_v2, Rails.application.credentials.azure

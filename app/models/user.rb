@@ -34,19 +34,6 @@ class User < ApplicationRecord
 
   def self.from_omniauth(auth)
     find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
-      # # provider specific attributes can be configured here
-      # case provider
-      # when 'developer'
-      #   user.name = auth.info.name
-      # when 'saml'
-      #   user.first_name = auth.info.first_name
-      #   user.last_name = auth.info.last_name
-      #   user.name = auth.info.name
-      # when 'azure_activedirectory_v2'
-      #   user.first_name = auth.info.first_name
-      #   user.last_name = auth.info.last_name
-      #   user.name = auth.info.name
-      # end
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
       # user.image = auth.info.image # assuming the user model has an image
@@ -54,6 +41,26 @@ class User < ApplicationRecord
       # uncomment the line below to skip the confirmation emails.
       # user.skip_confirmation!
     end
+  end
+
+  def update_fields_from_omniauth(auth)
+    # provider specific attributes are configured here
+    case auth.provider
+      when 'developer'
+        self.first_name = auth.info.first_name
+        self.last_name = auth.info.last_name
+        self.username = auth.info.username
+        self.phone_number = auth.info.phone_number
+      when 'saml'
+        self.first_name = auth.info.first_name
+        self.last_name = auth.info.last_name
+        self.username = auth.info.name
+      when 'azure_activedirectory_v2'
+        self.first_name = auth.info.first_name
+        self.last_name = auth.info.last_name
+        self.username = auth.info.nickname
+    end
+    self.save
   end
 
   def update_password_with_password(params)
