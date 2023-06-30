@@ -12,20 +12,17 @@ module Members
       @namespace = namespace
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      authorize! @namespace, to: :destroy_member?
+    def execute # rubocop:disable Metrics/AbcSize
+      if current_user != member.user
+        authorize! @namespace, to: :destroy_member?
 
-      unless current_user != member.user
-        raise MemberDestroyError, I18n.t('services.members.destroy.cannot_remove_self',
-                                         namespace_type: namespace.class.model_name.human)
-      end
-
-      unless Member.namespace_owners_include_user?(current_user, namespace) ||
-             (Member.user_has_namespace_maintainer_access?(current_user,
-                                                           namespace) &&
-                                                           member.access_level <= Member::AccessLevel::MAINTAINER)
-        raise MemberDestroyError,
-              I18n.t('services.members.destroy.role_not_allowed')
+        unless Member.namespace_owners_include_user?(current_user, namespace) ||
+               (Member.user_has_namespace_maintainer_access?(current_user,
+                                                             namespace) &&
+                                                             member.access_level <= Member::AccessLevel::MAINTAINER)
+          raise MemberDestroyError,
+                I18n.t('services.members.destroy.role_not_allowed')
+        end
       end
 
       member.destroy

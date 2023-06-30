@@ -104,25 +104,21 @@ module Groups
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
 
-    test 'cannot remove themselves as a member from the group' do
+    test 'can remove themselves as a member from the group' do
       visit group_members_url(@namespace)
 
       table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
         first('button.Viral-Dropdown--icon').click
-        click_link I18n.t(:'groups.members.index.remove')
+        click_link I18n.t(:'groups.members.index.leave_group')
       end
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
       end
 
-      assert_text I18n.t('services.members.destroy.cannot_remove_self',
-                         namespace_type: @namespace.class.model_name.human)
-
-      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: @members_count + header_row_count
+      assert_text I18n.t(:'groups.members.destroy.leave_success', name: @namespace.name)
     end
 
     test 'can not add a member to the group' do

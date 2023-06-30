@@ -39,12 +39,19 @@ module MembershipActions
     end
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize
     Members::DestroyService.new(@member, @namespace, current_user).execute
     if @member.deleted?
-      flash[:success] = t('.success')
+      if current_user == @member.user
+        flash[:success] = t('.leave_success', name: @namespace.name)
+        redirect_to root_path and return
+      else
+        flash[:success] = t('.success')
+      end
     else
-      flash[:error] = @member.errors.full_messages.first
+      flash[:error] = @member.errors.full_messages.first if @member.user != current_user
+      flash[:error] = I18n.t('activerecord.errors.models.member.destroy.last_member_self',
+                             namespace_type: @namespace.class.model_name.human)
     end
     redirect_to members_path
   end

@@ -132,6 +132,7 @@ en:
               inclusion: "provided is not included in the list of valid access levels"
           destroy:
             last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
+            last_member_self: "You cannot remove yourself as this would leave the %{namespace_type} without an owner."
         personal_access_token:
           attributes:
             scopes:
@@ -350,8 +351,10 @@ en:
       index:
         title: Members
         add: Add New Member
-        remove: Remove
+        remove: Remove member
+        leave_group: Leave group
         remove_confirmation: Are you sure you want to remove this member from the group?
+        leave_confirmation: Are you sure you want to remove yourself from this group?
         title: Members
         subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
         access_granted_by: "Access granted by %{grantor_email}"
@@ -364,6 +367,7 @@ en:
         actions:
           button_add_aria_label: Add new group member button
           link_remove_aria_label: "Remove group member %{member} button"
+          link_leave_group_aria_label: "Leave group button"
           member_dropdown_aria_label: "Dropdown options for group member %{member}"
         inherited_from: "Inherited from:"
         table_header:
@@ -382,6 +386,7 @@ en:
       destroy:
         error: "There was an error removing the group member"
         success: "Group member successfully removed"
+        leave_success: "You have successfully left the group %{name}"
     samples:
       index:
         title: Samples
@@ -419,8 +424,10 @@ en:
         success: "Project member added successfully"
       index:
         add: Add New Member
-        remove: Remove
+        remove: Remove member
+        leave_project: Leave project
         remove_confirmation: Are you sure you want to remove this member from the project?
+        leave_confirmation: Are you sure you want to remove yourself from the project?
         title: Members
         subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
         access_granted_by: "Access granted by %{grantor_email}"
@@ -433,6 +440,7 @@ en:
         actions:
           button_add_aria_label: Add new project member button
           link_remove_aria_label: "Remove project member %{member} button"
+          link_leave_project_aria_label: "Leave project button"
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
         inherited_from: "Inherited from:"
         table_header:
@@ -451,6 +459,7 @@ en:
       destroy:
         error: "There was an error removing the project member"
         success: "Project member successfully removed"
+        leave_success: "You have successfully left the project %{name}"
     samples:
       show:
         edit_button: Edit this sample
@@ -494,7 +503,6 @@ en:
       create:
         role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"
       destroy:
-        cannot_remove_self: "You cannot remove yourself from the %{namespace_type}"
         role_not_allowed: A maintainer can only remove a member up to the Maintainer role
       update:
         cannot_update_self: "You cannot update your own %{namespace_type} role"

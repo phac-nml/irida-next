@@ -100,9 +100,11 @@ class GroupMemberTest < ActiveSupport::TestCase
   end
 
   test '#validates that the last remaining owner of a group is not deleted' do
-    group_member = members(:group_two_member_john_doe)
-    group_member.last_namespace_owner_member
     group = groups(:group_two)
+
+    group_member = members(:group_two_member_john_doe)
+
+    group_member.destroy
 
     assert group_member.errors.full_messages.include?(
       I18n.t('activerecord.errors.models.member.destroy.last_member',
