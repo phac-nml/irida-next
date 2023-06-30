@@ -1,36 +1,35 @@
-<%= form_with(url: namespace_project_transfer_index_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
+<%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
               data: { turbo_confirm: "" }) do |form| %>
   <div class="form-field">
     <%= form.label :new_namespace_id,
-                   t(:"projects.edit.advanced.transfer.new_namespace_id") %>
+               t(:"projects.edit.advanced.transfer.new_namespace_id") %>
     <%= form.collection_select(
-          :new_namespace_id,
-          @authorized_namespaces,
-          :id,
-          :full_name,
-          { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
-          {
-            data: {
-              action: "projects--transfer#onChange"
-            },
-            class: @error.present? ? "error" : ""
-          }
-        ) %>
+      :new_namespace_id,
+      @authorized_namespaces,
+      :id,
+      :full_name,
+      { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
+      {
+        data: {
+          action: "projects--transfer#onChange"
+        },
+        class: @error.present? ? "error" : ""
+      }
+    ) %>
     <% if @error.present? %>
       <p class="text-sm text-red-500 dark:text-red-400"><%= @error %></p>
     <% end %>
   </div>
 
   <div>
-    <%= form.submit t(:'projects.edit.advanced.transfer.submit'),
-                    class: "button button--state-destructive button--size-default",
-                    disabled: true,
-                    data: {
-                      "projects--transfer-target": "submitButton",
-                      turbo_content: ".confirm-transfer",
-                      confirm_value: @project.name
-                    }
-    %>
+    <%= form.submit t(:"projects.edit.advanced.transfer.submit"),
+                class: "button button--state-destructive button--size-default",
+                disabled: true,
+                data: {
+                  "projects--transfer-target": "submitButton",
+                  turbo_content: ".confirm-transfer",
+                  confirm_value: @project.name
+                } %>
   </div>
 
 <% end %>

@@ -3,9 +3,9 @@
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
-  before_action :project, only: %i[show edit update activity destroy]
+  before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorized_namespaces, only: %i[edit new update create]
+  before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
     respond_to do |format|
@@ -64,6 +64,18 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     # No necessary code here
   end
 
+  def transfer
+    if Projects::TransferService.new(@project, current_user).execute(new_namespace)
+      flash[:success] = t('.transfer.success', project_name: @project.name)
+      respond_to do |format|
+        format.turbo_stream { redirect_to project_path(@project) }
+      end
+    else
+      @error = @project.errors.messages.values.flatten.first
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     Projects::DestroyService.new(@project, current_user).execute
     if @project.deleted?
@@ -109,6 +121,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     return unless @project
 
     @authorized_namespaces = @authorized_namespaces.where.not(id: @project.namespace.parent.id)
+  end
+
+  def new_namespace
+    id = params.require(:new_namespace_id)
+    Namespace.find_by(id:)
   end
 
   def resolve_layout
