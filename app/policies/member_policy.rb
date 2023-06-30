@@ -11,9 +11,8 @@ class MemberPolicy < ApplicationPolicy
                       namespace.self_and_ancestor_ids
                     end
 
-    relation.where(id: Member.includes(namespace: [:route]).where(namespace_id: namespace_ids)
-            .order('routes.path': :desc).select(
-              :id, :user_id, :namespace_id
-            ).uniq(&:user_id).pluck(:id)) # rubocop:disable Rails/PluckInWhere
+    relation.where(id: Member.joins(namespace: [:route]).where(namespace_id: namespace_ids)
+            .order(user_id: :asc, 'routes.path': :desc)
+            .select('DISTINCT ON (user_id) members.id'))
   end
 end
