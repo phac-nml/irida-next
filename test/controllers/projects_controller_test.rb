@@ -118,6 +118,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
     assert_response :unauthorized
   end
 
+  test 'should fail to update a project with wrong params' do
+    sign_in users(:david_doe)
+
+    project = projects(:john_doe_project2)
+
+    patch project_path(project),
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'VERY BAD PATH' } } }
+
+    assert_response :unauthorized
+  end
+
   test 'should delete a project' do
     sign_in users(:john_doe)
 
