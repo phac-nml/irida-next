@@ -3,6 +3,8 @@
 # entity class for GroupGroupLink
 class GroupGroupLink < ApplicationRecord
   has_logidze
+  acts_as_paranoid
+
   belongs_to :shared_group, class_name: 'Group'
   belongs_to :shared_with_group, class_name: 'Group'
 
