@@ -109,7 +109,7 @@
                     <% end %>
                   </div>
                 </td>
-                <% if current_user == member.user || allowed_to?(:destroy_member?, @namespace) %>
+                <% if (current_user == member.user || allowed_to?(:destroy_member?, @namespace)) && !member_source.key?(:inherited_namespace_path)  %>
                   <td class="px-4 py-3 text-right">
                     <% if current_user == member.user %>
                       <%= render partial: "projects/members/current_user_is_member", locals: { member: } %>
