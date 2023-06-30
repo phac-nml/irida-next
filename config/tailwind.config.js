@@ -8,7 +8,6 @@ module.exports = {
     "./node_modules/flowbite/**/*.js",
     "./test/components/previews/**/*",
     "./test/components/viral/system/**/*",
-    "./config/locales/en.yml",
   ],
   theme: {
     extend: {

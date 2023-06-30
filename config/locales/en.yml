@@ -39,7 +39,7 @@ en:
       create?: You are not authorized to create this resource on this server.
       destroy?: You are not authorized to remove the requested resource from this server.
       edit?: You are not authorized to update this resource on this server.
-      index?: You are not authorized to view the listing of resourcs on this server.
+      index?: You are not authorized to view the listing of resources on this server.
       new?: You are not authorized to create this resource on this server.
       read?: You are not authorized to view this resource on this server.
       transfer?: You are not authorized to transfer the requested resource.
@@ -421,7 +421,7 @@ en:
             - Project visibility level will change to match namespace rules when transferring to a group.
           confirm:
             title: Confirmation required
-            warning_html: You are going to transfer <span class="font-semibold">%{project_name}</span> to another namespace. Once you confirm, this action cannot be undone.
+            warning_html: You are going to transfer <strong>%{project_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
             points_html:
               - To prevent accidental actions we ask you to confirm your intention.
               - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel

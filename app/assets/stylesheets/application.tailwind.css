@@ -216,7 +216,7 @@
   }
 
   .button {
-    @apply flex items-center justify-center font-medium border rounded-md focus:z-10 focus:ring-4 cursor-pointer;
+    @apply flex items-center justify-center font-medium border rounded-md cursor-pointer focus:z-10 focus:ring-4;
   }
 
   .button:disabled {
@@ -294,6 +294,10 @@
 
   .dialog--footer {
     @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
+  }
+
+  strong {
+    @apply font-semibold;
   }
 }
 
