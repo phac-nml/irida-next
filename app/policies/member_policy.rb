@@ -11,8 +11,9 @@ class MemberPolicy < ApplicationPolicy
                       namespace.self_and_ancestor_ids
                     end
 
-    relation.where(id: Member.joins(namespace: [:route]).where(namespace_id: namespace_ids)
-            .order(user_id: :asc, 'routes.path': :desc)
-            .select('DISTINCT ON (user_id) members.id'))
+    relation.where(id: Member.joins(namespace: [:route])
+                             .where(namespace_id: namespace_ids)
+                             .order(user_id: :asc, 'routes.path': :desc)
+                             .select('DISTINCT ON (user_id) members.id'))
   end
 end
