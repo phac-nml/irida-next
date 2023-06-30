@@ -404,7 +404,7 @@ en:
         title: Advanced settings
         path:
           title: Change path
-          description: A project's path is a unique identifier where it can be accessed in the URL
+          description: A project's path is a unique identifier that can be accessed via the URL
           points:
             - Be careful! Changing a project's path can have unintended side effects.
         transfer:
