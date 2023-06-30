@@ -432,6 +432,7 @@ en:
     new:
       title: Create project
       placeholder: Awesome project name
+      description: Project description, not required
       subtitle: Projects are where you can store and analyze your data
       submit: Create project
       cancel: Cancel
