@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_28_145212) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_30_152409) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_145212) do
     t.integer "group_access_level", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "log_data"
     t.index ["shared_group_id", "shared_with_group_id"], name: "index_group_link_shared_group_id_with_shared_with_group_id", unique: true
   end
 
@@ -520,5 +521,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_145212) do
   SQL
   create_trigger :logidze_on_personal_access_tokens, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_personal_access_tokens BEFORE INSERT OR UPDATE ON public.personal_access_tokens FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_group_group_links, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_group_group_links BEFORE INSERT OR UPDATE ON public.group_group_links FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end
