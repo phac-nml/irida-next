@@ -81,6 +81,6 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   test 'manageable scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 8, scoped_projects.count
+    assert_equal 10, scoped_projects.count
   end
 end
