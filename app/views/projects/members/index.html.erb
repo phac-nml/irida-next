@@ -16,6 +16,15 @@
       <div class="shadow">
         <%= turbo_frame_tag("member-update-alert") %>
         <table class="min-w-full table-fixed dark:divide-gray-600">
+          <thead class="text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.members.index.table_header.username") %></th>
+              <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.members.index.table_header.access_level") %></th>
+              <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.members.index.table_header.source") %></th>
+              <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.members.index.table_header.access_granted") %></th>
+              <th scope="col" class="px-6 py-3 text-right"><%= t(:"projects.members.index.table_header.action") %></th>
+            </tr>
+          </thead>
           <tbody
             class="
               bg-white
@@ -26,17 +35,17 @@
             "
           >
             <% @members.each do |member| %>
+              <% member_source = membership_source(@namespace, member) %>
               <tr
+
                 class="
                   text-sm
                   font-normal
                   text-gray-500
-                  hover:bg-gray-50
-                  dark:hover:bg-gray-700
                   dark:text-gray-400
                 "
               >
-                <td class="p-4 whitespace-nowrap">
+                <td class="px-6 py-4">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %>
                     <% if current_user == member.user %>
                       <span
@@ -56,9 +65,9 @@
                     <% end %>
                   </div>
                 </td>
-                <td class="p-4 whitespace-nowrap">
-                  <% if member.user != current_user && allowed_to?(:update_member?, @namespace) &&
-                    member.access_level <= @access_levels.values.last %>
+                <td class="px-6 py-4">
+                  <% if (member.user != current_user && allowed_to?(:update_member?, @namespace) &&
+                    member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
                     <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
                       <%= render partial: "projects/members/access_level",
                       locals: {
@@ -70,22 +79,41 @@
                     <%= t(:"projects.members.index.access_level.level_#{member.access_level}") %>
                   <% end %>
                 </td>
-                <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= t(
-                      :"projects.members.index.access_granted_by",
-                      grantor_email: member.created_by.email
-                    ) %></div>
+                <td class="px-6 py-4">
+                  <% if !member_source.key?(:inherited_namespace_path) %>
+                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member_source[:label] %></div>
+                  <% else %>
+                    <%= viral_tooltip(title: t(:"projects.members.index.inherited_from")) do %>
+                      <%= link_to member_source[:label],
+                      member_source[:inherited_namespace_path],
+                      class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                    <% end %>
+                  <% end %>
                 </td>
-                <td class="p-4 whitespace-nowrap">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                <td class="px-6 py-4">
+                  <div>
+                    <% if member.user.email != member.created_by.email %>
+                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %> by <span class="block">
+                        <%= member.created_by.email %>
+                      </span>
+                    <% else %>
+                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %></span>
+                    <% end %>
+
                     <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
-                      <%= I18n.l(member.updated_at, format: :default) %>
+                      <% if member.created_at < member.updated_at %>
+                        <%= render UpdatedComponent.new(
+                          updated_at: member.updated_at
+                        ) %>
+                      <% end %>
                     <% end %>
                   </div>
                 </td>
-                <% if allowed_to?(:destroy_member?, @namespace) %>
-                  <td class="px-4 py-3 text-right">
-                    <%= viral_dropdown(icon: "ellipsis_vertical", classes: "member-settings-ellipsis", aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label', member: member.user.email) }) do |dropdown| %>
+                <% if !member_source.key?(:inherited_namespace_path) && allowed_to?(:destroy_member?, @namespace) %>
+                  <td class="px-6 py-4 text-right">
+                    <%= viral_dropdown(icon: "ellipsis_vertical",
+                                      aria: { label: t(:'projects.members.index.actions.member_dropdown_aria_label',
+                                      member: member.user.email) }) do |dropdown| %>
                       <%= dropdown.item(
                         label: t(:"projects.members.index.remove"),
                         url: namespace_project_member_path(id: member.id),

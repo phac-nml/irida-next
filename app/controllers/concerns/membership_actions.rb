@@ -14,7 +14,7 @@ module MembershipActions
 
   def index
     authorize! @namespace, to: :member_listing?
-    @members = Member.where(namespace_id: @namespace.id)
+    @members = authorized_scope(Member, type: :relation, scope_options: { namespace: @namespace })
   end
 
   def new
@@ -89,9 +89,8 @@ module MembershipActions
 
   def available_users
     # Remove current user from available users as a user cannot add themselves
-    @available_users = User.where.not(id: Member.where(
-      namespace_id: @namespace.id
-    ).pluck(:user_id)).to_a - [current_user]
+    @available_users = User.where.not(id: Member.select(:user_id).where(namespace: @namespace))
+                           .where.not(id: current_user.id)
   end
 
   protected

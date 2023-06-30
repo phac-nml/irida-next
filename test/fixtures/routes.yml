@@ -107,7 +107,17 @@ group_six_route:
   path: group-6
   source: group_six (Namespace)
 
+project21_namespace_route:
+  name: Group 1 / Project 21
+  path: group-1/project-21
+  source: project21_namespace (Namespace)
+
 project23_namespace_route:
   name: Group 6 / Project 23
   path: group-6/project-23
   source: project23_namespace (Namespace)
+
+project24_namespace_route:
+  name: Group 1 / Project 24
+  path: group-1/project-24
+  source: project24_namespace (Namespace)

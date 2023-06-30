@@ -192,6 +192,14 @@ project23_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
+project24_namespace:
+  name: Project 24
+  path: project-24
+  description: Project 24 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
 john_doe_project4_namespace:
   name: Project 4
   path: project-4
