@@ -9,7 +9,7 @@ module System
       message = 'Success Message!'
 
       assert_text message
-      assert_selector '.bg-green-700'
+      assert_selector '.text-green-500.bg-green-100'
       find('[data-action="viral--flash#dismiss"]').click
       assert_no_text message
     end
