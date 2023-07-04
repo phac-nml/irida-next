@@ -10,7 +10,7 @@ module Viral
     def initialize(type:, data:, timeout: DEFAULT_TIMEOUT)
       @type = type
       @data = data
-      @timeout = timeout
+      @timeout = type.to_s == 'error' ? 0 : timeout
     end
   end
 end
