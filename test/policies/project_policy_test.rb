@@ -50,6 +50,10 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.update_sample?
   end
 
+  test '#transfer_sample?' do
+    assert @policy.transfer_sample?
+  end
+
   test '#destroy_sample?' do
     assert @policy.destroy_sample?
   end
@@ -58,15 +62,25 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.destroy_sample?
   end
 
+  test '#transfer_sample_into_project?' do
+    assert @policy.transfer_sample_into_project?
+  end
+
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
-    # John Doe has access to 23 projects
-    assert_equal scoped_projects.count, 25
+    # John Doe has access to 26 projects
+    assert_equal scoped_projects.count, 26
 
     user = users(:david_doe)
     policy = ProjectPolicy.new(user:)
     scoped_projects = policy.apply_scope(Project, type: :relation)
     # David Doe has access to 0 projects
     assert_equal scoped_projects.count, 0
+  end
+
+  test 'manageable scope' do
+    scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
+
+    assert_equal 10, scoped_projects.count
   end
 end

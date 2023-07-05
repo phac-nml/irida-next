@@ -117,4 +117,5 @@ group :test do
   gem 'cuprite'
 
   gem 'simplecov', require: false
+  gem 'timecop'
 end

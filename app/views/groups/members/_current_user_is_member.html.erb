@@ -1,0 +1,15 @@
+<%= viral_dropdown(icon: "ellipsis_vertical",
+                                     aria: { label: t(:'groups.members.index.actions.member_dropdown_aria_label',
+                                     member: member.user.email) }) do |dropdown| %>
+  <%= dropdown.item(
+    label: (t(:"groups.members.index.leave_group")),
+    url: group_member_path(@namespace, member),
+    data: {
+      turbo_method: :delete,
+      turbo_confirm: (t(:"groups.members.index.leave_confirmation"))
+    },
+    aria: {
+      label: (t(:"groups.members.index.actions.link_leave_group_aria_label"))
+    }
+  ) %>
+<% end %>
