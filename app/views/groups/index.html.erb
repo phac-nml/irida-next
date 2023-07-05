@@ -23,9 +23,11 @@
             <% @groups.each do |group| %>
               <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
                 <td class="w-16 p-2 whitespace-nowrap">
-                  <%= link_to(group_path(group)) do %>
-                    <%= viral_avatar(name: group.name, colour_string: "#{group.name}-#{group.id}") %>
-                  <% end %>
+                  <%= viral_avatar(
+                    name: group.name,
+                    colour_string: "#{group.name}-#{group.id}",
+                    url: group_path(group)
+                  ) %>
                 </td>
                 <td class="p-4 whitespace-nowrap">
                   <%= link_to group.name,

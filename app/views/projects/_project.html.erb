@@ -4,9 +4,10 @@
 >
   <td class="w-16 p-2 whitespace-nowrap">
     <%= viral_avatar(
-          name: project.name,
-          colour_string: "#{project.name}-#{project.id}"
-        ) %>
+      name: project.name,
+      colour_string: "#{project.name}-#{project.id}",
+      url: namespace_project_path(project.namespace.parent, project)
+    ) %>
 
   </td>
   <td class="p-4 whitespace-nowrap">
