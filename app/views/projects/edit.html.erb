@@ -13,20 +13,21 @@
             <div class="form-field">
               <%= builder.label :name %>
               <%= builder.text_field :name,
-                                     required: true,
-                                     autofocus: true,
-                                     placeholder: t(:"projects.new.placeholder") %>
+                                 required: true,
+                                 autofocus: true,
+                                 placeholder: t(:"projects.new.placeholder") %>
             </div>
             <div class="form-field">
               <%= builder.label :description %>
               <%= builder.text_area :description,
-                                    {
-                                      :class => "form-control",
-                                      "aria-label" => t(:'projects.new.description')
-                                    } %>
+                                {
+                                  :class => "form-control",
+                                  "aria-label" => t(:"projects.new.description")
+                                } %>
             </div>
             <div>
-              <%= form.submit t("projects.edit.general.submit"), class: "btn btn-default" %>
+              <%= form.submit t("projects.edit.general.submit"),
+                          class: "button button--state-default button-size--default" %>
             </div>
           <% end %>
         <% end %>

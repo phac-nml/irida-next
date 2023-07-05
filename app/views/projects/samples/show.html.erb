@@ -5,7 +5,7 @@
       <% if allowed_to?(:new?, @project) %>
         <%= link_to t("projects.samples.show.edit_button"),
         edit_namespace_project_sample_path(id: @sample.id),
-        class: "btn btn-primary mr-1" %>
+        class: "button button--state-primary button-size--default mr-1" %>
       <% end %>
       <% if allowed_to?(:destroy?, @project) %>
         <%= link_to t("projects.samples.show.remove_button"),
@@ -14,11 +14,11 @@
           turbo_method: :delete,
           turbo_confirm: t("projects.samples.show.remove_button_confirmation")
         },
-        class: "btn btn-default mr-1" %>
+        class: "button button--state-default button-size--default mr-1" %>
       <% end %>
       <%= link_to t("projects.samples.show.back_button"),
       namespace_project_samples_path,
-      class: "btn btn-default" %>
+      class: "button button--state-default button-size--default" %>
     </div>
   <% end %>
 <% end %>

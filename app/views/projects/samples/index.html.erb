@@ -4,7 +4,7 @@
     <% if allowed_to?(:create_sample?, @project) %>
       <%= link_to t("projects.samples.index.new_button"),
       new_namespace_project_sample_path,
-      class: "btn btn-primary",
+      class: "button button--state-primary button-size--default",
       "aria-label": t(".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
@@ -24,7 +24,7 @@
             "
           >
             <% @samples.each do |sample| %>
-              <tr class=" text-sm font-normal text-gray-500 dark:text-gray-400 ">
+              <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
                 <td class="p-4 whitespace-nowrap">
                   <%= link_to sample.name,
                   namespace_project_sample_path(id: sample.id),

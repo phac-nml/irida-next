@@ -15,6 +15,11 @@ class PageHeaderComponentTest < ApplicationSystemTestCase
     assert_selector 'div.page-header .btn', count: 1
   end
 
+  test 'renders header with buttons' do
+    visit('/rails/view_components/viral_page_header_component/with_buttons')
+    assert_selector 'div.page-header .button', count: 1
+  end
+
   test 'renders header with icon' do
     visit('/rails/view_components/viral_page_header_component/with_icon')
     assert_selector 'div.page-header svg'
