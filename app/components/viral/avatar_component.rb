@@ -20,7 +20,7 @@ module Viral
       @font_styles = if size == :small
                        'text-lg font-medium'
                      else
-                       size == :medium ? 'text-2xl font-semibold' : 'text-5xl font-bold'
+                       size == :medium ? 'text-2xl font-semibold' : 'text-4xl font-bold'
                      end
       @system_arguments = system_arguments
     end
