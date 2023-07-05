@@ -320,8 +320,8 @@ en:
     edit:
       title: Settings
       details:
-        title: Name and description
-        subtitle: Change the name and description of your group
+        title: General
+        subtitle: Group name and description
         name_placeholder: Awesome group name
         path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
         submit: Save changes
