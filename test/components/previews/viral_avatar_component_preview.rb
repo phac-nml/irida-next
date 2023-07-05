@@ -6,4 +6,6 @@ class ViralAvatarComponentPreview < ViewComponent::Preview
   def small; end
 
   def large; end
+
+  def with_link; end
 end

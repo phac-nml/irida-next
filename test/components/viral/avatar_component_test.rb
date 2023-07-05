@@ -24,5 +24,11 @@ module Viral
       assert_selector('div.w-16.h-16')
       assert_text('J')
     end
+
+    test 'with link' do
+      render_inline(Viral::AvatarComponent.new(name: 'J', url: 'https://example.com'))
+      assert_selector('a[href="https://example.com"]')
+      assert_selector('a.avatar')
+    end
   end
 end
