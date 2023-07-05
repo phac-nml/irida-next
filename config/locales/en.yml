@@ -525,6 +525,12 @@ en:
       destroy:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
+      transfer:
+        new:
+          title: Transfer Samples
+          submit_button: Submit
+        create:
+          success: Samples were successfully transferred.
   services:
     members:
       create:
