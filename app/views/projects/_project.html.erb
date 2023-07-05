@@ -6,6 +6,9 @@
     <%= viral_avatar(
       name: project.name,
       colour_string: "#{project.name}-#{project.id}",
+      data: {
+        turbo: false
+      },
       url: namespace_project_path(project.namespace.parent, project)
     ) %>
 

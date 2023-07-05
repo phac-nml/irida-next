@@ -26,6 +26,9 @@
                   <%= viral_avatar(
                     name: group.name,
                     colour_string: "#{group.name}-#{group.id}",
+                    data: {
+                      turbo: false
+                    },
                     url: group_path(group)
                   ) %>
                 </td>
