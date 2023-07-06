@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-  <head>
-    <%= render "layouts/partials/head" %>
-  </head>
+  <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
     <%= render LayoutComponent.new(user: current_user) do |layout| %>
       <% layout.sidebar do |navigation| %>
