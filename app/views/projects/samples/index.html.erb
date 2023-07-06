@@ -3,9 +3,9 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:create_sample?, @project) %>
       <%= link_to t("projects.samples.index.new_button"),
-      new_namespace_project_sample_path,
-      class: "button button--state-primary button-size--default",
-      "aria-label": t(".actions.button_add_aria_label") %>
+                  new_namespace_project_sample_path,
+                  class: "button button--state-primary button--size-default",
+                  "aria-label": t(".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
 <% end %>

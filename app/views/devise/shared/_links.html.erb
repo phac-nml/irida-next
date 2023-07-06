@@ -56,10 +56,10 @@
     </div>
     <%- resource_class.omniauth_providers.each do |provider| %>
       <%= button_to omniauth_authorize_path(resource_name, provider),
-      data: {
-        turbo: false
-      },
-      class: "button button--state-default button-size--default w-full" do %>
+                    data: {
+                      turbo: false
+                    },
+                    class: "button button--state-default button--size-default w-full" do %>
         <div class="inline-flex items-center text-center">
           <%= viral_icon(name: provider, classes: "w-4 h-4 mr-2 -ml-1") %>
           <%= OmniAuth::Utils.camelize(provider) %>
