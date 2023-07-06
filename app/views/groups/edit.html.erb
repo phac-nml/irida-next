@@ -61,13 +61,10 @@
           dark:bg-gray-800
         "
       >
-        <div id="settings-accordion" data-accordion="collapse">
+        <div>
           <h2
             id="settings-delete-heading"
             class="
-              flex
-              items-center
-              justify-between
               text-xl
               font-semibold
               leading-tight
@@ -77,7 +74,7 @@
           >
             <%= t(:".advanced.title") %>
           </h2>
-          <div class="pt-4" aria-labelledby="settings-delete-heading">
+          <div class="pt-4">
             <h3 class="text-lg font-semibold leading-tight text-red-600">
               <%= t(:"groups.edit.advanced.delete_group.title") %>
             </h3>
@@ -91,7 +88,7 @@
                             turbo_method: :delete,
                             turbo_confirm: t(:"groups.edit.advanced.delete_group.confirm")
                           },
-                          class: "button button--state-danger button--size-default" %>
+                          class: "button button--state-destructive button--size-default inline-block" %>
             </div>
           </div>
         </div>
