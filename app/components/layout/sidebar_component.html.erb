@@ -3,6 +3,31 @@
     style="grid-area: navigation; display: flex; flex-direction: column;"
     class="bg-white dark:bg-gray-800 dark:border-gray-700"
   >
+    <div class="flex items-center justify-between p-2 overflow-x-hidden">
+      <a href="<%= root_path %>" class="whitespace-nowrap">
+        <%= viral_icon(
+          name: "beaker",
+          classes: "w-8 h-8 text-green-500 rotate-12 inline-block"
+        ) %>
+        <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+          <%= t(:"general.name") %>
+        </span>
+      </a>
+      <!-- Profile menu -->
+      <%= viral_dropdown(icon: "user_circle", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1") do |dropdown| %>
+        <%= dropdown.item(
+          label: t(:"general.navbar.account_dropdown.profile"),
+          url: profile_path
+        ) %>
+        <%= dropdown.item(
+          label: t(:"general.navbar.account_dropdown.sign_out"),
+          url: destroy_user_session_path,
+          data: {
+            turbo_method: :delete
+          }
+        ) %>
+      <% end %>
+    </div>
     <div class="pt-2 pb-4 overflow-y-auto">
       <div
         class="
@@ -61,12 +86,12 @@
         class="flex items-center"
       >
         <%= render(
-              Viral::IconComponent.new(
-                name: "chevron_double_left",
-                color: :subdued,
-                classes: "w-5 h-5 mr-2"
-              )
-            ) %>
+          Viral::IconComponent.new(
+            name: "chevron_double_left",
+            color: :subdued,
+            classes: "w-5 h-5 mr-2"
+          )
+        ) %>
         <%= t(:"general.collapse_sidebar") %>
       </span>
 
@@ -75,12 +100,12 @@
         class="items-center hidden"
       >
         <%= render(
-              Viral::IconComponent.new(
-                name: "chevron_double_right",
-                color: :subdued,
-                classes: "w-5 h-5"
-              )
-            ) %>
+          Viral::IconComponent.new(
+            name: "chevron_double_right",
+            color: :subdued,
+            classes: "w-5 h-5"
+          )
+        ) %>
         <span class="sr-only"><%= t(:"general.expand_sidebar") %></span>
       </span>
     </button>
