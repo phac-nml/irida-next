@@ -1,7 +1,5 @@
-<div class="body-wrapper">
-  <%= render Layout::NavbarComponent.new(user: user) %>
   <div
-    class="body"
+    class="layout-body"
     data-controller="layout--layout-component"
     data-layout--layout-component-target="layoutContainer"
   >
@@ -16,4 +14,3 @@
   <% flash.each do |key, value| %>
     <%= viral_flash(type: key, data: value) %>
   <% end %>
-</div>
