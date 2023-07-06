@@ -9,7 +9,7 @@
   }
 
   kbd {
-    @apply px-2 py-1.5 text-sm font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500
+    @apply px-2 py-1.5 text-sm font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500;
   }
 
   .body-wrapper {
@@ -297,7 +297,16 @@
   }
 
   .avatar {
-    @apply relative inline-flex items-center justify-center overflow-hidden bg-gray-100 rounded-md dark:bg-gray-600;
+    @apply relative inline-flex items-center justify-center overflow-hidden text-gray-800 rounded-md dark:text-gray-300;
+    --tw-avatar-bg-lightness: 35%;
+    --tw-avatar-border-lightness: 35%;
+    --tw-avatar-bg-alpha: 0.3;
+  }
+
+  .dark .avatar {
+    --tw-avatar-bg-lightness: 25%;
+    --tw-avatar-border-lightness: 90%;
+    --tw-avatar-bg-alpha: 0.4;
   }
 
   strong {

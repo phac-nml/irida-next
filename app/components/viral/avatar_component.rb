@@ -28,7 +28,8 @@ module Viral
 
     def generate_hsla_colour(name)
       h = name.hash.abs % 360
-      { dark: "hsla(#{h}, 100%, 30%, .4)", light: "hsla(#{h}, 100%, 85%, .4)" }
+      { border: "hsla(#{h}, 100%, var(--tw-avatar-border-lightness), var(--tw-avatar-bg-alpha))",
+        background: "hsla(#{h}, 100%, var(--tw-avatar-bg-lightness), var(--tw-avatar-bg-alpha))" }
     end
 
     def system_arguments
@@ -36,7 +37,7 @@ module Viral
         opts[:tag] = @url ? :a : :div
         (opts[:role] = :img) unless @url
         (opts[:href] = @url) if @url
-        opts[:style] = "background-color: #{@colours[:light]}; border: 1px solid #{@colours[:dark]};"
+        opts[:style] = "background-color: #{@colours[:background]}; border: 1px solid #{@colours[:border]};"
         opts[:aria] = { label: @name }
         opts[:classes] = class_names(
           'avatar',
