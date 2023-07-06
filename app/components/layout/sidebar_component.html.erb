@@ -13,22 +13,30 @@
           <%= t(:"general.name") %>
         </span>
       </a>
-      <!-- Profile menu -->
-      <%= viral_dropdown(icon: "user_circle", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1") do |dropdown| %>
-        <%= dropdown.item(
-          label: t(:"general.navbar.account_dropdown.profile"),
-          url: profile_path
-        ) %>
-        <%= dropdown.item(
-          label: t(:"general.navbar.account_dropdown.sign_out"),
-          url: destroy_user_session_path,
-          data: {
-            turbo_method: :delete
-          }
-        ) %>
-      <% end %>
+      <div>
+        <button
+          data-action="click->layout--layout-component#collapse"
+          class="navbar-button"
+        >
+          <%= viral_icon(name: "chevron_double_left", classes: "w-6 h-6") %>
+        </button>
+        <!-- Profile menu -->
+        <%= viral_dropdown(icon: "user_circle", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1") do |dropdown| %>
+          <%= dropdown.item(
+            label: t(:"general.navbar.account_dropdown.profile"),
+            url: profile_path
+          ) %>
+          <%= dropdown.item(
+            label: t(:"general.navbar.account_dropdown.sign_out"),
+            url: destroy_user_session_path,
+            data: {
+              turbo_method: :delete
+            }
+          ) %>
+        <% end %>
+      </div>
     </div>
-    <div class="pt-2 pb-4 overflow-y-auto">
+    <div class="pt-2 pb-4 overflow-y-auto bg-gray-100">
       <div
         class="
           flex-1
