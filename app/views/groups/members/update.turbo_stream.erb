@@ -7,5 +7,6 @@
                       access_levels: @access_levels
                     } %>
 
-<%= turbo_stream.update "member-#{member.id}-access-level-updated",
-                    I18n.l(member.updated_at, format: :default) %>
+<%= turbo_stream.update "member-#{member.id}-access-level-updated" do %>
+  <%= render UpdatedComponent.new(updated_at: member.updated_at) %>
+<% end %>

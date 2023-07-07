@@ -210,7 +210,7 @@ if Rails.env.development?
     { name: 'Bartonella', path: 'bartonella', owner_email: group_owner_emails[1],
       member_emails_by_role:,
       subgroups: [
-        { name: 'Bartonella henselae', path: 'bacillus-anthracis', projects: generic_projects },
+        { name: 'Bartonella henselae', path: 'bartonella-henselae', projects: generic_projects },
         { name: 'Bartonella quintana', path: 'bartonella-quintana', projects: generic_projects }
       ] },
     { name: 'Bordetella', path: 'bordetella', owner_email: group_owner_emails[2],

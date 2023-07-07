@@ -3,6 +3,8 @@
 # entity class for Sample
 class Sample < ApplicationRecord
   has_logidze
+  acts_as_paranoid
+
   belongs_to :project
 
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }

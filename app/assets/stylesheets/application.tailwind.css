@@ -8,6 +8,10 @@
     overflow: hidden;
   }
 
+  kbd {
+    @apply px-2 py-1.5 text-sm font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500;
+  }
+
   .body-wrapper {
     height: 100vh;
     width: 100vw;
@@ -50,7 +54,7 @@
 
   .page-header {
     overflow: hidden;
-    @apply items-center justify-between block p-2 px-4 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
+    @apply items-center justify-between block p-2 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
   }
 
   .navbar-btn {
@@ -66,7 +70,7 @@
   }
 
   .card {
-    @apply p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800;
+    @apply p-4 bg-white border border-gray-200 rounded-md shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800;
   }
 
   p link {
@@ -74,7 +78,7 @@
   }
 
   .form-field label {
-    @apply block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200;
+    @apply block mb-1 text-sm font-medium text-gray-900 dark:text-white;
   }
 
   .form-field input[type="text"],
@@ -83,8 +87,17 @@
   .form-field input[type="email"] {
     @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
   }
+
   .form-field.datepicker input[type="text"] {
-    @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+    @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  }
+
+  .form-field select {
+    @apply bg-gray-50 border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
+  }
+
+  .form-field select.error {
+    @apply bg-gray-50 border-red-500 text-gray-900 sm:text-sm rounded-md focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-red-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500;
   }
 
   .form-field select.prefixed {
@@ -110,7 +123,7 @@
   }
 
   .form-field textarea {
-    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-gray-300 bg-gray-50 text-sm text-gray-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   input[type="checkbox"] {
@@ -122,15 +135,15 @@
   }
 
   .btn {
-    @apply text-white rounded-lg text-sm px-5 py-2.5 text-center focus:outline-none focus:ring-4;
+    @apply text-white rounded-md text-sm px-5 py-2.5 text-center focus:outline-none focus:ring-4;
   }
 
   .btn-xs {
-    @apply px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none focus:ring-4;
+    @apply px-3 py-2 text-xs font-medium text-center text-white rounded-md focus:outline-none focus:ring-4;
   }
 
   .btn-sm {
-    @apply px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:outline-none focus:ring-4;
+    @apply px-3 py-2 text-sm font-medium text-center text-white rounded-md focus:outline-none focus:ring-4;
   }
 
   .btn-default {
@@ -151,10 +164,6 @@
 
   .row-btn svg {
     @apply w-5 h-5;
-  }
-
-  .form-field select {
-    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
   .Viral-Icon {
@@ -199,7 +208,7 @@
   }
 
   .Viral-Dropdown--button {
-    @apply flex items-center py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+    @apply flex items-center py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
   }
 
   .Viral-Dropdown--icon {
@@ -207,7 +216,11 @@
   }
 
   .button {
-    @apply flex items-center justify-center font-medium border rounded-md focus:z-10 focus:ring-4;
+    @apply flex items-center justify-center font-medium border rounded-md cursor-pointer focus:z-10 focus:ring-4;
+  }
+
+  .button:disabled {
+    @apply opacity-50 cursor-not-allowed;
   }
 
   .button--size-default {
@@ -281,6 +294,23 @@
 
   .dialog--footer {
     @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
+  }
+
+  .avatar {
+    @apply relative inline-flex items-center justify-center overflow-hidden text-gray-800 rounded-md dark:text-gray-300;
+    --tw-avatar-bg-lightness: 35%;
+    --tw-avatar-border-lightness: 35%;
+    --tw-avatar-bg-alpha: 0.3;
+  }
+
+  .dark .avatar {
+    --tw-avatar-bg-lightness: 25%;
+    --tw-avatar-border-lightness: 90%;
+    --tw-avatar-bg-alpha: 0.4;
+  }
+
+  strong {
+    @apply font-semibold;
   }
 }
 

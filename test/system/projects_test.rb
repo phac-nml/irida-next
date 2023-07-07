@@ -17,7 +17,7 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
     click_on I18n.t(:'components.pagination.next')
-    assert_selector 'tr', count: 5
+    assert_selector 'tr', count: 6
     click_on I18n.t(:'components.pagination.previous')
     assert_selector 'tr', count: 20
 
@@ -46,19 +46,18 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_text project_description
   end
 
-  test 'can update a project' do
-    project_name = 'Updated Project'
+  test 'can update project name and description' do
+    project_name = 'New Project'
+    project_description = 'New Project Description'
 
     visit project_edit_path(projects(:project1))
     assert_text I18n.t(:'projects.edit.general.title')
 
-    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-      fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
-      assert_equal 'updated-project',
-                   find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
-      click_on I18n.t(:'projects.edit.general.submit')
-    end
+    fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
+    fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
+    click_on I18n.t(:'projects.edit.general.submit')
     assert_selector 'h1', text: project_name
+    assert_text project_description
   end
 
   test 'can view project' do

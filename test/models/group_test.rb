@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GroupTest < ActiveSupport::TestCase
+class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
   def setup
     @group = groups(:group_one)
     @subgroup_one = groups(:subgroup1)
@@ -99,6 +99,31 @@ class GroupTest < ActiveSupport::TestCase
       -> { Member.count } => (members_count * -1)
     ) do
       @group_three.destroy
+    end
+  end
+
+  test '#destroy removes descendant groups, project namespaces, projects, and members, then they are restored' do
+    self_and_descendants_count = @group_three.self_and_descendants.count
+    project_namespaces = Namespaces::ProjectNamespace.where(parent: @group_three.self_and_descendants)
+    projects_count = project_namespaces.count
+    members_count = Member.where(namespace: @group_three.self_and_descendants).count +
+                    Member.where(namespace: project_namespaces).count
+    assert_difference(
+      -> { Group.count } => (self_and_descendants_count * -1),
+      -> { Namespaces::ProjectNamespace.count } => (projects_count * -1),
+      -> { Project.count } => (projects_count * -1),
+      -> { Member.count } => (members_count * -1)
+    ) do
+      @group_three.destroy
+    end
+
+    assert_difference(
+      -> { Group.count } => (self_and_descendants_count * +1),
+      -> { Namespaces::ProjectNamespace.count } => (projects_count * +1),
+      -> { Project.count } => (projects_count * +1),
+      -> { Member.count } => (members_count * +1)
+    ) do
+      Group.restore(@group_three.id, recursive: true)
     end
   end
 end

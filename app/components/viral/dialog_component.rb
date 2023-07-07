@@ -8,7 +8,7 @@ module Viral
     renders_one :header, Viral::Dialog::HeaderComponent
     renders_many :sections, Viral::Dialog::SectionComponent
     renders_one :primary_action, lambda { |**system_arguments|
-      Viral::ButtonComponent.new(type: :primary, **system_arguments)
+      Viral::ButtonComponent.new(state: :primary, **system_arguments)
     }
     renders_many :secondary_actions
 
@@ -22,10 +22,11 @@ module Viral
 
     renders_one :trigger
 
-    def initialize(title: '', size: SIZE_DEFAULT, open: false)
+    def initialize(title: '', size: SIZE_DEFAULT, open: false, **system_arguments)
       @title = title
       @open = open
       @dialog_size = SIZE_MAPPINGS[size]
+      @system_arguments = system_arguments
     end
 
     def render_footer?

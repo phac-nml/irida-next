@@ -19,14 +19,10 @@ module Members
       end
     end
 
-    test 'remove group member with incorrect permissions' do
+    test 'remove themselves as a group member' do
       user = users(:joan_doe)
-      assert_no_difference ['Member.count'] do
+      assert_difference -> { Member.count } => -1 do
         Members::DestroyService.new(@group_member, @group, user).execute
-      end
-      assert @group_member.errors.full_messages.any? do |error_message|
-        error_message.include?(I18n.t('services.members.destroy.cannot_remove_self',
-                                      namespace_type: @group.type))
       end
     end
 

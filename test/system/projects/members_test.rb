@@ -4,8 +4,11 @@ require 'application_system_test_case'
 
 module Projects
   class MembersTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+    header_row_count = 1
+
     def setup
-      login_as users(:john_doe)
+      @user = users(:john_doe)
+      login_as @user
       @namespace = namespaces_user_namespaces(:john_doe_namespace)
       @project = projects(:john_doe_project2)
       @members_count = members.select { |member| member.namespace == @project.namespace }.count
@@ -15,7 +18,46 @@ module Projects
       visit namespace_project_members_url(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count
+      assert_selector 'tr', count: @members_count + header_row_count
+    end
+
+    test 'can see list of project members which are inherited from parent group' do
+      project = projects(:project21)
+      parent_namespace = groups(:group_one)
+      members_count = members.select { |member| member.namespace == parent_namespace }.count
+
+      visit namespace_project_members_url(parent_namespace, project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+      assert_selector 'tr', count: members_count + header_row_count
+
+      assert_no_text 'Direct member'
+    end
+
+    test 'lists the correct membership when user is a direct member of the project as well as an inherited member
+    through a group' do
+      project = projects(:project24)
+      parent_namespace = groups(:group_one)
+
+      visit namespace_project_members_url(parent_namespace, project)
+
+      group_member = members(:group_one_member_ryan_doe)
+
+      project_member = members(:project_twenty_four_member_ryan_doe)
+
+      assert_equal project_member.user, group_member.user
+
+      # User has membership in group and in project with same access level
+      assert_equal Member::AccessLevel::GUEST, group_member.access_level
+      assert_equal Member::AccessLevel::GUEST, project_member.access_level
+
+      table_row = find(:table_row, [project_member.user.email])
+
+      within table_row do
+        # Should display member as Direct member of project
+        assert_text 'Direct member'
+        assert_no_text 'Group 1'
+      end
     end
 
     test 'cannot access project members' do
@@ -42,14 +84,19 @@ module Projects
 
       assert_text I18n.t(:'projects.members.create.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count + 1
+      assert_selector 'tr', count: (@members_count + 1) + header_row_count
     end
 
     test 'can remove a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
+      project_member = members(:project_two_member_ryan_doe)
 
-      all('.member-settings-ellipsis')[2].click
-      click_link I18n.t(:'projects.members.index.remove')
+      table_row = find(:table_row, { 'Username' => project_member.user.email })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.members.index.remove')
+      end
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
@@ -57,24 +104,25 @@ module Projects
 
       assert_text I18n.t(:'projects.members.destroy.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count - 1
+      assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
 
-    test 'cannot remove themselves as a member from the project' do
+    test 'can remove themselves as a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
 
-      first('.member-settings-ellipsis').click
-      click_link I18n.t(:'projects.members.index.remove')
+      table_row = find(:table_row, { 'Username' => @user.email })
 
-      within('#turbo-confirm[open]') do
-        click_button 'Confirm'
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.members.index.leave_project')
       end
 
-      assert_no_text I18n.t(:'projects.members.destroy.success')
-      assert_text I18n.t('services.members.destroy.cannot_remove_self',
-                         namespace_type: @project.namespace.class.model_name.human)
-      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t(:'projects.members.destroy.leave_success', name: @project.name)
+      assert_no_selector 'h1', text: I18n.t(:'projects.members.index.title')
     end
 
     test 'can create a project under namespace and add a new member to project' do
@@ -111,7 +159,7 @@ module Projects
 
       assert_text I18n.t(:'projects.members.create.success')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: 1
+      assert_selector 'tr', count: 1 + header_row_count
     end
 
     test 'can not add a member to the project' do
@@ -127,14 +175,23 @@ module Projects
       namespace = groups(:group_five)
       project_member = members(:project_twenty_two_member_michelle_doe)
 
-      visit namespace_project_members_url(namespace, project)
+      Timecop.travel(Time.zone.now + 5) do
+        visit namespace_project_members_url(namespace, project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+        assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
+        find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
 
-      within %(turbo-frame[id="member-update-alert"]) do
-        assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)
+        within %(turbo-frame[id="member-update-alert"]) do
+          assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)
+        end
+
+        project_member_row = find(:table_row, [project_member.user.email])
+
+        within project_member_row do
+          assert_text 'Updated', count: 1
+          assert_text 'less than a minute ago'
+        end
       end
     end
 

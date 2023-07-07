@@ -3,6 +3,8 @@
 # entity class for Member
 class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_logidze
+  acts_as_paranoid
+
   belongs_to :user
   belongs_to :namespace, autosave: true
   belongs_to :created_by, class_name: 'User'
@@ -91,6 +93,14 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
+    def can_transfer_sample?(user, object_namespace)
+      namespace_owners_include_user?(user, object_namespace)
+    end
+
+    def can_transfer_sample_to_project?(user, object_namespace)
+      can_transfer_into_namespace?(user, object_namespace)
+    end
+
     def namespace_owners_include_user?(user, namespace)
       if namespace.project_namespace?
         Member.exists?(
@@ -160,7 +170,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     errors.add(:base,
                I18n.t('activerecord.errors.models.member.destroy.last_member',
                       namespace_type: namespace.class.model_name.human))
-    false
+    throw :abort
   end
 
   # Method to update descendant membership access levels so they aren't less than the parent group

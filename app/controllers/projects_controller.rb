@@ -65,20 +65,20 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def transfer
-    new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
-      redirect_to(
-        project_path(@project),
-        notice: t('.success', project_name: @project.name)
-      )
+      flash[:success] = t('.transfer.success', project_name: @project.name)
+      respond_to do |format|
+        format.turbo_stream { redirect_to project_path(@project) }
+      end
     else
+      @error = @project.errors.messages.values.flatten.first
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     Projects::DestroyService.new(@project, current_user).execute
-    if @project.destroyed?
+    if @project.deleted?
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to projects_path
     else
@@ -118,14 +118,22 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def authorized_namespaces
     @authorized_namespaces = authorized_scope(Namespace, type: :relation, as: :manageable)
+    return unless @project
+
+    @authorized_namespaces = @authorized_namespaces.where.not(id: @project.namespace.parent.id)
+  end
+
+  def new_namespace
+    id = params.require(:new_namespace_id)
+    Namespace.find_by(id:)
   end
 
   def resolve_layout
     case action_name
-    when 'show', 'edit'
-      'projects'
-    else
+    when 'new', 'create', 'index'
       'application'
+    else
+      'projects'
     end
   end
 

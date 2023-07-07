@@ -14,7 +14,7 @@ module MembershipActions
 
   def index
     authorize! @namespace, to: :member_listing?
-    @members = Member.where(namespace_id: @namespace.id)
+    @members = authorized_scope(Member, type: :relation, scope_options: { namespace: @namespace })
   end
 
   def new
@@ -39,12 +39,19 @@ module MembershipActions
     end
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize
     Members::DestroyService.new(@member, @namespace, current_user).execute
-    if @member.destroyed?
-      flash[:success] = t('.success')
+    if @member.deleted?
+      if current_user == @member.user
+        flash[:success] = t('.leave_success', name: @namespace.name)
+        redirect_to root_path and return
+      else
+        flash[:success] = t('.success')
+      end
     else
-      flash[:error] = @member.errors.full_messages.first
+      flash[:error] = @member.errors.full_messages.first if @member.user != current_user
+      flash[:error] = I18n.t('activerecord.errors.models.member.destroy.last_member_self',
+                             namespace_type: @namespace.class.model_name.human)
     end
     redirect_to members_path
   end
@@ -89,9 +96,8 @@ module MembershipActions
 
   def available_users
     # Remove current user from available users as a user cannot add themselves
-    @available_users = User.where.not(id: Member.where(
-      namespace_id: @namespace.id
-    ).pluck(:user_id)).to_a - [current_user]
+    @available_users = User.where.not(id: Member.select(:user_id).where(namespace: @namespace))
+                           .where.not(id: current_user.id)
   end
 
   protected

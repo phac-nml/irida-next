@@ -10,26 +10,34 @@ Turbo.setConfirmMethod((message, element) => {
     );
   }
 
+  // Add any text that was passed in
+  if (message) {
+    dialog.querySelector("p").textContent = message;
+  }
+
   // Save the default dialog content to reset when closing
   const defaultState = dialog.innerHTML;
 
   // Determine if custom content is provided
+  // This can be hidden on a button inside a form created by rails
   const contentIdElement = element.querySelector("[data-turbo-content]");
 
   if (contentIdElement) {
     let contentId = contentIdElement.getAttribute("data-turbo-content");
     dialog.querySelector(".dialog--content").innerHTML =
       document.querySelector(contentId).innerHTML;
-  } else {
-    dialog.querySelector("p").textContent = message;
   }
 
   // See if there is a custom form to display
-  const formIdElement = element.querySelector("[data-turbo-form]");
-  if (formIdElement) {
-    let formId = formIdElement.getAttribute("data-turbo-form");
-    dialog.querySelector(".dialog--form").innerHTML =
-      document.querySelector(formId).innerHTML;
+  const confirmValueElement = element.querySelector("[data-confirm-value]");
+  if (confirmValueElement) {
+    let value = confirmValueElement.getAttribute("data-confirm-value");
+    const confirmForm = dialog.querySelector(".dialog--form--validate");
+    confirmForm.setAttribute("data-confirmation-input-value", value);
+
+    // Display the form to valid against value
+    dialog.querySelector(".dialog--form").classList.add("hidden");
+    confirmForm.classList.remove("hidden");
   }
 
   dialog.showModal();
