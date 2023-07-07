@@ -9,7 +9,7 @@
   }
 
   kbd {
-    @apply px-2 py-1.5 text-sm font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500
+    @apply px-2 py-1.5 text-sm font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500;
   }
 
   .body-wrapper {
@@ -54,7 +54,7 @@
 
   .page-header {
     overflow: hidden;
-    @apply items-center justify-between block p-2 px-4 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
+    @apply items-center justify-between block p-2 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
   }
 
   .navbar-btn {
@@ -294,6 +294,19 @@
 
   .dialog--footer {
     @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
+  }
+
+  .avatar {
+    @apply relative inline-flex items-center justify-center overflow-hidden text-gray-800 rounded-md dark:text-gray-300;
+    --tw-avatar-bg-lightness: 35%;
+    --tw-avatar-border-lightness: 35%;
+    --tw-avatar-bg-alpha: 0.3;
+  }
+
+  .dark .avatar {
+    --tw-avatar-bg-lightness: 25%;
+    --tw-avatar-border-lightness: 90%;
+    --tw-avatar-bg-alpha: 0.4;
   }
 
   strong {
