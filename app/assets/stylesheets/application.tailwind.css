@@ -191,7 +191,7 @@
   }
 
   .button {
-    @apply inline-flex items-center justify-center w-1/2 text-sm rounded-md cursor-pointer sm:w-auto focus:z-10;
+    @apply inline-flex items-center justify-center w-1/2 text-sm rounded-md cursor-pointer sm:w-auto focus:z-10 border;
   }
 
   .button:disabled {
