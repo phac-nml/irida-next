@@ -332,6 +332,14 @@ en:
           title: Transfer group
           submit: Transfer group
           new_namespace_id: Select a new namespace
+          descriptions:
+            - Transfer a group into another namespace.
+            - When you transfer a group within another group, you can easily manage multiple projects and users.
+            - "Things to be aware of before transferring a group:"
+          points:
+            - Be careful! Changing a group's namespace can have unintended side effects.
+            - You can only transfer a group within groups where you have sufficient permissions.
+            - Group visibility level will change to match namespace rules when transferring to a group.
         delete:
           title: Delete group
           description: Deleting a group is permanent and cannot be undone. All projects and subgroups will be deleted along with the group

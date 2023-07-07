@@ -25,13 +25,8 @@
         </div>
       <% end %>
     <% end %>
-  </div>
-</div>
 
-<% if allowed_to?(:transfer?, @group) or allowed_to?(:destroy?, @group) %>
-  <div class="p-4 md:mx-auto">
-    <div class="grid gap-4">
-
+    <% if allowed_to?(:transfer?, @group) or allowed_to?(:destroy?, @group) %>
       <h2 class="text-2xl font-extrabold dark:text-white">
         <%= t(:"groups.edit.advanced.title") %>
       </h2>
@@ -41,6 +36,6 @@
       <% if allowed_to?(:destroy?, @group) %>
         <%= render "edit_advanced_delete", group: @group %>
       <% end %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>

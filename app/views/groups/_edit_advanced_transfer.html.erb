@@ -1,16 +1,37 @@
 <%= viral_card do |card| %>
-  <% card.header(title: t(:"groups.edit.advanced.transfer.title")) %>
+  <% card.header(title: t("groups.edit.advanced.transfer.title")) %>
   <% card.section do %>
+
+    <% t("groups.edit.advanced.transfer.descriptions").each do |description| %>
+      <p class="mb-2 text-base text-gray-900 dark:text-white"><%= description %></p>
+    <% end %>
+    <ul
+      class="
+        mb-4
+        ml-4
+        space-y-1
+        text-gray-500
+        list-disc
+        list-inside
+        dark:text-gray-400
+      "
+    >
+
+      <% t("groups.edit.advanced.transfer.points").each do |item| %>
+        <li><%= item %></li>
+      <% end %>
+    </ul>
+
     <%= form_with(url: group_transfer_path, method: :put,  class: "grid gap-4") do |form| %>
       <div class="form-field">
         <%= form.label :new_namespace_id,
-                   t(:"groups.edit.advanced.transfer.new_namespace_id") %>
+                   t("groups.edit.advanced.transfer.new_namespace_id") %>
         <%= form.collection_select(
           :new_namespace_id,
           @authorized_namespaces,
           :id,
           :full_name,
-          { prompt: t(:"groups.edit.advanced.transfer.new_namespace_id") }
+          { prompt: t("groups.edit.advanced.transfer.new_namespace_id") }
         ) %>
         <%= render "shared/form/field_errors",
         errors: group.errors.full_messages_for(:new_namespace) %>
