@@ -5,7 +5,7 @@ class GroupsController < Groups::ApplicationController
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorized_namespaces, only: %i[edit new update create]
+  before_action :authorized_namespaces, only: %i[new update create]
 
   def index
     @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
