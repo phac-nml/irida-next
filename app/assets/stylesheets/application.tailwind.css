@@ -53,8 +53,7 @@
   }
 
   .page-header {
-    overflow: hidden;
-    @apply items-center justify-between block p-2 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
+    @apply items-center justify-between block p-2 bg-white border-b border-gray-200 sm:flex dark:bg-gray-800 dark:border-gray-700;
   }
 
   .navbar-btn {
@@ -192,7 +191,7 @@
   }
 
   .button {
-    @apply flex items-center justify-center font-medium border rounded-md cursor-pointer focus:z-10 focus:ring-4;
+    @apply inline-flex items-center justify-center w-1/2 text-sm rounded-md cursor-pointer sm:w-auto focus:z-10;
   }
 
   .button:disabled {

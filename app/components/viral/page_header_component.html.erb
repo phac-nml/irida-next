@@ -1,28 +1,16 @@
 <div class="page-header">
-  <div class="w-full">
-    <div
-      class="
-        items-center
-        justify-between
-        block
-        sm:flex
-        md:divide-x
-        md:divide-gray-100
-        dark:divide-gray-700
-      "
-    >
-      <div class="flex flex-row justify-between">
-        <div class="flex items-center">
-          <% if icon.present? %>
-            <%= icon %>
-          <% end %>
+  <div class="w-full mb-1 sm:flex">
+    <div class="flex items-center">
+      <% if icon.present? %>
+        <%= icon %>
+      <% end %>
 
-          <div class="flex-1 pl-2">
-            <h1 class="font-semibold leading-tight text-gray-900 dark:text-white"><%= title %></h1>
-            <p class="text-gray-500 dark:text-gray-400"><%= subtitle %></p>
-          </div>
-        </div>
+      <div class="px-2">
+        <h1 class="font-semibold leading-tight text-gray-900 dark:text-white"><%= title %></h1>
+        <p class="text-gray-500 dark:text-gray-400"><%= subtitle %></p>
       </div>
+    </div>
+    <div class="flex items-center ml-auto space-x-2 whitespace-nowrap sm:space-x-3">
       <%= buttons %>
     </div>
   </div>
