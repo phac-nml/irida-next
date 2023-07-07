@@ -1,88 +1,46 @@
-<div class="p-4">
-  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <!--Edit general details form -->
-    <div
-      class="
-        p-4
-        bg-white
-        border
-        border-gray-200
-        rounded-lg
-        shadow-sm
-        2xl:col-span-2
-        dark:border-gray-700
-        sm:p-6
-        dark:bg-gray-800
-      "
-    >
-      <h2
-        class="
-          text-xl
-          font-semibold
-          leading-tight
-          text-gray-900
-          dark:text-white
-          mb-4
-        "
-      >
-        <%= t(:"groups.edit.details.title") %>
-      </h2>
-      <div data-controller="slugify">
-        <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
-          <div class="grid gap-4">
-            <%= render partial: "form_fields",
-            locals: {
-              form: form,
-              group: @group,
-              authorized_namespaces: @authorized_namespaces
-            } %>
+<div class="p-4 md:mx-auto">
+  <div class="grid gap-4">
 
-            <div>
-              <%= form.submit t(:"groups.edit.details.submit"), class: "btn btn-primary" %>
+    <h2 class="text-2xl font-extrabold dark:text-white">
+      <%= t(:"groups.edit.details.title") %>
+    </h2>
+    <%= viral_card do |card| %>
+      <% card.header(title: t(:"groups.edit.details.subtitle")) %>
+      <% card.section do %>
+        <div data-controller="slugify">
+          <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
+            <div class="grid gap-4">
+              <%= render partial: "form_fields",
+              locals: {
+                form: form,
+                group: @group,
+                authorized_namespaces: @authorized_namespaces
+              } %>
+
+              <div>
+                <%= form.submit t(:"groups.edit.details.submit"), class: "btn btn-primary" %>
+              </div>
             </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <% if allowed_to?(:transfer?, @group) or allowed_to?(:destroy?, @group) %>
-      <div
-        class="
-          p-4
-          bg-white
-          border
-          border-gray-200
-          rounded-lg
-          shadow-sm
-          2xl:col-span-2
-          dark:border-gray-700
-          sm:p-6
-          dark:bg-gray-800
-        "
-      >
-        <div class="grid gap-4">
-          <h2
-            class="
-              text-xl
-              font-semibold
-              leading-tight
-              text-gray-900
-              dark:text-white
-              flex
-              justify-between
-              items-center
-            "
-          >
-            <%= t(:"groups.edit.advanced.title") %>
-          </h2>
-          <% if allowed_to?(:transfer?, @group) %>
-            <%= render "edit_advanced_transfer", group: @group %>
-          <% end %>
-          <% if allowed_to?(:destroy?, @group) %>
-            <%= render "edit_advanced_delete", group: @group %>
           <% end %>
         </div>
-      </div>
+      <% end %>
     <% end %>
   </div>
 </div>
+
+<% if allowed_to?(:transfer?, @group) or allowed_to?(:destroy?, @group) %>
+  <div class="p-4 md:mx-auto">
+    <div class="grid gap-4">
+
+      <h2 class="text-2xl font-extrabold dark:text-white">
+        <%= t(:"groups.edit.advanced.title") %>
+      </h2>
+      <% if allowed_to?(:transfer?, @group) %>
+        <%= render "edit_advanced_transfer", group: @group %>
+      <% end %>
+      <% if allowed_to?(:destroy?, @group) %>
+        <%= render "edit_advanced_delete", group: @group %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

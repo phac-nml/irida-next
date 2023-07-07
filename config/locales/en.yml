@@ -321,7 +321,7 @@ en:
     edit:
       title: Settings
       details:
-        title: Name and description
+        title: General
         subtitle: Change the name and description of your group
         name_placeholder: Awesome group name
         path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
