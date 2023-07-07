@@ -272,7 +272,7 @@
   }
 
   .avatar {
-    @apply relative inline-flex items-center justify-center overflow-hidden text-gray-800 rounded-md dark:text-gray-300;
+    @apply relative inline-flex items-center justify-center overflow-hidden text-gray-800 rounded-md dark:text-gray-300 flex-none;
     --tw-avatar-bg-lightness: 35%;
     --tw-avatar-border-lightness: 35%;
     --tw-avatar-bg-alpha: 0.3;
