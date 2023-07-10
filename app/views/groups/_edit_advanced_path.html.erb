@@ -1,54 +1,52 @@
 <%= viral_card do |card| %>
   <% card.header(title: t(:"groups.edit.advanced.path.title")) %>
   <% card.section do %>
-    <p class="text-gray-600 dark:text-gray-400">
-      <%= t(:"groups.edit.advanced.path.description") %>
-    </p>
     <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
       <div class="grid gap-4">
-        <div class="grid grid-cols-2 gap-4">
+        <p class="text-gray-600 dark:text-gray-400">
+          <%= t(:"groups.edit.advanced.path.description") %>
+        </p>
+        <div class="flex">
           <div class="form-field">
             <%= form.label :parent_id %>
-            <div class="flex whitespace-nowrap items-center">
-              <div
-                class="
-                  inline-flex
-                  items-center
-                  px-3
-                  py-2.5
-                  text-sm
-                  text-gray-600
-                  bg-gray-200
-                  dark:bg-gray-800/50
-                  dark:text-gray-200
-                  border
-                  border-r-0
-                  border-gray-300
-                  rounded-l-lg
-                  dark:bg-gray-600
-                  dark:text-gray-400
-                  dark:border-gray-600
-                "
-              >
-                <%= root_url %>
-                <% if @group.parent %>
-                  <strong>
-                    <%= @group.parent.full_path + "/" %>
-                  </strong>
-                <% end %>
-              </div>
-              <%= form.hidden_field :parent_id %>
-              <% invalid_path = @group.errors.include?(:path) %>
-              <div class="form-field <%= 'invalid' if invalid_path %>">
-                <%= form.label :path %>
-                <%= form.text_field :path, pattern: Irida::PathRegex::PATH_REGEX_STR, required: true %>
-                <p class="field-hint">
-                  <%= t(:"groups.create.path_help") %>
-                </p>
-                <%= render "shared/form/field_errors",
-                errors: @group.errors.full_messages_for(:path) %>
-              </div>
+            <div
+              class="
+                inline-flex
+                items-center
+                px-3
+                py-2.5
+                text-sm
+                text-gray-600
+                bg-gray-200
+                dark:bg-gray-800/50
+                dark:text-gray-200
+                border
+                border-r-0
+                border-gray-300
+                rounded-l-md
+                dark:bg-gray-600
+                dark:text-gray-400
+                dark:border-gray-600
+              "
+            >
+              <%= root_url %>
+              <% if @group.parent %>
+                <strong>
+                  <%= @group.parent.full_path + "/" %>
+                </strong>
+              <% end %>
             </div>
+            <%= form.hidden_field :parent_id %>
+          </div>
+          <% invalid_path = @group.errors.include?(:path) %>
+          <div class="form-field postfixed w-full <%= 'invalid' if invalid_path %>">
+            <%= form.label :path %>
+            <%= form.text_field :path,
+                            pattern: Irida::PathRegex::PATH_REGEX_STR,
+                            required: true,
+                            title: t(:"groups.create.path_help") %>
+            <%= render "shared/form/field_errors",
+            errors: @group.errors.full_messages_for(:path) %>
           </div>
         </div>
         <div>
