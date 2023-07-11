@@ -87,6 +87,15 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def self_and_descendant_ids
       self_and_descendants.as_ids
     end
+
+    def without_descendants
+      wildcard_path_select =
+        joins(:route)
+        .select(Arel.sql("concat(routes.path,'/%')")).to_sql
+
+      joins(:route)
+        .where(Arel.sql(format('routes.path not ILIKE all(array(%s))', wildcard_path_select)))
+    end
   end
 
   def ancestors
