@@ -3,9 +3,9 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
-      new_group_member_path(@namespace),
-      class: "btn btn-primary",
-      "aria-label": t(:".actions.button_add_aria_label") %>
+                  new_group_member_path(@namespace),
+                  class: "button button--state-primary button--size-default",
+                  "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
 <% end %>
@@ -26,23 +26,12 @@
             </tr>
           </thead>
           <tbody
-            class="
-              bg-white
-              divide-y
-              divide-gray-200
-              dark:bg-gray-800
-              dark:divide-gray-700
-            "
+            class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
           >
             <% @members.each do |member| %>
               <% member_source = membership_source(@namespace, member) %>
               <tr
-                class="
-                  text-sm
-                  font-normal
-                  text-gray-500
-                  dark:text-gray-400
-                "
+                class="text-sm font-normal text-gray-500 dark:text-gray-400"
               >
                 <td class="px-6 py-4">
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %>

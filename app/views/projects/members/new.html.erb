@@ -16,12 +16,12 @@
     >
       <h2
         class="
+          mb-4
           text-xl
           font-semibold
           leading-tight
           text-gray-900
           dark:text-white
-          mb-4
         "
       >
         <%= t(:".title") %>
@@ -54,8 +54,8 @@
 
             <div>
               <%= form.submit t(:".add_member_to_project"),
-                          class: "btn btn-primary mr-1",
-                          disabled: !@available_users.count.positive? %>
+                              class: "button button--state-primary button--size-default",
+                              disabled: !@available_users.count.positive? %>
             </div>
           </div>
         <% end %>
