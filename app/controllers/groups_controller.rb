@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 # Controller actions for Groups
-class GroupsController < Groups::ApplicationController
+class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
-  before_action :group, only: %i[edit show destroy update]
+  before_action :group, only: %i[edit show destroy share update]
   before_action :context_crumbs, except: %i[index new create show]
   before_action :authorized_namespaces, only: %i[new update create]
 
@@ -58,6 +58,22 @@ class GroupsController < Groups::ApplicationController
     else
       flash[:error] = @group.errors.full_messages.first
       redirect_to group_path(@group)
+    end
+  end
+
+  def share # rubocop:disable Metrics/AbcSize
+    ggl = Groups::ShareService.new(current_user, @group, params[:share_with_group_id],
+                                   params[:group_access_level]).execute
+    if ggl
+      if ggl.errors.full_messages.count.positive?
+        flash[:error] = ggl.errors.full_messages.first
+      else
+        flash[:success] = 'Successfully shared group'
+        redirect_to group_path(@group)
+      end
+    else
+      flash[:error] = 'There was an error sharing group'
+      render :edit, status: :unprocessable_entity
     end
   end
 

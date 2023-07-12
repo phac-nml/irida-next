@@ -93,6 +93,13 @@ class GroupPolicy < NamespacePolicy
     false
   end
 
+  def share_group_with_other_groups?
+    return true if Member.can_share_group?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |_relation|
     user.groups.self_and_descendants.include_route
   end
