@@ -1,33 +1,12 @@
-<div class="p-4">
-  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <!--Edit general details form -->
-    <div
-      class="
-        p-4
-        bg-white
-        border
-        border-gray-200
-        rounded-lg
-        shadow-sm
-        2xl:col-span-2
-        dark:border-gray-700
-        sm:p-6
-        dark:bg-gray-800
-      "
-    >
-      <h2
-        class="
-          mb-4
-          text-xl
-          font-semibold
-          leading-tight
-          text-gray-900
-          dark:text-white
-        "
-      >
-        <%= t(:"groups.edit.details.title") %>
-      </h2>
-      <div data-controller="slugify">
+<div class="p-4 md:mx-auto">
+  <!--Edit general details form -->
+  <div class="grid gap-4">
+    <h2 class="text-2xl font-extrabold dark:text-white">
+      <%= t(:"groups.edit.details.title") %>
+    </h2>
+    <%= viral_card do |card| %>
+      <% card.header(title: t(:"groups.edit.details.subtitle")) %>
+      <% card.section do %>
         <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
           <div class="grid gap-4">
             <%= render partial: "form_fields",
@@ -36,63 +15,21 @@
               group: @group,
               authorized_namespaces: @authorized_namespaces
             } %>
-
             <div>
               <%= form.submit t(:"groups.edit.details.submit"),
-                              class: "button button--state-primary button--size-default" %>
+                          class: "button button--state-primary button--size-default" %>
             </div>
           </div>
         <% end %>
-      </div>
-    </div>
+      <% end %>
+    <% end %>
 
+    <h2 class="text-2xl font-extrabold dark:text-white">
+      <%= t(:"groups.edit.advanced.title") %>
+    </h2>
+    <%= render "edit_advanced_path", group: @group %>
     <% if allowed_to?(:destroy?, @group) %>
-      <div
-        class="
-          p-4
-          bg-white
-          border
-          border-gray-200
-          rounded-lg
-          shadow-sm
-          2xl:col-span-2
-          dark:border-gray-700
-          sm:p-6
-          dark:bg-gray-800
-        "
-      >
-        <div>
-          <h2
-            id="settings-delete-heading"
-            class="
-              text-xl
-              font-semibold
-              leading-tight
-              text-gray-900
-              dark:text-white
-            "
-          >
-            <%= t(:".advanced.title") %>
-          </h2>
-          <div class="pt-4">
-            <h3 class="text-lg font-semibold leading-tight text-red-600">
-              <%= t(:"groups.edit.advanced.delete_group.title") %>
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              <%= t(:"groups.edit.advanced.delete_group.description") %>
-            </p>
-            <div class="mt-4">
-              <%= link_to t(:"groups.edit.advanced.delete_group.submit"),
-                          group_path(@group),
-                          data: {
-                            turbo_method: :delete,
-                            turbo_confirm: t(:"groups.edit.advanced.delete_group.confirm")
-                          },
-                          class: "button button--state-destructive button--size-default inline-block" %>
-            </div>
-          </div>
-        </div>
-      </div>
+      <%= render "edit_advanced_delete", group: @group %>
     <% end %>
   </div>
 </div>

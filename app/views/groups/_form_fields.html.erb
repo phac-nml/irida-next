@@ -11,45 +11,58 @@
   <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:name) %>
 </div>
 
-<% if group.parent_id.present? %>
-  <div class="grid grid-cols-2 gap-4">
-    <div class="form-field">
-      <%= form.label :parent_id %>
-      <div class="flex whitespace-nowrap items-center">
-        <div
-          class="
-            inline-flex
-            items-center
-            px-3
-            py-2.5
-            text-sm
-            text-gray-600
-            bg-gray-200
-            dark:bg-gray-800/50
-            dark:text-gray-200
-            border
-            border-r-0
-            border-gray-300
-            rounded-l-lg
-            dark:bg-gray-600
-            dark:text-gray-400
-            dark:border-gray-600
-          "
-        >
-          <%= root_url %>
+<% if group.new_record? %>
+  <% if group.parent_id.present? %>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="form-field">
+        <%= form.label :parent_id %>
+        <div class="flex whitespace-nowrap items-center">
+          <div
+            class="
+              inline-flex
+              items-center
+              px-3
+              py-2.5
+              text-sm
+              text-gray-600
+              bg-gray-200
+              border
+              border-r-0
+              border-gray-300
+              rounded-l-lg
+              dark:bg-gray-600
+              dark:text-gray-400
+              dark:border-gray-600
+            "
+          >
+            <%= root_url %>
+          </div>
+          <%= form.collection_select(
+            :parent_id,
+            authorized_namespaces,
+            :id,
+            :full_path,
+            {},
+            { class: "prefixed" }
+          ) %>
+          <div class="ml-4 dark:text-gray-200">/</div>
         </div>
-        <%= form.collection_select(
-          :parent_id,
-          authorized_namespaces,
-          :id,
-          :full_path,
-          {},
-          { class: "prefixed" }
-        ) %>
-        <div class="ml-4 dark:text-gray-200">/</div>
+      </div>
+      <div class="form-field">
+        <%= form.label :path %>
+        <%= form.text_field :path,
+                        data: {
+                          "slugify-target": "path"
+                        },
+                        pattern: Irida::PathRegex::PATH_REGEX_STR,
+                        required: true %>
       </div>
     </div>
-    <div class="form-field">
+  <% end %>
+
+  <% unless group.parent_id.present? %>
+    <% invalid_path = group.errors.include?(:path) %>
+    <div class="form-field <%= 'invalid' if invalid_path %>">
       <%= form.label :path %>
       <%= form.text_field :path,
                       data: {
@@ -57,25 +70,13 @@
                       },
                       pattern: Irida::PathRegex::PATH_REGEX_STR,
                       required: true %>
+      <p class="field-hint">
+        <%= t(:"groups.create.path_help") %>
+      </p>
+      <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:path) %>
     </div>
-  </div>
-<% end %>
+  <% end %>
 
-<% unless group.parent_id.present? %>
-  <% invalid_path = group.errors.include?(:path) %>
-  <div class="form-field <%= 'invalid' if invalid_path %>">
-    <%= form.label :path %>
-    <%= form.text_field :path,
-                    data: {
-                      "slugify-target": "path"
-                    },
-                    pattern: Irida::PathRegex::PATH_REGEX_STR,
-                    required: true %>
-    <p class="field-hint">
-      <%= t(:"groups.create.path_help") %>
-    </p>
-    <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:path) %>
-  </div>
 <% end %>
 
 <div class="form-field">

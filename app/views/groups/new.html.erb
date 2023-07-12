@@ -6,7 +6,12 @@
     <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
       <div class="grid gap-4">
 
-        <%= render partial: "form_fields", locals: { form: form, group: @new_group } %>
+        <%= render partial: "form_fields",
+        locals: {
+          form: form,
+          group: @new_group,
+          authorized_namespaces: @authorized_namespaces
+        } %>
 
         <div class="flex">
           <%= form.submit t(:"groups.create.submit"),

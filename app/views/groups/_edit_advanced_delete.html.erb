@@ -1,0 +1,17 @@
+<%= viral_card do |card| %>
+  <% card.header(title: t(:"groups.edit.advanced.delete.title")) %>
+  <% card.section do %>
+    <p class="text-gray-600 dark:text-gray-400">
+      <%= t(:"groups.edit.advanced.delete.description") %>
+    </p>
+    <div class="mt-4">
+      <%= link_to t(:"groups.edit.advanced.delete.submit"),
+      group_path(group),
+      data: {
+        turbo_method: :delete,
+        turbo_confirm: t(:"groups.edit.advanced.delete.confirm")
+      },
+      class: "button button--state-destructive button--size-default inline-block" %>
+    </div>
+  <% end %>
+<% end %>
