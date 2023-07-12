@@ -80,6 +80,10 @@
     @apply block mb-1 text-sm font-medium text-gray-900 dark:text-white;
   }
 
+  .form-field div.field_with_errors {
+    @apply block w-full;
+  }
+
   .form-field input[type="text"],
   .form-field input[type="search"],
   .form-field input[type="password"],
