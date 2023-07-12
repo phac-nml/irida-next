@@ -77,7 +77,7 @@ class GroupsController < Groups::ApplicationController
 
   def resolve_layout
     case action_name
-    when 'show', 'edit'
+    when 'show', 'edit', 'update'
       'groups'
     when 'new', 'create'
       if @group
