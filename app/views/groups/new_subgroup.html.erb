@@ -13,11 +13,11 @@
           authorized_namespaces: @authorized_namespaces
         } %>
 
-            <div class="my-2">
-              <%= form.submit t(:'groups.new_subgroup.submit'), class: "btn btn-primary mr-1" %>
-              <%= link_to t(:'groups.new_subgroup.cancel'), group_path(@group), class: "btn btn-default" %>
-            </div>
-        <% end %>
+        <div class="flex">
+          <%= form.submit t(:'groups.new_subgroup.submit'), class: "button button--state-primary button--size-default mr-2" %>
+          <%= link_to t(:'groups.new_subgroup.cancel'), group_path(@group), class: "button button--state-default button--size-default" %>
         </div>
-      </div>
+    <% end %>
+    </div>
   </div>
+</div>

@@ -16,15 +16,15 @@
       t(".never")
     end %></td>
   <td><%= button_to(
-      t(".revoke_button"),
-      revoke_profile_personal_access_token_path(id: personal_access_token.id),
-      method: "delete",
-      form: {
-        data: {
-          "turbo-frame": "personal-access-tokens",
-          "turbo-confirm": t(".revoke_confirm")
-        }
-      },
-      class: "btn-xs btn-danger"
-    ) %></td>
+            t(".revoke_button"),
+            revoke_profile_personal_access_token_path(id: personal_access_token.id),
+            method: "delete",
+            form: {
+              data: {
+                "turbo-frame": "personal-access-tokens",
+                "turbo-confirm": t(".revoke_confirm")
+              }
+            },
+            class: "button button--state-destructive button--size-default"
+          ) %></td>
 </tr>

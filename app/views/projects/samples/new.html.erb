@@ -21,12 +21,12 @@
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
-          <div>
+          <div class="flex">
             <%= form.submit t("projects.samples.new.submit_button"),
-                        class: "btn btn-primary mr-1" %>
+                        class: "button button--state-primary button--size-default mr-2" %>
             <%= link_to t("projects.samples.new.cancel_button"),
             namespace_project_samples_path,
-            class: "btn btn-default" %>
+            class: "button button--state-default button--size-default" %>
           </div>
         </div>
       <% end %>

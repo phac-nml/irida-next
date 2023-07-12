@@ -53,8 +53,7 @@
   }
 
   .page-header {
-    overflow: hidden;
-    @apply items-center justify-between block p-2 px-4 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 sm:flex;
+    @apply items-center justify-between block p-2 bg-white border-b border-gray-200 sm:flex dark:bg-gray-800 dark:border-gray-700;
   }
 
   .navbar-btn {
@@ -141,30 +140,6 @@
     @apply mt-1 text-sm text-gray-500 dark:text-gray-400;
   }
 
-  .btn {
-    @apply text-white rounded-md text-sm px-5 py-2.5 text-center focus:outline-none focus:ring-4;
-  }
-
-  .btn-xs {
-    @apply px-3 py-2 text-xs font-medium text-center text-white rounded-md focus:outline-none focus:ring-4;
-  }
-
-  .btn-sm {
-    @apply px-3 py-2 text-sm font-medium text-center text-white rounded-md focus:outline-none focus:ring-4;
-  }
-
-  .btn-default {
-    @apply text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700;
-  }
-
-  .btn-primary {
-    @apply text-white bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-800 dark:hover:bg-primary-700 dark:focus:ring-primary-800;
-  }
-
-  .btn-danger {
-    @apply text-white bg-red-600 hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-800;
-  }
-
   .row-btn {
     @apply px-1 py-0 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
@@ -223,7 +198,7 @@
   }
 
   .button {
-    @apply flex items-center justify-center font-medium border rounded-md cursor-pointer focus:z-10 focus:ring-4;
+    @apply inline-flex items-center justify-center w-1/2 text-sm rounded-md cursor-pointer sm:w-auto focus:z-10 border;
   }
 
   .button:disabled {
@@ -301,6 +276,19 @@
 
   .dialog--footer {
     @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
+  }
+
+  .avatar {
+    @apply relative inline-flex items-center justify-center overflow-hidden text-gray-800 rounded-md dark:text-gray-300 flex-none;
+    --tw-avatar-bg-lightness: 35%;
+    --tw-avatar-border-lightness: 35%;
+    --tw-avatar-bg-alpha: 0.3;
+  }
+
+  .dark .avatar {
+    --tw-avatar-bg-lightness: 25%;
+    --tw-avatar-border-lightness: 90%;
+    --tw-avatar-bg-alpha: 0.4;
   }
 
   strong {
