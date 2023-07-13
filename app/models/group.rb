@@ -11,25 +11,20 @@ class Group < Namespace
            class_name: 'Namespace', foreign_key: :parent_id, inverse_of: :parent, dependent: :destroy
   has_many :users, through: :group_members
 
-  has_many :shared_group_links, foreign_key: :shared_with_group_id, class_name: 'GroupGroupLink' # rubocop:disable Rails/HasManyOrHasOneDependent, Rails/InverseOf
-  has_many :shared_with_group_links, foreign_key: :shared_group_id, class_name: 'GroupGroupLink' do # rubocop:disable Rails/HasManyOrHasOneDependent, Rails/InverseOf
+  has_many :shared_group_links, foreign_key: :shared_with_group_id, class_name: 'GroupGroupLink', dependent: :destroy # rubocop:disable Rails/InverseOf
+  has_many :shared_with_group_links, foreign_key: :shared_group_id, class_name: 'GroupGroupLink', dependent: :destroy do # rubocop:disable Rails/InverseOf
     def of_ancestors
       group = proxy_association.owner
 
       return GroupGroupLink.none unless group.has_parent?
 
-      GroupGroupLink.where(shared_group_id: group.ancestors.reorder(nil).select(:id))
+      GroupGroupLink.where(shared_group_id: group.ancestor_ids)
     end
 
     def of_ancestors_and_self
       group = proxy_association.owner
 
-      source_ids =
-        if group.has_parent?
-          group.self_and_ancestors.reorder(nil).select(:id)
-        else
-          group.id
-        end
+      source_ids = group.self_and_ancestor_ids
 
       GroupGroupLink.where(shared_group_id: source_ids)
     end
