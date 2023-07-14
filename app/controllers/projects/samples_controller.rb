@@ -28,7 +28,7 @@ module Projects
     end
 
     def create
-      @sample = Samples::CreateService.new(current_user, @project, sample_params).execute
+      @sample = ::Samples::CreateService.new(current_user, @project, sample_params).execute
 
       if @sample.persisted?
         flash[:success] = t('.success')
@@ -40,7 +40,7 @@ module Projects
 
     def update
       respond_to do |format|
-        if Samples::UpdateService.new(@sample, current_user, sample_params).execute
+        if ::Samples::UpdateService.new(@sample, current_user, sample_params).execute
           flash[:success] = t('.success')
           format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
         else
@@ -50,7 +50,7 @@ module Projects
     end
 
     def destroy
-      Samples::DestroyService.new(@sample, current_user).execute
+      ::Samples::DestroyService.new(@sample, current_user).execute
       if @sample.deleted?
         flash[:success] = t('.success', sample_name: @sample.name)
       else
