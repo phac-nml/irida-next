@@ -11,10 +11,22 @@ class Group < Namespace
            class_name: 'Namespace', foreign_key: :parent_id, inverse_of: :parent, dependent: :destroy
   has_many :users, through: :group_members
 
-  has_many :group_links, foreign_key: :namespace_id, class_name: 'NamespaceGroupLink', # rubocop:disable Rails/InverseOf
-                         dependent: :destroy
-  has_many :namespace_links, foreign_key: :group_id, class_name: 'NamespaceGroupLink', # rubocop:disable Rails/InverseOf
-                             dependent: :destroy do
+  has_many :shared_group_links, # rubocop:disable Rails/InverseOf
+           lambda {
+             where(namespace_type: Group.sti_name)
+           },
+           foreign_key: :group_id, class_name: 'NamespaceGroupLink', dependent: :destroy
+  has_many :shared_project_namespace_links, # rubocop:disable Rails/InverseOf
+           lambda {
+             where(namespace_type: Namespaces::ProjectNamespace.sti_name)
+           },
+           foreign_key: :group_id, class_name: 'NamespaceGroupLink', dependent: :destroy
+  has_many :shared_with_group_links, # rubocop:disable Rails/InverseOf
+           lambda {
+             where(namespace_type: Group.sti_name)
+           },
+           foreign_key: :namespace_id, class_name: 'NamespaceGroupLink',
+           dependent: :destroy do
     def of_ancestors
       group = proxy_association.owner
 
@@ -31,8 +43,9 @@ class Group < Namespace
       NamespaceGroupLink.where(group_id: source_ids)
     end
   end
-  has_many :shared_groups, through: :group_links, source: :group
-  has_many :shared_with_namespaces, through: :namespace_links, source: :namespace
+  has_many :shared_groups, through: :shared_group_links, source: :namespace
+  has_many :shared_project_namespaces, through: :shared_project_namespace_links, source: :namespace
+  has_many :shared_with_groups, through: :shared_with_group_links, source: :group
 
   def self.sti_name
     'Group'

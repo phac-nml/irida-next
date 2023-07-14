@@ -138,7 +138,7 @@ class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
                                                   namespace_id: group.id,
                                                   group_access_level: Member::AccessLevel::ANALYST)
 
-    group_group_links = subgroup_to_share.namespace_links.of_ancestors_and_self
+    group_group_links = subgroup_to_share.shared_with_group_links.of_ancestors_and_self
 
     assert_equal 2, group_group_links.count
 
@@ -150,7 +150,7 @@ class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
     group_to_share = groups(:david_doe_group_four)
     group_group_link = NamespaceGroupLink.create(group_id: group_to_share.id, namespace_id: @group.id,
                                                  group_access_level: Member::AccessLevel::ANALYST)
-    group_group_links = group_to_share.namespace_links.of_ancestors
+    group_group_links = group_to_share.shared_with_group_links.of_ancestors
 
     assert_equal 0, group_group_links.count
     assert_not group_group_links.include?(group_group_link)
@@ -167,7 +167,7 @@ class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
                                                   namespace_id: group.id,
                                                   group_access_level: Member::AccessLevel::ANALYST)
 
-    group_group_links = subgroup_to_share.namespace_links.of_ancestors
+    group_group_links = subgroup_to_share.shared_with_group_links.of_ancestors
 
     assert_equal 1, group_group_links.count
 
@@ -182,7 +182,7 @@ class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
     group_group_link = NamespaceGroupLink.create(group_id: group_to_share.id, namespace_id: group.id,
                                                  group_access_level: Member::AccessLevel::ANALYST)
 
-    group_group_links = group_to_share.namespace_links.of_ancestors_and_self
+    group_group_links = group_to_share.shared_with_group_links.of_ancestors_and_self
 
     assert_equal 1, group_group_links.count
 
