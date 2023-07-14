@@ -13,27 +13,15 @@
       <%= f.label :email %>
       <%= f.email_field :email, :required => true, autofocus: true, autocomplete: "email" %>
     </div>
-    <div class="form-field <%= 'invalid' if invalid %>">
-      <%= f.label :provider %>
-      <%= f.text_field :provider %>
-    </div>
-    <div class="form-field <%= 'invalid' if invalid %>">
-      <%= f.label :uid %>
-      <%= f.text_field :uid %>
-    </div>
-    <div class="form-field <%= 'invalid' if invalid %>">
+    <div class="form-field">
       <%= f.label :first_name %>
       <%= f.text_field :first_name %>
     </div>
-    <div class="form-field <%= 'invalid' if invalid %>">
+    <div class="form-field">
       <%= f.label :last_name %>
       <%= f.text_field :last_name %>
     </div>
-    <div class="form-field <%= 'invalid' if invalid %>">
-      <%= f.label :username %>
-      <%= f.text_field :username %>
-    </div>
-    <div class="form-field <%= 'invalid' if invalid %>">
+    <div class="form-field%>">
       <%= f.label :phone_number %>
       <%= f.telephone_field :phone_number %>
     </div>

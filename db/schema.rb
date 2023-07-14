@@ -114,7 +114,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_162646) do
     t.string "uid"
     t.jsonb "log_data"
     t.datetime "deleted_at"
-    t.string "username"
+    t.string "provider_username"
     t.string "first_name"
     t.string "last_name"
     t.string "phone_number"

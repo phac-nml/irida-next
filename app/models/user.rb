@@ -48,16 +48,16 @@ class User < ApplicationRecord
       when 'developer'
         self.first_name = auth.info.first_name
         self.last_name = auth.info.last_name
-        self.username = auth.info.username
+        self.provider_username = auth.info.provider_username
         self.phone_number = auth.info.phone_number
       when 'saml'
         self.first_name = auth.info.first_name
         self.last_name = auth.info.last_name
-        self.username = auth.info.name
+        self.provider_username = auth.info.name
       when 'azure_activedirectory_v2'
         self.first_name = auth.info.first_name
         self.last_name = auth.info.last_name
-        self.username = auth.info.nickname
+        self.provider_username = auth.info.nickname
     end
     # user.image = auth.info.image # assuming the user model has an image
     self.save

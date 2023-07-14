@@ -28,7 +28,12 @@ class ProfilesController < Profiles::ApplicationController
   private
 
   def update_params
-    params.require(:user).permit(:email)
+    params.require(:user).permit(
+      :email,
+      :first_name,
+      :last_name,
+      :phone_number
+      )
   end
 
   def set_user
