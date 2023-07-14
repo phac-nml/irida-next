@@ -21,13 +21,12 @@
       <%= f.label :last_name %>
       <%= f.text_field :last_name %>
     </div>
-    <div class="form-field%>">
+    <div class="form-field">
       <%= f.label :phone_number %>
       <%= f.telephone_field :phone_number %>
     </div>
     <div class="my-2">
-      <%= f.submit t(:"profiles.show.email.submit"),
-                   class: "button button--state-primary button--size-default" %>
+      <%= f.submit t(:"profiles.show.email.submit"), class: "button button--state-primary button--size-default" %>
     </div>
   <% end %>
 </div>
