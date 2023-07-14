@@ -231,7 +231,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
     namespace = namespaces_user_namespaces(:john_doe_namespace)
     old_namespace = groups(:group_one)
 
-    post namespace_project_transfer_path(old_namespace, project),
+    post namespace_project_samples_transfer_path(old_namespace, project),
          params: { new_namespace_id: namespace.id }, as: :turbo_stream
 
     assert_response :redirect
@@ -241,7 +241,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
     sign_in users(:david_doe)
     project = projects(:project1)
     old_namespace = groups(:group_one)
-    post namespace_project_transfer_path(old_namespace, project),
+    post namespace_project_samples_transfer_path(old_namespace, project),
          params: { new_namespace_id: 'asdfasd' }, as: :turbo_stream
 
     assert_response :unprocessable_entity

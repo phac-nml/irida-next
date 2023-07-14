@@ -15,12 +15,12 @@ module Projects
       end
 
       test 'should get new if owner' do
-        get new_namespace_project_transfer_path(@namespace, @project1)
+        get new_namespace_project_samples_transfer_path(@namespace, @project1)
         assert_response :success
       end
 
       test 'should create sample transfer for a member that is an owner' do
-        post namespace_project_transfer_index_path(@namespace, @project1),
+        post namespace_project_samples_transfer_path(@namespace, @project1),
              params: {
                new_project_id: @project2.id,
                sample_ids: [@sample1.id, @sample2.id]
@@ -33,7 +33,7 @@ module Projects
         user = users(:joan_doe)
         login_as user
 
-        post namespace_project_transfer_index_path(@namespace, @project1),
+        post namespace_project_samples_transfer_path(@namespace, @project1),
              params: {
                new_project_id: @project2.id,
                sample_ids: [@sample1.id, @sample2.id]
@@ -45,7 +45,7 @@ module Projects
         user = users(:ryan_doe)
         login_as user
 
-        post namespace_project_transfer_index_path(@namespace, @project1),
+        post namespace_project_samples_transfer_path(@namespace, @project1),
              params: {
                new_project_id: @project2.id,
                sample_ids: [@sample1.id, @sample2.id]
@@ -54,7 +54,7 @@ module Projects
       end
 
       test 'should not create sample transfer within the same project' do
-        post namespace_project_transfer_index_path(@namespace, @project1),
+        post namespace_project_samples_transfer_path(@namespace, @project1),
              params: {
                new_project_id: @project1.id,
                sample_ids: [@sample1.id, @sample2.id]
