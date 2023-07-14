@@ -3,7 +3,7 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Transfer
-    class TransferController < ApplicationController
+    class TransfersController < ApplicationController
       before_action :project
       before_action :projects
 

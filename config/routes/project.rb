@@ -20,7 +20,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       resources :samples do
         scope module: :samples, as: :samples do
           collection do
-            resource :transfer, only: %i[create new], controller: :transfer
+            resource :transfer, only: %i[create new]
           end
         end
       end
