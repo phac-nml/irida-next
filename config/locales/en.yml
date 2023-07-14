@@ -510,6 +510,7 @@ en:
         edit_button: Edit
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
+        transfer_button: Transfer samples
         actions:
           button_add_aria_label: Add new sample button
           dropdown_aria_label: Dropdown options for sample %{sample_name}
@@ -527,7 +528,7 @@ en:
       destroy:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
-      transfer:
+      transfers:
         new:
           title: Transfer Samples
           submit_button: Submit

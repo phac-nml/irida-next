@@ -1,19 +1,31 @@
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <% if allowed_to?(:create_sample?, @project) %>
-      <%= link_to t("projects.samples.index.new_button"),
-                  new_namespace_project_sample_path,
-                  class: "button button--state-primary button--size-default",
-                  "aria-label": t(".actions.button_add_aria_label") %>
-    <% end %>
+    <div>
+      <% if allowed_to?(:transfer_sample?, @project) %>
+        <%= link_to t("projects.samples.index.transfer_button"),
+        new_namespace_project_samples_transfer_path,
+        class: "button button--size-default button--state-default mr-1" %>
+      <% end %>
+      <% if allowed_to?(:create_sample?, @project) %>
+        <%= link_to t("projects.samples.index.new_button"),
+        new_namespace_project_sample_path,
+        class: "button button--size-default button--state-primary",
+        "aria-label": t(".actions.button_add_aria_label") %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
+
 <div class="bg-white dark:bg-gray-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
-        <table id="samples-table" class="min-w-full table-fixed dark:divide-gray-600">
+        <table
+          id="samples-table"
+          class="min-w-full table-fixed dark:divide-gray-600"
+          data-controller="selection"
+        >
           <tbody
             class="
               bg-white
@@ -25,6 +37,19 @@
           >
             <% @samples.each do |sample| %>
               <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                <% if allowed_to?(:transfer_sample?, @project) %>
+                  <td class="ps-4 w-10">
+                    <%= check_box_tag "sample_ids[]",
+                    sample.id,
+                    nil,
+                    id: "sample_ids_#{sample.id}",
+                    "aria-label": "placeholder_#{sample.id}",
+                    data: {
+                      action: "input->selection#toggle",
+                      selection_target: "rowSelection"
+                    } %>
+                  </td>
+                <% end %>
                 <td class="p-4 whitespace-nowrap">
                   <%= link_to sample.name,
                   namespace_project_sample_path(id: sample.id),

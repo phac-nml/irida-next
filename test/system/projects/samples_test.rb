@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module Projects
-  class SamplesTest < ApplicationSystemTestCase
+  class SamplesTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
     setup do
       @user = users(:john_doe)
       login_as @user
@@ -67,6 +67,35 @@ module Projects
       end
 
       assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name)
+    end
+
+    test 'should transfer samples' do
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      assert_selector 'table#samples-table tr', count: 2
+      all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        click_on I18n.t('projects.samples.transfers.new.submit_button')
+      end
+      assert_selector 'table#samples-table tr', count: 0
+    end
+
+    test 'user with maintainer access should not be able to see the transfer samples button' do
+      user = users(:joan_doe)
+      login_as user
+
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.transfer_button'), count: 0
+    end
+
+    test 'user with guest access should not be able to see the transfer samples button' do
+      user = users(:ryan_doe)
+      login_as user
+
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.transfer_button'), count: 0
     end
 
     test 'user should not be able to see the edit button for the sample' do
