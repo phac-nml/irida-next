@@ -4,7 +4,7 @@ require 'test_helper'
 
 module Projects
   module Samples
-    class TransferControllerTest < ActionDispatch::IntegrationTest
+    class TransfersControllerTest < ActionDispatch::IntegrationTest
       setup do
         sign_in users(:john_doe)
         @sample1 = samples(:sample1)
