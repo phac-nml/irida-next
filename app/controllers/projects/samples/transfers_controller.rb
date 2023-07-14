@@ -7,7 +7,9 @@ module Projects
       before_action :project
       before_action :projects
 
-      def new; end
+      def new
+        authorize! @project, to: :transfer_sample?
+      end
 
       def create
         new_project_id = params[:new_project_id]

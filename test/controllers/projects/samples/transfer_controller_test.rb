@@ -19,11 +19,48 @@ module Projects
         assert_response :success
       end
 
+      test 'should not get new if non-owner' do
+        user = users(:micha_doe)
+        login_as user
+
+        get new_namespace_project_samples_transfer_path(@namespace, @project1)
+        assert_response :unauthorized
+      end
+
       test 'should create sample transfer for a member that is an owner' do
         post namespace_project_samples_transfer_path(@namespace, @project1),
              params: {
                new_project_id: @project2.id,
                sample_ids: [@sample1.id, @sample2.id]
+             }
+
+        assert_redirected_to namespace_project_samples_path
+      end
+
+      test 'should not create sample transfer for a non-member' do
+        user = users(:micha_doe)
+        login_as user
+
+        post namespace_project_samples_transfer_path(@namespace, @project1),
+             params: {
+               new_project_id: @project2.id,
+               sample_ids: [@sample1.id, @sample2.id]
+             }
+        assert_response :unauthorized
+      end
+
+      test 'should create sample transfer for a member in an ancestor group' do
+        namespace = groups(:subgroup_one_group_three)
+        project4 = projects(:project4)
+        project22 = projects(:project22)
+        sample23 = samples(:sample23)
+        user = users(:james_doe)
+        login_as user
+
+        post namespace_project_samples_transfer_path(namespace, project4),
+             params: {
+               new_project_id: project22.id,
+               sample_ids: [sample23.id]
              }
 
         assert_redirected_to namespace_project_samples_path
