@@ -80,12 +80,8 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
 
     click_link I18n.t(:'groups.sidebar.settings')
 
-    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+    within all('form[action="/group-1"]')[0] do
       fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'Edited group'
-
-      assert_selector %(input[data-slugify-target="path"]) do |input|
-        assert_equal 'edited-group', input['value']
-      end
 
       fill_in 'Description', with: 'Edited group description'
       click_on I18n.t(:'groups.edit.details.submit')
@@ -95,13 +91,28 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     assert_selector 'h1', text: 'Edited group'
   end
 
+  test 'can edit a group path' do
+    visit group_url(groups(:group_one))
+
+    click_link I18n.t(:'groups.sidebar.settings')
+
+    within all('form[action="/group-1"]')[1] do
+      fill_in I18n.t(:'activerecord.attributes.group.path'), with: 'group-1-edited'
+
+      click_on I18n.t(:'groups.edit.advanced.path.submit')
+    end
+
+    assert_text I18n.t(:'groups.update.success')
+    assert_current_path '/group-1-edited'
+  end
+
   test 'can delete a group' do
     visit group_url(groups(:group_two))
 
     click_link I18n.t(:'groups.sidebar.settings')
 
-    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete_group.submit'), count: 1
-    click_link I18n.t(:'groups.edit.advanced.delete_group.submit')
+    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete.submit'), count: 1
+    click_link I18n.t(:'groups.edit.advanced.delete.submit')
 
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -132,7 +143,7 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
 
     click_link I18n.t(:'groups.sidebar.settings')
 
-    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete_group.submit'), count: 0
+    assert_selector 'a', text: I18n.t(:'groups.edit.advanced.delete.submit'), count: 0
   end
 
   test 'can view group' do

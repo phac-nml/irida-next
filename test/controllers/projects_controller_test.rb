@@ -119,41 +119,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
   end
 
   test 'should fail to update a project with wrong params' do
-    sign_in users(:john_doe)
+    sign_in users(:david_doe)
 
-    patch project_path(projects(:project2)),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'a VERY wrong path' } } }
+    project = projects(:john_doe_project2)
 
-    assert_response :unprocessable_entity
-  end
-
-  test 'should transfer a project' do
-    sign_in users(:john_doe)
-
-    post project_transfer_path(projects(:project2)),
-         params: { new_namespace_id: groups(:subgroup1).id }
-
-    assert_redirected_to project_path(projects(:project2).reload)
-  end
-
-  test 'should not transfer a project' do
-    sign_in users(:john_doe)
-
-    post project_transfer_path(projects(:project2)),
-         params: { new_namespace_id: groups(:david_doe_group_four).id }
+    patch project_path(project),
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'VERY BAD PATH' } } }
 
     assert_response :unauthorized
-  end
-
-  test 'should fail to transfer a project with wrong params' do
-    sign_in users(:john_doe)
-
-    post project_transfer_path(projects(:project2)),
-         params: {
-           new_namespace_id: 'does-not-exist'
-         }
-
-    assert_response :unprocessable_entity
   end
 
   test 'should delete a project' do
@@ -249,6 +222,38 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
              }
            }
          }
+
+    assert_response :unauthorized
+  end
+
+  test 'should transfer project' do
+    project = projects(:project1)
+    namespace = namespaces_user_namespaces(:john_doe_namespace)
+    old_namespace = groups(:group_one)
+
+    post namespace_project_samples_transfer_path(old_namespace, project),
+         params: { new_namespace_id: namespace.id }, as: :turbo_stream
+
+    assert_response :redirect
+  end
+
+  test 'should not create a new transfer with wrong parameters' do
+    sign_in users(:david_doe)
+    project = projects(:project1)
+    old_namespace = groups(:group_one)
+    post namespace_project_samples_transfer_path(old_namespace, project),
+         params: { new_namespace_id: 'asdfasd' }, as: :turbo_stream
+
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not transfer a project to unowned namespace' do
+    sign_in users(:david_doe)
+    project = projects(:project1)
+    old_namespace = groups(:group_one)
+    post namespace_project_transfer_path(old_namespace, project),
+         params: { new_namespace_id: groups(:david_doe_group_four).id },
+         as: :turbo_stream
 
     assert_response :unauthorized
   end

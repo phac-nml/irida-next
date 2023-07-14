@@ -15,7 +15,7 @@ module Viral
     end
 
     test 'destructive button' do
-      render_inline(Viral::ButtonComponent.new(type: :destructive)) do
+      render_inline(Viral::ButtonComponent.new(state: :destructive)) do
         'Destructive Button'
       end
 

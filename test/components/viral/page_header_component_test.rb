@@ -1,26 +1,27 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'application_system_test_case'
 
-class PageHeaderComponentTest < ViewComponent::TestCase
+class PageHeaderComponentTest < ApplicationSystemTestCase
   test 'renders header' do
-    title = 'THIS IS THE TITLE'
-    subtitle = 'THIS IS A SUBTITLE'
-    render_inline(Viral::PageHeaderComponent.new(title:, subtitle:))
+    visit('/rails/view_components/viral_page_header_component/with_icon')
 
-    assert_text title
-    assert_text subtitle
+    assert_text 'Page header'
+    assert_text 'This is a page header'
+  end
+
+  test 'renders header with buttons' do
+    visit('/rails/view_components/viral_page_header_component/with_buttons')
+    assert_selector 'div.page-header .button', count: 1
   end
 
   test 'renders header with icon' do
-    title = 'THIS IS THE TITLE'
-    subtitle = 'THIS IS A SUBTITLE'
-    render_inline(Viral::PageHeaderComponent.new(title:, subtitle:)) do |component|
-      component.with_icon(name: 'beaker')
-      component.with_buttons { 'BUTTONS' }
-    end
+    visit('/rails/view_components/viral_page_header_component/with_icon')
+    assert_selector 'div.page-header svg'
+  end
 
-    assert_text title
-    assert_text 'BUTTONS'
+  test 'renders header with avatar' do
+    visit('/rails/view_components/viral_page_header_component/with_avatar')
+    assert_selector 'div.page-header div.avatar'
   end
 end

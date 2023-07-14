@@ -56,7 +56,7 @@
               scope,
               class: "font-medium text-gray-900 dark:text-gray-300" %>
               <p
-                id=<%= "personal_access_token_scopes_#{scope}_help-text" %>
+                id="<%= "personal_access_token_scopes_#{scope}_help-text" %>"
                 class="text-xs font-normal text-gray-500 dark:text-gray-300"
               ><%= t("auth.scopes.#{scope}") %></p>
             </div>
@@ -67,7 +67,7 @@
       </div>
       <div class="my-2">
         <%= f.submit t("profiles.personal_access_tokens.create.submit"),
-                 class: "btn btn-primary" %>
+                     class: "button button--state-primary button--size-default" %>
       </div>
     </div>
   <% end %>

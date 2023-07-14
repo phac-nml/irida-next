@@ -17,7 +17,13 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       get :edit
       post :transfer
       resources :members, only: %i[create destroy index new update]
-      resources :samples
+      resources :samples do
+        scope module: :samples, as: :samples do
+          collection do
+            resource :transfer, only: %i[create new]
+          end
+        end
+      end
     end
   end
 end

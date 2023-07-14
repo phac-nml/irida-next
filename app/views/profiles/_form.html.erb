@@ -1,17 +1,17 @@
 <div class="w-full">
   <div class="pb-4">
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.email.title') %>
+      <%= t(:"profiles.show.email.title") %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
-      <%= t :'profiles.show.email.subtitle' %>
+      <%= t :"profiles.show.email.subtitle" %>
     </p>
   </div>
   <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
     <% invalid = user.errors.include?(:email) %>
     <div class="form-field <%= 'invalid' if invalid %>">
       <%= f.label :email %>
-      <%= f.email_field :email, :required => true, autofocus: true, autocomplete: "email" %>
+      <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email" %>
     </div>
     <div class="form-field">
       <%= f.label :first_name %>
@@ -26,7 +26,8 @@
       <%= f.telephone_field :phone_number %>
     </div>
     <div class="my-2">
-      <%= f.submit t(:'profiles.show.email.submit'), class: "btn btn-primary" %>
+      <%= f.submit t(:"profiles.show.email.submit"),
+                   class: "button button--state-primary button--size-default" %>
     </div>
   <% end %>
 </div>

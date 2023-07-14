@@ -1,0 +1,55 @@
+<%= viral_card do |card| %>
+  <% card.header(title: t(:"groups.edit.advanced.path.title")) %>
+  <% card.section do %>
+    <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
+      <div class="grid gap-4">
+        <p class="text-gray-600 dark:text-gray-400">
+          <%= t(:"groups.edit.advanced.path.description") %>
+        </p>
+        <% invalid_path = @group.errors.include?(:path) %>
+        <div class="form-field prefixed <%= 'invalid' if invalid_path %>">
+          <%= form.label :path %>
+          <div class="flex whitespace-nowrap items-center">
+            <div
+              class="
+                inline-flex
+                items-center
+                px-3
+                py-2.5
+                text-sm
+                text-gray-600
+                bg-gray-200
+                border
+                border-r-0
+                border-gray-300
+                rounded-l-md
+                dark:bg-gray-600
+                dark:text-gray-400
+                dark:border-gray-600
+              "
+            >
+              <%= root_url %>
+              <% if @group.parent %>
+                <strong>
+                  <%= @group.parent.full_path + "/" %>
+                </strong>
+              <% end %>
+            </div>
+            <%= form.text_field :path,
+                            pattern: Irida::PathRegex::PATH_REGEX_STR,
+                            required: true,
+                            title: t(:"groups.create.path_help"),
+                            class: "prefixed" %>
+          </div>
+          <%= render "shared/form/field_errors",
+          errors: @group.errors.full_messages_for(:path) %>
+        </div>
+        <div>
+          <%= form.submit t(:"groups.edit.advanced.path.submit"),
+                      class:
+                        "button button--state-destructive button--size-default inline-block" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
