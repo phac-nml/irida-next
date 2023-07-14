@@ -1,54 +1,53 @@
 <div class="w-full">
   <div class="pb-4">
-    <%# <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.email.title') %>
-    </h2> %>
-    <%# <p class="text-gray-500 dark:text-gray-400">
-      <%= t :'profiles.show.email.subtitle' %>
-    </p> %>
-  </div>
-  <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
       <%= t(:'profiles.show.email.title') %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.email%>
+      <%= t(:'profiles.show.missing') if @user.email == nil%>
     </p>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      provider
+      <%= t(:'profiles.show.provider.title') %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.provider%>
+      <%= t(:'profiles.show.missing') if @user.provider == nil%>
     </p>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      uid
+      <%= t(:'profiles.show.uid.title') %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.uid%>
+      <%= t(:'profiles.show.missing') if @user.uid == nil%>
     </p>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      first_name
+      <%= t(:'profiles.show.first_name.title') %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.first_name%>
+      <%= t(:'profiles.show.missing') if @user.first_name == nil%>
     </p>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      last_name
+      <%= t(:'profiles.show.last_name.title') %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.last_name%>
+      <%= t(:'profiles.show.missing') if @user.last_name == nil%>
     </p>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      username
+      <%= t(:'profiles.show.provider_username.title') %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
-      <%=@user.username%>
+      <%=@user.provider_username%>
+      <%= t(:'profiles.show.missing') if @user.provider_username == nil%>
     </p>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      phone_number
+      <%= t(:'profiles.show.phone_number.title') %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.phone_number%>
+      <%= t(:'profiles.show.missing') if @user.phone_number == nil%>
     </p>
-  <% end %>
+  </div>
 </div>

@@ -258,6 +258,19 @@ en:
         subtitle: Email address linked to this account
         pending: "Pending confirmation of %{email}"
         submit: Update profile settings
+      provider:
+        title: OmniAuth Provider
+      uid:
+        title: OmniAuth Provider UID
+      provider_username:
+        title: OmniAuth Provider Username
+      first_name:
+        title: First Name
+      last_name:
+        title: Last Name
+      phone_number:
+        title: Phone Number
+      missing: These aren't the droids you're looking for...
     update:
       success: Profile updated successfully
     passwords:
