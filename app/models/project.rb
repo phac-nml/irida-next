@@ -19,6 +19,8 @@ class Project < ApplicationRecord
   delegate :path, to: :namespace
   delegate :human_name, to: :namespace
   delegate :full_path, to: :namespace
+  delegate :full_name, to: :namespace
+  delegate :parent, to: :namespace
 
   scope :include_route, -> { includes(namespace: [{ parent: :route }, :route]) }
 

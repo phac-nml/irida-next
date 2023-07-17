@@ -74,4 +74,19 @@ class GroupQueryTest < ActiveSupport::TestCase
 
     assert_equal I18n.t('action_policy.policy.group.read?', name: group.name), error_message
   end
+
+  test 'group query should not return a result when unauthorized a' do
+    group = groups(:david_doe_group_four)
+
+    result = IridaSchema.execute(GROUP_QUERY, context: { current_user: @user },
+                                              variables: { groupPath: group.full_path })
+
+    assert_nil result['data']['group']
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal I18n.t('action_policy.policy.group.read?', name: group.name), error_message
+  end
 end

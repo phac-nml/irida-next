@@ -66,4 +66,16 @@ class NodeQueryTest < ActiveSupport::TestCase
     assert_equal group.to_global_id.to_s, data['id'], 'id should be GlobalID'
     assert_equal group.name, data['name']
   end
+
+  test 'node query should not return an unauthorized project' do
+    project = projects(:project1)
+
+    result = IridaSchema.execute(NODE_QUERY, context: { current_user: users(:jane_doe) },
+                                             variables: { id: project.to_global_id.to_s })
+
+    assert_not_nil result['errors'], 'should not work and have errors.'
+
+    error_message = result['errors'][0]['message']
+    assert_equal 'An object of type Project was hidden due to permissions', error_message
+  end
 end

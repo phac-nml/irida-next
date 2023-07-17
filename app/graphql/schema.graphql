@@ -1,7 +1,7 @@
 """
 A group
 """
-type Group implements Node {
+type Group implements Namespace & Node {
   """
   List of descendant groups of this group.
   """
@@ -119,6 +119,41 @@ type Mutation {
 }
 
 """
+A namespace
+"""
+interface Namespace {
+  """
+  Description of the namespace.
+  """
+  description: String!
+
+  """
+  Full name of the namespace.
+  """
+  fullName: String!
+
+  """
+  Full path of the namespace.
+  """
+  fullPath: ID!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Name of the namespace.
+  """
+  name: String!
+
+  """
+  Path of the namespace.
+  """
+  path: String!
+}
+
+"""
 An object with an ID.
 """
 interface Node {
@@ -151,6 +186,46 @@ type PageInfo {
   When paginating backwards, the cursor to continue.
   """
   startCursor: String
+}
+
+"""
+A project
+"""
+type Project implements Node {
+  """
+  Description of the project.
+  """
+  description: String!
+
+  """
+  Full name of the project.
+  """
+  fullName: String!
+
+  """
+  Full path of the project.
+  """
+  fullPath: ID!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Name of the project.
+  """
+  name: String!
+
+  """
+  Parent namespace
+  """
+  parent: Namespace
+
+  """
+  Path of the project.
+  """
+  path: String!
 }
 
 """
@@ -216,6 +291,16 @@ type Query {
     """
     ids: [ID!]!
   ): [Node]!
+
+  """
+  Find a project.
+  """
+  project(
+    """
+    Full path of the project. For example, `pathogen/surveillance/2023`.
+    """
+    fullPath: ID!
+  ): Project
 }
 
 """

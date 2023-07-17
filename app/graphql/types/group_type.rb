@@ -2,7 +2,9 @@
 
 module Types
   # Group Type
-  class GroupType < NamespaceType
+  class GroupType < Types::BaseObject
+    implements Namespace
+    implements GraphQL::Types::Relay::Node
     description 'A group'
 
     field :descendant_groups, connection_type,
@@ -12,5 +14,14 @@ module Types
           resolver: Resolvers::NestedGroupsResolver
 
     field :parent, GroupType, null: true, description: 'Parent group.'
+
+    def self.authorized?(object, context)
+      super &&
+        allowed_to?(
+          :read?,
+          object,
+          context: { user: context[:current_user] }
+        )
+    end
   end
 end
