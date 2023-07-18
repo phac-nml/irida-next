@@ -16,7 +16,6 @@
         dark:text-gray-400
       "
     >
-
       <% t("groups.edit.advanced.transfer.points").each do |item| %>
         <li><%= item %></li>
       <% end %>
@@ -37,7 +36,9 @@
         errors: group.errors.full_messages_for(:new_namespace) %>
       </div>
       <div>
-        <%= form.submit t("groups.edit.advanced.transfer.submit"), class: "btn btn-default" %>
+        <%= form.submit t("groups.edit.advanced.transfer.submit"),
+                    class:
+                      "button button--state-default button--size-default inline-block" %>
       </div>
     <% end %>
   <% end %>
