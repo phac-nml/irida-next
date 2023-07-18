@@ -145,6 +145,8 @@ en:
             namespace_id:
               blank: Namespace must exist
               taken: The namespace has already been shared with this group
+            namespace_type:
+              inclusion: can only be Group or Project
             group_access_level:
               inclusion: "provided is not included in the list of valid access levels"
     exceptions:

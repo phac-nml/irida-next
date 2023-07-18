@@ -4,6 +4,7 @@ require 'test_helper'
 
 class NamespaceGroupLinkTest < ActiveSupport::TestCase
   def setup
+    @user = users(:john_doe)
     @group = groups(:group_one)
     @group_to_share = groups(:david_doe_group_four)
   end
@@ -51,6 +52,17 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     assert_not group_group_link.save
     assert group_group_link.errors.full_messages.include?(
       I18n.t('activerecord.errors.models.namespace_group_link.attributes.namespace_id.blank')
+    )
+  end
+
+  test '#validates the namespace type is either Group or Project' do
+    group_group_link = NamespaceGroupLink.new(group_id: @group_to_share.id, namespace_id: @user.id,
+                                              group_access_level: Member::AccessLevel::ANALYST)
+
+    assert_not group_group_link.save
+
+    assert group_group_link.errors.messages.values.flatten.include?(
+      I18n.t('activerecord.errors.models.namespace_group_link.attributes.namespace_type.inclusion')
     )
   end
 end

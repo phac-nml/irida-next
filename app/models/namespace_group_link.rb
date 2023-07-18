@@ -5,7 +5,7 @@ class NamespaceGroupLink < ApplicationRecord
   has_logidze
   acts_as_paranoid
 
-  before_save :set_namespace_type
+  before_validation :set_namespace_type
 
   belongs_to :group, class_name: 'Group'
   belongs_to :namespace, class_name: 'Namespace'
@@ -15,10 +15,16 @@ class NamespaceGroupLink < ApplicationRecord
   validates :group_access_level, inclusion: { in: Member::AccessLevel.all_values_with_owner },
                                  presence: true
 
+  validates :namespace_type,
+            inclusion: {
+              in: %w[Group Project]
+            }
+
   private
 
   def set_namespace_type
+    return unless namespace
+
     self.namespace_type = namespace.type
-    true
   end
 end
