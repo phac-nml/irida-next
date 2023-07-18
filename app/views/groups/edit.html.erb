@@ -1,28 +1,26 @@
 <div class="p-4 md:mx-auto">
+  <!--Edit general details form -->
   <div class="grid gap-4">
-
     <h2 class="text-2xl font-extrabold dark:text-white">
       <%= t(:"groups.edit.details.title") %>
     </h2>
     <%= viral_card do |card| %>
       <% card.header(title: t(:"groups.edit.details.subtitle")) %>
       <% card.section do %>
-        <div data-controller="slugify">
-          <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
-            <div class="grid gap-4">
-              <%= render partial: "form_fields",
-              locals: {
-                form: form,
-                group: @group,
-                authorized_namespaces: @authorized_namespaces
-              } %>
-
-              <div>
-                <%= form.submit t(:"groups.edit.details.submit"), class: "btn btn-primary" %>
-              </div>
+        <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
+          <div class="grid gap-4">
+            <%= render partial: "form_fields",
+            locals: {
+              form: form,
+              group: @group,
+              authorized_namespaces: @authorized_namespaces
+            } %>
+            <div>
+              <%= form.submit t(:"groups.edit.details.submit"),
+                          class: "button button--state-primary button--size-default" %>
             </div>
-          <% end %>
-        </div>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
 
@@ -31,7 +29,7 @@
         <%= t(:"groups.edit.advanced.title") %>
       </h2>
       <% if allowed_to?(:transfer?, @group) %>
-        <%= render "edit_advanced_transfer", group: @group %>
+        <%= render "edit_advanced_path", group: @group %>
       <% end %>
       <% if allowed_to?(:destroy?, @group) %>
         <%= render "edit_advanced_delete", group: @group %>

@@ -6,11 +6,19 @@
     <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
       <div class="grid gap-4">
 
-        <%= render partial: "form_fields", locals: { form: form, group: @new_group } %>
+        <%= render partial: "form_fields",
+        locals: {
+          form: form,
+          group: @new_group,
+          authorized_namespaces: @authorized_namespaces
+        } %>
 
-        <div class="my-2">
-          <%= form.submit t(:"groups.create.submit"), class: "btn btn-primary mr-1" %>
-          <%= link_to t(:"groups.create.cancel"), groups_path, class: "btn btn-default" %>
+        <div class="flex">
+          <%= form.submit t(:"groups.create.submit"),
+                      class: " button button--state-primary button--size-default mr-2" %>
+          <%= link_to t(:"groups.create.cancel"),
+          groups_path,
+          class: "button button--state-default button--size-default" %>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 <%= viral_pageheader(title: 'Page header with buttons', subtitle: 'This is a page header') do |header| %>
   <%= header.buttons do %>
-    <button class="btn btn-default">Button</button>
+    <%= viral_button { "Button" } %>
   <% end %>
 <% end %>

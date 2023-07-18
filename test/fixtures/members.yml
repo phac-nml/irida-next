@@ -66,6 +66,12 @@ group_three_member_ryan_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>
   access_level: <%= Member::AccessLevel::GUEST %>
 
+subgroup_one_group_three_member_james_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_three) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
 subgroup_one_group_three_member_micha_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
