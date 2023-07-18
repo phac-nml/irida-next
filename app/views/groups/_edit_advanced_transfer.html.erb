@@ -21,25 +21,32 @@
       <% end %>
     </ul>
 
-    <%= form_with(url: group_transfer_path, method: :put,  class: "grid gap-4") do |form| %>
-      <div class="form-field">
-        <%= form.label :new_namespace_id,
-                   t("groups.edit.advanced.transfer.new_namespace_id") %>
-        <%= form.collection_select(
-          :new_namespace_id,
-          @authorized_namespaces,
-          :id,
-          :full_name,
-          { prompt: t("groups.edit.advanced.transfer.new_namespace_id") }
-        ) %>
-        <%= render "shared/form/field_errors",
-        errors: group.errors.full_messages_for(:new_namespace) %>
-      </div>
-      <div>
-        <%= form.submit t("groups.edit.advanced.transfer.submit"),
-                    class:
-                      "button button--state-default button--size-default inline-block" %>
-      </div>
-    <% end %>
+    <div data-controller="transfer">
+      <%= form_with(url: group_transfer_path, method: :put,  class: "grid gap-4") do |form| %>
+        <div class="form-field">
+          <%= form.label :new_namespace_id,
+                     t("groups.edit.advanced.transfer.new_namespace_id") %>
+          <%= form.collection_select(
+            :new_namespace_id,
+            @authorized_namespaces,
+            :id,
+            :full_name,
+            { prompt: t("groups.edit.advanced.transfer.new_namespace_id") },
+            { data: { action: "transfer#onChange" } }
+          ) %>
+          <%= render "shared/form/field_errors",
+          errors: group.errors.full_messages_for(:new_namespace) %>
+        </div>
+        <div>
+          <%= form.submit t("groups.edit.advanced.transfer.submit"),
+                      class:
+                        "button button--state-destructive button--size-default inline-block",
+                      disabled: true,
+                      data: {
+                        "transfer-target": "submitButton"
+                      } %>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
