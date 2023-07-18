@@ -335,7 +335,7 @@ en:
             - Transfer group to another parent group.
           points:
             - Be careful. Changing a group's parent can have unintended side effects.
-            - You must have the Owner role in the target group.
+            - You can only transfer groups where you have sufficient permissions.
             - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
         delete:
           title: Delete group

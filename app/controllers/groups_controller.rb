@@ -82,7 +82,7 @@ class GroupsController < Groups::ApplicationController
   end
 
   def authorized_namespaces
-    @authorized_namespaces = authorized_scope(Namespace, type: :relation, as: :manageable)
+    @authorized_namespaces = authorized_scope(Group, type: :relation, as: :manageable)
   end
 
   def resolve_layout
