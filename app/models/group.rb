@@ -32,7 +32,7 @@ class Group < Namespace
 
       return NamespaceGroupLink.none unless group.has_parent?
 
-      NamespaceGroupLink.where(group_id: group.ancestor_ids)
+      NamespaceGroupLink.where(namespace_id: group.ancestor_ids)
     end
 
     def of_ancestors_and_self
@@ -40,7 +40,7 @@ class Group < Namespace
 
       source_ids = group.self_and_ancestor_ids
 
-      NamespaceGroupLink.where(group_id: source_ids)
+      NamespaceGroupLink.where(namespace_id: source_ids)
     end
   end
   has_many :shared_groups, through: :shared_group_links, source: :namespace

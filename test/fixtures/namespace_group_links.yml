@@ -1,0 +1,36 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+namespace_group_link1:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project20_namespace) %>
+  group_access_level: <%= Member::AccessLevel::MAINTAINER %>
+
+namespace_group_link2:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+
+namespace_group_link3:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project25_namespace) %>
+  group_access_level: <%= Member::AccessLevel::MAINTAINER %>
+
+namespace_group_link4:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+
+namespace_group_link5:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>
+
+namespace_group_link6:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>
+
+namespace_group_link7:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup2) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>

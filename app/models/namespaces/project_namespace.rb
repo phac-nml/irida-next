@@ -15,19 +15,17 @@ module Namespaces
              foreign_key: :namespace_id, class_name: 'NamespaceGroupLink',
              dependent: :destroy do
       def of_ancestors
-        group = proxy_association.owner
+        ns = proxy_association.owner
 
-        return NamespaceGroupLink.none unless group.has_parent?
-
-        NamespaceGroupLink.where(group_id: group.ancestor_ids)
+        NamespaceGroupLink.where(namespace_id: ns.parent.self_and_ancestor_ids)
       end
 
       def of_ancestors_and_self
-        group = proxy_association.owner
+        ns = proxy_association.owner
 
-        source_ids = group.self_and_ancestor_ids
+        source_ids = [ns.id] + ns.parent.self_and_ancestor_ids
 
-        NamespaceGroupLink.where(group_id: source_ids)
+        NamespaceGroupLink.where(namespace_id: source_ids)
       end
     end
 

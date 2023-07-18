@@ -127,65 +127,41 @@ class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
     end
   end
 
-  test 'gets self and ancestors for which a group has been shared with' do
-    top_level_group_to_share = groups(:group_one)
-    subgroup_to_share = groups(:subgroup1)
-    group = groups(:david_doe_group_four)
+  test 'get ancestor namespace_group_links for subgroup' do
+    subgroup2 = groups(:subgroup2)
 
-    group_group_link = NamespaceGroupLink.create(group_id: subgroup_to_share.id, namespace_id: group.id,
-                                                 group_access_level: Member::AccessLevel::ANALYST)
-    group_group_link2 = NamespaceGroupLink.create(group_id: top_level_group_to_share.id,
-                                                  namespace_id: group.id,
-                                                  group_access_level: Member::AccessLevel::ANALYST)
+    group_group_link1 = namespace_group_links(:namespace_group_link5)
 
-    group_group_links = subgroup_to_share.shared_with_group_links.of_ancestors_and_self
+    group_group_link2 = namespace_group_links(:namespace_group_link6)
 
-    assert_equal 2, group_group_links.count
+    group_group_link3 = namespace_group_links(:namespace_group_link7)
 
-    assert group_group_links.include?(group_group_link)
+    group_group_links = subgroup2.shared_with_group_links.of_ancestors
+
+    assert_equal 3, group_group_links.count
+
+    assert group_group_links.include?(group_group_link1)
     assert group_group_links.include?(group_group_link2)
+    assert group_group_links.include?(namespace_group_links(:namespace_group_link2))
+    assert_not group_group_links.include?(group_group_link3)
   end
 
-  test 'gets ancestors only (not self) for which a group has been shared with' do
-    group_to_share = groups(:david_doe_group_four)
-    group_group_link = NamespaceGroupLink.create(group_id: group_to_share.id, namespace_id: @group.id,
-                                                 group_access_level: Member::AccessLevel::ANALYST)
-    group_group_links = group_to_share.shared_with_group_links.of_ancestors
+  test 'get self and ancestor namespace_group_links for subgroup' do
+    subgroup2 = groups(:subgroup2)
 
-    assert_equal 0, group_group_links.count
-    assert_not group_group_links.include?(group_group_link)
-  end
+    group_group_link1 = namespace_group_links(:namespace_group_link5)
 
-  test 'gets any ancestors (group to share has parent) for which a group has been shared with' do
-    top_level_group_to_share = groups(:group_one)
-    subgroup_to_share = groups(:subgroup1)
-    group = groups(:david_doe_group_four)
+    group_group_link2 = namespace_group_links(:namespace_group_link6)
 
-    group_group_link = NamespaceGroupLink.create(group_id: subgroup_to_share.id, namespace_id: group.id,
-                                                 group_access_level: Member::AccessLevel::ANALYST)
-    group_group_link2 = NamespaceGroupLink.create(group_id: top_level_group_to_share.id,
-                                                  namespace_id: group.id,
-                                                  group_access_level: Member::AccessLevel::ANALYST)
+    group_group_link3 = namespace_group_links(:namespace_group_link7)
 
-    group_group_links = subgroup_to_share.shared_with_group_links.of_ancestors
+    group_group_links = subgroup2.shared_with_group_links.of_ancestors_and_self
 
-    assert_equal 1, group_group_links.count
+    assert_equal 4, group_group_links.count
 
-    assert_not group_group_links.include?(group_group_link)
+    assert group_group_links.include?(group_group_link1)
     assert group_group_links.include?(group_group_link2)
-  end
-
-  test 'gets any ancestors (group to share has no parent) for which a group has been shared with' do
-    group_to_share = groups(:group_one)
-    group = groups(:david_doe_group_four)
-
-    group_group_link = NamespaceGroupLink.create(group_id: group_to_share.id, namespace_id: group.id,
-                                                 group_access_level: Member::AccessLevel::ANALYST)
-
-    group_group_links = group_to_share.shared_with_group_links.of_ancestors_and_self
-
-    assert_equal 1, group_group_links.count
-
-    assert group_group_links.include?(group_group_link)
+    assert group_group_links.include?(group_group_link3)
+    assert group_group_links.include?(namespace_group_links(:namespace_group_link2))
   end
 end

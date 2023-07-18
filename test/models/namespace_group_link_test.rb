@@ -9,18 +9,12 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
   end
 
   test 'group to group link is valid' do
-    group_group_link = NamespaceGroupLink.new(group_id: @group_to_share.id, namespace_id: @group.id,
-                                              group_access_level: Member::AccessLevel::ANALYST)
+    group_group_link = namespace_group_links(:namespace_group_link5)
 
-    assert group_group_link.save
+    assert group_group_link.valid?
   end
 
   test 'cannot create multiple group to group links with the same groups' do
-    group_group_link = NamespaceGroupLink.new(group_id: @group_to_share.id, namespace_id: @group.id,
-                                              group_access_level: Member::AccessLevel::ANALYST)
-
-    assert group_group_link.save
-
     group_group_link = NamespaceGroupLink.new(group_id: @group_to_share.id, namespace_id: @group.id,
                                               group_access_level: Member::AccessLevel::ANALYST)
 
