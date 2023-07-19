@@ -337,6 +337,12 @@ en:
             - Be careful. Changing a group's parent can have unintended side effects.
             - You can only transfer groups where you have sufficient permissions.
             - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
+          confirm:
+            title: Confirmation required
+            warning_html: You are going to transfer <strong>%{group_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
+            points_html:
+              - To prevent accidental actions we ask you to confirm your intention.
+              - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
         delete:
           title: Delete group
           description: Deleting a group is permanent and cannot be undone. All projects and subgroups will be deleted along with the group.

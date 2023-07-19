@@ -5,7 +5,7 @@ class GroupsController < Groups::ApplicationController
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorized_namespaces, only: %i[edit new update create]
+  before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
     @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
@@ -67,6 +67,7 @@ class GroupsController < Groups::ApplicationController
       flash[:success] = t('.success')
       redirect_to group_path(@group)
     else
+      @error = @group.errors.messages.values.flatten.first
       render :edit, status: :unprocessable_entity
     end
   end

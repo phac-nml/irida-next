@@ -123,7 +123,8 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
   end
 
   test 'can transfer a group' do
-    visit group_url(groups(:group_one))
+    group = groups(:group_one)
+    visit group_url(group)
 
     click_link I18n.t(:'groups.sidebar.settings')
     assert_selector 'h3', text: I18n.t(:'groups.edit.advanced.transfer.title')
@@ -131,6 +132,12 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     within %(form[action="/group-1/transfer"]) do
       find('#new_namespace_id').find(:xpath, 'option[14]').select_option
       click_on I18n.t(:'groups.edit.advanced.transfer.submit')
+    end
+
+    within('#turbo-confirm') do
+      assert_text I18n.t(:'components.confirmation.title')
+      find('input[type=text]').fill_in with: group.path
+      click_on I18n.t(:'components.confirmation.confirm')
     end
 
     assert_text I18n.t(:'groups.transfer.success')
