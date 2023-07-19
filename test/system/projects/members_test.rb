@@ -129,7 +129,7 @@ module Projects
       project_name = 'New Project'
       project_description = 'New Project Description'
 
-      visit projects_url
+      visit dashboard_projects_url
 
       click_on I18n.t(:'projects.index.create_project_button')
 

@@ -8,7 +8,7 @@ class ProjectsTest < ApplicationSystemTestCase
   end
 
   test 'can see the list of projects' do
-    visit projects_url
+    visit dashboard_projects_url
 
     assert_selector 'h1', text: I18n.t(:'projects.index.title')
     assert_selector 'tr', count: 20
@@ -29,7 +29,7 @@ class ProjectsTest < ApplicationSystemTestCase
     project_name = 'New Project'
     project_description = 'New Project Description'
 
-    visit projects_url
+    visit dashboard_projects_url
 
     click_on I18n.t(:'projects.index.create_project_button')
 

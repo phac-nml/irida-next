@@ -115,8 +115,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation do |relation|
     relation.where(namespace: { parent: user.groups.self_and_descendant_ids })
-            .include_route.order(updated_at: :desc).or(relation.where(namespace: { parent: user.namespace })
-            .include_route.order(updated_at: :desc))
+            .include_route.or(relation.where(namespace: { parent: user.namespace })
+            .include_route)
   end
 
   scope_for :relation, :manageable do |relation|
@@ -130,8 +130,14 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
           ]
         ).select(:namespace_id)
       ).self_and_descendants.where(type: Namespaces::ProjectNamespace.sti_name).select(:id))
-      .include_route.order(updated_at: :desc)
+      .include_route
       .or(relation.where(namespace: { parent: user.namespace }))
-      .include_route.order(updated_at: :desc)
+      .include_route
+  end
+
+  scope_for :relation, :personal do |relation|
+    relation
+      .where(namespace: { parent: user.namespace })
+      .include_route
   end
 end

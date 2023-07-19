@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   draw :group
 
   draw :api
+  draw :dashboard
   draw :user
   draw :project
 

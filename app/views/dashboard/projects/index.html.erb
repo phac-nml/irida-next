@@ -1,0 +1,93 @@
+<%= render Viral::PageHeaderComponent.new(title: t("projects.index.title"), subtitle: t("projects.index.subtitle")) do |component| %>
+  <%= component.with_icon do %>
+    <%= viral_icon(name: "rectangle_stack", classes: "h-14 w-14 text-primary-700") %>
+  <% end %>
+  <%= component.with_buttons do %>
+    <%= link_to t(:"projects.index.create_project_button"),
+    new_project_path,
+    class: "button button--state-primary button--size-default" %>
+  <% end %>
+<% end %>
+
+<div class="bg-white dark:bg-gray-800">
+  <div
+    class="
+      text-sm
+      font-medium
+      text-center
+      text-gray-500
+      border-b
+      border-gray-200
+      dark:text-gray-400
+      dark:border-gray-700
+    "
+  >
+    <ul class="flex flex-wrap -mb-px">
+      <li class="mr-2">
+        <%= link_to "All",
+        dashboard_projects_url(),
+        class:
+          (
+            if params[:personal]
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+            else
+              "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+            end
+          ),
+        aria: {
+          current: params[:personal] ? "false" : "page"
+        } %>
+      </li>
+      <li class="mr-2">
+        <%= link_to "Personal",
+        dashboard_projects_url(personal: "true"),
+        class:
+          (
+            if params[:personal]
+              "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+            else
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+            end
+          ),
+        aria: {
+          current: params[:personal] ? "page" : "false"
+        } %>
+      </li>
+    </ul>
+  </div>
+  <div class="flex flex-col" data-turbo-temporary>
+    <% if @has_projects %>
+      <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **params.permit(:personal, :page)), loading: :lazy do %>
+        <table class="min-w-full table-fixed dark:divide-gray-600">
+          <tbody
+            class="
+              bg-white
+              divide-y
+              divide-gray-200
+              dark:bg-gray-800
+              dark:divide-gray-700
+            "
+          >
+            <% 15.times do %>
+              <tr>
+
+                <td class="p-4 animate-pulse">
+                  <div class="flex-1 py-1 space-y-6">
+                    <div class="space-y-3">
+                      <div class="w-48 h-2 rounded bg-slate-200"></div>
+                      <div class="w-32 h-2 rounded bg-slate-200"></div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+      <%= turbo_frame_tag "projects_pagination",
+      data: {
+        controller: "turbo-frame-history"
+      } %>
+    <% end %>
+  </div>
+</div>
