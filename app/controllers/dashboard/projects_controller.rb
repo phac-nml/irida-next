@@ -12,7 +12,8 @@ module Dashboard
                                  .exists?(namespace: { parent: current_user.groups.self_and_descendant_ids })
         end
         format.turbo_stream do
-          @pagy, @projects = pagy(@q.result.where(id: load_projects(params).select(:id)).include_route)
+          @pagy, @projects = pagy(@q.result.where(id: load_projects(params).select(:id))
+                                           .include_route.order(updated_at: :desc))
         end
       end
     end
@@ -20,13 +21,11 @@ module Dashboard
     private
 
     def load_projects(finder_params)
-      projects = if finder_params[:personal]
-                   authorized_scope(Project, type: :relation, as: :personal)
-                 else
-                   authorized_scope(Project, type: :relation)
-                 end
-
-      projects.order(updated_at: :desc)
+      if finder_params[:personal]
+        authorized_scope(Project, type: :relation, as: :personal)
+      else
+        authorized_scope(Project, type: :relation)
+      end
     end
   end
 end
