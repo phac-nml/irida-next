@@ -10,6 +10,14 @@
 <% end %>
 
 <div class="bg-white dark:bg-gray-800">
+  <div>
+    <div class="right-0">
+      <%= search_form_for @q, url: dashboard_projects_url(**params.permit(:personal).merge({format: :turbo_stream})) do |f| %>
+        <%= f.search_field :namespace_name_or_namespace_description_or_namespace_route_name_cont,
+                       "data-action": "filters#submit" %>
+      <% end %>
+    </div>
+  </div>
   <div
     class="
       text-sm
@@ -57,7 +65,7 @@
   </div>
   <div class="flex flex-col" data-turbo-temporary>
     <% if @has_projects %>
-      <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **params.permit(:personal, :page)), loading: :lazy do %>
+      <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters), loading: :lazy do %>
         <table class="min-w-full table-fixed dark:divide-gray-600">
           <tbody
             class="

@@ -20,8 +20,9 @@
     prev_url:
       (
         if @pagy.prev
-          dashboard_projects_url(
-            **params.permit(:personal).merge({ page: @pagy.prev })
+          pagy_url_for(@pagy, @pagy.prev).gsub(
+            "projects.turbo_stream",
+            "projects"
           )
         else
           nil
@@ -30,8 +31,9 @@
     next_url:
       (
         if @pagy.next
-          dashboard_projects_url(
-            **params.permit(:personal).merge({ page: @pagy.next })
+          pagy_url_for(@pagy, @pagy.next).gsub(
+            "projects.turbo_stream",
+            "projects"
           )
         else
           nil

@@ -3,7 +3,8 @@
 module Dashboard
   # Dashboard Projects Controller
   class ProjectsController < ApplicationController
-    def index
+    def index # rubocop:disable Metric/AbcSize
+      @q = Project.ransack(params[:q])
       respond_to do |format|
         format.html do
           @has_projects = Project.joins(:namespace).exists?(namespace: { parent: current_user.namespace }) ||
@@ -11,7 +12,7 @@ module Dashboard
                                  .exists?(namespace: { parent: current_user.groups.self_and_descendant_ids })
         end
         format.turbo_stream do
-          @pagy, @projects = pagy(load_projects(params))
+          @pagy, @projects = pagy(@q.result.where(id: load_projects(params).select(:id)).include_route)
         end
       end
     end
