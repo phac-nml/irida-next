@@ -17,7 +17,7 @@ class NamespaceGroupLink < ApplicationRecord
 
   validates :namespace_type,
             inclusion: {
-              in: %w[Group Project]
+              in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
             }
 
   private
