@@ -10,16 +10,9 @@
 <% end %>
 
 <div class="bg-white dark:bg-gray-800">
-  <div>
-    <div class="right-0">
-      <%= search_form_for @q, url: dashboard_projects_url(**params.permit(:personal).merge({format: :turbo_stream})) do |f| %>
-        <%= f.search_field :namespace_name_or_namespace_description_or_namespace_route_name_cont,
-                       "data-action": "filters#submit" %>
-      <% end %>
-    </div>
-  </div>
   <div
     class="
+      flex
       text-sm
       font-medium
       text-center
@@ -62,6 +55,30 @@
         } %>
       </li>
     </ul>
+    <div class="flex ml-auto items-center font-normal">
+      <%= search_form_for @q, url: dashboard_projects_url(**params.permit(:personal).merge({format: :turbo_stream})) do |f| %>
+        <div class="relative lg:w-72">
+          <div
+            class="
+              absolute
+              inset-y-0
+              left-0
+              flex
+              items-center
+              pl-3
+              pointer-events-none
+            "
+          >
+            <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
+          </div>
+          <%= f.search_field :namespace_name_cont,
+                         "data-action": "filters#submit",
+                         class:
+                           "block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                         placeholder: t("projects.index.search.placeholder") %>
+        </div>
+      <% end %>
+    </div>
   </div>
   <div class="flex flex-col" data-turbo-temporary>
     <% if @has_projects %>
