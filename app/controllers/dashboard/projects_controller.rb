@@ -5,6 +5,7 @@ module Dashboard
   class ProjectsController < ApplicationController
     def index # rubocop:disable Metric/AbcSize
       @q = Project.ransack(params[:q])
+      set_default_sort
       respond_to do |format|
         format.html do
           @has_projects = Project.joins(:namespace).exists?(namespace: { parent: current_user.namespace }) ||
@@ -19,6 +20,10 @@ module Dashboard
     end
 
     private
+
+    def set_default_sort
+      @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    end
 
     def load_projects(finder_params)
       if finder_params[:personal]

@@ -445,6 +445,13 @@ en:
       create_project_button: New project
       search:
         placeholder: Filter by name
+      sorting:
+        updated_at_desc: Updated At
+        created_at_desc: Last created
+        namespace_name_asc: Name
+        namespace_name_desc: Name, descending
+        updated_at_asc: Oldest updated
+        created_at_asc: Oldest created
     new:
       title: Create project
       placeholder: Awesome project name

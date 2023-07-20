@@ -55,7 +55,7 @@
         } %>
       </li>
     </ul>
-    <div class="flex ml-auto items-center font-normal">
+    <div class="flex flex-row space-x-2 ml-auto items-center font-normal">
       <%= search_form_for @q, url: dashboard_projects_url(**params.permit(:personal).merge({format: :turbo_stream})), html: {"data-controller": "filters"} do |f| %>
         <div class="relative lg:w-72">
           <div
@@ -77,6 +77,38 @@
                            "block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                          placeholder: t("projects.index.search.placeholder") %>
         </div>
+      <% end %>
+      <%= viral_dropdown(label: t("projects.index.sorting.%s_%s" % [@q.sorts[0].name, @q.sorts[0].dir]), aira: { label: "table sorting"} ) do |dropdown| %>
+        <%= dropdown.item(
+          label: t("projects.index.sorting.updated_at_desc"),
+          url: sort_url(@q, "updated_at desc"),
+          icon_name: active_sort(@q, "updated_at", "desc") ? "check" : "blank"
+        ) %>
+        <%= dropdown.item(
+          label: t("projects.index.sorting.created_at_desc"),
+          url: sort_url(@q, "created_at desc"),
+          icon_name: active_sort(@q, "created_at", "desc") ? "check" : "blank"
+        ) %>
+        <%= dropdown.item(
+          label: t("projects.index.sorting.namespace_name_asc"),
+          url: sort_url(@q, "namespace_name asc"),
+          icon_name: active_sort(@q, "namespace_name", "asc") ? "check" : "blank"
+        ) %>
+        <%= dropdown.item(
+          label: t("projects.index.sorting.namespace_name_desc"),
+          url: sort_url(@q, "namespace_name desc"),
+          icon_name: active_sort(@q, "namespace_name", "desc") ? "check" : "blank"
+        ) %>
+        <%= dropdown.item(
+          label: t("projects.index.sorting.updated_at_asc"),
+          url: sort_url(@q, "updated_at asc"),
+          icon_name: active_sort(@q, "updated_at", "asc") ? "check" : "blank"
+        ) %>
+        <%= dropdown.item(
+          label: t("projects.index.sorting.created_at_asc"),
+          url: sort_url(@q, "created_at asc"),
+          icon_name: active_sort(@q, "created_at", "asc") ? "check" : "blank"
+        ) %>
       <% end %>
     </div>
   </div>
