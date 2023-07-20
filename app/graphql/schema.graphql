@@ -35,7 +35,7 @@ type Group implements Namespace & Node {
   """
   Description of the namespace.
   """
-  description: String!
+  description: String
 
   """
   Full name of the namespace.
@@ -125,7 +125,7 @@ interface Namespace {
   """
   Description of the namespace.
   """
-  description: String!
+  description: String
 
   """
   Full name of the namespace.
@@ -195,7 +195,7 @@ type Project implements Node {
   """
   Description of the project.
   """
-  description: String!
+  description: String
 
   """
   Full name of the project.
