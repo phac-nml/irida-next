@@ -30,6 +30,7 @@ module Dashboard
       visit dashboard_projects_url
 
       click_on I18n.t(:'dashboard.projects.index.personal')
+      sleep 1
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_selector 'tr', count: 3
