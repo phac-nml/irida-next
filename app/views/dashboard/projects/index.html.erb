@@ -1,9 +1,9 @@
-<%= render Viral::PageHeaderComponent.new(title: t("projects.index.title"), subtitle: t("projects.index.subtitle")) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: t(".title"), subtitle: t(".subtitle")) do |component| %>
   <%= component.with_icon do %>
     <%= viral_icon(name: "rectangle_stack", classes: "h-14 w-14 text-primary-700") %>
   <% end %>
   <%= component.with_buttons do %>
-    <%= link_to t(:"projects.index.create_project_button"),
+    <%= link_to t(".create_project_button"),
     new_project_path,
     class: "button button--state-primary button--size-default" %>
   <% end %>
@@ -25,7 +25,7 @@
   >
     <ul class="flex flex-wrap -mb-px">
       <li class="mr-2">
-        <%= link_to "All",
+        <%= link_to t(".all"),
         dashboard_projects_url(),
         class:
           (
@@ -40,7 +40,7 @@
         } %>
       </li>
       <li class="mr-2">
-        <%= link_to "Personal",
+        <%= link_to t(".personal"),
         dashboard_projects_url(personal: "true"),
         class:
           (
@@ -75,40 +75,16 @@
                          "data-action": "filters#submit",
                          class:
                            "block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                         placeholder: t("projects.index.search.placeholder") %>
+                         placeholder: t(".search.placeholder") %>
         </div>
       <% end %>
-      <%= viral_dropdown(label: t("projects.index.sorting.%s_%s" % [@q.sorts[0].name, @q.sorts[0].dir]), aira: { label: "table sorting"} ) do |dropdown| %>
-        <%= dropdown.item(
-          label: t("projects.index.sorting.updated_at_desc"),
-          url: sort_url(@q, "updated_at desc"),
-          icon_name: active_sort(@q, "updated_at", "desc") ? "check" : "blank"
-        ) %>
-        <%= dropdown.item(
-          label: t("projects.index.sorting.created_at_desc"),
-          url: sort_url(@q, "created_at desc"),
-          icon_name: active_sort(@q, "created_at", "desc") ? "check" : "blank"
-        ) %>
-        <%= dropdown.item(
-          label: t("projects.index.sorting.namespace_name_asc"),
-          url: sort_url(@q, "namespace_name asc"),
-          icon_name: active_sort(@q, "namespace_name", "asc") ? "check" : "blank"
-        ) %>
-        <%= dropdown.item(
-          label: t("projects.index.sorting.namespace_name_desc"),
-          url: sort_url(@q, "namespace_name desc"),
-          icon_name: active_sort(@q, "namespace_name", "desc") ? "check" : "blank"
-        ) %>
-        <%= dropdown.item(
-          label: t("projects.index.sorting.updated_at_asc"),
-          url: sort_url(@q, "updated_at asc"),
-          icon_name: active_sort(@q, "updated_at", "asc") ? "check" : "blank"
-        ) %>
-        <%= dropdown.item(
-          label: t("projects.index.sorting.created_at_asc"),
-          url: sort_url(@q, "created_at asc"),
-          icon_name: active_sort(@q, "created_at", "asc") ? "check" : "blank"
-        ) %>
+      <%= sorting_dropdown(@q) do |dropdown| %>
+        <%= sorting_item(dropdown, @q, :updated_at, :desc) %>
+        <%= sorting_item(dropdown, @q, :created_at, :desc) %>
+        <%= sorting_item(dropdown, @q, :namespace_name, :asc) %>
+        <%= sorting_item(dropdown, @q, :namespace_name, :desc) %>
+        <%= sorting_item(dropdown, @q, :updated_at, :asc) %>
+        <%= sorting_item(dropdown, @q, :created_at, :asc) %>
       <% end %>
     </div>
   </div>
