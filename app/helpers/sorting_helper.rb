@@ -9,7 +9,9 @@ module SortingHelper
   end
 
   def sorting_dropdown(ransack_obj, &)
-    viral_dropdown(label: t(format('.sorting.%<field>s_%<dir>s', field: ransack_obj.sorts[0].name, dir: ransack_obj.sorts[0].dir)),
+    viral_dropdown(label: t(format('.sorting.%<field>s_%<dir>s',
+                                   field: ransack_obj.sorts[0].name,
+                                   dir: ransack_obj.sorts[0].dir)),
 &)
   end
 
