@@ -57,6 +57,7 @@
     </ul>
     <div class="flex flex-row space-x-2 ml-auto items-center font-normal">
       <%= search_form_for @q, url: dashboard_projects_url(**params.permit(:personal).merge({format: :turbo_stream})), html: {"data-controller": "filters"} do |f| %>
+        <%= f.label :namespace_name_cont, t(".search.placeholder"), class: "sr-only" %>
         <div class="relative lg:w-72">
           <div
             class="
