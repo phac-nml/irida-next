@@ -28,12 +28,13 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
     assert_nil(u.last_name)
     assert_nil(u.phone_number)
 
-    patch profile_url, params: { user: {
+    patch profile_url, params: { user:
+    {
       email: 'john.doe@gmail.com',
       first_name: 'john',
       last_name: 'doe',
       phone_number: '1234'
-      } }
+    } }
 
     assert_response :redirect
     assert_equal('john.doe@gmail.com', u.email)
