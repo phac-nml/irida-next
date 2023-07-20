@@ -6,7 +6,7 @@ module Types
     implements GraphQL::Types::Relay::Node
     description 'A project'
 
-    field :description, String, null: false, description: 'Description of the project.'
+    field :description, String, null: true, description: 'Description of the project.'
     field :full_name, String, null: false, description: 'Full name of the project.'
     field :full_path, ID, null: false, description: 'Full path of the project.' # rubocop:disable GraphQL/ExtractType
     field :name, String, null: false, description: 'Name of the project.'

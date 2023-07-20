@@ -8,7 +8,7 @@ module Types
     include GraphQL::Types::Relay::NodeBehaviors
     description 'A namespace'
 
-    field :description, String, null: false, description: 'Description of the namespace.'
+    field :description, String, null: true, description: 'Description of the namespace.'
     field :full_name, String, null: false, description: 'Full name of the namespace.'
     field :full_path, ID, null: false, description: 'Full path of the namespace.'
     field :name, String, null: false, description: 'Name of the namespace.'
