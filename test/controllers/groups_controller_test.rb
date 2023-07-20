@@ -152,4 +152,36 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     assert_response :success
   end
+
+  test 'should transfer group' do
+    sign_in users(:john_doe)
+    group = groups(:group_one)
+    new_namespace = groups(:group_two)
+
+    put group_transfer_path(group),
+        params: { new_namespace_id: new_namespace.id }, as: :turbo_stream
+
+    assert_response :redirect
+  end
+
+  test 'should not create a new transfer with wrong parameters' do
+    sign_in users(:john_doe)
+    group = groups(:group_one)
+
+    put group_transfer_path(group),
+        params: { new_namespace_id: 'asdfasd' }, as: :turbo_stream
+
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not transfer a group without permission' do
+    sign_in users(:joan_doe)
+    group = groups(:group_one)
+    new_namespace = groups(:group_two)
+
+    put group_transfer_path(group),
+        params: { new_namespace_id: new_namespace.id }, as: :turbo_stream
+
+    assert_response :unauthorized
+  end
 end
