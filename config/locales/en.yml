@@ -59,7 +59,7 @@ en:
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
         update_member?: You are not authorized to update members for group %{name} on this server.
         sample_listing?: You are not authorized to view samples for group %{name} on this server.
-        share_group_with_other_groups?: You are not authorized to share group %{name} with other groups on this server.
+        share_namespace_with_group?: You are not authorized to share group %{name} with other groups on this server.
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.
@@ -81,6 +81,7 @@ en:
         create_member?: You are not authorized to create members for the project namespace %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         update_member?: You are not authorized to update members for the project namespace %{name} on this server.
+        share_namespace_with_group?: You are not authorized to share project %{name} with other groups on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
@@ -565,7 +566,7 @@ en:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
     groups:
       share:
-        group_not_found: Group with id %{group_id} to share with %{group} cannot be found.
+        group_not_found: Group with id %{group_id} to share namespace with cannot be found.
   application:
     errors:
       access_denied: Access Denied.

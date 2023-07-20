@@ -10,6 +10,8 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
     patch '/', action: :update
     put '/', action: :update
     delete '/', action: :destroy
+    post '/share', to: 'share#create'
+
     # Begin on /-/ scope.
     # Use this for all project routes.
     scope '-' do

@@ -93,7 +93,7 @@ class GroupPolicy < NamespacePolicy
     false
   end
 
-  def share_group_with_other_groups?
+  def share_namespace_with_group?
     return true if Member.can_share_group?(user, record) == true
 
     details[:name] = record.name
