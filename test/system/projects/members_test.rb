@@ -131,7 +131,7 @@ module Projects
 
       visit dashboard_projects_url
 
-      click_on I18n.t(:'projects.index.create_project_button')
+      click_on I18n.t(:'dashboard.projects.index.create_project_button')
 
       assert_selector 'h1', text: I18n.t(:'projects.new.title')
 
