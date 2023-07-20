@@ -1,32 +1,50 @@
 <div class="w-full">
   <div class="pb-4">
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:"profiles.show.email.title") %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
-      <%= t :"profiles.show.email.subtitle" %>
-    </p>
+    <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
+      <% invalid = user.errors.include?(:email) %>
+      <div class="form-field <%= 'invalid' if invalid %>">
+        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+          <%= t(:"profiles.show.email.title") %>
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400">
+          <%= t :"profiles.show.email.subtitle" %>
+        </p>
+        <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email" %>
+      </div>
+      <br/>
+      <div class="form-field">
+        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+          <%= t(:"profiles.show.first_name.title") %>
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400">
+          <%= t :"profiles.show.first_name.subtitle" %>
+        </p>
+        <%= f.text_field :first_name %>
+      </div>
+      <br/>
+      <div class="form-field">
+        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+          <%= t(:"profiles.show.last_name.title") %>
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400">
+          <%= t :"profiles.show.last_name.subtitle" %>
+        </p>
+        <%= f.text_field :last_name %>
+      </div>
+      <br/>
+      <div class="form-field">
+        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+          <%= t(:"profiles.show.phone_number.title") %>
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400">
+          <%= t :"profiles.show.phone_number.subtitle" %>
+        </p>
+        <%= f.text_field :phone_number %>
+      </div>
+      <br/>
+      <div class="my-2">
+        <%= f.submit t(:"profiles.show.email.submit"), class: "button button--state-primary button--size-default" %>
+      </div>
+    <% end %>
   </div>
-  <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
-    <% invalid = user.errors.include?(:email) %>
-    <div class="form-field <%= 'invalid' if invalid %>">
-      <%= f.label :email %>
-      <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email" %>
-    </div>
-    <div class="form-field">
-      <%= f.label :first_name %>
-      <%= f.text_field :first_name %>
-    </div>
-    <div class="form-field">
-      <%= f.label :last_name %>
-      <%= f.text_field :last_name %>
-    </div>
-    <div class="form-field">
-      <%= f.label :phone_number %>
-      <%= f.telephone_field :phone_number %>
-    </div>
-    <div class="my-2">
-      <%= f.submit t(:"profiles.show.email.submit"), class: "button button--state-primary button--size-default" %>
-    </div>
-  <% end %>
 </div>

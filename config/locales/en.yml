@@ -260,16 +260,22 @@ en:
         submit: Update profile settings
       provider:
         title: OmniAuth Provider
+        subtitle: Type of sign-in provider managing this user
       uid:
-        title: OmniAuth Provider UID
+        title: Provider UID
+        subtitle: UID the provider has associated with this user
       provider_username:
-        title: OmniAuth Provider Username
+        title: Provider Username
+        subtitle: Username the provider has associated with this user
       first_name:
         title: First Name
+        subtitle: First name of this user
       last_name:
         title: Last Name
+        subtitle: Last name of this user
       phone_number:
         title: Phone Number
+        subtitle: Telephone number of this user
       missing: These aren't the droids you're looking for...
     update:
       success: Profile updated successfully

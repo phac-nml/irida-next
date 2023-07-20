@@ -1,53 +1,83 @@
 <div class="w-full">
   <div class="pb-4">
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.email.title') %>
+      <%= t(:"profiles.show.email.title") %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
+      <%= t :"profiles.show.email.subtitle" %>
+    </p>
+    <p class="text-gray-900 dark:text-white">
       <%=@user.email%>
       <%= t(:'profiles.show.missing') if @user.email == nil%>
     </p>
+    <br/>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.provider.title') %>
+      <%= t(:"profiles.show.provider.title") %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
+      <%= t :"profiles.show.provider.subtitle" %>
+    </p>
+    <p class="text-gray-900 dark:text-white">
       <%=@user.provider%>
       <%= t(:'profiles.show.missing') if @user.provider == nil%>
     </p>
+    <br/>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.uid.title') %>
+      <%= t(:"profiles.show.provider_username.title") %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
-      <%=@user.uid%>
-      <%= t(:'profiles.show.missing') if @user.uid == nil%>
+      <%= t :"profiles.show.provider_username.subtitle" %>
     </p>
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.first_name.title') %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
-      <%=@user.first_name%>
-      <%= t(:'profiles.show.missing') if @user.first_name == nil%>
-    </p>
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.last_name.title') %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
-      <%=@user.last_name%>
-      <%= t(:'profiles.show.missing') if @user.last_name == nil%>
-    </p>
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.provider_username.title') %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
+    <p class="text-gray-900 dark:text-white">
       <%=@user.provider_username%>
       <%= t(:'profiles.show.missing') if @user.provider_username == nil%>
     </p>
+    <br/>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:'profiles.show.phone_number.title') %>
+      <%= t(:"profiles.show.uid.title") %>
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
+      <%= t :"profiles.show.uid.subtitle" %>
+    </p>
+    <p class="text-gray-900 dark:text-white">
+      <%=@user.uid%>
+      <%= t(:'profiles.show.missing') if @user.uid == nil%>
+    </p>
+    <br/>
+    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+      <%= t(:"profiles.show.first_name.title") %>
+    </h2>
+    <p class="text-gray-500 dark:text-gray-400">
+      <%= t :"profiles.show.first_name.subtitle" %>
+    </p>
+    <p class="text-gray-900 dark:text-white">
+      <%=@user.first_name%>
+      <%= t(:'profiles.show.missing') if @user.first_name == nil%>
+    </p>
+    <br/>
+    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+      <%= t(:"profiles.show.last_name.title") %>
+    </h2>
+    <p class="text-gray-500 dark:text-gray-400">
+      <%= t :"profiles.show.last_name.subtitle" %>
+    </p>
+    <p class="text-gray-900 dark:text-white">
+      <%=@user.last_name%>
+      <%= t(:'profiles.show.missing') if @user.last_name == nil%>
+    </p>
+    <br/>
+    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+      <%= t(:"profiles.show.phone_number.title") %>
+    </h2>
+    <p class="text-gray-500 dark:text-gray-400">
+      <%= t :"profiles.show.phone_number.subtitle" %>
+    </p>
+    <p class="text-gray-900 dark:text-white">
       <%=@user.phone_number%>
       <%= t(:'profiles.show.missing') if @user.phone_number == nil%>
     </p>
+    <br/>
+
+
   </div>
 </div>
