@@ -13,4 +13,5 @@ pin 'flowbite-datepicker', to: 'https://ga.jspm.io/npm:flowbite-datepicker@1.2.2
 pin '@sindresorhus/slugify', to: 'https://ga.jspm.io/npm:@sindresorhus/slugify@2.2.0/index.js'
 pin '@sindresorhus/transliterate', to: 'https://ga.jspm.io/npm:@sindresorhus/transliterate@1.6.0/index.js'
 pin 'escape-string-regexp', to: 'https://ga.jspm.io/npm:escape-string-regexp@5.0.0/index.js'
+pin 'lodash', to: 'https://ga.jspm.io/npm:lodash@4.17.21/lodash.js'
 pin_all_from 'app/javascript/controllers', under: 'controllers'
