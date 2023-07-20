@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_30_162646) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_13_163258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -29,6 +29,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_162646) do
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
     t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["user_id"], name: "index_members_on_user_id"
+  end
+
+  create_table "namespace_group_links", force: :cascade do |t|
+    t.bigint "group_id", null: false
+    t.bigint "namespace_id", null: false
+    t.date "expires_at"
+    t.integer "group_access_level", null: false
+    t.string "namespace_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.jsonb "log_data"
+    t.index ["deleted_at"], name: "index_namespace_group_links_on_deleted_at"
+    t.index ["group_id", "namespace_id"], name: "index_group_link_group_with_namespace", unique: true
   end
 
   create_table "namespaces", force: :cascade do |t|
@@ -514,5 +528,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_162646) do
   SQL
   create_trigger :logidze_on_personal_access_tokens, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_personal_access_tokens BEFORE INSERT OR UPDATE ON public.personal_access_tokens FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_namespace_group_links, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_namespace_group_links BEFORE INSERT OR UPDATE ON public.namespace_group_links FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end
