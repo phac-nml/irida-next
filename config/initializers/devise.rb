@@ -286,7 +286,8 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   # expected format of OMNIAUTH_PROVIDERS = 'developer,saml,azure_activedirectory_v2'
   if ENV['OMNIAUTH_PROVIDERS']
     if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
-      config.omniauth :developer,
+      config.omniauth
+        :developer,
         :fields => [:email, :provider_username, :first_name, :last_name, :phone_number],
         :uid_field => :email
     end

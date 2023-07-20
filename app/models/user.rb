@@ -45,19 +45,19 @@ class User < ApplicationRecord
   def update_fields_from_omniauth(auth)
     # provider specific attributes are configured here
     case auth.provider
-      when 'developer'
-        self.first_name = auth.info.first_name
-        self.last_name = auth.info.last_name
-        self.provider_username = auth.info.provider_username
-        self.phone_number = auth.info.phone_number
-      when 'saml'
-        self.first_name = auth.info.first_name
-        self.last_name = auth.info.last_name
-        self.provider_username = auth.info.name
-      when 'azure_activedirectory_v2'
-        self.first_name = auth.info.first_name
-        self.last_name = auth.info.last_name
-        self.provider_username = auth.info.nickname
+    when 'developer'
+      self.first_name = auth.info.first_name
+      self.last_name = auth.info.last_name
+      self.provider_username = auth.info.provider_username
+      self.phone_number = auth.info.phone_number
+    when 'saml'
+      self.first_name = auth.info.first_name
+      self.last_name = auth.info.last_name
+      self.provider_username = auth.info.name
+    when 'azure_activedirectory_v2'
+      self.first_name = auth.info.first_name
+      self.last_name = auth.info.last_name
+      self.provider_username = auth.info.nickname
     end
     # user.image = auth.info.image # assuming the user model has an image
     self.save

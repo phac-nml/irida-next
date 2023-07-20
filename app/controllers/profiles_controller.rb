@@ -33,7 +33,7 @@ class ProfilesController < Profiles::ApplicationController
       :first_name,
       :last_name,
       :phone_number
-      )
+    )
   end
 
   def set_user
