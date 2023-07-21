@@ -96,7 +96,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         render :edit, status: :conflict
       else
         flash[:success] = t('.success')
-        # redirect_to group_path(@group)
         redirect_to namespace_project_path(@project.namespace.parent, @project)
       end
     else
