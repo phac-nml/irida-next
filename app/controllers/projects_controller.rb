@@ -3,9 +3,9 @@
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
-  before_action :project, only: %i[show edit update activity transfer destroy]
+  before_action :project, only: %i[show edit update activity share transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorized_namespaces, only: %i[edit new update create transfer]
+  before_action :authorized_namespaces, only: %i[edit new update share create transfer]
 
   def index
     respond_to do |format|
@@ -84,6 +84,24 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     else
       flash[:error] = @project.errors.full_messages.first
       redirect_to namespace_project_path(@project)
+    end
+  end
+
+  def share # rubocop:disable Metrics/AbcSize
+    namespace_group_link = Groups::ShareService.new(current_user, params[:shared_group_id], @project.namespace,
+                                                    params[:group_access_level]).execute
+    if namespace_group_link
+      if namespace_group_link.errors.full_messages.count.positive?
+        flash[:error] = namespace_group_link.errors.full_messages.first
+        render :edit, status: :conflict
+      else
+        flash[:success] = t('.success')
+        # redirect_to group_path(@group)
+        redirect_to namespace_project_path(@project.namespace.parent, @project)
+      end
+    else
+      flash[:error] = t('.error')
+      render :edit, status: :unprocessable_entity
     end
   end
 

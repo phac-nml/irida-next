@@ -361,6 +361,9 @@ en:
       cancel: Cancel
     update:
       success: Group updated successfully
+    share:
+      success: Successfully shared group with group
+      error: There was an error sharing group with group
     members:
       create:
         error: "Error adding member"
@@ -461,6 +464,9 @@ en:
       success: "Project %{project_name} was successfully updated"
     transfer:
       success: "Project %{project_name} was successfully transferred"
+    share:
+      success: Successfully shared project with group
+      error: There was an error sharing project with group
     members:
       create:
         error: "Error adding member"
