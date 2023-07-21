@@ -1,7 +1,7 @@
 """
 A group
 """
-type Group implements Node {
+type Group implements Namespace & Node {
   """
   List of descendant groups of this group.
   """
@@ -35,7 +35,7 @@ type Group implements Node {
   """
   Description of the namespace.
   """
-  description: String!
+  description: String
 
   """
   Full name of the namespace.
@@ -119,6 +119,41 @@ type Mutation {
 }
 
 """
+A namespace
+"""
+interface Namespace {
+  """
+  Description of the namespace.
+  """
+  description: String
+
+  """
+  Full name of the namespace.
+  """
+  fullName: String!
+
+  """
+  Full path of the namespace.
+  """
+  fullPath: ID!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Name of the namespace.
+  """
+  name: String!
+
+  """
+  Path of the namespace.
+  """
+  path: String!
+}
+
+"""
 An object with an ID.
 """
 interface Node {
@@ -151,6 +186,86 @@ type PageInfo {
   When paginating backwards, the cursor to continue.
   """
   startCursor: String
+}
+
+"""
+A project
+"""
+type Project implements Node {
+  """
+  Description of the project.
+  """
+  description: String
+
+  """
+  Full name of the project.
+  """
+  fullName: String!
+
+  """
+  Full path of the project.
+  """
+  fullPath: ID!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Name of the project.
+  """
+  name: String!
+
+  """
+  Parent namespace
+  """
+  parent: Namespace
+
+  """
+  Path of the project.
+  """
+  path: String!
+}
+
+"""
+The connection type for Project.
+"""
+type ProjectConnection {
+  """
+  A list of edges.
+  """
+  edges: [ProjectEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Project]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type ProjectEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Project
 }
 
 """
@@ -216,6 +331,41 @@ type Query {
     """
     ids: [ID!]!
   ): [Node]!
+
+  """
+  Find a project.
+  """
+  project(
+    """
+    Full path of the project. For example, `pathogen/surveillance/2023`.
+    """
+    fullPath: ID!
+  ): Project
+
+  """
+  Find projects.
+  """
+  projects(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): ProjectConnection
 }
 
 """
