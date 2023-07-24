@@ -9,8 +9,8 @@ module ShareActions
   end
 
   def share # rubocop:disable Metrics/AbcSize
-    namespace_group_link = Groups::ShareService.new(current_user, params[:shared_group_id], @namespace,
-                                                    params[:group_access_level]).execute
+    namespace_group_link = Namespaces::GroupShareService.new(current_user, params[:shared_group_id], @namespace,
+                                                             params[:group_access_level]).execute
     if namespace_group_link
       if namespace_group_link.errors.full_messages.count.positive?
         flash[:error] = namespace_group_link.errors.full_messages.first

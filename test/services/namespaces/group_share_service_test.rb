@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-module Groups
+module Namespaces
   class ShareServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
@@ -13,7 +13,7 @@ module Groups
       namespace = groups(:group_six)
 
       assert_difference -> { NamespaceGroupLink.count } => 1 do
-        Groups::ShareService.new(@user, group.id, namespace, Member::AccessLevel::ANALYST).execute
+        Namespaces::GroupShareService.new(@user, group.id, namespace, Member::AccessLevel::ANALYST).execute
       end
     end
 
@@ -23,7 +23,7 @@ module Groups
       namespace = groups(:group_six)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Groups::ShareService.new(user, group.id, namespace, Member::AccessLevel::ANALYST).execute
+        Namespaces::GroupShareService.new(user, group.id, namespace, Member::AccessLevel::ANALYST).execute
       end
 
       assert_equal GroupPolicy, exception.policy
@@ -38,7 +38,7 @@ module Groups
       namespace = groups(:group_one)
 
       assert_no_difference ['NamespaceGroupLink.count'] do
-        Groups::ShareService.new(@user, group_id, namespace, Member::AccessLevel::ANALYST).execute
+        Namespaces::GroupShareService.new(@user, group_id, namespace, Member::AccessLevel::ANALYST).execute
       end
     end
 
@@ -49,7 +49,8 @@ module Groups
       assert_authorized_to(:share_namespace_with_group?, namespace,
                            with: GroupPolicy,
                            context: { user: @user }) do
-        Groups::ShareService.new(@user, group.id, namespace, Member::AccessLevel::ANALYST).execute
+        Namespaces::GroupShareService.new(@user, group.id, namespace,
+                                          Member::AccessLevel::ANALYST).execute
       end
     end
 
@@ -57,8 +58,8 @@ module Groups
       group = groups(:group_one)
       namespace = groups(:group_six)
 
-      group_group_link = Groups::ShareService.new(@user, group.id, namespace,
-                                                  Member::AccessLevel::ANALYST).execute
+      group_group_link = Namespaces::GroupShareService.new(@user, group.id, namespace,
+                                                           Member::AccessLevel::ANALYST).execute
       group_group_link.create_logidze_snapshot!
 
       assert_equal 1, group_group_link.log_data.version
