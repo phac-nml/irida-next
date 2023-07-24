@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Namespaces
-  class ShareServiceTest < ActiveSupport::TestCase
+  class GroupShareServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
     end

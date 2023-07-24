@@ -26,7 +26,7 @@ module ShareActions
   end
 
   def unshare
-    ngl = Namespaces::GroupUnShareService.new(current_user, params[:shared_group_id], @namespace).execute
+    ngl = Namespaces::GroupUnshareService.new(current_user, params[:shared_group_id], @namespace).execute
 
     if ngl.deleted?
       flash[:success] = "Successfully unshared #{@namespace.type} with group"
