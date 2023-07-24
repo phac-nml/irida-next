@@ -2,10 +2,12 @@
 
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
+  include ShareActions
+
   layout :resolve_layout
-  before_action :project, only: %i[show edit update activity share transfer destroy]
+  before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorized_namespaces, only: %i[edit new update share create transfer]
+  before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
     respond_to do |format|
@@ -87,23 +89,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def share # rubocop:disable Metrics/AbcSize
-    namespace_group_link = Groups::ShareService.new(current_user, params[:shared_group_id], @project.namespace,
-                                                    params[:group_access_level]).execute
-    if namespace_group_link
-      if namespace_group_link.errors.full_messages.count.positive?
-        flash[:error] = namespace_group_link.errors.full_messages.first
-        render :edit, status: :conflict
-      else
-        flash[:success] = t('.success')
-        redirect_to namespace_project_path(@project.namespace.parent, @project)
-      end
-    else
-      flash[:error] = t('.error')
-      render :edit, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def project_params
@@ -164,5 +149,21 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         path: namespace_project_edit_path
       }]
     end
+  end
+
+  protected
+
+  def namespace
+    return unless params[:project_id]
+
+    path = [params[:namespace_id], params[:project_id]].join('/')
+    @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+    @namespace = @project.namespace
+
+    authorized_namespaces
+  end
+
+  def namespace_path
+    namespace_project_path(@namespace.parent, @project)
   end
 end

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 # Controller actions for Groups
-class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
+class GroupsController < Groups::ApplicationController
+  include ShareActions
+
   layout :resolve_layout
-  before_action :group, only: %i[edit share show destroy update]
+  before_action :group, only: %i[edit show destroy update]
   before_action :context_crumbs, except: %i[index new create show]
   before_action :authorized_namespaces, only: %i[new update create]
 
@@ -61,23 +63,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     end
   end
 
-  def share # rubocop:disable Metrics/AbcSize
-    namespace_group_link = Groups::ShareService.new(current_user, params[:shared_group_id], @group,
-                                                    params[:group_access_level]).execute
-    if namespace_group_link
-      if namespace_group_link.errors.full_messages.count.positive?
-        flash[:error] = namespace_group_link.errors.full_messages.first
-        render :edit, status: :conflict
-      else
-        flash[:success] = t('.success')
-        redirect_to group_path(@group)
-      end
-    else
-      flash[:error] = t('.error')
-      render :edit, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def group
@@ -120,5 +105,15 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
       name: I18n.t('groups.edit.title'),
       path: group_path
     }]
+  end
+
+  protected
+
+  def namespace
+    @namespace = group
+  end
+
+  def namespace_path
+    group_path(@group)
   end
 end
