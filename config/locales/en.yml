@@ -288,7 +288,7 @@ en:
       phone_number:
         title: Phone Number
         subtitle: Telephone number of this user
-      missing: These aren't the droids you're looking for...
+      missing: This field has not been provided by the OmniAuth Provider.
     update:
       success: Profile updated successfully
     passwords:
