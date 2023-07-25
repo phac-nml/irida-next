@@ -8,9 +8,17 @@ module Viral
     DEFAULT_TIMEOUT = 3500
 
     def initialize(type:, data:, timeout: DEFAULT_TIMEOUT)
-      @type = type
+      @type = set_type(type)
       @data = data
       @timeout = type.to_s == 'error' ? 0 : timeout
+    end
+
+    def set_type(type)
+      @type = if type == 'notice'
+                'info'
+              else
+                type == 'alert' ? 'error' : type
+              end
     end
   end
 end
