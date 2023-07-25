@@ -34,79 +34,48 @@ class User < ApplicationRecord
 
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
-    # user = self.set_user_fields_from_omniauth(auth, user)
     user.email = auth.info.email
-    user.password = Devise.friendly_token[0, 20]
-    user.first_name = auth.info.first_name
-    user.last_name = auth.info.last_name
+    unless user.password.present?
+      user.password = Devise.friendly_token[0, 20]
+    end
 
     # provider specific attributes are configured here
     case auth.provider
     when 'developer'
-      user.provider_username = auth.info.provider_username
-      user.phone_number = auth.info.phone_number
+      user = self.from_developer(user, auth)
     when 'saml'
-      user.provider_username = auth.info.name
-      # user.phone_number = auth.info.x
+      user = self.from_saml(user, auth)
     when 'azure_activedirectory_v2'
-      user.provider_username = auth.info.nickname
-      # user.phone_number = auth.info.x
+      user = self.from_azure_activedirectory_v2(user, auth)
     end
-    # user.image = auth.info.image  # not implimented yet
 
     user.save
     user
-    # find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
-    #   user.email = auth.info.email
-    #   user.password = Devise.friendly_token[0, 20]
-    #   # If you are using confirmable and the provider(s) you use validate emails,
-    #   # uncomment the line below to skip the confirmation emails.
-    #   # user.skip_confirmation!
-    # end
   end
 
-  # def self.set_user_fields_from_omniauth(auth, user)
-  #   user.email = auth.info.email
-  #   user.password = Devise.friendly_token[0, 20]
-  #   user.first_name = auth.info.first_name
-  #   user.last_name = auth.info.last_name
+  def self.from_developer(user, auth)
+    user.first_name = auth.info.first_name
+    user.last_name = auth.info.last_name
+    user.provider_username = auth.info.provider_username
+    user.phone_number = auth.info.phone_number
+    user
+  end
 
-  #   # provider specific attributes are configured here
-  #   case auth.provider
-  #   when 'developer'
-  #     user.provider_username = auth.info.provider_username
-  #     user.phone_number = auth.info.phone_number
-  #   when 'saml'
-  #     user.provider_username = auth.info.name
-  #     # user.phone_number = auth.info.x
-  #   when 'azure_activedirectory_v2'
-  #     user.provider_username = auth.info.nickname
-  #     # user.phone_number = auth.info.x
-  #   end
-  #   # user.image = auth.info.image  # not implimented yet
+  def self.from_saml(user, auth)
+    user.first_name = auth.info.first_name
+    user.last_name = auth.info.last_name
+    user.provider_username = auth.info.name
+    # user.phone_number = auth.info.x
+    user
+  end
 
-  #   user
-  # end
-
-
-  # def update_fields_from_omniauth(auth)
-  #   # provider specific attributes are configured here
-  #   case auth.provider
-  #   when 'developer'
-  #     self.provider_username = auth.info.provider_username
-  #     self.phone_number = auth.info.phone_number
-  #   when 'saml'
-  #     self.provider_username = auth.info.name
-  #     # self.phone_number = auth.info.x
-  #   when 'azure_activedirectory_v2'
-  #     self.provider_username = auth.info.nickname
-  #     # self.phone_number = auth.info.x
-  #   end
-  #   self.first_name = auth.info.first_name
-  #   self.last_name = auth.info.last_name
-  #   # user.image = auth.info.image # assuming the user model has an image
-  #   self.save
-  # end
+  def self.from_azure_activedirectory_v2(user, auth)
+    user.first_name = auth.info.first_name
+    user.last_name = auth.info.last_name
+    user.provider_username = auth.info.nickname
+    # user.phone_number = auth.info.x
+    user
+  end
 
   def update_password_with_password(params)
     current_password = params.delete(:current_password)
