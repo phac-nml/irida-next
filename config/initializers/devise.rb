@@ -287,8 +287,8 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   if ENV['OMNIAUTH_PROVIDERS']
     if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
       config.omniauth :developer,
-                      :fields => %I[email provider_username first_name last_name phone_number],
-                      :uid_field => :email
+                      fields: %I[email provider_username first_name last_name phone_number],
+                      uid_field: :email
     end
 
     if ENV['OMNIAUTH_PROVIDERS'].include? 'saml'

@@ -35,18 +35,18 @@ class User < ApplicationRecord
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
     user.email = auth.info.email
-    unless user.password.present?
+    if user.password.blank?
       user.password = Devise.friendly_token[0, 20]
     end
 
     # provider specific attributes are configured here
     case auth.provider
     when 'developer'
-      user = self.from_developer(user, auth)
+      user = from_developer(user, auth)
     when 'saml'
-      user = self.from_saml(user, auth)
+      user = from_saml(user, auth)
     when 'azure_activedirectory_v2'
-      user = self.from_azure_activedirectory_v2(user, auth)
+      user = from_azure_activedirectory_v2(user, auth)
     end
 
     user.save
