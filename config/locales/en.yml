@@ -215,6 +215,11 @@ en:
       title: Confirmation required
       cancel: Cancel
       confirm: Confirm
+    flash:
+      success_icon: Check icon
+      error_icon: X icon
+      warning_icon: Exclamation icon
+      information_icon: Information icon
   layouts:
     application:
       site_title: IRIDA Next
