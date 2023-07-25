@@ -1,7 +1,7 @@
 """
 A group
 """
-type Group implements Namespace & Node {
+type Group implements Node {
   """
   List of descendant groups of this group.
   """
@@ -66,6 +66,36 @@ type Group implements Namespace & Node {
   Path of the namespace.
   """
   path: String!
+
+  """
+  Projects within this namespace
+  """
+  projects(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Include projects from subgroups.
+    """
+    includeSubGroups: Boolean = false
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): ProjectConnection
 }
 
 """
@@ -121,7 +151,7 @@ type Mutation {
 """
 A namespace
 """
-interface Namespace {
+type Namespace implements Node {
   """
   Description of the namespace.
   """
@@ -151,6 +181,36 @@ interface Namespace {
   Path of the namespace.
   """
   path: String!
+
+  """
+  Projects within this namespace
+  """
+  projects(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Include projects from subgroups.
+    """
+    includeSubGroups: Boolean = false
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): ProjectConnection
 }
 
 """
@@ -220,7 +280,7 @@ type Project implements Node {
   """
   Parent namespace
   """
-  parent: Namespace
+  parent: Namespace!
 
   """
   Path of the project.
@@ -311,6 +371,16 @@ type Query {
     """
     last: Int
   ): GroupConnection!
+
+  """
+  Find a namespace.
+  """
+  namespace(
+    """
+    Full path of the namespace. For example, `pathogen/surveillance`.
+    """
+    fullPath: ID!
+  ): Namespace
 
   """
   Fetches an object given its ID.

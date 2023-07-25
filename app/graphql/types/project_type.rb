@@ -12,7 +12,7 @@ module Types
     field :name, String, null: false, description: 'Name of the project.'
     field :path, String, null: false, description: 'Path of the project.'
 
-    field :parent, Namespace, null: true, description: 'Parent namespace'
+    field :parent, NamespaceType, null: false, description: 'Parent namespace'
 
     def self.authorized?(object, context)
       super &&
