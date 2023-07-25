@@ -8,7 +8,7 @@ export default class extends Controller {
   }
 
   connect() {
-    this.submit = _.debounce(this.submit, 1000);
+    this.submit = _.debounce(this.submit, 500);
   }
 
   submit() {
