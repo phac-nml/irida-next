@@ -35,9 +35,7 @@ class User < ApplicationRecord
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
     user.email = auth.info.email
-    if user.password.blank?
-      user.password = Devise.friendly_token[0, 20]
-    end
+    user.password = Devise.friendly_token[0, 20] if user.password.blank?
 
     # provider specific attributes are configured here
     case auth.provider
