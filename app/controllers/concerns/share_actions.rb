@@ -26,12 +26,15 @@ module ShareActions
   end
 
   def unshare
-    ngl = Namespaces::GroupUnshareService.new(current_user, params[:shared_group_id], @namespace).execute
-
-    if ngl.deleted?
-      flash[:success] = "Successfully unshared #{@namespace.type} with group"
+    if Namespaces::GroupUnshareService.new(current_user, params[:shared_group_id],
+                                           @namespace).execute
+      flash[:success] =
+        "Successfully unshared #{@namespace.type} with group"
+      redirect_to namespace_path
     else
-      flash[:error] = "Successfully unsharing #{@namespace.type} with group"
+      flash[:error] =
+        @namespace.errors.full_messages.first
+      render :edit, status: :unprocessable_entity
     end
   end
 

@@ -206,4 +206,25 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     assert_response :conflict
   end
+
+  test 'unshare group' do
+    sign_in users(:john_doe)
+    namespace_group_link = namespace_group_links(:namespace_group_link2)
+    group = namespace_group_link.group
+    namespace = namespace_group_link.namespace
+
+    post group_unshare_path(namespace, params: { shared_group_id: group.id })
+
+    assert_redirected_to group_path(namespace)
+  end
+
+  test 'unshare group when link doesn\'t exist with another group' do
+    sign_in users(:john_doe)
+    group = groups(:group_one)
+    namespace = groups(:group_six)
+
+    post group_unshare_path(namespace, params: { shared_group_id: group.id })
+
+    assert_response :unprocessable_entity
+  end
 end

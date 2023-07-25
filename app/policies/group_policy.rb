@@ -100,6 +100,13 @@ class GroupPolicy < NamespacePolicy
     false
   end
 
+  def unshare_namespace_with_group?
+    return true if Member.can_unshare_group?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |_relation|
     user.groups.self_and_descendants.include_route
   end

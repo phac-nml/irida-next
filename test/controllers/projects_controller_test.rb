@@ -313,4 +313,28 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
 
     assert_response :conflict
   end
+
+  test 'unshare project' do
+    sign_in users(:john_doe)
+    namespace_group_link = namespace_group_links(:namespace_group_link1)
+    group = namespace_group_link.group
+    project_namespace = namespace_group_link.namespace
+
+    post namespace_project_unshare_path(project_namespace.parent, project_namespace.project,
+                                        params: { shared_group_id: group.id })
+
+    assert_redirected_to namespace_project_path(project_namespace.parent, project_namespace.project)
+  end
+
+  test 'unshare project when link doesn\'t exist' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_one)
+    project_namespace = namespaces_project_namespaces(:project23_namespace)
+
+    post namespace_project_unshare_path(project_namespace.parent, project_namespace.project,
+                                        params: { shared_group_id: group.id })
+
+    assert_response :unprocessable_entity
+  end
 end

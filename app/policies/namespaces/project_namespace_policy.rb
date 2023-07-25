@@ -49,5 +49,12 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def unshare_namespace_with_group?
+      return true if Member.can_unshare_group?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
   end
 end

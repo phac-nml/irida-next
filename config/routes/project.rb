@@ -26,6 +26,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         end
       end
       post :share
+      post :unshare
     end
   end
 end
