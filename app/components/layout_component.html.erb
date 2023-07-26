@@ -1,25 +1,25 @@
-  <div
-    class="layout-body"
-    data-controller="layout--layout-component"
-    data-layout--layout-component-target="layoutContainer"
-  >
-    <%= sidebar %>
-    <div class="content">
-      <div class="p-2 bg-white dark:bg-gray-800"
-      data-layout--layout-component-target="expandButton">
-        <button
-          data-action="click->layout--layout-component#expand"
-          class="navbar-button"
-        >
-          <%= viral_icon(name: "chevron_double_right", classes: "w-6 h-6") %>
-        </button>
-      </div>
-      <%= body %>
-      <%= render ConfirmationComponent.new %>
+<div
+  class="layout-body"
+  data-controller="layout--layout-component"
+  data-layout--layout-component-target="layoutContainer"
+>
+  <%= sidebar %>
+  <div class="content">
+    <div class="p-2 bg-white dark:bg-gray-800 hidden"
+         data-layout--layout-component-target="expandButton">
+      <button
+        data-action="click->layout--layout-component#expand"
+        class="navbar-button"
+      >
+        <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
+      </button>
     </div>
+    <%= body %>
+    <%= render ConfirmationComponent.new %>
   </div>
 </div>
-<div class="fixed flex flex-col top-5 right-6 ">
+<div class="fixed flex flex-col top-5 right-6">
   <% flash.each do |key, value| %>
     <%= viral_flash(type: key, data: value) %>
   <% end %>
+</div>
