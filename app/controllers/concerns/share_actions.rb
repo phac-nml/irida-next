@@ -28,8 +28,7 @@ module ShareActions
   def unshare
     if Namespaces::GroupUnshareService.new(current_user, params[:shared_group_id],
                                            @namespace).execute
-      flash[:success] =
-        "Successfully unshared #{@namespace.type} with group"
+      flash[:success] = t('.success')
       redirect_to namespace_path
     else
       flash[:error] =

@@ -366,6 +366,8 @@ en:
     share:
       success: Successfully shared group with group
       error: There was an error sharing group with group
+    unshare:
+      success: Successfully unshared group
     members:
       create:
         error: "Error adding member"
@@ -469,6 +471,8 @@ en:
     share:
       success: Successfully shared project with group
       error: There was an error sharing project with group
+    unshare:
+      success: Successfully unshared project with group
     members:
       create:
         error: "Error adding member"
