@@ -68,7 +68,11 @@ class GroupsController < Groups::ApplicationController
       redirect_to group_path(@group)
     else
       @error = @group.errors.messages.values.flatten.first
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :unprocessable_entity, locals: { confirm_value: @group.path, error: @error }
+        end
+      end
     end
   end
 
