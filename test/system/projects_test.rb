@@ -7,45 +7,6 @@ class ProjectsTest < ApplicationSystemTestCase
     login_as users(:john_doe)
   end
 
-  test 'can see the list of projects' do
-    visit projects_url
-
-    assert_selector 'h1', text: I18n.t(:'projects.index.title')
-    assert_selector 'tr', count: 20
-    assert_text projects(:project1).human_name
-    assert_selector 'a', text: I18n.t(:'components.pagination.next')
-    assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
-
-    click_on I18n.t(:'components.pagination.next')
-    assert_selector 'tr', count: 7
-    click_on I18n.t(:'components.pagination.previous')
-    assert_selector 'tr', count: 20
-
-    click_link projects(:project1).human_name
-    assert_selector 'h1', text: projects(:project1).name
-  end
-
-  test 'can create a project from index page' do
-    project_name = 'New Project'
-    project_description = 'New Project Description'
-
-    visit projects_url
-
-    click_on I18n.t(:'projects.index.create_project_button')
-
-    assert_selector 'h1', text: I18n.t(:'projects.new.title')
-
-    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-      fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
-      assert_equal 'new-project', find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
-      fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
-      click_on I18n.t(:'projects.new.submit')
-    end
-
-    assert_selector 'h1', text: project_name
-    assert_text project_description
-  end
-
   test 'can update project name and description' do
     project_name = 'New Project'
     project_description = 'New Project Description'

@@ -60,6 +60,9 @@ gem 'view_component'
 # Pagy
 gem 'pagy', '~> 6.0' # omit patch digit
 
+# Ransack
+gem 'ransack', '~> 3.2', '>= 3.2.1'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 

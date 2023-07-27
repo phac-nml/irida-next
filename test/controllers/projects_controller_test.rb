@@ -5,11 +5,11 @@ require 'test_helper'
 class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   include Devise::Test::IntegrationHelpers
 
-  test 'should get index' do
+  test 'should redirect to dashboard projects index when get index' do
     sign_in users(:john_doe)
 
     get projects_path
-    assert_response :success
+    assert_redirected_to dashboard_projects_path
   end
 
   test 'should show the project' do
