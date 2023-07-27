@@ -61,7 +61,7 @@ class GroupsController < Groups::ApplicationController
     end
   end
 
-  def transfer
+  def transfer # rubocop:disable Metrics/AbcSize
     new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     if Groups::TransferService.new(@group, current_user).execute(new_namespace)
       flash[:success] = t('.success')
