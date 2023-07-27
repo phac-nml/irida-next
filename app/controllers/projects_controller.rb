@@ -63,7 +63,9 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
       end
     else
       @error = @project.errors.messages.values.flatten.first
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream
+      end
     end
   end
 
