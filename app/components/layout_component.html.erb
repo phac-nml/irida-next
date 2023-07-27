@@ -5,15 +5,19 @@
 >
   <%= sidebar %>
   <div class="content">
-    <div class="p-2 bg-white dark:bg-gray-800 hidden"
-         data-layout--layout-component-target="expandButton">
+    <nav
+      class="flex px-5 bg-white border-b border-slate-200 dark:bg-slate-800"
+      style="height: 50px"
+    >
       <button
+        data-layout--layout-component-target="expandButton"
         data-action="click->layout--layout-component#expand"
-        class="navbar-button"
+        class="hidden"
       >
         <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
       </button>
-    </div>
+      <%= breadcrumb %>
+    </nav>
     <%= body %>
     <%= render ConfirmationComponent.new %>
   </div>

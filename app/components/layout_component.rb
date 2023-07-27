@@ -6,6 +6,7 @@ class LayoutComponent < Component
 
   renders_one :sidebar, Layout::SidebarComponent
   renders_one :body
+  renders_one :breadcrumb, Viral::BreadcrumbComponent
 
   def initialize(user:, **system_arguments)
     @user = user

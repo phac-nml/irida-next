@@ -33,11 +33,11 @@
             ) %>
           <% end %>
         <% end %>
+        <% layout.breadcrumb(
+          route: @project.namespace.route,
+          context_crumbs: @context_crumbs
+        ) %>
         <% layout.body do %>
-          <%= render Viral::BreadcrumbComponent.new(
-            route: @project.namespace.route,
-            context_crumbs: @context_crumbs
-          ) %>
           <%= turbo_frame_tag("errors") %>
           <%= yield %>
         <% end %>
