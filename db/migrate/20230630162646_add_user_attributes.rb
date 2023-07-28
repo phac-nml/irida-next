@@ -7,7 +7,6 @@ class AddUserAttributes < ActiveRecord::Migration[7.0]
       t.string :provider_username
       t.string :first_name
       t.string :last_name
-      t.string :phone_number
     end
   end
 end

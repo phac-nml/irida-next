@@ -31,8 +31,7 @@ class ProfilesController < Profiles::ApplicationController
     params.require(:user).permit(
       :email,
       :first_name,
-      :last_name,
-      :phone_number
+      :last_name
     )
   end
 

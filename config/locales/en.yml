@@ -285,9 +285,6 @@ en:
       last_name:
         title: Last Name
         subtitle: Last name of this user
-      phone_number:
-        title: Phone Number
-        subtitle: Telephone number of this user
       missing: This field has not been provided by the OmniAuth Provider.
     update:
       success: Profile updated successfully

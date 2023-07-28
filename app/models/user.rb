@@ -55,7 +55,6 @@ class User < ApplicationRecord
     user.first_name = auth.info.first_name
     user.last_name = auth.info.last_name
     user.provider_username = auth.info.provider_username
-    user.phone_number = auth.info.phone_number
     user
   end
 
@@ -63,7 +62,6 @@ class User < ApplicationRecord
     user.first_name = auth.info.first_name
     user.last_name = auth.info.last_name
     user.provider_username = auth.info.name
-    # user.phone_number = auth.info.x
     user
   end
 
@@ -71,7 +69,6 @@ class User < ApplicationRecord
     user.first_name = auth.info.first_name
     user.last_name = auth.info.last_name
     user.provider_username = auth.info.nickname
-    # user.phone_number = auth.info.x
     user
   end
 
