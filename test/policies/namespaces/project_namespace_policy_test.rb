@@ -29,5 +29,13 @@ module Namespaces
     test '#member_listing?' do
       assert @policy.member_listing?
     end
+
+    test '#share_namespace_with_group?' do
+      assert @policy.share_namespace_with_group?
+    end
+
+    test '#unshare_namespace_with_group?' do
+      assert @policy.unshare_namespace_with_group?
+    end
   end
 end

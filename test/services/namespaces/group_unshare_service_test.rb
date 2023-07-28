@@ -52,7 +52,7 @@ module Namespaces
 
       Namespaces::GroupUnshareService.new(@user, group.id, namespace).execute
 
-      assert namespace.errors.full_messages.include?('Namespace to group link does not exist')
+      assert namespace.errors.full_messages.include?(I18n.t('services.namespaces.unshare.group_link_not_exist'))
     end
 
     test 'valid authorization to unshare group' do

@@ -94,14 +94,14 @@ class GroupPolicy < NamespacePolicy
   end
 
   def share_namespace_with_group?
-    return true if Member.can_share_group?(user, record) == true
+    return true if Member.can_share_namespace_with_group?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
   def unshare_namespace_with_group?
-    return true if Member.can_unshare_group?(user, record) == true
+    return true if Member.can_unshare_namespace_with_group?(user, record) == true
 
     details[:name] = record.name
     false

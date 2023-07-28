@@ -17,7 +17,10 @@ module Namespaces
 
       namespace_group_link = NamespaceGroupLink.find_by(group_id:, namespace:)
 
-      raise NamespaceGroupUnshareError, 'Namespace to group link does not exist' if namespace_group_link.nil?
+      if namespace_group_link.nil?
+        raise NamespaceGroupUnshareError,
+              I18n.t('services.namespaces.unshare.group_link_not_exist')
+      end
 
       namespace_group_link.destroy
     rescue Namespaces::GroupUnshareService::NamespaceGroupUnshareError => e
