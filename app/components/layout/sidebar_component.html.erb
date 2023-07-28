@@ -21,7 +21,19 @@
           <%= t(:"general.name") %>
         </span>
       </a>
-      <div>
+      <div
+        class="
+          flex
+          flex-col
+          flex-shrink-0
+          space-y-1
+          md:flex-row
+          md:items-center
+          lg:justify-end
+          md:space-y-0
+          md:space-x-1
+        "
+      >
         <button
           data-action="click->layout--layout-component#collapse"
           class="navbar-button"
