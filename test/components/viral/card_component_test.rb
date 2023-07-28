@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'view_component_test_case'
 
 module Viral
-  class CardComponentTest < ViewComponent::TestCase
+  class CardComponentTest < ViewComponentTestCase
     test 'default card' do
       render_inline(Viral::CardComponent.new(title: 'Simple card with Title')) do
         'This is a card'

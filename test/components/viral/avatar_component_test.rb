@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'view_component_test_case'
 
 module Viral
-  class AvatarComponentTest < ViewComponent::TestCase
+  class AvatarComponentTest < ViewComponentTestCase
     test 'default avatar' do
       render_inline(Viral::AvatarComponent.new(name: 'J'))
       assert_selector('div.avatar')

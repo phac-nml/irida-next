@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'view_component_test_case'
 
 module Viral
-  class ButtonComponentTest < ViewComponent::TestCase
+  class ButtonComponentTest < ViewComponentTestCase
     test 'basic button' do
       render_inline(Viral::ButtonComponent.new) do
         'Basic Button'
