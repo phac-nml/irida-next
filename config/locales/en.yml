@@ -118,6 +118,12 @@ en:
         user_id: User
       user:
         email: Email
+        provider: Authentication Provider
+        uid: Authentication Provider UID
+        provider_username: Authentication Provider Username
+        first_name: First Name
+        last_name: Last Name
+        missing: This field has not been provided by the Authentication Provider.
     errors:
       models:
         namespace:
@@ -270,22 +276,6 @@ en:
         subtitle: Email address linked to this account
         pending: "Pending confirmation of %{email}"
         submit: Update profile settings
-      provider:
-        title: OmniAuth Provider
-        subtitle: Type of sign-in provider managing this user
-      uid:
-        title: Provider UID
-        subtitle: UID the provider has associated with this user
-      provider_username:
-        title: Provider Username
-        subtitle: Username the provider has associated with this user
-      first_name:
-        title: First Name
-        subtitle: First name of this user
-      last_name:
-        title: Last Name
-        subtitle: Last name of this user
-      missing: This field has not been provided by the OmniAuth Provider.
     update:
       success: Profile updated successfully
     passwords:

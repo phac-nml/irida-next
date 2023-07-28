@@ -3,26 +3,17 @@
     <%= form_with(model: user, url: profile_path, method: :patch) do |f| %>
       <% invalid = user.errors.include?(:email) %>
       <div class="form-field <%= 'invalid' if invalid %>">
-        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-          <%= t(:"profiles.show.email.title") %>
-        </h2>
-        <%= f.label :email, t(:"profiles.show.email.subtitle") %>
+        <%= f.label :email %>
         <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email" %>
       </div>
       <br/>
       <div class="form-field">
-        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-          <%= t(:"profiles.show.first_name.title") %>
-        </h2>
-        <%= f.label :first_name, t(:"profiles.show.first_name.subtitle") %>
+        <%= f.label :first_name %>
         <%= f.text_field :first_name %>
       </div>
       <br/>
       <div class="form-field">
-        <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-          <%= t(:"profiles.show.last_name.title") %>
-        </h2>
-        <%= f.label :last_name, t(:"profiles.show.last_name.subtitle") %>
+        <%= f.label :last_name %>
         <%= f.text_field :last_name %>
       </div>
       <br/>
