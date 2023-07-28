@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'view_component_system_test_case'
+require 'view_component_test_case'
 
 module Viral
-  class FlashComponentTest < ViewComponent::TestCase
+  class FlashComponentTest < ViewComponentTestCase
     test 'success message' do
       message = 'Successful Message!'
       render_inline(Viral::FlashComponent.new(type: 'success', data: message))
