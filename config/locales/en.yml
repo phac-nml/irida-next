@@ -251,6 +251,8 @@ en:
       groups: Groups
       projects: Projects
     navbar:
+      collapse:
+        aria_label: Collapse navigation menu
       main_dropdown:
         aria-label: Main navigation menu
         groups: Groups

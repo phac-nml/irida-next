@@ -16,7 +16,7 @@ body {
   .layout-body {
     width: 100vw;
     display: grid;
-    grid-template-columns: 255px 1fr;
+    grid-template-columns: 280px 1fr;
     grid-template-rows: 1fr;
     @apply w-screen h-screen transition-all;
   }
