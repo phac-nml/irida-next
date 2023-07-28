@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Controller actions for Groups
-class GroupsController < Groups::ApplicationController
+class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :context_crumbs, except: %i[index new create show]
@@ -87,7 +87,8 @@ class GroupsController < Groups::ApplicationController
   end
 
   def authorized_namespaces
-    @authorized_namespaces = authorized_scope(Group, type: :relation, as: :manageable)
+    @authorized_namespaces = authorized_scope(Namespace,
+                                              type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
   end
 
   def resolve_layout
