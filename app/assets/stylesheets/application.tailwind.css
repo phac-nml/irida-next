@@ -34,7 +34,8 @@ body {
     @apply border-r border-slate-200 bg-slate-50 dark:border-gray-700 dark:bg-slate-800;
   }
 
-  .navbar-button {
+  .navbar-button,
+  button.navbar-button.Viral-Dropdown--icon {
     @apply p-1 text-sm text-gray-500 rounded-md hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 
@@ -141,7 +142,7 @@ body {
     height: 20px;
     width: 20px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor' class='w-5 h-5'%3E%3Cpath d='M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z' /%3E%3C/svg%3E%0A");
-}
+  }
 
   .row-btn {
     @apply px-1 py-0 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
@@ -201,7 +202,7 @@ body {
   }
 
   .button {
-    @apply inline-flex items-center justify-center w-1/2 text-sm rounded-md cursor-pointer sm:w-auto focus:z-10 border;
+    @apply inline-flex items-center justify-center w-1/2 text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10;
   }
 
   .button:disabled {
@@ -282,7 +283,7 @@ body {
   }
 
   .avatar {
-    @apply relative inline-flex items-center justify-center overflow-hidden text-gray-800 rounded-md dark:text-gray-300 flex-none;
+    @apply relative inline-flex items-center justify-center flex-none overflow-hidden text-gray-800 rounded-md dark:text-gray-300;
     --tw-avatar-bg-lightness: 35%;
     --tw-avatar-border-lightness: 35%;
     --tw-avatar-bg-alpha: 0.3;

@@ -1,15 +1,7 @@
 <aside id="sidebar" class="sidebar" aria-label="Sidebar">
   <div style="grid-area: navigation; display: flex; flex-direction: column;">
     <div
-      class="
-        flex
-        items-center
-        justify-between
-        px-2
-        overflow-x-hidden
-        bg-slate-200
-        whitespace-nowrap
-      "
+      class="flex items-center justify-between px-2 overflow-x-hidden bg-slate-200 whitespace-nowrap"
       style="height: 50px;"
     >
       <a href="<%= root_path %>" class="whitespace-nowrap">
@@ -29,7 +21,7 @@
           <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
         </button>
         <!-- Profile menu -->
-        <%= viral_dropdown(icon: "user_circle", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button") do |dropdown| %>
+        <%= viral_dropdown(icon: "user_circle", skidding: -300, dropdown_styles: "width: 255px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button") do |dropdown| %>
           <%= dropdown.item(
             label: t(:"general.navbar.account_dropdown.profile"),
             url: profile_path

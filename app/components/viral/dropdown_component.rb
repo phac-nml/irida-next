@@ -4,7 +4,7 @@ module Viral
   # Dropdown component
   class DropdownComponent < Viral::Component
     renders_many :items, Dropdown::ItemComponent
-    attr_reader :label, :icon_name, :caret, :trigger
+    attr_reader :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -12,16 +12,20 @@ module Viral
       hover: 'hover'
     }.freeze
 
-    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT,
+    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0, dropdown_styles: '',
                    **system_arguments)
+      @dropdown_styles = dropdown_styles
       @label = label
       @icon_name = icon
       @caret = caret
+      @skidding = skidding
       @trigger = TRIGGER_MAPPINGS[trigger]
 
       @system_arguments = system_arguments
       @system_arguments[:id] ||= "dd-#{SecureRandom.hex(10)}"
-      @system_arguments[:data] = { 'viral--dropdown-target': 'trigger' }
+      @system_arguments[:data] = {
+        'viral--dropdown-target': 'trigger'
+      }
       @system_arguments[:tag] = :button
 
       @system_arguments.merge!(system_arguments_for_button) if @label.present?
