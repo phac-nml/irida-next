@@ -42,6 +42,18 @@ module Namespaces
       end
     end
 
+    test 'should not be able to share user namespace with group' do
+      user = users(:david_doe)
+      group = groups(:group_one)
+      namespace = namespaces_user_namespaces(:david_doe_namespace)
+
+      assert_no_difference ['NamespaceGroupLink.count'] do
+        Namespaces::GroupShareService.new(user, group.id, namespace, Member::AccessLevel::ANALYST).execute
+      end
+
+      assert namespace.errors.full_messages.include?(I18n.t('services.groups.share.invalid_namespace_type'))
+    end
+
     test 'valid authorization to share group with other groups' do
       group = groups(:group_one)
       namespace = groups(:group_six)

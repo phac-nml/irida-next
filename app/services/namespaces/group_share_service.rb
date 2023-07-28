@@ -13,7 +13,11 @@ module Namespaces
       @max_group_access_role = max_group_access_role
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      unless [Group.sti_name, Namespaces::ProjectNamespace.sti_name].include?(namespace.type)
+        raise NamespaceGroupShareError, I18n.t('services.groups.share.invalid_namespace_type')
+      end
+
       authorize! namespace, to: :share_namespace_with_group?
 
       group = Group.find_by(id: group_id)

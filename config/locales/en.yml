@@ -580,6 +580,8 @@ en:
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.
     namespaces:
+      share:
+        invalid_namespace_type: Only a group or project namespace can be shared with a group.
       unshare:
         group_link_not_exist: Namespace to group link does not exist
   application:
