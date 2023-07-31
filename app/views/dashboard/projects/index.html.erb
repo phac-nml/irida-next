@@ -1,7 +1,4 @@
-<%= render Viral::PageHeaderComponent.new(title: t(".title"), subtitle: t(".subtitle")) do |component| %>
-  <%= component.with_icon do %>
-    <%= viral_icon(name: "rectangle_stack", classes: "h-14 w-14 text-primary-700") %>
-  <% end %>
+<%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
     <%= link_to t(".create_project_button"),
     new_project_path,
@@ -55,7 +52,7 @@
         } %>
       </li>
     </ul>
-    <div class="flex flex-row space-x-2 ml-auto items-center font-normal">
+    <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
       <%= search_form_for @q, url: dashboard_projects_url(**request.query_parameters.slice(:personal)), html: {"data-controller": "filters"} do |f| %>
         <%= f.label :namespace_name_cont, t(".search.placeholder"), class: "sr-only" %>
         <div class="relative lg:w-72">

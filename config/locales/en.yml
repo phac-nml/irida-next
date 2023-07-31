@@ -272,8 +272,7 @@ en:
   dashboard:
     projects:
       index:
-        title: Your projects
-        subtitle: Projects are where you can store and analyze your data
+        title: Projects
         create_project_button: New project
         all: All
         personal: Personal
