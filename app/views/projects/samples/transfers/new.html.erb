@@ -1,27 +1,29 @@
-<%= viral_dialog(open: true) do |dialog| %>
-  <%= dialog.header(title: t(".title")) %>
-  <%= dialog.section do %>
-    <%= form_with(url: namespace_project_samples_transfer_path, method: :post, data: {
+<%= turbo_frame_tag "transfer_modal" do %>
+  <%= viral_dialog(open: true) do |dialog| %>
+    <%= dialog.header(title: t(".title")) %>
+    <%= dialog.section do %>
+      <%= form_with(url: namespace_project_samples_transfer_path, method: :post, data: {
               turbo: false}) do |form| %>
-      <div
-        data-controller="form"
-        data-form-storage-key-value=<%=namespace_project_samples_url%>
-        data-form-target="field"
-        data-form-field-name-value="sample_ids[]"
-      />
-      <div class="form-field">
-        <%= form.label :new_project_id %>
-        <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
-        <%= render "shared/form/field_errors",
-        errors: @project.errors.full_messages_for(:base) %>
-      </div>
-      <div class="my-2">
-        <%= form.submit t(".submit_button"),
-                    class: "button button--size-default button--state-primary",
-                    data: {
-                      action: "click->form#clear"
-                    } %>
-      </div>
+        <div
+          data-controller="form"
+          data-form-storage-key-value=<%=namespace_project_samples_url%>
+          data-form-target="field"
+          data-form-field-name-value="sample_ids[]"
+        />
+        <div class="form-field">
+          <%= form.label :new_project_id %>
+          <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
+          <%= render "shared/form/field_errors",
+          errors: @project.errors.full_messages_for(:base) %>
+        </div>
+        <div class="my-2">
+          <%= form.submit t(".submit_button"),
+                      class: "button button--size-default button--state-primary",
+                      data: {
+                        action: "click->form#clear"
+                      } %>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
