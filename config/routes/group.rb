@@ -18,6 +18,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     resources :members, only: %i[create destroy index new update]
     resources :group_links, only: %i[create destroy update index]
     resources :samples, only: %i[index]
+    get :invited_groups, to: 'members#invited_groups'
   end
 
   scope(path: '*id',

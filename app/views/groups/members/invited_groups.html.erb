@@ -1,0 +1,63 @@
+<%= turbo_frame_tag("namespace_share") do %>
+<%= viral_dialog(open: true) do |dialog| %>>
+  <%= dialog.header(title: "Share namespace") %>
+  <%= dialog.section do %>
+    <div class="my-4">
+      <p class="dark:text-gray-400">You're sharing <%= "#{@namespace.type.downcase} #{@namespace.human_name}" %> with a group</p>
+    </div>
+
+
+      <%= form_with(url: "#", method: :post, data: {
+                turbo: false}) do |form| %>
+      <div class="grid gap-4">
+        <div class="form-field">
+          <%= form.label 'Group to share namespace with' %>
+          <%= form.select :shared_group_id,
+                      options_for_select(Group.all.collect { |u| [u.name, u.id] }),
+                      { prompt: "Select group" },
+                      required: true %>
+        </div>
+        <div class="form-field">
+          <%= form.label 'Maximum group access level' %>
+          <%= form.select :group_access_level,
+                      options_for_select(@access_levels),
+                      { prompt: "Select access level" },
+                      required: true %>
+        </div>
+        <div
+          class="form-field datepicker"
+          data-controller="datepicker"
+        >
+          <%= form.label 'Access expiration (optional)' %>
+          <div class="relative max-w-sm">
+            <div
+              class="
+                absolute
+                inset-y-0
+                left-0
+                flex
+                items-center
+                pl-3
+                pointer-events-none
+              "
+            >
+              <%= render Viral::IconComponent.new(
+                name: "calendar_days",
+                classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+              ) %>
+            </div>
+            <%= form.text_field :expires_at,
+                        placeholder: "YYYY-MM-DD",
+                        autocomplete: "off",
+                        "data-datepicker-target": "datePicker",
+                        style: "z-index: 10000 !important;" %>
+          </div>
+      </div>
+        <div class="my-4">
+          <%= form.submit "Share", class: "button button--size-default button--state-primary" %>
+        </div>
+
+    <% end %>
+  <% end %>
+<% end %>
+<% end %>

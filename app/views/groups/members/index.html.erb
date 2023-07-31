@@ -1,6 +1,10 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
+    <%= link_to 'Invite Group',
+              group_invited_groups_path,
+              data: {"turbo-frame"=> "namespace_share"},
+              class: "button button--state-default button--size-default" %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
                   new_group_member_path(@namespace),
@@ -11,9 +15,39 @@
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
+      <ul cldarass="flex flex-wrap -mb-px">
+      <li class="mr-2">
+        <%= link_to 'Members',
+        "#",
+        class:
+          (
+            if params[:members]
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+            else
+              "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+            end
+          ) %>
+      </li>
+      <% if @namespace.shared_with_groups.count.positive? %>
+        <li class="mr-2">
+          <%= link_to 'Groups',
+          "#",
+          class:
+            (
+              if params[:groups]
+                "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+              else
+                "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              end
+            )
+          %>
+        </li>
+      <% end %>
+    </ul>
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
+        <%= turbo_frame_tag("namespace_share") %>
         <%= turbo_frame_tag("member-update-alert") %>
         <table class="min-w-full table-fixed dark:divide-slate-600">
           <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">

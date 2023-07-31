@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_30_152823) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_04_233743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -82,7 +82,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_152823) do
     t.datetime "deleted_at"
     t.jsonb "log_data"
     t.index ["deleted_at"], name: "index_namespace_group_links_on_deleted_at"
-    t.index ["group_id", "namespace_id"], name: "index_group_link_group_with_namespace", unique: true
+    t.index ["group_id", "namespace_id"], name: "index_group_link_group_with_namespace", unique: true, where: "(deleted_at IS NULL)"
   end
 
   create_table "namespaces", force: :cascade do |t|
