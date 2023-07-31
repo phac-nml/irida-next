@@ -16,8 +16,6 @@ module Samples
       authorize! @new_project, to: :transfer_sample_into_project?
 
       transfer(new_project_id, sample_ids)
-
-      true
     rescue Samples::TransferService::TransferError => e
       project.errors.add(:base, e.message)
       false
@@ -37,12 +35,16 @@ module Samples
     end
 
     def transfer(new_project_id, sample_ids)
-      ActiveRecord::Base.transaction do
-        sample_ids.each do |sample_id|
-          sample = Sample.find_by(id: sample_id, project_id: @project.id)
-          sample.update(project_id: new_project_id)
-        end
+      has_errors = false
+      sample_ids.each do |sample_id|
+        sample = Sample.find_by(id: sample_id, project_id: @project.id)
+        sample.update!(project_id: new_project_id)
+      rescue StandardError => e
+        has_errors = true
+        project.errors.add(:base, "#{e.message} for sample id  #{sample_id}")
+        next
       end
+      !has_errors
     end
   end
 end

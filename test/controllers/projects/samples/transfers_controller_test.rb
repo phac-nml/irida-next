@@ -97,7 +97,7 @@ module Projects
                sample_ids: [@sample1.id, @sample2.id]
              }
 
-        assert_response :unprocessable_entity
+        assert_redirected_to namespace_project_samples_path
       end
     end
   end
