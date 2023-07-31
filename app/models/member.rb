@@ -24,7 +24,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   delegate :project, to: :project_namespace
 
-  class << self
+  class << self # rubocop:disable Metrics/ClassLength
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -83,10 +83,14 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def can_transfer_into_namespace?(user, object_namespace)
       if object_namespace.project_namespace?
-        Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
-                       user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
-          Member.exists?(namespace: object_namespace, user:,
-                         access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+        if object_namespace.parent.user_namespace?
+          object_namespace.parent.owner == user
+        else
+          Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
+                         user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
+            Member.exists?(namespace: object_namespace, user:,
+                           access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
+        end
       elsif object_namespace.group_namespace?
         Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
                        access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
