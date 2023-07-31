@@ -4,7 +4,7 @@ module Viral
   # Dropdown component
   class DropdownComponent < Viral::Component
     renders_many :items, Dropdown::ItemComponent
-    attr_reader :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger
+    attr_reader :distance, :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -12,8 +12,9 @@ module Viral
       hover: 'hover'
     }.freeze
 
-    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0, dropdown_styles: '',
+    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0, distance: 10, dropdown_styles: '',
                    **system_arguments)
+      @distance = distance
       @dropdown_styles = dropdown_styles
       @label = label
       @icon_name = icon
