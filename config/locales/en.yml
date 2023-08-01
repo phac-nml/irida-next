@@ -438,6 +438,11 @@ en:
         submit: Update project
       advanced:
         title: Advanced settings
+        destroy:
+          title: Delete project
+          description: Deleting a project is permanent and cannot be undone. All samples will be deleted along with the project.
+          submit: Delete project
+          confirm: Are you sure you want to delete this project?
         path:
           title: Change path
           description: A project's path is a unique identifier that can be accessed via the URL
@@ -477,6 +482,8 @@ en:
       success: "Project %{project_name} was successfully updated"
     transfer:
       success: "Project %{project_name} was successfully transferred"
+    destroy:
+      success: "Project %{project_name} was successfully deleted"
     members:
       create:
         error: "Error adding member"
