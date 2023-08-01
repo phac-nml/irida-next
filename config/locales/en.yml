@@ -242,6 +242,7 @@ en:
       site_title: IRIDA Next
   general:
     name: IRIDA Next
+    help: Help
     expand_sidebar: Expand sidebar
     collapse_sidebar: Collapse sidebar
     screen_reader:
@@ -349,7 +350,6 @@ en:
     create:
       success: Group created successfully
       title: Create group
-      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
       name_placeholder: Awesome group name
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
       submit: Create group
@@ -394,7 +394,7 @@ en:
     show:
       create_subgroup_button: New subgroup
       create_project_button: New project
-      title: Your groups
+      title: Groups
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
     new_subgroup:
       title: Create subgroup

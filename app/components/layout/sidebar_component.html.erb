@@ -70,9 +70,9 @@
     </div>
     <%= viral_dropdown(label:, icon: "inbox_stack", caret: true, classes: "w-full rounded-none border-r-0 border-l-0 px-4", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
       <%= dropdown.item(
-          label: t(:"general.default_sidebar.projects"),
-          url: dashboard_projects_path
-        ) %>
+            label: t(:"general.default_sidebar.projects"),
+            url: dashboard_projects_path
+          ) %>
       <%= dropdown.item(label: t(:"general.default_sidebar.groups"), url: groups_path) %>
     <% end %>
     <div class="flex-1 space-y-1 divide-y divide-slate-200 dark:divide-slate-700">
@@ -90,7 +90,10 @@
       <% end %>
     </div>
   </div>
-  <div style="grid-area: collapse">
-    <p>HELLO</p>
+  <div style="grid-area: collapse" class="p-2">
+    <%= link_to "https://phac-nml.github.io/irida-next/docs/intro", target: :_blank, class: "flex-inline button button--size-small" do %>
+      <%= viral_icon(name: :question_mark, classes: "w-4 h-4 mr-1") %>
+      <%= t("general.help") %>
+    <% end %>
   </div>
 </aside>
