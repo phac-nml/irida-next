@@ -1,5 +1,5 @@
 <aside id="sidebar" class="sidebar" aria-label="Sidebar">
-  <div style="grid-area: navigation; display: flex; flex-direction: column;">
+  <div class="grow">
     <div
       class="
         flex
@@ -14,9 +14,9 @@
     >
       <a href="<%= root_path %>" class="whitespace-nowrap">
         <%= viral_icon(
-          name: "beaker",
-          classes: "w-8 h-8 text-green-500 rotate-12 inline-block"
-        ) %>
+              name: "beaker",
+              classes: "w-8 h-8 text-green-500 rotate-12 inline-block"
+            ) %>
         <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">
           <%= t(:"general.name") %>
         </span>
@@ -44,53 +44,53 @@
         <!-- Add new items -->
         <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button") do |dropdown| %>
           <%= dropdown.item(
-            label: t(:"general.navbar.new_dropdown.project"),
-            url: new_project_path
-          ) %>
+                label: t(:"general.navbar.new_dropdown.project"),
+                url: new_project_path
+              ) %>
           <%= dropdown.item(
-            label: t(:"general.navbar.new_dropdown.group"),
-            url: new_group_path
-          ) %>
+                label: t(:"general.navbar.new_dropdown.group"),
+                url: new_group_path
+              ) %>
         <% end %>
         <!-- Profile menu -->
         <%= viral_dropdown(icon: "user_circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button") do |dropdown| %>
           <%= dropdown.item(
-            label: t(:"general.navbar.account_dropdown.profile"),
-            url: profile_path
-          ) %>
+                label: t(:"general.navbar.account_dropdown.profile"),
+                url: profile_path
+              ) %>
           <%= dropdown.item(
-            label: t(:"general.navbar.account_dropdown.sign_out"),
-            url: destroy_user_session_path,
-            data: {
-              turbo_method: :delete
-            }
-          ) %>
+                label: t(:"general.navbar.account_dropdown.sign_out"),
+                url: destroy_user_session_path,
+                data: {
+                  turbo_method: :delete
+                }
+              ) %>
         <% end %>
       </div>
     </div>
-    <div class="pb-4 overflow-y-auto ">
-      <%= viral_dropdown(label:, icon: "inbox_stack", caret: true, classes: "w-full rounded-none border-r-0 border-l-0 px-4", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
-        <%= dropdown.item(
+    <%= viral_dropdown(label:, icon: "inbox_stack", caret: true, classes: "w-full rounded-none border-r-0 border-l-0 px-4", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
+      <%= dropdown.item(
           label: t(:"general.default_sidebar.projects"),
           url: dashboard_projects_path
         ) %>
-        <%= dropdown.item(label: t(:"general.default_sidebar.groups"), url: groups_path) %>
-      <% end %>
-      <div class="flex-1 space-y-1 divide-y divide-slate-200 dark:divide-slate-700">
-        <%= header %>
-        <% if sections.present? %>
-          <% sections.each do |section| %>
-            <%= section %>
-          <% end %>
-        <% else %>
-          <%= render Layout::Sidebar::SectionComponent.new do %>
-            <% items.each do |item| %>
-              <%= item %>
-            <% end %>
+      <%= dropdown.item(label: t(:"general.default_sidebar.groups"), url: groups_path) %>
+    <% end %>
+    <div class="flex-1 space-y-1 divide-y divide-slate-200 dark:divide-slate-700">
+      <%= header %>
+      <% if sections.present? %>
+        <% sections.each do |section| %>
+          <%= section %>
+        <% end %>
+      <% else %>
+        <%= render Layout::Sidebar::SectionComponent.new do %>
+          <% items.each do |item| %>
+            <%= item %>
           <% end %>
         <% end %>
-      </div>
+      <% end %>
     </div>
   </div>
-
+  <div style="grid-area: collapse">
+    <p>HELLO</p>
+  </div>
 </aside>

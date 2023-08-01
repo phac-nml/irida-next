@@ -1,5 +1,4 @@
 @tailwind base;
-@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -14,7 +13,6 @@ body {
   }
 
   .layout-body {
-    width: 100vw;
     display: grid;
     grid-template-columns: 280px 1fr;
     grid-template-rows: 1fr;
@@ -26,12 +24,11 @@ body {
   }
 
   .sidebar {
-    display: grid;
     grid-template-areas: "navigation" "collapse";
     grid-template-rows: 1fr 40px;
     overflow-x: hidden;
 
-    @apply text-sm border-r border-slate-200 bg-slate-50 dark:border-gray-700 dark:bg-slate-800;
+    @apply flex flex-col text-sm border-r border-slate-200 bg-slate-50 dark:border-gray-700 dark:bg-slate-800;
   }
 
   .navbar-button,

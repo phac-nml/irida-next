@@ -4,7 +4,7 @@
   data-layout--layout-component-target="layoutContainer"
 >
   <%= sidebar %>
-  <div class="content">
+  <div class="content relative">
     <nav
       class="flex px-5 bg-white border-b border-slate-200 dark:bg-slate-800"
       style="height: 50px"
@@ -18,7 +18,7 @@
       </button>
       <%= breadcrumb %>
     </nav>
-    <main class="m-4"><%= body %></main>
+    <main class="m-4 mb-0 absolute top-12 bottom-0 right-0 left-0 overflow-y-auto"><%= body %></main>
     <%= render ConfirmationComponent.new %>
   </div>
 </div>
