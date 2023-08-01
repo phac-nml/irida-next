@@ -12,8 +12,9 @@ module Viral
       hover: 'hover'
     }.freeze
 
-    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0, distance: 10, dropdown_styles: '',
-                   **system_arguments)
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0, distance: 10,
+                   dropdown_styles: '', **system_arguments)
       @distance = distance
       @dropdown_styles = dropdown_styles
       @label = label
@@ -32,6 +33,7 @@ module Viral
       @system_arguments.merge!(system_arguments_for_button) if @label.present?
       @system_arguments.merge!(system_arguments_for_icon) if @icon_name.present?
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def system_arguments_for_button
       {
