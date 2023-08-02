@@ -5,13 +5,13 @@
     <% end %>
 
     <div>
-      <h1 class="text-3xl font-semibold leading-tight text-gray-900 dark:text-white"><%= title %></h1>
+      <h1 class="text-2xl font-medium leading-tight text-gray-900 dark:text-white"><%= title %></h1>
       <% if subtitle != nil %>
         <p class="text-gray-500 dark:text-gray-400"><%= subtitle %></p>
       <% end %>
     </div>
   </div>
   <div class="flex ml-auto space-x-2 whitespace-nowrap sm:space-x-3">
-    <%= buttons %>
+    <div class="flex-none"><%= buttons %></div>
   </div>
 </div>
