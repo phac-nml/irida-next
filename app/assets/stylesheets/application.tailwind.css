@@ -36,10 +36,6 @@ body {
     @apply p-1 text-sm text-gray-500 rounded-md hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
   }
 
-  .page-header {
-    @apply items-center justify-between block p-2 bg-white border-b border-gray-200 sm:flex dark:bg-gray-800 dark:border-gray-700;
-  }
-
   .link {
     @apply font-medium text-green-600 hover:underline dark:text-green-500;
   }
