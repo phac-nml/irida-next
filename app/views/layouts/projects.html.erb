@@ -3,7 +3,7 @@
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
     <%= render LayoutComponent.new(user: current_user) do |layout| %>
-      <% layout.sidebar(label: @project.name) do |navigation| %>
+    <% layout.sidebar(label: @project.name, icon_name: "rectangle_stack") do |navigation| %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: project_path(@project),

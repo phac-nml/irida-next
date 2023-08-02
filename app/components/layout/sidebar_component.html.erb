@@ -68,7 +68,7 @@
         <% end %>
       </div>
     </div>
-    <%= viral_dropdown(label:, icon: "inbox_stack", caret: true, classes: "w-full rounded-none border-r-0 border-l-0 px-4", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
+    <%= viral_dropdown(label:, icon: icon_name, caret: true, classes: "w-full rounded-none border-r-0 border-l-0 px-4", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
       <%= dropdown.item(
             label: t(:"general.default_sidebar.projects"),
             url: dashboard_projects_path
