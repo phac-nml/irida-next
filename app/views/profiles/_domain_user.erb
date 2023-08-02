@@ -5,7 +5,7 @@
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.email%>
-      <%= t(:'activerecord.attributes.user.missing') if @user.email == nil%>
+      <%= t(:'profiles.show.missing') if @user.email == nil || @user.email == ""%>
     </p>
     <br/>
     <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
@@ -13,16 +13,7 @@
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.provider%>
-      <%= t(:'activerecord.attributes.user.missing') if @user.provider == nil%>
-    </p>
-    <br/>
-
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
-      <%= t(:"activerecord.attributes.user.provider_username") %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
-      <%=@user.provider_username%>
-      <%= t(:'activerecord.attributes.user.provider_username') if @user.provider_username == nil%>
+      <%= t(:'profiles.show.missing') if @user.provider == nil || @user.provider == ""%>
     </p>
     <br/>
 
@@ -31,7 +22,7 @@
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.uid%>
-      <%= t(:'activerecord.attributes.user.uid') if @user.uid == nil%>
+      <%= t(:'profiles.show.missing') if @user.uid == nil || @user.uid == ""%>
     </p>
     <br/>
 
@@ -40,7 +31,7 @@
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.first_name%>
-      <%= t(:'activerecord.attributes.user.first_name') if @user.first_name == nil%>
+      <%= t(:'profiles.show.missing') if @user.first_name == nil || @user.first_name == ""%>
     </p>
     <br/>
 
@@ -49,7 +40,7 @@
     </h2>
     <p class="text-gray-500 dark:text-gray-400">
       <%=@user.last_name%>
-      <%= t(:'activerecord.attributes.user.last_name') if @user.last_name == nil%>
+      <%= t(:'profiles.show.missing') if @user.last_name == nil || @user.last_name == ""%>
     </p>
     <br/>
 

@@ -54,21 +54,18 @@ class User < ApplicationRecord
   def self.from_developer(user, auth)
     user.first_name = auth.info.first_name
     user.last_name = auth.info.last_name
-    user.provider_username = auth.info.provider_username
     user
   end
 
   def self.from_saml(user, auth)
     user.first_name = auth.info.first_name
     user.last_name = auth.info.last_name
-    user.provider_username = auth.info.name
     user
   end
 
   def self.from_azure_activedirectory_v2(user, auth)
     user.first_name = auth.info.first_name
     user.last_name = auth.info.last_name
-    user.provider_username = auth.info.nickname
     user
   end
 

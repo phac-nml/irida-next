@@ -120,10 +120,8 @@ en:
         email: Email
         provider: Authentication Provider
         uid: Authentication Provider UID
-        provider_username: Authentication Provider Username
         first_name: First Name
         last_name: Last Name
-        missing: This field has not been provided by the Authentication Provider.
     errors:
       models:
         namespace:
@@ -276,6 +274,7 @@ en:
         subtitle: Email address linked to this account
         pending: "Pending confirmation of %{email}"
         submit: Update profile settings
+      missing: This field has not been provided by the Authentication Provider.
     update:
       success: Profile updated successfully
     passwords:
