@@ -2,6 +2,8 @@
 
 # Controller actions for Groups
 class GroupsController < Groups::ApplicationController
+  include ShareActions
+
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update]
   before_action :context_crumbs, except: %i[index new create show]
@@ -103,5 +105,15 @@ class GroupsController < Groups::ApplicationController
       name: I18n.t('groups.edit.title'),
       path: group_path
     }]
+  end
+
+  protected
+
+  def namespace
+    @namespace = group
+  end
+
+  def namespace_path
+    group_path(@group)
   end
 end
