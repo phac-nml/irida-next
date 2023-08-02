@@ -1,12 +1,12 @@
 <%= render Viral::BaseComponent.new(tag: :span, data: {
   controller: "viral--dialog-component",
   "viral--dialog-component-open-value": open
-}, **system_arguments) do %>
+}) do %>
 
   <% if trigger.present? %>
     <%= trigger %>
   <% end %>
-  <dialog id="dialog" class="<%= dialog_size %>">
+  <%= render Viral::BaseComponent.new(tag: :dialog, id: :dialog, classes: [dialog_size], **system_arguments) do %>
     <% if header.present? %>
       <%= header %>
     <% end %>
@@ -32,5 +32,5 @@
         <% end %>
       </div>
     <% end %>
-  </dialog>
+  <% end %>
 <% end %>

@@ -7,8 +7,10 @@ export default class extends Controller {
 
   initialize() {
     new Datepicker(this.datePickerTarget, {
+      container: "#dialog",
       format: "yyyy-mm-dd",
       orientation: "bottom left",
+      autohide: true,
     });
   }
 }

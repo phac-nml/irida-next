@@ -1,10 +1,14 @@
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <%= link_to 'Invite Group',
-          "#",
-          class: "button button--state-default button--size-default",
-          "aria-label": t(:".actions.button_add_aria_label") %>
+    <% if !allowed_to?(:share_namespace_with_group?, @namespace) %>
+      <%= link_to I18n.t("projects.members.index.invite_group"),
+      namespace_project_invite_group_path,
+      data: {
+        "turbo-frame" => "namespace_share"
+      },
+      class: "button button--state-default button--size-default" %>
+    <% end %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
       new_namespace_project_member_path,
@@ -17,143 +21,53 @@
 <div class="flex flex-col">
 
 <div class="bg-white dark:bg-slate-800">
+  <%= turbo_frame_tag("namespace_share") %>
   <ul class="flex flex-wrap -mb-px">
+    <li class="mr-2">
+      <%= link_to "Members",
+      namespace_project_members_path(),
+      data: {
+        turbo_frame: "members",
+        turbo_stream: ""
+      },
+      class:
+        (
+          if params[:invited_groups]
+            "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+          else
+            "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+          end
+        ),
+      aria: {
+        current: params[:invited_groups] ? "false" : "page"
+      } %>
+    </li>
+    <% if @namespace.shared_with_groups.count.positive? %>
       <li class="mr-2">
-        <%= link_to 'Members',
-        "#",
+        <%= link_to "Groups",
+        invited_groups_namespace_project_members_path(invited_groups: "true"),
+        data: {
+          turbo_frame: "members",
+          turbo_stream: ""
+        },
         class:
           (
-            if params[:personal]
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            else
+            if params[:invited_groups]
               "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+            else
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
             end
           ),
         aria: {
-          current: params[:personal] ? "false" : "page"
+          current: params[:invited_groups] ? "page" : "false"
         } %>
       </li>
-      <li class="mr-2">
-        <%= link_to 'Groups',
-        "#",
-        class:
-          (
-            if params[:personal]
-              "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            end
-          ),
-        aria: {
-          current: params[:personal] ? "page" : "false"
-        } %>
-      </li>
-    </ul>
-  <div class="flex flex-col">
-    <div class="overflow-x-auto">
-      <div class="shadow">
-        <%= turbo_frame_tag("member-update-alert") %>
-        <table class="min-w-full table-fixed dark:divide-slate-600">
-          <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.members.index.table_header.username") %></th>
-              <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.members.index.table_header.access_level") %></th>
-              <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.members.index.table_header.source") %></th>
-              <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.members.index.table_header.access_granted") %></th>
-              <th scope="col" class="px-6 py-3 text-right"><%= t(:"projects.members.index.table_header.action") %></th>
-            </tr>
-          </thead>
-          <tbody
-            class="bg-white divide-y divide-slate-200  dark:bg-slate-800 dark:divide-slate-700"
-          >
-            <% @members.each do |member| %>
-              <% member_source = membership_source(@namespace, member) %>
-              <tr
-                class="text-sm font-normal text-slate-500  dark:text-slate-400"
-              >
-                <td class="px-6 py-4">
-                  <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member.user.email %>
-                    <% if current_user == member.user %>
-                      <span
-                        class="
-                          bg-green-200
-                          text-green-800
-                          text-xs
-                          font-medium
-                          ml-2
-                          px-2.5
-                          py-0.5
-                          rounded-full
-                          dark:bg-green-900
-                          dark:text-green-300
-                        "
-                      ><%= t(:"activerecord.models.member.its_you") %></span>
-                    <% end %>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <% if (member.user != current_user && allowed_to?(:update_member?, @namespace) &&
-                    member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-                    <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
-                      <%= render partial: "projects/members/access_level",
-                      locals: {
-                        member: member,
-                        access_levels: @access_levels
-                      } %>
-                    <% end %>
-                  <% else %>
-                    <%= t(:"projects.members.index.access_level.level_#{member.access_level}") %>
-                  <% end %>
-                </td>
-                <td class="px-6 py-4">
-                  <% if !member_source.key?(:inherited_namespace_path) %>
-                    <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member_source[:label] %></div>
-                  <% else %>
-                    <%= viral_tooltip(title: t(:"projects.members.index.inherited_from")) do %>
-                      <%= link_to member_source[:label],
-                      member_source[:inherited_namespace_path],
-                      class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                    <% end %>
-                  <% end %>
-                </td>
-                <td class="px-6 py-4">
-                  <div>
-                    <% if member.user.email != member.created_by.email %>
-                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %> by <span class="block">
-                        <%= member.created_by.email %>
-                      </span>
-                    <% else %>
-                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %></span>
-                    <% end %>
+    <% end %>
+  </ul>
+  <%= turbo_frame_tag "members",
+  src: namespace_project_members_path(format: :turbo_stream),
+  loading: :lazy %>
 
-                    <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
-                      <% if member.created_at < member.updated_at %>
-                        <%= render UpdatedComponent.new(
-                          updated_at: member.updated_at
-                        ) %>
-                      <% end %>
-                    <% end %>
-                  </div>
-                </td>
-                <% if (current_user == member.user || allowed_to?(:destroy_member?, @namespace)) && !member_source.key?(:inherited_namespace_path)  %>
-                  <td class="px-4 py-3 text-right">
-                    <% if current_user == member.user %>
-                      <%= render partial: "projects/members/current_user_is_member", locals: { member: } %>
-                    <% else %>
-                      <%= render partial: "projects/members/current_user_is_not_member",
-                      locals: {
-                        member:
-                      } %>
-                    <% end %>
-                  </td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 </div>
 
 <%= render PaginationComponent.new(

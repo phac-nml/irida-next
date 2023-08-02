@@ -1,0 +1,51 @@
+<%= turbo_frame_tag('members') do %>
+  <div class="flex flex-col">
+    <div class="overflow-x-auto">
+      <div class="shadow">
+        <table class="min-w-full table-fixed dark:divide-gray-600">
+          <thead class="text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left">Group</th>
+              <th scope="col" class="px-6 py-3 text-left">Source</th>
+              <th scope="col" class="px-6 py-3 text-left">Access Granted</th>
+              <th scope="col" class="px-6 py-3 text-left">Access Level</th>
+              <th scope="col" class="px-6 py-3 text-left">Expiration</th>
+              <th scope="col" class="px-6 py-3 text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody
+            class="
+              bg-white
+              divide-y
+              divide-gray-200
+              dark:bg-gray-800
+              dark:divide-gray-700
+            "
+          >
+            <% @namespace.shared_with_group_links.each do |m| %>
+              <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                <td class="px-6 py-4"><%= m.group.name %></td>
+                <td class="px-6 py-4"></td>
+                <td class="px-6 py-4"><%= distance_of_time_in_words(Time.now, m.created_at) %></td>
+                <td class="px-6 py-4"><%= t(:"projects.members.invited_groups.access_level.level_#{m.group_access_level}") %></td>
+                <td class="px-6 py-4"><%= m.expires_at.nil? ? "N/A" : m.expires_at %></td>
+                <td class="px-6 py-4">
+                  <button
+                    class="
+                      button
+                      button--state-destructive
+                      button--size-default
+                      inline-block
+                    "
+                  >
+                    Unshare
+                  </button>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>

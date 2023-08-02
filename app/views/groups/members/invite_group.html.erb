@@ -1,9 +1,11 @@
 <%= turbo_frame_tag("namespace_share") do %>
-<%= viral_dialog(open: true) do |dialog| %>>
-  <%= dialog.header(title: "Share namespace") %>
+<%= viral_dialog(open: true, classes: ["overflow-visible"]) do |dialog| %>
+  <%= dialog.header(title:  I18n.t('groups.members.invite_group.title')) %>
   <%= dialog.section do %>
-    <div class="my-4">
-      <p class="dark:text-gray-400">You're sharing <%= "#{@namespace.type.downcase} #{@namespace.human_name}" %> with a group</p>
+    <div class="my-6">
+      <p class="dark:text-gray-400">
+        <%= I18n.t('groups.members.invite_group.sharing_namespace_with_group', name: @namespace.human_name) %>
+      </p>
     </div>
 
 
@@ -11,24 +13,24 @@
                 turbo: false}) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
-          <%= form.label 'Group to share namespace with' %>
+          <%= form.label I18n.t('groups.members.invite_group.label.shared_group') %>
           <%= form.select :shared_group_id,
                       options_for_select(Group.all.collect { |u| [u.name, u.id] }),
-                      { prompt: "Select group" },
+                      { prompt: I18n.t('groups.members.invite_group.placeholder.select_group') },
                       required: true %>
         </div>
         <div class="form-field">
-          <%= form.label 'Maximum group access level' %>
+          <%= form.label I18n.t('groups.members.invite_group.label.group_access_level') %>
           <%= form.select :group_access_level,
                       options_for_select(@access_levels),
-                      { prompt: "Select access level" },
+                      { prompt: I18n.t('groups.members.invite_group.placeholder.select_access_level') },
                       required: true %>
         </div>
         <div
           class="form-field datepicker"
           data-controller="datepicker"
         >
-          <%= form.label 'Access expiration (optional)' %>
+          <%= form.label I18n.t('groups.members.invite_group.label.access_expiration') %>
           <div class="relative max-w-sm">
             <div
               class="
@@ -49,14 +51,19 @@
             <%= form.text_field :expires_at,
                         placeholder: "YYYY-MM-DD",
                         autocomplete: "off",
-                        "data-datepicker-target": "datePicker",
-                        style: "z-index: 10000 !important;" %>
+                        "data-datepicker-target": "datePicker" %>
           </div>
       </div>
         <div class="my-4">
-          <%= form.submit "Share", class: "button button--size-default button--state-primary" %>
+          <%= form.submit I18n.t('groups.members.invite_group.button.submit'), class: "button button--size-default button--state-primary" %>
+          <button
+            type="button"
+            class="button button--size-default button--state-default"
+            data-action="click->viral--dialog-component#close"
+          >
+            <%= I18n.t('groups.members.invite_group.button.cancel') %>
+          </button>
         </div>
-
     <% end %>
   <% end %>
 <% end %>

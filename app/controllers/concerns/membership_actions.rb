@@ -8,7 +8,7 @@ module MembershipActions
     before_action proc { namespace }
     before_action proc { member }, only: %i[destroy update]
     before_action proc { available_users }, only: %i[new create]
-    before_action proc { access_levels }, only: %i[new create index update invited_groups]
+    before_action proc { access_levels }, only: %i[new create index update invite_group]
     before_action proc { context_crumbs }, only: %i[index new]
   end
 
@@ -76,6 +76,8 @@ module MembershipActions
       end
     end
   end
+
+  def invite_group; end
 
   def invited_groups; end
 
