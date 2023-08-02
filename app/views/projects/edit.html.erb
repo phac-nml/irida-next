@@ -27,20 +27,19 @@
             </div>
             <div>
               <%= form.submit t("projects.edit.general.submit"),
-                              class: "button button--state-default button--size-default" %>
+                          class: "button button--state-default button--size-default" %>
             </div>
           <% end %>
         <% end %>
       <% end %>
     <% end %>
 
-    <%- if allowed_to?(:transfer?, @project) %>
-      <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
+    <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
 
-      <%= viral_card(title: t(".advanced.transfer.title")) do %>
-        <%= render "projects/transfer", locales: { project: @project } %>
-      <% end %>
+    <%= render "change_path", project: @project %>
+
+    <% if allowed_to?(:transfer?, @project) %>
+      <%= render "transfer", project: @project %>
     <% end %>
-
   </div>
 </div>
