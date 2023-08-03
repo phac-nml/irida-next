@@ -2,22 +2,15 @@
 
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
+  include ShareActions
+
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
-  before_action :context_crumbs, except: %i[index new create show]
+  before_action :context_crumbs, except: %i[new create show]
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
-    respond_to do |format|
-      format.html do
-        @has_projects = Project.joins(:namespace).exists?(namespace: { parent: current_user.namespace }) ||
-                        Project.joins(:namespace)
-                               .exists?(namespace: { parent: current_user.groups.self_and_descendant_ids })
-      end
-      format.turbo_stream do
-        @pagy, @projects = pagy(authorized_scope(Project, type: :relation).order(updated_at: :desc))
-      end
-    end
+    redirect_to dashboard_projects_path
   end
 
   def show
@@ -72,7 +65,9 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
       end
     else
       @error = @project.errors.messages.values.flatten.first
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream
+      end
     end
   end
 
@@ -130,7 +125,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def resolve_layout
     case action_name
-    when 'new', 'create', 'index'
+    when 'new', 'create'
       'application'
     else
       'projects'
@@ -147,5 +142,21 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         path: namespace_project_edit_path
       }]
     end
+  end
+
+  protected
+
+  def namespace
+    return unless params[:project_id]
+
+    path = [params[:namespace_id], params[:project_id]].join('/')
+    @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+    @namespace = @project.namespace
+
+    authorized_namespaces
+  end
+
+  def namespace_path
+    namespace_project_path(@namespace.parent, @project)
   end
 end

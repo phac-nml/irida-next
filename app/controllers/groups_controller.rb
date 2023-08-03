@@ -2,10 +2,12 @@
 
 # Controller actions for Groups
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
+  include ShareActions
+
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorized_namespaces, only: %i[edit new update create transfer]
+  before_action :authorized_namespaces, except: %i[index show destroy]
 
   def index
     @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
@@ -119,5 +121,15 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
       name: I18n.t('groups.edit.title'),
       path: group_path
     }]
+  end
+
+  protected
+
+  def namespace
+    @namespace = group
+  end
+
+  def namespace_path
+    group_path(@group)
   end
 end

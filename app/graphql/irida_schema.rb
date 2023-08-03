@@ -26,6 +26,8 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
     case object
     when Group
       Types::GroupType
+    when Project
+      Types::ProjectType
     else
       raise("Unexpected object: #{obj}")
     end

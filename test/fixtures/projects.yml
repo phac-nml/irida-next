@@ -103,3 +103,7 @@ project23:
 project24:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace) %>
+
+project25:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project25_namespace) %>

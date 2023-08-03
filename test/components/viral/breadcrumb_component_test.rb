@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'view_component_test_case'
 
 module Viral
-  class BreadcrumbComponentTest < ViewComponent::TestCase
+  class BreadcrumbComponentTest < ViewComponentTestCase
     test 'single path' do
       # Mock route
       mock_route = routes(:group_one_route)

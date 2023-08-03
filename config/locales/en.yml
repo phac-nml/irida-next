@@ -60,6 +60,8 @@ en:
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
         update_member?: You are not authorized to update members for group %{name} on this server.
         sample_listing?: You are not authorized to view samples for group %{name} on this server.
+        share_namespace_with_group?: You are not authorized to share group %{name} with other groups on this server.
+        unshare_namespace_with_group?: You are not authorized to unshare group %{name} with other groups on this server.
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.
@@ -81,6 +83,8 @@ en:
         create_member?: You are not authorized to create members for the project namespace %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         update_member?: You are not authorized to update members for the project namespace %{name} on this server.
+        share_namespace_with_group?: You are not authorized to share project %{name} with other groups on this server.
+        unshare_namespace_with_group?: You are not authorized to unshare project %{name} with other groups on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
@@ -138,6 +142,18 @@ en:
           attributes:
             scopes:
               inclusion: can only contain available scopes
+        namespace_group_link:
+          attributes:
+            group_id:
+              blank: Group must exist
+              taken: The group has already been shared with this namespace
+            namespace_id:
+              blank: Namespace must exist
+              taken: The namespace has already been shared with this group
+            namespace_type:
+              inclusion: can only be Group or Project
+            group_access_level:
+              inclusion: "provided is not included in the list of valid access levels"
     exceptions:
       personal_access_token:
         not_found: "Could not find personal access token with id %{token_id}"
@@ -216,6 +232,11 @@ en:
       title: Confirmation required
       cancel: Cancel
       confirm: Confirm
+    flash:
+      success_icon: Check icon
+      error_icon: X icon
+      warning_icon: Exclamation icon
+      information_icon: Information icon
   layouts:
     application:
       site_title: IRIDA Next
@@ -246,6 +267,23 @@ en:
         sign_out: Sign out
       dark_mode:
         aria_label: Toggle dark mode
+  dashboard:
+    projects:
+      index:
+        title: Your projects
+        subtitle: Projects are where you can store and analyze your data
+        create_project_button: New project
+        all: All
+        personal: Personal
+        search:
+          placeholder: Filter by name
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          namespace_name_asc: Name
+          namespace_name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
   profiles:
     sidebar:
       header: User Settings
@@ -366,6 +404,11 @@ en:
       success: Group updated successfully
     transfer:
       success: Group transferred successfully
+    share:
+      success: Successfully shared group with group
+      error: There was an error sharing group with group
+    unshare:
+      success: Successfully unshared group
     members:
       create:
         error: "Error adding member"
@@ -446,10 +489,6 @@ en:
             points_html:
               - To prevent accidental actions we ask you to confirm your intention.
               - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
-    index:
-      title: Your projects
-      subtitle: Projects are where you can store and analyze your data
-      create_project_button: New project
     new:
       title: Create project
       placeholder: Awesome project name
@@ -466,6 +505,11 @@ en:
       success: "Project %{project_name} was successfully updated"
     transfer:
       success: "Project %{project_name} was successfully transferred"
+    share:
+      success: Successfully shared project with group
+      error: There was an error sharing project with group
+    unshare:
+      success: Successfully unshared project with group
     members:
       create:
         error: "Error adding member"
@@ -574,6 +618,14 @@ en:
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
+    groups:
+      share:
+        group_not_found: Group with id %{group_id} to share namespace with cannot be found.
+    namespaces:
+      share:
+        invalid_namespace_type: Only a group or project namespace can be shared with a group.
+      unshare:
+        group_link_not_exist: Namespace to group link does not exist
   application:
     errors:
       access_denied: Access Denied.

@@ -126,4 +126,42 @@ class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
       Group.restore(@group_three.id, recursive: true)
     end
   end
+
+  test 'get ancestor namespace_group_links for subgroup' do
+    subgroup2 = groups(:subgroup2)
+
+    group_group_link1 = namespace_group_links(:namespace_group_link5)
+
+    group_group_link2 = namespace_group_links(:namespace_group_link6)
+
+    group_group_link3 = namespace_group_links(:namespace_group_link7)
+
+    group_group_links = subgroup2.shared_with_group_links.of_ancestors
+
+    assert_equal 3, group_group_links.count
+
+    assert group_group_links.include?(group_group_link1)
+    assert group_group_links.include?(group_group_link2)
+    assert group_group_links.include?(namespace_group_links(:namespace_group_link2))
+    assert_not group_group_links.include?(group_group_link3)
+  end
+
+  test 'get self and ancestor namespace_group_links for subgroup' do
+    subgroup2 = groups(:subgroup2)
+
+    group_group_link1 = namespace_group_links(:namespace_group_link5)
+
+    group_group_link2 = namespace_group_links(:namespace_group_link6)
+
+    group_group_link3 = namespace_group_links(:namespace_group_link7)
+
+    group_group_links = subgroup2.shared_with_group_links.of_ancestors_and_self
+
+    assert_equal 4, group_group_links.count
+
+    assert group_group_links.include?(group_group_link1)
+    assert group_group_links.include?(group_group_link2)
+    assert group_group_links.include?(group_group_link3)
+    assert group_group_links.include?(namespace_group_links(:namespace_group_link2))
+  end
 end

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'view_component_test_case'
 
 module Viral
-  class IconComponentTest < ViewComponent::TestCase
+  class IconComponentTest < ViewComponentTestCase
     test 'default' do
       render_inline(Viral::IconComponent.new(name: 'home'))
       assert_selector 'svg.Viral-Icon__Svg', count: 1
