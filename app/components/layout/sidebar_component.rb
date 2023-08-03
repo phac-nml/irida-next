@@ -10,7 +10,7 @@ module Layout
     renders_many :items, Sidebar::ItemComponent
 
     def initialize(label:, icon_name:, **system_arguments)
-      @label = label.length > 14 ? "#{label[0..14]}..." : label
+      @label = label
       @tooltip = label
       @icon_name = icon_name
       @system_arguments = system_arguments
