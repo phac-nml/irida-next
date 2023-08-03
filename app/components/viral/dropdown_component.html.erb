@@ -13,7 +13,7 @@
         ) %>
       <% end %>
       <% if label.present? %>
-        <p class="overflow-hidden truncate grow"><%= label %><p>
+        <span><%= label %></span>
       <% end %>
       <% if caret %>
         <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>

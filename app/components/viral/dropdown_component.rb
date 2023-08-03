@@ -4,7 +4,7 @@ module Viral
   # Dropdown component
   class DropdownComponent < Viral::Component
     renders_many :items, Dropdown::ItemComponent
-    attr_reader :distance, :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger
+    attr_reader :distance, :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger, :tooltip
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -13,7 +13,7 @@ module Viral
     }.freeze
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(label: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0, distance: 10,
+    def initialize(label: nil, tooltip: nil, icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0, distance: 10,
                    dropdown_styles: '', **system_arguments)
       @distance = distance
       @dropdown_styles = dropdown_styles
@@ -25,6 +25,7 @@ module Viral
 
       @system_arguments = system_arguments
       @system_arguments[:id] ||= "dd-#{SecureRandom.hex(10)}"
+      @system_arguments[:title] = tooltip if tooltip.present?
       @system_arguments[:data] = {
         'viral--dropdown-target': 'trigger'
       }
