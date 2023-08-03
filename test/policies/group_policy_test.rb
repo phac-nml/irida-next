@@ -37,6 +37,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.create_subgroup?
   end
 
+  test '#transfer?' do
+    assert @policy.transfer?
+  end
+
   test '#transfer_into_namespace?' do
     assert @policy.transfer_into_namespace?
   end

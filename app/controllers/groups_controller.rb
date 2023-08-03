@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 # Controller actions for Groups
-class GroupsController < Groups::ApplicationController
+class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   include ShareActions
 
   layout :resolve_layout
-  before_action :group, only: %i[edit show destroy update]
+  before_action :group, only: %i[edit show destroy update transfer]
   before_action :context_crumbs, except: %i[index new create show]
-  before_action :authorized_namespaces, only: %i[new update create]
+  before_action :authorized_namespaces, except: %i[index show destroy]
 
   def index
     @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
@@ -63,6 +63,21 @@ class GroupsController < Groups::ApplicationController
     end
   end
 
+  def transfer # rubocop:disable Metrics/AbcSize
+    new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
+    if Groups::TransferService.new(@group, current_user).execute(new_namespace)
+      flash[:success] = t('.success')
+      redirect_to group_path(@group)
+    else
+      @error = @group.errors.messages.values.flatten.first
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :unprocessable_entity, locals: { confirm_value: @group.path, error: @error }
+        end
+      end
+    end
+  end
+
   private
 
   def group
@@ -74,7 +89,8 @@ class GroupsController < Groups::ApplicationController
   end
 
   def authorized_namespaces
-    @authorized_namespaces = authorized_scope(Namespace, type: :relation, as: :manageable)
+    @authorized_namespaces = authorized_scope(Namespace,
+                                              type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
   end
 
   def resolve_layout
