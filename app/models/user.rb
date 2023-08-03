@@ -23,6 +23,9 @@ class User < ApplicationRecord
 
   has_many :personal_access_tokens, dependent: :destroy
 
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+
   # Groups
   has_many :members, inverse_of: :user, dependent: :destroy
   has_many :groups, through: :members

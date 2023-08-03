@@ -3,34 +3,52 @@
 john_doe:
   email: john.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: John
+  last_name: Doe
 
 jane_doe:
   email: jane.doe@localhost
+  first_name: Jane
+  last_name: Doe
 
 james_doe:
   email: james.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: James
+  last_name: Doe
 
 joan_doe:
   email: joan.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Joan
+  last_name: Doe
 
 steve_doe:
   email: steve.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Steve
+  last_name: Doe
 
 michelle_doe:
   email: michelle.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Michelle
+  last_name: Doe
 
 micha_doe:
   email: micha.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Micha
+  last_name: Doe
 
 ryan_doe:
   email: ryan.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Ryan
+  last_name: Doe
 
 david_doe:
   email: david.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: David
+  last_name: Doe
