@@ -24,26 +24,40 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
     sign_in u
 
     assert_equal('john.doe@localhost', u.email)
-    assert_nil(u.first_name)
-    assert_nil(u.last_name)
+    assert_equal('John', u.first_name)
+    assert_equal('Doe', u.last_name)
 
     patch profile_url, params: { user:
     {
-      email: 'john.doe@gmail.com',
-      first_name: 'john',
-      last_name: 'doe'
+      email: 'johnny.deer@localhost',
+      first_name: 'johnny',
+      last_name: 'deer'
     } }
 
     assert_response :redirect
-    assert_equal('john.doe@gmail.com', u.email)
-    assert_equal('john', u.first_name)
-    assert_equal('doe', u.last_name)
+    assert_equal('johnny.deer@localhost', u.email)
+    assert_equal('johnny', u.first_name)
+    assert_equal('deer', u.last_name)
   end
 
   test 'should not update a users email with a blank email' do
     sign_in users(:john_doe)
 
     patch profile_url, params: { user: { email: '' } }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not update a users first_name with a blank first_name' do
+    sign_in users(:john_doe)
+
+    patch profile_url, params: { user: { first_name: '' } }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not update a users last_name with a blank last_name' do
+    sign_in users(:john_doe)
+
+    patch profile_url, params: { user: { last_name: '' } }
     assert_response :unprocessable_entity
   end
 end
