@@ -13,8 +13,8 @@ module Viral
     }.freeze
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(label: nil, tooltip: '', icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0, distance: 10,
-                   dropdown_styles: '', **system_arguments)
+    def initialize(label: nil, tooltip: '', icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0,
+                   distance: 10, dropdown_styles: '', **system_arguments)
       @distance = distance
       @dropdown_styles = dropdown_styles
       @label = label
