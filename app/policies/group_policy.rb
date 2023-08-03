@@ -44,6 +44,13 @@ class GroupPolicy < NamespacePolicy
     false
   end
 
+  def transfer?
+    return true if Member.can_transfer?(user, record)
+
+    details[:name] = record.name
+    false
+  end
+
   def transfer_into_namespace?
     return true if Member.can_transfer_into_namespace?(user, record) == true
 
@@ -88,6 +95,20 @@ class GroupPolicy < NamespacePolicy
 
   def sample_listing?
     return true if Member.can_view?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def share_namespace_with_group?
+    return true if Member.can_share_namespace_with_group?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def unshare_namespace_with_group?
+    return true if Member.can_unshare_namespace_with_group?(user, record) == true
 
     details[:name] = record.name
     false

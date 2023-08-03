@@ -21,7 +21,7 @@
         <%= viral_dropdown(icon: "bars_3", aria: { label: t(:'general.navbar.main_dropdown.aria-label') }) do |dropdown| %>
           <%= dropdown.item(
             label: t(:"general.navbar.main_dropdown.projects"),
-            url: projects_path,
+            url: dashboard_projects_path,
             icon_name: "rectangle_stack"
           ) %>
           <%= dropdown.item(

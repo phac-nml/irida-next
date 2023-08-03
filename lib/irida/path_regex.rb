@@ -16,6 +16,7 @@ module Irida
       apple-touch-icon-precomposed.png
       apple-touch-icon.png
       assets
+      dashboard
       favicon.ico
       groups
       rails

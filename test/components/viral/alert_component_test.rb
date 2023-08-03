@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'view_component_test_case'
 
 module Viral
-  class AlertComponentTest < ViewComponent::TestCase
+  class AlertComponentTest < ViewComponentTestCase
     test 'notice alert' do
       render_inline(Viral::AlertComponent.new(message: 'This is a notice alert', type: 'notice'))
       assert_text 'This is a notice alert'
