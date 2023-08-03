@@ -1,7 +1,7 @@
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <% if !allowed_to?(:share_namespace_with_group?, @namespace) %>
+    <% if allowed_to?(:share_namespace_with_group?, @namespace) %>
       <%= link_to I18n.t("projects.members.index.invite_group"),
       namespace_project_invite_group_path,
       data: {
@@ -24,50 +24,104 @@
   <%= turbo_frame_tag("namespace_share") %>
   <ul class="flex flex-wrap -mb-px">
     <li class="mr-2">
-      <%= link_to "Members",
+      <%= link_to t(:"projects.members.index.tabs.members"),
       namespace_project_members_path(),
       data: {
-        turbo_frame: "members",
-        turbo_stream: ""
+        turbo_frame: "_top"
       },
       class:
         (
-          if params[:invited_groups]
+          if params[:tab] == "invited_groups"
             "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
           else
             "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
           end
         ),
       aria: {
-        current: params[:invited_groups] ? "false" : "page"
+        current: params[:tab] == "invited_groups" ? "false" : "page"
       } %>
     </li>
     <% if @namespace.shared_with_groups.count.positive? %>
       <li class="mr-2">
-        <%= link_to "Groups",
-        invited_groups_namespace_project_members_path(invited_groups: "true"),
+        <%= link_to t(:"projects.members.index.tabs.groups"),
+        namespace_project_members_path(tab: "invited_groups"),
         data: {
-          turbo_frame: "members",
-          turbo_stream: ""
+          turbo_frame: "_top"
         },
         class:
           (
-            if params[:invited_groups]
+            if params[:tab] == "invited_groups"
               "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
             else
               "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
             end
           ),
         aria: {
-          current: params[:invited_groups] ? "page" : "false"
+          current: params[:tab] == "invited_groups" ? "page" : "false"
         } %>
+        <span
+          style="margin-left: -15px;"
+          class="
+            bg-green-200
+            text-green-800
+            text-xs
+            font-medium
+            ml-2
+            px-2.5
+            py-0.5
+            rounded-full
+            dark:bg-green-900
+            dark:text-green-300
+          "
+        >
+          <%= @namespace.shared_with_group_links.count %>
+        </span>
       </li>
     <% end %>
   </ul>
-  <%= turbo_frame_tag "members",
-  src: namespace_project_members_path(format: :turbo_stream),
-  loading: :lazy %>
+  <div class="flex flex-col" data-turbo-temporary>
+    <%= turbo_frame_tag "members",
+    src:
+      (
+        if params[:tab] == "invited_groups"
+          invited_groups_namespace_project_members_path(
+            format: :turbo_stream
+          )
+        else
+          namespace_project_members_path(
+            format: :turbo_stream
+          )
+        end
+      ),
+    loading: :lazy do %>
 
+      <table class="min-w-full table-fixed dark:divide-gray-600">
+        <tbody
+          class="
+            bg-white
+            divide-y
+            divide-gray-200
+            dark:bg-gray-800
+            dark:divide-gray-700
+          "
+        >
+          <% 15.times do %>
+            <tr>
+
+              <td class="p-4 animate-pulse">
+                <div class="flex-1 py-1 space-y-6">
+                  <div class="space-y-3">
+                    <div class="w-48 h-2 rounded bg-slate-200"></div>
+                    <div class="w-32 h-2 rounded bg-slate-200"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
 </div>
 
 <%= render PaginationComponent.new(

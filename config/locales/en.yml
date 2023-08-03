@@ -590,6 +590,9 @@ en:
           source: Source
           access_granted: Access Granted
           action: Action
+        tabs:
+          members: Members
+          groups: Groups
       update:
         success: "Project member %{user_email} updated successfully"
       new:
@@ -621,6 +624,17 @@ en:
           level_20: Analyst
           level_30: Maintainer
           level_40: Owner
+        table_header:
+          group: Group
+          source: Source
+          access_granted: Access granted
+          access_level: Access level
+          expiration: Expiration
+          action: Action
+        buttons:
+          unshare: Unshare
+        aria_labels:
+          group_access_level: Group Access Level
     samples:
       show:
         edit_button: Edit this sample
