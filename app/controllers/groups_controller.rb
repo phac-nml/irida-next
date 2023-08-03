@@ -10,7 +10,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   before_action :authorized_namespaces, except: %i[index show destroy]
 
   def index
-    @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
+    redirect_to dashboard_groups_path
   end
 
   def show
