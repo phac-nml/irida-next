@@ -1,4 +1,18 @@
-<aside id="sidebar" class="sidebar flex flex-col text-sm border-r border-slate-200 bg-slate-50 dark:border-gray-700 dark:bg-slate-800" aria-label="Sidebar">
+<aside
+  id="sidebar"
+  class="
+    flex
+    flex-col
+    text-sm
+    border-r
+    sidebar
+    border-slate-200
+    bg-slate-50
+    dark:border-gray-700
+    dark:bg-slate-900
+  "
+  aria-label="Sidebar"
+>
   <div class="grow">
     <div
       class="
@@ -8,6 +22,7 @@
         px-2
         overflow-x-hidden
         bg-slate-200
+        dark:bg-slate-800
         whitespace-nowrap
       "
       style="height: 50px;"
@@ -68,7 +83,7 @@
         <% end %>
       </div>
     </div>
-    <%= viral_dropdown(label:, icon: icon_name, tooltip: tooltip, caret: true, classes: "w-full rounded-none border-r-0 border-l-0 border-t-0 px-4 bg-slate-50", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
+    <%= viral_dropdown(label:, icon: icon_name, tooltip: tooltip, caret: true, classes: "w-full rounded-none dark:bg-slate-900 border-r-0 border-l-0 border-t-0 px-4 bg-slate-50", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
       <%= dropdown.item(
             label: t(:"general.default_sidebar.projects"),
             url: dashboard_projects_path
@@ -91,7 +106,7 @@
     </div>
   </div>
   <div class="p-2">
-    <%= link_to "https://phac-nml.github.io/irida-next/docs/intro", target: :_blank, class: "flex-inline button button--size-small" do %>
+    <%= link_to "https://phac-nml.github.io/irida-next/docs/intro", target: :_blank, class: "flex-inline button button--state-default button--size-small" do %>
       <%= viral_icon(name: :question_mark, classes: "w-4 h-4 mr-1") %>
       <%= t("general.help") %>
     <% end %>
