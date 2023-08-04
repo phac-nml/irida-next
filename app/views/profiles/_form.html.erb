@@ -11,12 +11,12 @@
       <br/>
       <div class="form-field <%= 'invalid' if invalidfn %>">
         <%= f.label :first_name %>
-        <%= f.text_field :first_name, required: true, autocomplete: "first_name" %>
+        <%= f.text_field :first_name, required: true, autocomplete: "given-name" %>
       </div>
       <br/>
       <div class="form-field <%= 'invalid' if invalidln %>">
         <%= f.label :last_name %>
-        <%= f.text_field :last_name, required: true, autocomplete: "last_name" %>
+        <%= f.text_field :last_name, required: true, autocomplete: "family-name" %>
       </div>
       <br/>
       <div class="my-2">
