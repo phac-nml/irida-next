@@ -286,6 +286,9 @@ en:
           namespace_name_desc: Name, descending
           updated_at_asc: Oldest updated
           created_at_asc: Oldest created
+    groups:
+      index:
+        more_items: "%{count} more items"
   profiles:
     sidebar:
       header: User Settings

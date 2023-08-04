@@ -1,0 +1,61 @@
+<turbo_frame_tag id="<%= dom_id(group) %>" target="_top">
+  <div class="flex pl-2 items-center text-sm font-normal text-gray-500 dark:text-gray-400 group-list-tree">
+    <div style="padding-left: <%= "#{depth * 20}px" %>"><%= group.children.count > 0 ? link_to("D", dashboard_groups_path(parent_id: group.id, depth: depth + 1, collapse:), data: { turbo_stream: '' }) : nil %></div>
+    <div class="w-16 p-2 whitespace-nowrap">
+      <%= viral_avatar(
+            name: group.name,
+            colour_string: "#{group.name}-#{group.id}",
+            data: {
+              turbo: false
+            },
+            url: group_path(group)
+          ) %>
+    </div>
+    <div class="p-4 grow whitespace-nowrap">
+      <%= link_to group.name,
+                  group_path(group),
+                  class: "text-grey-800 dark:text-grey-300 font-semibold hover:underline" %>
+      <% if current_user.id == group.owner_id %>
+                      <span
+                        class="
+                          bg-green-200
+                          text-green-800
+                          text-xs
+                          font-medium
+                          ml-2
+                          px-2.5
+                          py-0.5
+                          rounded-full
+                          dark:bg-green-900
+                          dark:text-green-300
+                        "
+                      >
+                        <%= t(:"groups.owner") %>
+                      </span>
+      <% end %>
+      <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= group.description %></div>
+    </div>
+    <div class="px-4 py-3">
+      <div class="flex items-center justify-end">
+        <div class="inline-flex items-center justify-between w-8 mr-2">
+          <%= viral_icon(name: "folder", classes: "w-4 h-4") %>
+          0
+        </div>
+        <div class="inline-flex items-center justify-between w-8 mr-2">
+          <%= viral_icon(name: "users", classes: "w-4 h-4") %>
+          1
+        </div>
+        <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'groups.index.group_dropdown.label', group_name: group.name) }) do |dropdown| %>
+          <%= dropdown.item(
+                label: t(:"groups.index.group_dropdown.delete"),
+                url: group_path(group),
+                data: {
+                  turbo_method: :delete,
+                  turbo_confirm: t(:"groups.index.group_dropdown.delete_confirmation")
+                }
+              ) %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</turbo_frame_tag>
