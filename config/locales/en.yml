@@ -602,7 +602,7 @@ en:
         select_access_level: Select Access Level
       destroy:
         error: "There was an error removing the project member"
-        success: "Project member successfully removed"
+        success: "Project member %{user} successfully removed"
         leave_success: "You have successfully left the project %{name}"
       invite_group:
         title: Share namespace

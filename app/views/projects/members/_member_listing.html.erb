@@ -3,6 +3,7 @@
     <div class="overflow-x-auto">
       <div class="shadow">
         <%= turbo_frame_tag("member-update-alert") %>
+        <%= turbo_frame_tag("member-remove-alert") %>
         <table class="min-w-full table-fixed dark:divide-gray-600">
           <thead class="text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -19,7 +20,7 @@
             <% @members.each do |member| %>
               <% member_source = membership_source(@namespace, member) %>
               <tr
-
+                id="<%= dom_id(member) %>"
                 class="text-sm font-normal text-gray-500  dark:text-gray-400"
               >
                 <td class="px-6 py-4">

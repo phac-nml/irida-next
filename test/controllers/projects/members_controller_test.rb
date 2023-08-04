@@ -52,10 +52,10 @@ module Projects
       project_member = members(:project_two_member_james_doe)
 
       assert_difference('Member.count', -1) do
-        delete namespace_project_member_path(namespace, project, project_member)
+        delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
       end
 
-      assert_redirected_to namespace_project_members_path(namespace, project)
+      assert_response :ok
     end
 
     test 'shouldn\'t delete a member from the project' do
