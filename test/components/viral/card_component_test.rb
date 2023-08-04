@@ -26,8 +26,8 @@ module Viral
           header.action do
             'Delete'
           end
-          'Just the body here'
         end
+        'Just the body here'
       end
 
       assert_selector 'section.Viral-Card' do
