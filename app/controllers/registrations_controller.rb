@@ -4,8 +4,7 @@
 class RegistrationsController < Devise::RegistrationsController
   layout 'devise'
 
-  before_action :configure_sign_up_params, only: [:create]
-  before_action :configure_account_update_params, only: [:update]
+  before_action :configure_sign_up_params, :configure_account_update_params
 
   # GET /resource/sign_up
   # def new
@@ -13,9 +12,9 @@ class RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  def create
-    super
-  end
+  # def create
+  #   super
+  # end
 
   # GET /resource/edit
   # def edit
@@ -23,9 +22,9 @@ class RegistrationsController < Devise::RegistrationsController
   # end
 
   # PUT /resource
-  def update
-    super
-  end
+  # def update
+  #   super
+  # end
 
   # DELETE /resource
   # def destroy
