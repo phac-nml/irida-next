@@ -3,7 +3,7 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:share_namespace_with_group?, @namespace) %>
       <%= link_to I18n.t("projects.members.index.invite_group"),
-      namespace_project_invite_group_path,
+      invite_group_namespace_project_members_path,
       data: {
         "turbo-frame" => "namespace_share"
       },
