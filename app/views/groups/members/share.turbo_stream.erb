@@ -1,0 +1,10 @@
+<%= turbo_stream.update "invited-group-alert", viral_alert(type:, message:) %>
+
+<% if @group_invited %>
+  <%= turbo_stream.append "invited-groups-table-body",
+                      partial: "groups/members/namespace_group_link",
+                      locals: {
+                        namespace_group_link: @namespace_group_link
+                      } %>
+
+<% end %>

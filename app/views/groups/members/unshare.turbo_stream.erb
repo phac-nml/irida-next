@@ -1,0 +1,5 @@
+<%= turbo_stream.update "invited-group-alert", viral_alert(type:, message:) %>
+
+<% if @namespace_group_link != false %>
+  <%= turbo_stream.remove dom_id(@namespace_group_link) %>
+<% end %>

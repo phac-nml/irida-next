@@ -3,6 +3,7 @@
 # Common Members actions
 module MembershipActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
+  include ShareActions
 
   included do
     before_action proc { namespace }

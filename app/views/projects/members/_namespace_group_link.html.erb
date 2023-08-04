@@ -1,0 +1,76 @@
+<tr
+  id="<%= dom_id(namespace_group_link) %>"
+  class="text-sm font-normal text-gray-500 dark:text-gray-400"
+>
+    <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
+    <td class="px-6 py-4"><%= namespace_group_link.namespace == @namespace ? "Direct Member" : namespace_group_link.namespace.name %></td>
+    <td class="px-6 py-4"><%= distance_of_time_in_words(Time.now, namespace_group_link.created_at) %></td>
+    <td class="px-6 py-4">
+      <div class="form-field">
+        <%= form_with( url: '#', method: :patch) do |form| %>
+          <%= form.select(
+            :group_access_level,
+            @access_levels,
+            {},
+            {
+              id: "invited-group-#{namespace_group_link.group.id}-access-level-select",
+              value: namespace_group_link.group_access_level,
+              onchange: "this.form.requestSubmit();",
+              "aria-label": t(:"projects.members.invited_groups.aria_labels.group_access_level")
+            }
+          ) %>
+          <input type="hidden" name="format" value="turbo_stream"/>
+        <% end %>
+      </div>
+    </td>
+    <td class="px-6 py-4">
+      <%= form_with( url: '#', method: :patch) do |form| %>
+        <div
+          class="form-field datepicker"
+          data-controller="datepicker"
+        >
+          <div class="relative max-w-sm">
+            <div
+              class="
+                absolute
+                inset-y-0
+                left-0
+                flex
+                items-center
+                pl-3
+                pointer-events-none
+              "
+            >
+              <%= render Viral::IconComponent.new(
+                name: "calendar_days",
+                classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+              ) %>
+            </div>
+            <%= form.text_field :expires_at,
+                        placeholder: "YYYY-MM-DD",
+                        autocomplete: "off",
+                        value: namespace_group_link.expires_at,
+                        onblur: "this.form.requestSubmit();",
+                        "data-datepicker-target": "datePicker" %>
+
+            <input type="hidden" name="format" value="turbo_stream"/>
+        </div>
+      <% end %>
+    </td>
+    <td class="px-6 py-4">
+      <%= link_to 'Unshare',
+                  unshare_namespace_project_members_path(@namespace.parent, @namespace.project, shared_group_id: namespace_group_link.group.id),
+                  data: {
+                          turbo_method: :delete,
+                          turbo_confirm: 'Are you sure you want to unshare the namespace with this group',
+                          turbo_stream: true
+                  },
+                  class: "
+                    button
+                    button--state-destructive
+                    button--size-default
+                    inline-block
+                  "
+      %>
+    </td>
+  </tr>

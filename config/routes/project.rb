@@ -21,6 +21,8 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         collection do
           get :invited_groups
           get :invite_group
+          post :share
+          delete :unshare
         end
       end
       resources :group_links, only: %i[create destroy update index]

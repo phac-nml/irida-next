@@ -19,6 +19,8 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       collection do
         get :invited_groups
         get :invite_group
+        post :share, as: :group_share
+        delete :unshare, as: :group_unshare
       end
     end
     resources :group_links, only: %i[create destroy update index]

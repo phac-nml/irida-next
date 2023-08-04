@@ -9,8 +9,7 @@
     </div>
 
 
-      <%= form_with(url: "#", method: :post, data: {
-                turbo: false}) do |form| %>
+      <%= form_with(url: share_namespace_project_members_path(@namespace.parent, @namespace.project), method: :post, data: {remote: true}) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
           <%= form.label I18n.t('projects.members.invite_group.label.shared_group') %>
@@ -55,7 +54,10 @@
           </div>
       </div>
         <div class="my-4">
-          <%= form.submit I18n.t('projects.members.invite_group.button.submit'), class: "button button--size-default button--state-primary" %>
+          <%= form.submit I18n.t('projects.members.invite_group.button.submit'),
+              class: "button button--size-default button--state-primary",
+              data: { action: 'click->viral--dialog-component#close'}
+          %>
           <button
             type="button"
             class="button button--size-default button--state-default"
