@@ -37,6 +37,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.create_subgroup?
   end
 
+  test '#transfer?' do
+    assert @policy.transfer?
+  end
+
   test '#transfer_into_namespace?' do
     assert @policy.transfer_into_namespace?
   end
@@ -59,6 +63,14 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
   test '#sample_listing?' do
     assert @policy.sample_listing?
+  end
+
+  test '#share_namespace_with_group?' do
+    assert @policy.share_namespace_with_group?
+  end
+
+  test '#unshare_namespace_with_group?' do
+    assert @policy.unshare_namespace_with_group?
   end
 
   test 'scope' do

@@ -8,37 +8,17 @@ module Viral
     DEFAULT_TIMEOUT = 3500
 
     def initialize(type:, data:, timeout: DEFAULT_TIMEOUT)
-      @type = type
+      @type = type_for_flash(type)
       @data = data
-      @timeout = timeout
-      @icon = icon_for_flash
-      @classes = classes_for_flash
+      @timeout = type.to_s == 'error' ? 0 : timeout
     end
 
-    def classes_for_flash
-      case type.to_s
-      when 'error'
-        'bg-red-600 dark:bg-red-800'
-      when 'success'
-        'bg-green-700 dark:bg-green-900'
-      when 'warning'
-        'bg-yellow-300 dark:bg-yellow-800'
-      else
-        'bg-blue-600 dark:bg-blue-800'
-      end
-    end
-
-    def icon_for_flash
-      case type
-      when 'error'
-        'exclamation_circle'
-      when 'success'
-        'check'
-      when 'warning'
-        'exclamation_triangle'
-      else
-        'information_circle'
-      end
+    def type_for_flash(type)
+      @type = if type == 'notice'
+                'info'
+              else
+                type == 'alert' ? 'error' : type
+              end
     end
   end
 end

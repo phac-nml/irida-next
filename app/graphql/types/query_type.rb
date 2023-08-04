@@ -19,6 +19,12 @@ module Types
     field :groups, Types::GroupType.connection_type, null: false, resolver: Resolvers::GroupsResolver,
                                                      description: 'Find groups.'
 
+    field :project, Types::ProjectType, null: true, authorize: { to: :read? }, resolver: Resolvers::ProjectResolver,
+                                        description: 'Find a project.'
+
+    field :projects, Types::ProjectType.connection_type, null: true, resolver: Resolvers::ProjectsResolver,
+                                                         description: 'Find projects.'
+
     def current_user
       context[:current_user]
     end

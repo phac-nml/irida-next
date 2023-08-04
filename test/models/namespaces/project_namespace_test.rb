@@ -97,4 +97,30 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
       Namespaces::ProjectNamespace.restore(@project_namespace.id, recursive: true)
     end
   end
+
+  test 'share project namespace with group and get ancestors namespace_group_links' do
+    project_namespace = namespaces_project_namespaces(:project25_namespace)
+
+    namespace_group_link1 = namespace_group_links(:namespace_group_link2)
+
+    namespace_group_link2 = namespace_group_links(:namespace_group_link3)
+
+    namespace_group_links = project_namespace.shared_with_group_links.of_ancestors
+
+    assert namespace_group_links.include?(namespace_group_link1)
+    assert_not namespace_group_links.include?(namespace_group_link2)
+  end
+
+  test 'share project namespace with group and get ancestor and self namespace_group_links' do
+    project_namespace = namespaces_project_namespaces(:project25_namespace)
+
+    namespace_group_link1 = namespace_group_links(:namespace_group_link2)
+
+    namespace_group_link2 = namespace_group_links(:namespace_group_link3)
+
+    namespace_group_links = project_namespace.shared_with_group_links.of_ancestors_and_self
+
+    assert namespace_group_links.include?(namespace_group_link1)
+    assert namespace_group_links.include?(namespace_group_link2)
+  end
 end

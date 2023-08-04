@@ -14,10 +14,10 @@
     <% if sections.present? %>
       <% sections.each_with_index do |section, index| %>
         <%= section %>
-        <% if sections.length() - 1 != index %>
-          <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-600" />
+        <% if sections.length - 1 != index %>
+          <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-600"/>
         <% end %>
-        <% end %>
+      <% end %>
     <% end %>
 
     <% if render_footer? %>
@@ -26,11 +26,11 @@
           <%= primary_action %>
         <% end %>
         <% if secondary_actions? %>
-        <% secondary_actions.each do |action| %>
-          <%= action %>
+          <% secondary_actions.each do |action| %>
+            <%= action %>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     <% end %>
-    </div>
   </dialog>
 <% end %>
