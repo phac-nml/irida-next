@@ -3,7 +3,17 @@
 
   <div class="form-field">
     <%= f.label :email %>
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.email_field :email, autofocus: true, required: true, autocomplete: "email" %>
+  </div>
+
+  <div class="form-field">
+    <%= f.label :first_name %>
+    <%= f.text_field :first_name, required: true, autocomplete: "first_name" %>
+  </div>
+
+  <div class="form-field">
+    <%= f.label :last_name %>
+    <%= f.text_field :last_name, required: true, autocomplete: "last_name" %>
   </div>
 
   <div class="form-field">
@@ -12,12 +22,12 @@
       <span class="text-sm font-light text-gray-500 dark:text-gray-400">(<%= @minimum_password_length %>
         characters minimum)</span>
     <% end %>
-    <%= f.password_field :password, autocomplete: "new-password" %>
+    <%= f.password_field :password, required: true, autocomplete: "new-password" %>
   </div>
 
   <div class="form-field">
     <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+    <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
   </div>
 
   <%= f.submit "Sign up",
