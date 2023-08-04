@@ -128,7 +128,7 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     visit group_url(group1)
 
     click_link I18n.t(:'groups.sidebar.settings')
-    assert_selector 'h3', text: I18n.t(:'groups.edit.advanced.transfer.title')
+    assert_selector 'h2', text: I18n.t(:'groups.edit.advanced.transfer.title')
 
     within %(form[action="/group-1/transfer"]) do
       find('#new_namespace_id').find("option[value='#{group3.id}']").select_option
@@ -159,7 +159,7 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     visit group_url(group)
 
     click_link I18n.t(:'groups.sidebar.settings')
-    assert_selector 'h3', text: I18n.t(:'groups.edit.advanced.transfer.title')
+    assert_selector 'h2', text: I18n.t(:'groups.edit.advanced.transfer.title')
 
     within %(form[action="/group-1/transfer"]) do
       find('#new_namespace_id').find("option[value='#{group.id}']").select_option
