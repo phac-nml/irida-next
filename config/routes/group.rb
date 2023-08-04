@@ -29,5 +29,6 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     delete '/', action: :destroy
     patch '/', action: :update
     put '/', action: :update
+    put :transfer
   end
 end

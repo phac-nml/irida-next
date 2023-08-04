@@ -1,0 +1,28 @@
+<%= form_with(url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form", data: { turbo_confirm: "" }) do |form| %>
+  <div class="form-field">
+    <%= form.label :new_namespace_id,
+               t("groups.edit.advanced.transfer.new_namespace_id") %>
+    <%= form.collection_select(
+      :new_namespace_id,
+      @authorized_namespaces,
+      :id,
+      :full_name,
+      { prompt: t("groups.edit.advanced.transfer.new_namespace_id") },
+      { data: { action: "transfer#onChange" } }
+    ) %>
+    <% if error.present? %>
+      <p class="text-sm text-red-500 dark:text-red-400"><%= error %></p>
+    <% end %>
+  </div>
+  <div>
+    <%= form.submit t("groups.edit.advanced.transfer.submit"),
+                class:
+                  "button button--state-destructive button--size-default inline-block",
+                disabled: true,
+                data: {
+                  "transfer-target": "submitButton",
+                  turbo_content: ".confirm-transfer",
+                  confirm_value: confirm_value
+                } %>
+  </div>
+<% end %>

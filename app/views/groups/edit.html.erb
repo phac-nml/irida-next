@@ -27,7 +27,13 @@
     <h2 class="text-2xl font-extrabold dark:text-white">
       <%= t(:"groups.edit.advanced.title") %>
     </h2>
+
     <%= render "edit_advanced_path", group: @group %>
+
+    <% if allowed_to?(:transfer?, @group) %>
+      <%= render "edit_advanced_transfer", group: @group %>
+    <% end %>
+
     <% if allowed_to?(:destroy?, @group) %>
       <%= render "edit_advanced_delete", group: @group %>
     <% end %>
