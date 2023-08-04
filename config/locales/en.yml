@@ -383,8 +383,8 @@ en:
               - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
         delete:
           title: Delete group
-          description: Deleting a group is permanent and cannot be undone. All projects and subgroups will be deleted along with the group.
-          submit: Delete
+          description: Deleting a group is permanent and cannot be undone. All projects, subgroups, and direct members will be deleted along with the group.
+          submit: Delete group
           confirm: Are you sure you want to delete this group?
         path:
           title: Change group URL
@@ -468,7 +468,7 @@ en:
         title: Advanced settings
         destroy:
           title: Delete project
-          description: Deleting a project is permanent and cannot be undone. All samples will be deleted along with the project.
+          description: Deleting a project is permanent and cannot be undone. All samples and direct members will be deleted along with the project.
           submit: Delete project
           confirm: Are you sure you want to delete this project?
         path:
