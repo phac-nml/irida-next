@@ -24,7 +24,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   delegate :project, to: :project_namespace
 
-  class << self
+  class << self # rubocop:disable Metrics/ClassLength
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -99,6 +99,14 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def can_transfer_sample_to_project?(user, object_namespace)
       can_transfer_into_namespace?(user, object_namespace)
+    end
+
+    def can_share_namespace_with_group?(user, object_namespace)
+      can_modify?(user, object_namespace)
+    end
+
+    def can_unshare_namespace_with_group?(user, object_namespace)
+      can_modify?(user, object_namespace)
     end
 
     def namespace_owners_include_user?(user, namespace)

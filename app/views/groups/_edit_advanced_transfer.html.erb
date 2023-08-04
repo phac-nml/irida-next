@@ -1,0 +1,53 @@
+<%= viral_card do |card| %>
+  <% card.header(title: t("groups.edit.advanced.transfer.title")) %>
+  <% card.section do %>
+
+    <% t("groups.edit.advanced.transfer.descriptions").each do |description| %>
+      <p class="mb-2 text-base text-gray-900 dark:text-white"><%= description %></p>
+    <% end %>
+    <ul
+      class="
+        mb-4
+        ml-4
+        space-y-1
+        text-gray-500
+        list-disc
+        list-inside
+        dark:text-gray-400
+      "
+    >
+      <% t("groups.edit.advanced.transfer.points").each do |item| %>
+        <li><%= item %></li>
+      <% end %>
+    </ul>
+
+    <div data-controller="transfer">
+      <div class="hidden confirm-transfer">
+        <div
+          class="
+            flex
+            p-4
+            mb-4
+            text-red-800
+            rounded-lg
+            bg-red-50
+            dark:bg-gray-800
+            dark:text-red-400
+          "
+        >
+          <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
+          <span class="flex-1 ml-4"><%= t(
+              "groups.edit.advanced.transfer.confirm.warning_html",
+              group_name: group.human_name
+            ) %></span>
+        </div>
+        <div class="mb-4">
+          <% t("groups.edit.advanced.transfer.confirm.points_html", group: group.path).each do |item| %>
+            <p class="mb-2 text-base text-gray-900 dark:text-white"><%= item %></p>
+          <% end %>
+        </div>
+      </div>
+      <%= render "edit_advanced_transfer_form", confirm_value: group.path, error: nil %>
+    </div>
+  <% end %>
+<% end %>

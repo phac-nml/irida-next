@@ -2,6 +2,8 @@
 
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
+  include ShareActions
+
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[new create show]
@@ -140,5 +142,21 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         path: namespace_project_edit_path
       }]
     end
+  end
+
+  protected
+
+  def namespace
+    return unless params[:project_id]
+
+    path = [params[:namespace_id], params[:project_id]].join('/')
+    @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+    @namespace = @project.namespace
+
+    authorized_namespaces
+  end
+
+  def namespace_path
+    namespace_project_path(@namespace.parent, @project)
   end
 end

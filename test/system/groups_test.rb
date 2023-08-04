@@ -122,6 +122,59 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     assert_selector 'tr', count: @groups_count - 1
   end
 
+  test 'can transfer a group' do
+    group1 = groups(:group_one)
+    group3 = groups(:group_three)
+    visit group_url(group1)
+
+    click_link I18n.t(:'groups.sidebar.settings')
+    assert_selector 'h3', text: I18n.t(:'groups.edit.advanced.transfer.title')
+
+    within %(form[action="/group-1/transfer"]) do
+      find('#new_namespace_id').find("option[value='#{group3.id}']").select_option
+      click_on I18n.t(:'groups.edit.advanced.transfer.submit')
+    end
+
+    within('#turbo-confirm') do
+      assert_text I18n.t(:'components.confirmation.title')
+      find('input[type=text]').fill_in with: group1.path
+      click_on I18n.t(:'components.confirmation.confirm')
+    end
+
+    assert_text I18n.t(:'groups.transfer.success')
+  end
+
+  test 'user with maintainer access should not be able to see the transfer group section' do
+    login_as users(:joan_doe)
+
+    visit group_url(groups(:group_one))
+
+    click_link I18n.t(:'groups.sidebar.settings')
+
+    assert_selector 'h3', text: I18n.t(:'groups.edit.advanced.transfer.title'), count: 0
+  end
+
+  test 'cannot transfer group into same namespace' do
+    group = groups(:group_one)
+    visit group_url(group)
+
+    click_link I18n.t(:'groups.sidebar.settings')
+    assert_selector 'h3', text: I18n.t(:'groups.edit.advanced.transfer.title')
+
+    within %(form[action="/group-1/transfer"]) do
+      find('#new_namespace_id').find("option[value='#{group.id}']").select_option
+      click_on I18n.t(:'groups.edit.advanced.transfer.submit')
+    end
+
+    within('#turbo-confirm') do
+      assert_text I18n.t(:'components.confirmation.title')
+      find('input[type=text]').fill_in with: group.path
+      click_on I18n.t(:'components.confirmation.confirm')
+    end
+
+    assert_text I18n.t(:'services.groups.transfer.same_group_and_namespace')
+  end
+
   test 'cannot create subgroup' do
     login_as users(:ryan_doe)
 

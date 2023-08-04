@@ -11,7 +11,7 @@
       { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
       {
         data: {
-          action: "projects--transfer#onChange"
+          action: "transfer#onChange"
         },
         class: @error.present? ? "error" : ""
       }
@@ -26,7 +26,7 @@
                 class: "button button--state-destructive button--size-default",
                 disabled: true,
                 data: {
-                  "projects--transfer-target": "submitButton",
+                  "transfer-target": "submitButton",
                   turbo_content: ".confirm-transfer",
                   confirm_value: @project.name
                 } %>
