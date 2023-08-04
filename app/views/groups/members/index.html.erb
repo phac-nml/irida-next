@@ -1,136 +1,116 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <% if !allowed_to?(:share_namespace_with_group?, @namespace) %>
-      <%= link_to I18n.t('groups.members.index.invite_group'),
-                group_invite_group_path,
-                data: {"turbo-frame"=> "namespace_share"},
-                class: "button button--state-default button--size-default" %>
+    <% if allowed_to?(:share_namespace_with_group?, @namespace) %>
+      <%= link_to I18n.t("groups.members.index.invite_group"),
+      group_invite_group_path,
+      data: {
+        "turbo-frame" => "namespace_share"
+      },
+      class: "button button--state-default button--size-default" %>
     <% end %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
-                  new_group_member_path(@namespace),
-                  class: "button button--state-primary button--size-default",
-                  "aria-label": t(:".actions.button_add_aria_label") %>
+      new_group_member_path(@namespace),
+      class: "button button--state-primary button--size-default",
+      "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
-      <ul cldarass="flex flex-wrap -mb-px">
+  <%= turbo_frame_tag("namespace_share") %>
+  <ul class="flex flex-wrap -mb-px">
+    <li class="mr-2">
+      <%= link_to t(:"groups.members.index.tabs.members"),
+      group_members_path(),
+      data: {
+        turbo_frame: "_top"
+      },
+      class:
+        (
+          if params[:tab] == "invited_groups"
+            "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+          else
+            "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+          end
+        ),
+      aria: {
+        current: params[:tab] == "invited_groups" ? "false" : "page"
+      } %>
+    </li>
+    <% if @namespace.shared_with_groups.count.positive? %>
       <li class="mr-2">
-        <%= link_to 'Members',
-        "#",
+        <%= link_to t(:"groups.members.index.tabs.groups"),
+        group_members_path(tab: "invited_groups"),
+        data: {
+          turbo_frame: "_top"
+        },
         class:
           (
-            if params[:members]
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            else
+            if params[:tab] == "invited_groups"
               "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+            else
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
             end
-          ) %>
+          ),
+        aria: {
+          current: params[:tab] == "invited_groups" ? "page" : "false"
+        } %>
+        <span
+          style="margin-left: -15px;"
+          class="
+            bg-green-200
+            text-green-800
+            text-xs
+            font-medium
+            ml-2
+            px-2.5
+            py-0.5
+            rounded-full
+            dark:bg-green-900
+            dark:text-green-300
+          "
+        >
+          <%= @namespace.shared_with_group_links.count %>
+        </span>
       </li>
-      <% if @namespace.shared_with_groups.count.positive? %>
-        <li class="mr-2">
-          <%= link_to 'Groups',
-          "#",
-          class:
-            (
-              if params[:groups]
-                "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-              else
-                "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              end
-            )
-          %>
-        </li>
-      <% end %>
-    </ul>
-  <div class="flex flex-col">
-    <div class="overflow-x-auto">
-      <div class="shadow">
-        <%= turbo_frame_tag("namespace_share") %>
-        <%= turbo_frame_tag("member-update-alert") %>
-        <table class="min-w-full table-fixed dark:divide-slate-600">
-          <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left"><%= t(:"groups.members.index.table_header.username") %></th>
-              <th scope="col" class="px-6 py-3 text-left"><%= t(:"groups.members.index.table_header.access_level") %></th>
-              <th scope="col" class="px-6 py-3 text-left"><%= t(:"groups.members.index.table_header.source") %></th>
-              <th scope="col" class="px-6 py-3 text-left"><%= t(:"groups.members.index.table_header.access_granted") %></th>
-              <th scope="col" class="px-6 py-3 text-right"><%= t(:"groups.members.index.table_header.action") %></th>
-            </tr>
-          </thead>
-          <tbody
-            class="bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700"
-          >
-            <% @members.each do |member| %>
-              <% member_source = membership_source(@namespace, member) %>
-              <tr
-                class="text-sm font-normal text-slate-500 dark:text-slate-400"
-              >
-                <td class="px-6 py-4">
-                  <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member.user.email %>
-                    <% if current_user == member.user %>
-                      <span
-                        class="
-                          bg-green-200
-                          text-green-800
-                          text-xs
-                          font-medium
-                          ml-2
-                          px-2.5
-                          py-0.5
-                          rounded-full
-                          dark:bg-green-900
-                          dark:text-green-300
-                        "
-                      ><%= t(:"activerecord.models.member.its_you") %></span>
-                    <% end %>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <% if (member.user != current_user && allowed_to?(:update_member?, @namespace) &&
-                   member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-                    <%= turbo_frame_tag("member-#{member.id}-access-level") do %>
-                      <%= render partial: "groups/members/access_level",
-                      locals: {
-                        member: member,
-                        access_levels: @access_levels
-                      } %>
-                    <% end %>
-                  <% else %>
-                    <%= t(:".access_level.level_#{member.access_level}") %>
-                  <% end %>
-                </td>
-                <td class="px-6 py-4">
-                  <% if !member_source.key?(:inherited_namespace_path) %>
-                    <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member_source[:label] %></div>
-                  <% else %>
-                    <%= viral_tooltip(title: t(:"groups.members.index.inherited_from")) do %>
-                      <%= link_to member_source[:label],
-                      member_source[:inherited_namespace_path],
-                      class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                    <% end %>
-                  <% end %>
-                </td>
-                <td class="px-6 py-4">
-                  <div>
-                    <% if member.user.email != member.created_by.email %>
-                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %> by <span class="block">
-                        <%= member.created_by.email %>
-                      </span>
-                    <% else %>
-                      <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %></span>
-                    <% end %>
+    <% end %>
+  </ul>
+  <div class="flex flex-col" data-turbo-temporary>
+    <%= turbo_frame_tag "members",
+    src:
+      (
+        if params[:tab] == "invited_groups"
+          invited_groups_group_members_path(
+            format: :turbo_stream
+          )
+        else
+          group_members_path(
+            format: :turbo_stream
+          )
+        end
+      ),
+    loading: :lazy do %>
 
-                    <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
-                      <% if member.created_at < member.updated_at %>
-                        <%= render UpdatedComponent.new(
-                          updated_at: member.updated_at
-                        ) %>
-                      <% end %>
-                    <% end %>
+      <table class="min-w-full table-fixed dark:divide-gray-600">
+        <tbody
+          class="
+            bg-white
+            divide-y
+            divide-gray-200
+            dark:bg-gray-800
+            dark:divide-gray-700
+          "
+        >
+          <% 15.times do %>
+            <tr>
+
+              <td class="p-4 animate-pulse">
+                <div class="flex-1 py-1 space-y-6">
+                  <div class="space-y-3">
+                    <div class="w-48 h-2 rounded bg-slate-200"></div>
+                    <div class="w-32 h-2 rounded bg-slate-200"></div>
                   </div>
                 </td>
                 <% if (current_user == member.user || allowed_to?(:destroy_member?, @namespace)) && !member_source.key?(:inherited_namespace_path) %>

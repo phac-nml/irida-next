@@ -67,10 +67,10 @@ module Projects
       project_member = members(:project_two_member_james_doe)
 
       assert_no_difference('Member.count') do
-        delete namespace_project_member_path(namespace, project, project_member)
+        delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
       end
 
-      assert_response :redirect
+      assert_response :unprocessable_entity
     end
   end
 end

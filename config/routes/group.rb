@@ -15,10 +15,14 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         module: :groups,
         as: :group,
         constraints: { group_id: Irida::PathRegex.full_namespace_route_regex }) do
-    resources :members, only: %i[create destroy index new update]
+    resources :members, only: %i[create destroy index new update] do
+      collection do
+        get :invited_groups
+        get :invite_group
+      end
+    end
     resources :group_links, only: %i[create destroy update index]
     resources :samples, only: %i[index]
-    get :invite_group, to: 'members#invite_group'
   end
 
   scope(path: '*id',
