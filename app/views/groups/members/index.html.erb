@@ -10,13 +10,13 @@
   <% end %>
 <% end %>
 
-<div class="bg-white dark:bg-gray-800">
+<div class="bg-white dark:bg-slate-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
         <%= turbo_frame_tag("member-update-alert") %>
-        <table class="min-w-full table-fixed dark:divide-gray-600">
-          <thead class="text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="min-w-full table-fixed dark:divide-slate-600">
+          <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
             <tr>
               <th scope="col" class="px-6 py-3 text-left"><%= t(:"groups.members.index.table_header.username") %></th>
               <th scope="col" class="px-6 py-3 text-left"><%= t(:"groups.members.index.table_header.access_level") %></th>
@@ -26,15 +26,15 @@
             </tr>
           </thead>
           <tbody
-            class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
+            class="bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700"
           >
             <% @members.each do |member| %>
               <% member_source = membership_source(@namespace, member) %>
               <tr
-                class="text-sm font-normal text-gray-500 dark:text-gray-400"
+                class="text-sm font-normal text-slate-500 dark:text-slate-400"
               >
                 <td class="px-6 py-4">
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %>
+                  <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member.user.email %>
                     <% if current_user == member.user %>
                       <span
                         class="
@@ -69,7 +69,7 @@
                 </td>
                 <td class="px-6 py-4">
                   <% if !member_source.key?(:inherited_namespace_path) %>
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member_source[:label] %></div>
+                    <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member_source[:label] %></div>
                   <% else %>
                     <%= viral_tooltip(title: t(:"groups.members.index.inherited_from")) do %>
                       <%= link_to member_source[:label],

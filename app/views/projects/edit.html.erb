@@ -1,7 +1,7 @@
 <div class="md:mx-auto">
   <div class="grid gap-4">
 
-    <h2 class="text-2xl font-medium leading-tight text-gray-900 dark:text-white">
+    <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white">
       <%= t(".general.title") %>
     </h2>
     <%= viral_card do |card| %>
@@ -35,7 +35,7 @@
     <% end %>
 
     <% if allowed_to?(:transfer?, @project) or allowed_to?(:destroy?, @project) %>
-      <h2 class="text-2xl font-medium leading-tight text-gray-900 dark:text-white"><%= t(".advanced.title") %></h2>
+      <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white"><%= t(".advanced.title") %></h2>
     <% end %>
 
     <% if allowed_to?(:transfer?, @project) %>

@@ -4,12 +4,13 @@ module Viral
   module Card
     # Header component for the card
     class HeaderComponent < Component
-      attr_reader :title
+      attr_reader :subtitle, :title
 
       renders_many :actions
 
-      def initialize(title: '', **system_arguments)
+      def initialize(title: '', subtitle: nil, **system_arguments)
         @title = title
+        @subtitle = subtitle
         @system_arguments = system_arguments
         @system_arguments[:classes] = class_names(
           @system_arguments[:classes],

@@ -1,6 +1,6 @@
 <tr
   id="<%= dom_id project %>"
-  class="text-sm font-normal text-gray-500 dark:text-gray-400"
+  class="text-sm font-normal text-slate-500 dark:text-slate-400"
 >
   <td class="w-16 p-2 whitespace-nowrap">
     <%= viral_avatar(
@@ -18,12 +18,12 @@
     data: {
       turbo: false
     },
-    class: "text-gray-800 dark:text-gray-300 hover:underline" do %>
+                class: "text-slate-800 dark:text-slate-300 hover:underline" do %>
       <span><%= project.namespace.parent.full_name %>
         /
       </span><span class="font-semibold"><%= project.namespace.name %></span>
     <% end %>
-    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= project.description %></div>
+    <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 text-right whitespace-nowrap">
     <%= viral_tooltip(title: l(project.updated_at, format: :long)) do %>

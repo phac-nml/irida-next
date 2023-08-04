@@ -6,22 +6,22 @@
       "inline-flex items-center justify-center button button--state-primary button--size-default" %>
   <% end %>
 <% end %>
-<div class="bg-white dark:bg-gray-800">
+<div class="bg-white dark:bg-slate-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
-        <table class="min-w-full table-fixed dark:divide-gray-600">
+        <table class="min-w-full table-fixed dark:divide-slate-600">
           <tbody
             class="
               bg-white
               divide-y
-              divide-gray-200
-              dark:bg-gray-800
-              dark:divide-gray-700
+              divide-slate-200
+              dark:bg-slate-800
+              dark:divide-slate-700
             "
           >
             <% @groups.each do |group| %>
-              <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
+            <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
                 <td class="w-16 p-2 whitespace-nowrap">
                   <%= viral_avatar(
                     name: group.name,
@@ -54,7 +54,7 @@
                       <%= t(:"groups.owner") %>
                     </span>
                   <% end %>
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= group.description %></div>
+                  <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= group.description %></div>
                 </td>
                 <td class="px-4 py-3">
                   <div class="flex items-center justify-end">

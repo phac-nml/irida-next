@@ -9,7 +9,7 @@ body {
 
 @layer components {
   kbd {
-    @apply px-2 py-1.5 text-sm font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500;
+    @apply px-2 py-1.5 text-sm font-semibold text-slate-800 bg-slate-100 border border-slate-200 rounded-lg dark:bg-slate-600 dark:text-slate-100 dark:border-slate-500;
   }
 
   .layout-body {
@@ -31,7 +31,7 @@ body {
 
   .navbar-button,
   button.navbar-button.Viral-Dropdown--icon {
-    @apply p-1 text-sm text-gray-500 rounded-md hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+    @apply p-1 text-sm text-slate-500 rounded-md hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 
   .link {
@@ -39,7 +39,7 @@ body {
   }
 
   .card {
-    @apply p-4 bg-slate-50 border border-gray-200 rounded-md shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800;
+    @apply p-4 bg-slate-50 border border-slate-200 rounded-md shadow-sm dark:border-slate-700 sm:p-6 dark:bg-slate-800;
   }
 
   p link {
@@ -47,7 +47,7 @@ body {
   }
 
   .form-field label {
-    @apply block mb-1 text-sm font-medium text-gray-900 dark:text-white;
+    @apply block mb-1 text-sm font-medium text-slate-900 dark:text-white;
   }
 
   .form-field div.field_with_errors {
@@ -58,7 +58,7 @@ body {
   .form-field input[type="search"],
   .form-field input[type="password"],
   .form-field input[type="email"] {
-    @apply border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
+    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
   }
 
   .form-field input[type="text"].prefixed,
@@ -69,15 +69,15 @@ body {
   }
 
   .form-field.datepicker input[type="text"] {
-    @apply border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-700 focus:border-primary-700 block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
   .form-field select {
-    @apply border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
+    @apply border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
   }
 
   .form-field select.error {
-    @apply border-red-500 text-gray-900 sm:text-sm rounded-md focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-red-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500;
+    @apply border-red-500 text-slate-900 sm:text-sm rounded-md focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-slate-800 dark:border-red-400 dark:placeholder-slate-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500;
   }
 
   .form-field select.prefixed {
@@ -91,7 +91,7 @@ body {
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply rounded-r-md border-0 p-2.5 block w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm text-gray-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply rounded-r-md border-0 p-2.5 block w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field.invalid label {
@@ -103,15 +103,15 @@ body {
   }
 
   .form-field textarea {
-    @apply block w-full rounded-md border border-gray-300 text-sm text-gray-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 text-sm text-slate-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   input[type="checkbox"] {
-    @apply w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-primary-300 focus:ring-4 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600;
+    @apply w-4 h-4 border border-slate-300 rounded bg-slate-50 focus:ring-primary-300 focus:ring-4 dark:border-slate-600 dark:bg-slate-800 dark:ring-offset-slate-800 dark:focus:ring-primary-600;
   }
 
   .field-hint {
-    @apply mt-1 text-sm text-gray-500 dark:text-gray-400;
+    @apply mt-1 text-sm text-slate-500 dark:text-slate-400;
   }
 
   input[type="search"]::-webkit-search-cancel-button {
@@ -124,7 +124,7 @@ body {
   }
 
   .row-btn {
-    @apply px-1 py-0 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+    @apply px-1 py-0 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 
   .row-btn svg {
@@ -149,11 +149,11 @@ body {
   }
 
   .Viral-Icon--colorBase {
-    @apply text-gray-900;
+    @apply text-slate-900;
   }
 
   .Viral-Icon--colorSubdued {
-    @apply text-gray-400;
+    @apply text-slate-400;
   }
 
   .Viral-Icon--colorCritical {
@@ -173,11 +173,11 @@ body {
   }
 
   .Viral-Dropdown--button {
-    @apply flex items-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+    @apply flex items-center py-2.5 px-5 text-sm font-medium text-slate-900 focus:outline-none bg-white rounded-md border border-slate-200 hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
   }
 
   .Viral-Dropdown--icon {
-    @apply rounded-md text-sm text-gray-500 p-2.5 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+    @apply rounded-md text-sm text-slate-500 p-2.5 hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 
   .button {
@@ -201,7 +201,7 @@ body {
   }
 
   .button--state-default {
-    @apply text-gray-900 bg-white border-gray-200 focus:outline-none hover:bg-gray-100 hover:text-gray-950 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+    @apply text-slate-900 bg-white border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
   }
 
   .button--state-destructive {
@@ -209,16 +209,16 @@ body {
   }
 
   .button--state-primary {
-    @apply text-white border-primary-800 bg-primary-700 focus:outline-none hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-600 dark:text-white dark:border-primary-600 dark:hover:bg-primary-700;
+    @apply text-white border-primary-800 bg-primary-700 focus:outline-none hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:text-white dark:border-primary-900 dark:hover:bg-primary-700;
   }
 
   /* VIRAL DIALOG */
   dialog {
-    @apply w-full max-w-2xl max-h-full p-0 bg-white rounded-lg shadow dark:bg-gray-700 focus:outline-none;
+    @apply w-full max-w-2xl max-h-full p-0 bg-white rounded-lg shadow dark:bg-slate-800 focus:outline-none;
   }
 
   dialog::backdrop {
-    @apply bg-gray-400/30 dark:bg-gray-900/40 backdrop-blur-sm;
+    @apply bg-slate-400/30 dark:bg-slate-900/40 backdrop-blur-sm;
   }
 
   .dialog--size {
@@ -242,15 +242,15 @@ body {
   }
 
   .dialog--header {
-    @apply flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600;
+    @apply flex items-start justify-between p-4 border-b rounded-t dark:border-slate-600;
   }
 
   .dialog--title {
-    @apply text-xl font-semibold text-gray-900 dark:text-white;
+    @apply text-xl font-semibold text-slate-900 dark:text-white;
   }
 
   .dialog--close {
-    @apply text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700;
+    @apply text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-slate-600 dark:hover:text-white focus:outline-none focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700;
   }
 
   .dialog--section {
@@ -258,11 +258,11 @@ body {
   }
 
   .dialog--footer {
-    @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
+    @apply flex items-center p-6 space-x-2 border-t border-slate-200 rounded-b dark:border-slate-600;
   }
 
   .avatar {
-    @apply relative inline-flex items-center justify-center flex-none overflow-hidden text-gray-800 rounded-md dark:text-gray-300;
+    @apply relative inline-flex items-center justify-center flex-none overflow-hidden text-slate-800 rounded-md dark:text-slate-300;
     --tw-avatar-bg-lightness: 35%;
     --tw-avatar-border-lightness: 35%;
     --tw-avatar-bg-alpha: 0.3;
@@ -284,32 +284,32 @@ body {
 }
 
 .page.next a {
-  @apply flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white;
+  @apply flex items-center justify-center h-full py-1.5 px-3 leading-tight text-slate-500 bg-white rounded-r-lg border border-slate-300 hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 .page.prev a {
-  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white;
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-white rounded-l-lg border border-slate-300 hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 .page.next.disabled {
-  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-gray-50 rounded-r-lg border border-gray-300 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 cursor-not-allowed;
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-slate-50 rounded-r-lg border border-slate-300 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400 cursor-not-allowed;
 }
 
 .page.prev.disabled {
-  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-gray-50 rounded-l-lg border border-gray-300 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 cursor-not-allowed;
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-slate-50 rounded-l-lg border border-slate-300 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400 cursor-not-allowed;
 }
 
 .page a,
 .page.gap {
-  @apply relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+  @apply relative inline-flex items-center px-4 py-2 text-sm font-medium text-slate-900 bg-white border border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
 }
 
 .page.active {
-  @apply z-10 flex items-center justify-center px-3 py-2 text-sm leading-tight border text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white;
+  @apply z-10 flex items-center justify-center px-3 py-2 text-sm leading-tight border text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-slate-700 dark:bg-slate-800 dark:text-white;
 }
 
 .pagy-info {
-  @apply text-sm font-normal text-gray-500 dark:text-gray-400;
+  @apply text-sm font-normal text-slate-500 dark:text-slate-400;
 }
 
 div.field_with_errors > :is(select) {

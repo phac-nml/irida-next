@@ -3,7 +3,7 @@
     <div class="mb-2">
       <% if actions.present? %>
         <div class="flex">
-          <h2 class="flex-1 text-sm font-semibold text-gray-900 dark:text-white">
+          <h2 class="flex-1 text-sm font-semibold text-slate-900 dark:text-white">
             <%= title.upcase %>
           </h2>
           <div>
@@ -13,12 +13,12 @@
           </div>
         </div>
       <% else %>
-        <h2 class="flex-1 text-sm font-semibold text-gray-800 dark:text-white">
+        <h2 class="flex-1 text-sm font-semibold text-slate-800 dark:text-white">
           <%= title.upcase %>
         </h2>
       <% end %>
     </div>
   <% end %>
 
-  <p class="text-gray-500 dark:text-gray-400"><%= content %></p>
+  <p class="text-slate-500 dark:text-slate-400"><%= content %></p>
 <% end %>
