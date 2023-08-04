@@ -1,48 +1,43 @@
 <div class="w-full">
-  <div class="pb-4">
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+  <dl>
+    <dt>
       <%= t(:"activerecord.attributes.user.email") %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
+    </dt>
+    <dd>
       <%=@user.email%>
       <%= t(:'profiles.show.missing') if @user.email == nil || @user.email == ""%>
-    </p>
-    <br/>
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+    </dd>
+
+    <dt>
       <%= t(:"activerecord.attributes.user.provider") %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
+    </dt>
+    <dd>
       <%=@user.provider%>
       <%= t(:'profiles.show.missing') if @user.provider == nil || @user.provider == ""%>
-    </p>
-    <br/>
+    </dd>
 
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+    <dt>
       <%= t(:"activerecord.attributes.user.uid") %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
+    </dt>
+    <dd>
       <%=@user.uid%>
       <%= t(:'profiles.show.missing') if @user.uid == nil || @user.uid == ""%>
-    </p>
-    <br/>
+    </dd>
 
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+    <dt>
       <%= t(:"activerecord.attributes.user.first_name") %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
+    </dt>
+    <dd>
       <%=@user.first_name%>
       <%= t(:'profiles.show.missing') if @user.first_name == nil || @user.first_name == ""%>
-    </p>
-    <br/>
+    </dd>
 
-    <h2 class="text-xl font-semibold leading-tight text-gray-900 dark:text-white">
+    <dt>
       <%= t(:"activerecord.attributes.user.last_name") %>
-    </h2>
-    <p class="text-gray-500 dark:text-gray-400">
+    </dt>
+    <dd>
       <%=@user.last_name%>
       <%= t(:'profiles.show.missing') if @user.last_name == nil || @user.last_name == ""%>
-    </p>
-    <br/>
-
-  </div>
+    </dd>
+  </dl>
 </div>

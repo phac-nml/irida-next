@@ -1,8 +1,8 @@
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+    <%= viral_card(title: "Main Settings") do %>
       <%= render 'form', user: @user if @user.provider == nil %>
       <%= render 'domain_user', user: @user if @user.provider != nil %>
-    </div>
+    <% end %>
   </div>
 </div>
