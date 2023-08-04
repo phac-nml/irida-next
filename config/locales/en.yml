@@ -108,7 +108,7 @@ en:
         name: Project Name
         description: Description
         parent_id: Project URL
-        path: Project slug
+        path: Path
       personal_access_token:
         name: Token name
         scopes: Scopes
@@ -467,11 +467,9 @@ en:
       advanced:
         title: Advanced settings
         path:
-          title: Change path
-          submit: Change path
-          description: A project's path is a unique identifier that can be accessed via the URL
-          points:
-            - Be careful! Changing a project's path can have unintended side effects.
+          title: Change project URL
+          submit: Change project URL
+          description: Changing a project's URL can have unintended side effects.
           help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
         transfer:
           title: Transfer project
