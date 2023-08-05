@@ -11,10 +11,9 @@
           <%= form.select(
             :group_access_level,
             @access_levels,
-            {},
+            {:selected => namespace_group_link.group_access_level},
             {
               id: "invited-group-#{namespace_group_link.group.id}-access-level-select",
-              value: namespace_group_link.group_access_level,
               onchange: "this.form.requestSubmit();",
               "aria-label": t(:"projects.members.invited_groups.aria_labels.group_access_level")
             }
