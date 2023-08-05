@@ -59,6 +59,7 @@
         aria: {
           current: params[:tab] == "invited_groups" ? "page" : "false"
         } %>
+
         <span
           style="margin-left: -15px;"
           class="
@@ -74,7 +75,9 @@
             dark:text-green-300
           "
         >
-          <%= @namespace.shared_with_group_links.count %>
+          <%= turbo_frame_tag 'invited-groups-count' do %>
+            <%= @namespace.shared_with_group_links.count %>
+          <% end %>
         </span>
       </li>
     <% end %>
