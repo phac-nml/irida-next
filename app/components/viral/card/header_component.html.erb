@@ -1,6 +1,6 @@
 <%= render Viral::BaseComponent.new(tag: 'div', **system_arguments) do %>
   <% if title_only? %>
-    <h2 class="text-lg font-semibold text-slate-800 dark:text-white">
+    <h2 id="<%= title_id %>" class="text-lg font-semibold text-slate-800 dark:text-white">
       <%= title %>
     </h2>
     <% if subtitle.present? %>
@@ -11,7 +11,7 @@
   <% else %>
       <% if actions.present? %>
         <div class="flex">
-          <h2 class="flex-1 text-lg font-semibold text-slate-800 dark:text-white">
+          <h2 id="<%= title_id %>" class="flex-1 text-lg font-semibold text-slate-800 dark:text-white">
             <%= title %>
             <p class="text-slate-500 dark:text-slate-400">
               <%= subtitle %>
@@ -24,7 +24,7 @@
           </div>
         </div>
       <% else %>
-      <h2 class="flex-1 text-lg font-semibold text-slate-800 dark:text-white">
+      <h2 id="<%= title_id %>" class="flex-1 text-lg font-semibold text-slate-800 dark:text-white">
           <%= title %>
       </h2>
       <p class="text-slate-500 dark:text-slate-400">
