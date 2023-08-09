@@ -1,47 +1,49 @@
-<% t("projects.edit.advanced.transfer.descriptions").each do |description| %>
-  <p class="mb-2 text-base text-gray-900 dark:text-white"><%= description %></p>
-<% end %>
-<ul
-  class="
-    mb-4
-    ml-4
-    space-y-1
-    text-gray-500
-    list-disc
-    list-inside
-    dark:text-gray-400
-  "
->
-
-  <% t("projects.edit.advanced.transfer.points").each do |item| %>
-    <li><%= item %></li>
+<%= viral_card(title: t("projects.edit.advanced.transfer.title")) do %>
+  <% t("projects.edit.advanced.transfer.descriptions").each do |description| %>
+    <p class="mb-2 text-base text-gray-900 dark:text-white"><%= description %></p>
   <% end %>
-</ul>
-<div data-controller="transfer">
-  <div class="hidden confirm-transfer">
-    <div
-      class="
-        flex
-        p-4
-        mb-4
-        text-red-800
-        rounded-lg
-        bg-red-50
-        dark:bg-gray-800
-        dark:text-red-400
-      "
-    >
-      <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
-      <span class="flex-1 ml-4"><%= t(
-          "projects.edit.advanced.transfer.confirm.warning_html",
-          project_name: @project.human_name
-        ) %></span>
+  <ul
+    class="
+      mb-4
+      ml-4
+      space-y-1
+      text-gray-500
+      list-disc
+      list-inside
+      dark:text-gray-400
+    "
+  >
+
+    <% t("projects.edit.advanced.transfer.points").each do |item| %>
+      <li><%= item %></li>
+    <% end %>
+  </ul>
+  <div data-controller="transfer">
+    <div class="hidden confirm-transfer">
+      <div
+        class="
+          flex
+          p-4
+          mb-4
+          text-red-800
+          rounded-lg
+          bg-red-50
+          dark:bg-gray-800
+          dark:text-red-400
+        "
+      >
+        <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
+        <span class="flex-1 ml-4"><%= t(
+            "projects.edit.advanced.transfer.confirm.warning_html",
+            project_name: @project.human_name
+          ) %></span>
+      </div>
+      <div class="mb-4">
+        <% t("projects.edit.advanced.transfer.confirm.points_html", project: @project.name).each do |item| %>
+          <p class="mb-2 text-base text-gray-900 dark:text-white"><%= item %></p>
+        <% end %>
+      </div>
     </div>
-    <div class="mb-4">
-      <% t("projects.edit.advanced.transfer.confirm.points_html", project: @project.name).each do |item| %>
-        <p class="mb-2 text-base text-gray-900 dark:text-white"><%= item %></p>
-      <% end %>
-    </div>
+    <%= render "projects/transfer_form", project: @project %>
   </div>
-  <%= render "projects/transfer_form", project: @project %>
-</div>
+<% end %>
