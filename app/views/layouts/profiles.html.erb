@@ -17,11 +17,13 @@
             icon: "user",
             label: t(:"profiles.sidebar.profile")
           ) %>
-          <%= render section.with_item(
-            url: edit_profile_password_path,
-            icon: "lock_closed",
-            label: t(:"profiles.sidebar.password")
-          ) if @user.provider == nil %>
+          <% if allowed_to?(:edit_password?, @user) %>
+            <%= render section.with_item(
+              url: edit_profile_password_path,
+              icon: "lock_closed",
+              label: t(:"profiles.sidebar.password")
+            ) %>
+          <% end %>
           <%= render section.with_item(
             url: profile_account_path,
             icon: "building_library",

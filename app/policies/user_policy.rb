@@ -36,4 +36,9 @@ class UserPolicy < ApplicationPolicy
   def update?
     return true if record == user
   end
+
+  def edit_password?
+    # Passwords on OmniAuth Users is not allowed
+    return true if user.provider.nil?
+  end
 end
