@@ -2,8 +2,8 @@
 <html class="light" lang="<%= locale %>">
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900" data-controller="dark-mode">
-  <%= render LayoutComponent.new(user: current_user, fixed: false) do |layout| %>
-      <% layout.sidebar(label: t(:"general.default_sidebar.title"), icon_name: "inbox_stack") do |navigation| %>
+    <%= render LayoutComponent.new(user: current_user, fixed: false) do |layout| %>
+      <% layout.with_sidebar(label: t(:"general.default_sidebar.title"), icon_name: "inbox_stack") do |navigation| %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             icon: "rectangle_stack",
@@ -16,7 +16,7 @@
             url: groups_path
           ) %>
         <% end %>
-        <% layout.body do %>
+        <% layout.with_body do %>
           <%= yield %>
         <% end %>
       <% end %>

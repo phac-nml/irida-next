@@ -67,7 +67,7 @@
                       1
                     </div>
                     <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'groups.index.group_dropdown.label', group_name: group.name) }) do |dropdown| %>
-                      <%= dropdown.item(
+                      <%= dropdown.with_item(
                         label: t(:"groups.index.group_dropdown.delete"),
                         url: group_path(group),
                         data: {

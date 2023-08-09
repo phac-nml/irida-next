@@ -55,7 +55,7 @@ gem 'omniauth-saml'
 
 # Tailwind CSS [https://tailwindcss.com]
 gem 'tailwindcss-rails', '~> 2.0'
-gem 'view_component'
+gem 'view_component', '~> 3.0'
 
 # Pagy
 gem 'pagy', '~> 6.0' # omit patch digit
