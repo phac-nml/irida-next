@@ -3,7 +3,12 @@
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900" data-controller="dark-mode">
     <%= render LayoutComponent.new(user: current_user) do |layout| %>
-    <% layout.sidebar(label: @group.name, icon_name: "squares_2x2") do |navigation| %>
+    <% layout.with_sidebar do |navigation| %>
+        <% navigation.with_header(
+          label: @group.name,
+          url: group_path(@group),
+          icon: "squares_2x2"
+        ) %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: group_path(@group),
@@ -28,8 +33,8 @@
             ) %>
           <% end %>
         <% end %>
-        <%= layout.breadcrumb(route: @group.route, context_crumbs: @context_crumbs) %>
-        <% layout.body do %>
+      <%= layout.with_breadcrumb(route: @group.route, context_crumbs: @context_crumbs) %>
+      <% layout.with_body do %>
           <%= yield %>
         <% end %>
       <% end %>
