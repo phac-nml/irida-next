@@ -1,43 +1,38 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-  <%= render "layouts/partials/head" %>
-  <body class="bg-white dark:bg-slate-900" data-controller="dark-mode">
-    <%= render LayoutComponent.new(user: current_user) do |layout| %>
-    <% layout.with_sidebar do |navigation| %>
-        <% navigation.with_header(
-          label: @group.name,
-          url: group_path(@group),
-          icon: "squares_2x2"
+<%= render "layouts/partials/head" %>
+<body class="bg-white dark:bg-slate-900" data-controller="dark-mode">
+<%= render LayoutComponent.new(user: current_user) do |layout| %>
+  <% layout.with_sidebar(label: @group.name, icon_name: "squares_2x2") do |navigation| %>
+    <%= navigation.with_section do |section| %>
+      <%= render section.with_item(
+        url: group_path(@group),
+        icon: "squares_2x2",
+        label: t(:"groups.sidebar.details")
+      ) %>
+      <%= render section.with_item(
+        url: group_samples_path(@group),
+        icon: "beaker",
+        label: t(:"projects.sidebar.samples")
+      ) %>
+      <%= render section.with_item(
+        url: group_members_path(@group),
+        icon: "users",
+        label: t(:"groups.sidebar.members")
+      ) %>
+      <% if allowed_to?(:update?, @group) %>
+        <%= render section.with_item(
+          url: edit_group_path(@group),
+          icon: "cog_6_tooth",
+          label: t(:"groups.sidebar.settings")
         ) %>
-        <%= navigation.with_section do |section| %>
-          <%= render section.with_item(
-            url: group_path(@group),
-            icon: "squares_2x2",
-            label: t(:"groups.sidebar.details")
-          ) %>
-          <%= render section.with_item(
-            url: group_samples_path(@group),
-            icon: "beaker",
-            label: t(:"projects.sidebar.samples")
-          ) %>
-          <%= render section.with_item(
-            url: group_members_path(@group),
-            icon: "users",
-            label: t(:"groups.sidebar.members")
-          ) %>
-          <% if allowed_to?(:update?, @group) %>
-            <%= render section.with_item(
-              url: edit_group_path(@group),
-              icon: "cog_6_tooth",
-              label: t(:"groups.sidebar.settings")
-            ) %>
-          <% end %>
-        <% end %>
-      <%= layout.with_breadcrumb(route: @group.route, context_crumbs: @context_crumbs) %>
-      <% layout.with_body do %>
-          <%= yield %>
-        <% end %>
       <% end %>
     <% end %>
-  </body>
+    <%= layout.with_breadcrumb(route: @group.route, context_crumbs: @context_crumbs) %>
+    <% layout.with_body do %>
+      <%= yield %>
+    <% end %>
+  <% end %>
+<% end %>
+</body>
 </html>

@@ -58,22 +58,22 @@
         </button>
         <!-- Add new items -->
         <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button") do |dropdown| %>
-          <%= dropdown.item(
+          <%= dropdown.with_item(
                 label: t(:"general.navbar.new_dropdown.project"),
                 url: new_project_path
               ) %>
-          <%= dropdown.item(
+          <%= dropdown.with_item(
                 label: t(:"general.navbar.new_dropdown.group"),
                 url: new_group_path
               ) %>
         <% end %>
         <!-- Profile menu -->
         <%= viral_dropdown(icon: "user_circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button") do |dropdown| %>
-          <%= dropdown.item(
+          <%= dropdown.with_item(
                 label: t(:"general.navbar.account_dropdown.profile"),
                 url: profile_path
               ) %>
-          <%= dropdown.item(
+          <%= dropdown.with_item(
                 label: t(:"general.navbar.account_dropdown.sign_out"),
                 url: destroy_user_session_path,
                 data: {
@@ -84,11 +84,11 @@
       </div>
     </div>
     <%= viral_dropdown(label:, icon: icon_name, tooltip: tooltip, caret: true, classes: "w-full rounded-none dark:bg-slate-900 border-r-0 border-l-0 border-t-0 dark:border-b- px-4 bg-slate-50", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
-      <%= dropdown.item(
+      <%= dropdown.with_item(
             label: t(:"general.default_sidebar.projects"),
             url: dashboard_projects_path
           ) %>
-      <%= dropdown.item(label: t(:"general.default_sidebar.groups"), url: groups_path) %>
+      <%= dropdown.with_item(label: t(:"general.default_sidebar.groups"), url: groups_path) %>
     <% end %>
     <div class="flex-1 space-y-1 divide-y divide-slate-200 dark:divide-slate-700">
       <%= header %>

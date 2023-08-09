@@ -3,7 +3,7 @@
   <%= render "layouts/partials/head" %>
 <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
 <%= render LayoutComponent.new(user: current_user) do |layout| %>
-  <% layout.sidebar do |navigation| %>
+  <% layout.with_sidebar(label: @project.name, icon_name: "rectangle_stack") do |navigation| %>
     <%= navigation.with_section do |section| %>
       <%= render section.with_item(
         url: project_path(@project),
@@ -28,7 +28,7 @@
         ) %>
       <% end %>
     <% end %>
-        <% layout.breadcrumb(
+    <% layout.with_breadcrumb(
           route: @project.namespace.route,
           context_crumbs: @context_crumbs
         ) %>
