@@ -5,8 +5,8 @@
       <%= t(:"groups.edit.details.title") %>
     </h2>
     <%= viral_card do |card| %>
-      <% card.header(title: t(:"groups.edit.details.subtitle")) %>
-      <% card.section do %>
+      <% card.with_header(title: t(:"groups.edit.details.subtitle")) %>
+      <% card.with_section do %>
         <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
           <div class="grid gap-4">
             <%= render partial: "form_fields",

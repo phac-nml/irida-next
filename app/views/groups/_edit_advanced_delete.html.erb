@@ -1,6 +1,6 @@
 <%= viral_card do |card| %>
-  <% card.header(title: t(:"groups.edit.advanced.delete.title")) %>
-  <% card.section do %>
+  <% card.with_header(title: t(:"groups.edit.advanced.delete.title")) %>
+  <% card.with_section do %>
     <p class="text-slate-600 dark:text-slate-400">
       <%= t(:"groups.edit.advanced.delete.description") %>
     </p>

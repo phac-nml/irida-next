@@ -5,8 +5,8 @@
       <%= t(".general.title") %>
     </h2>
     <%= viral_card do |card| %>
-      <% card.header(title: t(".general.heading")) %>
-      <% card.section do %>
+      <% card.with_header(title: t(".general.heading")) %>
+      <% card.with_section do %>
         <%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
           <%= form.fields_for :namespace, include_id: false do |builder| %>
 
