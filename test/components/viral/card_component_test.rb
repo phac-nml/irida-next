@@ -10,7 +10,7 @@ module Viral
       end
 
       assert_selector 'section.Viral-Card' do
-        assert_selector 'h3.font-semibold' do
+        assert_selector 'h2.font-semibold' do
           assert_text 'Simple card with Title'
         end
         assert_text 'This is a card'
@@ -26,8 +26,8 @@ module Viral
           header.action do
             'Delete'
           end
-          'Just the body here'
         end
+        'Just the body here'
       end
 
       assert_selector 'section.Viral-Card' do

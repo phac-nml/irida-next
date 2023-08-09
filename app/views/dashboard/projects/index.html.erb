@@ -1,7 +1,4 @@
-<%= render Viral::PageHeaderComponent.new(title: t(".title"), subtitle: t(".subtitle")) do |component| %>
-  <%= component.with_icon do %>
-    <%= viral_icon(name: "rectangle_stack", classes: "h-14 w-14 text-primary-700") %>
-  <% end %>
+<%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
     <%= link_to t(".create_project_button"),
     new_project_path,
@@ -9,18 +6,18 @@
   <% end %>
 <% end %>
 
-<div class="bg-white dark:bg-gray-800">
+<div class="bg-white dark:bg-slate-800">
   <div
     class="
       flex
       text-sm
       font-medium
       text-center
-      text-gray-500
+      text-slate-500
       border-b
-      border-gray-200
-      dark:text-gray-400
-      dark:border-gray-700
+      border-slate-200
+      dark:text-slate-400
+      dark:border-slate-700
     "
   >
     <ul class="flex flex-wrap -mb-px">
@@ -30,9 +27,9 @@
         class:
           (
             if params[:personal]
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
             else
-              "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
             end
           ),
         aria: {
@@ -45,9 +42,9 @@
         class:
           (
             if params[:personal]
-              "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
             else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
             end
           ),
         aria: {
@@ -55,7 +52,7 @@
         } %>
       </li>
     </ul>
-    <div class="flex flex-row space-x-2 ml-auto items-center font-normal">
+    <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
       <%= search_form_for @q, url: dashboard_projects_url(**request.query_parameters.slice(:personal)), html: {"data-controller": "filters"} do |f| %>
         <%= f.label :namespace_name_cont, t(".search.placeholder"), class: "sr-only" %>
         <div class="relative lg:w-72">
@@ -76,7 +73,7 @@
           <%= f.search_field :namespace_name_cont,
                          "data-action": "filters#submit",
                          class:
-                           "block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                               "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                          placeholder: t(".search.placeholder") %>
         </div>
       <% end %>
@@ -93,14 +90,14 @@
   <div class="flex flex-col" data-turbo-temporary>
     <% if @has_projects %>
       <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters), loading: :lazy do %>
-        <table class="min-w-full table-fixed dark:divide-gray-600">
+        <table class="min-w-full table-fixed dark:divide-slate-600">
           <tbody
             class="
               bg-white
               divide-y
-              divide-gray-200
-              dark:bg-gray-800
-              dark:divide-gray-700
+              divide-slate-200
+              dark:bg-slate-800
+              dark:divide-slate-700
             "
           >
             <% 15.times do %>

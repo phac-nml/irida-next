@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-  <head>
-    <%= render "layouts/partials/head" %>
-  </head>
-  <body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
+  <%= render "layouts/partials/head" %>
+  <body class="bg-white dark:bg-slate-900" data-controller="dark-mode">
     <%= render LayoutComponent.new(user: current_user) do |layout| %>
-      <% layout.sidebar do |navigation| %>
-        <% navigation.with_header(
-          label: @group.name,
-          url: group_path(@group),
-          icon: "squares_2x2"
-        ) %>
+    <% layout.sidebar(label: @group.name, icon_name: "squares_2x2") do |navigation| %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: group_path(@group),
@@ -35,11 +28,8 @@
             ) %>
           <% end %>
         <% end %>
+        <%= layout.breadcrumb(route: @group.route, context_crumbs: @context_crumbs) %>
         <% layout.body do %>
-          <%= render Viral::BreadcrumbComponent.new(
-            route: @group.route,
-            context_crumbs: @context_crumbs
-          ) %>
           <%= yield %>
         <% end %>
       <% end %>

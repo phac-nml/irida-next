@@ -23,13 +23,13 @@ module Viral
     def classes_for_alert
       case type
       when 'danger'
-        'text-red-800 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800'
+        'text-red-800 border-red-300 bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800'
       when 'info'
-        'text-blue-800 border-blue-300 bg-blue-50 dark:text-blue-400 dark:bg-gray-800 dark:border-blue-800'
+        'text-blue-800 border-blue-300 bg-blue-50 dark:text-blue-400 dark:bg-slate-800 dark:border-blue-800'
       when 'success'
-        'text-green-800 border border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800'
+        'text-green-800 border border-green-300 bg-green-50 dark:text-green-400 dark:bg-slate-800 dark:border-green-800'
       else
-        'border-gray-300 bg-gray-50 dark:bg-gray-800 dark:border-gray-600'
+        'border-slate-300 bg-slate-50 dark:bg-slate-800 dark:border-slate-600'
       end
     end
   end

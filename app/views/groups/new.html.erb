@@ -1,27 +1,25 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:"groups.create.title"), subtitle: t(:"groups.create.subtitle")) do |component| %>
   <%= component.with_icon(name: "squares_plus", classes: "h-14 w-14 text-primary-700") %>
 <% end %>
-<div class="p-4">
-  <div data-controller="slugify" class="card">
-    <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
-      <div class="grid gap-4">
+<div data-controller="slugify" class="card">
+  <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
+    <div class="grid gap-4">
 
-        <%= render partial: "form_fields",
-        locals: {
-          form: form,
-          group: @new_group,
-          authorized_namespaces: @authorized_namespaces
-        } %>
+      <%= render partial: "form_fields",
+      locals: {
+        form: form,
+        group: @new_group,
+        authorized_namespaces: @authorized_namespaces
+      } %>
 
-        <div class="flex">
-          <%= form.submit t(:"groups.create.submit"),
-                      class: " button button--state-primary button--size-default mr-2" %>
-          <%= link_to t(:"groups.create.cancel"),
-          groups_path,
-          class: "button button--state-default button--size-default" %>
-        </div>
+      <div class="flex">
+        <%= form.submit t(:"groups.create.submit"),
+                    class: " button button--state-primary button--size-default mr-2" %>
+        <%= link_to t(:"groups.create.cancel"),
+        groups_path,
+        class: "button button--state-default button--size-default" %>
       </div>
+    </div>
 
-    <% end %>
-  </div>
+  <% end %>
 </div>

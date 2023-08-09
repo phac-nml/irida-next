@@ -1,88 +1,114 @@
-<aside id="sidebar" class="sidebar" aria-label="Sidebar">
-  <div
-    style="grid-area: navigation; display: flex; flex-direction: column;"
-    class="bg-white dark:bg-gray-800 dark:border-gray-700"
-  >
-    <div class="pt-2 pb-4 overflow-y-auto">
-      <div
-        class="
-          flex-1
-          px-2
-          space-y-1
-          bg-white
-          divide-y
-          divide-gray-200
-          dark:bg-gray-800
-          dark:divide-gray-700
-        "
-      >
-        <%= header %>
-        <% if sections.present? %>
-          <% sections.each do |section| %>
-            <%= section %>
-          <% end %>
-        <% else %>
-          <%= render Layout::Sidebar::SectionComponent.new do %>
-            <% items.each do |item| %>
-              <%= item %>
-            <% end %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <div style="grid-area: collapse">
-    <button
-      data-action="click->layout--layout-component#toggle"
+<aside
+  id="sidebar"
+  class="
+    flex
+    flex-col
+    text-sm
+    border-r
+    sidebar
+    border-slate-200
+    bg-slate-50
+    dark:border-slate-950
+    dark:bg-slate-900
+  "
+  aria-label="Sidebar"
+>
+  <div class="grow">
+    <div
       class="
         flex
         items-center
-        justify-center
-        w-full
-        h-10
-        text-sm
-        font-medium
-        text-gray-500
-        transition-colors
-        duration-150
-        border-t
-        border-gray-200
-        rounded-none
-        hover:text-gray-700
-        dark:hover:text-gray-200
-        dark:border-gray-700
-        dark:text-gray-400
-        dark:hover:bg-gray-700
-        focus:ring-0
+        justify-between
+        px-2
+        overflow-x-hidden
+        bg-slate-200
+        dark:bg-slate-950
+        whitespace-nowrap
       "
+      style="height: 50px;"
     >
-      <span
-        data-layout--layout-component-target="iconCollapse"
-        class="flex items-center"
-      >
-        <%= render(
-              Viral::IconComponent.new(
-                name: "chevron_double_left",
-                color: :subdued,
-                classes: "w-5 h-5 mr-2"
-              )
+      <a href="<%= root_path %>" class="whitespace-nowrap">
+        <%= viral_icon(
+              name: "beaker",
+              classes: "w-8 h-8 text-green-500 rotate-12 inline-block"
             ) %>
-        <%= t(:"general.collapse_sidebar") %>
-      </span>
-
-      <span
-        data-layout--layout-component-target="iconExpand"
-        class="items-center hidden"
+        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+          <%= t(:"general.name") %>
+        </span>
+      </a>
+      <div
+        class="
+          flex
+          flex-col
+          flex-shrink-0
+          space-y-1
+          md:flex-row
+          md:items-center
+          lg:justify-end
+          md:space-y-0
+          md:space-x-1
+        "
       >
-        <%= render(
-              Viral::IconComponent.new(
-                name: "chevron_double_right",
-                color: :subdued,
-                classes: "w-5 h-5"
-              )
-            ) %>
-        <span class="sr-only"><%= t(:"general.expand_sidebar") %></span>
-      </span>
-    </button>
+        <button
+          data-action="click->layout--layout-component#collapse"
+          class="navbar-button"
+          aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
+        >
+          <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
+        </button>
+        <!-- Add new items -->
+        <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button") do |dropdown| %>
+          <%= dropdown.item(
+                label: t(:"general.navbar.new_dropdown.project"),
+                url: new_project_path
+              ) %>
+          <%= dropdown.item(
+                label: t(:"general.navbar.new_dropdown.group"),
+                url: new_group_path
+              ) %>
+        <% end %>
+        <!-- Profile menu -->
+        <%= viral_dropdown(icon: "user_circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button") do |dropdown| %>
+          <%= dropdown.item(
+                label: t(:"general.navbar.account_dropdown.profile"),
+                url: profile_path
+              ) %>
+          <%= dropdown.item(
+                label: t(:"general.navbar.account_dropdown.sign_out"),
+                url: destroy_user_session_path,
+                data: {
+                  turbo_method: :delete
+                }
+              ) %>
+        <% end %>
+      </div>
+    </div>
+    <%= viral_dropdown(label:, icon: icon_name, tooltip: tooltip, caret: true, classes: "w-full rounded-none dark:bg-slate-900 border-r-0 border-l-0 border-t-0 dark:border-b- px-4 bg-slate-50", skidding: -300, dropdown_styles: "width: 276px;", distance: 5) do |dropdown| %>
+      <%= dropdown.item(
+            label: t(:"general.default_sidebar.projects"),
+            url: dashboard_projects_path
+          ) %>
+      <%= dropdown.item(label: t(:"general.default_sidebar.groups"), url: groups_path) %>
+    <% end %>
+    <div class="flex-1 space-y-1 divide-y divide-slate-200 dark:divide-slate-700">
+      <%= header %>
+      <% if sections.present? %>
+        <% sections.each do |section| %>
+          <%= section %>
+        <% end %>
+      <% else %>
+        <%= render Layout::Sidebar::SectionComponent.new do %>
+          <% items.each do |item| %>
+            <%= item %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <div class="p-2">
+    <%= link_to "https://phac-nml.github.io/irida-next/docs/intro", target: :_blank, class: "flex-inline button button--state-default button--size-small" do %>
+      <%= viral_icon(name: :question_mark, classes: "w-4 h-4 mr-1") %>
+      <%= t("general.help") %>
+    <% end %>
   </div>
 </aside>

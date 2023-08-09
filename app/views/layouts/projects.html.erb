@@ -1,49 +1,42 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-<head>
   <%= render "layouts/partials/head" %>
-</head>
-<body class="bg-white dark:bg-gray-900" data-controller="dark-mode">
-<%= render LayoutComponent.new(user: current_user) do |layout| %>
-  <% layout.sidebar do |navigation| %>
-    <% navigation.with_header(
-         label: @project.name,
-         url: project_path(@project),
-         icon: "clipboard_document"
-       ) %>
-    <%= navigation.with_section do |section| %>
-      <%= render section.with_item(
-        url: project_path(@project),
-        icon: "clipboard_document",
-        label: t(:"projects.sidebar.details")
-      ) %>
-      <%= render section.with_item(
-        url: namespace_project_members_path,
-        icon: "users",
-        label: t(:"projects.sidebar.members")
-      ) %>
-      <%= render section.with_item(
-        url: project_samples_path(@project),
-        icon: "beaker",
-        label: t(:"projects.sidebar.samples")
-      ) %>
-      <% if allowed_to?(:update?, @project) %>
-        <%= render section.with_item(
-          url: project_edit_path(@project),
-          icon: "cog_6_tooth",
-          label: t(:"projects.sidebar.settings")
+  <body class="bg-white dark:bg-slate-900" data-controller="dark-mode">
+    <%= render LayoutComponent.new(user: current_user) do |layout| %>
+    <% layout.sidebar(label: @project.name, icon_name: "rectangle_stack") do |navigation| %>
+        <%= navigation.with_section do |section| %>
+          <%= render section.with_item(
+            url: project_path(@project),
+            icon: "clipboard_document",
+            label: t(:"projects.sidebar.details")
+          ) %>
+          <%= render section.with_item(
+            url: namespace_project_members_path,
+            icon: "users",
+            label: t(:"projects.sidebar.members")
+          ) %>
+          <%= render section.with_item(
+            url: project_samples_path(@project),
+            icon: "beaker",
+            label: t(:"projects.sidebar.samples")
+          ) %>
+          <% if allowed_to?(:update?, @project) %>
+            <%= render section.with_item(
+              url: project_edit_path(@project),
+              icon: "cog_6_tooth",
+              label: t(:"projects.sidebar.settings")
+            ) %>
+          <% end %>
+        <% end %>
+        <% layout.breadcrumb(
+          route: @project.namespace.route,
+          context_crumbs: @context_crumbs
         ) %>
+        <% layout.body do %>
+          <%= turbo_frame_tag("errors") %>
+          <%= yield %>
+        <% end %>
       <% end %>
     <% end %>
-    <% layout.body do %>
-      <%= render Viral::BreadcrumbComponent.new(
-        route: @project.namespace.route,
-        context_crumbs: @context_crumbs
-      ) %>
-      <%= turbo_frame_tag("errors") %>
-      <%= yield %>
-    <% end %>
-  <% end %>
-<% end %>
-</body>
+  </body>
 </html>
