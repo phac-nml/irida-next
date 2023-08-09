@@ -1,4 +1,4 @@
-<%= turbo_stream.replace "personal-access-tokens-header",
+<%= turbo_stream.update "personal-access-tokens-header",
                          t(
                            :"profiles.personal_access_tokens.index.active_personal_access_tokens",
                            count: @active_access_tokens.count
