@@ -4,7 +4,7 @@
 class GroupListTreeComponent < ViewComponent::Base
   erb_template <<-ERB
       <div class="groups-list-tree-component">
-        <ul>
+        <ul class="groups-list group-list-tree">
           <%= render GroupListTree::GroupRowComponent.with_collection(@groups) %>
         </ul>
       </div>

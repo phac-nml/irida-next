@@ -1,5 +1,32 @@
-<li class="group-row">
-  <div class="group-row-contents">
-    <%= @group.name %>
+<li class="group-row <%= @group.children.count > 0 ? 'has_children' : nil %>">
+  <div class="group-row-contents flex items-center py-2 pr-3">
+    <div class="folder-toggle-wrap flex items-center mr-2">
+      <%= viral_icon(
+        name: :chevron_right,
+        color: :subdued,
+        classes: "h-3 w-3 inline-block"
+      ) %>
+    </div>
+    <div class="w-8 p-2 mr-3">
+      <%= viral_avatar(
+        name: @group.name,
+        size: :small,
+        colour_string: "#{@group.name}-#{@group.id}",
+        data: {
+          turbo: false
+        },
+        url: group_path(@group)
+      ) %>
+    </div>
+    <div class="group-text-container flex items-center flex-grow">
+      <div class="group-text grow">
+        <div class="flex items-center flex-wrap mr-3 title">
+          <%= @group.name %>
+        </div>
+        <div class="description">
+          <p><%= @group.description %></p>
+        </div>
+      </div>
+    </div>
   </div>
 </li>

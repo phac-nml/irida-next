@@ -279,29 +279,74 @@ body {
   }
 
   /*GROUPS LIST TREE*/
-  .groups-list-tree-container
-    > .group-list-tree
-    > .group-row.has-children:first-child {
-    @apply border-t-0;
+  .groups-list-tree-container {
+    > .group-list-tree > .group-row.has-children:first-child {
+      @apply border-top-0;
+    }
   }
 
   .group-list-tree {
-    margin-left: 30px;
-    @apply mb-0 relative;
-  }
+    .folder-toggle-wrap {
+      font-size: 0;
+      flex-shrink: 0;
 
-  .group-list-tree::before {
-    content: "";
-    display: block;
-    width: 0;
-    top: 5px;
-    bottom: 0;
-    left: -16px;
-    @apply absolute border-l-2 border-gray-400 dark:border-gray-600;
-  }
+      span {
+        @apply text-sm;
+      }
+    }
 
-  .group-list-tree > .group-row {
-    @apply relative;
+    > .group-row:not(.has-children) {
+      .folder-caret {
+        opacity: 0;
+      }
+    }
+
+    .group-list-tree {
+      @apply mb-0 ml-8 relative;
+
+      &::before {
+        content: "";
+        top: 5px;
+        bottom: 0;
+        left: -16px;
+        @apply absolute border-l-2 border-gray-400 dark:border-gray-600 block w-0;
+      }
+
+      > .group-row:not(.has-children) {
+        .folder-caret {
+          opacity: 0;
+        }
+      }
+
+      .group-row {
+        @apply relative;
+      }
+    }
+
+    .group-row-contents {
+      &:hover {
+        @apply bg-blue-50 border-blue-200 cursor-pointer;
+      }
+
+      .group-text-container,
+      .group-text {
+        min-width: 0; /* allows for truncated text within flex children */
+      }
+
+      .group-text {
+        flex-basis: 100%;
+
+        .title {
+          @apply text-sm font-semibold text-gray-700;
+        }
+
+        .description {
+          p {
+            @apply text-sm text-gray-500 text-ellipsis;
+          }
+        }
+      }
+    }
   }
 
   .group-list-tree > .group-row::before {
