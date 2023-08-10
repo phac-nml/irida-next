@@ -11,7 +11,6 @@ module Profiles
 
     # Update the user's password
     def update
-      authorize! @user
       authorize! @user, to: :edit_password?
       respond_to do |format|
         if @user.update_password_with_password(update_password_params)

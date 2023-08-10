@@ -39,6 +39,6 @@ class UserPolicy < ApplicationPolicy
 
   def edit_password?
     # Passwords on OmniAuth Users is not allowed
-    return true if user.provider.nil?
+    update? && user.provider.nil?
   end
 end

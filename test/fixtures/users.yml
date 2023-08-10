@@ -52,3 +52,11 @@ david_doe:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: David
   last_name: Doe
+
+jeff_doe:
+  email: jeff.doe@localhost
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Jeff
+  last_name: Doe
+  provider: developer
+  uid: jeff.doe@localhost

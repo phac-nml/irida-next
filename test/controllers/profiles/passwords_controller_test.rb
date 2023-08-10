@@ -28,5 +28,13 @@ module Profiles
             params: { user: { password: '', password_confirmation: '', current_password: 'password1' } }
       assert_response :unprocessable_entity
     end
+
+    test 'omniauth user should not update password' do
+      sign_in users(:jeff_doe)
+
+      patch profile_password_path,
+            params: { user: { password: 'password', password_confirmation: 'password', current_password: 'password1' } }
+      assert_response :unauthorized
+    end
   end
 end
