@@ -12,6 +12,8 @@ module ViewHelper
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',
     icon: 'Viral::IconComponent',
+    list_tree: 'Viral::ListTreeComponent',
+    list_row: 'Viral::ListTree::RowComponent',
     pageheader: 'Viral::PageHeaderComponent',
     tooltip: 'Viral::TooltipComponent'
   }.freeze

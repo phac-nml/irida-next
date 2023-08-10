@@ -277,6 +277,67 @@ body {
   strong {
     @apply font-semibold;
   }
+
+  /*GROUPS LIST TREE*/
+  .groups-list-tree-container
+    > .group-list-tree
+    > .group-row.has-children:first-child {
+    @apply border-t-0;
+  }
+
+  .group-list-tree {
+    margin-left: 30px;
+    @apply mb-0 relative;
+  }
+
+  .group-list-tree::before {
+    content: "";
+    display: block;
+    width: 0;
+    top: 5px;
+    bottom: 0;
+    left: -16px;
+    @apply absolute border-l-2 border-gray-400 dark:border-gray-600;
+  }
+
+  .group-list-tree > .group-row {
+    @apply relative;
+  }
+
+  .group-list-tree > .group-row::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 0;
+    top: 30px;
+    left: -16px;
+    @apply absolute border-t-2 border-gray-400 dark:border-gray-600;
+  }
+
+  .group-list-tree > .group-row:last-child::before {
+    background: pink;
+    height: auto;
+    top: 30px;
+    bottom: 0;
+  }
+
+  .group-row {
+    padding: 0;
+  }
+
+  .group-row.has-children {
+    border-top: 0;
+  }
+
+  .group-row:first-child {
+    border-top: 1px solid purple;
+  }
+
+  .group-row-contents:hover {
+    border-color: bisque;
+    background-color: aliceblue;
+    cursor: pointer;
+  }
 }
 
 .pagy-nav.pagination {

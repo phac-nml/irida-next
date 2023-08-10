@@ -8,12 +8,11 @@
       font-normal
       text-gray-500
       dark:text-gray-400
-      group-list-tree
     "
   >
     <div style="padding-left: <%= "#{depth * 20}px" %>"><%= if group.children.count > 0
         link_to(
-          "D",
+          ">",
           dashboard_groups_path(parent_id: group.id, depth: depth + 1, collapse:),
           data: {
             turbo_stream: ""
@@ -22,9 +21,10 @@
       else
         nil
       end %></div>
-    <div class="w-16 p-2 whitespace-nowrap">
+    <div class="w-8 p-2 whitespace-nowrap">
       <%= viral_avatar(
         name: group.name,
+        size: :small,
         colour_string: "#{group.name}-#{group.id}",
         data: {
           turbo: false
