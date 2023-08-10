@@ -7,6 +7,8 @@ class Sample < ApplicationRecord
 
   belongs_to :project
 
+  has_many_attached :files
+
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
   validates :name, uniqueness: { scope: %i[name project_id] }
 end
