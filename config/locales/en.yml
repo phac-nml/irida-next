@@ -583,8 +583,14 @@ en:
         edit_button: Edit this sample
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
-        back_button: Back to samples
         error: The sample does not exist within the project.
+        files: Files
+        upload_file: Upload File
+        upload_new_file: Upload New File
+        table_header:
+          filename: Filename
+          size: Size
+          created_at: Uploaded
       create:
         success: Sample was successfully created.
       new:
