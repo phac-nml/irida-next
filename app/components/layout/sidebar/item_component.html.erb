@@ -5,21 +5,26 @@
     class="
       flex
       items-center
-      my-1
+      mt-1
+      p-1
       transition-colors
       ease-in-out
       delay-75
-      rounded-md
-      p-1
-      hover:bg-gray-100
-      dark:text-gray-200
-      dark:hover:bg-gray-700
-      <%= class_names('Layout-Sidebar__Item--selected bg-gray-100 dark:bg-gray-700': current_page?(url)) %>
+      rounded-sm
+      hover:bg-slate-200
+      dark:text-slate-200
+      dark:hover:bg-slate-700
+      <%= class_names('Layout-Sidebar__Item--selected bg-slate-200 dark:bg-slate-700': current_page?(url)) %>
     "
   >
-    <%= viral_icon(name: icon, color: :subdued, style: "width: 27px;", classes: "p-1") %>
+    <% if current_page?(url) %>
+      <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 rounded-lg bg-primary-600"></div>
+    <% else %>
+      <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 bg-transparent"></div>
+    <% end %>
+    <%= viral_icon(name: icon, style: "width: 27px;", classes: "p-1") %>
     <span class="ml-2 grow">
-      <span data-layout--layout-component-target="link"><%= label %></span>
+      <%= label %>
     </span>
   </a>
 </li>

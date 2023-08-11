@@ -9,38 +9,38 @@
     <% end %>
   <% end %>
 <% end %>
-<div class="bg-white dark:bg-gray-800">
+<div class="bg-white dark:bg-slate-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
-        <table id="samples-table" class="min-w-full table-fixed dark:divide-gray-600">
+        <table id="samples-table" class="min-w-full table-fixed dark:divide-slate-600">
           <tbody
             class="
               bg-white
               divide-y
-              divide-gray-200
-              dark:bg-gray-800
-              dark:divide-gray-700
+              divide-slate-200
+              dark:bg-slate-800
+              dark:divide-slate-700
             "
           >
             <% @samples.each do |sample| %>
-              <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
+            <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
                 <td class="p-4 whitespace-nowrap">
                   <%= link_to sample.name,
                   namespace_project_sample_path(id: sample.id),
                   class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                  <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= sample.description %></div>
+                  <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= sample.description %></div>
                 </td>
                 <% if allowed_to?(:update_sample?, @project) %>
                   <td class="px-4 py-3">
                     <div class="flex items-center justify-end">
                       <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
-                        <%= dropdown.item(
+                        <%= dropdown.with_item(
                           label: t(:"projects.samples.index.edit_button"),
                           url: edit_namespace_project_sample_path(id: sample.id)
                         ) %>
                         <% if allowed_to?(:destroy_sample?, @project) %>
-                          <%= dropdown.item(
+                          <%= dropdown.with_item(
                             label: t(:"projects.samples.index.remove_button"),
                             url: namespace_project_sample_path(id: sample.id),
                             data: {

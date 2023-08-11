@@ -1,6 +1,6 @@
 <%= viral_card do |card| %>
-  <% card.header(title: t("groups.edit.advanced.transfer.title")) %>
-  <% card.section do %>
+  <% card.with_header(title: t("groups.edit.advanced.transfer.title")) %>
+  <% card.with_section do %>
 
     <% t("groups.edit.advanced.transfer.descriptions").each do |description| %>
       <p class="mb-2 text-base text-gray-900 dark:text-white"><%= description %></p>
