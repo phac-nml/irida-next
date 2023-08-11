@@ -123,6 +123,10 @@ en:
         user_id: User
       user:
         email: Email
+        provider: Authentication Provider
+        uid: Authentication Provider UID
+        first_name: First Name
+        last_name: Last Name
     errors:
       models:
         namespace:
@@ -299,6 +303,7 @@ en:
         subtitle: Email address linked to this account
         pending: "Pending confirmation of %{email}"
         submit: Update profile settings
+      missing: This field has not been provided by the Authentication Provider.
     update:
       success: Profile updated successfully
     passwords:

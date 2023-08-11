@@ -85,6 +85,8 @@ if Rails.env.development?
       email: 'admin@email.com',
       password: 'password1',
       password_confirmation: 'password1',
+      first_name: 'ad',
+      last_name: 'min',
       personal_access_tokens: [
         { name: 'API r/w Token', scopes: ['api'],
           token_digest: Devise.token_generator.digest(PersonalAccessToken, :token_digest, 'zs83sKD3jeysfnr_kgu9') },
@@ -94,53 +96,77 @@ if Rails.env.development?
     },
     {
       email: 'user1@email.com',
+      first_name: 'user',
+      last_name: 'one',
       password: 'password1',
       password_confirmation: 'password1'
     },
     {
       email: 'user2@email.com',
+      first_name: 'user',
+      last_name: 'two',
       password: 'password1',
       password_confirmation: 'password1'
     },
     {
       email: 'user3@email.com',
+      first_name: 'user',
+      last_name: 'three',
       password: 'password1',
       password_confirmation: 'password1'
     },
     {
       email: 'user4@email.com',
+      first_name: 'user',
+      last_name: 'four',
       password: 'password1',
       password_confirmation: 'password1'
     },
     {
       email: 'user5@email.com',
+      first_name: 'user',
+      last_name: 'five',
       password: 'password1',
       password_confirmation: 'password1'
     }, {
       email: 'user6@email.com',
+      first_name: 'user',
+      last_name: 'six',
       password: 'password1',
       password_confirmation: 'password1'
     },
     {
       email: 'user7@email.com',
+      first_name: 'user',
+      last_name: 'seven',
       password: 'password1',
       password_confirmation: 'password1'
     },
     {
       email: 'user8@email.com',
+      first_name: 'user',
+      last_name: 'eight',
       password: 'password1',
       password_confirmation: 'password1'
     },
     {
       email: 'user9@email.com',
+      first_name: 'user',
+      last_name: 'nine',
       password: 'password1',
       password_confirmation: 'password1'
     }
   ]
 
   users.each do |user_params|
-    user = User.create_with(user_params.slice(:password,
-                                              :password_confirmation)).find_or_create_by!(email: user_params[:email])
+    user = User.create_with(user_params.slice(
+                              :password,
+                              :password_confirmation
+                            )).find_or_create_by!(
+                              email: user_params[:email],
+                              first_name: user_params[:first_name],
+                              last_name: user_params[:last_name]
+                            )
     next unless user_params[:personal_access_tokens]
 
     user_params[:personal_access_tokens].each do |pat|
