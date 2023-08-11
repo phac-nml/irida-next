@@ -4,11 +4,13 @@
 class GroupListComponent < Component
   erb_template <<-ERB
       <div class="groups-list-tree-container">
-        <%= render GroupList::GroupListTreeComponent.new(groups: @groups) %>
+        <%= render GroupList::GroupListTreeComponent.new(groups: @groups, path: @path, path_args: @path_args) %>
       </div>
   ERB
 
-  def initialize(groups:)
+  def initialize(groups:, path: nil, path_args: {})
     @groups = groups
+    @path = path
+    @path_args = path_args
   end
 end
