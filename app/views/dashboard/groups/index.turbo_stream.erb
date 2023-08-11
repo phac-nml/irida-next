@@ -1,16 +1,3 @@
-<%= turbo_stream.update dom_id(@group) do %>
-  <%= render 'group', group: @group, depth: @depth - 1, collapse: !@collapse %>
-  <% if @collapse == false %>
-    <div>
-      <% @sub_groups.each do |group| %>
-        <%= render group, depth: @depth, collapse: false %>
-      <% end %>
-    </div>
-    <% if @group.children.count > 10 %>
-      <%= link_to group_path(@group), class: "flex text-blue-600 items-center", style: "padding-left: #{ @depth * 20 + 10 }px" do %>
-        <span class="flex-shrink mr-1"><%= viral_icon(name: :arrow_top_right_on_square, classes: "h-5 w-5") %></span>
-        <span><%= t(:'.more_items', count: @group.children.count - 10) %></span>
-      <% end %>
-    <% end %>
-  <% end %>
+<%= turbo_stream.replace dom_id(@group) do %>
+  <%= render GroupList::GroupRowComponent.new(group: @group, collapse: @collapse) %>
 <% end %>

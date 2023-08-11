@@ -1,0 +1,41 @@
+<li
+  id="<%= dom_id(group) %>"
+  class="group-row <%= group.children.count > 0 ? 'has_children' : nil %>"
+>
+  <div class="group-row-contents flex items-center py-2 pr-3">
+    <div class="folder-toggle-wrap flex items-center w-3">
+      <%- if group.children.count > 0 %>
+        <%= link_to dashboard_groups_path(parent_id: group.id, collapse: !collapse), data: {turbo_stream: ''} do %>
+          <%= viral_icon(
+            name: collapse ? :chevron_right : :chevron_down,
+            classes: "h-3 w-3 inline-block"
+          ) %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="w-10 p-2 mr-3">
+      <%= viral_avatar(
+        name: group.name,
+        size: :small,
+        colour_string: "#{group.name}-#{group.id}",
+        data: {
+          turbo: false
+        },
+        url: group_path(group)
+      ) %>
+    </div>
+    <div class="group-text-container flex items-center flex-grow">
+      <div class="group-text grow">
+        <div class="flex items-center flex-wrap mr-3 title">
+          <%= group.name %>
+        </div>
+        <div class="description">
+          <p><%= group.description %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if !collapse %>
+    <%= render GroupList::GroupListTreeComponent.new(groups: group.children) %>
+  <% end %>
+</li>
