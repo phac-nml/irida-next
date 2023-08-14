@@ -39,6 +39,6 @@
     </div>
   </div>
   <% if !collapse %>
-    <%= render GroupList::GroupListTreeComponent.new(groups: group.children) %>
+    <%= render GroupList::GroupListTreeComponent.new(groups: group.children, path:) %>
   <% end %>
 </li>
