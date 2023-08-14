@@ -2,13 +2,15 @@
 
 # Overall layout component
 class LayoutComponent < Component
-  attr_reader :user
+  attr_reader :layout, :user
 
   renders_one :sidebar, Layout::SidebarComponent
   renders_one :body
+  renders_one :breadcrumb, Viral::BreadcrumbComponent
 
-  def initialize(user:, **system_arguments)
+  def initialize(user:, fixed: true, **system_arguments)
     @user = user
+    @layout = fixed ? 'container mx-auto' : ''
     @system_arguments = system_arguments
   end
 end

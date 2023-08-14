@@ -1,6 +1,6 @@
 <%= viral_card do |card| %>
-  <% card.header(title: t(:"projects.edit.advanced.path.title")) %>
-  <% card.section do %>
+  <% card.with_header(title: t(:"projects.edit.advanced.path.title")) %>
+  <% card.with_section do %>
     <%= form_with(model: @project, url: namespace_project_path, method: :patch) do |form| %>
       <%= form.fields_for :namespace, include_id: false do |builder| %>
         <div class="grid gap-4">

@@ -1,6 +1,6 @@
 <%= viral_dialog(open: true) do |dialog| %>
-  <%= dialog.header(title: "This dialog has action buttons") %>
-  <%= dialog.section do %>
+  <%= dialog.with_header(title: "This dialog has action buttons") %>
+  <%= dialog.with_section do %>
     <p class="mb-3 text-gray-500 dark:text-gray-400">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
       tempor incididunt ut labore et dolore magna aliqua. Dignissim cras
@@ -16,8 +16,8 @@
       tempor commodo ullamcorper.
     </p>
   <% end %>
-  <%= dialog.primary_action { "Primary button" } %>
-  <% dialog.secondary_action do %>
+  <%= dialog.with_primary_action { "Primary button" } %>
+  <% dialog.with_secondary_action do %>
     <%= viral_button(data: { action: 'click->viral--dialog-component#close' }) do %>
       Secondary button
     <% end %>

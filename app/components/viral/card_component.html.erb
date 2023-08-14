@@ -5,7 +5,7 @@
   <% end %>
 
   <% if title.present? && !header.present? %>
-    <%= render Viral::Card::HeaderComponent.new(title: title) %>
+    <%= render Viral::Card::HeaderComponent.new(title:, subtitle:, title_id:) %>
   <% end %>
 
   <% if sections.present? %>
