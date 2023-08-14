@@ -1,12 +1,12 @@
-<div class="p-4 md:mx-auto">
+<div class="md:mx-auto">
   <div class="grid gap-4">
 
-    <h2 class="text-2xl font-extrabold dark:text-white">
+    <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white">
       <%= t(".general.title") %>
     </h2>
     <%= viral_card do |card| %>
-      <% card.header(title: t(".general.heading")) %>
-      <% card.section do %>
+      <% card.with_header(title: t(".general.heading")) %>
+      <% card.with_section do %>
         <%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
           <%= form.fields_for :namespace, include_id: false do |builder| %>
 
@@ -34,13 +34,16 @@
       <% end %>
     <% end %>
 
-    <%- if allowed_to?(:transfer?, @project) %>
-      <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
-
-      <%= viral_card(title: t(".advanced.transfer.title")) do %>
-        <%= render "projects/transfer", locales: { project: @project } %>
-      <% end %>
+    <% if allowed_to?(:transfer?, @project) or allowed_to?(:destroy?, @project) %>
+      <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white"><%= t(".advanced.title") %></h2>
     <% end %>
 
+    <% if allowed_to?(:transfer?, @project) %>
+      <%= render "transfer", project: @project %>
+    <% end %>
+
+    <% if allowed_to?(:destroy?, @project) %>
+      <%= render "destroy", project: @project %>
+    <% end %>
   </div>
 </div>

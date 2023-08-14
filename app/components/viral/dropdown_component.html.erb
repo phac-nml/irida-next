@@ -1,15 +1,24 @@
 <span
   data-controller="viral--dropdown"
   data-viral--dropdown-trigger-value="<%= trigger %>"
+  data-viral--dropdown-skidding-value="<%= skidding %>"
+  data-viral--dropdown-distance-value="<%= distance %>"
 >
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
-    <%= label %>
-    <% if icon_name.present? %>
-      <%= viral_icon(name: icon_name, classes: "w-6 h-6") %>
-    <% end %>
-    <% if caret %>
-      <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2") %>
-    <% end %>
+    <div class="flex items-center w-full">
+      <% if icon_name.present? %>
+        <%= viral_icon(
+          name: icon_name,
+          classes: label.present? ? "w-6 h-6 flex-none mr-3" : "w-6 h-6 flex-none"
+        ) %>
+      <% end %>
+      <% if label.present? %>
+        <span class="text-left truncate grow"><%= label %></span>
+      <% end %>
+      <% if caret %>
+        <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>
+      <% end %>
+    </div>
   <% end %>
   <!-- Dropdown menu -->
   <div
@@ -17,17 +26,18 @@
     class="
       z-10
       hidden
+      mx-3
       bg-white
       divide-y
-      divide-gray-100
+      divide-slate-100
       rounded-lg
       shadow
-      w-44
-      dark:bg-gray-700
+      dark:bg-slate-700
     "
+    style="<%= dropdown_styles %>"
   >
     <ul
-      class="py-2 text-sm text-gray-700 dark:text-gray-200"
+      class="py-2 text-sm text-slate-700 dark:text-slate-200"
       aria-labelledby="<%= system_arguments[:id] %>"
     >
       <% items.each do |item| %>

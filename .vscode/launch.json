@@ -10,7 +10,10 @@
             "request": "launch",
             "script": "bin/rails s",
             "useBundler": false,
-            "command": "ruby"
+            "command": "ruby",
+            "env": {
+                "OMNIAUTH_PROVIDERS": "developer,saml,azure_activedirectory_v2"
+            }
         },
         {
             "type": "rdbg",

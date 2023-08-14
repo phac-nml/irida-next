@@ -51,4 +51,17 @@ class ProjectsTest < ApplicationSystemTestCase
 
     assert_text I18n.t(:'action_policy.policy.project.edit?', name: project.name)
   end
+
+  test 'can delete a project' do
+    project = projects(:project1)
+    visit project_edit_path(project)
+    assert_selector 'a', text: I18n.t(:'projects.edit.advanced.destroy.submit'), count: 1
+    click_link I18n.t(:'projects.edit.advanced.destroy.submit')
+
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
+
+    assert_text I18n.t(:'projects.destroy.success', project_name: project.name)
+  end
 end

@@ -5,8 +5,10 @@ module OmniauthDeveloperHelper
     provider: 'developer',
     uid: '12345',
     info: {
-      email: 'jeff@irida.ca',
-      name: 'jeff'
+      email: 'jeff.thiessen@irida.ca',
+      name: 'jeff',
+      first_name: 'Jeff',
+      last_name: 'Thiessen'
     }
   }.freeze
 

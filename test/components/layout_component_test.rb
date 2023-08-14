@@ -8,7 +8,7 @@ class LayoutComponentTest < ViewComponent::TestCase
 
     with_request_url '/-/projects' do
       render_inline LayoutComponent.new(user:) do |layout|
-        layout.sidebar do |sidebar|
+        layout.with_sidebar(label: I18n.t(:'general.default_sidebar.projects'), icon_name: 'folder') do |sidebar|
           sidebar.with_header(label: I18n.t('general.default_sidebar.title'), url: '/', icon: 'home')
           sidebar.with_section do |section|
             section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects',
@@ -17,7 +17,7 @@ class LayoutComponentTest < ViewComponent::TestCase
                               icon: 'squares_2x2')
           end
         end
-        layout.body do
+        layout.with_body do
           'Hello, World!'
         end
       end

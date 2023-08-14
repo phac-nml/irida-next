@@ -139,7 +139,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
       delete namespace_project_path(namespace_id: namespace.path, project_id: project.namespace.path)
     end
 
-    assert_redirected_to projects_path
+    assert_redirected_to dashboard_projects_path(format: :html)
   end
 
   test 'should not delete a project' do

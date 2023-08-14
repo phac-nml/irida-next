@@ -1,12 +1,12 @@
 <%= turbo_stream.update("projects_list") do %>
-  <table class="min-w-full table-fixed dark:divide-gray-600">
+  <table class="min-w-full table-fixed dark:divide-slate-600">
     <tbody
       class="
         bg-white
         divide-y
-        divide-gray-200
-        dark:bg-gray-800
-        dark:divide-gray-700
+        divide-slate-200
+        dark:bg-slate-800
+        dark:divide-slate-700
       "
     >
       <%= render partial: "dashboard/projects/project", collection: @projects %>

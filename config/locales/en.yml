@@ -123,6 +123,10 @@ en:
         user_id: User
       user:
         email: Email
+        provider: Authentication Provider
+        uid: Authentication Provider UID
+        first_name: First Name
+        last_name: Last Name
     errors:
       models:
         namespace:
@@ -242,6 +246,7 @@ en:
       site_title: IRIDA Next
   general:
     name: IRIDA Next
+    help: Help
     expand_sidebar: Expand sidebar
     collapse_sidebar: Collapse sidebar
     screen_reader:
@@ -251,6 +256,8 @@ en:
       groups: Groups
       projects: Projects
     navbar:
+      collapse:
+        aria_label: Collapse navigation menu
       main_dropdown:
         aria-label: Main navigation menu
         groups: Groups
@@ -270,8 +277,7 @@ en:
   dashboard:
     projects:
       index:
-        title: Your projects
-        subtitle: Projects are where you can store and analyze your data
+        title: Projects
         create_project_button: New project
         all: All
         personal: Personal
@@ -297,6 +303,7 @@ en:
         subtitle: Email address linked to this account
         pending: "Pending confirmation of %{email}"
         submit: Update profile settings
+      missing: This field has not been provided by the Authentication Provider.
     update:
       success: Profile updated successfully
     passwords:
@@ -383,8 +390,8 @@ en:
               - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
         delete:
           title: Delete group
-          description: Deleting a group is permanent and cannot be undone. All projects and subgroups will be deleted along with the group.
-          submit: Delete
+          description: Deleting a group is permanent and cannot be undone. All projects, subgroups, and direct members will be deleted along with the group.
+          submit: Delete group
           confirm: Are you sure you want to delete this group?
         path:
           title: Change group URL
@@ -393,7 +400,7 @@ en:
     show:
       create_subgroup_button: New subgroup
       create_project_button: New project
-      title: Your groups
+      title: Groups
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
     new_subgroup:
       title: Create subgroup
@@ -466,6 +473,11 @@ en:
         submit: Update project
       advanced:
         title: Advanced settings
+        destroy:
+          title: Delete project
+          description: Deleting a project is permanent and cannot be undone. All samples and direct members will be deleted along with the project.
+          submit: Delete project
+          confirm: Are you sure you want to delete this project?
         path:
           title: Change path
           description: A project's path is a unique identifier that can be accessed via the URL
@@ -505,6 +517,8 @@ en:
       success: "Project %{project_name} was successfully updated"
     transfer:
       success: "Project %{project_name} was successfully transferred"
+    destroy:
+      success: "Project %{project_name} was successfully deleted"
     share:
       success: Successfully shared project with group
       error: There was an error sharing project with group

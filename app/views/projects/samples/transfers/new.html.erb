@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "transfer_modal" do %>
   <%= viral_dialog(open: true) do |dialog| %>
-    <%= dialog.header(title: t(".title")) %>
-    <%= dialog.section do %>
+    <%= dialog.with_header(title: t(".title")) %>
+    <%= dialog.with_section do %>
       <%= form_with(url: namespace_project_samples_transfer_path, method: :post, data: {
               turbo: false}) do |form| %>
         <div

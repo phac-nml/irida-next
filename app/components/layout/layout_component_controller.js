@@ -1,42 +1,24 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["layoutContainer", "iconExpand", "iconCollapse", "link"];
+  static targets = ["layoutContainer", "expandButton", "link"];
 
   initialize() {
     // Need to determine the previous state
     localStorage.getItem("layout") === "collapsed"
-      ? this.collapsed()
-      : this.expanded();
+      ? this.collapse()
+      : this.expand();
   }
 
-  toggle() {
-    if (this.layoutContainerTarget.classList.contains("collapsed")) {
-      this.expanded();
-    } else {
-      this.collapsed();
-    }
-  }
-
-  collapsed() {
+  collapse() {
     this.layoutContainerTarget.classList.add("collapsed");
-    this.iconCollapseTarget.classList.add("hidden");
-    this.iconExpandTarget.classList.remove("hidden");
-    this.iconExpandTarget.classList.add("flex");
-    this.linkTargets.forEach((link) => {
-      link.classList.add("sr-only");
-    });
+    this.expandButtonTarget.classList.remove("hidden");
     localStorage.setItem("layout", "collapsed");
   }
 
-  expanded() {
+  expand() {
     this.layoutContainerTarget.classList.remove("collapsed");
-    this.iconCollapseTarget.classList.remove("hidden");
-    this.iconExpandTarget.classList.remove("flex");
-    this.iconExpandTarget.classList.add("hidden");
-    this.linkTargets.forEach((link) => {
-      link.classList.remove("sr-only");
-    });
+    this.expandButtonTarget.classList.add("hidden");
     localStorage.setItem("layout", "expanded");
   }
 }

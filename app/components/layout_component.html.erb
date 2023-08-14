@@ -1,18 +1,30 @@
-<div class="body-wrapper">
-  <%= render Layout::NavbarComponent.new(user: user) %>
-  <div
-    class="body"
-    data-controller="layout--layout-component"
-    data-layout--layout-component-target="layoutContainer"
-  >
-    <%= sidebar %>
-    <div class="content">
-      <%= body %>
-      <%= render ConfirmationComponent.new %>
-    </div>
+<div
+  class="layout-body bg-white dark:bg-slate-800"
+  data-controller="layout--layout-component"
+  data-layout--layout-component-target="layoutContainer"
+>
+  <%= sidebar %>
+  <div class="relative content">
+    <nav
+      class="flex px-5 border-b border-slate-200 dark:border-slate-950"
+      style="height: 50px"
+    >
+      <button
+        data-layout--layout-component-target="expandButton"
+        data-action="click->layout--layout-component#expand"
+        class="hidden text-slate-500"
+      >
+        <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
+      </button>
+      <%= breadcrumb %>
+    </nav>
+    <main class="absolute bottom-0 left-0 right-0 p-4 overflow-y-auto top-12">
+      <div class="<%= @layout %>"><%= body %></div>
+    </main>
+    <%= render ConfirmationComponent.new %>
   </div>
 </div>
-<div class="fixed flex flex-col top-5 right-6 ">
+<div class="fixed flex flex-col top-5 right-6">
   <% flash.each do |key, value| %>
     <%= viral_flash(type: key, data: value) %>
   <% end %>
