@@ -1,10 +1,12 @@
 <%= turbo_stream.update "invited-group-alert", viral_alert(type:, message:) %>
 
-<%= turbo_stream.update "invited-groups-count",
-                    @namespace_group_link
-                      .namespace
-                      .shared_with_group_links
-                      .count %>
+<% if @namespace_group_link %>
+  <%= turbo_stream.update "invited-groups-count",
+                      @namespace_group_link
+                        .namespace
+                        .shared_with_group_links
+                        .count %>
+<% end %>
 
 <% if @group_invited %>
   <%= turbo_stream.append "invited-groups-table-body",
