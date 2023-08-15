@@ -64,6 +64,7 @@
                     <%= viral_tooltip(title: t(:"projects.members.index.inherited_from")) do %>
                       <%= link_to member_source[:label],
                       member_source[:inherited_namespace_path],
+                      data: {turbo_frame: "_top"},
                       class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
                     <% end %>
                   <% end %>
