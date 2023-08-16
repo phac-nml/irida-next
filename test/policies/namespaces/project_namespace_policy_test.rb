@@ -37,5 +37,9 @@ module Namespaces
     test '#unshare_namespace_with_group?' do
       assert @policy.unshare_namespace_with_group?
     end
+
+    test '#update_namespace_with_group_share?' do
+      assert @policy.update_namespace_with_group_share?
+    end
   end
 end
