@@ -1,73 +1,81 @@
 <%= turbo_frame_tag("namespace_share") do %>
-<%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>>
-  <%= dialog.header(title: I18n.t('projects.members.invite_group.title')) %>
-  <%= dialog.section do %>
-    <div class="my-6">
-      <p class="dark:text-gray-400">
-        <%= I18n.t('projects.members.invite_group.sharing_namespace_with_group', name: @namespace.human_name) %>
-      </p>
-    </div>
-
+  <%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>>
+    <%= dialog.with_header(title: I18n.t("projects.members.invite_group.title")) %>
+    <%= dialog.with_section do %>
+      <div class="my-6">
+        <p class="dark:text-gray-400">
+          <%= I18n.t(
+            "projects.members.invite_group.sharing_namespace_with_group",
+            name: @namespace.human_name
+          ) %>
+        </p>
+      </div>
 
       <%= form_with(url: share_namespace_project_members_path(@namespace.parent, @namespace.project), method: :post, data: {remote: true}) do |form| %>
-      <div class="grid gap-4">
-        <div class="form-field">
-          <%= form.label I18n.t('projects.members.invite_group.label.shared_group') %>
-          <%= form.select :shared_group_id,
-                      options_for_select(Group.all.collect { |u| [u.name, u.id] }),
-                      { prompt: I18n.t('projects.members.invite_group.placeholder.select_group') },
-                      required: true %>
-        </div>
-        <div class="form-field">
-          <%= form.label I18n.t('projects.members.invite_group.label.group_access_level') %>
-          <%= form.select :group_access_level,
-                      options_for_select(@access_levels),
-                      { prompt: I18n.t('projects.members.invite_group.placeholder.select_access_level') },
-                      required: true %>
-        </div>
-        <div
-          class="form-field datepicker"
-          data-controller="datepicker"
-        >
-          <%= form.label I18n.t('projects.members.invite_group.label.access_expiration') %>
-          <div class="relative max-w-sm">
-            <div
-              class="
-                absolute
-                inset-y-0
-                left-0
-                flex
-                items-center
-                pl-3
-                pointer-events-none
-              "
-            >
-              <%= render Viral::IconComponent.new(
-                name: "calendar_days",
-                classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
-              ) %>
-            </div>
-            <%= form.text_field :expires_at,
-                        placeholder: "YYYY-MM-DD",
-                        autocomplete: "off",
-                        "data-datepicker-target": "datePicker" %>
+        <div class="grid gap-4">
+          <div class="form-field">
+            <%= form.label I18n.t("projects.members.invite_group.label.shared_group") %>
+            <%= form.select :shared_group_id,
+                        options_for_select(Group.all.collect { |u| [u.name, u.id] }),
+                        {
+                          prompt:
+                            I18n.t("projects.members.invite_group.placeholder.select_group")
+                        },
+                        required: true %>
           </div>
-      </div>
-        <div class="my-4">
-          <%= form.submit I18n.t('projects.members.invite_group.button.submit'),
-              class: "button button--size-default button--state-primary",
-              data: { action: 'click->viral--dialog-component#close'}
-          %>
-          <button
-            type="button"
-            class="button button--size-default button--state-default"
-            data-action="click->viral--dialog-component#close"
-          >
-            <%= I18n.t('projects.members.invite_group.button.cancel') %>
-          </button>
+          <div class="form-field">
+            <%= form.label I18n.t("projects.members.invite_group.label.group_access_level") %>
+            <%= form.select :group_access_level,
+                        options_for_select(@access_levels),
+                        {
+                          prompt:
+                            I18n.t(
+                              "projects.members.invite_group.placeholder.select_access_level"
+                            )
+                        },
+                        required: true %>
+          </div>
+          <div class="form-field datepicker" data-controller="datepicker">
+            <%= form.label I18n.t("projects.members.invite_group.label.access_expiration") %>
+            <div class="relative max-w-sm">
+              <div
+                class="
+                  absolute
+                  inset-y-0
+                  left-0
+                  flex
+                  items-center
+                  pl-3
+                  pointer-events-none
+                "
+              >
+                <%= render Viral::IconComponent.new(
+                  name: "calendar_days",
+                  classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+                ) %>
+              </div>
+              <%= form.text_field :expires_at,
+                              placeholder: "YYYY-MM-DD",
+                              autocomplete: "off",
+                              "data-datepicker-target": "datePicker" %>
+            </div>
+          </div>
+          <div class="my-4">
+            <%= form.submit I18n.t("projects.members.invite_group.button.submit"),
+                        class: "button button--size-default button--state-primary",
+                        data: {
+                          action: "click->viral--dialog-component#close"
+                        } %>
+            <button
+              type="button"
+              class="button button--size-default button--state-default"
+              data-action="click->viral--dialog-component#close"
+            >
+              <%= I18n.t("projects.members.invite_group.button.cancel") %>
+            </button>
+          </div>
         </div>
-
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
 <% end %>
