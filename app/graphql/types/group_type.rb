@@ -2,8 +2,7 @@
 
 module Types
   # Group Type
-  class GroupType < Types::BaseObject
-    implements Namespace
+  class GroupType < Types::NamespaceType
     implements GraphQL::Types::Relay::Node
     description 'A group'
 

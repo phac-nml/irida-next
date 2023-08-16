@@ -10,6 +10,13 @@ module Namespaces
       false
     end
 
+    def read?
+      return true if record.owner == user
+
+      details[:name] = record.name
+      false
+    end
+
     def transfer_into_namespace?
       return true if record.owner == user
 
