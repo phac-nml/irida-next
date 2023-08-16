@@ -8,6 +8,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       get :edit, as: :edit_group
       post :share, as: :group_share
       post :unshare, as: :group_unshare
+      patch :share_update, as: :group_share_update
     end
 
     get '/', action: :show, as: :group_canonical

@@ -6,6 +6,8 @@ module ShareActions
 
   included do
     before_action proc { namespace }
+    # before_action proc { access_levels }
+    before_action proc { namespace_group_link }, only: %i[share_update]
   end
 
   def share # rubocop:disable Metrics/AbcSize
@@ -37,9 +39,43 @@ module ShareActions
     end
   end
 
+  def share_update
+    updated = Namespaces::GroupShareUpdateService.new(current_user, @namespace_group_link, params)
+
+    if updated
+      flash[:success] = t('success')
+      redirect_to namespace_path
+    else
+      flash[:error] = t('error')
+    end
+    #
+    # respond_to do |format|
+    #   if updated
+    #     format.turbo_stream do
+    #       render status: :ok, locals: { namespace_group_link: @namespace_group_link,
+    #                                     access_levels: @access_levels
+    #                                     type: 'success',
+    #                                     message: t('.success') }
+    #     end
+    #   else
+    #     format.turbo_stream do
+    #       render status: :bad_request,
+    #              locals: { namespace_group_link: @namespace_group_link, type: 'alert',
+    #                        message: t('.error') }
+    #     end
+    #   end
+    # end
+  end
+
   protected
 
   def namespace_path
     raise NotImplementedError
+  end
+
+  private
+
+  def namespace_group_link
+    @namespace_group_link ||= NamespaceGroupLink.find_by(id: params[:namespace_group_link_id])
   end
 end

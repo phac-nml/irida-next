@@ -259,4 +259,17 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     assert_response :unauthorized
   end
+
+  test 'should update namespace group share' do
+    sign_in users(:john_doe)
+
+    namespace_group_link = namespace_group_links(:namespace_group_link2)
+
+    patch group_share_update_path(namespace_group_link.namespace), params: {
+      namespace_group_link_id: namespace_group_link.id,
+      group_access_level: Member::AccessLevel::GUEST
+    }
+
+    assert_redirected_to group_path(namespace_group_link.namespace)
+  end
 end

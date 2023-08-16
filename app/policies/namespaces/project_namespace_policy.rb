@@ -56,5 +56,12 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def update_namespace_with_group_share?
+      return true if Member.can_update_namespace_with_group_share?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
   end
 end

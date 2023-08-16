@@ -337,4 +337,21 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
 
     assert_response :unprocessable_entity
   end
+
+  test 'should update namespace group share' do
+    sign_in users(:john_doe)
+
+    namespace_group_link = namespace_group_links(:namespace_group_link1)
+
+    project_namespace = namespace_group_link.namespace
+
+    patch namespace_project_share_update_path(project_namespace.parent,
+                                              project_namespace.project, params: {
+                                                namespace_group_link_id: namespace_group_link.id,
+                                                group_access_level: Member::AccessLevel::GUEST
+                                              })
+
+    assert_redirected_to namespace_project_path(project_namespace.parent,
+                                                project_namespace.project)
+  end
 end

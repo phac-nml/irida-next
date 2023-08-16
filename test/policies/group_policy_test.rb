@@ -73,6 +73,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.unshare_namespace_with_group?
   end
 
+  test '#update_namespace_with_group_share?' do
+    assert @policy.update_namespace_with_group_share?
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

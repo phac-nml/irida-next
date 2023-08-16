@@ -114,6 +114,13 @@ class GroupPolicy < NamespacePolicy
     false
   end
 
+  def update_namespace_with_group_share?
+    return true if Member.can_update_namespace_with_group_share?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |_relation|
     user.groups.self_and_descendants.include_route
   end
