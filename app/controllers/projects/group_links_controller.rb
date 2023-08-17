@@ -22,8 +22,7 @@ module Projects
     protected
 
     def group_links_path
-      # group_group_links_path
-      namespace_project_members_path
+      group_group_links_path
     end
 
     def context_crumbs

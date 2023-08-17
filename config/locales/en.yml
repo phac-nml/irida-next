@@ -60,9 +60,9 @@ en:
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
         update_member?: You are not authorized to update members for group %{name} on this server.
         sample_listing?: You are not authorized to view samples for group %{name} on this server.
-        link_namespace_with_group?: You are not authorized to share group %{name} with other groups on this server.
-        unlink_namespace_with_group?: You are not authorized to unshare group %{name} with other groups on this server.
-        update_namespace_with_group_link?: You are not authorized to update group %{name} share on this server.
+        link_namespace_with_group?: You are not authorized to link group %{name} with other groups on this server.
+        unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
+        update_namespace_with_group_link?: You are not authorized to update group %{name} links with other groups on this server.
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.
@@ -84,9 +84,9 @@ en:
         create_member?: You are not authorized to create members for the project namespace %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         update_member?: You are not authorized to update members for the project namespace %{name} on this server.
-        link_namespace_with_group?: You are not authorized to share project %{name} with other groups on this server.
-        unlink_namespace_with_group?: You are not authorized to unshare project %{name} with other groups on this server.
-        update_namespace_with_group_link?: You are not authorized to update project %{name} share on this server.
+        link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
+        unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
+        update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
@@ -415,10 +415,11 @@ en:
       success: Group transferred successfully
     group_links:
       create:
-        success: Successfully shared group with group
-        error: There was an error sharing group with group
+        success: Successfully linked group with group
+        error: There was an error linking group with group
       destroy:
-        success: Successfully unshared group
+        success: Successfully unlinked group from group
+        error: There was an error unlinking group from group
       update:
         success: Successfully updated namespace group link
         error: There was an error updating the namespace group link
@@ -527,10 +528,11 @@ en:
       success: "Project %{project_name} was successfully deleted"
     group_links:
       create:
-        success: Successfully shared project with group
-        error: There was an error sharing project with group
+        success: Successfully linked project with group
+        error: There was an error linking project with group
       destroy:
-        success: Successfully unshared project with group
+        success: Successfully unlinked project with group
+        error: There was an error unlinking projec from group
       update:
         success: Successfully updated namespace group link
         error: There was an error updating the namespace group link
