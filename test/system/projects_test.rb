@@ -89,7 +89,7 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t(:'projects.edit.advanced.path.submit')
     end
 
-    assert_text 'Path has already been taken'
+    assert_text I18n.t('activerecord.errors.models.namespace.attributes.name.taken').downcase
     assert_current_path '/group-1/project-1/-/edit'
   end
 end
