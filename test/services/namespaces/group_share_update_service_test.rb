@@ -56,9 +56,9 @@ module Namespaces
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :update_namespace_with_group_share?, exception.rule
+      assert_equal :update_namespace_with_group_link?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.update_namespace_with_group_share?',
+      assert_equal I18n.t(:'action_policy.policy.group.update_namespace_with_group_link?',
                           name: namespace_group_link.namespace.name),
                    exception.result.message
     end
@@ -73,9 +73,9 @@ module Namespaces
       end
 
       assert_equal ProjectNamespacePolicy, exception.policy
-      assert_equal :update_namespace_with_group_share?, exception.rule
+      assert_equal :update_namespace_with_group_link?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update_namespace_with_group_share?',
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update_namespace_with_group_link?',
                           name: namespace_group_link.namespace.name),
                    exception.result.message
     end
@@ -83,7 +83,7 @@ module Namespaces
     test 'valid authorization to update group to group share' do
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
-      assert_authorized_to(:update_namespace_with_group_share?, namespace_group_link.namespace,
+      assert_authorized_to(:update_namespace_with_group_link?, namespace_group_link.namespace,
                            with: GroupPolicy,
                            context: { user: @user }) do
         Namespaces::GroupShareUpdateService.new(@user, namespace_group_link,
@@ -94,7 +94,7 @@ module Namespaces
     test 'valid authorization to update project to group share' do
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
-      assert_authorized_to(:update_namespace_with_group_share?, namespace_group_link.namespace,
+      assert_authorized_to(:update_namespace_with_group_link?, namespace_group_link.namespace,
                            with: ProjectNamespacePolicy,
                            context: { user: @user }) do
         Namespaces::GroupShareUpdateService.new(@user, namespace_group_link,

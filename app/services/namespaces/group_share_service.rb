@@ -4,21 +4,21 @@ module Namespaces
   # Service used to Create NamespaceGroupLinks
   class GroupShareService < BaseService
     NamespaceGroupShareError = Class.new(StandardError)
-    attr_accessor :group_id, :namespace, :max_group_access_role
+    attr_accessor :group_id, :namespace, :namespace_group_link
 
-    def initialize(user, group_id, namespace, max_group_access_role)
-      super(user, namespace)
-      @group_id = group_id
+    def initialize(user, namespace, params)
+      super(user, params)
+      @group_id = params[:group_id]
       @namespace = namespace
-      @max_group_access_role = max_group_access_role
+      @namespace_group_link = NamespaceGroupLink.new(params.merge(namespace:))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def execute # rubocop:disable Metrics/AbcSize
       unless [Group.sti_name, Namespaces::ProjectNamespace.sti_name].include?(namespace.type)
         raise NamespaceGroupShareError, I18n.t('services.groups.share.invalid_namespace_type')
       end
 
-      authorize! namespace, to: :share_namespace_with_group?
+      authorize! namespace, to: :link_namespace_with_group?
 
       group = Group.find_by(id: group_id)
 
@@ -26,9 +26,6 @@ module Namespaces
         raise NamespaceGroupShareError, I18n.t('services.groups.share.group_not_found',
                                                group_id:)
       end
-
-      namespace_group_link = NamespaceGroupLink.new(group:, namespace:,
-                                                    group_access_level: max_group_access_role)
 
       namespace_group_link.save
 

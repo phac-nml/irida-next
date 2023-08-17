@@ -153,81 +153,6 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_response :success
   end
 
-  test 'should share group b with group a' do
-    sign_in users(:john_doe)
-    group = groups(:group_one)
-    namespace = groups(:group_six)
-
-    post group_share_path(namespace,
-                          params: { shared_group_id: group.id,
-                                    group_access_level: Member::AccessLevel::ANALYST })
-
-    assert_redirected_to group_path(namespace)
-  end
-
-  test 'should not share group b with group a as group b doesn\'t exist' do
-    sign_in users(:john_doe)
-    group_id = 1
-    namespace = groups(:group_one)
-
-    post group_share_path(namespace,
-                          params: { shared_group_id: group_id,
-                                    group_access_level: Member::AccessLevel::ANALYST })
-
-    assert_response :unprocessable_entity
-  end
-
-  test 'shouldn\'t share group b with group a as user doesn\'t have correct permissions' do
-    sign_in users(:micha_doe)
-    group = groups(:group_one)
-    namespace = groups(:group_six)
-
-    post group_share_path(namespace,
-                          params: { shared_group_id: group.id,
-                                    group_access_level: Member::AccessLevel::ANALYST })
-
-    assert_response :unauthorized
-  end
-
-  test 'group b already shared with group a' do
-    sign_in users(:john_doe)
-    group = groups(:group_one)
-    namespace = groups(:group_six)
-
-    post group_share_path(namespace,
-                          params: { shared_group_id: group.id,
-                                    group_access_level: Member::AccessLevel::ANALYST })
-
-    assert_redirected_to group_path(namespace)
-
-    post group_share_path(namespace,
-                          params: { shared_group_id: group.id,
-                                    group_access_level: Member::AccessLevel::ANALYST })
-
-    assert_response :conflict
-  end
-
-  test 'unshare group' do
-    sign_in users(:john_doe)
-    namespace_group_link = namespace_group_links(:namespace_group_link2)
-    group = namespace_group_link.group
-    namespace = namespace_group_link.namespace
-
-    post group_unshare_path(namespace, params: { shared_group_id: group.id })
-
-    assert_redirected_to group_path(namespace)
-  end
-
-  test 'unshare group when link doesn\'t exist with another group' do
-    sign_in users(:john_doe)
-    group = groups(:group_one)
-    namespace = groups(:group_six)
-
-    post group_unshare_path(namespace, params: { shared_group_id: group.id })
-
-    assert_response :unprocessable_entity
-  end
-
   test 'should transfer group' do
     sign_in users(:john_doe)
     group = groups(:group_one)
@@ -258,18 +183,5 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
         params: { new_namespace_id: new_namespace.id }, as: :turbo_stream
 
     assert_response :unauthorized
-  end
-
-  test 'should update namespace group share' do
-    sign_in users(:john_doe)
-
-    namespace_group_link = namespace_group_links(:namespace_group_link2)
-
-    patch group_share_update_path(namespace_group_link.namespace), params: {
-      namespace_group_link_id: namespace_group_link.id,
-      group_access_level: Member::AccessLevel::GUEST
-    }
-
-    assert_redirected_to group_path(namespace_group_link.namespace)
   end
 end

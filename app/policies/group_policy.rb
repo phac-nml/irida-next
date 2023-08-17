@@ -100,22 +100,22 @@ class GroupPolicy < NamespacePolicy
     false
   end
 
-  def share_namespace_with_group?
-    return true if Member.can_share_namespace_with_group?(user, record) == true
+  def link_namespace_with_group?
+    return true if Member.can_link_namespace_to_group?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
-  def unshare_namespace_with_group?
-    return true if Member.can_unshare_namespace_with_group?(user, record) == true
+  def unlink_namespace_with_group?
+    return true if Member.can_unlink_namespace_from_group?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
-  def update_namespace_with_group_share?
-    return true if Member.can_update_namespace_with_group_share?(user, record) == true
+  def update_namespace_with_group_link?
+    return true if Member.can_update_namespace_with_group_link?(user, record) == true
 
     details[:name] = record.name
     false

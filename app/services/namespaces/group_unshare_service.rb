@@ -3,29 +3,19 @@
 module Namespaces
   # Service used to Destroy NamespaceGroupLinks
   class GroupUnshareService < BaseService
-    NamespaceGroupUnshareError = Class.new(StandardError)
-    attr_accessor :group_id, :namespace, :max_group_access_role
+    attr_accessor :namespace_group_link
 
-    def initialize(user, group_id, namespace)
-      super(user, namespace)
-      @group_id = group_id
-      @namespace = namespace
+    def initialize(user, namespace_group_link, params = {})
+      super(user, params)
+      @namespace_group_link = namespace_group_link
     end
 
     def execute
-      authorize! namespace, to: :unshare_namespace_with_group?
+      return if namespace_group_link.nil?
 
-      namespace_group_link = NamespaceGroupLink.find_by(group_id:, namespace:)
-
-      if namespace_group_link.nil?
-        raise NamespaceGroupUnshareError,
-              I18n.t('services.namespaces.unshare.group_link_not_exist')
-      end
+      authorize! namespace_group_link.namespace, to: :unlink_namespace_with_group?
 
       namespace_group_link.destroy
-    rescue Namespaces::GroupUnshareService::NamespaceGroupUnshareError => e
-      @namespace.errors.add(:base, e.message)
-      false
     end
   end
 end

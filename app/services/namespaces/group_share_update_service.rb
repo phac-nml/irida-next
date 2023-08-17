@@ -11,7 +11,7 @@ module Namespaces
     end
 
     def execute
-      authorize! @namespace_group_link.namespace, to: :update_namespace_with_group_share?
+      authorize! @namespace_group_link.namespace, to: :update_namespace_with_group_link?
 
       @namespace_group_link.update(params)
     end

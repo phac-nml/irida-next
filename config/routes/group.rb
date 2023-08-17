@@ -6,9 +6,6 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         constraints: { id: Irida::PathRegex.full_namespace_route_regex }) do
     scope(path: '-') do
       get :edit, as: :edit_group
-      post :share, as: :group_share
-      post :unshare, as: :group_unshare
-      patch :share_update, as: :group_share_update
     end
 
     get '/', action: :show, as: :group_canonical
@@ -19,6 +16,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         as: :group,
         constraints: { group_id: Irida::PathRegex.full_namespace_route_regex }) do
     resources :members, only: %i[create destroy index new update]
+    resources :group_links, only: %i[create destroy update index]
     resources :samples, only: %i[index]
   end
 
