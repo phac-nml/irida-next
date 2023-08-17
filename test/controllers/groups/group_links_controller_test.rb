@@ -92,7 +92,6 @@ module Groups
 
     test 'unshare group when link doesn\'t exist with another group' do
       sign_in users(:john_doe)
-      group = groups(:group_one)
       namespace = groups(:group_six)
 
       delete group_group_link_path(namespace, 1,
