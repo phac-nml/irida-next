@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-module Namespaces
+module GroupLinks
   class GroupLinkUpdateServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
     def setup
       @user = users(:john_doe)
@@ -12,7 +12,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
       assert_changes -> { namespace_group_link.group_access_level }, to: Member::AccessLevel::GUEST do
-        Namespaces::GroupLinkUpdateService.new(@user, namespace_group_link,
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
     end
@@ -21,7 +21,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       assert_changes -> { namespace_group_link.group_access_level }, to: Member::AccessLevel::GUEST do
-        Namespaces::GroupLinkUpdateService.new(@user, namespace_group_link,
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
     end
@@ -31,7 +31,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
       assert_changes -> { namespace_group_link.expires_at }, to: expiration_date do
-        Namespaces::GroupLinkUpdateService.new(@user, namespace_group_link,
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { expires_at: expiration_date }).execute
       end
     end
@@ -41,7 +41,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       assert_changes -> { namespace_group_link.expires_at }, to: expiration_date do
-        Namespaces::GroupLinkUpdateService.new(@user, namespace_group_link,
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { expires_at: expiration_date }).execute
       end
     end
@@ -51,7 +51,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Namespaces::GroupLinkUpdateService.new(user, namespace_group_link,
+        GroupLinks::GroupLinkUpdateService.new(user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
 
@@ -68,11 +68,11 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Namespaces::GroupLinkUpdateService.new(user, namespace_group_link,
+        GroupLinks::GroupLinkUpdateService.new(user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
 
-      assert_equal ProjectNamespacePolicy, exception.policy
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
       assert_equal :update_namespace_with_group_link?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update_namespace_with_group_link?',
@@ -86,7 +86,7 @@ module Namespaces
       assert_authorized_to(:update_namespace_with_group_link?, namespace_group_link.namespace,
                            with: GroupPolicy,
                            context: { user: @user }) do
-        Namespaces::GroupLinkUpdateService.new(@user, namespace_group_link,
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
     end
@@ -95,9 +95,9 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       assert_authorized_to(:update_namespace_with_group_link?, namespace_group_link.namespace,
-                           with: ProjectNamespacePolicy,
+                           with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
-        Namespaces::GroupLinkUpdateService.new(@user, namespace_group_link,
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
     end
@@ -105,7 +105,7 @@ module Namespaces
     test 'group to group share is logged using logidze' do
       group_group_link = namespace_group_links(:namespace_group_link2)
       group_group_link.create_logidze_snapshot!
-      Namespaces::GroupLinkUpdateService.new(@user, group_group_link,
+      GroupLinks::GroupLinkUpdateService.new(@user, group_group_link,
                                              { group_access_level: Member::AccessLevel::GUEST }).execute
       group_group_link.create_logidze_snapshot!
 
@@ -119,7 +119,7 @@ module Namespaces
     test 'project to group share is logged using logidze' do
       project_group_link = namespace_group_links(:namespace_group_link1)
       project_group_link.create_logidze_snapshot!
-      Namespaces::GroupLinkUpdateService.new(@user, project_group_link,
+      GroupLinks::GroupLinkUpdateService.new(@user, project_group_link,
                                              { group_access_level: Member::AccessLevel::GUEST }).execute
       project_group_link.create_logidze_snapshot!
 

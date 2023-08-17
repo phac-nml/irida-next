@@ -8,13 +8,13 @@ module Projects
 
     test 'should share project namespace with group' do
       sign_in users(:john_doe)
-      namespace = groups(:group_one)
+      group = groups(:group_one)
       project = projects(:project22)
       project_namespace = project.namespace
 
       post namespace_project_group_links_path(project_namespace.parent, project,
                                               params: { namespace_group_link: {
-                                                group_id: namespace.id,
+                                                group_id: group.id,
                                                 group_access_level: Member::AccessLevel::ANALYST
                                               }, format: :turbo_stream })
 

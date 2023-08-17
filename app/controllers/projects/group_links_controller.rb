@@ -2,7 +2,7 @@
 
 module Projects
   # Controller actions for Project Group Links
-  class GroupLinksController < Groups::ApplicationController
+  class GroupLinksController < Projects::ApplicationController
     include ShareActions
 
     def group_link_params

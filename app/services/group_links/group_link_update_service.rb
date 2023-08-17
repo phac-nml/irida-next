@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Namespaces
+module GroupLinks
   # Service used to update NamespaceGroupLinks
   class GroupLinkUpdateService < BaseService
     attr_accessor :namespace_group_link

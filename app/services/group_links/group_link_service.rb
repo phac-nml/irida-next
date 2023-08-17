@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Namespaces
+module GroupLinks
   # Service used to Create NamespaceGroupLinks
   class GroupLinkService < BaseService
     NamespaceGroupLinkError = Class.new(StandardError)
@@ -30,7 +30,7 @@ module Namespaces
       namespace_group_link.save
 
       namespace_group_link
-    rescue Namespaces::GroupLinkService::NamespaceGroupLinkError => e
+    rescue GroupLinks::GroupLinkService::NamespaceGroupLinkError => e
       @namespace.errors.add(:base, e.message)
       false
     end

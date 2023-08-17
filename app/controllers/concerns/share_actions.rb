@@ -15,7 +15,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    namespace_group_link = Namespaces::GroupLinkService.new(current_user, @namespace, group_link_params).execute
+    namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace, group_link_params).execute
     respond_to do |format|
       if namespace_group_link
         if namespace_group_link.errors.full_messages.count.positive?
@@ -43,7 +43,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def destroy # rubocop:disable Metrics/MethodLength
-    Namespaces::GroupUnlinkService.new(current_user, @namespace_group_link).execute
+    GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
     respond_to do |format|
       if @namespace_group_link
         if @namespace_group_link.deleted?
@@ -69,7 +69,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def update # rubocop:disable Metrics/MethodLength
-    updated = Namespaces::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
+    updated = GroupLinks::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
     respond_to do |format|
       if updated
         format.turbo_stream do
