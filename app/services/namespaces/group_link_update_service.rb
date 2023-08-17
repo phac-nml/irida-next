@@ -2,7 +2,7 @@
 
 module Namespaces
   # Service used to update NamespaceGroupLinks
-  class GroupShareUpdateService < BaseService
+  class GroupLinkUpdateService < BaseService
     attr_accessor :namespace_group_link
 
     def initialize(user, namespace_group_link, params)

@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Namespaces
-  class GroupUnshareServiceTest < ActiveSupport::TestCase
+  class GroupUnlinkServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
     end
@@ -12,7 +12,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
       assert_difference -> { NamespaceGroupLink.count } => -1 do
-        Namespaces::GroupUnshareService.new(@user, namespace_group_link).execute
+        Namespaces::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
     end
 
@@ -23,11 +23,11 @@ module Namespaces
       namespace_group_link = nil
 
       assert_difference -> { NamespaceGroupLink.count } => 1 do
-        namespace_group_link = Namespaces::GroupShareService.new(@user, namespace, params).execute
+        namespace_group_link = Namespaces::GroupLinkService.new(@user, namespace, params).execute
       end
 
       assert_difference -> { NamespaceGroupLink.count } => -1 do
-        Namespaces::GroupUnshareService.new(@user, namespace_group_link).execute
+        Namespaces::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
     end
 
@@ -36,7 +36,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Namespaces::GroupUnshareService.new(user, namespace_group_link).execute
+        Namespaces::GroupUnlinkService.new(user, namespace_group_link).execute
       end
 
       assert_equal GroupPolicy, exception.policy
@@ -49,7 +49,7 @@ module Namespaces
 
     test 'unshare groub b with group a when no link exists' do
       namespace_group_link = nil
-      assert_not Namespaces::GroupUnshareService.new(@user, namespace_group_link).execute
+      assert_not Namespaces::GroupUnlinkService.new(@user, namespace_group_link).execute
     end
 
     test 'valid authorization to unshare group' do
@@ -58,7 +58,7 @@ module Namespaces
       assert_authorized_to(:unlink_namespace_with_group?, namespace_group_link.namespace,
                            with: GroupPolicy,
                            context: { user: @user }) do
-        Namespaces::GroupUnshareService.new(@user, namespace_group_link).execute
+        Namespaces::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
     end
 
@@ -66,7 +66,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       assert_difference -> { NamespaceGroupLink.count } => -1 do
-        Namespaces::GroupUnshareService.new(@user, namespace_group_link).execute
+        Namespaces::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
     end
 
@@ -77,11 +77,11 @@ module Namespaces
       namespace_group_link = nil
 
       assert_difference -> { NamespaceGroupLink.count } => 1 do
-        namespace_group_link = Namespaces::GroupShareService.new(@user, namespace, params).execute
+        namespace_group_link = Namespaces::GroupLinkService.new(@user, namespace, params).execute
       end
 
       assert_difference -> { NamespaceGroupLink.count } => -1 do
-        Namespaces::GroupUnshareService.new(@user, namespace_group_link).execute
+        Namespaces::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
     end
 
@@ -90,7 +90,7 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Namespaces::GroupUnshareService.new(user, namespace_group_link).execute
+        Namespaces::GroupUnlinkService.new(user, namespace_group_link).execute
       end
 
       assert_equal ProjectNamespacePolicy, exception.policy
@@ -107,7 +107,7 @@ module Namespaces
       assert_authorized_to(:unlink_namespace_with_group?, namespace_group_link.namespace,
                            with: ProjectNamespacePolicy,
                            context: { user: @user }) do
-        Namespaces::GroupUnshareService.new(@user, namespace_group_link).execute
+        Namespaces::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
     end
   end

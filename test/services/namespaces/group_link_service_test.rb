@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Namespaces
-  class GroupShareServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
+  class GroupLinkServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
     def setup
       @user = users(:john_doe)
     end
@@ -14,7 +14,7 @@ module Namespaces
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
       assert_difference -> { NamespaceGroupLink.count } => 1 do
-        Namespaces::GroupShareService.new(@user, namespace, params).execute
+        Namespaces::GroupLinkService.new(@user, namespace, params).execute
       end
     end
 
@@ -25,7 +25,7 @@ module Namespaces
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Namespaces::GroupShareService.new(user, namespace, params).execute
+        Namespaces::GroupLinkService.new(user, namespace, params).execute
       end
 
       assert_equal GroupPolicy, exception.policy
@@ -41,7 +41,7 @@ module Namespaces
       params = { group_id:, group_access_level: Member::AccessLevel::ANALYST }
 
       assert_no_difference ['NamespaceGroupLink.count'] do
-        Namespaces::GroupShareService.new(@user, namespace, params).execute
+        Namespaces::GroupLinkService.new(@user, namespace, params).execute
       end
     end
 
@@ -52,7 +52,7 @@ module Namespaces
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
       assert_no_difference ['NamespaceGroupLink.count'] do
-        Namespaces::GroupShareService.new(user, namespace, params).execute
+        Namespaces::GroupLinkService.new(user, namespace, params).execute
       end
 
       assert namespace.errors.full_messages.include?(I18n.t('services.groups.share.invalid_namespace_type'))
@@ -66,7 +66,7 @@ module Namespaces
       assert_authorized_to(:link_namespace_with_group?, namespace,
                            with: GroupPolicy,
                            context: { user: @user }) do
-        Namespaces::GroupShareService.new(@user, namespace, params).execute
+        Namespaces::GroupLinkService.new(@user, namespace, params).execute
       end
     end
 
@@ -75,7 +75,7 @@ module Namespaces
       namespace = groups(:group_six)
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
-      group_group_link = Namespaces::GroupShareService.new(@user, namespace, params).execute
+      group_group_link = Namespaces::GroupLinkService.new(@user, namespace, params).execute
       group_group_link.create_logidze_snapshot!
 
       assert_equal 1, group_group_link.log_data.version
@@ -92,7 +92,7 @@ module Namespaces
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
       assert_difference -> { NamespaceGroupLink.count } => 1 do
-        Namespaces::GroupShareService.new(@user, namespace, params).execute
+        Namespaces::GroupLinkService.new(@user, namespace, params).execute
       end
     end
 
@@ -103,7 +103,7 @@ module Namespaces
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Namespaces::GroupShareService.new(user, namespace, params).execute
+        Namespaces::GroupLinkService.new(user, namespace, params).execute
       end
 
       assert_equal ProjectNamespacePolicy, exception.policy
@@ -120,7 +120,7 @@ module Namespaces
       params = { group_id:, group_access_level: Member::AccessLevel::ANALYST }
 
       assert_no_difference ['NamespaceGroupLink.count'] do
-        Namespaces::GroupShareService.new(@user, namespace, params).execute
+        Namespaces::GroupLinkService.new(@user, namespace, params).execute
       end
     end
 
@@ -132,8 +132,8 @@ module Namespaces
       assert_authorized_to(:link_namespace_with_group?, namespace,
                            with: ProjectNamespacePolicy,
                            context: { user: @user }) do
-        Namespaces::GroupShareService.new(@user, namespace,
-                                          params).execute
+        Namespaces::GroupLinkService.new(@user, namespace,
+                                         params).execute
       end
     end
 
@@ -142,8 +142,8 @@ module Namespaces
       namespace = namespaces_project_namespaces(:project22_namespace)
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
-      project_group_link = Namespaces::GroupShareService.new(@user, namespace,
-                                                             params).execute
+      project_group_link = Namespaces::GroupLinkService.new(@user, namespace,
+                                                            params).execute
       project_group_link.create_logidze_snapshot!
 
       assert_equal 1, project_group_link.log_data.version

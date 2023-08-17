@@ -2,7 +2,7 @@
 
 module Namespaces
   # Service used to Destroy NamespaceGroupLinks
-  class GroupUnshareService < BaseService
+  class GroupUnlinkService < BaseService
     attr_accessor :namespace_group_link
 
     def initialize(user, namespace_group_link, params = {})
