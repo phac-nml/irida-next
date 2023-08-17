@@ -1,0 +1,57 @@
+<%= viral_card do |card| %>
+  <% card.with_header(title: t(:"projects.edit.advanced.path.title")) %>
+  <% card.with_section do %>
+    <%= form_with(model: @project, url: namespace_project_path, method: :patch) do |form| %>
+      <%= form.fields_for :namespace, include_id: false do |builder| %>
+        <div class="grid gap-4">
+          <p class="text-gray-600 dark:text-gray-400">
+            <%= t(:"projects.edit.advanced.path.description") %>
+          </p>
+          <% invalid_path = @project.namespace.errors.include?(:path) %>
+          <div class="form-field prefixed <%= 'invalid' if invalid_path %>">
+            <%= builder.label :path %>
+            <div class="flex whitespace-nowrap items-center">
+              <div
+                class="
+                  inline-flex
+                  items-center
+                  px-3
+                  py-2.5
+                  text-sm
+                  text-gray-600
+                  bg-gray-200
+                  border
+                  border-r-0
+                  border-gray-300
+                  rounded-l-md
+                  dark:bg-gray-600
+                  dark:text-gray-400
+                  dark:border-gray-600
+                "
+              >
+                <%= root_url %>
+                <% if @project.parent %>
+                  <strong>
+                    <%= @project.parent.full_path + "/" %>
+                  </strong>
+                <% end %>
+              </div>
+              <%= builder.text_field :path,
+                                 pattern: Irida::PathRegex::PATH_REGEX_STR,
+                                 required: true,
+                                 title: t(:"projects.edit.advanced.path.help"),
+                                 class: "prefixed" %>
+            </div>
+            <%= render "shared/form/field_errors",
+            errors: @project.namespace.errors.full_messages_for(:path) %>
+          </div>
+          <div>
+            <%= form.submit t(:"projects.edit.advanced.path.submit"),
+                        class:
+                          "button button--state-destructive button--size-default inline-block" %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

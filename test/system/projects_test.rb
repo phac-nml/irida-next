@@ -64,4 +64,32 @@ class ProjectsTest < ApplicationSystemTestCase
 
     assert_text I18n.t(:'projects.destroy.success', project_name: project.name)
   end
+
+  test 'can edit a project path' do
+    project = projects(:project1)
+    visit project_edit_path(project)
+
+    within all('form[action="/group-1/project-1"]')[1] do
+      fill_in 'project_namespace_attributes_path', with: 'project-1-edited'
+
+      click_on I18n.t(:'projects.edit.advanced.path.submit')
+    end
+
+    assert_text I18n.t('projects.update.success', project_name: project.name)
+    assert_current_path '/group-1/project-1-edited'
+  end
+
+  test 'show error when editing a project path to an existing namespace' do
+    project = projects(:project1)
+    visit project_edit_path(project)
+
+    within all('form[action="/group-1/project-1"]')[1] do
+      fill_in 'project_namespace_attributes_path', with: 'project-2'
+
+      click_on I18n.t(:'projects.edit.advanced.path.submit')
+    end
+
+    assert_text I18n.t('activerecord.errors.models.namespace.attributes.name.taken').downcase
+    assert_current_path '/group-1/project-1/-/edit'
+  end
 end
