@@ -14,12 +14,18 @@ module Projects
       def create
         new_project_id = params[:new_project_id]
         sample_ids = params[:sample_ids]
-        if ::Samples::TransferService.new(@project, current_user).execute(new_project_id, sample_ids)
-          flash[:success] = t('.success')
-        else
-          flash[:error] = @project.errors.full_messages
+        respond_to do |format|
+          if ::Samples::TransferService.new(@project, current_user).execute(new_project_id, sample_ids)
+            format.turbo_stream do
+              render status: :ok, locals: { sample_ids:, type: :success, message: t('.success') }
+            end
+          else
+            @errors = @project.errors.full_messages
+            format.turbo_stream do
+              render status: :unprocessable_entity, locals: { sample_ids: [], type: :alert, message: @errors }
+            end
+          end
         end
-        redirect_to namespace_project_samples_path
       end
 
       private

@@ -1,0 +1,9 @@
+<% if message %>
+  <%= turbo_stream.update "transfer_alert", viral_alert(type:, message:) %>
+<% end %>
+
+<% sample_ids.each do |sample_id| %>
+  <%= turbo_stream.remove sample_id %>
+<% end %>
+
+<%= turbo_stream.remove "transfer_modal" %>

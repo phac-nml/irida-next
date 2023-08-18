@@ -1,4 +1,5 @@
 <%= turbo_frame_tag "transfer_modal" %>
+<%= turbo_frame_tag "transfer_alert" %>
 
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
@@ -40,7 +41,10 @@
             "
           >
             <% @samples.each do |sample| %>
-              <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+              <tr
+                id="<%= sample.id %>"
+                class="text-sm font-normal text-slate-500 dark:text-slate-400"
+              >
                 <% if allowed_to?(:transfer_sample?, @project) %>
                   <td class="ps-4 w-10">
                     <%= check_box_tag "sample_ids[]",

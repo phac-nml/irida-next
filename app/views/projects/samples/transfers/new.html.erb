@@ -2,8 +2,7 @@
   <%= viral_dialog(open: true) do |dialog| %>
     <%= dialog.with_header(title: t(".title")) %>
     <%= dialog.with_section do %>
-      <%= form_with(url: namespace_project_samples_transfer_path, method: :post, data: {
-              turbo: false}) do |form| %>
+      <%= form_with(url: namespace_project_samples_transfer_path, method: :post) do |form| %>
         <div
           data-controller="form"
           data-form-storage-key-value=<%=namespace_project_samples_url%>

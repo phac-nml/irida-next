@@ -28,13 +28,13 @@ module Projects
       end
 
       test 'should create sample transfer for a member that is an owner' do
-        post namespace_project_samples_transfer_path(@namespace, @project1),
+        post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
              params: {
                new_project_id: @project2.id,
                sample_ids: [@sample1.id, @sample2.id]
              }
 
-        assert_redirected_to namespace_project_samples_path
+        assert_response :success
       end
 
       test 'should not create sample transfer for a non-member' do
@@ -57,13 +57,13 @@ module Projects
         user = users(:james_doe)
         login_as user
 
-        post namespace_project_samples_transfer_path(namespace, project4),
+        post namespace_project_samples_transfer_path(namespace, project4, format: :turbo_stream),
              params: {
                new_project_id: project22.id,
                sample_ids: [sample23.id]
              }
 
-        assert_redirected_to namespace_project_samples_path
+        assert_response :success
       end
 
       test 'should not create sample transfer for a member that is a maintainer' do
@@ -91,13 +91,13 @@ module Projects
       end
 
       test 'should not create sample transfer within the same project' do
-        post namespace_project_samples_transfer_path(@namespace, @project1),
+        post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
              params: {
                new_project_id: @project1.id,
                sample_ids: [@sample1.id, @sample2.id]
              }
 
-        assert_redirected_to namespace_project_samples_path
+        assert_response 422 # unprocessable entity
       end
     end
   end
