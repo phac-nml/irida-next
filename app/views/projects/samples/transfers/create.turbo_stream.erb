@@ -1,5 +1,13 @@
 <% if message %>
-  <%= turbo_stream.update "transfer_alert", viral_alert(type:, message:) %>
+  <%= turbo_stream.update "transfer_alert" do %>
+    <%= viral_alert(type:, message:) do %>
+      <ul class="mt-1.5 ml-4 list-disc list-inside">
+        <% errors.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
 <% end %>
 
 <% sample_ids.each do |sample_id| %>

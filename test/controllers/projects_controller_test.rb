@@ -244,7 +244,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
     post namespace_project_samples_transfer_path(old_namespace, project),
          params: { new_namespace_id: 'asdfasd' }, as: :turbo_stream
 
-    assert_response 422 # unprocessable entity
+    assert_response :unprocessable_entity
   end
 
   test 'should not transfer a project to unowned namespace' do

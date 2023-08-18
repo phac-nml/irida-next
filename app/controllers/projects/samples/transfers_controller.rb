@@ -11,18 +11,29 @@ module Projects
         authorize! @project, to: :transfer_sample?
       end
 
-      def create
+      def create # rubocop:disable Metrics/MethodLength
         new_project_id = params[:new_project_id]
-        sample_ids = params[:sample_ids]
+        sample_ids = params[:sample_ids] || []
+        transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
+                                                                                                 sample_ids)
         respond_to do |format|
-          if ::Samples::TransferService.new(@project, current_user).execute(new_project_id, sample_ids)
+          if transferred_samples_ids.length == sample_ids.length
             format.turbo_stream do
-              render status: :ok, locals: { sample_ids:, type: :success, message: t('.success') }
+              render status: :ok, locals: { sample_ids:, type: :success, message: t('.success'), errors: [] }
+            end
+          elsif @project.errors.include?(:samples)
+            @errors = @project.errors.full_messages_for(:samples)
+            format.turbo_stream do
+              render status: :partial_content,
+                     locals: { sample_ids: transferred_samples_ids, type: :alert,
+                               message: 'The following list of samples failed to transfer:', errors: @errors }
             end
           else
-            @errors = @project.errors.full_messages
+            @errors = @project.errors.full_messages_for(:base)
             format.turbo_stream do
-              render status: :unprocessable_entity, locals: { sample_ids: [], type: :alert, message: @errors }
+              render status: :unprocessable_entity,
+                     locals: { sample_ids: [], type: :alert,
+                               message: @errors, errors: [] }
             end
           end
         end

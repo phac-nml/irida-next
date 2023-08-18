@@ -24,16 +24,16 @@ module Samples
     end
 
     test 'transfer project samples without specifying details' do
-      assert_not Samples::TransferService.new(@current_project, @john_doe).execute(nil, nil)
+      assert_empty Samples::TransferService.new(@current_project, @john_doe).execute(nil, nil)
     end
 
     test 'transfer project samples to existing project' do
       @sample_transfer_params = { new_project_id: @current_project.id,
                                   sample_ids: [@sample1.id, @sample2.id] }
 
-      assert_not Samples::TransferService.new(@current_project, @john_doe)
-                                         .execute(@sample_transfer_params[:new_project_id],
-                                                  @sample_transfer_params[:sample_ids])
+      assert_empty Samples::TransferService.new(@current_project, @john_doe)
+                                           .execute(@sample_transfer_params[:new_project_id],
+                                                    @sample_transfer_params[:sample_ids])
     end
 
     test 'authorize allowed to transfer project samples with project permission' do

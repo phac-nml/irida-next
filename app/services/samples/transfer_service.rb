@@ -18,7 +18,7 @@ module Samples
       transfer(new_project_id, sample_ids)
     rescue Samples::TransferService::TransferError => e
       project.errors.add(:base, e.message)
-      false
+      []
     end
 
     private
@@ -35,16 +35,20 @@ module Samples
     end
 
     def transfer(new_project_id, sample_ids)
-      has_errors = false
+      transferred_samples_ids = []
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
+        transferred_samples_ids << sample_id
       rescue StandardError => e
-        has_errors = true
-        project.errors.add(:base, "#{e.message} for sample id  #{sample_id}")
+        if sample
+          project.errors.add(:samples, "#{e.message} for sample #{sample.name}")
+        else
+          project.errors.add(:samples, "#{e.message} for sample id #{sample_id}")
+        end
         next
       end
-      !has_errors
+      transferred_samples_ids
     end
   end
 end
