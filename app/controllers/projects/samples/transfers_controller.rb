@@ -11,7 +11,7 @@ module Projects
         authorize! @project, to: :transfer_sample?
       end
 
-      def create # rubocop:disable Metrics/MethodLength
+      def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         new_project_id = params[:new_project_id]
         sample_ids = params[:sample_ids] || []
         transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,

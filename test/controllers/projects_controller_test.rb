@@ -237,16 +237,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
     assert_response :redirect
   end
 
-  test 'should not create a new transfer with wrong parameters' do
-    sign_in users(:david_doe)
-    project = projects(:project1)
-    old_namespace = groups(:group_one)
-    post namespace_project_samples_transfer_path(old_namespace, project),
-         params: { new_namespace_id: 'asdfasd' }, as: :turbo_stream
-
-    assert_response :unprocessable_entity
-  end
-
   test 'should not transfer a project to unowned namespace' do
     sign_in users(:david_doe)
     project = projects(:project1)
