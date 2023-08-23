@@ -4,12 +4,23 @@
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <div>
+    <div
+      data-controller="form"
+      data-form-storage-key-value=<%=namespace_project_samples_url%>
+      data-form-target="field"
+      data-form-field-name-value="sample_ids[]"
+    >
       <% if allowed_to?(:transfer_sample?, @project) %>
         <%= link_to t("projects.samples.index.transfer_button"),
         new_namespace_project_samples_transfer_path,
         data: {
           turbo_frame: "transfer_modal"
+        },
+        class: "button button--size-default button--state-default mr-1" %>
+        <%= content_tag :a,
+        t("projects.samples.index.clear_button"),
+        data: {
+          action: "click->form#clear"
         },
         class: "button button--size-default button--state-default mr-1" %>
       <% end %>

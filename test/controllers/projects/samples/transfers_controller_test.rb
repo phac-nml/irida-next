@@ -97,7 +97,7 @@ module Projects
                sample_ids: [@sample1.id, @sample2.id]
              }
 
-        assert_response 422 # unprocessable entity
+        assert_response :unprocessable_entity
       end
     end
   end
