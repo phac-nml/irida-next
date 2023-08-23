@@ -26,7 +26,7 @@ module Projects
             format.turbo_stream do
               render status: :partial_content,
                      locals: { sample_ids: transferred_samples_ids, type: :alert,
-                               message: 'The following list of samples failed to transfer:', errors: @errors }
+                               message: t('.error'), errors: @errors }
             end
           else
             @errors = @project.errors.full_messages_for(:base)

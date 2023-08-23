@@ -611,6 +611,7 @@ en:
           submit_button: Submit
         create:
           success: Samples were successfully transferred.
+          error: "The following list of samples failed to transfer:"
   services:
     groups:
       transfer:
