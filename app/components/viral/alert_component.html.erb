@@ -1,13 +1,11 @@
 <%= render Viral::BaseComponent.new(tag: "div", **system_arguments) do %>
-  <div class=" flex p-4 mb-4 text-sm border-l-4 <%= classes %> " role="alert">
-    <span class="flex-shrink-0 inline">
-      <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
-    </span>
-    <div>
-      <span class="font-medium"><%= message %></span>
-      <% if content.present? %>
-        <%= content %>
-      <% end %>
-    </div>
+  <span class="flex-shrink-0 inline">
+    <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
+  </span>
+  <div>
+    <div class="font-medium"><%= message %></div>
+    <% if content.present? %>
+      <%= content %>
+    <% end %>
   </div>
 <% end %>

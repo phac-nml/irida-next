@@ -17,8 +17,10 @@ module Viral
     def initialize(type: TYPE_DEFAULT, message: nil, **system_arguments)
       @type = TYPE_MAPPINGS[type.to_sym] || TYPE_DEFAULT
       @message = message
-      @classes = classes_for_alert
       @system_arguments = system_arguments
+      @system_arguments[:classes] =
+        class_names('flex p-4 mb-4 text-sm border-l-4', classes_for_alert, @system_arguments[:classes])
+      @system_arguments[:role] = 'alert'
     end
 
     def classes_for_alert
