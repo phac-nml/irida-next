@@ -50,8 +50,8 @@
                     <%= check_box_tag "sample_ids[]",
                     sample.id,
                     nil,
-                    id: "sample_ids_#{sample.id}",
-                    "aria-label": "placeholder_#{sample.id}",
+                    id: dom_id(sample),
+                    "aria-label": sample.name,
                     data: {
                       action: "input->selection#toggle",
                       selection_target: "rowSelection"
