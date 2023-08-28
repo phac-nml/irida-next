@@ -1,18 +1,27 @@
-<li
+<% if group.children.count > 0 %>
+  <li
   id="<%= dom_id(group) %>"
   class="group-row <%= group.children.count > 0 ? 'has_children' : nil %>"
+  data-controller="groups--row"
 >
-  <div class="group-row-contents flex items-center py-2 pr-3">
-    <div class="folder-toggle-wrap flex items-center w-3">
-      <%- if group.children.count > 0 %>
-        <%= link_to public_send(path, path_args.merge({parent_id: group.id, collapse: !collapse})), data: {turbo_stream: ''} do %>
+    <div class="group-row-contents flex items-center py-2 pr-3"
+         data-action="click->groups--row#toggle" role="button" aria-label="<%= t(:'dashboard.groups.index.row_aria_label') %>">
+      <div class="folder-toggle-wrap flex items-center w-3">
+        <%= link_to public_send(path, path_args.merge({ parent_id: group.id, collapse: !collapse })), data: { turbo_stream: '', "groups--row-target": "toggle" },
+                    aria: { label: t(:'dashboard.groups.index.row_aria_label') } do %>
           <%= viral_icon(
-            name: collapse ? :chevron_right : :chevron_down,
-            classes: "h-3 w-3 inline-block"
-          ) %>
+                name: collapse ? :chevron_right : :chevron_down,
+                classes: "h-3 w-3 inline-block"
+              ) %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+<% else %>
+  <li>
+    <div class="group-row-contents flex items-center py-2 pr-3">
+      <div class="folder-toggle-wrap flex items-center w-3">
+
+      </div>
+<% end %>
     <div class="w-10 p-2 mr-3">
       <%= viral_avatar(
         name: group.name,
@@ -38,7 +47,7 @@
       </div>
     </div>
   </div>
-  <% if !collapse %>
+<% unless collapse %>
     <%= render GroupList::GroupListTreeComponent.new(groups: group.children, path:) %>
     <% if group.children.length > 10 %>
       <div class="group-row-contents flex items-center py-2 pr-3">
@@ -46,7 +55,7 @@
           <div class="group-text grow">
             <div class="flex items-center flex-wrap mr-3 title">
               <%= link_to "View all #{group.children.count} subgroups",
-              public_send(path, path_args.merge({ parent_id: group.id })) %>
+                          public_send(path, path_args.merge({ parent_id: group.id })) %>
             </div>
           </div>
         </div>

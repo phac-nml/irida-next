@@ -289,6 +289,7 @@ en:
     groups:
       index:
         more_items: "%{count} more items"
+        row_aria_label: "See %{group_name} subgroups"
   profiles:
     sidebar:
       header: User Settings
