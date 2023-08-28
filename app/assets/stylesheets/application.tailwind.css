@@ -285,9 +285,6 @@ body {
     @apply border-t-0;
   }
 
-  .group-list-tree {
-  }
-
   .group-list-tree .folder-toggle-wrap {
     font-size: 0;
     @apply flex-shrink-0;
@@ -345,8 +342,8 @@ body {
     @apply border-t-2 border-slate-50 dark:border-slate-700;
   }
 
-  .group-list-tree .group-row-contents:hover {
-    @apply bg-primary-50 dark:bg-primary-900 cursor-pointer;
+  .group-list-tree .group-row-contents.has_children:hover {
+    @apply bg-slate-50 dark:bg-slate-900 cursor-pointer;
   }
 
   .group-list-tree .group-row-contents .group-text-container,
