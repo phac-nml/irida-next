@@ -23,8 +23,8 @@
               dark:divide-gray-700
             "
           >
-            <% @namespace.shared_with_group_links.each do |namespace_group_link| %>
-              <%= render partial: "groups/group_links/namespace_group_link",
+            <% @namespace_group_links.each do |namespace_group_link| %>
+              <%= render partial: "namespace_group_link",
               locals: {
                 namespace_group_link: namespace_group_link
               } %>

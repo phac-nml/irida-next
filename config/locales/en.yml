@@ -423,13 +423,13 @@ en:
       success: Group transferred successfully
     group_links:
       create:
-        success: Successfully linked group with group
+        success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
       destroy:
-        success: Successfully unlinked group from group
+        success: Successfully unlinked group %{namespace_name} from group %{group_name}
         error: There was an error unlinking group from group
       update:
-        success: Successfully updated namespace group link
+        success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
     members:
       create:
@@ -571,13 +571,13 @@ en:
       success: "Project %{project_name} was successfully deleted"
     group_links:
       create:
-        success: Successfully linked project with group
+        success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group
       destroy:
-        success: Successfully unlinked project with group
-        error: There was an error unlinking projec from group
+        success: Successfully unlinked project %{namespace_name} with group %{group_name}
+        error: There was an error unlinking project from group
       update:
-        success: Successfully updated namespace group link
+        success: Successfully updated project %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
     members:
       create:
