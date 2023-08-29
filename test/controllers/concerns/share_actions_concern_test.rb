@@ -22,8 +22,7 @@ class TestClassController < ApplicationController
   private
 
   def access_levels
-    member_user = Member.find_by(user: current_user, namespace: @namespace)
-    @access_levels = Member.access_levels(member_user)
+    @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
   end
 end
 

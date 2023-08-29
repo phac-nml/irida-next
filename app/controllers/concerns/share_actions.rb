@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common share actions
-module ShareActions # rubocop:disable Metrics/ModuleLength
+module ShareActions
   extend ActiveSupport::Concern
 
   included do
@@ -100,21 +100,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def access_levels # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
-    if @namespace.parent&.user_namespace? && @namespace.parent.owner == current_user
-      @access_levels = Member::AccessLevel.access_level_options_owner
-    else
-      if @namespace.group_namespace?
-        member = Member.where(user: current_user,
-                              namespace: @namespace.self_and_ancestors).order(:access_level).last
-      else
-        member = Member.where(user: current_user,
-                              namespace: @namespace.self_and_ancestors)
-                       .or(Member.where(user: current_user,
-                                        namespace: @namespace.parent&.self_and_ancestors)).order(:access_level).last
-
-      end
-      @access_levels = Member.access_levels(member) unless member.nil?
-    end
+  def access_levels
+    @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
   end
 end
