@@ -4,6 +4,6 @@
     <%= render GroupsList::GroupRow::RowContentsComponent.new(group: @group, path: @path, path_args: @path_args, collapsed: @collapsed) %>
   </div>
   <% unless @collapsed %>
-    <%=  render GroupsList::GroupListTreeComponent.new(groups: @group.children, path: @path, path_args: @path_args)  %>
+    <%= render GroupsList::GroupListTreeComponent.new(parent: @group, groups: @group.children, path: @path, path_args: @path_args) %>
   <%  end %>
 </li>

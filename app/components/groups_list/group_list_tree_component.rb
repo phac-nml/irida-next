@@ -2,22 +2,19 @@
 
 module GroupsList
   class GroupListTreeComponent < ViewComponent::Base
-    LIMIT = 10
+    attr_reader :parent, :groups, :path, :path_args, :collapsed, :limit
 
-    erb_template <<~ERB
-      <ul class="groups-list group-list-tree flex flex-col">
-        <%= render GroupsList::GroupRowComponent.with_collection(@groups.take(LIMIT), path: @path, path_args: @path_args, collapsed: @collapsed) %>
-        <% if @groups.count > LIMIT %>
-          <li class="group-row">MOREITEMS HERE</li>
-        <% end %>
-      </ul>
-    ERB
-
-    def initialize(groups:, path: nil, path_args: {})
+    def initialize(groups:, parent: nil, path: nil, path_args: {})
+      @parent = parent
       @groups = groups
       @path = path
       @path_args = path_args
       @collapsed = true
+      @limit = 10
+    end
+
+    def show_more
+      @parent.present? && @groups.count > @limit
     end
   end
 end
