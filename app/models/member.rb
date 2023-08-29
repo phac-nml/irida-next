@@ -36,6 +36,24 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
+    def effective_access_level(namespace, user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      return AccessLevel::OWNER if namespace.parent&.user_namespace? && namespace.parent.owner == user
+
+      access_level = if namespace.group_namespace?
+                       Member.where(user:,
+                                    namespace: namespace.self_and_ancestors).order(:access_level).last&.access_level
+                     else
+                       Member.where(user:,
+                                    namespace: namespace.self_and_ancestors)
+                             .or(Member.where(user:,
+                                              namespace: namespace.parent&.self_and_ancestors)).order(:access_level)
+                             .last&.access_level
+
+                     end
+
+      access_level.nil? ? AccessLevel::NO_ACCESS : access_level
+    end
+
     def can_modify?(user, object_namespace)
       if object_namespace.project_namespace?
         Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
@@ -101,15 +119,15 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       can_transfer_into_namespace?(user, object_namespace)
     end
 
-    def can_share_namespace_with_group?(user, object_namespace)
+    def can_link_namespace_to_group?(user, object_namespace)
       can_modify?(user, object_namespace)
     end
 
-    def can_unshare_namespace_with_group?(user, object_namespace)
+    def can_unlink_namespace_from_group?(user, object_namespace)
       can_modify?(user, object_namespace)
     end
 
-    def can_update_namespace_with_group_share?(user, object_namespace)
+    def can_update_namespace_with_group_link?(user, object_namespace)
       can_modify?(user, object_namespace)
     end
 
@@ -222,6 +240,18 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
         access_level_options.merge(
           I18n.t('activerecord.models.member.access_level.owner') => OWNER
         )
+      end
+
+      def access_level_options_for_user(namespace, user)
+        effective_access_level = Member.effective_access_level(namespace, user)
+
+        if effective_access_level < MAINTAINER
+          {}
+        elsif effective_access_level == MAINTAINER
+          access_level_options
+        else
+          access_level_options_owner
+        end
       end
 
       # Method to return the human readable access level (passed in as a numeric value)

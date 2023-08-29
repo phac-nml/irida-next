@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Namespaces
+module GroupLinks
   # Service used to update NamespaceGroupLinks
-  class GroupShareUpdateService < BaseService
+  class GroupLinkUpdateService < BaseService
     attr_accessor :namespace_group_link
 
     def initialize(user, namespace_group_link, params)
@@ -11,7 +11,7 @@ module Namespaces
     end
 
     def execute
-      authorize! @namespace_group_link.namespace, to: :update_namespace_with_group_share?
+      authorize! @namespace_group_link.namespace, to: :update_namespace_with_group_link?
 
       @namespace_group_link.update(params)
     end

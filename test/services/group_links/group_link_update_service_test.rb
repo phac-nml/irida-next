@@ -2,8 +2,8 @@
 
 require 'test_helper'
 
-module Namespaces
-  class GroupShareUpdateServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
+module GroupLinks
+  class GroupLinkUpdateServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
     def setup
       @user = users(:john_doe)
     end
@@ -12,8 +12,8 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
       assert_changes -> { namespace_group_link.group_access_level }, to: Member::AccessLevel::GUEST do
-        Namespaces::GroupShareUpdateService.new(@user, namespace_group_link,
-                                                { group_access_level: Member::AccessLevel::GUEST }).execute
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
+                                               { group_access_level: Member::AccessLevel::GUEST }).execute
       end
     end
 
@@ -21,8 +21,8 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       assert_changes -> { namespace_group_link.group_access_level }, to: Member::AccessLevel::GUEST do
-        Namespaces::GroupShareUpdateService.new(@user, namespace_group_link,
-                                                { group_access_level: Member::AccessLevel::GUEST }).execute
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
+                                               { group_access_level: Member::AccessLevel::GUEST }).execute
       end
     end
 
@@ -31,8 +31,8 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
       assert_changes -> { namespace_group_link.expires_at }, to: expiration_date do
-        Namespaces::GroupShareUpdateService.new(@user, namespace_group_link,
-                                                { expires_at: expiration_date }).execute
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
+                                               { expires_at: expiration_date }).execute
       end
     end
 
@@ -41,8 +41,8 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       assert_changes -> { namespace_group_link.expires_at }, to: expiration_date do
-        Namespaces::GroupShareUpdateService.new(@user, namespace_group_link,
-                                                { expires_at: expiration_date }).execute
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
+                                               { expires_at: expiration_date }).execute
       end
     end
 
@@ -51,14 +51,14 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Namespaces::GroupShareUpdateService.new(user, namespace_group_link,
-                                                { group_access_level: Member::AccessLevel::GUEST }).execute
+        GroupLinks::GroupLinkUpdateService.new(user, namespace_group_link,
+                                               { group_access_level: Member::AccessLevel::GUEST }).execute
       end
 
       assert_equal GroupPolicy, exception.policy
-      assert_equal :update_namespace_with_group_share?, exception.rule
+      assert_equal :update_namespace_with_group_link?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.update_namespace_with_group_share?',
+      assert_equal I18n.t(:'action_policy.policy.group.update_namespace_with_group_link?',
                           name: namespace_group_link.namespace.name),
                    exception.result.message
     end
@@ -68,14 +68,14 @@ module Namespaces
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Namespaces::GroupShareUpdateService.new(user, namespace_group_link,
-                                                { group_access_level: Member::AccessLevel::GUEST }).execute
+        GroupLinks::GroupLinkUpdateService.new(user, namespace_group_link,
+                                               { group_access_level: Member::AccessLevel::GUEST }).execute
       end
 
-      assert_equal ProjectNamespacePolicy, exception.policy
-      assert_equal :update_namespace_with_group_share?, exception.rule
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :update_namespace_with_group_link?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update_namespace_with_group_share?',
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update_namespace_with_group_link?',
                           name: namespace_group_link.namespace.name),
                    exception.result.message
     end
@@ -83,30 +83,30 @@ module Namespaces
     test 'valid authorization to update group to group share' do
       namespace_group_link = namespace_group_links(:namespace_group_link2)
 
-      assert_authorized_to(:update_namespace_with_group_share?, namespace_group_link.namespace,
+      assert_authorized_to(:update_namespace_with_group_link?, namespace_group_link.namespace,
                            with: GroupPolicy,
                            context: { user: @user }) do
-        Namespaces::GroupShareUpdateService.new(@user, namespace_group_link,
-                                                { group_access_level: Member::AccessLevel::GUEST }).execute
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
+                                               { group_access_level: Member::AccessLevel::GUEST }).execute
       end
     end
 
     test 'valid authorization to update project to group share' do
       namespace_group_link = namespace_group_links(:namespace_group_link1)
 
-      assert_authorized_to(:update_namespace_with_group_share?, namespace_group_link.namespace,
-                           with: ProjectNamespacePolicy,
+      assert_authorized_to(:update_namespace_with_group_link?, namespace_group_link.namespace,
+                           with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
-        Namespaces::GroupShareUpdateService.new(@user, namespace_group_link,
-                                                { group_access_level: Member::AccessLevel::GUEST }).execute
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
+                                               { group_access_level: Member::AccessLevel::GUEST }).execute
       end
     end
 
     test 'group to group share is logged using logidze' do
       group_group_link = namespace_group_links(:namespace_group_link2)
       group_group_link.create_logidze_snapshot!
-      Namespaces::GroupShareUpdateService.new(@user, group_group_link,
-                                              { group_access_level: Member::AccessLevel::GUEST }).execute
+      GroupLinks::GroupLinkUpdateService.new(@user, group_group_link,
+                                             { group_access_level: Member::AccessLevel::GUEST }).execute
       group_group_link.create_logidze_snapshot!
 
       assert_equal 2, group_group_link.log_data.version
@@ -119,8 +119,8 @@ module Namespaces
     test 'project to group share is logged using logidze' do
       project_group_link = namespace_group_links(:namespace_group_link1)
       project_group_link.create_logidze_snapshot!
-      Namespaces::GroupShareUpdateService.new(@user, project_group_link,
-                                              { group_access_level: Member::AccessLevel::GUEST }).execute
+      GroupLinks::GroupLinkUpdateService.new(@user, project_group_link,
+                                             { group_access_level: Member::AccessLevel::GUEST }).execute
       project_group_link.create_logidze_snapshot!
 
       assert_equal 2, project_group_link.log_data.version

@@ -2,8 +2,6 @@
 
 # Controller actions for Groups
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
-  include ShareActions
-
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :context_crumbs, except: %i[index new create show]
