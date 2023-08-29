@@ -3,7 +3,6 @@
 # Common Members actions
 module MembershipActions
   extend ActiveSupport::Concern
-  include ShareActions
 
   included do
     before_action proc { namespace }
