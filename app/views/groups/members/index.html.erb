@@ -1,9 +1,9 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <% if allowed_to?(:share_namespace_with_group?, @namespace) %>
+    <% if allowed_to?(:link_namespace_with_group?, @namespace) %>
       <%= link_to I18n.t("groups.members.index.invite_group"),
-      invite_group_group_members_path,
+      new_group_group_link_path,
       data: {
         "turbo-frame" => "namespace_share"
       },
@@ -79,11 +79,12 @@
 
   </ul>
   <div class="flex flex-col">
+    <%= turbo_frame_tag("invited-group-alert") %>
     <%= turbo_frame_tag "members",
     src:
       (
         if params[:tab] == "invited_groups"
-          invited_groups_group_members_path(
+          group_group_links_path(
             format: :turbo_stream
           )
         else

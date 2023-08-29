@@ -11,11 +11,11 @@
         </p>
       </div>
 
-      <%= form_with(url: group_share_group_members_path(@namespace), method: :post, data: {remote: true}) do |form| %>
+      <%= form_with(model:  @new_group_link, url: group_group_links_path(@namespace), method: :post, data: {remote: true}) do |form| %>
         <div class="grid gap-4">
           <div class="form-field">
             <%= form.label I18n.t("groups.members.invite_group.label.shared_group") %>
-            <%= form.select :shared_group_id,
+            <%= form.select :group_id,
                         options_for_select(Group.all.collect { |u| [u.name, u.id] }),
                         {
                           prompt:

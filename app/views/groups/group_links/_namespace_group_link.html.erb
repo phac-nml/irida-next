@@ -1,13 +1,13 @@
-<tr
-  id="<%= dom_id(namespace_group_link) %>"
-  class="text-sm font-normal text-gray-500 dark:text-gray-400"
->
+ <tr
+    id="<%= dom_id(namespace_group_link) %>"
+    class="text-sm font-normal text-gray-500 dark:text-gray-400"
+  >
     <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
     <td class="px-6 py-4"><%= namespace_group_link.namespace == @namespace ? "Direct Member" : namespace_group_link.namespace.name %></td>
     <td class="px-6 py-4"><%= distance_of_time_in_words(Time.now, namespace_group_link.created_at) %></td>
     <td class="px-6 py-4">
       <div class="form-field">
-        <%= form_with( url: '#', method: :patch) do |form| %>
+        <%= form_with(model: namespace_group_link, url: group_group_link_path(@namespace, namespace_group_link), method: :patch) do |form| %>
           <%= form.select(
             :group_access_level,
             @access_levels,
@@ -15,7 +15,7 @@
             {
               id: "invited-group-#{namespace_group_link.group.id}-access-level-select",
               onchange: "this.form.requestSubmit();",
-              "aria-label": t(:"projects.members.invited_groups.aria_labels.group_access_level")
+              "aria-label": t(:"groups.members.invited_groups.aria_labels.group_access_level")
             }
           ) %>
           <input type="hidden" name="format" value="turbo_stream"/>
@@ -23,7 +23,7 @@
       </div>
     </td>
     <td class="px-6 py-4">
-      <%= form_with( url: '#', method: :patch) do |form| %>
+      <%= form_with( model: namespace_group_link, url: group_group_link_path(@namespace, namespace_group_link), method: :patch) do |form| %>
         <div
           class="form-field datepicker"
           data-controller="datepicker"
@@ -57,19 +57,21 @@
       <% end %>
     </td>
     <td class="px-6 py-4">
-      <%= link_to 'Unshare',
-                  unshare_namespace_project_members_path(@namespace.parent, @namespace.project, shared_group_id: namespace_group_link.group.id),
-                  data: {
-                          turbo_method: :delete,
-                          turbo_confirm: 'Are you sure you want to unshare the namespace with this group',
-                          turbo_stream: true
-                  },
-                  class: "
-                    button
-                    button--state-destructive
-                    button--size-default
-                    inline-block
-                  "
-      %>
+      <% if allowed_to?(:unlink_namespace_with_group?, @namespace) %>
+        <%= link_to 'Unshare',
+                    group_group_link_path(@namespace, namespace_group_link),
+                    data: {
+                            turbo_method: :delete,
+                            turbo_confirm: 'Are you sure you want to unshare the namespace with this group',
+                            turbo_stream: true
+                    },
+                    class: "
+                      button
+                      button--state-destructive
+                      button--size-default
+                      inline-block
+                    "
+        %>
+      <% end %>
     </td>
   </tr>

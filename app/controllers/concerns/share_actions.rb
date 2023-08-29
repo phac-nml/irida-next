@@ -6,7 +6,7 @@ module ShareActions
 
   included do
     before_action proc { namespace }
-    before_action proc { access_levels }, only: %i[index update]
+    before_action proc { access_levels }, only: %i[index create update new]
     before_action proc { namespace_group_link }, only: %i[destroy update]
   end
 
@@ -14,8 +14,12 @@ module ShareActions
     @namespace_group_links = NamespaceGroupLink.find_by(id: @namespace.id)
   end
 
+  def new
+    @new_group_link = NamespaceGroupLink.new(namespace_id: @namespace.id)
+  end
+
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace, group_link_params).execute
+    @namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace, group_link_params).execute
     respond_to do |format|
       if namespace_group_link
         if namespace_group_link.errors.full_messages.count.positive?
@@ -25,6 +29,7 @@ module ShareActions
                              message: namespace_group_link.errors.full_messages.first }
           end
         else
+          @group_invited = true
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @namespace_group_link,
                                           access_levels: @access_levels,
