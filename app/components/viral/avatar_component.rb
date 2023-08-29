@@ -19,7 +19,7 @@ module Viral
       @size = size
       @url = url
       @font_styles = if size == :small
-                       'text-lg font-medium'
+                       'text-sm'
                      else
                        size == :medium ? 'text-2xl font-semibold' : 'text-4xl font-bold'
                      end

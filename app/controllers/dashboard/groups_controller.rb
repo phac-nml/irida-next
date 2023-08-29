@@ -9,7 +9,7 @@ module Dashboard
           @groups = authorized_scope(Group, type: :relation).without_descendants.include_route.order(updated_at: :desc)
         end
         format.turbo_stream do
-          @collapse = params[:collapse] == 'true'
+          @collapsed = params[:collapse] == 'true'
           @group = Group.find(params[:parent_id])
           @depth = params[:depth].to_i
           @sub_groups = @group.children.first(10)

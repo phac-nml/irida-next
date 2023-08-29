@@ -1,7 +1,7 @@
 <%= turbo_stream.replace dom_id(@group) do %>
-  <%= render GroupList::GroupRowComponent.new(
+  <%= render GroupsList::GroupRow::WithChildrenComponent.new(
     group: @group,
-    collapse: @collapse,
+    collapsed: @collapsed,
     path: "dashboard_groups_path",
     path_args: {
     }

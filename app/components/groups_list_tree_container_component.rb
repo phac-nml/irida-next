@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-# This component renders a list of groups in a tree view.
-class GroupListComponent < Component
+class GroupsListTreeContainerComponent < ViewComponent::Base
   erb_template <<-ERB
       <div class="groups-list-tree-container">
-        <%= render GroupList::GroupListTreeComponent.new(groups: @groups, path: @path, path_args: @path_args) %>
+        <%= render GroupsList::GroupListTreeComponent.new(groups: @groups, path: @path, path_args: @path_args) %>
       </div>
   ERB
 
