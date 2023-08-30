@@ -1,0 +1,22 @@
+<tr
+  id="<%= dom_id(attachment) %>"
+  class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+>
+  <th scope="row" class="px-6 py-4"><%= link_to attachment.file.filename, download_namespace_project_sample_attachment_path(sample_id: @sample.id, id: attachment.id), data: { turbo: false } %></td>
+  <td class="px-6 py-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></td>
+  <td class="px-6 py-4"><%= l(attachment.created_at) %></td>
+  <td class="px-6 py-4">
+    <%= button_to(
+            t(".delete"),
+            namespace_project_sample_attachment_path(sample_id: @sample.id, id: attachment.id),
+            method: "delete",
+            form: {
+              data: {
+                "turbo-frame": "attachments",
+                "turbo-confirm": t(".delete_confirm")
+              }
+            },
+            class: "button button--state-destructive button--size-default"
+          ) %>
+  </td>
+</tr>

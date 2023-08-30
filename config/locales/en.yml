@@ -102,6 +102,9 @@ en:
     unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:
+      attachment:
+        file: File
+        metadata: Metadata
       group:
         name: Group name
         path: Path
@@ -591,6 +594,7 @@ en:
           filename: Filename
           size: Size
           created_at: Uploaded
+          action: Action
       create:
         success: Sample was successfully created.
       new:
@@ -628,6 +632,10 @@ en:
           submit_button: Submit
         create:
           success: Samples were successfully transferred.
+      attachments:
+        attachment:
+          delete: Delete
+          delete_confirm: Are you sure that you want to delete this file from the sample?
   services:
     groups:
       transfer:

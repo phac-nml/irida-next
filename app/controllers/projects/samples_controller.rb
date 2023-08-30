@@ -15,6 +15,7 @@ module Projects
 
     def show
       authorize! @sample.project, to: :read_sample?
+      @attachment = Attachment.new
     end
 
     def new

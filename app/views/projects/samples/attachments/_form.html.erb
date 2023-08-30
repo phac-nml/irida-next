@@ -1,23 +1,16 @@
-<%= form_with(model: @sample, url: namespace_project_sample_path(id: @sample.id), method: :patch) do |form| %>
+<%= form_with(model: attachment, url: namespace_project_sample_attachments_path(sample_id: @sample.id)) do |form| %>
   <div class="grid gap-4">
-    <% @sample.files.each do |file| %>
-      <%= form.hidden_field :files,
-                        id: file.signed_id,
-                        multiple: true,
-                        value: file.signed_id %>
-    <% end %>
 
     <div class="form-field">
-      <%= form.label :files,
+      <%= form.label :file,
                  t("projects.samples.show.files"),
                  class:
                    "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-      <%= form.file_field :files,
-                      multiple: true,
+      <%= form.file_field :file,
                       class:
                         "block w-full mb-5 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
       <%= render "shared/form/field_errors",
-      errors: @sample.errors.full_messages_for(:files) %>
+      errors: attachment.errors.full_messages_for(:file) %>
     </div>
 
     <div>
