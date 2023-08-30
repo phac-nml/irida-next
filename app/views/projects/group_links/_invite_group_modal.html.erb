@@ -1,7 +1,8 @@
 <%= turbo_frame_tag("new_namespace_group_link_modal") do %>
-  <%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>>
+  <%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>>
     <%= dialog.with_header(title: I18n.t("projects.members.invite_group.title")) %>
     <%= dialog.with_section do %>
+      <%= turbo_frame_tag("invite-group-alert") %>
       <div class="my-6">
         <p class="dark:text-gray-400">
           <%= I18n.t(
@@ -11,12 +12,15 @@
         </p>
       </div>
 
-      <%= form_with(model: @new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project), method: :post, data: {remote: true}) do |form| %>
+      <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project), method: :post, data: {remote: true}) do |form| %>
         <div class="grid gap-4">
           <div class="form-field">
             <%= form.label I18n.t("projects.members.invite_group.label.shared_group") %>
             <%= form.select :group_id,
-                        options_for_select(Group.all.collect { |u| [u.name, u.id] }),
+                        options_for_select(
+                          Group.all.collect { |u| [u.name, u.id] },
+                          new_group_link.group_id
+                        ),
                         {
                           prompt:
                             I18n.t("projects.members.invite_group.placeholder.select_group")
@@ -26,7 +30,10 @@
           <div class="form-field">
             <%= form.label I18n.t("projects.members.invite_group.label.group_access_level") %>
             <%= form.select :group_access_level,
-                        options_for_select(@access_levels),
+                        options_for_select(
+                          @access_levels,
+                          new_group_link.group_access_level
+                        ),
                         {
                           prompt:
                             I18n.t(
@@ -62,10 +69,7 @@
           </div>
           <div class="my-4">
             <%= form.submit I18n.t("projects.members.invite_group.button.submit"),
-                        class: "button button--size-default button--state-primary",
-                        data: {
-                          action: "click->viral--dialog-component#close"
-                        } %>
+                        class: "button button--size-default button--state-primary" %>
             <button
               type="button"
               class="button button--size-default button--state-default"

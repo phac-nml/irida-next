@@ -1,5 +1,3 @@
-<%= turbo_stream.update "invited-group-alert", viral_alert(type:, message:) %>
-
 <% if @namespace_group_link %>
   <%= turbo_stream.update "invited-groups-count",
                       @namespace_group_link
@@ -15,5 +13,24 @@
                       locals: {
                         namespace_group_link: @namespace_group_link
                       } %>
+
+<% end %>
+
+<% if @namespace_group_link != false %>
+  <%= turbo_stream.replace "new_namespace_group_link_modal",
+                       partial: "invite_group_modal",
+                       locals: {
+                         open: @namespace_group_link.errors.any? ? true : false,
+                         new_group_link: @namespace_group_link
+                       } %>
+
+  <%= turbo_stream.update (
+                        if @namespace_group_link.errors.any?
+                          "invite-group-alert"
+                        else
+                          "invited-group-alert"
+                        end
+                      ),
+                      viral_alert(type:, message:) %>
 
 <% end %>
