@@ -426,6 +426,7 @@ en:
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the namespace with this group
         aria_labels:
+          group_id: Id of group to share namespace with
           group_access_level: Group Access Level
           expires_at: Group access expiration
         access_level:
@@ -457,7 +458,7 @@ en:
           select_access_level: Select access level
           select_group: Select group
         label:
-          shared_group: Group to share namespace with
+          group_id: Group to share namespace with
           group_access_level: Maximum group access level
           access_expiration: Access expiration (optional)
         button:
@@ -575,6 +576,7 @@ en:
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the namespace with this group
         aria_labels:
+          group_id: Id of group to share namespace with
           group_access_level: Group Access Level
           expires_at: Group access expiration
         access_level:

@@ -25,7 +25,8 @@
                           prompt:
                             I18n.t("projects.group_links.new.placeholder.select_group")
                         },
-                        required: true %>
+                        required: true,
+                        "aria-label": t(:"projects.group_links.index.aria_labels.group_id") %>
           </div>
           <div class="form-field">
             <%= form.label I18n.t("projects.group_links.new.label.group_access_level") %>
@@ -40,7 +41,9 @@
                               "projects.group_links.new.placeholder.select_access_level"
                             )
                         },
-                        required: true %>
+                        required: true,
+                        "aria-label":
+                          t(:"projects.group_links.index.aria_labels.group_access_level") %>
           </div>
           <div class="form-field datepicker" data-controller="datepicker">
             <%= form.label I18n.t("projects.group_links.new.label.access_expiration") %>
@@ -64,7 +67,9 @@
               <%= form.text_field :expires_at,
                               placeholder: "YYYY-MM-DD",
                               autocomplete: "off",
-                              "data-datepicker-target": "datePicker" %>
+                              "data-datepicker-target": "datePicker",
+                              "aria-label":
+                                t(:"projects.group_links.index.aria_labels.expires_at") %>
             </div>
           </div>
           <div class="my-4">

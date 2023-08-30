@@ -15,7 +15,7 @@
       <%= form_with(model:  new_group_link, url: group_group_links_path(@namespace), method: :post, data: {remote: true}) do |form| %>
         <div class="grid gap-4">
           <div class="form-field">
-            <%= form.label I18n.t("groups.group_links.new.label.shared_group") %>
+            <%= form.label I18n.t("groups.group_links.new.label.group_id") %>
             <%= form.select :group_id,
                         options_for_select(
                           Group.all.collect { |u| [u.name, u.id] },
@@ -24,10 +24,11 @@
                         {
                           prompt: I18n.t("groups.group_links.new.placeholder.select_group")
                         },
-                        required: true %>
+                        required: true,
+                        "aria-label": t(:"groups.group_links.index.aria_labels.group_id") %>
           </div>
           <div class="form-field">
-            <%= form.label I18n.t("groups.members.invite_group.label.group_access_level") %>
+            <%= form.label I18n.t("groups.group_links.new.label.group_access_level") %>
             <%= form.select :group_access_level,
                         options_for_select(
                           @access_levels,
@@ -37,7 +38,9 @@
                           prompt:
                             I18n.t("groups.group_links.new.placeholder.select_access_level")
                         },
-                        required: true %>
+                        required: true,
+                        "aria-label":
+                          t(:"groups.group_links.index.aria_labels.group_access_level") %>
           </div>
           <div class="form-field datepicker" data-controller="datepicker">
             <%= form.label I18n.t("groups.group_links.new.label.access_expiration") %>
@@ -61,7 +64,9 @@
               <%= form.text_field :expires_at,
                               placeholder: "YYYY-MM-DD",
                               autocomplete: "off",
-                              "data-datepicker-target": "datePicker" %>
+                              "data-datepicker-target": "datePicker",
+                              "aria-label":
+                                t(:"groups.group_links.index.aria_labels.expires_at") %>
             </div>
           </div>
           <div class="my-4">

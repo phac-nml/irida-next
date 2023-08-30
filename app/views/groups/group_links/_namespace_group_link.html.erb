@@ -49,6 +49,7 @@
                         placeholder: "YYYY-MM-DD",
                         autocomplete: "off",
                         value: namespace_group_link.expires_at,
+                        id: "invited-group-#{namespace_group_link.group.id}-expiration",
                         "data-datepicker-target": "datePicker",
                         "data-datepicker-autosubmit": "true",
                         "aria-label": t(:"groups.group_links.index.aria_labels.expires_at") %>
