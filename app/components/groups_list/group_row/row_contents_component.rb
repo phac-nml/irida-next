@@ -2,6 +2,7 @@
 
 module GroupsList
   module GroupRow
+    # Component for the contents of a group tree row
     class RowContentsComponent < Viral::Component
       def initialize(group:, path: nil, path_args: {}, collapsed: false)
         @group = group
