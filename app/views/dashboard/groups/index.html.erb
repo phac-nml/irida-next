@@ -1,9 +1,7 @@
-<%= render Viral::PageHeaderComponent.new(title: t("groups.show.title"), subtitle: t("groups.show.subtitle")) do |component| %>
-  <%= component.with_icon do %>
-    <%= viral_icon(name: "squares_2x2", classes: "h-14 w-14 text-primary-700") %>
-  <% end %>
+<%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
+
   <%= component.with_buttons do %>
-    <%= link_to t(:"groups.index.create_group_button"),
+    <%= link_to t(:".create_group_button"),
     new_group_path,
     class:
       "inline-flex items-center justify-center button button--state-primary button--size-default" %>
