@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module GroupsList
+  # This component renders a group row, either with or without children.
   class GroupRowComponent < ViewComponent::Base
     with_collection_parameter :group
 
