@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module GroupsList
+  # Component to render a collapsible tree of groups
   class GroupListTreeComponent < ViewComponent::Base
     attr_reader :parent, :groups, :path, :path_args, :collapsed, :limit
 
