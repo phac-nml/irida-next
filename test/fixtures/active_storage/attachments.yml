@@ -1,4 +1,4 @@
-sample1_files_test_file_fastq:
-  name: files
-  record: sample1 (Sample)
-  blob: sample1_files_test_file_fastq_blob
+attachment1_file_test_file_fastq:
+  name: file
+  record: attachment1 (Attachment)
+  blob: attachment1_file_test_file_fastq_blob

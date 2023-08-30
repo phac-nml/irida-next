@@ -1,9 +1,5 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  metadata: 
-  attachable: one
-
-two:
-  metadata: 
-  attachable: two
+attachment1:
+  metadata: {}
+  attachable: sample1 (Sample)
