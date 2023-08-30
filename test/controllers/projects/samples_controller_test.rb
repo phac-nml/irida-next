@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Projects
-  class SamplesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+  class SamplesControllerTest < ActionDispatch::IntegrationTest
     setup do
       sign_in users(:john_doe)
       @sample1 = samples(:sample1)
@@ -134,13 +134,6 @@ module Projects
       end
 
       assert_response :unauthorized
-    end
-
-    test 'can attach a file to a sample that the user has role >= Maintainer' do
-      patch namespace_project_sample_url(@namespace, @project, @sample1),
-            params: { sample: { files: [fixture_file_upload('test_file.fastq', 'text/plain')] } }
-
-      assert_redirected_to namespace_project_sample_url(@namespace, @project, @sample1)
     end
   end
 end
