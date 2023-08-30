@@ -65,12 +65,29 @@ module Projects
       click_on I18n.t('projects.samples.show.upload_file')
 
       within('dialog') do
-        attach_file 'sample[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        attach_file 'attachment[file]', Rails.root.join('test/fixtures/files/test_file.fastq')
         click_on I18n.t('projects.samples.show.upload_file')
       end
 
-      assert_text I18n.t('projects.samples.update.success')
-      assert_text 'test_file.fastq'
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
+      within('#attachments') do
+        assert_text 'test_file.fastq'
+      end
+    end
+
+    test 'user with role >= Maintainer should be able to delete a file frpm a Sample' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
+      click_on I18n.t('projects.samples.attachments.attachment.delete')
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
+      within('#attachments') do
+        assert_no_text 'test_file.fastq'
+      end
     end
 
     test 'should destroy Sample' do
