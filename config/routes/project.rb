@@ -25,6 +25,11 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :transfer, only: %i[create new]
           end
         end
+        resources :attachments, module: :samples, only: %i[create update destroy] do
+          member do
+            get :download
+          end
+        end
       end
     end
   end

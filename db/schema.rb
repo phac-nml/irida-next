@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_27_133120) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_30_152823) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -41,6 +41,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_133120) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "attachments", force: :cascade do |t|
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "deleted_at"
+    t.string "attachable_type", null: false
+    t.bigint "attachable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "log_data"
+    t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable"
+    t.index ["metadata"], name: "index_attachments_on_metadata", using: :gin
   end
 
   create_table "members", force: :cascade do |t|
@@ -559,5 +571,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_133120) do
   SQL
   create_trigger :logidze_on_namespace_group_links, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_namespace_group_links BEFORE INSERT OR UPDATE ON public.namespace_group_links FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_attachments, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_attachments BEFORE INSERT OR UPDATE ON public.attachments FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end

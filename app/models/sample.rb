@@ -7,7 +7,7 @@ class Sample < ApplicationRecord
 
   belongs_to :project
 
-  has_many_attached :files
+  has_many :attachments, as: :attachable, dependent: :destroy
 
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
   validates :name, uniqueness: { scope: %i[name project_id] }

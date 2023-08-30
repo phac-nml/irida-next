@@ -28,40 +28,20 @@
   <% if allowed_to?(:update?, @project) %>
     <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
       <% header.with_action do %>
-        <%= viral_dialog do |dialog| %>
-          <% dialog.with_trigger do %>
-            <%= viral_button(data: { action: "click->viral--dialog-component#open" }) do %>
-              <%= t("projects.samples.show.upload_file") %>
-            <% end %>
-          <% end %>
-          <% dialog.with_header(title: t("projects.samples.show.upload_new_file")) %>
-          <% dialog.with_section do %>
-            <%= render partial: "add_file_form", locals: { sample: @sample } %>
-          <% end %>
-        <% end %>
+        <%= render partial: "projects/samples/attachments/new_attachment_modal",
+        locals: {
+          open: false,
+          attachment: @attachment
+        } %>
       <% end %>
     <% end %>
   <% else %>
     <% card.with_header(title: t("projects.samples.show.files")) %>
   <% end %>
   <% card.with_section do %>
-    <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
-      <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
-        <tr>
-          <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.filename") %></th>
-          <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.size") %></th>
-          <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.created_at") %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @sample.files.each do |file| %>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4"><%= file.filename %></th>
-            <td class="px-6 py-4"><%= number_to_human_size(file.blob.byte_size) %></td>
-            <td class="px-6 py-4"><%= l(file.created_at) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <%= render partial: "projects/samples/attachments/table",
+    locals: {
+      attachments: @sample.attachments
+    } %>
   <% end %>
 <% end %>
