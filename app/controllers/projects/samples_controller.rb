@@ -67,7 +67,7 @@ module Projects
     end
 
     def sample_params
-      params.require(:sample).permit(:name, :description, files: [])
+      params.require(:sample).permit(:name, :description)
     end
 
     def project

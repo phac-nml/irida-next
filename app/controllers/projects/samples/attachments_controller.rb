@@ -30,7 +30,7 @@ module Projects
       def update; end
 
       def destroy
-        authorize! @project, to: :destroy_sample?
+        authorize! @project, to: :update_sample?
 
         return unless @attachment.destroy
 
