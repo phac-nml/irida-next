@@ -20,6 +20,14 @@ Metrics/BlockLength:
     - "**/config/routes/**/*.rb"
     - "**/test/**/*.rb"
 
+# https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsclasslength
+Metrics/ClassLength:
+  Exclude:
+    - "**/config/environments/*.rb"
+    - "**/config/routes.rb"
+    - "**/config/routes/**/*.rb"
+    - "**/test/**/*.rb"
+
 # https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsmodulelength
 Metrics/ModuleLength:
   Exclude:

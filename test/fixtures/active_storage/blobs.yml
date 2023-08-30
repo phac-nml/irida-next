@@ -1,0 +1,1 @@
+sample1_files_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test_fixtures" %>

@@ -1,7 +1,10 @@
 <%= form_with(model: @sample, url: namespace_project_sample_path(id: @sample.id), method: :patch) do |form| %>
   <div class="grid gap-4">
     <% @sample.files.each do |file| %>
-      <%= form.hidden_field :files, multiple: true, value: file.signed_id %>
+      <%= form.hidden_field :files,
+                        id: file.signed_id,
+                        multiple: true,
+                        value: file.signed_id %>
     <% end %>
 
     <div class="form-field">
