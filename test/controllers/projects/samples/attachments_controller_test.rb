@@ -1,7 +1,13 @@
-require "test_helper"
+# frozen_string_literal: true
 
-class Projects::Samples::AttachmentsControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+require 'test_helper'
+
+module Projects
+  module Samples
+    class AttachmentsControllerTest < ActionDispatch::IntegrationTest
+      # test "the truth" do
+      #   assert true
+      # end
+    end
+  end
 end
