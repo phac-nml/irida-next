@@ -3,7 +3,7 @@
 module GroupsList
   module GroupRow
     # Component for the contents of a group row that has children
-    class WithChildrenComponent < ViewComponent::Base
+    class WithChildrenComponent < Viral::Component
       def initialize(group:, path: nil, path_args: {}, collapsed: false)
         @group = group
         @path = path

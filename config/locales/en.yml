@@ -291,7 +291,7 @@ en:
         title: Groups
         create_group_button: New group
         more_items: "%{count} more items"
-        row_aria_label: "See %{group_name} subgroups"
+        row_aria_label: "See %{name} subgroups"
         subgroups: Subgroups
   profiles:
     sidebar:

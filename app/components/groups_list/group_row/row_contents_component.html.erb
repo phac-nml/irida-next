@@ -1,12 +1,4 @@
-<%= link_to public_send(@path, @path_args.merge({ parent_id: @group.id, collapse: !@collapsed })), data: { turbo_stream: '', "groups--row-target": "toggle" },
-            aria: { label: t(:'dashboard.groups.index.row_aria_label') }, class: "folder-toggle-wrap mr-2 flex items-center" do %>
-  <span class="folder-caret inline-block text-slate-400">
-      <%= viral_icon(name: :chevron_right, classes: 'h-3 w-3') %>
-    </span>
-  <span class="item-type-icon text-slate-400">
-      <%= viral_icon(name: :squares_2x2, classes: 'h-4 w-4') %>
-    </span>
-<% end %>
+
 
 <%= viral_avatar(
       name: @group.name,
