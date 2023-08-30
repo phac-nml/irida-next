@@ -1,12 +1,12 @@
 <%= turbo_frame_tag("new_namespace_group_link_modal") do %>
   <%= viral_dialog(open: open, classes: ["overflow-visible"]) do |dialog| %>
-    <%= dialog.with_header(title: I18n.t("groups.members.invite_group.title")) %>
+    <%= dialog.with_header(title: I18n.t("groups.group_links.new.title")) %>
     <%= dialog.with_section do %>
       <%= turbo_frame_tag("invite-group-alert") %>
       <div class="my-6">
         <p class="dark:text-gray-400">
           <%= I18n.t(
-            "groups.members.invite_group.sharing_namespace_with_group",
+            "groups.group_links.new.sharing_namespace_with_group",
             name: @namespace.human_name
           ) %>
         </p>
@@ -15,15 +15,14 @@
       <%= form_with(model:  new_group_link, url: group_group_links_path(@namespace), method: :post, data: {remote: true}) do |form| %>
         <div class="grid gap-4">
           <div class="form-field">
-            <%= form.label I18n.t("groups.members.invite_group.label.shared_group") %>
+            <%= form.label I18n.t("groups.group_links.new.label.shared_group") %>
             <%= form.select :group_id,
                         options_for_select(
                           Group.all.collect { |u| [u.name, u.id] },
                           new_group_link.group_id
                         ),
                         {
-                          prompt:
-                            I18n.t("groups.members.invite_group.placeholder.select_group")
+                          prompt: I18n.t("groups.group_links.new.placeholder.select_group")
                         },
                         required: true %>
           </div>
@@ -36,14 +35,12 @@
                         ),
                         {
                           prompt:
-                            I18n.t(
-                              "groups.members.invite_group.placeholder.select_access_level"
-                            )
+                            I18n.t("groups.group_links.new.placeholder.select_access_level")
                         },
                         required: true %>
           </div>
           <div class="form-field datepicker" data-controller="datepicker">
-            <%= form.label I18n.t("groups.members.invite_group.label.access_expiration") %>
+            <%= form.label I18n.t("groups.group_links.new.label.access_expiration") %>
             <div class="relative max-w-sm">
               <div
                 class="
@@ -68,14 +65,14 @@
             </div>
           </div>
           <div class="my-4">
-            <%= form.submit I18n.t("groups.members.invite_group.button.submit"),
+            <%= form.submit I18n.t("groups.group_links.new.button.submit"),
                         class: "button button--size-default button--state-primary" %>
             <button
               type="button"
               class="button button--size-default button--state-default"
               data-action="click->viral--dialog-component#close"
             >
-              <%= I18n.t("groups.members.invite_group.button.cancel") %>
+              <%= I18n.t("groups.group_links.new.button.cancel") %>
             </button>
           </div>
         </div>

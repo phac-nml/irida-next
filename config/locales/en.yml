@@ -422,6 +422,25 @@ en:
     transfer:
       success: Group transferred successfully
     group_links:
+      index:
+        unlink: Unlink
+        unlink_confirmation: Are you sure you want to unlink the namespace with this group
+        aria_labels:
+          group_access_level: Group Access Level
+          expires_at: Group access expiration
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        table_header:
+          group: Group
+          source: Source
+          access_granted: Access granted
+          access_level: Access level
+          expiration: Expiration
+          action: Action
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
@@ -431,6 +450,19 @@ en:
       update:
         success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
+      new:
+        title: Share namespace
+        sharing_namespace_with_group: "You're sharing group %{name} with a group"
+        placeholder:
+          select_access_level: Select access level
+          select_group: Select group
+        label:
+          shared_group: Group to share namespace with
+          group_access_level: Maximum group access level
+          access_expiration: Access expiration (optional)
+        button:
+          cancel: Cancel
+          submit: Share
     members:
       create:
         error: "Error adding member"
@@ -477,37 +509,6 @@ en:
         error: "There was an error removing the group member"
         success: "Group member %{user} successfully removed"
         leave_success: "You have successfully left the group %{name}"
-      invite_group:
-        title: Share namespace
-        sharing_namespace_with_group: "You're sharing group %{name} with a group"
-        placeholder:
-          select_access_level: Select access level
-          select_group: Select group
-        label:
-          shared_group: Group to share namespace with
-          group_access_level: Maximum group access level
-          access_expiration: Access expiration (optional)
-        button:
-          cancel: Cancel
-          submit: Share
-      invited_groups:
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Analyst
-          level_30: Maintainer
-          level_40: Owner
-        table_header:
-          group: Group
-          source: Source
-          access_granted: Access granted
-          access_level: Access level
-          expiration: Expiration
-          action: Action
-        buttons:
-          unshare: Unshare
-        aria_labels:
-          group_access_level: Group Access Level
     samples:
       index:
         title: Samples
@@ -570,6 +571,25 @@ en:
     destroy:
       success: "Project %{project_name} was successfully deleted"
     group_links:
+      index:
+        unlink: Unlink
+        unlink_confirmation: Are you sure you want to unlink the namespace with this group
+        aria_labels:
+          group_access_level: Group Access Level
+          expires_at: Group access expiration
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        table_header:
+          group: Group
+          source: Source
+          access_granted: Access granted
+          access_level: Access level
+          expiration: Expiration
+          action: Action
       create:
         success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group
@@ -579,6 +599,19 @@ en:
       update:
         success: Successfully updated project %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
+      new:
+        title: Share namespace
+        sharing_namespace_with_group: "You're sharing group %{name} with a group"
+        placeholder:
+          select_access_level: Select access level
+          select_group: Select group
+        label:
+          shared_group: Group to share namespace with
+          group_access_level: Maximum group access level
+          access_expiration: Access expiration (optional)
+        button:
+          cancel: Cancel
+          submit: Share
     members:
       create:
         error: "Error adding member"
@@ -625,37 +658,6 @@ en:
         error: "There was an error removing the project member"
         success: "Project member %{user} successfully removed"
         leave_success: "You have successfully left the project %{name}"
-      invite_group:
-        title: Share namespace
-        sharing_namespace_with_group: "You're sharing project %{name} with a group"
-        placeholder:
-          select_access_level: Select access level
-          select_group: Select group
-        label:
-          shared_group: Group to share namespace with
-          group_access_level: Maximum group access level
-          access_expiration: Access expiration (optional)
-        button:
-          cancel: Cancel
-          submit: Share
-      invited_groups:
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Analyst
-          level_30: Maintainer
-          level_40: Owner
-        table_header:
-          group: Group
-          source: Source
-          access_granted: Access granted
-          access_level: Access level
-          expiration: Expiration
-          action: Action
-        buttons:
-          unshare: Unshare
-        aria_labels:
-          group_access_level: Group Access Level
     samples:
       show:
         edit_button: Edit this sample

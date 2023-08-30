@@ -15,7 +15,7 @@
             {
               id: "invited-group-#{namespace_group_link.group.id}-access-level-select",
               onchange: "this.form.requestSubmit();",
-              "aria-label": t(:"projects.members.invited_groups.aria_labels.group_access_level")
+              "aria-label": t(:"projects.group_links.index.aria_labels.group_access_level")
             }
           ) %>
           <input type="hidden" name="format" value="turbo_stream"/>
@@ -50,7 +50,8 @@
                         autocomplete: "off",
                         value: namespace_group_link.expires_at,
                         "data-datepicker-target": "datePicker",
-                        "data-datepicker-autosubmit": "true" %>
+                        "data-datepicker-autosubmit": "true",
+                        "aria-label": t(:"projects.group_links.index.aria_labels.expires_at") %>
 
             <input type="hidden" name="format" value="turbo_stream"/>
         </div>
@@ -58,11 +59,11 @@
     </td>
     <td class="px-6 py-4">
       <% if allowed_to?(:unlink_namespace_with_group?, @namespace) %>
-        <%= link_to 'Unshare',
+        <%= link_to t(:"projects.group_links.index.unlink"),
                     namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link),
                     data: {
                             turbo_method: :delete,
-                            turbo_confirm: 'Are you sure you want to unshare the namespace with this group',
+                            turbo_confirm: t(:"projects.group_links.index.unlink_confirmation"),
                             turbo_stream: true
                     },
                     class: "
