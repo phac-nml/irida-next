@@ -1,4 +1,10 @@
 <% if new_attachment %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(
+      type: :success,
+      data: t(".success", filename: new_attachment.file.filename)
+    ) %>
+  <% end %>
   <%= turbo_stream.append "attachments-table-body",
                       partial: "attachment",
                       locals: {
