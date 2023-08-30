@@ -23,7 +23,7 @@ module ActiveSupport
 
     parallelize_setup do |worker|
       SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
-      ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{i}"
+      ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{worker}"
     end
 
     parallelize_teardown do |_worker|
