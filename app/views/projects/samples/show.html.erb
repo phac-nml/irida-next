@@ -25,20 +25,24 @@
 <% end %>
 
 <%= viral_card do |card| %>
-  <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
-    <% header.with_action do %>
-      <%= viral_dialog do |dialog| %>
-        <% dialog.with_trigger do %>
-          <%= viral_button(data: { action: "click->viral--dialog-component#open" }) do %>
-            <%= t("projects.samples.show.upload_file") %>
+  <% if allowed_to?(:update?, @project) %>
+    <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
+      <% header.with_action do %>
+        <%= viral_dialog do |dialog| %>
+          <% dialog.with_trigger do %>
+            <%= viral_button(data: { action: "click->viral--dialog-component#open" }) do %>
+              <%= t("projects.samples.show.upload_file") %>
+            <% end %>
           <% end %>
-        <% end %>
-        <% dialog.with_header(title: t("projects.samples.show.upload_new_file")) %>
-        <% dialog.with_section do %>
-          <%= render partial: "add_file_form", locals: { sample: @sample } %>
+          <% dialog.with_header(title: t("projects.samples.show.upload_new_file")) %>
+          <% dialog.with_section do %>
+            <%= render partial: "add_file_form", locals: { sample: @sample } %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
+  <% else %>
+    <% card.with_header(title: t("projects.samples.show.files")) %>
   <% end %>
   <% card.with_section do %>
     <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">

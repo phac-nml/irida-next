@@ -1,0 +1,4 @@
+sample1_files_test_file_fastq:
+  name: files
+  record: sample1 (Sample)
+  blob: sample1_files_test_file_fastq_blob
