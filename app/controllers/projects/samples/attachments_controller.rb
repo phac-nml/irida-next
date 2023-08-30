@@ -6,7 +6,7 @@ module Projects
     class AttachmentsController < ApplicationController
       before_action :project
       before_action :sample
-      before_action :attachment, only: %i[update destroy download]
+      before_action :attachment, only: %i[destroy download]
 
       def create
         authorize! @project, to: :update_sample?
@@ -26,8 +26,6 @@ module Projects
           end
         end
       end
-
-      def update; end
 
       def destroy
         authorize! @project, to: :update_sample?
