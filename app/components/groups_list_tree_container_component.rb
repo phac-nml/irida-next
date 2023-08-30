@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Renders top level wrapper for the groups list tree
 class GroupsListTreeContainerComponent < ViewComponent::Base
   erb_template <<-ERB
       <div class="groups-list-tree-container">
