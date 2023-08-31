@@ -50,5 +50,83 @@ module Groups
 
       assert_selector 'tr', count: (@group_links_count + 1) + header_row_count
     end
+
+    test 'can remove a group to group link' do
+      namespace_group_link = namespace_group_links(:namespace_group_link5)
+
+      visit group_members_url(@namespace, tab: 'invited_groups')
+      assert_selector 'tr', count: @group_links_count + header_row_count
+
+      table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+      within table_row do
+        click_link I18n.t(:'groups.group_links.index.unlink')
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
+      end
+
+      assert_text I18n.t(:'groups.group_links.destroy.success', namespace_name: namespace_group_link.namespace.name,
+                                                                group_name: namespace_group_link.group.name)
+
+      assert_selector 'tr', count: (@group_links_count - 1) + header_row_count
+    end
+
+    test 'cannot add a group to group link' do
+      login_as users(:ryan_doe)
+      visit group_members_url(@namespace, tab: 'invited_groups')
+
+      assert_selector 'a', text: I18n.t(:'groups.members.index.invite_group'), count: 0
+    end
+
+    test 'can update namespace group links group access level to another access level' do
+      namespace_group_link = namespace_group_links(:namespace_group_link5)
+
+      Timecop.travel(Time.zone.now + 5) do
+        visit group_members_url(@namespace, tab: 'invited_groups')
+        assert_selector 'tr', count: @group_links_count + header_row_count
+
+        find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
+                                                                                         'option[2]').select_option
+
+        within %(turbo-frame[id="invited-group-alert"]) do
+          assert_text I18n.t(:'groups.group_links.update.success', namespace_name: namespace_group_link.namespace.name,
+                                                                   group_name: namespace_group_link.group.name,
+                                                                   param_name: 'group access level')
+        end
+
+        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+        within namespace_group_link_row do
+          assert_text 'Updated', count: 1
+          assert_text 'less than a minute ago'
+        end
+      end
+    end
+
+    # test 'can update namespace group links expiration' do
+    #   namespace_group_link = namespace_group_links(:namespace_group_link5)
+
+    #   Timecop.travel(Time.zone.now + 5) do
+    #     visit group_members_url(@namespace, tab: 'invited_groups')
+    #     assert_selector 'tr', count: @group_links_count + header_row_count
+
+    #     find("#invited-#{namespace_group_link.group.id}-expiration").set('2023-08-07')
+
+    #     within %(turbo-frame[id="invited-group-alert"]) do
+    #       assert_text I18n.t(:'groups.group_links.update.success', namespace_name: namespace_group_link.namespace.name,
+    #                                                                group_name: namespace_group_link.group.name,
+    #                                                                param_name: 'expiration')
+    #     end
+
+    #     namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+    #     within namespace_group_link_row do
+    #       assert_text 'Updated', count: 1
+    #       assert_text 'less than a minute ago'
+    #     end
+    #   end
+    # end
   end
 end

@@ -4,7 +4,20 @@
 >
     <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
     <td class="px-6 py-4"><%= namespace_group_link.namespace == @namespace ? "Direct Member" : namespace_group_link.namespace.name %></td>
-    <td class="px-6 py-4"><%= distance_of_time_in_words(Time.now, namespace_group_link.created_at) %></td>
+    <td class="px-6 py-4">
+      <div>
+        <span class="text-sm"><%= distance_of_time_in_words(Time.now, namespace_group_link.created_at) %></span>
+        <span class="block">
+          <%= turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
+            <% if namespace_group_link.created_at < namespace_group_link.updated_at %>
+              <%= render UpdatedComponent.new(
+                updated_at: namespace_group_link.updated_at
+              ) %>
+            <% end %>
+          <% end %>
+        </span>
+      </div>
+    </td>
     <td class="px-6 py-4">
       <div class="form-field">
         <% if allowed_to?(:update_namespace_with_group_link?, @namespace) %>
