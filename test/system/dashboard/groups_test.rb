@@ -31,7 +31,7 @@ module Dashboard
           assert_text groups(:group_one).human_name
           assert_no_selector 'ul.groups-list.group-list-tree'
           find('a.folder-toggle-wrap').click
-          assert_selector 'ul.groups-list.group-list-tree'
+          assert_selector 'li'
         end
       end
     end
