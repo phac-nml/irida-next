@@ -81,7 +81,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
       delete group_path(group)
     end
 
-    assert_redirected_to groups_path
+    assert_redirected_to dashboard_groups_path
   end
 
   test 'should not show a sub group that doesn\'t exist' do
