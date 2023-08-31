@@ -75,7 +75,7 @@ module Projects
       end
     end
 
-    test 'user with role >= Maintainer should be able to delete a file frpm a Sample' do
+    test 'user with role >= Maintainer should be able to delete a file from a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
       click_on I18n.t('projects.samples.attachments.attachment.delete')
