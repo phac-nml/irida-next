@@ -3,7 +3,7 @@
 module GroupsList
   module GroupRow
     # Component for the contents of a group row that has no children
-    class WithoutChildrenComponent < ViewComponent::Base
+    class WithoutChildrenComponent < Viral::Component
       def initialize(group:, path: nil, path_args: {})
         @group = group
         @path = path

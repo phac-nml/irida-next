@@ -399,6 +399,9 @@ en:
           title: Change group URL
           description: Changing a group's URL can have unintended side effects.
           submit: Change group URL
+    show:
+      create_subgroup_button: New subgroup
+      create_project_button: New project
     new_subgroup:
       title: Create subgroup
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
