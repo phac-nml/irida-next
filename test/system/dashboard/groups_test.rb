@@ -39,5 +39,25 @@ module Dashboard
         assert_text groups(:subgroup1).name
       end
     end
+
+    test 'can create a group from listing page' do
+      visit dashboard_groups_url
+
+      click_link I18n.t(:'dashboard.groups.index.create_group_button')
+
+      within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+        fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'New group'
+
+        assert_selector %(input[data-slugify-target="path"]) do |input|
+          assert_equal 'new-group', input['value']
+        end
+
+        fill_in 'Description', with: 'New group description'
+        click_on I18n.t(:'groups.create.submit')
+      end
+
+      assert_text I18n.t(:'groups.create.success')
+      assert_selector 'h1', text: 'New group'
+    end
   end
 end

@@ -9,7 +9,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     sign_in users(:john_doe)
 
     get groups_path
-    assert_response :success
+    assert_response :redirect
   end
 
   test 'should show the group' do
