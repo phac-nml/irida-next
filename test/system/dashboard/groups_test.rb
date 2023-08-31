@@ -15,11 +15,11 @@ module Dashboard
 
       within 'ul.groups-list.group-list-tree' do
         assert_selector 'li', count: 5
-        assert_text groups(:group_one).human_name
-        assert_text groups(:group_two).human_name
-        assert_text groups(:group_three).human_name
-        assert_text groups(:group_five).human_name
-        assert_text groups(:group_six).human_name
+        assert_text groups(:group_one).name
+        assert_text groups(:group_two).name
+        assert_text groups(:group_three).name
+        assert_text groups(:group_five).name
+        assert_text groups(:group_six).name
       end
     end
 
@@ -28,11 +28,15 @@ module Dashboard
 
       within 'ul.groups-list.group-list-tree' do
         within first('li') do
-          assert_text groups(:group_one).human_name
+          assert_text groups(:group_one).name
           assert_no_selector 'ul.groups-list.group-list-tree'
           find('a.folder-toggle-wrap').click
-          assert_selector 'li'
         end
+      end
+
+      within first('ul.groups-list.group-list-tree') do
+        assert_text groups(:group_one).name
+        assert_text groups(:subgroup1).name
       end
     end
   end
