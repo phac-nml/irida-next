@@ -56,7 +56,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     Groups::DestroyService.new(@group, current_user).execute
     if @group.deleted?
       flash[:success] = t('.success', group_name: @group.name)
-      redirect_to groups_path
+      redirect_to dashboard_groups_path
     else
       flash[:error] = @group.errors.full_messages.first
       redirect_to group_path(@group)
