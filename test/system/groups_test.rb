@@ -78,7 +78,10 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
   end
 
   test 'can delete a group' do
-    visit group_url(groups(:group_two))
+    visit dashboard_groups_path
+    assert_text groups(:group_two).name
+
+    find('div.title a', text: groups(:group_two).name).click
 
     click_link I18n.t(:'groups.sidebar.settings')
 
@@ -90,7 +93,7 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     end
 
     assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
-    assert_selector 'li', count: @groups_count - 1
+    assert_no_text groups(:group_two).name
   end
 
   test 'can transfer a group' do
