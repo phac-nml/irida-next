@@ -370,7 +370,7 @@ body {
     text-decoration: none;
   }
   .group-list-tree .group-row-contents .title {
-    font-size: 16px;
+    @apply text-base font-medium text-slate-900 dark:text-white;
   }
 
   .group-list-tree .group-row-contents.has-more-items {
@@ -380,6 +380,7 @@ body {
 
   .group-list-tree .group-row-contents .description p {
     max-width: 100%;
+    @apply text-sm text-slate-700 dark:text-slate-400;
   }
 
   .group-list-tree .group-row-contents .stats {
