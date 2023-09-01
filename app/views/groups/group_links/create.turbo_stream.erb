@@ -1,5 +1,4 @@
 <% if @group_invited %>
-  <%= @namespace_group_link.inspect %>
   <%= turbo_stream.append "invited-groups-table-body",
                       partial: "namespace_group_link",
                       locals: {
@@ -7,6 +6,16 @@
                       } %>
   <% if @existing_namespace_group_link %>
     <%= turbo_stream.remove dom_id(@existing_namespace_group_link) %>
+  <% end %>
+
+  <%= turbo_stream.update "invited_groups_pagination" do %>
+    <%= render PaginationComponent.new(
+      info: pagy_info(@pagy),
+      prev_url:
+        (@pagy.prev ? group_group_links_url(@namespace, page: @pagy.prev) : nil),
+      next_url:
+        (@pagy.next ? group_group_links_url(@namespace, page: @pagy.next) : nil)
+    ) %>
   <% end %>
 
 <% end %>

@@ -12,11 +12,9 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def index
     respond_to do |format|
-      format.html do
-        @has_namespace_group_links = true
-      end
+      format.html
       format.turbo_stream do
-        @pagy, @namespace_group_links = pagy(authorized_scope(NamespaceGroupLink, type: :relation, scope_options: { namespace: @namespace })) # rubocop:disable Layout/LineLength
+        @pagy, @namespace_group_links = pagy(load_namespace_group_links)
       end
     end
   end
@@ -27,6 +25,8 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace, group_link_params).execute
+    @pagy, @namespace_group_links = pagy(load_namespace_group_links)
+
     respond_to do |format| # rubocop:disable Metrics/BlockLength
       if @namespace_group_link
         if @namespace_group_link.errors.full_messages.count.positive?
@@ -62,6 +62,8 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
+    @pagy, @namespace_group_links = pagy(load_namespace_group_links)
+
     respond_to do |format|
       if @namespace_group_link
         if @namespace_group_link.deleted?
@@ -129,5 +131,10 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def access_levels
     @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
+  end
+
+  def load_namespace_group_links
+    authorized_scope(NamespaceGroupLink, type: :relation,
+                                         scope_options: { namespace: @namespace })
   end
 end

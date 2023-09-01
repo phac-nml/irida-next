@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 # Common Members actions
-module MembershipActions
+module MembershipActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
     before_action proc { namespace }
     before_action proc { member }, only: %i[destroy update]
     before_action proc { available_users }, only: %i[new create]
-    before_action proc { access_levels }, only: %i[new create index update]
+    before_action proc { access_levels }, only: %i[new create index update invite_group invited_groups]
     before_action proc { context_crumbs }, only: %i[index new]
   end
 
@@ -45,7 +45,10 @@ module MembershipActions
     if @member.deleted?
       if current_user == @member.user
         flash[:success] = t('.leave_success', name: @namespace.name)
-        redirect_to root_path
+        respond_to do |format|
+          # format.turbo_stream { redirect_to root_path }
+          format.html { redirect_to root_path }
+        end
       else
         respond_to do |format|
           format.turbo_stream do
@@ -55,12 +58,6 @@ module MembershipActions
         end
       end
     else
-<<<<<<< HEAD
-      flash[:error] = @member.errors.full_messages.first if @member.user != current_user
-      if @member.user == current_user
-        flash[:error] = I18n.t('activerecord.errors.models.member.destroy.last_member_self',
-                               namespace_type: @namespace.class.model_name.human)
-=======
       message = if @member.user == current_user
                   I18n.t('activerecord.errors.models.member.destroy.last_member_self',
                          namespace_type: @namespace.class.model_name.human)
@@ -73,7 +70,6 @@ module MembershipActions
           render status: :unprocessable_entity, locals: { member: @member, type: 'alert',
                                                           message: }
         end
->>>>>>> 5f9986ce (Updated member removal to be done via turbo_stream, updated tests)
       end
     end
   end
@@ -95,6 +91,10 @@ module MembershipActions
       end
     end
   end
+
+  def invite_group; end
+
+  def invited_groups; end
 
   private
 

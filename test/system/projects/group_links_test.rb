@@ -15,7 +15,7 @@ module Projects
 
     test 'can see a list of group links' do
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      pause
+
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
@@ -56,7 +56,6 @@ module Projects
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
-      pause
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
@@ -70,7 +69,7 @@ module Projects
 
       assert_text I18n.t(:'projects.group_links.destroy.success', namespace_name: namespace_group_link.namespace.name,
                                                                   group_name: namespace_group_link.group.name)
-      pause
+
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
 

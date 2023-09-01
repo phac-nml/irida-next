@@ -10,4 +10,15 @@
                           namespace_group_link: @existing_namespace_group_link
                         } %>
   <% end %>
+
+  <%= turbo_stream.update "invited_groups_pagination" do %>
+    <%= render PaginationComponent.new(
+      info: pagy_info(@pagy),
+      prev_url:
+        (@pagy.prev ? group_group_links_url(@namespace, page: @pagy.prev) : nil),
+      next_url:
+        (@pagy.next ? group_group_links_url(@namespace, page: @pagy.next) : nil)
+    ) %>
+  <% end %>
+
 <% end %>
