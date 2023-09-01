@@ -3,19 +3,14 @@
 module GroupsList
   # Component to render a collapsible tree of groups
   class GroupListTreeComponent < Component
-    attr_reader :parent, :groups, :path, :path_args, :collapsed, :limit
+    attr_reader :parent, :groups, :path, :path_args, :collapsed
 
-    def initialize(groups:, parent: nil, path: nil, path_args: {}, limit: 10)
+    def initialize(groups:, parent: nil, path: nil, path_args: {})
       @parent = parent
       @groups = groups
       @path = path
       @path_args = path_args
       @collapsed = true
-      @limit = limit
-    end
-
-    def show_more
-      @parent.present? && @groups.count > @limit
     end
   end
 end

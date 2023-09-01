@@ -1,12 +1,3 @@
 <ul class="groups-list group-list-tree flex flex-col">
-  <%= render GroupsList::GroupRowComponent.with_collection(groups.take(limit), path: path, path_args: path_args, collapsed: collapsed) %>
-  <% if show_more %>
-    <li class="group-row">
-      <p class="py-3 pr-3 flex items-center">
-        <%= link_to "View all #{groups.count} subgroups",
-                    public_send(path, path_args.merge({ parent_id: parent.id })),
-                    class: "font-medium text-blue-600 dark:text-blue-500 hover:underline" %>
-      </p>
-    </li>
-  <% end %>
+  <%= render GroupsList::GroupRowComponent.with_collection(groups, path: path, path_args: path_args, collapsed: collapsed) %>
 </ul>
