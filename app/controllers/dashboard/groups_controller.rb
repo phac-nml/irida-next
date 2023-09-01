@@ -12,7 +12,7 @@ module Dashboard
           @collapsed = params[:collapse] == 'true'
           @group = Group.find(params[:parent_id])
           @depth = params[:depth].to_i
-          @sub_groups = @group.children.first(10)
+          @sub_groups = @group.children
         end
       end
     end
