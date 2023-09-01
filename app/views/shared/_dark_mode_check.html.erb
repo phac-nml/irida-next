@@ -17,7 +17,6 @@
   window.addEventListener("storage", function(event) {
     if (event.key !== "theme") return;
     if (isDarkMode(localStorage.getItem("theme"))) {
-      console.log("dark");
       this.document.documentElement.classList.add("dark");
     } else {
       this.document.documentElement.classList.remove("dark");
