@@ -331,7 +331,6 @@ body {
     @apply border-t-2 border-slate-200 dark:border-slate-600;
   }
   .group-list-tree .group-list-tree .group-row:last-child::before {
-    background: white;
     height: auto;
     top: 30px;
     bottom: 0;
