@@ -1,8 +1,6 @@
 <script>
   // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-  const theme = localStorage.getItem("theme");
-
-  function isDarkMode() {
+  function isDarkMode(theme) {
     return (
       theme === "dark" ||
       (theme === "system" &&
@@ -10,15 +8,17 @@
     );
   }
 
-  if (isDarkMode()) {
+  if (isDarkMode(localStorage.getItem("theme"))) {
     document.documentElement.classList.add("dark");
   } else {
     document.documentElement.classList.remove("dark");
   }
 
   window.addEventListener("storage", function(event) {
-    if (isDarkMode()) {
-        this.document.documentElement.classList.add("dark");
+    if (event.key !== "theme") return;
+    if (isDarkMode(localStorage.getItem("theme"))) {
+      console.log("dark");
+      this.document.documentElement.classList.add("dark");
     } else {
       this.document.documentElement.classList.remove("dark");
     }
