@@ -334,6 +334,7 @@ body {
     height: auto;
     top: 30px;
     bottom: 0;
+    @apply bg-white dark:bg-slate-800;
   }
 
   .group-list-tree .group-list-tree .group-row.being-removed {
