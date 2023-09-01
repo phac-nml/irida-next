@@ -3,12 +3,14 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
-                  new_namespace_project_member_path,
-                  class: "button button--state-primary button--size-default",
-                  "aria-label": t(:".actions.button_add_aria_label") %>
+      new_namespace_project_member_path,
+      class: "button button--state-primary button--size-default",
+      "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
 <% end %>
+
+<div class="flex flex-col">
 
 <div class="bg-white dark:bg-slate-800">
   <div class="flex flex-col">
@@ -31,7 +33,7 @@
             <% @members.each do |member| %>
               <% member_source = membership_source(@namespace, member) %>
               <tr
-
+                id="<%= dom_id(member) %>"
                 class="text-sm font-normal text-slate-500  dark:text-slate-400"
               >
                 <td class="px-6 py-4">
@@ -117,4 +119,37 @@
       </div>
     </div>
   </div>
+</div>
+
+
+<%= turbo_frame_tag("members_pagination") do %>
+  <%= render PaginationComponent.new(
+      info: pagy_info(@pagy),
+      prev_url:
+        (
+          if @pagy.prev
+            namespace_project_members_url(
+              @namespace.parent,
+              @namespace.project,
+              page: @pagy.prev
+            )
+          else
+            nil
+          end
+        ),
+      next_url:
+        (
+          if @pagy.next
+            namespace_project_members_url(
+              @namespace.parent,
+              @namespace.project,
+              page: @pagy.next
+            )
+          else
+            nil
+          end
+        )
+    ) %>
+  <% end %>
+
 </div>

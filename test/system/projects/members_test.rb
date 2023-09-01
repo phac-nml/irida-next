@@ -102,7 +102,7 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t(:'projects.members.destroy.success')
+      assert_text I18n.t(:'projects.members.destroy.success', user: project_member.user.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end

@@ -134,5 +134,5 @@ project24_namespace_route:
 
 project25_namespace_route:
   name: Group 1 / Subgroup 1 / Project 25
-  path: group-1/subgroup1/project-25
+  path: group-1/subgroup-1/project-25
   source: project25_namespace (Namespace)

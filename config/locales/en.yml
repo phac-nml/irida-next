@@ -421,16 +421,6 @@ en:
       success: Group updated successfully
     transfer:
       success: Group transferred successfully
-    group_links:
-      create:
-        success: Successfully linked group with group
-        error: There was an error linking group with group
-      destroy:
-        success: Successfully unlinked group from group
-        error: There was an error unlinking group from group
-      update:
-        success: Successfully updated namespace group link
-        error: There was an error updating the namespace group link
     members:
       create:
         error: "Error adding member"
@@ -534,16 +524,6 @@ en:
       success: "Project %{project_name} was successfully transferred"
     destroy:
       success: "Project %{project_name} was successfully deleted"
-    group_links:
-      create:
-        success: Successfully linked project with group
-        error: There was an error linking project with group
-      destroy:
-        success: Successfully unlinked project with group
-        error: There was an error unlinking projec from group
-      update:
-        success: Successfully updated namespace group link
-        error: There was an error updating the namespace group link
     members:
       create:
         error: "Error adding member"

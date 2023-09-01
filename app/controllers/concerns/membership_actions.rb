@@ -14,7 +14,7 @@ module MembershipActions
 
   def index
     authorize! @namespace, to: :member_listing?
-    @members = authorized_scope(Member, type: :relation, scope_options: { namespace: @namespace })
+    @pagy, @members = pagy(load_members)
   end
 
   def new
@@ -39,21 +39,28 @@ module MembershipActions
     end
   end
 
-  def destroy # rubocop:disable Metrics/AbcSize
+  def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     Members::DestroyService.new(@member, @namespace, current_user).execute
+    @pagy, @members = pagy(load_members)
+
     if @member.deleted?
       if current_user == @member.user
         flash[:success] = t('.leave_success', name: @namespace.name)
-        redirect_to root_path and return
+        redirect_to root_path
       else
-        flash[:success] = t('.success')
+        respond_to do |format|
+          format.turbo_stream do
+            render status: :ok, locals: { member: @member, type: 'success',
+                                          message: t('.success', user: @member.user.email) }
+          end
+        end
       end
     else
       flash[:error] = @member.errors.full_messages.first if @member.user != current_user
       flash[:error] = I18n.t('activerecord.errors.models.member.destroy.last_member_self',
                              namespace_type: @namespace.class.model_name.human)
+      redirect_to members_path
     end
-    redirect_to members_path
   end
 
   def update
@@ -84,6 +91,10 @@ module MembershipActions
     # Remove current user from available users as a user cannot add themselves
     @available_users = User.where.not(id: Member.select(:user_id).where(namespace: @namespace))
                            .where.not(id: current_user.id)
+  end
+
+  def load_members
+    authorized_scope(Member, type: :relation, scope_options: { namespace: @namespace })
   end
 
   protected

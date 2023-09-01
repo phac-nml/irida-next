@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   test 'project members index' do
@@ -82,9 +82,9 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # r
 
     project_member = members(:project_two_member_james_doe)
 
-    delete namespace_project_member_path(namespace, project, project_member)
+    delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
 
-    assert_redirected_to namespace_project_members_path(namespace, project)
+    assert_response :ok
     assert_equal 3, project.namespace.project_members.count
   end
 
@@ -121,7 +121,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # r
     project_member = members(:project_two_member_james_doe)
 
     assert_no_changes -> { [project.namespace.project_members].count } do
-      delete namespace_project_member_path(namespace, project, project_member)
+      delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
     end
 
     assert_response :redirect

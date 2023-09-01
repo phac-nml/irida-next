@@ -99,7 +99,7 @@ module Groups
         click_button 'Confirm'
       end
 
-      assert_text I18n.t(:'groups.members.destroy.success')
+      assert_text I18n.t(:'groups.members.destroy.success', user: group_member.user.email)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
