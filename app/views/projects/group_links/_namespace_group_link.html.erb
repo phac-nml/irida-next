@@ -1,9 +1,19 @@
+ <% member_source = membership_source(@namespace, namespace_group_link) %>
 <tr
   id="<%= dom_id(namespace_group_link) %>"
   class="text-sm font-normal text-gray-500 dark:text-gray-400"
 >
     <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
-    <td class="px-6 py-4"><%= namespace_group_link.namespace == @namespace ? "Direct Member" : namespace_group_link.namespace.name %></td>
+    <td class="px-6 py-4"> <% if !member_source.key?(:inherited_namespace_path) %>
+          <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member_source[:label] %></div>
+      <% else %>
+        <%= viral_tooltip(title: t(:"groups.members.index.shared_inherited")) do %>
+          <%= link_to member_source[:label],
+          member_source[:inherited_namespace_path],
+          data: {turbo_frame: "_top"},
+          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+        <% end %>
+      <% end %></td>
     <td class="px-6 py-4">
       <div>
         <span class="text-sm"><%= distance_of_time_in_words(Time.now, namespace_group_link.created_at) %></span>
@@ -20,7 +30,7 @@
     </td>
     <td class="px-6 py-4">
       <div class="form-field">
-        <% if allowed_to?(:update_namespace_with_group_link?, @namespace) %>
+        <% if allowed_to?(:update_namespace_with_group_link?, @namespace) && !member_source.key?(:inherited_namespace_path) %>
           <%= form_with(model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
             <%= form.select(
               :group_access_level,
@@ -40,7 +50,7 @@
       </div>
     </td>
     <td class="px-6 py-4">
-      <% if allowed_to?(:update_namespace_with_group_link?, @namespace) %>
+      <% if allowed_to?(:update_namespace_with_group_link?, @namespace) && !member_source.key?(:inherited_namespace_path) %>
         <%= form_with( model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
           <div
             class="form-field datepicker"
@@ -80,7 +90,7 @@
       <% end %>
     </td>
     <td class="px-6 py-4">
-      <% if allowed_to?(:unlink_namespace_with_group?, @namespace) %>
+      <% if allowed_to?(:unlink_namespace_with_group?, @namespace) && !member_source.key?(:inherited_namespace_path) %>
         <%= link_to t(:"projects.group_links.index.unlink"),
                     namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link),
                     data: {

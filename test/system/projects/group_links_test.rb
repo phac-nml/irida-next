@@ -15,9 +15,9 @@ module Projects
 
     test 'can see a list of group links' do
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-
+      pause
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @group_links_count + header_row_count
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
 
     test 'cannot access group links' do
@@ -30,7 +30,7 @@ module Projects
 
     test 'can create a project to group link' do
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      assert_selector 'tr', count: @group_links_count + header_row_count
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
       assert_selector 'a', text: I18n.t(:'projects.members.index.invite_group'), count: 1
 
@@ -48,14 +48,15 @@ module Projects
         click_button I18n.t(:'projects.group_links.new.button.submit')
       end
 
-      assert_selector 'tr', count: (@group_links_count + 1) + header_row_count
+      assert_selector 'tr', count: (@namespace.shared_with_group_links.of_ancestors.count + 1) + header_row_count
     end
 
     test 'can remove a project to group link' do
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      assert_selector 'tr', count: @group_links_count + header_row_count
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+      pause
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
@@ -69,8 +70,8 @@ module Projects
 
       assert_text I18n.t(:'projects.group_links.destroy.success', namespace_name: namespace_group_link.namespace.name,
                                                                   group_name: namespace_group_link.group.name)
-
-      assert_selector 'tr', count: (@group_links_count - 1) + header_row_count
+      pause
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
 
     test 'cannot add a project to group link' do
@@ -85,7 +86,7 @@ module Projects
 
       Timecop.travel(Time.zone.now + 5) do
         visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-        assert_selector 'tr', count: @group_links_count + header_row_count
+        assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
         find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
                                                                                          'option[2]').select_option
@@ -112,7 +113,7 @@ module Projects
 
       Timecop.travel(Time.zone.now + 5) do
         visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-        assert_selector 'tr', count: @group_links_count + header_row_count
+        assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
         find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
                                                                           .native.send_keys(:return)

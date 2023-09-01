@@ -1,1 +1,31 @@
 <%= turbo_stream.replace "members", partial: "invited_groups" %>
+
+<%= turbo_stream.update "namespace_group_links_pagination" do %>
+  <%= render PaginationComponent.new(
+    info: pagy_info(@pagy),
+    prev_url:
+      (
+        if @pagy.prev
+          namespace_project_group_links_url(
+            @namespace.parent,
+            @namespace.project,
+            page: @pagy.prev
+          )
+        else
+          nil
+        end
+      ),
+    next_url:
+      (
+        if @pagy.next
+          namespace_project_group_links_url(
+            @namespace.parent,
+            @namespace.project,
+            page: @pagy.next
+          )
+        else
+          nil
+        end
+      )
+  ) %>
+<% end %>

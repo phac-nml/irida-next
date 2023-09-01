@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common share actions
-module ShareActions
+module ShareActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
@@ -11,7 +11,14 @@ module ShareActions
   end
 
   def index
-    @namespace_group_links = NamespaceGroupLink.where(namespace_id: @namespace.id)
+    respond_to do |format|
+      format.html do
+        @has_namespace_group_links = true
+      end
+      format.turbo_stream do
+        @pagy, @namespace_group_links = pagy(authorized_scope(NamespaceGroupLink, type: :relation, scope_options: { namespace: @namespace })) # rubocop:disable Layout/LineLength
+      end
+    end
   end
 
   def new
@@ -20,7 +27,7 @@ module ShareActions
 
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace, group_link_params).execute
-    respond_to do |format|
+    respond_to do |format| # rubocop:disable Metrics/BlockLength
       if @namespace_group_link
         if @namespace_group_link.errors.full_messages.count.positive?
           format.turbo_stream do
@@ -30,6 +37,11 @@ module ShareActions
           end
         else
           @group_invited = true
+          # namespace group link in which the group is previously linked to an ancestor of the namespace
+          @existing_namespace_group_link = @namespace.shared_with_group_links.of_ancestors
+                                                     .where(group_id: group_link_params[:group_id])
+                                                     .order(:group_access_level).last
+
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @namespace_group_link,
                                           access_levels: @access_levels,
@@ -48,11 +60,16 @@ module ShareActions
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength
+  def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
     respond_to do |format|
       if @namespace_group_link
         if @namespace_group_link.deleted?
+          # namespace group link in which the group is linked to an ancestor of the namespace
+          @existing_namespace_group_link = @namespace.shared_with_group_links.of_ancestors
+                                                     .where(group_id: @namespace_group_link.group_id)
+                                                     .order(:group_access_level).last
+
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @namespace_group_link, type: 'success',
                                           message: t('.success', namespace_name: @namespace.name,

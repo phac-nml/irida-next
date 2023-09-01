@@ -1,18 +1,13 @@
-<% if @namespace_group_link %>
-  <%= turbo_stream.update "invited-groups-count",
-                      @namespace_group_link
-                        .namespace
-                        .shared_with_group_links
-                        .count %>
-<% end %>
-
 <% if @group_invited %>
-  <%= @namespace_group_link.inspect %>
   <%= turbo_stream.append "invited-groups-table-body",
                       partial: "namespace_group_link",
                       locals: {
                         namespace_group_link: @namespace_group_link
                       } %>
+
+  <% if @existing_namespace_group_link %>
+    <%= turbo_stream.remove dom_id(@existing_namespace_group_link) %>
+  <% end %>
 
 <% end %>
 

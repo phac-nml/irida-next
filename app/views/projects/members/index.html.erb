@@ -12,6 +12,9 @@
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
       new_namespace_project_member_path,
+      data: {
+        turbo: false
+      },
       class: "button button--state-primary button--size-default",
       "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
@@ -58,26 +61,6 @@
       aria: {
         current: params[:tab] == "invited_groups" ? "page" : "false"
       } %>
-
-      <span
-        style="margin-left: -15px;"
-        class="
-          bg-green-200
-          text-green-800
-          text-xs
-          font-medium
-          ml-2
-          px-2.5
-          py-0.5
-          rounded-full
-          dark:bg-green-900
-          dark:text-green-300
-        "
-      >
-        <%= turbo_frame_tag 'invited-groups-count' do %>
-          <%= @namespace.shared_with_group_links.count %>
-        <% end %>
-      </span>
     </li>
   </ul>
   <div class="flex flex-col" data-turbo-temporary>
@@ -122,6 +105,7 @@
         </tbody>
       </table>
     <% end %>
+    <%= turbo_frame_tag "namespace_group_links_pagination" %>
   </div>
 </div>
 
