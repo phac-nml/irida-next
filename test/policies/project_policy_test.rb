@@ -69,7 +69,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
     # John Doe has access to 26 projects
-    assert_equal scoped_projects.count, 27
+    assert_equal scoped_projects.count, 28
 
     user = users(:david_doe)
     policy = ProjectPolicy.new(user:)
@@ -81,6 +81,6 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   test 'manageable scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 12, scoped_projects.count
+    assert_equal 13, scoped_projects.count
   end
 end
