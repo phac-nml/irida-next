@@ -60,3 +60,11 @@ jeff_doe:
   last_name: Doe
   provider: developer
   uid: jeff.doe@localhost
+
+<% 25.times do |n| %>
+user<%= (n) %>:
+  email: <%= "user#{n}@localhost" %>
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: User
+  last_name: <%= n %>
+<% end %>
