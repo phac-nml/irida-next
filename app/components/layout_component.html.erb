@@ -1,7 +1,7 @@
 <div
   class="layout-body bg-white dark:bg-slate-800"
-  data-controller="layout--layout-component"
-  data-layout--layout-component-target="layoutContainer"
+  data-controller="layout"
+  data-layout-target="layoutContainer"
 >
   <%= sidebar %>
   <div class="relative content">
@@ -10,8 +10,8 @@
       style="height: 50px"
     >
       <button
-        data-layout--layout-component-target="expandButton"
-        data-action="click->layout--layout-component#expand"
+        data-layout-target="expandButton"
+        data-action="click->layout#expand"
         class="hidden text-slate-500"
       >
         <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
