@@ -121,7 +121,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     project_member = members(:project_two_member_james_doe)
 
     assert_no_changes -> { [project.namespace.project_members].count } do
-      delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
+      delete namespace_project_member_path(namespace, project, project_member)
     end
 
     assert_response :redirect
