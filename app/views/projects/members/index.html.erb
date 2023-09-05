@@ -33,7 +33,6 @@
             <% @members.each do |member| %>
               <% member_source = membership_source(@namespace, member) %>
               <tr
-                id="<%= dom_id(member) %>"
                 class="text-sm font-normal text-slate-500  dark:text-slate-400"
               >
                 <td class="px-6 py-4">
