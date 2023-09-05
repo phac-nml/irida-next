@@ -82,7 +82,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_152823) do
     t.datetime "deleted_at"
     t.jsonb "log_data"
     t.index ["deleted_at"], name: "index_namespace_group_links_on_deleted_at"
-    t.index ["group_id", "namespace_id"], name: "index_group_link_group_with_namespace", unique: true, where: "(deleted_at IS NULL)"
+    t.index ["group_id", "namespace_id"], name: "index_group_link_group_with_namespace", unique: true
   end
 
   create_table "namespaces", force: :cascade do |t|
