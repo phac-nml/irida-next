@@ -329,7 +329,10 @@ en:
     preferences:
       show:
         theme_title: Colour theme
-        toggle: Enable dark mode
+        system_theme: System
+        system_desc: The colour theme will update based on your operating system settings.
+        light_theme: Light
+        dark_theme: Dark
     personal_access_tokens:
       access_token_section:
         label: Your new personal access token
