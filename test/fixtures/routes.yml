@@ -141,3 +141,8 @@ group_seven_route:
   name: Group 7
   path: group-7
   source: group_seven (Namespace)
+
+project26_namespace_route:
+  name: john.doe@localhost / Project 26
+  path: john.doe_at_localhost/project-26
+  source: project26_namespace (Namespace)

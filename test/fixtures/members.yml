@@ -243,10 +243,10 @@ group_seven_group_member<%= (n) %>:
   access_level: <%= Member::AccessLevel::ANALYST %>
 <% end %>
 
-# <% 25.times do |n| %>
-# user<%= (n) %>:
-#   email: <%= "user#{n}@localhost" %>
-#   encrypted_password: <%= User.new.send :password_digest, "password1" %>
-#   first_name: User
-#   last_name: <%= n %>
-# <% end %>
+<% 25.times do |n| %>
+project_twenty_six_group_member<%= (n) %>:
+  user_id: <%= ActiveRecord::FixtureSet.identify("user#{n}".to_sym) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace) %>
+  access_level: <%= Member::AccessLevel::ANALYST %>
+<% end %>
