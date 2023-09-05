@@ -15,14 +15,23 @@ module Projects
     end
 
     test 'can see the list of project members' do
-      visit namespace_project_members_url(@namespace, @project)
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:project26)
+      visit namespace_project_members_url(namespace, project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count + header_row_count
+      assert_selector 'tr', count: 20 + header_row_count
 
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
-      assert_selector 'span', text: "Displaying #{@members_count} items"
+
+      click_on I18n.t(:'components.pagination.next')
+      assert_selector 'tr', count: 5 + header_row_count
+
+      assert_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+
+      click_on I18n.t(:'components.pagination.previous')
+      assert_selector 'tr', count: 20 + header_row_count
     end
 
     test 'can see list of project members which are inherited from parent group' do
