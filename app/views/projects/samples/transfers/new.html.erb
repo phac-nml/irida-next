@@ -4,10 +4,10 @@
     <%= dialog.with_section do %>
       <%= form_with(url: namespace_project_samples_transfer_path, method: :post) do |form| %>
         <div
-          data-controller="form"
-          data-form-storage-key-value=<%=namespace_project_samples_url%>
-          data-form-target="field"
-          data-form-field-name-value="sample_ids[]"
+          data-controller="projects--samples--transfers"
+          data-projects--samples--transfers-storage-key-value=<%=namespace_project_samples_url%>
+          data-projects--samples--transfers-target="field"
+          data-projects--samples--transfers-field-name-value="sample_ids[]"
         />
         <div class="form-field">
           <%= form.label :new_project_id %>
