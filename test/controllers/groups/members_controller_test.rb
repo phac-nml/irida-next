@@ -45,10 +45,10 @@ module Groups
       group_member = members(:group_one_member_james_doe)
 
       assert_difference('Member.count', -1) do
-        delete group_member_path(group, group_member, format: :turbo_stream)
+        delete group_member_path(group, group_member)
       end
 
-      assert_response :ok
+      assert_redirected_to group_members_path(group)
     end
 
     test 'shouldn\'t delete a member from the group' do

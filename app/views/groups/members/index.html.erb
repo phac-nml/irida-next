@@ -113,5 +113,11 @@
       </div>
     </div>
   </div>
-  <%= turbo_frame_tag("members_pagination")%>
+  <%= turbo_frame_tag("members_pagination") do %>
+  <%= render PaginationComponent.new(
+    info: pagy_info(@pagy),
+    prev_url: (@pagy.prev ? group_members_url(@group, page: @pagy.prev) : nil),
+    next_url: (@pagy.next ? group_members_url(@group, page: @pagy.next) : nil)
+  ) %>
+  <% end %>
 </div>

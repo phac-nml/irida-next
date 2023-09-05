@@ -74,9 +74,9 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
     group_member = members(:group_one_member_james_doe)
 
-    delete group_member_path(group, group_member, format: :turbo_stream)
+    delete group_member_path(group, group_member)
 
-    assert_response :ok
+    assert_redirected_to group_members_path(group)
     assert_equal 3, group.group_members.count
   end
 

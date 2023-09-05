@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module Groups
-  class MembersTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+  class MembersTest < ApplicationSystemTestCase
     header_row_count = 1
 
     def setup
@@ -18,6 +18,10 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: @members_count + header_row_count
+
+      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_selector 'span', text: "Displaying #{@members_count} items"
     end
 
     test 'can see list of group members for subgroup which are inherited from parent group' do
