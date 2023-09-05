@@ -633,6 +633,7 @@ en:
           submit_button: Submit
         create:
           success: Samples were successfully transferred.
+          error: "The following list of samples failed to transfer:"
       attachments:
         attachment:
           delete: Delete
@@ -641,7 +642,6 @@ en:
           success: File %{filename} was successfully uploaded.
         destroy:
           success: File %{filename} was successfully removed.
-          error: "The following list of samples failed to transfer:"
   services:
     groups:
       transfer:
