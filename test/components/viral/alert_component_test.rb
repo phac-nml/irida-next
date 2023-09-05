@@ -17,9 +17,7 @@ module Viral
     end
 
     test 'alert with content' do
-      render_inline(Viral::AlertComponent.new(message: 'This is an alert alert',
-                                              type: 'alert').with_content('Blah blah blah'))
-      assert_text 'Blah blah blah'
+      render_preview(:with_content)
     end
   end
 end
