@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module Projects
-  class SamplesTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+  class SamplesTest < ApplicationSystemTestCase
     setup do
       @user = users(:john_doe)
       login_as @user
