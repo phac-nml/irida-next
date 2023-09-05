@@ -62,20 +62,20 @@ class GroupMemberTest < ActiveSupport::TestCase
   test 'should return correct access levels for access level MAINTAINER' do
     group_member = members(:group_one_member_joan_doe)
     assert_equal group_member.access_level, Member::AccessLevel::MAINTAINER
-    access_levels = Member.access_levels(group_member)
+    access_levels = Member::AccessLevel.access_level_options_for_user(group_member.namespace, group_member.user)
     assert_not access_levels.key?(I18n.t('activerecord.models.member.access_level.owner'))
   end
 
   test 'should return correct access levels for access level OWNER' do
     assert_equal @group_member.access_level, Member::AccessLevel::OWNER
-    access_levels = Member.access_levels(@group_member)
+    access_levels = Member::AccessLevel.access_level_options_for_user(@group_member.namespace, @group_member.user)
     assert access_levels.key?(I18n.t('activerecord.models.member.access_level.owner'))
   end
 
   test 'should return no access levels for access level other than OWNER or MAINTAINER' do
-    assert_equal @group_member.access_level, Member::AccessLevel::OWNER
-    @group_member.access_level = Member::AccessLevel::GUEST
-    access_levels = Member.access_levels(@group_member)
+    group_member = members(:group_one_member_ryan_doe)
+    assert_equal group_member.access_level, Member::AccessLevel::GUEST
+    access_levels = Member::AccessLevel.access_level_options_for_user(group_member.namespace, group_member.user)
     assert access_levels.empty?
   end
 

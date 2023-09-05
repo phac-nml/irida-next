@@ -23,10 +23,13 @@ module ActiveSupport
 
     parallelize_setup do |worker|
       SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
+      ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{worker}"
     end
 
     parallelize_teardown do |_worker|
       SimpleCov.result
+      FileUtils.rm_rf(ActiveStorage::Blob.service.root)
+      FileUtils.rm_rf(ActiveStorage::Blob.services.fetch(:test_fixtures).root)
     end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.

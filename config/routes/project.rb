@@ -18,15 +18,19 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       get :edit
       post :transfer
       resources :members, only: %i[create destroy index new update]
+      resources :group_links, only: %i[create destroy update index]
       resources :samples do
         scope module: :samples, as: :samples do
           collection do
             resource :transfer, only: %i[create new]
           end
         end
+        resources :attachments, module: :samples, only: %i[create destroy] do
+          member do
+            get :download
+          end
+        end
       end
-      post :share
-      post :unshare
     end
   end
 end

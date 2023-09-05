@@ -1,0 +1,19 @@
+<% if new_attachment %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(
+      type: :success,
+      data: t(".success", filename: new_attachment.file.filename)
+    ) %>
+  <% end %>
+  <%= turbo_stream.append "attachments-table-body",
+                      partial: "attachment",
+                      locals: {
+                        attachment: new_attachment
+                      } %>
+<% end %>
+<%= turbo_stream.replace "new_attachment_modal",
+                     partial: "new_attachment_modal",
+                     locals: {
+                       open: attachment.errors.any? ? true : false,
+                       attachment: attachment
+                     } %>

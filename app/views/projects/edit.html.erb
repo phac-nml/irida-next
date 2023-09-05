@@ -27,16 +27,16 @@
             </div>
             <div>
               <%= form.submit t("projects.edit.general.submit"),
-                              class: "button button--state-default button--size-default" %>
+                          class: "button button--state-default button--size-default" %>
             </div>
           <% end %>
         <% end %>
       <% end %>
     <% end %>
 
-    <% if allowed_to?(:transfer?, @project) or allowed_to?(:destroy?, @project) %>
-      <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white"><%= t(".advanced.title") %></h2>
-    <% end %>
+    <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
+
+    <%= render "change_path", project: @project %>
 
     <% if allowed_to?(:transfer?, @project) %>
       <%= render "transfer", project: @project %>

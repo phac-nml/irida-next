@@ -2,8 +2,6 @@
 
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
-  include ShareActions
-
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[new create show]

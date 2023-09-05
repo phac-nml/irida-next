@@ -6,40 +6,101 @@ module ShareActions
 
   included do
     before_action proc { namespace }
+    before_action proc { access_levels }, only: %i[index update]
+    before_action proc { namespace_group_link }, only: %i[destroy update]
   end
 
-  def share # rubocop:disable Metrics/AbcSize
-    namespace_group_link = Namespaces::GroupShareService.new(current_user, params[:shared_group_id], @namespace,
-                                                             params[:group_access_level]).execute
-    if namespace_group_link
-      if namespace_group_link.errors.full_messages.count.positive?
-        flash[:error] = namespace_group_link.errors.full_messages.first
-        render :edit, status: :conflict
+  def index
+    @namespace_group_links = NamespaceGroupLink.find_by(id: @namespace.id)
+  end
+
+  def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace, group_link_params).execute
+    respond_to do |format|
+      if namespace_group_link
+        if namespace_group_link.errors.full_messages.count.positive?
+          format.turbo_stream do
+            render status: :conflict,
+                   locals: { namespace_group_link: @namespace_group_link, type: 'alert',
+                             message: namespace_group_link.errors.full_messages.first }
+          end
+        else
+          format.turbo_stream do
+            render status: :ok, locals: { namespace_group_link: @namespace_group_link,
+                                          access_levels: @access_levels,
+                                          type: 'success',
+                                          message: t('.success') }
+          end
+        end
       else
-        flash[:success] = t('.success')
-        redirect_to namespace_path
+        format.turbo_stream do
+          render status: :bad_request,
+                 locals: { type: 'alert',
+                           message: t('.error') }
+        end
       end
-    else
-      flash[:error] = t('.error')
-      render :edit, status: :unprocessable_entity
     end
   end
 
-  def unshare
-    if Namespaces::GroupUnshareService.new(current_user, params[:shared_group_id],
-                                           @namespace).execute
-      flash[:success] = t('.success')
-      redirect_to namespace_path
-    else
-      flash[:error] =
-        @namespace.errors.full_messages.first
-      render :edit, status: :unprocessable_entity
+  def destroy # rubocop:disable Metrics/MethodLength
+    GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
+    respond_to do |format|
+      if @namespace_group_link
+        if @namespace_group_link.deleted?
+          format.turbo_stream do
+            render status: :ok, locals: { namespace_group_link: @namespace_group_link, type: 'success',
+                                          message: t('.success') }
+          end
+        else
+          format.turbo_stream do
+            render status: :unprocessable_entity,
+                   locals: { namespace_group_link: @namespace_group_link, type: 'alert',
+                             message: @member.errors.full_messages.first }
+          end
+        end
+      else
+        format.turbo_stream do
+          render status: :bad_request,
+                 locals: { type: 'alert',
+                           message: t('error') }
+        end
+      end
+    end
+  end
+
+  def update # rubocop:disable Metrics/MethodLength
+    updated = GroupLinks::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
+    respond_to do |format|
+      if updated
+        format.turbo_stream do
+          render status: :ok, locals: { namespace_group_link: @namespace_group_link,
+                                        access_levels: @access_levels,
+                                        type: 'success',
+                                        message: t('.success') }
+        end
+      else
+        format.turbo_stream do
+          render status: :unprocessable_entity,
+                 locals: { namespace_group_link: @namespace_group_link, type: 'alert',
+                           message: t('.error') }
+        end
+      end
     end
   end
 
   protected
 
-  def namespace_path
+  def group_links_path
     raise NotImplementedError
+  end
+
+  def group_link_namespace
+    raise NotImplementedError
+  end
+
+  private
+
+  def access_levels
+    @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
   end
 end

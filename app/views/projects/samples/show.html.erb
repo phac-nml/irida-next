@@ -3,22 +3,45 @@
   <%= component.with_buttons do %>
     <div class="flex flex-row">
       <% if allowed_to?(:new?, @project) %>
-        <%= link_to t("projects.samples.show.edit_button"),
-                    edit_namespace_project_sample_path(id: @sample.id),
-                    class: "button button--state-primary button--size-default mr-1" %>
+        <%= link_to(
+          t("projects.samples.show.edit_button"),
+          edit_namespace_project_sample_path(id: @sample.id),
+          class: "button button--state-primary button--size-default mr-1"
+        ) %>
       <% end %>
       <% if allowed_to?(:destroy?, @project) %>
-        <%= link_to t("projects.samples.show.remove_button"),
-                    namespace_project_sample_path(id: @sample.id),
-                    data: {
-                      turbo_method: :delete,
-                      turbo_confirm: t("projects.samples.show.remove_button_confirmation")
-                    },
-                    class: "button button--state-default button--size-default mr-1" %>
+        <%= link_to(
+          t("projects.samples.show.remove_button"),
+          namespace_project_sample_path(id: @sample.id),
+          data: {
+            turbo_method: :delete,
+            turbo_confirm: t("projects.samples.show.remove_button_confirmation")
+          },
+          class: "button button--state-default button--size-default mr-1"
+        ) %>
       <% end %>
-      <%= link_to t("projects.samples.show.back_button"),
-                  namespace_project_samples_path,
-                  class: "button button--state-default button--size-default" %>
     </div>
+  <% end %>
+<% end %>
+
+<%= viral_card do |card| %>
+  <% if allowed_to?(:update?, @project) %>
+    <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
+      <% header.with_action do %>
+        <%= render partial: "projects/samples/attachments/new_attachment_modal",
+        locals: {
+          open: false,
+          attachment: @attachment
+        } %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <% card.with_header(title: t("projects.samples.show.files")) %>
+  <% end %>
+  <% card.with_section do %>
+    <%= render partial: "projects/samples/attachments/table",
+    locals: {
+      attachments: @sample.attachments
+    } %>
   <% end %>
 <% end %>

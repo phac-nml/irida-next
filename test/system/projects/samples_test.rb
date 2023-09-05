@@ -41,7 +41,8 @@ module Projects
       click_on I18n.t('projects.samples.new.submit_button')
 
       assert_text I18n.t('projects.samples.create.success')
-      click_on I18n.t('projects.samples.show.back_button')
+      assert_text 'New Name'
+      assert_text @sample1.description
     end
 
     test 'should update Sample' do
@@ -54,7 +55,39 @@ module Projects
       click_on I18n.t('projects.samples.edit.submit_button')
 
       assert_text I18n.t('projects.samples.update.success')
-      click_on I18n.t('projects.samples.show.back_button')
+      assert_text 'New Sample Name'
+      assert_text @sample1.description
+    end
+
+    test 'user with role >= Maintainer should be able to attach a file to a Sample' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
+      assert_selector 'button', text: I18n.t('projects.samples.show.upload_file'), count: 1
+      click_on I18n.t('projects.samples.show.upload_file')
+
+      within('dialog') do
+        attach_file 'attachment[file]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        click_on I18n.t('projects.samples.show.upload_file')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
+      within('#attachments') do
+        assert_text 'test_file.fastq'
+      end
+    end
+
+    test 'user with role >= Maintainer should be able to delete a file from a Sample' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
+      click_on I18n.t('projects.samples.attachments.attachment.delete')
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
+      within('#attachments') do
+        assert_no_text 'test_file.fastq'
+      end
     end
 
     test 'should destroy Sample' do
@@ -114,6 +147,15 @@ module Projects
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
 
       assert_selector 'a', text: I18n.t('projects.samples.index.remove_button'), count: 0
+    end
+
+    test 'user should not be able to see the upload file button for the sample' do
+      user = users(:ryan_doe)
+      login_as user
+
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.upload_file'), count: 0
     end
 
     test 'visiting the index should not allow the current user only edit action' do

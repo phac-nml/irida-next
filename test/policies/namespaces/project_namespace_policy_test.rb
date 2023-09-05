@@ -30,12 +30,16 @@ module Namespaces
       assert @policy.member_listing?
     end
 
-    test '#share_namespace_with_group?' do
-      assert @policy.share_namespace_with_group?
+    test '#link_namespace_with_group?' do
+      assert @policy.link_namespace_with_group?
     end
 
-    test '#unshare_namespace_with_group?' do
-      assert @policy.unshare_namespace_with_group?
+    test '#unlink_namespace_with_group?' do
+      assert @policy.unlink_namespace_with_group?
+    end
+
+    test '#update_namespace_with_group_link?' do
+      assert @policy.update_namespace_with_group_link?
     end
   end
 end

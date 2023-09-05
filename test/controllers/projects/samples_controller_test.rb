@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Projects
-  class SamplesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+  class SamplesControllerTest < ActionDispatch::IntegrationTest
     setup do
       sign_in users(:john_doe)
       @sample1 = samples(:sample1)
