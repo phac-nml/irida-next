@@ -8,7 +8,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   before_action :authorized_namespaces, except: %i[index show destroy]
 
   def index
-    @groups = authorized_scope(Group, type: :relation).order(updated_at: :desc)
+    redirect_to dashboard_groups_path
   end
 
   def show
@@ -54,7 +54,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     Groups::DestroyService.new(@group, current_user).execute
     if @group.deleted?
       flash[:success] = t('.success', group_name: @group.name)
-      redirect_to groups_path
+      redirect_to dashboard_groups_path(format: :html)
     else
       flash[:error] = @group.errors.full_messages.first
       redirect_to group_path(@group)

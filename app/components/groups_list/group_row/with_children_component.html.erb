@@ -1,0 +1,21 @@
+<li id="<%= dom_id(@group) %>" class="group-row has-children <%= @group.description.present? ? 'has-description' : nil %>" data-controller="groups--row" %>
+  <div class="group-row-contents py-3 pr-3 w-full text-left flex items-center"
+       data-action="click->groups--row#toggle"
+       aria-label="<%= t(:'dashboard.groups.index.row_aria_label', name: @group.name) %>">
+    <%= link_to public_send(@path, @path_args.merge({ parent_id: @group.id, collapse: !@collapsed })), data: { turbo_stream: '', "groups--row-target": "toggle" },
+                aria: { label: t(:'dashboard.groups.index.row_aria_label', name: @group.name) }, class: "folder-toggle-wrap mr-2 flex items-center" do %>
+    <span class="folder-caret inline-block text-slate-400">
+      <% if @collapsed %>
+        <%= viral_icon(name: :chevron_right, classes: 'h-3 w-3') %>
+      <% else %>
+        <%= viral_icon(name: :chevron_down, classes: 'h-3 w-3') %>
+      <% end %>
+    </span>
+
+    <% end %>
+    <%= render GroupsList::GroupRow::RowContentsComponent.new(group: @group, path: @path, path_args: @path_args, collapsed: @collapsed) %>
+  </div>
+  <% unless @collapsed %>
+    <%= render GroupsList::GroupListTreeComponent.new(parent: @group, groups: @group.children, path: @path, path_args: @path_args) %>
+  <% end %>
+</li>

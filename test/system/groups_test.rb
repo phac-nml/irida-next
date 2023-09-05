@@ -9,40 +9,11 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     login_as @user
   end
 
-  test 'can see the list of groups' do
-    visit groups_url
-
-    assert_selector 'h1', text: I18n.t(:'groups.show.title')
-    assert_selector 'tr', count: @groups_count
-    assert_text groups(:group_one).name
-    assert_text groups(:subgroup1).name
-  end
-
   test 'can create a group' do
     visit groups_url
 
     click_button I18n.t(:'general.navbar.new_dropdown.aria_label')
     click_link I18n.t(:'general.navbar.new_dropdown.group')
-
-    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-      fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'New group'
-
-      assert_selector %(input[data-slugify-target="path"]) do |input|
-        assert_equal 'new-group', input['value']
-      end
-
-      fill_in 'Description', with: 'New group description'
-      click_on I18n.t(:'groups.create.submit')
-    end
-
-    assert_text I18n.t(:'groups.create.success')
-    assert_selector 'h1', text: 'New group'
-  end
-
-  test 'can create a group from listing page' do
-    visit groups_url
-
-    click_link I18n.t(:'groups.index.create_group_button')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.group.name'), with: 'New group'
@@ -107,7 +78,10 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
   end
 
   test 'can delete a group' do
-    visit group_url(groups(:group_two))
+    visit dashboard_groups_path
+    assert_text groups(:group_two).name
+
+    find('div.title a', text: groups(:group_two).name).click
 
     click_link I18n.t(:'groups.sidebar.settings')
 
@@ -118,8 +92,8 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
-    assert_selector 'h1', text: I18n.t(:'groups.show.title')
-    assert_selector 'tr', count: @groups_count - 1
+    assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+    assert_no_text groups(:group_two).name
   end
 
   test 'can transfer a group' do

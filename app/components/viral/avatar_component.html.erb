@@ -1,6 +1,6 @@
 <%= render Viral::BaseComponent.new(**system_arguments) do %>
   <% if initials.present? %>
-    <span class="<%= font_styles %>">
+    <span class="pointer-events-none <%= font_styles %>">
       <%= initials %>
     </span>
   <% end %>
