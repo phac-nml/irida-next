@@ -13,7 +13,8 @@ module ViewHelper
     flash: 'Viral::FlashComponent',
     icon: 'Viral::IconComponent',
     pageheader: 'Viral::PageHeaderComponent',
-    tooltip: 'Viral::TooltipComponent'
+    tooltip: 'Viral::TooltipComponent',
+    text_input: 'Viral::Form::TextInputComponent'
   }.freeze
 
   VIRAL_HELPERS.each do |name, component|
