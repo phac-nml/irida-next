@@ -9,6 +9,7 @@
       <div class="grid gap-6 mb-6">
       <% value["properties"].each do |property, fields| %>
           <%= render Viral::Form::TextInputComponent.new(
+            name: property,
             label: fields['description'],
             type: fields['type'],
             help: fields['help_text'],

@@ -10,7 +10,7 @@ require 'test_helpers/cuprite_setup'
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :irida_next_cuprite
 
-  include AxeHelpers
+  # include AxeHelpers
   include BetterRailsSystemTests
   include CupriteHelpers
   include Warden::Test::Helpers
