@@ -1,0 +1,22 @@
+<%= turbo_stream.update "member-remove-alert", viral_alert(type:, message:) %>
+
+<% if member.deleted? %>
+  <%= turbo_stream.remove dom_id(member) %>
+
+  <% if @existing_member %>
+    <%= turbo_stream.append "members-table-body",
+                        partial: "member",
+                        locals: {
+                          member: @existing_member,
+                          access_levels: @access_levels
+                        } %>
+  <% end %>
+
+  <%= turbo_stream.update "members_pagination" do %>
+    <%= render PaginationComponent.new(
+      info: pagy_info(@pagy),
+      prev_url: (@pagy.prev ? group_members_url(@group, page: @pagy.prev) : nil),
+      next_url: (@pagy.next ? group_members_url(@group, page: @pagy.next) : nil)
+    ) %>
+  <% end %>
+<% end %>
