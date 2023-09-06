@@ -97,25 +97,13 @@
                     <div class="w-32 h-2 rounded bg-slate-200"></div>
                   </div>
                 </td>
-                <% if (current_user == member.user || allowed_to?(:destroy_member?, @namespace)) && !member_source.key?(:inherited_namespace_path) %>
-                  <td class="px-4 py-3 text-right">
-                    <% if current_user == member.user %>
-                      <%= render partial: "groups/members/current_user_is_member", locals: { member: } %>
-                    <% else %>
-                      <%= render partial: "groups/members/current_user_is_not_member", locals: { member: } %>
-                    <% end %>
-                  </td>
-                <% end %>
+
               </tr>
             <% end %>
           </tbody>
         </table>
+        <% end %>
       </div>
     </div>
-    <%= render PaginationComponent.new(
-      info: pagy_info(@pagy),
-      prev_url: (@pagy.prev ? group_members_url(@group, page: @pagy.prev) : nil),
-      next_url: (@pagy.next ? group_members_url(@group, page: @pagy.next) : nil)
-    ) %>
   </div>
 </div>

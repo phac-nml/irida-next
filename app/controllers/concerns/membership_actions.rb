@@ -41,6 +41,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     Members::DestroyService.new(@member, @namespace, current_user).execute
+    @pagy, @members = pagy(load_members)
 
     if @member.deleted?
       if current_user == @member.user
