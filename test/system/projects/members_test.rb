@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module Projects
-  class MembersTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+  class MembersTest < ApplicationSystemTestCase
     header_row_count = 1
 
     def setup
@@ -15,10 +15,23 @@ module Projects
     end
 
     test 'can see the list of project members' do
-      visit namespace_project_members_url(@namespace, @project)
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:project26)
+      visit namespace_project_members_url(namespace, project)
 
-      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      assert_selector 'tr', count: @members_count + header_row_count
+      assert_selector 'tr', count: 20 + header_row_count
+
+      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+
+      click_on I18n.t(:'components.pagination.next')
+      assert_selector 'tr', count: 5 + header_row_count
+
+      assert_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+
+      click_on I18n.t(:'components.pagination.previous')
+      assert_selector 'tr', count: 20 + header_row_count
     end
 
     test 'can see list of project members which are inherited from parent group' do
@@ -102,7 +115,7 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t(:'projects.members.destroy.success')
+      assert_text I18n.t(:'projects.members.destroy.success', user: project_member.user.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end

@@ -14,7 +14,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
       within 'ul.groups-list.group-list-tree' do
-        assert_selector 'li', count: 5
+        assert_selector 'li', count: 6
         assert_text groups(:group_one).name
         assert_text groups(:group_two).name
         assert_text groups(:group_three).name

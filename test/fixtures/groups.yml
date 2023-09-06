@@ -83,3 +83,10 @@ subgroup_one_group_six:
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+group_seven:
+  name: Group 7
+  path: group-7
+  type: Group
+  description: Group 7 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

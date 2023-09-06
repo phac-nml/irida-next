@@ -26,7 +26,7 @@
       >
         <%= t(:".title") %>
       </h2>
-      <%= form_with(model: @new_member, url: group_members_path, method: :post) do |form| %>
+      <%= form_with(model: @new_member, url: group_members_path, data: {turbo: false}, method: :post) do |form| %>
         <div class="grid gap-4">
           <div class="form-field">
             <%= form.label :user_id %>
@@ -52,8 +52,8 @@
 
           <div>
             <%= form.submit t(:".add_member_to_group"),
-                            class: "button button--state-primary button--size-default mr-1",
-                            disabled: !@available_users.count.positive? %>
+                        class: "button button--state-primary button--size-default mr-1",
+                        disabled: !@available_users.count.positive? %>
           </div>
         </div>
       <% end %>

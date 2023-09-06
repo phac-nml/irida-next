@@ -227,3 +227,26 @@ project_twenty_four_member_michelle_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace) %>
   access_level: <%= Member::AccessLevel::ANALYST %>
+
+
+group_seven_group_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_seven) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+<% 25.times do |n| %>
+group_seven_group_member<%= (n) %>:
+  user_id: <%= ActiveRecord::FixtureSet.identify("user#{n}".to_sym) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_seven) %>
+  access_level: <%= Member::AccessLevel::ANALYST %>
+<% end %>
+
+<% 25.times do |n| %>
+project_twenty_six_group_member<%= (n) %>:
+  user_id: <%= ActiveRecord::FixtureSet.identify("user#{n}".to_sym) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace) %>
+  access_level: <%= Member::AccessLevel::ANALYST %>
+<% end %>

@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   test 'group members index' do

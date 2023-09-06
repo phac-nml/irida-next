@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   test 'project members index' do

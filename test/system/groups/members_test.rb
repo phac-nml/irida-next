@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module Groups
-  class MembersTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+  class MembersTest < ApplicationSystemTestCase
     header_row_count = 1
 
     def setup
@@ -14,10 +14,23 @@ module Groups
     end
 
     test 'can see the list of group members' do
-      visit group_members_url(@namespace)
+      namespace = groups(:group_seven)
+
+      visit group_members_url(namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      assert_selector 'tr', count: @members_count + header_row_count
+      assert_selector 'tr', count: 20 + header_row_count
+
+      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      click_on I18n.t(:'components.pagination.next')
+      assert_selector 'tr', count: 6 + header_row_count
+
+      assert_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+
+      click_on I18n.t(:'components.pagination.previous')
+      assert_selector 'tr', count: 20 + header_row_count
     end
 
     test 'can see list of group members for subgroup which are inherited from parent group' do
@@ -99,7 +112,7 @@ module Groups
         click_button 'Confirm'
       end
 
-      assert_text I18n.t(:'groups.members.destroy.success')
+      assert_text I18n.t(:'groups.members.destroy.success', user: group_member.user.email)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
