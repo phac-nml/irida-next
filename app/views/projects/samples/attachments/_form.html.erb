@@ -1,4 +1,7 @@
 <%= form_with(model: attachment, url: namespace_project_sample_attachments_path(sample_id: @sample.id)) do |form| %>
+  <%= form.hidden_field :attachable_id %>
+  <%= form.hidden_field :attachable_type %>
+
   <div class="grid gap-4">
 
     <div class="form-field">

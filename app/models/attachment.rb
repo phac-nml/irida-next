@@ -9,6 +9,8 @@ class Attachment < ApplicationRecord
 
   has_one_attached :file
 
+  validates :file, attached: true
+
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment
   def destroy
     update(deleted_at: Time.current)
