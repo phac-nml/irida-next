@@ -131,9 +131,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       can_modify?(user, object_namespace)
     end
 
-    def namespace_owners_include_user?(user, namespace) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-      return true if namespace.parent&.user_namespace? && namespace.parent.owner == user
-
+    def namespace_owners_include_user?(user, namespace)
       if namespace.project_namespace?
         Member.exists?(
           namespace:, user:,
