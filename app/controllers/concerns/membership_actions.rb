@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 # Common Members actions
-module MembershipActions
+module MembershipActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
     before_action proc { namespace }
     before_action proc { member }, only: %i[destroy update]
     before_action proc { available_users }, only: %i[new create]
-    before_action proc { access_levels }, only: %i[new create index update]
+    before_action proc { access_levels }
     before_action proc { context_crumbs }, only: %i[index new]
   end
 
@@ -41,22 +41,41 @@ module MembershipActions
 
   def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     Members::DestroyService.new(@member, @namespace, current_user).execute
+    @pagy, @members = pagy(load_members)
 
     if @member.deleted?
       if current_user == @member.user
         flash[:success] = t('.leave_success', name: @namespace.name)
-        redirect_to root_path and return
+        respond_to do |format|
+          # format.turbo_stream { redirect_to root_path }
+          format.html { redirect_to root_path }
+        end
       else
-        flash[:success] = t('.success')
+        respond_to do |format|
+          @existing_member = Member.where(namespace: @namespace.parent&.self_and_ancestor_ids, user: @member.user)
+                                   .order(:access_level).last
+
+          format.turbo_stream do
+            render status: :ok, locals: { member: @member, type: 'success',
+                                          message: t('.success', user: @member.user.email) }
+          end
+        end
       end
     else
-      flash[:error] = @member.errors.full_messages.first if @member.user != current_user
-      if @member.user == current_user
-        flash[:error] = I18n.t('activerecord.errors.models.member.destroy.last_member_self',
-                               namespace_type: @namespace.class.model_name.human)
+      message = if @member.user == current_user
+                  I18n.t('activerecord.errors.models.member.destroy.last_member_self',
+                         namespace_type: @namespace.class.model_name.human)
+                else
+                  @member.errors.full_messages.first
+                end
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :unprocessable_entity, locals: { member: @member, type: 'alert',
+                                                          message: }
+        end
       end
     end
-    redirect_to members_path
   end
 
   def update
