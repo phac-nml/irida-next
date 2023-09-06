@@ -192,9 +192,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   # Method to ensure we don't leave a group or project without an owner
-  def last_namespace_owner_member
+  def last_namespace_owner_member # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
     return if destroyed_by_association
     return if access_level != Member::AccessLevel::OWNER
+    return if namespace.parent&.user_namespace?
     return if Member.where(namespace:, access_level: Member::AccessLevel::OWNER).many?
     return if Member.where(namespace: namespace.parent&.self_and_ancestor_ids,
                            access_level: Member::AccessLevel::OWNER).any?

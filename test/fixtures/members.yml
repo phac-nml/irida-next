@@ -250,3 +250,9 @@ project_twenty_six_group_member<%= (n) %>:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace) %>
   access_level: <%= Member::AccessLevel::ANALYST %>
 <% end %>
+
+project_twenty_six_group_member25:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user25) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace) %>
+  access_level: <%= Member::AccessLevel::OWNER %>

@@ -143,6 +143,36 @@ module Projects
       assert_selector 'tr', count: (members_count - 1) + header_row_count
     end
 
+    test 'can leave a project that is under a user namespace where user is the only owner "member" of the project' do
+      login_as users(:user25)
+
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:project26)
+
+      visit namespace_project_members_url(namespace, project)
+      project_member = members(:project_twenty_six_group_member25)
+
+      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+
+      click_on I18n.t(:'components.pagination.next')
+
+      table_row = find(:table_row, { 'Username' => project_member.user.email })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.members.index.leave_project')
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t(:'projects.members.destroy.leave_success', name: project.name)
+      # Redirected to dashboard
+      assert_text 'HELLO: Stranger Danger'
+    end
+
     test 'can remove themselves as a member from the project' do
       visit namespace_project_members_url(@namespace, @project)
 
