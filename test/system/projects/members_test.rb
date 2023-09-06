@@ -25,7 +25,7 @@ module Projects
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
-      assert_selector 'tr', count: 5 + header_row_count
+      assert_selector 'tr', count: 6 + header_row_count
 
       assert_selector 'a', text: I18n.t(:'components.pagination.previous')
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
