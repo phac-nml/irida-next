@@ -134,6 +134,10 @@ en:
         last_name: Last Name
     errors:
       models:
+        attachment:
+          attributes:
+            file:
+              checksum_uniqueness: checksum matches existing file
         namespace:
           attributes:
             name:
