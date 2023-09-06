@@ -12,9 +12,11 @@ module ViewHelper
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',
     icon: 'Viral::IconComponent',
+    input_wrapper: 'Viral::Form::InputWrapperComponent',
     pageheader: 'Viral::PageHeaderComponent',
-    tooltip: 'Viral::TooltipComponent',
-    text_input: 'Viral::Form::TextInputComponent'
+    select: 'Viral::Form::SelectComponent',
+    text_input: 'Viral::Form::TextInputComponent',
+    tooltip: 'Viral::TooltipComponent'
   }.freeze
 
   VIRAL_HELPERS.each do |name, component|

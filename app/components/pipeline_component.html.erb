@@ -3,20 +3,24 @@
   <p class="my-4 text-lg text-gray-500"><%= @description %></p>
   <form data-controller="form_validation">
     <% @definitions.each do |key, value| %>
-      <h3 class="text-lg font-bold dark:text-white"><%= value['title'] %></h3>
-      <p class="mb-3 text-gray-500 dark:text-gray-400"><%= value['description'] %></p>
+      <fieldset>
+        <legend><%= value['title'] %></legend>
+        <p class="mb-3 text-gray-500 dark:text-gray-400"><%= value['description'] %></p>
 
-      <div class="grid gap-6 mb-6">
-      <% value["properties"].each do |property, fields| %>
-          <%= render Viral::Form::TextInputComponent.new(
-            name: property,
-            label: fields['description'],
-            type: fields['type'],
-            help: fields['help_text'],
-            pattern: fields['pattern'],
-          ) %>
-      <% end %>
-      </div>
+        <div class="grid gap-6 mb-6">
+          <% value["properties"].each do |property, fields| %>
+            <%= render Viral::Form::TextInputComponent.new(
+              name: property,
+              label: fields['description'],
+              type: fields['type'],
+              help: fields['help_text'],
+              pattern: fields['pattern'],
+              default: fields['default'],
+              hidden: fields['hidden'],
+            ) %>
+          <% end %>
+        </div>
+      </fieldset>
     <% end %>
   </form>
 </div>
