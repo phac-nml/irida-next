@@ -25,7 +25,7 @@ module Projects
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
-      assert_selector 'tr', count: 5 + header_row_count
+      assert_selector 'tr', count: 6 + header_row_count
 
       assert_selector 'a', text: I18n.t(:'components.pagination.previous')
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -118,6 +118,59 @@ module Projects
       assert_text I18n.t(:'projects.members.destroy.success', user: project_member.user.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
+    end
+
+    test 'can remove a member from the project that is under a user namespace' do
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project4)
+      visit namespace_project_members_url(namespace, project)
+      project_member = members(:project_four_member_joan_doe)
+      members_count = members.select { |member| member.namespace == project.namespace }.count
+
+      table_row = find(:table_row, { 'Username' => project_member.user.email })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.members.index.remove')
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t(:'projects.members.destroy.success')
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+      assert_selector 'tr', count: (members_count - 1) + header_row_count
+    end
+
+    test 'can leave a project that is under a user namespace where user is the only owner "member" of the project' do
+      login_as users(:user25)
+
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:project26)
+
+      visit namespace_project_members_url(namespace, project)
+      project_member = members(:project_twenty_six_group_member25)
+
+      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+
+      click_on I18n.t(:'components.pagination.next')
+
+      table_row = find(:table_row, { 'Username' => project_member.user.email })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.members.index.leave_project')
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t(:'projects.members.destroy.leave_success', name: project.name)
+      # Redirected to dashboard
+      assert_text 'HELLO: Stranger Danger'
     end
 
     test 'can remove themselves as a member from the project' do
