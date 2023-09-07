@@ -42,7 +42,8 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = ENV.fetch('RAILS_STORAGE_SERVICE', 'local').to_sym
 
-  config.action_mailer.default_url_options = { host: ENV.fetch('RAILS_HOST'), port: ENV.fetch('RAILS_PROTOCOL') }
+  config.action_mailer.default_url_options = { host: ENV.fetch('RAILS_HOST', 'example.com'),
+                                               protocol: ENV.fetch('RAILS_PROTOCOL', 'http') }
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
