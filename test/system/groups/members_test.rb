@@ -78,22 +78,27 @@ module Groups
 
     test 'can add a member to the group' do
       visit group_members_url(@namespace)
+      user_to_add = users(:jane_doe)
+
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 1
 
       click_link I18n.t(:'groups.members.index.add')
 
-      assert_selector 'h2', text: I18n.t(:'groups.members.new.title')
+      within('dialog') do
+        assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
+        find('#member_user_id').find('option', text: user_to_add.email).select_option
+        find('#member_access_level').find('option',
+                                          text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
 
-      find('#member_user_id').find(:xpath, 'option[2]').select_option
-      find('#member_access_level').find(:xpath, 'option[5]').select_option
+        click_button I18n.t(:'groups.members.new.add_member_to_group')
+      end
 
-      click_button I18n.t(:'groups.members.new.add_member_to_group')
-
-      assert_text I18n.t(:'groups.members.create.success')
+      assert_text I18n.t(:'groups.members.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: (@members_count + 1) + header_row_count
+      assert_not_nil find(:table_row, { 'Username' => user_to_add.email })
     end
 
     test 'can remove a member from the group' do

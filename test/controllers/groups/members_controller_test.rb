@@ -31,10 +31,10 @@ module Groups
 
       assert_difference('Member.count') do
         post group_members_path, params: { member: { user_id: user.id,
-                                                     access_level: Member::AccessLevel::OWNER } }
+                                                     access_level: Member::AccessLevel::OWNER }, format: :turbo_stream }
       end
 
-      assert_redirected_to group_members_path(group)
+      assert_response :success
     end
 
     test 'should delete a member from the group' do
