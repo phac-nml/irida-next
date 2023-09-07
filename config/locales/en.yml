@@ -479,6 +479,7 @@ en:
         success: "Group member %{user_email} updated successfully"
       new:
         title: Add New Member
+        description: You are adding a new member to group %{name}
         add_member_to_group: Add member to group
         select_user: Select a User
         select_access_level: Select Access Level
@@ -593,6 +594,7 @@ en:
       new:
         title: Add New Member
         add_member_to_project: Add member to project
+        description: You are adding a new member to project %{name}
         select_user: Select a User
         select_access_level: Select Access Level
       destroy:
