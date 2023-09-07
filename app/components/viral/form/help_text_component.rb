@@ -4,7 +4,7 @@ module Viral
   module Form
     # Component to render form help text can be either default, success or error
     class HelpTextComponent < ViewComponent::Base
-      attr_reader :system_arguments, :icon
+      attr_reader :icon
 
       STATE_MAPPINGS = {
         default: 'mt-2 text-sm text-slate-500 dark:text-slate-400',
@@ -20,12 +20,12 @@ module Viral
 
       def initialize(state: :default, **system_arguments)
         @state = state
-        @system_arguments = system_arguments
+        @arguments = system_arguments
         @icon = ICON_MAPPINGS.key?(@state) ? ICON_MAPPINGS[@state] : ICON_MAPPINGS[:default]
       end
 
       def system_arguments
-        @system_arguments.tap do |args|
+        @arguments.tap do |args|
           args[:tag] = 'p'
           args[:classes] = class_names(
             'flex items-center justify-start',
