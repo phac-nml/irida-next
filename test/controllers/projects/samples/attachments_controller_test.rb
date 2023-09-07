@@ -17,6 +17,16 @@ module Projects
         assert_difference('Attachment.count') do
           post namespace_project_sample_attachments_url(@namespace, @project, @sample1),
                params: { attachment: {
+                 file: fixture_file_upload('test_file_1.fastq', 'text/plain')
+               } },
+               as: :turbo_stream
+        end
+      end
+
+      test 'user with role >= Maintainer cannot create a duplicate attachment for a sample' do
+        assert_no_difference('Attachment.count') do
+          post namespace_project_sample_attachments_url(@namespace, @project, @sample1),
+               params: { attachment: {
                  file: fixture_file_upload('test_file.fastq', 'text/plain')
                } },
                as: :turbo_stream

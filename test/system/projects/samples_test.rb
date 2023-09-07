@@ -75,6 +75,21 @@ module Projects
       end
     end
 
+    test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      assert_selector 'button', text: I18n.t('projects.samples.show.upload_file'), count: 1
+      click_on I18n.t('projects.samples.show.upload_file')
+
+      within('dialog') do
+        attach_file 'attachment[file]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        click_on I18n.t('projects.samples.show.upload_file')
+      end
+
+      within('dialog') do
+        assert_text 'checksum matches existing file'
+      end
+    end
+
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1

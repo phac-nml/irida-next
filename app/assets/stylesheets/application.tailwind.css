@@ -114,6 +114,10 @@ body {
     @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
   }
 
+  .form-field.invalid input[type="file"] {
+    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
+  }
+
   .form-field textarea {
     @apply block w-full rounded-md border border-slate-300 text-sm text-slate-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
