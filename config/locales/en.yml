@@ -447,7 +447,7 @@ en:
     members:
       create:
         error: "Error adding member"
-        success: "Group member added successfully"
+        success: "Group member %{user} added successfully"
       index:
         add: Add New Member
         remove: Remove member
@@ -560,7 +560,7 @@ en:
     members:
       create:
         error: "Error adding member"
-        success: "Project member added successfully"
+        success: "Project member %{user} added successfully"
       index:
         add: Add New Member
         remove: Remove member

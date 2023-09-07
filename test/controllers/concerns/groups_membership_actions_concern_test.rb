@@ -49,9 +49,9 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     post group_members_path, params: { member: { user_id: users(:steve_doe).id,
                                                  namespace_id: group.id,
                                                  created_by_id: user.id,
-                                                 access_level: Member::AccessLevel::OWNER } }
+                                                 access_level: Member::AccessLevel::OWNER }, format: :turbo_stream }
 
-    assert_redirected_to group_members_path(group)
+    assert_response :success
     assert_equal 5, group.group_members.count
   end
 
@@ -63,7 +63,8 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     post group_members_path(group), params: { member: { user_id: user.id,
                                                         namespace_id: group.id,
                                                         created_by_id: user.id,
-                                                        access_level: Member::AccessLevel::OWNER + 100_000 } }
+                                                        access_level: Member::AccessLevel::OWNER + 100_000 },
+                                              format: :turbo_stream }
     assert_response :unprocessable_entity
   end
 
@@ -99,7 +100,8 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     post group_members_path, params: { member: { user_id: user.id,
                                                  namespace_id: group.id,
                                                  created_by_id: user.id,
-                                                 access_level: Member::AccessLevel::OWNER + 100_000 } }
+                                                 access_level: Member::AccessLevel::OWNER + 100_000 },
+                                       format: :turbo_stream }
 
     assert_response 422 # unprocessable entity
   end

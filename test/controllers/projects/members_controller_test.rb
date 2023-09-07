@@ -36,10 +36,11 @@ module Projects
         post namespace_project_members_path, params: { member: { user_id: user.id,
                                                                  namespace_id: namespace.id,
                                                                  created_by_id: created_by_user.id,
-                                                                 access_level: Member::AccessLevel::OWNER } }
+                                                                 access_level: Member::AccessLevel::OWNER },
+                                                       format: :turbo_stream }
       end
 
-      assert_redirected_to namespace_project_members_path(namespace, project)
+      assert_response :success
     end
 
     test 'should delete a member from the project' do

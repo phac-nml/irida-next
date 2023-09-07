@@ -1,0 +1,36 @@
+<%= viral_dialog(open: open) do |dialog| %>
+  <%= dialog.with_header(title: t(:"groups.members.new.title")) %>
+  <%= dialog.with_section do %>
+     <%= form_with(model: @new_member, url: group_members_path, method: :post) do |form| %>
+        <div class="grid gap-4">
+          <div class="form-field">
+            <%= form.label :user_id %>
+            <%= form.select :user_id,
+                        options_for_select(
+                          @available_users.collect { |u| [u.email, u.id] },
+                          selected: @new_member.user_id
+                        ),
+                        { prompt: t(:"groups.members.new.select_user") },
+                        required: true %>
+          </div>
+
+          <% invalid_access_level = @new_member.errors.include?(:access_level) %>
+          <div class="form-field <%= 'invalid' if invalid_access_level %>">
+            <%= form.label :access_level %>
+            <%= form.select :access_level,
+                        @access_levels,
+                        { prompt: t(:"groups.members.new.select_access_level") },
+                        required: true %>
+            <%= render "shared/form/field_errors",
+            errors: @new_member.errors.full_messages_for(:access_level) %>
+          </div>
+
+          <div>
+            <%= form.submit t(:"groups.members.new.add_member_to_group"),
+                        class: "button button--state-primary button--size-default mr-1",
+                        disabled: !@available_users.count.positive? %>
+          </div>
+        </div>
+      <% end %>
+  <% end %>
+<% end %>
