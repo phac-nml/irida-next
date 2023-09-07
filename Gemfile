@@ -91,7 +91,7 @@ gem 'paranoia'
 # ActiveStorage
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
-gem 'azure-storage-blob', '~> 2.0', require: false
+gem 'azure-storage-blob', git: 'https://github.com/honeyankit/azure-storage-ruby', require: false
 gem 'google-cloud-storage', '~> 1.11', require: false
 
 group :development, :test do
