@@ -1,25 +1,42 @@
 <script>
   // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-  function isDarkMode(theme) {
+  function isSystemTheme() {
+    return localStorage.getItem("theme") === "system";
+  }
+
+  function isDarkTheme() {
+    return localStorage.getItem("theme") === "dark";
+  }
+
+  function isDarkMode() {
     return (
-      theme === "dark" ||
-      (theme === "system" &&
+      isDarkTheme() ||
+      (isSystemTheme() &&
         window.matchMedia("(prefers-color-scheme: dark)").matches)
     );
   }
 
-  if (isDarkMode(localStorage.getItem("theme"))) {
-    document.documentElement.classList.add("dark");
-  } else {
-    document.documentElement.classList.remove("dark");
+  function updateTheme(isDark) {
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }
+
+    // Set up watcher for system theme changes
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      if(isSystemTheme()) {
+        updateTheme(e.matches);
+      }
+    });
 
   window.addEventListener("storage", function(event) {
     if (event.key !== "theme") return;
-    if (isDarkMode(localStorage.getItem("theme"))) {
-      this.document.documentElement.classList.add("dark");
-    } else {
-      this.document.documentElement.classList.remove("dark");
-    }
+    updateTheme(isDarkMode());
   });
+
+  updateTheme(isDarkMode());
 </script>
