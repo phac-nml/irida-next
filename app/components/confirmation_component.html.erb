@@ -29,13 +29,13 @@
     </div>
     <div
       class="hidden mt-4 dialog--form--validate"
-      data-controller="confirmation-component"
+      data-controller="confirmation"
     >
 
       <form method="dialog">
         <input
           type="text"
-          data-action="confirmation-component#inputChange"
+          data-action="confirmation#inputChange"
           class="
             bg-slate-50
             border
@@ -61,7 +61,7 @@
             class="button button--state-destructive button--size-default"
             value="confirm"
             disabled="disabled"
-            data-confirmation-component-target="confirmButton"
+            data-confirmation-target="confirmButton"
           ><%= t(:"components.confirmation.confirm") %>
           </button>
           <button
