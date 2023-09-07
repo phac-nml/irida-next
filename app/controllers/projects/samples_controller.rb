@@ -9,8 +9,14 @@ module Projects
 
     def index
       authorize! @project, to: :sample_listing?
-
-      @samples = Sample.where(project_id: @project.id)
+      respond_to do |format|
+        format.html do
+          @has_samples = Sample.exists?(project_id: @project.id)
+        end
+        format.turbo_stream do
+          @pagy, @samples = pagy(Sample.where(project_id: @project.id))
+        end
+      end
     end
 
     def show

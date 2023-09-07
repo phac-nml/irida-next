@@ -16,6 +16,8 @@ module Projects
         sample_ids = params[:sample_ids] || []
         transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
                                                                                                  sample_ids)
+        @pagy, @samples = pagy(Sample.where(project_id: @project.id))
+
         respond_to do |format|
           if transferred_samples_ids.length == sample_ids.length
             format.turbo_stream do

@@ -22,74 +22,17 @@
     </div>
   <% end %>
 <% end %>
+
 <div class="bg-white dark:bg-slate-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
-        <table
-          id="samples-table"
-          class="min-w-full table-fixed dark:divide-slate-600"
-          data-controller="selection"
-        >
-          <tbody
-            class="
-              bg-white
-              divide-y
-              divide-slate-200
-              dark:bg-slate-800
-              dark:divide-slate-700
-            "
-          >
-            <% @samples.each do |sample| %>
-              <tr
-                id="<%= sample.id %>"
-                class="text-sm font-normal text-slate-500 dark:text-slate-400"
-              >
-                <% if allowed_to?(:transfer_sample?, @project) %>
-                  <td class="ps-4 w-10">
-                    <%= check_box_tag "sample_ids[]",
-                    sample.id,
-                    nil,
-                    id: dom_id(sample),
-                    "aria-label": sample.name,
-                    data: {
-                      action: "input->selection#toggle",
-                      selection_target: "rowSelection"
-                    } %>
-                  </td>
-                <% end %>
-                <td class="p-4 whitespace-nowrap">
-                  <%= link_to sample.name,
-                  namespace_project_sample_path(id: sample.id),
-                  class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                  <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= sample.description %></div>
-                </td>
-                <% if allowed_to?(:update_sample?, @project) %>
-                  <td class="px-4 py-3">
-                    <div class="flex items-center justify-end">
-                      <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
-                        <%= dropdown.with_item(
-                          label: t(:"projects.samples.index.edit_button"),
-                          url: edit_namespace_project_sample_path(id: sample.id)
-                        ) %>
-                        <% if allowed_to?(:destroy_sample?, @project) %>
-                          <%= dropdown.with_item(
-                            label: t(:"projects.samples.index.remove_button"),
-                            url: namespace_project_sample_path(id: sample.id),
-                            data: {
-                              turbo_method: :delete,
-                              turbo_confirm: t(:"projects.samples.index.remove_button_confirmation")
-                            }
-                          ) %>
-                        <% end %>
-                      <% end %>
-                    </div>
-                  </td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+        <% if @has_samples %>
+          <%= turbo_frame_tag "project_samples_list",
+          src: project_samples_path(@project, format: :turbo_stream, page: params[:page]),
+          loading: :lazy %>
+          <%= turbo_frame_tag "project_samples_pagination" %>
+        <% end %>
       </div>
     </div>
   </div>
