@@ -2,6 +2,7 @@
 
 module Viral
   module Form
+    # Component to render form help text can be either default, success or error
     class HelpTextComponent < ViewComponent::Base
       attr_reader :system_arguments, :icon
 
