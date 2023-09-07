@@ -91,7 +91,7 @@ gem 'paranoia'
 # ActiveStorage
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
-gem 'azure-storage-blob', git: 'https://github.com/honeyankit/azure-storage-ruby', require: false
+gem 'azure-storage-blob', github: 'honeyankit/azure-storage-ruby', branch: 'master', require: false
 gem 'google-cloud-storage', '~> 1.11', require: false
 
 group :development, :test do
@@ -112,7 +112,7 @@ group :development do
   # gem "spring"
 
   # erb-formatter
-  gem 'erb-formatter', git: 'https://github.com/nebulab/erb-formatter.git', tag: 'v0.4.2', require: false
+  gem 'erb-formatter', github: 'nebulab/erb-formatter', tag: 'v0.4.2', require: false
 
   # LookBook
   gem 'actioncable'
