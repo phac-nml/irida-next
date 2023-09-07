@@ -117,7 +117,7 @@ group :development do
   # LookBook
   gem 'actioncable'
   gem 'listen'
-  gem 'lookbook', '>= 2.0.0.rc.1'
+  gem 'lookbook', '~> 2.0'
 end
 
 group :test do
