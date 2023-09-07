@@ -1,0 +1,26 @@
+<%= viral_dialog(open: open) do |dialog| %>
+  <%= dialog.with_header(title: t("projects.samples.transfers.new.title")) %>
+  <%= dialog.with_section do %>
+    <%= form_with(url: namespace_project_samples_transfer_path, method: :post) do |form| %>
+      <div
+        data-controller="projects--samples--transfers"
+        data-projects--samples--transfers-storage-key-value=<%=namespace_project_samples_url%>
+        data-projects--samples--transfers-target="field"
+        data-projects--samples--transfers-field-name-value="sample_ids[]"
+      />
+      <div class="form-field">
+        <%= form.label :new_project_id %>
+        <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
+        <%= render "shared/form/field_errors",
+        errors: @project.errors.full_messages_for(:base) %>
+      </div>
+      <div class="my-2">
+        <%= form.submit t("projects.samples.transfers.new.submit_button"),
+                    class: "button button--size-default button--state-primary",
+                    data: {
+                      action: "click->projects--samples--transfers#clear"
+                    } %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

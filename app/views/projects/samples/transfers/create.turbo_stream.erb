@@ -10,7 +10,11 @@
   <% end %>
 <% end %>
 
-<%= turbo_stream.remove "transfer_modal" %>
+<%= turbo_stream.update "transfer_modal",
+                    partial: "transfer_modal",
+                    locals: {
+                      open: false
+                    } %>
 
 <%= turbo_stream.update "project_samples_list",
                     partial: "projects/samples/table",
