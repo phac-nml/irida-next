@@ -15,7 +15,6 @@
     <div class="overflow-x-auto">
       <div class="shadow">
         <%= turbo_frame_tag("member-update-alert") %>
-        <%= turbo_frame_tag("member-remove-alert") %>
           <%= turbo_frame_tag "group_members_list",
           src: group_members_path(@group, format: :turbo_stream, page: params[:page]),
           loading: :lazy %>

@@ -1,4 +1,9 @@
-<%= turbo_stream.update "member-remove-alert", viral_alert(type:, message:) %>
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(
+    type:,
+    data: message
+  ) %>
+<% end %>
 
 <% if member.deleted? %>
   <%= turbo_stream.update "group_members_list" do %>
