@@ -22,6 +22,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     build-essential \
     curl \
+    git \
     libpq-dev \
     libvips \
     node-gyp \
