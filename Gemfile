@@ -90,7 +90,9 @@ gem 'paranoia'
 
 # ActiveStorage
 gem 'active_storage_validations'
+gem 'aws-sdk-s3', require: false
 gem 'azure-storage-blob', '~> 2.0', require: false
+gem 'google-cloud-storage', '~> 1.11', require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
