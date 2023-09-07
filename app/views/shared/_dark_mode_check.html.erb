@@ -1,24 +1,44 @@
 <script>
   // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-  if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-    document.documentElement.classList.add("dark");
-  } else {
-    document.documentElement.classList.remove("dark");
+  function isSystemTheme() {
+    return localStorage.getItem("theme") === "system";
   }
 
-  window.addEventListener("storage", function(event) {
-    if (this.localStorage.getItem("theme") === "light") {
-      if (document.documentElement.classList.contains("dark")) {
-        this.document.documentElement.classList.remove("dark");
-        this.document.querySelector("#app-darkmode-toggle>svg[data-dark-mode-target=darkIcon]").classList.remove("hidden");
-        this.document.querySelector("#app-darkmode-toggle>svg[data-dark-mode-target=lightIcon]").classList.add("hidden");
-      }
-    } else if (this.localStorage.getItem("theme") === "dark") {
-      if (!document.documentElement.classList.contains("dark")) {
-        this.document.documentElement.classList.add("dark");
-        this.document.querySelector("#app-darkmode-toggle>svg[data-dark-mode-target=darkIcon]").classList.add("hidden");
-        this.document.querySelector("#app-darkmode-toggle>svg[data-dark-mode-target=lightIcon]").classList.remove("hidden");
-      }
+  function isDarkTheme() {
+    return localStorage.getItem("theme") === "dark";
+  }
+
+  function isDarkMode() {
+    return (
+      isDarkTheme() ||
+      (isSystemTheme() &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    );
+  }
+
+  function updateTheme(isDark) {
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+    } else {
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
     }
+  }
+
+    // Set up watcher for system theme changes
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      if(isSystemTheme()) {
+        updateTheme(e.matches);
+      }
+    });
+
+  window.addEventListener("storage", function(event) {
+    if (event.key !== "theme") return;
+    updateTheme(isDarkMode());
   });
+
+  updateTheme(isDarkMode());
 </script>

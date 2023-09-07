@@ -281,8 +281,6 @@ en:
         aria_label: Account menu dropdown
         profile: Edit profile
         sign_out: Sign out
-      dark_mode:
-        aria_label: Toggle dark mode
   dashboard:
     projects:
       index:
@@ -313,6 +311,7 @@ en:
       password: Password
       account: Account
       access_tokens: Access Tokens
+      preferences: Preferences
     show:
       email:
         title: Email
@@ -338,6 +337,13 @@ en:
           - All projects and groups you are a member of will be left intact
         button: Delete account
         confirm: Are you sure you want to delete your account?
+    preferences:
+      show:
+        theme_title: Colour theme
+        system_theme: System
+        system_desc: The colour theme will update based on your operating system settings.
+        light_theme: Light
+        dark_theme: Dark
     personal_access_tokens:
       access_token_section:
         label: Your new personal access token
