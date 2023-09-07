@@ -14,7 +14,12 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def index
     authorize! @namespace, to: :member_listing?
-    @pagy, @members = pagy(load_members)
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        @pagy, @members = pagy(load_members)
+      end
+    end
   end
 
   def new
@@ -41,21 +46,15 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     Members::DestroyService.new(@member, @namespace, current_user).execute
-    @pagy, @members = pagy(load_members)
 
     if @member.deleted?
       if current_user == @member.user
         flash[:success] = t('.leave_success', name: @namespace.name)
-        respond_to do |format|
-          # format.turbo_stream { redirect_to root_path }
-          format.html { redirect_to root_path }
-        end
+        redirect_to root_path
       else
         respond_to do |format|
-          @existing_member = Member.where(namespace: @namespace.parent&.self_and_ancestor_ids, user: @member.user)
-                                   .order(:access_level).last
-
           format.turbo_stream do
+            @pagy, @members = pagy(load_members)
             render status: :ok, locals: { member: @member, type: 'success',
                                           message: t('.success', user: @member.user.email) }
           end

@@ -481,7 +481,7 @@ en:
         select_access_level: Select Access Level
       destroy:
         error: "There was an error removing the group member"
-        success: "Group member successfully removed"
+        success: "Group member %{user} successfully removed"
         leave_success: "You have successfully left the group %{name}"
     samples:
       index:
@@ -594,7 +594,7 @@ en:
         select_access_level: Select Access Level
       destroy:
         error: "There was an error removing the project member"
-        success: "Project member successfully removed"
+        success: "Project member %{user} successfully removed"
         leave_success: "You have successfully left the project %{name}"
     samples:
       show:
