@@ -50,7 +50,12 @@
   <% invalid_path = @project.namespace.errors.include?(:path) %>
   <div class="form-field <%= 'invalid' if invalid_path %>">
     <%= builder.label :path %>
-    <%= builder.text_field :path, data: { "slugify-target": "path" }, required: true %>
+    <%= builder.text_field :path,
+                       data: {
+                         "slugify-target": "path"
+                       },
+                       pattern: Irida::PathRegex::PATH_REGEX_STR,
+                       required: true %>
     <%= render "shared/form/field_errors",
     errors: @project.namespace.errors.full_messages_for(:path) %>
   </div>
