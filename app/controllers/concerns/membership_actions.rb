@@ -25,6 +25,12 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   def new
     authorize! @namespace, to: :create_member? unless @namespace.parent.nil? && @namespace.owner == current_user
     @new_member = Member.new(namespace_id: @namespace.id)
+
+    respond_to do |format|
+      format.turbo_stream do
+        render status: :ok
+      end
+    end
   end
 
   def create # rubocop:disable Metrics/MethodLength
