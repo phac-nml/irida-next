@@ -172,6 +172,8 @@ en:
         not_found: "Could not find personal access token with id %{token_id}"
     models:
       member:
+        one: Member
+        other: Members
         access_level:
           no_access: No Access
           guest: Guest
@@ -185,6 +187,7 @@ en:
         other: Groups
       sample:
         one: Sample
+        other: Samples
       namespaces/project_namespace:
         one: Project
         other: Projects

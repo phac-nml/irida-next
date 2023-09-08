@@ -88,7 +88,11 @@ gem 'fx'
 # Soft delete records
 gem 'paranoia'
 
+# ActiveStorage
 gem 'active_storage_validations'
+gem 'aws-sdk-s3', require: false
+gem 'azure-storage-blob', github: 'honeyankit/azure-storage-ruby', branch: 'master', require: false
+gem 'google-cloud-storage', '~> 1.11', require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -108,12 +112,12 @@ group :development do
   # gem "spring"
 
   # erb-formatter
-  gem 'erb-formatter', git: 'https://github.com/nebulab/erb-formatter.git', tag: 'v0.4.2', require: false
+  gem 'erb-formatter', github: 'nebulab/erb-formatter', tag: 'v0.4.2', require: false
 
   # LookBook
   gem 'actioncable'
   gem 'listen'
-  gem 'lookbook', '>= 2.0.0.rc.1'
+  gem 'lookbook', '~> 2.0'
 end
 
 group :test do
