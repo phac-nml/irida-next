@@ -1,4 +1,5 @@
-<div class="form-field">
+<% invalid_name = @project.namespace.errors.include?(:name) %>
+<div class="form-field <%= 'invalid' if invalid_name %>">
   <%= builder.label :name %>
   <%= builder.text_field :name,
                      data: {
@@ -8,6 +9,8 @@
                      required: true,
                      autofocus: true,
                      placeholder: t(:"projects.new.placeholder") %>
+  <%= render "shared/form/field_errors",
+  errors: @project.namespace.errors.full_messages_for(:name) %>
 </div>
 <div class="grid grid-cols-2 gap-4">
   <div class="form-field">
@@ -44,9 +47,12 @@
       <div class="ml-4 dark:text-slate-200">/</div>
     </div>
   </div>
-  <div class="form-field">
+  <% invalid_path = @project.namespace.errors.include?(:path) %>
+  <div class="form-field <%= 'invalid' if invalid_path %>">
     <%= builder.label :path %>
     <%= builder.text_field :path, data: { "slugify-target": "path" }, required: true %>
+    <%= render "shared/form/field_errors",
+    errors: @project.namespace.errors.full_messages_for(:path) %>
   </div>
 </div>
 <div class="form-field">
