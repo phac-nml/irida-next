@@ -18,7 +18,7 @@ module Projects
       sign_in users(:john_doe)
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project2)
-      get new_namespace_project_member_path(namespace, project)
+      get new_namespace_project_member_path(namespace, project, format: :turbo_stream)
       assert_response :success
     end
 
@@ -28,7 +28,7 @@ module Projects
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project2)
 
-      get new_namespace_project_member_path(namespace, project)
+      get new_namespace_project_member_path(namespace, project, format: :turbo_stream)
       created_by_user = users(:john_doe)
       user = users(:jane_doe)
 
@@ -49,7 +49,7 @@ module Projects
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project2)
 
-      get new_namespace_project_member_path(namespace, project)
+      get new_namespace_project_member_path(namespace, project, format: :turbo_stream)
       project_member = members(:project_two_member_james_doe)
 
       assert_difference('Member.count', -1) do

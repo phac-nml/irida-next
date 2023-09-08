@@ -18,7 +18,7 @@ module Groups
       sign_in users(:john_doe)
 
       group = groups(:group_one)
-      get new_group_member_path(group)
+      get new_group_member_path(group, format: :turbo_stream)
       assert_response :success
     end
 

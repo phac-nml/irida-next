@@ -5,7 +5,8 @@
       <%= link_to t(:".add"),
       new_namespace_project_member_path,
       data: {
-        turbo_frame: "new_member_modal"
+        turbo_frame: "new_member_modal",
+        turbo_stream: true
       },
       class: "button button--state-primary button--size-default",
       "aria-label": t(:".actions.button_add_aria_label") %>
