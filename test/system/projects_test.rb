@@ -7,6 +7,35 @@ class ProjectsTest < ApplicationSystemTestCase
     login_as users(:john_doe)
   end
 
+  test 'can create a project' do
+    new_project_name = 'Project 1'
+    visit new_project_path
+
+    assert_selector 'h1', text: I18n.t(:'projects.new.title'), count: 1
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: new_project_name
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    assert_text I18n.t(:'projects.create.success', project_name: new_project_name)
+    assert_selector 'h1', text: new_project_name
+  end
+
+  test 'show error when creating a project with a short name' do
+    new_project_name = 'a'
+    visit new_project_path
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: new_project_name
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    message = find_field('Path')[:validationMessage]
+    assert_equal message, 'Please match the format requested.'
+    assert_current_path new_project_path
+  end
+
   test 'can update project name and description' do
     project_name = 'New Project'
     project_description = 'New Project Description'
