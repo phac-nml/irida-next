@@ -2,7 +2,6 @@
   <ul
     class="
       max-w-md
-      space-y-1
       text-sm
       text-slate-500
       list-inside
@@ -10,11 +9,10 @@
     "
   >
     <% errors.each do |error_message| %>
-      <li class="flex items-center text-red-500">
-        <%= render Viral::IconComponent.new(
-          name: "x_circle",
-          classes: "w-3 h-3 mr-1.5 flex-shrink-0"
-        ) %><%= error_message %>
+      <li>
+        <%= viral_help_text(state: :error) do %>
+          <%= error_message %>
+        <% end %>
       </li>
     <% end %>
   </ul>
