@@ -134,6 +134,10 @@ en:
         last_name: Last Name
     errors:
       models:
+        attachment:
+          attributes:
+            file:
+              checksum_uniqueness: checksum matches existing file
         namespace:
           attributes:
             name:
@@ -277,8 +281,6 @@ en:
         aria_label: Account menu dropdown
         profile: Edit profile
         sign_out: Sign out
-      dark_mode:
-        aria_label: Toggle dark mode
   dashboard:
     projects:
       index:
@@ -295,6 +297,13 @@ en:
           namespace_name_desc: Name, descending
           updated_at_asc: Oldest updated
           created_at_asc: Oldest created
+    groups:
+      index:
+        title: Groups
+        create_group_button: New group
+        more_items: "%{count} more items"
+        row_aria_label: "See %{name} subgroups"
+        subgroups: Subgroups
   profiles:
     sidebar:
       header: User Settings
@@ -302,6 +311,7 @@ en:
       password: Password
       account: Account
       access_tokens: Access Tokens
+      preferences: Preferences
     show:
       email:
         title: Email
@@ -327,6 +337,13 @@ en:
           - All projects and groups you are a member of will be left intact
         button: Delete account
         confirm: Are you sure you want to delete your account?
+    preferences:
+      show:
+        theme_title: Colour theme
+        system_theme: System
+        system_desc: The colour theme will update based on your operating system settings.
+        light_theme: Light
+        dark_theme: Dark
     personal_access_tokens:
       access_token_section:
         label: Your new personal access token
@@ -405,8 +422,6 @@ en:
     show:
       create_subgroup_button: New subgroup
       create_project_button: New project
-      title: Groups
-      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
     new_subgroup:
       title: Create subgroup
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
@@ -466,7 +481,7 @@ en:
         select_access_level: Select Access Level
       destroy:
         error: "There was an error removing the group member"
-        success: "Group member successfully removed"
+        success: "Group member %{user} successfully removed"
         leave_success: "You have successfully left the group %{name}"
     samples:
       index:
@@ -579,7 +594,7 @@ en:
         select_access_level: Select Access Level
       destroy:
         error: "There was an error removing the project member"
-        success: "Project member successfully removed"
+        success: "Project member %{user} successfully removed"
         leave_success: "You have successfully left the project %{name}"
     samples:
       show:

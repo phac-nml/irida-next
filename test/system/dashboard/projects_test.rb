@@ -18,7 +18,7 @@ module Dashboard
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
-      assert_selector 'tr', count: 7
+      assert_selector 'tr', count: 8
       click_on I18n.t(:'components.pagination.previous')
       assert_selector 'tr', count: 20
 
@@ -33,7 +33,7 @@ module Dashboard
       sleep 1
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_selector 'tr', count: 3
+      assert_selector 'tr', count: 4
       assert_text projects(:john_doe_project2).human_name
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')

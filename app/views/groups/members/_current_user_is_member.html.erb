@@ -6,7 +6,8 @@
     url: group_member_path(@namespace, member),
     data: {
       turbo_method: :delete,
-      turbo_confirm: (t(:"groups.members.index.leave_confirmation"))
+      turbo_confirm: (t(:"groups.members.index.leave_confirmation")),
+      turbo_frame: "_top"
     },
     aria: {
       label: (t(:"groups.members.index.actions.link_leave_group_aria_label"))

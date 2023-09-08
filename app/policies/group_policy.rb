@@ -122,6 +122,6 @@ class GroupPolicy < NamespacePolicy
   end
 
   scope_for :relation do |_relation|
-    user.groups.self_and_descendants.include_route
+    user.groups.self_and_descendants
   end
 end

@@ -11,11 +11,11 @@ module Projects
       def create
         authorize! @project, to: :update_sample?
 
-        @attachment = Attachment.new(attachment_params.merge(attachable: @sample))
+        @attachment = Attachment.new(attachment_params.merge(attachable_id: @sample.id, attachable_type: @sample.class))
         respond_to do |format|
           if @attachment.save
             format.turbo_stream do
-              render locals: { attachment: Attachment.new,
+              render locals: { attachment: Attachment.new(attachable: @sample),
                                new_attachment: @attachment }
             end
           else
@@ -46,7 +46,7 @@ module Projects
       private
 
       def attachment_params
-        params.require(:attachment).permit(:file)
+        params.require(:attachment).permit(:attachable_id, :attachable_type, :file)
       end
 
       def attachment

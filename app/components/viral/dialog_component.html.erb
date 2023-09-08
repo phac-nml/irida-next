@@ -1,36 +1,38 @@
 <%= render Viral::BaseComponent.new(tag: :span, data: {
-  controller: "viral--dialog-component",
-  "viral--dialog-component-open-value": open
+  controller: "viral--dialog",
+  "viral--dialog-open-value": open
 }, **system_arguments) do %>
 
   <% if trigger.present? %>
     <%= trigger %>
   <% end %>
-  <dialog id="dialog" class="<%= dialog_size %>">
-    <% if header.present? %>
-      <%= header %>
-    <% end %>
-
-    <% if sections.present? %>
-      <% sections.each_with_index do |section, index| %>
-        <%= section %>
-        <% if sections.length - 1 != index %>
-          <hr class="h-px my-4 bg-slate-200 border-0 dark:bg-slate-600"/>
-        <% end %>
+  <div style="height: 0px">
+    <dialog id="dialog" class="<%= dialog_size %>">
+      <% if header.present? %>
+        <%= header %>
       <% end %>
-    <% end %>
 
-    <% if render_footer? %>
-      <div class="dialog--footer">
-        <% if primary_action? %>
-          <%= primary_action %>
-        <% end %>
-        <% if secondary_actions? %>
-          <% secondary_actions.each do |action| %>
-            <%= action %>
+      <% if sections.present? %>
+        <% sections.each_with_index do |section, index| %>
+          <%= section %>
+          <% if sections.length - 1 != index %>
+            <hr class="h-px my-4 bg-slate-200 border-0 dark:bg-slate-600"/>
           <% end %>
         <% end %>
-      </div>
-    <% end %>
-  </dialog>
+      <% end %>
+
+      <% if render_footer? %>
+        <div class="dialog--footer">
+          <% if primary_action? %>
+            <%= primary_action %>
+          <% end %>
+          <% if secondary_actions? %>
+            <% secondary_actions.each do |action| %>
+              <%= action %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </dialog>
+  </div>
 <% end %>
