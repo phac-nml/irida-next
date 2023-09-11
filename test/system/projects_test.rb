@@ -32,7 +32,7 @@ class ProjectsTest < ApplicationSystemTestCase
     end
 
     message = find_field('Path')[:validationMessage]
-    assert_equal message, 'Please match the format requested.'
+    assert_equal message, 'Please match the requested format.'
     assert_current_path new_project_path
   end
 
