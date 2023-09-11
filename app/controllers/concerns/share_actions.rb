@@ -11,7 +11,12 @@ module ShareActions
   end
 
   def index
-    @namespace_group_links = NamespaceGroupLink.find_by(id: @namespace.id)
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        @pagy, @namespace_group_links = pagy(load_namespace_group_links)
+      end
+    end
   end
 
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -102,5 +107,10 @@ module ShareActions
 
   def access_levels
     @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
+  end
+
+  def load_namespace_group_links
+    authorized_scope(NamespaceGroupLink, type: :relation,
+                                         scope_options: { namespace: @namespace })
   end
 end

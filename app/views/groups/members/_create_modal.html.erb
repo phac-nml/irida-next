@@ -9,7 +9,7 @@
         ) %>
       </p>
     </div>
-     <%= form_with(model: @new_member, url: group_members_path, method: :post) do |form| %>
+     <%= form_with(model: @new_member, url: group_members_path(**request.query_parameters), method: :post) do |form| %>
         <div class="grid gap-4">
           <div class="form-field">
             <%= form.label :user_id %>

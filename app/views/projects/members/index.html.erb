@@ -1,36 +1,104 @@
-<%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
-      new_namespace_project_member_path,
-      data: {
-        turbo_frame: "new_member_modal",
-        turbo_stream: true
-      },
-      class: "button button--state-primary button--size-default",
-      "aria-label": t(:".actions.button_add_aria_label") %>
+                  new_namespace_project_member_path(@namespace.parent, @namespace.project, **request.query_parameters),
+                  data: {
+                    turbo_frame: "new_member_modal",
+                    turbo_stream: true
+                  },
+                  class: "button button--state-primary button--size-default",
+                  "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
 <% end %>
 
-<%= turbo_frame_tag "new_member_modal" %>
 
 <div class="bg-white dark:bg-slate-800">
+  <%= turbo_frame_tag "new_member_modal" %>
+  <%= turbo_frame_tag("member-update-alert") %>
+  <ul class="flex flex-wrap -mb-px">
+    <li class="mr-2">
+      <%= link_to t(:"projects.members.index.tabs.members"),
+      namespace_project_members_path(),
+      data: {
+        turbo_frame: "_top"
+      },
+      class:
+        (
+          if params[:tab] == "invited_groups"
+            "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+          else
+            "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+          end
+        ),
+      aria: {
+        current: params[:tab] == "invited_groups" ? "false" : "page"
+      } %>
+    </li>
+    <li class="mr-2">
+      <%= link_to t(:"projects.members.index.tabs.groups"),
+      namespace_project_members_path(tab: "invited_groups"),
+      data: {
+        turbo_frame: "_top"
+      },
+      class:
+        (
+          if params[:tab] == "invited_groups"
+            "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+          else
+            "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+          end
+        ),
+      aria: {
+        current: params[:tab] == "invited_groups" ? "page" : "false"
+      } %>
+    </li>
+  </ul>
   <div class="flex flex-col">
-    <div class="overflow-x-auto">
-      <div class="shadow">
-        <%= turbo_frame_tag("member-update-alert") %>
-          <%= turbo_frame_tag "project_members_list",
-          src: namespace_project_members_url(
-            @namespace.parent,
-            @namespace.project,
-            format: :turbo_stream,
-            page: params[:page]
-          ),
-          loading: :lazy %>
+    <%= turbo_frame_tag("invited-group-alert") %>
+    <%= turbo_frame_tag "members",
+    src:
+      (
+        if params[:tab] == "invited_groups"
+          namespace_project_group_links_path(
+            format: :turbo_stream
+          )
+        else
+          namespace_project_members_path(
+            format: :turbo_stream
+          )
+        end
+      ),
+    loading: :lazy do %>
+      <table class="min-w-full table-fixed dark:divide-gray-600">
+        <tbody
+          class="
+            bg-white
+            divide-y
+            divide-gray-200
+            dark:bg-gray-800
+            dark:divide-gray-700
+          "
+        >
+          <% 15.times do %>
+            <tr>
+
+              <td class="p-4 animate-pulse">
+                <div class="flex-1 py-1 space-y-6">
+                  <div class="space-y-3">
+                    <div class="w-48 h-2 rounded bg-slate-200"></div>
+                    <div class="w-32 h-2 rounded bg-slate-200"></div>
+                  </div>
+                </td>
+
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% end %>
       </div>
-    <%= turbo_frame_tag "members_pagination" %>
     </div>
   </div>
 </div>
