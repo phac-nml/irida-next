@@ -1,6 +1,15 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
+      <% if allowed_to?(:link_namespace_with_group?, @namespace) %>
+      <%= link_to I18n.t("projects.members.index.invite_group"),
+      new_namespace_project_group_link_path(@namespace.parent, @namespace.project),
+      data: {
+        "turbo-frame" => "new_namespace_group_link_modal",
+        turbo_stream: true
+      },
+      class: "button button--state-default button--size-default" %>
+    <% end %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
       new_namespace_project_member_path(
@@ -20,6 +29,7 @@
 
 <div class="bg-white dark:bg-slate-800">
   <%= turbo_frame_tag "new_member_modal" %>
+  <%= turbo_frame_tag "new_namespace_group_link_modal" %>
   <%= turbo_frame_tag("member-update-alert") %>
   <ul class="flex flex-wrap -mb-px">
     <li class="mr-2">

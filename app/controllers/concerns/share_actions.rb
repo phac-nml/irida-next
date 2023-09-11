@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 # Common share actions
-module ShareActions
+module ShareActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
     before_action proc { namespace }
-    before_action proc { access_levels }, only: %i[index update]
+    before_action proc { access_levels }
     before_action proc { namespace_group_link }, only: %i[destroy update]
   end
 
@@ -18,10 +18,16 @@ module ShareActions
     end
   end
 
+  def new
+    @new_group_link = NamespaceGroupLink.new(namespace_id: @namespace.id)
+  end
+
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace, group_link_params).execute
+    @namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace, group_link_params).execute
+    @pagy, @namespace_group_links = pagy(load_namespace_group_links)
+
     respond_to do |format|
-      if namespace_group_link
+      if @namespace_group_link
         if namespace_group_link.errors.full_messages.count.positive?
           format.turbo_stream do
             render status: :conflict,
@@ -29,11 +35,14 @@ module ShareActions
                              message: namespace_group_link.errors.full_messages.first }
           end
         else
+          @group_invited = true
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @namespace_group_link,
                                           access_levels: @access_levels,
                                           type: 'success',
-                                          message: t('.success') }
+                                          message: t('.success',
+                                                     namespace_name: @namespace_group_link.namespace.human_name,
+                                                     group_name: @namespace_group_link.group.name) }
           end
         end
       else
@@ -48,6 +57,8 @@ module ShareActions
 
   def destroy # rubocop:disable Metrics/MethodLength
     GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
+    @pagy, @namespace_group_links = pagy(load_namespace_group_links)
+
     respond_to do |format|
       if @namespace_group_link
         if @namespace_group_link.deleted?
