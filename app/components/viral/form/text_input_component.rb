@@ -19,7 +19,7 @@ module Viral
       def system_arguments
         @arguments.tap do |args|
           args[:tag] = 'input'
-          args[:type] = @type
+          args[:type] = @type == 'integer' ? 'number' : @type
           args[:name] = @name
           args[:id] = @name
           args[:value] = @default

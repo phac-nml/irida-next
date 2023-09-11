@@ -17,7 +17,7 @@
         <%- if property["type"] == "boolean" %>
           <%= viral_checkbox(label: property["description"], default: property["default"], help_text: property["help_text"], hidden: property['hidden']) %>
         <% else %>
-          <%= viral_text_input(name:, label: property["description"], type: property['type+'], default: property["default"], required: property['required'], help_text: property["help_text"]) %>
+          <%= viral_text_input(name:, label: property["description"], type: property['type'], default: property["default"], required: property['required'], help_text: property["help_text"]) %>
         <% end %>
       <% end %>
     </div>
