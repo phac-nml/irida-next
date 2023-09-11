@@ -12,7 +12,6 @@ module ShareActions
 
   def index
     respond_to do |format|
-      format.html
       format.turbo_stream do
         @pagy, @namespace_group_links = pagy(load_namespace_group_links)
       end
