@@ -6,8 +6,7 @@ module Viral
     class CheckboxComponent < Viral::Component
       attr_reader :label, :name, :default, :help_text
 
-      # rubocop:disable Metrics/ParameterLists
-      def initialize(name:, label:, default: false, help_text: nil, hidden: false, **arguments)
+      def initialize(name:, label:, default: false, help_text: nil, hidden: false, **arguments) # rubocop:disable Metrics/ParameterLists
         @name = name
         @label = label
         @default = default
@@ -15,8 +14,6 @@ module Viral
         @hidden = hidden
         @arguments = arguments
       end
-
-      # rubocop:enable Metrics/ParameterLists
 
       def system_arguments
         @arguments.tap do |args|
