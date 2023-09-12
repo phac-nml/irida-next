@@ -27,20 +27,30 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     @new_member = Member.new(namespace_id: @namespace.id)
 
     respond_to do |format|
-      format.html do
-        render 'new'
+      format.turbo_stream do
+        render status: :ok
       end
     end
   end
 
-  def create
+  def create # rubocop:disable Metrics/MethodLength
     @new_member = Members::CreateService.new(current_user, @namespace, member_params).execute
 
     if @new_member.persisted?
-      flash[:success] = t('.success')
-      redirect_to members_path
+      respond_to do |format|
+        format.turbo_stream do
+          @pagy, @members = pagy(load_members)
+          render status: :ok, locals: { member: @new_member, type: 'success',
+                                        message: t('.success', user: @new_member.user.email) }
+        end
+      end
     else
-      render :new, status: :unprocessable_entity, locals: { member: @new_member }
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :unprocessable_entity, locals: { member: @new_member, type: 'alert',
+                                                          message: @new_member.errors.full_messages.first }
+        end
+      end
     end
   end
 

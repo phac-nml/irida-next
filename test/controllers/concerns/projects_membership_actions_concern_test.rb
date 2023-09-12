@@ -29,7 +29,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace = namespaces_user_namespaces(:john_doe_namespace)
     project = projects(:john_doe_project2)
-    get new_namespace_project_member_path(namespace, project)
+    get new_namespace_project_member_path(namespace, project, format: :turbo_stream)
 
     assert_response :success
     assert_equal 4, project.namespace.project_members.count
@@ -56,9 +56,9 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
          params: { member: { user_id: user.id,
                              namespace_id: proj_namespace,
                              created_by_id: curr_user.id,
-                             access_level: Member::AccessLevel::OWNER } }
+                             access_level: Member::AccessLevel::OWNER }, format: :turbo_stream }
 
-    assert_redirected_to namespace_project_members_path(namespace, project)
+    assert_response :success
     assert_equal 5, project.namespace.project_members.count
   end
 
@@ -106,7 +106,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
          params: { member: { user_id: user.id,
                              namespace_id: project.namespace.id,
                              created_by_id: users(:john_doe).id,
-                             access_level: Member::AccessLevel::OWNER + 100_000 } }
+                             access_level: Member::AccessLevel::OWNER + 100_000 }, format: :turbo_stream }
 
     assert_response 422 # unprocessable entity
   end
@@ -141,9 +141,9 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
          params: { member: { user_id: user_new.id,
                              namespace_id: proj_namespace,
                              created_by_id: user.id,
-                             access_level: Member::AccessLevel::ANALYST } }
+                             access_level: Member::AccessLevel::ANALYST }, format: :turbo_stream }
 
-    assert_redirected_to namespace_project_members_path(namespace, project)
+    assert_response :success
     assert_equal 2, project.namespace.project_members.count
   end
 
