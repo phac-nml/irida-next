@@ -188,5 +188,24 @@ module Groups
                            group_name: 'Group 5')
       end
     end
+
+    test 'can see the list of namespace group links' do
+      namespace_group_link = namespace_group_links(:namespace_group_link6)
+
+      visit group_members_url(namespace_group_link.namespace)
+
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      assert_selector 'a', text: 'Groups'
+
+      click_link 'Groups'
+
+      assert_selector 'tr', count: 3 + header_row_count
+
+      assert_text 'Direct member', count: 2
+
+      parent_namespace_group_link = namespace_group_link.namespace.parent
+      assert_not_nil find(:table_row, { 'Source' => parent_namespace_group_link.name })
+    end
   end
 end

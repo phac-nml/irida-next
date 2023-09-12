@@ -288,5 +288,27 @@ module Projects
                            group_name: 'Group 5')
       end
     end
+
+    test 'can see the list of namespace group links' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+
+      visit namespace_project_members_url(namespace_group_link.namespace.parent, namespace_group_link.namespace.project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+
+      assert_selector 'a', text: 'Groups'
+
+      click_link 'Groups'
+
+      assert_selector 'tr', count: 3 + header_row_count
+
+      assert_text 'Direct member', count: 1
+
+      parent_namespace_group_link = namespace_group_link.namespace.parent
+      assert_not_nil find(:table_row, { 'Source' => parent_namespace_group_link.name })
+
+      parent_namespace_group_link = namespace_group_link.namespace.parent.parent
+      assert_not_nil find(:table_row, { 'Source' => parent_namespace_group_link.name })
+    end
   end
 end

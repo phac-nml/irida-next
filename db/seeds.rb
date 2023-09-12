@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+@namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
+
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
@@ -36,7 +38,10 @@ def seed_members(email, access_level, namespace)
 end
 
 def seed_namespace_group_links(user, namespace, group, group_access_level)
-  GroupLinks::GroupLinkService.new(user, namespace, { group_id: group.id, group_access_level: }).execute
+  GroupLinks::GroupLinkService.new(user, namespace,
+                                   { group_id: group.id,
+                                     group_access_level:,
+                                     expires_at: @namespace_group_link_expiry_date }).execute
 end
 
 def seed_samples(project, sample_count)
