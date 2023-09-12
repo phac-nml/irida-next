@@ -2,6 +2,7 @@
 
 module Viral
   module Form
+    # Form text input component (numbers, email, text, etc.)
     class TextInputComponent < Viral::Component
       attr_reader :label, :name, :help_text
 
