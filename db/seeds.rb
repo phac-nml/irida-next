@@ -35,6 +35,10 @@ def seed_members(email, access_level, namespace)
                                access_level: Member::AccessLevel.access_level_options[access_level.to_s] }).execute
 end
 
+def seed_namespace_group_links(user, namespace, group, group_access_level)
+  GroupLinks::GroupLinkService.new(user, namespace, { group_id: group.id, group_access_level: }).execute
+end
+
 def seed_samples(project, sample_count)
   1.upto(sample_count) do |i|
     Samples::CreateService.new(
@@ -424,5 +428,25 @@ if Rails.env.development?
 
   groups.each do |group|
     seed_group(group_params: group)
+  end
+
+  # Create namespace group links (group to group)
+  all_groups_without_parent = Group.where(parent: nil)
+
+  all_groups_without_parent.each do |namespace|
+    groups_to_link_to_namespace = all_groups_without_parent.where.not(id: namespace.self_and_ancestor_ids)
+                                                           .where(parent: nil).limit(5)
+    groups_to_link_to_namespace.each do |group_to_link_to_namespace|
+      seed_namespace_group_links(namespace.owner, namespace, group_to_link_to_namespace, Member::AccessLevel::ANALYST)
+    end
+  end
+
+  # Create a direct namespace group link for each project
+  all_projects = Project.all
+
+  all_projects.each do |proj|
+    direct_group_to_link_to_namespace = all_groups_without_parent.last
+    seed_namespace_group_links(proj.namespace.owner, proj.namespace, direct_group_to_link_to_namespace,
+                               Member::AccessLevel::ANALYST)
   end
 end

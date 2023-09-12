@@ -489,6 +489,8 @@ en:
           link_leave_group_aria_label: "Leave group button"
           member_dropdown_aria_label: "Dropdown options for group member %{member}"
         inherited_from: "Inherited from:"
+        shared_inherited: Shared inherited
+        shared_direct: Shared direct
         table_header:
           username: Username
           access_level: Access Level
@@ -626,6 +628,8 @@ en:
           link_leave_project_aria_label: "Leave project button"
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
         inherited_from: "Inherited from:"
+        shared_inherited: Shared inherited
+        shared_direct: Shared direct
         table_header:
           username: Username
           access_level: Access Level

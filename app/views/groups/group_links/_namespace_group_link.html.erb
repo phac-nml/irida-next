@@ -5,7 +5,11 @@
     <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
     <td class="px-6 py-4">
       <% if !member_source.key?(:inherited_namespace_path) %>
-          <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member_source[:label] %></div>
+        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+          <%= viral_tooltip(title: t(:"groups.members.index.shared_direct")) do %>
+            <%= member_source[:label] %>
+          <% end %>
+        </div>
       <% else %>
         <%= viral_tooltip(title: t(:"groups.members.index.shared_inherited")) do %>
           <%= link_to member_source[:label],
