@@ -14,7 +14,6 @@
     </p>
     <div class="grid grid-cols-1 gap-4 mb-8">
       <% definition["properties"].each do |name, property| %>
-        <%= property['type'] %>
         <%- if property["type"] == "boolean" %>
           <%= viral_checkbox(name:, label: property["description"], default: property["default"], help_text: property["help_text"], hidden: property['hidden']) %>
         <% else %>
