@@ -16,6 +16,8 @@ module Viral
         @arguments = arguments
       end
 
+      # rubocop:enable Metrics/ParameterLists
+
       def system_arguments
         @arguments.tap do |args|
           args[:tag] = 'div'
