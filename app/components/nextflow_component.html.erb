@@ -1,4 +1,16 @@
-<h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-4xl dark:text-white">
+<h1
+  class="
+    mb-4
+    text-2xl
+    font-extrabold
+    leading-none
+    tracking-tight
+    text-gray-900
+    md:text-5xl
+    lg:text-4xl
+    dark:text-white
+  "
+>
   <%= schema["title"] %>
 </h1>
 <p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
@@ -15,9 +27,22 @@
     <div class="grid grid-cols-1 gap-4 mb-8">
       <% definition["properties"].each do |name, property| %>
         <%- if property["type"] == "boolean" %>
-          <%= viral_checkbox(name:, label: property["description"], default: property["default"], help_text: property["help_text"], hidden: property['hidden']) %>
+          <%= viral_checkbox(
+            name:,
+            label: property["description"],
+            default: property["default"],
+            help_text: property["help_text"],
+            hidden: property["hidden"]
+          ) %>
         <% else %>
-          <%= viral_text_input(name:, label: property["description"], type: property['type'], default: property["default"], required: property['required'], help_text: property["help_text"]) %>
+          <%= viral_text_input(
+            name:,
+            label: property["description"],
+            type: property["type"],
+            default: property["default"],
+            required: property["required"],
+            help_text: property["help_text"]
+          ) %>
         <% end %>
       <% end %>
     </div>
