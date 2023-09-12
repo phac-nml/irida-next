@@ -7,7 +7,8 @@ class NextflowComponent < Component
   attr_reader :schema, :url
 
   def initialize(schema_file:, url:)
-    @schema = nextflow_schema_from_file(schema_file)
+    path = Rails.root.join('tmp', schema_file)
+    @schema = JSON.parse(File.read(path))
     @url = url
   end
 end
