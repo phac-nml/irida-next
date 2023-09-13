@@ -34,19 +34,26 @@ module Samples
             I18n.t('services.samples.transfer.same_project')
     end
 
-    def transfer(new_project_id, sample_ids)
+    def transfer(new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength
       transferred_samples_ids = []
+      not_found_sample_ids = []
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
-      rescue StandardError => e
+      rescue StandardError
         if sample
-          project.errors.add(:samples, "#{e.message} for sample #{sample.name}")
+          project.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
+                                              sample_name: sample.name))
         else
-          project.errors.add(:samples, "#{e.message} for sample id #{sample_id}")
+          not_found_sample_ids << sample_id
         end
         next
+      end
+      unless not_found_sample_ids.empty?
+        project.errors.add(:samples,
+                           I18n.t('services.samples.transfer.samples_not_found',
+                                  sample_ids: not_found_sample_ids.join("','")))
       end
       transferred_samples_ids
     end
