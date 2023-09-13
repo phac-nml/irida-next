@@ -31,9 +31,9 @@
           <%= turbo_frame_tag "project_samples_list",
           src: project_samples_path(@project, format: :turbo_stream, page: params[:page]),
           loading: :lazy %>
-          <%= turbo_frame_tag "project_samples_pagination" %>
         <% end %>
       </div>
     </div>
+    <%= turbo_frame_tag "project_samples_pagination" %>
   </div>
 </div>
