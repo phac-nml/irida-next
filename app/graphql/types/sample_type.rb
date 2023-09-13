@@ -11,7 +11,6 @@ module Types
     field :project_id, String, null: false, description: 'Project the sample is on.'
 
     def self.authorized?(object, context)
-      # todo, write tests to ensure this is working correctly
       super &&
         allowed_to?(
           :read_sample?,
