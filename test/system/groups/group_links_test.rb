@@ -75,7 +75,7 @@ module Groups
       end
     end
 
-    test 'cannot remove a group to group link if logged in user has role changed' do
+    test 'cannot remove a group to group link if logged in user has role changed to a level which can\'t modify' do
       namespace_group_link = namespace_group_links(:namespace_group_link5)
 
       visit group_members_url(@namespace, tab: 'invited_groups')
@@ -95,11 +95,62 @@ module Groups
         click_button 'Confirm'
       end
 
-      pause
       assert_text I18n.t(:'action_policy.policy.group.unlink_namespace_with_group?',
                          name: namespace_group_link.namespace.name)
 
       assert_selector 'tr', count: @group_links_count + header_row_count
+
+    test 'can update namespace group links group access level to another access level' do
+      namespace_group_link = namespace_group_links(:namespace_group_link5)
+
+      Timecop.travel(Time.zone.now + 5) do
+        visit group_members_url(@namespace, tab: 'invited_groups')
+        assert_selector 'tr', count: @group_links_count + header_row_count
+
+        find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
+                                                                                         'option[2]').select_option
+
+        within %(turbo-frame[id="invited-group-alert"]) do
+          assert_text I18n.t(:'groups.group_links.update.success',
+                             namespace_name: namespace_group_link.namespace.human_name,
+                             group_name: namespace_group_link.group.human_name,
+                             param_name: 'group access level')
+        end
+
+        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+        within namespace_group_link_row do
+          assert_text 'Updated', count: 1
+          assert_text 'less than a minute ago'
+        end
+      end
+    end
+
+    test 'can update namespace group links expiration' do
+      namespace_group_link = namespace_group_links(:namespace_group_link5)
+      expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
+
+      Timecop.travel(Time.zone.now + 5) do
+        visit group_members_url(@namespace, tab: 'invited_groups')
+        assert_selector 'tr', count: @group_links_count + header_row_count
+
+        find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
+                                                                          .native.send_keys(:return)
+
+        within %(turbo-frame[id="invited-group-alert"]) do
+          assert_text I18n.t(:'groups.group_links.update.success',
+                             namespace_name: namespace_group_link.namespace.human_name,
+                             group_name: namespace_group_link.group.human_name,
+                             param_name: 'expiration')
+        end
+
+        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+        within namespace_group_link_row do
+          assert_text 'Updated', count: 1
+          assert_text 'less than a minute ago'
+        end
+      end
     end
   end
 end

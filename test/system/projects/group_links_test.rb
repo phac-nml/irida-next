@@ -101,5 +101,58 @@ module Projects
 
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
+
+    test 'can update namespace group links group access level to another access level' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+
+      Timecop.travel(Time.zone.now + 5) do
+        visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+        assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+        find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
+                                                                                         'option[2]').select_option
+
+        within %(turbo-frame[id="invited-group-alert"]) do
+          assert_text I18n.t(:'projects.group_links.update.success',
+                             namespace_name: namespace_group_link.namespace.human_name,
+                             group_name: namespace_group_link.group.human_name,
+                             param_name: 'group access level')
+        end
+
+        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+        within namespace_group_link_row do
+          assert_text 'Updated', count: 1
+          assert_text 'less than a minute ago'
+        end
+      end
+    end
+
+    test 'can update namespace group links expiration' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+      expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
+
+      Timecop.travel(Time.zone.now + 5) do
+        visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+        assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+        find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
+                                                                          .native.send_keys(:return)
+
+        within %(turbo-frame[id="invited-group-alert"]) do
+          assert_text I18n.t(:'projects.group_links.update.success',
+                             namespace_name: namespace_group_link.namespace.human_name,
+                             group_name: namespace_group_link.group.human_name,
+                             param_name: 'expiration')
+        end
+
+        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+        within namespace_group_link_row do
+          assert_text 'Updated', count: 1
+          assert_text 'less than a minute ago'
+        end
+      end
+    end
   end
 end

@@ -88,13 +88,16 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def update # rubocop:disable Metrics/MethodLength
     updated = GroupLinks::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
+    updated_param = group_link_params[:group_access_level].nil? ? 'expiration date' : 'group access level'
     respond_to do |format|
       if updated
         format.turbo_stream do
           render status: :ok, locals: { namespace_group_link: @namespace_group_link,
                                         access_levels: @access_levels,
                                         type: 'success',
-                                        message: t('.success') }
+                                        message: t('.success', namespace_name: @namespace.human_name,
+                                                               group_name: @namespace_group_link.group.human_name,
+                                                               param_name: updated_param) }
         end
       else
         format.turbo_stream do

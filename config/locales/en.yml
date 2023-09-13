@@ -468,7 +468,7 @@ en:
         success: Successfully unlinked group %{namespace_name} from group %{group_name}
         error: There was an error unlinking group from group
       update:
-        success: Successfully updated namespace group link
+        success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
       new:
         title: Share namespace
@@ -625,7 +625,7 @@ en:
         success: Successfully unlinked project %{namespace_name} with group %{group_name}
         error: There was an error unlinking project from group
       update:
-        success: Successfully updated namespace group link
+        success: Successfully updated project %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
       new:
         title: Share namespace
