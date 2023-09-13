@@ -127,7 +127,9 @@ module Projects
         find('#new_project_id').find("option[value='#{project2.id}']").select_option
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
-      assert_selector 'table#samples-table tr', count: 0
+      within %(turbo-frame[id="project_samples_list"]) do
+        assert_selector 'table#samples-table tr', count: 0
+      end
     end
 
     test 'should not transfer samples' do
@@ -140,7 +142,14 @@ module Projects
         find('#new_project_id').find("option[value='#{project26.id}']").select_option
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
-      assert_selector 'table#samples-table tr', count: 2
+      within %(turbo-frame[id="transfer_alert"]) do
+        assert_text I18n.t('projects.samples.transfers.create.error')
+        errors = @project.errors.full_messages_for(:samples)
+        errors.each { |error| assert_text error }
+      end
+      within %(turbo-frame[id="project_samples_list"]) do
+        assert_selector 'table#samples-table tr', count: 2
+      end
     end
 
     test 'should transfer some samples' do
@@ -153,7 +162,14 @@ module Projects
         find('#new_project_id').find("option[value='#{project25.id}']").select_option
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
-      assert_selector 'table#samples-table tr', count: 1
+      within %(turbo-frame[id="transfer_alert"]) do
+        assert_text I18n.t('projects.samples.transfers.create.error')
+        errors = @project.errors.full_messages_for(:samples)
+        errors.each { |error| assert_text error }
+      end
+      within %(turbo-frame[id="project_samples_list"]) do
+        assert_selector 'table#samples-table tr', count: 1
+      end
     end
 
     test 'user with maintainer access should not be able to see the transfer samples button' do
