@@ -18,6 +18,7 @@ module Viral
 
     test 'alert with content' do
       render_preview(:with_content)
+      assert_text 'This is content for the alert'
     end
   end
 end
