@@ -125,7 +125,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         find('#new_project_id').find("option[value='#{project2.id}']").select_option
-        click_on I18n.t('projects.samples.transfers.new.submit_button')
+        click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
       assert_selector 'table#samples-table tr', count: 0
     end
@@ -138,7 +138,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         find('#new_project_id').find("option[value='#{project26.id}']").select_option
-        click_on I18n.t('projects.samples.transfers.new.submit_button')
+        click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
       assert_selector 'table#samples-table tr', count: 2
     end
@@ -151,7 +151,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         find('#new_project_id').find("option[value='#{project25.id}']").select_option
-        click_on I18n.t('projects.samples.transfers.new.submit_button')
+        click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
       assert_selector 'table#samples-table tr', count: 1
     end
