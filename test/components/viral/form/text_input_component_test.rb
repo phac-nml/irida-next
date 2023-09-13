@@ -12,6 +12,10 @@ module Viral
         assert_selector 'input[type="text"]', count: 1
       end
 
+      def test_default_with_help_text
+        
+      end
+
       def test_number_input
         render_preview(:number_input)
 
