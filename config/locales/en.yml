@@ -440,7 +440,7 @@ en:
     group_links:
       index:
         unlink: Unlink
-        unlink_confirmation: Are you sure you want to unlink the namespace with this group
+        unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
         aria_labels:
           group_id: Id of group to share namespace with
           group_access_level: Group Access Level
@@ -462,7 +462,7 @@ en:
         success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
       destroy:
-        success: Successfully unlinked group from group
+        success: Successfully unlinked group %{namespace_name} from group %{group_name}
         error: There was an error unlinking group from group
       update:
         success: Successfully updated namespace group link
@@ -594,7 +594,7 @@ en:
     group_links:
       index:
         unlink: Unlink
-        unlink_confirmation: Are you sure you want to unlink the namespace with this group
+        unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
         aria_labels:
           group_id: Id of group to share namespace with
           group_access_level: Group Access Level
@@ -616,8 +616,8 @@ en:
         success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group
       destroy:
-        success: Successfully unlinked project with group
-        error: There was an error unlinking projec from group
+        success: Successfully unlinked project %{namespace_name} with group %{group_name}
+        error: There was an error unlinking project from group
       update:
         success: Successfully updated namespace group link
         error: There was an error updating the namespace group link

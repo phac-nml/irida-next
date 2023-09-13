@@ -1,7 +1,6 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <<<<<<< HEAD
     <% if allowed_to?(:link_namespace_with_group?, @namespace) %>
       <%= link_to I18n.t("projects.members.index.invite_group"),
       new_namespace_project_group_link_path(
@@ -12,78 +11,70 @@
       data: {
         "turbo-frame" => "new_member_modal",
         :turbo_stream => true
-=======
-      <% if allowed_to?(:link_namespace_with_group?, @namespace) %>
-        <%= link_to I18n.t("projects.members.index.invite_group"),
-      new_namespace_project_group_link_path(@namespace.parent, @namespace.project),
-      data: {
-        "turbo-frame" => "new_namespace_group_link_modal",
-        turbo_stream: true
->>>>>>> 01b60723 (Added UI for creating namespace group links, added routes, added translations, added tests)
       },
       class: "button button--state-default button--size-default" %>
-        <% end %>
-        <% if allowed_to?(:create_member?, @namespace) %>
-          <%= link_to t(:".add"),
-          new_namespace_project_member_path(
-            @namespace.parent,
-            @namespace.project,
-            tab: @tab
-          ),
-          data: {
-            turbo_frame: "new_member_modal",
-            turbo_stream: true
-          },
-          class: "button button--state-primary button--size-default",
-          "aria-label": t(:".actions.button_add_aria_label") %>
-        <% end %>
-      <% end %>
     <% end %>
+    <% if allowed_to?(:create_member?, @namespace) %>
+      <%= link_to t(:".add"),
+      new_namespace_project_member_path(
+        @namespace.parent,
+        @namespace.project,
+        tab: @tab
+      ),
+      data: {
+        turbo_frame: "new_member_modal",
+        turbo_stream: true
+      },
+      class: "button button--state-primary button--size-default",
+      "aria-label": t(:".actions.button_add_aria_label") %>
+    <% end %>
+  <% end %>
+<% end %>
 
-    <div class="bg-white dark:bg-slate-800">
-      <%= turbo_frame_tag "new_member_modal" %>
-      <%= turbo_frame_tag "member-update-alert" %>
-      <ul class="flex flex-wrap -mb-px">
-        <li class="mr-2">
-          <%= link_to t(:"projects.members.index.tabs.members"),
-          namespace_project_members_path(),
-          data: {
-            turbo_frame: "_top"
-          },
-          class:
-            (
-              if params[:tab] == "invited_groups"
-                "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              else
-                "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-              end
-            ),
-          aria: {
-            current: params[:tab] == "invited_groups" ? "false" : "page"
-          } %>
-        </li>
-        <li class="mr-2">
-          <%= link_to t(:"projects.members.index.tabs.groups"),
-          namespace_project_members_path(tab: "invited_groups"),
-          data: {
-            turbo_frame: "_top"
-          },
-          class:
-            (
-              if params[:tab] == "invited_groups"
-                "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-              else
-                "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              end
-            ),
-          aria: {
-            current: params[:tab] == "invited_groups" ? "page" : "false"
-          } %>
-        </li>
-      </ul>
-      <div class="flex flex-col">
-        <%= turbo_frame_tag "invited-group-alert" %>
-        <%= turbo_frame_tag "members", "data-turbo-temporary": true,
+<div class="bg-white dark:bg-slate-800">
+  <%= turbo_frame_tag "new_member_modal" %>
+  <%= turbo_frame_tag "member-update-alert" %>
+  <ul class="flex flex-wrap -mb-px">
+    <li class="mr-2">
+      <%= link_to t(:"projects.members.index.tabs.members"),
+      namespace_project_members_path(),
+      data: {
+        turbo_frame: "_top"
+      },
+      class:
+        (
+          if params[:tab] == "invited_groups"
+            "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+          else
+            "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+          end
+        ),
+      aria: {
+        current: params[:tab] == "invited_groups" ? "false" : "page"
+      } %>
+    </li>
+    <li class="mr-2">
+      <%= link_to t(:"projects.members.index.tabs.groups"),
+      namespace_project_members_path(tab: "invited_groups"),
+      data: {
+        turbo_frame: "_top"
+      },
+      class:
+        (
+          if params[:tab] == "invited_groups"
+            "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+          else
+            "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+          end
+        ),
+      aria: {
+        current: params[:tab] == "invited_groups" ? "page" : "false"
+      } %>
+    </li>
+  </ul>
+  <div class="flex flex-col">
+    <%= turbo_frame_tag "invited-group-alert" %>
+    <%= turbo_frame_tag "members", "data-turbo-temporary": true,
     src:
       (
         if params[:tab] == "invited_groups"
@@ -97,33 +88,33 @@
         end
       ),
     loading: :lazy do %>
-          <table class="min-w-full table-fixed dark:divide-gray-600">
-            <tbody
-              class="
-                bg-white
-                divide-y
-                divide-gray-200
-                dark:bg-gray-800
-                dark:divide-gray-700
-              "
-            >
-              <% 15.times do %>
-                <tr>
+      <table class="min-w-full table-fixed dark:divide-gray-600">
+        <tbody
+          class="
+            bg-white
+            divide-y
+            divide-gray-200
+            dark:bg-gray-800
+            dark:divide-gray-700
+          "
+        >
+          <% 15.times do %>
+            <tr>
 
-                  <td class="p-4 animate-pulse">
-                    <div class="flex-1 py-1 space-y-6">
-                      <div class="space-y-3">
-                        <div class="w-48 h-2 rounded bg-slate-200"></div>
-                        <div class="w-32 h-2 rounded bg-slate-200"></div>
-                      </div>
-                    </div>
-                  </td>
+              <td class="p-4 animate-pulse">
+                <div class="flex-1 py-1 space-y-6">
+                  <div class="space-y-3">
+                    <div class="w-48 h-2 rounded bg-slate-200"></div>
+                    <div class="w-32 h-2 rounded bg-slate-200"></div>
+                  </div>
+                </div>
+              </td>
 
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% end %>
-        <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>
-      </div>
-    </div>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+    <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>
+  </div>
+</div>
