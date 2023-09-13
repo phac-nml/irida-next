@@ -12,8 +12,8 @@ module Projects
       end
 
       def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-        new_project_id = params[:new_project_id]
-        sample_ids = params[:sample_ids] || []
+        new_project_id = transfer_params[:new_project_id]
+        sample_ids = transfer_params[:sample_ids]
         transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
                                                                                                  sample_ids)
         @pagy, @samples = pagy(Sample.where(project_id: @project.id))
