@@ -12,16 +12,16 @@ export default class extends Controller {
   };
 
   connect() {
-    const storageValue = JSON.parse(
+    const storageValues = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue)
     );
 
-    for (let i = 0; i < storageValue.length; i++) {
+    for (const storageValue of storageValues) {
       const element = document.createElement("input");
       element.type = "hidden";
       element.id = this.fieldNameValue;
       element.name = this.fieldNameValue;
-      element.value = storageValue[i];
+      element.value = storageValue;
       this.fieldTarget.appendChild(element);
     }
   }
