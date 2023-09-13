@@ -1,5 +1,5 @@
 <%= viral_dialog(open: open) do |dialog| %>
-  <%= dialog.with_header(title: t("projects.samples.transfers.new.title")) %>
+  <%= dialog.with_header(title: t("projects.samples.transfers._transfer_modal.title")) %>
   <%= dialog.with_section do %>
     <%= form_with(url: namespace_project_samples_transfer_path, method: :post) do |form| %>
       <div
@@ -10,13 +10,14 @@
       />
       <div class="grid gap-4">
         <div class="form-field">
-          <%= form.label :new_project_id %>
+          <%= form.label :new_project_id,
+                     t("projects.samples.transfers._transfer_modal.new_project_id") %>
           <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
           <%= render "shared/form/field_errors",
           errors: @project.errors.full_messages_for(:base) %>
         </div>
         <div class="flex flex-row-reverse">
-          <%= form.submit t("projects.samples.transfers.new.submit_button"),
+          <%= form.submit t("projects.samples.transfers._transfer_modal.submit_button"),
                       class: "button button--size-default button--state-primary",
                       data: {
                         action: "click->projects--samples--transfers#clear"

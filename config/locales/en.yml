@@ -643,8 +643,9 @@ en:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
       transfers:
-        new:
+        _transfer_modal:
           title: Transfer Samples
+          new_project_id: Project to transfer samples to
           submit_button: Submit
         create:
           success: Samples were successfully transferred.
