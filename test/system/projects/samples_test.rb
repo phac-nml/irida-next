@@ -118,14 +118,42 @@ module Projects
     end
 
     test 'should transfer samples' do
+      project2 = projects(:project2)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       assert_selector 'table#samples-table tr', count: 2
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        find('#new_project_id').find("option[value='#{project2.id}']").select_option
         click_on I18n.t('projects.samples.transfers.new.submit_button')
       end
       assert_selector 'table#samples-table tr', count: 0
+    end
+
+    test 'should not transfer samples' do
+      project26 = projects(:project26)
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      assert_selector 'table#samples-table tr', count: 2
+      all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        find('#new_project_id').find("option[value='#{project26.id}']").select_option
+        click_on I18n.t('projects.samples.transfers.new.submit_button')
+      end
+      assert_selector 'table#samples-table tr', count: 2
+    end
+
+    test 'should transfer some samples' do
+      project25 = projects(:project25)
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      assert_selector 'table#samples-table tr', count: 2
+      all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        find('#new_project_id').find("option[value='#{project25.id}']").select_option
+        click_on I18n.t('projects.samples.transfers.new.submit_button')
+      end
+      assert_selector 'table#samples-table tr', count: 1
     end
 
     test 'user with maintainer access should not be able to see the transfer samples button' do

@@ -99,6 +99,17 @@ module Projects
 
         assert_response :unprocessable_entity
       end
+
+      test 'should do a partial sample transfer' do
+        sample3 = samples(:sample3)
+        post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
+             params: {
+               new_project_id: @project2.id,
+               sample_ids: [@sample1.id, @sample2.id, sample3.id]
+             }
+
+        assert_response :partial_content
+      end
     end
   end
 end
