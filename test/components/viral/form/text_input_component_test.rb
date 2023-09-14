@@ -13,7 +13,11 @@ module Viral
       end
 
       def test_default_with_help_text
-        
+        render_preview(:default_with_help_text)
+
+        assert_selector 'label', text: 'Text input with help'
+        assert_selector 'input[type="text"]', count: 1
+        assert_selector 'p.text-sm', text: 'Text input with help text content'
       end
 
       def test_number_input
