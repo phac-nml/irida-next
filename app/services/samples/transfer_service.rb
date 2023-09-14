@@ -53,7 +53,7 @@ module Samples
       unless not_found_sample_ids.empty?
         project.errors.add(:samples,
                            I18n.t('services.samples.transfer.samples_not_found',
-                                  sample_ids: not_found_sample_ids.join("','")))
+                                  sample_ids: not_found_sample_ids.join(', ')))
       end
       transferred_samples_ids
     end
