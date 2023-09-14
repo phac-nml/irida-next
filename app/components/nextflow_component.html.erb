@@ -32,7 +32,8 @@
             label: property["description"],
             default: property["default"],
             help_text: property["help_text"],
-            hidden: property["hidden"]
+            hidden: property["hidden"],
+            value: name
           ) %>
         <% else %>
           <%= viral_text_input(
