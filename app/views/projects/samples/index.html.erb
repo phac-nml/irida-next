@@ -1,63 +1,39 @@
+<%= turbo_frame_tag "transfer_modal" %>
+<%= turbo_frame_tag "transfer_alert" %>
+
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <% if allowed_to?(:create_sample?, @project) %>
-      <%= link_to t("projects.samples.index.new_button"),
-                  new_namespace_project_sample_path,
-                  class: "button button--state-primary button--size-default",
-                  "aria-label": t(".actions.button_add_aria_label") %>
-    <% end %>
+    <div>
+      <% if allowed_to?(:transfer_sample?, @project) %>
+        <%= link_to t("projects.samples.index.transfer_button"),
+        new_namespace_project_samples_transfer_path,
+        data: {
+          turbo_frame: "transfer_modal"
+        },
+        class: "button button--size-default button--state-default mr-1" %>
+      <% end %>
+      <% if allowed_to?(:create_sample?, @project) %>
+        <%= link_to t("projects.samples.index.new_button"),
+        new_namespace_project_sample_path,
+        class: "button button--size-default button--state-primary",
+        "aria-label": t(".actions.button_add_aria_label") %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
+
 <div class="bg-white dark:bg-slate-800">
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <div class="shadow">
-        <table id="samples-table" class="min-w-full table-fixed dark:divide-slate-600">
-          <tbody
-            class="
-              bg-white
-              divide-y
-              divide-slate-200
-              dark:bg-slate-800
-              dark:divide-slate-700
-            "
-          >
-            <% @samples.each do |sample| %>
-            <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
-                <td class="p-4 whitespace-nowrap">
-                  <%= link_to sample.name,
-                  namespace_project_sample_path(id: sample.id),
-                  class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-                  <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= sample.description %></div>
-                </td>
-                <% if allowed_to?(:update_sample?, @project) %>
-                  <td class="px-4 py-3">
-                    <div class="flex items-center justify-end">
-                      <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
-                        <%= dropdown.with_item(
-                          label: t(:"projects.samples.index.edit_button"),
-                          url: edit_namespace_project_sample_path(id: sample.id)
-                        ) %>
-                        <% if allowed_to?(:destroy_sample?, @project) %>
-                          <%= dropdown.with_item(
-                            label: t(:"projects.samples.index.remove_button"),
-                            url: namespace_project_sample_path(id: sample.id),
-                            data: {
-                              turbo_method: :delete,
-                              turbo_confirm: t(:"projects.samples.index.remove_button_confirmation")
-                            }
-                          ) %>
-                        <% end %>
-                      <% end %>
-                    </div>
-                  </td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+        <% if @has_samples %>
+          <%= turbo_frame_tag "project_samples_list",
+          src: project_samples_path(@project, format: :turbo_stream, page: params[:page]),
+          loading: :lazy %>
+        <% end %>
       </div>
     </div>
+    <%= turbo_frame_tag "project_samples_pagination" %>
   </div>
 </div>

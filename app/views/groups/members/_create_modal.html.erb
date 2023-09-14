@@ -1,32 +1,15 @@
-<div class="p-4">
-  <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <div
-      class="
-        p-4
-        bg-white
-        border
-        border-slate-200
-        rounded-lg
-        shadow-sm
-        2xl:col-span-2
-        dark:border-slate-700
-        sm:p-6
-        dark:bg-slate-800
-      "
-    >
-      <h2
-        class="
-          mb-4
-          text-xl
-          font-semibold
-          leading-tight
-          text-slate-900
-          dark:text-white
-        "
-      >
-        <%= t(:".title") %>
-      </h2>
-      <%= form_with(model: @new_member, url: group_members_path, data: {turbo: false}, method: :post) do |form| %>
+<%= viral_dialog(open: open) do |dialog| %>
+  <%= dialog.with_header(title: t(:"groups.members.new.title")) %>
+  <%= dialog.with_section do %>
+    <div class="my-6">
+      <p class="dark:text-gray-400">
+        <%= I18n.t(
+          "groups.members.new.description",
+          name: @namespace.human_name
+        ) %>
+      </p>
+    </div>
+     <%= form_with(model: @new_member, url: group_members_path(tab: @tab), method: :post) do |form| %>
         <div class="grid gap-4">
           <div class="form-field">
             <%= form.label :user_id %>
@@ -35,7 +18,7 @@
                           @available_users.collect { |u| [u.email, u.id] },
                           selected: @new_member.user_id
                         ),
-                        { prompt: t(:".select_user") },
+                        { prompt: t(:"groups.members.new.select_user") },
                         required: true %>
           </div>
 
@@ -44,19 +27,18 @@
             <%= form.label :access_level %>
             <%= form.select :access_level,
                         @access_levels,
-                        { prompt: t(:".select_access_level") },
+                        { prompt: t(:"groups.members.new.select_access_level") },
                         required: true %>
             <%= render "shared/form/field_errors",
             errors: @new_member.errors.full_messages_for(:access_level) %>
           </div>
 
           <div>
-            <%= form.submit t(:".add_member_to_group"),
+            <%= form.submit t(:"groups.members.new.add_member_to_group"),
                         class: "button button--state-primary button--size-default mr-1",
                         disabled: !@available_users.count.positive? %>
           </div>
         </div>
       <% end %>
-    </div>
-  </div>
-</div>
+  <% end %>
+<% end %>

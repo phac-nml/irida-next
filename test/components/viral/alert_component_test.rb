@@ -15,5 +15,10 @@ module Viral
       assert_text 'This is an alert alert'
       assert_selector 'div.text-red-800.border-red-300.bg-red-50', count: 1
     end
+
+    test 'alert with content' do
+      render_preview(:with_content)
+      assert_text 'This is content for the alert'
+    end
   end
 end

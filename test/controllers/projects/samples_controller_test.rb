@@ -114,10 +114,9 @@ module Projects
 
     test 'should destroy sample' do
       assert_difference('Sample.count', -1) do
-        delete namespace_project_sample_url(@namespace, @project, @sample1)
+        delete namespace_project_sample_url(@namespace, @project, @sample1),
+               as: :turbo_stream
       end
-
-      assert_redirected_to namespace_project_samples_url(@namespace, @project)
     end
 
     test 'should not destroy sample, if it does not belong to the project' do

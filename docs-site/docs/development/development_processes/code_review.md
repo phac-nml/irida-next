@@ -11,7 +11,7 @@ All merge requests for IRIDA Next, whether written by a IRIDA team member or a w
 ## Getting your pull request reviewed, approved, and merged
 
 Before you begin:
-* Familiarize yourself with the [contribution acceptance criteria](./pull_request_workflow/#contribution-acceptance-criteria)
+* Familiarize yourself with the [contribution acceptance criteria](./pull_request_workflow#contribution-acceptance-criteria)
 
 As soon as you have code to review, have the code **reviewed** by a reviewer. The reviewer can:
 * Give you a second opinion on the chosen solution and implementation.
