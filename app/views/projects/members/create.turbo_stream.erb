@@ -12,7 +12,7 @@
     ) %>
   <% end %>
 
-  <% if tab != "invited_groups" %>
+  <% if @tab != "invited_groups" %>
     <%= turbo_stream.update "members", partial: "member_listing" %>
 
     <%= turbo_stream.update "members_pagination" do %>

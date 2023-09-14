@@ -3,7 +3,7 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
-                  new_namespace_project_member_path(@namespace.parent, @namespace.project, **request.query_parameters),
+                  new_namespace_project_member_path(@namespace.parent, @namespace.project, tab: @tab),
                   data: {
                     turbo_frame: "new_member_modal",
                     turbo_stream: true

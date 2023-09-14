@@ -3,7 +3,7 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
-                  new_group_member_path(@namespace, **request.query_parameters),
+                  new_group_member_path(@namespace, tab: @tab),
                   data: {
                     turbo_frame: "new_member_modal",
                     turbo_stream: true
