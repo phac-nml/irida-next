@@ -1,4 +1,4 @@
-<% if @group_invited %>
+<% if @group_invited && @tab == 'invited_groups' %>
   <%= turbo_stream.replace "members", partial: "invited_groups" %>
 
   <%= turbo_stream.update "invited_groups_pagination" do %>
