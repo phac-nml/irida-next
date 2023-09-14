@@ -24,7 +24,7 @@ module Projects
               render status: :ok, locals: { sample_ids:, type: :success, message: t('.success'), errors: [] }
             end
           elsif @project.errors.include?(:samples)
-            @errors = @project.errors.full_messages_for(:samples)
+            @errors = @project.errors.messages_for(:samples)
             format.turbo_stream do
               render status: :partial_content,
                      locals: { sample_ids: transferred_samples_ids, type: :alert,
