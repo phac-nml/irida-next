@@ -9,7 +9,7 @@ class ProjectShareActionsConcernTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     project_namespace = namespaces_project_namespaces(:project20_namespace)
-    get namespace_project_group_links_path(project_namespace.parent, project_namespace.project)
+    get namespace_project_group_links_path(project_namespace.parent, project_namespace.project, format: :turbo_stream)
 
     assert_response :success
     assert_equal 2, project_namespace.shared_with_group_links.of_ancestors_and_self.count

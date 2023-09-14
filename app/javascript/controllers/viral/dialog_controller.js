@@ -8,6 +8,10 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
   }
 
+  disconnect() {
+    this.openValue = false;
+  }
+
   open() {
     this.dialog.showModal();
   }

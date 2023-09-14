@@ -435,6 +435,26 @@ en:
     transfer:
       success: Group transferred successfully
     group_links:
+      index:
+        unlink: Unlink
+        unlink_confirmation: Are you sure you want to unlink the namespace with this group
+        aria_labels:
+          group_id: Id of group to share namespace with
+          group_access_level: Group Access Level
+          expires_at: Group access expiration
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        table_header:
+          group: Group
+          source: Source
+          access_granted: Access granted
+          access_level: Access level
+          expiration: Expiration
+          action: Action
       create:
         success: Successfully linked group with group
         error: There was an error linking group with group
@@ -469,12 +489,17 @@ en:
           link_leave_group_aria_label: "Leave group button"
           member_dropdown_aria_label: "Dropdown options for group member %{member}"
         inherited_from: "Inherited from:"
+        shared_inherited: Shared inherited
+        shared_direct: Shared direct
         table_header:
           username: Username
           access_level: Access Level
           source: Source
           access_granted: Access Granted
           action: Action
+        tabs:
+          members: Members
+          groups: Groups
       update:
         success: "Group member %{user_email} updated successfully"
       new:
@@ -549,6 +574,26 @@ en:
     destroy:
       success: "Project %{project_name} was successfully deleted"
     group_links:
+      index:
+        unlink: Unlink
+        unlink_confirmation: Are you sure you want to unlink the namespace with this group
+        aria_labels:
+          group_id: Id of group to share namespace with
+          group_access_level: Group Access Level
+          expires_at: Group access expiration
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        table_header:
+          group: Group
+          source: Source
+          access_granted: Access granted
+          access_level: Access level
+          expiration: Expiration
+          action: Action
       create:
         success: Successfully linked project with group
         error: There was an error linking project with group
@@ -583,12 +628,17 @@ en:
           link_leave_project_aria_label: "Leave project button"
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
         inherited_from: "Inherited from:"
+        shared_inherited: Shared inherited
+        shared_direct: Shared direct
         table_header:
           username: Username
           access_level: Access Level
           source: Source
           access_granted: Access Granted
           action: Action
+        tabs:
+          members: Members
+          groups: Groups
       update:
         success: "Project member %{user_email} updated successfully"
       new:
