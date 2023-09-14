@@ -1,0 +1,33 @@
+<% if message %>
+  <%= turbo_stream.update "transfer_alert" do %>
+    <%= viral_alert(type:, message:, classes: "mb-4 h-30 overflow-y-auto") do %>
+      <% unless errors.empty? %>
+        <ul class="mt-1.5 ml-4 list-disc list-inside">
+          <% errors.each do |error| %>
+            <li><%= error %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "transfer_modal",
+                    partial: "transfer_modal",
+                    locals: {
+                      open: false
+                    } %>
+
+<%= turbo_stream.update "project_samples_list",
+                    partial: "projects/samples/table",
+                    locals: {
+                      project: @project,
+                      samples: @samples
+                    } %>
+
+<%= turbo_stream.update "project_samples_pagination",
+                    partial: "projects/samples/pagination",
+                    locals: {
+                      project: @project,
+                      pagy: @pagy
+                    } %>

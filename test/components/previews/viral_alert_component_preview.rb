@@ -6,4 +6,6 @@ class ViralAlertComponentPreview < ViewComponent::Preview
   def info_alert; end
 
   def success_alert; end
+
+  def with_content; end
 end

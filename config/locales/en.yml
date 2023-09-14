@@ -629,6 +629,7 @@ en:
         edit_button: Edit
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
+        transfer_button: Transfer samples
         actions:
           button_add_aria_label: Add new sample button
           dropdown_aria_label: Dropdown options for sample %{sample_name}
@@ -646,12 +647,14 @@ en:
       destroy:
         success: Sample %{sample_name} was removed.
         error: The sample does not exist within the project.
-      transfer:
-        new:
+      transfers:
+        _transfer_modal:
           title: Transfer Samples
+          new_project_id: Project to transfer samples to
           submit_button: Submit
         create:
           success: Samples were successfully transferred.
+          error: "The following list of samples failed to transfer:"
       attachments:
         attachment:
           delete: Delete
@@ -679,6 +682,8 @@ en:
         empty_new_project_id: The new project id is empty.
         empty_sample_ids: The sample ids are empty.
         same_project: The samples already exist in the project. Please select a different project.
+        sample_exists: "Sample '%{sample_name}' already exists in the target project"
+        samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
