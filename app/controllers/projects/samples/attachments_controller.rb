@@ -11,7 +11,7 @@ module Projects
       def create
         authorize! @project, to: :update_sample?
 
-        @attachment = Attachment.new(attachment_params.merge(attachable_id: @sample.id, attachable_type: @sample.class))
+        @attachment = Attachment.new(attachment_params.merge(attachable_id: @sample.id, attachable_type: @sample.class, metadata: assign_metadata))
         respond_to do |format|
           if @attachment.save
             format.turbo_stream do
@@ -60,6 +60,18 @@ module Projects
       def project
         path = [params[:namespace_id], params[:project_id]].join('/')
         @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+      end
+
+      def assign_metadata
+        file_format = params[:attachment][:file].original_filename
+        case file_format
+        when /^\S+\.fn?a(sta)?(\.gz)?$/
+          return {format: "fasta"}
+        when /^\S+\.f(ast)?q(\.gz)?$/
+          return {format: "fastq"}
+        else
+          return {format: "unknown"}
+        end
       end
     end
   end
