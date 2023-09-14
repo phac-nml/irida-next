@@ -119,4 +119,4 @@ Open `coverage/index.html`
 
 ## Documentation
 
-See [docs](/docs/README.md).
+See [docs](https://phac-nml.github.io/irida-next/).
