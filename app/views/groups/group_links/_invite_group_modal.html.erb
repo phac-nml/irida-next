@@ -1,4 +1,4 @@
-<%= turbo_frame_tag("new_namespace_group_link_modal") do %>
+<%= turbo_frame_tag "new_namespace_group_link_modal" do %>
   <%= viral_dialog(open: open, classes: ["overflow-visible"]) do |dialog| %>
     <%= dialog.with_header(title: I18n.t("groups.group_links.new.title")) %>
     <%= dialog.with_section do %>

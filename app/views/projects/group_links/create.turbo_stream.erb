@@ -33,7 +33,7 @@
 <% end %>
 
 <% if @namespace_group_link != false %>
-  <%= turbo_stream.update "new_namespace_group_link_modal",
+  <%= turbo_stream.replace "new_namespace_group_link_modal",
                        partial: "invite_group_modal",
                        locals: {
                          open: @namespace_group_link.errors.any? ? true : false,
