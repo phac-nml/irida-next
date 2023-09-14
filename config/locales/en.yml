@@ -658,6 +658,7 @@ en:
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
         error: The sample does not exist within the project.
         files: Files
+        no_associated_files: There are no files associated with this sample. Click the [Upload File] button to add one.
         upload_file: Upload File
         upload_new_file: Upload New File
         table_header:

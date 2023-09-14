@@ -38,10 +38,14 @@
   <% else %>
     <% card.with_header(title: t("projects.samples.show.files")) %>
   <% end %>
-  <% card.with_section do %>
-    <%= render partial: "projects/samples/attachments/table",
-    locals: {
-      attachments: @sample.attachments
-    } %>
+  <% if @sample.attachments.any? %>
+    <% card.with_section do %>
+      <%= render partial: "projects/samples/attachments/table",
+      locals: {
+        attachments: @sample.attachments
+      } %>
+    <% end %>
+  <% else %>
+    <dd> <%= t("projects.samples.show.no_associated_files") %> </dd>
   <% end %>
 <% end %>
