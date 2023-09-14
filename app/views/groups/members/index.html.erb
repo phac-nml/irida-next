@@ -3,7 +3,7 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:link_namespace_with_group?, @namespace) %>
       <%= link_to I18n.t("groups.members.index.invite_group"),
-      new_group_group_link_path,
+      new_group_group_link_path(@namespace, tab: @tab),
       data: {
         "turbo-frame" => "new_namespace_group_link_modal",
         turbo_stream: true

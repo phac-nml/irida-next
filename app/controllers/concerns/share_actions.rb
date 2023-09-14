@@ -8,6 +8,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     before_action proc { namespace }
     before_action proc { access_levels }
     before_action proc { namespace_group_link }, only: %i[destroy update]
+    before_action proc { tab }, only: %i[index new create]
   end
 
   def index
@@ -101,6 +102,10 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
         end
       end
     end
+  end
+
+  def tab
+    @tab = params[:tab]
   end
 
   protected

@@ -12,7 +12,7 @@
         </p>
       </div>
 
-      <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project), method: :post, data: {remote: true}) do |form| %>
+      <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post, data: {remote: true}) do |form| %>
         <div class="grid gap-4">
           <div class="form-field">
             <%= form.label I18n.t("projects.group_links.new.label.shared_group") %>
