@@ -20,8 +20,8 @@
   <% schema["definitions"].each do |_item, definition| %>
     <%- if definition["properties"]
       .values
-      .filter { |property| property.key?("hidden") }
-      .length != definition["properties"].values.length %>
+      .filter { |property| !property.key?("hidden") }
+      .length > 0 %>
       <h2 class="text-2xl font-extrabold dark:text-white">
         <%= definition["title"] %>
       </h2>
