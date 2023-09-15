@@ -599,7 +599,7 @@ en:
         error: There was an error linking project with group
       destroy:
         success: Successfully unlinked project with group
-        error: There was an error unlinking projec from group
+        error: There was an error unlinking project from group
       update:
         success: Successfully updated namespace group link
         error: There was an error updating the namespace group link
