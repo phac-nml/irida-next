@@ -6,7 +6,7 @@
       new_group_group_link_path(@namespace, tab: @tab),
       data: {
         "turbo-frame" => "new_member_modal",
-        turbo_stream: true
+        :turbo_stream => true
       },
       class: "button button--state-default button--size-default" %>
     <% end %>
@@ -66,7 +66,7 @@
   </ul>
   <div class="flex flex-col">
     <%= turbo_frame_tag "invited-group-alert" %>
-    <%= turbo_frame_tag "members",
+    <%= turbo_frame_tag "members", "data-turbo-temporary": true,
     src:
       (
         if params[:tab] == "invited_groups"
@@ -107,6 +107,6 @@
         </tbody>
       </table>
     <% end %>
-    <%= turbo_frame_tag "members_pagination" %>
+    <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>
   </div>
 </div>

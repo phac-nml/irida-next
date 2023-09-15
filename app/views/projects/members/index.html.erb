@@ -3,10 +3,14 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:link_namespace_with_group?, @namespace) %>
       <%= link_to I18n.t("projects.members.index.invite_group"),
-      new_namespace_project_group_link_path(@namespace.parent, @namespace.project, tab: @tab),
+      new_namespace_project_group_link_path(
+        @namespace.parent,
+        @namespace.project,
+        tab: @tab
+      ),
       data: {
         "turbo-frame" => "new_member_modal",
-        turbo_stream: true
+        :turbo_stream => true
       },
       class: "button button--state-default button--size-default" %>
     <% end %>
@@ -70,7 +74,7 @@
   </ul>
   <div class="flex flex-col">
     <%= turbo_frame_tag "invited-group-alert" %>
-    <%= turbo_frame_tag "members",
+    <%= turbo_frame_tag "members", "data-turbo-temporary": true,
     src:
       (
         if params[:tab] == "invited_groups"
@@ -111,6 +115,6 @@
         </tbody>
       </table>
     <% end %>
-    <%= turbo_frame_tag "members_pagination" %>
+    <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>
   </div>
 </div>
