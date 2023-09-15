@@ -3,10 +3,7 @@
   <%= dialog.with_section do %>
     <div class="my-6">
       <p class="dark:text-gray-400">
-        <%= I18n.t(
-          "projects.members.new.description",
-          name: @namespace.human_name
-        ) %>
+        <%= I18n.t("projects.members.new.description", name: @namespace.human_name) %>
       </p>
     </div>
     <%= form_with(model: @new_member, url: namespace_project_members_path(tab: @tab), method: :post) do |form| %>

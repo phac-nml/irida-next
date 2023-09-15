@@ -7,10 +7,7 @@
       prev_url:
         (
           if @pagy.prev
-            group_group_links_url(
-              @namespace,
-              page: @pagy.prev
-            )
+            group_group_links_url(@namespace, page: @pagy.prev)
           else
             nil
           end
@@ -18,10 +15,7 @@
       next_url:
         (
           if @pagy.next
-            group_group_links_url(
-              @namespace,
-              page: @pagy.next
-            )
+            group_group_links_url(@namespace, page: @pagy.next)
           else
             nil
           end
@@ -32,20 +26,17 @@
 
 <% if @namespace_group_link != false %>
   <%= turbo_stream.update "new_member_modal",
-                       partial: "invite_group_modal",
-                       locals: {
-                         open: @namespace_group_link.errors.any? ? true : false,
-                         new_group_link: @namespace_group_link
-                       } %>
+                      partial: "invite_group_modal",
+                      locals: {
+                        open: @namespace_group_link.errors.any? ? true : false,
+                        new_group_link: @namespace_group_link
+                      } %>
 
   <% if @namespace_group_link.errors.any? %>
     <%= turbo_stream.update "invite-group-alert", viral_alert(type:, message:) %>
   <% else %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(
-        type:,
-        data: message
-      ) %>
+      <%= viral_flash(type:, data: message) %>
     <% end %>
   <% end %>
 <% end %>
