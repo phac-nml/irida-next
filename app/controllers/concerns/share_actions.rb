@@ -9,6 +9,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     before_action proc { access_levels }
     before_action proc { namespace_group_link }, only: %i[destroy update]
     before_action proc { tab }, only: %i[index new create]
+    before_action proc { available_namespace_group_links }, only: %i[new create]
   end
 
   def index
@@ -21,7 +22,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def new
     @new_group_link = NamespaceGroupLink.new(namespace_id: @namespace.id)
-    @available_namespace_group_links = Group.where.not(id: NamespaceGroupLink.where(namespace:).select(:group_id))
   end
 
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -123,6 +123,10 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def access_levels
     @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
+  end
+
+  def available_namespace_group_links
+    @available_namespace_group_links = Group.where.not(id: NamespaceGroupLink.where(namespace:).select(:group_id))
   end
 
   def load_namespace_group_links
