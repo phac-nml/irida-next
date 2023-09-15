@@ -85,11 +85,38 @@ class ProjectsTest < ApplicationSystemTestCase
 
     within all('form[action="/group-1/project-1"]')[1] do
       fill_in 'project_namespace_attributes_path', with: 'project-2'
-
       click_on I18n.t(:'projects.edit.advanced.path.submit')
     end
 
     assert_text I18n.t('activerecord.errors.models.namespace.attributes.name.taken').downcase
+    assert_current_path '/group-1/project-1/-/edit'
+  end
+
+  test 'show error when editing a project with a short name' do
+    project_name = 'a'
+    project = projects(:project1)
+    visit project_edit_path(project)
+
+    within all('form[action="/group-1/project-1"]')[0] do
+      fill_in 'Name', with: project_name
+      click_on I18n.t('projects.edit.general.submit')
+    end
+
+    assert_text 'Name is too short'
+    assert_current_path '/group-1/project-1/-/edit'
+  end
+
+  test 'show error when editing a project with a long description' do
+    project_description = 'a' * 256
+    project = projects(:project1)
+    visit project_edit_path(project)
+
+    within all('form[action="/group-1/project-1"]')[0] do
+      fill_in 'Description', with: project_description
+      click_on I18n.t('projects.edit.general.submit')
+    end
+
+    assert_text 'Description is too long'
     assert_current_path '/group-1/project-1/-/edit'
   end
 end
