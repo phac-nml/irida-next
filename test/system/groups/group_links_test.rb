@@ -64,5 +64,12 @@ module Groups
 
       assert_selector 'tr', count: (@group_links_count - 1) + header_row_count
     end
+
+    test 'cannot remove a group to group link' do
+      login_as users(:ryan_doe)
+      visit group_members_url(@namespace, tab: 'invited_groups')
+
+      assert_selector 'a', text: I18n.t(:'groups.group_links.index.unlink'), count: 0
+    end
   end
 end

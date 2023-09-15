@@ -65,5 +65,12 @@ module Projects
 
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
+
+    test 'cannot remove a project to group link' do
+      login_as users(:ryan_doe)
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+
+      assert_selector 'a', text: I18n.t(:'projects.group_links.index.unlink'), count: 0
+    end
   end
 end
