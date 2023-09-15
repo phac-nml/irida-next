@@ -301,7 +301,10 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
         }
       }
       # expected keys are: [:idp_sso_service_url, :sp_entity_id, ;idp_cert]
-      config.omniauth :saml, saml_options.merge(Rails.application.credentials.saml)
+      unless Rails.application.credentials.saml.nil?
+        saml_options = saml_options.merge(Rails.application.credentials.saml)
+      end
+      config.omniauth :saml, saml_options
     end
 
     if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
