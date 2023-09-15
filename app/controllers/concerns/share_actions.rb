@@ -21,6 +21,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def new
     @new_group_link = NamespaceGroupLink.new(namespace_id: @namespace.id)
+    @available_namespace_group_links = Group.where.not(id: NamespaceGroupLink.where(namespace:).select(:group_id))
   end
 
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
