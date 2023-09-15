@@ -23,11 +23,43 @@ class ProjectsTest < ApplicationSystemTestCase
   end
 
   test 'show error when creating a project with a short name' do
-    new_project_name = 'a'
+    project_name = 'a'
+    project_path = 'new-project'
     visit new_project_path
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
-      fill_in 'Name', with: new_project_name
+      fill_in 'Name', with: project_name
+      fill_in 'Path', with: project_path
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    assert_text 'Name is too short'
+    assert_current_path new_project_path
+  end
+
+  test 'show error when creating a project with a long description' do
+    project_name = 'New Project'
+    project_description = 'a' * 256
+    visit new_project_path
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: project_name
+      fill_in 'Description', with: project_description
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    assert_text 'Description is too long'
+    assert_current_path new_project_path
+  end
+
+  test 'show error when creating a project with an invalid path' do
+    project_name = 'New Project'
+    project_path = 'a'
+    visit new_project_path
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: project_name
+      fill_in 'Path', with: project_path
       click_on I18n.t(:'projects.new.submit')
     end
 

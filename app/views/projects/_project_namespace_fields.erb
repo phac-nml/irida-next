@@ -68,4 +68,6 @@
                       :class => "form-control",
                       "aria-label" => "Project description, not required"
                     } %>
+  <%= render "shared/form/field_errors",
+  errors: @project.namespace.errors.full_messages_for(:description) %>
 </div>
