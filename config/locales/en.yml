@@ -34,6 +34,9 @@ en:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
     updated: Updated
+  date:
+    formats:
+      iso: "YYYY-MM-DD"
   action_policy:
     policy:
       create?: You are not authorized to create this resource on this server.
@@ -456,7 +459,7 @@ en:
           expiration: Expiration
           action: Action
       create:
-        success: Successfully linked group with group
+        success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
       destroy:
         success: Successfully unlinked group from group
@@ -464,6 +467,19 @@ en:
       update:
         success: Successfully updated namespace group link
         error: There was an error updating the namespace group link
+      new:
+        title: Share namespace
+        sharing_namespace_with_group: "You're sharing group %{name} with a group"
+        placeholder:
+          select_access_level: Select access level
+          select_group: Select group
+        label:
+          group_id: Group to share namespace with
+          group_access_level: Maximum group access level
+          access_expiration: Access expiration (optional)
+        button:
+          cancel: Cancel
+          submit: Share
     members:
       create:
         error: "Error adding member"
@@ -472,6 +488,7 @@ en:
         add: Add New Member
         remove: Remove member
         leave_group: Leave group
+        invite_group: Invite Group
         remove_confirmation: Are you sure you want to remove this member from the group?
         leave_confirmation: Are you sure you want to remove yourself from this group?
         title: Members
@@ -595,7 +612,7 @@ en:
           expiration: Expiration
           action: Action
       create:
-        success: Successfully linked project with group
+        success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group
       destroy:
         success: Successfully unlinked project with group
@@ -603,6 +620,19 @@ en:
       update:
         success: Successfully updated namespace group link
         error: There was an error updating the namespace group link
+      new:
+        title: Share namespace
+        sharing_namespace_with_group: "You're sharing group %{name} with a group"
+        placeholder:
+          select_access_level: Select access level
+          select_group: Select group
+        label:
+          shared_group: Group to share namespace with
+          group_access_level: Maximum group access level
+          access_expiration: Access expiration (optional)
+        button:
+          cancel: Cancel
+          submit: Share
     members:
       create:
         error: "Error adding member"
@@ -611,6 +641,7 @@ en:
         add: Add New Member
         remove: Remove member
         leave_project: Leave project
+        invite_group: Invite group
         remove_confirmation: Are you sure you want to remove this member from the project?
         leave_confirmation: Are you sure you want to remove yourself from the project?
         title: Members
