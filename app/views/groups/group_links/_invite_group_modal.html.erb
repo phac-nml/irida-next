@@ -2,7 +2,7 @@
   <%= dialog.with_header(title: I18n.t("groups.group_links.new.title")) %>
   <%= dialog.with_section do %>
     <%= turbo_frame_tag("invite-group-alert") %>
-    <div class="my-6">
+    <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
       <p class="dark:text-gray-400">
         <%= I18n.t(
           "groups.group_links.new.sharing_namespace_with_group",
@@ -55,8 +55,8 @@
                 pointer-events-none
               "
             >
-              <%= render Viral::IconComponent.new(
-                name: "calendar_days",
+              <%= viral_icon(
+                name: :calendar_days,
                 classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
               ) %>
             </div>

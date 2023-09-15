@@ -1,7 +1,7 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(:"groups.members.new.title")) %>
   <%= dialog.with_section do %>
-    <div class="my-6">
+    <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
       <p class="dark:text-gray-400">
         <%= I18n.t("groups.members.new.description", name: @namespace.human_name) %>
       </p>
