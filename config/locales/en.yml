@@ -560,6 +560,7 @@ en:
       placeholder: Awesome project name
       description: Project description, not required
       subtitle: Projects are where you can store and analyze your data
+      help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
       submit: Create project
       cancel: Cancel
     sidebar:

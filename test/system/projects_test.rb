@@ -31,8 +31,8 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t(:'projects.new.submit')
     end
 
-    message = find_field('Path')[:validationMessage]
-    assert_equal message, 'Please match the requested format.'
+    error_message = find_field('Path')[:title]
+    assert_equal error_message, I18n.t(:'projects.new.help')
     assert_current_path new_project_path
   end
 

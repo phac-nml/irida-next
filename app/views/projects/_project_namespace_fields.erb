@@ -55,7 +55,8 @@
                          "slugify-target": "path"
                        },
                        pattern: Irida::PathRegex::PATH_REGEX_STR,
-                       required: true %>
+                       required: true,
+                       title: t(:"projects.new.help") %>
     <%= render "shared/form/field_errors",
     errors: @project.namespace.errors.full_messages_for(:path) %>
   </div>
