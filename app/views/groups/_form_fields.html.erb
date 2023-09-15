@@ -48,7 +48,8 @@
           <div class="ml-4 dark:text-slate-200">/</div>
         </div>
       </div>
-      <div class="form-field">
+      <% invalid_path = group.errors.include?(:path) %>
+      <div class="form-field <%= 'invalid' if invalid_path %>">
         <%= form.label :path %>
         <%= form.text_field :path,
                         data: {
@@ -56,6 +57,7 @@
                         },
                         pattern: Irida::PathRegex::PATH_REGEX_STR,
                         required: true %>
+        <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:path) %>
       </div>
     </div>
   <% end %>
@@ -76,10 +78,12 @@
       <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:path) %>
     </div>
   <% end %>
-
 <% end %>
 
-<div class="form-field">
+<% invalid_description = group.errors.include?(:description) %>
+<div class="form-field <%= 'invalid' if invalid_description %>">
   <%= form.label :description %>
   <%= form.text_area :description %>
+  <%= render "shared/form/field_errors",
+  errors: group.errors.full_messages_for(:description) %>
 </div>
