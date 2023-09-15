@@ -1,5 +1,5 @@
 <% if @group_invited && @tab == 'invited_groups' %>
-  <%= turbo_stream.replace "members", partial: "invited_groups" %>
+  <%= turbo_stream.update "members", partial: "invited_groups" %>
 
   <%= turbo_stream.update "invited_groups_pagination" do %>
     <%= render PaginationComponent.new(
@@ -31,7 +31,7 @@
 <% end %>
 
 <% if @namespace_group_link != false %>
-  <%= turbo_stream.replace "new_member_modal",
+  <%= turbo_stream.update "new_member_modal",
                        partial: "invite_group_modal",
                        locals: {
                          open: @namespace_group_link.errors.any? ? true : false,
