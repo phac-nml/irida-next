@@ -1,0 +1,9 @@
+<%= render NextflowComponent.new(
+  schema:
+    JSON.parse(
+      File.read(
+        Rails.root.join("test", "fixtures", "files", "nextflow_schema.json")
+      )
+    ),
+  url: "no_where"
+) %>

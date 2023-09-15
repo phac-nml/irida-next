@@ -8,13 +8,15 @@ module ViewHelper
     breadcrumb: 'Viral::BreadcrumbComponent',
     button: 'Viral::ButtonComponent',
     card: 'Viral::CardComponent',
+    checkbox: 'Viral::Form::CheckboxComponent',
     dialog: 'Viral::DialogComponent',
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',
+    help_text: 'Viral::Form::HelpTextComponent',
     icon: 'Viral::IconComponent',
     pageheader: 'Viral::PageHeaderComponent',
-    tooltip: 'Viral::TooltipComponent',
-    help_text: 'Viral::Form::HelpTextComponent'
+    text_input: 'Viral::Form::TextInputComponent',
+    tooltip: 'Viral::TooltipComponent'
   }.freeze
 
   VIRAL_HELPERS.each do |name, component|
