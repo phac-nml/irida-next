@@ -18,34 +18,40 @@
 </p>
 <form>
   <% schema["definitions"].each do |_item, definition| %>
-    <h2 class="text-2xl font-extrabold dark:text-white">
-      <%= definition["title"] %>
-    </h2>
-    <p class="mb-2 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-      <%= definition["description"] %>
-    </p>
-    <div class="grid grid-cols-1 gap-4 mb-8">
-      <% definition["properties"].each do |name, property| %>
-        <%- if property["type"] == "boolean" %>
-          <%= viral_checkbox(
-            name:,
-            label: property["description"],
-            default: property["default"],
-            help_text: property["help_text"],
-            hidden: property["hidden"],
-            value: name
-          ) %>
-        <% else %>
-          <%= viral_text_input(
-            name:,
-            label: property["description"],
-            type: property["type"],
-            default: property["default"],
-            required: property["required"],
-            help_text: property["help_text"]
-          ) %>
+    <%- if definition["properties"]
+      .values
+      .filter { |property| property.key?("hidden") }
+      .length != definition["properties"].values.length %>
+      <h2 class="text-2xl font-extrabold dark:text-white">
+        <%= definition["title"] %>
+      </h2>
+      <p class="mb-2 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+        <%= definition["description"] %>
+      </p>
+      <div class="grid grid-cols-1 gap-4 mb-8">
+        <% definition["properties"].each do |name, property| %>
+          <%- if property["type"] == "boolean" %>
+            <%= viral_checkbox(
+              name:,
+              label: property["description"],
+              default: property["default"],
+              help_text: property["help_text"],
+              hidden: property["hidden"],
+              value: name
+            ) %>
+          <% else %>
+            <%= viral_text_input(
+              name:,
+              label: property["description"],
+              type: property["type"],
+              default: property["default"],
+              required: property["required"],
+              help_text: property["help_text"],
+              hidden: property["hidden"]
+            ) %>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   <% end %>
 </form>

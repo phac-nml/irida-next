@@ -4,16 +4,17 @@ module Viral
   module Form
     # Form text input component (numbers, email, text, etc.)
     class TextInputComponent < Viral::Component
-      attr_reader :label, :name, :help_text
+      attr_reader :label, :name, :help_text, :hidden
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(name:, label:, type: 'text', default: nil, required: false, help_text: nil, **arguments)
+      def initialize(name:, label:, type: 'text', default: nil, required: false, help_text: nil, hidden: false, **arguments)
         @name = name
         @label = label
         @type = type
         @default = default
         @required = required
         @help_text = help_text
+        @hidden = hidden
         @arguments = arguments
       end
 
