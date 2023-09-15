@@ -15,7 +15,7 @@ module Projects
       end
 
       test 'should get new if owner' do
-        get new_namespace_project_samples_transfer_path(@namespace, @project1)
+        get new_namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream)
         assert_response :success
       end
 
