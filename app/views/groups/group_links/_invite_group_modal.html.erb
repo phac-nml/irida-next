@@ -17,7 +17,7 @@
           <%= form.label I18n.t("groups.group_links.new.label.group_id") %>
           <%= form.select :group_id,
                       options_for_select(
-                        @available_namespace_group_links.collect { |u| [u.name, u.id] },
+                        @namespace_linkable_groups.collect { |u| [u.name, u.id] },
                         new_group_link.group_id
                       ),
                       {
