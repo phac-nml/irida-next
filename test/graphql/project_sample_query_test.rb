@@ -9,7 +9,7 @@ class ProjectSampleQueryTest < ActiveSupport::TestCase
         name
         path
         id
-        samples {
+        samples(first:10) {
           nodes {
             id
             name
@@ -40,6 +40,7 @@ class ProjectSampleQueryTest < ActiveSupport::TestCase
     assert_equal project.name, data['name']
 
     assert_equal project.to_global_id.to_s, data['id'], 'id should be GlobalID'
+    assert_equal project.samples.count, data['samples']['nodes'].count
 
     # verify fetched sample data matches data on project
     project.samples.each_with_index do |sample, index|
