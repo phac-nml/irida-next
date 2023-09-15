@@ -34,6 +34,9 @@ en:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
     updated: Updated
+  date:
+    formats:
+      iso: "YYYY-MM-DD"
   action_policy:
     policy:
       create?: You are not authorized to create this resource on this server.
