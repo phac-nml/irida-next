@@ -510,7 +510,7 @@ type Sample implements Node {
   """
   Project the sample is on.
   """
-  projectId: String!
+  project: Project!
 }
 
 """

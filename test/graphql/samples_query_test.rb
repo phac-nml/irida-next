@@ -10,7 +10,9 @@ class SamplesQueryTest < ActiveSupport::TestCase
           name
           description
           id
-          projectId
+          project {
+            id
+          }
         }
         totalCount
       }

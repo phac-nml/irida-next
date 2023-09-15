@@ -13,7 +13,9 @@ class ProjectSampleQueryTest < ActiveSupport::TestCase
           nodes {
             id
             name
-            projectId
+            project {
+              id
+            }
           }
         }
       }
@@ -41,9 +43,9 @@ class ProjectSampleQueryTest < ActiveSupport::TestCase
 
     # verify fetched sample data matches data on project
     project.samples.each_with_index do |sample, index|
-      assert data['samples']['nodes'][index]['id'].include? sample.id.to_s
+      assert_equal data['samples']['nodes'][index]['id'], sample.to_global_id.to_s
       assert_equal data['samples']['nodes'][index]['name'], sample.name
-      assert_equal data['samples']['nodes'][index]['projectId'], project.id.to_s
+      assert_equal data['samples']['nodes'][index]['project']['id'], project.to_global_id.to_s
     end
   end
 end
