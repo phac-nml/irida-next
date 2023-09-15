@@ -10,6 +10,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }
     before_action proc { context_crumbs }, only: %i[index new]
+    before_action proc { tab }, only: %i[index new create]
   end
 
   def index
@@ -119,6 +120,10 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def load_members
     authorized_scope(Member, type: :relation, scope_options: { namespace: @namespace })
+  end
+
+  def tab
+    @tab = params[:tab]
   end
 
   protected

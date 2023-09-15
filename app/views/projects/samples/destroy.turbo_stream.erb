@@ -1,0 +1,19 @@
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type: type, data: message) %>
+<% end %>
+
+<% if @sample.deleted? %>
+  <%= turbo_stream.update "project_samples_list",
+                      partial: "table",
+                      locals: {
+                        project: @project,
+                        samples: @samples
+                      } %>
+
+  <%= turbo_stream.update "project_samples_pagination",
+                      partial: "pagination",
+                      locals: {
+                        project: @project,
+                        pagy: @pagy
+                      } %>
+<% end %>

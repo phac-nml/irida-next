@@ -9,7 +9,7 @@ class GroupShareActionsConcernTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     group = groups(:subgroup1)
-    get group_group_links_path(group)
+    get group_group_links_path(group, format: :turbo_stream)
 
     assert_response :success
     assert_equal 3, group.shared_with_group_links.of_ancestors_and_self.count

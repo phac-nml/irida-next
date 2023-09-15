@@ -3,7 +3,7 @@
 module Dashboard
   # Dashboard Projects Controller
   class ProjectsController < ApplicationController
-    def index # rubocop:disable Metric/AbcSize
+    def index # rubocop:disable Metrics/AbcSize
       @q = Project.ransack(params[:q])
       set_default_sort
       respond_to do |format|

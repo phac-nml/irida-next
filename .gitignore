@@ -31,8 +31,13 @@
 
 /public/assets
 
-# Ignore master key for decrypting credentials and more.
+# Ignore credentials files
+/config/credentials.yml.enc
+/config/credentials/*
+!/config/credentials/
+!/config/credentials/.keep
 /config/master.key
+
 
 /public/packs
 /public/packs-test

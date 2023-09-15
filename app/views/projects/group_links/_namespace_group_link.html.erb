@@ -1,0 +1,51 @@
+<% member_source = membership_source(@namespace, namespace_group_link) %>
+ <tr
+    class="text-sm font-normal text-gray-500 dark:text-gray-400"
+  >
+    <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
+    <td class="px-6 py-4">
+      <% if !member_source.key?(:inherited_namespace_path) %>
+        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+          <%= viral_tooltip(title: t(:"projects.members.index.shared_direct")) do %>
+            <%= member_source[:label] %>
+          <% end %>
+        </div>
+       <% else %>
+        <%= viral_tooltip(title: t(:"projects.members.index.shared_inherited")) do %>
+          <%= link_to member_source[:label],
+          member_source[:inherited_namespace_path],
+          data: {turbo_frame: "_top"},
+          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+        <% end %>
+      <% end %>
+    </td>
+    <td class="px-6 py-4">
+      <div>
+        <span class="text-sm"><%= distance_of_time_in_words(Time.now, namespace_group_link.created_at) %></span>
+        <span class="block">
+          <%= turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
+            <% if namespace_group_link.created_at < namespace_group_link.updated_at %>
+              <%= render UpdatedComponent.new(
+                updated_at: namespace_group_link.updated_at
+              ) %>
+            <% end %>
+          <% end %>
+        </span>
+      </div>
+    </td>
+    <td class="px-6 py-4">
+      <%= t(:"projects.group_links.index.access_level.level_#{namespace_group_link.group_access_level}") %>
+    </td>
+    <td class="px-6 py-4">
+      <%= namespace_group_link.expires_at %>
+    </td>
+    <td class="px-6 py-4">
+      <button class="
+                    button
+                    button--state-destructive
+                    button--size-small
+                    inline-block"><%= t(:"projects.group_links.index.unlink")%>
+      </button>
+
+    </td>
+  </tr>

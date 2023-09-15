@@ -55,6 +55,11 @@ After running this command to set the postgres version for the shell, you will n
 bundle && pnpm install
 ```
 
+Generate credentials:
+```bash
+EDITOR=nano bin/rails credentials::edit
+```
+
 Initialize the database:
 
 ```bash
@@ -119,4 +124,4 @@ Open `coverage/index.html`
 
 ## Documentation
 
-See [docs](/docs/README.md).
+See [docs](https://phac-nml.github.io/irida-next/).
