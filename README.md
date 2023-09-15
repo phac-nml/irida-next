@@ -55,6 +55,11 @@ After running this command to set the postgres version for the shell, you will n
 bundle && pnpm install
 ```
 
+Generate credentials:
+```bash
+EDITOR=nano bin/rails credentials::edit
+```
+
 Initialize the database:
 
 ```bash
