@@ -61,7 +61,8 @@
     errors: @project.namespace.errors.full_messages_for(:path) %>
   </div>
 </div>
-<div class="form-field">
+<% invalid_description = @project.namespace.errors.include?(:description) %>
+<div class="form-field <%= 'invalid' if invalid_description %>">
   <%= builder.label :description %>
   <%= builder.text_area :description,
                     {
