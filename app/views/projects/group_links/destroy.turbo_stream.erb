@@ -1,13 +1,10 @@
 <%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(
-    type:,
-    data: message
-  ) %>
+  <%= viral_flash(type:, data: message) %>
 <% end %>
 
-<%= turbo_stream.replace "members", partial: "invited_groups" %>
+<%= turbo_stream.update "members", partial: "invited_groups" %>
 
-<%= turbo_stream.update "invited_groups_pagination" do %>
+<%= turbo_stream.update "members_pagination" do %>
   <%= render PaginationComponent.new(
     info: pagy_info(@pagy),
     prev_url:
