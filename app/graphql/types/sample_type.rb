@@ -8,7 +8,7 @@ module Types
 
     field :description, String, null: true, description: 'Description of the sample.'
     field :name, String, null: false, description: 'Name of the sample.'
-    field :project_id, String, null: false, description: 'Project the sample is on.'
+    field :project, ProjectType, null: false, description: 'Project the sample is on.'
 
     def self.authorized?(object, context)
       super &&
