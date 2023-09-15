@@ -35,5 +35,12 @@ module Projects
 
       assert_selector 'tr', count: (@namespace.shared_with_group_links.of_ancestors.count + 1) + header_row_count
     end
+
+    test 'cannot add a project to group link' do
+      login_as users(:ryan_doe)
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+
+      assert_selector 'a', text: I18n.t(:'groups.members.index.invite_group'), count: 0
+    end
   end
 end
