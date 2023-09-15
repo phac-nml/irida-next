@@ -3,17 +3,20 @@
   <%= component.with_buttons do %>
     <% if allowed_to?(:create_member?, @namespace) %>
       <%= link_to t(:".add"),
-                  new_namespace_project_member_path(@namespace.parent, @namespace.project, tab: @tab),
-                  data: {
-                    turbo_frame: "new_member_modal",
-                    turbo_stream: true
-                  },
-                  class: "button button--state-primary button--size-default",
-                  "aria-label": t(:".actions.button_add_aria_label") %>
+      new_namespace_project_member_path(
+        @namespace.parent,
+        @namespace.project,
+        tab: @tab
+      ),
+      data: {
+        turbo_frame: "new_member_modal",
+        turbo_stream: true
+      },
+      class: "button button--state-primary button--size-default",
+      "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
 <% end %>
-
 
 <div class="bg-white dark:bg-slate-800">
   <%= turbo_frame_tag "new_member_modal" %>
@@ -91,14 +94,14 @@
                     <div class="w-48 h-2 rounded bg-slate-200"></div>
                     <div class="w-32 h-2 rounded bg-slate-200"></div>
                   </div>
-                </td>
+                </div>
+              </td>
 
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <% end %>
-      </div>
-    </div>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+    <%= turbo_frame_tag "members_pagination" %>
   </div>
 </div>

@@ -1,7 +1,7 @@
-<%= turbo_stream.replace "members", partial: "member_listing" %>
+<%= turbo_stream.update "members", partial: "member_listing" %>
 
-  <%= turbo_stream.update "members_pagination" do %>
-   <%= render PaginationComponent.new(
+<%= turbo_stream.update "members_pagination" do %>
+  <%= render PaginationComponent.new(
     info: pagy_info(@pagy),
     prev_url:
       (
@@ -28,4 +28,4 @@
         end
       )
   ) %>
-  <% end %>
+<% end %>
