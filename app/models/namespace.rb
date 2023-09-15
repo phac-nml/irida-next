@@ -20,7 +20,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :owner, presence: true, if: ->(n) { n.owner_required? }
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
-  validates :name, uniqueness: { scope: %i[type parent_id] }, if: -> { parent_id.present? }
+  validates :name, uniqueness: { case_sensitive: false, scope: %i[type parent_id] }, if: -> { parent_id.present? }
 
   validates :description, length: { maximum: 255 }
 
