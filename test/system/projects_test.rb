@@ -37,6 +37,19 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_current_path new_project_path
   end
 
+  test 'show error when creating a project with a same name' do
+    project2 = projects(:project2)
+    visit new_project_path
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: project2.name
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    assert_text 'Project Name has already been taken'
+    assert_current_path new_project_path
+  end
+
   test 'show error when creating a project with a long description' do
     project_name = 'New Project'
     project_description = 'a' * 256
@@ -164,6 +177,20 @@ class ProjectsTest < ApplicationSystemTestCase
     end
 
     assert_text 'Name is too short'
+    assert_current_path '/group-1/project-1/-/edit'
+  end
+
+  test 'show error when editing a project with a same name' do
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+    visit project_edit_path(project1)
+
+    within all('form[action="/group-1/project-1"]')[0] do
+      fill_in 'Name', with: project2.name
+      click_on I18n.t('projects.edit.general.submit')
+    end
+
+    assert_text 'Project Name has already been taken'
     assert_current_path '/group-1/project-1/-/edit'
   end
 

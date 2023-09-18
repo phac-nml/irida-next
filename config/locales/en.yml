@@ -145,7 +145,7 @@ en:
           attributes:
             name:
               blank: Can't be blank
-              taken: Has already been taken
+              taken: has already been taken
         member:
           attributes:
             access_level:
