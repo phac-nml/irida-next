@@ -3,7 +3,15 @@
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-gray-900">
     <%= render LayoutComponent.new(user: current_user) do |layout| %>
-      <% layout.with_sidebar(label: @project.name, icon_name: "rectangle_stack") do |navigation| %>
+      <% project_name =
+        (
+          if @project.namespace.name_changed?
+            @project.namespace.name_change.first
+          else
+            @project.name
+          end
+        ) %>
+      <% layout.with_sidebar(label: project_name, icon_name: "rectangle_stack") do |navigation| %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: project_path(@project),
