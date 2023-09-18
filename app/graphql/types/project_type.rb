@@ -12,6 +12,13 @@ module Types
     field :name, String, null: false, description: 'Name of the project.'
     field :path, String, null: false, description: 'Path of the project.'
 
+    field :samples,
+          SampleType.connection_type,
+          null: true,
+          description: 'Samples on the project',
+          complexity: 5,
+          resolver: Resolvers::ProjectSamplesResolver
+
     field :parent, NamespaceType, null: false, description: 'Parent namespace'
 
     def self.authorized?(object, context)

@@ -6,10 +6,7 @@
 
 <% if @new_member.persisted? %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(
-      type:,
-      data: message
-    ) %>
+    <%= viral_flash(type:, data: message) %>
   <% end %>
 
   <% if @tab != "invited_groups" %>

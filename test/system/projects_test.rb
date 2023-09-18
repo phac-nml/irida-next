@@ -7,6 +7,67 @@ class ProjectsTest < ApplicationSystemTestCase
     login_as users(:john_doe)
   end
 
+  test 'can create a project' do
+    new_project_name = 'Project 1'
+    visit new_project_path
+
+    assert_selector 'h1', text: I18n.t(:'projects.new.title'), count: 1
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: new_project_name
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    assert_text I18n.t(:'projects.create.success', project_name: new_project_name)
+    assert_selector 'h1', text: new_project_name
+  end
+
+  test 'show error when creating a project with a short name' do
+    project_name = 'a'
+    project_path = 'new-project'
+    visit new_project_path
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: project_name
+      fill_in 'Path', with: project_path
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    assert_text 'Name is too short'
+    assert_current_path new_project_path
+  end
+
+  test 'show error when creating a project with a long description' do
+    project_name = 'New Project'
+    project_description = 'a' * 256
+    visit new_project_path
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: project_name
+      fill_in 'Description', with: project_description
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    assert_text 'Description is too long'
+    assert_current_path new_project_path
+  end
+
+  test 'show error when creating a project with an invalid path' do
+    project_name = 'New Project'
+    project_path = 'a'
+    visit new_project_path
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: project_name
+      fill_in 'Path', with: project_path
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    error_message = find_field('Path')[:title]
+    assert_equal error_message, I18n.t(:'projects.new.help')
+    assert_current_path new_project_path
+  end
+
   test 'can update project name and description' do
     project_name = 'New Project'
     project_description = 'New Project Description'
