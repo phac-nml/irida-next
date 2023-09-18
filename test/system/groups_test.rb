@@ -2,7 +2,7 @@
 
 require 'application_system_test_case'
 
-class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+class GroupsTest < ApplicationSystemTestCase
   def setup
     @user = users(:john_doe)
     @groups_count = @user.groups.self_and_descendant_ids.count
@@ -30,9 +30,47 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
     assert_selector 'h1', text: 'New group'
   end
 
+  test 'show error when creating a group with a short name' do
+    visit new_group_url
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in I18n.t('activerecord.attributes.group.name'), with: 'a'
+      fill_in I18n.t('activerecord.attributes.group.path'), with: 'new-group'
+      click_on I18n.t('groups.create.submit')
+    end
+
+    assert_text 'Group name is too short'
+    assert_current_path '/-/groups/new'
+  end
+
+  test 'show error when creating a group with a same name' do
+    group2 = groups(:group_two)
+    visit new_group_url
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in I18n.t('activerecord.attributes.group.name'), with: group2.name
+      click_on I18n.t('groups.create.submit')
+    end
+
+    assert_text 'Group name has already been taken'
+    assert_current_path '/-/groups/new'
+  end
+
+  test 'show error when creating a group with a long description' do
+    visit new_group_url
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in I18n.t('activerecord.attributes.group.name'), with: 'New group'
+      fill_in I18n.t('activerecord.attributes.group.description'), with: 'a' * 256
+      click_on I18n.t('groups.create.submit')
+    end
+
+    assert_text 'Description is too long'
+    assert_current_path '/-/groups/new'
+  end
+
   test 'can create a sub-group' do
     visit group_url(groups(:group_one))
-
     assert_selector 'a', text: I18n.t(:'groups.show.create_subgroup_button'), count: 1
     click_link I18n.t(:'groups.show.create_subgroup_button')
 
@@ -44,6 +82,21 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
 
     assert_text I18n.t(:'groups.create.success')
     assert_selector 'h1', text: 'New sub-group'
+  end
+
+  test 'show error when creating a sub-group with a same name' do
+    visit group_url(groups(:group_one))
+    assert_selector 'a', text: I18n.t(:'groups.show.create_subgroup_button'), count: 1
+    click_link I18n.t(:'groups.show.create_subgroup_button')
+
+    subgroup1 = groups(:subgroup1)
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in I18n.t('activerecord.attributes.group.name'), with: subgroup1.name
+      click_on I18n.t('groups.new_subgroup.submit')
+    end
+
+    assert_text 'Group name has already been taken'
   end
 
   test 'can edit a group' do
@@ -75,6 +128,46 @@ class GroupsTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLeng
 
     assert_text I18n.t(:'groups.update.success')
     assert_current_path '/group-1-edited'
+  end
+
+  test 'show error when editing a group with a short name' do
+    visit group_url(groups(:group_one))
+    click_link I18n.t(:'groups.sidebar.settings')
+
+    within all('form[action="/group-1"]')[0] do
+      fill_in I18n.t('activerecord.attributes.group.name'), with: 'a'
+      click_on I18n.t('groups.edit.details.submit')
+    end
+
+    assert_text 'Group name is too short'
+    assert_current_path '/-/groups/group-1/-/edit'
+  end
+
+  test 'show error when editing a group with a same name' do
+    group2 = groups(:group_two)
+    visit group_url(groups(:group_one))
+    click_link I18n.t(:'groups.sidebar.settings')
+
+    within all('form[action="/group-1"]')[0] do
+      fill_in I18n.t('activerecord.attributes.group.name'), with: group2.name
+      click_on I18n.t('groups.edit.details.submit')
+    end
+
+    assert_text 'Group name has already been taken'
+    assert_current_path '/-/groups/group-1/-/edit'
+  end
+
+  test 'show error when editing a group with a long description' do
+    visit group_url(groups(:group_one))
+    click_link I18n.t(:'groups.sidebar.settings')
+
+    within all('form[action="/group-1"]')[0] do
+      fill_in I18n.t('activerecord.attributes.group.description'), with: 'a' * 256
+      click_on I18n.t('groups.edit.details.submit')
+    end
+
+    assert_text 'Description is too long'
+    assert_current_path '/-/groups/group-1/-/edit'
   end
 
   test 'can delete a group' do
