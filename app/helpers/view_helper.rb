@@ -16,7 +16,8 @@ module ViewHelper
     icon: 'Viral::IconComponent',
     pageheader: 'Viral::PageHeaderComponent',
     text_input: 'Viral::Form::TextInputComponent',
-    tooltip: 'Viral::TooltipComponent'
+    tooltip: 'Viral::TooltipComponent',
+    select: 'Viral::Form::SelectComponent'
   }.freeze
 
   VIRAL_HELPERS.each do |name, component|
