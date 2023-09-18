@@ -32,7 +32,7 @@
             ) %>
           </div>
           <%= f.text_field :expires_at,
-                       placeholder: "YYYY-MM-DD",
+                       placeholder: I18n.t("date.formats.iso"),
                        autocomplete: "off",
                        "data-datepicker-target": "datePicker" %>
         </div>
@@ -54,7 +54,7 @@
             <div class="ml-2 text-sm">
               <%= label_tag "personal_access_token_scopes_#{scope}",
               scope,
-                            class: "font-medium text-slate-900 dark:text-slate-300" %>
+              class: "font-medium text-slate-900 dark:text-slate-300" %>
               <p
                 id="<%= "personal_access_token_scopes_#{scope}_help-text" %>"
                 class="text-xs font-normal text-slate-500 dark:text-slate-300"
@@ -67,7 +67,7 @@
       </div>
       <div class="my-2">
         <%= f.submit t("profiles.personal_access_tokens.create.submit"),
-                     class: "button button--state-primary button--size-default" %>
+                 class: "button button--state-primary button--size-default" %>
       </div>
     </div>
   <% end %>
