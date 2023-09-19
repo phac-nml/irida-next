@@ -17,6 +17,8 @@ module Viral
         @hidden = hidden
       end
 
+      # rubocop:enable Metrics/ParameterLists
+
       def system_arguments
         @args.tap do |opts|
           opts[:tag] = 'select'
