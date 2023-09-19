@@ -145,7 +145,7 @@ en:
         namespace:
           attributes:
             name:
-              blank: Can't be blank
+              blank: can't be blank
               taken: has already been taken
         member:
           attributes:
