@@ -118,6 +118,10 @@ body {
     @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
   }
 
+  .form-field.invalid textarea {
+    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
+  }
+
   .form-field textarea {
     @apply block w-full rounded-md border border-slate-300 text-sm text-slate-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
@@ -295,7 +299,9 @@ body {
   }
 
   /*GROUPS LIST TREE*/
-  .groups-list-tree-container > .group-list-tree > .group-row.has-children:first-child {
+  .groups-list-tree-container
+    > .group-list-tree
+    > .group-row.has-children:first-child {
     border-top: 0;
   }
 
@@ -323,7 +329,7 @@ body {
   }
 
   .group-list-tree .group-list-tree::before {
-    content: '';
+    content: "";
     display: block;
     width: 0;
     position: absolute;
@@ -337,7 +343,7 @@ body {
     position: relative;
   }
   .group-list-tree .group-list-tree .group-row::before {
-    content: '';
+    content: "";
     display: block;
     width: 10px;
     height: 0;
@@ -370,7 +376,8 @@ body {
     @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
   }
 
-  .group-list-tree .group-row-contents .group-text-container, .group-list-tree .group-row-contents .group-text {
+  .group-list-tree .group-row-contents .group-text-container,
+  .group-list-tree .group-row-contents .group-text {
     min-width: 0;
   }
   .group-list-tree .group-row-contents .group-text {
@@ -416,7 +423,6 @@ body {
   .group-list-tree .group-row-contents .stats .stat-value {
     margin: 2px 0 0 5px;
   }
-
 }
 
 .pagy-nav.pagination {
