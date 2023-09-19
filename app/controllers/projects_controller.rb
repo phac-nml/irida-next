@@ -46,7 +46,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         project_path(@project)
       )
     else
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :unprocessable_entity
+        end
+      end
     end
   end
 
