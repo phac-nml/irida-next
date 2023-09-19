@@ -3,29 +3,7 @@
     for="countries"
     class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"
   ><%= label %></label>
-  <select
-    id="countries"
-    <%= multiple.present? ? "multiple".html_safe : nil %>
-    class="
-      bg-slate-50
-      border
-      border-slate-300
-      text-slate-900
-      text-sm
-      rounded-lg
-      focus:ring-primary-500
-      focus:border-primary-500
-      block
-      w-full
-      p-2.5
-      dark:bg-slate-700
-      dark:border-slate-600
-      dark:placeholder-slate-400
-      dark:text-white
-      dark:focus:ring-primary-500
-      dark:focus:border-primary-500
-    "
-  >
+  <%= render Viral::BaseComponent.new(**system_arguments) do %>
     <% unless selected_value.present? %>
       <%= render Viral::Form::Select::OptionComponent.new(
         option: {
@@ -39,5 +17,5 @@
       options,
       selected_value:
     ) %>
-  </select>
+  <% end %>
 </div>
