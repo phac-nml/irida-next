@@ -7,7 +7,7 @@ title: Useful Commands for Development
 ### Drop, rebuild and seed db
 
 ``` bash
-rake db:drop db:create db:migrate db:seed
+bin/rails db:drop db:create db:migrate db:seed
 ```
 
 ### Create new credentials
