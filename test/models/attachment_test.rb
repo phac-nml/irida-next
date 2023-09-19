@@ -26,6 +26,26 @@ class AttachmentTest < ActiveSupport::TestCase
     assert new_attachment.errors.added?(:file, :checksum_uniqueness)
   end
 
+  test 'metadata format' do
+    new_fastq_attachment = @sample.attachments.build
+    new_fastq_attachment.file.attach(io: Rails.root.join('test/fixtures/files/test_file_1.fastq').open,
+                               filename: 'test_file_1.fastq')
+    new_fastq_attachment.save
+    assert_equal new_fastq_attachment.metadata["format"], 'fastq'
+
+    new_fasta_attachment = @sample.attachments.build
+    new_fasta_attachment.file.attach(io: Rails.root.join('test/fixtures/files/test_file_2.fasta').open,
+                               filename: 'test_file_2.fasta')
+    new_fasta_attachment.save
+    assert_equal new_fasta_attachment.metadata["format"], "fasta"
+
+    new_unknown_attachment = @sample.attachments.build
+    new_unknown_attachment.file.attach(io: Rails.root.join('test/fixtures/files/test_file_3.docx').open,
+                               filename: 'test_file_3.docx')
+    new_unknown_attachment.save
+    assert_equal new_unknown_attachment.metadata["format"], "unknown"
+  end
+
   test '#destroy does not destroy the ActiveStorage::Attachment' do
     assert_no_difference('ActiveStorage::Attachment.count') do
       @attachment1.destroy
