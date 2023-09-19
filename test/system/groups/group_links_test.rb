@@ -74,5 +74,32 @@ module Groups
         assert_selector 'button.Viral-Dropdown--icon', count: 0
       end
     end
+
+    test 'cannot remove a group to group link if logged in user has role changed' do
+      namespace_group_link = namespace_group_links(:namespace_group_link5)
+
+      visit group_members_url(@namespace, tab: 'invited_groups')
+      assert_selector 'tr', count: @group_links_count + header_row_count
+
+      table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'groups.group_links.index.unlink')
+      end
+
+      Member.find_by(user: @user,
+                     namespace: namespace_group_link.namespace).update(access_level: Member::AccessLevel::GUEST)
+
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
+      end
+
+      pause
+      assert_text I18n.t(:'action_policy.policy.group.unlink_namespace_with_group?',
+                         name: namespace_group_link.namespace.name)
+
+      assert_selector 'tr', count: @group_links_count + header_row_count
+    end
   end
 end

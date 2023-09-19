@@ -1,0 +1,3 @@
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type: "alert", data: authorization_message) %>
+<% end %>
