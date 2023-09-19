@@ -5,25 +5,5 @@
 <% if @namespace_group_link&.deleted? %>
   <%= turbo_stream.update "members", partial: "invited_groups" %>
 
-  <%= turbo_stream.update "members_pagination" do %>
-    <%= render PaginationComponent.new(
-      info: pagy_info(@pagy),
-      prev_url:
-        (
-          if @pagy.prev
-            group_group_links_url(@namespace, page: @pagy.prev)
-          else
-            nil
-          end
-        ),
-      next_url:
-        (
-          if @pagy.next
-            group_group_links_url(@namespace, page: @pagy.next)
-          else
-            nil
-          end
-        )
-    ) %>
-  <% end %>
+  <%= turbo_stream.update "members_pagination", partial: "pagination" %>
 <% end %>
