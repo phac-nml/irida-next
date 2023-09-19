@@ -2,6 +2,7 @@
 
 module Viral
   module Form
+    # Form select input component
     class SelectComponent < Viral::Component
       attr_reader :label, :options, :selected_value, :hidden
 
