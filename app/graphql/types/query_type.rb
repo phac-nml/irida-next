@@ -29,6 +29,9 @@ module Types
     field :projects, Types::ProjectType.connection_type, null: true, resolver: Resolvers::ProjectsResolver,
                                                          description: 'Find projects.'
 
+    field :samples, Types::SampleType.connection_type, null: true, resolver: Resolvers::SamplesResolver,
+                                                       description: 'Find samples.'
+
     def current_user
       context[:current_user]
     end

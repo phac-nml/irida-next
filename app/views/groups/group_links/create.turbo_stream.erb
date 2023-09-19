@@ -1,0 +1,22 @@
+<% if @group_invited && @tab == 'invited_groups' %>
+  <%= turbo_stream.update "members", partial: "invited_groups" %>
+
+  <%= turbo_stream.update "members_pagination", partial: "pagination" %>
+<% end %>
+
+<% if @namespace_group_link != false %>
+  <%= turbo_stream.update "new_member_modal",
+                      partial: "invite_group_modal",
+                      locals: {
+                        open: @namespace_group_link.errors.any? ? true : false,
+                        new_group_link: @namespace_group_link
+                      } %>
+
+  <% if @namespace_group_link.errors.any? %>
+    <%= turbo_stream.update "invite-group-alert", viral_alert(type:, message:) %>
+  <% else %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= viral_flash(type:, data: message) %>
+    <% end %>
+  <% end %>
+<% end %>

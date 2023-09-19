@@ -44,6 +44,7 @@ module Namespaces
     end
 
     def link_namespace_with_group?
+      return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_link_namespace_to_group?(user, record) == true
 
       details[:name] = record.name
@@ -51,6 +52,7 @@ module Namespaces
     end
 
     def unlink_namespace_with_group?
+      return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_unlink_namespace_from_group?(user, record) == true
 
       details[:name] = record.name
@@ -58,6 +60,7 @@ module Namespaces
     end
 
     def update_namespace_with_group_link?
+      return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_update_namespace_with_group_link?(user, record) == true
 
       details[:name] = record.name

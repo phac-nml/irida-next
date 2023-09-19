@@ -33,6 +33,17 @@ class NodesQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  NODES_SAMPLES_QUERY = <<~GRAPHQL
+    query($ids: [ID!]!) {
+      nodes(ids: $ids) {
+        id
+        ... on Sample {
+          name
+        }
+      }
+    }
+  GRAPHQL
+
   def setup
     @user = users(:john_doe)
   end
@@ -105,6 +116,18 @@ class NodesQueryTest < ActiveSupport::TestCase
     assert_equal 'An object of type Project was hidden due to permissions', error_message
   end
 
+  test 'nodes query should not return samples from an unauthorized project' do
+    project = projects(:project1)
+
+    result = IridaSchema.execute(NODES_QUERY, context: { current_user: users(:jane_doe) },
+                                              variables: { ids: [project.samples[0].to_global_id.to_s] })
+
+    assert_not_nil result['errors'], 'should not work and have errors.'
+
+    error_message = result['errors'][0]['message']
+    assert_equal 'An object of type Sample was hidden due to permissions', error_message
+  end
+
   test 'nodes query for project should be able to return project attributes' do
     project = projects(:project1)
 
@@ -119,5 +142,21 @@ class NodesQueryTest < ActiveSupport::TestCase
     assert_equal 1, data.length
 
     assert_equal project.name, data[0]['name']
+  end
+
+  test 'nodes query for sample should be able to return sample attributes' do
+    sample = samples(:sample1)
+
+    result = IridaSchema.execute(NODES_SAMPLES_QUERY, context: { current_user: @user },
+                                                      variables: { ids: [sample.to_global_id.to_s] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['nodes']
+
+    assert_not_empty data, 'nodes type should work'
+    assert_equal 1, data.length
+
+    assert_equal sample.name, data[0]['name']
   end
 end

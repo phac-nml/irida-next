@@ -28,6 +28,8 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
       Types::GroupType
     when Project
       Types::ProjectType
+    when Sample
+      Types::SampleType
     else
       raise("Unexpected object: #{obj}")
     end

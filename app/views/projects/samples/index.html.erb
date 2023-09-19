@@ -9,7 +9,8 @@
         <%= link_to t("projects.samples.index.transfer_button"),
         new_namespace_project_samples_transfer_path,
         data: {
-          turbo_frame: "transfer_modal"
+          turbo_frame: "transfer_modal",
+          turbo_stream: true
         },
         class: "button button--size-default button--state-default mr-1" %>
       <% end %>

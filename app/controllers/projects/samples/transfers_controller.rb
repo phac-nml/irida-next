@@ -9,6 +9,12 @@ module Projects
 
       def new
         authorize! @project, to: :transfer_sample?
+
+        respond_to do |format|
+          format.turbo_stream do
+            render status: :ok
+          end
+        end
       end
 
       def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
