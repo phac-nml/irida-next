@@ -458,6 +458,9 @@ en:
           access_level: Access level
           expiration: Expiration
           action: Action
+        actions:
+          member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
+          unlink_aria_label: "Unlink namespace from group %{member} button"
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
@@ -612,6 +615,9 @@ en:
           access_level: Access level
           expiration: Expiration
           action: Action
+        actions:
+          member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
+          unlink_aria_label: "Unlink namespace from group %{member} button"
       create:
         success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group

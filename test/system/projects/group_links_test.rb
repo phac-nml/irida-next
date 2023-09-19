@@ -52,6 +52,7 @@ module Projects
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
+        first('button.Viral-Dropdown--icon').click
         click_link I18n.t(:'projects.group_links.index.unlink')
       end
 
@@ -69,8 +70,9 @@ module Projects
     test 'cannot remove a project to group link' do
       login_as users(:ryan_doe)
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-
-      assert_selector 'a', text: I18n.t(:'projects.group_links.index.unlink'), count: 0
+      within('table') do
+        assert_selector 'button.Viral-Dropdown--icon', count: 0
+      end
     end
   end
 end
