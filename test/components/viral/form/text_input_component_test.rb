@@ -5,14 +5,14 @@ require 'view_component_test_case'
 module Viral
   module Form
     class TextInputComponentTest < ViewComponentTestCase
-      def test_default
+      test 'default' do
         render_preview(:default)
 
         assert_selector 'label', text: 'Test input label'
         assert_selector 'input[type="text"]', count: 1
       end
 
-      def test_default_with_help_text
+      test 'helper text' do
         render_preview(:default_with_help_text)
 
         assert_selector 'label', text: 'Text input with help'
@@ -20,7 +20,7 @@ module Viral
         assert_selector 'p.text-sm', text: 'Text input with help text content'
       end
 
-      def test_number_input
+      test 'number input' do
         render_preview(:number_input)
 
         assert_selector 'label', text: 'Number input label'

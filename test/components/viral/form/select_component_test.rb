@@ -1,12 +1,21 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require 'view_component_test_case'
 
-class Viral::Form::SelectComponentTest < ViewComponent::TestCase
-  def test_component_renders_something_useful
-    # assert_equal(
-    #   %(<span>Hello, components!</span>),
-    #   render_inline(Viral::Form::SelectComponent.new(message: "Hello, components!")).css("span").to_html
-    # )
+module Viral
+  module Form
+    class SelectComponentTest < ViewComponentTestCase
+      test 'default' do
+        render_preview(:default)
+        assert_selector 'label', text: 'Select Input'
+        assert_selector 'option', count: 4
+      end
+
+      test 'default option' do
+        render_preview(:selected_option)
+        assert_selector 'label', text: 'Select Input'
+        assert_selector 'option[value="2"][selected]', count: 1
+      end
+    end
   end
 end
