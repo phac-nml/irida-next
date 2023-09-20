@@ -91,8 +91,12 @@ class ProjectsTest < ApplicationSystemTestCase
     fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
     fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
     click_on I18n.t(:'projects.edit.general.submit')
-    assert_selector 'h1', text: project_name
-    assert_text project_description
+    assert_text I18n.t('projects.update.success', project_name:)
+    within %(turbo-frame[id="project_name_and_description_form"]) do
+      assert_selector "input#project_namespace_attributes_name[value='#{project_name}']", count: 1
+      assert_selector 'textarea#project_namespace_attributes_description',
+                      text: project_description, count: 1
+    end
   end
 
   test 'can view project' do
@@ -145,12 +149,11 @@ class ProjectsTest < ApplicationSystemTestCase
 
     within all('form[action="/group-1/project-1"]')[1] do
       fill_in 'project_namespace_attributes_path', with: 'project-1-edited'
-
       click_on I18n.t(:'projects.edit.advanced.path.submit')
     end
 
     assert_text I18n.t('projects.update.success', project_name: project.name)
-    assert_current_path '/group-1/project-1-edited'
+    assert_current_path '/group-1/project-1/-/edit'
   end
 
   test 'show error when editing a project path to an existing namespace' do
