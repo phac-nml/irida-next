@@ -13,8 +13,26 @@ class Attachment < ApplicationRecord
 
   validates_with AttachmentChecksumValidator
 
+  before_create :assign_metadata
+
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment
   def destroy
     update(deleted_at: Time.current)
+  end
+
+  private
+
+  def assign_metadata
+    case file.filename.to_s
+    # Assigns fasta to metadata format for following file types: .fasta, .fasta.gz, .fna, .fna.gz, .fa, .fa.gz
+    when /^\S+\.fn?a(sta)?(\.gz)?$/
+      metadata[:format] = 'fasta'
+    # Assigns fastq to metadata format for following file types: .fastq, .fastq.gz, .fq, .fq.gz
+    when /^\S+\.f(ast)?q(\.gz)?$/
+      metadata[:format] = 'fastq'
+    # Else assigns unknown to metadata format
+    else
+      metadata[:format] = 'unknown'
+    end
   end
 end
