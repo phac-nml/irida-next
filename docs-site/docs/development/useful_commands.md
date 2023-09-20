@@ -17,7 +17,9 @@ rm config/credentials.yml.enc
 EDITOR="vim --nofork" bin/rails credentials:edit
 ```
 
-### Run this additional process to have UI changes updated as they are changed
+### Additional process to have UI changes updated as they are changed
+
+When running the server with `bin/rails s` instead of `bin/dev`, like when attaching the debugger in VSCode, the tailwind process can be run separately.
 
 ``` bash
 bin/rails tailwindcss:watch
