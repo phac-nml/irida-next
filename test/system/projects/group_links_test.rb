@@ -112,12 +112,10 @@ module Projects
         find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
                                                                                          'option[2]').select_option
 
-        within %(turbo-frame[id="invited-group-alert"]) do
-          assert_text I18n.t(:'projects.group_links.update.success',
-                             namespace_name: namespace_group_link.namespace.human_name,
-                             group_name: namespace_group_link.group.human_name,
-                             param_name: 'group access level')
-        end
+        assert_text I18n.t(:'projects.group_links.update.success',
+                           namespace_name: namespace_group_link.namespace.human_name,
+                           group_name: namespace_group_link.group.human_name,
+                           param_name: 'group access level')
 
         namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
@@ -139,12 +137,10 @@ module Projects
         find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
                                                                           .native.send_keys(:return)
 
-        within %(turbo-frame[id="invited-group-alert"]) do
-          assert_text I18n.t(:'projects.group_links.update.success',
-                             namespace_name: namespace_group_link.namespace.human_name,
-                             group_name: namespace_group_link.group.human_name,
-                             param_name: 'expiration')
-        end
+        assert_text I18n.t(:'projects.group_links.update.success',
+                           namespace_name: namespace_group_link.namespace.human_name,
+                           group_name: namespace_group_link.group.human_name,
+                           param_name: 'expiration')
 
         namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
