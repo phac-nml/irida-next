@@ -42,5 +42,64 @@ module Projects
 
       assert_selector 'a', text: I18n.t(:'groups.members.index.invite_group'), count: 0
     end
+
+    test 'can remove a project to group link' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+      table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.group_links.index.unlink')
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
+      end
+
+      assert_text I18n.t(:'projects.group_links.destroy.success',
+                         namespace_name: namespace_group_link.namespace.human_name,
+                         group_name: namespace_group_link.group.human_name)
+
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+    end
+
+    test 'cannot remove a project to group link' do
+      login_as users(:ryan_doe)
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+      within('table') do
+        assert_selector 'button.Viral-Dropdown--icon', count: 0
+      end
+    end
+
+    test 'cannot remove a project to group link if logged in user has role changed to a level which can\'t modify' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+      table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.group_links.index.unlink')
+      end
+
+      Member.where(user: @user,
+                   namespace: namespace_group_link.namespace.parent&.self_and_ancestor_ids)
+            .update(access_level: Member::AccessLevel::GUEST)
+
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
+      end
+
+      assert_text I18n.t(:'action_policy.policy.namespaces/project_namespace.unlink_namespace_with_group?',
+                         name: namespace_group_link.namespace.name)
+
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+    end
   end
 end

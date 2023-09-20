@@ -1,0 +1,9 @@
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type:, data: message) %>
+<% end %>
+
+<% if @namespace_group_link&.deleted? %>
+  <%= turbo_stream.update "members", partial: "invited_groups" %>
+
+  <%= turbo_stream.update "members_pagination", partial: "pagination" %>
+<% end %>
