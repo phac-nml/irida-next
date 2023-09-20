@@ -2,6 +2,7 @@
 
 module Viral
   module Form
+    # Wrapper for form inputs providing label and help text
     class InputWrapperComponent < Viral::Component
       attr_reader :label, :help_text, :name
 
