@@ -11,18 +11,18 @@ module Projects
       def create
         authorize! @project, to: :update_sample?
 
-        @attachment = Attachment.new(attachment_params.merge(attachable_id: @sample.id, attachable_type: @sample.class))
+        @attachments = ::Attachments::CreateService.new(current_user, @sample, attachment_params).execute
+
+        status = if @attachments.count(&:persisted?) == @attachments.count
+                   :ok
+                 else
+                   :multi_status
+                 end
+
         respond_to do |format|
-          if @attachment.save
-            format.turbo_stream do
-              render locals: { attachment: Attachment.new(attachable: @sample),
-                               new_attachment: @attachment }
-            end
-          else
-            format.turbo_stream do
-              render status: :unprocessable_entity, locals: { attachment: @attachment,
-                                                              new_attachment: nil }
-            end
+          format.turbo_stream do
+            render status:, locals: { attachment: Attachment.new(attachable: @sample),
+                                      attachments: @attachments }
           end
         end
       end
@@ -46,7 +46,7 @@ module Projects
       private
 
       def attachment_params
-        params.require(:attachment).permit(:attachable_id, :attachable_type, :file)
+        params.require(:attachment).permit(:attachable_id, :attachable_type, files: [])
       end
 
       def attachment
