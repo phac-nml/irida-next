@@ -1,3 +1,14 @@
-<%= render Viral::Form::InputWrapperComponent.new(label:, name:, help_text:, hidden:) do %>
+<div <%= hidden ? 'class="hidden"'.html_safe : nil %>>
+  <label
+    for="<%= name %>"
+    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+  >
+    <%= label %>
+  </label>
   <%= render Viral::BaseComponent.new(**system_arguments) %>
-<% end %>
+  <% if help_text.present? %>
+    <%= viral_help_text do %>
+      <%= help_text %>
+    <% end %>
+  <% end %>
+</div>
