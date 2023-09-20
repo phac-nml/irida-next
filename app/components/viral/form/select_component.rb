@@ -25,10 +25,12 @@ module Viral
           opts[:name] = @name
           opts[:multiple] if @multiple
           opts[:classes] = class_names(
-            'bg-slate-50 border border-slate-300 text-slate-900 text-sm', 'rounded-lg focus:ring-primary-500 focus:border-primary-500',
-            'block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600',
+            'bg-slate-50 border border-slate-300 text-slate-900',
+            'text-sm rounded-lg focus:ring-primary-500', 'focus:border-primary-500 block w-full p-2.5',
+            'dark:bg-slate-700 dark:border-slate-600',
             'dark:placeholder-slate-400 dark:text-white',
-            'dark:focus:ring-primary-500 dark:focus:border-primary-500'
+            'dark:focus:ring-primary-500',
+            'dark:focus:border-primary-500'
           )
         end
       end
