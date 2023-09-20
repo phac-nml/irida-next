@@ -13,7 +13,9 @@ module Projects
 
         @attachments = ::Attachments::CreateService.new(current_user, @sample, attachment_params).execute
 
-        status = if @attachments.count(&:persisted?) == @attachments.count
+        status = if !@attachments.count.positive?
+                   :unprocessable_entity
+                 elsif @attachments.count(&:persisted?) == @attachments.count
                    :ok
                  else
                    :multi_status

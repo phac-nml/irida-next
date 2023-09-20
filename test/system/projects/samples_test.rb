@@ -65,7 +65,7 @@ module Projects
       click_on I18n.t('projects.samples.show.upload_file')
 
       within('dialog') do
-        attach_file 'attachment[file]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
         click_on I18n.t('projects.samples.show.upload_file')
       end
 
@@ -81,13 +81,11 @@ module Projects
       click_on I18n.t('projects.samples.show.upload_file')
 
       within('dialog') do
-        attach_file 'attachment[file]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
         click_on I18n.t('projects.samples.show.upload_file')
       end
 
-      within('dialog') do
-        assert_text 'checksum matches existing file'
-      end
+      assert_text 'checksum matches existing file'
     end
 
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do

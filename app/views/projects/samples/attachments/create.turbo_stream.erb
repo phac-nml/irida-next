@@ -1,4 +1,4 @@
-<% attachments.each do |attachment| %>
+<% attachments&.each do |attachment| %>
   <% if attachment.persisted? %>
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(
