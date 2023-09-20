@@ -44,7 +44,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
                                           type: 'success',
                                           message: t('.success',
                                                      namespace_name: @namespace_group_link.namespace.human_name,
-                                                     group_name: @namespace_group_link.group.name) }
+                                                     group_name: @namespace_group_link.group.human_name) }
           end
         end
       else
@@ -57,7 +57,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength
+  def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
     @pagy, @namespace_group_links = pagy(load_namespace_group_links)
 
@@ -66,13 +66,14 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
         if @namespace_group_link.deleted?
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @namespace_group_link, type: 'success',
-                                          message: t('.success') }
+                                          message: t('.success', namespace_name: @namespace.human_name,
+                                                                 group_name: @namespace_group_link.group.human_name) }
           end
         else
           format.turbo_stream do
             render status: :unprocessable_entity,
                    locals: { namespace_group_link: @namespace_group_link, type: 'alert',
-                             message: @member.errors.full_messages.first }
+                             message: @namespace_group_link.errors.full_messages.first }
           end
         end
       else

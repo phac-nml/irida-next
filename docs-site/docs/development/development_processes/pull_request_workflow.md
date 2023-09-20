@@ -17,7 +17,7 @@ We welcome pull requests from everyone, with fixes and improvements to IRIDA Nex
 
 Live by *smaller iterations*. Please keep the amount of changes in a single PR **as small as possible**. If you want to contribute a large feature, think very carefully about what the minimum viable change is. Can you split the functionality into two smaller PRs? Can you submit only the backend/API code? Can you start with a very simple UI? Can you do just a part of the refactor?
 
-Small PRs which are more easiliy reviewed, lead to higher code quality which is more important to IRIDA Next than having a minimal commit log. The smaller a PR is, the more likely it will be merged quickly. After that you can send more PRs to enhance and expand the feature. The [How to get faster PR reviews](https://github.com/kubernetes/kubernetes/blob/release-1.5/docs/devel/faster_reviews.md) document from the Kubernetes team also has some great points regarding this.
+Small PRs which are more easily reviewed, lead to higher code quality which is more important to IRIDA Next than having a minimal commit log. The smaller a PR is, the more likely it will be merged quickly. After that you can send more PRs to enhance and expand the feature. The [How to get faster PR reviews](https://github.com/kubernetes/kubernetes/blob/release-1.5/docs/devel/faster_reviews.md) document from the Kubernetes team also has some great points regarding this.
 
 ## Contribution acceptance criteria
 
