@@ -29,21 +29,21 @@ class AttachmentTest < ActiveSupport::TestCase
   test 'metadata format' do
     new_fastq_attachment = @sample.attachments.build
     new_fastq_attachment.file.attach(io: Rails.root.join('test/fixtures/files/test_file_1.fastq').open,
-                               filename: 'test_file_1.fastq')
+                                     filename: 'test_file_1.fastq')
     new_fastq_attachment.save
-    assert_equal new_fastq_attachment.metadata["format"], 'fastq'
+    assert_equal new_fastq_attachment.metadata['format'], 'fastq'
 
     new_fasta_attachment = @sample.attachments.build
     new_fasta_attachment.file.attach(io: Rails.root.join('test/fixtures/files/test_file_2.fasta').open,
-                               filename: 'test_file_2.fasta')
+                                     filename: 'test_file_2.fasta')
     new_fasta_attachment.save
-    assert_equal new_fasta_attachment.metadata["format"], "fasta"
+    assert_equal new_fasta_attachment.metadata['format'], 'fasta'
 
     new_unknown_attachment = @sample.attachments.build
     new_unknown_attachment.file.attach(io: Rails.root.join('test/fixtures/files/test_file_3.docx').open,
-                               filename: 'test_file_3.docx')
+                                       filename: 'test_file_3.docx')
     new_unknown_attachment.save
-    assert_equal new_unknown_attachment.metadata["format"], "unknown"
+    assert_equal new_unknown_attachment.metadata['format'], 'unknown'
   end
 
   test '#destroy does not destroy the ActiveStorage::Attachment' do
