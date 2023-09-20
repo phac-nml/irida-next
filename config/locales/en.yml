@@ -109,6 +109,7 @@ en:
         file: File
         metadata: Metadata
       group:
+        description: Description
         name: Group name
         path: Path
         parent_id: Group URL
