@@ -76,7 +76,7 @@
               ) %>
             </div>
             <%= form.text_field :expires_at,
-                            placeholder: "YYYY-MM-DD",
+                            placeholder: I18n.t("date.formats.iso"),
                             autocomplete: "off",
                             value: namespace_group_link.expires_at,
                             id: "invited-group-#{namespace_group_link.group.id}-expiration",
