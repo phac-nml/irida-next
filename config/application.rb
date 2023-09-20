@@ -43,5 +43,13 @@ module Irida
 
     # Only load log data on demand
     config.logidze.ignore_log_data_by_default = true
+
+    initializer 'catch_all', after: :add_internal_routes, before: :set_routes_reloader_hook do |app|
+      routes_reloader.run_after_load_paths = lambda {
+        app.routes.append do
+          match '*unmatched', to: 'application#route_not_found', via: :all
+        end
+      }
+    end
   end
 end
