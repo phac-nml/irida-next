@@ -1,8 +1,8 @@
-<%= turbo_stream.replace "new_member_modal",
-                     partial: "create_modal",
-                     locals: {
-                       open: member.errors.any? ? true : false
-                     } %>
+<%= turbo_stream.update "new_member_modal",
+                    partial: "create_modal",
+                    locals: {
+                      open: member.errors.any? ? true : false
+                    } %>
 
 <% if @new_member.persisted? %>
   <%= turbo_stream.append "flashes" do %>

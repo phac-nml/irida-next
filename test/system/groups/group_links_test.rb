@@ -125,6 +125,17 @@ module Groups
       end
     end
 
+    test 'cannot update namespace group links group access level' do
+      login_as users(:ryan_doe)
+
+      visit group_members_url(@namespace, tab: 'invited_groups')
+      assert_selector 'tr', count: @group_links_count + header_row_count
+
+      within('table') do
+        assert_selector 'select', count: 0
+      end
+    end
+
     test 'can update namespace group links expiration' do
       namespace_group_link = namespace_group_links(:namespace_group_link5)
       expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
@@ -147,6 +158,17 @@ module Groups
           assert_text 'Updated', count: 1
           assert_text 'less than a minute ago'
         end
+      end
+    end
+
+    test 'cannot update namespace group links expiration' do
+      login_as users(:ryan_doe)
+
+      visit group_members_url(@namespace, tab: 'invited_groups')
+      assert_selector 'tr', count: @group_links_count + header_row_count
+
+      within('table') do
+        assert_selector 'input.datepicker-input', count: 0
       end
     end
   end

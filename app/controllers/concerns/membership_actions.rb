@@ -29,12 +29,12 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
     respond_to do |format|
       format.turbo_stream do
-        render status: :ok, locals: { tab: params[:tab] }
+        render status: :ok
       end
     end
   end
 
-  def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def create # rubocop:disable Metrics/MethodLength
     @new_member = Members::CreateService.new(current_user, @namespace, member_params).execute
 
     if @new_member.persisted?
@@ -42,7 +42,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
         format.turbo_stream do
           @pagy, @members = pagy(load_members)
           render status: :ok, locals: { member: @new_member, type: 'success',
-                                        message: t('.success', user: @new_member.user.email), tab: params[:tab] }
+                                        message: t('.success', user: @new_member.user.email) }
         end
       end
     else
