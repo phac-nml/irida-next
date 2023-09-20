@@ -696,8 +696,8 @@ en:
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
         error: The sample does not exist within the project.
         files: Files
-        upload_file: Upload File
-        upload_new_file: Upload New File
+        upload: Upload
+        upload_files: Upload Files
         table_header:
           filename: Filename
           size: Size

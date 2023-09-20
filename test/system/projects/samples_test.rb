@@ -61,12 +61,12 @@ module Projects
 
     test 'user with role >= Maintainer should be able to attach a file to a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
-      assert_selector 'button', text: I18n.t('projects.samples.show.upload_file'), count: 1
-      click_on I18n.t('projects.samples.show.upload_file')
+      assert_selector 'button', text: I18n.t('projects.samples.show.upload_files'), count: 1
+      click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
-        click_on I18n.t('projects.samples.show.upload_file')
+        click_on I18n.t('projects.samples.show.upload')
       end
 
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
@@ -77,12 +77,12 @@ module Projects
 
     test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
-      assert_selector 'button', text: I18n.t('projects.samples.show.upload_file'), count: 1
-      click_on I18n.t('projects.samples.show.upload_file')
+      assert_selector 'button', text: I18n.t('projects.samples.show.upload_files'), count: 1
+      click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
-        click_on I18n.t('projects.samples.show.upload_file')
+        click_on I18n.t('projects.samples.show.upload')
       end
 
       assert_text 'checksum matches existing file'
