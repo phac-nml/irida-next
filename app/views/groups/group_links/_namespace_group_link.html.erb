@@ -17,15 +17,6 @@
         },
         class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
       <% end %>
-    <% else %>
-      <%= viral_tooltip(title: t(:"groups.members.index.shared_inherited")) do %>
-        <%= link_to member_source[:label],
-        member_source[:inherited_namespace_path],
-        data: {
-          turbo_frame: "_top"
-        },
-        class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-      <% end %>
     <% end %>
   </td>
   <td class="px-6 py-4">

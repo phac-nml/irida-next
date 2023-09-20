@@ -99,6 +99,7 @@ module Groups
                          name: namespace_group_link.namespace.name)
 
       assert_selector 'tr', count: @group_links_count + header_row_count
+    end
 
     test 'can update namespace group links group access level to another access level' do
       namespace_group_link = namespace_group_links(:namespace_group_link5)
