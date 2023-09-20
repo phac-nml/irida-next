@@ -1,8 +1,4 @@
-<div <%= hidden ? 'class="hidden"'.html_safe : nil %>>
-  <label
-    for="countries"
-    class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"
-  ><%= label %></label>
+<%= render Viral::Form::InputWrapperComponent.new(label:, name:, help_text:, hidden:) do %>
   <%= render Viral::BaseComponent.new(**system_arguments) do %>
     <% unless selected_value.present? %>
       <%= render Viral::Form::Select::OptionComponent.new(
@@ -18,4 +14,4 @@
       selected_value:
     ) %>
   <% end %>
-</div>
+<% end %>

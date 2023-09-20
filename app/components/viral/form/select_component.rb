@@ -4,10 +4,11 @@ module Viral
   module Form
     # Form select input component
     class SelectComponent < Viral::Component
-      attr_reader :label, :options, :selected_value, :hidden
+      attr_reader :label, :name, :options, :selected_value, :help_text, :hidden
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(label:, name:, options: [], multiple: false, selected_value: nil, hidden: false, **args)
+      def initialize(label:, name:, options: [], multiple: false, help_text: nil, selected_value: nil, hidden: false,
+                     **args)
         @label = label
         @name = name
         @multiple = multiple
@@ -15,6 +16,7 @@ module Viral
         @args = args
         @options = options
         @hidden = hidden
+        @help_text = help_text
       end
 
       # rubocop:enable Metrics/ParameterLists
