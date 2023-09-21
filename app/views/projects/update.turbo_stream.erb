@@ -4,6 +4,19 @@
   <% end %>
 <% end %>
 
+<% if @updated %>
+  <%= turbo_stream.update "project_name" do %>
+    <%= @project.name %>
+  <% end %>
+
+  <%= turbo_stream.update "breadcrumb" do %>
+    <%= render Viral::BreadcrumbComponent.new(
+      route: project.namespace.route,
+      context_crumbs:
+    ) %>
+  <% end %>
+<% end %>
+
 <%= turbo_stream.update "project_name_and_description_form",
                     partial: "form_fields",
                     locals: {

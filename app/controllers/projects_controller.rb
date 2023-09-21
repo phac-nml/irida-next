@@ -40,16 +40,12 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def update
+    # TODO: redirect on change path, because url needs to be updated as well
     respond_to do |format|
-      if Projects::UpdateService.new(@project, current_user, project_params).execute
-        # flash[:success] = t('.success', project_name: @project.name)
-        # format.html do
-        #   redirect_to(
-        #     project_path(@project)
-        #   )
-        # end
+      @updated = Projects::UpdateService.new(@project, current_user, project_params).execute
+      if @updated
         format.turbo_stream do
-          render status: :ok, locals: { project: @project, type: 'success',
+          render status: :ok, locals: { project: @project, context_crumbs: @context_crumbs, type: 'success',
                                         message: t('.success', project_name: @project.name) }
         end
       else
