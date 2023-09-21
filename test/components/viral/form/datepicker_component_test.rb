@@ -25,6 +25,12 @@ module Viral
         assert_selector 'input[type="text"]', count: 1
         assert_selector 'p.text-sm', text: 'Select a date in the future'
       end
+
+      test 'with placeholder' do
+        render_preview(:with_placeholder)
+        assert_no_selector 'label'
+        assert_selector 'input[type="text"][placeholder:"Pick a date"]', count: 1
+      end
     end
   end
 end
