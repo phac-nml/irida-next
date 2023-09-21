@@ -36,6 +36,4 @@ Rails.application.routes.draw do
       send("#{name}_url", project&.namespace&.parent, project, *args)
     end
   end
-
-  match '*unmatched', to: 'application#route_not_found', via: :all
 end
