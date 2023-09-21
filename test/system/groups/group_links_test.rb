@@ -66,6 +66,28 @@ module Groups
       assert_selector 'tr', count: (@group_links_count - 1) + header_row_count
     end
 
+    test 'cannot remove a group to group link which may have been unlinked in another tab' do
+      namespace_group_link = namespace_group_links(:namespace_group_link5)
+
+      visit group_members_url(@namespace, tab: 'invited_groups')
+      assert_selector 'tr', count: @group_links_count + header_row_count
+
+      namespace_group_link.destroy
+
+      table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'groups.group_links.index.unlink')
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
+      end
+
+      assert_text 'Resource not found'
+    end
+
     test 'cannot remove a group to group link' do
       login_as users(:ryan_doe)
       visit group_members_url(@namespace, tab: 'invited_groups')
@@ -170,6 +192,21 @@ module Groups
       within('table') do
         assert_selector 'input.datepicker-input', count: 0
       end
+    end
+
+    test 'cannot update namespace group link which may have been deleted in another tab' do
+      namespace_group_link = namespace_group_links(:namespace_group_link5)
+      expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
+
+      visit group_members_url(@namespace, tab: 'invited_groups')
+      assert_selector 'tr', count: @group_links_count + header_row_count
+
+      namespace_group_link.destroy
+
+      find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
+                                                                        .native.send_keys(:return)
+
+      assert_text 'Resource not found'
     end
   end
 end
