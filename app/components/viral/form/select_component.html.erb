@@ -20,4 +20,9 @@
       selected_value:
     ) %>
   <% end %>
+  <% if help_text.present? %>
+    <%= viral_help_text do %>
+      <%= help_text %>
+    <% end %>
+  <% end %>
 </div>
