@@ -39,11 +39,17 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def update
-    # TODO: redirect on change path, because url needs to be updated as well
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     respond_to do |format|
       @updated = Projects::UpdateService.new(@project, current_user, project_params).execute
-      if @updated
+      if project_params[:namespace_attributes][:path]
+        if @updated
+          flash[:success] = t('.success', project_name: @project.name)
+          format.html { redirect_to(project_edit_path(@project)) }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+        end
+      elsif @updated
         format.turbo_stream do
           render status: :ok, locals: { type: 'success', message: t('.success', project_name: @project.name) }
         end

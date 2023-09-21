@@ -91,10 +91,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     patch project_path(projects(:project2)),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
-                    format: :turbo_stream }
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
 
-    assert_response :ok
+    assert_redirected_to project_edit_path(projects(:project2).reload)
   end
 
   test 'should update a project which which is under the user\'s namespace' do
@@ -103,10 +102,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:john_doe_project2)
 
     patch project_path(project),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
-                    format: :turbo_stream }
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
 
-    assert_response :ok
+    assert_redirected_to project_edit_path(project.reload)
   end
 
   test 'should not update a project which which is under another user\'s namespace' do

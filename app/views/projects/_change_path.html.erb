@@ -47,6 +47,9 @@
           </div>
           <div>
             <%= form.submit t(:"projects.edit.advanced.path.submit"),
+                        data: {
+                          turbo: false
+                        },
                         class:
                           "button button--state-destructive button--size-default inline-block" %>
           </div>

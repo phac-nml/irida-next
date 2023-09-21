@@ -169,7 +169,7 @@ class ProjectsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('projects.update.success', project_name: project.name)
-    assert_current_path '/group-1/project-1/-/edit'
+    assert_current_path '/group-1/project-1-edited/-/edit'
   end
 
   test 'show error when editing a project path to an existing namespace' do
@@ -190,7 +190,7 @@ class ProjectsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('activerecord.errors.models.namespace.attributes.name.taken').downcase
-    assert_current_path '/group-1/project-1/-/edit'
+    assert_current_path '/group-1/project-1'
   end
 
   test 'show error when editing a project with a short name' do
