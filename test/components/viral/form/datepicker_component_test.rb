@@ -29,7 +29,7 @@ module Viral
       test 'with placeholder' do
         render_preview(:with_placeholder)
         assert_no_selector 'label'
-        assert_selector 'input[type="text"][placeholder:"Pick a date"]', count: 1
+        assert_selector 'input[type="text"][placeholder="Pick a date"]', count: 1
       end
     end
   end
