@@ -4,13 +4,14 @@ module Viral
   module Form
     # Form control for datepicker
     class DatepickerComponent < Viral::Component
-      attr_reader :name, :label
+      attr_reader :name, :label, :help_text
 
-      def initialize(id:, name:, label: nil, value: nil, **options)
+      def initialize(id:, name:, label: nil, value: nil, help_text: nil, **options) # rubocop:disable Metrics/ParameterLists
         @id = id
         @name = name
         @label = label
         @value = value
+        @help_text = help_text
         @options = options
       end
 

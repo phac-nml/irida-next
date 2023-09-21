@@ -26,4 +26,9 @@
     </div>
     <%= render Viral::BaseComponent.new(**system_arguments) %>
   </div>
+  <% if help_text.present? %>
+    <%= viral_help_text do %>
+      <%= help_text %>
+    <% end %>
+  <% end %>
 </div>
