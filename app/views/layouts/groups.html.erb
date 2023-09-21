@@ -28,7 +28,7 @@
             ) %>
           <% end %>
         <% end %>
-        <%= layout.with_breadcrumb(route: @group.route, context_crumbs: @context_crumbs) %>
+        <%= layout.with_breadcrumb(context_crumbs: @context_crumbs) %>
         <% layout.with_body do %>
           <%= yield %>
         <% end %>

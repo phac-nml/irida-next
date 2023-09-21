@@ -5,20 +5,39 @@ module Viral
   class BreadcrumbComponent < Component
     attr_reader :links
 
-    def initialize(route:, context_crumbs: nil)
-      @links = build_crumbs(route, context_crumbs)
+    def initialize(context_crumbs: nil)
+      @links = context_crumbs.nil? ? nil : build_crumbs(context_crumbs)
     end
 
-    def build_crumbs(route, context_crumbs)
+    def build_crumbs(context_crumbs)
       crumbs = []
-      route.path.split('/').each_with_index do |_part, index|
-        crumbs << crumb_for_route(route, index)
+      path = context_crumbs[0][:path].split('/')
+      path.each_with_index do |crumb, index|
+        next if index == 0 || index == path.length - 1 || crumb == '-'
+
+        crumbs << route_to_context_crumbs(path, crumb, index)
       end
       crumbs += context_crumbs if context_crumbs.present? && validate_context_crumbs(context_crumbs)
       crumbs
     end
 
+    # def build_crumbs(route, context_crumbs)
+    #   crumbs = []
+    #   route.path.split('/').each_with_index do |_part, index|
+    #     crumbs << crumb_for_route(route, index)
+    #   end
+    #   crumbs += context_crumbs if context_crumbs.present? && validate_context_crumbs(context_crumbs)
+    #   crumbs
+    # end
+
     private
+
+    def route_to_context_crumbs(path, crumb, index)
+      namespace = Namespace.all.find_by(path: crumb)
+      crumb = namespace.name if namespace
+
+      { name: crumb, path: path[0..index].join('/')[1..-1] }
+    end
 
     def crumb_for_route(route, index)
       {
