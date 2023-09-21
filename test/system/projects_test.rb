@@ -97,6 +97,14 @@ class ProjectsTest < ApplicationSystemTestCase
       assert_selector 'textarea#project_namespace_attributes_description',
                       text: project_description, count: 1
     end
+
+    within %(turbo-frame[id="project_name"]) do
+      assert_text project_name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text project_name
+    end
   end
 
   test 'can view project' do
@@ -152,6 +160,14 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t(:'projects.edit.advanced.path.submit')
     end
 
+    within %(turbo-frame[id="project_name"]) do
+      assert_text project.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text project.name
+    end
+
     assert_text I18n.t('projects.update.success', project_name: project.name)
     assert_current_path '/group-1/project-1/-/edit'
   end
@@ -163,6 +179,14 @@ class ProjectsTest < ApplicationSystemTestCase
     within all('form[action="/group-1/project-1"]')[1] do
       fill_in 'project_namespace_attributes_path', with: 'project-2'
       click_on I18n.t(:'projects.edit.advanced.path.submit')
+    end
+
+    within %(turbo-frame[id="project_name"]) do
+      assert_text project.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text project.name
     end
 
     assert_text I18n.t('activerecord.errors.models.namespace.attributes.name.taken').downcase
@@ -179,6 +203,14 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t('projects.edit.general.submit')
     end
 
+    within %(turbo-frame[id="project_name"]) do
+      assert_text project.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text project.name
+    end
+
     assert_text 'Name is too short'
     assert_current_path '/group-1/project-1/-/edit'
   end
@@ -193,6 +225,14 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t('projects.edit.general.submit')
     end
 
+    within %(turbo-frame[id="project_name"]) do
+      assert_text project1.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text project1.name
+    end
+
     assert_text 'Project Name has already been taken'
     assert_current_path '/group-1/project-1/-/edit'
   end
@@ -205,6 +245,14 @@ class ProjectsTest < ApplicationSystemTestCase
     within all('form[action="/group-1/project-1"]')[0] do
       fill_in 'Description', with: project_description
       click_on I18n.t('projects.edit.general.submit')
+    end
+
+    within %(turbo-frame[id="project_name"]) do
+      assert_text project.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text project.name
     end
 
     assert_text 'Description is too long'

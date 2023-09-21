@@ -45,12 +45,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
       @updated = Projects::UpdateService.new(@project, current_user, project_params).execute
       if @updated
         format.turbo_stream do
-          render status: :ok, locals: { project: @project, context_crumbs: @context_crumbs, type: 'success',
-                                        message: t('.success', project_name: @project.name) }
+          render status: :ok, locals: { type: 'success', message: t('.success', project_name: @project.name) }
         end
       else
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { project: @project }
+          render status: :unprocessable_entity
         end
       end
     end

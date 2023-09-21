@@ -1,4 +1,4 @@
-<% unless project.namespace.errors.any? %>
+<% unless @project.namespace.errors.any? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
@@ -11,8 +11,8 @@
 
   <%= turbo_stream.update "breadcrumb" do %>
     <%= render Viral::BreadcrumbComponent.new(
-      route: project.namespace.route,
-      context_crumbs:
+      route: @project.namespace.route,
+      context_crumbs: @context_crumbs
     ) %>
   <% end %>
 <% end %>
@@ -20,11 +20,11 @@
 <%= turbo_stream.update "project_name_and_description_form",
                     partial: "form_fields",
                     locals: {
-                      project:
+                      project: @project
                     } %>
 
 <%= turbo_stream.update "project_path_form",
                     partial: "change_path",
                     locals: {
-                      project:
+                      project: @project
                     } %>
