@@ -91,7 +91,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     patch project_path(projects(:project2)),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
+                    format: :turbo_stream }
 
     assert_redirected_to project_edit_path(projects(:project2).reload)
   end
@@ -102,7 +103,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:john_doe_project2)
 
     patch project_path(project),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
+                    format: :turbo_stream }
 
     assert_redirected_to project_edit_path(project.reload)
   end
