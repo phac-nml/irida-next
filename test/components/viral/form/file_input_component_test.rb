@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require 'view_component_test_case'
 
-class Viral::Form::FileInputComponentTest < ViewComponent::TestCase
-  def test_component_renders_something_useful
-    # assert_equal(
-    #   %(<span>Hello, components!</span>),
-    #   render_inline(Viral::Form::FileInputComponent.new(message: "Hello, components!")).css("span").to_html
-    # )
+module Viral
+  module Form
+    class FileInputComponentTest < ViewComponentTestCase
+    end
   end
 end
