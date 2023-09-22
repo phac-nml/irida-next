@@ -41,12 +41,25 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     end
   end
 
-  def update
-    if Groups::UpdateService.new(@group, current_user, group_params).execute
-      flash[:success] = t('.success')
-      redirect_to group_path(@group)
-    else
-      render :edit, status: :unprocessable_entity
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    respond_to do |format|
+      @updated = Groups::UpdateService.new(@group, current_user, group_params).execute
+      if group_params[:path]
+        if @updated
+          flash[:success] = t('.success', group_name: @group.name)
+          format.html { redirect_to edit_group_path(@group) }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+        end
+      elsif @updated
+        format.turbo_stream do
+          render status: :ok, locals: { type: 'success', message: t('.success', group_name: @group.name) }
+        end
+      else
+        format.turbo_stream do
+          render status: :unprocessable_entity
+        end
+      end
     end
   end
 

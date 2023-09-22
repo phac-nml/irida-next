@@ -1,0 +1,14 @@
+<%= form_with(model: group, url: group_path(group), method: :patch) do |form| %>
+  <div class="grid gap-4">
+    <%= render partial: "form_fields",
+    locals: {
+      form: form,
+      group: group,
+      authorized_namespaces: authorized_namespaces
+    } %>
+    <div>
+      <%= form.submit t(:"groups.edit.details.submit"),
+                  class: "button button--state-primary button--size-default" %>
+    </div>
+  </div>
+<% end %>

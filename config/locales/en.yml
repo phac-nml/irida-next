@@ -435,7 +435,7 @@ en:
       submit: Create subgroup
       cancel: Cancel
     update:
-      success: Group updated successfully
+      success: Group %{group_name} was successfully updated
     transfer:
       success: Group transferred successfully
     group_links:

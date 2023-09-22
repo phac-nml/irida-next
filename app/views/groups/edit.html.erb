@@ -1,25 +1,20 @@
 <div class="md:mx-auto">
   <!--Edit general details form -->
   <div class="grid gap-4">
+
     <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white">
       <%= t(:"groups.edit.details.title") %>
     </h2>
+
     <%= viral_card do |card| %>
       <% card.with_header(title: t(:"groups.edit.details.subtitle")) %>
       <% card.with_section do %>
-        <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
-          <div class="grid gap-4">
-            <%= render partial: "form_fields",
-            locals: {
-              form: form,
-              group: @group,
-              authorized_namespaces: @authorized_namespaces
-            } %>
-            <div>
-              <%= form.submit t(:"groups.edit.details.submit"),
-                          class: "button button--state-primary button--size-default" %>
-            </div>
-          </div>
+        <%= turbo_frame_tag("group_name_and_description_form") do %>
+          <%= render partial: "edit_name_and_description_form",
+          locals: {
+            group: @group,
+            authorized_namespaces: @authorized_namespaces
+          } %>
         <% end %>
       <% end %>
     <% end %>
