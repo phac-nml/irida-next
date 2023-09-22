@@ -98,7 +98,7 @@ class ProjectsTest < ApplicationSystemTestCase
                       text: project_description, count: 1
     end
 
-    within %(turbo-frame[id="project_name"]) do
+    within %(turbo-frame[id="sidebar_project_name"]) do
       assert_text project_name
     end
 
@@ -160,7 +160,7 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t(:'projects.edit.advanced.path.submit')
     end
 
-    within %(turbo-frame[id="project_name"]) do
+    within %(turbo-frame[id="sidebar_project_name"]) do
       assert_text project.name
     end
 
@@ -181,7 +181,7 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t(:'projects.edit.advanced.path.submit')
     end
 
-    within %(turbo-frame[id="project_name"]) do
+    within %(turbo-frame[id="sidebar_project_name"]) do
       assert_text project.name
     end
 
@@ -190,7 +190,7 @@ class ProjectsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('activerecord.errors.models.namespace.attributes.name.taken').downcase
-    assert_current_path '/group-1/project-1'
+    assert_current_path '/group-1/project-1/-/edit'
   end
 
   test 'show error when editing a project with a short name' do
@@ -203,7 +203,7 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t('projects.edit.general.submit')
     end
 
-    within %(turbo-frame[id="project_name"]) do
+    within %(turbo-frame[id="sidebar_project_name"]) do
       assert_text project.name
     end
 
@@ -225,7 +225,7 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t('projects.edit.general.submit')
     end
 
-    within %(turbo-frame[id="project_name"]) do
+    within %(turbo-frame[id="sidebar_project_name"]) do
       assert_text project1.name
     end
 
@@ -247,7 +247,7 @@ class ProjectsTest < ApplicationSystemTestCase
       click_on I18n.t('projects.edit.general.submit')
     end
 
-    within %(turbo-frame[id="project_name"]) do
+    within %(turbo-frame[id="sidebar_project_name"]) do
       assert_text project.name
     end
 

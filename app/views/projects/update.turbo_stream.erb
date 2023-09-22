@@ -5,7 +5,7 @@
 <% end %>
 
 <% if @updated %>
-  <%= turbo_stream.update "project_name" do %>
+  <%= turbo_stream.update "sidebar_project_name" do %>
     <%= @project.name %>
   <% end %>
 
@@ -19,6 +19,12 @@
 
 <%= turbo_stream.update "project_name_and_description_form",
                     partial: "edit_form",
+                    locals: {
+                      project: @project
+                    } %>
+
+<%= turbo_stream.update "project_path_form",
+                    partial: "change_path",
                     locals: {
                       project: @project
                     } %>

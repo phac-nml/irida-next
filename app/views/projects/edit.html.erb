@@ -15,7 +15,9 @@
 
     <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
 
-    <%= render "change_path", project: @project %>
+    <%= turbo_frame_tag("project_path_form") do %>
+      <%= render "change_path", project: @project %>
+    <% end %>
 
     <% if allowed_to?(:transfer?, @project) %>
       <%= render "transfer", project: @project %>
