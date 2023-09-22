@@ -7,6 +7,7 @@ module Attachments
     def setup
       @user = users(:john_doe)
       @sample = samples(:sample2)
+      @sample1 = samples(:sample1)
       @fastq_se_blob = active_storage_blobs(:test_file_fastq_blob)
       @testsample_illumina_pe_fwd_blob = active_storage_blobs(:testsample_illumina_pe_forward_blob)
       @testsample_illumina_pe_rev_blob = active_storage_blobs(:testsample_illumina_pe_reverse_blob)
@@ -70,6 +71,26 @@ module Attachments
       assert_not created_attachment.metadata.key?('type')
       assert_not created_attachment.metadata.key?('direction')
       assert_not created_attachment.metadata.key?('associated_attachment_id')
+    end
+
+    test 'create attachments with empty params' do
+      assert_no_difference -> { Attachment.count } do
+        Attachments::CreateService.new(@user, @sample, {}).execute
+      end
+    end
+
+    test 'create attachments with empty files params' do
+      assert_no_difference -> { Attachment.count } do
+        Attachments::CreateService.new(@user, @sample, { files: [''] }).execute
+      end
+    end
+
+    test 'create attachments with file matching existing checksum' do
+      params = { files: [@fastq_se_blob] }
+
+      assert_no_difference -> { Attachment.count } do
+        Attachments::CreateService.new(@user, @sample1, params).execute
+      end
     end
   end
 end
