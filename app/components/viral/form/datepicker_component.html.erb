@@ -1,0 +1,34 @@
+<div data-controller="datepicker">
+  <%- if label.present? %>
+    <label
+      for="<%= name %>"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    >
+      <%= label %>
+    </label>
+  <% end %>
+  <div class="relative max-w-sm">
+    <div
+      class="
+        absolute
+        inset-y-0
+        left-0
+        flex
+        items-center
+        pl-3
+        pointer-events-none
+      "
+    >
+      <%= viral_icon(
+        name: "calendar_days",
+        classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+      ) %>
+    </div>
+    <%= render Viral::BaseComponent.new(**system_arguments) %>
+  </div>
+  <% if help_text.present? %>
+    <%= viral_help_text do %>
+      <%= help_text %>
+    <% end %>
+  <% end %>
+</div>
