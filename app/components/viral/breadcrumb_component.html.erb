@@ -12,10 +12,16 @@
         <% if index < links.length - 1 %>
           <%= link_to link[:name],
           [root_url, link[:path]].join(""),
+          data: {
+            turbo_frame: "_top"
+          },
           class: "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400" %>
         <% else %>
           <%= link_to link[:name],
           [root_url, link[:path]].join(""),
+          data: {
+            turbo_frame: "_top"
+          },
           class: "ml-1 text-sm font-medium text-slate-600 md:ml-2 dark:text-slate-400" %>
         <% end %>
 
