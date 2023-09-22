@@ -1,0 +1,25 @@
+<% unless @group.errors.any? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+<% end %>
+
+<% if @updated %>
+  <%= turbo_stream.update "sidebar_group_name" do %>
+    <%= @group.name %>
+  <% end %>
+
+  <%= turbo_stream.update "breadcrumb" do %>
+    <%= render Viral::BreadcrumbComponent.new(
+      route: @group.route,
+      context_crumbs: @context_crumbs
+    ) %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "group_name_and_description_form",
+                    partial: "edit_name_and_description_form",
+                    locals: {
+                      group: @group,
+                      authorized_namespaces: @authorized_namespaces
+                    } %>

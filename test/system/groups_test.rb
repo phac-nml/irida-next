@@ -130,22 +130,38 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'can edit a group' do
+    group_name = 'Edited group'
+    group_description = 'Edited group description'
     visit group_url(groups(:group_one))
 
     click_link I18n.t('groups.sidebar.settings')
 
     within all('form[action="/group-1"]')[0] do
-      fill_in I18n.t('activerecord.attributes.group.name'), with: 'Edited group'
-      fill_in 'Description', with: 'Edited group description'
+      fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
+      fill_in 'Description', with: group_description
       click_on I18n.t('groups.edit.details.submit')
     end
 
-    assert_text I18n.t('groups.update.success')
-    assert_selector 'h1', text: 'Edited group'
+    assert_text I18n.t('groups.update.success', group_name:)
+
+    within %(turbo-frame[id="group_name_and_description_form"]) do
+      assert_selector "input#group_name[value='#{group_name}']", count: 1
+      assert_selector 'textarea#group_description',
+                      text: group_description, count: 1
+    end
+
+    within %(turbo-frame[id="sidebar_group_name"]) do
+      assert_text group_name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text group_name
+    end
   end
 
   test 'can edit a group path' do
-    visit group_url(groups(:group_one))
+    group1 = groups(:group_one)
+    visit group_url(group1)
 
     click_link I18n.t('groups.sidebar.settings')
 
@@ -154,8 +170,8 @@ class GroupsTest < ApplicationSystemTestCase
       click_on I18n.t('groups.edit.advanced.path.submit')
     end
 
-    assert_text I18n.t('groups.update.success')
-    assert_current_path '/group-1-edited'
+    assert_text I18n.t('groups.update.success', group_name: group1.name)
+    assert_current_path '/-/groups/group-1-edited/-/edit'
   end
 
   test 'show error when editing a group with a short name' do
@@ -210,7 +226,7 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     assert_text 'Path has already been taken'
-    assert_current_path '/-/groups/group-1/-/edit'
+    assert_current_path '/group-1'
   end
 
   test 'can delete a group' do
