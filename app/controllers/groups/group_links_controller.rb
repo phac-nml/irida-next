@@ -26,10 +26,13 @@ module Groups
     end
 
     def context_crumbs
-      @context_crumbs = [{
-        name: I18n.t('groups.members.index.title'),
-        path: group_links_path
-      }]
+      case action_name
+      when 'index'
+        @context_crumbs = [{
+          name: I18n.t('groups.members.index.title'),
+          path: group_links_path
+        }]
+      end
     end
 
     def group_link_namespace
