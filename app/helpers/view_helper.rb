@@ -12,6 +12,7 @@ module ViewHelper
     datepicker: 'Viral::Form::DatepickerComponent',
     dialog: 'Viral::DialogComponent',
     dropdown: 'Viral::DropdownComponent',
+    file_input: 'Viral::Form::FileInputComponent',
     flash: 'Viral::FlashComponent',
     help_text: 'Viral::Form::HelpTextComponent',
     icon: 'Viral::IconComponent',

@@ -1,5 +1,15 @@
 <h1
-  class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-4xl dark:text-white"
+  class="
+    mb-4
+    text-2xl
+    font-extrabold
+    leading-none
+    tracking-tight
+    text-gray-900
+    md:text-5xl
+    lg:text-4xl
+    dark:text-white
+  "
 >
   <%= schema["title"] %>
 </h1>
@@ -29,10 +39,10 @@
               hidden: property["hidden"],
               value: name
             ) %>
-          <% else %>
-            <%- if property["enum"] %>
-              <%= viral_select(
-                name:,
+          <% end %>
+          <%- if property["enum"] %>
+             <%= viral_select(
+               name:,
                 label: property["description"],
                 options: property["enum"].map { |option| { value: option, label: option } },
                 selected_value: property["default"],
@@ -40,17 +50,17 @@
                 help_text: property["help_text"],
                 hidden: property["hidden"]
               ) %>
-            <% else %>
-              <%= viral_text_input(
-                name:,
-                label: property["description"],
-                **input_type(property),
-                default: property["default"],
-                required: property["required"],
-                help_text: property["help_text"],
-                hidden: property["hidden"]
-              ) %>
-            <% end %>
+          <% else %>
+            <%= viral_text_input(
+              name:,
+              label: property["description"],
+              **input_type(property),
+              default: property["default"],
+              required: property["required"],
+              help_text: property["help_text"],
+              hidden: property["hidden"],
+              (definition["required"].present? && definition["required"].include?(name) ? "required".html_safe : nil)
+            ) %>
           <% end %>
         <% end %>
       </div>
