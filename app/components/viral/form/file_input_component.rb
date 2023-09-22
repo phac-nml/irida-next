@@ -7,7 +7,7 @@ module Viral
       attr_reader :label, :name, :help_text, :hidden
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(name:, label:, type: 'text', default: nil, required: nil, pattern: nil, help_text: nil,
+      def initialize(name:, label: nil, type: 'text', default: nil, required: nil, pattern: nil, help_text: nil,
                      hidden: false, **arguments)
         @name = name
         @label = label
