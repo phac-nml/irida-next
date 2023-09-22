@@ -18,7 +18,7 @@
 <% end %>
 
 <%= turbo_stream.update "project_name_and_description_form",
-                    partial: "form_fields",
+                    partial: "edit_form",
                     locals: {
                       project: @project
                     } %>

@@ -16,9 +16,9 @@
       >
         <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
       </button>
-      <%= turbo_frame_tag("breadcrumb") do %>
+      <turbo-frame id="breadcrumb">
         <%= breadcrumb %>
-      <% end %>
+      </turbo-frame>
     </nav>
     <main class="absolute bottom-0 left-0 right-0 p-4 overflow-y-auto top-12">
       <div class="<%= @layout %>"><%= body %></div>
