@@ -26,10 +26,14 @@ module Groups
     end
 
     def context_crumbs
-      @context_crumbs = [{
-        name: I18n.t('groups.samples.index.title'),
-        path: group_samples_path
-      }]
+      @context_crumbs = route_to_context_crumbs(@group.route)
+      case action_name
+      when 'index'
+        @context_crumbs += [{
+          name: I18n.t('groups.samples.index.title'),
+          path: group_samples_path
+        }]
+      end
     end
   end
 end

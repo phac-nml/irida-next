@@ -90,7 +90,8 @@ module Projects
     end
 
     def context_crumbs
-      @context_crumbs = [{
+      @context_crumbs = route_to_context_crumbs(@project.namespace.route)
+      @context_crumbs += [{
         name: I18n.t('projects.samples.index.title'),
         path: namespace_project_samples_path
       }]

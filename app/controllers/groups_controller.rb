@@ -148,7 +148,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def context_crumbs
-    @context_crumbs =
+    @context_crumbs = route_to_context_crumbs(@group.route)
+    @context_crumbs +=
       case action_name
       when 'show'
         [{

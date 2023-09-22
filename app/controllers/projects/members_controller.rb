@@ -26,9 +26,10 @@ module Projects
     end
 
     def context_crumbs
+      @context_crumbs = route_to_context_crumbs(@project.namespace.route)
       case action_name
       when 'index', 'new'
-        @context_crumbs = [{
+        @context_crumbs += [{
           name: I18n.t('projects.members.index.title'),
           path: namespace_project_members_path
         }]

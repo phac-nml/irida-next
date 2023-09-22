@@ -140,18 +140,13 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def context_crumbs
-    @context_crumbs = []
+    @context_crumbs = route_to_context_crumbs(@project.namespace.route)
 
     case action_name
     when 'update', 'edit'
-      @context_crumbs = [{
+      @context_crumbs += [{
         name: I18n.t('projects.edit.title'),
         path: namespace_project_edit_path
-      }]
-    when 'show'
-      @context_crumbs = [{
-        name: @project.namespace.name,
-        path: namespace_project_path
       }]
     end
   end
