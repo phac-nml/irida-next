@@ -23,9 +23,9 @@ module Attachments
 
       @attachments.each(&:save)
 
-      persisted_attachments = @attachments.select(&:persisted?)
+      persisted_fastq_attachments = @attachments.select { |attachment| attachment.persisted? && attachment.fastq? }
 
-      identify_illumina_pe(persisted_attachments&.select(&:fastq?))
+      identify_illumina_pe(persisted_fastq_attachments) if persisted_fastq_attachments.count > 1
 
       @attachments
     end
@@ -38,14 +38,16 @@ module Attachments
 
       # identify illumina pe attachments based on illumina fastq filename convention
       # https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/NamingConvention_FASTQ-files-swBS.htm
-      attachments&.each do |attachment|
-        if /^(?<sample_name>.+_[^_]+_L[0-9]{3})_R(?<region>[1-2])_(?<set_number>[0-9]{3})\./ =~ attachment.filename.to_s
-          case region
-          when '1'
-            illumina_pe["#{sample_name}_#{set_number}"]['forward'] = attachment
-          when '2'
-            illumina_pe["#{sample_name}_#{set_number}"]['reverse'] = attachment
-          end
+      attachments.each do |att|
+        unless /^(?<sample_name>.+_[^_]+_L[0-9]{3})_R(?<region>[1-2])_(?<set_number>[0-9]{3})\./ =~ att.filename.to_s
+          next
+        end
+
+        case region
+        when '1'
+          illumina_pe["#{sample_name}_#{set_number}"]['forward'] = att
+        when '2'
+          illumina_pe["#{sample_name}_#{set_number}"]['reverse'] = att
         end
       end
 
