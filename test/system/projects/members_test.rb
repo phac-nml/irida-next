@@ -19,6 +19,10 @@ module Projects
       project = projects(:project26)
       visit namespace_project_members_url(namespace, project)
 
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+
+      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username')
+
       assert_selector 'tr', count: 20 + header_row_count
 
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -42,6 +46,9 @@ module Projects
       visit namespace_project_members_url(parent_namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+
+      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username')
+
       assert_selector 'tr', count: members_count + header_row_count
 
       assert_no_text 'Direct member'
@@ -296,13 +303,15 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      assert_selector 'a', text: 'Groups'
+      assert_selector 'a', text: I18n.t(:'projects.members.index.tabs.groups')
 
-      click_link 'Groups'
+      click_link I18n.t(:'projects.members.index.tabs.groups')
+
+      assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group')
 
       assert_selector 'tr', count: 3 + header_row_count
 
-      assert_text 'Direct member', count: 1
+      assert_text I18n.t(:'activerecord.models.namespace_group_link.direct'), count: 1
 
       parent_namespace_group_link = namespace_group_link.namespace.parent
       assert_not_nil find(:table_row, { 'Source' => parent_namespace_group_link.name })
