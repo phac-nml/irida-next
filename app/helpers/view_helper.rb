@@ -9,6 +9,7 @@ module ViewHelper
     button: 'Viral::ButtonComponent',
     card: 'Viral::CardComponent',
     checkbox: 'Viral::Form::CheckboxComponent',
+    datepicker: 'Viral::Form::DatepickerComponent',
     dialog: 'Viral::DialogComponent',
     dropdown: 'Viral::DropdownComponent',
     flash: 'Viral::FlashComponent',

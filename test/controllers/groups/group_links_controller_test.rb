@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Groups
-  class GroupLinksControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+  class GroupLinksControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
     test 'should share group b with group a' do
@@ -97,7 +97,7 @@ module Groups
       delete group_group_link_path(namespace, 1,
                                    format: :turbo_stream)
 
-      assert_response :bad_request
+      assert_response :not_found
     end
 
     test 'should update namespace group share' do

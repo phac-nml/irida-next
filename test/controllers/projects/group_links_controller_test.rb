@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Projects
-  class GroupLinksControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+  class GroupLinksControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
     test 'should share project namespace with group' do
@@ -95,7 +95,7 @@ module Projects
                                                1,
                                                format: :turbo_stream)
 
-      assert_response :bad_request
+      assert_response :not_found
     end
 
     test 'should not unshare project with group as user doesn\'t have correct permissions' do

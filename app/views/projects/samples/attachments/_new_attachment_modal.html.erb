@@ -2,10 +2,10 @@
   <%= viral_dialog(open: open) do |dialog| %>
     <% dialog.with_trigger do %>
       <%= viral_button(data: { action: "click->viral--dialog#open" }) do %>
-        <%= t("projects.samples.show.upload_file") %>
+        <%= t("projects.samples.show.upload_files") %>
       <% end %>
     <% end %>
-    <% dialog.with_header(title: t("projects.samples.show.upload_new_file")) %>
+    <% dialog.with_header(title: t("projects.samples.show.upload_files")) %>
     <% dialog.with_section do %>
       <%= render partial: "projects/samples/attachments/form",
       locals: {

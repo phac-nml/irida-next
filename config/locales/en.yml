@@ -109,6 +109,7 @@ en:
         file: File
         metadata: Metadata
       group:
+        description: Description
         name: Group name
         path: Path
         parent_id: Group URL
@@ -144,8 +145,8 @@ en:
         namespace:
           attributes:
             name:
-              blank: Can't be blank
-              taken: Has already been taken
+              blank: can't be blank
+              taken: has already been taken
         member:
           attributes:
             access_level:
@@ -440,7 +441,7 @@ en:
     group_links:
       index:
         unlink: Unlink
-        unlink_confirmation: Are you sure you want to unlink the namespace with this group
+        unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
         aria_labels:
           group_id: Id of group to share namespace with
           group_access_level: Group Access Level
@@ -458,14 +459,20 @@ en:
           access_level: Access level
           expiration: Expiration
           action: Action
+        actions:
+          member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
+          unlink_aria_label: "Unlink namespace from group %{member} button"
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
       destroy:
-        success: Successfully unlinked group from group
+        success: Successfully unlinked group %{namespace_name} from group %{group_name}
         error: There was an error unlinking group from group
       update:
-        success: Successfully updated namespace group link
+        params:
+          expiration_date: expiration date
+          group_access_level: group access level
+        success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
       new:
         title: Share namespace
@@ -594,7 +601,7 @@ en:
     group_links:
       index:
         unlink: Unlink
-        unlink_confirmation: Are you sure you want to unlink the namespace with this group
+        unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
         aria_labels:
           group_id: Id of group to share namespace with
           group_access_level: Group Access Level
@@ -612,14 +619,20 @@ en:
           access_level: Access level
           expiration: Expiration
           action: Action
+        actions:
+          member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
+          unlink_aria_label: "Unlink namespace from group %{member} button"
       create:
         success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group
       destroy:
-        success: Successfully unlinked project with group
-        error: There was an error unlinking projec from group
+        success: Successfully unlinked project %{namespace_name} with group %{group_name}
+        error: There was an error unlinking project from group
       update:
-        success: Successfully updated namespace group link
+        params:
+          expiration_date: expiration date
+          group_access_level: group access level
+        success: Successfully updated project %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
       new:
         title: Share namespace
@@ -690,8 +703,8 @@ en:
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
         error: The sample does not exist within the project.
         files: Files
-        upload_file: Upload File
-        upload_new_file: Upload New File
+        upload: Upload
+        upload_files: Upload Files
         table_header:
           filename: Filename
           size: Size
@@ -743,6 +756,7 @@ en:
           delete_confirm: Are you sure that you want to delete this file from the sample?
         create:
           success: File %{filename} was successfully uploaded.
+          failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
         destroy:
           success: File %{filename} was successfully removed.
   services:
