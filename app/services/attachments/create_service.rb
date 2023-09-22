@@ -25,14 +25,14 @@ module Attachments
 
       persisted_fastq_attachments = @attachments.select { |attachment| attachment.persisted? && attachment.fastq? }
 
-      identify_illumina_pe(persisted_fastq_attachments) if persisted_fastq_attachments.count > 1
+      identify_illumina_paired_end_files(persisted_fastq_attachments) if persisted_fastq_attachments.count > 1
 
       @attachments
     end
 
     private
 
-    def identify_illumina_pe(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
+    def identify_illumina_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       illumina_pe = Hash.new { |h, k| h[k] = {} }
 
