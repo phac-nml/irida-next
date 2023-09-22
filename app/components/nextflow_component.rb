@@ -8,4 +8,18 @@ class NextflowComponent < Component
     @schema = schema
     @url = url
   end
+
+  def input_type(property)
+    if property['format'].present?
+      case property['format']
+      when 'file-path'
+        return file_input(property)
+      end
+    end
+    { type: property['type'] }
+  end
+
+  def file_input(property)
+    { type: 'file', pattern: property['pattern'] }
+  end
 end
