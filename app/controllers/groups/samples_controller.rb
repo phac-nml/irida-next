@@ -4,8 +4,8 @@ module Groups
   # Controller actions for Samples within a Group
   class SamplesController < ApplicationController
     layout 'groups'
-    before_action :context_crumbs, only: %i[index]
     before_action :group, only: %i[index]
+    before_action :context_crumbs, only: %i[index]
 
     def index
       authorize! @group, to: :sample_listing?

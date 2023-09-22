@@ -149,19 +149,13 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def context_crumbs
     @context_crumbs = route_to_context_crumbs(@group.route)
-    @context_crumbs +=
-      case action_name
-      when 'show'
-        [{
-          name: @group.name,
-          path: group_path
-        }]
-      else
-        [{
-          name: I18n.t('groups.edit.title'),
-          path: group_path
-        }]
-      end
+
+    return unless action_name != 'show'
+
+    @context_crumbs += [{
+      name: I18n.t('groups.edit.title'),
+      path: group_path
+    }]
   end
 
   protected
