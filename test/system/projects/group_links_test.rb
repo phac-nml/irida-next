@@ -67,6 +67,28 @@ module Projects
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
 
+    test 'cannot remove a project to group link that may have been unlinked in another tab' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+      namespace_group_link.destroy
+
+      table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link I18n.t(:'projects.group_links.index.unlink')
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
+      end
+
+      assert_text 'Resource not found'
+    end
+
     test 'cannot remove a project to group link' do
       login_as users(:ryan_doe)
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
@@ -100,6 +122,92 @@ module Projects
                          name: namespace_group_link.namespace.name)
 
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+    end
+
+    test 'can update namespace group links group access level to another access level' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+
+      Timecop.travel(Time.zone.now + 5) do
+        visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+        assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+        find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
+                                                                                         'option[2]').select_option
+
+        assert_text I18n.t(:'projects.group_links.update.success',
+                           namespace_name: namespace_group_link.namespace.human_name,
+                           group_name: namespace_group_link.group.human_name,
+                           param_name: 'group access level')
+
+        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+        within namespace_group_link_row do
+          assert_text 'Updated', count: 1
+          assert_text 'less than a minute ago'
+        end
+      end
+    end
+
+    test 'cannot update namespace group links group access level' do
+      login_as users(:ryan_doe)
+
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+      within('table') do
+        assert_selector 'select', count: 0
+      end
+    end
+
+    test 'can update namespace group links expiration' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+      expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
+
+      Timecop.travel(Time.zone.now + 5) do
+        visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+        assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+        find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
+                                                                          .native.send_keys(:return)
+
+        assert_text I18n.t(:'projects.group_links.update.success',
+                           namespace_name: namespace_group_link.namespace.human_name,
+                           group_name: namespace_group_link.group.human_name,
+                           param_name: 'expiration')
+
+        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+        within namespace_group_link_row do
+          assert_text 'Updated', count: 1
+          assert_text 'less than a minute ago'
+        end
+      end
+    end
+
+    test 'cannot update namespace group links expiration' do
+      login_as users(:ryan_doe)
+
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+      within('table') do
+        assert_selector 'input.datepicker-input', count: 0
+      end
+    end
+
+    test 'cannot update namespace group link which may have been deleted in another tab' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+      expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
+
+      visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
+      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
+
+      namespace_group_link.destroy
+
+      find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
+                                                                        .native.send_keys(:return)
+
+      assert_text 'Resource not found'
     end
   end
 end

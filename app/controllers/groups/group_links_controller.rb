@@ -12,7 +12,7 @@ module Groups
     private
 
     def namespace_group_link
-      @namespace_group_link ||= @group.shared_with_group_links.find_by(id: params[:id])
+      @namespace_group_link = @group.shared_with_group_links.find_by(id: params[:id]) || not_found
     end
 
     def namespace
