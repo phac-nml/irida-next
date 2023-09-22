@@ -170,6 +170,8 @@ module Projects
 
       click_on I18n.t(:'components.pagination.next')
 
+      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username')
+
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
       within table_row do
