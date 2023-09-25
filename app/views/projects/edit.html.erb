@@ -8,7 +8,7 @@
       <% card.with_header(title: t(".general.heading")) %>
       <% card.with_section do %>
         <%= turbo_frame_tag("project_name_and_description_form") do %>
-          <%= render partial: "edit_form", locals: { project: @project } %>
+          <%= render partial: "edit_name_and_description_form", locals: { project: @project } %>
         <% end %>
       <% end %>
     <% end %>
