@@ -4,14 +4,17 @@ require 'view_component_test_case'
 
 module Viral
   class BreadcrumbComponentTest < ViewComponentTestCase
+    include RouteHelper
     test 'single path' do
       # Mock route
       mock_route = routes(:group_one_route)
 
       # Mock context breadcrumb
-      context_crumbs = [{ name: I18n.t('groups.edit.title', raise: true), path: groups(:group_one).path }]
 
-      render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+      context_crumbs = route_to_context_crumbs(mock_route)
+      context_crumbs += [{ name: I18n.t('groups.edit.title', raise: true), path: groups(:group_one).path }]
+
+      render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
       assert_selector 'a', count: 2
       assert_selector 'svg', count: 1
@@ -22,24 +25,24 @@ module Viral
       mock_route = routes(:group_one_route)
 
       # Mock context breadcrumb
-      context_crumbs = [{ name: I18n.t('projects.edit.title', raise: true),
-                          path: "#{groups(:group_one).path}/-/edit`" }]
+      context_crumbs = route_to_context_crumbs(mock_route)
+      context_crumbs += [{ name: I18n.t('projects.edit.title', raise: true),
+                           path: "#{groups(:group_one).path}/-/edit`" }]
 
-      render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+      render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
       assert_text I18n.t('groups.edit.title', raise: true)
       assert_selector 'a', count: 2
       assert_selector 'svg', count: 1
     end
 
-    test 'without context crumbs' do
+    test 'route with no extra crumbs' do
       # Mock route
       mock_route = routes(:group_one_route)
 
-      # Mock context breadcrumb
-      context_crumbs = nil
+      context_crumbs = route_to_context_crumbs(mock_route)
 
-      render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+      render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
       assert_selector 'a', count: 1
     end
@@ -49,10 +52,11 @@ module Viral
       mock_route = routes(:group_one_route)
 
       # Mock context breadcrumb
-      context_crumbs = [{ name: I18n.t('projects.edit.title', raise: true),
-                          path: "#{groups(:group_one).path}/-/groups/new`" }]
+      context_crumbs = route_to_context_crumbs(mock_route)
+      context_crumbs += [{ name: I18n.t('projects.edit.title', raise: true),
+                           path: "#{groups(:group_one).path}/-/groups/new`" }]
 
-      render_inline(Viral::BreadcrumbComponent.new(route: mock_route, context_crumbs:))
+      render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
       assert_selector 'a', count: 2
       assert_selector 'svg', count: 1
