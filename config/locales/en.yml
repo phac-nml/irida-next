@@ -195,6 +195,10 @@ en:
       namespaces/project_namespace:
         one: Project
         other: Projects
+      namespace_group_link:
+        one: Namespace Group Link
+        other: Namespace Group Links
+        direct: Direct member
   datetime:
     distance_in_words:
       about_x_hours:
