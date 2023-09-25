@@ -21,7 +21,7 @@ module Viral
       assert_selector 'section.Viral-Card' do
         assert_selector 'h2', text: 'Card with section actions'
         assert_selector '.Viral-Card--Section', count: 1 do
-          assert_selector 'h2', text: 'FIRST SECTION'
+          assert_selector 'h3', text: 'FIRST SECTION'
           assert_selector 'a.text-red-500', text: 'Delete'
         end
       end
