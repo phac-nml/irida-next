@@ -23,7 +23,9 @@
       <%= t(:"groups.edit.advanced.title") %>
     </h2>
 
-    <%= render "edit_advanced_path", group: @group %>
+    <%= turbo_frame_tag("group_path_form") do %>
+      <%= render "edit_advanced_path", group: @group %>
+    <% end %>
 
     <% if allowed_to?(:transfer?, @group) %>
       <%= render "edit_advanced_transfer", group: @group %>
