@@ -175,7 +175,8 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'show error when editing a group with a short name' do
-    visit group_url(groups(:group_one))
+    group1 = groups(:group_one)
+    visit group_url(group1)
     click_link I18n.t('groups.sidebar.settings')
 
     within all('form[action="/group-1"]')[0] do
@@ -183,13 +184,22 @@ class GroupsTest < ApplicationSystemTestCase
       click_on I18n.t('groups.edit.details.submit')
     end
 
+    within %(turbo-frame[id="sidebar_group_name"]) do
+      assert_text group1.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text group1.name
+    end
+
     assert_text 'Group name is too short'
     assert_current_path '/-/groups/group-1/-/edit'
   end
 
   test 'show error when editing a group with a same name' do
+    group1 = groups(:group_one)
     group2 = groups(:group_two)
-    visit group_url(groups(:group_one))
+    visit group_url(group1)
     click_link I18n.t('groups.sidebar.settings')
 
     within all('form[action="/group-1"]')[0] do
@@ -197,12 +207,21 @@ class GroupsTest < ApplicationSystemTestCase
       click_on I18n.t('groups.edit.details.submit')
     end
 
+    within %(turbo-frame[id="sidebar_group_name"]) do
+      assert_text group1.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text group1.name
+    end
+
     assert_text 'Group name has already been taken'
     assert_current_path '/-/groups/group-1/-/edit'
   end
 
   test 'show error when editing a group with a long description' do
-    visit group_url(groups(:group_one))
+    group1 = groups(:group_one)
+    visit group_url(group1)
     click_link I18n.t('groups.sidebar.settings')
 
     within all('form[action="/group-1"]')[0] do
@@ -210,12 +229,21 @@ class GroupsTest < ApplicationSystemTestCase
       click_on I18n.t('groups.edit.details.submit')
     end
 
+    within %(turbo-frame[id="sidebar_group_name"]) do
+      assert_text group1.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text group1.name
+    end
+
     assert_text 'Description is too long'
     assert_current_path '/-/groups/group-1/-/edit'
   end
 
   test 'show error when editing a group with a same path' do
-    visit group_url(groups(:group_one))
+    group1 = groups(:group_one)
+    visit group_url(group1)
     click_link I18n.t('groups.sidebar.settings')
 
     group2 = groups(:group_two)
@@ -225,8 +253,16 @@ class GroupsTest < ApplicationSystemTestCase
       click_on I18n.t('groups.edit.advanced.path.submit')
     end
 
+    within %(turbo-frame[id="sidebar_group_name"]) do
+      assert_text group1.name
+    end
+
+    within %(turbo-frame[id="breadcrumb"]) do
+      assert_text group1.name
+    end
+
     assert_text 'Path has already been taken'
-    assert_current_path '/group-1'
+    assert_current_path '/-/groups/group-1/-/edit'
   end
 
   test 'can delete a group' do
