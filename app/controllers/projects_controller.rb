@@ -39,14 +39,23 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def update
-    if Projects::UpdateService.new(@project, current_user, project_params).execute
-      flash[:success] = t('.success', project_name: @project.name)
-      redirect_to(
-        project_path(@project)
-      )
-    else
-      render :edit, status: :unprocessable_entity
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    respond_to do |format|
+      @updated = Projects::UpdateService.new(@project, current_user, project_params).execute
+      if @updated
+        if project_params[:namespace_attributes][:path]
+          flash[:success] = t('.success', project_name: @project.name)
+          format.turbo_stream { redirect_to(project_edit_path(@project)) }
+        else
+          format.turbo_stream do
+            render status: :ok, locals: { type: 'success', message: t('.success', project_name: @project.name) }
+          end
+        end
+      else
+        format.turbo_stream do
+          render status: :unprocessable_entity
+        end
+      end
     end
   end
 
