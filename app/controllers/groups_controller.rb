@@ -4,8 +4,8 @@
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
-  before_action :context_crumbs, except: %i[index new create]
   before_action :authorized_namespaces, except: %i[index show destroy]
+  before_action :context_crumbs, except: %i[index new create]
 
   def index
     redirect_to dashboard_groups_path
@@ -31,7 +31,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def new
     @group = Group.find(params[:parent_id]) if params[:parent_id]
-
+    context_crumbs
     authorize! @group, to: :create_subgroup? if params[:parent_id]
 
     @new_group = Group.new(parent_id: @group&.id)
@@ -51,6 +51,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
       redirect_to group_path(@new_group.full_path)
     else
       @group = @new_group.parent
+      context_crumbs
       render_new status: :unprocessable_entity
     end
   end
@@ -150,12 +151,15 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def context_crumbs
     @context_crumbs = @group.nil? ? [] : route_to_context_crumbs(@group.route)
 
-    return unless action_name != 'show'
-
-    @context_crumbs += [{
-      name: I18n.t('groups.edit.title'),
-      path: group_canonical_path
-    }]
+    case action_name
+    when 'new', 'create', 'show'
+      @context_crumbs
+    else
+      @context_crumbs += [{
+        name: I18n.t('groups.edit.title'),
+        path: group_canonical_path
+      }]
+    end
   end
 
   protected

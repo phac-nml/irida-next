@@ -4,7 +4,7 @@
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
-  before_action :context_crumbs, except: %i[new create]
+  before_action :context_crumbs, except: %i[new create update]
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
@@ -56,6 +56,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
           render status: :unprocessable_entity
         end
       end
+      context_crumbs
     end
   end
 
