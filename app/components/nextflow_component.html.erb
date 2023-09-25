@@ -1,5 +1,15 @@
 <h1
-  class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-4xl dark:text-white"
+  class="
+    mb-4
+    text-2xl
+    font-extrabold
+    leading-none
+    tracking-tight
+    text-gray-900
+    md:text-5xl
+    lg:text-4xl
+    dark:text-white
+  "
 >
   <%= schema["title"] %>
 </h1>
@@ -35,7 +45,7 @@
                 name:,
                 label: property["description"],
                 options: property["enum"].map { |option| { value: option, label: option } },
-                selected: property["default"],
+                selected_value: property["default"],
                 required: property["required"],
                 help_text: property["help_text"],
                 hidden: property["hidden"]
