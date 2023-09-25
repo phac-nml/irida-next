@@ -19,6 +19,9 @@ module Groups
       visit group_members_url(namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username')
+
       assert_selector 'tr', count: 20 + header_row_count
 
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -39,6 +42,9 @@ module Groups
       visit group_members_url(namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username')
+
       assert_selector 'tr', count: @members_count + header_row_count
 
       assert_no_text 'Direct member'
@@ -196,9 +202,11 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'a', text: 'Groups'
+      assert_selector 'a', text: I18n.t(:'groups.members.index.tabs.groups')
 
-      click_link 'Groups'
+      click_link I18n.t(:'groups.members.index.tabs.groups')
+
+      assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group')
 
       assert_selector 'tr', count: 3 + header_row_count
 

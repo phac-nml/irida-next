@@ -195,6 +195,10 @@ en:
       namespaces/project_namespace:
         one: Project
         other: Projects
+      namespace_group_link:
+        one: Namespace Group Link
+        other: Namespace Group Links
+        direct: Direct member
   datetime:
     distance_in_words:
       about_x_hours:
@@ -469,7 +473,10 @@ en:
         success: Successfully unlinked group %{namespace_name} from group %{group_name}
         error: There was an error unlinking group from group
       update:
-        success: Successfully updated namespace group link
+        params:
+          expiration_date: expiration date
+          group_access_level: group access level
+        success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
       new:
         title: Share namespace
@@ -626,7 +633,10 @@ en:
         success: Successfully unlinked project %{namespace_name} with group %{group_name}
         error: There was an error unlinking project from group
       update:
-        success: Successfully updated namespace group link
+        params:
+          expiration_date: expiration date
+          group_access_level: group access level
+        success: Successfully updated project %{namespace_name} with group %{group_name} link %{param_name}
         error: There was an error updating the namespace group link
       new:
         title: Share namespace

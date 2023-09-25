@@ -1,47 +1,23 @@
 <div class="md:mx-auto">
   <div class="grid gap-4">
-
     <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white">
       <%= t(".general.title") %>
     </h2>
+
     <%= viral_card do |card| %>
       <% card.with_header(title: t(".general.heading")) %>
       <% card.with_section do %>
-        <%= form_with(model: @project, url: namespace_project_path, method: :patch, class: "grid gap-4") do |form| %>
-          <%= form.fields_for :namespace, include_id: false do |builder| %>
-            <% invalid_name = @project.namespace.errors.include?(:name) %>
-            <div class="form-field <%= 'invalid' if invalid_name %>">
-              <%= builder.label :name %>
-              <%= builder.text_field :name,
-                                 required: true,
-                                 autofocus: true,
-                                 placeholder: t(:"projects.new.placeholder") %>
-              <%= render "shared/form/field_errors",
-              errors: @project.namespace.errors.full_messages_for(:name) %>
-            </div>
-            <% invalid_description = @project.namespace.errors.include?(:description) %>
-            <div class="form-field <%= 'invalid' if invalid_description %>">
-              <%= builder.label :description %>
-              <%= builder.text_area :description,
-                                {
-                                  :class => "form-control",
-                                  "aria-label" => t(:"projects.new.description")
-                                } %>
-              <%= render "shared/form/field_errors",
-              errors: @project.namespace.errors.full_messages_for(:description) %>
-            </div>
-            <div>
-              <%= form.submit t("projects.edit.general.submit"),
-                          class: "button button--state-default button--size-default" %>
-            </div>
-          <% end %>
+        <%= turbo_frame_tag("project_name_and_description_form") do %>
+          <%= render partial: "edit_name_and_description_form", locals: { project: @project } %>
         <% end %>
       <% end %>
     <% end %>
 
     <h2 class="text-2xl font-extrabold dark:text-white"><%= t(".advanced.title") %></h2>
 
-    <%= render "change_path", project: @project %>
+    <%= turbo_frame_tag("project_path_form") do %>
+      <%= render "change_path", project: @project %>
+    <% end %>
 
     <% if allowed_to?(:transfer?, @project) %>
       <%= render "transfer", project: @project %>

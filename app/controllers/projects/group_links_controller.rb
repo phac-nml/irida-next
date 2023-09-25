@@ -12,8 +12,8 @@ module Projects
     private
 
     def namespace_group_link
-      @namespace_group_link ||= @project.namespace.shared_with_group_links
-                                        .find_by(id: params[:id])
+      @namespace_group_link = @project.namespace.shared_with_group_links
+                                      .find_by(id: params[:id]) || not_found
     end
 
     def namespace
