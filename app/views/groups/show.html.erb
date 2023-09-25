@@ -8,12 +8,19 @@
   <% end %>
   <%= component.with_buttons do %>
     <% if allowed_to?(:new?, @group) %>
-        <%= link_to t(:"groups.show.create_subgroup_button"),
-                    new_group_path(parent_id: @group.id),
-                    class: "button button--size-default button--state-default" %>
-        <%= link_to t(:"groups.show.create_project_button"),
-                    new_project_path(group_id: @group.id),
-                    class: "button button--size-default button--state-primary ml-2" %>
+      <%= link_to t(:"groups.show.create_subgroup_button"),
+      new_group_path(parent_id: @group.id),
+      class: "button button--size-default button--state-default" %>
+      <%= link_to t(:"groups.show.create_project_button"),
+      new_project_path(group_id: @group.id),
+      class: "button button--size-default button--state-primary ml-2" %>
     <% end %>
   <% end %>
 <% end %>
+
+<div class="bg-white dark:bg-gray-800">
+  <%= render GroupsListTreeContainerComponent.new(
+    groups: @group.children,
+    path: "dashboard_groups_path"
+  ) %>
+</div>
