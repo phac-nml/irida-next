@@ -6,6 +6,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :context_crumbs, except: %i[index new create show]
   before_action :authorized_namespaces, except: %i[index show destroy]
+  before_action :authorized_subgroups_and_projects, only: %i[show]
 
   def index
     redirect_to dashboard_groups_path
@@ -100,6 +101,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def authorized_namespaces
     @authorized_namespaces = authorized_scope(Namespace,
                                               type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
+  end
+
+  def authorized_subgroups_and_projects
+    @subgroups_and_projects = Namespace.where(parent_id: @group.id).or(Namespace.where(parent_id: @group.id,
+                                                                                       type: 'Project'))
   end
 
   def resolve_layout
