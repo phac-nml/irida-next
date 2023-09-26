@@ -52,11 +52,11 @@
   <td class="px-6 py-4">
     <div>
       <% if member.user.email != member.created_by.email %>
-        <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %> by <span class="block">
+        <%= time_ago(Time.now, member.created_at) %> by <span class="block">
           <%= member.created_by.email %>
         </span>
       <% else %>
-        <span class="text-sm"><%= distance_of_time_in_words(Time.now, member.created_at) %></span>
+        <%= time_ago(Time.now, member.created_at) %>
       <% end %>
 
       <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>

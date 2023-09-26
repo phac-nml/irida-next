@@ -20,7 +20,7 @@
   </td>
   <td class="px-6 py-4">
     <div>
-      <span class="text-sm"><%= distance_of_time_in_words(Time.now, namespace_group_link.created_at) %></span>
+      <%= time_ago(Time.now, namespace_group_link.created_at) %>
       <span class="block">
         <%= turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
           <% if namespace_group_link.created_at < namespace_group_link.updated_at %>
