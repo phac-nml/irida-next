@@ -6,7 +6,7 @@ module Viral
     attr_reader :links
 
     def initialize(context_crumbs: nil)
-      @links = validate_context_crumbs(context_crumbs) unless context_crumbs.nil?
+      @links = validate_context_crumbs(context_crumbs)
     end
 
     private
