@@ -10,11 +10,23 @@ module Samples
     end
 
     test 'create sample with valid params' do
-      valid_params = { name: 'new-project2-sample', description: 'first sample for project2' }
+      valid_params = { name: 'new-project2-sample', description: 'first sample for project2', metadata: {
+        source: 'Human',
+        province: 'MB',
+        sex: 'Female'
+      } }
 
       assert_difference -> { Sample.count } => 1 do
         Samples::CreateService.new(@user, @project, valid_params).execute
       end
+
+      created_sample = Sample.last
+
+      assert created_sample.name == valid_params[:name]
+      assert created_sample.description == valid_params[:description]
+      assert created_sample.metadata['source'] == valid_params[:metadata][:source]
+      assert created_sample.metadata['province'] == valid_params[:metadata][:province]
+      assert created_sample.metadata['sex'] == valid_params[:metadata][:sex]
     end
 
     test 'create sample with invalid params' do
