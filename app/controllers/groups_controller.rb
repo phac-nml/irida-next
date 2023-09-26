@@ -104,8 +104,10 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def authorized_subgroups_and_projects
-    @subgroups_and_projects = Namespace.where(parent_id: @group.id).or(Namespace.where(parent_id: @group.id,
-                                                                                       type: 'Project'))
+    @subgroups_and_projects = Namespace.where(parent_id: @group.id,
+                                              type: [
+                                                Namespaces::ProjectNamespace.sti_name, Group.sti_name
+                                              ]).order(type: :asc)
   end
 
   def resolve_layout
