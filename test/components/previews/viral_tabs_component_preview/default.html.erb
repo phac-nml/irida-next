@@ -1,1 +1,3 @@
-<%= render Viral::TabsComponent.new %>
+<%= render Viral::TabsComponent.new do |tabs| %>
+  <%= tabs.with_tab(url: "#", label: "Projects", selected: true) %>
+<% end %>
