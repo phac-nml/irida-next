@@ -1,14 +1,26 @@
-
-
-<%= viral_avatar(
-      name: @group.name,
-      size: :small,
-      colour_string: "#{@group.name}-#{@group.id}",
-      data: {
-        turbo: false
-      },
-      url: group_path(@group)
-    ) %>
+<% if @group.type == "Group" %>
+  <%= viral_icon(name: :squares_2x2, classes: "h-5 w-5 text-slate-400 mr-2") %>
+  <%= viral_avatar(
+        name: @group.name,
+        size: :small,
+        colour_string: "#{@group.name}-#{@group.id}",
+        data: {
+          turbo: false
+        },
+        url: group_path(@group)
+      ) %>
+<% else %>
+  <%= viral_icon(name: :rectangle_stack, classes: "h-5 w-5 text-slate-400 mr-2") %>
+  <%= viral_avatar(
+        name: @group.name,
+        size: :small,
+        colour_string: "#{@group.name}-#{@group.id}",
+        data: {
+          turbo: false
+        },
+        url: project_path(@group.project)
+      ) %>
+<% end %>
 
 <div class="group-text-container flex grow items-center ml-2">
   <div class="group-text flex flex-col">
