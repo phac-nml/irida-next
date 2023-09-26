@@ -51,11 +51,19 @@
     <td class="px-6 py-4">
       <div>
         <% if member.user.email != member.created_by.email %>
-          <%= time_ago(Time.now, member.created_at) %> by <span class="block">
+          <%= render partial: 'shared/distance_of_time_in_words',
+            locals: {
+              current_time: Time.now,
+              original_time: member.created_at
+            } %> by <span class="block">
             <%= member.created_by.email %>
           </span>
         <% else %>
-          <%= time_ago(Time.now, member.created_at) %>
+          <%= render partial: 'shared/distance_of_time_in_words',
+            locals: {
+              current_time: Time.now,
+              original_time: member.created_at
+            } %>
         <% end %>
 
         <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>

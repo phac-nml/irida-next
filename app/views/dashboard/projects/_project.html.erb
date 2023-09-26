@@ -26,6 +26,10 @@
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 text-right whitespace-nowrap">
-      <%= time_ago(Time.now, project.updated_at) %>
+    <%= render partial: 'shared/distance_of_time_in_words',
+      locals: {
+        current_time: Time.now,
+        original_time: project.updated_at
+      } %>
   </td>
 </tr>
