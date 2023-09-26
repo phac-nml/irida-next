@@ -5,5 +5,4 @@ class Component < ViewComponent::Base
 
   include ViewHelper
   include ClassNameHelper
-  include TimeAgoHelper
 end
