@@ -51,7 +51,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     group = groups(:group_one)
-    patch group_path(group, format: :turbo_stream), params: { group: { name: 'New Group Name' } }
+    patch group_path(group), params: { group: { name: 'New Group Name' }, format: :turbo_stream }
     assert_response :ok
   end
 
@@ -60,7 +60,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
 
     group = groups(:group_one)
     assert_no_changes -> { group.name } do
-      patch group_path(group, format: :turbo_stream), params: { group: { name: 'NG' } }
+      patch group_path(group), params: { group: { name: 'NG' }, format: :turbo_stream }
     end
     assert_response :unprocessable_entity
   end
