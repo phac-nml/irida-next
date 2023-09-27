@@ -4,7 +4,6 @@ module Groups
   # Controller actions for Group Group Links
   class GroupLinksController < Groups::ApplicationController
     include ShareActions
-    include BreadcrumbNavigation
 
     def group_link_params
       params.require(:namespace_group_link).permit(:group_id, :group_access_level, :expires_at)
@@ -27,7 +26,7 @@ module Groups
     end
 
     def context_crumbs
-      @context_crumbs = route_to_context_crumbs(@group.route)
+      super
       case action_name
       when 'index'
         @context_crumbs += [{

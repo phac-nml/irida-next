@@ -3,11 +3,8 @@
 module Groups
   # Controller actions for Samples within a Group
   class SamplesController < ApplicationController
-    include BreadcrumbNavigation
-
     layout 'groups'
     before_action :group, only: %i[index]
-    before_action :context_crumbs, only: %i[index]
 
     def index
       authorize! @group, to: :sample_listing?
@@ -28,7 +25,7 @@ module Groups
     end
 
     def context_crumbs
-      @context_crumbs = route_to_context_crumbs(@group.route)
+      super
       case action_name
       when 'index'
         @context_crumbs += [{

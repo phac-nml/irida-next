@@ -4,7 +4,6 @@ module Projects
   # Controller actions for Project Group Links
   class GroupLinksController < Projects::ApplicationController
     include ShareActions
-    include BreadcrumbNavigation
 
     def group_link_params
       params.require(:namespace_group_link).permit(:id, :group_id, :namespace_id, :group_access_level, :expires_at)
@@ -24,11 +23,11 @@ module Projects
     protected
 
     def group_links_path
-      group_group_links_path
+      namespace_project_group_links_path
     end
 
     def context_crumbs
-      @context_crumbs = route_to_context_crumbs(@project.namespace.route)
+      super
       case action_name
       when 'index'
         @context_crumbs += [{
@@ -39,8 +38,6 @@ module Projects
     end
 
     def group_link_namespace
-      path = [params[:namespace_id], params[:project_id]].join('/')
-      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
       @project.namespace
     end
   end

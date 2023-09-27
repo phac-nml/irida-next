@@ -4,7 +4,6 @@ module Projects
   module Samples
     # Controller actions for Project Samples Transfer
     class TransfersController < ApplicationController
-      before_action :project
       before_action :projects
 
       def new
@@ -51,11 +50,6 @@ module Projects
 
       def transfer_params
         params.permit(:new_project_id, sample_ids: [])
-      end
-
-      def project
-        path = [params[:namespace_id], params[:project_id]].join('/')
-        @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
       end
 
       def projects

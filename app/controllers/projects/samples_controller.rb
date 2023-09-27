@@ -3,11 +3,7 @@
 module Projects
   # Controller actions for Samples
   class SamplesController < Projects::ApplicationController
-    include BreadcrumbNavigation
-
     before_action :sample, only: %i[show edit update destroy]
-    before_action :project
-    before_action :context_crumbs
 
     def index
       authorize! @project, to: :sample_listing?
@@ -86,13 +82,8 @@ module Projects
       params.require(:sample).permit(:name, :description)
     end
 
-    def project
-      path = [params[:namespace_id], params[:project_id]].join('/')
-      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
-    end
-
     def context_crumbs
-      @context_crumbs = route_to_context_crumbs(@project.namespace.route)
+      super
       @context_crumbs += [{
         name: I18n.t('projects.samples.index.title'),
         path: namespace_project_samples_path
