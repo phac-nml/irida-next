@@ -1,0 +1,8 @@
+<%= turbo_stream.replace dom_id(@group) do %>
+  <%= render NamespaceTree::Row::WithChildrenComponent.new(
+    namespace: @group,
+    children: @group.children,
+    collapsed: @collapsed,
+    path: "dashboard_groups_path",
+    type: [Group.sti_name] %>
+  <% end %>
