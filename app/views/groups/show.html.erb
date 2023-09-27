@@ -47,8 +47,5 @@
 </ul>
 
 <div class="bg-white dark:bg-gray-800">
-  <%= render GroupsListTreeContainerComponent.new(
-    groups: @groups,
-    path: group_path(@group)
-  ) %>
+  <%= render GroupsListTreeContainerComponent.new(groups: @groups, path: "group_path") %>
 </div>
