@@ -48,7 +48,7 @@
 
 <div class="bg-white dark:bg-gray-800">
   <%= render GroupsListTreeContainerComponent.new(
-    groups: @subgroups_and_projects,
-    path: "dashboard_groups_path"
+    groups: @groups,
+    path: group_path(@group)
   ) %>
 </div>

@@ -14,6 +14,17 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def show
     authorize! @group, to: :read?
+
+    respond_to do |format|
+      format.html do
+        @groups = @subgroups_and_projects
+      end
+      format.turbo_stream do
+        @collapsed = params[:collapse] == 'true'
+        @groups = @subgroups_and_projects
+        @depth = params[:depth].to_i
+      end
+    end
   end
 
   def new
@@ -104,10 +115,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def authorized_subgroups_and_projects
-    @subgroups_and_projects = Namespace.where(parent_id: @group.id,
-                                              type: [
-                                                Namespaces::ProjectNamespace.sti_name, Group.sti_name
-                                              ]).include_route.order(type: :asc)
+    @subgroups_and_projects = Namespace.where(
+      parent_id: params[:parent_id] || @group.id,
+      type: [
+        Namespaces::ProjectNamespace.sti_name, Group.sti_name
+      ]
+    ).include_route.order(type: :asc)
   end
 
   def resolve_layout
