@@ -6,7 +6,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :context_crumbs, except: %i[index new create show]
   before_action :authorized_namespaces, except: %i[index show destroy]
-  before_action :authorized_subgroups_and_projects, only: %i[show]
 
   def index
     redirect_to dashboard_groups_path
@@ -17,12 +16,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
     respond_to do |format|
       format.html do
-        @groups = @subgroups_and_projects
+        @groups = authorized_subgroups_and_projects(@group.id)
       end
       format.turbo_stream do
         @group = Group.find(params[:parent_id])
         @collapsed = params[:collapse] == 'true'
-        @sub_groups = @subgroups_and_projects
+        @children = @group.children(type: [Namespaces::ProjectNamespace.sti_name, Group.sti_name])
         @depth = params[:depth].to_i
       end
     end
@@ -115,9 +114,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                                               type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
   end
 
-  def authorized_subgroups_and_projects
+  def authorized_subgroups_and_projects(id)
     @subgroups_and_projects = Namespace.where(
-      parent_id: params[:parent_id] || @group.id,
+      parent_id: id,
       type: [
         Namespaces::ProjectNamespace.sti_name, Group.sti_name
       ]

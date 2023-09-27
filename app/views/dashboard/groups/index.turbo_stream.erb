@@ -1,6 +1,7 @@
 <%= turbo_stream.replace dom_id(@group) do %>
   <%= render GroupsList::GroupRow::WithChildrenComponent.new(
     group: @group,
+    children: @group.children,
     collapsed: @collapsed,
     path: "dashboard_groups_path",
     path_args: {
