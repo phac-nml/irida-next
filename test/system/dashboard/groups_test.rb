@@ -20,6 +20,34 @@ module Dashboard
         assert_text groups(:group_three).name
         assert_text groups(:group_five).name
         assert_text groups(:group_six).name
+        assert_text groups(:group_seven).name
+      end
+    end
+
+    test 'can sort the list of groups' do
+      visit dashboard_groups_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        assert_selector 'li', count: 6
+        assert_text groups(:group_one).name
+        assert_text groups(:group_two).name
+        assert_text groups(:group_three).name
+        assert_text groups(:group_five).name
+        assert_text groups(:group_six).name
+        assert_text groups(:group_seven).name
+      end
+
+      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+      sleep 1
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        within first('li') do
+          assert_text groups(:group_seven).name
+        end
       end
     end
 
@@ -27,7 +55,7 @@ module Dashboard
       visit dashboard_groups_url
 
       within 'ul.groups-list.namespace-list-tree' do
-        within first('li') do
+        within :xpath, "li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:group_one).name}']]" do
           assert_text groups(:group_one).name
           assert_no_selector 'ul.groups-list.namespace-list-tree'
           find('a.folder-toggle-wrap').click
