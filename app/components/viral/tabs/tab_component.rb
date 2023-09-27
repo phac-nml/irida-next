@@ -3,20 +3,21 @@
 module Viral
   module Tabs
     class TabComponent < Viral::Component
-      attr_reader :url, :label, :link_classes, :selected
-
       erb_template <<-ERB
-        <%= link_to label, url, class: link_classes, data: { turbo_frame: "_top" } %>
+        <%= link_to @url, class: @link_classes, role: "tab", data: { turbo_frame: "_top" }, aria: { controls: "DFS", selected: @selected } do %>
+          <%= content %>
+        <% end %>
       ERB
 
-      def initialize(url:, label:, selected: false)
+      def initialize(url:, selected: false)
         @url = url
-        @label = label
         @selected = selected
-        @link_classes = class_names({
-                                      'inline-block p-4 border-b-2 rounded-t-lg': selected,
-                                      'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300': !selected
-                                    })
+        @link_classes = class_names(
+          {
+            'inline-block p-4 text-primary-600 border-b-2 border-primary-600 rounded-t-lg active dark:text-primary-500 dark:border-primary-500': selected,
+            'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300': !selected
+          }
+        )
       end
     end
   end
