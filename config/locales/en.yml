@@ -314,6 +314,14 @@ en:
         create_group_button: New group
         more_items: "%{count} more items"
         row_aria_label: "See %{name} subgroups"
+        subgroups: Subgroups
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
   profiles:
     sidebar:
       header: User Settings
