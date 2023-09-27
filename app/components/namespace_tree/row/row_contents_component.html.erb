@@ -26,7 +26,7 @@
   <div class="flex flex-col namespace-text">
     <div class="namespace-text grow shrink">
       <div class="flex flex-wrap items-center mr-3 font-semibold title">
-        <%= link_to @namespace.name, group_path(@namespace) %>
+        <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
       </div>
       <div class="description">
         <p><%= @namespace.description %></p>
