@@ -4,6 +4,7 @@ module Groups
   # Controller actions for Group Group Links
   class GroupLinksController < Groups::ApplicationController
     include ShareActions
+    include BreadcrumbNavigation
 
     def group_link_params
       params.require(:namespace_group_link).permit(:group_id, :group_access_level, :expires_at)

@@ -4,6 +4,7 @@ module Projects
   # Controller actions for Project Group Links
   class GroupLinksController < Projects::ApplicationController
     include ShareActions
+    include BreadcrumbNavigation
 
     def group_link_params
       params.require(:namespace_group_link).permit(:id, :group_id, :namespace_id, :group_access_level, :expires_at)

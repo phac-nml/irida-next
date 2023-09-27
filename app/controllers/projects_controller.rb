@@ -2,6 +2,7 @@
 
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
+  include BreadcrumbNavigation
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :context_crumbs, except: %i[new create update]
@@ -56,7 +57,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
           render status: :unprocessable_entity
         end
       end
-      context_crumbs
     end
   end
 

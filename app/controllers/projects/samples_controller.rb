@@ -3,6 +3,8 @@
 module Projects
   # Controller actions for Samples
   class SamplesController < Projects::ApplicationController
+    include BreadcrumbNavigation
+
     before_action :sample, only: %i[show edit update destroy]
     before_action :project
     before_action :context_crumbs

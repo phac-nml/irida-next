@@ -2,6 +2,7 @@
 
 # Controller actions for Groups
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
+  include BreadcrumbNavigation
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
@@ -31,7 +32,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def new
     @group = Group.find(params[:parent_id]) if params[:parent_id]
-    context_crumbs
     authorize! @group, to: :create_subgroup? if params[:parent_id]
 
     @new_group = Group.new(parent_id: @group&.id)
@@ -51,7 +51,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
       redirect_to group_path(@new_group.full_path)
     else
       @group = @new_group.parent
-      context_crumbs
       render_new status: :unprocessable_entity
     end
   end

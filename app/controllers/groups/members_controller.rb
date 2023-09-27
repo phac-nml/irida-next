@@ -4,6 +4,7 @@ module Groups
   # Controller actions for Members
   class MembersController < Groups::ApplicationController
     include MembershipActions
+    include BreadcrumbNavigation
 
     def member_params
       params.require(:member).permit(:user_id, :access_level, :type, :namespace_id, :created_by_id)
