@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+class ProjectsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   test 'should redirect to dashboard projects index when get index' do
@@ -91,9 +91,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
     sign_in users(:john_doe)
 
     patch project_path(projects(:project2)),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
+                    format: :turbo_stream }
 
-    assert_redirected_to project_path(projects(:project2).reload)
+    assert_redirected_to project_edit_path(projects(:project2).reload)
   end
 
   test 'should update a project which which is under the user\'s namespace' do
@@ -102,9 +103,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable
     project = projects(:john_doe_project2)
 
     patch project_path(project),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
+          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
+                    format: :turbo_stream }
 
-    assert_redirected_to project_path(project.reload)
+    assert_redirected_to project_edit_path(project.reload)
   end
 
   test 'should not update a project which which is under another user\'s namespace' do

@@ -16,6 +16,7 @@ module ViewHelper
     help_text: 'Viral::Form::HelpTextComponent',
     icon: 'Viral::IconComponent',
     pageheader: 'Viral::PageHeaderComponent',
+    select: 'Viral::Form::SelectComponent',
     text_input: 'Viral::Form::TextInputComponent',
     tooltip: 'Viral::TooltipComponent'
   }.freeze
