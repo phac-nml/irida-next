@@ -433,6 +433,9 @@ en:
     show:
       create_subgroup_button: New subgroup
       create_project_button: New project
+      tabs:
+        label: Group project details navigation
+        subgroups_and_projects: Sub groups and projects
     new_subgroup:
       title: Create subgroup
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
