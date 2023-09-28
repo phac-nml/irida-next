@@ -5,7 +5,7 @@ module Viral
     # A tab component for use with the Viral::Tabs::TabsComponent.
     class TabComponent < Viral::Component
       erb_template <<-ERB
-        <%= link_to @url, class: @link_classes, role: "tab", aria: { controls: @controls, role: "tab", selected: @selected } do %>
+        <%= link_to @url, class: @link_classes, role: "tab", aria: { controls: @controls, selected: @selected } do %>
           <%= content %>
         <% end %>
       ERB
