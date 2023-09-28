@@ -25,20 +25,18 @@
 <% end %>
 
 <%= viral_card do |card| %>
-  <% if allowed_to?(:update?, @project) %>
+  <% if @sample.attachments.any? %>
     <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
-      <% header.with_action do %>
-        <%= render partial: "projects/samples/attachments/new_attachment_modal",
-        locals: {
-          open: false,
-          attachment: @attachment
-        } %>
+      <% if allowed_to?(:update?, @project) %>
+        <% header.with_action do %>
+          <%= render partial: "projects/samples/attachments/new_attachment_modal",
+          locals: {
+            open: false,
+            attachment: @attachment
+          } %>
+        <% end %>
       <% end %>
     <% end %>
-  <% else %>
-    <% card.with_header(title: t("projects.samples.show.files")) %>
-  <% end %>
-  <% if @sample.attachments.any? %>
     <% card.with_section do %>
       <%= render partial: "projects/samples/attachments/table",
       locals: {
@@ -46,8 +44,13 @@
       } %>
     <% end %>
   <% else %>
-    <p class="text-gray-500 dark:text-gray-400">
-      <%= t("projects.samples.show.no_associated_files") %>
-    </p>
+    <%= render partial: "layouts/partials/empty_content",
+    locals: {
+      text_title: t("projects.samples.show.no_files"),
+      text_note: t("projects.samples.show.no_associated_files"),
+      btn_action_partial: "projects/samples/attachments/new_attachment_modal",
+      btn_action_permission: allowed_to?(:update?, @project),
+      attachment: @attachment
+    } %>
   <% end %>
 <% end %>
