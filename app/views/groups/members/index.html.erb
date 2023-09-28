@@ -26,86 +26,59 @@
 <div class="bg-white dark:bg-slate-800">
   <%= turbo_frame_tag "new_member_modal" %>
   <%= turbo_frame_tag "member-update-alert" %>
-  <ul class="flex flex-wrap -mb-px">
-    <li class="mr-2">
-      <%= link_to t(:"groups.members.index.tabs.members"),
-      group_members_path(),
-      data: {
-        turbo_frame: "_top"
-      },
-      class:
-        (
-          if params[:tab] == "invited_groups"
-            "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-          else
-            "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-          end
-        ),
-      aria: {
-        current: params[:tab] == "invited_groups" ? "false" : "page"
-      } %>
-    </li>
-    <li class="mr-2">
-      <%= link_to t(:"groups.members.index.tabs.groups"),
-      group_members_path(tab: "invited_groups"),
-      data: {
-        turbo_frame: "_top"
-      },
-      class:
-        (
-          if params[:tab] == "invited_groups"
-            "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-          else
-            "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-          end
-        ),
-      aria: {
-        current: params[:tab] == "invited_groups" ? "page" : "false"
-      } %>
-    </li>
-  </ul>
-  <div class="flex flex-col">
-    <%= turbo_frame_tag "members", "data-turbo-temporary": true,
-    src:
-      (
-        if params[:tab] == "invited_groups"
-          group_group_links_path(
-            format: :turbo_stream
-          )
-        else
-          group_members_path(
-            format: :turbo_stream
-          )
-        end
-      ),
-    loading: :lazy do %>
-      <table class="min-w-full table-fixed dark:divide-gray-600">
-        <tbody
-          class="
+
+  <%= viral_tabs(id: "members-tabs", label: "Group members tabs") do |tabs| %>
+    <%= tabs.with_tab(url: group_members_path(), selected: params[:tab] != "invited_groups", controls: "members-tabs") do %>
+      <%= t(:"groups.members.index.tabs.members") %>
+    <% end %>
+    <%= tabs.with_tab(url: group_members_path(tab: "invited_groups"), selected: params[:tab] == "invited_groups", controls: "members-tabs") do %>
+      <%= t(:"groups.members.index.tabs.groups") %>
+    <% end %>
+    <%= tabs.with_tab_content do %>
+      <div class="flex flex-col">
+        <%= turbo_frame_tag "members", "data-turbo-temporary": true,
+                            src:
+                              (
+                                if params[:tab] == "invited_groups"
+                                  group_group_links_path(
+                                    format: :turbo_stream
+                                  )
+                                else
+                                  group_members_path(
+                                    format: :turbo_stream
+                                  )
+                                end
+                              ),
+                            loading: :lazy do %>
+          <table class="min-w-full table-fixed dark:divide-slate-600">
+            <tbody
+              class="
             bg-white
             divide-y
-            divide-gray-200
-            dark:bg-gray-800
-            dark:divide-gray-700
+            divide-slate-200
+            dark:bg-slate-800
+            dark:divide-slate-700
           "
-        >
-          <% 15.times do %>
-            <tr>
+            >
+            <% 15.times do %>
+              <tr>
 
-              <td class="p-4 animate-pulse">
-                <div class="flex-1 py-1 space-y-6">
-                  <div class="space-y-3">
-                    <div class="w-48 h-2 rounded bg-slate-200"></div>
-                    <div class="w-32 h-2 rounded bg-slate-200"></div>
+                <td class="p-4 animate-pulse">
+                  <div class="flex-1 py-1 space-y-6">
+                    <div class="space-y-3">
+                      <div class="w-48 h-2 rounded bg-slate-200"></div>
+                      <div class="w-32 h-2 rounded bg-slate-200"></div>
+                    </div>
                   </div>
-                </div>
-              </td>
+                </td>
 
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        <% end %>
+        <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>
+      </div>
     <% end %>
-    <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>
-  </div>
+  <% end %>
 </div>
