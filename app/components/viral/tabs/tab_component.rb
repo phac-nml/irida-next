@@ -17,7 +17,7 @@ module Viral
         @link_classes = class_names(
           'inline-block p-4 border-b-2 rounded-t-lg',
           {
-            'text-primary-600 border-primary-600 active dark:text-primary-500 dark:border-primary-500': selected,
+            'text-primary-700 border-primary-700 active dark:text-primary-500 dark:border-primary-500': selected,
             'border-transparent hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300': !selected
           }
         )
