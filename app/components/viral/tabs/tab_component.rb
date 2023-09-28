@@ -2,6 +2,7 @@
 
 module Viral
   module Tabs
+    # A tab component for use with the Viral::Tabs::TabsComponent.
     class TabComponent < Viral::Component
       erb_template <<-ERB
         <%= link_to @url, class: @link_classes, role: "tab", data: { turbo_frame: "_top" }, aria: { controls: "DFS", selected: @selected } do %>
@@ -13,9 +14,10 @@ module Viral
         @url = url
         @selected = selected
         @link_classes = class_names(
+          'inline-block p-4 border-b-2 rounded-t-lg',
           {
-            'inline-block p-4 text-primary-600 border-b-2 border-primary-600 rounded-t-lg active dark:text-primary-500 dark:border-primary-500': selected,
-            'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300': !selected
+            'text-primary-600 border-primary-600 active dark:text-primary-500 dark:border-primary-500': selected,
+            'border-transparent hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300': !selected
           }
         )
       end
