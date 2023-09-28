@@ -1,15 +1,5 @@
 <h1
-  class="
-    mb-4
-    text-2xl
-    font-extrabold
-    leading-none
-    tracking-tight
-    text-gray-900
-    md:text-5xl
-    lg:text-4xl
-    dark:text-white
-  "
+  class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900  md:text-5xl lg:text-4xl dark:text-white"
 >
   <%= schema["title"] %>
 </h1>
@@ -30,16 +20,6 @@
       </p>
       <div class="grid grid-cols-1 gap-4 mb-8">
         <% definition["properties"].each do |name, property| %>
-          <%- if property["type"] == "boolean" %>
-            <%= viral_checkbox(
-              name:,
-              label: property["description"],
-              default: property["default"],
-              help_text: property["help_text"],
-              hidden: property["hidden"],
-              value: name
-            ) %>
-          <% end %>
           <%- if property["enum"] %>
              <%= viral_select(
                name:,
@@ -51,20 +31,15 @@
                 hidden: property["hidden"]
               ) %>
           <% else %>
-            <%= viral_text_input(
-              name:,
-              label: property["description"],
-              **input_type(property),
-              default: property["default"],
-              required: property["required"],
-              help_text: property["help_text"],
-              hidden: property["hidden"],
-              (definition["required"].present? && definition["required"].include?(name) ? "required".html_safe : nil)
-            ) %>
+            <%= form_input(
+                  name,
+                  property,
+                  definition["required"].present? && definition["required"].include?(name)
+                ) %>
           <% end %>
         <% end %>
       </div>
     <% end %>
   <% end %>
-  <button type="submit">Submit</button>
+  <button type="submit" class="button button--state-primary button--size-default">Submit</button>
 </form>
