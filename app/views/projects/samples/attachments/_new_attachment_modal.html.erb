@@ -2,7 +2,12 @@
   <%= viral_dialog(open: open) do |dialog| %>
     <% dialog.with_trigger do %>
       <%= viral_button(data: { action: "click->viral--dialog#open" }) do %>
-        <%= t("projects.samples.show.upload_files") %>
+        <div class="flex">
+          <%= viral_icon(name: :plus, classes: 'h-5 w-5') %>
+          <span class="ml-2 grow">
+            <%= t("projects.samples.show.upload_files") %>
+          </span>
+        </div>
       <% end %>
     <% end %>
     <% dialog.with_header(title: t("projects.samples.show.upload_files")) %>
