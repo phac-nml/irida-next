@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-module GroupsList
-  module GroupRow
+module NamespaceTree
+  module Row
     # Component for the contents of a group row that has children
     class WithChildrenComponent < Viral::Component
-      def initialize(group:, children:, path: nil, path_args: {}, collapsed: false)
+      def initialize(group:, children:, type:, path: nil, path_args: {}, collapsed: false)
         @group = group
         @children = children
+        @type = type
         @path = path
         @path_args = path_args
         @collapsed = collapsed

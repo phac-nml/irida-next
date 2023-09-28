@@ -47,5 +47,5 @@
 </ul>
 
 <div class="bg-white dark:bg-gray-800">
-  <%= render GroupsListTreeContainerComponent.new(groups: @groups, path: "group_path") %>
+  <%= render NamespaceTreeContainerComponent.new(groups: @groups, path: "group_path", type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]) %>
 </div>

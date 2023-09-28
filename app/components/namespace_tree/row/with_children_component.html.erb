@@ -20,7 +20,7 @@
       </span>
 
     <% end %>
-    <%= render GroupsList::GroupRow::RowContentsComponent.new(
+    <%= render NamespaceTree::Row::RowContentsComponent.new(
       group: @group,
       path: @path,
       path_args: @path_args,
@@ -28,11 +28,12 @@
     ) %>
   </div>
   <% unless @collapsed %>
-    <%= render GroupsList::GroupListTreeComponent.new(
+    <%= render NamespaceTree::NamespaceTreeComponent.new(
       parent: @group,
       groups: @children,
       path: @path,
-      path_args: @path_args
+      path_args: @path_args,
+      type: @type
     ) %>
   <% end %>
 </li>

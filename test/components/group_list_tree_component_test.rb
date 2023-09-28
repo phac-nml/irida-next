@@ -7,7 +7,7 @@ class GroupListTreeComponentTest < ViewComponent::TestCase
     groups = Array.new(3) { |i| Group.create!(name: "Group GLT #{i + 1}", path: "group-glt-#{i + 1}") }
     groups.push(Group.create!(name: 'Group GLT 4', path: 'group-glt-4',
                               children: [Group.create!(name: 'Group GLT 5', path: 'group-glt-5')]))
-    render_inline GroupsListTreeContainerComponent.new(groups:, path: 'dashboard_groups_path')
+    render_inline NamespaceTreeContainerComponent.new(groups:, path: 'dashboard_groups_path')
 
     assert_selector 'li', count: 4
     assert_selector 'li', text: 'Group GLT 1'

@@ -3,6 +3,6 @@
     <span class="folder-toggle-wrap mr-2 flex items-center">
       <%= viral_icon(name: :blank, classes: "h-3 w-3") %>
     </span>
-    <%= render GroupsList::GroupRow::RowContentsComponent.new(group: @group, path: @path, path_args: @path_args) %>
+    <%= render NamespaceTree::Row::RowContentsComponent.new(group: @group, path: @path, path_args: @path_args) %>
   </div>
 </li>

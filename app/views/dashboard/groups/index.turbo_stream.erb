@@ -1,5 +1,5 @@
 <%= turbo_stream.replace dom_id(@group) do %>
-  <%= render GroupsList::GroupRow::WithChildrenComponent.new(
+  <%= render NamespaceTree::Row::WithChildrenComponent.new(
     group: @group,
     children: @group.children,
     collapsed: @collapsed,

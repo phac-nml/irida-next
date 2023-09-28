@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module GroupsList
-  module GroupRow
+module NamespaceTree
+  module Row
     # Component for the contents of a group row that has no children
     class WithoutChildrenComponent < Viral::Component
       def initialize(group:, path: nil, path_args: {})

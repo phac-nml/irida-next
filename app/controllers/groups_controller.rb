@@ -21,7 +21,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
       format.turbo_stream do
         @group = Group.find(params[:parent_id])
         @collapsed = params[:collapse] == 'true'
-        @children = @group.children(type: [Namespaces::ProjectNamespace.sti_name, Group.sti_name])
+        @children = authorized_subgroups_and_projects(@group.id)
         @depth = params[:depth].to_i
       end
     end
