@@ -1,8 +1,8 @@
-<%= render Viral::TabsComponent.new(id: "demo-tabs") do |tabs| %>
-  <%= tabs.with_tab(url: "#", selected: true) do %>
+<%= render Viral::TabsComponent.new(id: "demo-tabs", label: "Demo tabs") do |tabs| %>
+  <%= tabs.with_tab(url: "#", selected: true, controls: "demo-tabs") do %>
     First tab
   <% end %>
-  <%= tabs.with_tab(url: "#") do %>
+  <%= tabs.with_tab(url: "#", controls: "demo-tabs") do %>
     Second tab
   <% end %>
 

@@ -3,13 +3,14 @@
 module Viral
   # This component is a container for the tabs.
   class TabsComponent < Viral::Component
-    attr_reader :id
+    attr_reader :id, :label
 
     renders_many :tabs, Viral::Tabs::TabComponent
     renders_one :tab_content
 
-    def initialize(id:)
+    def initialize(id:, label:)
       @id = id
+      @label = label
     end
   end
 end
