@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module NamespaceTree
-  # This component renders a group row, either with or without children.
+  # This component renders a namespace row, either with or without children.
   class RowComponent < ViewComponent::Base
     with_collection_parameter :group
 
