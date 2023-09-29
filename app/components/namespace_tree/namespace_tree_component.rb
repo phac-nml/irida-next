@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module NamespaceTree
-  # Component to render a collapsible tree of groups
+  # Component to render a namespace tree
   class NamespaceTreeComponent < Component
     attr_reader :parent, :groups, :path, :path_args, :collapsed
 
