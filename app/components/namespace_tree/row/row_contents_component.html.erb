@@ -1,31 +1,31 @@
 <% if @group.type == "Group" %>
   <%= viral_icon(name: :squares_2x2, classes: "h-5 w-5 text-slate-400 mr-2") %>
   <%= viral_avatar(
-        name: @group.name,
-        size: :small,
-        colour_string: "#{@group.name}-#{@group.id}",
-        data: {
-          turbo: false
-        },
-        url: group_path(@group)
-      ) %>
+    name: @group.name,
+    size: :small,
+    colour_string: "#{@group.name}-#{@group.id}",
+    data: {
+      turbo: false
+    },
+    url: group_path(@group)
+  ) %>
 <% else %>
   <%= viral_icon(name: :rectangle_stack, classes: "h-5 w-5 text-slate-400 mr-2") %>
   <%= viral_avatar(
-        name: @group.name,
-        size: :small,
-        colour_string: "#{@group.name}-#{@group.id}",
-        data: {
-          turbo: false
-        },
-        url: project_path(@group.project)
-      ) %>
+    name: @group.name,
+    size: :small,
+    colour_string: "#{@group.name}-#{@group.id}",
+    data: {
+      turbo: false
+    },
+    url: project_path(@group.project)
+  ) %>
 <% end %>
 
-<div class="group-text-container flex grow items-center ml-2">
-  <div class="group-text flex flex-col">
+<div class="flex items-center ml-2 group-text-container grow">
+  <div class="flex flex-col group-text">
     <div class="group-text grow shrink">
-      <div class="flex items-center flex-wrap title font-semibold mr-3">
+      <div class="flex flex-wrap items-center mr-3 font-semibold title">
         <%= link_to @group.name, group_path(@group) %>
       </div>
       <div class="description">
@@ -35,9 +35,18 @@
   </div>
 </div>
 
-<div class="metadata flex flex-none shrink-0 flex-wrap justify-between">
-  <div class="stats text-slate-500 group-stats mt-2 flex items-center">
-    <span class="flex items-center" title="<%= t(:'dashboard.groups.index.subgroups') %>">
+<div class="flex flex-wrap justify-between flex-none metadata shrink-0">
+  <div class="grid grid-cols-2 mt-2 stats text-slate-500 group-stats">
+    <span
+      class="flex items-center"
+      title="<%= t(:'dashboard.groups.index.subgroups') %>"
+    >
+      <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5") %>
+    </span>
+    <span
+      class="flex items-center"
+      title="<%= t(:'dashboard.groups.index.subgroups') %>"
+    >
       <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5") %><%= @group.children.count %>
     </span>
   </div>
