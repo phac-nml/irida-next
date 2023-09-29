@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GroupListTreeComponentTest < ViewComponent::TestCase
+class NamespaceTreeComponentTest < ViewComponent::TestCase
   test 'Should render a collapsed tree' do
     groups = Array.new(3) { |i| Group.create!(name: "Group GLT #{i + 1}", path: "group-glt-#{i + 1}") }
     groups.push(Group.create!(name: 'Group GLT 4', path: 'group-glt-4',
