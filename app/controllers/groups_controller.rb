@@ -16,12 +16,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
     respond_to do |format|
       format.html do
-        @groups = authorized_subgroups_and_projects(@group.id)
+        @groups = subgroups_and_projects(@group.id)
       end
       format.turbo_stream do
         @group = Group.find(params[:parent_id])
         @collapsed = params[:collapse] == 'true'
-        @children = authorized_subgroups_and_projects(@group.id)
+        @children = subgroups_and_projects(@group.id)
         @depth = params[:depth].to_i
       end
     end
@@ -114,7 +114,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                                               type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
   end
 
-  def authorized_subgroups_and_projects(id)
+  def subgroups_and_projects(id)
     @subgroups_and_projects = Namespace.where(
       parent_id: id,
       type: [
