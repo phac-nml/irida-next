@@ -1,25 +1,25 @@
 <% if @group.type == "Group" %>
   <%= viral_icon(name: :squares_2x2, classes: "h-5 w-5 text-slate-400 mr-2") %>
   <%= viral_avatar(
-    name: @group.name,
-    size: :small,
-    colour_string: "#{@group.name}-#{@group.id}",
-    data: {
-      turbo: false
-    },
-    url: group_path(@group)
-  ) %>
+        name: @group.name,
+        size: :small,
+        colour_string: "#{@group.name}-#{@group.id}",
+        data: {
+          turbo: false
+        },
+        url: group_path(@group)
+      ) %>
 <% else %>
   <%= viral_icon(name: :rectangle_stack, classes: "h-5 w-5 text-slate-400 mr-2") %>
   <%= viral_avatar(
-    name: @group.name,
-    size: :small,
-    colour_string: "#{@group.name}-#{@group.id}",
-    data: {
-      turbo: false
-    },
-    url: project_path(@group.project)
-  ) %>
+        name: @group.name,
+        size: :small,
+        colour_string: "#{@group.name}-#{@group.id}",
+        data: {
+          turbo: false
+        },
+        url: project_path(@group.project)
+      ) %>
 <% end %>
 
 <div class="flex items-center ml-2 group-text-container grow">
@@ -36,24 +36,26 @@
 </div>
 
 <div class="flex flex-wrap justify-between flex-none metadata shrink-0">
-  <div class="grid grid-cols-2 gap-4 mt-2 stats text-slate-500 group-stats">
+  <div class="grid grid-cols-2 gap-3 mt-2 stats text-slate-500 group-stats">
     <% if @group.type == "Group" %>
+      <%= viral_tooltip(title: t(:'.stats.projects')) do %>
       <span
-        class="flex items-center"
-        title="<%= t(:'dashboard.groups.index.subgroups') %>"
+        class="flex items-center text-sm"
       >
-        <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5") %>
+        <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5 mr-1") %>
         <%= Namespace.where(
-          parent_id: @group.id,
-          type: [Namespaces::ProjectNamespace.sti_name]
-        ).count %>
+              parent_id: @group.id,
+              type: [Namespaces::ProjectNamespace.sti_name]
+            ).count %>
       </span>
+      <% end %>
+      <%= viral_tooltip(title: t(:'.stats.subgroups')) do %>
       <span
         class="flex items-center"
-        title="<%= t(:'dashboard.groups.index.subgroups') %>"
       >
         <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5") %><%= @group.children.count %>
       </span>
+      <% end %>
     <% end %>
   </div>
 </div>

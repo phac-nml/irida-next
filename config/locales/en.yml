@@ -314,7 +314,6 @@ en:
         create_group_button: New group
         more_items: "%{count} more items"
         row_aria_label: "See %{name} subgroups"
-        subgroups: Subgroups
   profiles:
     sidebar:
       header: User Settings
@@ -435,7 +434,7 @@ en:
       create_project_button: New project
       tabs:
         label: Group project details navigation
-        subgroups_and_projects: Sub groups and projects
+        subgroups_and_projects: Subgroups and projects
     new_subgroup:
       title: Create subgroup
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
