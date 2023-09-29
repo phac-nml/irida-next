@@ -20,10 +20,14 @@
 
 <%= viral_tabs(id: "group-details", label: t(:'.tabs.label')) do |tabs| %>
   <%= tabs.with_tab(url: "#", controls: "group-details", selected: true) do %>
-    <%= t(:'.tabs.subgroups_and_projects') %>
+    <%= t(:".tabs.subgroups_and_projects") %>
   <% end %>
 <% end %>
 
 <div class="bg-white dark:bg-gray-800">
-  <%= render NamespaceTreeContainerComponent.new(groups: @groups, path: "group_path", type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]) %>
+  <%= render NamespaceTreeContainerComponent.new(
+    groups: @groups,
+    path: "group_path",
+    type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+  ) %>
 </div>
