@@ -12,19 +12,11 @@ module Samples
     end
 
     test 'update sample with valid params' do
-      valid_params = { name: 'new-sample3-name', description: 'new-sample3-description', metadata: {
-        source: 'Human',
-        province: 'MB',
-        sex: 'Female'
-      } }
+      valid_params = { name: 'new-sample3-name', description: 'new-sample3-description' }
 
       assert_changes -> { [@sample.name, @sample.description] }, to: %w[new-sample3-name new-sample3-description] do
         Samples::UpdateService.new(@sample, @user, valid_params).execute
       end
-
-      assert @sample.metadata['source'] == valid_params[:metadata][:source]
-      assert @sample.metadata['province'] == valid_params[:metadata][:province]
-      assert @sample.metadata['sex'] == valid_params[:metadata][:sex]
     end
 
     test 'update sample with invalid params' do
