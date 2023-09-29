@@ -2,7 +2,7 @@
 
 module NamespaceTree
   module Row
-    # Component for the contents of a group tree row
+    # Component for the contents of NamespaceTree row
     class RowContentsComponent < Viral::Component
       def initialize(group:, path: nil, path_args: {}, collapsed: false)
         @group = group
