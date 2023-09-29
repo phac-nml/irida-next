@@ -11,6 +11,20 @@ class SampleTest < ActiveSupport::TestCase
     assert @sample.valid?
   end
 
+  test 'valid sample with metadata' do
+    @sample.metadata_provenance = {
+      KEY1: {
+        SOURCE: 'USER',
+        SOURCE_ID: 1
+      },
+      KEY2: {
+        SOURCE: 'ANALYSIS',
+        SOURCE_ID: 2
+      }
+    }
+    assert @sample.valid?
+  end
+
   test '#destroy removes sample ' do
     assert_difference(-> { Sample.count } => -1) do
       @sample.destroy
