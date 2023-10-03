@@ -11,7 +11,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     redirect_to dashboard_groups_path
   end
 
-  def show
+  def show # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     authorize! @group, to: :read?
 
     respond_to do |format|
@@ -88,7 +88,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     end
   end
 
-  def transfer
+  def transfer # rubocop:disable Metrics/AbcSize
     new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     respond_to do |format|
       if Groups::TransferService.new(@group, current_user).execute(new_namespace)
