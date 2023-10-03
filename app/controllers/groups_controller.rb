@@ -19,10 +19,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
         @groups = subgroups_and_projects(@group.id)
       end
       format.turbo_stream do
-        @group = Group.find(params[:parent_id])
-        @collapsed = params[:collapse] == 'true'
-        @children = subgroups_and_projects(@group.id)
-        @depth = params[:depth].to_i
+        if params[:parent_id]
+          @group = Group.find(params[:parent_id])
+          @collapsed = params[:collapse] == 'true'
+          @children = subgroups_and_projects(@group.id)
+          @depth = params[:depth].to_i
+        else
+          render :show
+        end
       end
     end
   end
@@ -84,14 +88,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     end
   end
 
-  def transfer # rubocop:disable Metrics/AbcSize
+  def transfer
     new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
-    if Groups::TransferService.new(@group, current_user).execute(new_namespace)
-      flash[:success] = t('.success')
-      redirect_to group_path(@group)
-    else
-      @error = @group.errors.messages.values.flatten.first
-      respond_to do |format|
+    respond_to do |format|
+      if Groups::TransferService.new(@group, current_user).execute(new_namespace)
+        flash[:success] = t('.success')
+        format.turbo_stream { redirect_to edit_group_path(@group) }
+      else
+        @error = @group.errors.messages.values.flatten.first
         format.turbo_stream do
           render status: :unprocessable_entity, locals: { confirm_value: @group.path, error: @error }
         end
