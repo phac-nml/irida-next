@@ -11,22 +11,20 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     redirect_to dashboard_groups_path
   end
 
-  def show # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def show
     authorize! @group, to: :read?
 
     respond_to do |format|
-      format.html do
-        @groups = subgroups_and_projects(@group.id)
-      end
-      format.turbo_stream do
-        if params[:parent_id]
+      if params.has_key? :parent_id
+        format.turbo_stream do
           @group = Group.find(params[:parent_id])
           @collapsed = params[:collapse] == 'true'
           @children = subgroups_and_projects(@group.id)
           @depth = params[:depth].to_i
-        else
-          render :show
         end
+      end
+      format.html do
+        @groups = subgroups_and_projects(@group.id)
       end
     end
   end
