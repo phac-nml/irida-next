@@ -15,7 +15,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     authorize! @group, to: :read?
 
     respond_to do |format|
-      if params.has_key? :parent_id
+      if params.key? :parent_id
         format.turbo_stream do
           @group = Group.find(params[:parent_id])
           @collapsed = params[:collapse] == 'true'
