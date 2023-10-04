@@ -6,7 +6,7 @@ module NamespaceTree
     with_collection_parameter :namespace
 
     erb_template <<~ERB
-      <% if @namespace.direct_descendants_of_type?(@type) %>
+      <% if @namespace.children_of_type?(@type) %>
         <%= render NamespaceTree::Row::WithChildrenComponent.new(namespace: @namespace, type: @type, children: Group.none, path: @path, path_args: @path_args, collapsed: @collapsed) %>
         <% else %>
         <%= render NamespaceTree::Row::WithoutChildrenComponent.new(namespace: @namespace, path: @path, path_args: @path_args) %>
