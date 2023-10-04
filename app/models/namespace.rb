@@ -175,7 +175,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     ancestors.count >= Namespace::MAX_ANCESTORS - 2
   end
 
-  def has_children_of_type?(type)
+  def children_of_type?(type)
     Namespace.exists?(parent: self, type:)
   end
 
