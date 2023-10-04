@@ -19,12 +19,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
         format.turbo_stream do
           @group = Group.find(params[:parent_id])
           @collapsed = params[:collapse] == 'true'
-          @children = subgroups_and_projects(@group.id)
+          @children = namespace_children
           @depth = params[:depth].to_i
         end
       end
       format.html do
-        @namespaces = subgroups_and_projects(@group.id)
+        @namespaces = namespace_children
       end
     end
   end
@@ -116,13 +116,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                                               type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
   end
 
-  def subgroups_and_projects(id)
-    @subgroups_and_projects = Namespace.where(
-      parent_id: id,
-      type: [
+  def namespace_children
+    @group.children_of_type(
+      [
         Namespaces::ProjectNamespace.sti_name, Group.sti_name
       ]
-    ).include_route.order(type: :asc)
+    )
   end
 
   def resolve_layout
