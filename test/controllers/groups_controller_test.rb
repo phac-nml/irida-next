@@ -12,6 +12,14 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'should get fragment of namesapce tree' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_one)
+    get group_path(group), params: { parent_id: group.id, format: :turbo_stream }
+    assert_response :ok
+  end
+
   test 'should show the group' do
     sign_in users(:john_doe)
 
