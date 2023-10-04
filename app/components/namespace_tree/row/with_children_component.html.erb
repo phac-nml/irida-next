@@ -1,11 +1,19 @@
 <li
   id="<%= dom_id(@namespace) %>"
-  class="group-row has-children <%= @namespace.description.present? ? 'has-description' : nil %>"
+  class="namespace-entry has-children <%= @namespace.description.present? ? 'has-description' : nil %>"
   data-controller="groups--row"
   %
 >
   <div
-    class="flex items-center w-full py-3 pr-3 text-left group-row-contents"
+    class="
+      flex
+      items-center
+      w-full
+      py-3
+      pr-3
+      text-left
+      namespace-entry-contents
+    "
     data-action="click->groups--row#toggle"
     aria-label="<%= t(:'dashboard.groups.index.row_aria_label', name: @namespace.name) %>"
   >

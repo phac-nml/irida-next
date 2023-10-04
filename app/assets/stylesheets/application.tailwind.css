@@ -300,35 +300,35 @@ body {
 
   /*GROUPS LIST TREE*/
   .namespace-tree-container
-    > .group-list-tree
-    > .group-row.has-children:first-child {
+    > .namespace-list-tree
+    > .namespace-entry.has-children:first-child {
     border-top: 0;
   }
 
-  .group-list-tree .folder-toggle-wrap {
+  .namespace-list-tree .folder-toggle-wrap {
     font-size: 0;
     flex-shrink: 0;
   }
-  .group-list-tree .folder-toggle-wrap span {
+  .namespace-list-tree .folder-toggle-wrap span {
     font-size: 12px;
   }
 
-  .group-list-tree .item-type-icon {
+  .namespace-list-tree .item-type-icon {
     margin-top: 2px;
     width: 20px;
   }
 
-  .group-list-tree > .group-row:not(.has-children) .folder-caret {
+  .namespace-list-tree > .namespace-entry:not(.has-children) .folder-caret {
     opacity: 0;
   }
 
-  .group-list-tree .group-list-tree {
+  .namespace-list-tree .namespace-list-tree {
     margin-bottom: 0;
     margin-left: 30px;
     position: relative;
   }
 
-  .group-list-tree .group-list-tree::before {
+  .namespace-list-tree .namespace-list-tree::before {
     content: "";
     display: block;
     width: 0;
@@ -339,10 +339,10 @@ body {
     @apply border-l-2 border-slate-200 dark:border-slate-600;
   }
 
-  .group-list-tree .group-list-tree .group-row {
+  .namespace-list-tree .namespace-list-tree .namespace-entry {
     position: relative;
   }
-  .group-list-tree .group-list-tree .group-row::before {
+  .namespace-list-tree .namespace-list-tree .namespace-entry::before {
     content: "";
     display: block;
     width: 10px;
@@ -352,75 +352,79 @@ body {
     left: -16px;
     @apply border-t-2 border-slate-200 dark:border-slate-600;
   }
-  .group-list-tree .group-list-tree .group-row:last-child::before {
+  .namespace-list-tree
+    .namespace-list-tree
+    .namespace-entry:last-child::before {
     height: auto;
     top: 30px;
     bottom: 0;
     @apply bg-white dark:bg-slate-800;
   }
 
-  .group-list-tree .group-list-tree .group-row.being-removed {
+  .namespace-list-tree .namespace-list-tree .namespace-entry.being-removed {
     opacity: 0.5;
   }
-  .group-list-tree .group-row {
+  .namespace-list-tree .namespace-entry {
     padding: 0;
   }
-  .group-list-tree .group-row.has-children {
+  .namespace-list-tree .namespace-entry.has-children {
     border-top: 0;
   }
-  .group-list-tree .group-row:first-child {
+  .namespace-list-tree .namespace-entry:first-child {
     @apply border-t border-slate-200 dark:border-slate-600;
   }
 
-  .group-list-tree .group-row.has-children > .group-row-contents:hover {
+  .namespace-list-tree
+    .namespace-entry.has-children
+    > .namespace-entry-contents:hover {
     @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
   }
 
-  .group-list-tree .group-row-contents .group-text-container,
-  .group-list-tree .group-row-contents .group-text {
+  .namespace-list-tree .namespace-entry-contents .namespace-text-container,
+  .namespace-list-tree .namespace-entry-contents .namespace-text {
     min-width: 0;
   }
-  .group-list-tree .group-row-contents .group-text {
+  .namespace-list-tree .namespace-entry-contents .namespace-text {
     flex-basis: 100%;
   }
 
-  .group-list-tree .group-row-contents .avatar-container {
+  .namespace-list-tree .namespace-entry-contents .avatar-container {
     flex-shrink: 0;
   }
 
-  .group-list-tree .group-row-contents .avatar-container > a {
+  .namespace-list-tree .namespace-entry-contents .avatar-container > a {
     width: 100%;
     text-decoration: none;
   }
-  .group-list-tree .group-row-contents .title {
+  .namespace-list-tree .namespace-entry-contents .title {
     @apply text-base font-medium text-slate-900 dark:text-white;
   }
 
-  .group-list-tree .group-row-contents.has-more-items {
+  .namespace-list-tree .namespace-entry-contents.has-more-items {
     display: block;
     padding: 20px 10px;
   }
 
-  .group-list-tree .group-row-contents .description p {
+  .namespace-list-tree .namespace-entry-contents .description p {
     max-width: 100%;
     @apply text-sm text-slate-700 dark:text-slate-400;
   }
 
-  .group-list-tree .group-row-contents .stats {
+  .namespace-list-tree .namespace-entry-contents .stats {
     position: relative;
     line-height: normal;
     text-align: right;
     flex-shrink: 0;
   }
 
-  .group-list-tree .group-row-contents .stats > span {
+  .namespace-list-tree .namespace-entry-contents .stats > span {
     display: inline-flex;
     align-items: center;
     height: 16px;
     min-width: 30px;
   }
 
-  .group-list-tree .group-row-contents .stats .stat-value {
+  .namespace-list-tree .namespace-entry-contents .stats .stat-value {
     margin: 2px 0 0 5px;
   }
 }
