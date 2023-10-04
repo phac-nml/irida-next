@@ -41,10 +41,7 @@
       <%= viral_tooltip(title: t(:'.stats.projects')) do %>
         <span class="flex items-center text-sm">
           <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5 mr-1") %>
-          <%= Namespace.where(
-            parent_id: @namespace.id,
-            type: [Namespaces::ProjectNamespace.sti_name]
-          ).count %>
+          <%= @namespace.project_namespaces.count %>
         </span>
       <% end %>
       <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
