@@ -3,7 +3,7 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Attachments
-    class AttachmentsController < ApplicationController
+    class AttachmentsController < Projects::ApplicationController
       before_action :sample
       before_action :attachment, only: %i[destroy download]
 

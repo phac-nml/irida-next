@@ -2,7 +2,6 @@
 
 # Controller actions for Groups
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
-  include BreadcrumbNavigation
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
