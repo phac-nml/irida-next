@@ -61,6 +61,12 @@ jeff_doe:
   provider: developer
   uid: jeff.doe@localhost
 
+alph_abet:
+  email: alph.abet@localhost
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Alph
+  last_name: Abet
+
 <% 25.times do |n| %>
 user<%= (n) %>:
   email: <%= "user#{n}@localhost" %>

@@ -13,7 +13,6 @@ subgroup1:
   type: Group
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 <% (Namespace::MAX_ANCESTORS-1).times do |n| %>
 subgroup<%= (n+2) %>:
@@ -22,7 +21,6 @@ subgroup<%= (n+2) %>:
   type: Group
   description: <%= "Subgroup #{n+2} description" %>
   parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}") %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 <% end %>
 
 group_two:
@@ -30,21 +28,18 @@ group_two:
   path: group-2
   type: Group
   description: Group 2 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 group_three:
   name: Group 3
   path: group-3
   type: Group
   description: Group 3 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 subgroup_one_group_three:
   name: Subgroup 1 Group 3
   path: subgroup-1-group-3
   type: Group
   description: Subgroup 1 Group 3
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>
 
 david_doe_group_four:
@@ -52,21 +47,18 @@ david_doe_group_four:
   path: group-4
   type: Group
   description: David's first group
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
 
 group_five:
   name: Group 5
   path: group-5
   type: Group
   description: Group 5 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 subgroup_one_group_five:
   name: Subgroup 1 Group 5
   path: subgroup-1-group-5
   type: Group
   description: Subgroup 1 Group 5
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
 
 group_six:
@@ -74,7 +66,6 @@ group_six:
   path: group-6
   type: Group
   description: Group 6 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 subgroup_one_group_six:
   name: Group 6
@@ -82,11 +73,17 @@ subgroup_one_group_six:
   type: Group
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 group_seven:
   name: Group 7
   path: group-7
   type: Group
   description: Group 7 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+<% [*("a".."z")].each do |letter| %>
+group_<%= letter %>:
+  name: <%= "Group #{letter.capitalize}" %>
+  path: <%= "group-#{letter}" %>
+  type: Group
+  description: <%= "Group #{letter} description" %>
+<% end %>
