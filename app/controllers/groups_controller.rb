@@ -19,7 +19,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
         format.turbo_stream do
           @group = Group.find(params[:parent_id])
           @collapsed = params[:collapse] == 'true'
-          @children = namespace_children
+          @children = @collapsed ? Namespace.none : namespace_children
           @depth = params[:depth].to_i
         end
       end
