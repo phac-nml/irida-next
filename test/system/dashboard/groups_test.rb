@@ -5,7 +5,7 @@ require 'application_system_test_case'
 module Dashboard
   class GroupsTest < ApplicationSystemTestCase
     def setup
-      login_as users(:john_doe)
+      login_as users(:alph_abet)
     end
 
     test 'can see the list of groups' do
@@ -14,29 +14,41 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
       within 'ul.groups-list.namespace-list-tree' do
+        assert_selector 'li', count: 20
+        [*('z'..'g')].each do |letter|
+          assert_text groups("group_#{letter}".to_sym).name
+        end
+      end
+
+      click_on I18n.t(:'components.pagination.next')
+      assert_text I18n.t(:'components.pagination.previous')
+      within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 6
-        assert_text groups(:group_one).name
-        assert_text groups(:group_two).name
-        assert_text groups(:group_three).name
-        assert_text groups(:group_five).name
-        assert_text groups(:group_six).name
-        assert_text groups(:group_seven).name
+        [*('f'..'a')].each do |letter|
+          assert_text groups("group_#{letter}".to_sym).name
+        end
+      end
+
+      click_on I18n.t(:'components.pagination.previous')
+      assert_text I18n.t(:'components.pagination.next')
+      within 'ul.groups-list.namespace-list-tree' do
+        assert_selector 'li', count: 20
+        [*('z'..'g')].each do |letter|
+          assert_text groups("group_#{letter}".to_sym).name
+        end
       end
     end
 
-    test 'can sort the list of groups' do
+    test 'can sort the list of groups by name descending' do
       visit dashboard_groups_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
       within 'ul.groups-list.namespace-list-tree' do
-        assert_selector 'li', count: 6
-        assert_text groups(:group_one).name
-        assert_text groups(:group_two).name
-        assert_text groups(:group_three).name
-        assert_text groups(:group_five).name
-        assert_text groups(:group_six).name
-        assert_text groups(:group_seven).name
+        assert_selector 'li', count: 20
+        [*('z'..'g')].each do |letter|
+          assert_text groups("group_#{letter}".to_sym).name
+        end
       end
 
       click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
@@ -46,12 +58,109 @@ module Dashboard
 
       within 'ul.groups-list.namespace-list-tree' do
         within first('li') do
-          assert_text groups(:group_seven).name
+          assert_text groups(:group_z).name
+        end
+      end
+    end
+
+    test 'can sort the list of groups by name ascending' do
+      visit dashboard_groups_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        assert_selector 'li', count: 20
+        [*('z'..'g')].each do |letter|
+          assert_text groups("group_#{letter}".to_sym).name
+        end
+      end
+
+      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_asc')
+      sleep 1
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_asc')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        within first('li') do
+          assert_text groups(:group_a).name
+        end
+      end
+    end
+
+    test 'can sort the list of groups by updated at desc' do
+      visit dashboard_groups_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        assert_selector 'li', count: 20
+        [*('z'..'g')].each do |letter|
+          assert_text groups("group_#{letter}".to_sym).name
+        end
+      end
+
+      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      sleep 1
+      assert_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        within first('li') do
+          assert_text groups(:group_a).name
+        end
+      end
+    end
+
+    test 'can sort the list of groups by updated at asc' do
+      visit dashboard_groups_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        assert_selector 'li', count: 20
+        [*('z'..'g')].each do |letter|
+          assert_text groups("group_#{letter}".to_sym).name
+        end
+      end
+
+      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_asc')
+      sleep 1
+      assert_text I18n.t(:'dashboard.projects.index.sorting.updated_at_asc')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        within first('li') do
+          assert_text groups(:group_a).name
+        end
+      end
+    end
+
+    test 'can sort the list of groups by created_at asc' do
+      visit dashboard_groups_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        assert_selector 'li', count: 20
+        [*('z'..'g')].each do |letter|
+          assert_text groups("group_#{letter}".to_sym).name
+        end
+      end
+
+      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_asc')
+      sleep 1
+      assert_text I18n.t(:'dashboard.projects.index.sorting.created_at_asc')
+
+      within 'ul.groups-list.namespace-list-tree' do
+        within first('li') do
+          assert_text groups(:group_a).name
         end
       end
     end
 
     test 'can expand parent groups to see their children' do
+      login_as users(:john_doe)
       visit dashboard_groups_url
 
       within 'ul.groups-list.namespace-list-tree' do
