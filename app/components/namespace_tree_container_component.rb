@@ -4,12 +4,12 @@
 class NamespaceTreeContainerComponent < ViewComponent::Base
   erb_template <<-ERB
       <div class="groups-list-tree-container">
-        <%= render NamespaceTree::NamespaceTreeComponent.new(groups: @groups, path: @path, path_args: @path_args, type: @type) %>
+        <%= render NamespaceTree::NamespaceTreeComponent.new(namespaces: @namespaces, path: @path, path_args: @path_args, type: @type) %>
       </div>
   ERB
 
-  def initialize(groups:, path: nil, path_args: {}, type: Group.sti_name)
-    @groups = groups
+  def initialize(namespaces:, path: nil, path_args: {}, type: Group.sti_name)
+    @namespaces = namespaces
     @path = path
     @path_args = path_args
     @type = type

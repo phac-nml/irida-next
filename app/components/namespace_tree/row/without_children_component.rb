@@ -2,10 +2,10 @@
 
 module NamespaceTree
   module Row
-    # Component for the contents of a group row that has no children
+    # Component for the contents of a namespace row that has no children
     class WithoutChildrenComponent < Viral::Component
-      def initialize(group:, path: nil, path_args: {})
-        @group = group
+      def initialize(namespace:, path: nil, path_args: {})
+        @namespace = namespace
         @path = path
         @path_args = path_args
       end

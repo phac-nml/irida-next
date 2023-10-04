@@ -24,7 +24,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
         end
       end
       format.html do
-        @groups = subgroups_and_projects(@group.id)
+        @namespaces = subgroups_and_projects(@group.id)
       end
     end
   end

@@ -1,6 +1,6 @@
 <%= turbo_stream.replace dom_id(@group) do %>
   <%= render NamespaceTree::Row::WithChildrenComponent.new(
-    group: @group,
+    namespace: @group,
     children: @children,
     collapsed: @collapsed,
     path: "group_path",

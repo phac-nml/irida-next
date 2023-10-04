@@ -3,11 +3,11 @@
 module NamespaceTree
   # Component to render a namespace tree
   class NamespaceTreeComponent < Component
-    attr_reader :parent, :groups, :path, :path_args, :collapsed
+    attr_reader :parent, :namespaces, :path, :path_args, :collapsed
 
-    def initialize(groups:, type:, parent: nil, path: nil, path_args: {})
+    def initialize(namespaces:, type:, parent: nil, path: nil, path_args: {})
       @parent = parent
-      @groups = groups
+      @namespaces = namespaces
       @path = path
       @path_args = path_args
       @type = type

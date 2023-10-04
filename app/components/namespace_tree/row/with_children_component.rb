@@ -2,11 +2,11 @@
 
 module NamespaceTree
   module Row
-    # Component for the contents of a group row that has children
+    # Component for the contents of a namespace row that has children
     class WithChildrenComponent < Viral::Component
       # rubocop:disable Metrics/ParameterLists
-      def initialize(group:, children:, type:, path: nil, path_args: {}, collapsed: false)
-        @group = group
+      def initialize(namespace:, children:, type:, path: nil, path_args: {}, collapsed: false)
+        @namespace = namespace
         @children = children
         @type = type
         @path = path

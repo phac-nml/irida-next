@@ -26,7 +26,7 @@
 
 <div class="bg-white dark:bg-gray-800">
   <%= render NamespaceTreeContainerComponent.new(
-    groups: @groups,
+    namespaces: @namespaces,
     path: "group_path",
     type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
   ) %>

@@ -4,8 +4,8 @@ module NamespaceTree
   module Row
     # Component for the contents of NamespaceTree row
     class RowContentsComponent < Viral::Component
-      def initialize(group:, path: nil, path_args: {}, collapsed: false)
-        @group = group
+      def initialize(namespace:, path: nil, path_args: {}, collapsed: false)
+        @namespace = namespace
         @path = path
         @path_args = path_args
         @collapsed = collapsed
