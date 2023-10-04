@@ -2,3 +2,13 @@ attachment1_file_test_file_fastq:
   name: file
   record: attachment1 (Attachment)
   blob: attachment1_file_test_file_fastq_blob
+
+attachment2_file_test_file_fastq:
+  name: file
+  record: attachment2 (Attachment)
+  blob: attachment2_file_test_file_fastq_blob
+
+attachment3_file_test_file_fastq:
+  name: file
+  record: attachment3 (Attachment)
+  blob: attachment3_file_test_file_fastq_blob
