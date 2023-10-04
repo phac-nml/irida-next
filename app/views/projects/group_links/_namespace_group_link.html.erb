@@ -1,22 +1,21 @@
-<% member_source = membership_source(@namespace, namespace_group_link) %>
+<% namespace_group_link_source =
+  namespace_group_link_source(@namespace, namespace_group_link) %>
 <tr class="text-sm font-normal text-gray-500 dark:text-gray-400">
   <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
   <td class="px-6 py-4">
-    <% if !member_source.key?(:inherited_namespace_path) %>
-      <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-        <%= viral_tooltip(title: t(:"projects.members.index.shared_direct")) do %>
-          <%= member_source[:label] %>
-        <% end %>
-      </div>
-    <% else %>
-      <%= viral_tooltip(title: t(:"projects.members.index.shared_inherited")) do %>
-        <%= link_to member_source[:label],
-        member_source[:inherited_namespace_path],
+    <% if namespace_group_link_source.key?(:inherited_indirect_namespace_path) %>
+      <%= viral_tooltip(title: 'Inherited from') do %>
+        <%= link_to namespace_group_link_source[:label],
+        namespace_group_link_source[:inherited_indirect_namespace_path],
         data: {
           turbo_frame: "_top"
         },
         class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
       <% end %>
+    <% else %>
+      <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+        <%= namespace_group_link_source[:label] %>
+      </div>
     <% end %>
   </td>
   <td class="px-6 py-4">
@@ -33,7 +32,7 @@
   </td>
   <td class="px-6 py-4">
     <div class="form-field">
-      <% if allowed_to?(:update_namespace_with_group_link?, @namespace) && !member_source.key?(:inherited_namespace_path) %>
+      <% if allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_indirect_namespace_path) %>
         <%= form_with(model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
           <%= form.select(
             :group_access_level,
@@ -56,7 +55,7 @@
     </div>
   </td>
   <td class="px-6 py-4">
-    <% if allowed_to?(:update_namespace_with_group_link?, @namespace) && !member_source.key?(:inherited_namespace_path) %>
+    <% if allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_indirect_namespace_path) %>
       <%= form_with( model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
         <div class="form-field datepicker" data-controller="datepicker">
           <div class="relative max-w-sm">
@@ -95,7 +94,7 @@
     <% end %>
   </td>
   <td class="px-6 py-4 text-right">
-    <% if allowed_to?(:unlink_namespace_with_group?, @namespace) && !member_source.key?(:inherited_namespace_path) %>
+    <% if allowed_to?(:unlink_namespace_with_group?, @namespace) && !namespace_group_link_source.key?(:inherited_indirect_namespace_path) %>
       <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.group_links.index.actions.member_dropdown_aria_label', member: namespace_group_link.group.name) }) do |dropdown| %>
         <%= dropdown.with_item(
           label: (t(:"projects.group_links.index.unlink")),

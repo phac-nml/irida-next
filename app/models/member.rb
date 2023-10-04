@@ -24,7 +24,11 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   delegate :project, to: :project_namespace
 
-  class << self # rubocop:disable Metrics/ClassLength
+  scope :for_namespace, lambda { |namespace = nil|
+                          where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
+                        }
+
+  class << self
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -36,59 +40,30 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
-    def effective_access_level(namespace, user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def effective_access_level(namespace, user)
       return AccessLevel::OWNER if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
-      access_level = if namespace.group_namespace?
-                       Member.where(user:,
-                                    namespace: namespace.self_and_ancestors).order(:access_level).last&.access_level
-                     else
-                       Member.where(user:,
-                                    namespace: namespace.self_and_ancestors)
-                             .or(Member.where(user:,
-                                              namespace: namespace.parent&.self_and_ancestors)).order(:access_level)
-                             .last&.access_level
-
-                     end
+      access_level = Member.for_namespace(namespace).where(user:).last&.access_level
 
       access_level.nil? ? AccessLevel::NO_ACCESS : access_level
     end
 
     def can_modify?(user, object_namespace)
-      if object_namespace.project_namespace?
-        Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
-                       user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
-          Member.exists?(namespace: object_namespace, user:,
-                         access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
-      elsif object_namespace.group_namespace?
-        Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
-                       access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
-      end
+      Member.for_namespace(object_namespace).exists?(user:,
+                                                     access_level: [
+                                                       Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
+                                                     ])
     end
 
     def can_create?(user, object_namespace)
-      if object_namespace.project_namespace?
-        Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
-                       user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
-          Member.exists?(namespace: object_namespace, user:,
-                         access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
-      elsif object_namespace.group_namespace?
-        Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
-                       access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
-      end
+      Member.for_namespace(object_namespace).exists?(user:,
+                                                     access_level: [
+                                                       Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
+                                                     ])
     end
 
     def can_view?(user, object_namespace)
-      if object_namespace.project_namespace?
-        Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids, user:) ||
-          Member.exists?(
-            namespace: object_namespace, user:
-          )
-      elsif object_namespace.group_namespace?
-        Member.exists?(
-          namespace: object_namespace.self_and_ancestor_ids, user:
-        )
-      end
+      Member.for_namespace(object_namespace).exists?(user:)
     end
 
     def can_destroy?(user, object_namespace)
@@ -100,19 +75,12 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def can_transfer_into_namespace?(user, object_namespace)
-      if object_namespace.project_namespace?
-        if object_namespace.parent.user_namespace?
-          object_namespace.parent.owner == user
-        else
-          Member.exists?(namespace: object_namespace.parent&.self_and_ancestor_ids,
-                         user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]) ||
-            Member.exists?(namespace: object_namespace, user:,
-                           access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
-        end
-      elsif object_namespace.group_namespace?
-        Member.exists?(namespace: object_namespace.self_and_ancestor_ids, user:,
-                       access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER])
-      end
+      return object_namespace.parent.owner == user if object_namespace.parent&.user_namespace?
+
+      Member.for_namespace(object_namespace).exists?(user:,
+                                                     access_level: [
+                                                       Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
+                                                     ])
     end
 
     def can_transfer_sample?(user, object_namespace)
@@ -135,38 +103,16 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       can_modify?(user, object_namespace)
     end
 
-    def namespace_owners_include_user?(user, namespace) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def namespace_owners_include_user?(user, namespace)
       return true if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
-      if namespace.project_namespace?
-        Member.exists?(
-          namespace:, user:,
-          access_level: Member::AccessLevel::OWNER
-        ) || Member.exists?(
-          namespace: namespace.parent&.self_and_ancestor_ids, user:,
-          access_level: Member::AccessLevel::OWNER
-        )
-      elsif namespace.group_namespace?
-        Member.exists?(
-          namespace: namespace.self_and_ancestor_ids, user:,
-          access_level: Member::AccessLevel::OWNER
-        )
-      end
+      Member.for_namespace(namespace).exists?(user:,
+                                              access_level: Member::AccessLevel::OWNER)
     end
 
     def user_has_namespace_maintainer_access?(user, namespace)
-      if namespace.project_namespace?
-        Member.exists?(
-          namespace:, user:,
-          access_level: Member::AccessLevel::MAINTAINER
-        ) || Member.exists?(
-          namespace: namespace.parent&.self_and_ancestor_ids, user:,
-          access_level: Member::AccessLevel::MAINTAINER
-        )
-      else
-        Member.exists?(user:, namespace: namespace.self_and_ancestor_ids,
-                       access_level: Member::AccessLevel::MAINTAINER)
-      end
+      Member.for_namespace(namespace).exists?(user:,
+                                              access_level: Member::AccessLevel::MAINTAINER)
     end
   end
 

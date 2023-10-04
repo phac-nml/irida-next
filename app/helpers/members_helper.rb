@@ -10,4 +10,13 @@ module MembersHelper
         label: member.namespace.name }
     end
   end
+
+  def namespace_group_link_source(namespace, namespace_group_link)
+    if namespace_group_link.namespace == namespace
+      { label: 'Direct shared' }
+    else
+      { inherited_indirect_namespace_path: group_url(namespace_group_link.namespace),
+        label: namespace_group_link.namespace.name }
+    end
+  end
 end

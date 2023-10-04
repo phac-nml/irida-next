@@ -210,7 +210,7 @@ module Groups
 
       assert_selector 'tr', count: 3 + header_row_count
 
-      assert_text 'Direct member', count: 2
+      assert_text 'Direct shared', count: 2
 
       parent_namespace_group_link = namespace_group_link.namespace.parent
       assert_not_nil find(:table_row, { 'Source' => parent_namespace_group_link.name })

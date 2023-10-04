@@ -20,19 +20,19 @@ module Groups
       assert_selector 'a', text: I18n.t(:'groups.members.index.invite_group'), count: 1
 
       click_link I18n.t(:'groups.members.index.invite_group')
-
+      pause
       within('span[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.group_links.new.title')
         assert_selector 'p', text: I18n.t(
           :'groups.group_links.new.sharing_namespace_with_group',
           name: @namespace.human_name
         )
-        find('#namespace_group_link_group_id').find(:xpath, 'option[2]').select_option
+        find('#namespace_group_link_group_id').find(:xpath, '//option[contains(text(), "Group 7")]').select_option
         find('#namespace_group_link_group_access_level').find(:xpath, 'option[3]').select_option
 
         click_button I18n.t(:'groups.group_links.new.button.submit')
       end
-
+      pause
       assert_selector 'tr', count: (@group_links_count + 1) + header_row_count
     end
 
