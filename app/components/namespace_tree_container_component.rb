@@ -3,7 +3,7 @@
 # Renders top level wrapper for the namespace tree
 class NamespaceTreeContainerComponent < ViewComponent::Base
   erb_template <<-ERB
-      <div class="groups-list-tree-container">
+      <div class="namespace-tree-container">
         <%= render NamespaceTree::NamespaceTreeComponent.new(namespaces: @namespaces, path: @path, path_args: @path_args, type: @type) %>
       </div>
   ERB

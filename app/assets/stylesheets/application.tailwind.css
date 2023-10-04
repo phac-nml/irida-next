@@ -43,7 +43,7 @@ body {
 
   .navbar-button,
   button.navbar-button.Viral-Dropdown--icon {
-    @apply p-1 text-sm text-slate-500 rounded-md hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply p-1 text-sm rounded-md text-slate-500 hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 
   .link {
@@ -51,7 +51,7 @@ body {
   }
 
   .card {
-    @apply p-4 bg-slate-50 border border-slate-200 rounded-md shadow-sm dark:border-slate-700 sm:p-6 dark:bg-slate-800;
+    @apply p-4 border rounded-md shadow-sm bg-slate-50 border-slate-200 dark:border-slate-700 sm:p-6 dark:bg-slate-800;
   }
 
   p link {
@@ -127,7 +127,7 @@ body {
   }
 
   input[type="checkbox"] {
-    @apply w-4 h-4 border border-slate-300 rounded bg-slate-50 focus:ring-primary-300 focus:ring-4 dark:border-slate-600 dark:bg-slate-800 dark:ring-offset-slate-800 dark:focus:ring-primary-600;
+    @apply w-4 h-4 border rounded border-slate-300 bg-slate-50 focus:ring-primary-300 focus:ring-4 dark:border-slate-600 dark:bg-slate-800 dark:ring-offset-slate-800 dark:focus:ring-primary-600;
   }
 
   .field-hint {
@@ -221,7 +221,7 @@ body {
   }
 
   .button--state-default {
-    @apply text-slate-900 bg-white border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
+    @apply bg-white text-slate-900 border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
   }
 
   .button--state-destructive {
@@ -278,11 +278,11 @@ body {
   }
 
   .dialog--footer {
-    @apply flex items-center p-6 space-x-2 border-t border-slate-200 rounded-b dark:border-slate-600;
+    @apply flex items-center p-6 space-x-2 border-t rounded-b border-slate-200 dark:border-slate-600;
   }
 
   .avatar {
-    @apply relative inline-flex items-center justify-center flex-none overflow-hidden text-slate-800 rounded-md dark:text-slate-300;
+    @apply relative inline-flex items-center justify-center flex-none overflow-hidden rounded-md text-slate-800 dark:text-slate-300;
     --tw-avatar-bg-lightness: 35%;
     --tw-avatar-border-lightness: 35%;
     --tw-avatar-bg-alpha: 0.3;
@@ -299,7 +299,7 @@ body {
   }
 
   /*GROUPS LIST TREE*/
-  .groups-list-tree-container
+  .namespace-tree-container
     > .group-list-tree
     > .group-row.has-children:first-child {
     border-top: 0;
@@ -447,7 +447,7 @@ body {
 
 .page a,
 .page.gap {
-  @apply relative inline-flex items-center px-4 py-2 text-sm font-medium text-slate-900 bg-white border border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
+  @apply relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white border text-slate-900 border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
 }
 
 .page.active {
