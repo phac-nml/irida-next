@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Nextflow
-  class SamplesheetComponent < ViewComponent::Base
+  class SamplesheetComponent < Component
+    def initialize(samplesheet:)
+      @samplesheet = samplesheet
+    end
   end
 end

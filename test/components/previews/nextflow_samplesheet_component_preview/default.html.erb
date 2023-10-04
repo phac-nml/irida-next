@@ -1,1 +1,4 @@
-<%= render Nextflow::SamplesheetComponent.new %>
+<%= render Nextflow::SamplesheetComponent.new(samplesheet:
+  CSV.read(
+    Rails.root.join("test", "fixtures", "files", "nextflow", samplesheet_file)
+)) %>
