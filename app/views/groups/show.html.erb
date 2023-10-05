@@ -1,40 +1,48 @@
 <%= render Viral::PageHeaderComponent.new(title: @group.name, subtitle: @group.description) do |component| %>
   <%= component.icon do %>
     <%= viral_avatar(
-      name: @group.name,
-      colour_string: "#{@group.name}-#{@group.id}",
-      size: :large
-    ) %>
+          name: @group.name,
+          colour_string: "#{@group.name}-#{@group.id}",
+          size: :large
+        ) %>
   <% end %>
   <%= component.with_buttons do %>
     <% if allowed_to?(:new?, @group) %>
       <%= link_to t(:"groups.show.create_subgroup_button"),
-      new_group_path(parent_id: @group.id),
-      class: "button button--size-default button--state-default" %>
+                  new_group_path(parent_id: @group.id),
+                  class: "button button--size-default button--state-default" %>
       <%= link_to t(:"groups.show.create_project_button"),
-      new_project_path(group_id: @group.id),
-      class: "button button--size-default button--state-primary ml-2" %>
+                  new_project_path(group_id: @group.id),
+                  class: "button button--size-default button--state-primary ml-2" %>
     <% end %>
   <% end %>
 <% end %>
 
-<%= viral_tabs(id: "group-details", label: t(:'.tabs.label')) do |tabs| %>
-  <%= tabs.with_tab(url: group_path(@group), controls: "group-details", selected: params[:tab] != "shared_projects") do %>
-    <%= t(:".tabs.subgroups_and_projects") %>
-  <% end %>
-  <%= tabs.with_tab(url: group_path(@group, tab: "shared_projects"), controls: "group-projects", selected: params[:tab] == "shared_projects") do %>
-    <%= t(:'.tabs.shared_projects') %>
+<%= turbo_frame_tag "group_details" do %>
+  <%= viral_tabs(id: "group-details", label: t(:'.tabs.label')) do |tabs| %>
+    <%= tabs.with_tab(url: group_path(@group), controls: "group-details", selected: @tab != "shared_projects") do %>
+      <%= t(:".tabs.subgroups_and_projects") %>
+    <% end %>
+    <%= tabs.with_tab(url: group_path(@group, tab: "shared_projects"), controls: "group-projects", selected: @tab == "shared_projects") do %>
+      <%= t(:'.tabs.shared_projects') %>
+    <% end %>
+
+    <%= tabs.with_tab_content do %>
+      <%= turbo_frame_tag "group_show", "data-turbo-temporary": true, src: (
+        if @tab == "shared_projects"
+          group_shared_projects_path(@group)
+        else
+          group_subgroups_path(@group)
+        end
+      ), loading: :lazy do %>
+
+        <%= render NamespaceTreeContainerComponent.new(
+          namespaces: @namespaces,
+          path: "group_path",
+          type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+        ) %>
+      <% end %>
+    <% end %>
   <% end %>
 
-  <%= tabs.with_tab_content do %>
-
-  <% end %>
 <% end %>
-
-<div class="bg-white dark:bg-gray-800">
-  <%= render NamespaceTreeContainerComponent.new(
-    namespaces: @namespaces,
-    path: "group_path",
-    type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
-  ) %>
-</div>

@@ -18,6 +18,8 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     resources :members, only: %i[create destroy index new update]
     resources :group_links, only: %i[create destroy update index new]
     resources :samples, only: %i[index]
+    resources :subgroups, only: %i[index]
+    resources :shared_projects, only: %i[index]
   end
 
   scope(path: '*id',

@@ -4,6 +4,7 @@
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :parent_group, only: %i[new]
+  before_action :tab, only: %i[show]
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
@@ -187,5 +188,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def namespace_path
     group_path(@group)
+  end
+
+  def tab
+    @tab = params[:tab]
   end
 end
