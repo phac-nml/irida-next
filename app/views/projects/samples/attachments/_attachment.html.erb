@@ -12,7 +12,7 @@
     } %></th>
   <td class="px-6 py-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></td>
   <td class="px-6 py-4">
-    <%= viral_distance(current_time: Time.now, original_time: attachment.created_at) %>
+    <%= viral_time_ago(original_time: attachment.created_at) %>
   </td>
   <td class="px-6 py-4">
     <% if allowed_to?(:update_sample?, @project) %>
