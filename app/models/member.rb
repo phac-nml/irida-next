@@ -144,19 +144,14 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                                               namespace) == Member::AccessLevel::MAINTAINER
     end
 
-    def access_level_in_namespace_group_links(user, namespace) # rubocop:disable Metrics/AbcSize
-      direct_shared = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
-      inherited_shared = NamespaceGroupLink.where(group: user.groups.self_and_descendants)
-                                           .where(namespace_id: direct_shared.pluck(:group_id))
-
-      namespace_group_links = direct_shared.or(inherited_shared)
+    def access_level_in_namespace_group_links(user, namespace)
+      namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
+                                                .where(group: user.groups.self_and_descendants)
 
       if namespace_group_links.count.positive?
         maxlevel_namespace_group_link = namespace_group_links.order(:group_access_level).last
         membership = Member.for_namespace_and_ancestors(maxlevel_namespace_group_link&.group)
                      &.where(user:)&.order(:access_level)
-
-        return Member::AccessLevel::NO_ACCESS if membership.empty?
 
         return [maxlevel_namespace_group_link.group_access_level, membership.last.access_level].min
       end
