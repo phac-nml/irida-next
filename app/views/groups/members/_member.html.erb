@@ -52,20 +52,15 @@
   <td class="px-6 py-4">
     <div>
       <% if member.user.email != member.created_by.email %>
-
-        <%= render partial: 'shared/distance_of_time_in_words',
-          locals: {
-            current_time: Time.now,
-            original_time: member.created_at
-          } %> by <span class="block">
+        <%= viral_tooltip(title: l(member.created_at, format: :long)) do %>
+          <%= viral_distance(current_time: Time.now, original_time: member.created_at) %>
+        <% end %> by <span class="block">
           <%= member.created_by.email %>
         </span>
       <% else %>
-        <%= render partial: 'shared/distance_of_time_in_words',
-          locals: {
-            current_time: Time.now,
-            original_time: member.created_at
-          } %>
+        <%= viral_tooltip(title: l(member.created_at, format: :long)) do %>
+          <%= viral_distance(current_time: Time.now, original_time: member.created_at) %>
+        <% end %>
       <% end %>
 
       <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>

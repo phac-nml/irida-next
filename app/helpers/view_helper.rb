@@ -11,6 +11,7 @@ module ViewHelper
     checkbox: 'Viral::Form::CheckboxComponent',
     datepicker: 'Viral::Form::DatepickerComponent',
     dialog: 'Viral::DialogComponent',
+    distance: 'Viral::DistanceOfTimeComponent',
     dropdown: 'Viral::DropdownComponent',
     file_input: 'Viral::Form::FileInputComponent',
     flash: 'Viral::FlashComponent',
