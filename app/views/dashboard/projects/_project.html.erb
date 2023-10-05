@@ -26,6 +26,6 @@
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 text-right whitespace-nowrap">
-    <%= viral_distance(current_time: Time.now, original_time: project.updated_at) %>
+    <%= viral_time_ago(original_time: project.updated_at) %>
   </td>
 </tr>
