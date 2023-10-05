@@ -13,6 +13,20 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def show
     authorize! @group, to: :read?
+
+    respond_to do |format|
+      if params.key? :parent_id
+        format.turbo_stream do
+          @group = Group.find(params[:parent_id])
+          @collapsed = params[:collapse] == 'true'
+          @children = @collapsed ? Namespace.none : namespace_children
+          @depth = params[:depth].to_i
+        end
+      end
+      format.html do
+        @namespaces = namespace_children
+      end
+    end
   end
 
   def new
@@ -41,12 +55,23 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     end
   end
 
-  def update
-    if Groups::UpdateService.new(@group, current_user, group_params).execute
-      flash[:success] = t('.success')
-      redirect_to group_path(@group)
-    else
-      render :edit, status: :unprocessable_entity
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    respond_to do |format|
+      @updated = Groups::UpdateService.new(@group, current_user, group_params).execute
+      if @updated
+        if group_params[:path]
+          flash[:success] = t('.success', group_name: @group.name)
+          format.turbo_stream { redirect_to edit_group_path(@group) }
+        else
+          format.turbo_stream do
+            render status: :ok, locals: { type: 'success', message: t('.success', group_name: @group.name) }
+          end
+        end
+      else
+        format.turbo_stream do
+          render status: :unprocessable_entity
+        end
+      end
     end
   end
 
@@ -63,12 +88,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def transfer # rubocop:disable Metrics/AbcSize
     new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
-    if Groups::TransferService.new(@group, current_user).execute(new_namespace)
-      flash[:success] = t('.success')
-      redirect_to group_path(@group)
-    else
-      @error = @group.errors.messages.values.flatten.first
-      respond_to do |format|
+    respond_to do |format|
+      if Groups::TransferService.new(@group, current_user).execute(new_namespace)
+        flash[:success] = t('.success')
+        format.turbo_stream { redirect_to edit_group_path(@group) }
+      else
+        @error = @group.errors.messages.values.flatten.first
         format.turbo_stream do
           render status: :unprocessable_entity, locals: { confirm_value: @group.path, error: @error }
         end
@@ -89,6 +114,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def authorized_namespaces
     @authorized_namespaces = authorized_scope(Namespace,
                                               type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
+  end
+
+  def namespace_children
+    @group.children_of_type(
+      [
+        Namespaces::ProjectNamespace.sti_name, Group.sti_name
+      ]
+    )
   end
 
   def resolve_layout

@@ -8,12 +8,26 @@
   <% end %>
   <%= component.with_buttons do %>
     <% if allowed_to?(:new?, @group) %>
-        <%= link_to t(:"groups.show.create_subgroup_button"),
-                    new_group_path(parent_id: @group.id),
-                    class: "button button--size-default button--state-default" %>
-        <%= link_to t(:"groups.show.create_project_button"),
-                    new_project_path(group_id: @group.id),
-                    class: "button button--size-default button--state-primary ml-2" %>
+      <%= link_to t(:"groups.show.create_subgroup_button"),
+      new_group_path(parent_id: @group.id),
+      class: "button button--size-default button--state-default" %>
+      <%= link_to t(:"groups.show.create_project_button"),
+      new_project_path(group_id: @group.id),
+      class: "button button--size-default button--state-primary ml-2" %>
     <% end %>
   <% end %>
 <% end %>
+
+<%= viral_tabs(id: "group-details", label: t(:'.tabs.label')) do |tabs| %>
+  <%= tabs.with_tab(url: "#", controls: "group-details", selected: true) do %>
+    <%= t(:".tabs.subgroups_and_projects") %>
+  <% end %>
+<% end %>
+
+<div class="bg-white dark:bg-gray-800">
+  <%= render NamespaceTreeContainerComponent.new(
+    namespaces: @namespaces,
+    path: "group_path",
+    type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+  ) %>
+</div>

@@ -6,6 +6,35 @@
       "inline-flex items-center justify-center button button--state-primary button--size-default" %>
   <% end %>
 <% end %>
-<div class="bg-white dark:bg-gray-800">
-  <%= render GroupsListTreeContainerComponent.new(groups: @groups, path: "dashboard_groups_path") %>
+<div class="bg-white dark:bg-slate-800">
+  <div
+    class="
+      flex
+      text-sm
+      font-medium
+      text-center
+      border-b
+      text-slate-500
+      border-slate-200
+      dark:text-slate-400
+      dark:border-slate-700
+    "
+  >
+    <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
+      <%= sorting_dropdown(@q) do |dropdown| %>
+        <%= sorting_item(dropdown, @q, :updated_at, :desc) %>
+        <%= sorting_item(dropdown, @q, :created_at, :desc) %>
+        <%= sorting_item(dropdown, @q, :name, :asc) %>
+        <%= sorting_item(dropdown, @q, :name, :desc) %>
+        <%= sorting_item(dropdown, @q, :updated_at, :asc) %>
+        <%= sorting_item(dropdown, @q, :created_at, :asc) %>
+      <% end %>
+    </div>
+  </div>
+  <div class="flex flex-col" data-turbo-temporary>
+    <%= turbo_frame_tag "groups_tree",
+    src: dashboard_groups_url(format: :turbo_stream, **request.query_parameters),
+    loading: :lazy %>
+    <%= turbo_frame_tag "groups_pagination" %>
+  </div>
 </div>

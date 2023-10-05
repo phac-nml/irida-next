@@ -1,0 +1,9 @@
+<ul class="groups-list namespace-list-tree flex flex-col">
+  <%= render NamespaceTree::RowComponent.with_collection(
+    namespaces,
+    path: path,
+    path_args: path_args,
+    type: @type,
+    collapsed: collapsed
+  ) %>
+</ul>

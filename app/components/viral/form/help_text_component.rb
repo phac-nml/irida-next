@@ -13,7 +13,7 @@ module Viral
       }.freeze
 
       ICON_MAPPINGS = {
-        default: 'information_circle_solid',
+        default: nil,
         success: 'check_circle_solid',
         error: 'x_circle'
       }.freeze
