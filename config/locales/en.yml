@@ -198,7 +198,7 @@ en:
       namespace_group_link:
         one: Namespace Group Link
         other: Namespace Group Links
-        direct: Direct member
+        direct: Direct shared
   datetime:
     distance_in_words:
       about_x_hours:

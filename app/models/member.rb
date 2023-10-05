@@ -96,11 +96,12 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def can_transfer_into_namespace?(user, object_namespace)
       return object_namespace.parent.owner == user if object_namespace.parent&.user_namespace?
 
-      Member.for_namespace_and_ancestors(object_namespace).exists?(user:,
-                                                                   access_level: [
-                                                                     Member::AccessLevel::MAINTAINER,
-                                                                     Member::AccessLevel::OWNER
-                                                                   ]) ||
+      Member.for_namespace_and_ancestors(object_namespace)
+            .exists?(user:,
+                     access_level: [
+                       Member::AccessLevel::MAINTAINER,
+                       Member::AccessLevel::OWNER
+                     ]) ||
         [
           Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
         ].include?(

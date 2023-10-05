@@ -313,7 +313,7 @@ module Projects
 
       assert_selector 'tr', count: 3 + header_row_count
 
-      assert_text 'Direct shared', count: 1
+      assert_text I18n.t(:'activerecord.models.namespace_group_link.direct'), count: 1
 
       parent_namespace_group_link = namespace_group_link.namespace.parent
       assert_not_nil find(:table_row, { 'Source' => parent_namespace_group_link.name })
