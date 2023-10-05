@@ -19,11 +19,15 @@
 <% end %>
 
 <%= viral_tabs(id: "group-details", label: t(:'.tabs.label')) do |tabs| %>
-  <%= tabs.with_tab(url: "#", controls: "group-details", selected: true) do %>
+  <%= tabs.with_tab(url: group_path(@group), controls: "group-details", selected: params[:tab] != "shared_projects") do %>
     <%= t(:".tabs.subgroups_and_projects") %>
   <% end %>
-  <%= tabs.with_tab(url: "", controls: "group-projects", selected: false) do %>
+  <%= tabs.with_tab(url: group_path(@group, tab: "shared_projects"), controls: "group-projects", selected: params[:tab] == "shared_projects") do %>
     <%= t(:'.tabs.shared_projects') %>
+  <% end %>
+
+  <%= tabs.with_tab_content do %>
+
   <% end %>
 <% end %>
 
