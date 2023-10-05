@@ -231,3 +231,19 @@ projectA_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>
+
+namespace_group_link_group_one_project1_namespace:
+  name: Group One Project 1
+  path: project-1
+  description: Group One Project 1 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user24) %>
+
+namespace_group_link_group_three_project1_namespace:
+  name: Group Three Project 1
+  path: project-1
+  description: Group Three Project 1 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user24) %>

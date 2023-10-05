@@ -212,5 +212,29 @@ module Projects
 
       assert_text 'Resource not found'
     end
+
+    test 'group member of Group C cannot see Group A projects' do
+      login_as users(:user25)
+
+      no_access_namespace_group_link = namespace_group_links(:namespace_group_link10)
+
+      visit namespace_project_url(no_access_namespace_group_link.namespace.parent,
+                                  no_access_namespace_group_link.namespace.project)
+
+      assert_text I18n.t(:'action_policy.policy.project.read?',
+                         name: no_access_namespace_group_link.namespace.name)
+    end
+
+    test 'group member of Group A cannot see Group C projects' do
+      login_as users(:john_doe)
+
+      no_access_namespace_group_link = namespace_group_links(:namespace_group_link11)
+
+      visit namespace_project_url(no_access_namespace_group_link.namespace.parent,
+                                  no_access_namespace_group_link.namespace.project)
+
+      assert_text I18n.t(:'action_policy.policy.project.read?',
+                         name: no_access_namespace_group_link.namespace.name)
+    end
   end
 end

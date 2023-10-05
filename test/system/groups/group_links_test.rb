@@ -211,5 +211,27 @@ module Groups
 
       assert_text 'Resource not found'
     end
+
+    test 'group member of Group C cannot see Group A' do
+      login_as users(:user25)
+
+      no_access_namespace_group_link = namespace_group_links(:namespace_group_link8)
+
+      visit group_url(no_access_namespace_group_link.namespace)
+
+      assert_text I18n.t(:'action_policy.policy.group.read?',
+                         name: no_access_namespace_group_link.namespace.name)
+    end
+
+    test 'group member of Group A cannot see Group C' do
+      login_as users(:john_doe)
+
+      no_access_namespace_group_link = namespace_group_links(:namespace_group_link9)
+
+      visit group_url(no_access_namespace_group_link.namespace)
+
+      assert_text I18n.t(:'action_policy.policy.group.read?',
+                         name: no_access_namespace_group_link.namespace.name)
+    end
   end
 end

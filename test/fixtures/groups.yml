@@ -87,3 +87,21 @@ group_<%= letter %>:
   type: Group
   description: <%= "Group #{letter} description" %>
 <% end %>
+
+namespace_group_link_group_one:
+  name: Group One
+  path: group-one
+  type: Group
+  description: Group One description
+
+namespace_group_link_group_two:
+  name: Group Two
+  path: group-two
+  type: Group
+  description: Group Two description
+
+namespace_group_link_group_three:
+  name: Group Three
+  path: group-three
+  type: Group
+  description: Group Three description
