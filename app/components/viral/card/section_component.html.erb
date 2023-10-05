@@ -3,9 +3,9 @@
     <div class="mb-2">
       <% if actions.present? %>
         <div class="flex">
-          <h2 class="flex-1 text-sm font-semibold text-slate-900 dark:text-white">
+          <h3 class="flex-1 text-sm font-semibold text-slate-900 dark:text-white">
             <%= title.upcase %>
-          </h2>
+          </h3>
           <div>
             <% actions.each do |action| %>
               <span class="ml-2"><%= action %></span>
@@ -13,9 +13,9 @@
           </div>
         </div>
       <% else %>
-        <h2 class="flex-1 text-sm font-semibold text-slate-800 dark:text-white">
+        <h3 class="flex-1 text-sm font-semibold text-slate-800 dark:text-white">
           <%= title.upcase %>
-        </h2>
+        </h3>
       <% end %>
     </div>
   <% end %>

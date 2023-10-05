@@ -1,9 +1,28 @@
-<%= turbo_stream.replace dom_id(@group) do %>
-  <%= render GroupsList::GroupRow::WithChildrenComponent.new(
-    group: @group,
-    collapsed: @collapsed,
-    path: "dashboard_groups_path",
-    path_args: {
-    }
+<%= turbo_stream.update("groups_tree") do %>
+  <%= render NamespaceTreeContainerComponent.new(
+    namespaces: @groups,
+    path: "dashboard_groups_path"
+  ) %>
+<% end %>
+
+<%= turbo_stream.update "groups_pagination" do %>
+  <%= render PaginationComponent.new(
+    info: nil,
+    prev_url:
+      (
+        if @pagy.prev
+          pagy_url_for(@pagy, @pagy.prev).gsub("groups.turbo_stream", "groups")
+        else
+          nil
+        end
+      ),
+    next_url:
+      (
+        if @pagy.next
+          pagy_url_for(@pagy, @pagy.next).gsub("groups.turbo_stream", "groups")
+        else
+          nil
+        end
+      )
   ) %>
 <% end %>

@@ -146,3 +146,10 @@ project26_namespace_route:
   name: john.doe@localhost / Project 26
   path: john.doe_at_localhost/project-26
   source: project26_namespace (Namespace)
+
+<% [*("a".."z")].each do |letter| %>
+group_<%= letter %>_route:
+  name: <%= "Group #{letter.capitalize}" %>
+  path: <%= "group-#{letter}" %>
+  source: group<%= "_#{letter}" %> (Namespace)
+<% end %>

@@ -1,6 +1,6 @@
 <%= viral_card do |card| %>
   <% card.with_header(title: 'Card Header') do |header| %>
-    <% header.action do %>
+    <% header.with_action do %>
       <%= link_to "Delete",
       "#",
       class: "button button--state-default button--size-default" %>
