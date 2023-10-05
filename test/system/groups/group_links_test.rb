@@ -212,6 +212,45 @@ module Groups
       assert_text 'Resource not found'
     end
 
+    test 'group member of Group C can access Group B as it is shared with Group C' do
+      login_as users(:user25)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link9)
+
+      visit group_url(namespace_group_link.namespace)
+
+      assert_no_text I18n.t(:'action_policy.policy.group.read?',
+                            name: namespace_group_link.namespace.name)
+
+      assert_selector 'h1', text: namespace_group_link.namespace.human_name, count: 1
+      assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
+    end
+
+    test 'group member of Group B can access Group A as Group B is shared with Group A' do
+      login_as users(:user24)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link8)
+
+      visit group_url(namespace_group_link.namespace)
+
+      assert_no_text I18n.t(:'action_policy.policy.group.read?',
+                            name: namespace_group_link.namespace.name)
+
+      assert_selector 'h1', text: namespace_group_link.namespace.human_name, count: 1
+      assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
+    end
+
+    test 'group member of Group B cannot access Group C as Group B is not shared with Group C' do
+      login_as users(:user24)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link9)
+
+      visit group_url(namespace_group_link.group)
+
+      assert_text I18n.t(:'action_policy.policy.group.read?',
+                         name: namespace_group_link.group.name)
+    end
+
     test 'group member of Group C cannot see Group A' do
       login_as users(:user25)
 
