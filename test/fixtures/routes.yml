@@ -22,6 +22,11 @@ john_doe_namespace_route:
   path: john.doe_at_localhost
   source: john_doe_namespace (Namespace)
 
+jeff_doe_namespace_route:
+  name: jeff.doe@localhost
+  path: jeff.doe_at_localhost
+  source: jeff_doe_namespace (Namespace)
+
 jane_doe_namespace_route:
   name: jane.doe@localhost
   path: jane.doe_at_localhost
