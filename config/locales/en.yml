@@ -443,6 +443,7 @@ en:
       tabs:
         label: Group project details navigation
         subgroups_and_projects: Subgroups and projects
+        shared_projects: Shared projects
     new_subgroup:
       title: Create subgroup
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects

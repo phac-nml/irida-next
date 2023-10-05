@@ -22,6 +22,9 @@
   <%= tabs.with_tab(url: "#", controls: "group-details", selected: true) do %>
     <%= t(:".tabs.subgroups_and_projects") %>
   <% end %>
+  <%= tabs.with_tab(url: "", controls: "group-projects", selected: false) do %>
+    <%= t(:'.tabs.shared_projects') %>
+  <% end %>
 <% end %>
 
 <div class="bg-white dark:bg-gray-800">
