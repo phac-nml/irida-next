@@ -36,11 +36,11 @@
   <%= turbo_frame_tag "member-update-alert" %>
 
   <%= viral_tabs(id: "project-members", label: "Project members tables") do |tabs| %>
-    <%= tabs.with_tab(url: namespace_project_members_path(), controls: "project-members", selected: params[:tab] != "invited_groups") do %>
+    <%= tabs.with_tab(url: namespace_project_members_path(), controls: "project-members", selected: @tab != "invited_groups") do %>
       <%= t(:"projects.members.index.tabs.members") %>
     <% end %>
 
-    <%= tabs.with_tab(url: namespace_project_members_path(tab: "invited_groups"), controls: "project-members", selected: params[:tab] == "invited_groups") do %>
+    <%= tabs.with_tab(url: namespace_project_members_path(tab: "invited_groups"), controls: "project-members", selected: @tab == "invited_groups") do %>
       <%= t(:"projects.members.index.tabs.groups") %>
     <% end %>
 
@@ -49,7 +49,7 @@
         <%= turbo_frame_tag "members", "data-turbo-temporary": true,
                             src:
                               (
-                                if params[:tab] == "invited_groups"
+                                if @tab == "invited_groups"
                                   namespace_project_group_links_path(
                                     format: :turbo_stream
                                   )
@@ -63,27 +63,27 @@
           <table class="min-w-full table-fixed dark:divide-gray-600">
             <tbody
               class="
-            bg-white
-            divide-y
-            divide-gray-200
-            dark:bg-gray-800
-            dark:divide-gray-700
-          "
+                bg-white
+                divide-y
+                divide-gray-200
+                dark:bg-gray-800
+                dark:divide-gray-700
+              "
             >
-            <% 10.times do %>
-              <tr>
+              <% 10.times do %>
+                <tr>
 
-                <td class="p-4 animate-pulse">
-                  <div class="flex-1 py-1 space-y-6">
-                    <div class="space-y-3">
-                      <div class="w-48 h-2 rounded bg-slate-200"></div>
-                      <div class="w-32 h-2 rounded bg-slate-200"></div>
+                  <td class="p-4 animate-pulse">
+                    <div class="flex-1 py-1 space-y-6">
+                      <div class="space-y-3">
+                        <div class="w-48 h-2 rounded bg-slate-200"></div>
+                        <div class="w-32 h-2 rounded bg-slate-200"></div>
+                      </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
 
-              </tr>
-            <% end %>
+                </tr>
+              <% end %>
             </tbody>
           </table>
         <% end %>
@@ -91,6 +91,5 @@
       </div>
     <% end %>
   <% end %>
-
 
 </div>

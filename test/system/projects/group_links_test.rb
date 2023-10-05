@@ -110,8 +110,12 @@ module Projects
         click_link I18n.t(:'projects.group_links.index.unlink')
       end
 
+      member_namespace_ids_to_update = @namespace.shared_with_group_links.of_ancestors.pluck(:group_id) +
+                                       namespace_group_link.namespace.parent&.self_and_ancestors&.ids +
+                                       [namespace_group_link.namespace.id]
+
       Member.where(user: @user,
-                   namespace: namespace_group_link.namespace.parent&.self_and_ancestor_ids)
+                   namespace: member_namespace_ids_to_update).update(access_level: Member::AccessLevel::GUEST)
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'

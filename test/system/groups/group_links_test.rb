@@ -110,8 +110,11 @@ module Groups
         click_link I18n.t(:'groups.group_links.index.unlink')
       end
 
-      Member.find_by(user: @user,
-                     namespace: namespace_group_link.namespace).update(access_level: Member::AccessLevel::GUEST)
+      member_namespace_ids_to_update = @namespace.shared_with_group_links.of_ancestors.pluck(:group_id) +
+                                       namespace_group_link.namespace.self_and_ancestors&.ids
+
+      Member.where(user: @user,
+                   namespace: member_namespace_ids_to_update).update(access_level: Member::AccessLevel::GUEST)
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
