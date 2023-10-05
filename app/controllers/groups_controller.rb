@@ -5,7 +5,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
-  before_action :context_crumbs, except: %i[index new create]
 
   def index
     redirect_to dashboard_groups_path
