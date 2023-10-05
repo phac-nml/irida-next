@@ -42,3 +42,7 @@ sample27:
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
 
+sampleA:
+  name: Project 5 Sample 1
+  description: Sample 1 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project5) %>

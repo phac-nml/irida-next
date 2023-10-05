@@ -4,10 +4,10 @@ attachment1:
   metadata: {}
   attachable: sample1 (Sample)
 
-attachment2:
+attachmentB:
   metadata: {}
-  attachable: sample1 (Sample)
+  attachable: sampleA (Sample)
 
-attachment3:
+attachmentC:
   metadata: {}
-  attachable: sample1 (Sample)
+  attachable: sampleA (Sample)

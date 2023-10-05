@@ -5,9 +5,8 @@ require 'test_helper'
 class AttachmentsCleanupJobTest < ActiveJob::TestCase
   def setup
     @attachment1 = attachments(:attachment1)
-    @attachment2 = attachments(:attachment2)
-    @attachment3 = attachments(:attachment3)
-    @sample = samples(:sample1)
+    @attachment2 = attachments(:attachmentB)
+    @attachment3 = attachments(:attachmentC)
   end
 
   test 'valid attachments pretest' do
