@@ -20,6 +20,10 @@ class NamespaceGroupLink < ApplicationRecord
               in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
             }
 
+  scope :for_namespace_and_ancestors, lambda { |namespace = nil|
+                                        where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
+                                      }
+
   private
 
   def set_namespace_type

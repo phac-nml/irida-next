@@ -75,7 +75,7 @@ module Groups
     end
 
     test 'cannot access group members' do
-      login_as users(:david_doe)
+      login_as users(:user_no_access)
 
       visit group_members_url(@namespace)
 

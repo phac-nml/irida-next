@@ -112,7 +112,6 @@ module Projects
 
       Member.where(user: @user,
                    namespace: namespace_group_link.namespace.parent&.self_and_ancestor_ids)
-            .update(access_level: Member::AccessLevel::GUEST)
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
