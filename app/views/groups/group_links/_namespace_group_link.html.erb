@@ -20,11 +20,9 @@
   </td>
   <td class="px-6 py-4">
     <div>
-      <%= render partial: 'shared/distance_of_time_in_words',
-        locals: {
-          current_time: Time.now,
-          original_time: namespace_group_link.created_at
-        } %>
+      <%= viral_tooltip(title: l(namespace_group_link.created_at, format: :long)) do %>
+        <%= viral_distance(current_time: Time.now, original_time: namespace_group_link.created_at) %>
+      <% end %>
       <span class="block">
         <%= turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
           <% if namespace_group_link.created_at < namespace_group_link.updated_at %>

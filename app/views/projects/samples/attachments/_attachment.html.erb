@@ -12,11 +12,9 @@
     } %></th>
   <td class="px-6 py-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></td>
   <td class="px-6 py-4">
-    <%= render partial: 'shared/distance_of_time_in_words',
-      locals: {
-        current_time: Time.now,
-        original_time: attachment.created_at
-      } %>
+    <%= viral_tooltip(title: l(attachment.created_at, format: :long)) do %>
+      <%= viral_distance(current_time: Time.now, original_time: attachment.created_at) %>
+    <% end %>
   </td>
   <td class="px-6 py-4">
     <% if allowed_to?(:update_sample?, @project) %>
