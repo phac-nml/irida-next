@@ -28,7 +28,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }
 
-  class << self # rubocop:disable Metrics/ClassLength
+  class << self
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -44,45 +44,31 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       return AccessLevel::OWNER if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
       access_level = Member.for_namespace_and_ancestors(namespace)
-                           .where(user:).order(:access_level).last&.access_level ||
-                     access_level_in_namespace_group_links(
-                       user, namespace
-                     )
+                           .where(user:).order(:access_level).last&.access_level
+
+      access_level = access_level_in_namespace_group_links(user, namespace) if access_level.nil?
 
       access_level.nil? ? AccessLevel::NO_ACCESS : access_level
     end
 
     def can_modify?(user, object_namespace)
-      Member.for_namespace_and_ancestors(object_namespace).exists?(user:,
-                                                                   access_level: [
-                                                                     Member::AccessLevel::MAINTAINER,
-                                                                     Member::AccessLevel::OWNER
-                                                                   ]) ||
-        [
-          Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
-        ].include?(
-          access_level_in_namespace_group_links(user,
-                                                object_namespace)
-        )
+      [
+        Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
+      ].include?(
+        effective_access_level(object_namespace, user)
+      )
     end
 
     def can_create?(user, object_namespace)
-      Member.for_namespace_and_ancestors(object_namespace).exists?(user:,
-                                                                   access_level: [
-                                                                     Member::AccessLevel::MAINTAINER,
-                                                                     Member::AccessLevel::OWNER
-                                                                   ]) ||
-        [
-          Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
-        ].include?(
-          access_level_in_namespace_group_links(user,
-                                                object_namespace)
-        )
+      [
+        Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
+      ].include?(
+        effective_access_level(object_namespace, user)
+      )
     end
 
     def can_view?(user, object_namespace)
-      Member.for_namespace_and_ancestors(object_namespace).exists?(user:) ||
-        access_level_in_namespace_group_links(user, object_namespace) > Member::AccessLevel::NO_ACCESS
+      effective_access_level(object_namespace, user) > Member::AccessLevel::NO_ACCESS
     end
 
     def can_destroy?(user, object_namespace)
@@ -96,18 +82,11 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def can_transfer_into_namespace?(user, object_namespace)
       return object_namespace.parent.owner == user if object_namespace.parent&.user_namespace?
 
-      Member.for_namespace_and_ancestors(object_namespace)
-            .exists?(user:,
-                     access_level: [
-                       Member::AccessLevel::MAINTAINER,
-                       Member::AccessLevel::OWNER
-                     ]) ||
-        [
-          Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
-        ].include?(
-          access_level_in_namespace_group_links(user,
-                                                object_namespace)
-        )
+      [
+        Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
+      ].include?(
+        effective_access_level(object_namespace, user)
+      )
     end
 
     def can_transfer_sample?(user, object_namespace)
@@ -133,16 +112,11 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def namespace_owners_include_user?(user, namespace)
       return true if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
-      Member.for_namespace_and_ancestors(namespace).exists?(user:,
-                                                            access_level: Member::AccessLevel::OWNER) ||
-        access_level_in_namespace_group_links(user, namespace) == Member::AccessLevel::OWNER
+      effective_access_level(namespace, user) == Member::AccessLevel::OWNER
     end
 
     def user_has_namespace_maintainer_access?(user, namespace)
-      Member.for_namespace_and_ancestors(namespace).exists?(user:,
-                                                            access_level: Member::AccessLevel::MAINTAINER) ||
-        access_level_in_namespace_group_links(user,
-                                              namespace) == Member::AccessLevel::MAINTAINER
+      effective_access_level(namespace, user) == Member::AccessLevel::MAINTAINER
     end
 
     def access_level_in_namespace_group_links(user, namespace)
