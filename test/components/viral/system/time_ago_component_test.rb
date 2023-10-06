@@ -4,16 +4,6 @@ require 'application_system_test_case'
 
 module System
   class TimeAgoComponentTest < ApplicationSystemTestCase
-    test 'default' do
-      visit('/rails/view_components/viral_time_ago_component/default')
-      assert_text '15 days ago'
-    end
-
-    test 'current time input' do
-      visit('/rails/view_components/viral_time_ago_component/current_time_input')
-      assert_text '5 days ago'
-    end
-
     test 'default tooltip' do
       visit('/rails/view_components/viral_time_ago_component/default')
       assert_text '15 days ago'
