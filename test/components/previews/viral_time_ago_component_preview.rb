@@ -2,4 +2,5 @@
 
 class ViralTimeAgoComponentPreview < ViewComponent::Preview
   def default; end
+  def current_time_input; end
 end
