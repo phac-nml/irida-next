@@ -1,4 +1,4 @@
-<%= turbo_stream.update "group_show" do %>
+<%= turbo_stream.update "group_show_tab_content" do %>
   <table class="min-w-full table-fixed dark:divide-slate-600">
     <tbody
       class="
@@ -9,7 +9,7 @@
               dark:divide-slate-700
             "
     >
-    <%= render partial: "dashboard/projects/project", collection: @shared_projects %>
+    <%= render partial: "shared/project/row", collection: @shared_projects, as: :project %>
     </tbody>
   </table>
 <% end %>

@@ -27,7 +27,7 @@
   <% end %>
 
   <%= tabs.with_tab_content do %>
-    <%= turbo_frame_tag "group_show", "data-turbo-temporary": true, src: (
+    <%= turbo_frame_tag "group_show_tab_content", "data-turbo-temporary": true, src: (
       if @tab == "shared_projects"
         group_shared_projects_path(@group, format: :turbo_stream)
       else
