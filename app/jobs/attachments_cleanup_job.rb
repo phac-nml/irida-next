@@ -19,6 +19,9 @@ class AttachmentsCleanupJob < ApplicationJob
     # SELECT "attachments".* FROM "attachments"
     #   WHERE "attachments"."deleted_at" IS NOT NULL AND "attachements"."deleted_at" <= $1
     attachments_to_delete = Attachment.only_deleted.where(deleted_at: ..(Date.yesterday.midnight - days_old.day))
-    attachments_to_delete.each(&:really_destroy!)
+    attachments_to_delete.each do |att|
+      att.file.purge
+      att.really_destroy!
+    end
   end
 end
