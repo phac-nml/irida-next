@@ -80,8 +80,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def can_transfer_into_namespace?(user, object_namespace)
-      return object_namespace.parent.owner == user if object_namespace.parent&.user_namespace?
-
       [
         Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
       ].include?(
@@ -110,8 +108,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def namespace_owners_include_user?(user, namespace)
-      return true if namespace.parent&.user_namespace? && namespace.parent.owner == user
-
       effective_access_level(namespace, user) == Member::AccessLevel::OWNER
     end
 
