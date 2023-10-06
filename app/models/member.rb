@@ -117,7 +117,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def access_level_in_namespace_group_links(user, namespace)
       namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
-                                                .where(group: user.groups.self_and_descendants)
+                                                .where(group: user.groups.self_and_descendants).not_expired
 
       if namespace_group_links.count.positive?
         maxlevel_namespace_group_link = namespace_group_links.order(:group_access_level).last
