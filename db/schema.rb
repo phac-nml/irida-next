@@ -151,8 +151,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_29_194603) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.datetime "deleted_at"
+    t.jsonb "metadata", default: {}, null: false
     t.jsonb "metadata_provenance", default: {}, null: false
     t.index ["deleted_at"], name: "index_samples_on_deleted_at"
+    t.index ["metadata"], name: "index_samples_on_metadata", using: :gin
     t.index ["metadata_provenance"], name: "index_samples_on_metadata_provenance", using: :gin
     t.index ["name", "project_id"], name: "index_samples_on_name_and_project_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["project_id"], name: "index_samples_on_project_id"

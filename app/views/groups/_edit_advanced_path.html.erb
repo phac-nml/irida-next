@@ -46,6 +46,9 @@
         </div>
         <div>
           <%= form.submit t(:"groups.edit.advanced.path.submit"),
+                      data: {
+                        turbo_frame: "_top"
+                      },
                       class:
                         "button button--state-destructive button--size-default inline-block" %>
         </div>

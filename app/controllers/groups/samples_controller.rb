@@ -4,7 +4,6 @@ module Groups
   # Controller actions for Samples within a Group
   class SamplesController < ApplicationController
     layout 'groups'
-    before_action :context_crumbs, only: %i[index]
     before_action :group, only: %i[index]
 
     def index
@@ -26,10 +25,14 @@ module Groups
     end
 
     def context_crumbs
-      @context_crumbs = [{
-        name: I18n.t('groups.samples.index.title'),
-        path: group_samples_path
-      }]
+      super
+      case action_name
+      when 'index'
+        @context_crumbs += [{
+          name: I18n.t('groups.samples.index.title'),
+          path: group_samples_path
+        }]
+      end
     end
   end
 end

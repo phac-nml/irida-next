@@ -3,8 +3,7 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Attachments
-    class AttachmentsController < ApplicationController
-      before_action :project
+    class AttachmentsController < Projects::ApplicationController
       before_action :sample
       before_action :attachment, only: %i[destroy download]
 
@@ -57,11 +56,6 @@ module Projects
 
       def sample
         @sample = @project.samples.find_by(id: params[:sample_id]) || not_found
-      end
-
-      def project
-        path = [params[:namespace_id], params[:project_id]].join('/')
-        @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
       end
     end
   end

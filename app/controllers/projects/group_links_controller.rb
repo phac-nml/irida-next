@@ -23,13 +23,14 @@ module Projects
     protected
 
     def group_links_path
-      group_group_links_path
+      namespace_project_group_links_path
     end
 
     def context_crumbs
+      super
       case action_name
       when 'index'
-        @context_crumbs = [{
+        @context_crumbs += [{
           name: I18n.t('projects.members.index.title'),
           path: group_links_path
         }]
@@ -37,8 +38,6 @@ module Projects
     end
 
     def group_link_namespace
-      path = [params[:namespace_id], params[:project_id]].join('/')
-      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
       @project.namespace
     end
   end

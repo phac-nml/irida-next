@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
+class GroupsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   test 'should get index' do
@@ -10,6 +10,14 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     get groups_path
     assert_response :redirect
+  end
+
+  test 'should get fragment of namesapce tree' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_one)
+    get group_path(group), params: { parent_id: group.id, format: :turbo_stream }
+    assert_response :ok
   end
 
   test 'should show the group' do
@@ -51,8 +59,8 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     sign_in users(:john_doe)
 
     group = groups(:group_one)
-    patch group_path(group), params: { group: { name: 'New Group Name' } }
-    assert_redirected_to group_path(group)
+    patch group_path(group), params: { group: { name: 'New Group Name' }, format: :turbo_stream }
+    assert_response :ok
   end
 
   test 'should not update a group with invalid params' do
@@ -60,7 +68,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     group = groups(:group_one)
     assert_no_changes -> { group.name } do
-      patch group_path(group), params: { group: { name: 'NG' } }
+      patch group_path(group), params: { group: { name: 'NG' }, format: :turbo_stream }
     end
     assert_response :unprocessable_entity
   end

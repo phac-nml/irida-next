@@ -7,13 +7,15 @@ module Viral
       attr_reader :label, :name, :help_text, :hidden
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(name:, label:, type: 'text', default: nil, required: false, help_text: nil, hidden: false,
+      def initialize(name:, label:, type: 'text', default: nil, required: nil, pattern: nil, help_text: nil,
+                     hidden: false,
                      **arguments)
         @name = name
         @label = label
         @type = type
         @default = default
         @required = required
+        @pattern = pattern
         @help_text = help_text
         @hidden = hidden
         @arguments = arguments
@@ -28,11 +30,12 @@ module Viral
           args[:name] = @name
           args[:id] = @name
           args[:value] = @default
-          args[:required] = @required
+          args[:required] = @required if @required.present?
+          args[:pattern] = @pattern if @pattern.present?
           args[:classes] = class_names(
-            'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500',
-            'focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400',
-            'dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+            'bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-primary-500',
+            'focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600',
+            'dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
             args[:classes]
           )
         end
