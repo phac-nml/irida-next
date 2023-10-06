@@ -27,7 +27,7 @@ class Attachment < ApplicationRecord
   end
 
   def fasta?
-    metadata[:format] == 'fasta'
+    metadata['format'] == 'fasta'
   end
 
   def associated_attachment
@@ -41,14 +41,14 @@ class Attachment < ApplicationRecord
     # Assigns fasta to metadata format and assembly to type for following file types:
     # .fasta, .fasta.gz, .fna, .fna.gz, .fa, .fa.gz
     when /^\S+\.fn?a(sta)?(\.gz)?$/
-      metadata[:format] = 'fasta'
-      metadata[:type] = 'assembly'
+      metadata['format'] = 'fasta'
+      metadata['type'] = 'assembly'
     # Assigns fastq to metadata format for following file types: .fastq, .fastq.gz, .fq, .fq.gz
     when /^\S+\.f(ast)?q(\.gz)?$/
-      metadata[:format] = 'fastq'
+      metadata['format'] = 'fastq'
     # Else assigns unknown to metadata format
     else
-      metadata[:format] = 'unknown'
+      metadata['format'] = 'unknown'
     end
   end
 end
