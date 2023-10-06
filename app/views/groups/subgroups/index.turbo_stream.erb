@@ -1,0 +1,8 @@
+<%= turbo_stream.update "group_show" do %>
+  <%= render NamespaceTreeContainerComponent.new(
+    namespaces: @namespaces,
+    path: "group_subgroups_path",
+    path_args: { group_id: @group.full_path },
+    type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+  ) %>
+<% end %>
