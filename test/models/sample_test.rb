@@ -45,6 +45,20 @@ class SampleTest < ActiveSupport::TestCase
     assert_not_nil @sample.errors[:name]
   end
 
+  test 'valid sample with metadata provenance' do
+    @sample.metadata_provenance = {
+      KEY1: {
+        SOURCE: 'USER',
+        SOURCE_ID: 1
+      },
+      KEY2: {
+        SOURCE: 'ANALYSIS',
+        SOURCE_ID: 2
+      }
+    }
+    assert @sample.valid?
+  end
+
   test '#destroy removes sample ' do
     assert_difference(-> { Sample.count } => -1) do
       @sample.destroy
