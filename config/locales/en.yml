@@ -466,6 +466,7 @@ en:
           level_20: Analyst
           level_30: Maintainer
           level_40: Owner
+        inherited_from: "Inherited from"
         table_header:
           group: Group
           source: Source
@@ -526,7 +527,7 @@ en:
           link_remove_aria_label: "Remove group member %{member} button"
           link_leave_group_aria_label: "Leave group button"
           member_dropdown_aria_label: "Dropdown options for group member %{member}"
-        inherited_from: "Inherited from:"
+        inherited_from: "Inherited from"
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         table_header:
@@ -626,6 +627,7 @@ en:
           level_20: Analyst
           level_30: Maintainer
           level_40: Owner
+        inherited_from: "Inherited from"
         table_header:
           group: Group
           source: Source
@@ -686,7 +688,7 @@ en:
           link_remove_aria_label: "Remove project member %{member} button"
           link_leave_project_aria_label: "Leave project button"
           member_dropdown_aria_label: "Dropdown options for project member %{member}"
-        inherited_from: "Inherited from:"
+        inherited_from: "Inherited from"
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         table_header:

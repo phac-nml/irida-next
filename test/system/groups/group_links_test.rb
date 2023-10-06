@@ -226,7 +226,7 @@ module Groups
       assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
     end
 
-    test 'group member of Group B can access Group A as Group B is shared with Group A' do
+    test 'group member of Group B can access Group A as it is shared with group B' do
       login_as users(:user24)
 
       namespace_group_link = namespace_group_links(:namespace_group_link8)
@@ -240,7 +240,7 @@ module Groups
       assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
     end
 
-    test 'group member of Group B cannot access Group C as Group B is not shared with Group C' do
+    test 'group member of Group B cannot access Group C as it is not shared with Group B' do
       login_as users(:user24)
 
       namespace_group_link = namespace_group_links(:namespace_group_link9)

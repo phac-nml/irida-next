@@ -228,7 +228,7 @@ module Projects
       assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
     end
 
-    test 'group member of Group B cannot access Group C projects as it is not shared with Group C' do
+    test 'group member of Group B cannot access Group C projects as it is not shared with Group B' do
       login_as users(:user24)
 
       namespace_group_link = namespace_group_links(:namespace_group_link11)

@@ -4,7 +4,7 @@
   <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
   <td class="px-6 py-4">
     <% if namespace_group_link_source.key?(:inherited_namespace_path) %>
-      <%= viral_tooltip(title: 'Inherited from') do %>
+      <%= viral_tooltip(title: t(:"groups.group_links.index.inherited_from")) do %>
         <%= link_to namespace_group_link_source[:label],
         namespace_group_link_source[:inherited_namespace_path],
         data: {
