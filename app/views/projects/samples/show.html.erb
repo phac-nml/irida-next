@@ -25,8 +25,8 @@
 <% end %>
 
 <%= viral_card do |card| %>
-  <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
-    <% if allowed_to?(:update?, @project) %>
+  <% if allowed_to?(:update?, @project) %>
+    <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
       <% header.with_action do %>
         <%= render partial: "projects/samples/attachments/new_attachment_modal",
         locals: {
@@ -35,6 +35,8 @@
         } %>
       <% end %>
     <% end %>
+  <% else %>
+    <% card.with_header(title: t("projects.samples.show.files")) %>
   <% end %>
   <% card.with_section do %>
     <%= render partial: "projects/samples/attachments/table",
