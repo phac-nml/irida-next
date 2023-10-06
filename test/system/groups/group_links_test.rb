@@ -272,5 +272,18 @@ module Groups
       assert_text I18n.t(:'action_policy.policy.group.read?',
                          name: no_access_namespace_group_link.namespace.name)
     end
+
+    test 'group member of Group C cannot access Group B as the access has expired' do
+      login_as users(:user25)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link9)
+      NamespaceGroupLink.where(namespace: namespace_group_link.namespace,
+                               group: namespace_group_link.group).update(expires_at: Time.zone.today - 1)
+
+      visit group_url(namespace_group_link.namespace)
+
+      assert_text I18n.t(:'action_policy.policy.group.read?',
+                         name: namespace_group_link.namespace.name)
+    end
   end
 end

@@ -263,5 +263,20 @@ module Projects
       assert_text I18n.t(:'action_policy.policy.project.read?',
                          name: no_access_namespace_group_link.namespace.name)
     end
+
+    test 'group member of Group B cannot access Group A projects as the access has expired' do
+      login_as users(:user24)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link10)
+
+      NamespaceGroupLink.where(namespace: [namespace_group_link.namespace, namespace_group_link.namespace.parent],
+                               group: namespace_group_link.group).update(expires_at: Time.zone.today - 1)
+
+      visit namespace_project_url(namespace_group_link.namespace.parent,
+                                  namespace_group_link.namespace.project)
+
+      assert_text I18n.t(:'action_policy.policy.project.read?',
+                         name: namespace_group_link.namespace.name)
+    end
   end
 end
