@@ -24,7 +24,7 @@ module Projects
     end
 
     test 'cannot access project samples' do
-      login_as users(:david_doe)
+      login_as users(:user_no_access)
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 

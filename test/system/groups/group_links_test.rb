@@ -27,7 +27,7 @@ module Groups
           :'groups.group_links.new.sharing_namespace_with_group',
           name: @namespace.human_name
         )
-        find('#namespace_group_link_group_id').find(:xpath, 'option[2]').select_option
+        find('#namespace_group_link_group_id').find(:xpath, '//option[contains(text(), "Group 7")]').select_option
         find('#namespace_group_link_group_access_level').find(:xpath, 'option[3]').select_option
 
         click_button I18n.t(:'groups.group_links.new.button.submit')
@@ -110,8 +110,11 @@ module Groups
         click_link I18n.t(:'groups.group_links.index.unlink')
       end
 
-      Member.find_by(user: @user,
-                     namespace: namespace_group_link.namespace).update(access_level: Member::AccessLevel::GUEST)
+      member_namespace_ids_to_update = @namespace.shared_with_group_links.of_ancestors.pluck(:group_id) +
+                                       namespace_group_link.namespace.self_and_ancestors&.ids
+
+      Member.where(user: @user,
+                   namespace: member_namespace_ids_to_update).update(access_level: Member::AccessLevel::GUEST)
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
@@ -207,6 +210,80 @@ module Groups
                                                                         .native.send_keys(:return)
 
       assert_text 'Resource not found'
+    end
+
+    test 'group member of Group C can access Group B as it is shared with Group C' do
+      login_as users(:user25)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link9)
+
+      visit group_url(namespace_group_link.namespace)
+
+      assert_no_text I18n.t(:'action_policy.policy.group.read?',
+                            name: namespace_group_link.namespace.name)
+
+      assert_selector 'h1', text: namespace_group_link.namespace.human_name, count: 1
+      assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
+    end
+
+    test 'group member of Group B can access Group A as it is shared with group B' do
+      login_as users(:user24)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link8)
+
+      visit group_url(namespace_group_link.namespace)
+
+      assert_no_text I18n.t(:'action_policy.policy.group.read?',
+                            name: namespace_group_link.namespace.name)
+
+      assert_selector 'h1', text: namespace_group_link.namespace.human_name, count: 1
+      assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
+    end
+
+    test 'group member of Group B cannot access Group C as it is not shared with Group B' do
+      login_as users(:user24)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link9)
+
+      visit group_url(namespace_group_link.group)
+
+      assert_text I18n.t(:'action_policy.policy.group.read?',
+                         name: namespace_group_link.group.name)
+    end
+
+    test 'group member of Group C cannot see Group A' do
+      login_as users(:user25)
+
+      no_access_namespace_group_link = namespace_group_links(:namespace_group_link8)
+
+      visit group_url(no_access_namespace_group_link.namespace)
+
+      assert_text I18n.t(:'action_policy.policy.group.read?',
+                         name: no_access_namespace_group_link.namespace.name)
+    end
+
+    test 'group member of Group A cannot see Group C' do
+      login_as users(:john_doe)
+
+      no_access_namespace_group_link = namespace_group_links(:namespace_group_link9)
+
+      visit group_url(no_access_namespace_group_link.namespace)
+
+      assert_text I18n.t(:'action_policy.policy.group.read?',
+                         name: no_access_namespace_group_link.namespace.name)
+    end
+
+    test 'group member of Group C cannot access Group B as the access has expired' do
+      login_as users(:user25)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link9)
+      NamespaceGroupLink.where(namespace: namespace_group_link.namespace,
+                               group: namespace_group_link.group).update(expires_at: Time.zone.today - 1)
+
+      visit group_url(namespace_group_link.namespace)
+
+      assert_text I18n.t(:'action_policy.policy.group.read?',
+                         name: namespace_group_link.namespace.name)
     end
   end
 end

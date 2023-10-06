@@ -110,9 +110,12 @@ module Projects
         click_link I18n.t(:'projects.group_links.index.unlink')
       end
 
+      member_namespace_ids_to_update = @namespace.shared_with_group_links.of_ancestors.pluck(:group_id) +
+                                       namespace_group_link.namespace.parent&.self_and_ancestors&.ids +
+                                       [namespace_group_link.namespace.id]
+
       Member.where(user: @user,
-                   namespace: namespace_group_link.namespace.parent&.self_and_ancestor_ids)
-            .update(access_level: Member::AccessLevel::GUEST)
+                   namespace: member_namespace_ids_to_update).update(access_level: Member::AccessLevel::GUEST)
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
@@ -208,6 +211,72 @@ module Projects
                                                                         .native.send_keys(:return)
 
       assert_text 'Resource not found'
+    end
+
+    test 'group member of Group B can access Group A projects as it is shared with Group A' do
+      login_as users(:user24)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link10)
+
+      visit namespace_project_url(namespace_group_link.namespace.parent,
+                                  namespace_group_link.namespace.project)
+
+      assert_no_text I18n.t(:'action_policy.policy.project.read?',
+                            name: namespace_group_link.namespace.name)
+
+      assert_selector 'h1', text: namespace_group_link.namespace.name, count: 1
+      assert_selector 'p', text: namespace_group_link.namespace.description, count: 1
+    end
+
+    test 'group member of Group B cannot access Group C projects as it is not shared with Group B' do
+      login_as users(:user24)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link11)
+
+      visit namespace_project_url(namespace_group_link.namespace.parent,
+                                  namespace_group_link.namespace.project)
+
+      assert_text I18n.t(:'action_policy.policy.project.read?',
+                         name: namespace_group_link.namespace.name)
+    end
+
+    test 'group member of Group C cannot see Group A projects' do
+      login_as users(:user25)
+
+      no_access_namespace_group_link = namespace_group_links(:namespace_group_link10)
+
+      visit namespace_project_url(no_access_namespace_group_link.namespace.parent,
+                                  no_access_namespace_group_link.namespace.project)
+
+      assert_text I18n.t(:'action_policy.policy.project.read?',
+                         name: no_access_namespace_group_link.namespace.name)
+    end
+
+    test 'group member of Group A cannot see Group C projects' do
+      login_as users(:john_doe)
+
+      no_access_namespace_group_link = namespace_group_links(:namespace_group_link11)
+
+      visit namespace_project_url(no_access_namespace_group_link.namespace.parent,
+                                  no_access_namespace_group_link.namespace.project)
+
+      assert_text I18n.t(:'action_policy.policy.project.read?',
+                         name: no_access_namespace_group_link.namespace.name)
+    end
+
+    test 'group member of Group B cannot access Group A projects as the access has expired' do
+      login_as users(:user24)
+
+      namespace_group_link = namespace_group_links(:namespace_group_link10)
+
+      NamespaceGroupLink.where(namespace: [namespace_group_link.namespace, namespace_group_link.namespace.parent],
+                               group: namespace_group_link.group).update(expires_at: Time.zone.today - 1)
+
+      visit namespace_project_url(namespace_group_link.namespace.parent,
+                                  namespace_group_link.namespace.project)
+
+      assert_text I18n.t(:'action_policy.policy.project.read?',
+                         name: namespace_group_link.namespace.name)
     end
   end
 end

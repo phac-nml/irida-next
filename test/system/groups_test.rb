@@ -368,6 +368,7 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'can not view group' do
+    login_as users(:user_no_access)
     group = groups(:david_doe_group_four)
     visit group_url(group)
 

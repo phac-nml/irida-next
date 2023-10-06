@@ -264,3 +264,22 @@ group_<%= letter %>_member_alpha_bet:
   namespace_id: <%= ActiveRecord::FixtureSet.identify("group_#{letter}".to_sym) %>
   access_level: <%= Member::AccessLevel::OWNER %>
 <% end %>
+
+namespace_group_link8_member1:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+namespace_group_link_group_two_member1:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user24) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+
+namespace_group_link9_member1:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user25) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
