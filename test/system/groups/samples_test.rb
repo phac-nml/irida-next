@@ -28,7 +28,7 @@ module Groups
     end
 
     test 'cannot access group samples' do
-      login_as users(:david_doe)
+      login_as users(:user_no_access)
 
       visit group_samples_url(@group)
 

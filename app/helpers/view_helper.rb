@@ -20,6 +20,7 @@ module ViewHelper
     select: 'Viral::Form::SelectComponent',
     tabs: 'Viral::TabsComponent',
     text_input: 'Viral::Form::TextInputComponent',
+    time_ago: 'Viral::TimeAgoComponent',
     tooltip: 'Viral::TooltipComponent'
   }.freeze
 

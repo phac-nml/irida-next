@@ -114,7 +114,7 @@ class ProjectsTest < ApplicationSystemTestCase
   end
 
   test 'can not view project' do
-    login_as users(:david_doe)
+    login_as users(:user_no_access)
 
     group = groups(:group_one)
     project = projects(:project1)

@@ -2,9 +2,9 @@
 
 # Controller actions for Projects
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
+  include BreadcrumbNavigation
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
-  before_action :context_crumbs, except: %i[new create show]
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
 
   def index
@@ -140,11 +140,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def context_crumbs
-    @context_crumbs = []
+    @context_crumbs = @project.nil? ? [] : route_to_context_crumbs(@project.namespace.route)
 
     case action_name
     when 'update', 'edit'
-      @context_crumbs = [{
+      @context_crumbs += [{
         name: I18n.t('projects.edit.title'),
         path: namespace_project_edit_path
       }]

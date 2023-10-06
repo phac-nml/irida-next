@@ -5,27 +5,11 @@ module Viral
   class BreadcrumbComponent < Component
     attr_reader :links
 
-    def initialize(route:, context_crumbs: nil)
-      @links = build_crumbs(route, context_crumbs)
-    end
-
-    def build_crumbs(route, context_crumbs)
-      crumbs = []
-      route.path.split('/').each_with_index do |_part, index|
-        crumbs << crumb_for_route(route, index)
-      end
-      crumbs += context_crumbs if context_crumbs.present? && validate_context_crumbs(context_crumbs)
-      crumbs
+    def initialize(context_crumbs: nil)
+      @links = validate_context_crumbs(context_crumbs)
     end
 
     private
-
-    def crumb_for_route(route, index)
-      {
-        name: route.name.split(' / ')[index],
-        path: route.path.split('/')[0..index].join('/')
-      }
-    end
 
     def validate_context_crumbs(context_crumbs)
       raise ArgumentError, 'Context crumbs must be an array' unless context_crumbs.is_a?(Array)

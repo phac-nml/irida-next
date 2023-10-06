@@ -26,8 +26,6 @@
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 text-right whitespace-nowrap">
-    <%= viral_tooltip(title: l(project.updated_at, format: :long)) do %>
-      <span class="text-sm"><%= distance_of_time_in_words(Time.now, project.updated_at) %></span>
-    <% end %>
+    <%= viral_time_ago(original_time: project.updated_at) %>
   </td>
 </tr>

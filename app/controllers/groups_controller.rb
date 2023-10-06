@@ -4,7 +4,6 @@
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
-  before_action :context_crumbs, except: %i[index new create show]
   before_action :authorized_namespaces, except: %i[index show destroy]
 
   def index
@@ -31,7 +30,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def new
     @group = Group.find(params[:parent_id]) if params[:parent_id]
-
     authorize! @group, to: :create_subgroup? if params[:parent_id]
 
     @new_group = Group.new(parent_id: @group&.id)
@@ -148,10 +146,17 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def context_crumbs
-    @context_crumbs = [{
-      name: I18n.t('groups.edit.title'),
-      path: group_path
-    }]
+    @context_crumbs = @group.nil? ? [] : route_to_context_crumbs(@group.route)
+
+    case action_name
+    when 'new', 'create', 'show'
+      @context_crumbs
+    else
+      @context_crumbs += [{
+        name: I18n.t('groups.edit.title'),
+        path: group_canonical_path
+      }]
+    end
   end
 
   protected

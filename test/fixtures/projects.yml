@@ -111,3 +111,15 @@ project25:
 project26:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace) %>
+
+projectA:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace) %>
+
+namespace_group_link_group_one_project1:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:user24) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one_project1_namespace) %>
+
+namespace_group_link_group_three_project1:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:user24) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace) %>

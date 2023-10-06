@@ -11,6 +11,54 @@ class SampleTest < ActiveSupport::TestCase
     assert @sample.valid?
   end
 
+  test 'valid sample with metadata' do
+    @sample.metadata = {
+      source: 'Human',
+      province: 'MB',
+      sex: 'Female'
+    }
+    assert @sample.valid?
+  end
+
+  test 'invalid sample with blank name' do
+    @sample.name = nil
+    assert_not @sample.valid?
+    assert @sample.errors.added?(:name, :blank)
+  end
+
+  test 'invalid sample with short name' do
+    @sample.name = 'a'
+    assert_not @sample.valid?
+    assert_not_nil @sample.errors[:name]
+  end
+
+  test 'invalid sample with long name' do
+    @sample.name = 'a' * 256
+    assert_not @sample.valid?
+    assert_not_nil @sample.errors[:name]
+  end
+
+  test 'invalid sample with same name' do
+    sample2 = samples(:sample2)
+    @sample.name = sample2.name
+    assert_not @sample.valid?
+    assert_not_nil @sample.errors[:name]
+  end
+
+  test 'valid sample with metadata provenance' do
+    @sample.metadata_provenance = {
+      KEY1: {
+        SOURCE: 'USER',
+        SOURCE_ID: 1
+      },
+      KEY2: {
+        SOURCE: 'ANALYSIS',
+        SOURCE_ID: 2
+      }
+    }
+    assert @sample.valid?
+  end
+
   test '#destroy removes sample ' do
     assert_difference(-> { Sample.count } => -1) do
       @sample.destroy

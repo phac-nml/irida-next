@@ -22,6 +22,11 @@ john_doe_namespace_route:
   path: john.doe_at_localhost
   source: john_doe_namespace (Namespace)
 
+jeff_doe_namespace_route:
+  name: jeff.doe@localhost
+  path: jeff.doe_at_localhost
+  source: jeff_doe_namespace (Namespace)
+
 jane_doe_namespace_route:
   name: jane.doe@localhost
   path: jane.doe_at_localhost
@@ -153,3 +158,28 @@ group_<%= letter %>_route:
   path: <%= "group-#{letter}" %>
   source: group<%= "_#{letter}" %> (Namespace)
 <% end %>
+
+namespace_group_link_group_one_route:
+  name: Group One
+  path: group-one
+  source: namespace_group_link_group_one (Namespace)
+
+namespace_group_link_group_two_route:
+  name: Group Two
+  path: group-two
+  source: namespace_group_link_group_two (Namespace)
+
+namespace_group_link_group_three_route:
+  name: Group Three
+  path: group-three
+  source: namespace_group_link_group_three (Namespace)
+
+namespace_group_link_group_one_project1_namespace_route:
+  name: Group One / Project 1
+  path: group-one/project-1
+  source: namespace_group_link_group_one_project1_namespace (Namespace)
+
+namespace_group_link_group_three_project1_namespace_route:
+  name: Group Three / Project 1
+  path: group-three/project-1
+  source: namespace_group_link_group_three_project1_namespace (Namespace)

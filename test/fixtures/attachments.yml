@@ -3,3 +3,15 @@
 attachment1:
   metadata: {}
   attachable: sample1 (Sample)
+
+attachmentA:
+  metadata: {}
+  attachable: sampleA (Sample)
+
+attachmentB:
+  metadata: {}
+  attachable: sampleA (Sample)
+
+attachmentC:
+  metadata: {}
+  attachable: sampleA (Sample)

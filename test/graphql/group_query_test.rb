@@ -76,9 +76,10 @@ class GroupQueryTest < ActiveSupport::TestCase
   end
 
   test 'group query should not return a result when unauthorized a' do
+    user = users(:user_no_access)
     group = groups(:david_doe_group_four)
 
-    result = IridaSchema.execute(GROUP_QUERY, context: { current_user: @user },
+    result = IridaSchema.execute(GROUP_QUERY, context: { current_user: user },
                                               variables: { groupPath: group.full_path })
 
     assert_nil result['data']['group']

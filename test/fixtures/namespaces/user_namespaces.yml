@@ -23,3 +23,9 @@ david_doe_namespace:
   path: david.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
+
+jeff_doe_namespace:
+  name: jeff.doe@localhost
+  path: jeff.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>

@@ -80,3 +80,10 @@ user25:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "25"
+
+# Do not link this user to anything
+user_no_access:
+  email: <%= "user_no_access@localhost" %>
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: User
+  last_name: "No Access"

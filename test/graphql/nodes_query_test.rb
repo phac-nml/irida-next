@@ -63,9 +63,10 @@ class NodesQueryTest < ActiveSupport::TestCase
   end
 
   test 'nodes query should not return an unauthorized group' do
+    user = users(:user_no_access)
     group = groups(:david_doe_group_four)
 
-    result = IridaSchema.execute(NODES_QUERY, context: { current_user: @user },
+    result = IridaSchema.execute(NODES_QUERY, context: { current_user: user },
                                               variables: { ids: [group.to_global_id.to_s] })
 
     assert_not_nil result['errors'], 'should not work and have errors.'

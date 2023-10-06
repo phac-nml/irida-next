@@ -66,7 +66,7 @@ module Projects
       end
 
       test 'user without access cannot download the attachment' do
-        sign_in users(:david_doe)
+        sign_in users(:user_no_access)
         get download_namespace_project_sample_attachment_url(@namespace, @project, @sample1, @attachment1)
 
         assert_response :unauthorized

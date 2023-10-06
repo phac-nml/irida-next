@@ -41,3 +41,27 @@ namespace_group_link7:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup2) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
+
+namespace_group_link8:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>
+  namespace_type: "Group"
+
+namespace_group_link9:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>
+  namespace_type: "Group"
+
+namespace_group_link10:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one_project1_namespace) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>
+  namespace_type: "Group"
+
+namespace_group_link11:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>
+  namespace_type: "Group"
