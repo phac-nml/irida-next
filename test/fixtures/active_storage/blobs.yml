@@ -6,6 +6,8 @@ testsample_illumina_pe_forward_blob: <%= ActiveStorage::FixtureSet.blob filename
 
 testsample_illumina_pe_reverse_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_L001_R2_001.fastq", service_name: "test_fixtures" %>
 
+attachmentA_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test_fixtures" %>
+
 attachmentB_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_B.fastq", service_name: "test_fixtures" %>
 
 attachmentC_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_C.fastq", service_name: "test_fixtures" %>

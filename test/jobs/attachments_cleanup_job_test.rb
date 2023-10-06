@@ -4,7 +4,7 @@ require 'test_helper'
 
 class AttachmentsCleanupJobTest < ActiveJob::TestCase
   def setup
-    @attachment1 = attachments(:attachment1)
+    @attachment1 = attachments(:attachmentA)
     @attachment2 = attachments(:attachmentB)
     @attachment3 = attachments(:attachmentC)
   end
@@ -32,16 +32,13 @@ class AttachmentsCleanupJobTest < ActiveJob::TestCase
     assert_not_nil @attachment1.deleted_at
     assert_not_nil @attachment2.deleted_at
     assert_nil @attachment3.deleted_at
-    # verify file counts
-    assert_equal 1, Attachment.all.count
-    assert_equal 2, Attachment.only_deleted.count
-    assert_equal 3, ActiveStorage::Attachment.count
-    # run job
-    AttachmentsCleanupJob.perform_now
-    # verify only first file is deleted (hard)
-    assert_equal 1, Attachment.all.count
-    assert_equal 1, Attachment.only_deleted.count
-    assert_equal 2, ActiveStorage::Attachment.count # file removed
+
+    # run job and verify file/object count changes
+    assert_difference -> { ActiveStorage::Attachment.count } => -1,
+                      -> { Attachment.only_deleted.count } => -1,
+                      -> { Attachment.all.count } => 0 do
+      AttachmentsCleanupJob.perform_now
+    end
 
     # verify attachment exist or not
     id_list = Attachment.all.map(&:id)
@@ -68,16 +65,13 @@ class AttachmentsCleanupJobTest < ActiveJob::TestCase
     assert_not_nil @attachment1.deleted_at
     assert_not_nil @attachment2.deleted_at
     assert_nil @attachment3.deleted_at
-    # verify file counts
-    assert_equal 1, Attachment.all.count
-    assert_equal 2, Attachment.only_deleted.count
-    assert_equal 3, ActiveStorage::Attachment.count
-    # run job
-    AttachmentsCleanupJob.perform_now(14)
-    # verify only first file is deleted (hard)
-    assert_equal 1, Attachment.all.count
-    assert_equal 1, Attachment.only_deleted.count
-    assert_equal 2, ActiveStorage::Attachment.count # file removed
+
+    # run job and verify file/object count changes
+    assert_difference -> { ActiveStorage::Attachment.count } => -1,
+                      -> { Attachment.only_deleted.count } => -1,
+                      -> { Attachment.all.count } => 0 do
+      AttachmentsCleanupJob.perform_now(14)
+    end
 
     # verify attachment exist or not
     id_list = Attachment.all.map(&:id)
@@ -102,16 +96,13 @@ class AttachmentsCleanupJobTest < ActiveJob::TestCase
     assert_not_nil @attachment1.deleted_at
     assert_not_nil @attachment2.deleted_at
     assert_nil @attachment3.deleted_at
-    # verify file counts
-    assert_equal 1, Attachment.all.count
-    assert_equal 2, Attachment.only_deleted.count
-    assert_equal 3, ActiveStorage::Attachment.count
-    # run job
-    AttachmentsCleanupJob.perform_now
-    # verify only 2 files are deleted (hard)
-    assert_equal 1, Attachment.all.count
-    assert_equal 0, Attachment.only_deleted.count
-    assert_equal 1, ActiveStorage::Attachment.count # file removed
+
+    # run job and verify file/object count changes
+    assert_difference -> { ActiveStorage::Attachment.count } => -2,
+                      -> { Attachment.only_deleted.count } => -2,
+                      -> { Attachment.all.count } => 0 do
+      AttachmentsCleanupJob.perform_now
+    end
 
     # verify attachment exist or not
     id_list = Attachment.all.map(&:id)
