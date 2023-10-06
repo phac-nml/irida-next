@@ -18,10 +18,13 @@ class AttachmentsCleanupJob < ApplicationJob
 
     # SELECT "attachments".* FROM "attachments"
     #   WHERE "attachments"."deleted_at" IS NOT NULL AND "attachements"."deleted_at" <= $1
-    attachments_to_delete = Attachment.only_deleted.where(deleted_at: ..(Date.yesterday.midnight - days_old.day))
-    attachments_to_delete.each do |att|
-      att.file.purge
-      att.really_destroy!
+    Attachment.only_deleted.where(
+      deleted_at: ..(Date.yesterday.midnight - days_old.day)
+    ).find_in_batches(batch_size: 50) do |group| # handle files in batches
+      group.each do |att|
+        att.file.purge
+        att.really_destroy!
+      end
     end
   end
 end
