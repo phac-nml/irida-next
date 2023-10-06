@@ -8,13 +8,4 @@
   <p class="text-gray-500 dark:text-gray-400 text-center">
     <%= text_note %>
   </p>
-  <% if btn_action_permission %>
-    <div class="flex items-center justify-center mt-2">
-      <%= render partial: btn_action_partial,
-        locals: {
-          open: false,
-          attachment: @attachment
-        } %>
-    </div>
-  <% end %>
 <% end %>
