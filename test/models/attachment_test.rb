@@ -26,7 +26,7 @@ class AttachmentTest < ActiveSupport::TestCase
     assert new_attachment.errors.added?(:file, :checksum_uniqueness)
   end
 
-  test 'metadata format fastq file types' do
+  test 'metadata fastq file types' do
     new_fastq_attachment_ext_fastq = @sample.attachments.build
     new_fastq_attachment_ext_fastq.file.attach(io: Rails.root.join('test/fixtures/files/test_file_1.fastq').open,
                                                filename: 'test_file_1.fastq')
@@ -52,45 +52,51 @@ class AttachmentTest < ActiveSupport::TestCase
     assert_equal new_fastq_attachment_ext_fq_gz.metadata['format'], 'fastq'
   end
 
-  test 'metadata format fasta file types' do
+  test 'metadata fasta file types' do
     new_fasta_attachment_ext_fasta = @sample.attachments.build
     new_fasta_attachment_ext_fasta.file.attach(io: Rails.root.join('test/fixtures/files/test_file_5.fasta').open,
                                                filename: 'test_file_5.fasta')
     new_fasta_attachment_ext_fasta.save
     assert_equal new_fasta_attachment_ext_fasta.metadata['format'], 'fasta'
+    assert_equal new_fasta_attachment_ext_fasta.metadata['type'], 'assembly'
 
     new_fasta_attachment_ext_fasta_gz = @sample.attachments.build
     new_fasta_attachment_ext_fasta_gz.file.attach(io: Rails.root.join('test/fixtures/files/test_file_6.fasta.gz').open,
                                                   filename: 'test_file_6.fasta.gz')
     new_fasta_attachment_ext_fasta_gz.save
     assert_equal new_fasta_attachment_ext_fasta_gz.metadata['format'], 'fasta'
+    assert_equal new_fasta_attachment_ext_fasta_gz.metadata['type'], 'assembly'
 
     new_fasta_attachment_ext_fa = @sample.attachments.build
     new_fasta_attachment_ext_fa.file.attach(io: Rails.root.join('test/fixtures/files/test_file_7.fa').open,
                                             filename: 'test_file_7.fa')
     new_fasta_attachment_ext_fa.save
     assert_equal new_fasta_attachment_ext_fa.metadata['format'], 'fasta'
+    assert_equal new_fasta_attachment_ext_fa.metadata['type'], 'assembly'
 
     new_fasta_attachment_ext_fa_gz = @sample.attachments.build
     new_fasta_attachment_ext_fa_gz.file.attach(io: Rails.root.join('test/fixtures/files/test_file_8.fa.gz').open,
                                                filename: 'test_file_8.fa.gz')
     new_fasta_attachment_ext_fa_gz.save
     assert_equal new_fasta_attachment_ext_fa_gz.metadata['format'], 'fasta'
+    assert_equal new_fasta_attachment_ext_fa_gz.metadata['type'], 'assembly'
 
     new_fasta_attachment_ext_fna = @sample.attachments.build
     new_fasta_attachment_ext_fna.file.attach(io: Rails.root.join('test/fixtures/files/test_file_9.fna').open,
                                              filename: 'test_file_9.fna')
     new_fasta_attachment_ext_fna.save
     assert_equal new_fasta_attachment_ext_fna.metadata['format'], 'fasta'
+    assert_equal new_fasta_attachment_ext_fna.metadata['type'], 'assembly'
 
     new_fasta_attachment_ext_fna_gz = @sample.attachments.build
     new_fasta_attachment_ext_fna_gz.file.attach(io: Rails.root.join('test/fixtures/files/test_file_10.fna.gz').open,
                                                 filename: 'test_file_10.fna.gz')
     new_fasta_attachment_ext_fna_gz.save
     assert_equal new_fasta_attachment_ext_fna_gz.metadata['format'], 'fasta'
+    assert_equal new_fasta_attachment_ext_fna_gz.metadata['type'], 'assembly'
   end
 
-  test 'metadata format unknown file types' do
+  test 'metadata unknown file types' do
     new_unknown_attachment_ext_docx = @sample.attachments.build
     new_unknown_attachment_ext_docx.file.attach(io: Rails.root.join('test/fixtures/files/test_file_11.docx').open,
                                                 filename: 'test_file_11.docx')
