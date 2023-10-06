@@ -2,5 +2,16 @@
 
 module Groups
   class SharedProjectsController < Groups::ApplicationController
+    before_action :group, only: %i[index]
+
+    def index
+      @shared_projects = @group.shared_projects
+    end
+
+    private
+
+    def group
+      @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
+    end
   end
 end
