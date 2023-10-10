@@ -1,0 +1,15 @@
+<div class="border border-slate-200 dark:border-slate-700 mt-4 py-20 flex justify-center">
+  <div class="inline-block flex items-center">
+    <%= viral_icon(name: icon_name, color: :primary, classes: "w-20 h-20 shrink mr-4") %>
+    <div class="flex flex-col grow">
+      <h3 class="text-2xl font-bold dark:text-slate-300 text-slate-700">
+        <%= title %>
+      </h3>
+      <% if description.present? %>
+        <p class="text-slate-600 dark:text-slate-400">
+          <%= description %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>
