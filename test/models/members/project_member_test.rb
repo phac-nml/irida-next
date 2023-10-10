@@ -126,4 +126,11 @@ class ProjectMemberTest < ActiveSupport::TestCase
       Member.restore(@project_member.id, recursive: true)
     end
   end
+
+  test '#scope for_namespace_and_ancestors returns the correct collection' do
+    project = projects(:project1)
+    @project_parent_member = members(:group_one_member_james_doe)
+    members = Member.for_namespace_and_ancestors(project)
+    assert members.include?(@project_parent_member)
+  end
 end

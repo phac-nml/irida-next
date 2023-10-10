@@ -127,4 +127,10 @@ class GroupMemberTest < ActiveSupport::TestCase
       Member.restore(@group_member.id, recursive: true)
     end
   end
+
+  test '#scope for_namespace_and_ancestors returns the correct collection' do
+    group = groups(:subgroup1)
+    members = Member.for_namespace_and_ancestors(group)
+    assert members.include?(@group_member)
+  end
 end
