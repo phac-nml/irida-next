@@ -3,9 +3,16 @@
 module Nextflow
   # Render the contents of a Nextflow samplesheet to a table
   class SamplesheetComponent < Component
-    def initialize(headers:, samples:)
-      @headers = headers
+    attr_reader :properties, :required, :samples
+
+    def initialize(schema:, samples:)
       @samples = samples
+      extract_properties(schema)
+    end
+
+    def extract_properties(schema)
+      @properties = schema['items']['properties']
+      @required = schema['items']['required']
     end
   end
 end

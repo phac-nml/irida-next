@@ -1,24 +1,32 @@
-<div class="relative overflow-x-auto border dark:border-slate-700 shadow">
+<div class="overflow-hidden border-b border-gray-200 shadow dark:border-gray-700 sm:rounded-lg">
+  <%= form_with url: "#", remote: true do |form| %>
   <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
     <tr>
-      <% @headers.each do |header| %>
-        <th class="py-3 px-6 font-semibold tracking-wider">
+      <% properties.keys.each do |header| %>
+        <th class="px-6 py-3 font-semibold tracking-wider">
           <%= header %>
         </th>
       <% end %>
     </tr>
     </thead>
     <tbody>
-    <% @samples.each do |sample| %>
+    <% samples.each_with_index do |sample, index| %>
+      <%= fields_for "sample[#{index}]".to_s do |fields| %>
       <tr>
-        <% @headers.each_with_index do |_header, index| %>
-          <td class="py-3 px-6 border-b border-gray-200 dark:border-gray-700">
-            <%= sample[index] %>
-          </td>
-        <% end %>
+        <td class="px-6 py-3 text-left whitespace-nowrap">
+          <%= sample.name %>
+          <%= fields.hidden_field :name, value: sample.id %>
+        </td>
+        <td></td>
+        <td></td>
+        <td class="p-0">
+          <%= fields.select :stradedness, properties['strandedness']['enum'], class: "w-full" %>
+        </td>
       </tr>
+      <% end %>
     <% end %>
     </tbody>
   </table>
+  <% end %>
 </div>

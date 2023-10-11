@@ -2,23 +2,25 @@
 
 require 'csv'
 class NextflowSamplesheetComponentPreview < ViewComponent::Preview
-  # @param samplesheet_file select :samplesheet_file_options
+  # @param schema_file select :schema_file_options
 
-  def default(samplesheet_file: 'samplesheet.csv')
-    headers, *samples = CSV.read(
-      Rails.root.join('test', 'fixtures', 'files', 'nextflow', samplesheet_file)
-    )
-
+  def default(schema_file: 'samplesheet_schema.json')
     render_with_template(locals: {
-                           headers:,
-                           samples:
+                           schema_file:,
+                           samples: generate_samples
                          })
   end
 
-  def samplesheet_file_options
+  def generate_samples
+    sample1 = Sample.new(name: 'Sample 1', description: 'Sample 1 description')
+    sample2 = Sample.new(name: 'Sample 2', description: 'Sample 2 description')
+
+    [sample1, sample2]
+  end
+
+  def schema_file_options
     Rails.root.join('test/fixtures/files/nextflow').entries.select do |f|
-      File.file?(File.join('test/fixtures/files/nextflow',
-                           f)) && f.to_s.starts_with?('samplesheet') && f.to_s.ends_with?('.csv')
+      File.file?(File.join('test/fixtures/files/nextflow', f)) && f.to_s.starts_with?('samplesheet_schema')
     end
   end
 end
