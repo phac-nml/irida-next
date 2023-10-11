@@ -12,9 +12,9 @@
     <tbody>
     <% @samples.each do |sample| %>
       <tr>
-        <% @headers.each do |header| %>
+        <% @headers.each_with_index do |_header, index| %>
           <td class="py-3 px-6 border-b border-gray-200 dark:border-gray-700">
-            <%= sample[header] %>
+            <%= sample[index] %>
           </td>
         <% end %>
       </tr>
