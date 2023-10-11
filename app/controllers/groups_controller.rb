@@ -162,7 +162,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def current_page
     @current_page = case action_name
-                    when 'show'
+                    when 'show', 'new'
                       'details'
                     else
                       'settings'

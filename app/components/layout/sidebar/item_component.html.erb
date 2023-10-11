@@ -1,3 +1,5 @@
+<% selected = @current_page == label.downcase %>
+
 <li class="Layout-Sidebar__Item">
   <a
     href="<%= url %>"
@@ -14,10 +16,10 @@
       hover:bg-slate-200
       dark:text-slate-200
       dark:hover:bg-slate-700
-      <%= class_names('Layout-Sidebar__Item--selected bg-slate-200 dark:bg-slate-700': @current_page == label.downcase)  %>
+      <%= class_names('Layout-Sidebar__Item--selected bg-slate-200 dark:bg-slate-700': selected)  %>
     "
   >
-    <% if @current_page == label.downcase %>
+    <% if selected %>
       <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 rounded-lg bg-primary-600"></div>
     <% else %>
       <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 bg-transparent"></div>
