@@ -126,4 +126,22 @@ class ProjectMemberTest < ActiveSupport::TestCase
       Member.restore(@project_member.id, recursive: true)
     end
   end
+
+  test '#scope for_namespace_and_ancestors returns the correct collection' do
+    project = projects(:project1)
+
+    members = Member.for_namespace_and_ancestors(project)
+
+    group_and_ancestors = project.namespace.parent&.self_and_ancestors
+    memberships = []
+
+    group_and_ancestors.each do |group|
+      memberships << group.group_members
+    end
+
+    memberships = memberships.flatten
+
+    assert memberships.count == members.count
+    assert_same_unique_elements(members, memberships)
+  end
 end

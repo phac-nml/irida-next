@@ -15,6 +15,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 require 'action_policy/test_helper'
+require 'test_helpers/array_helpers'
 
 module ActiveSupport
   class TestCase
@@ -38,5 +39,6 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
     include Devise::Test::IntegrationHelpers
     include ActionPolicy::TestHelper
+    include ArrayHelpers
   end
 end

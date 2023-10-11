@@ -65,4 +65,24 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
       I18n.t('activerecord.errors.models.namespace_group_link.attributes.namespace_type.inclusion')
     )
   end
+
+  test '#scope for_namespace_and_ancestors returns the correct collection' do
+    group_group_link = namespace_group_links(:namespace_group_link2)
+
+    namespace = group_group_link.namespace
+
+    namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
+
+    group_and_ancestors = namespace.self_and_ancestors
+    shared_with_group_links = []
+
+    group_and_ancestors.each do |group|
+      shared_with_group_links << group.shared_with_group_links
+    end
+
+    shared_with_group_links = shared_with_group_links.flatten
+
+    assert shared_with_group_links.count == namespace_group_links.count
+    assert_same_unique_elements(namespace_group_links, shared_with_group_links)
+  end
 end
