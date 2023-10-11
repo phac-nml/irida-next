@@ -1,1 +1,24 @@
-<%= @samplesheet %>
+<div class="relative overflow-x-auto border dark:border-slate-700 shadow">
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <% @headers.each do |header| %>
+        <th class="py-3 px-6 font-semibold tracking-wider">
+          <%= header %>
+        </th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <% @samples.each do |sample| %>
+      <tr>
+        <% @headers.each do |header| %>
+          <td class="py-3 px-6 border-b border-gray-200 dark:border-gray-700">
+            <%= sample[header] %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

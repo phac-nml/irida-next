@@ -2,8 +2,9 @@
 
 module Nextflow
   class SamplesheetComponent < Component
-    def initialize(samplesheet:)
-      @samplesheet = samplesheet
+    def initialize(headers:, samples:)
+      @headers = headers
+      @samples = samples
     end
   end
 end
