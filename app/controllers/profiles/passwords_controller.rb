@@ -4,6 +4,8 @@
 module Profiles
   # Controller for the user password page
   class PasswordsController < Profiles::ApplicationController
+    before_action :current_page
+
     # Get password page
     def edit
       authorize! @user
@@ -28,6 +30,10 @@ module Profiles
 
     def update_password_params
       params.require(:user).permit(:password, :password_confirmation, :current_password)
+    end
+
+    def current_page
+      @current_page = 'password'
     end
   end
 end

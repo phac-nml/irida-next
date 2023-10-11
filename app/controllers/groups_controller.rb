@@ -5,6 +5,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   layout :resolve_layout
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
+  before_action :current_page
 
   def index
     redirect_to dashboard_groups_path
@@ -157,6 +158,15 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
         path: group_canonical_path
       }]
     end
+  end
+
+  def current_page
+    @current_page = case action_name
+                    when 'show'
+                      'details'
+                    else
+                      'settings'
+                    end
   end
 
   protected

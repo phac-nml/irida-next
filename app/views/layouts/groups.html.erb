@@ -8,23 +8,27 @@
           <%= render section.with_item(
             url: group_path(@group),
             icon: "squares_2x2",
-            label: t(:"groups.sidebar.details")
+            label: t(:"groups.sidebar.details"),
+            current_page: @current_page
           ) %>
           <%= render section.with_item(
             url: group_samples_path(@group),
             icon: "beaker",
-            label: t(:"projects.sidebar.samples")
+            label: t(:"projects.sidebar.samples"),
+            current_page: @current_page
           ) %>
           <%= render section.with_item(
             url: group_members_path(@group),
             icon: "users",
-            label: t(:"groups.sidebar.members")
+            label: t(:"groups.sidebar.members"),
+            current_page: @current_page
           ) %>
           <% if allowed_to?(:update?, @group) %>
             <%= render section.with_item(
               url: edit_group_path(@group),
               icon: "cog_6_tooth",
-              label: t(:"groups.sidebar.settings")
+              label: t(:"groups.sidebar.settings"),
+              current_page: @current_page
             ) %>
           <% end %>
         <% end %>

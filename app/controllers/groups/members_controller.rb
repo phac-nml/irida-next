@@ -5,6 +5,8 @@ module Groups
   class MembersController < Groups::ApplicationController
     include MembershipActions
 
+    before_action :current_page
+
     def member_params
       params.require(:member).permit(:user_id, :access_level, :type, :namespace_id, :created_by_id)
     end
@@ -39,6 +41,10 @@ module Groups
     def member_namespace
       @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
       @group
+    end
+
+    def current_page
+      @current_page = 'members'
     end
   end
 end

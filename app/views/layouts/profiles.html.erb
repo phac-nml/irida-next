@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
-<%= render "layouts/partials/head" %>
-<body class="bg-white dark:bg-slate-900">
-<%= render LayoutComponent.new(user: current_user, fixed: true) do |layout| %>
-  <% layout.with_sidebar(label: t(:'profiles.sidebar.header'), icon_name: "user_circle") do |navigation| %>
-    <%= navigation.with_section do |section| %>
-      <%= render section.with_item(
-        url: profile_path,
-        icon: "user",
-        label: t(:"profiles.sidebar.profile")
-      ) %>
-      <% if allowed_to?(:edit_password?, @user) %>
-        <%= render section.with_item(
-          url: edit_profile_password_path,
-          icon: "lock_closed",
-          label: t(:"profiles.sidebar.password")
-        ) %>
+  <%= render "layouts/partials/head" %>
+  <body class="bg-white dark:bg-slate-900">
+    <%= render LayoutComponent.new(user: current_user, fixed: true) do |layout| %>
+      <% layout.with_sidebar(label: t(:'profiles.sidebar.header'), icon_name: "user_circle") do |navigation| %>
+        <%= navigation.with_section do |section| %>
+          <%= render section.with_item(
+            url: profile_path,
+            icon: "user",
+            label: t(:"profiles.sidebar.profile"),
+            current_page: @current_page
+          ) %>
+          <% if allowed_to?(:edit_password?, @user) %>
+            <%= render section.with_item(
+              url: edit_profile_password_path,
+              icon: "lock_closed",
+              label: t(:"profiles.sidebar.password"),
+              current_page: @current_page
+            ) %>
+          <% end %>
+          <%= render section.with_item(
+            url: profile_personal_access_tokens_path,
+            icon: "ticket",
+            label: t(:"profiles.sidebar.access_tokens"),
+            current_page: @current_page
+          ) %>
+          <%= render section.with_item(
+            url: profile_preferences_path,
+            icon: :adjustment_horizontal,
+            label: t(:"profiles.sidebar.preferences"),
+            current_page: @current_page
+          ) %>
+          <%= render section.with_item(
+            url: profile_account_path,
+            icon: "building_library",
+            label: t(:"profiles.sidebar.account"),
+            current_page: @current_page
+          ) %>
+        <% end %>
+        <% layout.with_body do %>
+          <%= yield %>
+        <% end %>
       <% end %>
-      <%= render section.with_item(
-        url: profile_personal_access_tokens_path,
-        icon: "ticket",
-        label: t(:"profiles.sidebar.access_tokens")
-      ) %>
-      <%= render section.with_item(
-        url: profile_preferences_path,
-        icon: :adjustment_horizontal,
-        label: t(:"profiles.sidebar.preferences")
-      ) %>
-      <%= render section.with_item(
-        url: profile_account_path,
-        icon: "building_library",
-        label: t(:"profiles.sidebar.account")
-      ) %>
     <% end %>
-    <% layout.with_body do %>
-      <%= yield %>
-    <% end %>
-  <% end %>
-<% end %>
-</body>
+  </body>
 </html>
