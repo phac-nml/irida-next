@@ -129,8 +129,19 @@ class GroupMemberTest < ActiveSupport::TestCase
   end
 
   test '#scope for_namespace_and_ancestors returns the correct collection' do
-    group = groups(:subgroup1)
-    members = Member.for_namespace_and_ancestors(group)
-    assert members.include?(@group_member)
+    namespace = groups(:subgroup1)
+    members = Member.for_namespace_and_ancestors(namespace)
+
+    group_and_ancestors = namespace.self_and_ancestors
+    memberships = []
+
+    group_and_ancestors.each do |group|
+      memberships << group.group_members
+    end
+
+    memberships = memberships.flatten
+
+    assert memberships.count == members.count
+    assert_same_unique_elements(members, memberships)
   end
 end
