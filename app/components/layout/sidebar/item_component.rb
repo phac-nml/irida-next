@@ -4,13 +4,13 @@ module Layout
   module Sidebar
     # Sidebar item component
     class ItemComponent < Component
-      attr_reader :url, :label, :icon, :current_page
+      attr_reader :url, :label, :icon, :selected
 
-      def initialize(url:, label:, icon: nil, current_page: nil)
+      def initialize(url:, label:, icon: nil, selected: false)
         @url = url
         @label = label
         @icon = icon
-        @current_page = current_page
+        @selected = selected
       end
     end
   end
