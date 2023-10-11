@@ -2,7 +2,7 @@
 
 # Controller for the user profile page
 class ProfilesController < Profiles::ApplicationController
-  before_action :set_user, :current_page
+  before_action :current_page
 
   # Get the profile page
   def show
@@ -33,10 +33,6 @@ class ProfilesController < Profiles::ApplicationController
       :first_name,
       :last_name
     )
-  end
-
-  def set_user
-    @user = current_user
   end
 
   def current_page

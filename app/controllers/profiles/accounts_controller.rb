@@ -4,8 +4,6 @@
 module Profiles
   # Controller for the user account page
   class AccountsController < Profiles::ApplicationController
-    before_action :current_page
-
     # Get account page
     def show
       authorize! @user, to: :read?

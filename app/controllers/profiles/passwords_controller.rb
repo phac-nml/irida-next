@@ -4,8 +4,6 @@
 module Profiles
   # Controller for the user password page
   class PasswordsController < Profiles::ApplicationController
-    before_action :current_page
-
     # Get password page
     def edit
       authorize! @user

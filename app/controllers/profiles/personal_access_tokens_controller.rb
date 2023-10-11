@@ -4,7 +4,7 @@
 module Profiles
   # Controller for the user personal access tokens page
   class PersonalAccessTokensController < Profiles::ApplicationController
-    before_action :active_access_tokens, :current_page
+    before_action :active_access_tokens
 
     def index
       authorize! @user
