@@ -49,15 +49,18 @@ en:
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
-      new:
-        sign_in: Sign in
+      new_with_providers:
+        local_button: "Sign in with Local Account"
+        return_button: "Return to sign in selection"
+        omniauth: "Sign in with %{provider}"
     shared:
-      links:
-        forgot_password: "Forgot your password?"
+      form:
         sign_in: "Sign in"
+      links:
         create_an_account: "Don't have an account?"
         create_an_account_link: "Register now"
-        omniauth: "Sign in with %{provider}"
+        forgot_password: "Forgot your password?"
+        sign_in: "Sign in"
     unlocks:
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
