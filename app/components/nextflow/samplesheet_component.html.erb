@@ -2,36 +2,36 @@
   <%= form_with url: "#", remote: true do |form| %>
     <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
       <thead class="text-xs text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
-    <tr>
-      <% properties.keys.each_with_index do |header, index| %>
-        <th class="px-6 py-3 font-semibold tracking-wider">
-          <div class="flex items-center ">
-            <span class="uppercase"><%= header %></span>
-            <%= viral_tooltip(title: properties[header]["errorMessage"]) do %>
-              <%= viral_icon(name: :information_circle_solid, color: :subdued, classes: "ml-2 h-4 w-4 inline-block") %>
-            <% end %>
-          </div>
-        </th>
-      <% end %>
-    </tr>
-    </thead>
-    <tbody>
-    <% samples.each_with_index do |sample, index| %>
-      <%= fields_for "sample[#{index}]".to_s do |fields| %>
-        <tr class="border-b">
-        <td class="px-6 py-3 text-left whitespace-nowrap">
-          <%= sample.name %>
-          <%= fields.hidden_field :name, value: sample.id %>
-        </td>
-          <td><%= sample.attachments %></td>
-        <td></td>
-        <td class="p-0">
-          <%= fields.select :strandedness, properties['strandedness']['enum'], {}, { :class => "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm  focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" } %>
-        </td>
+      <tr>
+        <% properties.keys.each_with_index do |header, index| %>
+          <th class="px-6 py-3 font-semibold tracking-wider">
+            <div class="flex items-center ">
+              <span class="uppercase"><%= header %></span>
+              <%= viral_tooltip(title: properties[header]["errorMessage"]) do %>
+                <%= viral_icon(name: :information_circle_solid, color: :subdued, classes: "ml-2 h-4 w-4 inline-block") %>
+              <% end %>
+            </div>
+          </th>
+        <% end %>
       </tr>
+      </thead>
+      <tbody>
+      <% samples.each_with_index do |sample, index| %>
+        <%= fields_for "sample[#{index}]".to_s do |fields| %>
+          <tr class="border-b">
+            <td class="px-6 py-3 text-left whitespace-nowrap">
+              <%= sample.name %>
+              <%= fields.hidden_field :name, value: sample.id %>
+            </td>
+            <td><%= fields.select :fastq, sample.attachments.map { |a| a.file.filename }, { :prompt => "Select a file" }, { :class => "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm  focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" } %></td>
+            <td><%= fields.select :fastq, sample.attachments.map { |a| a.file.filename }, { :prompt => "Select a file" }, { :class => "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm  focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" } %></td>
+            <td class="p-0">
+              <%= fields.select :strandedness, properties['strandedness']['enum'], {}, { :class => "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm  focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" } %>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
-    <% end %>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
   <% end %>
 </div>
