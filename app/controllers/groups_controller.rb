@@ -3,6 +3,7 @@
 # Controller actions for Groups
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
+  before_action :parent_group, only: %i[new]
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
@@ -30,7 +31,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def new
-    @group = Group.find(params[:parent_id]) if params[:parent_id]
     authorize! @group, to: :create_subgroup? if params[:parent_id]
 
     @new_group = Group.new(parent_id: @group&.id)
@@ -102,6 +102,10 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   private
 
+  def parent_group
+    @group = Group.find(params[:parent_id]) if params[:parent_id]
+  end
+
   def group
     @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
   end
@@ -163,8 +167,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def current_page
     @current_page = case action_name
                     when 'new'
-                      parent_group = Group.find(params[:parent_id]) if params[:parent_id]
-                      if parent_group
+                      if @group
                         'details'
                       else
                         'groups'
