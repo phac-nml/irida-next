@@ -162,7 +162,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def current_page
     @current_page = case action_name
-                    when 'show', 'new'
+                    when 'new'
+                      parent_group = Group.find(params[:parent_id]) if params[:parent_id]
+                      if parent_group
+                        'details'
+                      else
+                        'groups'
+                      end
+                    when 'show'
                       'details'
                     else
                       'settings'
