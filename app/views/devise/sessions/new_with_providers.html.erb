@@ -6,10 +6,6 @@
     <%= render "devise/shared/links" %>
     <%= button_to t(".return_button"),
     new_user_session_path,
-    method: :get,
-    params: {
-      local: false
-    },
     class: "button button--state-default button--size-default w-full" %>
   <% else %>
     <%- resource_class.omniauth_providers.each do |provider| %>
