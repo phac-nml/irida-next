@@ -3,6 +3,8 @@
 module Dashboard
   # Dashboard Projects Controller
   class ProjectsController < ApplicationController
+    before_action :current_page
+
     def index # rubocop:disable Metrics/AbcSize
       @q = Project.ransack(params[:q])
       set_default_sort
@@ -31,6 +33,10 @@ module Dashboard
       else
         authorized_scope(Project, type: :relation)
       end
+    end
+
+    def current_page
+      @current_page = 'projects'
     end
   end
 end

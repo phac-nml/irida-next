@@ -29,5 +29,9 @@ module Profiles
     def update_password_params
       params.require(:user).permit(:password, :password_confirmation, :current_password)
     end
+
+    def current_page
+      @current_page = 'password'
+    end
   end
 end

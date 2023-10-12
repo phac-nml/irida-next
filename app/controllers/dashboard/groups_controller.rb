@@ -3,6 +3,8 @@
 module Dashboard
   # Dashboard groups controller
   class GroupsController < ApplicationController
+    before_action :current_page
+
     def index
       @q = Group.ransack(params[:q])
       set_default_sort
@@ -40,6 +42,10 @@ module Dashboard
 
     def load_groups
       @groups = authorized_scope(Group, type: :relation).without_descendants
+    end
+
+    def current_page
+      @current_page = 'groups'
     end
   end
 end

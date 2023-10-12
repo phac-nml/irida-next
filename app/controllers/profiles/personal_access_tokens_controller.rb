@@ -52,5 +52,9 @@ module Profiles
     def active_access_tokens
       @active_access_tokens = current_user.personal_access_tokens.active
     end
+
+    def current_page
+      @current_page = 'access tokens'
+    end
   end
 end

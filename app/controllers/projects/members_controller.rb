@@ -5,6 +5,8 @@ module Projects
   class MembersController < Projects::ApplicationController
     include MembershipActions
 
+    before_action :current_page
+
     def member_params
       params.require(:member).permit(:user_id, :access_level, :type, :namespace_id, :created_by_id)
     end
@@ -38,6 +40,10 @@ module Projects
 
     def member_namespace
       @project.namespace
+    end
+
+    def current_page
+      @current_page = 'members'
     end
   end
 end

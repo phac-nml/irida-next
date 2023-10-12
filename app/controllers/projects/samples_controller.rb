@@ -4,6 +4,7 @@ module Projects
   # Controller actions for Samples
   class SamplesController < Projects::ApplicationController
     before_action :sample, only: %i[show edit update destroy]
+    before_action :current_page
 
     def index
       authorize! @project, to: :sample_listing?
@@ -88,6 +89,10 @@ module Projects
         name: I18n.t('projects.samples.index.title'),
         path: namespace_project_samples_path
       }]
+    end
+
+    def current_page
+      @current_page = 'samples'
     end
   end
 end
