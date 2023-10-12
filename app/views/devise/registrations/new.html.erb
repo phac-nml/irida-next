@@ -27,12 +27,17 @@
 
   <div class="form-field">
     <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
+    <%= f.password_field :password_confirmation,
+                     required: true,
+                     autocomplete: "new-password" %>
   </div>
 
   <%= f.submit "Sign up",
-               class: "button button--state-primary button--size-default w-full" %>
+           class: "button button--state-primary button--size-default w-full" %>
 <% end %>
 
 <div class="flex"><span class="mr-2">Already signed up?</span>
-  <%= render "devise/shared/links" %></div>
+  <div class="grid gap-2">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
