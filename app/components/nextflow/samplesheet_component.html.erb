@@ -1,11 +1,16 @@
 <div class="overflow-hidden border-b border-slate-200 shadow dark:border-slate-700 sm:rounded-lg py-4">
   <%= form_with url: "#", remote: true do |form| %>
     <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
-      <thead class="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+      <thead class="text-xs text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
     <tr>
-      <% properties.keys.each do |header| %>
+      <% properties.keys.each_with_index do |header, index| %>
         <th class="px-6 py-3 font-semibold tracking-wider">
-          <%= header %>
+          <div class="flex items-center ">
+            <span class="uppercase"><%= header %></span>
+            <%= viral_tooltip(title: properties[header]["errorMessage"]) do %>
+              <%= viral_icon(name: :information_circle_solid, color: :subdued, classes: "ml-2 h-4 w-4 inline-block") %>
+            <% end %>
+          </div>
         </th>
       <% end %>
     </tr>
@@ -21,7 +26,7 @@
         <td></td>
         <td></td>
         <td class="p-0">
-          <%= fields.select :stradedness, properties['strandedness']['enum'], {}, { :class => "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm  focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" } %>
+          <%= fields.select :strandedness, properties['strandedness']['enum'], {}, { :class => "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm  focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" } %>
         </td>
       </tr>
       <% end %>

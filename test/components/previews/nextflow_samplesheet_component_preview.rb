@@ -3,19 +3,14 @@
 require 'csv'
 class NextflowSamplesheetComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
-
   def default(schema_file: 'samplesheet_schema.json')
-    render_with_template(locals: {
-                           schema_file:,
-                           samples: generate_samples
-                         })
-  end
-
-  def generate_samples
     sample1 = Sample.new(name: 'Sample 1', description: 'Sample 1 description')
     sample2 = Sample.new(name: 'Sample 2', description: 'Sample 2 description')
 
-    [sample1, sample2]
+    render_with_template(locals: {
+                           schema_file:,
+                           samples: [sample1, sample2]
+                         })
   end
 
   def schema_file_options
