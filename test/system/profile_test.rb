@@ -52,7 +52,7 @@ class ProfileTest < ApplicationSystemTestCase
       click_on I18n.t(:'components.confirmation.confirm')
     end
 
-    assert_text I18n.t('devise.shared.links.create_an_account_link')
+    assert_text I18n.t(:'devise.sessions.new_with_providers.local_button')
   end
 
   test 'can view personal access tokens' do
