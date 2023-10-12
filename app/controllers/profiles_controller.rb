@@ -2,8 +2,6 @@
 
 # Controller for the user profile page
 class ProfilesController < Profiles::ApplicationController
-  before_action :current_page
-
   # Get the profile page
   def show
     authorize! @user, to: :read?
