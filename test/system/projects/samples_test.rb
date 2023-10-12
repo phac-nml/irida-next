@@ -62,6 +62,11 @@ module Projects
     test 'user with role >= Maintainer should be able to attach a file to a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
       assert_selector 'button', text: I18n.t('projects.samples.show.upload_files'), count: 1
+      within('#attachments') do
+        assert_text I18n.t('projects.samples.show.no_files')
+        assert_text I18n.t('projects.samples.show.no_associated_files')
+        assert_no_text 'test_file.fastq'
+      end
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
@@ -71,6 +76,8 @@ module Projects
 
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
       within('#attachments') do
+        assert_no_text I18n.t('projects.samples.show.no_files')
+        assert_no_text I18n.t('projects.samples.show.no_associated_files')
         assert_text 'test_file.fastq'
       end
     end

@@ -465,3 +465,15 @@ body {
 div.field_with_errors > :is(select) {
   @apply text-red-900 placeholder-red-300 border-red-700;
 }
+
+.table-container table:not(:has(td)) {
+  display: none;
+}
+
+.table-container:not(:has(td)) .empty_state_message {
+  display: block;
+}
+
+.table-container .empty_state_message {
+  display: none;
+}
