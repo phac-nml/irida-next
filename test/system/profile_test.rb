@@ -52,7 +52,7 @@ class ProfileTest < ApplicationSystemTestCase
       click_on I18n.t(:'components.confirmation.confirm')
     end
 
-    assert_text I18n.t(:'devise.sessions.new_with_providers.local_button')
+    assert_selector 'h1', text: I18n.t(:'devise.layout.title')
   end
 
   test 'can view personal access tokens' do
