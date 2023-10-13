@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Groups
+  # Controller actions for group subgroups and projects
   class SubgroupsController < ApplicationController
     before_action :group, only: %i[index]
 
