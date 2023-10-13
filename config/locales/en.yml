@@ -444,6 +444,10 @@ en:
         label: Group project details navigation
         subgroups_and_projects: Subgroups and projects
         shared_projects: Shared projects
+      subgroups:
+        no_subgroups:
+          title: No subgroups
+          description: Create a subgroup to manage projects and members
       shared_projects:
         no_shared:
           title: No projects have been shared with this group.

@@ -19,12 +19,10 @@
       </tbody>
     </table>
     <div class="empty_state_message">
-      <%= render partial: "layouts/partials/empty_content",
-      locals: {
-        text_title: t("projects.samples.show.no_files"),
-        text_note: t("projects.samples.show.no_associated_files"),
-        btn_icon: :document_plus
-      } %>
+      <%= viral_empty(
+            title: t(:'projects.samples.show.no_files'),
+            description: t(:'projects.samples.show.no_associated_files'),
+            icon_name: :document_text) %>
     </div>
   </div>
 <% end %>
