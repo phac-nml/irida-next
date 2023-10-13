@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Groups
+  # Controller actions for projects shared with a group
   class SharedProjectsController < Groups::ApplicationController
     before_action :group, only: %i[index]
 
