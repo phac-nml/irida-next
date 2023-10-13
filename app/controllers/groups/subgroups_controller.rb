@@ -5,7 +5,7 @@ module Groups
   class SubgroupsController < ApplicationController
     before_action :group, only: %i[index]
 
-    def index
+    def index # rubocop:disable Metrics/AbcSize
       respond_to do |format|
         format.html { redirect_to group_path(@group) }
         format.turbo_stream do
