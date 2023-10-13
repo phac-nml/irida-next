@@ -80,12 +80,14 @@ group_seven:
   type: Group
   description: Group 7 description
 
-<% [*("a".."z")].each do |letter| %>
+<% [*("a".."z")].each_with_index do |letter, index| %>
 group_<%= letter %>:
   name: <%= "Group #{letter.capitalize}" %>
   path: <%= "group-#{letter}" %>
   type: Group
   description: <%= "Group #{letter} description" %>
+  created_at: <%= (index + 1).days.ago %>
+  updated_at: <%= (index + 1).days.ago %>
 <% end %>
 
 namespace_group_link_group_one:
