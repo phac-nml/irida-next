@@ -6,7 +6,12 @@ module Groups
     before_action :group, only: %i[index]
 
     def index
-      @shared_projects = @group.shared_projects
+      respond_to do |format|
+        format.html { redirect_to group_path(@group) }
+        format.turbo_stream do
+          @shared_projects = @group.shared_projects
+        end
+      end
     end
 
     private
