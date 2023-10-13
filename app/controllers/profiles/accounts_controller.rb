@@ -14,5 +14,9 @@ module Profiles
       @user.destroy
       redirect_to new_user_session_url
     end
+
+    def current_page
+      @current_page = 'account'
+    end
   end
 end

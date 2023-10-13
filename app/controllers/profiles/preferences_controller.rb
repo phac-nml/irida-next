@@ -7,5 +7,9 @@ module Profiles
     def show
       authorize! @user, to: :read?
     end
+
+    def current_page
+      @current_page = 'preferences'
+    end
   end
 end

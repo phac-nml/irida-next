@@ -8,29 +8,31 @@
           <%= render section.with_item(
             url: project_path(@project),
             icon: "clipboard_document",
-            label: t(:"projects.sidebar.details")
+            label: t(:"projects.sidebar.details"),
+            selected: @current_page == t(:"projects.sidebar.details").downcase
           ) %>
           <%= render section.with_item(
             url: namespace_project_members_path,
             icon: "users",
-            label: t(:"projects.sidebar.members")
+            label: t(:"projects.sidebar.members"),
+            selected: @current_page == t(:"projects.sidebar.members").downcase
           ) %>
           <%= render section.with_item(
             url: project_samples_path(@project),
             icon: "beaker",
-            label: t(:"projects.sidebar.samples")
+            label: t(:"projects.sidebar.samples"),
+            selected: @current_page == t(:"projects.sidebar.samples").downcase
           ) %>
           <% if allowed_to?(:update?, @project) %>
             <%= render section.with_item(
               url: project_edit_path(@project),
               icon: "cog_6_tooth",
-              label: t(:"projects.sidebar.settings")
+              label: t(:"projects.sidebar.settings"),
+              selected: @current_page == t(:"projects.sidebar.settings").downcase
             ) %>
           <% end %>
         <% end %>
-        <% layout.with_breadcrumb(
-          context_crumbs: @context_crumbs
-        ) %>
+        <% layout.with_breadcrumb(context_crumbs: @context_crumbs) %>
         <% layout.with_body do %>
           <%= turbo_frame_tag("errors") %>
           <%= yield %>

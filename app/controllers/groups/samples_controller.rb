@@ -4,7 +4,7 @@ module Groups
   # Controller actions for Samples within a Group
   class SamplesController < ApplicationController
     layout 'groups'
-    before_action :group, only: %i[index]
+    before_action :group, :current_page, only: %i[index]
 
     def index
       authorize! @group, to: :sample_listing?
@@ -33,6 +33,10 @@ module Groups
           path: group_samples_path
         }]
       end
+    end
+
+    def current_page
+      @current_page = 'samples'
     end
   end
 end

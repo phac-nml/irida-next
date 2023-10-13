@@ -3,7 +3,7 @@
 module Profiles
   # Base Controller for the users profile
   class ApplicationController < ApplicationController
-    before_action :set_user
+    before_action :set_user, :current_page
 
     layout 'profiles'
 

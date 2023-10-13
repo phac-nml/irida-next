@@ -8,12 +8,14 @@
           <%= render section.with_item(
             icon: "rectangle_stack",
             label: t(:"general.default_sidebar.projects"),
-            url: dashboard_projects_path
+            url: dashboard_projects_path,
+            selected: @current_page == t(:"general.default_sidebar.projects").downcase
           ) %>
           <%= render section.with_item(
             icon: "squares_2x2",
             label: t(:"general.default_sidebar.groups"),
-            url: dashboard_groups_path
+            url: dashboard_groups_path,
+            selected: @current_page == t(:"general.default_sidebar.groups").downcase
           ) %>
         <% end %>
         <% layout.with_body do %>

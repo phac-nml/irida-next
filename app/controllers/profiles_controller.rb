@@ -2,8 +2,6 @@
 
 # Controller for the user profile page
 class ProfilesController < Profiles::ApplicationController
-  before_action :set_user
-
   # Get the profile page
   def show
     authorize! @user, to: :read?
@@ -35,7 +33,7 @@ class ProfilesController < Profiles::ApplicationController
     )
   end
 
-  def set_user
-    @user = current_user
+  def current_page
+    @current_page = 'profile'
   end
 end

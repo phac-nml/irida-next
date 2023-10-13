@@ -6,6 +6,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   layout :resolve_layout
   before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
+  before_action :current_page
 
   def index
     redirect_to dashboard_projects_path
@@ -165,5 +166,16 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def namespace_path
     namespace_project_path(@namespace.parent, @project)
+  end
+
+  def current_page
+    @current_page = case action_name
+                    when 'show'
+                      'details'
+                    when 'new'
+                      'projects'
+                    else
+                      'settings'
+                    end
   end
 end
