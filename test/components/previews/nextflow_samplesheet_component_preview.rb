@@ -13,6 +13,8 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
                          })
   end
 
+  private
+
   def schema_file_options
     Rails.root.join('test/fixtures/files/nextflow').entries.select do |f|
       File.file?(File.join('test/fixtures/files/nextflow', f)) && f.to_s.starts_with?('samplesheet_schema')
