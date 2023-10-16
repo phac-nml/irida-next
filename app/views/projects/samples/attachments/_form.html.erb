@@ -2,7 +2,7 @@
   <%= form.hidden_field :attachable_id %>
   <%= form.hidden_field :attachable_type %>
 
-  <div class="grid gap-4">
+  <div class="grid gap-4" data-controller="attachment-upload">
 
     <div class="form-field">
       <%= form.label :files,
@@ -18,7 +18,11 @@
 
     <div>
       <%= form.submit t("projects.samples.show.upload"),
-                  class: "button button--state-primary button--size-default" %>
+                  class: "button button--state-primary button--size-default",
+                  data: {
+                    "attachment-upload-target": "submitButton"
+                  }
+                  %>
     </div>
   </div>
 <% end %>
