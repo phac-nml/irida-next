@@ -299,9 +299,7 @@ body {
   }
 
   /*GROUPS LIST TREE*/
-  .namespace-tree-container
-    > .namespace-list-tree
-    > .namespace-entry.has-children:first-child {
+  .namespace-tree-container>.namespace-list-tree>.namespace-entry.has-children:first-child {
     border-top: 0;
   }
 
@@ -309,6 +307,7 @@ body {
     font-size: 0;
     flex-shrink: 0;
   }
+
   .namespace-list-tree .folder-toggle-wrap span {
     font-size: 12px;
   }
@@ -318,7 +317,7 @@ body {
     width: 20px;
   }
 
-  .namespace-list-tree > .namespace-entry:not(.has-children) .folder-caret {
+  .namespace-list-tree>.namespace-entry:not(.has-children) .folder-caret {
     opacity: 0;
   }
 
@@ -342,6 +341,7 @@ body {
   .namespace-list-tree .namespace-list-tree .namespace-entry {
     position: relative;
   }
+
   .namespace-list-tree .namespace-list-tree .namespace-entry::before {
     content: "";
     display: block;
@@ -352,9 +352,8 @@ body {
     left: -16px;
     @apply border-t-2 border-slate-200 dark:border-slate-600;
   }
-  .namespace-list-tree
-    .namespace-list-tree
-    .namespace-entry:last-child::before {
+
+  .namespace-list-tree .namespace-list-tree .namespace-entry:last-child::before {
     height: auto;
     top: 30px;
     bottom: 0;
@@ -364,19 +363,20 @@ body {
   .namespace-list-tree .namespace-list-tree .namespace-entry.being-removed {
     opacity: 0.5;
   }
+
   .namespace-list-tree .namespace-entry {
     padding: 0;
   }
+
   .namespace-list-tree .namespace-entry.has-children {
     border-top: 0;
   }
+
   .namespace-list-tree .namespace-entry:first-child {
     @apply border-t border-slate-200 dark:border-slate-600;
   }
 
-  .namespace-list-tree
-    .namespace-entry.has-children
-    > .namespace-entry-contents:hover {
+  .namespace-list-tree .namespace-entry.has-children>.namespace-entry-contents:hover {
     @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
   }
 
@@ -384,6 +384,7 @@ body {
   .namespace-list-tree .namespace-entry-contents .namespace-text {
     min-width: 0;
   }
+
   .namespace-list-tree .namespace-entry-contents .namespace-text {
     flex-basis: 100%;
   }
@@ -392,10 +393,11 @@ body {
     flex-shrink: 0;
   }
 
-  .namespace-list-tree .namespace-entry-contents .avatar-container > a {
+  .namespace-list-tree .namespace-entry-contents .avatar-container>a {
     width: 100%;
     text-decoration: none;
   }
+
   .namespace-list-tree .namespace-entry-contents .title {
     @apply text-base font-medium text-slate-900 dark:text-white;
   }
@@ -417,7 +419,7 @@ body {
     flex-shrink: 0;
   }
 
-  .namespace-list-tree .namespace-entry-contents .stats > span {
+  .namespace-list-tree .namespace-entry-contents .stats>span {
     display: inline-flex;
     align-items: center;
     height: 16px;
@@ -462,7 +464,7 @@ body {
   @apply text-sm font-normal text-slate-500 dark:text-slate-400;
 }
 
-div.field_with_errors > :is(select) {
+div.field_with_errors> :is(select) {
   @apply text-red-900 placeholder-red-300 border-red-700;
 }
 
@@ -475,5 +477,9 @@ div.field_with_errors > :is(select) {
 }
 
 .table-container .empty_state_message {
+  display: none;
+}
+
+input[type=file][data-direct-upload-url][disabled] {
   display: none;
 }
