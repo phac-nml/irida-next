@@ -6,6 +6,7 @@ module Groups
     before_action :group, only: %i[index]
 
     def index
+      authorize! @group, to: :read?
       respond_to do |format|
         format.html { redirect_to group_path(@group) }
         format.turbo_stream do
