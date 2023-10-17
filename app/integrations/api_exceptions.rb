@@ -2,7 +2,7 @@
 
 module Integrations
   module ApiExceptions
-    APIExceptionError = Class.new(APIExceptionError)
+    APIExceptionError = Class.new(StandardError)
     BadRequestError = Class.new(APIExceptionError)
     UnauthorizedError = Class.new(APIExceptionError)
     ForbiddenError = Class.new(APIExceptionError)
