@@ -14,5 +14,12 @@ module Nextflow
       @properties = schema['items']['properties']
       @required = schema['items']['required']
     end
+
+    def filter_files(sample, regex)
+      names = sample.attachments.map { |a| a.file.filename.to_s }
+      puts names
+      puts regex
+      names.select { |name| name.match?(/#{Regexp.new(regex)}/) }
+    end
   end
 end
