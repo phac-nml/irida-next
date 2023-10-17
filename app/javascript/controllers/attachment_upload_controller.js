@@ -1,7 +1,10 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static targets = ["submitButton"];
+    static targets = ["submitButton", "attachmentsInput"];
+    static values = {
+        buttonText: String
+    }
 
     connect() {
         this.element.addEventListener("direct-upload:initialize", event => this.uploadInitialize(event))
@@ -9,11 +12,13 @@ export default class extends Controller {
         this.element.addEventListener("direct-upload:progress", event => this.uploadProgress(event))
         this.element.addEventListener("direct-upload:error", event => this.uploadError(event))
         this.element.addEventListener("direct-upload:end", event => this.uploadEnd(event))
+
     }
 
     uploadInitialize(event) {
         const { target, detail } = event
         const { id, file } = detail
+
         target.insertAdjacentHTML("beforebegin", `
             <div id="direct-upload-${id}"
             class="direct-upload direct-upload--pending flex-1 relative mb-1">
@@ -24,13 +29,17 @@ export default class extends Controller {
                 </div>
             </div>
             `)
+
         const textColor = localStorage.getItem('theme') == 'dark' ? 'text-blue-700' : 'text-slate-900'
         target.previousElementSibling.querySelector(`.direct-upload__filename`).innerHTML =
             `<span class="text-base font-medium ${textColor} dark:text-white">${file.name}</span>
             <span class="text-sm font-medium ${textColor} dark:text-white" id="upload-progress-${id}">0%</span>`
 
+        this.attachmentsInputTarget.classList.add('hidden')
         this.submitButtonTarget.disabled = true
-        this.submitButtonTarget.value = "Uploading"
+        this.submitButtonTarget.value = this.buttonTextValue
+
+
     }
 
     uploadStart(event) {

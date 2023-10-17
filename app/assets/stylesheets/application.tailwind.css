@@ -479,7 +479,3 @@ div.field_with_errors> :is(select) {
 .table-container .empty_state_message {
   display: none;
 }
-
-input[type=file][data-direct-upload-url][disabled] {
-  display: none;
-}
