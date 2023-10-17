@@ -1,4 +1,4 @@
-<h2><%= link_to t(".title") %></h2>
+<h2><%= t(".title") %></h2>
 
 <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
@@ -9,7 +9,7 @@
   </div>
 
   <div class="actions">
-    <%= f.submit link_to t(".submit_button") %>
+    <%= f.submit t(".submit_button") %>
   </div>
 <% end %>
 
