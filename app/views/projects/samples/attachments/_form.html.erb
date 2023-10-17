@@ -2,7 +2,7 @@
   <%= form.hidden_field :attachable_id %>
   <%= form.hidden_field :attachable_type %>
 
-  <div class="grid gap-4" data-controller="attachment-upload" data-attachment-upload-button-text-value='Uploading'>
+  <div class="grid gap-4" data-controller="attachment-upload" data-attachment-upload-button-text-value='<%=t("projects.samples.show.uploading") %>'>
 
     <div class="form-field">
       <%= form.label :files,

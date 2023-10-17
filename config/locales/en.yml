@@ -723,6 +723,7 @@ en:
         no_associated_files: There are no files associated with this sample.
         upload: Upload
         upload_files: Upload Files
+        uploading: Uploading
         table_header:
           filename: Filename
           size: Size
