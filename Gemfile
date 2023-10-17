@@ -53,7 +53,6 @@ gem 'omniauth-saml'
 # API Integrations
 gem 'faraday'
 gem 'faraday-net_http'
-gem 'oj'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
