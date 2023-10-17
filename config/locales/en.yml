@@ -131,6 +131,8 @@ en:
         access_level: Access Level
         user_id: User
       user:
+        password: Password
+        password_confirmation: Password confirmation
         email: Email
         provider: Authentication Provider
         uid: Authentication Provider UID
