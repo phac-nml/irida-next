@@ -8,15 +8,14 @@ class SessionsController < Devise::SessionsController
 
   # GET /resource/sign_in
   def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-
-    if resource_class.omniauth_providers.empty?
-      render :new_with_no_providers
-    else
-      @local_account = params[:local]
-      render :new_with_providers
+    super do
+      if resource_class.omniauth_providers.empty?
+        render :new_with_no_providers
+      else
+        @local_account = params[:local]
+        render :new_with_providers
+      end
+      return
     end
   end
 
