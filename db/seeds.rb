@@ -57,7 +57,7 @@ end
 
 def seed_attachments(_user, sample)
   files = Rails.root.join('test/fixtures/files').entries.select do |f|
-    File.file?(File.join('test/fixtures/files/', f)) && f.to_s.starts_with?('TestSample_S1')
+    ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
   end
 
   files.each do |f|
