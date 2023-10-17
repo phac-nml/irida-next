@@ -9,7 +9,7 @@
         dark:divide-slate-700
       "
     >
-      <%= render partial: "dashboard/projects/project", collection: @projects %>
+    <%= render partial: "shared/project/row", collection: @projects, as: :project %>
     </tbody>
   </table>
 <% end %>

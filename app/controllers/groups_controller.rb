@@ -4,6 +4,7 @@
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :parent_group, only: %i[new]
+  before_action :tab, only: %i[show]
   before_action :group, only: %i[edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
@@ -14,20 +15,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def show
     authorize! @group, to: :read?
-
-    respond_to do |format|
-      if params.key? :parent_id
-        format.turbo_stream do
-          @group = Group.find(params[:parent_id])
-          @collapsed = params[:collapse] == 'true'
-          @children = @collapsed ? Namespace.none : namespace_children
-          @depth = params[:depth].to_i
-        end
-      end
-      format.html do
-        @namespaces = namespace_children
-      end
-    end
   end
 
   def new
@@ -187,5 +174,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def namespace_path
     group_path(@group)
+  end
+
+  def tab
+    @tab = params[:tab]
   end
 end
