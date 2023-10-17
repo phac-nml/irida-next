@@ -19,14 +19,15 @@ export default class extends Controller {
             class="direct-upload direct-upload--pending flex-1 relative mb-1">
                 <div class="flex justify-between mb-1 direct-upload__filename">
                 </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 0%" id="direct-upload-progress-${id}"></div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 0%" id="direct-upload-progress-${id}"></div>
                 </div>
             </div>
             `)
+        const textColor = localStorage.getItem('theme') == 'dark' ? 'text-blue-700' : 'text-slate-900'
         target.previousElementSibling.querySelector(`.direct-upload__filename`).innerHTML =
-            `<span class="text-base font-medium text-blue-700 dark:text-white">${file.name}</span>
-            <span class="text-sm font-medium text-blue-700 dark:text-white" id="upload-progress-${id}">0%</span>`
+            `<span class="text-base font-medium ${textColor} dark:text-white">${file.name}</span>
+            <span class="text-sm font-medium ${textColor} dark:text-white" id="upload-progress-${id}">0%</span>`
 
         this.submitButtonTarget.disabled = true
         this.submitButtonTarget.value = "Uploading"
