@@ -31,8 +31,8 @@ export default class extends Controller {
             `)
 
         target.previousElementSibling.querySelector(`.direct-upload__filename`).innerHTML =
-            `<span class="text-sm text-gray-500 dark:text-gray-400 dark:text-white">${file.name}</span>
-            <span class="text-sm text-gray-500 dark:text-gray-400 dark:text-white" id="upload-progress-${id}">0%</span>`
+            `<span class="text-sm text-gray-500 dark:text-gray-400">${file.name}</span>
+            <span class="text-sm text-gray-500 dark:text-gray-400" id="upload-progress-${id}">0%</span>`
 
         this.attachmentsInputTarget.classList.add('hidden')
         this.submitButtonTarget.disabled = true
