@@ -51,19 +51,21 @@ def seed_samples(project, sample_count)
       { name: "#{project.namespace.parent.name}/#{project.name} Sample #{i}",
         description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{i}." }
     ).execute
-    seed_attachments(project.creator, sample)
+    seed_attachments(sample) if i < 10
   end
 end
 
-def seed_attachments(_user, sample)
-  files = Rails.root.join('test/fixtures/files').entries.select do |f|
-    ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
-  end
-
-  files.each do |f|
+def seed_attachments(sample)
+  sequencing_files.each do |f|
     a = sample.attachments.build
     a.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
     a.save!
+  end
+end
+
+def sequencing_files
+  Rails.root.join('test/fixtures/files').entries.select do |f|
+    ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
   end
 end
 
