@@ -19,16 +19,19 @@ export default class extends Controller {
         const { target, detail } = event
         const { id, file } = detail
 
-        target.insertAdjacentHTML("beforebegin", `
+        target.insertAdjacentHTML(
+          "beforebegin",
+          `
             <div id="direct-upload-${id}"
             class="direct-upload direct-upload--pending flex-1 relative mb-1">
                 <div class="flex justify-between mb-1 direct-upload__filename">
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 0%" id="direct-upload-progress-${id}"></div>
+                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 0" id="direct-upload-progress-${id}"></div>
                 </div>
             </div>
-            `)
+            `
+        );
 
         target.previousElementSibling.querySelector(`.direct-upload__filename`).innerHTML =
             `<span class="text-sm text-gray-500 dark:text-gray-400">${file.name}</span>
@@ -58,7 +61,7 @@ export default class extends Controller {
         event.preventDefault()
         const { id, error } = event.detail
         const element = document.getElementById(`direct-upload-${id}`)
-        element.classList.add("direct-upload--error border-rose-600")
+        element.classList.add("direct-upload--error", "border-rose-600");
         element.setAttribute("title", error)
     }
 
