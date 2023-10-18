@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'csv'
 class NextflowSamplesheetComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
   def default(schema_file: 'samplesheet_schema.json')
