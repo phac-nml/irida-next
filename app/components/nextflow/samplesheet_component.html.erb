@@ -46,14 +46,14 @@
               <%= fields.hidden_field :name, value: sample.id %>
             </td>
             <td><%= fields.select :fastq,
-                                  filter_files(sample, properties["fastq_1"]["pattern"]),
+                                  filter_files(sample, properties["fastq_1"]),
                                   { prompt: "Select a file" },
                                   {
                                     class:
                                       "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm  focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                   } %></td>
             <td><%= fields.select :fastq,
-                                  sample.attachments.map { |a| a.file.filename },
+                                  filter_files(sample, properties["fastq_2"]),
                                   { prompt: "Select a file" },
                                   {
                                     class:
