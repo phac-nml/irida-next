@@ -18,11 +18,7 @@ module Nextflow
     def filter_files(sample, properties)
       names = sample.attachments.map { |a| a.file.filename.to_s }
       pattern = properties['pattern']
-      if pattern.nil?
-        pattern = properties['anyOf'].find do |p|
-          p['pattern'].present?
-        end
-      end
+      pattern = properties['anyOf'].find { |p| p['pattern'].present? }['pattern'] if pattern.nil?
       names.grep(/#{Regexp.new(pattern.to_s)}/)
     end
   end
