@@ -38,7 +38,7 @@
                       dark:bg-yellow-900
                       dark:text-yellow-300
                     "
-                  >REQUIRED</span>
+                  ><%= t(".required") %></span>
                 <% end %>
               </div>
             </th>
@@ -55,7 +55,7 @@
               </td>
               <td><%= fields.select :fastq,
                               filter_files(sample, properties["fastq_1"]),
-                              { prompt: "Select a file" },
+                              { prompt: t(".file_select") },
                               {
                                 required: required.include?("fastq_1"),
                                 class:
@@ -63,7 +63,7 @@
                               } %></td>
               <td><%= fields.select :fastq,
                               filter_files(sample, properties["fastq_2"]),
-                              { prompt: "Select a file" },
+                              { prompt: t(".file_select") },
                               {
                                 required: required.include?("fastq_2"),
                                 class:
@@ -72,7 +72,7 @@
               <td class="p-0">
                 <%= fields.select :strandedness,
                               properties["strandedness"]["enum"],
-                              {},
+                              { prompt: t(".strandedness_select") },
                               {
                                 required: required.include?("strandedness"),
                                 class:
