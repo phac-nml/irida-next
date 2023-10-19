@@ -2,7 +2,7 @@
 
 module Attachments
   # Service used to Concatenate Attachments
-  class ConcatenationService < BaseService
+  class ConcatenationService < BaseService # rubocop:disable Metrics/ClassLength
     AttachmentConcatenationError = Class.new(StandardError)
 
     attr_accessor :attachable, :attachments, :concatenation_params
@@ -12,10 +12,10 @@ module Attachments
       @attachable = attachable
 
       # single-end params: { concatenate_ids = [], basename: basefilename OPTIONAL,
-      #                      delete_originals: true/false OPTIONAL
+      #                      delete_originals: true OPTIONAL
       #                      }
       # paired-end params: { concatenate_ids = [[],[]], basename: basefilename OPTIONAL,
-      #                      delete_originals: true/false OPTIONAL
+      #                      delete_originals: true OPTIONAL
       #                      }
       @concatenation_params = params
     end
@@ -110,31 +110,52 @@ module Attachments
     end
 
     # Concatenates the paired-end reads into a multiple paired-end files
-    def concatenate_paired_end_reads(forward_reads, reverse_reads) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def concatenate_paired_end_reads(forward_reads, reverse_reads) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
       basename = concatenation_params[:basename] || 'concatenated_file'
 
       begin
         dir = Dir.mktmpdir('concatenation')
-        temp_file_fwd = Tempfile.new('cocatenatefile_fwd', [dir])
-        temp_file_rev = Tempfile.new('cocatenatefile_rev', [dir])
 
-        forward_reads.each do |forward_read|
-          temp_file_fwd.write forward_read.file.blob.download
+        if forward_reads.length.positive?
+          temp_file_fwd = Tempfile.new('cocatenatefile_fwd', [dir])
+
+          forward_reads.each do |forward_read|
+            temp_file_fwd.write forward_read.file.blob.download
+          end
+          temp_file_fwd.rewind
+
+          forward_reads_attachment = attachable.attachments.build
+          forward_reads_attachment.file.attach(io: temp_file_fwd.open, filename: "#{basename}_S1_L001_R1_001.fastq")
+          forward_reads_attachment.save
         end
-        temp_file_fwd.rewind
 
-        reverse_reads.each do |reverse_read|
-          temp_file_rev.write reverse_read.file.blob.download
+        if reverse_reads.length.positive?
+          temp_file_rev = Tempfile.new('cocatenatefile_rev', [dir])
+
+          reverse_reads.each do |reverse_read|
+            temp_file_rev.write reverse_read.file.blob.download
+          end
+          temp_file_rev.rewind
+
+          reverse_reads_attachment = attachable.attachments.build
+          reverse_reads_attachment.file.attach(io: temp_file_rev.open, filename: "#{basename}_S1_L001_R2_001.fastq")
+          reverse_reads_attachment.save
         end
-        temp_file_rev.rewind
 
-        forward_reads_attachment = attachable.attachments.build
-        forward_reads_attachment.file.attach(io: temp_file_fwd.open, filename: "#{basename}_S1_L001_R1_001.fastq")
-        forward_reads_attachment.save
+        # Set metadata for forward and reverse attachment
+        if forward_reads.length.positive? && reverse_reads.length.positive?
+          fwd_metadata = {
+            associated_attachment_id: reverse_reads_attachment.id, type: 'illumina_pe', direction: 'forward'
+          }
 
-        reverse_reads_attachment = attachable.attachments.build
-        reverse_reads_attachment.file.attach(io: temp_file_rev.open, filename: "#{basename}_S1_L001_R2_001.fastq")
-        reverse_reads_attachment.save
+          rev_metadata = {
+            associated_attachment_id: forward_reads_attachment.id, type: 'illumina_pe', direction: 'reverse'
+          }
+
+          forward_reads_attachment.update(metadata: forward_reads_attachment.metadata.merge(fwd_metadata))
+
+          reverse_reads_attachment.update(metadata: reverse_reads_attachment.metadata.merge(rev_metadata))
+        end
       ensure
         # Remove the temp dir and it's contents
         FileUtils.remove_entry dir
