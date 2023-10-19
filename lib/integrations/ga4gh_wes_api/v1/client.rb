@@ -35,12 +35,19 @@ module Integrations
           )
         end
 
-        def run_nextflow_md5_job
+        def run(run_id)
+          request(
+            http_method: :get,
+            endpoint: "runs/#{run_id}"
+          )
+        end
+
+        def run_workflow(workflow_type:, workflow_type_version:, workflow_url:, workflow_params:)
           job_params = {
-            workflow_type: 'NEXTFLOW',
-            workflow_type_version: '21.04.0',
-            workflow_url: 'https://github.com/jb-adams/md5-nf',
-            workflow_params: '{"file_int": 3}'
+            workflow_type:,
+            workflow_type_version:,
+            workflow_url:,
+            workflow_params:
           }
 
           request(
@@ -50,11 +57,13 @@ module Integrations
           )
         end
 
-        # TODO: dummy method to be removed
-        def some_req_w_arg(my_arg)
-          request(
-            http_method: :get,
-            endpoint: "some/#{my_arg}/path"
+        # Runs a md5 hash check. The method is used for testing connection with server api
+        def run_test_nextflow_md5_job
+          run_workflow(
+            workflow_type: 'NEXTFLOW',
+            workflow_type_version: '21.04.0',
+            workflow_url: 'https://github.com/jb-adams/md5-nf',
+            workflow_params: '{"file_int": 3}'
           )
         end
 
