@@ -71,7 +71,7 @@ module Attachments
     # Files can only be concatenated as follows. No mixing of types:
     # Paired-end -> Paired-end
     # Single-end -> Single-end
-    def validate_same_types(attachments, is_paired_end, is_single_end)
+    def validate_same_types(attachments, is_paired_end, is_single_end) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       valid_type = true
 
       attachments.each do |attachment|
@@ -79,6 +79,18 @@ module Attachments
           valid_type = !attachment.metadata.key?('type')
         elsif is_paired_end
           valid_type = attachment.metadata.key?('type')
+        end
+      end
+
+      if valid_type
+        expected_extension = attachments.first.file.filename.to_s.partition('.').last
+        attachments.each do |attachment|
+          extension = attachment.file.filename.to_s.partition('.').last
+          next unless extension != expected_extension
+
+          valid_type = false
+          raise AttachmentConcatenationError,
+                I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
         end
       end
 
@@ -91,13 +103,16 @@ module Attachments
     # Concatenates the single end reads into a single-end file
     def concatenate_single_end_reads(attachments)
       basename = concatenation_params[:basename] || 'concatenated_file'
+      extension = attachments.first.file.filename.to_s.partition('.').last
+
+      extension = 'fastq.gz' if extension == 'gz'
 
       blobs = []
       attachments.each do |attachment|
         blobs << attachment.file.blob
       end
 
-      composed_blob = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R1_001.fastq")
+      composed_blob = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R1_001.#{extension}")
 
       Attachments::CreateService.new(current_user, attachable, { files: [composed_blob.signed_id] }).execute
     end
@@ -105,6 +120,10 @@ module Attachments
     # Concatenates the paired-end reads into a multiple paired-end files
     def concatenate_paired_end_reads(forward_reads, reverse_reads) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       basename = concatenation_params[:basename] || 'concatenated_file'
+      extension = forward_reads.first.file.filename.to_s.partition('.').last
+
+      extension = 'fastq.gz' if extension == 'gz'
+
       files = []
       if forward_reads.length.positive?
         blobs = []
@@ -112,7 +131,7 @@ module Attachments
           blobs << forward_read.file.blob
         end
 
-        composed_blob_fwd = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R1_001.fastq")
+        composed_blob_fwd = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R1_001.#{extension}")
         files << composed_blob_fwd.signed_id
       end
 
@@ -122,7 +141,7 @@ module Attachments
           blobs << reverse_read.file.blob
         end
 
-        composed_blob_rev = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R2_001.fastq")
+        composed_blob_rev = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R2_001.#{extension}")
         files << composed_blob_rev.signed_id
       end
 

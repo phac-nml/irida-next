@@ -794,6 +794,7 @@ en:
       concatenation:
         incorrect_file_types: 'Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.'
         incorrect_attachable: 'All or some of then selected files do not belong to the sample. Aborting concatenation'
+        incorrect_fastq_file_types: "Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files"
     groups:
       transfer:
         namespace_empty: The new namespace is empty.
