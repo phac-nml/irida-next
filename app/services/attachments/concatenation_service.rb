@@ -2,7 +2,7 @@
 
 module Attachments
   # Service used to Concatenate Attachments
-  class ConcatenationService < BaseService # rubocop:disable Metrics/ClassLength
+  class ConcatenationService < BaseService
     AttachmentConcatenationError = Class.new(StandardError)
 
     attr_accessor :attachable, :attachments, :concatenation_params
@@ -11,10 +11,10 @@ module Attachments
       super(user, params)
       @attachable = attachable
 
-      # single-end params: { concatenate_ids = [], basename: basefilename OPTIONAL,
+      # single-end params: { attachment_ids = [], basename: basefilename OPTIONAL,
       #                      delete_originals: true OPTIONAL
       #                      }
-      # paired-end params: { concatenate_ids = [[],[]], basename: basefilename OPTIONAL,
+      # paired-end params: { attachment_ids = [[],[]], basename: basefilename OPTIONAL,
       #                      delete_originals: true OPTIONAL
       #                      }
       @concatenation_params = params
@@ -24,16 +24,16 @@ module Attachments
       # authorize if user can update sample
       authorize! attachable.project, to: :update_sample? if attachable.instance_of?(Sample)
 
-      concatenate_ids = concatenation_params[:concatenate_ids]
+      attachment_ids = concatenation_params[:attachment_ids]
 
-      unless concatenate_ids.all? { |i| i.is_a?(Integer) }
+      unless attachment_ids.all? { |i| i.is_a?(Integer) }
         # if multi-dimensional array of ids
-        concatenate_ids = concatenate_ids.first + concatenate_ids.last
+        attachment_ids = attachment_ids.first + attachment_ids.last
       end
 
-      attachments = attachable.attachments.where(id: concatenate_ids, attachable:).order(:id)
+      attachments = attachable.attachments.where(id: attachment_ids, attachable:).order(:id)
 
-      if !attachments.length == concatenate_ids.length
+      if !attachments.length == attachment_ids.length
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.incorrect_attachable')
       end
@@ -92,74 +92,41 @@ module Attachments
     def concatenate_single_end_reads(attachments)
       basename = concatenation_params[:basename] || 'concatenated_file'
 
-      begin
-        dir = Dir.mktmpdir('concatenation')
-        temp_file = Tempfile.new('cocatenatefile', [dir])
-
-        attachments.each do |attachment|
-          temp_file.write attachment.file.blob.download
-        end
-        temp_file.rewind
-
-        new_attachment = attachable.attachments.build
-        new_attachment.file.attach(io: temp_file.open, filename: "#{basename}_S1_L001_R1_001.fastq")
-        new_attachment.save
-      ensure
-        FileUtils.remove_entry dir
+      blobs = []
+      attachments.each do |attachment|
+        blobs << attachment.file.blob
       end
+
+      composed_blob = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R1_001.fastq")
+
+      Attachments::CreateService.new(current_user, attachable, { files: [composed_blob.signed_id] }).execute
     end
 
     # Concatenates the paired-end reads into a multiple paired-end files
-    def concatenate_paired_end_reads(forward_reads, reverse_reads) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+    def concatenate_paired_end_reads(forward_reads, reverse_reads) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       basename = concatenation_params[:basename] || 'concatenated_file'
-
-      begin
-        dir = Dir.mktmpdir('concatenation')
-
-        if forward_reads.length.positive?
-          temp_file_fwd = Tempfile.new('cocatenatefile_fwd', [dir])
-
-          forward_reads.each do |forward_read|
-            temp_file_fwd.write forward_read.file.blob.download
-          end
-          temp_file_fwd.rewind
-
-          forward_reads_attachment = attachable.attachments.build
-          forward_reads_attachment.file.attach(io: temp_file_fwd.open, filename: "#{basename}_S1_L001_R1_001.fastq")
-          forward_reads_attachment.save
+      files = []
+      if forward_reads.length.positive?
+        blobs = []
+        forward_reads.each do |forward_read|
+          blobs << forward_read.file.blob
         end
 
-        if reverse_reads.length.positive?
-          temp_file_rev = Tempfile.new('cocatenatefile_rev', [dir])
-
-          reverse_reads.each do |reverse_read|
-            temp_file_rev.write reverse_read.file.blob.download
-          end
-          temp_file_rev.rewind
-
-          reverse_reads_attachment = attachable.attachments.build
-          reverse_reads_attachment.file.attach(io: temp_file_rev.open, filename: "#{basename}_S1_L001_R2_001.fastq")
-          reverse_reads_attachment.save
-        end
-
-        # Set metadata for forward and reverse attachment
-        if forward_reads.length.positive? && reverse_reads.length.positive?
-          fwd_metadata = {
-            associated_attachment_id: reverse_reads_attachment.id, type: 'illumina_pe', direction: 'forward'
-          }
-
-          rev_metadata = {
-            associated_attachment_id: forward_reads_attachment.id, type: 'illumina_pe', direction: 'reverse'
-          }
-
-          forward_reads_attachment.update(metadata: forward_reads_attachment.metadata.merge(fwd_metadata))
-
-          reverse_reads_attachment.update(metadata: reverse_reads_attachment.metadata.merge(rev_metadata))
-        end
-      ensure
-        # Remove the temp dir and it's contents
-        FileUtils.remove_entry dir
+        composed_blob_fwd = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R1_001.fastq")
+        files << composed_blob_fwd.signed_id
       end
+
+      if reverse_reads.length.positive?
+        blobs = []
+        reverse_reads.each do |reverse_read|
+          blobs << reverse_read.file.blob
+        end
+
+        composed_blob_rev = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R2_001.fastq")
+        files << composed_blob_rev.signed_id
+      end
+
+      Attachments::CreateService.new(current_user, attachable, { files: }).execute
     end
   end
 end
