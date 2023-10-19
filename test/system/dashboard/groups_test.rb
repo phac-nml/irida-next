@@ -130,7 +130,7 @@ module Dashboard
 
       within 'ul.groups-list.namespace-list-tree' do
         within first('li') do
-          assert_text groups(:group_a).name
+          assert_text groups(:group_z).name
         end
       end
     end
@@ -154,7 +154,7 @@ module Dashboard
 
       within 'ul.groups-list.namespace-list-tree' do
         within first('li') do
-          assert_text groups(:group_a).name
+          assert_text groups(:group_z).name
         end
       end
     end

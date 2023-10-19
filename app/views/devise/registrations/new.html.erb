@@ -19,20 +19,24 @@
   <div class="form-field">
     <%= f.label :password %>
     <% if @minimum_password_length %>
-      <span class="text-sm font-light text-slate-500 dark:text-slate-400">(<%= @minimum_password_length %>
-        characters minimum)</span>
+      <span class="text-sm font-light text-slate-500 dark:text-slate-400"><%= t(".password_hint", minimum_password_length: @minimum_password_length) %></span>
     <% end %>
     <%= f.password_field :password, required: true, autocomplete: "new-password" %>
   </div>
 
   <div class="form-field">
     <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
+    <%= f.password_field :password_confirmation,
+                     required: true,
+                     autocomplete: "new-password" %>
   </div>
 
-  <%= f.submit "Sign up",
-               class: "button button--state-primary button--size-default w-full" %>
+  <%= f.submit t(".submit_button"),
+           class: "button button--state-primary button--size-default w-full" %>
 <% end %>
 
-<div class="flex"><span class="mr-2">Already signed up?</span>
-  <%= render "devise/shared/links" %></div>
+<div class="flex"><span class="mr-2"><%= t(".signed_up") %></span>
+  <div class="grid gap-2">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

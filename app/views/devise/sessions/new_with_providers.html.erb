@@ -1,0 +1,27 @@
+<% if @local_account %>
+  <%= render "devise/shared/form" %>
+<% end %>
+<div class="grid gap-2">
+  <% if @local_account %>
+    <%= render "devise/shared/links" %>
+    <%= link_to t(".return_button"),
+    new_user_session_path,
+    class: "button button--state-default button--size-default w-full" %>
+  <% else %>
+    <%- resource_class.omniauth_providers.each do |provider| %>
+      <%= button_to omniauth_authorize_path(resource_name, provider),
+                    data: {
+                      turbo: false
+                    },
+                    class: "button button--state-default button--size-default w-full" do %>
+        <div class="inline-flex items-center text-center">
+          <%= viral_icon(name: provider, classes: "w-4 h-4 mr-2 -ml-1") %>
+          <%= t(".omniauth", provider: OmniAuth::Utils.camelize(provider)) %>
+        </div>
+      <% end %>
+    <% end %>
+    <%= link_to t(".local_button"),
+    new_user_session_path(local: true),
+    class: "button button--state-default button--size-default w-full" %>
+  <% end %>
+</div>

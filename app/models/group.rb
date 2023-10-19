@@ -21,6 +21,7 @@ class Group < Namespace
              where(namespace_type: Namespaces::ProjectNamespace.sti_name)
            },
            foreign_key: :group_id, class_name: 'NamespaceGroupLink', dependent: :destroy
+
   has_many :shared_with_group_links, # rubocop:disable Rails/InverseOf
            lambda {
              where(namespace_type: Group.sti_name)
@@ -44,7 +45,9 @@ class Group < Namespace
     end
   end
   has_many :shared_groups, through: :shared_group_links, source: :namespace
-  has_many :shared_project_namespaces, through: :shared_project_namespace_links, source: :namespace
+  has_many :shared_project_namespaces, through: :shared_project_namespace_links,
+                                       class_name: 'Namespaces::ProjectNamespace', source: :namespace
+  has_many :shared_projects, through: :shared_project_namespaces, class_name: 'Project', source: :project
   has_many :shared_with_groups, through: :shared_with_group_links, source: :group
 
   def self.sti_name

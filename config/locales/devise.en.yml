@@ -2,10 +2,14 @@
 
 en:
   devise:
+    layout:
+      title: IRIDA Next
     confirmations:
+      title: "Resend confirmation instructions"
       confirmed: "Your email address has been successfully confirmed."
       send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
+      submit_button: "Resend confirmation instructions"
     failure:
       already_authenticated: "You are already signed in."
       inactive: "Your account is not activated yet."
@@ -19,16 +23,33 @@ en:
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"
+        greeting: "Welcome %{email}!"
+        instructions: "You can confirm your account email through the link below:"
+        confirm_button: "Confirm my account"
       reset_password_instructions:
         subject: "Reset password instructions"
+        greeting: "Hello %{email}!"
+        instructions: "Someone has requested a link to change your password. You can do this through the link below."
+        disclaimer_info: "If you didn't request this, please ignore this email."
+        link_info: "Your password won't change until you access the link above and create a new one."
+        reset_button: "Change my password"
       unlock_instructions:
         subject: "Unlock instructions"
+        greeting: "Hello %{email}!"
+        locked_info: "Your account has been locked due to an excessive number of unsuccessful sign in attempts."
+        instructions: "Click the link below to unlock your account:"
+        unlock_button: "Unlock my account"
       email_changed:
         subject: "Email Changed"
+        greeting: "Hello %{email}!"
+        confirmed_email_info: "We're contacting you to notify you that your email has been changed to %{email}."
+        unconfirmed_email_info: "We're contacting you to notify you that your email is being changed to %{email}."
       password_change:
         subject: "Password Changed"
+        greeting: "Hello %{email}!"
+        password_change_info: "We're contacting you to notify you that your password has been changed."
     omniauth_callbacks:
-      failure: "Could not authenticate you from %{kind} because \"%{reason}\"."
+      failure: 'Could not authenticate you from %{kind} because "%{reason}".'
       success: "Successfully authenticated from %{kind} account."
     passwords:
       no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
@@ -36,7 +57,31 @@ en:
       send_paranoid_instructions: "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes."
       updated: "Your password has been changed successfully. You are now signed in."
       updated_not_active: "Your password has been changed successfully."
+      new:
+        submit_button: "Send me reset password instructions"
+      edit:
+        title: Change your password
+        password_label: "New password"
+        password_confirmation_label: "Confirm new password"
+        password_hint: "(%{minimum_password_length} characters minimum)"
+        submit_button: "Change my password"
     registrations:
+      new:
+        password_hint: "(%{minimum_password_length} characters minimum)"
+        signed_up: "Already signed up?"
+        submit_button: "Sign up"
+      edit:
+        title: "Edit %{resource_name}"
+        cancel_title: "Cancel my account"
+        password_blank_hint: "(leave blank if you don't want to change it)"
+        password_length_hint: "(%{minimum_password_length} characters minimum)"
+        current_password_hint: "(we need your current password to confirm your changes)"
+        confirmation_message: "Currently waiting confirmation for: %{email}"
+        unhappy: Unhappy?
+        submit_button: "Update"
+        cancel_button: "Cancel my account"
+        cancel_confirmation: "Are you sure?"
+        back_link: "Back"
       destroyed: "Bye! Your account has been successfully cancelled. We hope to see you again soon."
       signed_up: "Welcome! You have signed up successfully."
       signed_up_but_inactive: "You have signed up successfully. However, we could not sign you in because your account is not yet activated."
@@ -49,16 +94,24 @@ en:
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
-      new:
-        sign_in: Sign in
+      new_with_providers:
+        local_button: "Sign in with Local Account"
+        return_button: "Return to sign in selection"
+        omniauth: "Sign in with %{provider}"
     shared:
-      links:
-        forgot_password: "Forgot your password?"
+      form:
         sign_in: "Sign in"
+      links:
         create_an_account: "Don't have an account?"
         create_an_account_link: "Register now"
-        omniauth: "Sign in with"
+        forgot_password_link: "Forgot your password?"
+        confirmation_link: "Didn't receive confirmation instructions?"
+        unlock_link: "Didn't receive unlock instructions?"
+        sign_in_link: "Sign in"
     unlocks:
+      new:
+        title: "Resend unlock instructions"
+        submit_button: "Resend unlock instructions"
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
       unlocked: "Your account has been unlocked successfully. Please sign in to continue."
