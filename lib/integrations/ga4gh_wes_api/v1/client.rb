@@ -43,12 +43,7 @@ module Integrations
         end
 
         def run_workflow(workflow_type:, workflow_type_version:, workflow_url:, workflow_params:)
-          job_params = {
-            workflow_type:,
-            workflow_type_version:,
-            workflow_url:,
-            workflow_params:
-          }
+          job_params = { workflow_type:, workflow_type_version:, workflow_url:, workflow_params: }
 
           request(
             http_method: :post,
