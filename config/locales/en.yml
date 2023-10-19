@@ -790,6 +790,10 @@ en:
         destroy:
           success: File %{filename} was successfully removed.
   services:
+    attachments:
+      concatenation:
+        incorrect_file_types: 'Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.'
+        incorrect_attachable: 'All or some of then selected files do not belong to the sample. Aborting concatenation'
     groups:
       transfer:
         namespace_empty: The new namespace is empty.
