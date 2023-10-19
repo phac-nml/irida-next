@@ -1,9 +1,9 @@
 <% if label[:type] == 'direction' %>
 <td class="px-6 py-4">
 <% if label[:label] == 'forward' %>
-<i class="fas fa-arrow-right"></i>
-<% else %>
-<i class="fa-solid fa-arrow-left"></i>
+          <%= viral_icon(name: :arrow_right, classes: "h-3 w-3") %>
+<% elsif label[:label] == 'reverse' %>
+    <%= viral_icon(name: :arrow_left, classes: "h-3 w-3") %>
 <% end %>
 </td>
 
