@@ -3,7 +3,7 @@
 # Validator for Attachment checksum
 class AttachmentChecksumValidator < ActiveModel::Validator
   def validate(record)
-    return if record.file.metadata.key?('composed')
+    return if record.file.checksum.blank?
 
     klass = record.class
 
