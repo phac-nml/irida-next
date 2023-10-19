@@ -47,7 +47,7 @@ module Groups
 
       assert_selector 'tr', count: @members_count + header_row_count
 
-      assert_no_text 'Direct member'
+      assert_text 'Direct member', count: 1
     end
 
     test 'lists the correct membership when user is a direct member of the group as well as an inherited member

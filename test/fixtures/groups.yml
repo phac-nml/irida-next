@@ -80,6 +80,12 @@ group_seven:
   type: Group
   description: Group 7 description
 
+group_eight:
+  name: Group 8
+  path: group-8
+  type: Group
+  description: Group 8 description
+
 <% [*("a".."z")].each do |letter| %>
 group_<%= letter %>:
   name: <%= "Group #{letter.capitalize}" %>

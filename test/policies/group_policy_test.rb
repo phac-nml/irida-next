@@ -81,7 +81,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
     # John Doe has access to 19 groups
-    assert_equal scoped_groups.count, 19
+    assert_equal scoped_groups.count, 20
 
     user = users(:david_doe)
     policy = GroupPolicy.new(user:)
