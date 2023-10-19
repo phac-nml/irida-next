@@ -1,7 +1,13 @@
 <tr
   id="<%= dom_id(attachment) %>"
-  class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+  class="
+  bg-white
+  <%= 'border-b' unless attachment.metadata['type'] == 'illumina_pe' && attachment.id < attachment.metadata['associated_attachment_id'] %>
+  dark:bg-slate-800
+  dark:border-slate-700
+  "
 >
+<%= viral_attachment_label(type: 'direction', attachment: attachment) %>
   <th scope="row" class="px-6 py-4"><%= link_to attachment.file.filename,
     download_namespace_project_sample_attachment_path(
       sample_id: @sample.id,
@@ -10,6 +16,14 @@
     data: {
       turbo: false
     } %></th>
+  <% if attachment.metadata['type'] == 'illumina_pe' && attachment.id < attachment.metadata['associated_attachment_id'] %>
+  <%= viral_attachment_label(type: 'format', attachment: attachment, span_row: true) %>
+  <%= viral_attachment_label(type: 'type', attachment: attachment, span_row: true) %>
+  <% end %>
+  <% if attachment.metadata['type'] != 'illumina_pe' %>
+  <%= viral_attachment_label(type: 'format', attachment: attachment) %>
+  <%= viral_attachment_label(type: 'type', attachment: attachment) %>
+  <% end %>
   <td class="px-6 py-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></td>
   <td class="px-6 py-4">
     <%= viral_time_ago(original_time: attachment.created_at) %>

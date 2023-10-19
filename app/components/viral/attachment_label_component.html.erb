@@ -1,0 +1,12 @@
+<% if label[:type] == 'direction' %>
+<td class="px-6 py-4">
+<% if label[:label] == 'forward' %>
+<i class="fas fa-arrow-right"></i>
+<% else %>
+<i class="fa-solid fa-arrow-left"></i>
+<% end %>
+</td>
+
+<% elsif label[:type] == 'format' || label[:type] == 'type' %>
+<td class="px-6 py-4" <% if label[:span] %> rowspan=2 <% end %>><%= label[:label] %></td>
+<% end %>
