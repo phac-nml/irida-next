@@ -189,7 +189,3 @@ group_eight_route:
   path: group-8
   source: group_eight (Namespace)
 
-group_9_route:
-  name: Group 9
-  path: group-9
-  source: group_9 (Namespace)
