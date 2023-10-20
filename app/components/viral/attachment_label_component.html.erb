@@ -1,12 +1,10 @@
 <% if label[:type] == 'direction' %>
-<td class="px-6 py-4">
-<% if label[:label] == 'forward' %>
-          <%= viral_icon(name: :arrow_right, classes: "h-3 w-3") %>
-<% elsif label[:label] == 'reverse' %>
-    <%= viral_icon(name: :arrow_left, classes: "h-3 w-3") %>
-<% end %>
-</td>
+    <% if label[:label] == 'forward' %>
+        <%= viral_icon(name: :arrow_right, classes: "h-3 w-3 dark:text-slate-400") %>
+    <% elsif label[:label] == 'reverse' %>
+        <%= viral_icon(name: :arrow_left, classes: "h-3 w-3") %>
+    <% end %>
 
 <% elsif label[:type] == 'format' || label[:type] == 'type' %>
-<td class="px-6 py-4" <% if label[:span] %> rowspan=2 <% end %>><%= label[:label] %></td>
+    <div class="<%= label[:color] %> p-2 rounded text-center text-white"><%= label[:label] %></div>
 <% end %>

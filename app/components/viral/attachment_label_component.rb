@@ -5,37 +5,39 @@ module Viral
   class AttachmentLabelComponent < Viral::Component
     attr_reader :label
 
-    def initialize(type:, attachment:, span_row: false)
-      @label = attachment_label(type, attachment, span_row)
+    COLORS = {
+      format: {
+        fasta: 'bg-sky-400',
+        fastq: 'bg-emerald-400',
+        unknown: 'bg-gray-400'
+      },
+      type: {
+        assembly: 'bg-orange-400',
+        illumina_pe: 'bg-violet-400'
+      }
+    }.freeze
+
+    def initialize(type:, attachment:)
+      @label = attachment_label(type, attachment)
     end
 
     private
 
-    # rubocop:disable Metrics/MethodLength
-    def attachment_label(type, attachment, span_row)
+    def attachment_label(type, attachment)
       case type
       when 'direction'
         direction = attachment.metadata.key?('direction') ? get_direction(attachment.metadata['direction']) : nil
-        {
-          type: 'direction',
-          color: 'none',
-          label: direction,
-          span: span_row
-        }
+        { type: 'direction', color: nil, label: direction }
       when 'format'
-        {
-          type: 'format',
-          color: 'none',
-          label: attachment.metadata['format'],
-          span: span_row
-        }
+        { type: 'format', color: COLORS[type.to_sym][attachment.metadata['format'].to_sym],
+          label: attachment.metadata['format'] }
       when 'type'
-        {
-          type: 'type',
-          color: 'none',
-          label: attachment.metadata['type'],
-          span: span_row
-        }
+        if attachment.metadata.key?('type')
+          { type: 'type', color: COLORS[type.to_sym][attachment.metadata['type'].to_sym],
+            label: attachment.metadata['type'] }
+        else
+          { type: 'type', color: nil, label: attachment.metadata['type'] }
+        end
       end
     end
 

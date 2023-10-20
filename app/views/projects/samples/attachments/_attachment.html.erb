@@ -2,12 +2,12 @@
   id="<%= dom_id(attachment) %>"
   class="
   bg-white
-  <%= 'border-b' unless attachment.metadata['type'] == 'illumina_pe' && attachment.id < attachment.metadata['associated_attachment_id'] %>
+  <%= 'border-b' unless row_action == 'span' %>
   dark:bg-slate-800
   dark:border-slate-700
   "
 >
-<%= viral_attachment_label(type: 'direction', attachment: attachment) %>
+  <td><%= viral_attachment_label(type: 'direction', attachment: attachment) %></td>
   <th scope="row" class="px-6 py-4"><%= link_to attachment.file.filename,
     download_namespace_project_sample_attachment_path(
       sample_id: @sample.id,
@@ -16,35 +16,34 @@
     data: {
       turbo: false
     } %></th>
-  <% if attachment.metadata['type'] == 'illumina_pe' && attachment.id < attachment.metadata['associated_attachment_id'] %>
-  <%= viral_attachment_label(type: 'format', attachment: attachment, span_row: true) %>
-  <%= viral_attachment_label(type: 'type', attachment: attachment, span_row: true) %>
-  <% end %>
-  <% if attachment.metadata['type'] != 'illumina_pe' %>
-  <%= viral_attachment_label(type: 'format', attachment: attachment) %>
-  <%= viral_attachment_label(type: 'type', attachment: attachment) %>
+  <% if row_action != 'skip'%>
+    <td class="px-6 py-4" <% if row_action == 'span' %> rowspan=2 <% end %> ><%= viral_attachment_label(type: 'format', attachment: attachment)%></td>
+    <td class="px-6 py-4" <% if row_action == 'span' %> rowspan=2 <% end %> ><%= viral_attachment_label(type: 'type', attachment: attachment) %></td>
   <% end %>
   <td class="px-6 py-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></td>
-  <td class="px-6 py-4">
+  <% if row_action != 'skip'%>
+  <td class="px-6 py-4" <% if row_action == 'span' %> rowspan=2 <% end %>>
     <%= viral_time_ago(original_time: attachment.created_at) %>
   </td>
-  <td class="px-6 py-4">
-    <% if allowed_to?(:update_sample?, @project) %>
-      <%= button_to(
-        t(".delete"),
-        namespace_project_sample_attachment_path(
-          sample_id: @sample.id,
-          id: attachment.id
-        ),
-        method: "delete",
-        form: {
-          data: {
-            "turbo-frame": "attachments",
-            "turbo-confirm": t(".delete_confirm")
-          }
-        },
-        class: "button button--state-destructive button--size-default"
-      ) %>
-    <% end %>
-  </td>
+
+    <td class="px-6 py-4" <% if row_action == 'span' %> rowspan=2 <% end %>>
+      <% if allowed_to?(:update_sample?, @project) %>
+        <%= button_to(
+          t(".delete"),
+          namespace_project_sample_attachment_path(
+            sample_id: @sample.id,
+            id: attachment.id
+          ),
+          method: "delete",
+          form: {
+            data: {
+              "turbo-frame": "attachments",
+              "turbo-confirm": t(".delete_confirm")
+            }
+          },
+          class: "button button--state-destructive button--size-default"
+        ) %>
+      <% end %>
+    </td>
+  <% end %>
 </tr>

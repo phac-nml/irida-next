@@ -13,11 +13,37 @@
         </tr>
       </thead>
       <tbody id="attachments-table-body">
-        <% attachments.each do |attachment| %>
+        <% attachments.each_with_index do |attachment, index| %>
+          <% if attachment.fastq? && attachment.metadata.key?('associated_attachment_id') %>
+            <%# Checks for attachment is the first in a paired end attachment %>
+            <% if index+1 != attachments.length && attachment.metadata['associated_attachment_id'] == attachments[index+1].id %>
+            <%= render partial: "projects/samples/attachments/attachment",
+                locals: {
+                  attachment: attachment,
+                  row_action: 'span'
+              } %>
+            <%# Checks for attachment is the second in a paired end attachment %>
+            <% elsif attachment.metadata['associated_attachment_id'] == attachments[index-1].id %>
+              <%= render partial: "projects/samples/attachments/attachment",
+                locals: {
+                  attachment: attachment,
+                  row_action: 'skip'
+              } %>
+            <%# Removeable once delete function removes both paired end attachments %>
+            <% else %>
+            <%= render partial: "projects/samples/attachments/attachment",
+            locals: {
+              attachment: attachment,
+              row_action: nil
+            } %>
+            <% end %>
+          <% else %>
           <%= render partial: "projects/samples/attachments/attachment",
           locals: {
-            attachment: attachment
+            attachment: attachment,
+            row_action: nil
           } %>
+          <% end %>
         <% end %>
       </tbody>
     </table>
