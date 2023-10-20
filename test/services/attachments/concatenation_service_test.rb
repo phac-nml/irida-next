@@ -78,7 +78,9 @@ module Attachments
 
       Attachments::ConcatenationService.new(@user, sample, params).execute
 
-      assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_fastq_file_types'))
+      assert sample.errors.full_messages.include?(
+        I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
+      )
     end
 
     test 'shouldn\'t concatenate files as they do not belong to the sample' do
