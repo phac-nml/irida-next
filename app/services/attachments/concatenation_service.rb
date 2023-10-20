@@ -33,33 +33,35 @@ module Attachments
 
       attachments = attachable.attachments.where(id: attachment_ids, attachable:).order(:id)
 
-      if !attachments.length == attachment_ids.length
+      if attachments.length != attachment_ids.length
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.incorrect_attachable')
       end
 
-      is_paired_end = attachments.first.metadata.key?('type')
-      is_single_end = !attachments.first.metadata.key?('type')
+      if attachments.length.positive?
+        is_paired_end = attachments.first.metadata.key?('type')
+        is_single_end = !attachments.first.metadata.key?('type')
 
-      validate_same_types(attachments, is_paired_end, is_single_end)
+        validate_same_types(attachments, is_paired_end, is_single_end)
 
-      if is_paired_end
-        forward_reads = []
-        reverse_reads = []
-        attachments.each do |attachment|
-          if attachment.metadata['direction'] == 'forward'
-            forward_reads << attachment
-          elsif attachment.metadata['direction'] == 'reverse'
-            reverse_reads << attachment
+        if is_paired_end
+          forward_reads = []
+          reverse_reads = []
+          attachments.each do |attachment|
+            if attachment.metadata['direction'] == 'forward'
+              forward_reads << attachment
+            elsif attachment.metadata['direction'] == 'reverse'
+              reverse_reads << attachment
+            end
           end
+          concatenate_paired_end_reads(forward_reads, reverse_reads)
+        elsif is_single_end
+          concatenate_single_end_reads(attachments)
         end
-        concatenate_paired_end_reads(forward_reads, reverse_reads)
-      elsif is_single_end
-        concatenate_single_end_reads(attachments)
-      end
 
-      # if option is selected then destroy the original files
-      attachments.each(&:destroy!) if concatenation_params[:delete_originals]
+        # if option is selected then destroy the original files
+        attachments.each(&:destroy!) if concatenation_params[:delete_originals]
+      end
     rescue Attachments::ConcatenationService::AttachmentConcatenationError => e
       attachable.errors.add(:base, e.message)
       attachable

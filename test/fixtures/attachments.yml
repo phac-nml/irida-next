@@ -15,3 +15,31 @@ attachmentB:
 attachmentC:
   metadata: {}
   attachable: sampleA (Sample)
+
+attachmentPEFWD1:
+  metadata: { "type": "illumina_pe", "format": "fastq", "direction": "forward" }
+  attachable: sampleB (Sample)
+
+attachmentPEREV1:
+  metadata: { "type": "illumina_pe", "format": "fastq", "direction": "reverse" }
+  attachable: sampleB (Sample)
+
+attachmentPEFWD2:
+  metadata: { "type": "illumina_pe", "format": "fastq", "direction": "forward" }
+  attachable: sampleB (Sample)
+
+attachmentPEREV2:
+  metadata: { "type": "illumina_pe", "format": "fastq", "direction": "reverse" }
+  attachable: sampleB (Sample)
+
+attachmentD:
+  metadata: {}
+  attachable: sampleB (Sample)
+
+attachmentE:
+  metadata: {}
+  attachable: sampleB (Sample)
+
+attachmentF:
+  metadata: {}
+  attachable: sampleB (Sample)
