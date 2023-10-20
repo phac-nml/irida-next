@@ -10,23 +10,36 @@ module Groups
       @group = groups(:group_one)
     end
 
-    test 'transfer group with permission & maximum ancestors' do
+    test 'transfer group with permission' do
       new_namespace = groups(:group_eight)
-      user = users(:ryan_doe)
+      owner_user = users(:james_doe)
+      maintainer_user = users(:joan_doe)
+      guest_user = users(:ryan_doe)
 
       assert_nil @group.parent
+      assert_equal Member::AccessLevel::OWNER,
+                   @group.group_members.where(user_id: owner_user.id).first.access_level
+      assert_equal Member::AccessLevel::MAINTAINER,
+                   @group.group_members.where(user_id: maintainer_user.id).first.access_level
       assert_equal Member::AccessLevel::GUEST,
-                   @group.group_members.where(user_id: user.id).first.access_level
+                   @group.group_members.where(user_id: guest_user.id).first.access_level
+      (Namespace::MAX_ANCESTORS - 1).times do |n|
+        assert_equal Member::AccessLevel::GUEST,
+                     groups("subgroup#{n + 1}").group_members.where(user_id: guest_user.id).first.access_level
+      end
 
       Groups::TransferService.new(@group, @john_doe).execute(new_namespace)
 
       assert_equal @group.parent, new_namespace
+      assert_equal Member::AccessLevel::OWNER,
+                   @group.group_members.where(user_id: owner_user.id).first.access_level
       assert_equal Member::AccessLevel::MAINTAINER,
-                   @group.group_members.where(user_id: user.id).first.access_level
-
+                   @group.group_members.where(user_id: maintainer_user.id).first.access_level
+      assert_equal Member::AccessLevel::MAINTAINER,
+                   @group.group_members.where(user_id: guest_user.id).first.access_level
       (Namespace::MAX_ANCESTORS - 1).times do |n|
         assert_equal Member::AccessLevel::MAINTAINER,
-                     groups("subgroup#{n + 1}").group_members.where(user_id: user.id).first.access_level
+                     groups("subgroup#{n + 1}").group_members.where(user_id: guest_user.id).first.access_level
       end
     end
 
