@@ -1,4 +1,4 @@
 en:
   required: Required
-  file_select: Select a file
-  strandedness_select: Select file strandedness
+  file_prompt: Select a file
+  dropdown_prompt: Select an option
