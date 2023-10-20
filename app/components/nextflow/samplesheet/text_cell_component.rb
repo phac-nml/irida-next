@@ -2,6 +2,7 @@
 
 module Nextflow
   module Samplesheet
+    # Render a single cell of a Nextflow samplesheet for a property that requires a text input
     class TextCellComponent < ViewComponent::Base
       attr_reader :name, :fields, :required
 
