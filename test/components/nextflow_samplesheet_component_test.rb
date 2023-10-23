@@ -4,8 +4,10 @@ require 'view_component_test_case'
 
 class NextflowSamplesheetComponentTest < ViewComponentTestCase
   test 'default' do
-    render_inline Nextflow::SamplesheetComponent.new(samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
-                                                     schema: JSON.parse(File.read('test/fixtures/files/nextflow/samplesheet_schema.json')))
+    render_inline Nextflow::SamplesheetComponent.new(
+      samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
+      schema: JSON.parse(File.read('test/fixtures/files/nextflow/samplesheet_schema.json'))
+    )
 
     assert_selector 'table' do
       assert_selector 'thead th', count: 4
