@@ -6,7 +6,9 @@ module Integrations
     module V1
       API_SERVER_ENDPOINT_VERSION = 'v1/'
       # API Integration with GA4GH WES
-      class Client
+
+      # TODO: should the class be shortened/split up somehow?
+      class Client # rubocop:disable Metrics/ClassLength
         include ApiExceptions
 
         # TODO: put this server url in a secrets file
@@ -26,9 +28,16 @@ module Integrations
           )
         end
 
-        def runs
+        def runs(
+          page_size: nil,
+          page_token: nil
+        )
+          params = {}
+          params['page_size'] = page_size if page_size.present?
+          params['page_token'] = page_token if page_token.present?
           get(
-            endpoint: 'runs'
+            endpoint: 'runs',
+            params:
           )
         end
 
@@ -38,21 +47,32 @@ module Integrations
           )
         end
 
-        def run_workflow(
+        def run_workflow( # rubocop:disable Metrics/ParameterLists
+          workflow_params: nil,
           workflow_type: nil,
           workflow_type_version: nil,
+          tags: nil,
+          workflow_engine: nil,
+          workflow_engine_version: nil,
+          workflow_engine_parameters: nil,
           workflow_url: nil,
-          workflow_params: nil
+          workflow_attachment: nil # TODO: this is an 'Array of strings <binary>', probably needs special handling
         )
-          job_params = {}
-          job_params['workflow_type'] = workflow_type if workflow_type.present?
-          job_params['workflow_type_version'] = workflow_type_version if workflow_type_version.present?
-          job_params['workflow_url'] = workflow_url if workflow_url.present?
-          job_params['workflow_params'] = workflow_params if workflow_params.present?
+          # TODO: is there a better way to do this in ruby?
+          params = {}
+          params['workflow_params'] = workflow_params if workflow_params.present?
+          params['workflow_type'] = workflow_type if workflow_type.present?
+          params['workflow_type_version'] = workflow_type_version if workflow_type_version.present?
+          params['tags'] = tags if tags.present?
+          params['workflow_engine'] = workflow_engine if workflow_engine.present?
+          params['workflow_engine_version'] = workflow_engine_version if workflow_engine_version.present?
+          params['workflow_engine_parameters'] = workflow_engine_parameters if workflow_engine_parameters.present?
+          params['workflow_url'] = workflow_url if workflow_url.present?
+          params['workflow_attachment'] = workflow_attachment if workflow_attachment.present?
 
           post(
             endpoint: 'runs',
-            params: job_params
+            params:
           )
         end
 
@@ -103,7 +123,7 @@ module Integrations
 
         # TODO, replace the 'puts' with proper error handling
         def handle_error(err)
-          puts "status: #{err.response[:status]}"
+          Rails.logger.debug "status: #{err.response[:status]}"
           puts "headers: #{err.response[:headers]}"
           puts "body: #{err.response[:body]}"
           puts "urlpath: #{err.response[:request][:url_path]}"
