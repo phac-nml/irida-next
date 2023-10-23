@@ -47,7 +47,7 @@ module Integrations
           )
         end
 
-        def run_workflow( # rubocop:disable Metrics/ParameterLists
+        def run_workflow( # rubocop:disable Metrics
           workflow_params: nil,
           workflow_type: nil,
           workflow_type_version: nil,
@@ -122,18 +122,25 @@ module Integrations
         end
 
         # TODO, replace the 'puts' with proper error handling
-        def handle_error(err)
-          Rails.logger.debug "status: #{err.response[:status]}"
-          puts "headers: #{err.response[:headers]}"
-          puts "body: #{err.response[:body]}"
-          puts "urlpath: #{err.response[:request][:url_path]}"
+        def handle_error(err) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+          Rails.logger.debug do
+            "DEBUG: Handling error for ga4gh_wes_api\n" \
+              "status: #{err.response[:status]}\n" \
+              "headers: #{err.response[:headers]}\n" \
+              "body: #{err.response[:body]}\n" \
+              "urlpath: #{err.response[:request][:url_path]}"
+          end
           case err
-          when Faraday::ClientError # 4XX
-            puts '4XX error'
-            raise
-          when Faraday::ServerError # 5XX
-            puts '5XX error'
-            raise
+          when Faraday::BadRequestError # 400
+            raise BadRequestError, err.message
+          when Faraday::UnauthorizedError # 401
+            raise UnauthorizedError, err.message
+          when Faraday::ForbiddenError # 403
+            raise ForbiddenError, err.message
+          when Faraday::ResourceNotFound # 404
+            raise NotFoundError, err.message
+          when Faraday::ClientError # 500
+            raise ApiError, err.message
           end
         end
       end
