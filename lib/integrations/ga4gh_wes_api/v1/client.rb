@@ -8,7 +8,6 @@ module Integrations
       # API Integration with GA4GH WES
       class Client
         include ApiExceptions
-        include HttpStatusCodes
 
         # TODO: put this server url in a secrets file
         API_SERVER_URL = 'http://localhost:7500/'
@@ -22,31 +21,36 @@ module Integrations
         end
 
         def service_info
-          request(
-            http_method: :get,
+          get(
             endpoint: 'service-info'
           )
         end
 
         def runs
-          request(
-            http_method: :get,
+          get(
             endpoint: 'runs'
           )
         end
 
         def run(run_id)
-          request(
-            http_method: :get,
+          get(
             endpoint: "runs/#{run_id}"
           )
         end
 
-        def run_workflow(workflow_type:, workflow_type_version:, workflow_url:, workflow_params:)
-          job_params = { workflow_type:, workflow_type_version:, workflow_url:, workflow_params: }
+        def run_workflow(
+          workflow_type: nil,
+          workflow_type_version: nil,
+          workflow_url: nil,
+          workflow_params: nil
+        )
+          job_params = {}
+          job_params['workflow_type'] = workflow_type if workflow_type.present?
+          job_params['workflow_type_version'] = workflow_type_version if workflow_type_version.present?
+          job_params['workflow_url'] = workflow_url if workflow_url.present?
+          job_params['workflow_params'] = workflow_params if workflow_params.present?
 
-          request(
-            http_method: :post,
+          post(
             endpoint: 'runs',
             params: job_params
           )
@@ -64,50 +68,54 @@ module Integrations
 
         private
 
-        def client
-          @client ||= Faraday.new(API_ENDPOINT) do |client|
-            client.request :url_encoded
-            client.adapter Faraday.default_adapter
-            # client.headers['Authorization'] = "token #{oauth_token}" if oauth_token.present?
+        def conn
+          @conn ||= Faraday.new(API_ENDPOINT) do |f|
+            # f.request :authorization, 'Bearer', -> { MyAuthStorage.get_auth_token }
+            f.request :json # encode req bodies as JSON
+            f.request :url_encoded
+            f.response :logger # logs request and responses
+            f.response :json # decode response bodies as JSON
+            f.response :raise_error, include_request: true
+            f.adapter :net_http # Use the Net::HTTP adapter
           end
         end
 
-        def request(http_method:, endpoint:, params: {})
-          response = client.public_send(http_method, endpoint, params)
-          parsed_response = JSON.parse(response.body)
-
-          return parsed_response if response_successful?(response)
-
-          raise error_class(response), "Code: #{response.status}, response: #{response.body}"
+        def post(endpoint:, params:, data: nil)
+          response = conn.post(endpoint) do |req|
+            req.params = params
+            req.headers['Content-Type'] = 'application/json'
+            req.body = data.to_json if data.present?
+          end
+          response.body
+        rescue Faraday::Error => e
+          handle_error e
         end
 
-        def response_successful?(response)
-          response.status == HTTP_OK_CODE
+        def get(endpoint:, params: nil)
+          response = conn.get(endpoint) do |req|
+            req.params = params if params.present?
+            req.headers['Content-Type'] = 'application/json'
+          end
+          response.body
+        rescue Faraday::Error => e
+          handle_error e
         end
 
-        def error_class(response)
-          case response.status
-          when HTTP_BAD_REQUEST_CODE
-            BadRequestError
-          when HTTP_UNAUTHORIZED_CODE
-            UnauthorizedError
-          when HTTP_FORBIDDEN_CODE
-            ForbiddenError
-          when HTTP_NOT_FOUND_CODE
-            NotFoundError
-          when HTTP_UNPROCESSABLE_ENTITY_CODE
-            UnprocessableEntityError
-          else
-            # TODO: example code, to remove
-            # return SpecialError if some_special_condition?
-            ApiError
+        # TODO, replace the 'puts' with proper error handling
+        def handle_error(err)
+          puts "status: #{err.response[:status]}"
+          puts "headers: #{err.response[:headers]}"
+          puts "body: #{err.response[:body]}"
+          puts "urlpath: #{err.response[:request][:url_path]}"
+          case err
+          when Faraday::ClientError # 4XX
+            puts '4XX error'
+            raise
+          when Faraday::ServerError # 5XX
+            puts '5XX error'
+            raise
           end
         end
-
-        # TODO: example code, to remove
-        # def some_special_condition?
-        #   response.body.match?('some state')
-        # end
       end
     end
   end
