@@ -17,23 +17,23 @@ module Viral
       }
     }.freeze
 
-    def initialize(type:, attachment:)
-      @label = attachment_label(type, attachment)
+    def initialize(label_type:, attachment:)
+      @label = attachment_label(label_type, attachment)
     end
 
     private
 
-    def attachment_label(type, attachment)
-      color = type == 'direction' ? nil : get_color(type, attachment)
-      case type
+    def attachment_label(label_type, attachment)
+      color = label_type == 'direction' ? nil : get_color(label_type, attachment)
+      case label_type
       when 'direction'
         direction = attachment.metadata.key?('direction') ? get_direction(attachment.metadata['direction']) : nil
-        { type: 'direction', color:, label: direction }
+        { label_type: 'direction', color:, label: direction }
       when 'format'
-        { type: 'format', color:,
+        { label_type: 'format', color:,
           label: attachment.metadata['format'] }
       when 'type'
-        { type: 'type', color:, label: attachment.metadata['type'] }
+        { label_type: 'type', color:, label: attachment.metadata['type'] }
       end
     end
 
@@ -43,11 +43,11 @@ module Viral
       'reverse'
     end
 
-    def get_color(type, attachment)
-      if type == 'format'
-        COLORS[type.to_sym][attachment.metadata['format'].to_sym]
-      elsif type == 'type'
-        attachment.metadata.key?('type') ? COLORS[type.to_sym][attachment.metadata['type'].to_sym] : nil
+    def get_color(label_type, attachment)
+      if label_type == 'format' && attachment.metadata.key?('format')
+        COLORS[label_type.to_sym][attachment.metadata['format'].to_sym]
+      elsif label_type == 'type'
+        attachment.metadata.key?('type') ? COLORS[label_type.to_sym][attachment.metadata['type'].to_sym] : nil
       end
     end
   end
