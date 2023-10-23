@@ -1,8 +1,8 @@
 <% if label[:type] == 'direction' %>
     <% if label[:label] == 'forward' %>
-        <%= viral_icon(name: :arrow_right, classes: "h-3 w-3 dark:text-slate-400") %>
+        <%= viral_icon(name: :arrow_right, classes: "h-3 w-3 ml-1 mr-2 dark:text-slate-400") %>
     <% elsif label[:label] == 'reverse' %>
-        <%= viral_icon(name: :arrow_left, classes: "h-3 w-3") %>
+        <%= viral_icon(name: :arrow_left, classes: "h-3 w-3 ml-1 mr-2") %>
     <% end %>
 
 <% elsif label[:type] == 'format' || label[:type] == 'type' %>

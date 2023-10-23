@@ -34,6 +34,10 @@ class Attachment < ApplicationRecord
     attachable.attachments.find_by(id: metadata['associated_attachment_id'])
   end
 
+  def associated_attachment_filename
+    attachable.attachments.find_by(id: metadata['associated_attachment_id']).file.filename
+  end
+
   private
 
   def assign_metadata

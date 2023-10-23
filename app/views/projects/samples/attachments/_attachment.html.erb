@@ -1,13 +1,44 @@
+
+<% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
 <tr
   id="<%= dom_id(attachment) %>"
   class="
   bg-white
-  <%= 'border-b' unless row_action == 'span' %>
+  border-b
   dark:bg-slate-800
   dark:border-slate-700
   "
 >
-  <td><%= viral_attachment_label(type: 'direction', attachment: attachment) %></td>
+  <% if attachment.associated_attachment %>
+
+  <th class="px-6 py-4">
+    <div>
+    <div class="flex mb-4">
+  <%= viral_attachment_label(type: 'direction', attachment: attachment) %>
+    <span><%= link_to attachment.file.filename,
+    download_namespace_project_sample_attachment_path(
+      sample_id: @sample.id,
+      id: attachment.id
+    ),
+    data: {
+      turbo: false
+    } %>
+    </span>
+
+    </div>
+    <div class="flex">
+    <%= viral_attachment_label(type: 'direction', attachment: attachment.associated_attachment) %>
+    <span><%= link_to attachment.associated_attachment_filename,
+    download_namespace_project_sample_attachment_path(
+      sample_id: @sample.id,
+      id: attachment.metadata['associated_attachment_id']
+    ),
+    data: {
+      turbo: false
+    } %></span>
+    </div>
+</div></th>
+  <% else %>
   <th scope="row" class="px-6 py-4"><%= link_to attachment.file.filename,
     download_namespace_project_sample_attachment_path(
       sample_id: @sample.id,
@@ -16,17 +47,27 @@
     data: {
       turbo: false
     } %></th>
-  <% if row_action != 'skip'%>
-    <td class="px-6 py-4" <% if row_action == 'span' %> rowspan=2 <% end %> ><%= viral_attachment_label(type: 'format', attachment: attachment)%></td>
-    <td class="px-6 py-4" <% if row_action == 'span' %> rowspan=2 <% end %> ><%= viral_attachment_label(type: 'type', attachment: attachment) %></td>
-  <% end %>
+    <% end %>
+    <td class="px-6 py-4"><%= viral_attachment_label(type: 'format', attachment: attachment)%></td>
+    <td class="px-6 py-4"><%= viral_attachment_label(type: 'type', attachment: attachment) %></td>
+
+  <% if attachment.associated_attachment %>
+  <td class="px-6 py-4">
+  <div class="mb-4">
+  <%= number_to_human_size(attachment.file.blob.byte_size) %>
+  </div>
+  <div>
+  <%= number_to_human_size(attachment.associated_attachment.file.blob.byte_size) %>
+  </div>
+  </td>
+  <% else %>
   <td class="px-6 py-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></td>
-  <% if row_action != 'skip'%>
-  <td class="px-6 py-4" <% if row_action == 'span' %> rowspan=2 <% end %>>
+  <% end %>
+  <td class="px-6 py-4">
     <%= viral_time_ago(original_time: attachment.created_at) %>
   </td>
 
-    <td class="px-6 py-4" <% if row_action == 'span' %> rowspan=2 <% end %>>
+    <td class="px-6 py-4">
       <% if allowed_to?(:update_sample?, @project) %>
         <%= button_to(
           t(".delete"),
@@ -45,5 +86,5 @@
         ) %>
       <% end %>
     </td>
-  <% end %>
 </tr>
+<% end %>
