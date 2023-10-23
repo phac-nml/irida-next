@@ -4,6 +4,8 @@ require 'test_helper'
 
 module Groups
   class TransferServiceTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     def setup
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
