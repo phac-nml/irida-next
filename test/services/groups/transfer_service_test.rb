@@ -4,6 +4,8 @@ require 'test_helper'
 
 module Groups
   class TransferServiceTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     def setup
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
@@ -16,6 +18,8 @@ module Groups
       assert_changes -> { @group.parent }, to: new_namespace do
         Groups::TransferService.new(@group, @john_doe).execute(new_namespace)
       end
+
+      assert_enqueued_with(job: UpdateMembershipsJob)
     end
 
     test 'transfer group without specifying new namespace' do
