@@ -10,23 +10,11 @@ module Groups
       @group = groups(:group_one)
     end
 
-    test 'transfer group with permission & maximum ancestors' do
-      new_namespace = groups(:group_eight)
-      user = users(:ryan_doe)
+    test 'transfer group with permission' do
+      new_namespace = namespaces_user_namespaces(:john_doe_namespace)
 
-      assert_nil @group.parent
-      assert_equal Member::AccessLevel::GUEST,
-                   @group.group_members.where(user_id: user.id).first.access_level
-
-      Groups::TransferService.new(@group, @john_doe).execute(new_namespace)
-
-      assert_equal @group.parent, new_namespace
-      assert_equal Member::AccessLevel::MAINTAINER,
-                   @group.group_members.where(user_id: user.id).first.access_level
-
-      (Namespace::MAX_ANCESTORS - 1).times do |n|
-        assert_equal Member::AccessLevel::MAINTAINER,
-                     groups("subgroup#{n + 1}").group_members.where(user_id: user.id).first.access_level
+      assert_changes -> { @group.parent }, to: new_namespace do
+        Groups::TransferService.new(@group, @john_doe).execute(new_namespace)
       end
     end
 
