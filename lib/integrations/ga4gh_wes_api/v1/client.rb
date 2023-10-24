@@ -6,9 +6,7 @@ module Integrations
     module V1
       API_SERVER_ENDPOINT_VERSION = 'v1/'
       # API Integration with GA4GH WES
-
-      # TODO: should the class be shortened/split up somehow?
-      class Client # rubocop:disable Metrics/ClassLength
+      class Client
         include ApiExceptions
 
         # TODO: put this server url in a secrets file
@@ -28,13 +26,11 @@ module Integrations
           )
         end
 
-        def runs(
-          page_size: nil,
-          page_token: nil
-        )
-          params = {}
-          params['page_size'] = page_size if page_size.present?
-          params['page_token'] = page_token if page_token.present?
+        # Arguments are defined here:
+        # https://ga4gh.github.io/workflow-execution-service-schemas/docs/#tag/Workflow-Runs/operation/ListRuns
+        # @param page_size [Integer <int64>]
+        # @param page_token [String]
+        def runs(**params)
           get(
             endpoint: 'runs',
             params:
@@ -47,29 +43,18 @@ module Integrations
           )
         end
 
-        def run_workflow( # rubocop:disable Metrics
-          workflow_params: nil,
-          workflow_type: nil,
-          workflow_type_version: nil,
-          tags: nil,
-          workflow_engine: nil,
-          workflow_engine_version: nil,
-          workflow_engine_parameters: nil,
-          workflow_url: nil,
-          workflow_attachment: nil # TODO: this is an 'Array of strings <binary>', probably needs special handling
-        )
-          # TODO: is there a better way to do this in ruby?
-          params = {}
-          params['workflow_params'] = workflow_params if workflow_params.present?
-          params['workflow_type'] = workflow_type if workflow_type.present?
-          params['workflow_type_version'] = workflow_type_version if workflow_type_version.present?
-          params['tags'] = tags if tags.present?
-          params['workflow_engine'] = workflow_engine if workflow_engine.present?
-          params['workflow_engine_version'] = workflow_engine_version if workflow_engine_version.present?
-          params['workflow_engine_parameters'] = workflow_engine_parameters if workflow_engine_parameters.present?
-          params['workflow_url'] = workflow_url if workflow_url.present?
-          params['workflow_attachment'] = workflow_attachment if workflow_attachment.present?
-
+        # Requires some of the following arguments as defined here:
+        # https://ga4gh.github.io/workflow-execution-service-schemas/docs/#tag/Workflow-Runs/operation/RunWorkflow
+        # @param workflow_params [String]
+        # @param workflow_type [String]
+        # @param workflow_type_version [String]
+        # @param tags [String]
+        # @param workflow_engine [String]
+        # @param workflow_engine_version [String]
+        # @param workflow_engine_parameters [String]
+        # @param workflow_url [String]
+        # @param workflow_attachment [Array of strings <binary>] TODO: Test how this works
+        def run_workflow(**params)
           post(
             endpoint: 'runs',
             params:
@@ -129,7 +114,7 @@ module Integrations
               "body: #{err.response[:body]}\n" \
               "urlpath: #{err.response[:request][:url_path]}"
           end
-          case err
+          case err # These are all the error responses defined by Ga4ghW Wes Api v1
           when Faraday::BadRequestError # 400
             raise BadRequestError, err.message
           when Faraday::UnauthorizedError # 401
