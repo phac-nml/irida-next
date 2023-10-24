@@ -7,9 +7,17 @@ class SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
-  # def new
-  #   super
-  # end
+  def new
+    super do
+      if resource_class.omniauth_providers.empty?
+        render :new_with_no_providers
+      else
+        @local_account = params[:local]
+        render :new_with_providers
+      end
+      return
+    end
+  end
 
   # POST /resource/sign_in
   # def create

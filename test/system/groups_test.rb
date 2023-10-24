@@ -374,4 +374,17 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_text I18n.t('action_policy.policy.group.read?', name: group.name)
   end
+
+  test 'visiting the show' do
+    @group = groups(:group_one)
+    visit group_url(@group)
+    assert_selector 'h1', text: @group.name
+
+    assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
+    assert_selector 'li.namespace-entry', count: 21
+
+    click_on I18n.t(:'groups.show.tabs.shared_projects')
+    assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.shared_projects')
+    assert_selector 'tbody > tr', count: 1
+  end
 end
