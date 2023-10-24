@@ -24,16 +24,19 @@ module Groups
 
     test 'transfer group without specifying new namespace' do
       assert_not Groups::TransferService.new(@group, @john_doe).execute(nil)
+      assert_no_enqueued_jobs
     end
 
     test 'transfer group to same group' do
       assert_not Groups::TransferService.new(@group, @john_doe).execute(@group)
+      assert_no_enqueued_jobs
     end
 
     test 'transfer group to namespace containing group' do
       subgroup_one = groups(:subgroup1)
 
       assert_not Groups::TransferService.new(subgroup_one, @john_doe).execute(@group)
+      assert_no_enqueued_jobs
     end
 
     test 'transfer group without group permission' do
@@ -49,6 +52,7 @@ module Groups
       assert_equal I18n.t(:'action_policy.policy.group.transfer?',
                           name: @group.name),
                    exception.result.message
+      assert_no_enqueued_jobs
     end
 
     test 'transfer group without target namespace permission' do
@@ -57,6 +61,7 @@ module Groups
       assert_raises(ActionPolicy::Unauthorized) do
         Groups::TransferService.new(@group, @john_doe).execute(new_namespace)
       end
+      assert_no_enqueued_jobs
     end
 
     test 'authorize allowed to transfer group with permission' do
@@ -68,6 +73,7 @@ module Groups
         Groups::TransferService.new(@group,
                                     @john_doe).execute(new_namespace)
       end
+      assert_enqueued_with(job: UpdateMembershipsJob)
     end
 
     test 'authorize allowed to transfer group into namespace' do
@@ -79,6 +85,7 @@ module Groups
         Groups::TransferService.new(@group,
                                     @john_doe).execute(new_namespace)
       end
+      assert_enqueued_with(job: UpdateMembershipsJob)
     end
   end
 end
