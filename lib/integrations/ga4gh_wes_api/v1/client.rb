@@ -6,7 +6,8 @@ module Integrations
     module V1
       API_SERVER_ENDPOINT_VERSION = 'v1/'
       # API Integration with GA4GH WES
-      class Client
+      # TODO: should this class be shortened somehow to be in line with rubocop?
+      class Client # rubocop:disable Metrics/ClassLength
         include ApiExceptions
 
         # TODO: put this server url in a secrets file
@@ -28,18 +29,12 @@ module Integrations
 
         # Arguments are defined here:
         # https://ga4gh.github.io/workflow-execution-service-schemas/docs/#tag/Workflow-Runs/operation/ListRuns
-        # @param page_size [Integer <int64>]
-        # @param page_token [String]
-        def runs(**params)
+        # @param page_size [Integer <int64>] Optional
+        # @param page_token [String] Optional
+        def list_runs(**params)
           get(
             endpoint: 'runs',
             params:
-          )
-        end
-
-        def run(run_id)
-          get(
-            endpoint: "runs/#{run_id}"
           )
         end
 
@@ -58,6 +53,45 @@ module Integrations
           post(
             endpoint: 'runs',
             params:
+          )
+        end
+
+        # @param run_id [String] Required
+        def get_run_log(run_id)
+          get(
+            endpoint: "runs/#{run_id}"
+          )
+        end
+
+        # @param run_id [String] Required
+        def get_run_status(run_id)
+          get(
+            endpoint: "runs/#{run_id}/status"
+          )
+        end
+
+        # @param run_id [String] Required
+        # @param page_size [Integer <int64>] Optional
+        # @param page_token [String] Optional
+        def list_tasks(run_id, **params)
+          get(
+            endpoint: "runs/#{run_id}/tasks", # TODO: can't get any tasks paths, 404
+            params:
+          )
+        end
+
+        # @param run_id [String] Required
+        # @param task_id [String] Required
+        def get_task(run_id, task_id)
+          get(
+            endpoint: "runs/#{run_id}/tasks/#{task_id}"
+          )
+        end
+
+        # @param run_id [String] Required
+        def cancel_run(run_id)
+          post(
+            endpoint: "runs/#{run_id}/cancel"
           )
         end
 
@@ -85,9 +119,9 @@ module Integrations
           end
         end
 
-        def post(endpoint:, params:, data: nil)
+        def post(endpoint:, params: nil, data: nil)
           response = conn.post(endpoint) do |req|
-            req.params = params
+            req.params = params if params.present?
             req.headers['Content-Type'] = 'application/json'
             req.body = data.to_json if data.present?
           end
