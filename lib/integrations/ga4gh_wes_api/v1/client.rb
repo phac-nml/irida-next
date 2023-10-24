@@ -121,7 +121,6 @@ module Integrations
           handle_error e
         end
 
-        # TODO, replace the 'puts' with proper error handling
         def handle_error(err) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
           Rails.logger.debug do
             "DEBUG: Handling error for ga4gh_wes_api\n" \
