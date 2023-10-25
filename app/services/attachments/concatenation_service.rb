@@ -11,10 +11,10 @@ module Attachments
       super(user, params)
       @attachable = attachable
 
-      # single-end params: { attachment_ids = [], basename: basefilename OPTIONAL,
+      # single-end params: { attachment_ids = [], basename: basefilename,
       #                      delete_originals: true OPTIONAL
       #                      }
-      # paired-end params: { attachment_ids = [[],[], ...], basename: basefilename OPTIONAL,
+      # paired-end params: { attachment_ids = [[],[], ...], basename: basefilename,
       #                      delete_originals: true OPTIONAL
       #                      }
       @concatenation_params = params
@@ -28,8 +28,10 @@ module Attachments
 
       if attachment_ids.empty?
         raise AttachmentConcatenationError,
-              'No files were selected to concatenate. Please select files then try again.'
+              I18n.t('services.attachments.concatenation.no_files_selected')
       end
+
+      validate_concatenated_file_basename
 
       is_paired_end = false
 
@@ -55,6 +57,16 @@ module Attachments
     end
 
     private
+
+    # Validates that a base file name was provided for the concatenated file
+    def validate_concatenated_file_basename
+      basename = concatenation_params[:basename]
+      if basename.nil? || basename.blank?
+        raise AttachmentConcatenationError,
+              I18n.t('services.attachments.concatenation.filename_missing')
+      end
+      true
+    end
 
     # Calls the validation, concatenate methods for the file type
     # If the user selects to delete the originals the originals
@@ -90,7 +102,10 @@ module Attachments
     # Validates that the paired end files are all the same type
     def validate_paired_end_files(attachments)
       attachments.each do |attachment|
-        next if attachment.metadata.key?('type') && attachments.first.metadata['type'] == 'illumina_pe'
+        if attachment.metadata.key?('type') && (attachments.first.metadata['type'] == 'illumina_pe' ||
+          attachments.first.metadata['type'] == 'pe')
+          next
+        end
 
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.incorrect_file_types')
@@ -100,9 +115,9 @@ module Attachments
 
     # Validates if the file extensions all match for the attachments
     def validate_file_extensions(attachments)
-      expected_extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : '.fastq'
+      expected_extension = attachments.first.metadata['compression'] == 'gzip' ? 'gz' : 'fastq'
       attachments.each do |attachment|
-        extension = attachment.file.filename.to_s.partition('.').last
+        extension = attachment.file.filename.to_s.split('.')[-1]
         next unless extension != expected_extension
 
         raise AttachmentConcatenationError,
@@ -113,33 +128,33 @@ module Attachments
 
     # Concatenates the single end reads into a single-end file
     def concatenate_single_end_reads(attachments)
-      basename = concatenation_params[:basename] || 'concatenated_file'
+      basename = concatenation_params[:basename]
       extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
-      blobs = retrieve_attachment_blobs(attachments)
-      composed_blob = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_R1.fastq#{extension}")
-      Attachments::CreateService.new(current_user, attachable, { files: [composed_blob.signed_id] }).execute
+      files = []
+      files << concatenate_attachments(attachments, "#{basename}_R1.fastq#{extension}").signed_id
+
+      Attachments::CreateService.new(current_user, attachable, { files: }).execute
     end
 
     # Concatenates the paired-end reads into a multiple paired-end files
-    def concatenate_paired_end_reads(attachments) # rubocop:disable Metrics/AbcSize
-      basename = concatenation_params[:basename] || 'concatenated_file'
+    def concatenate_paired_end_reads(attachments)
+      basename = concatenation_params[:basename]
 
       extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
       forward_reads, reverse_reads = attachments_to_paired_end_directional_reads(attachments)
 
       files = []
-
-      blobs = retrieve_attachment_blobs(forward_reads)
-      composed_blob_fwd = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_R1.fastq#{extension}")
-      files << composed_blob_fwd.signed_id
-
-      blobs = retrieve_attachment_blobs(reverse_reads)
-      composed_blob_rev = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_R2.fastq#{extension}")
-      files << composed_blob_rev.signed_id
+      files << concatenate_attachments(forward_reads, "#{basename}_R1.fastq#{extension}").signed_id <<
+        concatenate_attachments(reverse_reads, "#{basename}_R2.fastq#{extension}").signed_id
 
       Attachments::CreateService.new(current_user, attachable, { files: }).execute
+    end
+
+    def concatenate_attachments(attachments, filename)
+      blobs = retrieve_attachment_blobs(attachments)
+      ActiveStorage::Blob.compose(blobs, filename:)
     end
 
     # Separates attachments into forward and reverse reads
@@ -156,7 +171,7 @@ module Attachments
 
       if forward_reads.length != reverse_reads.length
         raise AttachmentConcatenationError,
-              'Incorrect file pairing. Forward and reverse read file counts do not match.'
+              I18n.t('services.attachments.concatenation.incorrect_file_pairs')
       end
 
       [forward_reads, reverse_reads]

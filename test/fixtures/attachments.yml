@@ -1,45 +1,69 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 attachment1:
-  metadata: {}
+  metadata: { "compression": "none" }
   attachable: sample1 (Sample)
 
 attachmentA:
-  metadata: {}
+  metadata: { "compression": "none" }
   attachable: sampleA (Sample)
 
 attachmentB:
-  metadata: {}
+  metadata: { "compression": "none" }
   attachable: sampleA (Sample)
 
 attachmentC:
-  metadata: {}
+  metadata: { "compression": "none" }
   attachable: sampleA (Sample)
 
 attachmentPEFWD1:
-  metadata: { "type": "illumina_pe", "format": "fastq", "direction": "forward" }
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
   attachable: sampleB (Sample)
 
 attachmentPEREV1:
-  metadata: { "type": "illumina_pe", "format": "fastq", "direction": "reverse" }
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
   attachable: sampleB (Sample)
 
 attachmentPEFWD2:
-  metadata: { "type": "illumina_pe", "format": "fastq", "direction": "forward" }
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
   attachable: sampleB (Sample)
 
 attachmentPEREV2:
-  metadata: { "type": "illumina_pe", "format": "fastq", "direction": "reverse" }
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
   attachable: sampleB (Sample)
 
 attachmentD:
-  metadata: {}
+  metadata: { "compression": "none" }
   attachable: sampleB (Sample)
 
 attachmentE:
-  metadata: {}
+  metadata: { "compression": "gzip" }
   attachable: sampleB (Sample)
 
 attachmentF:
-  metadata: {}
+  metadata: { "compression": "gzip" }
   attachable: sampleB (Sample)

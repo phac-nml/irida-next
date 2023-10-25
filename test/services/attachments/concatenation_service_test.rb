@@ -10,7 +10,8 @@ module Attachments
     end
 
     test 'concatenate single end files' do
-      params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id] }
+      params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id],
+                 basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 1 do
         Attachments::ConcatenationService.new(@user, @sample, params).execute
@@ -27,7 +28,8 @@ module Attachments
     test 'concatenate paired end files' do
       sample = samples(:sampleB)
       params = { attachment_ids: [[attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
-                                  [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id]] }
+                                  [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id]],
+                 basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 2 do
         Attachments::ConcatenationService.new(@user, sample, params).execute
@@ -49,7 +51,8 @@ module Attachments
 
     test 'concatenate fastq.gz files' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [attachments(:attachmentE).id, attachments(:attachmentF).id] }
+      params = { attachment_ids: [attachments(:attachmentE).id, attachments(:attachmentF).id],
+                 basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 1 do
         Attachments::ConcatenationService.new(@user, sample, params).execute
@@ -65,7 +68,8 @@ module Attachments
 
     test 'shouldn\'t concatenate single end with paired end files' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [attachments(:attachmentPEFWD1).id, attachments(:attachmentD).id] }
+      params = { attachment_ids: [attachments(:attachmentPEFWD1).id, attachments(:attachmentD).id],
+                 basename: 'new-concatenated-file' }
 
       Attachments::ConcatenationService.new(@user, sample, params).execute
 
@@ -74,7 +78,8 @@ module Attachments
 
     test 'shouldn\'t concatenate fastq with fastq.gz files' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [attachments(:attachmentD).id, attachments(:attachmentE).id] }
+      params = { attachment_ids: [attachments(:attachmentD).id, attachments(:attachmentE).id],
+                 basename: 'new-concatenated-file' }
 
       Attachments::ConcatenationService.new(@user, sample, params).execute
 
@@ -86,7 +91,8 @@ module Attachments
     test 'shouldn\'t concatenate files as they do not belong to the sample' do
       user = users(:john_doe)
       sample = samples(:sample2)
-      params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id] }
+      params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id],
+                 basename: 'new-concatenated-file' }
 
       Attachments::ConcatenationService.new(user, sample, params).execute
 
