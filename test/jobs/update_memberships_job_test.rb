@@ -53,8 +53,25 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
     end
   end
 
+  test 'project access level higher' do
+    @project_member.access_level = Member::AccessLevel::MAINTAINER
+    @project_member.save
+
+    assert_equal Member::AccessLevel::GUEST, @group_member.access_level
+    assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.access_level
+    assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.access_level
+
+    UpdateMembershipsJob.perform_now([@project_member.id])
+
+    assert_equal Member::AccessLevel::GUEST, @group_member.reload.access_level
+    assert_equal Member::AccessLevel::MAINTAINER, @project_member.reload.access_level
+    assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.reload.access_level
+    assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.reload.access_level
+  end
+
   test 'empty memberships' do
     assert_equal Member::AccessLevel::GUEST, @group_member.access_level
+    assert_equal Member::AccessLevel::GUEST, @project_member.access_level
     assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.access_level
     assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.access_level
 
@@ -68,6 +85,7 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
 
   test 'memberships do not exist' do
     assert_equal Member::AccessLevel::GUEST, @group_member.access_level
+    assert_equal Member::AccessLevel::GUEST, @project_member.access_level
     assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.access_level
     assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.access_level
 
