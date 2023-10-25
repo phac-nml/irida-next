@@ -137,5 +137,29 @@ module Attachments
 
       assert @sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.filename_missing'))
     end
+
+    test 'should throw an error if no files are selected for concatenation' do
+      params = { attachment_ids: [],
+                 basename: 'new-concatenated-file' }
+
+      assert_no_difference -> { Attachment.count } do
+        Attachments::ConcatenationService.new(@user, @sample, params).execute
+      end
+
+      assert @sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.no_files_selected'))
+    end
+
+    test 'should throw an error if foward reads file count doesn\'t equal to reverse reads file count' do
+      sample = samples(:sampleB)
+      params = { attachment_ids: [[attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
+                                  [attachments(:attachmentPEFWD2).id]],
+                 basename: 'new-concatenated-file' }
+
+      assert_no_difference -> { Attachment.count } do
+        Attachments::ConcatenationService.new(@user, sample, params).execute
+      end
+
+      assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_file_pairs'))
+    end
   end
 end
