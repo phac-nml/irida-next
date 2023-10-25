@@ -14,7 +14,6 @@ module Groups
 
     test 'transfer group with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
-
       assert_changes -> { @group.parent }, to: new_namespace do
         Groups::TransferService.new(@group, @john_doe).execute(new_namespace)
       end
@@ -41,11 +40,9 @@ module Groups
 
     test 'transfer group without group permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
-
       exception = assert_raises(ActionPolicy::Unauthorized) do
         Groups::TransferService.new(@group, @jane_doe).execute(new_namespace)
       end
-
       assert_equal GroupPolicy, exception.policy
       assert_equal :transfer?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
@@ -57,7 +54,6 @@ module Groups
 
     test 'transfer group without target namespace permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
-
       assert_raises(ActionPolicy::Unauthorized) do
         Groups::TransferService.new(@group, @john_doe).execute(new_namespace)
       end
@@ -66,7 +62,6 @@ module Groups
 
     test 'authorize allowed to transfer group with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
-
       assert_authorized_to(:transfer?, @group,
                            with: GroupPolicy,
                            context: { user: @john_doe }) do
@@ -78,7 +73,6 @@ module Groups
 
     test 'authorize allowed to transfer group into namespace' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
-
       assert_authorized_to(:transfer_into_namespace?, new_namespace,
                            with: Namespaces::UserNamespacePolicy,
                            context: { user: @john_doe }) do

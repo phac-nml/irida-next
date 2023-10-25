@@ -39,7 +39,12 @@ module Projects
         raise TransferError, I18n.t('services.projects.transfer.namespace_project_exists')
       end
 
+      project_ancestor_member_user_ids = Member.for_namespace_and_ancestors(project).map(&:user_id)
+      new_namespace_member_ids = Member.for_namespace_and_ancestors(@new_namespace).where(user_id: project_ancestor_member_user_ids).map(&:id) # rubocop:disable Layout/LineLength
+
       project.namespace.update(parent_id: @new_namespace.id)
+
+      UpdateMembershipsJob.perform_later(new_namespace_member_ids)
     end
   end
 end
