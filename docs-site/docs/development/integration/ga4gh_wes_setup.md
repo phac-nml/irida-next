@@ -97,3 +97,8 @@ expected response
 ```
 
 [more commands can be found here](https://starterkit.ga4gh.org/docs/starter-kit-apis/wes/wes_run_request)
+
+## Authentication
+
+If you are using authentication, you can set the following
+Use `bin/rails credentials:edit`` to set the GA4GH WES secrets (as ga4gh_wes:oauth_token)

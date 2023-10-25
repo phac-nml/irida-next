@@ -6,18 +6,16 @@ module Integrations
     module V1
       API_SERVER_ENDPOINT_VERSION = 'v1/'
       # API Integration with GA4GH WES
-      # TODO: should this class be shortened somehow to be in line with rubocop?
+      # authentication token should be set in credentials/secrets file as ga4gh_wes:oauth_token
       class Client # rubocop:disable Metrics/ClassLength
         include ApiExceptions
 
-        attr_reader :api_endpoint, :oauth_token
+        attr_reader :api_endpoint
 
         # @param api_server_url [String] API Server url without endpoint path. ex: 'http://localhost:7500/'
-        # @param oauth_token [String] OAuth2 bearer token
-        def initialize(api_server_url, oauth_token: nil)
+        def initialize(api_server_url)
           # Endpoint with path and version
           @api_endpoint = api_server_url + Ga4ghWesApi::API_SERVER_ENDPOINT_PATH + V1::API_SERVER_ENDPOINT_VERSION
-          @oauth_token = oauth_token
         end
 
         def service_info
@@ -108,7 +106,8 @@ module Integrations
 
         def conn
           Faraday.new(@api_endpoint) do |f|
-            f.request :authorization, 'Bearer', -> { @oauth_token } # proc so auth is evaluated on each request
+            # proc so auth is evaluated on each request
+            f.request :authorization, 'Bearer', -> { Rails.application.credentials.dig(:ga4gh_wes, :oauth_token) }
             f.request :json # encode req bodies as JSON
             f.request :url_encoded
             f.response :logger # logs request and responses
