@@ -18,6 +18,9 @@ attachmentPEREV1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob f
 attachmentPEFWD2_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_fwd_2.fastq", service_name: "test" %>
 attachmentPEREV2_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_rev_2.fastq", service_name: "test" %>
 
+attachmentPEFWD3_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_fwd_3.fastq", service_name: "test" %>
+attachmentPEREV3_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_rev_3.fastq", service_name: "test" %>
+
 attachmentD_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_D.fastq", service_name: "test" %>
 
 attachmentE_gz_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_2.fastq.gz", service_name: "test" %>

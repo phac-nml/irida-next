@@ -56,6 +56,26 @@ attachmentPEREV2:
     }
   attachable: sampleB (Sample)
 
+attachmentPEFWD3:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleB (Sample)
+
+attachmentPEREV3:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleB (Sample)
+
 attachmentD:
   metadata: { "compression": "none" }
   attachable: sampleB (Sample)

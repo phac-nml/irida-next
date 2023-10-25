@@ -18,7 +18,7 @@ module Attachments
       end
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/CyclomaticComplexity
       authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
       @attachments.each(&:save)
@@ -26,7 +26,12 @@ module Attachments
       persisted_fastq_attachments = @attachments.select { |attachment| attachment.persisted? && attachment.fastq? }
 
       identify_illumina_paired_end_files(persisted_fastq_attachments) if persisted_fastq_attachments.count > 1
-      identify_paired_end_files(persisted_fastq_attachments) if persisted_fastq_attachments.count > 1
+
+      unidentified_fastq_attachments = persisted_fastq_attachments.reject do |attachment|
+        attachment.metadata['type'] == 'illumina_pe'
+      end
+
+      identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.count > 1
 
       @attachments
     end
@@ -76,13 +81,13 @@ module Attachments
 
       # identify pe attachments based on fastq filename convention
       attachments.each do |att|
-        next unless /^(?<sample_name>.+_[^_]+)(?<region>[_R1-_2])\./ =~ att.filename.to_s
+        next unless /^(?<sample_name>.+_)(?<region>[1-2])\./ =~ att.filename.to_s
 
         case region
-        when '_R1'
-          illumina_pe[sample_name.to_s]['forward'] = att
-        when '_R2'
-          illumina_pe[sample_name.to_s]['reverse'] = att
+        when '1'
+          pe[sample_name.to_s]['forward'] = att
+        when '2'
+          pe[sample_name.to_s]['reverse'] = att
         end
       end
 

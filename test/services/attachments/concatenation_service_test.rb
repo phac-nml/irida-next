@@ -49,6 +49,35 @@ module Attachments
       assert_equal concatenatedrev_file_size, (attachmentrev1_file_size + attachmentrev2_file_size)
     end
 
+    test 'should concatenate more than 2 pairs of paired-end files' do
+      sample = samples(:sampleB)
+      params = { attachment_ids: [[attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
+                                  [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id],
+                                  [attachments(:attachmentPEFWD3).id, attachments(:attachmentPEREV3).id]],
+                 basename: 'new-concatenated-file' }
+
+      assert_difference -> { Attachment.count } => 2 do
+        Attachments::ConcatenationService.new(@user, sample, params).execute
+      end
+
+      attachmentfwd1_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD1).id).file.byte_size
+      attachmentfwd2_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD2).id).file.byte_size
+      attachmentfwd3_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD3).id).file.byte_size
+
+      attachmentrev1_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV1).id).file.byte_size
+      attachmentrev2_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV2).id).file.byte_size
+      attachmentrev3_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV3).id).file.byte_size
+
+      concatenatedfwd_file_size = sample.attachments.last(2).first.file.byte_size
+      concatenatedrev_file_size = sample.attachments.last(2).last.file.byte_size
+
+      assert_equal concatenatedfwd_file_size,
+                   (attachmentfwd1_file_size + attachmentfwd2_file_size + attachmentfwd3_file_size)
+
+      assert_equal concatenatedrev_file_size,
+                   (attachmentrev1_file_size + attachmentrev2_file_size + attachmentrev3_file_size)
+    end
+
     test 'concatenate fastq.gz files' do
       sample = samples(:sampleB)
       params = { attachment_ids: [attachments(:attachmentE).id, attachments(:attachmentF).id],
@@ -97,6 +126,16 @@ module Attachments
       Attachments::ConcatenationService.new(user, sample, params).execute
 
       assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_attachable'))
+    end
+
+    test 'shouldn\'t concatenate files when a base file name is not provided' do
+      params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id] }
+
+      assert_no_difference -> { Attachment.count } do
+        Attachments::ConcatenationService.new(@user, @sample, params).execute
+      end
+
+      assert @sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.filename_missing'))
     end
   end
 end

@@ -132,7 +132,7 @@ module Attachments
       extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
       files = []
-      files << concatenate_attachments(attachments, "#{basename}_R1.fastq#{extension}").signed_id
+      files << concatenate_attachments(attachments, "#{basename}_1.fastq#{extension}").signed_id
 
       Attachments::CreateService.new(current_user, attachable, { files: }).execute
     end
@@ -146,8 +146,8 @@ module Attachments
       forward_reads, reverse_reads = attachments_to_paired_end_directional_reads(attachments)
 
       files = []
-      files << concatenate_attachments(forward_reads, "#{basename}_R1.fastq#{extension}").signed_id <<
-        concatenate_attachments(reverse_reads, "#{basename}_R2.fastq#{extension}").signed_id
+      files << concatenate_attachments(forward_reads, "#{basename}_1.fastq#{extension}").signed_id <<
+        concatenate_attachments(reverse_reads, "#{basename}_2.fastq#{extension}").signed_id
 
       Attachments::CreateService.new(current_user, attachable, { files: }).execute
     end
