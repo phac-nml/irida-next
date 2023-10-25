@@ -107,8 +107,8 @@ module Integrations
         private
 
         def conn
-          @conn ||= Faraday.new(@api_endpoint) do |f|
-            f.request :authorization, 'Bearer', -> { @oauth_token }
+          Faraday.new(@api_endpoint) do |f|
+            f.request :authorization, 'Bearer', -> { @oauth_token } # proc so auth is evaluated on each request
             f.request :json # encode req bodies as JSON
             f.request :url_encoded
             f.response :logger # logs request and responses
@@ -124,7 +124,7 @@ module Integrations
             req.headers['Content-Type'] = 'application/json'
             req.body = data.to_json if data.present?
           end
-          response.body
+          response.body.deep_symbolize_keys
         rescue Faraday::Error => e
           handle_error e
         end
@@ -134,7 +134,7 @@ module Integrations
             req.params = params if params.present?
             req.headers['Content-Type'] = 'application/json'
           end
-          response.body
+          response.body.deep_symbolize_keys
         rescue Faraday::Error => e
           handle_error e
         end
