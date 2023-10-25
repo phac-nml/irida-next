@@ -8,6 +8,7 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
     @group_member = members(:group_one_member_ryan_doe)
     @first_subgroup_member = members(:subgroup1_member_ryan_doe)
     @second_subgroup_member = members(:subgroup2_member_ryan_doe)
+    @project_member = members(:project_one_member_ryan_doe)
   end
 
   test 'parent group access level higher' do
@@ -60,6 +61,7 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
     UpdateMembershipsJob.perform_now([])
 
     assert_equal Member::AccessLevel::GUEST, @group_member.reload.access_level
+    assert_equal Member::AccessLevel::GUEST, @project_member.reload.access_level
     assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.reload.access_level
     assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.reload.access_level
   end
@@ -72,6 +74,7 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
     UpdateMembershipsJob.perform_now([0])
 
     assert_equal Member::AccessLevel::GUEST, @group_member.reload.access_level
+    assert_equal Member::AccessLevel::GUEST, @project_member.reload.access_level
     assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.reload.access_level
     assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.reload.access_level
   end
