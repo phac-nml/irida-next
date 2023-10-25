@@ -100,7 +100,7 @@ module Attachments
 
     # Validates if the file extensions all match for the attachments
     def validate_file_extensions(attachments)
-      expected_extension = attachments.first.file.filename.to_s.partition('.').last
+      expected_extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : '.fastq'
       attachments.each do |attachment|
         extension = attachment.file.filename.to_s.partition('.').last
         next unless extension != expected_extension
@@ -114,32 +114,29 @@ module Attachments
     # Concatenates the single end reads into a single-end file
     def concatenate_single_end_reads(attachments)
       basename = concatenation_params[:basename] || 'concatenated_file'
-      extension = attachments.first.file.filename.to_s.partition('.').last
-
-      extension = 'fastq.gz' if extension == 'gz'
+      extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
       blobs = retrieve_attachment_blobs(attachments)
-      composed_blob = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R1_001.#{extension}")
+      composed_blob = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_R1.fastq#{extension}")
       Attachments::CreateService.new(current_user, attachable, { files: [composed_blob.signed_id] }).execute
     end
 
     # Concatenates the paired-end reads into a multiple paired-end files
     def concatenate_paired_end_reads(attachments) # rubocop:disable Metrics/AbcSize
       basename = concatenation_params[:basename] || 'concatenated_file'
-      extension = attachments.first.file.filename.to_s.partition('.').last
 
-      extension = 'fastq.gz' if extension == 'gz'
+      extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
       forward_reads, reverse_reads = attachments_to_paired_end_directional_reads(attachments)
 
       files = []
 
       blobs = retrieve_attachment_blobs(forward_reads)
-      composed_blob_fwd = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R1_001.#{extension}")
+      composed_blob_fwd = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_R1.fastq#{extension}")
       files << composed_blob_fwd.signed_id
 
       blobs = retrieve_attachment_blobs(reverse_reads)
-      composed_blob_rev = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_S1_L001_R2_001.#{extension}")
+      composed_blob_rev = ActiveStorage::Blob.compose(blobs, filename: "#{basename}_R2.fastq#{extension}")
       files << composed_blob_rev.signed_id
 
       Attachments::CreateService.new(current_user, attachable, { files: }).execute

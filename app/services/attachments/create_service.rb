@@ -32,14 +32,15 @@ module Attachments
 
     private
 
-    def identify_illumina_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
+    def identify_illumina_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize, Metrics/PerceivedComplexity
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       illumina_pe = Hash.new { |h, k| h[k] = {} }
 
       # identify illumina pe attachments based on illumina fastq filename convention
       # https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/NamingConvention_FASTQ-files-swBS.htm
       attachments.each do |att|
-        unless /^(?<sample_name>.+_[^_]+_L[0-9]{3})_R(?<region>[1-2])_(?<set_number>[0-9]{3})\./ =~ att.filename.to_s
+        unless (/^(?<sample_name>.+_[^_]+_L[0-9]{3})_R(?<region>[1-2])_(?<set_number>[0-9]{3})\./ =~ att.filename.to_s) ||
+               (/^(?<sample_name>.+_[^_]+)(?<region>[_R1-_2])\./ =~ att.filename.to_s)
           next
         end
 
@@ -48,6 +49,10 @@ module Attachments
           illumina_pe["#{sample_name}_#{set_number}"]['forward'] = att
         when '2'
           illumina_pe["#{sample_name}_#{set_number}"]['reverse'] = att
+        when '_R1'
+          illumina_pe[sample_name.to_s]['forward'] = att
+        when '_R2'
+          illumina_pe[sample_name.to_s]['reverse'] = att
         end
       end
 
