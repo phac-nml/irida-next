@@ -10,15 +10,14 @@ module Integrations
       class Client # rubocop:disable Metrics/ClassLength
         include ApiExceptions
 
-        # TODO: put this server url in a secrets file
-        API_SERVER_URL = 'http://localhost:7500/'
-        # Endpoint with path and version
-        API_ENDPOINT = API_SERVER_URL + Ga4ghWesApi::API_SERVER_ENDPOINT_PATH + V1::API_SERVER_ENDPOINT_VERSION
+        attr_reader :api_endpoint, :oauth_token
 
-        # attr_reader :oauth_token
-
-        def initialize(oauth_token = nil)
-          # @oauth_token = oauth_token
+        # @param api_server_url [String] API Server url without endpoint path. ex: 'http://localhost:7500/'
+        # @param oauth_token [String] OAuth2 bearer token
+        def initialize(api_server_url, oauth_token: nil)
+          # Endpoint with path and version
+          @api_endpoint = api_server_url + Ga4ghWesApi::API_SERVER_ENDPOINT_PATH + V1::API_SERVER_ENDPOINT_VERSION
+          @oauth_token = oauth_token
         end
 
         def service_info
@@ -108,8 +107,8 @@ module Integrations
         private
 
         def conn
-          @conn ||= Faraday.new(API_ENDPOINT) do |f|
-            # f.request :authorization, 'Bearer', -> { MyAuthStorage.get_auth_token }
+          @conn ||= Faraday.new(@api_endpoint) do |f|
+            f.request :authorization, 'Bearer', -> { @oauth_token }
             f.request :json # encode req bodies as JSON
             f.request :url_encoded
             f.response :logger # logs request and responses
