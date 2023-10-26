@@ -19,7 +19,7 @@ module Groups
         raise TransferError, I18n.t('services.groups.transfer.namespace_group_exists')
       end
 
-      group_ancestor_members_user_ids = Member.for_namespace_and_ancestors(@group).select(:user_id).pluck(:user_id)
+      group_ancestor_members_user_ids = Member.for_namespace_and_ancestors(@group).select(:user_id)
       update_members = Member.for_namespace_and_ancestors(new_namespace).where(user_id: group_ancestor_members_user_ids)
 
       @group.update(parent_id: new_namespace.id)
