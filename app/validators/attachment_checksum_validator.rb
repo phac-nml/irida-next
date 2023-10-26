@@ -3,6 +3,8 @@
 # Validator for Attachment checksum
 class AttachmentChecksumValidator < ActiveModel::Validator
   def validate(record)
+    return if record.file.checksum.blank?
+
     klass = record.class
 
     # add error if another Attachment associated with the Attachable exists with the same checksum

@@ -1,13 +1,38 @@
-attachment1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test_fixtures" %>
+attachment1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
 
-test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test_fixtures" %>
+test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
 
-testsample_illumina_pe_forward_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_L001_R1_001.fastq", service_name: "test_fixtures" %>
+testsample_illumina_pe_forward_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_L001_R1_001.fastq", service_name: "test" %>
 
-testsample_illumina_pe_reverse_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_L001_R2_001.fastq", service_name: "test_fixtures" %>
+testsample_illumina_pe_reverse_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_L001_R2_001.fastq", service_name: "test" %>
 
-attachmentA_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test_fixtures" %>
+attachmentA_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test" %>
 
-attachmentB_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_B.fastq", service_name: "test_fixtures" %>
+attachmentB_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_B.fastq", service_name: "test" %>
 
-attachmentC_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_C.fastq", service_name: "test_fixtures" %>
+attachmentC_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_C.fastq", service_name: "test" %>
+
+attachmentPEFWD1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_fwd_1.fastq", service_name: "test" %>
+attachmentPEREV1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_rev_1.fastq", service_name: "test" %>
+
+attachmentPEFWD2_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_fwd_2.fastq", service_name: "test" %>
+attachmentPEREV2_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_rev_2.fastq", service_name: "test" %>
+
+attachmentPEFWD3_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_fwd_3.fastq", service_name: "test" %>
+attachmentPEREV3_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_rev_3.fastq", service_name: "test" %>
+
+attachmentPEFWD4_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R1_001.fastq", service_name: "test" %>
+attachmentPEREV4_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R2_001.fastq", service_name: "test" %>
+
+attachmentPEFWD5_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5923-small_S1_L001_R1_001.fastq", service_name: "test" %>
+attachmentPEREV5_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5923-small_S1_L001_R2_001.fastq", service_name: "test" %>
+
+attachmentD_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_D.fastq", service_name: "test" %>
+
+attachmentE_gz_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_2.fastq.gz", service_name: "test" %>
+
+attachmentF_gz_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_14.fastq.gz", service_name: "test" %>
+
+attachmentG_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test" %>
+
+attachmentH_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_B.fastq", service_name: "test" %>
