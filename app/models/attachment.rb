@@ -50,5 +50,6 @@ class Attachment < ApplicationRecord
     else
       metadata['format'] = 'unknown'
     end
+    metadata['compression'] = filename.to_s.match?(/^\S+(.gz)+$/) ? 'gzip' : 'none'
   end
 end

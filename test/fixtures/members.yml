@@ -296,9 +296,56 @@ group_eight_member_john_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eight) %>
   access_level: <%= Member::AccessLevel::OWNER %>
 
+group_eight_member_james_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eight) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_eight_member_joan_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eight) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>
+
 group_eight_member_ryan_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eight) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
 
+group_nine_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_nine) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_nine_member_james_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_nine) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>
+
+subgroup_one_group_nine_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+subgroup_one_group_nine_member_james_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_ten_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_ten) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_ten_member_james_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_ten) %>
+  access_level: <%= Member::AccessLevel::GUEST %>

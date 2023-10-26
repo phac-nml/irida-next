@@ -19,7 +19,7 @@ module Groups
         raise TransferError, I18n.t('services.groups.transfer.namespace_group_exists')
       end
 
-      group_ancestor_member_user_ids = Member.for_namespace_and_ancestors(@group).map(&:user_id)
+      group_ancestor_member_user_ids = Member.for_namespace_and_ancestors(@group).select(:user_id)
       new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace).where(user_id: group_ancestor_member_user_ids).map(&:id) # rubocop:disable Layout/LineLength
 
       @group.update(parent_id: new_namespace.id)

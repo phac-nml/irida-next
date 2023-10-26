@@ -17,3 +17,78 @@ attachmentC_file_test_file_fastq:
   name: file
   record: attachmentC (Attachment)
   blob: attachmentC_file_test_file_fastq_blob
+
+attachmentPEFWD1_file_test_file_fastq:
+  name: file
+  record: attachmentPEFWD1 (Attachment)
+  blob: attachmentPEFWD1_file_test_file_fastq_blob
+
+attachmentPEREV1_file_test_file_fastq:
+  name: file
+  record: attachmentPEREV1 (Attachment)
+  blob: attachmentPEREV1_file_test_file_fastq_blob
+
+attachmentPEFWD2_file_test_file_fastq:
+  name: file
+  record: attachmentPEFWD2 (Attachment)
+  blob: attachmentPEFWD2_file_test_file_fastq_blob
+
+attachmentPEREV2_file_test_file_fastq:
+  name: file
+  record: attachmentPEREV2 (Attachment)
+  blob: attachmentPEREV2_file_test_file_fastq_blob
+
+attachmentPEFWD3_file_test_file_fastq:
+  name: file
+  record: attachmentPEFWD3 (Attachment)
+  blob: attachmentPEFWD3_file_test_file_fastq_blob
+
+attachmentPEREV3_file_test_file_fastq:
+  name: file
+  record: attachmentPEREV3 (Attachment)
+  blob: attachmentPEREV3_file_test_file_fastq_blob
+
+attachmentPEFWD4_file_test_file_fastq:
+  name: file
+  record: attachmentPEFWD4 (Attachment)
+  blob: attachmentPEFWD4_file_test_file_fastq_blob
+
+attachmentPEREV4_file_test_file_fastq:
+  name: file
+  record: attachmentPEREV4 (Attachment)
+  blob: attachmentPEREV4_file_test_file_fastq_blob
+
+attachmentPEFWD5_file_test_file_fastq:
+  name: file
+  record: attachmentPEFWD5 (Attachment)
+  blob: attachmentPEFWD5_file_test_file_fastq_blob
+
+attachmentPEREV5_file_test_file_fastq:
+  name: file
+  record: attachmentPEREV5 (Attachment)
+  blob: attachmentPEREV5_file_test_file_fastq_blob
+
+attachmentD_file_test_file_fastq:
+  name: file
+  record: attachmentD (Attachment)
+  blob: attachmentD_file_test_file_fastq_blob
+
+attachmentE_file_test_file_fastq:
+  name: file
+  record: attachmentE (Attachment)
+  blob: attachmentE_gz_file_test_file_fastq_blob
+
+attachmentF_file_test_file_fastq:
+  name: file
+  record: attachmentF (Attachment)
+  blob: attachmentF_gz_file_test_file_fastq_blob
+
+attachmentG_file_test_file_fastq:
+  name: file
+  record: attachmentG (Attachment)
+  blob: attachmentG_file_test_file_fastq_blob
+
+attachmentH_file_test_file_fastq:
+  name: file
+  record: attachmentH (Attachment)
+  blob: attachmentH_file_test_file_fastq_blob
