@@ -5,6 +5,9 @@ module Integrations
     module V1
       # API Client for GA4GH WES Integration
       class Client
+        # @param conn [Integrations::Ga4ghWesApi::V1::ApiConnection]
+        # Usage: ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new(
+        #   Integrations::Ga4ghWesApi::V1::ApiConnection.new('http://localhost:7500/') )
         def initialize(conn)
           @conn = conn
         end

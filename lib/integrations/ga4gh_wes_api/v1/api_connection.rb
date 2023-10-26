@@ -13,8 +13,6 @@ module Integrations
         attr_reader :api_endpoint
 
         # @param api_server_url [String] API Server url without endpoint path. ex: 'http://localhost:7500/'
-        # Usage: ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new(
-        #   Integrations::Ga4ghWesApi::V1::ApiConnection.new('http://localhost:7500/') )
         def initialize(api_server_url)
           # Endpoint with path and version
           @api_endpoint = api_server_url + Ga4ghWesApi::API_SERVER_ENDPOINT_PATH + V1::API_SERVER_ENDPOINT_VERSION
