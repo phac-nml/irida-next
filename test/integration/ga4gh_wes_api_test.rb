@@ -11,7 +11,7 @@ class ClientTest < ActionDispatch::IntegrationTest
       builder.adapter :test, stubs
     end
     # conn replaces Integrations::Ga4ghWesApi::V1::ApiConnection.new('example.com').conn
-    Integrations::Ga4ghWesApi::V1::Client.new(conn)
+    Integrations::Ga4ghWesApi::V1::Client.new(conn:)
   end
 
   def test_get_run_log_id
