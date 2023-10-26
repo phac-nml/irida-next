@@ -82,3 +82,13 @@ attachmentF_file_test_file_fastq:
   name: file
   record: attachmentF (Attachment)
   blob: attachmentF_gz_file_test_file_fastq_blob
+
+attachmentG_file_test_file_fastq:
+  name: file
+  record: attachmentG (Attachment)
+  blob: attachmentG_file_test_file_fastq_blob
+
+attachmentH_file_test_file_fastq:
+  name: file
+  record: attachmentH (Attachment)
+  blob: attachmentH_file_test_file_fastq_blob

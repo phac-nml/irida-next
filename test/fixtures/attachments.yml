@@ -127,3 +127,11 @@ attachmentE:
 attachmentF:
   metadata: { "compression": "gzip" }
   attachable: sampleB (Sample)
+
+attachmentG:
+  metadata: { "compression": "none" }
+  attachable: sampleC (Sample)
+
+attachmentH:
+  metadata: { "compression": "none" }
+  attachable: sampleC (Sample)

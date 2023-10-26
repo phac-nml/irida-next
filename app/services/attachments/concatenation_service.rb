@@ -177,6 +177,7 @@ module Attachments
       [forward_reads, reverse_reads]
     end
 
+    # Gets the blobs for the passed in attachments
     def retrieve_attachment_blobs(attachments)
       blobs = []
       attachments.each do |attachment|

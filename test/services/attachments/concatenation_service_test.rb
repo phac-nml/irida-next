@@ -10,19 +10,20 @@ module Attachments
     end
 
     test 'concatenate single end files' do
-      params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id],
+      sample = samples(:sampleC)
+      params = { attachment_ids: [attachments(:attachmentG).id, attachments(:attachmentH).id],
                  basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 1 do
-        Attachments::ConcatenationService.new(@user, @sample, params).execute
+        Attachments::ConcatenationService.new(@user, sample, params).execute
       end
 
-      attachmenta_file_size = @sample.attachments.find_by(id: attachments(:attachmentA).id).file.byte_size
-      attachmentb_file_size = @sample.attachments.find_by(id: attachments(:attachmentB).id).file.byte_size
+      attachmentg_file_size = sample.attachments.find_by(id: attachments(:attachmentG).id).file.byte_size
+      attachmenth_file_size = sample.attachments.find_by(id: attachments(:attachmentH).id).file.byte_size
 
-      concatenated_file_size = @sample.attachments.last.file.byte_size
+      concatenated_file_size = sample.attachments.last.file.byte_size
 
-      assert_equal concatenated_file_size, (attachmenta_file_size + attachmentb_file_size)
+      assert_equal concatenated_file_size, (attachmentg_file_size + attachmenth_file_size)
     end
 
     test 'concatenate paired end files' do
