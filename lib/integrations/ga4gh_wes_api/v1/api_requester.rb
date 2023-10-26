@@ -10,11 +10,20 @@ module Integrations
 
         attr_reader :conn
 
-        # @param conn [Integrations::Ga4ghWesApi::V1::ApiConnection]
-        # Usage: ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new(
-        #   Integrations::Ga4ghWesApi::V1::ApiConnection.new('http://localhost:7500/').conn )
-        def initialize(conn)
-          @conn = conn
+        # Must supply one of conn: or url:
+        #
+        # @param conn: [Integrations::Ga4ghWesApi::V1::ApiConnection]
+        # @param url: [String]
+        # Usage: ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: Faraday.new('http://localhost:7500/'))
+        # Usage: ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new(url: 'http://localhost:7500/')
+        def initialize(conn: nil, url: nil)
+          if !conn.nil?
+            @conn = conn
+          elsif !url.nil?
+            @conn = Integrations::Ga4ghWesApi::V1::ApiConnection.new(url).conn
+          else
+            raise StandardError, "must define either 'conn:' or 'url:'"
+          end
         end
 
         private
