@@ -30,7 +30,7 @@ module Attachments
 
       is_paired_end = false
 
-      unless attachment_ids.all? { |i| i.is_a?(Integer) }
+      unless attachment_ids.all? { |i| i.is_a?(Integer) || i.is_a?(String) }
         # if multi-dimensional array of ids
         attachment_ids = attachment_ids.flatten
         is_paired_end = true

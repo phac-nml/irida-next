@@ -11,6 +11,8 @@ module Projects
           @sample1 = samples(:sample1)
           @project1 = projects(:project1)
           @namespace = groups(:group_one)
+          @attachment1 = attachments(:attachment1)
+          @attachment2 = attachments(:attachment2)
         end
 
         test 'should get new if owner' do
@@ -30,7 +32,11 @@ module Projects
 
         test 'should create sample attachments concatenation for a member that is an owner' do
           post namespace_project_sample_attachments_concatenation_path(@namespace, @project1, @sample1,
-                                                                       format: :turbo_stream)
+                                                                       format: :turbo_stream),
+               params: {
+                 basename: 'blah',
+                 attachment_ids: [@attachment1.id, @attachment2.id]
+               }
 
           assert_response :success
         end

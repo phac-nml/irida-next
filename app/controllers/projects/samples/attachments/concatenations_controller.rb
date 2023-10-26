@@ -22,6 +22,7 @@ module Projects
           if @sample.errors.empty?
             render turbo_stream: [], status: :ok
           else
+            @errors = @sample.errors.full_messages_for(:base)
             render turbo_stream: [], status: :unprocessable_entity
           end
         end
