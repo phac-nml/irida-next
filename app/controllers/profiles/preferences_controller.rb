@@ -11,5 +11,28 @@ module Profiles
     def current_page
       @current_page = 'preferences'
     end
+
+    def update
+      authorize! @user
+
+      respond_to do |format|
+        if @user.update(update_params)
+          flash[:success] = t('.success')
+          format.html { redirect_to profile_preferences_path }
+        else
+          format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
+        end
+      end
+      locale = current_user.try(:locale) || I18n.default_locale
+      I18n.locale = locale
+    end
+
+    private
+
+    def update_params
+      params.require(:user).permit(
+        :locale
+      )
+    end
   end
 end

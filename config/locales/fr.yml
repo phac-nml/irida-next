@@ -29,7 +29,7 @@
 # To learn more, please read the Rails Internationalization guide
 # available at https://guides.rubyonrails.org/i18n.html.
 
-en:
+fr:
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
@@ -368,10 +368,10 @@ en:
         success: Language updated successfully
       success: Preferences updated successfully
       locale_form:
-        locale_title: Language
-        en: English
-        fr: French
-        submit_button: Select Language
+        locale_title: Langue
+        en: Anglais
+        fr: Français
+        submit_button: Choisir la langue
     personal_access_tokens:
       access_token_section:
         label: Your new personal access token

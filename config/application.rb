@@ -51,5 +51,11 @@ module Irida
         end
       }
     end
+
+    # Only enables locale from rails_i18n. Other options include ordinals, pluralization, transliteration
+    # https://github.com/svenfuchs/rails-i18n
+    config.rails_i18n.enabled_modules = [:locale]
+    # Only enables en and fr locales, avoiding unnecessarily loading other locales
+    config.i18n.available_locales = %i[en fr]
   end
 end
