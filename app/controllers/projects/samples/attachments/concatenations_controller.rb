@@ -16,13 +16,20 @@ module Projects
         def create
           authorize! @project, to: :update_sample?
 
-          render turbo_stream: [], status: :ok
+          @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user, @sample,
+                                                                              concatenation_params).execute
+
+          if @sample.errors.empty?
+            render turbo_stream: [], status: :ok
+          else
+            render turbo_stream: [], status: :unprocessable_entity
+          end
         end
 
         private
 
         def concatenation_params
-          params.permit(basename:, delete_originals:, attachment_ids: [])
+          params.permit(:basename, :delete_originals, attachment_ids: [])
         end
       end
     end

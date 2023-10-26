@@ -24,14 +24,9 @@ module Attachments
       # authorize if user can update sample
       authorize! attachable.project, to: :update_sample? if attachable.instance_of?(Sample)
 
+      validate_params
+
       attachment_ids = concatenation_params[:attachment_ids]
-
-      if attachment_ids.empty?
-        raise AttachmentConcatenationError,
-              I18n.t('services.attachments.concatenation.no_files_selected')
-      end
-
-      validate_concatenated_file_basename
 
       is_paired_end = false
 
@@ -53,18 +48,23 @@ module Attachments
       validate_and_concatenate(attachments, is_paired_end)
     rescue Attachments::ConcatenationService::AttachmentConcatenationError => e
       attachable.errors.add(:base, e.message)
-      attachable
+      []
     end
 
     private
 
-    # Validates that a base file name was provided for the concatenated file
-    def validate_concatenated_file_basename
-      basename = concatenation_params[:basename]
-      if basename.nil? || basename.blank?
+    # Validates params
+    def validate_params
+      if !concatenation_params.key?(:attachment_ids) || concatenation_params[:attachment_ids].empty?
+        raise AttachmentConcatenationError,
+              I18n.t('services.attachments.concatenation.no_files_selected')
+      end
+
+      if !concatenation_params.key?(:basename) || concatenation_params[:basename].empty?
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.filename_missing')
       end
+
       true
     end
 
@@ -76,16 +76,20 @@ module Attachments
 
       validate_file_extensions(attachments)
 
+      concatenated_attachments = []
+
       if is_paired_end
         validate_paired_end_files(attachments)
-        concatenate_paired_end_reads(attachments)
+        concatenated_attachments = concatenate_paired_end_reads(attachments)
       else
         validate_single_end_files(attachments)
-        concatenate_single_end_reads(attachments)
+        concatenated_attachments = concatenate_single_end_reads(attachments)
       end
 
       # if option is selected then destroy the original files
       attachments.each(&:destroy) if concatenation_params[:delete_originals]
+
+      concatenated_attachments
     end
 
     # Validates that the single end files are all the same type
