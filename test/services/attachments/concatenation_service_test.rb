@@ -13,10 +13,9 @@ module Attachments
       params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id],
                  basename: 'new-concatenated-file' }
 
-      # assert_difference -> { Attachment.count } => 1 do
-      Attachments::ConcatenationService.new(@user, @sample, params).execute
-      # end
-      puts @sample.errors.full_messages
+      assert_difference -> { Attachment.count } => 1 do
+        Attachments::ConcatenationService.new(@user, @sample, params).execute
+      end
 
       attachmenta_file_size = @sample.attachments.find_by(id: attachments(:attachmentA).id).file.byte_size
       attachmentb_file_size = @sample.attachments.find_by(id: attachments(:attachmentB).id).file.byte_size
