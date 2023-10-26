@@ -7,11 +7,13 @@ class ApplicationController < ActionController::Base
   include RouteHelper
 
   add_flash_types :success, :info, :warning, :danger
-  before_action :authenticate_user!, :use_locale
+  before_action :authenticate_user!
   around_action :use_logidze_responsible, only: %i[create destroy update] # rubocop:disable Rails/LexicallyScopedActionFilter
+  around_action :switch_locale
 
-  def use_locale
-    I18n.locale = current_user.locale.to_sym || I18n.default_locale
+  def switch_locale(&)
+    locale = current_user.try(:locale) || I18n.default_locale
+    I18n.with_locale(locale, &)
   end
 
   def use_logidze_responsible(&)
