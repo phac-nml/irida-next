@@ -85,7 +85,7 @@ module Attachments
       end
 
       # if option is selected then destroy the original files
-      attachments.each(&:destroy!) if concatenation_params[:delete_originals]
+      attachments.each(&:destroy) if concatenation_params[:delete_originals]
     end
 
     # Validates that the single end files are all the same type
@@ -154,7 +154,6 @@ module Attachments
 
     def concatenate_attachments(attachments, filename)
       blobs = retrieve_attachment_blobs(attachments)
-      puts blobs.inspect
       ActiveStorage::Blob.compose(blobs, filename:)
     end
 
