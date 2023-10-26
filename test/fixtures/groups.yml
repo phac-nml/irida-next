@@ -113,3 +113,22 @@ namespace_group_link_group_three:
   path: group-three
   type: Group
   description: Group Three description
+
+group_nine:
+  name: Group 9
+  path: group-9
+  type: Group
+  description: Group 9 description
+
+subgroup_one_group_nine:
+  name: Subgroup 1 Group 9
+  path: subgroup-1-group-9
+  type: Group
+  description: Subgroup 1 Group 9 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine) %>
+
+group_ten:
+  name: Group 10
+  path: group-10
+  type: Group
+  description: Group 10 description
