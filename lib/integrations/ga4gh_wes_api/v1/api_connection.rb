@@ -6,15 +6,39 @@ module Integrations
     module V1
       API_SERVER_ENDPOINT_VERSION = 'v1/'
       # API Connection GA4GH WES
+      # authentication token should be set in credentials/secrets file as ga4gh_wes:oauth_token
       class ApiConnection
         include ApiExceptions
 
         attr_reader :api_endpoint
 
         # @param api_server_url [String] API Server url without endpoint path. ex: 'http://localhost:7500/'
+        # Usage: ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new(
+        #   Integrations::Ga4ghWesApi::V1::ApiConnection.new('http://localhost:7500/') )
         def initialize(api_server_url)
           # Endpoint with path and version
           @api_endpoint = api_server_url + Ga4ghWesApi::API_SERVER_ENDPOINT_PATH + V1::API_SERVER_ENDPOINT_VERSION
+        end
+
+        def get(endpoint:, params: nil)
+          response = conn.get(endpoint) do |req|
+            req.params = params if params.present?
+            req.headers['Content-Type'] = 'application/json'
+          end
+          response.body.deep_symbolize_keys
+        rescue Faraday::Error => e
+          handle_error e
+        end
+
+        def post(endpoint:, params: nil, data: nil)
+          response = conn.post(endpoint) do |req|
+            req.params = params if params.present?
+            req.headers['Content-Type'] = 'application/json'
+            req.body = data.to_json if data.present?
+          end
+          response.body.deep_symbolize_keys
+        rescue Faraday::Error => e
+          handle_error e
         end
 
         private
@@ -30,27 +54,6 @@ module Integrations
             f.response :raise_error, include_request: true
             f.adapter :net_http # Use the Net::HTTP adapter
           end
-        end
-
-        def post(endpoint:, params: nil, data: nil)
-          response = conn.post(endpoint) do |req|
-            req.params = params if params.present?
-            req.headers['Content-Type'] = 'application/json'
-            req.body = data.to_json if data.present?
-          end
-          response.body.deep_symbolize_keys
-        rescue Faraday::Error => e
-          handle_error e
-        end
-
-        def get(endpoint:, params: nil)
-          response = conn.get(endpoint) do |req|
-            req.params = params if params.present?
-            req.headers['Content-Type'] = 'application/json'
-          end
-          response.body.deep_symbolize_keys
-        rescue Faraday::Error => e
-          handle_error e
         end
 
         def handle_error(err) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength

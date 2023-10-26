@@ -3,11 +3,14 @@
 module Integrations
   module Ga4ghWesApi
     module V1
-      # API Integration with GA4GH WES
-      # authentication token should be set in credentials/secrets file as ga4gh_wes:oauth_token
-      class Client < Integrations::Ga4ghWesApi::V1::ApiConnection
+      # API Client for GA4GH WES Integration
+      class Client
+        def initialize(conn)
+          @conn = conn
+        end
+
         def service_info
-          get(
+          @conn.get(
             endpoint: 'service-info'
           )
         end
@@ -17,7 +20,7 @@ module Integrations
         # @param page_size [Integer <int64>] Optional
         # @param page_token [String] Optional
         def list_runs(**params)
-          get(
+          @conn.get(
             endpoint: 'runs',
             params:
           )
@@ -35,7 +38,7 @@ module Integrations
         # @param workflow_url [String]
         # @param workflow_attachment [Array of strings <binary>] TODO: Test how this works
         def run_workflow(**params)
-          post(
+          @conn.post(
             endpoint: 'runs',
             params:
           )
@@ -43,14 +46,14 @@ module Integrations
 
         # @param run_id [String] Required
         def get_run_log(run_id)
-          get(
+          @conn.get(
             endpoint: "runs/#{run_id}"
           )
         end
 
         # @param run_id [String] Required
         def get_run_status(run_id)
-          get(
+          @conn.get(
             endpoint: "runs/#{run_id}/status"
           )
         end
@@ -59,7 +62,7 @@ module Integrations
         # @param page_size [Integer <int64>] Optional
         # @param page_token [String] Optional
         def list_tasks(run_id, **params)
-          get(
+          @conn.get(
             endpoint: "runs/#{run_id}/tasks",
             params:
           )
@@ -68,14 +71,14 @@ module Integrations
         # @param run_id [String] Required
         # @param task_id [String] Required
         def get_task(run_id, task_id)
-          get(
+          @conn.get(
             endpoint: "runs/#{run_id}/tasks/#{task_id}"
           )
         end
 
         # @param run_id [String] Required
         def cancel_run(run_id)
-          post(
+          @conn.post(
             endpoint: "runs/#{run_id}/cancel"
           )
         end
