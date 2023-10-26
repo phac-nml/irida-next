@@ -52,3 +52,7 @@ sampleB:
   description: Sample B description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>
 
+sampleC:
+  name: Project A Sample C
+  description: Sample C description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>

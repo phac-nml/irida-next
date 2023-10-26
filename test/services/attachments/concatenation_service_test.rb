@@ -49,6 +49,31 @@ module Attachments
       assert_equal concatenatedrev_file_size, (attachmentrev1_file_size + attachmentrev2_file_size)
     end
 
+    test 'concatenate illumina paired end files' do
+      sample = samples(:sampleC)
+      params = { attachment_ids: [[attachments(:attachmentPEFWD4).id, attachments(:attachmentPEREV4).id],
+                                  [attachments(:attachmentPEFWD5).id, attachments(:attachmentPEREV5).id]],
+                 basename: 'new-concatenated-file' }
+
+      # assert_difference -> { Attachment.count } => 2 do
+      Attachments::ConcatenationService.new(@user, sample, params).execute
+      # end
+      puts sample.errors.full_messages
+
+      attachmentfwd4_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD4).id).file.byte_size
+      attachmentfwd5_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD5).id).file.byte_size
+
+      attachmentrev4_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV4).id).file.byte_size
+      attachmentrev5_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV5).id).file.byte_size
+
+      concatenatedfwd_file_size = sample.attachments.last(2).first.file.byte_size
+      concatenatedrev_file_size = sample.attachments.last(2).last.file.byte_size
+
+      assert_equal concatenatedfwd_file_size, (attachmentfwd4_file_size + attachmentfwd5_file_size)
+
+      assert_equal concatenatedrev_file_size, (attachmentrev4_file_size + attachmentrev5_file_size)
+    end
+
     test 'should concatenate more than 2 pairs of paired-end files' do
       sample = samples(:sampleB)
       params = { attachment_ids: [[attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],

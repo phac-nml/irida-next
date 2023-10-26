@@ -154,6 +154,7 @@ module Attachments
 
     def concatenate_attachments(attachments, filename)
       blobs = retrieve_attachment_blobs(attachments)
+      puts blobs.inspect
       ActiveStorage::Blob.compose(blobs, filename:)
     end
 

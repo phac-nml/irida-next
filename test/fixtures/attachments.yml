@@ -19,7 +19,7 @@ attachmentC:
 attachmentPEFWD1:
   metadata:
     {
-      "type": "illumina_pe",
+      "type": "pe",
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
@@ -29,7 +29,7 @@ attachmentPEFWD1:
 attachmentPEREV1:
   metadata:
     {
-      "type": "illumina_pe",
+      "type": "pe",
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
@@ -39,7 +39,7 @@ attachmentPEREV1:
 attachmentPEFWD2:
   metadata:
     {
-      "type": "illumina_pe",
+      "type": "pe",
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
@@ -49,7 +49,7 @@ attachmentPEFWD2:
 attachmentPEREV2:
   metadata:
     {
-      "type": "illumina_pe",
+      "type": "pe",
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
@@ -59,7 +59,7 @@ attachmentPEREV2:
 attachmentPEFWD3:
   metadata:
     {
-      "type": "illumina_pe",
+      "type": "pe",
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
@@ -69,12 +69,52 @@ attachmentPEFWD3:
 attachmentPEREV3:
   metadata:
     {
-      "type": "illumina_pe",
+      "type": "pe",
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
     }
   attachable: sampleB (Sample)
+
+attachmentPEFWD4:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEREV4:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEFWD5:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEREV5:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
 
 attachmentD:
   metadata: { "compression": "none" }
