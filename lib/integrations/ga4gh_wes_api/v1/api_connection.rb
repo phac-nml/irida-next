@@ -7,7 +7,9 @@ module Integrations
       # REST API spec for versioning
       API_SERVER_ENDPOINT_VERSION = 'v1/'
       # Creates a Faraday connection to Ga4gh WES API
-      # authentication token should be set in credentials/secrets file as ga4gh_wes:oauth_token
+      #
+      # Additional headers set in credentials file as ga4gh_wes:headers as a Hash
+      # Authorization bearer token set in credentials file as ga4gh_wes:oauth_token
       class ApiConnection
         include ApiExceptions
 
@@ -25,7 +27,12 @@ module Integrations
         end
 
         def conn
-          Faraday.new(@api_endpoint) do |f|
+          headers = { 'Content-Type': 'application/json' }
+          headers = headers.merge(Rails.application.credentials.dig(:ga4gh_wes, :headers))
+          Faraday.new(
+            url: @api_endpoint,
+            headers:
+          ) do |f|
             # proc so auth is evaluated on each request
             f.request :authorization, 'Bearer', -> { Rails.application.credentials.dig(:ga4gh_wes, :oauth_token) }
             f.request :json # encode req bodies as JSON
