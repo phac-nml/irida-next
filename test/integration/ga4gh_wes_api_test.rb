@@ -111,6 +111,42 @@ class ClientTest < ActionDispatch::IntegrationTest
     stubs.verify_stubbed_calls
   end
 
+  def test_get_task
+    given_hash = {"name": "task_id","cmd":["string"],"start_time": "string","end_time": "string","stdout": "string","stderr": "string","exit_code": 0,"system_logs":["string"],"id": "string","tes_uri": "string"}
+    expected_hash = { name: "task_id", cmd:["string"], start_time: "string", end_time: "string", stdout: "string", stderr: "string", exit_code: 0, system_logs: ["string"], id: "string", tes_uri: "string" }
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/tasks/task_id') do |env|
+      assert_equal '/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/tasks/task_id', env.url.path
+      [
+        200,
+        { 'Content-Type': 'application/json' },
+        given_hash
+      ]
+    end
+
+    cli = client(stubs)
+    assert_equal expected_hash, cli.get_task('716ab7b0-cef7-4ae7-b467-26444b4c0579', 'task_id')
+    stubs.verify_stubbed_calls
+  end
+
+  def test_list_tasks
+    given_hash = {"task_logs":[{"name": "string","cmd":["string"],"start_time": "string","end_time": "string","stdout": "string","stderr": "string","exit_code": 0,"system_logs":["string"],"id": "string","tes_uri": "string"}],"next_page_token": "string"}
+    expected_hash = { task_logs: [{ name: "string", cmd:["string"], start_time: "string", end_time: "string", stdout: "string", stderr: "string", exit_code: 0, system_logs: ["string"], id: "string", tes_uri: "string"}], next_page_token: "string" }
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/tasks') do |env|
+      assert_equal '/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/tasks', env.url.path
+      [
+        200,
+        { 'Content-Type': 'application/json' },
+        given_hash
+      ]
+    end
+
+    cli = client(stubs)
+    assert_equal expected_hash, cli.list_tasks('716ab7b0-cef7-4ae7-b467-26444b4c0579')
+    stubs.verify_stubbed_calls
+  end
+
   def test_run_test_nextflow_md5_job
     given_hash = {"run_id":"aa5cd004-1fb5-4cc9-84c5-63c0e4956588"}
     expected_hash = { run_id: 'aa5cd004-1fb5-4cc9-84c5-63c0e4956588' }
