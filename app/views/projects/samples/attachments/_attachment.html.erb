@@ -11,7 +11,7 @@
   <th class="px-6 py-4">
     <div>
       <div class="flex mb-4">
-        <%= viral_attachment_label(label_type: 'direction', attachment: attachment) %>
+        <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
         <span>
           <%= link_to attachment.file.filename,
           download_namespace_project_sample_attachment_path(
@@ -24,7 +24,7 @@
         </span>
       </div>
       <div class="flex">
-      <%= viral_attachment_label(label_type: 'direction', attachment: attachment.associated_attachment) %>
+      <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
       <span>
         <%= link_to attachment.associated_attachment_filename,
         download_namespace_project_sample_attachment_path(
@@ -50,8 +50,8 @@
   </th>
   <% end %>
 
-  <td class="px-6 py-4"><%= viral_attachment_label(label_type: 'format', attachment: attachment)%></td>
-  <td class="px-6 py-4"><%= viral_attachment_label(label_type: 'type', attachment: attachment) %></td>
+  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata['format'], color: 'format' )%></td>
+  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata['type'], color: 'type') %></td>
 
   <% if attachment.associated_attachment %>
   <td class="px-6 py-4">

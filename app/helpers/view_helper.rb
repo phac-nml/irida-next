@@ -4,7 +4,6 @@
 module ViewHelper
   VIRAL_HELPERS = {
     alert: 'Viral::AlertComponent',
-    attachment_label: 'Viral::AttachmentLabelComponent',
     avatar: 'Viral::AvatarComponent',
     breadcrumb: 'Viral::BreadcrumbComponent',
     button: 'Viral::ButtonComponent',
@@ -19,6 +18,7 @@ module ViewHelper
     help_text: 'Viral::Form::HelpTextComponent',
     icon: 'Viral::IconComponent',
     pageheader: 'Viral::PageHeaderComponent',
+    pill: 'Viral::PillComponent',
     select: 'Viral::Form::SelectComponent',
     tabs: 'Viral::TabsComponent',
     text_input: 'Viral::Form::TextInputComponent',
