@@ -103,4 +103,19 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
                        count: @active_token_count - 1)
   end
+
+  test 'can view language selection' do
+    visit profile_preferences_path
+
+    assert_text I18n.t(:'profiles.preferences.locale_form.locale_title')
+  end
+  test 'can update language to french' do
+    visit profile_preferences_path
+
+    find('input[id=user_locale_fr]').click
+
+    click_button I18n.t(:'profiles.preferences.locale_form.submit_button')
+
+    assert_text I18n.t(:'profiles.preferences.locale_form.locale_title')
+  end
 end
