@@ -77,6 +77,106 @@ class ClientTest < ActionDispatch::IntegrationTest
     stubs.verify_stubbed_calls
   end
 
+  # 400
+  def test_malformed
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs') do |env|
+      assert_equal '/runs', env.url.path
+      raise Faraday::BadRequestError.new({status: "malformed",
+                                          headers: "",
+                                          body: "",
+                                          request: {
+                                            url_path: "/runs"
+                                        }})
+    end
+
+    cli = client(stubs)
+    assert_raise Integrations::ApiExceptions::BadRequestError do
+      cli.list_runs
+    end
+    stubs.verify_stubbed_calls
+  end
+
+  # 401
+  def test_unauthorized
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs/run-id') do |env|
+      assert_equal '/runs/run-id', env.url.path
+      raise Faraday::UnauthorizedError.new({status: "unauthorized",
+                                            headers: "",
+                                            body: "",
+                                            request: {
+                                              url_path: "/runs/run-id"
+                                            }})
+    end
+
+    cli = client(stubs)
+    assert_raise Integrations::ApiExceptions::UnauthorizedError do
+      cli.get_run_log('run-id')
+    end
+    stubs.verify_stubbed_calls
+  end
+
+  # 403
+  def test_forbidden
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs/run-id') do |env|
+    assert_equal '/runs/run-id', env.url.path
+    raise Faraday::ForbiddenError.new({status: "forbidden",
+                                       headers: "",
+                                       body: "",
+                                       request: {
+                                         url_path: '/runs/run-id'
+                                       }})
+    end
+
+    cli = client(stubs)
+    assert_raise Integrations::ApiExceptions::ForbiddenError do
+      cli.get_run_log('run-id')
+    end
+    stubs.verify_stubbed_calls
+  end
+
+  # 404
+  def test_resource_not_found
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs/not-a-run') do |env|
+      assert_equal '/runs/not-a-run', env.url.path
+      raise Faraday::ResourceNotFound.new({status: "not found",
+                                           headers: "",
+                                           body: "",
+                                           request: {
+                                             url_path: "/runs/not-a-run"
+                                          }})
+    end
+
+    cli = client(stubs)
+    assert_raise Integrations::ApiExceptions::NotFoundError do
+      cli.get_run_log('not-a-run')
+    end
+    stubs.verify_stubbed_calls
+  end
+
+  # 500
+  def test_server_error
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs/run-id') do |env|
+      assert_equal '/runs/run-id', env.url.path
+      raise Faraday::ServerError.new({status: "server error",
+                                      headers: "",
+                                      body: "",
+                                      request: {
+                                        url_path: "/runs/run-id"
+                                      }})
+    end
+
+    cli = client(stubs)
+    assert_raise Integrations::ApiExceptions::ApiError do
+      cli.get_run_log('run-id')
+    end
+    stubs.verify_stubbed_calls
+  end
+
   def test_get_run_status
     given_hash = {"run_id":"716ab7b0-cef7-4ae7-b467-26444b4c0579","state":"COMPLETE"}
     expected_hash = { run_id: "716ab7b0-cef7-4ae7-b467-26444b4c0579", state: "COMPLETE" }

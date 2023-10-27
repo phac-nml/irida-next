@@ -66,7 +66,7 @@ module Integrations
             raise ForbiddenError, err.message
           when Faraday::ResourceNotFound # 404
             raise NotFoundError, err.message
-          when Faraday::ClientError # 500
+          when Faraday::ServerError # 500
             raise ApiError, err.message
           end
         end
