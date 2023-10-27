@@ -87,7 +87,7 @@ class ClientTest < ActionDispatch::IntegrationTest
                                           body: "",
                                           request: {
                                             url_path: "/runs"
-                                        }})
+                                          }})
     end
 
     cli = client(stubs)
@@ -121,13 +121,13 @@ class ClientTest < ActionDispatch::IntegrationTest
   def test_forbidden
     stubs = Faraday::Adapter::Test::Stubs.new
     stubs.get('/runs/run-id') do |env|
-    assert_equal '/runs/run-id', env.url.path
-    raise Faraday::ForbiddenError.new({status: "forbidden",
-                                       headers: "",
-                                       body: "",
-                                       request: {
-                                         url_path: '/runs/run-id'
-                                       }})
+      assert_equal '/runs/run-id', env.url.path
+      raise Faraday::ForbiddenError.new({status: "forbidden",
+                                         headers: "",
+                                         body: "",
+                                         request: {
+                                           url_path: '/runs/run-id'
+                                         }})
     end
 
     cli = client(stubs)
@@ -147,7 +147,7 @@ class ClientTest < ActionDispatch::IntegrationTest
                                            body: "",
                                            request: {
                                              url_path: "/runs/not-a-run"
-                                          }})
+                                           }})
     end
 
     cli = client(stubs)
