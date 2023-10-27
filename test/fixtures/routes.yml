@@ -201,6 +201,6 @@ subgroup_one_group_nine_route:
 
 group_ten_route:
   name: Group 10
-  path: group-10
+  path: group-9/subgroup-1-group-9/group-10
   source: group_ten (Namespace)
 

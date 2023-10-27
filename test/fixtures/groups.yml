@@ -129,6 +129,7 @@ subgroup_one_group_nine:
 
 group_ten:
   name: Group 10
-  path: group-10
+  path: group-10-subgroup-1-group-9
   type: Group
   description: Group 10 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine) %>

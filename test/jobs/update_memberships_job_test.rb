@@ -96,4 +96,26 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
                    groups("subgroup#{n + 1}").group_members.where(user_id: @group_member.user_id).first.access_level
     end
   end
+
+  test 'nested memberships' do
+    group_member1 = members(:group_nine_member_james_doe)
+    group_member2 = members(:subgroup_one_group_nine_member_james_doe)
+    group_member3 = members(:group_ten_member_james_doe)
+
+    assert_equal Member::AccessLevel::MAINTAINER,
+                 group_member1.access_level
+    assert_equal Member::AccessLevel::OWNER,
+                 group_member2.access_level
+    assert_equal Member::AccessLevel::GUEST,
+                 group_member3.access_level
+
+    UpdateMembershipsJob.perform_now([group_member1.id, group_member2.id])
+
+    assert_equal Member::AccessLevel::MAINTAINER,
+                 group_member1.reload.access_level
+    assert_equal Member::AccessLevel::OWNER,
+                 group_member2.reload.access_level
+    assert_equal Member::AccessLevel::OWNER,
+                 group_member3.reload.access_level
+  end
 end
