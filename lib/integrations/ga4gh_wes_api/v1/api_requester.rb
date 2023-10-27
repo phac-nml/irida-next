@@ -10,20 +10,21 @@ module Integrations
 
         attr_reader :conn
 
-        # Must supply one of conn: or url:
+        # Defaults to setting server info from credentials ga4gh_wes:server_url and ga4gh_wes:server_endpoint
+        # This can be overriden by setting one of conn: or url:
         #
         # @param conn: [Integrations::Ga4ghWesApi::V1::ApiConnection]
         # @param url: [String]
         # Usage: ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: Faraday.new('http://localhost:7500/'))
         # Usage: ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new(url: 'http://localhost:7500/')
         def initialize(conn: nil, url: nil)
-          if !conn.nil?
-            @conn = conn
-          elsif !url.nil?
-            @conn = Integrations::Ga4ghWesApi::V1::ApiConnection.new(url).conn
-          else
-            raise StandardError, "must define either 'conn:' or 'url:'"
-          end
+          @conn = if !conn.nil?
+                    conn
+                  elsif !url.nil?
+                    Integrations::Ga4ghWesApi::V1::ApiConnection.new(url).conn
+                  else
+                    Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
+                  end
         end
 
         private
