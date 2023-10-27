@@ -44,7 +44,7 @@ module Integrations
             req.headers['Content-Type'] = 'application/json'
             req.body = data.to_json if data.present?
           end
-          response.body.deep_symbolize_keys
+          response.body&.deep_symbolize_keys # return nil if body is nil
         rescue Faraday::Error => e
           handle_error e
         end
