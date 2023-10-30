@@ -130,7 +130,7 @@ class GroupMemberTest < ActiveSupport::TestCase
 
   test '#scope for_namespace_and_ancestors returns the correct collection' do
     namespace = groups(:subgroup1)
-    members = Member.for_namespace_and_ancestors(namespace).not_expired
+    members = Member.for_namespace_and_ancestors(namespace)
 
     group_and_ancestors = namespace.self_and_ancestors
     memberships = []
@@ -143,5 +143,16 @@ class GroupMemberTest < ActiveSupport::TestCase
 
     assert memberships.count == members.count
     assert_same_unique_elements(members, memberships)
+  end
+
+  test 'non expired group member' do
+    assert_not @group_member.expires?
+    assert_not @group_member.expired?
+  end
+
+  test 'expired group member' do
+    @group_member.expires_at = 10.days.ago.to_date
+    assert @group_member.expires?
+    assert @group_member.expired?
   end
 end

@@ -130,7 +130,7 @@ class ProjectMemberTest < ActiveSupport::TestCase
   test '#scope for_namespace_and_ancestors returns the correct collection' do
     project = projects(:project1)
 
-    members = Member.for_namespace_and_ancestors(project).not_expired
+    members = Member.for_namespace_and_ancestors(project)
 
     group_and_ancestors = project.namespace.parent&.self_and_ancestors
     memberships = []
@@ -143,5 +143,16 @@ class ProjectMemberTest < ActiveSupport::TestCase
 
     assert memberships.count == members.count
     assert_same_unique_elements(members, memberships)
+  end
+
+  test 'non expired project member' do
+    assert_not @project_member.expires?
+    assert_not @project_member.expired?
+  end
+
+  test 'expired project member' do
+    @project_member.expires_at = 10.days.ago.to_date
+    assert @project_member.expires?
+    assert @project_member.expired?
   end
 end
