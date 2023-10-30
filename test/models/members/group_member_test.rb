@@ -130,7 +130,7 @@ class GroupMemberTest < ActiveSupport::TestCase
 
   test '#scope for_namespace_and_ancestors returns the correct collection' do
     namespace = groups(:subgroup1)
-    members = Member.for_namespace_and_ancestors(namespace)
+    members = Member.for_namespace_and_ancestors(namespace).not_expired
 
     group_and_ancestors = namespace.self_and_ancestors
     memberships = []

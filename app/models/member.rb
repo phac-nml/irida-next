@@ -26,6 +26,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }
+
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now) }
 
   class << self
