@@ -34,7 +34,7 @@
       </div>
     </td>
   <% else %>
-    <td scope="row" class="px-6 py-4"><%= link_to attachment.file.filename,
+    <td class="px-6 py-4"><%= link_to attachment.file.filename,
       download_namespace_project_sample_attachment_path(
         sample_id: @sample.id,
         id: attachment.id
