@@ -15,13 +15,13 @@ module Projects
           @attachment2 = attachments(:attachment2)
         end
 
-        test 'should get new if owner' do
+        test 'should get new for a member with role >= maintainer' do
           get new_namespace_project_sample_attachments_concatenation_path(@namespace, @project1, @sample1,
                                                                           format: :turbo_stream)
           assert_response :success
         end
 
-        test 'should not get new if non-owner' do
+        test 'should not get new if not a member' do
           user = users(:micha_doe)
           login_as user
 
@@ -30,7 +30,7 @@ module Projects
           assert_response :unauthorized
         end
 
-        test 'should create sample attachments concatenation for a member that is an owner' do
+        test 'should create sample attachments concatenation for a member with role >= maintainer' do
           post namespace_project_sample_attachments_concatenation_path(@namespace, @project1, @sample1,
                                                                        format: :turbo_stream),
                params: {

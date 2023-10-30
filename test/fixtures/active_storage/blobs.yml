@@ -1,6 +1,6 @@
 attachment1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
 
-attachment1_file_test_file_1_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_1.fastq", service_name: "test" %>
+attachment2_file_test_file_A_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test" %>
 
 test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
 
