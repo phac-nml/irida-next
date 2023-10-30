@@ -130,7 +130,7 @@ class ProjectMemberTest < ActiveSupport::TestCase
   test '#scope for_namespace_and_ancestors returns the correct collection' do
     project = projects(:project1)
 
-    members = Member.for_namespace_and_ancestors(project)
+    members = Member.for_namespace_and_ancestors(project).not_expired
 
     group_and_ancestors = project.namespace.parent&.self_and_ancestors
     memberships = []
