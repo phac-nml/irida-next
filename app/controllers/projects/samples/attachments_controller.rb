@@ -3,8 +3,7 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Attachments
-    class AttachmentsController < Projects::ApplicationController
-      before_action :sample
+    class AttachmentsController < Projects::Samples::ApplicationController
       before_action :attachment, only: %i[destroy download]
 
       def create
@@ -52,10 +51,6 @@ module Projects
 
       def attachment
         @attachment = @sample.attachments.find_by(id: params[:id]) || not_found
-      end
-
-      def sample
-        @sample = @project.samples.find_by(id: params[:sample_id]) || not_found
       end
     end
   end
