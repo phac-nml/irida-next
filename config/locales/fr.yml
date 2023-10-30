@@ -372,7 +372,6 @@ fr:
       locale_form:
         en: Anglais
         fr: Français
-        submit_button: Choisir la langue
     personal_access_tokens:
       access_token_section:
         label: Your new personal access token
