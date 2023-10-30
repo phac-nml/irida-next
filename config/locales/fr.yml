@@ -364,11 +364,12 @@ fr:
         system_desc: The colour theme will update based on your operating system settings.
         light_theme: Light
         dark_theme: Dark
+        locale_title: Langue
+        preferences: Preferences
       update:
         success: Language updated successfully
       success: Preferences updated successfully
       locale_form:
-        locale_title: Langue
         en: Anglais
         fr: Français
         submit_button: Choisir la langue

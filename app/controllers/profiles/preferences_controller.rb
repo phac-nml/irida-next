@@ -23,8 +23,6 @@ module Profiles
           format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
         end
       end
-      locale = current_user.try(:locale) || I18n.default_locale
-      I18n.locale = locale
     end
 
     private
