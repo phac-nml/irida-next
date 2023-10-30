@@ -1,16 +1,8 @@
-<tr
-  id="<%= dom_id(attachment) %>"
-  class="
-  bg-white
-  border-b
-  dark:bg-slate-800
-  dark:border-slate-700
-  "
->
-  <% if attachment.associated_attachment %>
+<tr id="<%= dom_id(attachment) %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+  <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
   <th class="px-6 py-4">
     <div>
-      <div class="flex mb-4">
+      <div class="flex mb-4 items-center">
         <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
         <span>
           <%= link_to attachment.file.filename,
@@ -23,7 +15,7 @@
           } %>
         </span>
       </div>
-      <div class="flex">
+      <div class="flex items-center">
       <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
       <span>
         <%= link_to attachment.associated_attachment_filename,
@@ -50,8 +42,21 @@
   </th>
   <% end %>
 
-  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata['format'], color: 'format' )%></td>
-  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata['type'], color: 'type') %></td>
+  <% if attachment.metadata['format'] == 'fasta' %>
+    <% format_color = 'blue' %>
+  <% elsif attachment.metadata['format'] == 'fastq' %>
+    <% format_color = 'green' %>
+  <% elsif attachment.metadata['format'] == 'unknown' %>
+    <% format_color = 'gray' %>
+  <% end %>
+  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata['format'], color: format_color )%></td>
+
+  <% if attachment.metadata['type'] == 'assembly' %>
+    <% type_color = 'pink' %>
+  <% elsif attachment.metadata['type'] == 'illumina_pe' %>
+    <% type_color = 'purple' %>
+  <% end %>
+  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata['type'], color: type_color) %></td>
 
   <% if attachment.associated_attachment %>
   <td class="px-6 py-4">
