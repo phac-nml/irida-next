@@ -36,20 +36,18 @@ module Integrations
         # @param workflow_attachment [Array of strings <binary>] Not implimented in V1
         def run_workflow(**params)
           # spec requires empty parameters be defined as empty strings
-          h = {
-            workflow_params: '',
-            workflow_type: '',
-            workflow_type_version: '',
-            tags: '',
-            workflow_engine: '',
-            workflow_engine_version: '',
-            workflow_engine_parameters: '',
-            workflow_url: '',
-            workflow_attachment: ''
-          }
+          h = { workflow_params: '',
+                workflow_type: '',
+                workflow_type_version: '',
+                tags: '',
+                workflow_engine: '',
+                workflow_engine_version: '',
+                workflow_engine_parameters: '',
+                workflow_url: '',
+                workflow_attachment: '' }
           post(
             endpoint: 'runs',
-            params: h.merge(params)
+            data: h.merge(params)
           )
         end
 
@@ -98,7 +96,7 @@ module Integrations
             workflow_type: 'NEXTFLOW',
             workflow_type_version: '21.04.0',
             workflow_url: 'https://github.com/jb-adams/md5-nf',
-            workflow_params: '{"file_int": 3}'
+            workflow_params: { file_int: 3 }
           )
         end
       end
