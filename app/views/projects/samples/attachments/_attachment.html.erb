@@ -45,21 +45,8 @@
     </td>
   <% end %>
 
-  <% if attachment.metadata['format'] == 'fasta' %>
-    <% format_color = "blue" %>
-  <% elsif attachment.metadata['format'] == 'fastq' %>
-    <% format_color = "green" %>
-  <% elsif attachment.metadata['format'] == 'unknown' %>
-    <% format_color = "gray" %>
-  <% end %>
-  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata["format"], color: format_color) %></td>
-
-  <% if attachment.metadata['type'] == 'assembly' %>
-    <% type_color = "pink" %>
-  <% elsif attachment.metadata['type'] == 'illumina_pe' %>
-    <% type_color = "purple" %>
-  <% end %>
-  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata["type"], color: type_color) %></td>
+  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata["format"], color: find_pill_color('attachment', 'format', attachment)) %></td>
+  <td class="px-6 py-4"><%= viral_pill(text: attachment.metadata["type"], color: find_pill_color('attachment', 'type', attachment)) %></td>
 
   <% if attachment.associated_attachment %>
     <td class="px-6 py-4">
