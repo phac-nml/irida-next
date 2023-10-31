@@ -145,7 +145,7 @@ class ProjectMemberTest < ActiveSupport::TestCase
     assert_same_unique_elements(members, memberships)
   end
 
-  test 'non expired project member' do
+  test '#scope not_expired for_namespace_and_ancestors returns the correct collection' do
     members = Member.for_namespace_and_ancestors(@project.namespace).not_expired
     assert_difference(-> { members.count } => -1) do
       @project_member.expires_at = 10.days.ago.to_date
