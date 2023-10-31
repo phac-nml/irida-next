@@ -146,13 +146,10 @@ class ProjectMemberTest < ActiveSupport::TestCase
   end
 
   test 'non expired project member' do
-    assert_not @project_member.expires?
-    assert_not @project_member.expired?
-  end
-
-  test 'expired project member' do
-    @project_member.expires_at = 10.days.ago.to_date
-    assert @project_member.expires?
-    assert @project_member.expired?
+    members = Member.for_namespace_and_ancestors(@project.namespace).not_expired
+    assert_difference(-> { members.count } => -1) do
+      @project_member.expires_at = 10.days.ago.to_date
+      @project_member.save
+    end
   end
 end

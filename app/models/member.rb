@@ -30,14 +30,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                         where('expires_at IS NULL OR expires_at > ?', Time.zone.now)
                       }
 
-  def expires?
-    expires_at.present?
-  end
-
-  def expired?
-    expires? && expires_at <= Time.current
-  end
-
   class << self
     def access_levels(member)
       case member.access_level
