@@ -13,12 +13,7 @@ module Projects
                                                    partial: 'modal',
                                                    locals: {
                                                      open: true
-                                                   }, status: :ok)
-          # respond_to do |format|
-          #   format.turbo_stream do
-          #     render status: :ok
-          #   end
-          # end
+                                                   }), status: :ok
         end
 
         def create
