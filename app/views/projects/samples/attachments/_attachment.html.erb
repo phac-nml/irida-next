@@ -2,6 +2,17 @@
   id="<%= dom_id(attachment) %>"
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
 >
+  <td class="px-6 py-4">
+    <%= check_box_tag "attachment_ids[]",
+    attachment.id,
+    nil,
+    id: dom_id(attachment.file),
+    "aria-label": attachment.file.filename,
+    data: {
+      action: "input->selection#toggle",
+      selection_target: "rowSelection"
+    } %>
+  </td>
   <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
     <td class="px-6 py-4">
       <div>

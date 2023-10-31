@@ -1,8 +1,12 @@
 <%= turbo_frame_tag("attachments") do %>
   <div class="table-container">
-    <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
+    <table
+      class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4"
+      data-controller="selection"
+    >
       <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
         <tr>
+          <td class="px-6 py-3"></td>
           <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.filename") %></th>
           <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.format") %></th>
           <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.type") %></th>
@@ -14,19 +18,20 @@
       <tbody id="attachments-table-body">
         <% attachments.each do |attachment| %>
           <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
-          <%= render partial: "projects/samples/attachments/attachment",
-          locals: {
-            attachment: attachment
-          } %>
+            <%= render partial: "projects/samples/attachments/attachment",
+            locals: {
+              attachment: attachment
+            } %>
           <% end %>
         <% end %>
       </tbody>
     </table>
     <div class="empty_state_message">
       <%= viral_empty(
-            title: t(:'projects.samples.show.no_files'),
-            description: t(:'projects.samples.show.no_associated_files'),
-            icon_name: :document_text) %>
+        title: t(:"projects.samples.show.no_files"),
+        description: t(:"projects.samples.show.no_associated_files"),
+        icon_name: :document_text
+      ) %>
     </div>
   </div>
 <% end %>
