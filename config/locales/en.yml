@@ -737,6 +737,8 @@ en:
         uploading: Uploading
         table_header:
           filename: Filename
+          format: Format
+          type: Type
           size: Size
           created_at: Uploaded
           action: Action

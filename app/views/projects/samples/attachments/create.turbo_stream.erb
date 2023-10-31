@@ -6,11 +6,13 @@
         data: t(".success", filename: attachment.file.filename)
       ) %>
     <% end %>
-    <%= turbo_stream.append "attachments-table-body",
-                        partial: "attachment",
-                        locals: {
-                          attachment: attachment
-                        } %>
+    <% if !attachment.associated_attachment || (attachment.associated_attachment && attachment.metadata['direction'] == 'forward') %>
+      <%= turbo_stream.append "attachments-table-body",
+                          partial: "attachment",
+                          locals: {
+                            attachment: attachment
+                          } %>
+    <% end %>
   <% else %>
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(
