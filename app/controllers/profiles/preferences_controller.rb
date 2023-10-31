@@ -14,16 +14,14 @@ module Profiles
 
     def update
       authorize! @user
+      # if update_params[:locale] == 'en'
+      #   flash[:success] = 'Language updated successfully'
+      # elsif update_params[:locale] == 'fr'
+      #   flash[:success] = 'Langue mise à jour avec succès'
+      # end
       respond_to do |format|
         if @user.update(update_params)
-          # Success message is hardcoded here because using the translation still uses the old language
-          # ie going from en to fr will use the en text. Hardcoding here will also simplify things in case
-          # a 3rd language is added
-          if update_params[:locale] == 'en'
-            flash[:success] = 'Language updated successfully' # rubocop:disable Rails/I18nLocaleTexts
-          elsif update_params[:locale] == 'fr'
-            flash[:success] = 'Langue mise à jour avec succès' # rubocop:disable Rails/I18nLocaleTexts
-          end
+          flash[:success] = t('.success')
           format.html { redirect_to profile_preferences_path }
         else
           format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
