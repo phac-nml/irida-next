@@ -25,10 +25,10 @@ module Viral
       @color = color.to_sym if color
       @system_arguments = system_arguments
       @system_arguments[:classes] = class_names(
-        @system_arguments[:classes],
         COLORS[@color],
         # Tailwind classes pertaining to all pill component colors
-        'text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full'
+        'text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full',
+        @system_arguments[:classes]
       )
     end
   end
