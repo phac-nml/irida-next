@@ -15,6 +15,8 @@ module PillColorHelper
   }.freeze
 
   def find_pill_color_for_attachment(attachment, label_type)
-    attachment.metadata.key?(label_type) ? ATTACHMENT_COLORS[label_type.to_sym][attachment.metadata[label_type].to_sym] : nil
+    return unless attachment.metadata.key?(label_type)
+
+    ATTACHMENT_COLORS[label_type.to_sym][attachment.metadata[label_type].to_sym]
   end
 end
