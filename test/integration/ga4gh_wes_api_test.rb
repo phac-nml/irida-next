@@ -250,8 +250,19 @@ class ClientTest < ActionDispatch::IntegrationTest
   def test_run_test_nextflow_md5_job
     given_hash = {"run_id":"aa5cd004-1fb5-4cc9-84c5-63c0e4956588"}
     expected_hash = { run_id: 'aa5cd004-1fb5-4cc9-84c5-63c0e4956588' }
-    stubs = Faraday::Adapter::Test::Stubs.new
-    stubs.post('/runs?workflow_params=%7B%22file_int%22%3A+3%7D&workflow_type=NEXTFLOW&workflow_type_version=21.04.0&workflow_url=https%3A%2F%2Fgithub.com%2Fjb-adams%2Fmd5-nf') do
+    stubs = Faraday::Adapter::Test::Stubs.new(strict_mode: true)
+    body = {
+      workflow_params: {file_int: 3},
+      workflow_type: 'NEXTFLOW',
+      workflow_type_version: '21.04.0',
+      tags: '',
+      workflow_engine: '',
+      workflow_engine_version: '',
+      workflow_engine_parameters: '',
+      workflow_url: 'https://github.com/jb-adams/md5-nf',
+      workflow_attachment: ''
+    }.to_json
+    stubs.post('/runs', body) do
       [
         200,
         { 'Content-Type': 'application/json' },
@@ -272,8 +283,19 @@ class ClientTest < ActionDispatch::IntegrationTest
   def test_run_workflow
     given_hash = {"run_id":"aa5cd004-1fb5-4cc9-84c5-63c0e4956588"}
     expected_hash = { run_id: 'aa5cd004-1fb5-4cc9-84c5-63c0e4956588' }
-    stubs = Faraday::Adapter::Test::Stubs.new
-    stubs.post('/runs?workflow_params=%7B%22file_int%22%3A+3%7D&workflow_type=NEXTFLOW&workflow_type_version=21.04.0&workflow_url=https%3A%2F%2Fgithub.com%2Fjb-adams%2Fmd5-nf') do
+    stubs = Faraday::Adapter::Test::Stubs.new(strict_mode: true)
+    body = {
+      workflow_params: {file_int: 3},
+      workflow_type: 'NEXTFLOW',
+      workflow_type_version: '21.04.0',
+      tags: '',
+      workflow_engine: '',
+      workflow_engine_version: '',
+      workflow_engine_parameters: '',
+      workflow_url: 'https://github.com/jb-adams/md5-nf',
+      workflow_attachment: ''
+    }.to_json
+    stubs.post('/runs', body) do
       [
         200,
         { 'Content-Type': 'application/json' },
@@ -290,7 +312,7 @@ class ClientTest < ActionDispatch::IntegrationTest
       workflow_type: 'NEXTFLOW',
       workflow_type_version: '21.04.0',
       workflow_url: 'https://github.com/jb-adams/md5-nf',
-      workflow_params: '{"file_int": 3}'
+      workflow_params: {file_int: 3}
     )
 
     stubs.verify_stubbed_calls
