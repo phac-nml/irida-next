@@ -47,11 +47,11 @@
 
   <td class="px-6 py-4"><%= viral_pill(
       text: attachment.metadata["format"],
-      color: find_pill_color_for_attachment(attachment, "format")
+      color: find_pill_color_for_format(attachment)
     ) %></td>
   <td class="px-6 py-4"><%= viral_pill(
       text: attachment.metadata["type"],
-      color: find_pill_color_for_attachment(attachment, "type")
+      color: find_pill_color_for_type(attachment)
     ) %></td>
 
   <% if attachment.associated_attachment %>
