@@ -19,6 +19,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should not show the project if member is expired' do
+    sign_in users(:john_doe)
+
+    project_member = members(:project_one_member_john_doe)
+    project_member.expires_at = 10.days.ago.to_date
+    project_member.save
+    get project_path(projects(:project1))
+    assert_response :unauthorized
+  end
+
   test 'should not show the project' do
     sign_in users(:micha_doe)
 
