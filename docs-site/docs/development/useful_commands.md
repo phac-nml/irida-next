@@ -30,3 +30,11 @@ bin/rails tailwindcss:watch
 ``` bash
 bin/rails graphql:dump_schema
 ```
+
+### Build and run docs
+
+```bash
+cd docs-site
+pnpm build
+npm run serve
+```
