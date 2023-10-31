@@ -13,9 +13,7 @@ module PillColorHelper
       illumina_pe: 'purple'
     }
   }.freeze
-  def find_pill_color(type, subtype, item: nil)
-    return unless type == 'attachment'
-
-    item.metadata.key?(subtype) ? ATTACHMENT_COLORS[subtype.to_sym][item.metadata[subtype].to_sym] : nil
+  def find_pill_color_for_attachment(attachment, label_type)
+    attachment.metadata.key?(label_type) ? ATTACHMENT_COLORS[label_type.to_sym][attachment.metadata[label_type].to_sym] : nil
   end
 end
