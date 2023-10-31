@@ -9,8 +9,16 @@ module Projects
 
         def new
           authorize! @project, to: :update_sample?
-
-          render turbo_stream: [], status: :ok
+          render turbo_stream: turbo_stream.update('concatenation_modal',
+                                                   partial: 'modal',
+                                                   locals: {
+                                                     open: true
+                                                   }, status: :ok)
+          # respond_to do |format|
+          #   format.turbo_stream do
+          #     render status: :ok
+          #   end
+          # end
         end
 
         def create
