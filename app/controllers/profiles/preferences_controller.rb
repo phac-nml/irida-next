@@ -14,13 +14,13 @@ module Profiles
 
     def update
       authorize! @user
-      # if update_params[:locale] == 'en'
-      #   flash[:success] = 'Language updated successfully'
-      # elsif update_params[:locale] == 'fr'
-      #   flash[:success] = 'Langue mise à jour avec succès'
-      # end
       respond_to do |format|
-        if @user.update(update_params)
+        # Locale is called now rather than from the around_action in app_controller because we need the locale
+        # change prior to the success flash so that the flash contains the correct translation
+        updated = @user.update(update_params)
+        locale = current_user.try(:locale) || I18n.default_locale
+        I18n.locale = locale
+        if updated
           flash[:success] = t('.success')
           format.html { redirect_to profile_preferences_path }
         else
