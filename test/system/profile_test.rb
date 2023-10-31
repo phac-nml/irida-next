@@ -109,11 +109,16 @@ class ProfileTest < ApplicationSystemTestCase
 
     assert_text I18n.t(:'profiles.preferences.locale_form.en')
   end
+
   test 'can update language to french' do
     visit profile_preferences_path
 
     find('input[id=user_locale_fr]').click
 
     assert_text 'Anglais'
+
+    within %(div[data-controller='viral--flash']) do
+      assert_text 'Langue mise à jour avec succès'
+    end
   end
 end

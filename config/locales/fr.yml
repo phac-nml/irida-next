@@ -367,7 +367,7 @@ fr:
         locale_title: Langue
         preferences: Preferences
       update:
-        success: Language updated successfully
+        success: Langue mise à jour avec succès
       success: Preferences updated successfully
       locale_form:
         en: Anglais
