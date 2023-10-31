@@ -9,6 +9,12 @@ namespace :ga4gh_wes do
   desc 'request service_info from ga4gh_wes server'
   task service_info: :environment do
     ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new
-    ga4gh_client.service_info
+    pp ga4gh_client.service_info
+  end
+
+  desc 'request list_runs from ga4gh_wes server'
+  task list_runs: :environment do
+    ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new
+    pp ga4gh_client.list_runs(page_size: 5)
   end
 end

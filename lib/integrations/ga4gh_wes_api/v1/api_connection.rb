@@ -29,7 +29,9 @@ module Integrations
 
         def conn
           headers = { 'Content-Type': 'application/json' }
-          headers = headers.merge(Rails.application.credentials.dig(:ga4gh_wes, :headers))
+          extra_headers = Rails.application.credentials.dig(:ga4gh_wes, :headers)
+          headers = headers.merge(extra_headers) unless extra_headers.nil?
+
           Faraday.new(
             url: @api_endpoint,
             headers:
