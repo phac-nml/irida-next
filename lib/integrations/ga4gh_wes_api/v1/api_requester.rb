@@ -33,7 +33,7 @@ module Integrations
           response = @conn.get(endpoint) do |req|
             req.params = params if params.present?
           end
-          response.body.deep_symbolize_keys
+          response.body&.deep_symbolize_keys
         rescue Faraday::Error => e
           handle_error e
         end
