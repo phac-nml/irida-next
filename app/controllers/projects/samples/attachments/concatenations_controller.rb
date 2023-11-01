@@ -22,15 +22,16 @@ module Projects
           @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user, @sample,
                                                                               concatenation_params).execute
 
-          if @sample.errors.empty?
-            render turbo_stream: turbo_stream.update('concatenation_modal',
-                                                     partial: 'modal',
-                                                     locals: {
-                                                       open: false
-                                                     }), status: :ok
-          else
-            @errors = @sample.errors.full_messages_for(:base)
-            render turbo_stream: [], status: :unprocessable_entity
+          respond_to do |format|
+            if @sample.errors.empty?
+              format.turbo_stream do
+                render status: :ok, locals: { type: :success, message: t('.success') }
+              end
+            else
+              @errors = @sample.errors.full_messages_for(:base)
+              render turbo_stream: [],
+                     status: :unprocessable_entity
+            end
           end
         end
 
