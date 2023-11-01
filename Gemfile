@@ -128,6 +128,3 @@ group :test do
   gem 'simplecov', require: false
   gem 'timecop'
 end
-
-# Extends Rails default locales beyond :en
-gem 'rails-i18n', '~> 7.0.0'
