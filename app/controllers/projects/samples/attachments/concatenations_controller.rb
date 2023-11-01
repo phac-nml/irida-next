@@ -23,7 +23,11 @@ module Projects
                                                                               concatenation_params).execute
 
           if @sample.errors.empty?
-            render turbo_stream: [], status: :ok
+            render turbo_stream: turbo_stream.update('concatenation_modal',
+                                                     partial: 'modal',
+                                                     locals: {
+                                                       open: false
+                                                     }), status: :ok
           else
             @errors = @sample.errors.full_messages_for(:base)
             render turbo_stream: [], status: :unprocessable_entity

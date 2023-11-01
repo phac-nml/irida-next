@@ -1,6 +1,40 @@
 <%= viral_dialog(open: open) do |dialog| %>
-  <%= dialog.with_header(title: "HI") %>
+  <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
-    <div>HELLO</div>
+    <%= form_with(url: namespace_project_sample_attachments_concatenation_path, method: :post) do |form| %>
+
+      <div
+        data-controller="projects--samples--transfers"
+        data-projects--samples--transfers-storage-key-value=<%=namespace_project_sample_url(id: @sample.id)%>
+        data-projects--samples--transfers-target="field"
+        data-projects--samples--transfers-field-name-value="attachment_ids[]"
+      />
+
+      <div class="grid gap-4">
+        <% invalid_basename = @sample.errors.include?(:basename) %>
+        <div class="form-field <%= 'invalid' if invalid_basename%>">
+          <%= form.label :basename %>
+          <%= form.text_field :basename, required: true %>
+          <%= render "shared/form/field_errors",
+          errors: @sample.errors.full_messages_for(:basename) %>
+        </div>
+
+        <div class="flex items-center">
+          <%= form.check_box :delete_originals,
+                         class:
+                           "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %>
+          <%= form.label :delete_originals,
+                     class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
+        </div>
+
+        <div class="flex flex-row-reverse">
+          <%= form.submit t(".submit_button"),
+                      class: "button button--size-default button--state-primary",
+                      data: {
+                        action: "click->projects--samples--transfers#clear"
+                      } %>
+        </div>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
