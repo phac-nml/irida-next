@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   draw :dashboard
   draw :user
   draw :project
+  draw :workflow_executions
 
   draw :development
 
