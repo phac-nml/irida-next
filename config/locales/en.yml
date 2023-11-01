@@ -760,6 +760,8 @@ en:
       index:
         title: Samples
         subtitle: This is a subtitle to list project samples.
+        workflows:
+          button_sr: Launch workflow
         new_button: New sample
         edit_button: Edit
         remove_button: Remove

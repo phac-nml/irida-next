@@ -7,6 +7,7 @@
     <div class="flex items-center space-x-2">
       <%= viral_button do %>
         <%= viral_icon(name: :rocket_launch, classes: "w-4 h-4 inline-block") %>
+        <span class="sr-only"><%= t(:'.workflows.button_sr') %></span>
       <% end %>
       <% if allowed_to?(:transfer_sample?, @project) %>
         <%= link_to t("projects.samples.index.transfer_button"),
