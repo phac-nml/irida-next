@@ -1,0 +1,9 @@
+<%= render Nextflow::SamplesheetComponent.new(
+  schema:
+    JSON.parse(
+      File.read(
+        Rails.root.join("test", "fixtures", "files", "nextflow", schema_file)
+      )
+    ),
+  samples:
+) %>

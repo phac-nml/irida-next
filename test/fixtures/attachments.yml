@@ -1,17 +1,141 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 attachment1:
-  metadata: {}
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample1 (Sample)
+
+attachment2:
+  metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)
 
 attachmentA:
-  metadata: {}
+  metadata: { "compression": "none" }
   attachable: sampleA (Sample)
 
 attachmentB:
-  metadata: {}
+  metadata: { "compression": "none" }
   attachable: sampleA (Sample)
 
 attachmentC:
-  metadata: {}
+  metadata: { "compression": "none" }
   attachable: sampleA (Sample)
+
+attachmentPEFWD1:
+  metadata:
+    {
+      "type": "pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleB (Sample)
+
+attachmentPEREV1:
+  metadata:
+    {
+      "type": "pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleB (Sample)
+
+attachmentPEFWD2:
+  metadata:
+    {
+      "type": "pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleB (Sample)
+
+attachmentPEREV2:
+  metadata:
+    {
+      "type": "pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleB (Sample)
+
+attachmentPEFWD3:
+  metadata:
+    {
+      "type": "pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleB (Sample)
+
+attachmentPEREV3:
+  metadata:
+    {
+      "type": "pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleB (Sample)
+
+attachmentPEFWD4:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEREV4:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEFWD5:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEREV5:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentD:
+  metadata: { "compression": "none" }
+  attachable: sampleB (Sample)
+
+attachmentE:
+  metadata: { "compression": "gzip" }
+  attachable: sampleB (Sample)
+
+attachmentF:
+  metadata: { "compression": "gzip" }
+  attachable: sampleB (Sample)
+
+attachmentG:
+  metadata: { "compression": "none" }
+  attachable: sampleC (Sample)
+
+attachmentH:
+  metadata: { "compression": "none" }
+  attachable: sampleC (Sample)

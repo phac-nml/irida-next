@@ -1,4 +1,5 @@
-<%= viral_card(title: t(:'.theme_title')) do %>
+<%= viral_card(title: t(:'.preferences')) do |card| %>
+  <% card.with_section(border_bottom: true, border_top: true, title: t(:'.theme_title')) do %>
   <div class="grid grid-cols-1 gap-4" data-controller="colour-mode">
     <div class="flex">
       <div class="flex items-center h-5"><input id="system-theme" type="radio" value="system" name="color-theme"
@@ -25,4 +26,8 @@
       <label for="light-theme" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"><%= t(:'.light_theme') %></label>
     </div>
   </div>
+  <% end %>
+  <% card.with_section(title: t(:'.locale_title')) do %>
+    <%= render 'locale_form', user: @user %>
+  <% end %>
 <% end %>

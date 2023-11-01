@@ -19,7 +19,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :validate_namespace
   validate :higher_access_level_than_group
 
-  after_update :update_descedant_memberships
+  after_update :update_descendant_memberships
   before_destroy :last_namespace_owner_member
 
   delegate :project, to: :project_namespace
@@ -171,7 +171,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   # Method to update descendant membership access levels so they aren't less than the parent group
-  def update_descedant_memberships
+  def update_descendant_memberships
     return unless namespace.group_namespace?
 
     descendants_membership = Member.where(user_id:,

@@ -18,7 +18,7 @@ module Attachments
       end
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/CyclomaticComplexity
       authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
       @attachments.each(&:save)
@@ -26,6 +26,12 @@ module Attachments
       persisted_fastq_attachments = @attachments.select { |attachment| attachment.persisted? && attachment.fastq? }
 
       identify_illumina_paired_end_files(persisted_fastq_attachments) if persisted_fastq_attachments.count > 1
+
+      unidentified_fastq_attachments = persisted_fastq_attachments.reject do |attachment|
+        attachment.metadata['type'] == 'illumina_pe'
+      end
+
+      identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.count > 1
 
       @attachments
     end
@@ -63,6 +69,40 @@ module Attachments
 
         rev_metadata = {
           associated_attachment_id: pe_attachments['forward'].id, type: 'illumina_pe', direction: 'reverse'
+        }
+
+        pe_attachments['reverse'].update(metadata: pe_attachments['reverse'].metadata.merge(rev_metadata))
+      end
+    end
+
+    def identify_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
+      # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
+      pe = Hash.new { |h, k| h[k] = {} }
+
+      # identify pe attachments based on fastq filename convention
+      attachments.each do |att|
+        next unless /^(?<sample_name>.+_)(?<region>[1-2])\./ =~ att.filename.to_s
+
+        case region
+        when '1'
+          pe[sample_name.to_s]['forward'] = att
+        when '2'
+          pe[sample_name.to_s]['reverse'] = att
+        end
+      end
+
+      # assign metadata to detected pe files that contain fwd and rev
+      pe.each do |_key, pe_attachments|
+        next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
+
+        fwd_metadata = {
+          associated_attachment_id: pe_attachments['reverse'].id, type: 'pe', direction: 'forward'
+        }
+
+        pe_attachments['forward'].update(metadata: pe_attachments['forward'].metadata.merge(fwd_metadata))
+
+        rev_metadata = {
+          associated_attachment_id: pe_attachments['forward'].id, type: 'pe', direction: 'reverse'
         }
 
         pe_attachments['reverse'].update(metadata: pe_attachments['reverse'].metadata.merge(rev_metadata))

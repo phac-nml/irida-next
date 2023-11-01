@@ -364,6 +364,14 @@ en:
         system_desc: The colour theme will update based on your operating system settings.
         light_theme: Light
         dark_theme: Dark
+        locale_title: Language
+        preferences: Preferences
+      update:
+        success: Language updated successfully
+      success: Preferences updated successfully
+      locale_form:
+        en: English
+        fr: French
     personal_access_tokens:
       access_token_section:
         label: Your new personal access token
@@ -737,6 +745,8 @@ en:
         uploading: Uploading
         table_header:
           filename: Filename
+          format: Format
+          type: Type
           size: Size
           created_at: Uploaded
           action: Action
@@ -790,6 +800,14 @@ en:
         destroy:
           success: File %{filename} was successfully removed.
   services:
+    attachments:
+      concatenation:
+        filename_missing: Base file name not provided. Please provide a base name for the concatenated file.
+        incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
+        incorrect_file_types: 'Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.'
+        incorrect_attachable: All or some of then selected files do not belong to the sample.
+        incorrect_fastq_file_types: "Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files"
+        no_files_selected: No files were selected to concatenate. Please select files then try again.
     groups:
       transfer:
         namespace_empty: The new namespace is empty.
