@@ -41,7 +41,7 @@ module Projects
       def destroy
         authorize! @project, to: :destroy?
 
-        return unless @attachment.attachable_type == 'Sample' && @attachment.attachable_id == @attachable.id
+        return unless @attachment.attachable_type == 'Sample' && @attachment.attachable_id == @sample.id
 
         @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
 
