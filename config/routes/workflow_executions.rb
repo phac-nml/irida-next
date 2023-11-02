@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-resource :workflow_executions, only: %i[show update] do
-  scope module: :workflows do
-    resource :selection, only: %i[show]
+scope :workflow_executions, module: :workflow_executions, as: :workflow_executions do
+  resources :submission, only: %i[new show] do
+    collection do
+      get :pipeline_selection, as: :pipeline_selection
+    end
   end
 end
