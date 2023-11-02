@@ -40,12 +40,15 @@ module Projects
 
       def destroy
         authorize! @project, to: :destroy?
+
+        return unless @attachment.attachable_type == 'Sample' && @attachment.attachable_id == @attachable.id
+
         @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
 
         return unless @destroyed_attachments
 
         status = if @destroyed_attachments.count.positive?
-                   deleted_status(@attachment, @destroyed_attachments.length)
+                   destroy_status(@attachment, @destroyed_attachments.length)
                  else
                    :unprocessable_entity
                  end
@@ -73,7 +76,7 @@ module Projects
         @attachment = @sample.attachments.find_by(id: params[:id]) || not_found
       end
 
-      def deleted_status(attachment, count)
+      def destroy_status(attachment, count)
         return count == 2 ? :ok : :multi_status if attachment.associated_attachment
 
         count == 1 ? :ok : :unprocessable_entity

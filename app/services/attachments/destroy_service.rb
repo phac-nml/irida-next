@@ -11,12 +11,9 @@ module Attachments
 
     def execute
       authorize! @attachable.project, to: :destroy?
-      return unless @attachable.instance_of?(Sample)
 
       attachments = []
-      return unless @attachment.attachable_type == 'Sample' && @attachment.attachable_id == @attachable.id
-
-      if @attachment.associated_attachment
+      if @attachable.instance_of?(Sample) && @attachment.associated_attachment
         associated_attachment = @attachment.associated_attachment
         associated_attachment.destroy
         attachments.append(associated_attachment)
