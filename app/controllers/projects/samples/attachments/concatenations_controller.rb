@@ -16,24 +16,18 @@ module Projects
                                                    }), status: :ok
         end
 
-        def create # rubocop:disable Metrics/MethodLength
+        def create
           authorize! @project, to: :update_sample?
 
           @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user, @sample,
                                                                               concatenation_params).execute
 
-          respond_to do |format|
-            if @sample.errors.empty?
-              format.turbo_stream do
-                render status: :ok, locals: { type: :success, message: t('.success') }
-              end
-            else
-              @errors = @sample.errors.full_messages.first
-              format.turbo_stream do
-                render status: :unprocessable_entity, locals: { type: :warning,
-                                                                message: @errors }
-              end
-            end
+          if @sample.errors.empty?
+            render status: :ok, locals: { type: :success, message: t('.success') }
+          else
+            @errors = @sample.errors.full_messages.first
+            render status: :unprocessable_entity, locals: { type: :warning,
+                                                            message: @errors }
           end
         end
 
