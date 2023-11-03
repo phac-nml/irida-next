@@ -12,16 +12,16 @@ module Attachments
     def execute
       authorize! @attachable.project, to: :destroy?
 
-      attachments = []
+      destroyed_attachments = []
       if @attachable.instance_of?(Sample) && @attachment.associated_attachment
         associated_attachment = @attachment.associated_attachment
         associated_attachment.destroy
-        attachments.append(associated_attachment)
+        destroyed_attachments.append(associated_attachment)
       end
 
       @attachment.destroy
-      attachments.append(@attachment)
-      attachments
+      destroyed_attachments.append(@attachment)
+      destroyed_attachments
     end
   end
 end

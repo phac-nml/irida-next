@@ -9,8 +9,6 @@ module Attachments
       @sample = samples(:sample1)
       @attachment1 = attachments(:attachment1)
       @attachment2 = attachments(:attachment2)
-      @testsample_illumina_pe_fwd_blob = active_storage_blobs(:testsample_illumina_pe_forward_blob)
-      @testsample_illumina_pe_rev_blob = active_storage_blobs(:testsample_illumina_pe_reverse_blob)
     end
 
     test 'delete attachment with correct permissions' do
