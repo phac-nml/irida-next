@@ -1,12 +1,12 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t("projects.samples.transfers._transfer_modal.title")) %>
   <%= dialog.with_section do %>
-    <%= form_with(url: namespace_project_samples_transfer_path, method: :post) do |form| %>
+    <%= form_with(:transfer, url: namespace_project_samples_transfer_path, method: :post) do |form| %>
       <div
         data-controller="projects--samples--transfers"
         data-projects--samples--transfers-storage-key-value=<%=namespace_project_samples_url%>
         data-projects--samples--transfers-target="field"
-        data-projects--samples--transfers-field-name-value="sample_ids[]"
+        data-projects--samples--transfers-field-name-value="transfer[sample_ids][]"
       />
       <div class="grid gap-4">
         <div class="form-field">
