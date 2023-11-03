@@ -1,7 +1,3 @@
-<%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type:, data: message) %>
-<% end %>
-
 <%= turbo_stream.update(
   "concatenation_modal",
   partial: "modal",
@@ -10,10 +6,16 @@
   }
 ) %>
 
-<%= turbo_stream.update(
-  "attachments",
-  partial: "projects/samples/attachments/table",
-  locals: {
-    attachments: @sample.attachments
-  }
-) %>
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type:, data: message) %>
+<% end %>
+
+<% unless @errors %>
+  <%= turbo_stream.update(
+    "attachments",
+    partial: "projects/samples/attachments/table",
+    locals: {
+      attachments: @sample.attachments
+    }
+  ) %>
+<% end %>
