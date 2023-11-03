@@ -34,7 +34,7 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
 
     @controller = TestClassController.new
     assert_raises(NotImplementedError) do
-      post @controller.create
+      @controller.create
     end
   end
 
@@ -43,7 +43,7 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
 
     @controller = TestClassController.new
     assert_raises(NotImplementedError) do
-      post @controller.destroy
+      @controller.destroy
     end
   end
 
@@ -52,7 +52,7 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
 
     @controller = TestClassController.new
     assert_raises(NotImplementedError) do
-      post @controller.update
+      @controller.update
     end
   end
 
@@ -60,11 +60,10 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     @controller = TestClassController.new
-    get @controller.index
+    @controller.index
 
     assert @namespace.nil?
     assert @namespace_group_link.nil?
-    assert_response :success
   end
 
   test 'calling group_link_namespace should result in an error' do

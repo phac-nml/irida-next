@@ -6,13 +6,13 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.0.7', '>= 7.0.7.2'
+gem 'rails', '~> 7.1.1'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 5.6'
+gem 'puma', '~> 6.4'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails'
@@ -55,13 +55,13 @@ gem 'omniauth-saml'
 
 # Tailwind CSS [https://tailwindcss.com]
 gem 'tailwindcss-rails', '~> 2.0'
-gem 'view_component', '~> 3.0'
+gem 'view_component', '~> 3.7'
 
 # Pagy
-gem 'pagy', '~> 6.0' # omit patch digit
+gem 'pagy', '~> 6.1' # omit patch digit
 
 # Ransack
-gem 'ransack', '~> 3.2', '>= 3.2.1'
+gem 'ransack', '~> 4.1', '>= 4.1.1'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -112,12 +112,12 @@ group :development do
   # gem "spring"
 
   # erb-formatter
-  gem 'erb-formatter', github: 'nebulab/erb-formatter', tag: 'v0.4.2', require: false
+  gem 'erb-formatter', '~> 0.4.3', require: false
 
   # LookBook
   gem 'actioncable'
   gem 'listen'
-  gem 'lookbook', '~> 2.0'
+  gem 'lookbook', '~> 2.1', '>= 2.1.1'
 end
 
 group :test do
@@ -128,6 +128,3 @@ group :test do
   gem 'simplecov', require: false
   gem 'timecop'
 end
-
-# Extends Rails default locales beyond :en
-gem 'rails-i18n', '~> 7.0.0'

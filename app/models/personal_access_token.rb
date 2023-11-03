@@ -3,7 +3,7 @@
 # Personal Access Token class
 class PersonalAccessToken < ApplicationRecord
   has_logidze
-  serialize :scopes, Array
+  serialize :scopes, type: Array, coder: YAML
 
   attr_reader :token
 
