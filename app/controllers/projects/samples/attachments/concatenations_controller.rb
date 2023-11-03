@@ -5,7 +5,7 @@ module Projects
     module Attachments
       # Controller actions for Project Samples Attachments Concatenation
       class ConcatenationsController < Projects::Samples::ApplicationController
-        respond_to :turbo_stream
+        respond_to :turbo_stream, only: %i[create]
 
         def new
           authorize! @project, to: :update_sample?
