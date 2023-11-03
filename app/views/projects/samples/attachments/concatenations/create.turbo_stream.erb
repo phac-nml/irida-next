@@ -10,12 +10,10 @@
   <%= viral_flash(type:, data: message) %>
 <% end %>
 
-<% unless @errors %>
-  <%= turbo_stream.update(
-    "attachments",
-    partial: "projects/samples/attachments/table",
-    locals: {
-      attachments: @sample.attachments
-    }
-  ) %>
-<% end %>
+<%= turbo_stream.update(
+  "attachments",
+  partial: "projects/samples/attachments/table",
+  locals: {
+    attachments: @sample.attachments
+  }
+) %>
