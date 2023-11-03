@@ -5,14 +5,12 @@ module Dashboard
   class ProjectsController < ApplicationController
     before_action :current_page
 
-    def index # rubocop:disable Metrics/AbcSize
+    def index
       @q = Project.ransack(params[:q])
       set_default_sort
       respond_to do |format|
         format.html do
-          @has_projects = Project.joins(:namespace).exists?(namespace: { parent: current_user.namespace }) ||
-                          Project.joins(:namespace)
-                                 .exists?(namespace: { parent: current_user.groups.self_and_descendant_ids })
+          @has_projects = load_projects(params).count.positive?
         end
         format.turbo_stream do
           @pagy, @projects = pagy(@q.result.where(id: load_projects(params).select(:id))
