@@ -29,7 +29,6 @@ class User < ApplicationRecord
   # Groups
   has_many :members, inverse_of: :user, dependent: :destroy
   has_many :groups, through: :members
-  has_many :project_namespaces, through: :members
 
   before_validation :ensure_namespace
   before_save :ensure_namespace
