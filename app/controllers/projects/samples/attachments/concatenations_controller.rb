@@ -5,7 +5,7 @@ module Projects
     module Attachments
       # Controller actions for Project Samples Attachments Concatenation
       class ConcatenationsController < Projects::Samples::ApplicationController
-        respond_to :turbo_stream, only: %i[create]
+        respond_to :turbo_stream
 
         def new
           authorize! @project, to: :update_sample?
@@ -34,7 +34,7 @@ module Projects
         private
 
         def concatenation_params
-          params.permit(:basename, :delete_originals, attachment_ids: {})
+          params.require(:concatenation).permit(:basename, :delete_originals, attachment_ids: {})
         end
       end
     end

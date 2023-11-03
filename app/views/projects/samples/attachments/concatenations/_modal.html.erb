@@ -1,12 +1,12 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
-    <%= form_with(url: namespace_project_sample_attachments_concatenation_path, method: :post) do |form| %>
+    <%= form_for(:concatenation, url: namespace_project_sample_attachments_concatenation_path, method: :post) do |form| %>
       <div
         data-controller="projects--samples--attachments--concatenations"
         data-projects--samples--attachments--concatenations-storage-key-value=<%=namespace_project_sample_url(id: @sample.id)%>
         data-projects--samples--attachments--concatenations-target="field"
-        data-projects--samples--attachments--concatenations-field-name-value="attachment_ids"
+        data-projects--samples--attachments--concatenations-field-name-value="concatenation[attachment_ids]"
       />
       <div class="grid gap-4">
         <% invalid_basename = @sample.errors.include?(:basename) %>
