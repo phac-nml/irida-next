@@ -25,9 +25,7 @@ module Attachments
       authorize! attachable.project, to: :update_sample? if attachable.instance_of?(Sample)
 
       validate_params
-
-      attachment_ids = concatenation_params[:attachment_ids]
-
+      attachment_ids = concatenation_params[:attachment_ids].values
       is_paired_end = false
 
       unless attachment_ids.all? { |i| i.is_a?(Integer) || i.is_a?(String) }

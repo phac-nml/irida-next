@@ -35,7 +35,7 @@ module Projects
                                                                        format: :turbo_stream),
                params: {
                  basename: 'blah',
-                 attachment_ids: [@attachment1.id, @attachment2.id]
+                 attachment_ids: { '0' => @attachment1.id, '1' => @attachment2.id }
                }
 
           assert_response :success

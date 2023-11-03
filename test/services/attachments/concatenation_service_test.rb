@@ -11,7 +11,7 @@ module Attachments
 
     test 'concatenate single end files' do
       sample = samples(:sampleC)
-      params = { attachment_ids: [attachments(:attachmentG).id, attachments(:attachmentH).id],
+      params = { attachment_ids: { '0' => attachments(:attachmentG).id, '1' => attachments(:attachmentH).id },
                  basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 1 do
@@ -30,8 +30,8 @@ module Attachments
 
     test 'concatenate paired end files' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [[attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
-                                  [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id]],
+      params = { attachment_ids: { '0' => [attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
+                                   '1' => [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id] },
                  basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 2 do
@@ -57,8 +57,8 @@ module Attachments
 
     test 'concatenate illumina paired end files' do
       sample = samples(:sampleC)
-      params = { attachment_ids: [[attachments(:attachmentPEFWD4).id, attachments(:attachmentPEREV4).id],
-                                  [attachments(:attachmentPEFWD5).id, attachments(:attachmentPEREV5).id]],
+      params = { attachment_ids: { '0' => [attachments(:attachmentPEFWD4).id, attachments(:attachmentPEREV4).id],
+                                   '1' => [attachments(:attachmentPEFWD5).id, attachments(:attachmentPEREV5).id] },
                  basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 2 do
@@ -84,9 +84,9 @@ module Attachments
 
     test 'should concatenate more than 2 pairs of paired-end files' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [[attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
-                                  [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id],
-                                  [attachments(:attachmentPEFWD3).id, attachments(:attachmentPEREV3).id]],
+      params = { attachment_ids: { '0' => [attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
+                                   '1' => [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id],
+                                   '2' => [attachments(:attachmentPEFWD3).id, attachments(:attachmentPEREV3).id] },
                  basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 2 do
@@ -113,7 +113,7 @@ module Attachments
 
     test 'concatenate fastq.gz files' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [attachments(:attachmentE).id, attachments(:attachmentF).id],
+      params = { attachment_ids: { '0' => attachments(:attachmentE).id, '1' => attachments(:attachmentF).id },
                  basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 1 do
@@ -178,7 +178,7 @@ module Attachments
 
     test 'shouldn\'t concatenate single end with paired end files' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [attachments(:attachmentPEFWD1).id, attachments(:attachmentD).id],
+      params = { attachment_ids: { '0' => attachments(:attachmentPEFWD1).id, '1' => attachments(:attachmentD).id },
                  basename: 'new-concatenated-file' }
 
       Attachments::ConcatenationService.new(@user, sample, params).execute
@@ -188,7 +188,7 @@ module Attachments
 
     test 'shouldn\'t concatenate fastq with fastq.gz files' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [attachments(:attachmentD).id, attachments(:attachmentE).id],
+      params = { attachment_ids: { '0' => attachments(:attachmentD).id, '1' => attachments(:attachmentE).id },
                  basename: 'new-concatenated-file' }
 
       Attachments::ConcatenationService.new(@user, sample, params).execute
@@ -201,7 +201,7 @@ module Attachments
     test 'shouldn\'t concatenate files as they do not belong to the sample' do
       user = users(:john_doe)
       sample = samples(:sample2)
-      params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id],
+      params = { attachment_ids: { '0' => attachments(:attachmentA).id, '1' => attachments(:attachmentB).id },
                  basename: 'new-concatenated-file' }
 
       Attachments::ConcatenationService.new(user, sample, params).execute
@@ -210,7 +210,7 @@ module Attachments
     end
 
     test 'shouldn\'t concatenate files when a base file name is not provided' do
-      params = { attachment_ids: [attachments(:attachmentA).id, attachments(:attachmentB).id] }
+      params = { attachment_ids: { '0' => attachments(:attachmentA).id, '1' => attachments(:attachmentB).id } }
 
       assert_no_difference -> { Attachment.count } do
         Attachments::ConcatenationService.new(@user, @sample, params).execute
@@ -220,7 +220,7 @@ module Attachments
     end
 
     test 'should throw an error if no files are selected for concatenation' do
-      params = { attachment_ids: [],
+      params = { attachment_ids: {},
                  basename: 'new-concatenated-file' }
 
       assert_no_difference -> { Attachment.count } do
@@ -232,8 +232,8 @@ module Attachments
 
     test 'should throw an error if foward reads file count doesn\'t equal to reverse reads file count' do
       sample = samples(:sampleB)
-      params = { attachment_ids: [[attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
-                                  [attachments(:attachmentPEFWD2).id]],
+      params = { attachment_ids: { '0' => [attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
+                                   '1' => [attachments(:attachmentPEFWD2).id] },
                  basename: 'new-concatenated-file' }
 
       assert_no_difference -> { Attachment.count } do

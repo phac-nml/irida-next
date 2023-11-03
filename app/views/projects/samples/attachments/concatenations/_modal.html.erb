@@ -2,14 +2,12 @@
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%= form_with(url: namespace_project_sample_attachments_concatenation_path, method: :post) do |form| %>
-
       <div
-        data-controller="projects--samples--transfers"
-        data-projects--samples--transfers-storage-key-value=<%=namespace_project_sample_url(id: @sample.id)%>
-        data-projects--samples--transfers-target="field"
-        data-projects--samples--transfers-field-name-value="attachment_ids[]"
+        data-controller="projects--samples--attachments--concatenations"
+        data-projects--samples--attachments--concatenations-storage-key-value=<%=namespace_project_sample_url(id: @sample.id)%>
+        data-projects--samples--attachments--concatenations-target="field"
+        data-projects--samples--attachments--concatenations-field-name-value="attachment_ids"
       />
-
       <div class="grid gap-4">
         <% invalid_basename = @sample.errors.include?(:basename) %>
         <div class="form-field <%= 'invalid' if invalid_basename%>">
@@ -35,7 +33,8 @@
           <%= form.submit t(".submit_button"),
                       class: "button button--size-default button--state-primary",
                       data: {
-                        action: "click->projects--samples--transfers#clear"
+                        action:
+                          "click->projects--samples--attachments--concatenations#clear"
                       } %>
         </div>
       </div>

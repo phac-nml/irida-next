@@ -38,7 +38,7 @@ module Projects
         private
 
         def concatenation_params
-          params.permit(:basename, :delete_originals, attachment_ids: [])
+          params.permit(:basename, :delete_originals, attachment_ids: {})
         end
       end
     end
