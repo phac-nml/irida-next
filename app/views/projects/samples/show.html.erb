@@ -1,3 +1,4 @@
+<%= turbo_frame_tag "new_attachment_modal" %>
 <%= turbo_frame_tag "concatenation_modal" %>
 
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, subtitle: @sample.description) do |component| %>
@@ -30,11 +31,13 @@
   <% if allowed_to?(:update?, @project) %>
     <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
       <% header.with_action do %>
-        <%= render partial: "projects/samples/attachments/new_attachment_modal",
-        locals: {
-          open: false,
-          attachment: @attachment
-        } %>
+        <%= link_to t(".new_attachment_button"),
+        new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+        data: {
+          turbo_frame: "new_attachment_modal",
+          turbo_stream: true
+        },
+        class: "button button--size-default button--state-default" %>
       <% end %>
       <% header.with_action do %>
         <%= link_to t(".concatenate_button"),
@@ -45,7 +48,7 @@
           turbo_frame: "concatenation_modal",
           turbo_stream: true
         },
-        class: "button button--size-default button--state-default mr-1" %>
+        class: "button button--size-default button--state-default" %>
       <% end %>
     <% end %>
   <% else %>

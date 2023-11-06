@@ -6,6 +6,17 @@ module Projects
     class AttachmentsController < Projects::Samples::ApplicationController
       before_action :attachment, only: %i[destroy download]
 
+      def new
+        authorize! @project, to: :update_sample?
+        @attachment = Attachment.new(attachable: @sample)
+        render turbo_stream: turbo_stream.update('new_attachment_modal',
+                                                 partial: 'new_attachment_modal',
+                                                 locals: {
+                                                   open: true,
+                                                   attachment: @attachment
+                                                 }), status: :ok
+      end
+
       def create
         authorize! @project, to: :update_sample?
 

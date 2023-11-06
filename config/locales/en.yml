@@ -770,6 +770,7 @@ en:
         leave_success: "You have successfully left the project %{name}"
     samples:
       show:
+        new_attachment_button: Upload Files
         concatenate_button: Concatenate Files
         edit_button: Edit this sample
         remove_button: Remove
