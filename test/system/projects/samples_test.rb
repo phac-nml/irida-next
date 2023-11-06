@@ -252,5 +252,40 @@ module Projects
       assert_text @sample1.name
       assert_text @sample2.name
     end
+
+    test 'should concatenate attachment files and keep originals' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within('#attachments') do
+        assert_selector 'table #attachments-table-body tr', count: 2
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('dialog') do
+        fill_in 'Basename', with: 'concatenated_file'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+      end
+      within('#attachments') do
+        assert_text 'concatenated_file'
+        assert_selector 'table #attachments-table-body tr', count: 3
+      end
+    end
+
+    test 'should concatenate attachment files and remove originals' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within('#attachments') do
+        assert_selector 'table #attachments-table-body tr', count: 2
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('dialog') do
+        fill_in 'Basename', with: 'concatenated_file'
+        check 'Delete originals'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+      end
+      within('#attachments') do
+        assert_text 'concatenated_file'
+        assert_selector 'table #attachments-table-body tr', count: 1
+      end
+    end
   end
 end

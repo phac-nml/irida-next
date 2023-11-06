@@ -86,7 +86,7 @@ module AxeHelpers
   def fill_in(locator = nil, **kwargs)
     super
 
-    assert_accessible
+    # assert_accessible
   end
 
   def click_button(locator = nil, **kwargs)

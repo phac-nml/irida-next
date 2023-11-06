@@ -46,6 +46,7 @@ module Attachments
       validate_and_concatenate(attachments, is_paired_end)
     rescue Attachments::ConcatenationService::AttachmentConcatenationError => e
       attachable.errors.add(:base, e.message)
+      []
     end
 
     private
