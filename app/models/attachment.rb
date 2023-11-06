@@ -36,15 +36,15 @@ class Attachment < ApplicationRecord
 
   def nonzipped_file_extension
     case file.filename.to_s
-    when /^\S+\.fq$/
+    when /^\S+\.fq(\.gz)?$/
       'fq'
-    when /^\S+\.fastq$/
+    when /^\S+\.fastq(\.gz)?$/
       'fastq'
-    when /^\S+\.fasta$/
+    when /^\S+\.fasta(\.gz)?$/
       'fasta'
-    when /^\S+\.fna$/
+    when /^\S+\.fna(\.gz)?$/
       'fna'
-    when /^\S+\.fa$/
+    when /^\S+\.fa(\.gz)?$/
       'fa'
     end
   end

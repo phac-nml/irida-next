@@ -24,6 +24,8 @@ module Attachments
       concatenated_file_size = sample.attachments.last.file.byte_size
 
       assert_equal concatenated_file_size, (attachmentg_file_size + attachmenth_file_size)
+
+      assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last.file.filename.to_s
     end
 
     test 'concatenate paired end files' do
@@ -48,6 +50,9 @@ module Attachments
       assert_equal concatenatedfwd_file_size, (attachmentfwd1_file_size + attachmentfwd2_file_size)
 
       assert_equal concatenatedrev_file_size, (attachmentrev1_file_size + attachmentrev2_file_size)
+
+      assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last(2).first.file.filename.to_s
+      assert_equal 'new-concatenated-file_2.fastq', sample.attachments.last(2).last.file.filename.to_s
     end
 
     test 'concatenate illumina paired end files' do
@@ -72,6 +77,9 @@ module Attachments
       assert_equal concatenatedfwd_file_size, (attachmentfwd4_file_size + attachmentfwd5_file_size)
 
       assert_equal concatenatedrev_file_size, (attachmentrev4_file_size + attachmentrev5_file_size)
+
+      assert_equal 'new-concatenated-file_S1_L001_R1_001.fastq', sample.attachments.last(2).first.file.filename.to_s
+      assert_equal 'new-concatenated-file_S1_L001_R2_001.fastq', sample.attachments.last(2).last.file.filename.to_s
     end
 
     test 'should concatenate more than 2 pairs of paired-end files' do
@@ -118,6 +126,14 @@ module Attachments
       concatenatedgz_file_size = sample.attachments.last.file.byte_size
 
       assert_equal concatenatedgz_file_size, (attachmentgz1_file_size + attachmentgz2_file_size)
+
+      assert_equal 'new-concatenated-file_1.fastq.gz', sample.attachments.last.file.filename.to_s
+    end
+
+    test 'concatenate fq files' do
+    end
+
+    test 'concatenate fq.gz files' do
     end
 
     test 'shouldn\'t concatenate single end with paired end files' do
