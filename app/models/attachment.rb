@@ -34,6 +34,21 @@ class Attachment < ApplicationRecord
     attachable.attachments.find_by(id: metadata['associated_attachment_id'])
   end
 
+  def file_extension
+    case file.filename.to_s
+    when /^\S+\.fq$/
+      'fq'
+    when /^\S+\.fastq$/
+      'fastq'
+    when /^\S+\.fasta$/
+      'fasta'
+    when /^\S+\.fna$/
+      'fna'
+    when /^\S+\.fa$/
+      'fa'
+    end
+  end
+
   private
 
   def assign_metadata
