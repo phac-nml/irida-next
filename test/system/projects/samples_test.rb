@@ -287,5 +287,14 @@ module Projects
         assert_selector 'table #attachments-table-body tr', count: 1
       end
     end
+
+    test 'user with guest access should not be able to see the concatenate attachment files button' do
+      user = users(:ryan_doe)
+      login_as user
+
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+
+      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 0
+    end
   end
 end
