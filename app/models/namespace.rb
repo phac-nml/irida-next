@@ -97,6 +97,14 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       joins(:route)
         .where(Arel.sql(format('routes.path not ILIKE all(array(%s))', wildcard_path_select)))
     end
+
+    def ransackable_attributes(_auth_object = nil)
+      %w[created_at deleted_at name updated_at]
+    end
+
+    def ransackable_associations(_auth_object = nil)
+      %w[]
+    end
   end
 
   def ancestors
