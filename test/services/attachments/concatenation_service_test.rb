@@ -153,8 +153,8 @@ module Attachments
 
       assert_equal concatenatedrev_file_size, (attachmentrev6_file_size + attachmentrev7_file_size)
 
-      assert_equal 'new-concatenated-file_S1_L001_R1_001.fq', sample.attachments.last(2).first.file.filename.to_s
-      assert_equal 'new-concatenated-file_S1_L001_R2_001.fq', sample.attachments.last(2).last.file.filename.to_s
+      assert_equal 'new-concatenated-file_S1_L001_R1_001.fastq', sample.attachments.last(2).first.file.filename.to_s
+      assert_equal 'new-concatenated-file_S1_L001_R2_001.fastq', sample.attachments.last(2).last.file.filename.to_s
     end
 
     test 'concatenate fq.gz files' do
@@ -173,7 +173,7 @@ module Attachments
 
       assert_equal concatenatedgz_file_size, (attachmentgz1_file_size + attachmentgz2_file_size)
 
-      assert_equal 'new-concatenated-file_1.fq.gz', sample.attachments.last.file.filename.to_s
+      assert_equal 'new-concatenated-file_1.fastq.gz', sample.attachments.last.file.filename.to_s
     end
 
     test 'shouldn\'t concatenate single end with paired end files' do

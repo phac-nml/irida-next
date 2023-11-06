@@ -34,21 +34,6 @@ class Attachment < ApplicationRecord
     attachable.attachments.find_by(id: metadata['associated_attachment_id'])
   end
 
-  def nonzipped_file_extension
-    case file.filename.to_s
-    when /^\S+\.fq(\.gz)?$/
-      'fq'
-    when /^\S+\.fastq(\.gz)?$/
-      'fastq'
-    when /^\S+\.fasta(\.gz)?$/
-      'fasta'
-    when /^\S+\.fna(\.gz)?$/
-      'fna'
-    when /^\S+\.fa(\.gz)?$/
-      'fa'
-    end
-  end
-
   private
 
   def assign_metadata

@@ -74,7 +74,7 @@ module Attachments
     def validate_and_concatenate(attachments, is_paired_end)
       return unless attachments.length.positive?
 
-      validate_file_extensions(attachments)
+      validate_file_formats(attachments)
 
       concatenated_attachments = []
 
@@ -117,17 +117,11 @@ module Attachments
       true
     end
 
-    # Validates if the file extensions all match for the attachments
-    def validate_file_extensions(attachments)
-      expected_extension = if attachments.first.metadata['compression'] == 'gzip'
-                             'gz'
-                           else
-                             attachments.first.nonzipped_file_extension
-                           end
-
+    # Validates if the file formats all match for the attachments
+    def validate_file_formats(attachments)
       attachments.each do |attachment|
-        extension = attachment.file.filename.to_s.split('.')[-1]
-        next unless extension != expected_extension
+        next unless (attachment.metadata['compression'] != attachments.first.metadata['compression']) ||
+                    (attachment.metadata['format'] != attachments.first.metadata['format'])
 
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
@@ -142,14 +136,14 @@ module Attachments
 
       files = []
       files << concatenate_attachments(attachments,
-                                       "#{basename}_1.#{attachments.first.nonzipped_file_extension}#{zipped_extension}")
+                                       "#{basename}_1.fastq#{zipped_extension}")
                .signed_id
 
       Attachments::CreateService.new(current_user, attachable, { files: }).execute
     end
 
     # Concatenates the paired-end reads into a multiple paired-end files
-    def concatenate_paired_end_reads(attachments) # rubocop:disable Metrics/AbcSize
+    def concatenate_paired_end_reads(attachments)
       zipped_extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
       fwd_filename, rev_filename = concatenated_paired_end_filenames(
@@ -161,10 +155,10 @@ module Attachments
       files = []
       files <<
         concatenate_attachments(forward_reads,
-                                "#{fwd_filename}.#{attachments.first.nonzipped_file_extension}#{zipped_extension}")
+                                "#{fwd_filename}.fastq#{zipped_extension}")
         .signed_id <<
         concatenate_attachments(reverse_reads,
-                                "#{rev_filename}.#{attachments.first.nonzipped_file_extension}#{zipped_extension}")
+                                "#{rev_filename}.fastq#{zipped_extension}")
         .signed_id
 
       Attachments::CreateService.new(current_user, attachable, { files: }).execute
