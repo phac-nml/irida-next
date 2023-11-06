@@ -8,6 +8,7 @@ module Projects
 
       def new
         authorize! @project, to: :update_sample?
+
         render turbo_stream: turbo_stream.update('sample_files_modal',
                                                  partial: 'new_attachment_modal',
                                                  locals: {
