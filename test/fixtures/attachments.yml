@@ -139,3 +139,51 @@ attachmentG:
 attachmentH:
   metadata: { "compression": "none" }
   attachable: sampleC (Sample)
+
+attachmentPEFWD6:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEREV6:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEFWD7:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEREV7:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentI:
+  metadata: { "compression": "gzip" }
+  attachable: sampleC (Sample)
+
+attachmentJ:
+  metadata: { "compression": "gzip" }
+  attachable: sampleC (Sample)
