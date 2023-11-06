@@ -34,7 +34,7 @@ class Attachment < ApplicationRecord
     attachable.attachments.find_by(id: metadata['associated_attachment_id'])
   end
 
-  def file_extension
+  def nonzipped_file_extension
     case file.filename.to_s
     when /^\S+\.fq$/
       'fq'
