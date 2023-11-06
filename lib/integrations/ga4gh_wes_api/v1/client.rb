@@ -36,18 +36,18 @@ module Integrations
         # @param workflow_attachment [Array of strings <binary>] Not implimented in V1
         def run_workflow(**params)
           # spec requires empty parameters be defined as empty strings
-          h = { workflow_params: '',
-                workflow_type: '',
-                workflow_type_version: '',
-                tags: '',
-                workflow_engine: '',
-                workflow_engine_version: '',
-                workflow_engine_parameters: '',
-                workflow_url: '',
-                workflow_attachment: '' }
+          base_params = { workflow_params: '',
+                          workflow_type: '',
+                          workflow_type_version: '',
+                          tags: '',
+                          workflow_engine: '',
+                          workflow_engine_version: '',
+                          workflow_engine_parameters: '',
+                          workflow_url: '',
+                          workflow_attachment: '' }
           post(
             endpoint: 'runs',
-            data: h.merge(params)
+            data: base_params.merge(params)
           )
         end
 
