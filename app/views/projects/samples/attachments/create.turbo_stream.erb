@@ -27,9 +27,9 @@
     <% end %>
   <% end %>
 <% end %>
-<%= turbo_stream.replace "sample_files_modal",
-                     partial: "new_attachment_modal",
-                     locals: {
-                       open: false,
-                       attachment: attachment
-                     } %>
+<%= turbo_stream.update "sample_files_modal",
+                    partial: "new_attachment_modal",
+                    locals: {
+                      open: false,
+                      attachment: attachment
+                    } %>
