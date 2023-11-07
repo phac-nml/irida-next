@@ -39,8 +39,8 @@ module Projects
       end
 
       def destroy
-        authorize! @project, to: :destroy?
-        return unless @attachment.attachable_type == 'Sample' && @attachment.attachable_id == @sample.id
+        authorize! @project, to: :destroy_sample?
+        return destroy_error if @attachment.attachable_type != 'Sample' || @attachment.attachable_id != @sample.id
 
         @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
 
@@ -79,6 +79,19 @@ module Projects
         return count == 2 ? :ok : :multi_status if attachment.associated_attachment
 
         count == 1 ? :ok : :unprocessable_entity
+      end
+
+      def destroy_error
+        respond_to do |format|
+          format.turbo_stream do
+            render status: :bad_request,
+                   locals: { type: 'alert',
+                             message: t('.error',
+                                        filename: @attachment.file.filename,
+                                        errors: "Attachment does not belong to #{@sample.name}"),
+                             destroyed_attachments: nil }
+          end
+        end
       end
     end
   end

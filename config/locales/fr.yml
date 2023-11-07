@@ -839,6 +839,8 @@ fr:
           failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
         destroy:
           success: File %{filename} was successfully removed.
+          error: 'File %{filename} was not be removed due to the following errors: %{errors}.'
+        error: File %{filename} was not be removed.
   services:
     groups:
       transfer:
