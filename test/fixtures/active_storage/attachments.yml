@@ -73,6 +73,26 @@ attachmentPEREV5_file_test_file_fastq:
   record: attachmentPEREV5 (Attachment)
   blob: attachmentPEREV5_file_test_file_fastq_blob
 
+attachmentPEFWD6_file_test_file_fastq:
+  name: file
+  record: attachmentPEFWD6 (Attachment)
+  blob: attachmentPEFWD6_file_test_file_fastq_blob
+
+attachmentPEREV6_file_test_file_fastq:
+  name: file
+  record: attachmentPEREV6 (Attachment)
+  blob: attachmentPEREV6_file_test_file_fastq_blob
+
+attachmentPEFWD7_file_test_file_fastq:
+  name: file
+  record: attachmentPEFWD7 (Attachment)
+  blob: attachmentPEFWD7_file_test_file_fastq_blob
+
+attachmentPEREV7_file_test_file_fastq:
+  name: file
+  record: attachmentPEREV7 (Attachment)
+  blob: attachmentPEREV7_file_test_file_fastq_blob
+
 attachmentD_file_test_file_fastq:
   name: file
   record: attachmentD (Attachment)
@@ -97,3 +117,13 @@ attachmentH_file_test_file_fastq:
   name: file
   record: attachmentH (Attachment)
   blob: attachmentH_file_test_file_fastq_blob
+
+attachmentI_file_test_file_fastq:
+  name: file
+  record: attachmentI (Attachment)
+  blob: attachmentI_file_test_file_fastq_blob
+
+attachmentJ_file_test_file_fastq:
+  name: file
+  record: attachmentJ (Attachment)
+  blob: attachmentJ_file_test_file_fastq_blob

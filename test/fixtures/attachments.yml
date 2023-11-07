@@ -9,15 +9,15 @@ attachment2:
   attachable: sample1 (Sample)
 
 attachmentA:
-  metadata: { "compression": "none" }
+  metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
 
 attachmentB:
-  metadata: { "compression": "none" }
+  metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
 
 attachmentC:
-  metadata: { "compression": "none" }
+  metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
 
 attachmentPEFWD1:
@@ -121,21 +121,69 @@ attachmentPEREV5:
   attachable: sampleC (Sample)
 
 attachmentD:
-  metadata: { "compression": "none" }
+  metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleB (Sample)
 
 attachmentE:
-  metadata: { "compression": "gzip" }
+  metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
 
 attachmentF:
-  metadata: { "compression": "gzip" }
+  metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
 
 attachmentG:
-  metadata: { "compression": "none" }
+  metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleC (Sample)
 
 attachmentH:
-  metadata: { "compression": "none" }
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sampleC (Sample)
+
+attachmentPEFWD6:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEREV6:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEFWD7:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentPEREV7:
+  metadata:
+    {
+      "type": "illumina_pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+    }
+  attachable: sampleC (Sample)
+
+attachmentI:
+  metadata: { "compression": "gzip", "format": "fastq" }
+  attachable: sampleC (Sample)
+
+attachmentJ:
+  metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleC (Sample)

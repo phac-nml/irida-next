@@ -24,6 +24,8 @@ module Attachments
       concatenated_file_size = sample.attachments.last.file.byte_size
 
       assert_equal concatenated_file_size, (attachmentg_file_size + attachmenth_file_size)
+
+      assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last.file.filename.to_s
     end
 
     test 'concatenate paired end files' do
@@ -48,6 +50,9 @@ module Attachments
       assert_equal concatenatedfwd_file_size, (attachmentfwd1_file_size + attachmentfwd2_file_size)
 
       assert_equal concatenatedrev_file_size, (attachmentrev1_file_size + attachmentrev2_file_size)
+
+      assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last(2).first.file.filename.to_s
+      assert_equal 'new-concatenated-file_2.fastq', sample.attachments.last(2).last.file.filename.to_s
     end
 
     test 'concatenate illumina paired end files' do
@@ -72,6 +77,9 @@ module Attachments
       assert_equal concatenatedfwd_file_size, (attachmentfwd4_file_size + attachmentfwd5_file_size)
 
       assert_equal concatenatedrev_file_size, (attachmentrev4_file_size + attachmentrev5_file_size)
+
+      assert_equal 'new-concatenated-file_S1_L001_R1_001.fastq', sample.attachments.last(2).first.file.filename.to_s
+      assert_equal 'new-concatenated-file_S1_L001_R2_001.fastq', sample.attachments.last(2).last.file.filename.to_s
     end
 
     test 'should concatenate more than 2 pairs of paired-end files' do
@@ -118,6 +126,54 @@ module Attachments
       concatenatedgz_file_size = sample.attachments.last.file.byte_size
 
       assert_equal concatenatedgz_file_size, (attachmentgz1_file_size + attachmentgz2_file_size)
+
+      assert_equal 'new-concatenated-file_1.fastq.gz', sample.attachments.last.file.filename.to_s
+    end
+
+    test 'concatenate fq files' do
+      sample = samples(:sampleC)
+      params = { attachment_ids: [[attachments(:attachmentPEFWD6).id, attachments(:attachmentPEREV6).id],
+                                  [attachments(:attachmentPEFWD7).id, attachments(:attachmentPEREV7).id]],
+                 basename: 'new-concatenated-file' }
+
+      assert_difference -> { Attachment.count } => 2 do
+        Attachments::ConcatenationService.new(@user, sample, params).execute
+      end
+
+      attachmentfwd6_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD6).id).file.byte_size
+      attachmentfwd7_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD7).id).file.byte_size
+
+      attachmentrev6_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV6).id).file.byte_size
+      attachmentrev7_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV7).id).file.byte_size
+
+      concatenatedfwd_file_size = sample.attachments.last(2).first.file.byte_size
+      concatenatedrev_file_size = sample.attachments.last(2).last.file.byte_size
+
+      assert_equal concatenatedfwd_file_size, (attachmentfwd6_file_size + attachmentfwd7_file_size)
+
+      assert_equal concatenatedrev_file_size, (attachmentrev6_file_size + attachmentrev7_file_size)
+
+      assert_equal 'new-concatenated-file_S1_L001_R1_001.fastq', sample.attachments.last(2).first.file.filename.to_s
+      assert_equal 'new-concatenated-file_S1_L001_R2_001.fastq', sample.attachments.last(2).last.file.filename.to_s
+    end
+
+    test 'concatenate fq.gz files' do
+      sample = samples(:sampleC)
+      params = { attachment_ids: [attachments(:attachmentI).id, attachments(:attachmentJ).id],
+                 basename: 'new-concatenated-file' }
+
+      assert_difference -> { Attachment.count } => 1 do
+        Attachments::ConcatenationService.new(@user, sample, params).execute
+      end
+
+      attachmentgz1_file_size = sample.attachments.find_by(id: attachments(:attachmentI).id).file.byte_size
+      attachmentgz2_file_size = sample.attachments.find_by(id: attachments(:attachmentJ).id).file.byte_size
+
+      concatenatedgz_file_size = sample.attachments.last.file.byte_size
+
+      assert_equal concatenatedgz_file_size, (attachmentgz1_file_size + attachmentgz2_file_size)
+
+      assert_equal 'new-concatenated-file_1.fastq.gz', sample.attachments.last.file.filename.to_s
     end
 
     test 'shouldn\'t concatenate single end with paired end files' do

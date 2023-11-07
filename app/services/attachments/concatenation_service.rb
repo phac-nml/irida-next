@@ -74,7 +74,7 @@ module Attachments
     def validate_and_concatenate(attachments, is_paired_end)
       return unless attachments.length.positive?
 
-      validate_file_extensions(attachments)
+      validate_file_formats(attachments)
 
       concatenated_attachments = []
 
@@ -117,12 +117,11 @@ module Attachments
       true
     end
 
-    # Validates if the file extensions all match for the attachments
-    def validate_file_extensions(attachments)
-      expected_extension = attachments.first.metadata['compression'] == 'gzip' ? 'gz' : 'fastq'
+    # Validates if the file formats all match for the attachments
+    def validate_file_formats(attachments)
       attachments.each do |attachment|
-        extension = attachment.file.filename.to_s.split('.')[-1]
-        next unless extension != expected_extension
+        next unless (attachment.metadata['compression'] != attachments.first.metadata['compression']) ||
+                    (attachment.metadata['format'] != attachments.first.metadata['format'])
 
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
@@ -133,27 +132,47 @@ module Attachments
     # Concatenates the single end reads into a single-end file
     def concatenate_single_end_reads(attachments)
       basename = concatenation_params[:basename]
-      extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
+      zipped_extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
       files = []
-      files << concatenate_attachments(attachments, "#{basename}_1.fastq#{extension}").signed_id
+      files << concatenate_attachments(attachments,
+                                       "#{basename}_1.fastq#{zipped_extension}")
+               .signed_id
 
       Attachments::CreateService.new(current_user, attachable, { files: }).execute
     end
 
     # Concatenates the paired-end reads into a multiple paired-end files
     def concatenate_paired_end_reads(attachments)
-      basename = concatenation_params[:basename]
+      zipped_extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
-      extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
+      fwd_filename, rev_filename = concatenated_paired_end_filenames(
+        attachments.first.metadata['type']
+      )
 
       forward_reads, reverse_reads = attachments_to_paired_end_directional_reads(attachments)
 
       files = []
-      files << concatenate_attachments(forward_reads, "#{basename}_1.fastq#{extension}").signed_id <<
-        concatenate_attachments(reverse_reads, "#{basename}_2.fastq#{extension}").signed_id
+      files <<
+        concatenate_attachments(forward_reads,
+                                "#{fwd_filename}.fastq#{zipped_extension}")
+        .signed_id <<
+        concatenate_attachments(reverse_reads,
+                                "#{rev_filename}.fastq#{zipped_extension}")
+        .signed_id
 
       Attachments::CreateService.new(current_user, attachable, { files: }).execute
+    end
+
+    # Gets the filename in the correct format for illumina paired-end and paired-end files
+    def concatenated_paired_end_filenames(attachment_type)
+      basename = concatenation_params[:basename]
+
+      fwd_filename = attachment_type == 'illumina_pe' ? "#{basename}_S1_L001_R1_001" : "#{basename}_1"
+
+      rev_filename = attachment_type == 'illumina_pe' ? "#{basename}_S1_L001_R2_001" : "#{basename}_2"
+
+      [fwd_filename, rev_filename]
     end
 
     def concatenate_attachments(attachments, filename)
