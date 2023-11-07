@@ -4,14 +4,9 @@ require 'test_helper'
 
 class UpdateMembershipsJobTest < ActiveJob::TestCase
   def setup
-    Member.skip_callback(:update, :after, :update_descendant_memberships)
     @group_member = members(:group_one_member_ryan_doe)
     @first_subgroup_member = members(:subgroup1_member_ryan_doe)
     @second_subgroup_member = members(:subgroup2_member_ryan_doe)
-  end
-
-  def teardown
-    Member.set_callback(:update, :after, :update_descendant_memberships)
   end
 
   test 'parent group access level higher' do

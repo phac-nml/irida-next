@@ -19,7 +19,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :validate_namespace
   validate :higher_access_level_than_group
 
-  after_update :update_descendant_memberships
   before_destroy :last_namespace_owner_member
 
   delegate :project, to: :project_namespace
