@@ -1,5 +1,63 @@
 <%= turbo_stream.update("workflow_modal") do %>
   <%= viral_dialog(open: true) do |dialog| %>
     <%= dialog.with_header(title: "Workflow Selection") %>
+    <%= dialog.with_section do %>
+      <ul class="border divide-y divide-gray-200 dark:divide-gray-700 border-1 border-slate-50">
+        <li>
+          <button
+            class="w-full border-none group hover:bg-primary-600"
+          >
+            <div class="flex items-center p-4 space-x-4">
+              <div class="flex-shrink-0">
+                <%= viral_icon(
+                  name: :rocket_launch,
+                  classes:
+                    "group-hover:text-slate-100 group-hover:rotate-45 transition-rotate-45 group-hover:duration-500 group-hover:ease-in-out"
+                ) %>
+              </div>
+              <div class="flex-1 min-w-0 text-left group-hover:stroke-slate-100">
+                <p
+                  class="font-medium text-gray-900 truncate dark:text-white group-hover:text-slate-100"
+                >
+                  Super Awesome Workflow
+                </p>
+                <p
+                  class="text-sm font-normal truncate text-slate-500 dark:text-slate-400 group-hover:text-slate-200"
+                >
+                  Does stuff that gives you somewhat accurate answers.
+                </p>
+              </div>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button
+            class="w-full group hover:bg-primary-600"
+          >
+            <div class="flex items-center p-4 space-x-4">
+              <div class="flex-shrink-0">
+                <%= viral_icon(
+                  name: :rocket_launch,
+                  classes:
+                    "group-hover:text-slate-100 group-hover:rotate-45 transition-rotate-45 group-hover:duration-500 group-hover:ease-in-out"
+                ) %>
+              </div>
+              <div class="flex-1 min-w-0 text-left group-hover:stroke-slate-100">
+                <p
+                  class="font-medium text-gray-900 truncate dark:text-white group-hover:text-slate-100"
+                >
+                  Really Slow Workflow
+                </p>
+                <p
+                  class="text-sm font-normal truncate text-slate-500 dark:text-slate-400 group-hover:text-slate-200"
+                >
+                  Gives marginally more accurate answers.
+                </p>
+              </div>
+            </div>
+          </button>
+        </li>
+      </ul>
+    <% end %>
   <% end %>
 <% end %>
