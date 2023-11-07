@@ -1,0 +1,9 @@
+<div>
+  <% t = Sample.only_deleted.find(activity.trackable_id) %>
+  <%= t(
+    "activity.sample.destroy",
+    user: activity.owner.email,
+    sample_name: t.name,
+    project_name: t.project.name
+  ) %>
+</div>

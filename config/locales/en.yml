@@ -223,6 +223,11 @@ en:
         one: Namespace Group Link
         other: Namespace Group Links
         direct: Direct shared
+  activity:
+    sample:
+      create: "%{user} added new sample %{sample_name} to project %{project_name}"
+      destroy: "%{user} removed sample %{sample_name} from project %{project_name}"
+      update: "%{user} updated sample %{sample_name} in project %{project_name}"
   datetime:
     distance_in_words:
       updated:
