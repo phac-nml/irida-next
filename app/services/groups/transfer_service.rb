@@ -5,7 +5,7 @@ module Groups
   class TransferService < BaseGroupService
     TransferError = Class.new(StandardError)
 
-    def execute(new_namespace) # rubocop:disable Metrics/AbcSize
+    def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       validate(new_namespace)
 
       # Authorize if user can transfer group
@@ -20,7 +20,8 @@ module Groups
       end
 
       group_ancestor_member_user_ids = Member.for_namespace_and_ancestors(@group).select(:user_id)
-      new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace).where(user_id: group_ancestor_member_user_ids).select(&:id) # rubocop:disable Layout/LineLength
+      new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace)
+                                       .where(user_id: group_ancestor_member_user_ids).select(&:id)
 
       @group.update(parent_id: new_namespace.id)
 
