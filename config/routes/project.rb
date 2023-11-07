@@ -29,6 +29,11 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           member do
             get :download
           end
+          scope module: :attachments, as: :attachments do
+            collection do
+              resource :concatenation, only: %i[create new]
+            end
+          end
         end
       end
     end

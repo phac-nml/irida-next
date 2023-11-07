@@ -114,9 +114,14 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   scope_for :relation do |relation|
-    relation.where(namespace: { parent: user.groups.self_and_descendant_ids })
-            .include_route.or(relation.where(namespace: { parent: user.namespace })
-            .include_route)
+    relation
+      .where(namespace: { parent: user.groups.self_and_descendant_ids }).include_route
+      .or(relation.where(
+        namespace: user.members.joins(:namespace).where(
+          namespace: { type: Namespaces::ProjectNamespace.sti_name }
+        ).select(:namespace_id)
+      ).include_route)
+      .or(relation.where(namespace: { parent: user.namespace }).include_route)
   end
 
   scope_for :relation, :manageable do |relation|

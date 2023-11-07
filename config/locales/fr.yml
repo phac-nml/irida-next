@@ -1,0 +1,875 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   "true": "foo"
+#
+# To learn more, please read the Rails Internationalization guide
+# available at https://guides.rubyonrails.org/i18n.html.
+
+fr:
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M:%S"
+    updated: Updated
+  date:
+    formats:
+      iso: "YYYY-MM-DD"
+  action_policy:
+    policy:
+      create?: You are not authorized to create this resource on this server.
+      destroy?: You are not authorized to remove the requested resource from this server.
+      edit?: You are not authorized to update this resource on this server.
+      index?: You are not authorized to view the listing of resources on this server.
+      new?: You are not authorized to create this resource on this server.
+      read?: You are not authorized to view this resource on this server.
+      transfer?: You are not authorized to transfer the requested resource.
+      transfer_into_namespace?: You are not authorized to transfer to the requested namespace.
+      update?: You are not authorized to update this resource on this server.
+      group:
+        create?: You are not authorized to create a project under group %{name} on this server.
+        create_subgroup?: You are not authorized to create a subgroup within group %{name} on this server.
+        destroy?: You are not authorized to remove group %{name} from this server.
+        edit?: You are not authorized to modify group %{name} on this server.
+        new?: You are not authorized to create a project under group %{name} on this server.
+        read?: You are not authorized to view group %{name} on this server.
+        transfer?: You are not authorized to transfer group %{name} on this server.
+        transfer_into_namespace?: You are not authorized to transfer into the group namespace %{name} on this server.
+        update?: You are not authorized to update group %{name} on this server.
+        member_listing?: You are not authorized to view members for group %{name} on this server.
+        create_member?: You are not authorized to create members for group %{name} on this server.
+        destroy_member?: You are not authorized to remove members for group %{name} on this server.
+        update_member?: You are not authorized to update members for group %{name} on this server.
+        sample_listing?: You are not authorized to view samples for group %{name} on this server.
+        link_namespace_with_group?: You are not authorized to link group %{name} with other groups on this server.
+        unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
+        update_namespace_with_group_link?: You are not authorized to update group %{name} links with other groups on this server.
+      project:
+        activity?: You are not authorized to view the activity for project %{name} on this server.
+        destroy?: You are not authorized to remove project %{name} from this server.
+        edit?: You are not authorized to modify project %{name} on this server.
+        new?: You are not authorized to create a project under the %{name} namespace on this server.
+        read?: You are not authorized to view project %{name} on this server.
+        transfer?: You are not authorized to transfer project %{name} on this server.
+        update?: You are not authorized to update project %{name} on this server.
+        sample_listing?: You are not authorized to view samples for project %{name} on this server.
+        create_sample?: You are not authorized to create samples for project %{name} on this server.
+        destroy_sample?: You are not authorized to remove samples from project %{name} on this server.
+        read_sample?: You are not authorized to view this sample for project %{name} on this server.
+        update_sample?: You are not authorized to update samples for project %{name} on this server.
+        transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
+        transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
+      namespaces/project_namespace:
+        update?: You are not authorized to update the namespace for project %{name} on this server.
+        member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
+        create_member?: You are not authorized to create members for the project namespace %{name} on this server.
+        destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
+        update_member?: You are not authorized to update members for the project namespace %{name} on this server.
+        link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
+        unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
+        update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
+      namespaces/user_namespace:
+        create?: You are not authorized to create a project under the %{name} namespace
+        transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
+      user:
+        create?: You are not authorized to create a user on this server.
+        destroy?: You are not authorized to remove user %{name} from this server.
+        edit?: You are not authorized to update user %{name} on this server.
+        index?: You are not authorized to view listing of users on this server.
+        new?: You are not authorized to create a user on this server.
+        revoke?: You are not authorized to revoke personal access tokens for user %{name} on this server.
+        read?: You are not authorized to view profile for user %{name} on this server.
+        update?: You are not authorized to update user %{name} on this server.
+    unauthorized: You are not authorized to perform this action
+  activerecord:
+    attributes:
+      attachment:
+        file: File
+        metadata: Metadata
+      group:
+        description: Description
+        name: Group name
+        path: Path
+        parent_id: Group URL
+      namespaces/project_namespace:
+        name: Project Name
+        description: Description
+        parent_id: Project URL
+        path: Path
+      personal_access_token:
+        name: Token name
+        scopes: Scopes
+        created_at: Created
+        last_used_at: Last Used
+        expires_at: Expiration Date
+      sample:
+        name: Name
+        description: Description
+      member:
+        access_level: Access Level
+        user_id: User
+      user:
+        password: Password
+        password_confirmation: Password confirmation
+        email: Email
+        provider: Authentication Provider
+        uid: Authentication Provider UID
+        first_name: First Name
+        last_name: Last Name
+    errors:
+      models:
+        attachment:
+          attributes:
+            file:
+              checksum_uniqueness: checksum matches existing file
+        namespace:
+          attributes:
+            name:
+              blank: can't be blank
+              taken: has already been taken
+        member:
+          attributes:
+            access_level:
+              invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
+              inclusion: "provided is not included in the list of valid access levels"
+          destroy:
+            last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
+            last_member_self: "You cannot remove yourself as this would leave the %{namespace_type} without an owner."
+        personal_access_token:
+          attributes:
+            scopes:
+              inclusion: can only contain available scopes
+        namespace_group_link:
+          attributes:
+            group_id:
+              blank: Group must exist
+              taken: The group has already been shared with this namespace
+            namespace_id:
+              blank: Namespace must exist
+              taken: The namespace has already been shared with this group
+            namespace_type:
+              inclusion: can only be Group or Project
+            group_access_level:
+              inclusion: "provided is not included in the list of valid access levels"
+    exceptions:
+      personal_access_token:
+        not_found: "Could not find personal access token with id %{token_id}"
+    models:
+      member:
+        one: Member
+        other: Members
+        access_level:
+          no_access: No Access
+          guest: Guest
+          analyst: Analyst
+          maintainer: Maintainer
+          owner: Owner
+        its_you: It's you
+        direct: Direct member
+      group:
+        one: Group
+        other: Groups
+      sample:
+        one: Sample
+        other: Samples
+      namespaces/project_namespace:
+        one: Project
+        other: Projects
+      namespace_group_link:
+        one: Namespace Group Link
+        other: Namespace Group Links
+        direct: Direct shared
+  datetime:
+    distance_in_words:
+      updated:
+        about_x_hours:
+          one: Updated about %{count} hour ago
+          other: Updated about %{count} hours ago
+        about_x_months:
+          one: Updated about %{count} month ago
+          other: Updated about %{count} months ago
+        about_x_years:
+          one: Updated about %{count} year ago
+          other: Updated about %{count} years ago
+        almost_x_years:
+          one: Updated almost %{count} year ago
+          other: Updated almost %{count} years ago
+        half_a_minute: Updated half a minute ago
+        less_than_x_seconds:
+          one: Updated less than %{count} second ago
+          other: Updated less than %{count} seconds ago
+        less_than_x_minutes:
+          one: Updated less than a minute ago
+          other: Updated less than %{count} minutes ago
+        over_x_years:
+          one: Updated over %{count} year ago
+          other: Updated over %{count} years ago
+        x_seconds:
+          one: "Updated %{count} second ago"
+          other: "Updated %{count} seconds ago"
+        x_minutes:
+          one: "Updated %{count} minute ago"
+          other: "Updated %{count} minutes ago"
+        x_days:
+          one: "Updated %{count} day ago"
+          other: "Updated %{count} days ago"
+        x_months:
+          one: "Updated %{count} month ago"
+          other: "Updated %{count} months ago"
+        x_years:
+          one: "Updated %{count} year ago"
+          other: "Updated %{count} years ago"
+      about_x_hours:
+        one: about %{count} hour ago
+        other: about %{count} hours ago
+      about_x_months:
+        one: about %{count} month ago
+        other: about %{count} months ago
+      about_x_years:
+        one: about %{count} year ago
+        other: about %{count} years ago
+      almost_x_years:
+        one: almost %{count} year ago
+        other: almost %{count} years ago
+      half_a_minute: half a minute ago
+      less_than_x_seconds:
+        one: less than %{count} second ago
+        other: less than %{count} seconds ago
+      less_than_x_minutes:
+        one: less than a minute ago
+        other: less than %{count} minutes ago
+      over_x_years:
+        one: over %{count} year ago
+        other: over %{count} years ago
+      x_seconds:
+        one: "%{count} second ago"
+        other: "%{count} seconds ago"
+      x_minutes:
+        one: "%{count} minute ago"
+        other: "%{count} minutes ago"
+      x_days:
+        one: "%{count} day ago"
+        other: "%{count} days ago"
+      x_months:
+        one: "%{count} month ago"
+        other: "%{count} months ago"
+      x_years:
+        one: "%{count} year ago"
+        other: "%{count} years ago"
+  auth:
+    scopes:
+      api: Grants complete read/write access to the API.
+      read_api: Grants read access to the API.
+  components:
+    pagination:
+      previous: Prev
+      next: Next
+    clipboard:
+      copied: Copied!
+      copy: Copy to clipboard
+      toggle_visible: Toggle visibility
+    dialog:
+      close: Close dialog
+    confirmation:
+      title: Confirmation required
+      cancel: Cancel
+      confirm: Confirm
+    flash:
+      success_icon: Check icon
+      error_icon: X icon
+      warning_icon: Exclamation icon
+      information_icon: Information icon
+  layouts:
+    application:
+      site_title: IRIDA Next
+  general:
+    name: IRIDA Next
+    help: Help
+    expand_sidebar: Expand sidebar
+    collapse_sidebar: Collapse sidebar
+    screen_reader:
+      close: Close
+    default_sidebar:
+      title: Your work
+      groups: Groups
+      projects: Projects
+    navbar:
+      collapse:
+        aria_label: Collapse navigation menu
+      main_dropdown:
+        aria-label: Main navigation menu
+        groups: Groups
+        projects: Projects
+      search:
+        placeholder: Search
+      new_dropdown:
+        aria_label: New menu item
+        project: Create new project
+        group: Create new group
+      account_dropdown:
+        aria_label: Account menu dropdown
+        profile: Edit profile
+        sign_out: Sign out
+  dashboard:
+    projects:
+      index:
+        title: Projects
+        create_project_button: New project
+        all: All
+        personal: Personal
+        search:
+          placeholder: Filter by name
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          namespace_name_asc: Name
+          namespace_name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
+    groups:
+      index:
+        title: Groups
+        create_group_button: New group
+        more_items: "%{count} more items"
+        row_aria_label: "See %{name} subgroups"
+        subgroups: Subgroups
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
+  profiles:
+    sidebar:
+      header: User Settings
+      profile: Profile
+      password: Password
+      account: Account
+      access_tokens: Access Tokens
+      preferences: Preferences
+    show:
+      email:
+        title: Email
+        subtitle: Email address linked to this account
+        pending: "Pending confirmation of %{email}"
+        submit: Update profile settings
+      missing: This field has not been provided by the Authentication Provider.
+    update:
+      success: Profile updated successfully
+    passwords:
+      update:
+        success: Password updated successfully
+        hint: You must provide your current password to update it
+        title: Password
+        subtitle: Update your account password
+        submit: Save password
+        forgot: Forgot your password?
+    accounts:
+      delete:
+        description: Deleting your account has the following effects
+        effects:
+          - All projects and groups you own will be deleted
+          - All projects and groups you are a member of will be left intact
+        button: Delete account
+        confirm: Are you sure you want to delete your account?
+    preferences:
+      show:
+        theme_title: Colour theme
+        system_theme: System
+        system_desc: The colour theme will update based on your operating system settings.
+        light_theme: Light
+        dark_theme: Dark
+        locale_title: Langue
+        preferences: Preferences
+      update:
+        success: Langue mise à jour avec succès
+      success: Preferences updated successfully
+      locale_form:
+        en: Anglais
+        fr: Français
+    personal_access_tokens:
+      access_token_section:
+        label: Your new personal access token
+        description: Make sure you save it - you won't be able to access it again.
+        aria_label: Personal access token, copy to clipboard
+      create:
+        submit: Create personal access token
+        subtitle: Enter the name of your application, and we'll return a unique personal access token.
+        title: Add a personal access token
+      index:
+        active_personal_access_tokens: Active Personal Access Tokens (%{count})
+        expires_at: Expires
+        subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
+        title: Personal Access Tokens
+      personal_access_token:
+        never: Never
+        revoke_button: Revoke
+        revoke_confirm: Are you sure you want to revoke this personal access token? This action cannot be undone.
+  groups:
+    owner: Owner
+    sidebar:
+      details: Details
+      members: Members
+      settings: Settings
+    index:
+      create_group_button: New group
+      group_dropdown:
+        label: Actions for group %{group_name}
+        delete: Delete group
+        delete_confirmation: Are you sure you want to delete this group?
+    create:
+      success: Group created successfully
+      title: Create group
+      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
+      name_placeholder: Awesome group name
+      path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
+      submit: Create group
+      cancel: Cancel
+    destroy:
+      success: "Group %{group_name} was deleted"
+      error: "Could not delete %{group_name}"
+    edit:
+      title: Settings
+      details:
+        title: General
+        subtitle: Group name and description
+        name_placeholder: Awesome group name
+        submit: Save changes
+      advanced:
+        title: Advanced settings
+        transfer:
+          title: Transfer group
+          submit: Transfer group
+          new_namespace_id: Select a parent group
+          descriptions:
+            - Transfer group to another parent group.
+          points:
+            - Be careful. Changing a group's parent can have unintended side effects.
+            - You can only transfer groups where you have sufficient permissions.
+            - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
+          confirm:
+            title: Confirmation required
+            warning_html: You are going to transfer <strong>%{group_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
+            points_html:
+              - To prevent accidental actions we ask you to confirm your intention.
+              - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
+        delete:
+          title: Delete group
+          description: Deleting a group is permanent and cannot be undone. All projects, subgroups, and direct members will be deleted along with the group.
+          submit: Delete group
+          confirm: Are you sure you want to delete this group?
+        path:
+          title: Change group URL
+          description: Changing a group's URL can have unintended side effects.
+          submit: Change group URL
+    show:
+      create_subgroup_button: New subgroup
+      create_project_button: New project
+      tabs:
+        label: Group project details navigation
+        subgroups_and_projects: Subgroups and projects
+        shared_projects: Shared projects
+      subgroups:
+        no_subgroups:
+          title: No subgroups
+          description: Create a subgroup to manage projects and members
+      shared_projects:
+        no_shared:
+          title: No projects have been shared with this group.
+          description: Other groups can share projects directly with this group through the project settings page.
+    new_subgroup:
+      title: Create subgroup
+      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
+      submit: Create subgroup
+      cancel: Cancel
+    update:
+      success: Group %{group_name} was successfully updated
+    transfer:
+      success: Group transferred successfully
+    group_links:
+      index:
+        unlink: Unlink
+        unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
+        aria_labels:
+          group_id: Id of group to share namespace with
+          group_access_level: Group Access Level
+          expires_at: Group access expiration
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        inherited_from: "Inherited from"
+        table_header:
+          group: Group
+          source: Source
+          access_granted: Access granted
+          access_level: Access level
+          expiration: Expiration
+          action: Action
+        actions:
+          member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
+          unlink_aria_label: "Unlink namespace from group %{member} button"
+      create:
+        success: Successfully linked group %{namespace_name} with group %{group_name}
+        error: There was an error linking group with group
+      destroy:
+        success: Successfully unlinked group %{namespace_name} from group %{group_name}
+        error: There was an error unlinking group from group
+      update:
+        params:
+          expiration_date: expiration date
+          group_access_level: group access level
+        success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
+        error: There was an error updating the namespace group link
+      new:
+        title: Share namespace
+        sharing_namespace_with_group: "You're sharing group %{name} with a group"
+        placeholder:
+          select_access_level: Select access level
+          select_group: Select group
+        label:
+          group_id: Group to share namespace with
+          group_access_level: Maximum group access level
+          access_expiration: Access expiration (optional)
+        button:
+          cancel: Cancel
+          submit: Share
+    members:
+      create:
+        error: "Error adding member"
+        success: "Group member %{user} added successfully"
+      index:
+        add: Add New Member
+        remove: Remove member
+        leave_group: Leave group
+        invite_group: Invite Group
+        remove_confirmation: Are you sure you want to remove this member from the group?
+        leave_confirmation: Are you sure you want to remove yourself from this group?
+        title: Members
+        subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
+        access_granted_by: "Access granted by %{grantor_email}"
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        actions:
+          button_add_aria_label: Add new group member button
+          link_remove_aria_label: "Remove group member %{member} button"
+          link_leave_group_aria_label: "Leave group button"
+          member_dropdown_aria_label: "Dropdown options for group member %{member}"
+        inherited_from: "Inherited from"
+        shared_inherited: Shared inherited
+        shared_direct: Shared direct
+        table_header:
+          username: Username
+          access_level: Access Level
+          source: Source
+          access_granted: Access Granted
+          action: Action
+        tabs:
+          members: Members
+          groups: Groups
+      update:
+        success: "Group member %{user_email} updated successfully"
+      new:
+        title: Add New Member
+        description: You are adding a new member to group %{name}
+        add_member_to_group: Add member to group
+        select_user: Select a User
+        select_access_level: Select Access Level
+      destroy:
+        error: "There was an error removing the group member"
+        success: "Group member %{user} successfully removed"
+        leave_success: "You have successfully left the group %{name}"
+    samples:
+      index:
+        title: Samples
+        subtitle: These are the samples in %{namespace_type} %{namespace_name}
+  projects:
+    create:
+      success: "Project %{project_name} was successfully created"
+    edit:
+      title: Settings
+      general:
+        title: General
+        heading: Project name and description
+        submit: Update project
+      advanced:
+        title: Advanced settings
+        destroy:
+          title: Delete project
+          description: Deleting a project is permanent and cannot be undone. All samples and direct members will be deleted along with the project.
+          submit: Delete project
+          confirm: Are you sure you want to delete this project?
+        path:
+          title: Change project URL
+          submit: Change project URL
+          description: Changing a project's URL can have unintended side effects.
+          help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
+        transfer:
+          title: Transfer project
+          submit: Transfer project
+          new_namespace_id: Select a new namespace
+          descriptions:
+            - Transfer your project into another namespace.
+            - When you transfer your project to a group, you can easily manage multiple projects and users.
+            - "Things to be aware of before transferring your project:"
+          points:
+            - Be careful! Changing a project's namespace can have unintended side effects.
+            - You can only transfer projects to groups where you have sufficient permissions.
+            - Project visibility level will change to match namespace rules when transferring to a group.
+          confirm:
+            title: Confirmation required
+            warning_html: You are going to transfer <strong>%{project_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
+            points_html:
+              - To prevent accidental actions we ask you to confirm your intention.
+              - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
+    new:
+      title: Create project
+      placeholder: Awesome project name
+      description: Project description, not required
+      subtitle: Projects are where you can store and analyze your data
+      help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
+      submit: Create project
+      cancel: Cancel
+    sidebar:
+      details: Details
+      members: Members
+      samples: Samples
+      settings: Settings
+    update:
+      success: "Project %{project_name} was successfully updated"
+    transfer:
+      success: "Project %{project_name} was successfully transferred"
+    destroy:
+      success: "Project %{project_name} was successfully deleted"
+    group_links:
+      index:
+        unlink: Unlink
+        unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
+        aria_labels:
+          group_id: Id of group to share namespace with
+          group_access_level: Group Access Level
+          expires_at: Group access expiration
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        inherited_from: "Inherited from"
+        table_header:
+          group: Group
+          source: Source
+          access_granted: Access granted
+          access_level: Access level
+          expiration: Expiration
+          action: Action
+        actions:
+          member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
+          unlink_aria_label: "Unlink namespace from group %{member} button"
+      create:
+        success: Successfully linked project %{namespace_name} with group %{group_name}
+        error: There was an error linking project with group
+      destroy:
+        success: Successfully unlinked project %{namespace_name} with group %{group_name}
+        error: There was an error unlinking project from group
+      update:
+        params:
+          expiration_date: expiration date
+          group_access_level: group access level
+        success: Successfully updated project %{namespace_name} with group %{group_name} link %{param_name}
+        error: There was an error updating the namespace group link
+      new:
+        title: Share namespace
+        sharing_namespace_with_group: "You're sharing group %{name} with a group"
+        placeholder:
+          select_access_level: Select access level
+          select_group: Select group
+        label:
+          shared_group: Group to share namespace with
+          group_access_level: Maximum group access level
+          access_expiration: Access expiration (optional)
+        button:
+          cancel: Cancel
+          submit: Share
+    members:
+      create:
+        error: "Error adding member"
+        success: "Project member %{user} added successfully"
+      index:
+        add: Add New Member
+        remove: Remove member
+        leave_project: Leave project
+        invite_group: Invite group
+        remove_confirmation: Are you sure you want to remove this member from the project?
+        leave_confirmation: Are you sure you want to remove yourself from the project?
+        title: Members
+        subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
+        access_granted_by: "Access granted by %{grantor_email}"
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Analyst
+          level_30: Maintainer
+          level_40: Owner
+        actions:
+          button_add_aria_label: Add new project member button
+          link_remove_aria_label: "Remove project member %{member} button"
+          link_leave_project_aria_label: "Leave project button"
+          member_dropdown_aria_label: "Dropdown options for project member %{member}"
+        inherited_from: "Inherited from"
+        shared_inherited: Shared inherited
+        shared_direct: Shared direct
+        table_header:
+          username: Username
+          access_level: Access Level
+          source: Source
+          access_granted: Access Granted
+          action: Action
+        tabs:
+          members: Members
+          groups: Groups
+      update:
+        success: "Project member %{user_email} updated successfully"
+      new:
+        title: Add New Member
+        add_member_to_project: Add member to project
+        description: You are adding a new member to project %{name}
+        select_user: Select a User
+        select_access_level: Select Access Level
+      destroy:
+        error: "There was an error removing the project member"
+        success: "Project member %{user} successfully removed"
+        leave_success: "You have successfully left the project %{name}"
+    samples:
+      show:
+        edit_button: Edit this sample
+        remove_button: Remove
+        remove_button_confirmation: Are you sure you want to remove this sample from the project?
+        error: The sample does not exist within the project.
+        files: Files
+        no_files: No Files
+        no_associated_files: There are no files associated with this sample.
+        upload: Upload
+        upload_files: Upload Files
+        uploading: Uploading
+        table_header:
+          filename: Filename
+          format: Format
+          type: Type
+          size: Size
+          created_at: Uploaded
+          action: Action
+      create:
+        success: Sample was successfully created.
+      new:
+        title: Create sample
+        subtitle: This is a subtitle to create a new project sample.
+        submit_button: Create sample
+        cancel_button: Cancel
+      index:
+        title: Samples
+        subtitle: This is a subtitle to list project samples.
+        new_button: New sample
+        edit_button: Edit
+        remove_button: Remove
+        remove_button_confirmation: Are you sure you want to remove this sample from the project?
+        transfer_button: Transfer samples
+        actions:
+          button_add_aria_label: Add new sample button
+          dropdown_aria_label: Dropdown options for sample %{sample_name}
+        dropdown:
+          remove: Remove sample
+      update:
+        success: Sample was successfully updated.
+      edit:
+        title: Edit sample
+        subtitle: This is a subtitle to edit a project sample.
+        form:
+          title: Name and Description
+        submit_button: Update sample
+        cancel_button: Cancel
+      destroy:
+        success: Sample %{sample_name} was removed.
+        error: The sample does not exist within the project.
+      transfers:
+        _transfer_modal:
+          title: Transfer Samples
+          new_project_id: Project to transfer samples to
+          submit_button: Submit
+        create:
+          success: Samples were successfully transferred.
+          error: "The following list of samples failed to transfer:"
+      attachments:
+        attachment:
+          delete: Delete
+          delete_confirm: Are you sure that you want to delete this file from the sample?
+        create:
+          success: File %{filename} was successfully uploaded.
+          failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
+        destroy:
+          success: File %{filename} was successfully removed.
+  services:
+    groups:
+      transfer:
+        namespace_empty: The new namespace is empty.
+        same_group_and_namespace: The new namespace must be different from the group.
+        namespace_group_exists: A group with the same name/path already exists in the new namespace.
+    members:
+      create:
+        role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"
+      destroy:
+        role_not_allowed: A maintainer can only remove a member up to the Maintainer role
+      update:
+        cannot_update_self: "You cannot update your own %{namespace_type} role"
+        role_not_allowed: "A maintainer can only update a member's role up to the Maintainer role"
+    samples:
+      transfer:
+        empty_new_project_id: The new project id is empty.
+        empty_sample_ids: The sample ids are empty.
+        same_project: The samples already exist in the project. Please select a different project.
+        sample_exists: "Sample '%{sample_name}' already exists in the target project"
+        samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
+    projects:
+      transfer:
+        namespace_project_exists: Project with the same name or path already exists in the target namespace.
+    groups:
+      share:
+        group_not_found: Group with id %{group_id} to share namespace with cannot be found.
+    namespaces:
+      share:
+        invalid_namespace_type: Only a group or project namespace can be shared with a group.
+  application:
+    errors:
+      access_denied: Access Denied.
+      not_authorized: You are not authorized to access the requested resource on this server.
+      resource_not_found: Resource Not Found.
+      not_found_on_server: The requested resource could not be found on the server.

@@ -103,4 +103,23 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
                        count: @active_token_count - 1)
   end
+
+  test 'can view language selection' do
+    visit profile_preferences_path
+
+    assert_text I18n.t(:'profiles.preferences.locale_form.en')
+  end
+
+  test 'can update language to french' do
+    visit profile_preferences_path
+
+    find('input[id=user_locale_fr]').click
+
+    I18n.with_locale(:fr) do
+      assert_text I18n.t(:'profiles.preferences.locale_form.en')
+      within %(div[data-controller='viral--flash']) do
+        assert_text I18n.t(:'profiles.preferences.update.success')
+      end
+    end
+  end
 end

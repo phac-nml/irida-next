@@ -14,7 +14,6 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get namespace_project_members_path(namespace, project)
 
     assert_response :success
-    assert_equal 4, project.namespace.project_members.count
   end
 
   test 'project members index invalid route get' do
@@ -32,7 +31,6 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get new_namespace_project_member_path(namespace, project, format: :turbo_stream)
 
     assert_response :success
-    assert_equal 4, project.namespace.project_members.count
   end
 
   test 'project members new invalid route get' do
@@ -52,14 +50,15 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     user = users(:jane_doe)
     curr_user = users(:john_doe)
 
-    post namespace_project_members_path(namespace, project),
-         params: { member: { user_id: user.id,
-                             namespace_id: proj_namespace,
-                             created_by_id: curr_user.id,
-                             access_level: Member::AccessLevel::OWNER }, format: :turbo_stream }
+    assert_difference -> { project.namespace.project_members.count } => 1 do
+      post namespace_project_members_path(namespace, project),
+           params: { member: { user_id: user.id,
+                               namespace_id: proj_namespace,
+                               created_by_id: curr_user.id,
+                               access_level: Member::AccessLevel::OWNER }, format: :turbo_stream }
+    end
 
     assert_response :success
-    assert_equal 5, project.namespace.project_members.count
   end
 
   test 'project members create invalid route post' do
@@ -82,10 +81,11 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     project_member = members(:project_two_member_james_doe)
 
-    delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
+    assert_difference -> { project.namespace.project_members.count } => -1 do
+      delete namespace_project_member_path(namespace, project, project_member, format: :turbo_stream)
+    end
 
     assert_response :ok
-    assert_equal 3, project.namespace.project_members.count
   end
 
   test 'project members destroy invalid route delete' do
@@ -137,14 +137,15 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     user_new = users(:jane_doe)
 
-    post namespace_project_members_path(namespace, project),
-         params: { member: { user_id: user_new.id,
-                             namespace_id: proj_namespace,
-                             created_by_id: user.id,
-                             access_level: Member::AccessLevel::ANALYST }, format: :turbo_stream }
+    assert_difference -> { project.namespace.project_members.count } => 1 do
+      post namespace_project_members_path(namespace, project),
+           params: { member: { user_id: user_new.id,
+                               namespace_id: proj_namespace,
+                               created_by_id: user.id,
+                               access_level: Member::AccessLevel::ANALYST }, format: :turbo_stream }
+    end
 
     assert_response :success
-    assert_equal 2, project.namespace.project_members.count
   end
 
   test 'update project member access role with current user as owner' do

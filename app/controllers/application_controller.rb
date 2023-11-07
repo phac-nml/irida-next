@@ -9,6 +9,12 @@ class ApplicationController < ActionController::Base
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
   around_action :use_logidze_responsible, only: %i[create destroy update] # rubocop:disable Rails/LexicallyScopedActionFilter
+  around_action :switch_locale
+
+  def switch_locale(&)
+    locale = current_user.try(:locale) || I18n.default_locale
+    I18n.with_locale(locale, &)
+  end
 
   def use_logidze_responsible(&)
     Logidze.with_responsible(current_user&.id, transactional: false, &)

@@ -33,7 +33,6 @@ en:
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
-    updated: Updated
   date:
     formats:
       iso: "YYYY-MM-DD"
@@ -203,6 +202,44 @@ en:
         direct: Direct shared
   datetime:
     distance_in_words:
+      updated:
+        about_x_hours:
+          one: Updated about %{count} hour ago
+          other: Updated about %{count} hours ago
+        about_x_months:
+          one: Updated about %{count} month ago
+          other: Updated about %{count} months ago
+        about_x_years:
+          one: Updated about %{count} year ago
+          other: Updated about %{count} years ago
+        almost_x_years:
+          one: Updated almost %{count} year ago
+          other: Updated almost %{count} years ago
+        half_a_minute: Updated half a minute ago
+        less_than_x_seconds:
+          one: Updated less than %{count} second ago
+          other: Updated less than %{count} seconds ago
+        less_than_x_minutes:
+          one: Updated less than a minute ago
+          other: Updated less than %{count} minutes ago
+        over_x_years:
+          one: Updated over %{count} year ago
+          other: Updated over %{count} years ago
+        x_seconds:
+          one: "Updated %{count} second ago"
+          other: "Updated %{count} seconds ago"
+        x_minutes:
+          one: "Updated %{count} minute ago"
+          other: "Updated %{count} minutes ago"
+        x_days:
+          one: "Updated %{count} day ago"
+          other: "Updated %{count} days ago"
+        x_months:
+          one: "Updated %{count} month ago"
+          other: "Updated %{count} months ago"
+        x_years:
+          one: "Updated %{count} year ago"
+          other: "Updated %{count} years ago"
       about_x_hours:
         one: about %{count} hour ago
         other: about %{count} hours ago
@@ -364,6 +401,14 @@ en:
         system_desc: The colour theme will update based on your operating system settings.
         light_theme: Light
         dark_theme: Dark
+        locale_title: Language
+        preferences: Preferences
+      update:
+        success: Language updated successfully
+      success: Preferences updated successfully
+      locale_form:
+        en: English
+        fr: French
     personal_access_tokens:
       access_token_section:
         label: Your new personal access token
@@ -737,6 +782,8 @@ en:
         uploading: Uploading
         table_header:
           filename: Filename
+          format: Format
+          type: Type
           size: Size
           created_at: Uploaded
           action: Action

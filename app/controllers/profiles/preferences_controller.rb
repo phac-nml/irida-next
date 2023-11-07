@@ -11,5 +11,30 @@ module Profiles
     def current_page
       @current_page = 'preferences'
     end
+
+    def update
+      authorize! @user
+      respond_to do |format|
+        # Locale is called now rather than from the around_action in app_controller because we need the locale
+        # change prior to the success flash so that the flash contains the correct translation
+        updated = @user.update(update_params)
+        locale = current_user.try(:locale) || I18n.default_locale
+        I18n.locale = locale
+        if updated
+          flash[:success] = t('.success')
+          format.html { redirect_to profile_preferences_path }
+        else
+          format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
+        end
+      end
+    end
+
+    private
+
+    def update_params
+      params.require(:user).permit(
+        :locale
+      )
+    end
   end
 end

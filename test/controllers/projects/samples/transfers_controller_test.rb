@@ -30,8 +30,10 @@ module Projects
       test 'should create sample transfer for a member that is an owner' do
         post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
              params: {
-               new_project_id: @project2.id,
-               sample_ids: [@sample1.id, @sample2.id]
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [@sample1.id, @sample2.id]
+               }
              }
 
         assert_response :success
@@ -43,8 +45,10 @@ module Projects
 
         post namespace_project_samples_transfer_path(@namespace, @project1),
              params: {
-               new_project_id: @project2.id,
-               sample_ids: [@sample1.id, @sample2.id]
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [@sample1.id, @sample2.id]
+               }
              }
         assert_response :unauthorized
       end
@@ -59,8 +63,10 @@ module Projects
 
         post namespace_project_samples_transfer_path(namespace, project4, format: :turbo_stream),
              params: {
-               new_project_id: project22.id,
-               sample_ids: [sample23.id]
+               transfer: {
+                 new_project_id: project22.id,
+                 sample_ids: [sample23.id]
+               }
              }
 
         assert_response :success
@@ -72,8 +78,10 @@ module Projects
 
         post namespace_project_samples_transfer_path(@namespace, @project1),
              params: {
-               new_project_id: @project2.id,
-               sample_ids: [@sample1.id, @sample2.id]
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [@sample1.id, @sample2.id]
+               }
              }
         assert_response :unauthorized
       end
@@ -84,8 +92,10 @@ module Projects
 
         post namespace_project_samples_transfer_path(@namespace, @project1),
              params: {
-               new_project_id: @project2.id,
-               sample_ids: [@sample1.id, @sample2.id]
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [@sample1.id, @sample2.id]
+               }
              }
         assert_response :unauthorized
       end
@@ -93,8 +103,10 @@ module Projects
       test 'should not create sample transfer within the same project' do
         post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
              params: {
-               new_project_id: @project1.id,
-               sample_ids: [@sample1.id, @sample2.id]
+               transfer: {
+                 new_project_id: @project1.id,
+                 sample_ids: [@sample1.id, @sample2.id]
+               }
              }
 
         assert_response :unprocessable_entity
@@ -104,8 +116,10 @@ module Projects
         sample3 = samples(:sample3)
         post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
              params: {
-               new_project_id: @project2.id,
-               sample_ids: [@sample1.id, @sample2.id, sample3.id]
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [@sample1.id, @sample2.id, sample3.id]
+               }
              }
 
         assert_response :partial_content

@@ -38,7 +38,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     @controller = TestClassController.new
     assert_raises(NotImplementedError) do
-      get @controller.create
+      @controller.create
       assert @namespace.nil?
       assert @member.nil?
     end
@@ -49,7 +49,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     @controller = TestClassController.new
     assert_raises(NotImplementedError) do
-      get @controller.destroy
+      @controller.destroy
       assert @namespace.nil?
       assert @member.nil?
     end
@@ -59,22 +59,20 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     @controller = TestClassController.new
-    get @controller.index
+    @controller.index
 
     assert @namespace.nil?
     assert @member.nil?
-    assert_response :success
   end
 
   test 'calling new should not result in an error' do
     sign_in users(:john_doe)
 
     @controller = TestClassController.new
-    get @controller.new
+    @controller.new
 
     assert @namespace.nil?
     assert @member.nil?
-    assert_response :success
   end
 
   test 'calling member_namespace should result in an error' do

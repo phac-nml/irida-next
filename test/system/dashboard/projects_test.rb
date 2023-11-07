@@ -93,5 +93,15 @@ module Dashboard
       assert_selector 'h1', text: project_name
       assert_text project_description
     end
+
+    test 'can see projects that the user has been added to as a member' do
+      login_as users(:jean_doe)
+
+      visit dashboard_projects_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_selector 'tr', count: 1
+      assert_text projects(:john_doe_project2).human_name
+    end
   end
 end

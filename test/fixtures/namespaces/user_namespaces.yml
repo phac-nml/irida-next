@@ -12,6 +12,12 @@ jane_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
 
+jean_doe_namespace:
+  name: jean.doe@localhost
+  path: jean.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
+
 james_doe_namespace:
   name: james.doe@localhost
   path: james.doe_at_localhost

@@ -1,7 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 attachment1:
-  metadata: { "compression": "none" }
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample1 (Sample)
+
+attachment2:
+  metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)
 
 attachmentA:

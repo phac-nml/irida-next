@@ -13,7 +13,7 @@ module Irida
   # main application class
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -51,5 +51,10 @@ module Irida
         end
       }
     end
+
+    # Only enables en and fr locales, avoiding unnecessarily loading other locales
+    config.i18n.available_locales = %i[en fr]
+    # Set default locale
+    config.i18n.default_locale = :en
   end
 end
