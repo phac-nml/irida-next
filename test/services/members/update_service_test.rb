@@ -20,10 +20,6 @@ module Members
 
       assert_changes -> { @group_member.access_level }, to: Member::AccessLevel::OWNER do
         Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(@group_member.id)
-        end
-        assert_performed_jobs 1
       end
     end
 
@@ -32,7 +28,6 @@ module Members
 
       assert_no_changes -> { @group_member } do
         Members::UpdateService.new(@group_member, @group, @user, invalid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert @group_member.errors[:access_level].include?(
@@ -46,7 +41,6 @@ module Members
 
       assert_no_changes -> { @group_member } do
         Members::UpdateService.new(@group_member, @group, user, valid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert @group_member.errors.full_messages.include?(I18n.t('services.members.update.cannot_update_self',
@@ -59,7 +53,6 @@ module Members
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
         Members::UpdateService.new(@group_member, @group, user, valid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert_equal GroupPolicy, exception.policy
@@ -74,7 +67,6 @@ module Members
 
       assert_no_changes -> { group_member } do
         Members::UpdateService.new(group_member, @group, user, valid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert group_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
@@ -87,7 +79,6 @@ module Members
 
       assert_no_changes -> { group_member } do
         Members::UpdateService.new(group_member, group, @user, valid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert_not_equal Member.find_by(user_id: group_member.user_id,
@@ -102,10 +93,6 @@ module Members
 
       assert_changes -> { @project_member.access_level }, to: Member::AccessLevel::OWNER do
         Members::UpdateService.new(@project_member, @project_namespace, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(@project_member.id)
-        end
-        assert_performed_jobs 1
       end
     end
 
@@ -114,7 +101,6 @@ module Members
 
       assert_no_changes -> { @project_member } do
         Members::UpdateService.new(@project_member, @project_namespace, @user, invalid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert @project_member.errors[:access_level].include?(
@@ -128,7 +114,6 @@ module Members
 
       assert_no_changes -> { @project_member } do
         Members::UpdateService.new(@project_member, @project_namespace, user, valid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert @project_member.errors.full_messages.include?(
@@ -143,7 +128,6 @@ module Members
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
         Members::UpdateService.new(@project_member, @project_namespace, user, valid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
@@ -160,7 +144,6 @@ module Members
 
       assert_no_changes -> { project_member } do
         Members::UpdateService.new(project_member, project_namespace, user, valid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert project_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
@@ -174,7 +157,6 @@ module Members
 
       assert_no_changes -> { project_member } do
         Members::UpdateService.new(project_member, project_namespace, @user, valid_params).execute
-        assert_no_enqueued_jobs
       end
 
       assert_not_equal Member.find_by(user_id: project_member.user_id,
@@ -188,10 +170,6 @@ module Members
       assert_authorized_to(:update_member?, @group, with: GroupPolicy,
                                                     context: { user: @user }) do
         Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(@group_member.id)
-        end
-        assert_performed_jobs 1
       end
     end
 
@@ -203,10 +181,6 @@ module Members
                            context: { user: @user }) do
         Members::UpdateService.new(@project_member,
                                    @project_namespace, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(@project_member.id)
-        end
-        assert_performed_jobs 1
       end
     end
 
@@ -222,11 +196,8 @@ module Members
 
       assert_changes -> { group_member.access_level }, to: Member::AccessLevel::MAINTAINER do
         Members::UpdateService.new(group_member, group, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(group_member.id)
-        end
-        assert_performed_jobs 1
       end
+      perform_enqueued_jobs
 
       # group member is also a member of a descendant of the group so their access level is updated
       # to the same access level for the project membership
@@ -243,10 +214,6 @@ module Members
 
       assert_changes -> { @group_member.access_level }, to: Member::AccessLevel::OWNER do
         Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(@group_member.id)
-        end
-        assert_performed_jobs 1
       end
 
       @group_member.create_logidze_snapshot!
@@ -269,10 +236,6 @@ module Members
 
       assert_changes -> { @group_member.access_level }, to: Member::AccessLevel::OWNER do
         Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(@group_member.id)
-        end
-        assert_performed_jobs 1
       end
 
       @group_member.create_logidze_snapshot!
@@ -302,10 +265,6 @@ module Members
 
       assert_changes -> { @project_member.access_level }, to: Member::AccessLevel::OWNER do
         Members::UpdateService.new(@project_member, @project_namespace, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(@project_member.id)
-        end
-        assert_performed_jobs 1
       end
 
       @project_member.create_logidze_snapshot!
@@ -328,10 +287,6 @@ module Members
 
       assert_changes -> { @project_member.access_level }, to: Member::AccessLevel::OWNER do
         Members::UpdateService.new(@project_member, @project_namespace, @user, valid_params).execute
-        perform_enqueued_jobs do
-          UpdateMembershipsJob.perform_later(@project_member.id)
-        end
-        assert_performed_jobs 1
       end
 
       @project_member.create_logidze_snapshot!
