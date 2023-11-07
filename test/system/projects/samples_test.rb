@@ -129,7 +129,7 @@ module Projects
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        find('#new_project_id').find("option[value='#{project2.id}']").select_option
+        select project2.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
       within %(turbo-frame[id="project_samples_list"]) do
@@ -144,7 +144,7 @@ module Projects
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        find('#new_project_id').find("option[value='#{project26.id}']").select_option
+        select project26.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
       within %(turbo-frame[id="transfer_alert"]) do
@@ -164,7 +164,7 @@ module Projects
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        find('#new_project_id').find("option[value='#{project25.id}']").select_option
+        select project25.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
       within %(turbo-frame[id="transfer_alert"]) do
