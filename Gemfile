@@ -102,12 +102,17 @@ gem 'aws-sdk-s3', require: false
 gem 'azure-storage-blob', github: 'honeyankit/azure-storage-ruby', branch: 'master', require: false
 gem 'google-cloud-storage', '~> 1.11', require: false
 
+<<<<<<< HEAD
 # job queueing
 gem 'good_job', '~> 3.21'
 
 # spreadsheet parser [https://github.com/roo-rb/roo]
 gem 'roo', '~> 2.10.0'
 gem 'roo-xls'
+=======
+# Activity tracking
+gem 'public_activity'
+>>>>>>> c4688bf2 (Begin setting up public activity)
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
