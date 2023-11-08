@@ -54,9 +54,11 @@
     <% card.with_header(title: t("projects.samples.show.files")) %>
   <% end %>
   <% card.with_section do %>
-    <%= render partial: "projects/samples/attachments/table",
-    locals: {
-      attachments: @sample.attachments
-    } %>
+    <%= turbo_frame_tag("attachments") do %>
+      <%= render partial: "projects/samples/attachments/table",
+      locals: {
+        attachments: @sample.attachments
+      } %>
+    <% end %>
   <% end %>
 <% end %>
