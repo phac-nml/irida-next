@@ -114,6 +114,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   scope_for :relation do |relation|
+    groups_via_namespace_group_links = Group.where(id: NamespaceGroupLink
+    .where(group: user.groups.self_and_descendants).not_expired.select(:namespace_id))
+
     relation
       .where(namespace: { parent: user.groups.self_and_descendant_ids }).include_route
       .or(relation.where(
@@ -122,6 +125,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         ).select(:namespace_id)
       ).include_route)
       .or(relation.where(namespace: { parent: user.namespace }).include_route)
+      .or(relation.where(namespace: { parent: groups_via_namespace_group_links }).include_route)
   end
 
   scope_for :relation, :manageable do |relation|

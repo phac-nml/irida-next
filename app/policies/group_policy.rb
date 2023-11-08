@@ -123,8 +123,8 @@ class GroupPolicy < NamespacePolicy
 
   scope_for :relation do |relation|
     groups_via_namespace_group_links = relation.where(id: NamespaceGroupLink
-                                                    .where(group: user.groups.self_and_descendants,
-                                                           namespace_type: 'Group').not_expired.select(:namespace_id))
+                                                    .where(group: user.groups.self_and_descendants)
+                                                    .not_expired.select(:namespace_id))
 
     user.groups.self_and_descendants.or(groups_via_namespace_group_links)
   end
