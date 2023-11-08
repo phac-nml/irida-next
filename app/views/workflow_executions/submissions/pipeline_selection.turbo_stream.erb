@@ -1,0 +1,5 @@
+<%= turbo_stream.update("workflow_modal") do %>
+  <%= viral_dialog(open: true) do |dialog| %>
+    <%= dialog.with_header(title: "Workflow Selection") %>
+  <% end %>
+<% end %>
