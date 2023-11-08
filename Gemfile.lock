@@ -506,6 +506,8 @@ DEPENDENCIES
   debug
   devise (~> 4.9.2)
   erb-formatter (~> 0.4.3)
+  faraday
+  faraday-net_http
   fx
   google-cloud-storage (~> 1.11)
   graphiql-rails

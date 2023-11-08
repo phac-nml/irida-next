@@ -50,6 +50,10 @@ gem 'omniauth-azure-activedirectory-v2'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
 
+# API Integrations
+gem 'faraday'
+gem 'faraday-net_http'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
