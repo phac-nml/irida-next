@@ -7,7 +7,7 @@ export default class extends Controller {
     fieldName: String,
     storageKey: {
       type: String,
-      default: location.protocol + "//" + location.host + location.pathname,
+      default: `${location.protocol}//${location.host}${location.pathname}`,
     },
   };
 
@@ -24,17 +24,16 @@ export default class extends Controller {
           for (let arrayValue of value) {
             const element = document.createElement("input");
             element.type = "hidden";
-            element.id = this.fieldNameValue + "[" + storageValueIndex + "][]";
-            element.name =
-              this.fieldNameValue + "[" + storageValueIndex + "][]";
+            element.id = `${this.fieldNameValue}[${storageValueIndex}][]`;
+            element.name = `${this.fieldNameValue}[${storageValueIndex}][]`;
             element.value = arrayValue;
             this.fieldTarget.appendChild(element);
           }
         } else {
           const element = document.createElement("input");
           element.type = "hidden";
-          element.id = this.fieldNameValue + "[" + storageValueIndex + "]";
-          element.name = this.fieldNameValue + "[" + storageValueIndex + "]";
+          element.id = `${this.fieldNameValue}[${storageValueIndex}]`;
+          element.name = `${this.fieldNameValue}[${storageValueIndex}]`;
           element.value = value;
           this.fieldTarget.appendChild(element);
         }
