@@ -8,6 +8,7 @@ export default class extends Controller {
       default: location.protocol + "//" + location.host + location.pathname,
     },
   };
+  static outlets = ["action-link"];
 
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
@@ -27,6 +28,13 @@ export default class extends Controller {
     }
   }
 
+  actionLinkOutletConnected(outlet) {
+    const storageValue = JSON.parse(
+      sessionStorage.getItem(this.storageKeyValue)
+    );
+    outlet.setDisabled(storageValue === undefined || storageValue.length === 0);
+  }
+
   toggle(event) {
     const newStorageValue = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue)
@@ -41,6 +49,8 @@ export default class extends Controller {
       }
     }
     this.save(newStorageValue);
+
+    this.#updateActinLinks(newStorageValue.length === 0);
   }
 
   save(storageValue) {
@@ -48,5 +58,11 @@ export default class extends Controller {
       this.storageKeyValue,
       JSON.stringify([...storageValue])
     );
+  }
+
+  #updateActinLinks(disabled = false) {
+    this.actionLinkOutlets.forEach((outlet) => {
+      outlet.setDisabled(disabled);
+    });
   }
 }
