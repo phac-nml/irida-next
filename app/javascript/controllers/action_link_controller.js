@@ -10,10 +10,6 @@ export default class extends Controller {
     "text-slate-400",
   ];
 
-  connect() {
-    console.log(this.requiredValue);
-  }
-
   setDisabled(count = 0) {
     if (this.requiredValue > count) {
       this.element.classList.add(...this.#classes);
