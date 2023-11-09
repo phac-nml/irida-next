@@ -1,64 +1,69 @@
 <%= turbo_frame_tag "sample_files_modal" %>
 
-<%= render Viral::PageHeaderComponent.new(title: @sample.name, subtitle: @sample.description) do |component| %>
-  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
-  <%= component.with_buttons do %>
-    <div class="flex flex-row">
-      <% if allowed_to?(:new?, @project) %>
-        <%= link_to(
-          t("projects.samples.show.edit_button"),
-          edit_namespace_project_sample_path(id: @sample.id),
-          class: "button button--state-primary button--size-default mr-1"
-        ) %>
-      <% end %>
-      <% if allowed_to?(:destroy?, @project) %>
-        <%= link_to(
-          t("projects.samples.show.remove_button"),
-          namespace_project_sample_path(id: @sample.id),
-          data: {
-            turbo_method: :delete,
-            turbo_confirm: t("projects.samples.show.remove_button_confirmation")
-          },
-          class: "button button--state-default button--size-default mr-1"
-        ) %>
-      <% end %>
-    </div>
+<div data-controller="selection">
+  <%= render Viral::PageHeaderComponent.new(title: @sample.name, subtitle: @sample.description) do |component| %>
+    <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
+    <%= component.with_buttons do %>
+      <div class="flex flex-row">
+        <% if allowed_to?(:new?, @project) %>
+          <%= link_to(
+            t("projects.samples.show.edit_button"),
+            edit_namespace_project_sample_path(id: @sample.id),
+            class: "button button--state-primary button--size-default mr-1"
+          ) %>
+        <% end %>
+        <% if allowed_to?(:destroy?, @project) %>
+          <%= link_to(
+            t("projects.samples.show.remove_button"),
+            namespace_project_sample_path(id: @sample.id),
+            data: {
+              turbo_method: :delete,
+              turbo_confirm: t("projects.samples.show.remove_button_confirmation")
+            },
+            class: "button button--state-default button--size-default mr-1"
+          ) %>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
-<% end %>
 
-<%= viral_card do |card| %>
-  <% if allowed_to?(:update?, @project) %>
-    <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
-      <% header.with_action do %>
-        <%= link_to t(".new_attachment_button"),
-        new_namespace_project_sample_attachment_path(sample_id: @sample.id),
-        data: {
-          turbo_frame: "sample_files_modal",
-          turbo_stream: true
-        },
-        class: "button button--size-default button--state-default" %>
+  <%= viral_card do |card| %>
+    <% if allowed_to?(:update?, @project) %>
+      <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
+        <% header.with_action do %>
+          <%= link_to t(".new_attachment_button"),
+          new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+          data: {
+            turbo_frame: "sample_files_modal",
+            turbo_stream: true
+          },
+          class: "button button--size-default button--state-default" %>
+        <% end %>
+        <% header.with_action do %>
+          <%= button_to t(".concatenate_button"),
+          new_namespace_project_sample_attachments_concatenation_path(
+            sample_id: @sample.id
+          ),
+          method: :get,
+          disabled: true,
+          data: {
+            selection_target: "submitButton",
+            turbo_frame: "sample_files_modal",
+            turbo_stream: false
+          },
+          class: "button button--size-default button--state-default" %>
+        <% end %>
       <% end %>
-      <% header.with_action do %>
-        <%= link_to t(".concatenate_button"),
-        new_namespace_project_sample_attachments_concatenation_path(
-          sample_id: @sample.id
-        ),
-        data: {
-          turbo_frame: "sample_files_modal",
-          turbo_stream: true
-        },
-        class: "button button--size-default button--state-default" %>
+    <% else %>
+      <% card.with_header(title: t("projects.samples.show.files")) %>
+    <% end %>
+    <% card.with_section do %>
+      <%= turbo_frame_tag("attachments") do %>
+        <%= render partial: "projects/samples/attachments/table",
+        locals: {
+          attachments: @sample.attachments
+        } %>
       <% end %>
     <% end %>
-  <% else %>
-    <% card.with_header(title: t("projects.samples.show.files")) %>
   <% end %>
-  <% card.with_section do %>
-    <%= turbo_frame_tag("attachments") do %>
-      <%= render partial: "projects/samples/attachments/table",
-      locals: {
-        attachments: @sample.attachments
-      } %>
-    <% end %>
-  <% end %>
-<% end %>
+</div>
