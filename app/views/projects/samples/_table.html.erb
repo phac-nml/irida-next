@@ -4,6 +4,17 @@
   data-controller="selection"
   data-selection-action-link-outlet=".action-link"
 >
+<thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+    <tr>
+      <% if allowed_to?(:transfer_sample?, project) %>
+      <th></th>
+      <% end %>
+      <th scope="col" class="px-4 py-3 text-left">Sample</th>
+      <th scope="col" class="px-4 py-3 text-left">Created</th>
+      <th scope="col" class="px-4 py-3 text-left">Last Updated</th>
+      <th scope="col" class="px-4 py-3 text-right">Action</th>
+    </tr>
+  </thead>
   <tbody
     class="
       bg-white
@@ -33,14 +44,19 @@
               "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
           </td>
         <% end %>
-        <td class="p-4 whitespace-nowrap">
+        <td class="px-4 py-3 whitespace-nowrap">
           <%= link_to sample.name,
           namespace_project_sample_path(id: sample.id),
           data: {
             turbo: false
           },
           class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-          <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= sample.description %></div>
+        </td>
+        <td class="px-4 py-3">
+          <%= sample.created_at.localtime.strftime('%B %d, %Y') %>
+        </td>
+        <td class="px-4 py-3">
+          <%= viral_time_ago(original_time: sample.updated_at) %>
         </td>
         <% if allowed_to?(:update_sample?, project) %>
           <td class="px-4 py-3">

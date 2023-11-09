@@ -8,12 +8,15 @@ module Projects
 
     def index
       authorize! @project, to: :sample_listing?
+
+      @q = Sample.ransack(params[:q])
+      set_default_sort
       respond_to do |format|
         format.html do
           @has_samples = Sample.exists?(project_id: @project.id)
         end
         format.turbo_stream do
-          @pagy, @samples = pagy(Sample.where(project_id: @project.id))
+          @pagy, @samples = pagy(@q.result.where(id: Sample.where(project_id: @project.id)))
         end
       end
     end
@@ -91,6 +94,10 @@ module Projects
 
     def current_page
       @current_page = 'samples'
+    end
+
+    def set_default_sort
+      @q.sorts = 'updated_at desc' if @q.sorts.empty?
     end
   end
 end
