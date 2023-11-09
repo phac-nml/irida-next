@@ -11,10 +11,10 @@ module Attachments
       super(user, params)
       @attachable = attachable
 
-      # single-end params: { attachment_ids = [], basename: basefilename,
+      # single-end params: { attachment_ids = {}, basename: basefilename,
       #                      delete_originals: true OPTIONAL
       #                      }
-      # paired-end params: { attachment_ids = [[],[], ...], basename: basefilename,
+      # paired-end params: { attachment_ids = {{}, {}, ...}, basename: basefilename,
       #                      delete_originals: true OPTIONAL
       #                      }
       @concatenation_params = params
