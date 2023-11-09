@@ -1,6 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static values = { required: { type: Number, default: 0 } };
+
   #classes = [
     "pointer-events-none",
     "cursor-not-allowed",
@@ -8,8 +10,12 @@ export default class extends Controller {
     "text-slate-400",
   ];
 
-  setDisabled(disabled = true) {
-    if (disabled) {
+  connect() {
+    console.log(this.requiredValue);
+  }
+
+  setDisabled(count = 0) {
+    if (this.requiredValue > count) {
       this.element.classList.add(...this.#classes);
     } else {
       this.element.classList.remove(...this.#classes);

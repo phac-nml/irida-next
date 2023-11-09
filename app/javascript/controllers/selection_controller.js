@@ -32,7 +32,7 @@ export default class extends Controller {
     const storageValue = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue)
     );
-    outlet.setDisabled(storageValue?.length === 0);
+    outlet.setDisabled(storageValue.length);
   }
 
   toggle(event) {
@@ -50,7 +50,7 @@ export default class extends Controller {
     }
     this.save(newStorageValue);
 
-    this.#updateActinLinks(newStorageValue.length === 0);
+    this.#updateActinLinks(newStorageValue.length);
   }
 
   save(storageValue) {
@@ -60,9 +60,9 @@ export default class extends Controller {
     );
   }
 
-  #updateActinLinks(disabled = false) {
+  #updateActinLinks(count) {
     this.actionLinkOutlets.forEach((outlet) => {
-      outlet.setDisabled(disabled);
+      outlet.setDisabled(count);
     });
   }
 }
