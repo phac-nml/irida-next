@@ -40,5 +40,6 @@ module ActiveSupport
     include Devise::Test::IntegrationHelpers
     include ActionPolicy::TestHelper
     include ArrayHelpers
+    include ActiveJob::TestHelper
   end
 end

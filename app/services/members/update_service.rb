@@ -13,7 +13,7 @@ module Members
       @namespace = namespace
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! @namespace, to: :update_member?
 
       unless current_user != member.user
@@ -27,7 +27,11 @@ module Members
         raise MemberUpdateError, I18n.t('services.members.update.role_not_allowed')
       end
 
-      member.update(params)
+      updated = member.update(params)
+
+      UpdateMembershipsJob.perform_later(member.id) if updated
+
+      updated
     rescue Members::UpdateService::MemberUpdateError => e
       member.errors.add(:base, e.message)
       false

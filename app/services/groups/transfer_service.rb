@@ -5,7 +5,7 @@ module Groups
   class TransferService < BaseGroupService
     TransferError = Class.new(StandardError)
 
-    def execute(new_namespace) # rubocop:disable Metrics/AbcSize
+    def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       validate(new_namespace)
 
       # Authorize if user can transfer group
@@ -19,12 +19,13 @@ module Groups
         raise TransferError, I18n.t('services.groups.transfer.namespace_group_exists')
       end
 
-      group_ancestor_members_user_ids = Member.for_namespace_and_ancestors(@group).select(:user_id)
-      update_members = Member.for_namespace_and_ancestors(new_namespace).where(user_id: group_ancestor_members_user_ids)
+      group_ancestor_member_user_ids = Member.for_namespace_and_ancestors(@group).select(:user_id)
+      new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace)
+                                       .where(user_id: group_ancestor_member_user_ids).select(&:id)
 
       @group.update(parent_id: new_namespace.id)
 
-      update_members.each(&:update_descendant_memberships)
+      UpdateMembershipsJob.perform_later(new_namespace_member_ids)
 
       true
     rescue Groups::TransferService::TransferError => e

@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Members
-  class UpdateServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
+  class UpdateServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
       @project = projects(:john_doe_project2)
@@ -169,9 +169,7 @@ module Members
 
       assert_authorized_to(:update_member?, @group, with: GroupPolicy,
                                                     context: { user: @user }) do
-        Members::UpdateService.new(
-          @group_member, @group, @user, valid_params
-        ).execute
+        Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
       end
     end
 
@@ -199,6 +197,7 @@ module Members
       assert_changes -> { group_member.access_level }, to: Member::AccessLevel::MAINTAINER do
         Members::UpdateService.new(group_member, group, @user, valid_params).execute
       end
+      perform_enqueued_jobs
 
       # group member is also a member of a descendant of the group so their access level is updated
       # to the same access level for the project membership
