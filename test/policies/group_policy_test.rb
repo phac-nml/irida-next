@@ -86,7 +86,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
     user = users(:david_doe)
     policy = GroupPolicy.new(user:)
     scoped_groups = policy.apply_scope(Group, type: :relation)
-    # David Doe has access to 1 group
+    # David Doe has access to 2 groups
     assert_equal 2, scoped_groups.count
   end
 end
