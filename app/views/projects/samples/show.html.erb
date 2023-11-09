@@ -39,14 +39,11 @@
         class: "button button--size-default button--state-default" %>
       <% end %>
       <% header.with_action do %>
-        <%= button_to t(".concatenate_button"),
+        <%= link_to t(".concatenate_button"),
         new_namespace_project_sample_attachments_concatenation_path(
           sample_id: @sample.id
         ),
-        method: :get,
-        disabled: true,
         data: {
-          selection_target: "submitButton",
           turbo_frame: "sample_files_modal",
           turbo_stream: false
         },
