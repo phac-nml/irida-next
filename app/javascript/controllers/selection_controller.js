@@ -32,7 +32,7 @@ export default class extends Controller {
     const storageValue = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue)
     );
-    outlet.setDisabled(storageValue === undefined || storageValue.length === 0);
+    outlet.setDisabled(storageValue?.length === 0);
   }
 
   toggle(event) {
