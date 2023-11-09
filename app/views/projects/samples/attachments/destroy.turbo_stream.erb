@@ -1,16 +1,10 @@
-<% if destroyed_attachments %>
-  <% destroyed_attachments.each do |attachment| %>
-    <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(
-        type: :success,
-        data: t(".success", filename: attachment.file.filename)
-      ) %>
-    <% end %>
-
-    <%= turbo_stream.remove dom_id(attachment) %>
-  <% end %>
-<% else %>
+<% destroyed_attachments.each do |attachment| %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= viral_flash(
+      type: :success,
+      data: t(".success", filename: attachment.file.filename)
+    ) %>
   <% end %>
+
+  <%= turbo_stream.remove dom_id(attachment) %>
 <% end %>

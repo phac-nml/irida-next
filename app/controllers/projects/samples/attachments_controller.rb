@@ -38,32 +38,21 @@ module Projects
         end
       end
 
-      def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-        authorize! @project, to: :destroy_sample?
+      def destroy
+        authorize! @project, to: :update_sample?
         respond_to do |format|
-          if @attachment.attachable_type != 'Sample' || @attachment.attachable_id != @sample.id
-            format.turbo_stream do
-              render status: :bad_request,
-                     locals: { type: 'alert',
-                               message: t('.error',
-                                          filename: @attachment.file.filename,
-                                          errors: "Attachment does not belong to #{@sample.name}"),
-                               destroyed_attachments: nil }
-            end
-          else
-            @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
+          @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
 
-            return unless @destroyed_attachments
+          return unless @destroyed_attachments
 
-            status = if @destroyed_attachments.count.positive?
-                       destroy_status(@attachment, @destroyed_attachments.length)
-                     else
-                       :unprocessable_entity
-                     end
+          status = if @destroyed_attachments.count.positive?
+                     destroy_status(@attachment, @destroyed_attachments.length)
+                   else
+                     :unprocessable_entity
+                   end
 
-            format.turbo_stream do
-              render status:, locals: { destroyed_attachments: @destroyed_attachments }
-            end
+          format.turbo_stream do
+            render status:, locals: { destroyed_attachments: @destroyed_attachments }
           end
         end
       end
