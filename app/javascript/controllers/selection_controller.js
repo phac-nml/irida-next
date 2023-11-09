@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["rowSelection", "submitButton"];
+  static targets = ["rowSelection"];
   static values = {
     storageKey: {
       type: String,
@@ -22,7 +22,6 @@ export default class extends Controller {
           row.checked = true;
         }
       });
-      this.disableButton(storageValue);
     } else {
       this.save([]);
     }
@@ -42,7 +41,6 @@ export default class extends Controller {
       }
     }
 
-    this.disableButton(newStorageValue);
     this.save(newStorageValue);
   }
 
@@ -51,15 +49,5 @@ export default class extends Controller {
       this.storageKeyValue,
       JSON.stringify([...storageValue])
     );
-  }
-
-  disableButton(storageValue) {
-    if (this.hasSubmitButtonTarget) {
-      if (storageValue.length > 1) {
-        this.submitButtonTarget.disabled = false;
-      } else {
-        this.submitButtonTarget.disabled = true;
-      }
-    }
   }
 }

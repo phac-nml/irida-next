@@ -259,7 +259,7 @@ module Projects
         assert_selector 'table #attachments-table-body tr', count: 2
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_on I18n.t('projects.samples.show.concatenate_button'), match: :first
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         fill_in 'Basename', with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
@@ -276,7 +276,7 @@ module Projects
         assert_selector 'table #attachments-table-body tr', count: 2
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_on I18n.t('projects.samples.show.concatenate_button'), match: :first
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         fill_in 'Basename', with: 'concatenated_file'
         check 'Delete originals'
