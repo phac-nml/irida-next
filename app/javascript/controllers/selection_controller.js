@@ -8,7 +8,7 @@ export default class extends Controller {
   static values = {
     storageKey: {
       type: String,
-      default: location.protocol + "//" + location.host + location.pathname,
+      default: `${location.protocol}//${location.host}${location.pathname}`,
     },
   };
   static outlets = ["action-link"];
@@ -16,9 +16,7 @@ export default class extends Controller {
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
 
-    const storageValue = JSON.parse(
-      sessionStorage.getItem(this.storageKeyValue)
-    );
+    const storageValue = this.#getStoredSamples();
 
     if (storageValue) {
       this.rowSelectionTargets.map((row) => {
@@ -32,16 +30,12 @@ export default class extends Controller {
   }
 
   actionLinkOutletConnected(outlet) {
-    const storageValue = JSON.parse(
-      sessionStorage.getItem(this.storageKeyValue)
-    );
+    const storageValue = this.#getStoredSamples();
     outlet.setDisabled(storageValue.length);
   }
 
   toggle(event) {
-    const newStorageValue = JSON.parse(
-      sessionStorage.getItem(this.storageKeyValue)
-    );
+    const newStorageValue = this.#getStoredSamples();
 
     if (event.target.checked) {
       newStorageValue.push(event.target.value);
@@ -61,6 +55,10 @@ export default class extends Controller {
       this.storageKeyValue,
       JSON.stringify([...storageValue])
     );
+  }
+
+  #getStoredSamples() {
+    return JSON.parse(sessionStorage.getItem(this.storageKeyValue)) || [];
   }
 
   #updateActionLinks(count) {
