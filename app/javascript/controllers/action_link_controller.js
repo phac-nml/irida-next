@@ -5,18 +5,27 @@ export default class extends Controller {
 
   // # indicated private attribute or method
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
-  #classes = [
-    "pointer-events-none",
-    "cursor-not-allowed",
-    "bg-slate-200",
-    "text-slate-400",
-  ];
+  #event_classes = ["pointer-events-none", "cursor-not-allowed"];
+
+  #default_colours = ["bg-slate-200", "text-slate-400"];
+
+  #primary_colours = ["bg-primary-200", "text-slate-400", "border-primary-200"];
 
   setDisabled(count = 0) {
     if (this.requiredValue > count) {
-      this.element.classList.add(...this.#classes);
+      this.element.classList.add(...this.#event_classes);
+      if (this.element.classList.contains("button--state-primary")) {
+        this.element.classList.add(...this.#primary_colours);
+      } else {
+        this.element.classList.add(...this.#default_colours);
+      }
     } else {
-      this.element.classList.remove(...this.#classes);
+      this.element.classList.remove(...this.#event_classes);
+      if (this.element.classList.contains("button--state-primary")) {
+        this.element.classList.remove(...this.#primary_colours);
+      } else {
+        this.element.classList.remove(...this.#default_colours);
+      }
     }
   }
 }
