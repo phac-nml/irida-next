@@ -32,7 +32,7 @@
   <% end %>
 <% end %>
 <% if @has_samples %>
-  <div class="flex flex-row items-center ml-auto space-x-2 font-normal mb-4">
+  <div class="flex flex-row items-center justify-between ml-auto space-x-2 font-normal mb-4">
     <%= search_form_for @q, url: namespace_project_samples_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
       <%= f.label :name_cont, placeholder: t('.search.placeholder'), class: "sr-only" %>
       <div class="relative lg:w-96" >
