@@ -50,7 +50,7 @@ export default class extends Controller {
     }
     this.save(newStorageValue);
 
-    this.#updateActinLinks(newStorageValue.length);
+    this.#updateActionLinks(newStorageValue.length);
   }
 
   save(storageValue) {
@@ -60,7 +60,7 @@ export default class extends Controller {
     );
   }
 
-  #updateActinLinks(count) {
+  #updateActionLinks(count) {
     this.actionLinkOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
     });
