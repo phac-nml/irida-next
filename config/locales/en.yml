@@ -811,11 +811,13 @@ en:
           dropdown_aria_label: Dropdown options for sample %{sample_name}
         dropdown:
           remove: Remove sample
+        search:
+          placeholder: Filter by name
         sorting:
           updated_at_desc: Updated At
           created_at_desc: Last created
-          namespace_name_asc: Name
-          namespace_name_desc: Name, descending
+          name_asc: Name
+          name_desc: Name, descending
           updated_at_asc: Oldest updated
           created_at_asc: Oldest created
       update:
