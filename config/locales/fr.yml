@@ -33,6 +33,7 @@ fr:
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
+      full_date: "%B %d, %Y"
     updated: Updated
   date:
     formats:
@@ -850,6 +851,11 @@ fr:
           success: File %{filename} was successfully removed.
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
         error: File %{filename} was not removed.
+      table:
+        sample: Samples
+        created_at: Created
+        updated_at: Last Updated
+        action: Action
   services:
     attachments:
       concatenation:

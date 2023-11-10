@@ -16,7 +16,7 @@ module Projects
     test 'visiting the index' do
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_selector 'table#samples-table tr', count: 2
+      assert_selector 'table#samples-table tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
 
@@ -179,7 +179,7 @@ module Projects
     test 'should transfer samples' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_selector 'table#samples-table tr', count: 2
+      assert_selector 'table#samples-table tr', count: 3
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -187,14 +187,14 @@ module Projects
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
       within %(turbo-frame[id="project_samples_list"]) do
-        assert_selector 'table#samples-table tr', count: 0
+        assert_selector 'table#samples-table tr', count: 1
       end
     end
 
     test 'should not transfer samples' do
       project26 = projects(:project26)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_selector 'table#samples-table tr', count: 2
+      assert_selector 'table#samples-table tr', count: 3
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -207,14 +207,14 @@ module Projects
         errors.each { |error| assert_text error }
       end
       within %(turbo-frame[id="project_samples_list"]) do
-        assert_selector 'table#samples-table tr', count: 2
+        assert_selector 'table#samples-table tr', count: 3
       end
     end
 
     test 'should transfer some samples' do
       project25 = projects(:project25)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_selector 'table#samples-table tr', count: 2
+      assert_selector 'table#samples-table tr', count: 3
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -227,7 +227,7 @@ module Projects
         errors.each { |error| assert_text error }
       end
       within %(turbo-frame[id="project_samples_list"]) do
-        assert_selector 'table#samples-table tr', count: 1
+        assert_selector 'table#samples-table tr', count: 2
       end
     end
 
@@ -284,7 +284,7 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_selector 'table#samples-table tr', count: 2
+      assert_selector 'table#samples-table tr', count: 3
       assert_selector 'table#samples-table tr button.Viral-Dropdown--icon', text: '', count: 2
       first('table#samples-table tr button.Viral-Dropdown--icon').click
       assert_selector 'a', text: 'Edit', count: 1
@@ -301,10 +301,43 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 0
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_selector 'table#samples-table tr', count: 2
+      assert_selector 'table#samples-table tr', count: 3
       assert_selector 'table#samples-table tr button.Viral-Dropdown--icon', text: '', count: 0
       assert_text @sample1.name
       assert_text @sample2.name
+    end
+
+    test 'can search the list of samples by name' do
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_selector 'table#samples-table tr', count: 3
+      assert_text @sample1.name
+      assert_text @sample2.name
+
+      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+
+      assert_selector 'table#samples-table tr', count: 2
+      assert_text @sample1.name
+      assert_no_text @sample2.name
+    end
+
+    test 'can sort the list of projects' do
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_selector 'table#samples-table tr', count: 3
+      within first('tr[class="text-sm font-normal text-slate-500 dark:text-slate-400"]') do
+        assert_text @sample1.name
+      end
+
+      click_on I18n.t(:'projects.samples.index.sorting.updated_at_desc')
+      click_on I18n.t(:'projects.samples.index.sorting.name_desc')
+      sleep 1
+      click_on I18n.t(:'projects.samples.index.sorting.name_desc')
+
+      assert_selector 'table#samples-table tr', count: 3
+      within first('tr[class="text-sm font-normal text-slate-500 dark:text-slate-400"]') do
+        assert_text @sample2.name
+      end
     end
 
     test 'should concatenate attachment files and keep originals' do

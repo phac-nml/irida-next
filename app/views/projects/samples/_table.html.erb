@@ -7,12 +7,12 @@
 <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
     <tr>
       <% if allowed_to?(:transfer_sample?, project) %>
-      <th></th>
+      <th aria-hidden="true"></th>
       <% end %>
-      <th scope="col" class="px-4 py-3 text-left">Sample</th>
-      <th scope="col" class="px-4 py-3 text-left">Created</th>
-      <th scope="col" class="px-4 py-3 text-left">Last Updated</th>
-      <th scope="col" class="px-4 py-3 text-right">Action</th>
+      <th scope="col" class="px-4 py-3 text-left"><%= t(".sample") %></th>
+      <th scope="col" class="px-4 py-3 text-left"><%= t(".created_at") %></th>
+      <th scope="col" class="px-4 py-3 text-left"><%= t(".updated_at") %></th>
+      <th scope="col" class="px-4 py-3 text-right"><%= t(".action") %></th>
     </tr>
   </thead>
   <tbody
@@ -53,7 +53,7 @@
           class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
         </td>
         <td class="px-4 py-3">
-          <%= sample.created_at.localtime.strftime('%B %d, %Y') %>
+          <%= l(sample.created_at.localtime, format: :full_date) %>
         </td>
         <td class="px-4 py-3">
           <%= viral_time_ago(original_time: sample.updated_at) %>
