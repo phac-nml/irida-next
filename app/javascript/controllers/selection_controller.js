@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  // # indicated private attribute or method
+  // # indicates private attribute or method
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
 
   static targets = ["rowSelection"];

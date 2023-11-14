@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = { required: { type: Number, default: 0 } };
 
-  // # indicated private attribute or method
+  // # indicates private attribute or method
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
   #event_classes = ["pointer-events-none", "cursor-not-allowed"];
 
