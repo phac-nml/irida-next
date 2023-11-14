@@ -8,6 +8,8 @@ class SamplesWorkflowExecution < ActiveRecord::Migration[7.1]
       t.references :sample
       t.references :workflow_execution
 
+      t.datetime :deleted_at
+
       t.timestamps
     end
   end

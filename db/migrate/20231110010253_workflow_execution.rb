@@ -4,7 +4,7 @@
 class WorkflowExecution < ActiveRecord::Migration[7.1]
   def change
     create_table :workflow_executions do |t|
-      t.jsonb :metadata
+      t.jsonb :metadata, null: false, default: { workflow_name: '', workflow_version: '' }.to_json
       t.jsonb :workflow_params
       t.string :workflow_type
       t.string :workflow_type_version
@@ -17,6 +17,8 @@ class WorkflowExecution < ActiveRecord::Migration[7.1]
       t.references :submitter
       # states to be defined in a later migration
       # t.enum :state, enum_type: :workflow_execution_state, default: 'tbd'
+
+      t.datetime :deleted_at
 
       t.timestamps
     end
