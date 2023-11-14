@@ -14,12 +14,14 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
   test 'parent group access level higher' do
     perform_enqueued_jobs do
       assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.access_level
+      assert_equal Member::AccessLevel::GUEST, @project_member.access_level
       assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.access_level
 
       valid_params = { user: @group_member.user, access_level: Member::AccessLevel::MAINTAINER }
       Members::UpdateService.new(@group_member, @group_member.namespace, @user, valid_params).execute
 
       assert_equal Member::AccessLevel::MAINTAINER, @group_member.reload.access_level
+      assert_equal Member::AccessLevel::MAINTAINER, @project_member.reload.access_level
       assert_equal Member::AccessLevel::MAINTAINER, @first_subgroup_member.reload.access_level
       assert_equal Member::AccessLevel::MAINTAINER, @second_subgroup_member.reload.access_level
     end
@@ -28,12 +30,14 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
   test 'subgroup access level higher' do
     perform_enqueued_jobs do
       assert_equal Member::AccessLevel::GUEST, @group_member.access_level
+      assert_equal Member::AccessLevel::GUEST, @project_member.access_level
       assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.access_level
 
       valid_params = { user: @first_subgroup_member.user, access_level: Member::AccessLevel::MAINTAINER }
       Members::UpdateService.new(@first_subgroup_member, @group_member.namespace, @user, valid_params).execute
 
       assert_equal Member::AccessLevel::GUEST, @group_member.reload.access_level
+      assert_equal Member::AccessLevel::GUEST, @project_member.reload.access_level
       assert_equal Member::AccessLevel::MAINTAINER, @first_subgroup_member.reload.access_level
       assert_equal Member::AccessLevel::MAINTAINER, @second_subgroup_member.reload.access_level
     end
@@ -42,26 +46,27 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
   test 'nested subgroup access level higher' do
     perform_enqueued_jobs do
       assert_equal Member::AccessLevel::GUEST, @group_member.access_level
+      assert_equal Member::AccessLevel::GUEST, @project_member.access_level
       assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.access_level
 
       valid_params = { user: @second_subgroup_member.user, access_level: Member::AccessLevel::MAINTAINER }
       Members::UpdateService.new(@second_subgroup_member, @group_member.namespace, @user, valid_params).execute
 
       assert_equal Member::AccessLevel::GUEST, @group_member.reload.access_level
+      assert_equal Member::AccessLevel::GUEST, @project_member.reload.access_level
       assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.reload.access_level
       assert_equal Member::AccessLevel::MAINTAINER, @second_subgroup_member.reload.access_level
     end
   end
 
   test 'project access level higher' do
-    @project_member.access_level = Member::AccessLevel::MAINTAINER
-    @project_member.save
-
     assert_equal Member::AccessLevel::GUEST, @group_member.access_level
+    assert_equal Member::AccessLevel::GUEST, @project_member.access_level
     assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.access_level
     assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.access_level
 
-    UpdateMembershipsJob.perform_now([@project_member.id])
+    valid_params = { user: @project_member.user, access_level: Member::AccessLevel::MAINTAINER }
+    Members::UpdateService.new(@project_member, @group_member.namespace, @user, valid_params).execute
 
     assert_equal Member::AccessLevel::GUEST, @group_member.reload.access_level
     assert_equal Member::AccessLevel::MAINTAINER, @project_member.reload.access_level
