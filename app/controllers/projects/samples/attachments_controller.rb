@@ -42,7 +42,7 @@ module Projects
         authorize! @project, to: :update_sample?
 
         @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
-
+        puts @destroyed_attachments
         return unless @destroyed_attachments
 
         status = if @destroyed_attachments.count.positive?

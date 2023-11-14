@@ -9,6 +9,7 @@ module Attachments
       @sample = samples(:sample1)
       @attachment1 = attachments(:attachment1)
       @attachment2 = attachments(:attachment2)
+      @attachment3 = attachments(:attachmentA)
     end
 
     test 'delete attachment with correct permissions' do
@@ -36,6 +37,16 @@ module Attachments
       assert_difference -> { Attachment.count } => -2 do
         Attachments::DestroyService.new(@sample, @attachment2, @user).execute
       end
+    end
+
+    test 'delete attachment that does not belong to sample' do
+      assert_no_difference ['Attachment.count'] do
+        Attachments::DestroyService.new(@sample, @attachment3, @user).execute
+      end
+
+      assert @attachment3.errors.full_messages.include?(
+        I18n.t('services.attachments.destroy.does_not_belong_to_attachable')
+      )
     end
   end
 end
