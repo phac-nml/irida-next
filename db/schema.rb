@@ -164,6 +164,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_10_010313) do
     t.jsonb "samplesheet_params"
     t.bigint "sample_id"
     t.bigint "workflow_execution_id"
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["sample_id"], name: "index_samples_workflow_executions_on_sample_id"
@@ -191,7 +192,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_10_010313) do
   end
 
   create_table "workflow_executions", force: :cascade do |t|
-    t.jsonb "metadata"
+    t.jsonb "metadata", default: "{\"workflow_name\":\"\",\"workflow_version\":\"\"}", null: false
     t.jsonb "workflow_params"
     t.string "workflow_type"
     t.string "workflow_type_version"
@@ -202,6 +203,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_10_010313) do
     t.string "workflow_url"
     t.string "run_id"
     t.bigint "submitter_id"
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"

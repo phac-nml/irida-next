@@ -7,5 +7,5 @@ class WorkflowExecution < ApplicationRecord
 
   belongs_to :submitter, class_name: 'User'
 
-  serialize :metadata, WorkflowMetadata::ArraySerializer
+  serialize :metadata, coder: WorkflowMetadata::ArraySerializer
 end
