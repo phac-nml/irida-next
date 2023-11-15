@@ -60,18 +60,20 @@ class UpdateMembershipsJobTest < ActiveJob::TestCase
   end
 
   test 'project access level higher' do
-    assert_equal Member::AccessLevel::GUEST, @group_member.access_level
-    assert_equal Member::AccessLevel::GUEST, @project_member.access_level
-    assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.access_level
-    assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.access_level
+    perform_enqueued_jobs do
+      assert_equal Member::AccessLevel::GUEST, @group_member.access_level
+      assert_equal Member::AccessLevel::GUEST, @project_member.access_level
+      assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.access_level
+      assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.access_level
 
-    valid_params = { user: @project_member.user, access_level: Member::AccessLevel::MAINTAINER }
-    Members::UpdateService.new(@project_member, @group_member.namespace, @user, valid_params).execute
+      valid_params = { user: @project_member.user, access_level: Member::AccessLevel::MAINTAINER }
+      Members::UpdateService.new(@project_member, @group_member.namespace, @user, valid_params).execute
 
-    assert_equal Member::AccessLevel::GUEST, @group_member.reload.access_level
-    assert_equal Member::AccessLevel::MAINTAINER, @project_member.reload.access_level
-    assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.reload.access_level
-    assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.reload.access_level
+      assert_equal Member::AccessLevel::GUEST, @group_member.reload.access_level
+      assert_equal Member::AccessLevel::MAINTAINER, @project_member.reload.access_level
+      assert_equal Member::AccessLevel::GUEST, @first_subgroup_member.reload.access_level
+      assert_equal Member::AccessLevel::GUEST, @second_subgroup_member.reload.access_level
+    end
   end
 
   test 'empty memberships' do
