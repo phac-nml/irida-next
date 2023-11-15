@@ -24,3 +24,12 @@ class WorkflowMetadata
     obj&.to_json
   end
 end
+
+# Validates serialized metadata
+class WorkflowMetadataValidator < ActiveModel::Validator
+  def validate(record)
+    return if record.metadata.valid?
+
+    record.errors.add :base, 'WorkflowMetadata is invalid.'
+  end
+end
