@@ -13,6 +13,21 @@ module Projects
         @namespace = groups(:group_one)
       end
 
+      test 'should get new for a member with role >= maintainer' do
+        get new_namespace_project_sample_attachment_path(@namespace, @project, @sample1,
+                                                         format: :turbo_stream)
+        assert_response :success
+      end
+
+      test 'should not get new if not a member' do
+        user = users(:micha_doe)
+        login_as user
+
+        get new_namespace_project_sample_attachment_path(@namespace, @project, @sample1,
+                                                         format: :turbo_stream)
+        assert_response :unauthorized
+      end
+
       test 'user with role >= Maintainer can create an attachment for a sample' do
         assert_difference('Attachment.count') do
           post namespace_project_sample_attachments_url(@namespace, @project, @sample1),

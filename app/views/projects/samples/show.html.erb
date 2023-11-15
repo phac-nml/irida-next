@@ -1,3 +1,5 @@
+<%= turbo_frame_tag "sample_files_modal" %>
+
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, subtitle: @sample.description) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
@@ -28,20 +30,35 @@
   <% if allowed_to?(:update?, @project) %>
     <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
       <% header.with_action do %>
-        <%= render partial: "projects/samples/attachments/new_attachment_modal",
-        locals: {
-          open: false,
-          attachment: @attachment
-        } %>
+        <%= link_to t(".new_attachment_button"),
+        new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+        data: {
+          turbo_frame: "sample_files_modal",
+          turbo_stream: true
+        },
+        class: "button button--size-default button--state-default" %>
+      <% end %>
+      <% header.with_action do %>
+        <%= link_to t(".concatenate_button"),
+        new_namespace_project_sample_attachments_concatenation_path(
+          sample_id: @sample.id
+        ),
+        data: {
+          turbo_frame: "sample_files_modal",
+          turbo_stream: false
+        },
+        class: "button button--size-default button--state-default" %>
       <% end %>
     <% end %>
   <% else %>
     <% card.with_header(title: t("projects.samples.show.files")) %>
   <% end %>
   <% card.with_section do %>
-    <%= render partial: "projects/samples/attachments/table",
-    locals: {
-      attachments: @sample.attachments
-    } %>
+    <%= turbo_frame_tag("attachments") do %>
+      <%= render partial: "projects/samples/attachments/table",
+      locals: {
+        attachments: @sample.attachments
+      } %>
+    <% end %>
   <% end %>
 <% end %>

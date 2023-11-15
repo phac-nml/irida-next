@@ -1,0 +1,21 @@
+<%= turbo_stream.remove "new_attachment_modal" %>
+
+<%= turbo_stream.update(
+  "sample_files_modal",
+  partial: "modal",
+  locals: {
+    open: false
+  }
+) %>
+
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type:, data: message) %>
+<% end %>
+
+<%= turbo_stream.update(
+  "attachments",
+  partial: "projects/samples/attachments/table",
+  locals: {
+    attachments: @sample.attachments
+  }
+) %>

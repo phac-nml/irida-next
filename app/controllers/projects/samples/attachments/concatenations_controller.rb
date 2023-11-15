@@ -9,8 +9,11 @@ module Projects
 
         def new
           authorize! @project, to: :update_sample?
-
-          render turbo_stream: [], status: :ok
+          render turbo_stream: turbo_stream.update('sample_files_modal',
+                                                   partial: 'modal',
+                                                   locals: {
+                                                     open: true
+                                                   }), status: :ok
         end
 
         def create
@@ -20,17 +23,18 @@ module Projects
                                                                               concatenation_params).execute
 
           if @sample.errors.empty?
-            render turbo_stream: [], status: :ok
+            render status: :ok, locals: { type: :success, message: t('.success') }
           else
-            @errors = @sample.errors.full_messages_for(:base)
-            render turbo_stream: [], status: :unprocessable_entity
+            @errors = @sample.errors.full_messages.first
+            render status: :unprocessable_entity, locals: { type: :warning,
+                                                            message: @errors }
           end
         end
 
         private
 
         def concatenation_params
-          params.permit(:basename, :delete_originals, attachment_ids: [])
+          params.require(:concatenation).permit(:basename, :delete_originals, attachment_ids: {})
         end
       end
     end

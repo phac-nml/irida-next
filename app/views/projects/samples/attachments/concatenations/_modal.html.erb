@@ -1,0 +1,43 @@
+<%= viral_dialog(open: open) do |dialog| %>
+  <%= dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_section do %>
+    <%= form_for(:concatenation, url: namespace_project_sample_attachments_concatenation_path, method: :post) do |form| %>
+      <div
+        data-controller="projects--samples--attachments--concatenations"
+        data-projects--samples--attachments--concatenations-storage-key-value=<%=namespace_project_sample_url(id: @sample.id)%>
+        data-projects--samples--attachments--concatenations-target="field"
+        data-projects--samples--attachments--concatenations-field-name-value="concatenation[attachment_ids]"
+      />
+      <div class="grid gap-4">
+        <% invalid_basename = @sample.errors.include?(:basename) %>
+        <div class="form-field <%= 'invalid' if invalid_basename%>">
+          <%= form.label :basename, t(".basename") %>
+          <%= form.text_field :basename, required: true %>
+          <%= render "shared/form/field_errors",
+          errors: @sample.errors.full_messages_for(:basename) %>
+        </div>
+
+        <div class="flex items-center">
+          <%= form.check_box :delete_originals,
+                         {
+                           class:
+                             "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
+                         },
+                         true,
+                         false %>
+          <%= form.label :delete_originals,
+                     class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
+        </div>
+
+        <div class="flex flex-row-reverse">
+          <%= form.submit t(".submit_button"),
+                      class: "button button--size-default button--state-primary",
+                      data: {
+                        action:
+                          "click->projects--samples--attachments--concatenations#clear"
+                      } %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

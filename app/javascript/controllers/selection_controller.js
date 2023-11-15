@@ -45,6 +45,7 @@ export default class extends Controller {
         newStorageValue.splice(index, 1);
       }
     }
+
     this.save(newStorageValue);
 
     this.#updateActionLinks(newStorageValue.length);
