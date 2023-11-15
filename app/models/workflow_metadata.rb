@@ -9,31 +9,18 @@ class WorkflowMetadata
   validates :workflow_name, presence: true
   validates :workflow_version, presence: true
 
-  def initialize(**attrs)
-    attrs.each do |attr, value|
-      send("#{attr}=", value)
-    end
-  end
-
-  def attributes
-    %i[workflow_name workflow_version].each_with_object({}) do |hash, attr|
-      hash[attr] = send(attr)
-      hash
-    end
-  end
-
   # serialize metadata attributes
-  class ArraySerializer
-    class << self
-      def load(arr)
-        arr.map do |item|
-          WorkflowMetadata.new(item)
-        end
-      end
-
-      def dump(arr)
-        arr.map(&:attributes)
-      end
+  def self.load(json)
+    obj = new
+    unless json.nil?
+      attrs = JSON.parse json
+      obj.workflow_name = attrs['workflow_name']
+      obj.workflow_version = attrs['workflow_version']
     end
+    obj
+  end
+
+  def self.dump(obj)
+    obj&.to_json
   end
 end

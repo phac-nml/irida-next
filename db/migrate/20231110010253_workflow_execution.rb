@@ -2,9 +2,11 @@
 
 # Migration to add WorkflowExecution table
 class WorkflowExecution < ActiveRecord::Migration[7.1]
-  def change
+  def change # rubocop:disable Metrics/MethodLength
     create_table :workflow_executions do |t|
-      t.jsonb :metadata, null: false, default: { workflow_name: '', workflow_version: '' }.to_json
+      t.jsonb :metadata, null: false, default: WorkflowMetadata.dump(
+        WorkflowMetadata.new(workflow_name: '', workflow_version: '')
+      )
       t.jsonb :workflow_params
       t.string :workflow_type
       t.string :workflow_type_version
