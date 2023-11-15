@@ -11,7 +11,7 @@
       <div class="grid gap-4">
         <% invalid_basename = @sample.errors.include?(:basename) %>
         <div class="form-field <%= 'invalid' if invalid_basename%>">
-          <%= form.label :basename %>
+          <%= form.label :basename, t(".basename") %>
           <%= form.text_field :basename, required: true %>
           <%= render "shared/form/field_errors",
           errors: @sample.errors.full_messages_for(:basename) %>

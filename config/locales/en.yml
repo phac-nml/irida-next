@@ -837,6 +837,7 @@ en:
             success: Files were successfully concatenated.
           modal:
             title: Concatenate Files
+            basename: Filename
             delete_originals: Delete Originals
             submit_button: Concatenate
         attachment:
