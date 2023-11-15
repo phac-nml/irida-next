@@ -478,7 +478,7 @@ div.field_with_errors > :is(select) {
   display: none;
 }
 
-.table-container:not(:has(tbody td)) .empty_state_message {
+.table-container:not(:has(td)) .empty_state_message {
   display: block;
 }
 
