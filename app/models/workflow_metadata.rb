@@ -9,7 +9,7 @@ class WorkflowMetadata
   validates :workflow_name, presence: true
   validates :workflow_version, presence: true
 
-  # serialize metadata attributes
+  # de-serialize metadata attributes
   def self.load(json)
     obj = new
     unless json.nil?
@@ -20,6 +20,7 @@ class WorkflowMetadata
     obj
   end
 
+  # serialize metadata attributes
   def self.dump(obj)
     obj&.to_json
   end
