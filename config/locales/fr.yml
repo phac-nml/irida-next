@@ -839,7 +839,7 @@ fr:
           failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
         destroy:
           success: File %{filename} was successfully removed.
-          error: 'File %{filename} was not removed due to the following errors: %{errors}.'
+          error: 'File %{filename} was not removed due to the following errors: %{errors}'
         error: File %{filename} was not removed.
   services:
     attachments:
@@ -851,8 +851,8 @@ fr:
         incorrect_fastq_file_types: "Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files"
         no_files_selected: No files were selected to concatenate. Please select files then try again.
       destroy:
-        does_not_belong_to_attachable: This attachment does not belong to this attachable.
-        associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the attachable.
+        does_not_belong_to_attachable: This attachment does not belong to this sample.
+        associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
     groups:
       transfer:
         namespace_empty: The new namespace is empty.
