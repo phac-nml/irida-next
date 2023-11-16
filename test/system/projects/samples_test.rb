@@ -325,7 +325,7 @@ module Projects
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
       assert_selector 'table#samples-table tbody tr', count: 2
-      first('tbody tr td:nth-child(2)') do
+      within first('tbody tr td:nth-child(2)') do
         assert_text @sample1.name
       end
 
