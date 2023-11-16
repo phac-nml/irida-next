@@ -110,6 +110,52 @@ module Projects
       end
     end
 
+    test 'user with role >= Maintainer should be able to attach, view, and destroy paired files to a Sample' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
+      # Initial View
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      within('#attachments') do
+        assert_text I18n.t('projects.samples.show.no_files')
+        assert_text I18n.t('projects.samples.show.no_associated_files')
+        assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 0
+      end
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      # Attach paired files
+      within('dialog') do
+        attach_file 'attachment[files][]',
+                    [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq'),
+                     Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq')]
+        click_on I18n.t('projects.samples.show.upload')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq')
+
+      # View paired files
+      within('#attachments') do
+        assert_text 'TestSample_S1_L001_R1_001.fastq'
+        assert_text 'TestSample_S1_L001_R2_001.fastq'
+        assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
+      end
+
+      # Destroy paired files
+      click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq')
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq')
+      within('#attachments') do
+        assert_no_text 'TestSample_S1_L001_R1_001.fastq'
+        assert_no_text 'TestSample_S1_L001_R2_001.fastq'
+        assert_text I18n.t('projects.samples.show.no_files')
+        assert_text I18n.t('projects.samples.show.no_associated_files')
+      end
+    end
+
     test 'should destroy Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       assert_selector 'a', text: I18n.t('projects.samples.index.remove_button'), count: 1

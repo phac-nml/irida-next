@@ -38,13 +38,25 @@ module Projects
         end
       end
 
-      def destroy
+      def destroy # rubocop:disable Metrics/MethodLength
         authorize! @project, to: :update_sample?
 
-        return unless @attachment.destroy
-
+        @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
         respond_to do |format|
-          format.turbo_stream
+          if @destroyed_attachments.count.positive?
+            status = destroy_status(@attachment, @destroyed_attachments.length)
+            format.turbo_stream do
+              render status:, locals: { destroyed_attachments: @destroyed_attachments }
+            end
+          else
+            format.turbo_stream do
+              render status: :unprocessable_entity,
+                     locals: { message: t('.error',
+                                          filename: @attachment.file.filename,
+                                          errors: @attachment.errors.full_messages.first),
+                               destroyed_attachments: nil }
+            end
+          end
         end
       end
 
@@ -62,6 +74,12 @@ module Projects
 
       def attachment
         @attachment = @sample.attachments.find_by(id: params[:id]) || not_found
+      end
+
+      def destroy_status(attachment, count)
+        return count == 2 ? :ok : :multi_status if attachment.associated_attachment
+
+        count == 1 ? :ok : :unprocessable_entity
       end
     end
   end

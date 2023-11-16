@@ -53,14 +53,22 @@
       </div>
     </td>
   <% else %>
-    <td class="px-6 py-4"><%= link_to attachment.file.filename,
-      download_namespace_project_sample_attachment_path(
-        sample_id: @sample.id,
-        id: attachment.id
-      ),
-      data: {
-        turbo: false
-      } %>
+    <td class="px-6 py-4">
+    <div>
+        <div class="flex items-center">
+          <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+          <span>
+            <%= link_to attachment.file.filename,
+              download_namespace_project_sample_attachment_path(
+                sample_id: @sample.id,
+                id: attachment.id
+              ),
+              data: {
+                turbo: false
+              } %>
+          </span>
+        </div>
+      </div>
     </td>
   <% end %>
 

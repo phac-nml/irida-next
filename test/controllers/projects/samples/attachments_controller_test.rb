@@ -38,6 +38,29 @@ module Projects
         end
       end
 
+      test 'user with role >= Maintainer can create multiple attachments at once for a sample' do
+        assert_difference('Attachment.count', 3) do
+          post namespace_project_sample_attachments_url(@namespace, @project, @sample1),
+               params: { attachment: {
+                 files: [fixture_file_upload('test_file_1.fastq', 'text/plain'),
+                         fixture_file_upload('test_file_3.fq', 'text/plain'),
+                         fixture_file_upload('test_file_7.fa', 'text/plain')]
+               } },
+               as: :turbo_stream
+        end
+      end
+
+      test 'user with role >= Maintainer can create multiple attachments but exclude duplicates at once for a sample' do
+        assert_difference('Attachment.count') do
+          post namespace_project_sample_attachments_url(@namespace, @project, @sample1),
+               params: { attachment: {
+                 files: [fixture_file_upload('test_file_1.fastq', 'text/plain'),
+                         fixture_file_upload('test_file.fastq', 'text/plain')]
+               } },
+               as: :turbo_stream
+        end
+      end
+
       test 'user with role >= Maintainer cannot create a duplicate attachment for a sample' do
         assert_no_difference('Attachment.count') do
           post namespace_project_sample_attachments_url(@namespace, @project, @sample1),
@@ -51,6 +74,23 @@ module Projects
       test 'user with role >= Maintainer can destroy an attachment of a sample' do
         assert_difference(-> { @sample1.attachments.count }, -1) do
           delete namespace_project_sample_attachment_url(@namespace, @project, @sample1, @attachment1),
+                 as: :turbo_stream
+        end
+      end
+
+      test 'user with role >= Maintainer can upload and destroy paired attachments of a sample' do
+        assert_difference('Attachment.count', 2) do
+          post namespace_project_sample_attachments_url(@namespace, @project, @sample1),
+               params: { attachment: {
+                 files: [fixture_file_upload('TestSample_S1_L001_R1_001.fastq', 'text/plain'),
+                         fixture_file_upload('TestSample_S1_L001_R2_001.fastq', 'text/plain')]
+               } },
+               as: :turbo_stream
+        end
+
+        paired_attachment = @sample1.attachments[2]
+        assert_difference('Attachment.count', -2) do
+          delete namespace_project_sample_attachment_url(@namespace, @project, @sample1, paired_attachment),
                  as: :turbo_stream
         end
       end
