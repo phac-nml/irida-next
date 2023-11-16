@@ -112,6 +112,7 @@ module Projects
 
     test 'user with role >= Maintainer should be able to attach, view, and destroy paired files to a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
+      sleep 1
       # Initial View
       assert_selector 'button', text: I18n.t('projects.samples.show.upload_files'), count: 1
       within('#attachments') do
