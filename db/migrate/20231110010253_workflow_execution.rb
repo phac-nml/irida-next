@@ -13,7 +13,7 @@ class WorkflowExecution < ActiveRecord::Migration[7.1]
       t.string :tags, array: true
       t.string :workflow_engine
       t.string :workflow_engine_version
-      t.string :workflow_engine_parameters
+      t.jsonb :workflow_engine_parameters
       t.string :workflow_url
       t.string :run_id
       t.references :submitter

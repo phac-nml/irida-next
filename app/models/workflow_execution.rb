@@ -9,4 +9,7 @@ class WorkflowExecution < ApplicationRecord
 
   serialize :metadata, coder: WorkflowMetadata
   validates_with WorkflowMetadataValidator
+
+  serialize :workflow_params, coder: JsonbIndifferentSerializer
+  serialize :workflow_engine_parameters, coder: JsonbIndifferentSerializer
 end
