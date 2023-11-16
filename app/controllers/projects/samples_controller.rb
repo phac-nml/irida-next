@@ -57,13 +57,12 @@ module Projects
     def destroy
       ::Samples::DestroyService.new(@sample, current_user).execute
       @pagy, @samples = pagy(Sample.where(project_id: @project.id))
-      respond_to do |format|
-        if @sample.deleted?
-          format.turbo_stream do
-            render status: :ok, locals: { type: 'success',
-                                          message: t('.success', sample_name: @sample.name) }
-          end
-        else
+
+      if @sample.deleted?
+        flash[:success] = t('.success', sample_name: @sample.name)
+        redirect_to namespace_project_samples_path(format: :html)
+      else
+        respond_to do |format|
           format.turbo_stream do
             render status: :unprocessable_entity,
                    locals: { type: 'alert', message: @sample.errors.full_messages.first }
