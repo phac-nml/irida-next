@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class WorkflowExecutionTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
+class WorkflowExecutionTest < ActiveSupport::TestCase
   def setup
     @workflow_execution_valid = workflow_executions(:workflow_execution_valid)
     @workflow_execution_invalid_metadata = workflow_executions(:workflow_execution_invalid_metadata)
