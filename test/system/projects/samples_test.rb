@@ -120,6 +120,13 @@ module Projects
       end
 
       assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name)
+      assert_no_text @sample1.name
+
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
+      assert_selector 'table#samples-table tbody tr', count: 1
+      within first('tbody tr td:nth-child(2)') do
+        assert_text @sample2.name
+      end
     end
 
     test 'should transfer samples' do
