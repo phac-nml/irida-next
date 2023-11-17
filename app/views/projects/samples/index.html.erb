@@ -2,7 +2,7 @@
 <%= turbo_frame_tag "transfer_alert" %>
 <%= turbo_frame_tag "workflow_modal" %>
 
-<%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t(".subtitle")) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <div class="flex items-center space-x-2">
@@ -45,8 +45,9 @@
         dark:border-slate-700
       "
     >
-    <div class="flex flex-row items-center ml-auto space-x-2 font-normal mb-4">
+    <div class="flex flex-row items-center ml-auto space-x-2 font-normal mb-2">
       <%= search_form_for @q, url: namespace_project_samples_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
+        <input type="hidden" name="format" value="turbo_stream" />
         <%= f.label :name_cont, placeholder: t('.search.placeholder'), class: "sr-only" %>
         <div class="relative lg:w-72" >
           <div

@@ -861,7 +861,7 @@ en:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
         error: File %{filename} was not removed.
       table:
-        sample: Samples
+        sample: Sample
         created_at: Created
         updated_at: Last Updated
         action: Action
