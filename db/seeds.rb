@@ -10,6 +10,10 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+# Limit the number of file attachments to add when seeding to reduce time.
+@sample_attachment_count = 0
+@sample_attachment_limit = 20
+
 def seed_project(project_params:, creator:, namespace:)
   project = Projects::CreateService.new(creator,
                                         {
@@ -26,7 +30,7 @@ def seed_project(project_params:, creator:, namespace:)
     end
   end
 
-  # see the project samples
+  # seed the project samples
   seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
 end
 
@@ -51,16 +55,18 @@ def seed_samples(project, sample_count)
       { name: "#{project.namespace.parent.name}/#{project.name} Sample #{i}",
         description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{i}." }
     ).execute
-    seed_attachments(sample) if i < 10
+    seed_attachments(sample) if @sample_attachment_count < @sample_attachment_limit
   end
 end
 
 def seed_attachments(sample)
+  Rails.logger.info "seeding attachments... #{@sample_attachment_count}/#{@sample_attachment_limit}"
   sequencing_files.each do |f|
     a = sample.attachments.build
     a.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
     a.save!
   end
+  @sample_attachment_count += 1
 end
 
 def sequencing_files
@@ -89,6 +95,7 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
   # seed the projects
   if group_params[:projects] # rubocop:disable Style/SafeNavigation
     group_params[:projects].each do |project_params|
+      Rails.logger.info { "seeding... Group: #{group_params[:name]}, Project: #{project_params[:name]}" }
       seed_project(project_params:, creator: owner, namespace: group)
     end
   end
