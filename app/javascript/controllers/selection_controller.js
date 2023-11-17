@@ -1,20 +1,22 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  // # indicates private attribute or method
+  // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
+
   static targets = ["rowSelection"];
   static values = {
     storageKey: {
       type: String,
-      default: location.protocol + "//" + location.host + location.pathname,
+      default: `${location.protocol}//${location.host}${location.pathname}`,
     },
   };
+  static outlets = ["action-link"];
 
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
 
-    const storageValue = JSON.parse(
-      sessionStorage.getItem(this.storageKeyValue)
-    );
+    const storageValue = this.#getStoredSamples();
 
     if (storageValue) {
       this.rowSelectionTargets.map((row) => {
@@ -27,10 +29,13 @@ export default class extends Controller {
     }
   }
 
+  actionLinkOutletConnected(outlet) {
+    const storageValue = this.#getStoredSamples();
+    outlet.setDisabled(storageValue.length);
+  }
+
   toggle(event) {
-    const newStorageValue = JSON.parse(
-      sessionStorage.getItem(this.storageKeyValue)
-    );
+    const newStorageValue = this.#getStoredSamples();
 
     if (event.target.checked) {
       newStorageValue.push(event.target.value);
@@ -40,7 +45,10 @@ export default class extends Controller {
         newStorageValue.splice(index, 1);
       }
     }
+
     this.save(newStorageValue);
+
+    this.#updateActionLinks(newStorageValue.length);
   }
 
   save(storageValue) {
@@ -48,5 +56,15 @@ export default class extends Controller {
       this.storageKeyValue,
       JSON.stringify([...storageValue])
     );
+  }
+
+  #getStoredSamples() {
+    return JSON.parse(sessionStorage.getItem(this.storageKeyValue)) || [];
+  }
+
+  #updateActionLinks(count) {
+    this.actionLinkOutlets.forEach((outlet) => {
+      outlet.setDisabled(count);
+    });
   }
 }

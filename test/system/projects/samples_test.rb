@@ -61,7 +61,7 @@ module Projects
 
     test 'user with role >= Maintainer should be able to attach a file to a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
-      assert_selector 'button', text: I18n.t('projects.samples.show.upload_files'), count: 1
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
       within('#attachments') do
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
@@ -84,7 +84,7 @@ module Projects
 
     test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
-      assert_selector 'button', text: I18n.t('projects.samples.show.upload_files'), count: 1
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
@@ -107,6 +107,52 @@ module Projects
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
       within('#attachments') do
         assert_no_text 'test_file.fastq'
+      end
+    end
+
+    test 'user with role >= Maintainer should be able to attach, view, and destroy paired files to a Sample' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
+      # Initial View
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      within('#attachments') do
+        assert_text I18n.t('projects.samples.show.no_files')
+        assert_text I18n.t('projects.samples.show.no_associated_files')
+        assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 0
+      end
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      # Attach paired files
+      within('dialog') do
+        attach_file 'attachment[files][]',
+                    [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq'),
+                     Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq')]
+        click_on I18n.t('projects.samples.show.upload')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq')
+
+      # View paired files
+      within('#attachments') do
+        assert_text 'TestSample_S1_L001_R1_001.fastq'
+        assert_text 'TestSample_S1_L001_R2_001.fastq'
+        assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
+      end
+
+      # Destroy paired files
+      click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq')
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq')
+      within('#attachments') do
+        assert_no_text 'TestSample_S1_L001_R1_001.fastq'
+        assert_no_text 'TestSample_S1_L001_R2_001.fastq'
+        assert_text I18n.t('projects.samples.show.no_files')
+        assert_text I18n.t('projects.samples.show.no_associated_files')
       end
     end
 
@@ -251,6 +297,50 @@ module Projects
       assert_selector 'table#samples-table tr button.Viral-Dropdown--icon', text: '', count: 0
       assert_text @sample1.name
       assert_text @sample2.name
+    end
+
+    test 'should concatenate attachment files and keep originals' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 2
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+      end
+      within %(turbo-frame[id="attachments"]) do
+        assert_text 'concatenated_file'
+        assert_selector 'table #attachments-table-body tr', count: 3
+      end
+    end
+
+    test 'should concatenate attachment files and remove originals' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 2
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
+        check 'Delete originals'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+      end
+      within %(turbo-frame[id="attachments"]) do
+        assert_text 'concatenated_file'
+        assert_selector 'table #attachments-table-body tr', count: 1
+      end
+    end
+
+    test 'user with guest access should not be able to see the concatenate attachment files button' do
+      user = users(:ryan_doe)
+      login_as user
+
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+
+      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 0
     end
   end
 end

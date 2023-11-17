@@ -11,10 +11,10 @@ module Attachments
       super(user, params)
       @attachable = attachable
 
-      # single-end params: { attachment_ids = [], basename: basefilename,
+      # single-end params: { attachment_ids = {}, basename: basefilename,
       #                      delete_originals: true OPTIONAL
       #                      }
-      # paired-end params: { attachment_ids = [[],[], ...], basename: basefilename,
+      # paired-end params: { attachment_ids = {{}, {}, ...}, basename: basefilename,
       #                      delete_originals: true OPTIONAL
       #                      }
       @concatenation_params = params
@@ -25,9 +25,7 @@ module Attachments
       authorize! attachable.project, to: :update_sample? if attachable.instance_of?(Sample)
 
       validate_params
-
-      attachment_ids = concatenation_params[:attachment_ids]
-
+      attachment_ids = concatenation_params[:attachment_ids].values
       is_paired_end = false
 
       unless attachment_ids.all? { |i| i.is_a?(Integer) || i.is_a?(String) }

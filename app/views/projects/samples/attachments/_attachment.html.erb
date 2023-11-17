@@ -2,6 +2,25 @@
   id="<%= dom_id(attachment) %>"
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
 >
+  <td class="px-6 py-4">
+    <%= check_box_tag "attachment_ids[]",
+    (
+      if attachment.associated_attachment
+        [attachment.id, attachment.associated_attachment.id].to_s
+      else
+        attachment.id
+      end
+    ),
+    nil,
+    id: dom_id(attachment.file),
+    "aria-label": attachment.file.filename,
+    data: {
+      action: "input->selection#toggle",
+      selection_target: "rowSelection"
+    },
+    class:
+      "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+  </td>
   <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
     <td class="px-6 py-4">
       <div>
@@ -34,14 +53,22 @@
       </div>
     </td>
   <% else %>
-    <td class="px-6 py-4"><%= link_to attachment.file.filename,
-      download_namespace_project_sample_attachment_path(
-        sample_id: @sample.id,
-        id: attachment.id
-      ),
-      data: {
-        turbo: false
-      } %>
+    <td class="px-6 py-4">
+    <div>
+        <div class="flex items-center">
+          <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+          <span>
+            <%= link_to attachment.file.filename,
+              download_namespace_project_sample_attachment_path(
+                sample_id: @sample.id,
+                id: attachment.id
+              ),
+              data: {
+                turbo: false
+              } %>
+          </span>
+        </div>
+      </div>
     </td>
   <% end %>
 
