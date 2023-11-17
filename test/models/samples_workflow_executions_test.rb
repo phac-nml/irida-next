@@ -28,6 +28,9 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
   test 'invalid no workflow execution' do
     assert_not @samples_workflow_executions_invalid_no_workflow_execution.valid?
     assert_not_nil @samples_workflow_executions_invalid_no_workflow_execution.errors
-    assert_equal ['Workflow execution must exist'], @samples_workflow_executions_invalid_no_workflow_execution.errors.full_messages
+    assert_equal(
+      ['Workflow execution must exist'],
+      @samples_workflow_executions_invalid_no_workflow_execution.errors.full_messages
+    )
   end
 end
