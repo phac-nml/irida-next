@@ -80,7 +80,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    # John Doe has access to 19 groups
+    # John Doe has access to 23 groups
     assert_equal scoped_groups.count, 23
 
     user = users(:david_doe)
