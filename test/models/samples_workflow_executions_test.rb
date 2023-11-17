@@ -4,9 +4,15 @@ require 'test_helper'
 
 class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
   def setup
-    @samples_workflow_executions_valid = samples_workflow_executions(:samples_workflow_executions_valid)
-    @samples_workflow_executions_invalid_no_sample = samples_workflow_executions(:samples_workflow_executions_invalid_no_sample)
-    @samples_workflow_executions_invalid_no_workflow_execution = samples_workflow_executions(:samples_workflow_executions_invalid_no_workflow_execution)
+    @samples_workflow_executions_valid = samples_workflow_executions(
+      :samples_workflow_executions_valid
+    )
+    @samples_workflow_executions_invalid_no_sample = samples_workflow_executions(
+      :samples_workflow_executions_invalid_no_sample
+    )
+    @samples_workflow_executions_invalid_no_workflow_execution = samples_workflow_executions(
+      :samples_workflow_executions_invalid_no_workflow_execution
+    )
   end
 
   test 'valid samples workflow executions' do
