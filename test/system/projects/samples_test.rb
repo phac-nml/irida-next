@@ -321,7 +321,7 @@ module Projects
       assert_no_text @sample2.name
     end
 
-    test 'can sort the list of projects' do
+    test 'can sort the list of samples' do
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
       assert_selector 'table#samples-table tbody tr', count: 2
