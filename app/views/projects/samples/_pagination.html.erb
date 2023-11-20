@@ -1,9 +1,5 @@
-<% if request.GET["page"] %>
- <% request.GET["page"] = (request.GET["page"].to_i - 1).to_s %>
-<% end %>
-
 <%= render PaginationComponent.new(
   info: pagy_info(@pagy),
-  prev_url: (@pagy.prev ? project_samples_path(@project, **request.query_parameters, page: @pagy.prev) : nil),
-  next_url: (@pagy.next ? project_samples_path(@project, **request.query_parameters, page: @pagy.next) : nil)
+  prev_url: (@pagy.prev ? pagy_url_for(@pagy, @pagy.prev).gsub("samples.turbo_stream", "samples") : nil),
+  next_url: (@pagy.next ? pagy_url_for(@pagy, @pagy.next).gsub("samples.turbo_stream", "samples") : nil)
 ) %>
