@@ -119,7 +119,8 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name, project_name: @project.name)
+      assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name,
+                                                             project_name: @project.namespace.human_name)
 
       assert_no_selector 'table#samples-table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1

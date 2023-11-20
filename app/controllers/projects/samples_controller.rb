@@ -59,7 +59,7 @@ module Projects
       @pagy, @samples = pagy(Sample.where(project_id: @project.id))
 
       if @sample.deleted?
-        flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.name)
+        flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
         redirect_to namespace_project_samples_path(format: :html)
       else
         respond_to do |format|
