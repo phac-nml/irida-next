@@ -86,7 +86,7 @@
       <div class="overflow-x-auto">
         <div class="shadow">
           <%= turbo_frame_tag "project_samples_list",
-          src: project_samples_path(@project, format: :turbo_stream, **request.query_parameters, page: params[:page]),
+          src: project_samples_path(@project, format: :turbo_stream, **request.query_parameters),
           loading: :lazy do %>
             <table class="min-w-full table-fixed dark:divide-slate-600">
               <tbody

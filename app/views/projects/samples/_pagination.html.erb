@@ -1,6 +1,9 @@
+<% if request.GET["page"] %>
+ <% request.GET["page"] = (request.GET["page"].to_i - 1).to_s %>
+<% end %>
+
 <%= render PaginationComponent.new(
   info: pagy_info(@pagy),
-  prev_url:
-    (@pagy.prev ? project_samples_url(@project, page: @pagy.prev) : nil),
-  next_url: (@pagy.next ? project_samples_url(@project, page: @pagy.next) : nil)
+  prev_url: (@pagy.prev ? project_samples_path(@project, **request.query_parameters, page: @pagy.prev) : nil),
+  next_url: (@pagy.next ? project_samples_path(@project, **request.query_parameters, page: @pagy.next) : nil)
 ) %>
