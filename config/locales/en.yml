@@ -821,7 +821,7 @@ en:
         submit_button: Update sample
         cancel_button: Cancel
       destroy:
-        success: Sample %{sample_name} was removed.
+        success: Sample %{sample_name} was successfully removed from project %{project_name}.
         error: The sample does not exist within the project.
       transfers:
         _transfer_modal:
