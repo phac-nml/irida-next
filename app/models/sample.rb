@@ -13,10 +13,10 @@ class Sample < ApplicationRecord
   validates :name, uniqueness: { scope: %i[name project_id] }
 
   def self.ransackable_attributes(_auth_object = nil)
-    authorizable_ransackable_attributes & ['name']
+    %w[id name created_at updated_at]
   end
 
   def self.ransackable_associations(_auth_object = nil)
-    authorizable_ransackable_associations
+    %w[]
   end
 end

@@ -73,10 +73,10 @@
       <% end %>
       <%= sorting_dropdown(@q) do |dropdown| %>
         <%= sorting_item(dropdown, @q, :updated_at, :desc) %>
-        <%= sorting_item(dropdown, @q, :created_at, :desc) %>
+        <%= sorting_item(dropdown, @q, :updated_at, :asc) %>
         <%= sorting_item(dropdown, @q, :name, :asc) %>
         <%= sorting_item(dropdown, @q, :name, :desc) %>
-        <%= sorting_item(dropdown, @q, :updated_at, :asc) %>
+        <%= sorting_item(dropdown, @q, :created_at, :desc) %>
         <%= sorting_item(dropdown, @q, :created_at, :asc) %>
       <% end %>
     </div>
