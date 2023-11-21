@@ -155,7 +155,13 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation, :personal do |relation|
     relation
-      .where(namespace: { parent: user.namespace })
-      .include_route
+      .with(
+        personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id)
+      )
+      .where(
+        Arel.sql(
+          'projects.id in (select * from personal_projects)'
+        )
+      ).include_route
   end
 end

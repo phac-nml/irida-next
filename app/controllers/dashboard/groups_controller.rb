@@ -6,7 +6,7 @@ module Dashboard
     before_action :current_page
 
     def index
-      @q = Group.ransack(params[:q])
+      @q = authorized_groups.ransack(params[:q])
       set_default_sort
       respond_to do |format|
         format.html
@@ -15,7 +15,7 @@ module Dashboard
             toggle_group
             render :group
           else
-            @pagy, @groups = pagy(@q.result.where(id: load_groups.select(:id)).include_route)
+            @pagy, @groups = pagy(@q.result.include_route)
           end
         end
       end
@@ -40,8 +40,8 @@ module Dashboard
       @sub_groups = @group.children
     end
 
-    def load_groups
-      @groups = authorized_scope(Group, type: :relation).without_descendants
+    def authorized_groups
+      authorized_scope(Group, type: :relation).without_descendants
     end
 
     def current_page
