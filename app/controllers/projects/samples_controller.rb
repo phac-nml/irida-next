@@ -59,7 +59,7 @@ module Projects
 
     def destroy # rubocop:disable Metrics/AbcSize
       ::Samples::DestroyService.new(@sample, current_user).execute
-      @pagy, @samples = pagy(Sample.where(project_id: @project.id))
+      @pagy, @samples = pagy(load_samples)
 
       if @sample.deleted?
         flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
