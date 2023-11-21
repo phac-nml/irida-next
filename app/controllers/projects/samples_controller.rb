@@ -13,7 +13,7 @@ module Projects
       set_default_sort
       respond_to do |format|
         format.html do
-          @has_samples = load_samples(@project.id).exists?
+          @has_samples = @q.result.count.positive?
         end
         format.turbo_stream do
           @pagy, @samples = pagy(@q.result)
