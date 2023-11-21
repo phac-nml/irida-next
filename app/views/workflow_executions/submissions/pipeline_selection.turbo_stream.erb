@@ -1,1 +1,5 @@
-<%= turbo_stream.update "samples_dialog", partial: "pipeline_selection_dialog" %>
+<%= turbo_stream.update "samples_dialog",
+                    partial: "pipeline_selection_dialog",
+                    locals: {
+                      workflows: @workflows
+                    } %>
