@@ -115,13 +115,26 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation do |relation|
     relation
-      .where(namespace: { parent: user.groups.self_and_descendant_ids }).include_route
-      .or(relation.where(
-        namespace: user.members.joins(:namespace).where(
-          namespace: { type: Namespaces::ProjectNamespace.sti_name }
-        ).select(:namespace_id)
-      ).include_route)
-      .or(relation.where(namespace: { parent: user.namespace }).include_route)
+      .with(
+        personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id),
+        direct_projects: relation.where(
+          namespace: user.members.joins(:namespace).where(
+            namespace: { type: Namespaces::ProjectNamespace.sti_name }
+          ).select(:namespace_id)
+        ).select(:id),
+        group_projects: relation.joins(:namespace).where(namespace: { parent_id: user.groups.self_and_descendant_ids })
+        .select(:id),
+        linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
+        Group.where(id: NamespaceGroupLink
+          .where(group: user.groups.self_and_descendants).not_expired.select(:namespace_id)) }).select(:id)
+      ).where(
+        Arel.sql(
+          'projects.id in (select * from personal_projects)
+          or projects.id in (select * from group_projects)
+          or projects.id in (select * from direct_projects)
+          or projects.id in (select * from linked_projects)'
+        )
+      ).include_route
   end
 
   scope_for :relation, :manageable do |relation|
@@ -142,7 +155,13 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation, :personal do |relation|
     relation
-      .where(namespace: { parent: user.namespace })
-      .include_route
+      .with(
+        personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id)
+      )
+      .where(
+        Arel.sql(
+          'projects.id in (select * from personal_projects)'
+        )
+      ).include_route
   end
 end

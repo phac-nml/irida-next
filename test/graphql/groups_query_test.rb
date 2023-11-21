@@ -34,7 +34,14 @@ class GroupsQueryTest < ActiveSupport::TestCase
   end
 
   test 'groups query only returns scoped groups' do
-    groups_count = @user.groups.self_and_descendant_ids.count
+    groups_via_namespace_group_links = Group.where(id: NamespaceGroupLink
+      .where(group: @user.groups.self_and_descendants)
+      .not_expired.select(:namespace_id))
+
+    groups = @user.groups.self_and_descendants.or(groups_via_namespace_group_links)
+
+    groups_count = groups.count
+
     result = IridaSchema.execute(GROUPS_QUERY, context: { current_user: @user },
                                                variables: { first: 20 })
 
