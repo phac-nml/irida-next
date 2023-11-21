@@ -8,12 +8,15 @@ module Projects
 
     def index
       authorize! @project, to: :sample_listing?
+
+      @q = load_samples.ransack(params[:q])
+      set_default_sort
       respond_to do |format|
         format.html do
-          @has_samples = Sample.exists?(project_id: @project.id)
+          @has_samples = @q.result.count.positive?
         end
         format.turbo_stream do
-          @pagy, @samples = pagy(Sample.where(project_id: @project.id))
+          @pagy, @samples = pagy(@q.result)
         end
       end
     end
@@ -56,7 +59,7 @@ module Projects
 
     def destroy # rubocop:disable Metrics/AbcSize
       ::Samples::DestroyService.new(@sample, current_user).execute
-      @pagy, @samples = pagy(Sample.where(project_id: @project.id))
+      @pagy, @samples = pagy(load_samples)
 
       if @sample.deleted?
         flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
@@ -91,6 +94,14 @@ module Projects
 
     def current_page
       @current_page = 'samples'
+    end
+
+    def set_default_sort
+      @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    end
+
+    def load_samples
+      Sample.where(project_id: @project.id)
     end
   end
 end
