@@ -7,7 +7,10 @@
     <div class="flex items-center space-x-2">
       <%= link_to pipeline_selection_workflow_executions_submissions_path, data: { turbo_frame: "samples_dialog", turbo_stream: true, controller: "action-link", action_link_required_value: 1 },
         class: "button button--size-default button--state-default action-link" do %>
-        <%= viral_icon(name: :rocket_launch, classes: "w-4 h-4 inline-block") %>
+        <%= viral_icon(
+          name: :rocket_launch,
+          classes: "w-5 h-5 inline-block"
+        ) %>
         <span class="sr-only"><%= t(:".workflows.button_sr") %></span>
       <% end %>
       <% if allowed_to?(:transfer_sample?, @project) %>
@@ -32,42 +35,24 @@
 <% end %>
 <% if @has_samples %>
   <div
-      class="
-        flex
-        text-sm
-        font-medium
-        text-center
-        border-b
-        text-slate-500
-        border-slate-200
-        dark:text-slate-400
-        dark:border-slate-700
-      "
-    >
-    <div class="flex flex-row items-center ml-auto space-x-2 font-normal mb-2">
+    class="flex text-sm font-medium text-center border-b  text-slate-500 border-slate-200 dark:text-slate-400 dark:border-slate-700"
+  >
+    <div class="flex flex-row items-center mb-2 ml-auto space-x-2 font-normal">
       <%= search_form_for @q, url: namespace_project_samples_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
-        <input type="hidden" name="format" value="turbo_stream" />
-        <%= f.label :name_cont, placeholder: t('.search.placeholder'), class: "sr-only" %>
-        <div class="relative lg:w-72" >
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <%= f.label :name_cont, placeholder: t(".search.placeholder"), class: "sr-only" %>
+        <div class="relative lg:w-72">
           <div
-            class="
-              absolute
-              inset-y-0
-              left-0
-              flex
-              items-center
-              pl-3
-              pointer-events-none
-            "
+            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
           >
             <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
           </div>
           <%= f.hidden_field :s, value: params[:q].try(:[], :s) %>
           <%= f.search_field :name_cont,
-                          "data-action": "filters#submit",
-                          class:
-                            "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                          placeholder: t('.search.placeholder') %>
+                         "data-action": "filters#submit",
+                         class:
+                           "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                         placeholder: t(".search.placeholder") %>
         </div>
       <% end %>
       <%= sorting_dropdown(@q) do |dropdown| %>
@@ -89,13 +74,7 @@
           loading: :lazy do %>
             <table class="min-w-full table-fixed dark:divide-slate-600">
               <tbody
-                class="
-                  bg-white
-                  divide-y
-                  divide-slate-200
-                  dark:bg-slate-800
-                  dark:divide-slate-700
-                "
+                class="bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700"
               >
                 <% 15.times do %>
                   <tr>
