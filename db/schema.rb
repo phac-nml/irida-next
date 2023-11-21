@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_10_010313) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_21_200855) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -96,6 +96,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_10_010313) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.datetime "deleted_at"
+    t.jsonb "metadata_summary", default: {}
     t.index ["deleted_at"], name: "index_namespaces_on_deleted_at"
     t.index ["owner_id"], name: "index_namespaces_on_owner_id"
     t.index ["parent_id"], name: "index_namespaces_on_parent_id"

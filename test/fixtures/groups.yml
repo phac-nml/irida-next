@@ -6,6 +6,7 @@ group_one:
   type: Group
   description: Group 1 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: { "metadatafield1": 633, "metadatafield2": 106 }
 
 subgroup1:
   name: Subgroup 1
@@ -13,6 +14,7 @@ subgroup1:
   type: Group
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  metadata_summary: {}
 
 <% (Namespace::MAX_ANCESTORS-1).times do |n| %>
 subgroup<%= (n+2) %>:
@@ -21,6 +23,7 @@ subgroup<%= (n+2) %>:
   type: Group
   description: <%= "Subgroup #{n+2} description" %>
   parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}") %>
+  metadata_summary: {}
 <% end %>
 
 group_two:
@@ -28,12 +31,14 @@ group_two:
   path: group-2
   type: Group
   description: Group 2 description
+  metadata_summary: {}
 
 group_three:
   name: Group 3
   path: group-3
   type: Group
   description: Group 3 description
+  metadata_summary: {}
 
 subgroup_one_group_three:
   name: Subgroup 1 Group 3
@@ -41,18 +46,21 @@ subgroup_one_group_three:
   type: Group
   description: Subgroup 1 Group 3
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>
+  metadata_summary: {}
 
 david_doe_group_four:
   name: Group 4
   path: group-4
   type: Group
   description: David's first group
+  metadata_summary: {}
 
 group_five:
   name: Group 5
   path: group-5
   type: Group
   description: Group 5 description
+  metadata_summary: {}
 
 subgroup_one_group_five:
   name: Subgroup 1 Group 5
@@ -60,12 +68,14 @@ subgroup_one_group_five:
   type: Group
   description: Subgroup 1 Group 5
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
+  metadata_summary: {}
 
 group_six:
   name: Group 6
   path: group-6
   type: Group
   description: Group 6 description
+  metadata_summary: {}
 
 subgroup_one_group_six:
   name: Group 6
@@ -73,18 +83,21 @@ subgroup_one_group_six:
   type: Group
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
+  metadata_summary: {}
 
 group_seven:
   name: Group 7
   path: group-7
   type: Group
   description: Group 7 description
+  metadata_summary: {}
 
 group_eight:
   name: Group 8
   path: group-8
   type: Group
   description: Group 8 description
+  metadata_summary: {}
 
 <% [*("a".."z")].each_with_index do |letter, index| %>
 group_<%= letter %>:
@@ -94,6 +107,7 @@ group_<%= letter %>:
   description: <%= "Group #{letter} description" %>
   created_at: <%= (index + 1).days.ago %>
   updated_at: <%= (index + 1).days.ago %>
+  metadata_summary: {}
 <% end %>
 
 namespace_group_link_group_one:
@@ -101,24 +115,28 @@ namespace_group_link_group_one:
   path: group-one
   type: Group
   description: Group One description
+  metadata_summary: {}
 
 namespace_group_link_group_two:
   name: Group Two
   path: group-two
   type: Group
   description: Group Two description
+  metadata_summary: {}
 
 namespace_group_link_group_three:
   name: Group Three
   path: group-three
   type: Group
   description: Group Three description
+  metadata_summary: {}
 
 group_nine:
   name: Group 9
   path: group-9
   type: Group
   description: Group 9 description
+  metadata_summary: {}
 
 subgroup_one_group_nine:
   name: Subgroup 1 Group 9
@@ -126,6 +144,7 @@ subgroup_one_group_nine:
   type: Group
   description: Subgroup 1 Group 9 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine) %>
+  metadata_summary: {}
 
 group_ten:
   name: Group 10
@@ -133,27 +152,32 @@ group_ten:
   type: Group
   description: Group 10 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine) %>
+  metadata_summary: {}
 
 group_alpha:
   name: Group Alpha
   path: group-alpha
   type: Group
   description: Group Alpha description
+  metadata_summary: {}
 
 group_bravo:
   name: Group Bravo
   path: group-bravo
   type: Group
   description: Group bravo description
+  metadata_summary: {}
 
 group_charlie:
   name: Group Charlie
   path: group-charlie
   type: Group
   description: Group Charlie description
+  metadata_summary: {}
 
 group_alpha_subgroup1:
   name: Subgroup 1
   path: group-alpha/subgroup-1
   type: Group
   description: Subgroup 1 description
+  metadata_summary: {}
