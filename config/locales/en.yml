@@ -865,6 +865,10 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
+  workflow_executions:
+    submission:
+        pipeline_selection:
+          title: Workflow Selection
   services:
     attachments:
       concatenation:
