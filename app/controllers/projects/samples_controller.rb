@@ -58,6 +58,7 @@ module Projects
       @sample = ::Samples::CreateService.new(current_user, @project, sample_params).execute
 
       if @sample.persisted?
+        generate_activity(@sample, :create, { name: @sample.name, project_name: @project.name })
         flash[:success] = t('.success')
         redirect_to namespace_project_sample_path(id: @sample.id)
       else
@@ -68,6 +69,7 @@ module Projects
     def update
       respond_to do |format|
         if ::Samples::UpdateService.new(@sample, current_user, sample_params).execute
+          generate_activity(@sample, :update, { name: @sample.name, project_name: @project.name })
           flash[:success] = t('.success')
           format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
         else

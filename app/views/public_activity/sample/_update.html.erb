@@ -2,7 +2,21 @@
   <%= t(
     "activity.sample.update",
     user: activity.owner.email,
-    sample_name: activity.trackable.name,
-    project_name: activity.trackable.project.name
+    sample_name:
+      (
+        if !activity.trackable.nil?
+          activity.trackable.name
+        else
+          activity.parameters["name"]
+        end
+      ),
+    project_name:
+      (
+        if !activity.trackable.nil?
+          activity.trackable.project.name
+        else
+          activity.parameters["project_name"]
+        end
+      )
   ) %>
 </div>

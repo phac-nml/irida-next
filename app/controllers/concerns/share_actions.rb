@@ -33,6 +33,12 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
     if @created_namespace_group_link.persisted?
       respond_to do |format|
+        generate_activity(@namespace,
+                          :namespace_group_link_create, {
+                            namespace_type: @namespace.type.downcase,
+                            namespace_name: @namespace.human_name,
+                            invited_group_name: @created_namespace_group_link.group.name
+                          })
         @group_invited = true
         format.turbo_stream do
           render status: :ok,
@@ -60,9 +66,15 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
     @pagy, @namespace_group_links = pagy(load_namespace_group_links)
 
-    respond_to do |format|
+    respond_to do |format| # rubocop:disable Metrics/BlockLength
       if @namespace_group_link
         if @namespace_group_link.deleted?
+          generate_activity(@namespace,
+                            :namespace_group_link_destroy, {
+                              namespace_type: @namespace.type.downcase,
+                              namespace_name: @namespace.human_name,
+                              invited_group_name: @namespace_group_link.group.name
+                            })
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @namespace_group_link, type: 'success',
                                           message: t('concerns.share_actions.destroy.success',
@@ -86,7 +98,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def update # rubocop:disable Metrics/MethodLength
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @updated = GroupLinks::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
     updated_param = if group_link_params[:group_access_level].nil?
                       t('concerns.share_actions.update.params.expiration_date')
@@ -96,6 +108,12 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
     respond_to do |format|
       if @updated
+        generate_activity(@namespace,
+                          :namespace_group_link_update, {
+                            namespace_type: @namespace.type.downcase,
+                            namespace_name: @namespace.human_name,
+                            invited_group_name: @namespace_group_link.group.name
+                          })
         format.turbo_stream do
           render status: :ok, locals: { namespace_group_link: @namespace_group_link,
                                         access_levels: @access_levels,
