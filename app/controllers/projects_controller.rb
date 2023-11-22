@@ -30,6 +30,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     @project = Projects::CreateService.new(current_user, project_params).execute
 
     if @project.persisted?
+      generate_activity(@project.namespace, :create, { project_name: @project.name })
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
         project_samples_path(@project)
@@ -43,6 +44,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     respond_to do |format|
       @updated = Projects::UpdateService.new(@project, current_user, project_params).execute
       if @updated
+        generate_activity(@project.namespace, :update, { project_name: @project.name })
         if project_params[:namespace_attributes][:path]
           flash[:success] = t('.success', project_name: @project.name)
           format.turbo_stream { redirect_to(project_edit_path(@project)) }
@@ -61,11 +63,16 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def activity
     authorize! @project
-    # No necessary code here
+    @activities = PublicActivity::Activity.where(trackable_id: @project.namespace.id)
+                                          .or(PublicActivity::Activity
+                                          .where(trackable_id: Sample.with_deleted.where(project_id: @project.id)))
   end
 
-  def transfer
+  def transfer # rubocop:disable Metrics/AbcSize
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
+      generate_activity(@project.namespace, :transfer,
+                        { project_name: @project.name, old_namespace: @project.namespace.name,
+                          new_namespace: new_namespace.name })
       flash[:success] = t('.success', project_name: @project.name)
       respond_to do |format|
         format.turbo_stream { redirect_to project_path(@project) }
@@ -78,9 +85,10 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize
     Projects::DestroyService.new(@project, current_user).execute
     if @project.deleted?
+      generate_activity(@project.namespace, :destroy, { project_name: @project.name })
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to dashboard_projects_path(format: :html)
     else

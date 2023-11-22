@@ -214,10 +214,32 @@ en:
         other: Namespace Group Links
         direct: Direct shared
   activity:
+    group:
+      create: "%{user} created group %{name}"
+      destroy: "%{user} removed group %{name}"
+      update: "%{user} updated group %{name}"
+      member_create: "%{user} added new member %{member_name} to group %{namespace_name}"
+      member_destroy: "%{user} removed member %{member_name} from group %{namespace_name}"
+      member_update: "%{user} updated member %{member_name} attributes in group %{namespace_name}"
+      namespace_group_link_create: "%{user} shared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
+      namespace_group_link_destroy: "%{user} unshared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
+      namespace_group_link_update: "%{user} updated %{namespace_type} %{namespace_name} share attributes with group %{invited_group_name}"
+    namespaces_project_namespace:
+      create: "%{user} created project %{name}"
+      destroy: "%{user} removed project %{name}"
+      update: "%{user} updated project %{name}"
+      member_create: "%{user} added new member %{member_name} to project %{namespace_name}"
+      member_destroy: "%{user} removed member %{member_name} from project %{namespace_name}"
+      member_update: "%{user} updated member %{member_name} attributes in project %{namespace_name}"
+      namespace_group_link_create: "%{user} shared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
+      namespace_group_link_destroy: "%{user} unshared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
+      namespace_group_link_update: "%{user} updated %{namespace_type} %{namespace_name} share attributes with group %{invited_group_name}"
     sample:
       create: "%{user} added new sample %{sample_name} to project %{project_name}"
       destroy: "%{user} removed sample %{sample_name} from project %{project_name}"
       update: "%{user} updated sample %{sample_name} in project %{project_name}"
+      attachment_create: "%{user} uploaded sequencing data to project %{project_name} sample %{sample_name}"
+      attachment_destroy: "%{user} removed sequencing data from project %{project_name} sample %{sample_name}"
   datetime:
     distance_in_words:
       updated:

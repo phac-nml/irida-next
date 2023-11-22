@@ -1,0 +1,14 @@
+<div>
+  <%= t(
+    "activity.group.update",
+    user: activity.owner.email,
+    name:
+      (
+        if !activity.trackable.nil?
+          activity.trackable.name
+        else
+          activity.parameters["name"]
+        end
+      )
+  ) %>
+</div>
