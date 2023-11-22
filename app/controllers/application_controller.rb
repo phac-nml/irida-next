@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   include Irida::Auth
   include Pagy::Backend
   include RouteHelper
-  include PublicActivity::StoreController
 
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
