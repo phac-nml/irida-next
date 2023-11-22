@@ -151,7 +151,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    capybara-lockstep (2.2.0)
+    capybara-lockstep (2.2.2)
       activesupport (>= 4.2)
       capybara (>= 3.0)
       ruby2_keywords
@@ -307,6 +307,7 @@ GEM
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    logger (1.6.0)
     logidze (1.3.0)
       activerecord (>= 6.0)
       railties (>= 6.0)
@@ -355,12 +356,6 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.7-aarch64-linux)
-      racc (~> 1.4)
-    nokogiri (1.16.7-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.16.7-x86_64-darwin)
-      racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     oauth2 (2.0.9)
@@ -398,6 +393,11 @@ GEM
     prettier_print (1.2.1)
     psych (5.1.2)
       stringio
+    public_activity (3.0.1)
+      actionpack (>= 6.1.0)
+      activerecord (>= 6.1)
+      i18n (>= 0.5.0)
+      railties (>= 6.1.0)
     public_suffix (5.0.5)
     puma (6.4.2)
       nio4r (~> 2.0)
@@ -507,8 +507,9 @@ GEM
       rexml
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    selenium-webdriver (4.21.1)
+    selenium-webdriver (4.23.0)
       base64 (~> 0.2)
+      logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -559,12 +560,6 @@ GEM
     strscan (3.1.0)
     syntax_tree (6.2.0)
       prettier_print (>= 1.2.0)
-    tailwindcss-rails (2.6.0-aarch64-linux)
-      railties (>= 7.0.0)
-    tailwindcss-rails (2.6.0-arm64-darwin)
-      railties (>= 7.0.0)
-    tailwindcss-rails (2.6.0-x86_64-darwin)
-      railties (>= 7.0.0)
     tailwindcss-rails (2.6.0-x86_64-linux)
       railties (>= 7.0.0)
     thor (1.3.1)
@@ -598,7 +593,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.8.1)
-    websocket (1.2.10)
+    websocket (1.2.11)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -609,10 +604,6 @@ GEM
     zip_kit (6.3.0)
 
 PLATFORMS
-  aarch64-linux
-  arm64-darwin-22
-  arm64-darwin-23
-  x86_64-darwin-21
   x86_64-linux
 
 DEPENDENCIES
@@ -656,6 +647,7 @@ DEPENDENCIES
   pagy (~> 6.1)
   paranoia
   pg
+  public_activity
   puma (~> 6.4)
   rails (~> 7.1.3)
   ransack (~> 4.1, >= 4.1.1)

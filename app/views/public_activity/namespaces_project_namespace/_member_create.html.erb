@@ -1,0 +1,15 @@
+<div>
+  <%= t(
+    "activity.namespaces_project_namespace.member_create",
+    user: activity.owner.email,
+    namespace_name:
+      (
+        if !activity.trackable.nil?
+          activity.trackable.name
+        else
+          activity.parameters["namespace_name"]
+        end
+      ),
+    member_name: activity.parameters["member"]
+  ) %>
+</div>
