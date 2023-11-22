@@ -55,3 +55,7 @@ class ApplicationController < ActionController::Base
     not_found(exception)
   end
 end
+
+def generate_activity(object, action, params)
+  object.create_activity action, owner: current_user, params:
+end
