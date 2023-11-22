@@ -1,0 +1,11 @@
+<%= turbo_stream.update "samples_dialog" do %>
+  <%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
+    <%= dialog.with_header(title: t(:'.title', workflow: @workflow.name)) %>
+    <%= dialog.with_section do %>
+      <%= render Nextflow::SamplesheetComponent.new(
+        schema: @schema,
+        samples: @samples,
+      ) %>
+    <% end %>
+  <% end %>
+<% end %>

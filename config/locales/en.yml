@@ -867,9 +867,11 @@ en:
         updated_at: Last Updated
         action: Action
   workflow_executions:
-    submission:
+    submissions:
         pipeline_selection:
           title: Workflow Selection
+        show:
+          title: '%{workflow} parameters'
   services:
     attachments:
       concatenation:
