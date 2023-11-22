@@ -6,6 +6,7 @@ export default class extends Controller {
   connect() {
     let table = document.getElementById("attachments-table-body");
     let newTable = document.createElement("table");
+    newTable.classList.add("w-full");
 
     for (var i = 0; i < table.rows.length; i++) {
       let row = table.rows[i];
@@ -15,8 +16,13 @@ export default class extends Controller {
         let newRow = newTable.insertRow(-1);
 
         for (var j = 0; j < row.cells.length; j++) {
-          //only copy file name, type, and size columns
-          if (j == 1 || j == 4) {
+          if (j == 1) {
+            //copy file name column
+            let cell = row.cells[j];
+            let newCell = newRow.insertCell(-1);
+            newCell.innerHTML = cell.children[0].text;
+          } else if (j == 4) {
+            //copy file size column
             let cell = row.cells[j];
             let newCell = newRow.insertCell(-1);
             newCell.innerHTML = cell.innerHTML;

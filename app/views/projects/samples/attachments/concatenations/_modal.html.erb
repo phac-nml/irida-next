@@ -2,14 +2,12 @@
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
 
-    <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
-      <p class="dark:text-gray-400">
-        <%= t(".description") %>
-      </p>
+    <div class="mb-4 font-normal text-gray-500 dark:text-gray-400">
+      <p><%= t(".description") %></p>
       <div
         data-controller="projects--samples--attachments--concatenations-files"
         data-projects--samples--attachments--concatenations-files-target="field"
-      />
+      ></div>
     </div>
 
     <%= form_for(:concatenation, url: namespace_project_sample_attachments_concatenation_path, method: :post) do |form| %>
@@ -18,7 +16,7 @@
         data-projects--samples--attachments--concatenations-storage-key-value=<%=namespace_project_sample_url(id: @sample.id)%>
         data-projects--samples--attachments--concatenations-target="field"
         data-projects--samples--attachments--concatenations-field-name-value="concatenation[attachment_ids]"
-      />
+      ></div>
 
       <div class="grid gap-4">
         <% invalid_basename = @sample.errors.include?(:basename) %>
