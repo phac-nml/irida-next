@@ -1,0 +1,15 @@
+<div>
+  <%= t(
+    "activity.namespaces_project_namespace.sample_update",
+    user: activity.owner.email,
+    sample_name: activity.parameters["name"],
+    project_name:
+      (
+        if !activity.trackable.nil?
+          activity.trackable.name
+        else
+          activity.parameters["project_name"]
+        end
+      )
+  ) %>
+</div>
