@@ -4,7 +4,7 @@
 class SamplesWorkflowExecution < ActiveRecord::Migration[7.1]
   def change
     create_table :samples_workflow_executions do |t|
-      t.jsonb :samplesheet_params
+      t.jsonb :samplesheet_params, null: false, default: {}
       t.references :sample
       t.references :workflow_execution
 

@@ -9,6 +9,9 @@ class Sample < ApplicationRecord
 
   has_many :attachments, as: :attachable, dependent: :destroy
 
+  has_many :samples_workflow_executions, dependent: :nullify
+  has_many :workflow_executions, through: :samples_workflow_executions
+
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
   validates :name, uniqueness: { scope: %i[name project_id] }
 end

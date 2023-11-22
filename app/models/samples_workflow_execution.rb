@@ -7,6 +7,4 @@ class SamplesWorkflowExecution < ApplicationRecord
 
   belongs_to :workflow_execution
   belongs_to :sample
-
-  serialize :samplesheet_params, coder: JsonbIndifferentSerializer
 end
