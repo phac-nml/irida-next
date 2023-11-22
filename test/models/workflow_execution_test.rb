@@ -14,10 +14,7 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
 
   test 'invalid metadata' do
     assert_not @workflow_execution_invalid_metadata.valid?
-    assert_not @workflow_execution_invalid_metadata.metadata.valid?
     assert_not_nil @workflow_execution_invalid_metadata.errors[:metadata]
-    assert_equal ['WorkflowMetadata is invalid.'], @workflow_execution_invalid_metadata.errors.full_messages
-    assert_not_nil @workflow_execution_invalid_metadata.metadata.errors[:workflow_version]
-    assert_equal ["Workflow version can't be blank"], @workflow_execution_invalid_metadata.metadata.errors.full_messages
+    assert_equal ['Metadata root is missing required keys: workflow_version'], @workflow_execution_invalid_metadata.errors.full_messages
   end
 end

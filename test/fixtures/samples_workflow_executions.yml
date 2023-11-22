@@ -3,7 +3,7 @@
 samples_workflow_executions_valid:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid) %>
-  samplesheet_params: >
+  samplesheet_params:
     {
       key_c: 'value_c'
     }
@@ -11,7 +11,7 @@ samples_workflow_executions_valid:
 samples_workflow_executions_invalid_no_sample:
   sample_id: null
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid) %>
-  samplesheet_params: >
+  samplesheet_params:
     {
       key_c: 'value_c'
     }
@@ -19,7 +19,7 @@ samples_workflow_executions_invalid_no_sample:
 samples_workflow_executions_invalid_no_workflow_execution:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
   workflow_execution_id: null
-  samplesheet_params: >
+  samplesheet_params:
     {
       key_c: 'value_c'
     }

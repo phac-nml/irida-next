@@ -1,12 +1,12 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 workflow_execution_valid:
-  metadata: >
+  metadata:
     {
       "workflow_name": "wn1",
       "workflow_version": "wv1"
     }
-  workflow_params: >
+  workflow_params:
     {
       "key_a": "value_a"
     }
@@ -15,7 +15,7 @@ workflow_execution_valid:
   tags: ['tag1', 'tag2']
   workflow_engine: 'my_workflow_engine_1'
   workflow_engine_version: 'my_workflow_engine_version_1'
-  workflow_engine_parameters: >
+  workflow_engine_parameters:
     {
       "key_b": "value_b"
     }
@@ -24,12 +24,12 @@ workflow_execution_valid:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
 
 workflow_execution_invalid_metadata:
-  metadata: >
+  metadata:
     {
       "workflow_name": "wn1",
       "missing a param here": "invalid"
     }
-  workflow_params: >
+  workflow_params:
     {
       "key_a": "value_a"
     }
@@ -38,7 +38,7 @@ workflow_execution_invalid_metadata:
   tags: ['tag1', 'tag2']
   workflow_engine: 'my_workflow_engine_1'
   workflow_engine_version: 'my_workflow_engine_version_1'
-  workflow_engine_parameters: >
+  workflow_engine_parameters:
     {
       "key_b": "value_b"
     }

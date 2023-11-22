@@ -207,8 +207,8 @@ if Rails.env.development?
   # }
 
   # generic_workflow_metadata_objects = [
-  #   WorkflowMetadata.new(workflow_name: 'my_workflow_name_1', workflow_version: 'my_workflow_version_1'),
-  #   WorkflowMetadata.new(workflow_name: 'my_workflow_name_1', workflow_version: 'my_workflow_version_1')
+  #   {workflow_name: 'my_workflow_name_1', workflow_version: 'my_workflow_version_1'},
+  #   {workflow_name: 'my_workflow_name_1', workflow_version: 'my_workflow_version_1'}
   # ]
 
   # Various Hashes for workflow executions
