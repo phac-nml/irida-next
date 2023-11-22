@@ -2,8 +2,7 @@
 
 # Base Entity Class
 class ApplicationRecord < ActiveRecord::Base
-  include PublicActivity::Model
-  tracked owner: proc { |controller, _model| controller.current_user }
+  include PublicActivity::Common
 
   primary_abstract_class
   self.implicit_order_column = 'created_at'
