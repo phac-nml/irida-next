@@ -98,6 +98,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_21_200855) do
     t.datetime "deleted_at"
     t.jsonb "metadata_summary", default: {}
     t.index ["deleted_at"], name: "index_namespaces_on_deleted_at"
+    t.index ["metadata_summary"], name: "index_namespaces_on_metadata_summary", using: :gin
     t.index ["owner_id"], name: "index_namespaces_on_owner_id"
     t.index ["parent_id"], name: "index_namespaces_on_parent_id"
   end
