@@ -234,10 +234,10 @@ en:
       namespace_group_link_create: "%{user} shared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
       namespace_group_link_destroy: "%{user} unshared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
       namespace_group_link_update: "%{user} updated %{namespace_type} %{namespace_name} share attributes with group %{invited_group_name}"
+      sample_create: "%{user} added new sample %{sample_name} to project %{project_name}"
+      sample_destroy: "%{user} removed sample %{sample_name} from project %{project_name}"
+      sample_update: "%{user} updated sample %{sample_name} in project %{project_name}"
     sample:
-      create: "%{user} added new sample %{sample_name} to project %{project_name}"
-      destroy: "%{user} removed sample %{sample_name} from project %{project_name}"
-      update: "%{user} updated sample %{sample_name} in project %{project_name}"
       attachment_create: "%{user} uploaded sequencing data to project %{project_name} sample %{sample_name}"
       attachment_destroy: "%{user} removed sequencing data from project %{project_name} sample %{sample_name}"
   datetime:

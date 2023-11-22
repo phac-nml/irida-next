@@ -64,8 +64,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   def activity
     authorize! @project
     @activities = PublicActivity::Activity.where(trackable_id: @project.namespace.id)
-                                          .or(PublicActivity::Activity
-                                          .where(trackable_id: Sample.with_deleted.where(project_id: @project.id)))
   end
 
   def transfer # rubocop:disable Metrics/AbcSize
