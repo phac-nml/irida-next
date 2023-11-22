@@ -347,6 +347,8 @@ module Projects
       end
       click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file.fastq'
+        assert_text 'test_file_A.fastq'
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
       end
@@ -364,6 +366,8 @@ module Projects
       end
       click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file.fastq'
+        assert_text 'test_file_A.fastq'
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         check 'Delete originals'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')

@@ -16,16 +16,15 @@ export default class extends Controller {
         let newRow = newTable.insertRow(-1);
 
         for (var j = 0; j < row.cells.length; j++) {
-          if (j == 1) {
-            //copy file name column
+          if ((j == 1) | (j == 4)) {
+            //copy file name & size columns
             let cell = row.cells[j];
             let newCell = newRow.insertCell(-1);
-            newCell.innerHTML = cell.children[0].text;
-          } else if (j == 4) {
-            //copy file size column
-            let cell = row.cells[j];
-            let newCell = newRow.insertCell(-1);
-            newCell.innerHTML = cell.innerHTML;
+            if (cell.children.length > 0) {
+              newCell.innerHTML = cell.children[0].text;
+            } else {
+              newCell.innerHTML = cell.innerHTML;
+            }
           }
         }
       }
