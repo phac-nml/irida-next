@@ -5,38 +5,31 @@ export default class extends Controller {
 
   static values = {
     fieldName: String,
-    storageKey: {
-      type: String,
-      default: `${location.protocol}//${location.host}${location.pathname}`,
-    },
   };
 
   connect() {
-    const storageValues = JSON.parse(
-      sessionStorage.getItem(this.storageKeyValue)
+    const checkboxes = document.querySelectorAll(
+      "input[name='attachment_ids[]']:checked"
     );
 
-    if (storageValues) {
-      for (let [storageValueIndex, storageValue] of storageValues.entries()) {
-        const value = JSON.parse(storageValue);
-
-        if (value instanceof Array) {
-          for (let arrayValue of value) {
-            const element = document.createElement("input");
-            element.type = "hidden";
-            element.id = `${this.fieldNameValue}[${storageValueIndex}][]`;
-            element.name = `${this.fieldNameValue}[${storageValueIndex}][]`;
-            element.value = arrayValue;
-            this.fieldTarget.appendChild(element);
-          }
-        } else {
+    for (var i = 0; i < checkboxes.length; i++) {
+      const value = checkboxes[i].value;
+      if (value instanceof Array) {
+        for (let arrayValue of value) {
           const element = document.createElement("input");
           element.type = "hidden";
-          element.id = `${this.fieldNameValue}[${storageValueIndex}]`;
-          element.name = `${this.fieldNameValue}[${storageValueIndex}]`;
-          element.value = value;
+          element.id = `${this.fieldNameValue}[${i}][]`;
+          element.name = `${this.fieldNameValue}[${i}][]`;
+          element.value = arrayValue;
           this.fieldTarget.appendChild(element);
         }
+      } else {
+        const element = document.createElement("input");
+        element.type = "hidden";
+        element.id = `${this.fieldNameValue}[${i}]`;
+        element.name = `${this.fieldNameValue}[${i}]`;
+        element.value = value;
+        this.fieldTarget.appendChild(element);
       }
     }
   }
