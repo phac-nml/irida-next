@@ -30,6 +30,14 @@ export default class extends Controller {
       }
     }
 
+    const body = newTable.querySelector("tbody");
+    body.classList.add(
+      "divide-y",
+      "divide-slate-200",
+      "dark:bg-slate-800",
+      "dark:divide-slate-700"
+    );
+
     this.fieldTarget.appendChild(newTable);
   }
 }
