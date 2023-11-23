@@ -16,7 +16,25 @@
     "aria-label": attachment.file.filename,
     data: {
       name: attachment.file.filename,
+      attachment_name:
+        (
+          if attachment.associated_attachment
+            attachment.associated_attachment.file.filename
+          else
+            nil
+          end
+        ),
       size: number_to_human_size(attachment.file.blob.byte_size),
+      attachment_size:
+        (
+          if attachment.associated_attachment
+            number_to_human_size(
+              attachment.associated_attachment.file.blob.byte_size
+            )
+          else
+            nil
+          end
+        ),
       type: attachment.metadata["type"],
       action: "input->selection#toggle",
       selection_target: "rowSelection"

@@ -12,9 +12,22 @@ export default class extends Controller {
 
     for (var i = 0; i < checkboxes.length; i++) {
       const newRow = newTable.insertRow(-1);
-      newRow.insertCell(-1).innerHTML = checkboxes[i].dataset.name;
-      newRow.insertCell(-1).innerHTML = checkboxes[i].dataset.size;
-      newRow.insertCell(-1).innerHTML = checkboxes[i].dataset.type;
+      const name = checkboxes[i].dataset.name;
+      newRow.insertCell(-1).innerHTML = name ? name : "";
+      const size = checkboxes[i].dataset.size;
+      newRow.insertCell(-1).innerHTML = size ? size : "";
+      const type = checkboxes[i].dataset.type;
+      newRow.insertCell(-1).innerHTML = type ? type : "";
+
+      if (checkboxes[i].dataset.attachmentName) {
+        const newRow = newTable.insertRow(-1);
+        const attachmentName = checkboxes[i].dataset.attachmentName;
+        newRow.insertCell(-1).innerHTML = attachmentName ? attachmentName : "";
+        const attachmentSize = checkboxes[i].dataset.attachmentSize;
+        newRow.insertCell(-1).innerHTML = attachmentSize ? attachmentSize : "";
+        const attachmentType = checkboxes[i].dataset.type;
+        newRow.insertCell(-1).innerHTML = attachmentType ? attachmentType : "";
+      }
     }
 
     this.fieldTarget.appendChild(newTable);
