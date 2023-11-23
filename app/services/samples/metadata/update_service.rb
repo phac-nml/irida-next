@@ -17,14 +17,20 @@ module Samples
       def execute
         authorize! sample.project, to: :update_sample?
 
-        @sample.metadata.merge(@metadata) if @metadata
+        if @metadata
+          @metadata = @metadata.transform_keys(&:to_s)
+          @sample['metadata'] = @sample['metadata'].merge(@metadata)
+        end
 
         if @metadata_key
-          raise SampleMetadataUpdateError, I18n.t('key_does_not_exist') unless @sample.metadata.key?(@metadata_key)
-
-          @sample.metadata.delete(@metadata_key)
+          unless @sample['metadata'].key?(@metadata_key)
+            raise SampleMetadataUpdateError,
+                  I18n.t('services.samples.metadata.key_does_not_exist', sample_name: @sample.name, key: @metadata_key)
+          end
+          @sample['metadata'].delete(@metadata_key)
         end
-      rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError
+        @sample.update(id: @sample.id)
+      rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
       end
     end
