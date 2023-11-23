@@ -4,30 +4,17 @@ export default class extends Controller {
   static targets = ["field"];
 
   connect() {
-    let table = document.getElementById("attachments-table-body");
-    let newTable = document.createElement("table");
+    const checkboxes = document.querySelectorAll(
+      "input[name='attachment_ids[]']:checked"
+    );
+    const newTable = document.createElement("table");
     newTable.classList.add("w-full");
 
-    for (var i = 0; i < table.rows.length; i++) {
-      let row = table.rows[i];
-      let isChecked = row.cells[0].children[0].checked;
-
-      if (isChecked) {
-        let newRow = newTable.insertRow(-1);
-
-        for (var j = 0; j < row.cells.length; j++) {
-          if ((j == 1) | (j == 4)) {
-            //copy file name & size columns
-            let cell = row.cells[j];
-            let newCell = newRow.insertCell(-1);
-            if (cell.children.length > 0) {
-              newCell.innerHTML = cell.children[0].text;
-            } else {
-              newCell.innerHTML = cell.innerHTML;
-            }
-          }
-        }
-      }
+    for (var i = 0; i < checkboxes.length; i++) {
+      const newRow = newTable.insertRow(-1);
+      newRow.insertCell(-1).innerHTML = checkboxes[i].dataset.name;
+      newRow.insertCell(-1).innerHTML = checkboxes[i].dataset.size;
+      newRow.insertCell(-1).innerHTML = checkboxes[i].dataset.type;
     }
 
     this.fieldTarget.appendChild(newTable);

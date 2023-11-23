@@ -15,6 +15,9 @@
     id: dom_id(attachment.file),
     "aria-label": attachment.file.filename,
     data: {
+      name: attachment.file.filename,
+      size: number_to_human_size(attachment.file.blob.byte_size),
+      type: attachment.metadata["type"],
       action: "input->selection#toggle",
       selection_target: "rowSelection"
     },
