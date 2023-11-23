@@ -7,15 +7,22 @@ module Samples
       SampleMetadataUpdateError = Class.new(StandardError)
       attr_accessor :sample, :metadata, :metadata_key
 
-      def initialize(sample, user = nil, params = {}, metadata = nil, metadata_key = nil) # rubocop:disable Metrics/ParameterLists
+      def initialize(project, sample, user = nil, params = {}, metadata = nil, metadata_key = nil) # rubocop:disable Metrics/ParameterLists
         super(user, params.except(:sample, :id))
+        @project = project
         @sample = sample
         @metadata = metadata
         @metadata_key = metadata_key
       end
 
-      def execute
+      def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         authorize! sample.project, to: :update_sample?
+
+        if @project.id != @sample.project.id
+          raise SampleMetadataUpdateError,
+                I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample.name,
+                                                                                      project_name: @project.name)
+        end
 
         if @metadata
           @metadata = @metadata.transform_keys(&:to_s)

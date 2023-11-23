@@ -8,13 +8,14 @@ module Samples
       def setup
         @user = users(:john_doe)
         @sample = samples(:sample1)
+        @project = projects(:project1)
       end
 
       test 'update sample metadata with sample containing no existing metadata' do
         metadata = { 'key1' => 'value1', 'key2' => 'value2' }
 
         assert_changes -> { @sample.metadata }, to: { 'key1' => 'value1', 'key2' => 'value2' } do
-          Samples::Metadata::UpdateService.new(@sample, @user, {}, metadata, nil).execute
+          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, nil).execute
         end
       end
 
@@ -25,14 +26,14 @@ module Samples
         assert_changes lambda {
                          @sample.metadata
                        }, to: { 'key1' => 'value4', 'key2' => 'value2', 'key3' => 'value3' } do
-          Samples::Metadata::UpdateService.new(@sample, @user, {}, metadata, nil).execute
+          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, nil).execute
         end
       end
 
       test 'remove metadata key' do
         @sample.metadata = { 'key1' => 'value1', 'key2' => 'value2' }
 
-        Samples::Metadata::UpdateService.new(@sample, @user, {}, nil, 'key2').execute
+        Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, nil, 'key2').execute
 
         assert_equal(@sample.metadata, { 'key1' => 'value1' })
       end
@@ -41,7 +42,7 @@ module Samples
         @sample.metadata = { 'key1' => 'value1', 'key2' => 'value2' }
 
         assert_no_changes -> { @sample } do
-          Samples::Metadata::UpdateService.new(@sample, @user, {}, nil, 'key3').execute
+          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, nil, 'key3').execute
         end
         assert @sample.errors.full_messages.include?(
           I18n.t('services.samples.metadata.key_does_not_exist', sample_name: @sample.name, key: 'key3')
@@ -52,7 +53,7 @@ module Samples
         metadata = { 'key1' => 'value1', 'key2' => 'value2' }
 
         assert_changes -> { @sample.metadata }, to: { 'key1' => 'value1' } do
-          Samples::Metadata::UpdateService.new(@sample, @user, {}, metadata, 'key2').execute
+          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, 'key2').execute
         end
       end
 
@@ -60,7 +61,7 @@ module Samples
         metadata = { 'key1' => 'value1', 'key2' => 'value2' }
 
         assert_changes -> { @sample.metadata }, to: { 'key1' => 'value1', 'key2' => 'value2' } do
-          Samples::Metadata::UpdateService.new(@sample, @user, {}, metadata, 'key3').execute
+          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, 'key3').execute
         end
         assert @sample.errors.full_messages.include?(
           I18n.t('services.samples.metadata.key_does_not_exist', sample_name: @sample.name, key: 'key3')
@@ -71,7 +72,7 @@ module Samples
         metadata = { 'key1' => 'value1', 'key2' => 'value2' }
 
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          Samples::Metadata::UpdateService.new(@sample, user, {}, metadata, nil).execute
+          Samples::Metadata::UpdateService.new(@project, @sample, user, {}, metadata, nil).execute
         end
 
         assert_equal ProjectPolicy, exception.policy
@@ -86,8 +87,20 @@ module Samples
 
         assert_authorized_to(:update_sample?, @sample.project, with: ProjectPolicy,
                                                                context: { user: @user }) do
-          Samples::Metadata::UpdateService.new(@sample, @user, {}, metadata, nil).execute
+          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, nil).execute
         end
+      end
+
+      test 'sample does not belong to project' do
+        metadata = { 'key1' => 'value1', 'key2' => 'value2' }
+        project = projects(:projectA)
+        assert_no_changes -> { @sample } do
+          Samples::Metadata::UpdateService.new(project, @sample, @user, {}, metadata, nil).execute
+        end
+        assert @sample.errors.full_messages.include?(
+          I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample.name,
+                                                                                project_name: project.name)
+        )
       end
     end
   end

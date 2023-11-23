@@ -890,6 +890,7 @@ fr:
         samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
       metadata:
         key_does_not_exist: "Sample '%{sample_name}' does not contain '%{key}' in its metadata"
+        sample_does_not_belong_to_project: "Sample '%{sample_name} does not belong to project '${project_name}'"
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
