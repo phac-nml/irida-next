@@ -12,9 +12,9 @@
 
 # Limit the number of file attachments to add when seeding to reduce time.
 # default limit of 1 can be overriden with env variable 'SEED_ATTACHMENT_PER_SAMPLE'
-@attachments_per_sample = (ENV['SEED_ATTACHMENT_PER_SAMPLE'].presence || 2)
-# default limit of 50 total files attached can be overridden with env variable 'SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'
-@maximum_total_sample_attachments = (ENV['SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'].presence || 50)
+@attachments_per_sample = (ENV['SEED_ATTACHMENT_PER_SAMPLE'].presence || 1)
+# default of unlimited total files attached (-1) can be overridden with env variable 'SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'
+@maximum_total_sample_attachments = (ENV['SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'].presence || -1)
 @total_sample_attachment_count = 0
 # Array of sample file names
 @sequencing_file_list = Rails.root.join('test/fixtures/files').entries.select do |f|
@@ -62,7 +62,16 @@ def seed_samples(project, sample_count)
       { name: "#{project.namespace.parent.name}/#{project.name} Sample #{i}",
         description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{i}." }
     ).execute
-    seed_attachments(sample) if @total_sample_attachment_count < @maximum_total_sample_attachments
+    # exit if max total samples has been reached
+    next unless @maximum_total_sample_attachments == -1 ||
+                @total_sample_attachment_count < @maximum_total_sample_attachments
+
+    seed_attachments(sample)
+    # if max total samples has been reached, log it
+    if @maximum_total_sample_attachments != -1 &&
+       @total_sample_attachment_count >= @maximum_total_sample_attachments
+      Rails.logger.info "Maximum uploaded sample limit of '#{@maximum_total_sample_attachments}' reached."
+    end
   end
 end
 
@@ -75,9 +84,6 @@ def seed_attachments(sample)
     attachment.save!
     @total_sample_attachment_count += 1
   end
-  return unless @total_sample_attachment_count >= @maximum_total_sample_attachments
-
-  Rails.logger.info "Maximum uploaded sample limit of '#{@maximum_total_sample_attachments}' reached."
 end
 
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
