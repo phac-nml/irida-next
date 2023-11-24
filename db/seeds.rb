@@ -14,7 +14,7 @@
 # default limit of 1 can be overriden with env variable 'SEED_ATTACHMENT_PER_SAMPLE'
 @attachments_per_sample = (ENV['SEED_ATTACHMENT_PER_SAMPLE'].presence || 1)
 @attachments_per_sample = @attachments_per_sample.to_i
-# default of unlimited total files attached (-1) can be overridden with env variable 'SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'
+# default of unlimited files attached (-1) can be overridden with env variable 'SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'
 @maximum_total_sample_attachments = (ENV['SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'].presence || -1)
 @maximum_total_sample_attachments = @maximum_total_sample_attachments.to_i
 @total_sample_attachment_count = 0
