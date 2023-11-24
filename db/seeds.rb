@@ -80,12 +80,6 @@ def seed_attachments(sample)
   Rails.logger.info "Maximum uploaded sample limit of '#{@maximum_total_sample_attachments}' reached."
 end
 
-# def build_sequencing_files_list
-#   Rails.root.join('test/fixtures/files').entries.select do |f|
-#     ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
-#   end
-# end
-
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   owner = User.find_by(email: group_params[:owner_email]) if group_params[:owner_email]
 
