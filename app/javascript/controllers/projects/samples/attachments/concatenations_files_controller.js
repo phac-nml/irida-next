@@ -12,21 +12,15 @@ export default class extends Controller {
 
     for (var i = 0; i < checkboxes.length; i++) {
       const newRow = newTable.insertRow(-1);
-      const name = checkboxes[i].dataset.name;
-      newRow.insertCell(-1).innerHTML = name ? name : "";
-      const size = checkboxes[i].dataset.size;
-      newRow.insertCell(-1).innerHTML = size ? size : "";
-      const type = checkboxes[i].dataset.type;
-      newRow.insertCell(-1).innerHTML = type ? type : "";
+      this.#addCell(newRow, checkboxes[i].dataset.name);
+      this.#addCell(newRow, checkboxes[i].dataset.size);
+      this.#addCell(newRow, checkboxes[i].dataset.type);
 
       if (checkboxes[i].dataset.attachmentName) {
         const newRow = newTable.insertRow(-1);
-        const attachmentName = checkboxes[i].dataset.attachmentName;
-        newRow.insertCell(-1).innerHTML = attachmentName ? attachmentName : "";
-        const attachmentSize = checkboxes[i].dataset.attachmentSize;
-        newRow.insertCell(-1).innerHTML = attachmentSize ? attachmentSize : "";
-        const attachmentType = checkboxes[i].dataset.type;
-        newRow.insertCell(-1).innerHTML = attachmentType ? attachmentType : "";
+        this.#addCell(newRow, checkboxes[i].dataset.attachmentName);
+        this.#addCell(newRow, checkboxes[i].dataset.attachmentSize);
+        this.#addCell(newRow, checkboxes[i].dataset.type);
       }
     }
 
@@ -39,5 +33,9 @@ export default class extends Controller {
     );
 
     this.fieldTarget.appendChild(newTable);
+  }
+
+  #addCell(row, value) {
+    row.insertCell(-1).innerHTML = value ? value : "";
   }
 }

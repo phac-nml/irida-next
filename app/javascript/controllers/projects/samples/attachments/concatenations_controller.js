@@ -33,8 +33,4 @@ export default class extends Controller {
       }
     }
   }
-
-  clear() {
-    sessionStorage.removeItem(this.storageKeyValue);
-  }
 }
