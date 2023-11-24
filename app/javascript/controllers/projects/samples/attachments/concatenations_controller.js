@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 //creates hidden fields within a form for selected files
 export default class extends Controller {
-  static targets = ["field", "input"];
+  static targets = ["field"];
 
   static values = {
     fieldName: String,
