@@ -10,11 +10,14 @@ class SamplePolicy < ApplicationPolicy
         direct_group_projects_samples: relation.joins(project: [:namespace])
                               .where(namespace: { parent_id: group.self_and_descendant_ids }).includes(:project)
                               .select(:id),
-        linked_group_projects_samples: relation.where(project: Project.joins(:namespace).where(namespace:
-        {
-          parent: Namespace.where(parent: NamespaceGroupLink
-          .where(group: group.self_and_descendants).not_expired.select(:namespace_id))
-        })).includes(:project)
+        linked_group_projects_samples: relation.where(project: Project.joins(:namespace)
+        .where(
+          namespace:
+          {
+            parent: Namespace.where(parent: NamespaceGroupLink
+            .where(group: group.self_and_descendants).not_expired.select(:namespace_id))
+          }
+        ))
         .select(:id)
       ).where(
         Arel.sql(
