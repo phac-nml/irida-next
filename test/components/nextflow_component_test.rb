@@ -4,7 +4,11 @@ require 'view_component_test_case'
 
 class NextflowComponentTest < ViewComponentTestCase
   test 'default' do
-    render_preview(:default)
+    render_inline NextflowComponent.new(
+      samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
+      schema: JSON.parse(File.read('test/fixtures/files/nextflow/nextflow_schema.json')),
+      url: 'https://nf-co.re/testpipeline'
+    )
 
     assert_selector 'form' do
       assert_selector 'h1', text: 'nf-core/testpipeline pipeline parameters', count: 1
