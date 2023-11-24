@@ -11,8 +11,15 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 # Limit the number of file attachments to add when seeding to reduce time.
-@sample_attachment_count = 0
-@sample_attachment_limit = 20
+# default limit of 1 can be overriden with env variable 'SEED_ATTACHMENT_PER_SAMPLE'
+@attachments_per_sample = (ENV['SEED_ATTACHMENT_PER_SAMPLE'].presence || 2)
+# default limit of 50 total files attached can be overridden with env variable 'SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'
+@maximum_total_sample_attachments = (ENV['SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'].presence || 50)
+@total_sample_attachment_count = 0
+# Array of sample file names
+@sequencing_file_list = Rails.root.join('test/fixtures/files').entries.select do |f|
+  ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
+end
 
 def seed_project(project_params:, creator:, namespace:)
   project = Projects::CreateService.new(creator,
@@ -55,25 +62,29 @@ def seed_samples(project, sample_count)
       { name: "#{project.namespace.parent.name}/#{project.name} Sample #{i}",
         description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{i}." }
     ).execute
-    seed_attachments(sample) if @sample_attachment_count < @sample_attachment_limit
+    seed_attachments(sample) if @total_sample_attachment_count < @maximum_total_sample_attachments
   end
 end
 
 def seed_attachments(sample)
-  Rails.logger.info "seeding attachments... #{@sample_attachment_count}/#{@sample_attachment_limit}"
-  sequencing_files.each do |f|
-    a = sample.attachments.build
-    a.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
-    a.save!
+  (1..[@attachments_per_sample, @sequencing_file_list.length].min).each do |i|
+    Rails.logger.info "seeding... Sample: #{sample.name}, Attachments... #{i}/#{@attachments_per_sample}"
+    f = @sequencing_file_list[i - 1] # index'd at 0
+    attachment = sample.attachments.build
+    attachment.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
+    attachment.save!
+    @total_sample_attachment_count += 1
   end
-  @sample_attachment_count += 1
+  return unless @total_sample_attachment_count >= @maximum_total_sample_attachments
+
+  Rails.logger.info "Maximum uploaded sample limit of '#{@maximum_total_sample_attachments}' reached."
 end
 
-def sequencing_files
-  Rails.root.join('test/fixtures/files').entries.select do |f|
-    ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
-  end
-end
+# def build_sequencing_files_list
+#   Rails.root.join('test/fixtures/files').entries.select do |f|
+#     ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
+#   end
+# end
 
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   owner = User.find_by(email: group_params[:owner_email]) if group_params[:owner_email]
