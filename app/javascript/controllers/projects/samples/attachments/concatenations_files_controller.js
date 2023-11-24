@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
+// creates a table listing all the selected files
 export default class extends Controller {
   static targets = ["field"];
 
