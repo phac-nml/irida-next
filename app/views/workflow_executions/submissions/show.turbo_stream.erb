@@ -2,8 +2,10 @@
   <%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
     <%= dialog.with_header(title: t(:'.title', workflow: @workflow.name)) %>
     <%= dialog.with_section do %>
-      <%= render Nextflow::SamplesheetComponent.new(
-        schema: @schema,
+
+      <%= render NextflowComponent.new(
+        schema: @workflow_schema,
+        url: "#{}",
         samples: @samples,
       ) %>
     <% end %>

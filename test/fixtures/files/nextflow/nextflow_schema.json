@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://raw.githubusercontent.com/nf-core/testpipeline/master/nextflow_schema.json",
-  "title": "nf-core/testpipeline pipeline parameters",
-  "description": "this is a test",
+  "$id": "https://raw.githubusercontent.com/nf-core/iridanext/master/nextflow_schema.json",
+  "title": "nf-core/iridanext pipeline parameters",
+  "description": "Example IRIDA Next pipeline",
   "type": "object",
   "definitions": {
     "input_output_options": {
@@ -10,15 +10,20 @@
       "type": "object",
       "fa_icon": "fas fa-terminal",
       "description": "Define where the pipeline should find input data and save output data.",
-      "required": ["input", "outdir"],
+      "required": [
+        "input",
+        "outdir"
+      ],
       "properties": {
         "input": {
           "type": "string",
           "format": "file-path",
+          "exists": true,
           "mimetype": "text/csv",
-          "pattern": "^\\S+\\.(csv|tsv|yaml)$",
+          "pattern": "^\\S+\\.csv$",
+          "schema": "app/assets/files/nextflow/schema_input.json",
           "description": "Path to comma-separated file containing information about the samples in the experiment.",
-          "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/testpipeline/usage#samplesheet-input).",
+          "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/iridanext/usage#samplesheet-input).",
           "fa_icon": "fas fa-file-csv"
         },
         "outdir": {
@@ -33,11 +38,6 @@
           "fa_icon": "fas fa-envelope",
           "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
           "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-        },
-        "multiqc_title": {
-          "type": "string",
-          "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-          "fa_icon": "fas fa-file-signature"
         }
       }
     },
@@ -52,23 +52,6 @@
           "description": "Name of iGenomes reference.",
           "fa_icon": "fas fa-book",
           "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
-        },
-        "fasta": {
-          "type": "string",
-          "format": "file-path",
-          "mimetype": "text/plain",
-          "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
-          "description": "Path to FASTA genome file.",
-          "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-          "fa_icon": "far fa-file-code"
-        },
-        "igenomes_base": {
-          "type": "string",
-          "format": "directory-path",
-          "description": "Directory / URL base for iGenomes references.",
-          "default": "s3://ngi-igenomes/igenomes",
-          "fa_icon": "fas fa-cloud-download-alt",
-          "hidden": true
         },
         "igenomes_ignore": {
           "type": "boolean",
@@ -156,7 +139,7 @@
           "description": "Maximum amount of time that can be requested for any single job.",
           "default": "240.h",
           "fa_icon": "far fa-clock",
-          "pattern": "^(\\d+\\.?\\s*(s|m|h|day)\\s*)+$",
+          "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
           "hidden": true,
           "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
         }
@@ -170,8 +153,14 @@
       "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
       "properties": {
         "help": {
-          "type": ["string", "boolean"],
+          "type": "boolean",
           "description": "Display help text.",
+          "fa_icon": "fas fa-question-circle",
+          "hidden": true
+        },
+        "version": {
+          "type": "boolean",
+          "description": "Display version and exit.",
           "fa_icon": "fas fa-question-circle",
           "hidden": true
         },
@@ -205,31 +194,17 @@
           "fa_icon": "fas fa-remove-format",
           "hidden": true
         },
-        "max_multiqc_email_size": {
-          "type": "string",
-          "description": "File size limit when attaching MultiQC reports to summary emails.",
-          "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-          "default": "25.MB",
-          "fa_icon": "fas fa-file-upload",
-          "hidden": true
-        },
         "monochrome_logs": {
           "type": "boolean",
           "description": "Do not use coloured log outputs.",
           "fa_icon": "fas fa-palette",
           "hidden": true
         },
-        "multiqc_config": {
+        "hook_url": {
           "type": "string",
-          "description": "Custom config file to supply to MultiQC.",
-          "fa_icon": "fas fa-cog",
-          "hidden": true
-        },
-        "tracedir": {
-          "type": "string",
-          "description": "Directory to keep pipeline Nextflow logs and reports.",
-          "default": "${params.outdir}/pipeline_info",
-          "fa_icon": "fas fa-cogs",
+          "description": "Incoming hook URL for messaging service",
+          "fa_icon": "fas fa-people-group",
+          "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
           "hidden": true
         },
         "validate_params": {
@@ -246,11 +221,19 @@
           "hidden": true,
           "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
         },
-        "enable_conda": {
+        "validationFailUnrecognisedParams": {
           "type": "boolean",
-          "description": "Run this workflow with Conda. You can also use '-profile conda' instead of providing this parameter.",
+          "fa_icon": "far fa-check-circle",
+          "description": "Validation of parameters fails when an unrecognised parameter is found.",
           "hidden": true,
-          "fa_icon": "fas fa-bacon"
+          "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
+        },
+        "validationLenientMode": {
+          "type": "boolean",
+          "fa_icon": "far fa-check-circle",
+          "description": "Validation of parameters in lenient more.",
+          "hidden": true,
+          "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
         }
       }
     }
@@ -271,5 +254,6 @@
     {
       "$ref": "#/definitions/generic_options"
     }
-  ]
+  ],
+  "properties": {}
 }

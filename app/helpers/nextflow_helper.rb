@@ -2,6 +2,7 @@
 
 # Helper to render a Nextflow pipeline form
 module NextflowHelper
+  SCHEMA_PATH = 'test/fixtures/files/nextflow/'
   def form_input(name, property, required)
     return checkbox_input(name, property) if property['type'] == 'boolean'
 
@@ -36,5 +37,10 @@ module NextflowHelper
       hidden: property['hidden'],
       required:
     )
+  end
+
+  def samplesheet_schema(given_path)
+    path = File.basename(given_path)
+    JSON.parse(Rails.root.join(SCHEMA_PATH, path).read)
   end
 end

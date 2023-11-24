@@ -6,7 +6,8 @@ class NextflowComponent < Component
 
   attr_reader :schema, :url
 
-  def initialize(schema:, url:)
+  def initialize(schema:, url:, samples:)
+    @samples = samples
     @schema = schema
     @url = url
   end

@@ -1,19 +1,21 @@
-<table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
-  <thead
-    class="
+<div>
+  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><%= t(".label") %></label>
+  <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+    <thead
+      class="
           text-xs
           text-slate-700
           bg-slate-50
           dark:bg-slate-700
           dark:text-slate-400
         "
-  >
-  <tr>
-    <% properties.keys.each_with_index do |header, index| %>
-      <th class="px-6 py-3 font-semibold tracking-wider">
-        <div class="flex items-center space-x-2">
-          <span class="uppercase"><%= header %></span>
-          <% if required.include?(header) %>
+    >
+    <tr>
+      <% properties.keys.each_with_index do |header, index| %>
+        <th class="px-6 py-3 font-semibold tracking-wider">
+          <div class="flex items-center space-x-2">
+            <span class="uppercase"><%= header %></span>
+            <% if required.include?(header) %>
                   <span
                     class="
                       bg-yellow-100
@@ -27,22 +29,22 @@
                       dark:text-yellow-300
                     "
                   ><%= t(".required") %></span>
+            <% end %>
+          </div>
+        </th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <% samples.each_with_index do |sample, index| %>
+      <%= fields_for "sample[#{index}]".to_s do |fields| %>
+        <tr class="border-b dark:border-slate-700">
+          <% properties.keys.each do |property| %>
+            <%= render_cell_type(property, properties[property], sample, fields) %>
           <% end %>
-        </div>
-      </th>
+        </tr>
+      <% end %>
     <% end %>
-  </tr>
-  </thead>
-  <tbody>
-  <% samples.each_with_index do |sample, index| %>
-    <%= fields_for "sample[#{index}]".to_s do |fields| %>
-      <tr class="border-b dark:border-slate-700">
-        <% properties.keys.each do |property| %>
-          <%= render_cell_type(property, properties[property], sample, fields) %>
-        <% end %>
-      </tr>
-    <% end %>
-  <% end %>
-  </tbody>
-</table>
-
+    </tbody>
+  </table>
+</div>

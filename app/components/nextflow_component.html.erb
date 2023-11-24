@@ -7,7 +7,7 @@
   <%= schema["description"] %>
 </p>
 <form method="post" action="#">
-  <% schema["definitions"].each do |_item, definition| %>
+  <% schema["definitions"].each do |item, definition| %>
     <%- if definition["properties"]
       .values
       .filter { |property| !property.key?("hidden") }
@@ -20,7 +20,14 @@
       </p>
       <div class="grid grid-cols-1 gap-4 mb-8">
         <% definition["properties"].each do |name, property| %>
-          <%- if property["enum"] %>
+          <% if name == "outdir" || name == "email" %>
+            <!--  Don't do anything, skip these fields -->
+          <% elsif item == "input_output_options" && property["format"] == "file-path" %>
+            <%= render Nextflow::SamplesheetComponent.new(
+              schema: samplesheet_schema(property["schema"]),
+              samples: @samples,
+            ) %>
+          <% elsif property["enum"] %>
              <%= viral_select(
                name:,
                 label: property["description"],

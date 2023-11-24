@@ -15,7 +15,7 @@ module WorkflowExecutions
 
     def show
       @samples = samples
-      @schema = workflow_schema
+      @workflow_schema = workflow_schema
       @workflow = workflow
       respond_to do |format|
         format.turbo_stream do
@@ -38,14 +38,14 @@ module WorkflowExecutions
       [awesome_flow, slow_flow]
     end
 
-    def workflow_schema
-      # Need to get a schema file path from the workflow
-      JSON.parse(Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json').read)
-    end
-
     def samples
       sample_ids = params[:sample_ids]
       @samples = Sample.where(id: sample_ids)
+    end
+
+    def workflow_schema
+      # Need to get a schema file path from the workflow
+      JSON.parse(Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json').read)
     end
   end
 end
