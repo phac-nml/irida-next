@@ -45,3 +45,15 @@ workflow_execution_invalid_metadata:
   workflow_url: 'my_workflow_url'
   run_id: 'my_run_id_1'
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+irida_next_example:
+  metadata: { "workflow_name": "irida-next-example", "workflow_version": "1.0dev" }
+  workflow_params: {}
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

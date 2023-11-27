@@ -23,3 +23,12 @@ samples_workflow_executions_invalid_no_workflow_execution:
     {
       key_c: 'value_c'
     }
+
+sample1_irida_next_example:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example) %>
+  samplesheet_params: {
+    "sample": <%= "gid://irida/Sample/#{ActiveRecord::FixtureSet.identify(:sample1)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1)}" %>,
+    "fastq_2": ""
+  }

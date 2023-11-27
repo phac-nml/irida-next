@@ -11,6 +11,7 @@ class WorkflowExecution < ApplicationRecord
 
   has_many :samples_workflow_executions, dependent: :nullify
   has_many :samples, through: :samples_workflow_executions
+  has_many_attached :inputs
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
 end
