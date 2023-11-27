@@ -872,6 +872,7 @@ en:
           title: Workflow Selection
         show:
           title: '%{workflow} parameters'
+          submit: Submit
   services:
     attachments:
       concatenation:
