@@ -14,14 +14,14 @@ export default class extends Controller {
     for (var i = 0; i < checkboxes.length; i++) {
       const newRow = newTable.insertRow(-1);
       this.#addCell(newRow, checkboxes[i].dataset.name);
-      this.#addCell(newRow, checkboxes[i].dataset.size);
       this.#addCell(newRow, checkboxes[i].dataset.type);
+      this.#addCell(newRow, checkboxes[i].dataset.size);
 
       if (checkboxes[i].dataset.attachmentName) {
         const newRow = newTable.insertRow(-1);
         this.#addCell(newRow, checkboxes[i].dataset.attachmentName);
-        this.#addCell(newRow, checkboxes[i].dataset.attachmentSize);
         this.#addCell(newRow, checkboxes[i].dataset.type);
+        this.#addCell(newRow, checkboxes[i].dataset.attachmentSize);
       }
     }
 
@@ -38,5 +38,7 @@ export default class extends Controller {
 
   #addCell(row, value) {
     row.insertCell(-1).innerHTML = value ? value : "";
+    const cell = row.querySelector("td");
+    cell.classList.add("px-6", "py-4");
   }
 }
