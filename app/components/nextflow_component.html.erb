@@ -1,54 +1,54 @@
-<h1
+<div>
+  <h1
   class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900  md:text-5xl lg:text-4xl dark:text-white"
->
-  <%= schema["title"] %>
-</h1>
-<p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-  <%= schema["description"] %>
-</p>
-<form method="post" action="#">
-  <% schema["definitions"].each do |item, definition| %>
-    <%- if definition["properties"]
-      .values
-      .filter { |property| !property.key?("hidden") }
-      .length > 0 %>
-      <h2 class="text-2xl font-extrabold dark:text-white">
-        <%= definition["title"] %>
-      </h2>
-      <p class="mb-2 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-        <%= definition["description"] %>
-      </p>
-      <div class="grid grid-cols-1 gap-4 mb-8">
-        <% definition["properties"].each do |name, property| %>
-          <% if name == "outdir" || name == "email" %>
-            <!--  Don't do anything, skip these fields -->
-          <% elsif item == "input_output_options" && property["format"] == "file-path" %>
-            <%= render Nextflow::SamplesheetComponent.new(
-              schema: samplesheet_schema(property["schema"]),
-              samples: @samples,
-            ) %>
-          <% elsif property["enum"] %>
-             <%= viral_select(
-               name:,
-                label: property["description"],
-                options: property["enum"].map { |option| { value: option, label: option } },
-                selected_value: property["default"],
-                required: property["required"],
-                help_text: property["help_text"],
-                hidden: property["hidden"]
+  ><%= schema["title"] %></h1>
+  <p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+    <%= schema["description"] %>
+  </p>
+  <form method="post" action="#">
+    <% schema["definitions"].each do |item, definition| %>
+      <%- if definition["properties"]
+        .values
+        .filter { |property| !property.key?("hidden") }
+        .length > 0 %>
+        <h2 class="text-2xl font-extrabold dark:text-white">
+          <%= definition["title"] %>
+        </h2>
+        <p class="mb-2 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+          <%= definition["description"] %>
+        </p>
+        <div class="grid grid-cols-1 gap-4 mb-8">
+          <% definition["properties"].each do |name, property| %>
+            <% if name == "outdir" || name == "email" %>
+              <!--  Don't do anything, skip these fields -->
+            <% elsif item == "input_output_options" && property["format"] == "file-path" %>
+              <%= render Nextflow::SamplesheetComponent.new(
+                schema: samplesheet_schema(property["schema"]),
+                samples: @samples,
               ) %>
-          <% else %>
-            <%= form_input(
-                  name,
-                  property,
-                  definition["required"].present? && definition["required"].include?(name)
-                ) %>
+            <% elsif property["enum"] %>
+              <%= viral_select(
+                    name:,
+                    label: property["description"],
+                    options: property["enum"].map { |option| { value: option, label: option } },
+                    selected_value: property["default"],
+                    required: property["required"],
+                    help_text: property["help_text"],
+                    hidden: property["hidden"]
+                  ) %>
+            <% else %>
+              <%= form_input(
+                    name,
+                    property,
+                    definition["required"].present? && definition["required"].include?(name)
+                  ) %>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
-  <button type="submit" class="button button--state-primary button--size-default">
-    <%= t(:'workflow_executions.submissions.show.submit') %>
-  </button>
-</form>
+    <button type="submit" class="button button--state-primary button--size-default">
+      <%= t(:'workflow_executions.submissions.show.submit') %>
+    </button>
+  </form>
+</div>
