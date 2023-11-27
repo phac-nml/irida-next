@@ -33,6 +33,7 @@ fr:
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
+      full_date: "%B %d, %Y"
     updated: Updated
   date:
     formats:
@@ -810,6 +811,15 @@ fr:
           dropdown_aria_label: Dropdown options for sample %{sample_name}
         dropdown:
           remove: Remove sample
+        search:
+          placeholder: Filter by name
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
       update:
         success: Sample was successfully updated.
       edit:
@@ -820,7 +830,7 @@ fr:
         submit_button: Update sample
         cancel_button: Cancel
       destroy:
-        success: Sample %{sample_name} was removed.
+        success: Sample %{sample_name} was successfully removed from project %{project_name}.
         error: The sample does not exist within the project.
       transfers:
         _transfer_modal:
@@ -841,6 +851,11 @@ fr:
           success: File %{filename} was successfully removed.
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
         error: File %{filename} was not removed.
+      table:
+        sample: Samples
+        created_at: Created
+        updated_at: Last Updated
+        action: Action
   services:
     attachments:
       concatenation:

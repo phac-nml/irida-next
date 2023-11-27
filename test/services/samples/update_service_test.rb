@@ -4,8 +4,6 @@ require 'test_helper'
 
 module Samples
   class UpdateServiceTest < ActiveSupport::TestCase
-    include ActionPolicy::TestHelper
-
     def setup
       @user = users(:john_doe)
       @sample = samples(:sample23)
