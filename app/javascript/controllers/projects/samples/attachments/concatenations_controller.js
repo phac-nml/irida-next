@@ -14,7 +14,7 @@ export default class extends Controller {
     );
 
     for (var i = 0; i < checkboxes.length; i++) {
-      const value = checkboxes[i].value;
+      const value = JSON.parse(checkboxes[i].value);
       if (value instanceof Array) {
         for (let arrayValue of value) {
           const element = document.createElement("input");
