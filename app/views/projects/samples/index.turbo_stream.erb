@@ -11,3 +11,15 @@
                       project: @project,
                       pagy: @pagy
                     } %>
+
+<%= turbo_stream.update "project_samples_sort_links",
+                    partial: "sort_links",
+                    locals: {
+                      ransack_obj: @q
+                    } %>
+
+<%= turbo_stream.update "project_samples_search_field",
+                    partial: "search_field",
+                    locals: {
+                      ransack_obj: @q
+                    } %>
