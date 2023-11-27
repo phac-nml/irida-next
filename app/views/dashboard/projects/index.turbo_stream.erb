@@ -9,7 +9,7 @@
         dark:divide-slate-700
       "
     >
-    <%= render partial: "shared/project/row", collection: @projects, as: :project %>
+      <%= render partial: "shared/project/row", collection: @projects, as: :project %>
     </tbody>
   </table>
 <% end %>
@@ -41,3 +41,15 @@
       )
   ) %>
 <% end %>
+
+<%= turbo_stream.update "project_sort_links",
+                    partial: "sort_links",
+                    locals: {
+                      ransack_obj: @q
+                    } %>
+
+<%= turbo_stream.update "project_search_field",
+                    partial: "search_field",
+                    locals: {
+                      ransack_obj: @q
+                    } %>

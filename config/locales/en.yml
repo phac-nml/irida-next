@@ -334,6 +334,17 @@ en:
         sign_out: Sign out
   dashboard:
     projects:
+      search_field:
+        search:
+          placeholder: Filter by name
+      sort_links:
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          namespace_name_asc: Name
+          namespace_name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
       index:
         title: Projects
         create_project_button: New project

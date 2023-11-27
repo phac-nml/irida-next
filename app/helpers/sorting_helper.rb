@@ -15,10 +15,10 @@ module SortingHelper
                    caret: true, &)
   end
 
-  def sorting_item(dropdown, ransack_obj, field, dir)
+  def sorting_item(dropdown, ransack_obj, field, dir, sort_item)
     dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
                        url: sort_url(ransack_obj, format('%<field>s %<dir>s', field:, dir:)).gsub(
-                         'samples.turbo_stream', 'samples'
+                         "#{sort_item}.turbo_stream", sort_item
                        ),
                        icon_name: active_sort(ransack_obj, field, dir) ? 'check' : 'blank',
                        data: {

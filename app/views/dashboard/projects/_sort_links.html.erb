@@ -1,0 +1,8 @@
+<%= sorting_dropdown(ransack_obj) do |dropdown| %>
+    <%= sorting_item(dropdown, ransack_obj, :updated_at, :desc, "projects") %>
+    <%= sorting_item(dropdown, ransack_obj, :created_at, :desc, "projects") %>
+    <%= sorting_item(dropdown, ransack_obj, :namespace_name, :asc, "projects") %>
+    <%= sorting_item(dropdown, ransack_obj, :namespace_name, :desc, "projects") %>
+    <%= sorting_item(dropdown, ransack_obj, :updated_at, :asc, "projects") %>
+    <%= sorting_item(dropdown, ransack_obj, :created_at, :asc, "projects") %>
+<% end %>
