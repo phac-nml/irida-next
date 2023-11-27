@@ -15,15 +15,11 @@ class WorkflowExecution < ActiveRecord::Migration[7.1]
       t.string :workflow_url
       t.string :run_id
       t.references :submitter
-      # states to be fully defined in a later migration
-      t.string :states
-      # t.enum :state, enum_type: :workflow_execution_state, default: 'tbd'
+      t.string :state
 
       t.datetime :deleted_at
 
       t.timestamps
     end
-    # states to be defined in a later migration
-    # create_enum :workflow_execution_state, ['tbd']
   end
 end
