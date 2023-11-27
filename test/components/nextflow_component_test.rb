@@ -12,7 +12,7 @@ class NextflowComponentTest < ViewComponentTestCase
 
     assert_selector 'form' do
       assert_selector 'h1', text: 'nf-core/iridanext pipeline parameters', count: 1
-      assert_selector 'tbody tr', count: 2
+      assert_selector 'tbody tr', count: 3
       assert_selector 'input[type=text]', count: 1
     end
   end
