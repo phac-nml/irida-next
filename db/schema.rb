@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_25_155037) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_10_010313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -160,6 +160,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_25_155037) do
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
 
+  create_table "samples_workflow_executions", force: :cascade do |t|
+    t.jsonb "samplesheet_params", default: {}, null: false
+    t.bigint "sample_id"
+    t.bigint "workflow_execution_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sample_id"], name: "index_samples_workflow_executions_on_sample_id"
+    t.index ["workflow_execution_id"], name: "index_samples_workflow_executions_on_workflow_execution_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -178,6 +189,25 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_25_155037) do
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true, where: "(deleted_at IS NULL)"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, where: "(deleted_at IS NULL)"
+  end
+
+  create_table "workflow_executions", force: :cascade do |t|
+    t.jsonb "metadata", default: {"workflow_name"=>"", "workflow_version"=>""}, null: false
+    t.jsonb "workflow_params", default: {}, null: false
+    t.string "workflow_type"
+    t.string "workflow_type_version"
+    t.string "tags", array: true
+    t.string "workflow_engine"
+    t.string "workflow_engine_version"
+    t.jsonb "workflow_engine_parameters", default: {}, null: false
+    t.string "workflow_url"
+    t.string "run_id"
+    t.bigint "submitter_id"
+    t.string "states"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

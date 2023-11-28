@@ -92,6 +92,9 @@ gem 'fx'
 # Soft delete records
 gem 'paranoia'
 
+# Validate json schema's
+gem 'activerecord_json_validator', '~> 2.1.0'
+
 # ActiveStorage
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
