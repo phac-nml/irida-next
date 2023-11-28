@@ -12,11 +12,9 @@
                       pagy: @pagy
                     } %>
 
-<%= turbo_stream.update "project_samples_sort_links",
-                    partial: "sort_links",
-                    locals: {
-                      ransack_obj: @q
-                    } %>
+<%= turbo_stream.update "project_samples_sort_links" do %>
+  <%= render Ransack::SortLinksComponent.new(@q, "samples") %>
+<% end %>
 
 <%= turbo_stream.update "project_samples_hidden_search_value" do %>
   <%= render Ransack::HiddenFieldComponent.new(@q) %>

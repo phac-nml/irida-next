@@ -27,8 +27,6 @@
   ) %>
 <% end %>
 
-<%= turbo_stream.update "groups_sort_links",
-                    partial: "sort_links",
-                    locals: {
-                      ransack_obj: @q
-                    } %>
+<%= turbo_stream.update "groups_sort_links" do %>
+  <%= render Ransack::SortLinksComponent.new(@q, "groups") %>
+<% end %>

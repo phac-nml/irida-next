@@ -61,10 +61,10 @@ module Dashboard
         assert_text projects(:project1).human_name
       end
 
-      click_on I18n.t(:'dashboard.projects.sort_links.sorting.updated_at_desc')
-      click_on I18n.t(:'dashboard.projects.sort_links.sorting.namespace_name_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
       sleep 1
-      assert_text I18n.t(:'dashboard.projects.sort_links.sorting.namespace_name_desc')
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_selector 'tr', count: 20
       within first('tr') do
@@ -86,10 +86,10 @@ module Dashboard
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
-      click_on I18n.t(:'dashboard.projects.sort_links.sorting.updated_at_desc')
-      click_on I18n.t(:'dashboard.projects.sort_links.sorting.namespace_name_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
       sleep 1
-      assert_text I18n.t(:'dashboard.projects.sort_links.sorting.namespace_name_desc')
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_selector 'tr', count: 12
       within first('tr') do
@@ -106,10 +106,10 @@ module Dashboard
         assert_text projects(:project1).human_name
       end
 
-      click_on I18n.t(:'dashboard.projects.sort_links.sorting.updated_at_desc')
-      click_on I18n.t(:'dashboard.projects.sort_links.sorting.namespace_name_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
       sleep 1
-      assert_text I18n.t(:'dashboard.projects.sort_links.sorting.namespace_name_desc')
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_selector 'tr', count: 20
       within first('tr') do
@@ -125,7 +125,7 @@ module Dashboard
       within first('tr') do
         assert_text projects(:project19).human_name
       end
-      assert_text I18n.t(:'dashboard.projects.sort_links.sorting.namespace_name_desc')
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
     end
 
     test 'can create a project from index page' do

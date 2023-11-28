@@ -342,12 +342,11 @@ fr:
         personal: Personal
         search:
           placeholder: Filter by name
-      sort_links:
         sorting:
           updated_at_desc: Updated At
           created_at_desc: Last created
-          namespace_name_asc: Name
-          namespace_name_desc: Name, descending
+          name_asc: Name
+          name_desc: Name, descending
           updated_at_asc: Oldest updated
           created_at_asc: Oldest created
     groups:
@@ -357,7 +356,6 @@ fr:
         more_items: "%{count} more items"
         row_aria_label: "See %{name} subgroups"
         subgroups: Subgroups
-      sort_links:
         sorting:
           updated_at_desc: Updated At
           created_at_desc: Last created
@@ -815,6 +813,13 @@ fr:
           remove: Remove sample
         search:
           placeholder: Filter by name
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
       update:
         success: Sample was successfully updated.
       edit:
@@ -851,14 +856,6 @@ fr:
         created_at: Created
         updated_at: Last Updated
         action: Action
-      sort_links:
-        sorting:
-          updated_at_desc: Updated At
-          created_at_desc: Last created
-          name_asc: Name
-          name_desc: Name, descending
-          updated_at_asc: Oldest updated
-          created_at_asc: Oldest created
   services:
     attachments:
       concatenation:
@@ -906,3 +903,14 @@ fr:
       not_authorized: You are not authorized to access the requested resource on this server.
       resource_not_found: Resource Not Found.
       not_found_on_server: The requested resource could not be found on the server.
+  ransack:
+    sort_links_component:
+      sorting:
+        updated_at_desc: Updated At
+        created_at_desc: Last created
+        name_asc: Name
+        name_desc: Name, descending
+        namespace_name_asc: Name
+        namespace_name_desc: Name, descending
+        updated_at_asc: Oldest updated
+        created_at_asc: Oldest created

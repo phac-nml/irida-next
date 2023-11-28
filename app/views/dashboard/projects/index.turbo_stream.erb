@@ -42,11 +42,9 @@
   ) %>
 <% end %>
 
-<%= turbo_stream.update "project_sort_links",
-                    partial: "sort_links",
-                    locals: {
-                      ransack_obj: @q
-                    } %>
+<%= turbo_stream.update "project_sort_links" do %>
+  <%= render Ransack::SortLinksComponent.new(@q, "projects") %>
+<% end %>
 
 <%= turbo_stream.update "project_hidden_search_value" do %>
   <%= render Ransack::HiddenFieldComponent.new(@q) %>
