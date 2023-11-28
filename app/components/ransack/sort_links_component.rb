@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Ransack
-  # Component to render the hidden search field within the ransack search form
+  # Component for ransack sort links dropdown
   class SortLinksComponent < Component
     attr_reader :ransack_obj, :sort_item
 
