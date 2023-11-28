@@ -8,12 +8,13 @@ module SortingHelper
     true
   end
 
-  def sorting_dropdown(ransack_obj, &)
-    viral_dropdown(label: t(format('.sorting.%<field>s_%<dir>s',
-                                   field: ransack_obj.sorts[0].name,
-                                   dir: ransack_obj.sorts[0].dir)),
-                   caret: true, &)
-  end
+  # Moved to ransack sort_links_component
+  # def sorting_dropdown(ransack_obj, &)
+  #   viral_dropdown(label: t(format('.sorting.%<field>s_%<dir>s',
+  #                                  field: ransack_obj.sorts[0].name,
+  #                                  dir: ransack_obj.sorts[0].dir)),
+  #                  caret: true, &)
+  # end
 
   def sorting_item(dropdown, ransack_obj, field, dir, sort_item)
     dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
