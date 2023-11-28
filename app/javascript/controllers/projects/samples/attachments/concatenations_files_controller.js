@@ -9,7 +9,13 @@ export default class extends Controller {
       "input[name='attachment_ids[]']:checked"
     );
     const newTable = document.createElement("table");
-    newTable.classList.add("w-full");
+    newTable.classList.add(
+      "w-full",
+      "text-sm",
+      "text-left",
+      "text-slate-500",
+      "dark:text-slate-400"
+    );
 
     for (var i = 0; i < checkboxes.length; i++) {
       const newRow = newTable.insertRow(-1);
@@ -37,8 +43,8 @@ export default class extends Controller {
   }
 
   #addCell(row, value) {
-    row.insertCell(-1).innerHTML = value ? value : "";
-    const cell = row.querySelector("td");
+    const cell = row.insertCell(-1);
+    cell.innerHTML = value ? value : "";
     cell.classList.add("px-6", "py-4");
   }
 }

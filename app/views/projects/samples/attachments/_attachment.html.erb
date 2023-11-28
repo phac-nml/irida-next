@@ -17,11 +17,30 @@
     data: {
       "projects--samples--attachments--table-target": "input",
       action: "input->projects--samples--attachments--table#toggle",
-      name: attachment.file.filename,
+      name:
+        (
+          if attachment.associated_attachment
+            "<div class='flex items-center'>#{
+              viral_icon(
+                name: :arrow_right,
+                color: :subdued,
+                classes: "h-6 w-6 ml-0 mr-2"
+              )
+            }<span>#{attachment.file.filename}</span></div>".html_safe
+          else
+            attachment.file.filename
+          end
+        ),
       attachment_name:
         (
           if attachment.associated_attachment
-            attachment.associated_attachment.file.filename
+            "<div class='flex items-center'>#{
+              viral_icon(
+                name: :arrow_left,
+                color: :subdued,
+                classes: "h-6 w-6 ml-0 mr-2"
+              )
+            }<span>#{attachment.associated_attachment.file.filename}</span></div>".html_safe
           else
             nil
           end
