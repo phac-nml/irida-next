@@ -2,6 +2,8 @@
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
 
+    <%= turbo_frame_tag("concatenation-alert") %>
+
     <div class="mb-4 font-normal text-gray-500 dark:text-gray-400">
       <p class="mb-4"><%= t(".description") %></p>
       <div
