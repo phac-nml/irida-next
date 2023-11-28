@@ -209,3 +209,7 @@ group_ten_route:
   path: group-9/subgroup-1-group-9/group-10
   source: group_ten (Namespace)
 
+project28_namespace_route:
+  name: Group 4 / Project 28
+  path: group-4/project-28
+  source: project28_namespace (Namespace)

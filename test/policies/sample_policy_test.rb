@@ -15,7 +15,7 @@ class SamplePolicyTest < ActiveSupport::TestCase
     projects_samples_count = 0
     group_self_and_descendants = @group.self_and_descendants
 
-    # Sample counts from project belonging to group and it's descendants
+    # Sample counts from projects belonging to group and it's descendants
     group_self_and_descendants.each do |group|
       group.project_namespaces.each do |project_namespace|
         projects_samples_count += project_namespace.project.samples.count
@@ -24,7 +24,7 @@ class SamplePolicyTest < ActiveSupport::TestCase
 
     namespace_group_links = NamespaceGroupLink.where(group: group_self_and_descendants)
 
-    # Sample counts from project belonging to group and it's descendants via namespace group links
+    # Sample counts from projects belonging to group and it's descendants via namespace group links
     namespace_group_links.each do |namespace_group_link|
       if namespace_group_link.namespace_type == Namespaces::ProjectNamespace.sti_name
         projects_samples_count += namespace_group_link.namespace.project.samples.count

@@ -33,9 +33,9 @@ class ProjectsQueryTest < ActiveSupport::TestCase
     assert_not_empty data['nodes']
   end
 
-  test 'projects query only returns scoped groups' do
-    projects_count = Project.where(namespace: { parent: @user.groups.self_and_descendant_ids }).include_route
-                            .or(Project.where(namespace: { parent: @user.namespace }).include_route).count
+  test 'projects query only returns scoped projects' do
+    policy = ProjectPolicy.new(user: @user)
+    projects_count = policy.apply_scope(Project, type: :relation).count
     result = IridaSchema.execute(PROJECTS_QUERY, context: { current_user: @user },
                                                  variables: { first: 20 })
 

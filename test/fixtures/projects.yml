@@ -123,3 +123,7 @@ namespace_group_link_group_one_project1:
 namespace_group_link_group_three_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user24) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace) %>
+
+project28:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project28_namespace) %>
