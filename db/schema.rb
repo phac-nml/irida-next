@@ -203,7 +203,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_10_010313) do
     t.string "workflow_url"
     t.string "run_id"
     t.bigint "submitter_id"
-    t.string "states"
+    t.string "state"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
