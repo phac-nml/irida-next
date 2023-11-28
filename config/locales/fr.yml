@@ -342,6 +342,7 @@ fr:
         personal: Personal
         search:
           placeholder: Filter by name
+      sort_links:
         sorting:
           updated_at_desc: Updated At
           created_at_desc: Last created
@@ -356,6 +357,7 @@ fr:
         more_items: "%{count} more items"
         row_aria_label: "See %{name} subgroups"
         subgroups: Subgroups
+      sort_links:
         sorting:
           updated_at_desc: Updated At
           created_at_desc: Last created
@@ -771,17 +773,6 @@ fr:
         success: "Project member %{user} successfully removed"
         leave_success: "You have successfully left the project %{name}"
     samples:
-      search_field:
-        search:
-          placeholder: Filter by name
-      sort_links:
-        sorting:
-          updated_at_desc: Updated At
-          created_at_desc: Last created
-          name_asc: Name
-          name_desc: Name, descending
-          updated_at_asc: Oldest updated
-          created_at_asc: Oldest created
       show:
         edit_button: Edit this sample
         remove_button: Remove
@@ -867,6 +858,14 @@ fr:
         created_at: Created
         updated_at: Last Updated
         action: Action
+      sort_links:
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
   services:
     attachments:
       concatenation:

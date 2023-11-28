@@ -334,17 +334,6 @@ en:
         sign_out: Sign out
   dashboard:
     projects:
-      search_field:
-        search:
-          placeholder: Filter by name
-      sort_links:
-        sorting:
-          updated_at_desc: Updated At
-          created_at_desc: Last created
-          namespace_name_asc: Name
-          namespace_name_desc: Name, descending
-          updated_at_asc: Oldest updated
-          created_at_asc: Oldest created
       index:
         title: Projects
         create_project_button: New project
@@ -352,6 +341,7 @@ en:
         personal: Personal
         search:
           placeholder: Filter by name
+      sort_links:
         sorting:
           updated_at_desc: Updated At
           created_at_desc: Last created
@@ -366,6 +356,7 @@ en:
         more_items: "%{count} more items"
         row_aria_label: "See %{name} subgroups"
         subgroups: Subgroups
+      sort_links:
         sorting:
           updated_at_desc: Updated At
           created_at_desc: Last created
@@ -781,17 +772,6 @@ en:
         success: "Project member %{user} successfully removed"
         leave_success: "You have successfully left the project %{name}"
     samples:
-      search_field:
-        search:
-          placeholder: Filter by name
-      sort_links:
-        sorting:
-          updated_at_desc: Updated At
-          created_at_desc: Last created
-          name_asc: Name
-          name_desc: Name, descending
-          updated_at_asc: Oldest updated
-          created_at_asc: Oldest created
       show:
         new_attachment_button: Upload Files
         concatenate_button: Concatenate Files
@@ -888,6 +868,14 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
+      sort_links:
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
   workflow_executions:
     submission:
         pipeline_selection:
