@@ -21,7 +21,7 @@
 # Array of sample file names
 @sequencing_file_list = Rails.root.join('test/fixtures/files').entries.select do |f|
   ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
-end
+end.first(@attachments_per_sample)
 
 def seed_project(project_params:, creator:, namespace:)
   project = Projects::CreateService.new(creator,
@@ -78,9 +78,9 @@ def seed_samples(project, sample_count)
 end
 
 def seed_attachments(sample)
-  (1..[@attachments_per_sample, @sequencing_file_list.length].min).each do |i|
+  (0..(@attachments_per_sample - 1)).each do |i| # file list is index'd at 0
     Rails.logger.info "seeding... Sample: #{sample.name}, Attachments... #{i}/#{@attachments_per_sample}"
-    f = @sequencing_file_list[i - 1] # index'd at 0
+    f = @sequencing_file_list[i]
     attachment = sample.attachments.build
     attachment.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
     attachment.save!
