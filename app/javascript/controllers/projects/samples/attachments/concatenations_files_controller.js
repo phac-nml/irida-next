@@ -19,15 +19,27 @@ export default class extends Controller {
 
     for (var i = 0; i < checkboxes.length; i++) {
       const newRow = newTable.insertRow(-1);
-      this.#addCell(newRow, checkboxes[i].dataset.name);
-      this.#addCell(newRow, checkboxes[i].dataset.type);
-      this.#addCell(newRow, checkboxes[i].dataset.size);
-
       if (checkboxes[i].dataset.attachmentName) {
-        const newRow = newTable.insertRow(-1);
-        this.#addCell(newRow, checkboxes[i].dataset.attachmentName);
-        this.#addCell(newRow, checkboxes[i].dataset.type);
-        this.#addCell(newRow, checkboxes[i].dataset.attachmentSize);
+        const div = document.createElement("div");
+        div.innerHTML =
+          checkboxes[i].dataset.name + checkboxes[i].dataset.attachmentName;
+        this.#addCell(newRow, div);
+      } else {
+        this.#addCell(newRow, checkboxes[i].dataset.name);
+      }
+      this.#addCell(newRow, checkboxes[i].dataset.type);
+      if (checkboxes[i].dataset.attachmentSize) {
+        const parentDiv = document.createElement("div");
+        const div1 = document.createElement("div");
+        div1.classList.add("mb-4");
+        div1.innerHTML = checkboxes[i].dataset.size;
+        const div2 = document.createElement("div");
+        div2.innerHTML = checkboxes[i].dataset.attachmentSize;
+        parentDiv.appendChild(div1);
+        parentDiv.appendChild(div2);
+        this.#addCell(newRow, parentDiv);
+      } else {
+        this.#addCell(newRow, checkboxes[i].dataset.size);
       }
     }
 
@@ -44,7 +56,11 @@ export default class extends Controller {
 
   #addCell(row, value) {
     const cell = row.insertCell(-1);
-    cell.innerHTML = value ? value : "";
+    if (typeof value === "string") {
+      cell.innerHTML = value;
+    } else {
+      cell.append(value);
+    }
     cell.classList.add("px-6", "py-4");
   }
 }
