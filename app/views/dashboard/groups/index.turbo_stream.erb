@@ -27,6 +27,6 @@
   ) %>
 <% end %>
 
-<%= turbo_stream.update "groups_sort_links" do %>
-  <%= render Ransack::SortLinksComponent.new(@q, "groups") %>
+<%= turbo_stream.update "groups_sort_dropdown" do %>
+  <%= render Ransack::SortDropdownComponent.new(@q, "groups") %>
 <% end %>

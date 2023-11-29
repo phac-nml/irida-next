@@ -904,7 +904,7 @@ fr:
       resource_not_found: Resource Not Found.
       not_found_on_server: The requested resource could not be found on the server.
   ransack:
-    sort_links_component:
+    sort_dropdown_component:
       sorting:
         updated_at_desc: Updated At
         created_at_desc: Last created

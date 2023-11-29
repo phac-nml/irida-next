@@ -42,8 +42,8 @@
   ) %>
 <% end %>
 
-<%= turbo_stream.update "project_sort_links" do %>
-  <%= render Ransack::SortLinksComponent.new(@q, "projects") %>
+<%= turbo_stream.update "project_sort_dropdown" do %>
+  <%= render Ransack::SortDropdownComponent.new(@q, "projects") %>
 <% end %>
 
 <%= turbo_stream.update "project_hidden_search_value" do %>

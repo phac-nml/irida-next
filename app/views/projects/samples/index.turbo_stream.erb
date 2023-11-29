@@ -12,8 +12,8 @@
                       pagy: @pagy
                     } %>
 
-<%= turbo_stream.update "project_samples_sort_links" do %>
-  <%= render Ransack::SortLinksComponent.new(@q, "samples") %>
+<%= turbo_stream.update "project_samples_sort_dropdown" do %>
+  <%= render Ransack::SortDropdownComponent.new(@q, "samples") %>
 <% end %>
 
 <%= turbo_stream.update "project_samples_hidden_search_value" do %>
