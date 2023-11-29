@@ -46,7 +46,7 @@
               number_to_human_size(
                 attachment.associated_attachment.file.blob.byte_size
               )
-            }</div>"
+            }</div>".html_safe
           else
             number_to_human_size(attachment.file.blob.byte_size)
           end

@@ -40,7 +40,7 @@ export default class extends Controller {
     if (typeof value === "string") {
       cell.innerHTML = value;
     } else {
-      cell.append(value);
+      cell.appendChild(value);
     }
     cell.classList.add("px-6", "py-4");
   }
