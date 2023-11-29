@@ -125,8 +125,11 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         group_projects: relation.joins(:namespace).where(namespace: { parent_id: user.groups.self_and_descendant_ids })
         .select(:id),
         linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
-        Group.where(id: NamespaceGroupLink
-          .where(group: user.groups.self_and_descendants).not_expired.select(:namespace_id)) }).select(:id)
+        Namespace.where(parent_id: NamespaceGroupLink.where(
+          group: user.members.joins(:namespace).where(
+            namespace: { type: Group.sti_name }
+          ).select(:namespace_id)
+        ).not_expired.select(:namespace_id)) }).select(:id)
       ).where(
         Arel.sql(
           'projects.id in (select * from personal_projects)
@@ -137,20 +140,38 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       ).include_route
   end
 
-  scope_for :relation, :manageable do |relation|
-    relation
-      .where(namespace_id: Namespace.where(
-        id: Member.where(
-          user:,
-          access_level: [
-            Member::AccessLevel::MAINTAINER,
-            Member::AccessLevel::OWNER
-          ]
+  scope_for :relation, :manageable do |relation| # rubocop:disable Metrics/BlockLength
+    relation.with(
+      personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id),
+      direct_projects: relation.where(
+        namespace: user.members.joins(:namespace).where(
+          access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER],
+          namespace: { type: Namespaces::ProjectNamespace.sti_name }
         ).select(:namespace_id)
-      ).self_and_descendants.where(type: Namespaces::ProjectNamespace.sti_name).select(:id))
-      .include_route
-      .or(relation.where(namespace: { parent: user.namespace }))
-      .include_route
+      ).select(:id),
+      group_projects: relation.joins(:namespace).where(namespace: { parent: Namespace.where(parent:
+        user.members.joins(:namespace).where(
+          namespace_id: user.groups.self_and_descendants, user:, access_level: [Member::AccessLevel::MAINTAINER,
+                                                                                Member::AccessLevel::OWNER]
+        ).select(:namespace_id), type: Group.sti_name).select(:id) }).select(:id),
+      linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
+        Namespace.where(parent_id: NamespaceGroupLink.where(
+          group_access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER],
+          group: user.members.joins(:namespace).where(
+            namespace: { type: Group.sti_name },
+            access_level: [
+              Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
+            ]
+          ).select(:namespace_id)
+        ).not_expired.select(:namespace_id)) }).select(:id)
+    ).where(
+      Arel.sql(
+        'projects.id in (select * from personal_projects)
+        or projects.id in (select * from group_projects)
+        or projects.id in (select * from direct_projects)
+        or projects.id in (select * from linked_projects)'
+      )
+    ).include_route
   end
 
   scope_for :relation, :personal do |relation|
