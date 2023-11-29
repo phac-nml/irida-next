@@ -17,7 +17,9 @@
     data: {
       "projects--samples--attachments--table-target": "input",
       action: "input->projects--samples--attachments--table#toggle",
-      name:
+      attachment_name:
+        (attachment.file.filename unless attachment.associated_attachment),
+      associated_attachment_name:
         (
           if attachment.associated_attachment
             "<div class='flex mb-4 items-center'>#{
@@ -33,11 +35,15 @@
                 classes: "h-6 w-6 ml-0 mr-2"
               )
             }<span>#{attachment.associated_attachment.file.filename}</span></div>".html_safe
-          else
-            attachment.file.filename
           end
         ),
-      size:
+      attachment_size:
+        (
+          unless attachment.associated_attachment
+            number_to_human_size(attachment.file.blob.byte_size)
+          end
+        ),
+      associated_attachment_size:
         (
           if attachment.associated_attachment
             "<div class='mb-4'>#{
@@ -47,8 +53,6 @@
                 attachment.associated_attachment.file.blob.byte_size
               )
             }</div>".html_safe
-          else
-            number_to_human_size(attachment.file.blob.byte_size)
           end
         ),
       type:
