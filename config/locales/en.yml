@@ -362,7 +362,6 @@ en:
           name_desc: Name, descending
           updated_at_asc: Oldest updated
           created_at_asc: Oldest created
-          created_at_asc: Oldest created
   profiles:
     sidebar:
       header: User Settings
