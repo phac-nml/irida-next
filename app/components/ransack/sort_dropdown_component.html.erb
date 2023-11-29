@@ -1,14 +1,6 @@
 <%= viral_dropdown(label: t(".sorting.#{@ransack_obj.sorts[0].name}_#{@ransack_obj.sorts[0].dir}"),
                    caret: true) do |dropdown| %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, :updated_at, :desc, @sort_item) %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, :updated_at, :asc, @sort_item) %>
-    <% if @sort_item == "projects" %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, :namespace_name, :asc, @sort_item) %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, :namespace_name, :desc, @sort_item) %>
-    <% else %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, :name, :asc, @sort_item) %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, :name, :desc, @sort_item) %>
+    <% @sort_options.each do |sort| %>
+        <%= helpers.sorting_item(dropdown, @ransack_obj, sort[:name], sort[:dir], @sort_item) %>
     <% end %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, :created_at, :desc, @sort_item) %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, :created_at, :asc, @sort_item) %>
 <% end %>

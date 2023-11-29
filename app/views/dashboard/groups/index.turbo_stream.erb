@@ -28,5 +28,16 @@
 <% end %>
 
 <%= turbo_stream.update "groups_sort_dropdown" do %>
-  <%= render Ransack::SortDropdownComponent.new(@q, "groups") %>
+  <%= render Ransack::SortDropdownComponent.new(
+    @q,
+    "groups",
+    [
+      { name: "updated_at", dir: "desc" },
+      { name: "updated_at", dir: "asc" },
+      { name: "name", dir: "asc" },
+      { name: "name", dir: "desc" },
+      { name: "created_at", dir: "desc" },
+      { name: "created_at", dir: "asc" }
+    ]
+  ) %>
 <% end %>
