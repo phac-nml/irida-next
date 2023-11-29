@@ -2,26 +2,23 @@
   "sample_files_modal",
   partial: "modal",
   locals: {
-    open:
-      (
-        if @sample.errors.any? ? true : false
-      )
+    open: @sample.errors.any?
   }
 ) %>
 
-  <% if @sample.errors.any? %>
-    <%= turbo_stream.update "concatenation-alert",
-                        viral_alert(type:, message:, classes: "mb-4") %>
-  <% else %>
-    <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(type:, data: message) %>
-    <% end %>
-
-    <%= turbo_stream.update(
-      "attachments",
-      partial: "projects/samples/attachments/table",
-      locals: {
-        attachments: @sample.attachments
-      }
-    ) %>
+<% if @sample.errors.any? %>
+  <%= turbo_stream.update "concatenation-alert",
+                      viral_alert(type:, message:, classes: "mb-4") %>
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
   <% end %>
+
+  <%= turbo_stream.update(
+    "attachments",
+    partial: "projects/samples/attachments/table",
+    locals: {
+      attachments: @sample.attachments
+    }
+  ) %>
+<% end %>

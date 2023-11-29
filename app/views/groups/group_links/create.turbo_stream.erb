@@ -8,14 +8,7 @@
   <%= turbo_stream.update "new_member_modal",
                       partial: "invite_group_modal",
                       locals: {
-                        open:
-                          (
-                            if @created_namespace_group_link.errors.any?
-                              true
-                            else
-                              false
-                            end
-                          ),
+                        open: @created_namespace_group_link.errors.any?,
                         new_group_link: @created_namespace_group_link
                       } %>
 
