@@ -19,28 +19,9 @@ export default class extends Controller {
 
     for (var i = 0; i < checkboxes.length; i++) {
       const newRow = newTable.insertRow(-1);
-      if (checkboxes[i].dataset.attachmentName) {
-        const div = document.createElement("div");
-        div.innerHTML =
-          checkboxes[i].dataset.name + checkboxes[i].dataset.attachmentName;
-        this.#addCell(newRow, div);
-      } else {
-        this.#addCell(newRow, checkboxes[i].dataset.name);
-      }
+      this.#addCell(newRow, checkboxes[i].dataset.name);
       this.#addCell(newRow, checkboxes[i].dataset.type);
-      if (checkboxes[i].dataset.attachmentSize) {
-        const parentDiv = document.createElement("div");
-        const div1 = document.createElement("div");
-        div1.classList.add("mb-4");
-        div1.innerHTML = checkboxes[i].dataset.size;
-        const div2 = document.createElement("div");
-        div2.innerHTML = checkboxes[i].dataset.attachmentSize;
-        parentDiv.appendChild(div1);
-        parentDiv.appendChild(div2);
-        this.#addCell(newRow, parentDiv);
-      } else {
-        this.#addCell(newRow, checkboxes[i].dataset.size);
-      }
+      this.#addCell(newRow, checkboxes[i].dataset.size);
     }
 
     const body = newTable.querySelector("tbody");
