@@ -17,18 +17,18 @@ export default class extends Controller {
       "dark:text-slate-400"
     );
 
-    for (var i = 0; i < checkboxes.length; i++) {
+    for (let checkbox of checkboxes) {
       const newRow = newTable.insertRow(-1);
       this.#addCell(
         newRow,
-        checkboxes[i].dataset.attachmentName ||
-          checkboxes[i].dataset.associatedAttachmentName
+        checkbox.dataset.attachmentName ||
+          checkbox.dataset.associatedAttachmentName
       );
-      this.#addCell(newRow, checkboxes[i].dataset.type);
+      this.#addCell(newRow, checkbox.dataset.type);
       this.#addCell(
         newRow,
-        checkboxes[i].dataset.attachmentSize ||
-          checkboxes[i].dataset.associatedAttachmentSize
+        checkbox.dataset.attachmentSize ||
+          checkbox.dataset.associatedAttachmentSize
       );
     }
 

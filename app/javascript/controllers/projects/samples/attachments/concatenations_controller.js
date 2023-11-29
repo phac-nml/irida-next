@@ -13,25 +13,24 @@ export default class extends Controller {
       "input[name='attachment_ids[]']:checked"
     );
 
-    for (var i = 0; i < checkboxes.length; i++) {
+    for (let i = 0; i < checkboxes.length; i++) {
       const value = JSON.parse(checkboxes[i].value);
       if (value instanceof Array) {
         for (let arrayValue of value) {
-          const element = document.createElement("input");
-          element.type = "hidden";
-          element.id = `${this.fieldNameValue}[${i}][]`;
-          element.name = `${this.fieldNameValue}[${i}][]`;
-          element.value = arrayValue;
-          this.fieldTarget.appendChild(element);
+          this.#addHiddenInput(`${this.fieldNameValue}[${i}][]`, arrayValue);
         }
       } else {
-        const element = document.createElement("input");
-        element.type = "hidden";
-        element.id = `${this.fieldNameValue}[${i}]`;
-        element.name = `${this.fieldNameValue}[${i}]`;
-        element.value = value;
-        this.fieldTarget.appendChild(element);
+        this.#addHiddenInput(`${this.fieldNameValue}[${i}]`, value);
       }
     }
+  }
+
+  #addHiddenInput(name, value) {
+    const element = document.createElement("input");
+    element.type = "hidden";
+    element.id = name;
+    element.name = name;
+    element.value = value;
+    this.fieldTarget.appendChild(element);
   }
 }
