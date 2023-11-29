@@ -219,6 +219,134 @@ if Rails.env.development?
     end
   end
 
+  # Workflow Metadata
+  #
+  # {
+  #   workflow_name: String Required
+  #   workflow_version: String Required
+  # }
+
+  # generic_workflow_metadata_objects = [
+  #   {workflow_name: 'my_workflow_name_1', workflow_version: 'my_workflow_version_1'},
+  #   {workflow_name: 'my_workflow_name_1', workflow_version: 'my_workflow_version_1'}
+  # ]
+
+  # Various Hashes for workflow executions
+  #
+  # {
+  #   any_keys: String Optional
+  # }
+
+  # generic_workflow_execution_params_hashes = [
+  #   { my_key1: 'my_value_1', my_key2: 'my_value_2' },
+  #   { my_key3: 'my_value_3' },
+  #   { my_key4: 'my_value_4', my_key5: 'my_value_5' },
+  #   { my_key6: 'my_value_6' },
+  #   { my_key7: 'my_value_7', my_key8: 'my_value_8' },
+  #   { my_key9: 'my_value_9' }
+  # ]
+
+  # WorkflowExecution
+  #
+  # {
+  #   metadata: WorkflowMetadata Required
+  #   workflow_params: Hash
+  #   workflow_type: String
+  #   workflow_type_version: String
+  #   tags: [String]
+  #   workflow_engine: String
+  #   workflow_engine_version: String
+  #   workflow_engine_parameters: Hash
+  #   workflow_url: String
+  #   run_id: String
+  #   submitter: User Required
+  # }
+
+  # generic_workflow_execution_hashes = [
+  #   {
+  #     metadata: generic_workflow_metadata_objects[0],
+  #     workflow_params: generic_workflow_execution_params_hashes[0],
+  #     workflow_type: 'my_workflow_type_1',
+  #     workflow_type_version: 'my_workflow_version_1',
+  #     tags: %w[my_tag_1 my_tag_2],
+  #     workflow_engine: 'my_workflow_engine_1',
+  #     workflow_engine_version: 'my_workflow_engine_version_1',
+  #     workflow_engine_parameters: generic_workflow_execution_params_hashes[1],
+  #     workflow_url: 'my_workflow_url',
+  #     run_id: 'my_run_id',
+  #     submitter: User.find(1)
+  #   },
+  #   {
+  #     metadata: generic_workflow_metadata_objects[1],
+  #     workflow_params: generic_workflow_execution_params_hashes[2],
+  #     workflow_type: 'my_workflow_type_2',
+  #     workflow_type_version: 'my_workflow_version_2',
+  #     tags: %w[my_tag_3 my_tag_4],
+  #     workflow_engine: 'my_workflow_engine_2',
+  #     workflow_engine_version: 'my_workflow_engine_version_2',
+  #     workflow_engine_parameters: generic_workflow_execution_params_hashes[3],
+  #     workflow_url: 'my_workflow_url_2',
+  #     run_id: 'my_run_id_2',
+  #     submitter: User.find(2)
+  #   }
+  # ]
+
+  # generic_workflow_execution_hashes.each do |workflow_execution_params|
+  #   WorkflowExecution.create(
+  #     metadata: workflow_execution_params[:metadata],
+  #     workflow_params: workflow_execution_params[:workflow_params],
+  #     workflow_type: workflow_execution_params[:workflow_type],
+  #     workflow_type_version: workflow_execution_params[:workflow_type_version],
+  #     tags: workflow_execution_params[:tags],
+  #     workflow_engine: workflow_execution_params[:workflow_engine],
+  #     workflow_engine_version: workflow_execution_params[:workflow_engine_version],
+  #     workflow_engine_parameters: workflow_execution_params[:workflow_engine_parameters],
+  #     workflow_url: workflow_execution_params[:workflow_url],
+  #     run_id: workflow_execution_params[:run_id],
+  #     submitter: workflow_execution_params[:submitter]
+  #   )
+  # end
+
+  # Once a creator service is implimented we can create workflow executions something like this
+  # WorkflowExecution.create(
+  #   metadata: generic_workflow_metadata_objects[0],
+  #   workflow_params: generic_workflow_execution_params_hashes[0],
+  #   workflow_type: 'my_workflow_type_1',
+  #   workflow_type_version: 'my_workflow_version_1',
+  #   tags: %w[my_tag_1 my_tag_2],
+  #   workflow_engine: 'my_workflow_engine_1',
+  #   workflow_engine_version: 'my_workflow_engine_version_1',
+  #   workflow_engine_parameters: generic_workflow_execution_params_hashes[1],
+  #   workflow_url: 'my_workflow_url',
+  #   run_id: 'my_run_id',
+  #   submitter: User.find(1)
+  # )
+
+  # SamplesWorkflowExecution
+  #
+  # {
+  #   samplesheet_params: Hash
+  #   sample: Sample Required
+  #   workflow_execution: WorkflowExecution Required
+  # }
+
+  # generic_samples_workflow_execution_hashes = [
+  #   {
+  #     samplesheet_params: generic_workflow_execution_params_hashes[4],
+  #     sample: Sample.find(1),
+  #     workflow_execution: WorkflowExecution.find(1)
+  #   },
+  #   {
+  #     samplesheet_params: generic_workflow_execution_params_hashes[5],
+  #     sample: Sample.find(2),
+  #     workflow_execution: WorkflowExecution.find(2)
+  #   }
+  # ]
+
+  # generic_samples_workflow_execution_hashes.each do |samples_workflow_execution_params|
+  #   SamplesWorkflowExecution.create(**samples_workflow_execution_params)
+  # end
+
   # Group Params Hash
   #
   # {
