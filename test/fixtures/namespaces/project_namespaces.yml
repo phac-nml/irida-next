@@ -226,7 +226,7 @@ project26_namespace:
 
 projectA_namespace:
   name: Project A
-  path: project-A
+  path: project-a
   description: Project A description
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace) %>

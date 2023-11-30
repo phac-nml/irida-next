@@ -28,9 +28,10 @@ export default class extends Controller {
   #addHiddenInput(name, value) {
     const element = document.createElement("input");
     element.type = "hidden";
-    element.id = name;
+    element.id = value;
     element.name = name;
     element.value = value;
+    element.ariaHidden = "true";
     this.fieldTarget.appendChild(element);
   }
 }

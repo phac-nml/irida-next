@@ -339,7 +339,7 @@ module Projects
       end
     end
 
-    test 'should concatenate attachment files and keep originals' do
+    test 'should concatenate single end attachment files and keep originals' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       within %(turbo-frame[id="attachments"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
@@ -358,7 +358,34 @@ module Projects
       end
     end
 
-    test 'should concatenate attachment files and remove originals' do
+    test 'should concatenate paired end attachment files and keep originals' do
+      login_as users(:jeff_doe)
+      project = projects(:projectA)
+      sample = samples(:sampleB)
+      namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
+        all('input[data-associated-attachment-name]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file_fwd_1.fastq'
+        assert_text 'test_file_rev_1.fastq'
+        assert_text 'test_file_fwd_2.fastq'
+        assert_text 'test_file_rev_2.fastq'
+        assert_text 'test_file_fwd_3.fastq'
+        assert_text 'test_file_rev_3.fastq'
+        fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+      end
+      within %(turbo-frame[id="attachments"]) do
+        assert_text 'concatenated_file'
+        assert_selector 'table #attachments-table-body tr', count: 7
+      end
+    end
+
+    test 'should concatenate single end attachment files and remove originals' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       within %(turbo-frame[id="attachments"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
