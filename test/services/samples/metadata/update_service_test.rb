@@ -76,6 +76,15 @@ module Samples
                                                                                 project_name: project.name)
         )
       end
+
+      test 'no metadata' do
+        assert_no_changes -> { @sample } do
+          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, nil, nil).execute
+        end
+        assert @sample.errors.full_messages.include?(
+          I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
+        )
+      end
     end
   end
 end

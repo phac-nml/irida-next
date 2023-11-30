@@ -35,6 +35,9 @@ module Samples
                 @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
             end
           end
+        else
+          raise SampleMetadataUpdateError,
+                I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
         end
 
         @sample.update(id: @sample.id)
