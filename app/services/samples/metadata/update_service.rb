@@ -5,17 +5,17 @@ module Samples
     # Service used to Update Samples::Metadata
     class UpdateService < BaseService
       SampleMetadataUpdateError = Class.new(StandardError)
-      attr_accessor :sample, :metadata, :metadata_key
+      attr_accessor :sample, :metadata, :analysis_id
 
-      def initialize(project, sample, user = nil, params = {}, metadata = nil, metadata_key = nil) # rubocop:disable Metrics/ParameterLists
-        super(user, params.except(:sample, :id))
+      def initialize(project, sample, user = nil, params = {}, metadata = nil, analysis_id = nil) # rubocop:disable Metrics/ParameterLists
+        super(user, params)
         @project = project
         @sample = sample
         @metadata = metadata
-        @metadata_key = metadata_key
+        @analysis_id = analysis_id
       end
 
-      def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
         authorize! sample.project, to: :update_sample?
 
         if @project.id != @sample.project.id
@@ -26,16 +26,17 @@ module Samples
 
         if @metadata
           @metadata = @metadata.transform_keys(&:to_s)
-          @sample['metadata'] = @sample['metadata'].merge(@metadata)
+          @metadata.each do |k, v|
+            if v.blank?
+              @sample['metadata'].delete(k) && @sample['metadata_provenance'].delete(k) if @sample['metadata'].key?(k)
+            else
+              @sample['metadata'][k] = v
+              @sample['metadata_provenance'][k] =
+                @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
+            end
+          end
         end
 
-        if @metadata_key
-          unless @sample['metadata'].key?(@metadata_key)
-            raise SampleMetadataUpdateError,
-                  I18n.t('services.samples.metadata.key_does_not_exist', sample_name: @sample.name, key: @metadata_key)
-          end
-          @sample['metadata'].delete(@metadata_key)
-        end
         @sample.update(id: @sample.id)
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
