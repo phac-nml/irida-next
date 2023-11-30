@@ -41,7 +41,7 @@ module Groups
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
-      assert_selector 'tbody > tr', count: 4
+      assert_selector 'tbody > tr', count: 6
       assert_text samples(:sample28).name
       click_on I18n.t(:'components.pagination.previous')
       assert_selector 'tbody > tr', count: 20
