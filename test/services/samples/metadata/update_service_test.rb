@@ -11,62 +11,36 @@ module Samples
         @project = projects(:project1)
       end
 
-      test 'update sample metadata with sample containing no existing metadata' do
+      test 'update sample metadata with sample containing no existing metadata and test user in metadata provenance' do
         metadata = { 'key1' => 'value1', 'key2' => 'value2' }
+        Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, nil).execute
 
-        assert_changes -> { @sample.metadata }, to: { 'key1' => 'value1', 'key2' => 'value2' } do
-          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, nil).execute
-        end
+        assert_equal(@sample.metadata, { 'key1' => 'value1', 'key2' => 'value2' })
+        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => @user.id, 'source' => 'user' },
+                                                    'key2' => { 'id' => @user.id, 'source' => 'user' } })
       end
 
-      test 'update sample existing metadata with new metadata including key merge' do
+      test 'update sample metadata with new metadata including key merge and analysis in metadata provenance' do
         @sample.metadata = { 'key1' => 'value1', 'key2' => 'value2' }
+        @sample.metadata_provenance = { 'key1' => { 'id' => 1, 'source' => 'user' },
+                                        'key2' => { 'id' => 1, 'source' => 'user' } }
         metadata = { 'key1' => 'value4', 'key3' => 'value3' }
+        Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, 1).execute
 
-        assert_changes lambda {
-                         @sample.metadata
-                       }, to: { 'key1' => 'value4', 'key2' => 'value2', 'key3' => 'value3' } do
-          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, nil).execute
-        end
+        assert_equal(@sample.metadata, { 'key1' => 'value4', 'key2' => 'value2', 'key3' => 'value3' })
+        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 1, 'source' => 'analysis' },
+                                                    'key2' => { 'id' => 1, 'source' => 'user' },
+                                                    'key3' => { 'id' => 1, 'source' => 'analysis' } })
       end
 
       test 'remove metadata key' do
         @sample.metadata = { 'key1' => 'value1', 'key2' => 'value2' }
-
-        Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, nil, 'key2').execute
+        metadata = { 'key2' => '' }
+        Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, 1).execute
 
         assert_equal(@sample.metadata, { 'key1' => 'value1' })
       end
 
-      test 'remove metadata key that does not exist' do
-        @sample.metadata = { 'key1' => 'value1', 'key2' => 'value2' }
-
-        assert_no_changes -> { @sample } do
-          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, nil, 'key3').execute
-        end
-        assert @sample.errors.full_messages.include?(
-          I18n.t('services.samples.metadata.key_does_not_exist', sample_name: @sample.name, key: 'key3')
-        )
-      end
-
-      test 'update sample metadata and remove key in single service execution' do
-        metadata = { 'key1' => 'value1', 'key2' => 'value2' }
-
-        assert_changes -> { @sample.metadata }, to: { 'key1' => 'value1' } do
-          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, 'key2').execute
-        end
-      end
-
-      test 'update sample metadata and try to remove metadata key that does not exist' do
-        metadata = { 'key1' => 'value1', 'key2' => 'value2' }
-
-        assert_changes -> { @sample.metadata }, to: { 'key1' => 'value1', 'key2' => 'value2' } do
-          Samples::Metadata::UpdateService.new(@project, @sample, @user, {}, metadata, 'key3').execute
-        end
-        assert @sample.errors.full_messages.include?(
-          I18n.t('services.samples.metadata.key_does_not_exist', sample_name: @sample.name, key: 'key3')
-        )
-      end
       test 'update sample metadata without permission to update sample' do
         user = users(:ryan_doe)
         metadata = { 'key1' => 'value1', 'key2' => 'value2' }
