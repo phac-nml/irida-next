@@ -47,6 +47,11 @@ james_doe_namespace_route:
   path: james.doe_at_localhost
   source: james_doe_namespace (Namespace)
 
+user_26_namespace_route:
+  name: user.26@localhost
+  path: user.26_at_localhost
+  source: user_26_namespace (Namespace)
+
 project1_namespace_route:
   name: Group 1 / Project 1
   path: group-1/project-1
@@ -258,3 +263,7 @@ project_alpha_1_namespace_route:
   name: Group Alpha / Subgroup 1 / Project Alpha 1
   path: group-alpha/subgroup-1/project-alpha1
   source: projectAlpha1_namespace (Namespace)
+group_eleven_route:
+  name: Group 11
+  path: group-11
+  source: group_eleven (Namespace)

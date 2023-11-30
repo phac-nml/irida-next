@@ -8,7 +8,7 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     @policy = NamespacePolicy.new(user: @user)
   end
 
-  test 'named scope' do
+  test 'named scope without modify access to namespace via namespace group link' do
     scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, name: :manageable)
 
     assert_equal 2, scoped_namespaces.count
@@ -20,6 +20,26 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     assert_equal scoped_namespaces[1].type, Group.sti_name
     assert_equal scoped_namespaces[1].name, 'Group 4'
     assert_equal scoped_namespaces[1].path, 'group-4'
+  end
+
+  test 'named scope with modify access to namespace via namespace group link' do
+    user = users(:user26)
+    policy = NamespacePolicy.new(user:)
+    scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
+
+    actual_namespaces = scoped_namespaces.pluck(:name)
+    expected_namespaces = [user.namespace.name]
+
+    user_namespace_count = 1
+    namespace = namespace_group_links(:namespace_group_link14).namespace
+
+    linked_group_and_descendants = namespace.self_and_descendants.where(type: Group.sti_name)
+
+    expected_namespaces << linked_group_and_descendants.pluck(:name) << user.groups.self_and_descendants.pluck(:name)
+    expected_count = linked_group_and_descendants.count + user.groups.self_and_descendants.count + user_namespace_count
+
+    assert_equal expected_count, scoped_namespaces.count
+    assert_equal expected_namespaces.flatten.sort, actual_namespaces.flatten.sort
   end
 
   test 'missing_named_scope' do

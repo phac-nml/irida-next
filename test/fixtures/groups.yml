@@ -181,3 +181,10 @@ group_alpha_subgroup1:
   type: Group
   description: Subgroup 1 description
   metadata_summary: {}
+
+group_eleven:
+  name: Group 11
+  path: group-11
+  type: Group
+  description: Group 11 description
+  metadata_summary: {}

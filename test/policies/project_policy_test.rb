@@ -77,7 +77,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     # David Doe has access to 21 projects via a namespace
     # group link between one of his groups and group_one
-    assert_equal 21, scoped_projects.count
+    assert_equal 22, scoped_projects.count
   end
 
   test 'manageable scope' do
