@@ -18,7 +18,17 @@
       "projects--samples--attachments--table-target": "input",
       action: "input->projects--samples--attachments--table#toggle",
       attachment_name:
-        (attachment.file.filename unless attachment.associated_attachment),
+        (
+          unless attachment.associated_attachment
+            "<div class='flex items-center'>#{
+              viral_icon(
+                name: :document_text,
+                color: :subdued,
+                classes: "h-6 w-6 ml-0 mr-2"
+              )
+            }<span>#{attachment.file.filename}</span></div>"
+          end
+        ),
       associated_attachment_name:
         (
           if attachment.associated_attachment
@@ -97,18 +107,18 @@
     </td>
   <% else %>
     <td class="px-6 py-4">
-    <div>
+      <div>
         <div class="flex items-center">
           <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.file.filename,
-              download_namespace_project_sample_attachment_path(
-                sample_id: @sample.id,
-                id: attachment.id
-              ),
-              data: {
-                turbo: false
-              } %>
+            download_namespace_project_sample_attachment_path(
+              sample_id: @sample.id,
+              id: attachment.id
+            ),
+            data: {
+              turbo: false
+            } %>
           </span>
         </div>
       </div>

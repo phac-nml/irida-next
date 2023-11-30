@@ -443,7 +443,7 @@ module Projects
       within %(turbo-frame[id="attachments"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
         all('input[data-associated-attachment-name]').each { |checkbox| checkbox.click unless checkbox.checked? }
-        find("input[data-attachment-name='test_file_D.fastq']").click
+        find("input[data-attachment-name*='test_file_D.fastq']").click
       end
       click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -470,8 +470,8 @@ module Projects
       visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
       within %(turbo-frame[id="attachments"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
-        find("input[data-attachment-name='test_file_D.fastq']").click
-        find("input[data-attachment-name='test_file_2.fastq.gz']").click
+        find("input[data-attachment-name*='test_file_D.fastq']").click
+        find("input[data-attachment-name*='test_file_2.fastq.gz']").click
       end
       click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
