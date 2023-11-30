@@ -26,6 +26,13 @@ module Dashboard
       assert_selector 'h1', text: projects(:project1).name
     end
 
+    test 'can see the list of projects2' do
+      login_as users(:david_doe)
+      visit dashboard_projects_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+    end
+
     test 'can filter the list of projects to only see personal ones' do
       visit dashboard_projects_url
 

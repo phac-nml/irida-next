@@ -75,7 +75,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     policy = ProjectPolicy.new(user:)
     scoped_projects = policy.apply_scope(Project, type: :relation)
 
-    # David Doe has access to 20 projects via a namespace
+    # David Doe has access to 21 projects via a namespace
     # group link between one of his groups and group_one
     assert_equal 21, scoped_projects.count
   end
@@ -83,6 +83,6 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   test 'manageable scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 14, scoped_projects.count
+    assert_equal 29, scoped_projects.count
   end
 end
