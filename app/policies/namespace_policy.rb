@@ -15,14 +15,16 @@ class NamespacePolicy < ApplicationPolicy
                                ]).select(:namespace_id)
       ).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name).select(:id),
       linked_namespaces: relation.where(parent_id: NamespaceGroupLink.where(
-        group_access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER],
+        group_access_level: [Member::AccessLevel::MAINTAINER,
+                             Member::AccessLevel::OWNER],
         group: user.members.joins(:namespace).where(
           namespace: { type: Group.sti_name },
           access_level: [
             Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
           ]
         ).select(:namespace_id)
-      ).not_expired.select(:namespace_id)).select(:id)
+      ).not_expired.select(:namespace_id)).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name)
+      .select(:id)
     ).where(
       Arel.sql(
         'namespaces.id in (select * from personal_namespaces)
