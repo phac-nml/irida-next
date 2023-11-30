@@ -405,6 +405,86 @@ module Projects
       end
     end
 
+    test 'should concatenate paired end attachment files and remove originals' do
+      login_as users(:jeff_doe)
+      project = projects(:projectA)
+      sample = samples(:sampleB)
+      namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
+        all('input[data-associated-attachment-name]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file_fwd_1.fastq'
+        assert_text 'test_file_rev_1.fastq'
+        assert_text 'test_file_fwd_2.fastq'
+        assert_text 'test_file_rev_2.fastq'
+        assert_text 'test_file_fwd_3.fastq'
+        assert_text 'test_file_rev_3.fastq'
+        fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
+        check 'Delete originals'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+      end
+      within %(turbo-frame[id="attachments"]) do
+        assert_text 'concatenated_file_1.fastq'
+        assert_text 'concatenated_file_2.fastq'
+        assert_selector 'table #attachments-table-body tr', count: 4
+      end
+    end
+
+    test 'should not concatenate single and paired end attachment files' do
+      login_as users(:jeff_doe)
+      project = projects(:projectA)
+      sample = samples(:sampleB)
+      namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
+        all('input[data-associated-attachment-name]').each { |checkbox| checkbox.click unless checkbox.checked? }
+        find("input[data-attachment-name='test_file_D.fastq']").click
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file_fwd_1.fastq'
+        assert_text 'test_file_rev_1.fastq'
+        assert_text 'test_file_fwd_2.fastq'
+        assert_text 'test_file_rev_2.fastq'
+        assert_text 'test_file_fwd_3.fastq'
+        assert_text 'test_file_rev_3.fastq'
+        assert_text 'test_file_D.fastq'
+        fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+      end
+      within %(turbo-frame[id="concatenation-alert"]) do
+        assert_text I18n.t('services.attachments.concatenation.incorrect_file_types')
+      end
+    end
+
+    test 'should not concatenate compressed and uncompressed attachment files' do
+      login_as users(:jeff_doe)
+      project = projects(:projectA)
+      sample = samples(:sampleB)
+      namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
+        find("input[data-attachment-name='test_file_D.fastq']").click
+        find("input[data-attachment-name='test_file_2.fastq.gz']").click
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file_D.fastq'
+        assert_text 'test_file_2.fastq.gz'
+        fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+      end
+      within %(turbo-frame[id="concatenation-alert"]) do
+        assert_text I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
+      end
+    end
+
     test 'user with guest access should not be able to see the concatenate attachment files button' do
       user = users(:ryan_doe)
       login_as user
