@@ -12,8 +12,8 @@ class SamplePolicy < ApplicationPolicy
                               .select(:id),
         linked_group_projects_samples: relation.joins(project: [:namespace]).where(project: { namespace: Namespace
         .where(
-          parent: NamespaceGroupLink
-                  .where(group: group.self_and_descendants, namespace_type: Group.sti_name).not_expired
+          id: NamespaceGroupLink
+                  .where(group: group.self_and_descendants).not_expired
                   .select(:namespace_id)
         ).self_and_descendants })
         .select(:id)
