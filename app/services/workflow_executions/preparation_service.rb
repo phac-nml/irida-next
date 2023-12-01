@@ -18,8 +18,6 @@ module WorkflowExecutions
       # build workflow execution run directory
       generate_run_dir
 
-      @workflow_execution.run_id = @run_dir
-
       # does it make sense to rename the SamplesWorkflowExecution model to something better
       # e.g. SampleWorkflowExecutionParams
       @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
