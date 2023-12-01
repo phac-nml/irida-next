@@ -15,6 +15,7 @@
     <%= form_for(:concatenation, url: namespace_project_sample_attachments_concatenation_path, method: :post) do |form| %>
       <div
         data-controller="projects--samples--attachments--concatenations"
+        data-projects--samples--attachments--concatenations-storage-key-value=<%=namespace_project_sample_url(id: @sample.id)%>
         data-projects--samples--attachments--concatenations-target="field"
         data-projects--samples--attachments--concatenations-field-name-value="concatenation[attachment_ids]"
       ></div>
@@ -42,7 +43,11 @@
 
         <div class="flex flex-row-reverse">
           <%= form.submit t(".submit_button"),
-                      class: "button button--size-default button--state-primary" %>
+                      class: "button button--size-default button--state-primary",
+                      data: {
+                        action:
+                          "click->projects--samples--attachments--concatenations#clear"
+                      } %>
         </div>
       </div>
     <% end %>

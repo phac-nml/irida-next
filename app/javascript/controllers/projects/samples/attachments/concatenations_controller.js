@@ -6,23 +6,40 @@ export default class extends Controller {
 
   static values = {
     fieldName: String,
+    storageKey: {
+      type: String,
+      default: `${location.protocol}//${location.host}${location.pathname}`,
+    },
   };
 
   connect() {
-    const checkboxes = document.querySelectorAll(
-      "input[name='attachment_ids[]']:checked"
+    const storageValues = JSON.parse(
+      sessionStorage.getItem(this.storageKeyValue)
     );
 
-    for (let i = 0; i < checkboxes.length; i++) {
-      const value = JSON.parse(checkboxes[i].value);
-      if (value instanceof Array) {
-        for (let arrayValue of value) {
-          this.#addHiddenInput(`${this.fieldNameValue}[${i}][]`, arrayValue);
+    if (storageValues) {
+      for (let [storageValueIndex, storageValue] of storageValues.entries()) {
+        const value = JSON.parse(storageValue);
+
+        if (value instanceof Array) {
+          for (let arrayValue of value) {
+            this.#addHiddenInput(
+              `${this.fieldNameValue}[${storageValueIndex}][]`,
+              arrayValue
+            );
+          }
+        } else {
+          this.#addHiddenInput(
+            `${this.fieldNameValue}[${storageValueIndex}]`,
+            value
+          );
         }
-      } else {
-        this.#addHiddenInput(`${this.fieldNameValue}[${i}]`, value);
       }
     }
+  }
+
+  clear() {
+    sessionStorage.removeItem(this.storageKeyValue);
   }
 
   #addHiddenInput(name, value) {

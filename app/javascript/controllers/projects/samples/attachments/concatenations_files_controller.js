@@ -5,10 +5,9 @@ export default class extends Controller {
   static targets = ["field"];
 
   connect() {
-    const table = document.getElementById("attachments-table");
-
-    const newTable = document.createElement("table");
-    newTable.classList = table.classList;
+    const table = document.getElementById(
+      "attachments-table-body"
+    ).parentElement;
 
     const headers = table.getElementsByTagName("th");
     const headersIndex = [];
@@ -19,6 +18,8 @@ export default class extends Controller {
     }
 
     const body = table.getElementsByTagName("tbody")[0];
+    const newTable = document.createElement("table");
+    newTable.classList = table.classList;
     for (let row of body.rows) {
       const isChecked = row.cells[0].children[0].checked;
 

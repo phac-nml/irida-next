@@ -15,8 +15,8 @@
     id: dom_id(attachment.file),
     "aria-label": attachment.file.filename,
     data: {
-      "projects--samples--attachments--table-target": "input",
-      action: "input->projects--samples--attachments--table#toggle"
+      selection_target: "rowSelection",
+      action: "input->selection#toggle"
     },
     class:
       "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
