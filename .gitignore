@@ -52,6 +52,10 @@ coverage
 # Ignore Ruby LSP folder
 .ruby-lsp
 
+# Ignore Azurite
+__azurite*.json
+__blobstorage__
+
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
