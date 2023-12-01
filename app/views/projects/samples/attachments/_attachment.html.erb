@@ -16,60 +16,7 @@
     "aria-label": attachment.file.filename,
     data: {
       "projects--samples--attachments--table-target": "input",
-      action: "input->projects--samples--attachments--table#toggle",
-      attachment_name:
-        (
-          unless attachment.associated_attachment
-            "<div class='flex items-center'>#{
-              viral_icon(
-                name: :document_text,
-                color: :subdued,
-                classes: "h-6 w-6 ml-0 mr-2"
-              )
-            }<span>#{attachment.file.filename}</span></div>"
-          end
-        ),
-      associated_attachment_name:
-        (
-          if attachment.associated_attachment
-            "<div class='flex mb-4 items-center'>#{
-              viral_icon(
-                name: :arrow_right,
-                color: :subdued,
-                classes: "h-6 w-6 ml-0 mr-2"
-              )
-            }<span>#{attachment.file.filename}</span></div><div class='flex items-center'>#{
-              viral_icon(
-                name: :arrow_left,
-                color: :subdued,
-                classes: "h-6 w-6 ml-0 mr-2"
-              )
-            }<span>#{attachment.associated_attachment.file.filename}</span></div>".html_safe
-          end
-        ),
-      attachment_size:
-        (
-          unless attachment.associated_attachment
-            number_to_human_size(attachment.file.blob.byte_size)
-          end
-        ),
-      associated_attachment_size:
-        (
-          if attachment.associated_attachment
-            "<div class='mb-4'>#{
-              number_to_human_size(attachment.file.blob.byte_size)
-            }</div><div>#{
-              number_to_human_size(
-                attachment.associated_attachment.file.blob.byte_size
-              )
-            }</div>".html_safe
-          end
-        ),
-      type:
-        viral_pill(
-          text: attachment.metadata["type"],
-          color: find_pill_color_for_attachment(attachment, "type")
-        )
+      action: "input->projects--samples--attachments--table#toggle"
     },
     class:
       "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>

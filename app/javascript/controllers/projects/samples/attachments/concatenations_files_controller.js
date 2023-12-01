@@ -5,51 +5,39 @@ export default class extends Controller {
   static targets = ["field"];
 
   connect() {
-    const checkboxes = document.querySelectorAll(
-      "input[name='attachment_ids[]']:checked"
-    );
-    const newTable = document.createElement("table");
-    newTable.classList.add(
-      "w-full",
-      "text-sm",
-      "text-left",
-      "text-slate-500",
-      "dark:text-slate-400"
-    );
+    const table = document.getElementById("attachments-table");
 
-    for (let checkbox of checkboxes) {
-      const newRow = newTable.insertRow(-1);
-      this.#addCell(
-        newRow,
-        checkbox.dataset.attachmentName ||
-          checkbox.dataset.associatedAttachmentName
-      );
-      this.#addCell(newRow, checkbox.dataset.type);
-      this.#addCell(
-        newRow,
-        checkbox.dataset.attachmentSize ||
-          checkbox.dataset.associatedAttachmentSize
-      );
+    const newTable = document.createElement("table");
+    newTable.classList = table.classList;
+
+    const headers = table.getElementsByTagName("th");
+    const headersIndex = [];
+    for (let header of headers) {
+      if (["Filename", "Type", "Size"].includes(header.innerText)) {
+        headersIndex.push(header.cellIndex);
+      }
     }
 
-    const body = newTable.querySelector("tbody");
-    body.classList.add(
-      "divide-y",
-      "divide-slate-200",
-      "dark:bg-slate-800",
-      "dark:divide-slate-700"
-    );
+    const body = table.getElementsByTagName("tbody")[0];
+    for (let row of body.rows) {
+      const isChecked = row.cells[0].children[0].checked;
+
+      if (isChecked) {
+        const newRow = newTable.insertRow(-1);
+        newRow.classList = row.classList;
+
+        for (let cell of row.cells) {
+          if (headersIndex.includes(cell.cellIndex)) {
+            const newCell = cell;
+            newRow.append(newCell.cloneNode(true));
+          }
+        }
+      }
+    }
+
+    const newBody = newTable.getElementsByTagName("tbody")[0];
+    newBody.classList = body.classList;
 
     this.fieldTarget.appendChild(newTable);
-  }
-
-  #addCell(row, value) {
-    const cell = row.insertCell(-1);
-    if (typeof value === "string") {
-      cell.innerHTML = value;
-    } else {
-      cell.appendChild(value);
-    }
-    cell.classList.add("px-6", "py-4");
   }
 }
