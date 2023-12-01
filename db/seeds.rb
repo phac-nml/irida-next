@@ -79,7 +79,7 @@ end
 
 def seed_attachments(sample)
   (0..(@attachments_per_sample - 1)).each do |i| # file list is index'd at 0
-    Rails.logger.info "seeding... Sample: #{sample.name}, Attachments... #{i}/#{@attachments_per_sample}"
+    Rails.logger.info "seeding... Sample: #{sample.name}, Attachments... #{i + 1}/#{@attachments_per_sample}"
     f = @sequencing_file_list[i]
     attachment = sample.attachments.build
     attachment.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
