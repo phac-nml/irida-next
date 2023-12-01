@@ -38,3 +38,12 @@ cd docs-site
 pnpm build
 npm run serve
 ```
+
+### Output logs during rake tasks
+
+Rake tasks can be prepended with `info`, `debug`, or `verbose` to output the appropriate level of logging
+
+```bash
+# Example
+rake debug db:seed
+```

@@ -10,6 +10,19 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+# Limit the number of file attachments to add when seeding to reduce time.
+# default limit of 1 can be overriden with env variable 'SEED_ATTACHMENT_PER_SAMPLE'
+@attachments_per_sample = (ENV['SEED_ATTACHMENT_PER_SAMPLE'].presence || 1)
+@attachments_per_sample = @attachments_per_sample.to_i
+# default of unlimited files attached (-1) can be overridden with env variable 'SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'
+@maximum_total_sample_attachments = (ENV['SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'].presence || -1)
+@maximum_total_sample_attachments = @maximum_total_sample_attachments.to_i
+@total_sample_attachment_count = 0
+# Array of sample file names
+@sequencing_file_list = Rails.root.join('test/fixtures/files').entries.select do |f|
+  ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
+end.first(@attachments_per_sample)
+
 def seed_project(project_params:, creator:, namespace:)
   project = Projects::CreateService.new(creator,
                                         {
@@ -26,7 +39,7 @@ def seed_project(project_params:, creator:, namespace:)
     end
   end
 
-  # see the project samples
+  # seed the project samples
   seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
 end
 
@@ -51,21 +64,27 @@ def seed_samples(project, sample_count)
       { name: "#{project.namespace.parent.name}/#{project.name} Sample #{i}",
         description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{i}." }
     ).execute
-    seed_attachments(sample) if i < 10
+    # exit if max total samples has been reached
+    next unless @maximum_total_sample_attachments == -1 ||
+                @total_sample_attachment_count < @maximum_total_sample_attachments
+
+    seed_attachments(sample)
+    # if max total samples has been reached, log it
+    if @maximum_total_sample_attachments != -1 &&
+       @total_sample_attachment_count >= @maximum_total_sample_attachments
+      Rails.logger.info "Maximum uploaded sample limit of '#{@maximum_total_sample_attachments}' reached."
+    end
   end
 end
 
 def seed_attachments(sample)
-  sequencing_files.each do |f|
-    a = sample.attachments.build
-    a.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
-    a.save!
-  end
-end
-
-def sequencing_files
-  Rails.root.join('test/fixtures/files').entries.select do |f|
-    ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
+  (0..(@attachments_per_sample - 1)).each do |i| # file list is index'd at 0
+    Rails.logger.info "seeding... Sample: #{sample.name}, Attachments... #{i + 1}/#{@attachments_per_sample}"
+    f = @sequencing_file_list[i]
+    attachment = sample.attachments.build
+    attachment.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
+    attachment.save!
+    @total_sample_attachment_count += 1
   end
 end
 
@@ -89,6 +108,7 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
   # seed the projects
   if group_params[:projects] # rubocop:disable Style/SafeNavigation
     group_params[:projects].each do |project_params|
+      Rails.logger.info { "seeding... Group: #{group_params[:name]}, Project: #{project_params[:name]}" }
       seed_project(project_params:, creator: owner, namespace: group)
     end
   end
