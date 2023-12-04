@@ -70,18 +70,24 @@ module Samples
 
       test 'remove metadata key with user' do
         @sample.metadata = { 'key1' => 'value1', 'key2' => 'value2' }
+        @sample.metadata_provenance = { 'key1' => { 'id' => 1, 'source' => 'analysis' },
+                                        'key2' => { 'id' => 1, 'source' => 'analysis' } }
         params = { 'metadata' => { 'key2' => '' } }
         Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
         assert_equal(@sample.metadata, { 'key1' => 'value1' })
+        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 1, 'source' => 'analysis' } })
       end
 
       test 'remove metadata key with analysis' do
         @sample.metadata = { 'key1' => 'value1', 'key2' => 'value2' }
+        @sample.metadata_provenance = { 'key1' => { 'id' => 1, 'source' => 'user' },
+                                        'key2' => { 'id' => 1, 'source' => 'user' } }
         params = { 'metadata' => { 'key2' => '' }, 'analysis_id' => 1 }
         Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
         assert_equal(@sample.metadata, { 'key1' => 'value1' })
+        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 1, 'source' => 'user' } })
       end
 
       test 'update sample metadata with valid permission' do
