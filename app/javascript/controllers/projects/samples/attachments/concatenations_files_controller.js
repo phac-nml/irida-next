@@ -9,14 +9,6 @@ export default class extends Controller {
       "attachments-table-body"
     ).parentElement;
 
-    const headers = table.getElementsByTagName("th");
-    const headersIndex = [];
-    for (let header of headers) {
-      if (["Filename", "Type", "Size"].includes(header.innerText)) {
-        headersIndex.push(header.cellIndex);
-      }
-    }
-
     const body = table.getElementsByTagName("tbody")[0];
     const newTable = document.createElement("table");
     newTable.classList = table.classList;
@@ -28,9 +20,9 @@ export default class extends Controller {
         newRow.classList = row.classList;
 
         for (let cell of row.cells) {
-          if (headersIndex.includes(cell.cellIndex)) {
-            const newCell = cell;
-            newRow.append(newCell.cloneNode(true));
+          // copy file name, type, and sze
+          if ([1, 3, 4].includes(cell.cellIndex)) {
+            newRow.append(cell.cloneNode(true));
           }
         }
       }
