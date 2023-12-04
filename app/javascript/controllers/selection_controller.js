@@ -35,20 +35,11 @@ export default class extends Controller {
   }
 
   toggle(event) {
-    const newStorageValue = this.#getStoredSamples();
+    this.#addOrRemove(event.target.checked, event.target.value);
+  }
 
-    if (event.target.checked) {
-      newStorageValue.push(event.target.value);
-    } else {
-      const index = newStorageValue.indexOf(event.target.value);
-      if (index > -1) {
-        newStorageValue.splice(index, 1);
-      }
-    }
-
-    this.save(newStorageValue);
-
-    this.#updateActionLinks(newStorageValue.length);
+  remove({ params: { id } }) {
+    this.#addOrRemove(false, id.toString());
   }
 
   save(storageValue) {
@@ -56,6 +47,22 @@ export default class extends Controller {
       this.storageKeyValue,
       JSON.stringify([...storageValue])
     );
+  }
+
+  #addOrRemove(add, storageValue) {
+    const newStorageValue = this.#getStoredSamples();
+
+    if (add) {
+      newStorageValue.push(storageValue);
+    } else {
+      const index = newStorageValue.indexOf(storageValue);
+      if (index > -1) {
+        newStorageValue.splice(index, 1);
+      }
+    }
+
+    this.save(newStorageValue);
+    this.#updateActionLinks(newStorageValue.length);
   }
 
   #getStoredSamples() {

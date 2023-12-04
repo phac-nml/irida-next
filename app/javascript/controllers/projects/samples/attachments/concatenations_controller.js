@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
+//creates hidden fields within a form for selected files
 export default class extends Controller {
   static targets = ["field"];
 
@@ -22,26 +23,34 @@ export default class extends Controller {
 
         if (value instanceof Array) {
           for (let arrayValue of value) {
-            const element = document.createElement("input");
-            element.type = "hidden";
-            element.id = `${this.fieldNameValue}[${storageValueIndex}][]`;
-            element.name = `${this.fieldNameValue}[${storageValueIndex}][]`;
-            element.value = arrayValue;
-            this.fieldTarget.appendChild(element);
+            this.#addHiddenInput(
+              `${this.fieldNameValue}[${storageValueIndex}][]`,
+              arrayValue
+            );
           }
         } else {
-          const element = document.createElement("input");
-          element.type = "hidden";
-          element.id = `${this.fieldNameValue}[${storageValueIndex}]`;
-          element.name = `${this.fieldNameValue}[${storageValueIndex}]`;
-          element.value = value;
-          this.fieldTarget.appendChild(element);
+          this.#addHiddenInput(
+            `${this.fieldNameValue}[${storageValueIndex}]`,
+            value
+          );
         }
       }
     }
   }
 
-  clear() {
-    sessionStorage.removeItem(this.storageKeyValue);
+  clear(event) {
+    if (event.detail.success) {
+      sessionStorage.removeItem(this.storageKeyValue);
+    }
+  }
+
+  #addHiddenInput(name, value) {
+    const element = document.createElement("input");
+    element.type = "hidden";
+    element.id = value;
+    element.name = name;
+    element.value = value;
+    element.ariaHidden = "true";
+    this.fieldTarget.appendChild(element);
   }
 }

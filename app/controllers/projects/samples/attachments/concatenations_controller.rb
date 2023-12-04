@@ -26,7 +26,7 @@ module Projects
             render status: :ok, locals: { type: :success, message: t('.success') }
           else
             @errors = @sample.errors.full_messages.first
-            render status: :unprocessable_entity, locals: { type: :warning,
+            render status: :unprocessable_entity, locals: { type: :danger,
                                                             message: @errors }
           end
         end

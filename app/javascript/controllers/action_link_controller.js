@@ -13,6 +13,7 @@ export default class extends Controller {
 
   setDisabled(count = 0) {
     if (this.requiredValue > count) {
+      this.element.setAttribute("aria-disabled", "true");
       this.element.classList.add(...this.#event_classes);
       if (this.element.classList.contains("button--state-primary")) {
         this.element.classList.add(...this.#primary_colours);
@@ -20,6 +21,7 @@ export default class extends Controller {
         this.element.classList.add(...this.#default_colours);
       }
     } else {
+      this.element.removeAttribute("aria-disabled");
       this.element.classList.remove(...this.#event_classes);
       if (this.element.classList.contains("button--state-primary")) {
         this.element.classList.remove(...this.#primary_colours);
