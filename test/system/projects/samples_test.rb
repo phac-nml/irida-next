@@ -323,6 +323,7 @@ module Projects
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
+      assert_no_text @sample3.name
     end
 
     test 'can sort the list of samples' do
@@ -356,6 +357,7 @@ module Projects
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
+      assert_no_text @sample3.name
 
       click_on I18n.t(:'projects.samples.index.sorting.updated_at_desc')
       click_on I18n.t(:'projects.samples.index.sorting.name_desc')
@@ -388,6 +390,7 @@ module Projects
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.name
+      assert_no_text @sample2.name
       assert_no_text @sample3.name
     end
 
