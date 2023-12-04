@@ -255,3 +255,32 @@ project28_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
+
+projectAlpha_namespace:
+  name: Project Alpha
+  path: project-alpha
+  description: Project Alpha description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha) %>
+
+projectBravo_namespace:
+  name: Project Bravo
+  path: project-bravo
+  description: Project Bravo description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_bravo) %>
+
+projectCharlie_namespace:
+  name: Project Charlie
+  path: project-charlie
+  description: Project Charlie description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie) %>
+
+projectAlpha1_namespace:
+  name: Project Alpha 1
+  path: project-alpha-1
+  description: Project Alpha 1 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha_subgroup1) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>

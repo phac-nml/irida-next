@@ -127,3 +127,19 @@ namespace_group_link_group_three_project1:
 project28:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project28_namespace) %>
+
+projectAlpha:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha_namespace) %>
+
+projectBravo:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo_namespace) %>
+
+projectCharlie:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie_namespace) %>
+
+projectAlpha1:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1_namespace) %>

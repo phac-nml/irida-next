@@ -76,3 +76,23 @@ sample31:
   name: Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
+
+sampleAlpha:
+  name: Sample Alpha
+  description: Sample Alpha description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha) %>
+
+sampleBravo:
+  name: Sample Bravo
+  description: Sample Bravo description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo) %>
+
+sampleCharlie:
+  name: Sample Charlie
+  description: Sample Charlie description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie) %>
+
+sampleAlpha1:
+  name: Sample Alpha 1
+  description: Sample Alpha 1 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1) %>

@@ -213,3 +213,43 @@ project28_namespace_route:
   name: Group 4 / Project 28
   path: group-4/project-28
   source: project28_namespace (Namespace)
+
+group_alpha_route:
+  name: Group Alpha
+  path: group-alpha
+  source: group_alpha (Namespace)
+
+group_bravo_route:
+  name: Group Bravo
+  path: group-bravo
+  source: group_bravo (Namespace)
+
+group_charlie_route:
+  name: Group Charlie
+  path: group-charlie
+  source: group_charlie (Namespace)
+
+group_alpha_namespace_route:
+  name: Group Alpha / Project Alpha
+  path: group-alpha/project-alpha
+  source: projectAlpha_namespace (Namespace)
+
+group_bravo_namespace_route:
+  name: Group Bravo / Project Bravo
+  path: group-bravo/project-bravo
+  source: projectBravo_namespace (Namespace)
+
+group_charlie_namespace_route:
+  name: Group Charlie / Project Charlie
+  path: group-charlie/project-charlie
+  source: projectCharlie_namespace (Namespace)
+
+subgroup_one_group_alpha_route:
+  name: Group Alpha / Subgroup 1
+  path: group-alpha/subgroup-1
+  source: group_alpha_subgroup1 (Namespace)
+
+project_alpha_1_namespace_route:
+  name: Group Alpha / Subgroup 1 / Project Alpha 1
+  path: group-alpha/subgroup-1/project-alpha1
+  source: projectAlpha1_namespace (Namespace)

@@ -41,4 +41,19 @@ class SamplePolicyTest < ActiveSupport::TestCase
 
     assert_equal projects_samples_count, scoped_samples.count
   end
+
+  test 'scope includes samples from linked projects and projects from linked groups' do
+    user = users(:private_ryan)
+    group = groups(:group_alpha)
+    policy = SamplePolicy.new(group, user:)
+
+    scoped_samples = policy.apply_scope(Sample, type: :relation, scope_options: { group: })
+
+    assert_equal 4, scoped_samples.count
+
+    assert scoped_samples.include?(samples(:sampleAlpha))
+    assert scoped_samples.include?(samples(:sampleAlpha1))
+    assert scoped_samples.include?(samples(:sampleBravo))
+    assert scoped_samples.include?(samples(:sampleCharlie))
+  end
 end
