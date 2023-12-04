@@ -595,6 +595,7 @@ en:
           access_level: Access Level
           source: Source
           access_granted: Access Granted
+          expiration: Expiration
           action: Action
         tabs:
           members: Members
@@ -756,6 +757,7 @@ en:
           access_level: Access Level
           source: Source
           access_granted: Access Granted
+          expiration: Expiration
           action: Action
         tabs:
           members: Members

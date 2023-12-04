@@ -70,6 +70,7 @@
       <% end %>
     </div>
   </td>
+  <td class="px-6 py-4"><%= member.expires_at %></td>
   <% if (current_user == member.user || allowed_to?(:destroy_member?, @namespace)) && !member_source.key?(:inherited_namespace_path) %>
     <td class="px-4 py-3 text-right">
       <% if current_user == member.user %>
