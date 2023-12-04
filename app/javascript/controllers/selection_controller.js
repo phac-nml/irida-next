@@ -47,7 +47,18 @@ export default class extends Controller {
     }
 
     this.save(newStorageValue);
+    this.#updateActionLinks(newStorageValue.length);
+  }
 
+  remove({ params: { id } }) {
+    const newStorageValue = this.#getStoredSamples();
+    const index = newStorageValue.indexOf(id.toString());
+
+    if (index > -1) {
+      newStorageValue.splice(index, 1);
+    }
+
+    this.save(newStorageValue);
     this.#updateActionLinks(newStorageValue.length);
   }
 

@@ -12,7 +12,7 @@
       end
     ),
     nil,
-    id: dom_id(attachment.file),
+    id: dom_id(attachment.file, :file),
     "aria-label": attachment.file.filename,
     data: {
       selection_target: "rowSelection",
@@ -109,7 +109,15 @@
         method: "delete",
         form: {
           data: {
-            "turbo-frame": "attachments",
+            action: "click->selection#remove",
+            "selection-id-param":
+              (
+                if attachment.associated_attachment
+                  [attachment.id, attachment.associated_attachment.id].to_s
+                else
+                  attachment.id
+                end
+              ),
             "turbo-confirm": t(".delete_confirm")
           }
         },
