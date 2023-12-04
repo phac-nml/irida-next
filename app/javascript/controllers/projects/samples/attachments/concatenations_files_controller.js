@@ -5,13 +5,11 @@ export default class extends Controller {
   static targets = ["field"];
 
   connect() {
-    const table = document.getElementById(
-      "attachments-table-body"
-    ).parentElement;
-
-    const body = table.getElementsByTagName("tbody")[0];
+    const body = document.getElementById("attachments-table-body");
+    const table = body.parentElement;
     const newTable = document.createElement("table");
     newTable.classList = table.classList;
+
     for (let row of body.rows) {
       const isChecked = row.cells[0].children[0].checked;
 
@@ -30,7 +28,6 @@ export default class extends Controller {
 
     const newBody = newTable.getElementsByTagName("tbody")[0];
     newBody.classList = body.classList;
-
     this.fieldTarget.appendChild(newTable);
   }
 }
