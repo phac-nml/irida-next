@@ -38,8 +38,10 @@ export default class extends Controller {
     }
   }
 
-  clear() {
-    sessionStorage.removeItem(this.storageKeyValue);
+  clear(event) {
+    if (event.detail.success) {
+      sessionStorage.removeItem(this.storageKeyValue);
+    }
   }
 
   #addHiddenInput(name, value) {
