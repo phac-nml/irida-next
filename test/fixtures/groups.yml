@@ -133,3 +133,27 @@ group_ten:
   type: Group
   description: Group 10 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine) %>
+
+group_alpha:
+  name: Group Alpha
+  path: group-alpha
+  type: Group
+  description: Group Alpha description
+
+group_bravo:
+  name: Group Bravo
+  path: group-bravo
+  type: Group
+  description: Group bravo description
+
+group_charlie:
+  name: Group Charlie
+  path: group-charlie
+  type: Group
+  description: Group Charlie description
+
+group_alpha_subgroup1:
+  name: Subgroup 1
+  path: group-alpha/subgroup-1
+  type: Group
+  description: Subgroup 1 description

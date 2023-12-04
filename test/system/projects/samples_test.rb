@@ -9,6 +9,7 @@ module Projects
       login_as @user
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
+      @sample3 = samples(:sample30)
       @project = projects(:project1)
       @namespace = groups(:group_one)
     end
@@ -16,11 +17,11 @@ module Projects
     test 'visiting the index' do
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_selector 'table#samples-table tbody tr', count: 2
+      assert_selector 'table#samples-table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
 
-      assert_selector 'button.Viral-Dropdown--icon', count: 5
+      assert_selector 'button.Viral-Dropdown--icon', count: 6
     end
 
     test 'cannot access project samples' do
@@ -170,7 +171,7 @@ module Projects
 
       assert_no_selector 'table#samples-table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
-      assert_selector 'table#samples-table tbody tr', count: 1
+      assert_selector 'table#samples-table tbody tr', count: 2
       within first('tbody tr td:nth-child(2)') do
         assert_text @sample2.name
       end
@@ -179,7 +180,7 @@ module Projects
     test 'should transfer samples' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_selector 'table#samples-table tbody tr', count: 2
+      assert_selector 'table#samples-table tbody tr', count: 3
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -194,8 +195,9 @@ module Projects
     test 'should not transfer samples' do
       project26 = projects(:project26)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_selector 'table#samples-table tbody tr', count: 2
-      all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      assert_selector 'table#samples-table tbody tr', count: 3
+      all('input[type=checkbox]').last.click
+
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         select project26.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
@@ -207,15 +209,16 @@ module Projects
         errors.each { |error| assert_text error }
       end
       within %(turbo-frame[id="project_samples_list"]) do
-        assert_selector 'table#samples-table tbody tr', count: 2
+        assert_selector 'table#samples-table tbody tr', count: 3
       end
     end
 
     test 'should transfer some samples' do
       project25 = projects(:project25)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_selector 'table#samples-table tbody tr', count: 2
+      assert_selector 'table#samples-table tbody tr', count: 3
       all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         select project25.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
@@ -284,8 +287,8 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_selector 'table#samples-table tbody tr', count: 2
-      assert_selector 'table#samples-table tr button.Viral-Dropdown--icon', text: '', count: 2
+      assert_selector 'table#samples-table tbody tr', count: 3
+      assert_selector 'table#samples-table tr button.Viral-Dropdown--icon', text: '', count: 3
       first('table#samples-table tr button.Viral-Dropdown--icon').click
       assert_selector 'a', text: 'Edit', count: 1
       assert_selector 'a', text: 'Remove', count: 0
@@ -301,7 +304,7 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 0
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_selector 'table#samples-table tbody tr', count: 2
+      assert_selector 'table#samples-table tbody tr', count: 3
       assert_selector 'table#samples-table tr button.Viral-Dropdown--icon', text: '', count: 0
       assert_text @sample1.name
       assert_text @sample2.name
@@ -310,7 +313,7 @@ module Projects
     test 'can search the list of samples by name' do
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_selector 'table#samples-table tbody tr', count: 2
+      assert_selector 'table#samples-table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
 
@@ -324,7 +327,7 @@ module Projects
     test 'can sort the list of samples' do
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_selector 'table#samples-table tbody tr', count: 2
+      assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr td:nth-child(2)') do
         assert_text @sample1.name
       end
@@ -333,9 +336,10 @@ module Projects
       click_on I18n.t(:'projects.samples.index.sorting.name_desc')
 
       assert_text I18n.t(:'projects.samples.index.sorting.name_desc')
-      assert_selector 'table#samples-table tbody tr', count: 2
+      assert_selector 'table#samples-table tbody tr', count: 3
+
       within first('tbody tr td:nth-child(2)') do
-        assert_text @sample2.name
+        assert_text @sample3.name
       end
     end
 

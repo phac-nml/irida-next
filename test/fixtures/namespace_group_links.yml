@@ -65,3 +65,15 @@ namespace_group_link11:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
+
+namespace_group_link12:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo_namespace) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>
+  namespace_type: "Project"
+
+namespace_group_link13:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie) %>
+  group_access_level: <%= Member::AccessLevel::GUEST %>
+  namespace_type: "Group"

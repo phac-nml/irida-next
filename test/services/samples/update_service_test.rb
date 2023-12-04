@@ -67,7 +67,7 @@ module Samples
       assert_equal 2, @sample.log_data.version
       assert_equal 2, @sample.log_data.size
 
-      assert_equal 'Project 3 Sample 23', @sample.at(version: 1).name
+      assert_equal 'Project 4 Sample 23', @sample.at(version: 1).name
       assert_equal 'Sample 23 description.', @sample.at(version: 1).description
 
       assert_equal 'new-sample23-name', @sample.at(version: 2).name
@@ -91,7 +91,7 @@ module Samples
       assert_equal 2, @sample.log_data.version
       assert_equal 2, @sample.log_data.size
 
-      assert_equal 'Project 3 Sample 23', @sample.at(version: 1).name
+      assert_equal 'Project 4 Sample 23', @sample.at(version: 1).name
       assert_equal 'Sample 23 description.', @sample.at(version: 1).description
 
       assert_equal 'new-sample23-name', @sample.at(version: 2).name
@@ -99,7 +99,7 @@ module Samples
 
       @sample.switch_to!(1)
 
-      assert_equal 'Project 3 Sample 23', @sample.name
+      assert_equal 'Project 4 Sample 23', @sample.name
       assert_equal 'Sample 23 description.', @sample.description
     end
   end

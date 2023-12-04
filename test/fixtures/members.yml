@@ -355,3 +355,9 @@ group_ten_member_james_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_ten) %>
   access_level: <%= Member::AccessLevel::GUEST %>
+
+group_alpha_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha) %>
+  access_level: <%= Member::AccessLevel::OWNER %>

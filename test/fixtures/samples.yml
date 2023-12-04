@@ -18,7 +18,7 @@ sample<%= (n) %>:
 <% end %>
 
 sample23:
-  name: Project 3 Sample 23
+  name: Project 4 Sample 23
   description: Sample 23 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project4) %>
 
@@ -28,17 +28,17 @@ sample24:
   project_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2) %>
 
 sample25:
-  name: Project 1 Sample 1
+  name: Project 25 Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project25) %>
 
 sample26:
-  name: Project 1 Sample 1
+  name: Project 26 Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
 
 sample27:
-  name: Project 1 Sample 2
+  name: Project 26 Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
 
@@ -56,3 +56,43 @@ sampleC:
   name: Project A Sample C
   description: Sample C description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>
+
+sample28:
+  name: Project 28 Sample 1
+  description: Sample 1 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project28) %>
+
+sample29:
+  name: Sample 2
+  description: Sample 2 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project25) %>
+
+sample30:
+  name: Sample 2
+  description: Sample 2 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
+
+sample31:
+  name: Sample 2
+  description: Sample 2 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
+
+sampleAlpha:
+  name: Sample Alpha
+  description: Sample Alpha description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha) %>
+
+sampleBravo:
+  name: Sample Bravo
+  description: Sample Bravo description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo) %>
+
+sampleCharlie:
+  name: Sample Charlie
+  description: Sample Charlie description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie) %>
+
+sampleAlpha1:
+  name: Sample Alpha 1
+  description: Sample Alpha 1 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1) %>
