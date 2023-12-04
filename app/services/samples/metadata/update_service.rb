@@ -7,12 +7,12 @@ module Samples
       SampleMetadataUpdateError = Class.new(StandardError)
       attr_accessor :sample, :metadata, :analysis_id
 
-      def initialize(project, sample, user = nil, params = {}, metadata = nil, analysis_id = nil) # rubocop:disable Metrics/ParameterLists
+      def initialize(project, sample, user = nil, params = {})
         super(user, params)
         @project = project
         @sample = sample
-        @metadata = metadata
-        @analysis_id = analysis_id
+        @metadata = params['metadata']
+        @analysis_id = params['analysis_id']
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
@@ -25,14 +25,16 @@ module Samples
         end
 
         if @metadata
+          # Without transforming keys, issues with overwritting can occur and multiples of the same key can appear
           @metadata = @metadata.transform_keys(&:to_s)
-          @metadata.each do |k, v|
-            if v.blank?
-              @sample['metadata'].delete(k) && @sample['metadata_provenance'].delete(k) if @sample['metadata'].key?(k)
+          @metadata.each do |key, value|
+            if value.blank?
+              if @sample['metadata'].key?(key)
+                @sample['metadata'].delete(key) && @sample['metadata_provenance'].delete(key)
+              end
             else
-              @sample['metadata'][k] = v
-              @sample['metadata_provenance'][k] =
-                @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
+              @sample['metadata'][key] = value
+              update_sample_metadata_provenance(key, current_user)
             end
           end
         else
@@ -43,6 +45,22 @@ module Samples
         @sample.update(id: @sample.id)
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
+      end
+
+      private
+
+      def update_sample_metadata_provenance(key, user)
+        if @sample['metadata_provenance'].key?(key)
+          # We don't overwrite existing @sample['metadata_provenance'] with {source: 'analysis'} with a user
+          if @analysis_id.nil? && @sample['metadata_provenance'][key]['source'] == 'user'
+            @sample['metadata_provenance'][key] = { source: 'user', id: user.id }
+          elsif @analysis_id
+            @sample['metadata_provenance'][key] = { source: 'analysis', id: @analysis_id }
+          end
+        else
+          @sample['metadata_provenance'][key] =
+            @analysis_id.nil? ? { source: 'user', id: user.id } : { source: 'analysis', id: @analysis_id }
+        end
       end
     end
   end
