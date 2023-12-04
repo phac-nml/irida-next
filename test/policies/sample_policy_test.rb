@@ -10,7 +10,8 @@ class SamplePolicyTest < ActiveSupport::TestCase
   end
 
   test 'scope' do
-    scoped_samples = @policy.apply_scope(Sample, type: :relation, scope_options: { group: @group })
+    scoped_samples = @policy.apply_scope(Sample, type: :relation, name: :group_samples,
+                                                 scope_options: { group: @group })
 
     projects_samples_count = 0
     group_self_and_descendants = @group.self_and_descendants
@@ -47,7 +48,7 @@ class SamplePolicyTest < ActiveSupport::TestCase
     group = groups(:group_alpha)
     policy = SamplePolicy.new(group, user:)
 
-    scoped_samples = policy.apply_scope(Sample, type: :relation, scope_options: { group: })
+    scoped_samples = policy.apply_scope(Sample, type: :relation, name: :group_samples, scope_options: { group: })
 
     assert_equal 4, scoped_samples.count
 

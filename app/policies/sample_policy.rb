@@ -2,7 +2,7 @@
 
 # Policy samples authorization
 class SamplePolicy < ApplicationPolicy
-  scope_for :relation do |relation, options|
+  scope_for :relation, :group_samples do |relation, options|
     group = options[:group]
 
     relation

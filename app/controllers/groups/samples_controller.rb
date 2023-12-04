@@ -26,7 +26,7 @@ module Groups
     end
 
     def authorized_samples
-      authorized_scope(Sample, type: :relation, scope_options: { group: @group })
+      authorized_scope(Sample, type: :relation, as: :group_samples, scope_options: { group: @group })
     end
 
     def context_crumbs
