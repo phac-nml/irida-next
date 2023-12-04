@@ -5,6 +5,8 @@ class SamplePolicy < ApplicationPolicy
   scope_for :relation, :group_samples do |relation, options|
     group = options[:group]
 
+    next relation.none unless Member.can_view?(user, group)
+
     relation
       .with(
         direct_group_projects_samples: relation.joins(project: [:namespace])
