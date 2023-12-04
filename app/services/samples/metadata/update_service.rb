@@ -33,7 +33,7 @@ module Samples
                 @sample['metadata'].delete(key) && @sample['metadata_provenance'].delete(key)
               end
             else
-              update_sample_metadata(key, value, current_user)
+              update_metadata(key, value, current_user)
             end
           end
         else
@@ -48,22 +48,26 @@ module Samples
 
       private
 
-      def update_sample_metadata(key, value, user) # rubocop:disable Metrics/AbcSize
+      def update_metadata(key, value, user)
         if @sample['metadata_provenance'].key?(key)
           # We don't overwrite existing @sample['metadata_provenance'] or @sample['metadata']
           # that has a {source: 'analysis'} with a user
           if @analysis_id.nil? && @sample['metadata_provenance'][key]['source'] == 'user'
             @sample['metadata_provenance'][key] = { source: 'user', id: user.id }
-            @sample['metadata'][key] = value
+            assign_metadata_value(key, value)
           elsif @analysis_id
             @sample['metadata_provenance'][key] = { source: 'analysis', id: @analysis_id }
-            @sample['metadata'][key] = value
+            assign_metadata_value(key, value)
           end
         else
           @sample['metadata_provenance'][key] =
             @analysis_id.nil? ? { source: 'user', id: user.id } : { source: 'analysis', id: @analysis_id }
-          @sample['metadata'][key] = value
+          assign_metadata_value(key, value)
         end
+      end
+
+      def assign_metadata_value(key, value)
+        @sample['metadata'][key] = value
       end
     end
   end
