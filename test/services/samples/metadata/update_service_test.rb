@@ -62,7 +62,7 @@ module Samples
         params = { 'metadata' => { 'key1' => 'value4', 'key3' => 'value3' } }
         Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
-        assert_equal(@sample.metadata, { 'key1' => 'value4', 'key2' => 'value2', 'key3' => 'value3' })
+        assert_equal(@sample.metadata, { 'key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3' })
         assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 1, 'source' => 'analysis' },
                                                     'key2' => { 'id' => 1, 'source' => 'analysis' },
                                                     'key3' => { 'id' => @user.id, 'source' => 'user' } })
