@@ -56,20 +56,20 @@ module Samples
 
       private
 
-      def update_metadata_provenance(key) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/MethodLength
+      def update_metadata_provenance(key) # rubocop:disable Metrics/MethodLength
         if @sample['metadata_provenance'].key?(key)
           # We don't overwrite existing @sample['metadata_provenance'] or @sample['metadata']
           # that has a {source: 'analysis'} with a user
-          if @analysis_id
-            @sample['metadata_provenance'][key] = { source: 'analysis', id: @analysis_id }
-            true
-          elsif @analysis_id.nil?
+          if @analysis_id.nil?
             if @sample['metadata_provenance'][key]['source'] == 'user'
               @sample['metadata_provenance'][key] = { source: 'user', id: current_user.id }
               true
-            elsif @sample['metadata_provenance'][key]['source'] == 'analysis'
+            else
               false
             end
+          else
+            @sample['metadata_provenance'][key] = { source: 'analysis', id: @analysis_id }
+            true
           end
         else
           @sample['metadata_provenance'][key] =
