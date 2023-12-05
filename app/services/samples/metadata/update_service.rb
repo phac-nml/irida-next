@@ -35,7 +35,11 @@ module Samples
               end
             else
               provenance_updated = update_metadata_provenance(key)
-              provenance_updated ? assign_metadata_value(key, value) : metadata_fields_not_updated.append(key)
+              if provenance_updated
+                assign_metadata_value(key, value)
+              else
+                metadata_fields_not_updated.append("#{key}: #{value}")
+              end
             end
           end
           @sample.update(id: @sample.id)
