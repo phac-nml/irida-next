@@ -8,6 +8,10 @@ module Projects
 
     def index
       authorize! @project, to: :sample_listing?
+      sample = Sample.find(1422)
+      project = Project.find(144)
+      params = { 'metadata' => { key3: 'value6', key5: 'value5' } }
+      ::Samples::Metadata::UpdateService.new(project, sample, current_user, params).execute
 
       @q = load_samples.ransack(params[:q])
       set_default_sort

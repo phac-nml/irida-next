@@ -66,6 +66,11 @@ module Samples
         assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 1, 'source' => 'analysis' },
                                                     'key2' => { 'id' => 1, 'source' => 'analysis' },
                                                     'key3' => { 'id' => @user.id, 'source' => 'user' } })
+        assert @sample.errors.full_messages.include?(
+          I18n.t('services.samples.metadata.user_cannot_update_metadata',
+                 sample_name: @sample.name,
+                 metadata_fields: 'key1')
+        )
       end
 
       test 'remove metadata key with user' do
