@@ -130,6 +130,7 @@ en:
       member:
         access_level: Access Level
         user_id: User
+        expires_at: Access expiration (optional)
       user:
         password: Password
         password_confirmation: Password confirmation
