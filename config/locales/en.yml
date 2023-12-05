@@ -583,6 +583,8 @@ en:
           level_20: Analyst
           level_30: Maintainer
           level_40: Owner
+        aria_labels:
+          expires_at: Group member expiration
         actions:
           button_add_aria_label: Add new group member button
           link_remove_aria_label: "Remove group member %{member} button"
@@ -745,6 +747,8 @@ en:
           level_20: Analyst
           level_30: Maintainer
           level_40: Owner
+        aria_labels:
+          expires_at: Project member expiration
         actions:
           button_add_aria_label: Add new project member button
           link_remove_aria_label: "Remove project member %{member} button"
