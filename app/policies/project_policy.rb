@@ -143,20 +143,19 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id),
       direct_projects: relation.where(
         namespace: user.members.joins(:namespace).where(
-          access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER],
+          access_level: Member::AccessLevel.manageable,
           namespace: { type: Namespaces::ProjectNamespace.sti_name }
         ).select(:namespace_id)
       ).select(:id),
       group_projects: relation.joins(:namespace).where(namespace: { parent: Namespace.where(id:
         user.members.joins(:namespace).where(
-          namespace_id: user.groups.self_and_descendants, user:, access_level: [Member::AccessLevel::MAINTAINER,
-                                                                                Member::AccessLevel::OWNER]
+          namespace_id: user.groups.self_and_descendants, user:, access_level: Member::AccessLevel.manageable
         ).select(:namespace_id), type: Group.sti_name).self_and_descendants.select(:id) }).select(:id),
       linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
         Group.where(id: NamespaceGroupLink.where(
-          group: Member.where(user:, access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER],
+          group: Member.where(user:, access_level: Member::AccessLevel.manageable,
                               namespace_id: user.groups.self_and_descendant_ids).select(:namespace_id),
-          group_access_level: [Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER]
+          group_access_level: Member::AccessLevel.manageable
         ).not_expired.select(:namespace_id)).self_and_descendants }).select(:id)
     ).where(
       Arel.sql(
