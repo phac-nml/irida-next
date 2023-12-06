@@ -116,7 +116,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
       if namespace_group_links.count.positive?
         maxlevel_namespace_group_link = namespace_group_links.order(:group_access_level).last
-        membership = Member.for_namespace_and_ancestors(maxlevel_namespace_group_link&.group).not_expired
+        membership = Member.for_namespace_and_ancestors(maxlevel_namespace_group_link&.group)
                      &.where(user:)&.order(:access_level)
 
         return [maxlevel_namespace_group_link.group_access_level, membership.last.access_level].min if membership.any?
