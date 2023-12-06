@@ -7,4 +7,5 @@ class SamplesWorkflowExecution < ApplicationRecord
 
   belongs_to :workflow_execution
   belongs_to :sample
+  has_many_attached :inputs
 end
