@@ -68,7 +68,10 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
-    # John Doe has access to 29 projects
+    # John Doe has access to 30 projects. 29 through his namespace
+    # and projects under groups in which he is a member plus a project
+    # from David Doe's Group Four which is shared with subgroup 1 under
+    # John Doe's group Group 1
     assert_equal 30, scoped_projects.count
 
     user = users(:david_doe)
@@ -77,12 +80,24 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     # David Doe has access to 21 projects via a namespace
     # group link between one of his groups and group_one
+    # and one project of their own under david_doe_group_four
     assert_equal 22, scoped_projects.count
   end
 
   test 'manageable scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
+    # John Doe has manageable access to just projects under his namespace
+    # and projects under groups in which he is a member
     assert_equal 29, scoped_projects.count
+
+    user = users(:david_doe)
+    policy = ProjectPolicy.new(user:)
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :manageable)
+
+    # David Doe has manageable access to projects under his group and
+    # none through namespace group links as manageable access has not
+    # been set for any of the links
+    assert_equal 1, scoped_projects.count
   end
 end

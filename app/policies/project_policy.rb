@@ -149,13 +149,17 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       ).select(:id),
       group_projects: relation.joins(:namespace).where(namespace: { parent: Namespace.where(id:
         user.members.joins(:namespace).where(
-          namespace_id: user.groups.self_and_descendants, user:, access_level: Member::AccessLevel.manageable
+          namespace_id: user.groups.self_and_descendants,
+          access_level: Member::AccessLevel.manageable,
+          namespace: { type: Group.sti_name }
         ).select(:namespace_id), type: Group.sti_name).self_and_descendants.select(:id) }).select(:id),
       linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
         Group.where(id: NamespaceGroupLink.where(
-          group: Member.where(user:, access_level: Member::AccessLevel.manageable,
-                              namespace_id: user.groups.self_and_descendant_ids).select(:namespace_id),
-          group_access_level: Member::AccessLevel.manageable
+          group: user.groups.where(id: user.members.where(access_level: Member::AccessLevel.manageable,
+                                                          namespace: { type: Group.sti_name })
+                                                          .select(:namespace_id)).self_and_descendants,
+          group_access_level: Member::AccessLevel.manageable,
+          namespace_type: Group.sti_name
         ).not_expired.select(:namespace_id)).self_and_descendants }).select(:id)
     ).where(
       Arel.sql(

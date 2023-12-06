@@ -10,8 +10,13 @@ class NamespacePolicyTest < ActiveSupport::TestCase
 
   test 'named scope without modify access to namespace via namespace group link' do
     scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, name: :manageable)
+    user_namespace = namespaces_user_namespaces(:david_doe_namespace)
+    group = groups(:david_doe_group_four)
 
     assert_equal 2, scoped_namespaces.count
+
+    assert scoped_namespaces.include?(user_namespace)
+    assert scoped_namespaces.include?(group)
 
     assert_equal scoped_namespaces[0].type, Namespaces::UserNamespace.sti_name
     assert_equal scoped_namespaces[0].name, 'david.doe@localhost'
@@ -26,6 +31,7 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     user = users(:user26)
     policy = NamespacePolicy.new(user:)
     scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
+    group_self_and_descendants_count = groups(:group_one).self_and_descendants.count
 
     actual_namespaces = scoped_namespaces.pluck(:name)
     expected_namespaces = [user.namespace.name]
@@ -39,7 +45,38 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     expected_count = linked_group_and_descendants.count + user.groups.self_and_descendants.count + user_namespace_count
 
     assert_equal expected_count, scoped_namespaces.count
+    assert_equal expected_count,
+                 group_self_and_descendants_count + user.groups.self_and_descendants.count + user_namespace_count
     assert_equal expected_namespaces.flatten.sort, actual_namespaces.flatten.sort
+  end
+
+  test 'namespaces without and with manageable access via namespace group link' do
+    user = users(:john_doe)
+    namespace_group_link = namespace_group_links(:namespace_group_link4)
+
+    policy = NamespacePolicy.new(user:)
+    scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
+
+    # John Doe has manageable access to 24 namespaces
+    # (1 user namespace and 23 group namespaces)
+    assert_equal 24, scoped_namespaces.count
+
+    assert_not scoped_namespaces.include?(namespace_group_link.namespace)
+
+    # Namespace group link group access level updated to MAINTAINER from ANALYST
+    # which links David Doe's Group 4 to Subgroup 1 which is a subgroup under
+    # Group 1 which John Doe is an OWNER
+    namespace_group_link.group_access_level = Member::AccessLevel::MAINTAINER
+    namespace_group_link.save
+
+    scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
+
+    # John Doe has manageable access to 24 namespaces (1 user namespace,
+    # 23 group namespaces, and 1 group namespace via a namespace
+    # group link)
+    assert_equal 25, scoped_namespaces.count
+
+    assert scoped_namespaces.include?(namespace_group_link.namespace)
   end
 
   test 'missing_named_scope' do

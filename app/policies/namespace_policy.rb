@@ -2,21 +2,24 @@
 
 # Base policy for namespace authorization
 class NamespacePolicy < ApplicationPolicy
-  scope_for :relation, :manageable do |relation|
+  scope_for :relation, :manageable do |relation| # rubocop:disable Metrics/BlockLength
     relation.with(
       personal_namespaces: relation.where(type: [Namespaces::UserNamespace.sti_name],
                                           owner: user).self_and_descendants
                                           .where.not(type: Namespaces::ProjectNamespace.sti_name).select(:id),
-      membership_in_namespaces: relation.where(
-        type: [Group.sti_name],
-        id: user.members.where(access_level: Member::AccessLevel.manageable).select(:namespace_id)
-      ).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name).select(:id),
+      membership_in_namespaces: relation.where(type: Group.sti_name,
+                                               id: user.members.joins(:namespace).where(
+                                                 access_level: Member::AccessLevel.manageable,
+                                                 namespace: { type: Group.sti_name }
+                                               ).select(:namespace_id)).self_and_descendants.where.not(
+                                                 type: Namespaces::ProjectNamespace.sti_name
+                                               ).select(:id),
       linked_namespaces: relation.where(id: NamespaceGroupLink.where(
+        group: user.groups.where(id: user.members.joins(:namespace).where(access_level: Member::AccessLevel.manageable,
+                                                                          namespace: { type: Group.sti_name })
+                                                        .select(:namespace_id)).self_and_descendants,
         group_access_level: Member::AccessLevel.manageable,
-        group: user.members.joins(:namespace).where(
-          namespace: { type: Group.sti_name },
-          access_level: Member::AccessLevel.manageable
-        ).select(:namespace_id)
+        namespace_type: Group.sti_name
       ).not_expired.select(:namespace_id)).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name)
       .select(:id)
     ).where(
