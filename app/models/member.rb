@@ -26,9 +26,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }
-  scope :not_expired, lambda {
-                        where('expires_at IS NULL OR expires_at > ?', Time.zone.now)
-                      }
+  scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now) }
 
   class << self
     def access_levels(member)
@@ -117,7 +115,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
       if namespace_group_links.count.positive?
         maxlevel_namespace_group_link = namespace_group_links.order(:group_access_level).last
-        membership = Member.for_namespace_and_ancestors(maxlevel_namespace_group_link&.group).not_expired
+        membership = Member.for_namespace_and_ancestors(maxlevel_namespace_group_link&.group)
                      &.where(user:)&.order(:access_level)
 
         return [maxlevel_namespace_group_link.group_access_level, membership.last.access_level].min
