@@ -13,31 +13,22 @@ module WorkflowExecutions
       @samplesheet_rows = []
     end
 
-    def execute # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def execute
       # confirm params/permissions
       # build workflow execution run directory
       generate_run_dir
 
-      # does it make sense to rename the SamplesWorkflowExecution model to something better
-      # e.g. SampleWorkflowExecutionParams
-      @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
-        attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
-        samplesheet_params = sample_workflow_execution.samplesheet_params
-
-        attachments.each do |key, attachment|
-          samplesheet_params[key] = copy_attachment_to_run_dir(attachment, sample_workflow_execution)
-        end
-
-        @samplesheet_rows << samplesheet_params
-      end
+      # process each sample
+      process_samples_workflow_executions
 
       # persist samplesheet in run dir
-      @workflow_execution.inputs.attach(io: samplesheet_file, key: generate_input_key('samplesheet.csv'),
+      samplesheet_key = generate_input_key('samplesheet.csv')
+      @workflow_execution.inputs.attach(io: samplesheet_file, key: samplesheet_key,
                                         filename: 'samplesheet.csv')
 
       @workflow_execution.workflow_params = @workflow_execution.workflow_params.merge(
         {
-          '--input': generate_input_key('samplesheet.csv'),
+          '--input': samplesheet_key,
           '--outdir': generate_input_key('output')
         }
       )
@@ -67,25 +58,42 @@ module WorkflowExecutions
       attachments
     end
 
+    def process_samples_workflow_executions
+      @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
+        attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
+        samplesheet_params = sample_workflow_execution.samplesheet_params
+
+        attachments.each do |key, attachment|
+          samplesheet_params[key] = copy_attachment_to_run_dir(attachment, sample_workflow_execution)
+        end
+
+        @samplesheet_rows << samplesheet_params
+      end
+    end
+
     def generate_input_key(filename, prefix = '')
       format('%<run_dir>s/%<prefix>s%<filename>s', run_dir: @run_dir, filename:, prefix:)
     end
 
-    def copy_attachment_to_run_dir(attachment, attachable) # rubocop:disable Metrics/AbcSize
+    def compose_blob_with_custom_key(blob, key)
+      ActiveStorage::Blob.new(
+        key:,
+        filename: blob.filename,
+        byte_size: blob.byte_size,
+        checksum: blob.checksum,
+        content_type: blob.content_type
+      ).tap do |copied_blob|
+        copied_blob.compose([blob.key])
+        copied_blob.save!
+      end
+    end
+
+    def copy_attachment_to_run_dir(attachment, attachable)
       key = generate_input_key(attachment.filename, format('input/%<attachable_type>s_%<attachable_id>s/',
                                                            attachable_type: attachment.attachable_type,
                                                            attachable_id: attachment.attachable_id))
 
-      blob = ActiveStorage::Blob.new(
-        key:,
-        filename: attachment.filename,
-        byte_size: attachment.file.byte_size,
-        checksum: attachment.file.checksum,
-        content_type: attachment.file.content_type
-      ).tap do |copied_blob|
-        copied_blob.compose([attachment.file.key])
-        copied_blob.save!
-      end
+      blob = compose_blob_with_custom_key(attachment.file, key)
 
       attachable.inputs.attach(blob.signed_id)
 
