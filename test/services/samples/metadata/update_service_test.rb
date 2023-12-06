@@ -69,7 +69,7 @@ module Samples
         assert @sample.errors.full_messages.include?(
           I18n.t('services.samples.metadata.user_cannot_update_metadata',
                  sample_name: @sample.name,
-                 metadata_fields: 'key1: value4')
+                 metadata_fields: 'key1')
         )
       end
 

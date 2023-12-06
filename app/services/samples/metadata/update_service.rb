@@ -35,23 +35,26 @@ module Samples
               end
             else
               metadata_updated = update_metadata(key, value)
-              !metadata_updated && metadata_fields_not_updated.append("#{key}: #{value}")
+              !metadata_updated && metadata_fields_not_updated.append(key)
             end
           end
           @sample.update(id: @sample.id)
+
+          if metadata_fields_not_updated.count.positive?
+            raise SampleMetadataUpdateError,
+                  I18n.t('services.samples.metadata.user_cannot_update_metadata',
+                         sample_name: @sample.name,
+                         metadata_fields: metadata_fields_not_updated.join(', '))
+          else
+            true
+          end
         else
           raise SampleMetadataUpdateError,
                 I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
         end
-
-        if metadata_fields_not_updated.count.positive?
-          raise SampleMetadataUpdateError,
-                I18n.t('services.samples.metadata.user_cannot_update_metadata',
-                       sample_name: @sample.name,
-                       metadata_fields: metadata_fields_not_updated.join(', '))
-        end
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
+        false
       end
 
       private
