@@ -34,12 +34,8 @@ module Samples
                 @sample['metadata'].delete(key) && @sample['metadata_provenance'].delete(key)
               end
             else
-              provenance_updated = update_metadata_provenance(key)
-              if provenance_updated
-                assign_metadata_value(key, value)
-              else
-                metadata_fields_not_updated.append("#{key}: #{value}")
-              end
+              metadata_updated = update_metadata(key, value)
+              !metadata_updated && metadata_fields_not_updated.append("#{key}: #{value}")
             end
           end
           @sample.update(id: @sample.id)
@@ -60,30 +56,18 @@ module Samples
 
       private
 
-      def update_metadata_provenance(key) # rubocop:disable Metrics/MethodLength
-        if @sample['metadata_provenance'].key?(key)
-          # We don't overwrite existing @sample['metadata_provenance'] or @sample['metadata']
-          # that has a {source: 'analysis'} with a user
-          if @analysis_id.nil?
-            if @sample['metadata_provenance'][key]['source'] == 'user'
-              @sample['metadata_provenance'][key] = { source: 'user', id: current_user.id }
-              true
-            else
-              false
-            end
-          else
-            @sample['metadata_provenance'][key] = { source: 'analysis', id: @analysis_id }
-            true
-          end
+      def update_metadata(key, value)
+        # We don't overwrite existing @sample['metadata_provenance'] or @sample['metadata']
+        # that has a {source: 'analysis'} with a user
+        if @sample['metadata_provenance'].key?(key) && @analysis_id.nil? &&
+           @sample['metadata_provenance'][key]['source'] == 'analysis'
+          false
         else
           @sample['metadata_provenance'][key] =
             @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
+          @sample['metadata'][key] = value
           true
         end
-      end
-
-      def assign_metadata_value(key, value)
-        @sample['metadata'][key] = value
       end
     end
   end
