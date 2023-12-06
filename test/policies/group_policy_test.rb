@@ -89,4 +89,14 @@ class GroupPolicyTest < ActiveSupport::TestCase
     # David Doe has access to 2 groups
     assert_equal 2, scoped_groups.count
   end
+
+  test 'scope with expired group member' do
+    group_member = members(:group_one_member_john_doe)
+    group_member.expires_at = 10.days.ago.to_date
+    group_member.save
+
+    scoped_groups = @policy.apply_scope(Group, type: :relation)
+
+    assert_equal 19, scoped_groups.count
+  end
 end
