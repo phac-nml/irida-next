@@ -217,5 +217,38 @@ module Groups
       assert_not_nil find(:table_row, { 'Group' => 'Group 4', 'Source' => parent_namespace_group_link.name })
       assert_not_nil find(:table_row, { 'Group' => 'Group 11', 'Source' => parent_namespace_group_link.name })
     end
+
+    test 'can update member expiration' do
+      group_member = members(:group_one_member_joan_doe)
+      expiry_date = (Time.zone.today + 1).strftime('%Y-%m-%d')
+
+      visit group_members_url(@namespace)
+
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+      find("#group-member-#{group_member.id}-expiration").click.set(expiry_date)
+                                                         .native.send_keys(:return)
+
+      within %(turbo-frame[id="member-update-alert"]) do
+        assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)
+      end
+
+      group_member_row = find(:table_row, [group_member.user.email])
+
+      within group_member_row do
+        assert_text 'Updated', count: 1
+        assert_text 'less than a minute ago'
+      end
+    end
+
+    test 'cannot update member expiration' do
+      login_as users(:ryan_doe)
+
+      visit group_members_url(@namespace)
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      within('table') do
+        assert_selector 'input.datepicker-input', count: 0
+      end
+    end
   end
 end
