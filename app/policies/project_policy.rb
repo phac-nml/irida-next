@@ -113,17 +113,21 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  # self_and_descendant_ids returns all types
+  #
+
   scope_for :relation do |relation|
     relation
       .with(
         personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id),
         direct_projects: relation.where(
-          namespace: user.members.joins(:namespace).where(
+          namespace: user.members.not_expired.joins(:namespace).where(
             namespace: { type: Namespaces::ProjectNamespace.sti_name }
           ).select(:namespace_id)
         ).select(:id),
-        group_projects: relation.joins(:namespace).where(namespace: { parent_id: user.groups.self_and_descendant_ids })
-        .select(:id),
+        group_projects: relation.joins(:namespace).where(namespace: { parent_id:
+        Namespace.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids
+        .where(type: Group.sti_name) }).select(:id),
         linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
         Group.where(id: NamespaceGroupLink
           .where(group: user.groups.self_and_descendants).not_expired.select(:namespace_id)).self_and_descendants })
