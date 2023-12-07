@@ -123,10 +123,10 @@ class GroupPolicy < NamespacePolicy
 
   scope_for :relation do |relation|
     relation.with(
-      user_groups: relation.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids,
-      linked_groups: relation.where(id: NamespaceGroupLink.where(group:
-      Group.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendants)
-      .not_expired.select(:namespace_id)).select(:id)
+      user_groups: relation.where(id: user.members.joins(:namespace).where(namespace: { type: Group.sti_name })
+      .not_expired.select(:namespace_id)).self_and_descendant_ids,
+      linked_groups: NamespaceGroupLink.where(group: relation.where(id: user.members.joins(:namespace).where(namespace: { type: Group.sti_name })
+      .not_expired.select(:namespace_id)).self_and_descendant_ids).select(:namespace_id)
     ).where(
       Arel.sql(
         'namespaces.id in (select * from user_groups)
