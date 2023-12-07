@@ -113,6 +113,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  # self_and_descendant_ids returns all types
+  #
+
   scope_for :relation do |relation|
     relation
       .with(
