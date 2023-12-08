@@ -78,7 +78,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     policy = ProjectPolicy.new(user:)
     scoped_projects = policy.apply_scope(Project, type: :relation)
 
-    # David Doe has access to 21 projects via a namespace
+    # David Doe has access to 22 projects via a namespace
     # group link between one of his groups and group_one
     # and one project of their own under david_doe_group_four
     assert_equal 22, scoped_projects.count
