@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
+  # rubocop:disable Naming/VariableNumber
   setup do
     sign_in users(:john_doe)
     @sample1 = samples(:sample1)
@@ -47,4 +48,6 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, created_workflow_execution.samples_workflow_executions.count
     assert_equal @sample1, created_workflow_execution.samples_workflow_executions.first.sample
   end
+
+  # rubocop:enable Naming/VariableNumber
 end
