@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
+class GroupTest < ActiveSupport::TestCase
   def setup
     @group = groups(:group_one)
     @subgroup_one = groups(:subgroup1)
@@ -163,5 +163,17 @@ class GroupTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
     assert group_group_links.include?(group_group_link2)
     assert group_group_links.include?(group_group_link3)
     assert group_group_links.include?(namespace_group_links(:namespace_group_link2))
+  end
+
+  test 'group should have metadata summary with metadata fields and their counts from projects within' do
+    expected_metadata_summary = @group.metadata_summary
+    actual_metadata_summary = {}
+
+    group_project_namespaces = @group.project_namespaces
+    group_project_namespaces.each do |gpn|
+      actual_metadata_summary.merge!(gpn.metadata_summary) { |_key, old_value, new_value| old_value + new_value }
+    end
+
+    assert_equal expected_metadata_summary, actual_metadata_summary
   end
 end

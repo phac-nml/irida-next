@@ -7,6 +7,7 @@ project1_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: { "metadatafield1": 10, "metadatafield2": 35 }
 
 project2_namespace:
   name: Project 2
@@ -15,6 +16,7 @@ project2_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 john_doe_project2_namespace:
   name: Project 2
@@ -23,6 +25,7 @@ john_doe_project2_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 john_doe_project3_namespace:
   name: Project 3
@@ -31,6 +34,7 @@ john_doe_project3_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project4_namespace:
   name: Project 4
@@ -39,6 +43,7 @@ project4_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_three) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project5_namespace:
   name: Project 5
@@ -47,6 +52,7 @@ project5_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: { "metadatafield1": 623, "metadatafield2": 71 }
 
 project6_namespace:
   name: Project 6
@@ -55,6 +61,7 @@ project6_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project7_namespace:
   name: Project 7
@@ -63,6 +70,7 @@ project7_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project8_namespace:
   name: Project 8
@@ -71,6 +79,7 @@ project8_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project9_namespace:
   name: Project 9
@@ -79,6 +88,7 @@ project9_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project10_namespace:
   name: Project 10
@@ -87,6 +97,7 @@ project10_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project11_namespace:
   name: Project 11
@@ -95,6 +106,7 @@ project11_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project12_namespace:
   name: Project 12
@@ -103,6 +115,7 @@ project12_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project13_namespace:
   name: Project 13
@@ -111,6 +124,7 @@ project13_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project14_namespace:
   name: Project 14
@@ -119,6 +133,7 @@ project14_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project15_namespace:
   name: Project 15
@@ -127,6 +142,7 @@ project15_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project16_namespace:
   name: Project 16
@@ -135,6 +151,7 @@ project16_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project17_namespace:
   name: Project 17
@@ -143,6 +160,7 @@ project17_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project18_namespace:
   name: Project 18
@@ -151,6 +169,7 @@ project18_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project19_namespace:
   name: Project 19
@@ -159,6 +178,7 @@ project19_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project20_namespace:
   name: Project 20
@@ -167,6 +187,7 @@ project20_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project21_namespace:
   name: Project 21
@@ -175,6 +196,7 @@ project21_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project22_namespace:
   name: Project 22
@@ -183,6 +205,7 @@ project22_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project23_namespace:
   name: Project 23
@@ -191,6 +214,7 @@ project23_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project24_namespace:
   name: Project 24
@@ -199,6 +223,7 @@ project24_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 john_doe_project4_namespace:
   name: Project 4
@@ -207,6 +232,7 @@ john_doe_project4_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project25_namespace:
   name: Project 25
@@ -215,6 +241,7 @@ project25_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 project26_namespace:
   name: Project 26
@@ -223,6 +250,7 @@ project26_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
 
 projectA_namespace:
   name: Project A
@@ -231,6 +259,7 @@ projectA_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>
+  metadata_summary: {}
 
 namespace_group_link_group_one_project1_namespace:
   name: Group One Project 1
@@ -239,6 +268,7 @@ namespace_group_link_group_one_project1_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user24) %>
+  metadata_summary: {}
 
 namespace_group_link_group_three_project1_namespace:
   name: Group Three Project 1
@@ -247,6 +277,7 @@ namespace_group_link_group_three_project1_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user24) %>
+  metadata_summary: {}
 
 project28_namespace:
   name: Project 28
@@ -255,6 +286,7 @@ project28_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
+  metadata_summary: {}
 
 projectAlpha_namespace:
   name: Project Alpha
@@ -262,6 +294,7 @@ projectAlpha_namespace:
   description: Project Alpha description
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha) %>
+  metadata_summary: {}
 
 projectBravo_namespace:
   name: Project Bravo
@@ -269,6 +302,7 @@ projectBravo_namespace:
   description: Project Bravo description
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_bravo) %>
+  metadata_summary: {}
 
 projectCharlie_namespace:
   name: Project Charlie
@@ -276,6 +310,7 @@ projectCharlie_namespace:
   description: Project Charlie description
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie) %>
+  metadata_summary: {}
 
 projectAlpha1_namespace:
   name: Project Alpha 1
@@ -284,3 +319,4 @@ projectAlpha1_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha_subgroup1) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+  metadata_summary: {}

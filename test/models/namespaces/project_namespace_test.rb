@@ -123,4 +123,12 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert namespace_group_links.include?(namespace_group_link1)
     assert namespace_group_links.include?(namespace_group_link2)
   end
+
+  test 'project namespace should have metadata summary with metadata fields and their counts' do
+    assert_equal 2, @project_namespace.metadata_summary.count
+    assert @project_namespace.metadata_summary.key?('metadatafield1')
+    assert @project_namespace.metadata_summary.key?('metadatafield2')
+    assert_equal 10, @project_namespace.metadata_summary['metadatafield1']
+    assert_equal 35, @project_namespace.metadata_summary['metadatafield2']
+  end
 end
