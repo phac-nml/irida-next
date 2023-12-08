@@ -13,5 +13,7 @@ class WorkflowExecution < ApplicationRecord
   has_many :samples, through: :samples_workflow_executions
   has_many_attached :inputs
 
+  accepts_nested_attributes_for :samples_workflow_executions
+
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
 end
