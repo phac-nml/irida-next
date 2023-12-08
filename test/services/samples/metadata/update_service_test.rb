@@ -131,9 +131,19 @@ module Samples
         )
       end
 
-      test 'no metadata' do
+      test 'metadata is nil' do
         assert_no_changes -> { @sample } do
           Samples::Metadata::UpdateService.new(@project, @sample, @user, {}).execute
+        end
+        assert @sample.errors.full_messages.include?(
+          I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
+        )
+      end
+
+      test 'metadata is empty hash' do
+        params = { 'metadata' => {} }
+        assert_no_changes -> { @sample } do
+          Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
         end
         assert @sample.errors.full_messages.include?(
           I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)

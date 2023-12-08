@@ -17,6 +17,7 @@ module Samples
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
         authorize! sample.project, to: :update_sample?
+        metadata_fields_update_status = { updated: [], not_updated: [] }
 
         if @project.id != @sample.project.id
           raise SampleMetadataUpdateError,
@@ -24,37 +25,43 @@ module Samples
                                                                                       project_name: @project.name)
         end
 
-        if @metadata
+        if @metadata.nil? || @metadata == {}
+          raise SampleMetadataUpdateError,
+                I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
+        else
           # Without transforming keys, issues with overwritting can occur and multiples of the same key can appear
           @metadata = @metadata.transform_keys(&:to_s)
-          metadata_fields_not_updated = []
           @metadata.each do |key, value|
             if value.blank?
               if @sample['metadata'].key?(key)
-                @sample['metadata'].delete(key) && @sample['metadata_provenance'].delete(key)
+                @sample['metadata'].delete(key)
+                @sample['metadata_provenance'].delete(key)
+                metadata_fields_update_status[:updated].append(key)
               end
             else
               metadata_updated = update_metadata(key, value)
-              !metadata_updated && metadata_fields_not_updated.append(key)
+              if metadata_updated
+                metadata_fields_update_status[:updated].append(key)
+              else
+                metadata_fields_update_status[:not_updated].append(key)
+              end
             end
           end
           @sample.update(id: @sample.id)
 
-          if metadata_fields_not_updated.count.positive?
+          if metadata_fields_update_status[:not_updated].count.positive?
             raise SampleMetadataUpdateError,
                   I18n.t('services.samples.metadata.user_cannot_update_metadata',
                          sample_name: @sample.name,
-                         metadata_fields: metadata_fields_not_updated.join(', '))
+                         metadata_fields: metadata_fields_update_status[:not_updated].join(', '))
           else
-            true
+            metadata_fields_update_status[:updated]
           end
-        else
-          raise SampleMetadataUpdateError,
-                I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
+
         end
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
-        false
+        metadata_fields_update_status[:updated]
       end
 
       private
