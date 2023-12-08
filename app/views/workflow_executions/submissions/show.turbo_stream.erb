@@ -5,7 +5,7 @@
 
       <%= render NextflowComponent.new(
         schema: @workflow_schema,
-        url: "#{}",
+        url: create_workflow_executions_submissions_path,
         samples: @samples,
       ) %>
     <% end %>
