@@ -109,16 +109,19 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       effective_access_level(namespace, user) == Member::AccessLevel::MAINTAINER
     end
 
-    def access_level_in_namespace_group_links(user, namespace)
+    def access_level_in_namespace_group_links(user, namespace) # rubocop:disable Metrics/AbcSize
       namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
                                                 .where(group: user.groups.self_and_descendants).not_expired
 
       if namespace_group_links.count.positive?
         maxlevel_namespace_group_link = namespace_group_links.order(:group_access_level).last
-        membership = Member.for_namespace_and_ancestors(maxlevel_namespace_group_link&.group)
+        membership = Member.for_namespace_and_ancestors(maxlevel_namespace_group_link&.group).not_expired
                      &.where(user:)&.order(:access_level)
 
-        return [maxlevel_namespace_group_link.group_access_level, membership.last.access_level].min
+        return [maxlevel_namespace_group_link.group_access_level, membership.last.access_level].min if membership.any?
+
+        return maxlevel_namespace_group_link.group_access_level
+
       end
       Member::AccessLevel::NO_ACCESS
     end
