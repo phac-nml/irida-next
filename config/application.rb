@@ -56,5 +56,8 @@ module Irida
     config.i18n.available_locales = %i[en fr]
     # Set default locale
     config.i18n.default_locale = :en
+
+    # Set ActiveJob adapter
+    config.active_job.queue_adapter = :good_job
   end
 end

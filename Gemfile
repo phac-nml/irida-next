@@ -101,6 +101,9 @@ gem 'aws-sdk-s3', require: false
 gem 'azure-storage-blob', github: 'honeyankit/azure-storage-ruby', branch: 'master', require: false
 gem 'google-cloud-storage', '~> 1.11', require: false
 
+# job queueing
+gem 'good_job', '~> 3.21'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
