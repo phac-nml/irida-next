@@ -102,6 +102,11 @@ david_doe_namespace_route:
   path: david.doe_at_localhost
   source: david_doe_namespace (Namespace)
 
+alph_abet_namespace_route:
+  name: alph.abet@localhost
+  path: alph.abet_at_localhost
+  source: alph_abet_namespace (Namespace)
+
 david_doe_group_four_route:
   name: Group 4
   path: group-4

@@ -2,11 +2,9 @@
 
 # Base policy for namespace authorization
 class NamespacePolicy < ApplicationPolicy
-  scope_for :relation, :manageable do |relation| # rubocop:disable Metrics/BlockLength
+  scope_for :relation, :manageable do |relation|
     relation.with(
-      personal_namespaces: relation.where(type: [Namespaces::UserNamespace.sti_name],
-                                          owner: user).self_and_descendants
-                                          .where.not(type: Namespaces::ProjectNamespace.sti_name).select(:id),
+      personal_namespaces: relation.where(id: user.namespace.id).select(:id),
       membership_in_namespaces: relation.where(type: Group.sti_name,
                                                id: user.members.joins(:namespace).where(
                                                  access_level: Member::AccessLevel.manageable,

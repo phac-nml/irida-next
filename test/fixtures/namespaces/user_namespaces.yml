@@ -64,3 +64,9 @@ user_26_namespace:
   path: user.26_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user26) %>
+
+alph_abet_namespace:
+  name: alph.abet@localhost
+  path: alph.abet_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet) %>
