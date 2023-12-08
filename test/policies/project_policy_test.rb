@@ -84,6 +84,16 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert_equal 22, scoped_projects.count
   end
 
+  test 'scope expired project member' do
+    project_member = members(:group_one_member_john_doe)
+    project_member.expires_at = 10.days.ago.to_date
+    project_member.save
+
+    scoped_projects = @policy.apply_scope(Project, type: :relation)
+
+    assert_equal 11, scoped_projects.count
+  end
+
   test 'manageable scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
