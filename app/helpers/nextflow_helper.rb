@@ -18,7 +18,7 @@ module NextflowHelper
 
   def checkbox_input(name, property)
     viral_checkbox(
-      name:,
+      name: "metadata[#{name}]",
       label: property['description'],
       default: property['default'],
       pattern: property['pattern'],
@@ -31,7 +31,7 @@ module NextflowHelper
   def file_input(name, property, required)
     viral_file_input(
       label: property['description'],
-      name:,
+      name: "metadata[#{name}]",
       pattern: property['pattern'],
       help_text: property['help_text'],
       hidden: property['hidden'],

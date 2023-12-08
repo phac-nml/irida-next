@@ -5,7 +5,8 @@
   <p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
     <%= schema["description"] %>
   </p>
-  <form method="post" action="#">
+  <form method="post" action="<%= url %>">
+    <input type="hidden" name="format" value="turbo_stream" />
     <% schema["definitions"].each do |item, definition| %>
       <%- if definition["properties"]
         .values
@@ -28,7 +29,7 @@
               ) %>
             <% elsif property["enum"] %>
               <%= viral_select(
-                    name:,
+                    name: "metadata[#{name}]",
                     label: property["description"],
                     options: property["enum"].map { |option| { value: option, label: option } },
                     selected_value: property["default"],
@@ -38,7 +39,7 @@
                   ) %>
             <% else %>
               <%= form_input(
-                    name,
+                    "metadata[#{name}]",
                     property,
                     definition["required"].present? && definition["required"].include?(name)
                   ) %>
