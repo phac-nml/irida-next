@@ -35,20 +35,11 @@ module Attachments
       params = { attachment_ids: { '0' => attachments(:attachmentG).id, '1' => attachments(:attachmentH).id },
                  basename: 'new concatenated file' }
 
-      assert_difference -> { Attachment.count } => 1 do
+      assert_no_difference -> { Attachment.count } do
         Attachments::ConcatenationService.new(@user, sample, params).execute
       end
 
-      attachmentg_file_size = sample.attachments.find_by(id: attachments(:attachmentG).id).file.byte_size
-      attachmenth_file_size = sample.attachments.find_by(id: attachments(:attachmentH).id).file.byte_size
-
-      concatenated_file_size = sample.attachments.last.file.byte_size
-
-      assert_equal concatenated_file_size, (attachmentg_file_size + attachmenth_file_size)
-
-      assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last.file.filename.to_s
-
-      assert_equal 'fastq', sample.attachments.last.metadata['format']
+      assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_basename'))
     end
 
     test 'concatenate paired end files' do
@@ -90,31 +81,11 @@ module Attachments
                                    '1' => [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id] },
                  basename: 'new concatenated file' }
 
-      assert_difference -> { Attachment.count } => 2 do
+      assert_no_difference -> { Attachment.count } do
         Attachments::ConcatenationService.new(@user, sample, params).execute
       end
 
-      attachmentfwd1_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD1).id).file.byte_size
-      attachmentfwd2_file_size = sample.attachments.find_by(id: attachments(:attachmentPEFWD2).id).file.byte_size
-
-      attachmentrev1_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV1).id).file.byte_size
-      attachmentrev2_file_size = sample.attachments.find_by(id: attachments(:attachmentPEREV2).id).file.byte_size
-
-      concatenatedfwd_file_size = sample.attachments.last(2).first.file.byte_size
-      concatenatedrev_file_size = sample.attachments.last(2).last.file.byte_size
-
-      assert_equal concatenatedfwd_file_size, (attachmentfwd1_file_size + attachmentfwd2_file_size)
-
-      assert_equal concatenatedrev_file_size, (attachmentrev1_file_size + attachmentrev2_file_size)
-
-      assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last(2).first.file.filename.to_s
-      assert_equal 'new-concatenated-file_2.fastq', sample.attachments.last(2).last.file.filename.to_s
-
-      assert_equal 'fastq', sample.attachments.last(2).first.metadata['format']
-      assert_equal 'fastq', sample.attachments.last(2).last.metadata['format']
-
-      assert_equal 'pe', sample.attachments.last(2).first.metadata['type']
-      assert_equal 'pe', sample.attachments.last(2).last.metadata['type']
+      assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_basename'))
     end
 
     test 'concatenate illumina paired end files' do

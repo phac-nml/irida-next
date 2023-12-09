@@ -52,7 +52,7 @@ module Attachments
     private
 
     # Validates params
-    def validate_params
+    def validate_params # rubocop:disable Metrics/AbcSize
       if !concatenation_params.key?(:attachment_ids) || concatenation_params[:attachment_ids].empty?
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.no_files_selected')
@@ -61,6 +61,11 @@ module Attachments
       if !concatenation_params.key?(:basename) || concatenation_params[:basename].empty?
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.filename_missing')
+      end
+
+      if concatenation_params.key?(:basename) && !concatenation_params[:basename].match?(/^[[a-zA-Z0-9_\-\.]]*$/)
+        raise AttachmentConcatenationError,
+              I18n.t('services.attachments.concatenation.incorrect_basename')
       end
 
       true
@@ -129,7 +134,7 @@ module Attachments
 
     # Concatenates the single end reads into a single-end file
     def concatenate_single_end_reads(attachments)
-      basename = concatenation_params[:basename].gsub(' ', '-')
+      basename = concatenation_params[:basename]
       zipped_extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
       files = []
@@ -164,7 +169,7 @@ module Attachments
 
     # Gets the filename in the correct format for illumina paired-end and paired-end files
     def concatenated_paired_end_filenames(attachment_type)
-      basename = concatenation_params[:basename].gsub(' ', '-')
+      basename = concatenation_params[:basename]
 
       fwd_filename = attachment_type == 'illumina_pe' ? "#{basename}_S1_L001_R1_001" : "#{basename}_1"
 

@@ -845,6 +845,7 @@ en:
         concatenations:
           create:
             success: Files were successfully concatenated.
+            basename_help: The basename can only contain letters, numbers, hyphens and underscores
           modal:
             title: Concatenate Files
             description: "The following files were selected to be concatenated:"
@@ -879,6 +880,7 @@ en:
         incorrect_attachable: All or some of then selected files do not belong to the sample.
         incorrect_fastq_file_types: "Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files"
         no_files_selected: No files were selected to concatenate. Please select files then try again.
+        incorrect_basename: The base file name can only contain letters, numbers, hyphens and underscores
       destroy:
         does_not_belong_to_attachable: This attachment does not belong to this sample.
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
