@@ -16,11 +16,11 @@ module HTML5Helpers
       callback(mismatched_patterns);
     JS
 
-    message =
-      "The values supplied for the following inputs failed their respective pattern HTML5 validations:\n\n\t#{results.join("\n")}" # rubocop:disable Layout/LineLength
     if expected_result
-      assert results.empty?, message
+      assert results.empty?
     else
+      message =
+        "The values supplied for the following inputs failed their respective pattern HTML5 validations:\n\n\t#{results.join("\n")}" # rubocop:disable Layout/LineLength
       assert_not results.empty?, message
     end
   end
