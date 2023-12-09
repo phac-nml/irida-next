@@ -188,3 +188,33 @@ group_eleven:
   type: Group
   description: Group 11 description
   metadata_summary: {}
+
+group_delta:
+  name: Group Delta
+  path: group-delta
+  type: Group
+  description: Group Delta description
+  metadata_summary: {}
+
+group_delta_subgroupA:
+  name: Subgroup A
+  path: group-delta/subgroup-a
+  type: Group
+  description: Subgroup A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta) %>
+  metadata_summary: {}
+
+group_echo:
+  name: Group Echo
+  path: group-echo
+  type: Group
+  description: Group Echo description
+  metadata_summary: {}
+
+group_echo_subgroupB:
+  name: Subgroup B
+  path: group-echo/subgroup-b
+  type: Group
+  description: Subgroup B description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo) %>
+  metadata_summary: {}

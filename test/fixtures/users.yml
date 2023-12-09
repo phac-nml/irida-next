@@ -110,3 +110,9 @@ user26:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "26"
+
+private_joan:
+  email: <%= "private.joan@localhost" %>
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Private
+  last_name: Joan

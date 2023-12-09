@@ -41,6 +41,7 @@ private_ryan_namespace:
   path: private.ryan_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+
 joan_doe_namespace:
   name: joan.doe@localhost
   path: joan.doe_at_localhost
@@ -70,3 +71,9 @@ alph_abet_namespace:
   path: alph.abet_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet) %>
+
+private_joan_namespace:
+  name: private.joan@localhost
+  path: private.joan_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>

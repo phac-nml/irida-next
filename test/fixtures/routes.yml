@@ -52,6 +52,16 @@ user_26_namespace_route:
   path: user.26_at_localhost
   source: user_26_namespace (Namespace)
 
+private_joan_namespace_route:
+  name: private.joan@localhost
+  path: private.joan_at_localhost
+  source: private_joan_namespace (Namespace)
+
+private_ryan_namespace_route:
+  name: private.ryan@localhost
+  path: private.ryan_at_localhost
+  source: private_ryan_namespace (Namespace)
+
 project1_namespace_route:
   name: Group 1 / Project 1
   path: group-1/project-1
@@ -268,7 +278,28 @@ project_alpha_1_namespace_route:
   name: Group Alpha / Subgroup 1 / Project Alpha 1
   path: group-alpha/subgroup-1/project-alpha1
   source: projectAlpha1_namespace (Namespace)
+
 group_eleven_route:
   name: Group 11
   path: group-11
   source: group_eleven (Namespace)
+
+group_delta_route:
+  name: Group Delta
+  path: group-delta
+  source: group_delta (Namespace)
+
+group_echo_route:
+  name: Group Echo
+  path: group-echo
+  source: group_echo (Namespace)
+
+subgroup_a_group_delta_route:
+  name: Group Delta / Subgroup A
+  path: group-delta/subgroup-a
+  source: group_delta_subgroupA (Namespace)
+
+subgroup_b_group_echo_route:
+  name: Group Echo / Subgroup B
+  path: group-echo/subgroup-b
+  source: group_echo_subgroupB (Namespace)
