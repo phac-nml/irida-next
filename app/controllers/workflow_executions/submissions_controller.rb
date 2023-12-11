@@ -14,6 +14,8 @@ module WorkflowExecutions
     end
 
     def show
+      @workflow_execution = WorkflowExecution.new
+
       @samples = samples
       @workflow_schema = workflow_schema
       @workflow = workflow

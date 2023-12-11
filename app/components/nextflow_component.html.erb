@@ -1,6 +1,6 @@
 <div>
   <h1
-  class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900  md:text-5xl lg:text-4xl dark:text-white"
+    class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900  md:text-5xl lg:text-4xl dark:text-white"
   ><%= schema["title"] %></h1>
   <p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
     <%= schema["description"] %>
@@ -8,10 +8,7 @@
   <form method="post" action="<%= url %>">
     <input type="hidden" name="format" value="turbo_stream" />
     <% schema["definitions"].each do |item, definition| %>
-      <%- if definition["properties"]
-        .values
-        .filter { |property| !property.key?("hidden") }
-        .length > 0 %>
+      <%- if show_section?(definition["properties"]) %>
         <h2 class="text-2xl font-extrabold dark:text-white">
           <%= definition["title"] %>
         </h2>
@@ -19,30 +16,29 @@
           <%= definition["description"] %>
         </p>
         <div class="grid grid-cols-1 gap-4 mb-8">
-          <% definition["properties"].each do |name, property| %>
-            <% if name == "outdir" || name == "email" %>
-              <!--  Don't do anything, skip these fields -->
-            <% elsif item == "input_output_options" && property["format"] == "file-path" %>
-              <%= render Nextflow::SamplesheetComponent.new(
-                schema: samplesheet_schema(property["schema"]),
-                samples: @samples,
-              ) %>
-            <% elsif property["enum"] %>
-              <%= viral_select(
-                    name: "metadata[#{name}]",
-                    label: property["description"],
-                    options: property["enum"].map { |option| { value: option, label: option } },
-                    selected_value: property["default"],
-                    required: property["required"],
-                    help_text: property["help_text"],
-                    hidden: property["hidden"]
-                  ) %>
-            <% else %>
-              <%= form_input(
-                    "metadata[#{name}]",
-                    property,
-                    definition["required"].present? && definition["required"].include?(name)
-                  ) %>
+          <%= fields_for "workflow_execution[workflow_params]" do |fields| %>
+            <% definition["properties"].each do |name, property| %>
+              <% if name == "outdir" || name == "email" %>
+                <!--  Don't do anything, skip these fields -->
+              <% elsif item == "input_output_options" && property["format"] == "file-path" %>
+                <%= render Nextflow::SamplesheetComponent.new(
+                  schema: samplesheet_schema(property["schema"]),
+                  samples: @samples,
+                ) %>
+              <% elsif property["enum"] %>
+                <div>
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><%= property["description"] %></label>
+                  <%= fields.select name, property["enum"], { :selected => property["default"] }, { :class => "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" } %>
+                </div>
+
+
+              <% else %>
+                <%= form_input(
+                      "metadata[#{name}]",
+                      property,
+                      definition["required"].present? && definition["required"].include?(name)
+                    ) %>
+              <% end %>
             <% end %>
           <% end %>
         </div>

@@ -16,10 +16,10 @@ module Nextflow
     end
 
     def filter_files(sample, properties)
-      names = sample.attachments.map { |a| a.file.filename.to_s }
+      names = sample.attachments.map { |a| [a.file.filename.to_s, a.to_global_id] }
       pattern = properties['pattern']
       pattern = properties['anyOf'].find { |p| p['pattern'].present? }['pattern'] if pattern.nil?
-      names.grep(/#{Regexp.new(pattern.to_s)}/)
+      names.select { |n| n[0].match(/#{Regexp.new(pattern.to_s)}/) }
     end
 
     def render_cell_type(property, entry, sample, fields)

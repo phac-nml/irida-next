@@ -37,7 +37,7 @@
     </thead>
     <tbody>
     <% samples.each_with_index do |sample, index| %>
-      <%= fields_for "sample[#{index}]".to_s do |fields| %>
+      <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}][samplesheet_params]".to_s do |fields| %>
         <tr class="border-b dark:border-slate-700">
           <% properties.keys.each do |property| %>
             <%= render_cell_type(property, properties[property], sample, fields) %>
