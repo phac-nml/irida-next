@@ -1,0 +1,5 @@
+<%= render PaginationComponent.new(
+  info: pagy_info(pagy),
+  prev_url: (@pagy.prev ? group_samples_url(group, page: pagy.prev) : nil),
+  next_url: (pagy.next ? group_samples_url(group, page: pagy.next) : nil)
+) %>

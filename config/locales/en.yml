@@ -619,6 +619,11 @@ en:
       index:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
+      table:
+        sample: Sample
+        project: Project
+        created_at: Created
+        updated_at: Updated
   projects:
     create:
       success: "Project %{project_name} was successfully created"
