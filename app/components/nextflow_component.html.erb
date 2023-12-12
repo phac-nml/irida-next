@@ -28,13 +28,19 @@
               <% else %>
                 <div>
                   <label for="countries" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= property["description"] %></label>
-                <%= form_input(
-                      fields,
-                      name,
-                      property,
-                      definition["required"].present? && definition["required"].include?(name)
-                    ) %>
+                  <%= form_input(
+                        fields,
+                        name,
+                        property,
+                        definition["required"].present? && definition["required"].include?(name)
+                      ) %>
+                  <% if property['help_text'].present? %>
+                    <%= viral_help_text do %>
+                      <%= property['help_text'] %>
+                    <% end %>
+                  <% end %>
               <% end %>
+              </div>
             <% end %>
           <% end %>
         </div>
