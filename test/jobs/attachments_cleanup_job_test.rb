@@ -70,7 +70,7 @@ class AttachmentsCleanupJobTest < ActiveJob::TestCase
     assert_difference -> { ActiveStorage::Attachment.count } => -1,
                       -> { Attachment.only_deleted.count } => -1,
                       -> { Attachment.all.count } => 0 do
-      AttachmentsCleanupJob.perform_now(14)
+      AttachmentsCleanupJob.perform_now(days_old: 14)
     end
 
     # verify attachment exist or not
@@ -113,25 +113,25 @@ class AttachmentsCleanupJobTest < ActiveJob::TestCase
 
   test 'invalid argument string' do
     assert_raise(Exception) do
-      AttachmentsCleanupJob.perform_now('this is not a number')
+      AttachmentsCleanupJob.perform_now(days_old: 'this is not a number')
     end
   end
 
   test 'invalid argument negative' do
     assert_raise(Exception) do
-      AttachmentsCleanupJob.perform_now(-1)
+      AttachmentsCleanupJob.perform_now(days_old: -1)
     end
   end
 
   test 'invalid argument zero' do
     assert_raise(Exception) do
-      AttachmentsCleanupJob.perform_now(0)
+      AttachmentsCleanupJob.perform_now(days_old: 0)
     end
   end
 
   test 'invalid argument int as string' do
     assert_raise(Exception) do
-      AttachmentsCleanupJob.perform_now('1')
+      AttachmentsCleanupJob.perform_now(days_old: '1')
     end
   end
 end
