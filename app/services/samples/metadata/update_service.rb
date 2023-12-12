@@ -15,56 +15,62 @@ module Samples
         @analysis_id = params['analysis_id']
       end
 
-      def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+      def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         authorize! sample.project, to: :update_sample?
         metadata_fields_update_status = { updated: [], not_updated: [] }
 
-        if @project.id != @sample.project.id
-          raise SampleMetadataUpdateError,
-                I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample.name,
-                                                                                      project_name: @project.name)
-        end
+        validate_sample_in_project
 
-        if @metadata.nil? || @metadata == {}
-          raise SampleMetadataUpdateError,
-                I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
-        else
-          # Without transforming keys, issues with overwritting can occur and multiples of the same key can appear
-          @metadata = @metadata.transform_keys(&:to_s)
-          @metadata.each do |key, value|
-            if value.blank?
-              if @sample['metadata'].key?(key)
-                @sample['metadata'].delete(key)
-                @sample['metadata_provenance'].delete(key)
-                metadata_fields_update_status[:updated].append(key)
-              end
+        validate_metadata_param
+
+        transform_metadata_keys
+
+        @metadata.each do |key, value|
+          if value.blank?
+            if @sample['metadata'].key?(key)
+              @sample['metadata'].delete(key)
+              @sample['metadata_provenance'].delete(key)
+              metadata_fields_update_status[:updated].append(key)
+            end
+          else
+            metadata_updated = update_metadata(key, value)
+            if metadata_updated
+              metadata_fields_update_status[:updated].append(key)
             else
-              metadata_updated = update_metadata(key, value)
-              if metadata_updated
-                metadata_fields_update_status[:updated].append(key)
-              else
-                metadata_fields_update_status[:not_updated].append(key)
-              end
+              metadata_fields_update_status[:not_updated].append(key)
             end
           end
-          @sample.update(id: @sample.id)
-
-          if metadata_fields_update_status[:not_updated].count.positive?
-            raise SampleMetadataUpdateError,
-                  I18n.t('services.samples.metadata.user_cannot_update_metadata',
-                         sample_name: @sample.name,
-                         metadata_fields: metadata_fields_update_status[:not_updated].join(', '))
-          else
-            metadata_fields_update_status[:updated]
-          end
-
         end
+        @sample.save
+
+        check_not_updated_metadata_fields(metadata_fields_update_status[:not_updated])
+        metadata_fields_update_status[:updated]
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
         metadata_fields_update_status[:updated]
       end
 
       private
+
+      def validate_sample_in_project
+        return unless @project.id != @sample.project.id
+
+        raise SampleMetadataUpdateError,
+              I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample.name,
+                                                                                    project_name: @project.name)
+      end
+
+      def validate_metadata_param
+        return unless @metadata.nil? || @metadata == {}
+
+        raise SampleMetadataUpdateError,
+              I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
+      end
+
+      def transform_metadata_keys
+        # Without transforming keys, issues with overwritting can occur and multiples of the same key can appear
+        @metadata = @metadata.transform_keys(&:to_s)
+      end
 
       def update_metadata(key, value)
         # We don't overwrite existing @sample['metadata_provenance'] or @sample['metadata']
@@ -78,6 +84,15 @@ module Samples
           @sample['metadata'][key] = value
           true
         end
+      end
+
+      def check_not_updated_metadata_fields(not_updated_metadata_fields)
+        return unless not_updated_metadata_fields.count.positive?
+
+        raise SampleMetadataUpdateError,
+              I18n.t('services.samples.metadata.user_cannot_update_metadata',
+                     sample_name: @sample.name,
+                     metadata_fields: not_updated_metadata_fields.join(', '))
       end
     end
   end
