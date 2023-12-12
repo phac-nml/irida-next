@@ -7,7 +7,7 @@ class AttachmentsCleanupJob < ApplicationJob
   # Finds all deleted attachments more than `days_old`` days old, and destroys them
   # Params:
   # +days_old+:: positive integer. Number of days old and older to destroy. Default is 7
-  def perform(days_old = 7)
+  def perform(days_old: 7)
     if !days_old.instance_of?(Integer) || (days_old < 1)
       err = "'#{days_old}' is not a positive integer!"
       Rails.logger.error err
