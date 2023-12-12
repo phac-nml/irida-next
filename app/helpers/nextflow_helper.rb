@@ -3,20 +3,20 @@
 # Helper to render a Nextflow pipeline form
 module NextflowHelper
   SCHEMA_PATH = 'test/fixtures/files/nextflow/'
-  def form_input(name, property, required)
-    return checkbox_input(name, property) if property['type'] == 'boolean'
 
-    return file_input(name, property, required) if property['format'].present? && property['format'] == 'file-path'
+  def form_input(container, name, property, required)
+    return checkbox_input(container, name, property) if property['type'] == 'boolean'
 
-    text_input(name, property, required)
-  end
+    if property['enum'].present?
+      return viral_select(container:, name:, options: property['enum'], hidden: property['hidden'],
+                          selected_value: property['default'], help_text: property['help_text'])
+    end
 
-  def text_input(name, property, required)
     viral_text_input(label: property['description'], name:, type: 'text', required:, help_text: property['help_text'],
                      hidden: property['hidden'])
   end
 
-  def checkbox_input(name, property)
+  def checkbox_input(_fields, name, property)
     viral_checkbox(
       name: "metadata[#{name}]",
       label: property['description'],
@@ -28,7 +28,7 @@ module NextflowHelper
     )
   end
 
-  def file_input(name, property, required)
+  def file_input(_fields, name, property, required)
     viral_file_input(
       label: property['description'],
       name: "metadata[#{name}]",
