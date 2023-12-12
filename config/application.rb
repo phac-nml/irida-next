@@ -59,5 +59,16 @@ module Irida
 
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :good_job
+    # good_job configuration
+    config.good_job.enable_cron = true
+    # Configure cron with a hash that has a unique key for each recurring job
+    config.good_job.cron = {
+      attachments_cleanup_task: {
+        cron: '0 0 1 * * *', # Daily, 1 AM
+        class: 'AttachmentsCleanupJob', # job class as a String, must be an ActiveJob job
+        kwargs: { days_old: 7 }, # number of days old an attachment must be for deletion
+        description: 'delete/destroy attachements that have been deleted some time ago'
+      }
+    }
   end
 end
