@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module HTML5Helpers
-  def assert_html5_inputs_valid(expected_result: true) # rubocop:disable Metrics/MethodLength
+  def assert_html5_inputs_valid # rubocop:disable Metrics/MethodLength
     results = page.driver.evaluate_async_script <<~JS
       const callback = arguments[arguments.length - 1];
       const inputs = document.querySelectorAll("[required]");
@@ -16,7 +16,7 @@ module HTML5Helpers
       callback(mismatched_patterns);
     JS
 
-    if expected_result
+    if results.empty?
       assert results.empty?
     else
       message =
