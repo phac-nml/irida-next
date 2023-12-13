@@ -15,6 +15,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def show
     authorize! @group, to: :read?
+    @authorized_namespaces&.where&.not(id: @group.id)
   end
 
   def new
