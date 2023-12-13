@@ -303,3 +303,23 @@ subgroup_b_group_echo_route:
   name: Group Echo / Subgroup B
   path: group-echo/subgroup-b
   source: group_echo_subgroupB (Namespace)
+
+project_delta_namespace_route:
+  name: Group Delta / Project Delta
+  path: group-delta/project-delta
+  source: projectDelta_namespace (Namespace)
+
+project_echo_namespace_route:
+  name: Group Echo / Project Echo
+  path: group-echo/project-echo
+  source: projectEcho_namespace (Namespace)
+
+project_delta_subgroupA_namespace_route:
+  name: Group Delta / Subgroup A / Project Delta
+  path: group-delta/subgroup-a/project-delta
+  source: projectDeltaSubgroupA_namespace (Namespace)
+
+project_echo_subgroupB_namespace_route:
+  name: Group Echo / Subgroup B / Project Echo
+  path: group-echo/subgroup-b/project-echo
+  source: projectEchoSubgroupB_namespace (Namespace)

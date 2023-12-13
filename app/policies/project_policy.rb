@@ -155,8 +155,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         ).select(:namespace_id), type: Group.sti_name).self_and_descendants.select(:id) }).select(:id),
       linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
         Group.where(id: NamespaceGroupLink.where(
-          group: user.groups.where(id: user.members.where(access_level: Member::AccessLevel.manageable,
-                                                          namespace: { type: Group.sti_name })
+          group: user.groups.where(id: user.members.joins(:namespace)
+          .where(access_level: Member::AccessLevel.manageable,
+                 namespace: { type: Group.sti_name })
                                                           .select(:namespace_id)).self_and_descendants,
           group_access_level: Member::AccessLevel.manageable,
           namespace_type: Group.sti_name

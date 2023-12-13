@@ -100,4 +100,45 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     # been set for any of the links
     assert_equal 1, scoped_projects.count
   end
+
+  test 'named scope with modify access to namespace via a namespace group link ' do
+    user = users(:private_joan)
+    policy = ProjectPolicy.new(user:)
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :manageable)
+    scoped_projects_namespaces = Namespace.where(id: scoped_projects.select(:namespace_id))
+    scoped_projects_names = scoped_projects_namespaces.pluck(:name)
+
+    assert_equal 4, scoped_projects.length
+    assert_not scoped_projects_namespaces.include?(namespaces_user_namespaces(:private_joan_namespace).name)
+    assert scoped_projects_names.include?(namespaces_project_namespaces(:projectDelta_namespace).name)
+    assert scoped_projects_names.include?(namespaces_project_namespaces(:projectEcho_namespace).name)
+    assert scoped_projects_names.include?(namespaces_project_namespaces(:projectDeltaSubgroupA_namespace).name)
+    assert scoped_projects_names.include?(namespaces_project_namespaces(:projectEchoSubgroupB_namespace).name)
+
+    expected_projects = []
+
+    direct_groups = user.groups.self_and_descendant_ids
+
+    # Group Delta and Subgroup A
+    assert 2, direct_groups.length
+
+    direct_groups.each do |direct_group|
+      expected_projects << direct_group.project_namespaces.pluck(:name)
+    end
+
+    linked_namespaces = NamespaceGroupLink.where(group: direct_groups)
+
+    assert 1, linked_namespaces.length
+    assert linked_namespaces.include?(namespace_group_links(:namespace_group_link15))
+
+    linked_namespaces.each do |linked_namespace|
+      expected_projects << linked_namespace.group.project_namespaces.pluck(:name)
+    end
+
+    expected_projects = expected_projects.flatten.sort
+    actual_projects = scoped_projects_names.flatten.sort
+
+    assert expected_projects.count, actual_projects.count
+    assert expected_projects.flatten.sort, actual_projects.flatten.sort
+  end
 end
