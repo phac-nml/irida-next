@@ -6,6 +6,7 @@ module Viral
     class TextInputComponent < Viral::Component
       attr_reader :container, :name, :value, :required, :pattern, :placeholder
 
+      # rubocop:disable Metrics/ParameterLists
       def initialize(container:, name:, value: nil, required: nil, pattern: nil, placeholder: nil)
         @container = container
         @name = name
@@ -14,6 +15,8 @@ module Viral
         @pattern = pattern
         @placeholder = placeholder
       end
+
+      # rubocop:enable Metrics/ParameterLists
     end
   end
 end
