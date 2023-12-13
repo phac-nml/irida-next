@@ -9,6 +9,7 @@ AllCops:
   Exclude:
     - "**/bin/**/**"
     - "**/db/schema.rb"
+    - "**/db/jobs_schema.rb"
   TargetRubyVersion: "3.2"
   NewCops: enable
 

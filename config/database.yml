@@ -19,20 +19,45 @@ default: &default
   host: localhost
   timeout: 5000
 
+jobs: &jobs
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: test
+  password: test
+  host: localhost
+  timeout: 5000
+  migrations_paths: db/jobs_migrate
+
 development:
-  <<: *default
-  database: irida_next_development
+  primary:
+    <<: *default
+    database: irida_next_development
+  jobs:
+    <<: *jobs
+    database: irida_next_jobs_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: irida_next_test
+  primary:
+    <<: *default
+    database: irida_next_test
+  jobs:
+    <<: *jobs
+    database: irida_next_jobs_test
 
 #
 #   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
+#   JOBS_DATABASE_URL="postgres://myuser:mypass@localhost/someotherdatabase"
 #
 production:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  primary:
+      <<: *default
+      url: <%= ENV['DATABASE_URL'] %>
+  jobs:
+    <<: *jobs
+    url: <%= ENV['JOBS_DATABASE_URL'] %>
