@@ -25,7 +25,7 @@
                   schema: samplesheet_schema(property["schema"]),
                   samples: @samples,
                 ) %>
-              <% else %>
+              <% elsif !property["hidden"] %>
                 <div>
                   <label for="countries" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= property["description"] %></label>
                   <%= form_input(
@@ -39,8 +39,8 @@
                       <%= property['help_text'] %>
                     <% end %>
                   <% end %>
+                </div>
               <% end %>
-              </div>
             <% end %>
           <% end %>
         </div>

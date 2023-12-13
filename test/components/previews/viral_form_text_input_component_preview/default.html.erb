@@ -1,4 +1,6 @@
-<%= render Viral::Form::TextInputComponent.new(
-  name: "test_name",
-  label: "Test input label"
-) %>
+<%= form_with do |form| %>
+  <%= render Viral::Form::TextInputComponent.new(
+    container: form,
+    name: "test_name",
+  ) %>
+<% end %>

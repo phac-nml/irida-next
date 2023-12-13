@@ -12,8 +12,7 @@ module NextflowHelper
                           selected_value: property['default'], help_text: property['help_text'])
     end
 
-    viral_text_input(label: property['description'], name:, type: 'text', required:, help_text: property['help_text'],
-                     hidden: property['hidden'])
+    viral_text_input(container:, name:, required:, pattern: property['pattern'])
   end
 
   def checkbox_input(_fields, name, property)
