@@ -5,14 +5,20 @@
   <p class="mb-4 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400">
     <%= schema["description"] %>
   </p>
-  <form method="post" action="<%= url %>">
+  <%= form_with url: url do |form| %>
     <input type="hidden" name="format" value="turbo_stream" />
+
+    <%= fields_for "workflow_execution[metadata]" do |metadata| %>
+      <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
+      <%= metadata.hidden_field :workflow_version, value: @workflow.version %>
+    <% end %>
+
     <% schema["definitions"].each do |item, definition| %>
       <%- if show_section?(definition["properties"]) %>
-        <h2 class="text-2xl font-extrabold dark:text-white">
+        <h2 class="text-lg font-extrabold dark:text-white">
           <%= definition["title"] %>
         </h2>
-        <p class="mb-2 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400">
+        <p class="mb-2 font-normal text-slate-500 dark:text-slate-400">
           <%= definition["description"] %>
         </p>
         <div class="grid grid-cols-1 gap-4 mb-8">
@@ -27,7 +33,12 @@
                 ) %>
               <% elsif !property["hidden"] %>
                 <div>
-                  <label for="countries" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= property["description"] %></label>
+                  <label for="countries" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">
+                    <%= property["description"] %>
+                    <% if definition["required"].present? && definition["required"].include?(name) %>
+                      <%= viral_pill(text: t(:'components.nextflow.required'), color: :blue) %>
+                    <% end %>
+                  </label>
                   <%= form_input(
                         fields,
                         name,
@@ -49,5 +60,5 @@
     <button type="submit" class="button button--state-primary button--size-default">
       <%= t(:'workflow_executions.submissions.show.submit') %>
     </button>
-  </form>
+  <% end %>
 </div>

@@ -4,6 +4,7 @@
     <%= dialog.with_section do %>
 
       <%= render NextflowComponent.new(
+        workflow: @workflow,
         schema: @workflow_schema,
         url: workflow_executions_path,
         samples: @samples,

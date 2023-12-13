@@ -301,6 +301,8 @@ en:
       error_icon: X icon
       warning_icon: Exclamation icon
       information_icon: Information icon
+    nextflow:
+      required: Required
   layouts:
     application:
       site_title: IRIDA Next

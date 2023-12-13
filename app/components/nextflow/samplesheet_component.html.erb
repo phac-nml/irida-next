@@ -16,19 +16,7 @@
           <div class="flex items-center space-x-2">
             <span class="uppercase"><%= header %></span>
             <% if required.include?(header) %>
-                  <span
-                    class="
-                      bg-yellow-100
-                      text-yellow-800
-                      text-xs
-                      font-medium
-                      px-2.5
-                      py-0.5
-                      rounded
-                      dark:bg-yellow-900
-                      dark:text-yellow-300
-                    "
-                  ><%= t(".required") %></span>
+              <%= viral_pill(text: t(".required"), color: :blue) %>
             <% end %>
           </div>
         </th>

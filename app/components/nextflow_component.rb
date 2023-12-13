@@ -4,12 +4,13 @@
 class NextflowComponent < Component
   include NextflowHelper
 
-  attr_reader :schema, :url
+  attr_reader :schema, :url, :workflow
 
-  def initialize(schema:, url:, samples:)
+  def initialize(schema:, url:, samples:, workflow:)
     @samples = samples
     @schema = schema
     @url = url
+    @workflow = workflow
   end
 
   def show_section?(properties)
