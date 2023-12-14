@@ -15,20 +15,22 @@ module Samples
         params = { 'metadata' => { 'key1' => 'value1', 'key2' => 'value2' } }
         metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
-        assert_equal(@sample.metadata, { 'key1' => 'value1', 'key2' => 'value2' })
-        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => @user.id, 'source' => 'user' },
-                                                    'key2' => { 'id' => @user.id, 'source' => 'user' } })
-        assert_equal(metadata_fields_update_status, { updated: %w[key1 key2], not_updated: [] })
+        assert_equal({ 'key1' => 'value1', 'key2' => 'value2' }, @sample.metadata)
+        assert_equal({ 'key1' => { 'id' => @user.id, 'source' => 'user' },
+                       'key2' => { 'id' => @user.id, 'source' => 'user' } },
+                     @sample.metadata_provenance)
+        assert_equal({ updated: %w[key1 key2], not_updated: [] }, metadata_fields_update_status)
       end
 
       test 'update sample metadata with sample containing no existing metadata and analysis in metadata provenance' do
         params = { 'metadata' => { 'key1' => 'value1', 'key2' => 'value2' }, 'analysis_id' => 2 }
         metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
-        assert_equal(@sample.metadata, { 'key1' => 'value1', 'key2' => 'value2' })
-        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 2, 'source' => 'analysis' },
-                                                    'key2' => { 'id' => 2, 'source' => 'analysis' } })
-        assert_equal(metadata_fields_update_status, { updated: %w[key1 key2], not_updated: [] })
+        assert_equal({ 'key1' => 'value1', 'key2' => 'value2' }, @sample.metadata)
+        assert_equal({ 'key1' => { 'id' => 2, 'source' => 'analysis' },
+                       'key2' => { 'id' => 2, 'source' => 'analysis' } },
+                     @sample.metadata_provenance)
+        assert_equal({ updated: %w[key1 key2], not_updated: [] }, metadata_fields_update_status)
       end
 
       test 'update sample metadata merge with new metadata and analysis overwritting user' do
@@ -38,11 +40,12 @@ module Samples
         params = { 'metadata' => { 'key1' => 'value4', 'key3' => 'value3' }, 'analysis_id' => 10 }
         metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
-        assert_equal(@sample.metadata, { 'key1' => 'value4', 'key2' => 'value2', 'key3' => 'value3' })
-        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 10, 'source' => 'analysis' },
-                                                    'key2' => { 'id' => 1, 'source' => 'user' },
-                                                    'key3' => { 'id' => 10, 'source' => 'analysis' } })
-        assert_equal(metadata_fields_update_status, { updated: %w[key1 key3], not_updated: [] })
+        assert_equal({ 'key1' => 'value4', 'key2' => 'value2', 'key3' => 'value3' }, @sample.metadata)
+        assert_equal({ 'key1' => { 'id' => 10, 'source' => 'analysis' },
+                       'key2' => { 'id' => 1, 'source' => 'user' },
+                       'key3' => { 'id' => 10, 'source' => 'analysis' } },
+                     @sample.metadata_provenance)
+        assert_equal({ updated: %w[key1 key3], not_updated: [] }, metadata_fields_update_status)
       end
 
       test 'update sample metadata merge with new metadata and user overwritting user' do
@@ -52,11 +55,12 @@ module Samples
         params = { 'metadata' => { 'key1' => 'value4', 'key3' => 'value3' } }
         metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
-        assert_equal(@sample.metadata, { 'key1' => 'value4', 'key2' => 'value2', 'key3' => 'value3' })
-        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => @user.id, 'source' => 'user' },
-                                                    'key2' => { 'id' => 1, 'source' => 'user' },
-                                                    'key3' => { 'id' => @user.id, 'source' => 'user' } })
-        assert_equal(metadata_fields_update_status, { updated: %w[key1 key3], not_updated: [] })
+        assert_equal({ 'key1' => 'value4', 'key2' => 'value2', 'key3' => 'value3' }, @sample.metadata)
+        assert_equal({ 'key1' => { 'id' => @user.id, 'source' => 'user' },
+                       'key2' => { 'id' => 1, 'source' => 'user' },
+                       'key3' => { 'id' => @user.id, 'source' => 'user' } },
+                     @sample.metadata_provenance)
+        assert_equal({ updated: %w[key1 key3], not_updated: [] }, metadata_fields_update_status)
       end
 
       test 'update sample metadata merge with new metadata and user unable to overwrite analysis' do
@@ -66,11 +70,12 @@ module Samples
         params = { 'metadata' => { 'key1' => 'value4', 'key3' => 'value3' } }
         metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
-        assert_equal(@sample.metadata, { 'key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3' })
-        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 1, 'source' => 'analysis' },
-                                                    'key2' => { 'id' => 1, 'source' => 'analysis' },
-                                                    'key3' => { 'id' => @user.id, 'source' => 'user' } })
-        assert_equal(metadata_fields_update_status, { updated: %w[key3], not_updated: %w[key1] })
+        assert_equal({ 'key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3' }, @sample.metadata)
+        assert_equal({ 'key1' => { 'id' => 1, 'source' => 'analysis' },
+                       'key2' => { 'id' => 1, 'source' => 'analysis' },
+                       'key3' => { 'id' => @user.id, 'source' => 'user' } },
+                     @sample.metadata_provenance)
+        assert_equal({ updated: %w[key3], not_updated: %w[key1] }, metadata_fields_update_status)
         assert @sample.errors.full_messages.include?(
           I18n.t('services.samples.metadata.user_cannot_update_metadata',
                  sample_name: @sample.name,
@@ -85,9 +90,9 @@ module Samples
         params = { 'metadata' => { 'key2' => '' } }
         metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
-        assert_equal(@sample.metadata, { 'key1' => 'value1' })
-        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 1, 'source' => 'analysis' } })
-        assert_equal(metadata_fields_update_status, { updated: %w[key2], not_updated: [] })
+        assert_equal({ 'key1' => 'value1' }, @sample.metadata)
+        assert_equal({ 'key1' => { 'id' => 1, 'source' => 'analysis' } }, @sample.metadata_provenance)
+        assert_equal({ updated: %w[key2], not_updated: [] }, metadata_fields_update_status)
       end
 
       test 'remove metadata key with analysis' do
@@ -97,9 +102,9 @@ module Samples
         params = { 'metadata' => { 'key2' => '' }, 'analysis_id' => 1 }
         metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
 
-        assert_equal(@sample.metadata, { 'key1' => 'value1' })
-        assert_equal(@sample.metadata_provenance, { 'key1' => { 'id' => 1, 'source' => 'user' } })
-        assert_equal(metadata_fields_update_status, { updated: %w[key2], not_updated: [] })
+        assert_equal({ 'key1' => 'value1' }, @sample.metadata)
+        assert_equal({ 'key1' => { 'id' => 1, 'source' => 'user' } }, @sample.metadata_provenance)
+        assert_equal({ updated: %w[key2], not_updated: [] }, metadata_fields_update_status)
       end
 
       test 'update sample metadata with valid permission' do

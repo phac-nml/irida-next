@@ -24,7 +24,7 @@ module Samples
 
         transform_metadata_keys
 
-        metadata_fields_update_status = metadata_modification
+        metadata_fields_update_status = perform_metadata_update
 
         @sample.save
 
@@ -57,13 +57,13 @@ module Samples
         @metadata = @metadata.transform_keys(&:to_s)
       end
 
-      def metadata_modification
+      def perform_metadata_update
         update_status = { updated: [], not_updated: [] }
         @metadata.each do |key, value|
           if value.blank?
-            if @sample['metadata'].key?(key)
-              @sample['metadata'].delete(key)
-              @sample['metadata_provenance'].delete(key)
+            if @sample.metadata.key?(key)
+              @sample.metadata.delete(key)
+              @sample.metadata_provenance.delete(key)
               update_status[:updated].append(key)
             end
           else
@@ -75,15 +75,15 @@ module Samples
       end
 
       def assign_metadata_to_sample(key, value)
-        # We don't overwrite existing @sample['metadata_provenance'] or @sample['metadata']
+        # We don't overwrite existing @sample.metadata_provenance or @sample.metadata
         # that has a {source: 'analysis'} with a user
-        if @sample['metadata_provenance'].key?(key) && @analysis_id.nil? &&
-           @sample['metadata_provenance'][key]['source'] == 'analysis'
+        if @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
+           @sample.metadata_provenance[key]['source'] == 'analysis'
           false
         else
-          @sample['metadata_provenance'][key] =
+          @sample.metadata_provenance[key] =
             @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
-          @sample['metadata'][key] = value
+          @sample.metadata[key] = value
           true
         end
       end
