@@ -130,8 +130,7 @@ module Samples
         params = { 'metadata' => { 'key1' => 'value1', 'key2' => 'value2' } }
         project = projects(:projectA)
         assert_no_changes -> { @sample } do
-          assert_equal Samples::Metadata::UpdateService.new(project, @sample, @user, params).execute,
-                       { updated: [], not_updated: [] }
+          assert_nil Samples::Metadata::UpdateService.new(project, @sample, @user, params).execute
         end
         assert @sample.errors.full_messages.include?(
           I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample.name,
@@ -141,8 +140,7 @@ module Samples
 
       test 'metadata is nil' do
         assert_no_changes -> { @sample } do
-          assert_equal Samples::Metadata::UpdateService.new(@project, @sample, @user, {}).execute,
-                       { updated: [], not_updated: [] }
+          assert_nil Samples::Metadata::UpdateService.new(@project, @sample, @user, {}).execute
         end
         assert @sample.errors.full_messages.include?(
           I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
@@ -152,8 +150,7 @@ module Samples
       test 'metadata is empty hash' do
         params = { 'metadata' => {} }
         assert_no_changes -> { @sample } do
-          assert_equal Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute,
-                       { updated: [], not_updated: [] }
+          assert_nil Samples::Metadata::UpdateService.new(@project, @sample, @user, params).execute
         end
         assert @sample.errors.full_messages.include?(
           I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)

@@ -32,7 +32,7 @@ module Samples
         metadata_fields_update_status
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
-        metadata_fields_update_status || { updated: [], not_updated: [] }
+        metadata_fields_update_status || nil
       end
 
       private
@@ -89,12 +89,13 @@ module Samples
       end
 
       def fields_not_updated(metadata_fields_update_status)
-        return unless metadata_fields_update_status.count.positive?
+        metadata_fields_not_updated = metadata_fields_update_status[:not_updated]
+        return unless metadata_fields_not_updated.count.positive?
 
         raise SampleMetadataUpdateError,
               I18n.t('services.samples.metadata.user_cannot_update_metadata',
                      sample_name: @sample.name,
-                     metadata_fields: metadata_fields_update_status[:not_updated].join(', '))
+                     metadata_fields: metadata_fields_not_updated.join(', '))
       end
     end
   end
