@@ -7,7 +7,7 @@ module Viral
     class SelectComponentTest < ViewComponentTestCase
       test 'default' do
         render_preview(:default)
-        assert_selector 'option', count: 4
+        assert_selector 'option', count: 3
       end
 
       test 'default option' do
