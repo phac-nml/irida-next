@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-Faraday.default_adapter = :net_http
+Faraday.default_adapter = :net_http_persistent
