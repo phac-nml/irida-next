@@ -24,6 +24,7 @@
         <div class="grid grid-cols-1 gap-4 mb-8">
           <%= fields_for "workflow_execution[workflow_params]" do |fields| %>
             <% definition["properties"].each do |name, property| %>
+              <% formatted_name = format_name_as_arg(name) %>
               <% if name == "outdir" || name == "email" %>
                 <!--  Don't do anything, skip these fields -->
               <% elsif item == "input_output_options" && property["format"] == "file-path" %>
@@ -33,15 +34,15 @@
                 ) %>
               <% elsif !property["hidden"] %>
                 <div>
-                  <label for="countries" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">
+                  <%= fields.label formatted_name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
                     <%= property["description"] %>
                     <% if definition["required"].present? && definition["required"].include?(name) %>
                       <%= viral_pill(text: t(:'components.nextflow.required'), color: :blue) %>
                     <% end %>
-                  </label>
+                  <% end %>
                   <%= form_input(
                         fields,
-                        name,
+                        formatted_name,
                         property,
                         definition["required"].present? && definition["required"].include?(name)
                       ) %>
