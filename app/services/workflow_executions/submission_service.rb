@@ -10,6 +10,8 @@ module WorkflowExecutions
     end
 
     def execute
+      return false unless @workflow_execution.prepared?
+
       run = @wes_client.run_workflow(**@workflow_execution.as_wes_params)
 
       @workflow_execution.run_id = run[:run_id]

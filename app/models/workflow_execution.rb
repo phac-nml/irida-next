@@ -17,6 +17,10 @@ class WorkflowExecution < ApplicationRecord
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
 
+  def prepared?
+    state == 'prepared'
+  end
+
   def as_wes_params
     {
       workflow_params:,
