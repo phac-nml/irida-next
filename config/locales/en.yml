@@ -902,6 +902,10 @@ en:
         same_project: The samples already exist in the project. Please select a different project.
         sample_exists: "Sample '%{sample_name}' already exists in the target project"
         samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
+      metadata:
+        sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '${project_name}'"
+        empty_metadata: "No metadata was received to update sample '%{sample_name}'"
+        user_cannot_update_metadata: "Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis. "
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
