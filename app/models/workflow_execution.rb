@@ -16,4 +16,20 @@ class WorkflowExecution < ApplicationRecord
   accepts_nested_attributes_for :samples_workflow_executions
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
+
+  def prepared?
+    state == 'prepared'
+  end
+
+  def as_wes_params
+    {
+      workflow_params:,
+      workflow_type:,
+      workflow_type_version:,
+      workflow_engine:,
+      workflow_engine_version:,
+      workflow_engine_parameters:,
+      workflow_url:
+    }.compact
+  end
 end
