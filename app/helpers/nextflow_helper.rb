@@ -5,15 +5,14 @@ module NextflowHelper
   SCHEMA_PATH = 'test/fixtures/files/nextflow/'
 
   def form_input(container, name, property, required)
-    formatted_name = name.length > 1 ? "--#{name}" : "-#{name}"
-    return checkbox_input(container, formatted_name, property) if property['type'] == 'boolean'
+    return checkbox_input(container, name, property) if property['type'] == 'boolean'
 
     if property['enum'].present?
-      return viral_select(container:, name: formatted_name, options: property['enum'], hidden: property['hidden'],
+      return viral_select(container:, name:, options: property['enum'], hidden: property['hidden'],
                           selected_value: property['default'], help_text: property['help_text'])
     end
 
-    viral_text_input(container:, name: formatted_name, required:, pattern: property['pattern'])
+    viral_text_input(container:, name:, required:, pattern: property['pattern'])
   end
 
   def checkbox_input(_fields, name, property)
