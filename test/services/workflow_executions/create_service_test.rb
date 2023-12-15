@@ -55,7 +55,10 @@ module WorkflowExecutions
       assert_equal 'new', @workflow_execution.state
       assert_equal 'new', @workflow_execution2.state
 
-      perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+      perform_enqueued_jobs do
+        WorkflowExecutionNewJob.perform_now
+        WorkflowExecutionPreparationJob.perform_now
+      end
 
       assert_equal 'prepared', @workflow_execution.reload.state
       assert_equal 'prepared', @workflow_execution2.reload.state

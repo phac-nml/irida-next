@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Calls the workflow execution preparation service and then queues up the next workflow to execute
+# Queues the workflow execution submission job
 class WorkflowExecutionPreparationJob < ApplicationJob
   queue_as :default
 
@@ -8,7 +8,9 @@ class WorkflowExecutionPreparationJob < ApplicationJob
     workflow_executions = WorkflowExecution.where(state: 'new')
 
     workflow_executions.each do |workflow_execution|
-      WorkflowExecutions::PreparationService.new(workflow_execution).execute
+      if WorkflowExecutions::PreparationService.new(workflow_execution).execute
+        WorkflowExecutionSubmissionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+      end
     end
   end
 end
