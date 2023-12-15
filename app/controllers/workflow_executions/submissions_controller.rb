@@ -20,9 +20,11 @@ module WorkflowExecutions
     private
 
     def workflow
-      workflow = Struct.new(:name, :id, :description, :version, :metadata)
+      workflow = Struct.new(:name, :id, :description, :version, :metadata, :type, :type_version, :engine,
+                            :engine_version, :url, :execute_loc)
       metadata = { workflow_name: 'irida-next-example', workflow_version: '1.0dev' }
-      @workflow = workflow.new('Super Awesome Workflow', 1, 'This is a super awesome workflow', '1.0.0', metadata)
+      @workflow = workflow.new('Super Awesome Workflow', 1, 'This is a super awesome workflow', '1.0.1', metadata,
+                               'DSL2', '22.10.7', 'nextflow', '', 'https://github.com/phac-nml/iridanextexample', 'azure')
     end
 
     def workflows

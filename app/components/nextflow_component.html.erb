@@ -1,31 +1,27 @@
 <div>
   <h1
-    class="
-      mb-4
-      text-2xl
-      font-extrabold
-      leading-none
-      tracking-tight
-      text-slate-900
-      md:text-5xl
-      lg:text-4xl
-      dark:text-white
-    "
+    class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-slate-900 md:text-5xl lg:text-4xl dark:text-white"
   ><%= schema["title"] %></h1>
   <p
-    class="
-      mb-4
-      text-lg
-      font-normal
-      text-slate-500
-      lg:text-xl
-      dark:text-slate-400
-    "
+    class="mb-4 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400"
   >
     <%= schema["description"] %>
   </p>
   <%= form_with url: url do |form| %>
     <input type="hidden" name="format" value="turbo_stream"/>
+
+    <%= form.hidden_field :workflow_version, value: @workflow.version %>
+    <%= form.hidden_field :workflow_type, value: @workflow.type %>
+    <%= form.hidden_field :workflow_type_version, value: @workflow.type_version %>
+    <%= form.hidden_field :workflow_engine, value: @workflow.engine %>
+    <%= form.hidden_field :workflow_engine_version,
+                      value: @workflow.engine_version %>
+    <%= form.hidden_field :workflow_url, value: @workflow.url %>
+
+    <%= fields_for "workflow_engine_parameters" do |engine| %>
+      <%= form.hidden_field :engine, value: @workflow.engine %>
+      <%= form.hidden_field :execute_loc, value: @workflow.execute_loc %>
+    <% end %>
 
     <%= fields_for "workflow_execution[metadata]" do |metadata| %>
       <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
