@@ -1,65 +1,41 @@
-<div
-  class="
-    py-4
-    overflow-hidden
-    border
-    shadow
-    border-slate-200
-    dark:border-slate-700
-    sm:rounded-lg
-  "
->
-  <%= form_with url: "#", remote: true do |form| %>
-    <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
-      <thead
-        class="
+<div>
+  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><%= t(".label") %></label>
+  <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+    <thead
+      class="
           text-xs
           text-slate-700
           bg-slate-50
           dark:bg-slate-700
           dark:text-slate-400
         "
-      >
-        <tr>
-          <% properties.keys.each_with_index do |header, index| %>
-            <th class="px-6 py-3 font-semibold tracking-wider">
-              <div class="flex items-center space-x-2">
-                <span class="uppercase"><%= header %></span>
-                <% if required.include?(header) %>
-                  <span
-                    class="
-                      bg-yellow-100
-                      text-yellow-800
-                      text-xs
-                      font-medium
-                      px-2.5
-                      py-0.5
-                      rounded
-                      dark:bg-yellow-900
-                      dark:text-yellow-300
-                    "
-                  ><%= t(".required") %></span>
-                <% end %>
-              </div>
-            </th>
+    >
+    <tr>
+      <% properties.keys.each do |header| %>
+        <th class="px-6 py-3 font-semibold tracking-wider">
+          <div class="flex items-center space-x-2">
+            <span class="uppercase"><%= header %></span>
+            <% if required.include?(header) %>
+              <%= viral_pill(text: t(".required"), color: :blue) %>
+            <% end %>
+          </div>
+        </th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <% samples.each_with_index do |sample, index| %>
+      <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}]".to_s do |s| %>
+        <%= s.hidden_field :sample_id, value: sample.id %>
+        <tr class="border-b dark:border-slate-700">
+          <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}][samplesheet_params]".to_s do |fields| %>
+          <% properties.keys.each do |property| %>
+            <%= render_cell_type(property, properties[property], sample, fields) %>
+          <% end %>
           <% end %>
         </tr>
-      </thead>
-      <tbody>
-        <% samples.each_with_index do |sample, index| %>
-          <%= fields_for "sample[#{index}]".to_s do |fields| %>
-            <tr class="border-b dark:border-slate-700">
-              <% properties.keys.each do | property| %>
-                <%= render_cell_type(property, properties[property], sample, fields) %>
-              <% end %>
-            </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
-    <button
-      type="submit"
-      class="mt-4 ml-4 button button--size-default button--state-primary"
-    >Submit</button>
-  <% end %>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
 </div>

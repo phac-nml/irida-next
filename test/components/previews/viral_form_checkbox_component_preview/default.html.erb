@@ -1,5 +1,8 @@
-<%= render Viral::Form::CheckboxComponent.new(
-  label: "Test checkbox component",
-  name: "checkbox_name",
-  value: "checkbox_value"
-) %>
+<%= form_with url: '#' do |form| %>
+  <%= render Viral::Form::CheckboxComponent.new(
+    container: form,
+    label: "Test checkbox component",
+    name: "checkbox_name",
+    value: "checkbox_value"
+  ) %>
+<% end %>

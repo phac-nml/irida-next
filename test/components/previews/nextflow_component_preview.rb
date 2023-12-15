@@ -3,8 +3,12 @@
 class NextflowComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
   def default(schema_file: 'nextflow_schema.json')
+    sample1 = Sample.find_by(id: 1)
+    sample2 = Sample.find_by(id: 2)
+
     render_with_template(locals: {
-                           schema_file:
+                           schema_file:,
+                           samples: [sample1, sample2]
                          })
   end
 

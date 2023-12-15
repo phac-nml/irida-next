@@ -2,39 +2,35 @@
 
 # Helper to render a Nextflow pipeline form
 module NextflowHelper
-  def form_input(name, property, required)
-    return checkbox_input(name, property) if property['type'] == 'boolean'
+  SCHEMA_PATH = 'test/fixtures/files/nextflow/'
 
-    return file_input(name, property, required) if property['format'].present? && property['format'] == 'file-path'
+  def form_input(container, name, property, required)
+    return checkbox_input(container, name, property) if property['type'] == 'boolean'
 
-    text_input(name, property, required)
+    if property['enum'].present?
+      return viral_select(container:, name:, options: property['enum'], hidden: property['hidden'],
+                          selected_value: property['default'], help_text: property['help_text'])
+    end
+
+    viral_text_input(container:, name:, required:, pattern: property['pattern'])
   end
 
-  def text_input(name, property, required)
-    viral_text_input(label: property['description'], name:, type: 'text', required:, help_text: property['help_text'],
-                     hidden: property['hidden'])
-  end
-
-  def checkbox_input(name, property)
+  def checkbox_input(_fields, name, property)
     viral_checkbox(
-      name:,
+      name: "metadata[#{name}]",
       label: property['description'],
       default: property['default'],
-      pattern: property['pattern'],
       help_text: property['help_text'],
-      hidden: property['hidden'],
       value: name
     )
   end
 
-  def file_input(name, property, required)
-    viral_file_input(
-      label: property['description'],
-      name:,
-      pattern: property['pattern'],
-      help_text: property['help_text'],
-      hidden: property['hidden'],
-      required:
-    )
+  def samplesheet_schema(given_path)
+    path = File.basename(given_path)
+    JSON.parse(Rails.root.join(SCHEMA_PATH, path).read)
+  end
+
+  def format_name_as_arg(name)
+    name.length > 1 ? "--#{name}" : "-#{name}"
   end
 end
