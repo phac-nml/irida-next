@@ -5,24 +5,16 @@ module WorkflowExecutions
   class SubmissionsController < ApplicationController
     respond_to :turbo_stream
     before_action :workflows, only: %i[pipeline_selection]
-    before_action :samples, only: %i[show]
-    before_action :workflow_schema, only: %i[show]
-    before_action :workflow, only: %i[show]
+    before_action :samples, only: %i[new]
+    before_action :workflow_schema, only: %i[new]
+    before_action :workflow, only: %i[new]
 
     def pipeline_selection
-      respond_to do |format|
-        format.turbo_stream do
-          render status: :ok
-        end
-      end
+      render status: :ok
     end
 
-    def show
-      respond_to do |format|
-        format.turbo_stream do
-          render status: :ok
-        end
-      end
+    def new
+      render status: :ok
     end
 
     private

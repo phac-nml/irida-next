@@ -872,7 +872,7 @@ en:
     submissions:
         pipeline_selection:
           title: Workflow Selection
-        show:
+        new:
           title: '%{workflow} parameters'
           submit: Submit
   services:

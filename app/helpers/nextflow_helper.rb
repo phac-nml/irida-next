@@ -20,9 +20,7 @@ module NextflowHelper
       name: "metadata[#{name}]",
       label: property['description'],
       default: property['default'],
-      pattern: property['pattern'],
       help_text: property['help_text'],
-      hidden: property['hidden'],
       value: name
     )
   end

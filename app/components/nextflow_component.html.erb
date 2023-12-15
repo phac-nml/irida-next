@@ -1,12 +1,31 @@
 <div>
   <h1
-    class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-slate-900  md:text-5xl lg:text-4xl dark:text-white"
+    class="
+      mb-4
+      text-2xl
+      font-extrabold
+      leading-none
+      tracking-tight
+      text-slate-900
+      md:text-5xl
+      lg:text-4xl
+      dark:text-white
+    "
   ><%= schema["title"] %></h1>
-  <p class="mb-4 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400">
+  <p
+    class="
+      mb-4
+      text-lg
+      font-normal
+      text-slate-500
+      lg:text-xl
+      dark:text-slate-400
+    "
+  >
     <%= schema["description"] %>
   </p>
   <%= form_with url: url do |form| %>
-    <input type="hidden" name="format" value="turbo_stream" />
+    <input type="hidden" name="format" value="turbo_stream"/>
 
     <%= fields_for "workflow_execution[metadata]" do |metadata| %>
       <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
@@ -26,29 +45,29 @@
             <% definition["properties"].each do |name, property| %>
               <% formatted_name = format_name_as_arg(name) %>
               <% if name == "outdir" || name == "email" %>
-                <!--  Don't do anything, skip these fields -->
+                <!-- Don't do anything, skip these fields -->
               <% elsif item == "input_output_options" && property["format"] == "file-path" %>
                 <%= render Nextflow::SamplesheetComponent.new(
                   schema: samplesheet_schema(property["schema"]),
-                  samples: @samples,
+                  samples: @samples
                 ) %>
               <% elsif !property["hidden"] %>
                 <div>
                   <%= fields.label formatted_name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
                     <%= property["description"] %>
                     <% if definition["required"].present? && definition["required"].include?(name) %>
-                      <%= viral_pill(text: t(:'components.nextflow.required'), color: :blue) %>
+                      <%= viral_pill(text: t(:"components.nextflow.required"), color: :blue) %>
                     <% end %>
                   <% end %>
                   <%= form_input(
-                        fields,
-                        formatted_name,
-                        property,
-                        definition["required"].present? && definition["required"].include?(name)
-                      ) %>
+                    fields,
+                    formatted_name,
+                    property,
+                    definition["required"].present? && definition["required"].include?(name)
+                  ) %>
                   <% if property['help_text'].present? %>
                     <%= viral_help_text do %>
-                      <%= property['help_text'] %>
+                      <%= property["help_text"] %>
                     <% end %>
                   <% end %>
                 </div>
@@ -59,7 +78,7 @@
       <% end %>
     <% end %>
     <button type="submit" class="button button--state-primary button--size-default">
-      <%= t(:'workflow_executions.submissions.show.submit') %>
+      <%= t(:"workflow_executions.submissions.new.submit") %>
     </button>
   <% end %>
 </div>
