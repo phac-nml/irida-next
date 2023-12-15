@@ -35,6 +35,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             end
           end
         end
+        resource :metadata, module: :samples, only: %i[update]
       end
     end
   end
