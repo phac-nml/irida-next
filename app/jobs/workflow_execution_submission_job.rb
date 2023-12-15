@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Queues the workflow execution submission job
+# Creates a wes connection and calls the submission service for the workflow execution
 class WorkflowExecutionSubmissionJob < ApplicationJob
   queue_as :default
 
