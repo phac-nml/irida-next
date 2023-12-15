@@ -6,7 +6,7 @@ module Viral
     class CheckboxComponent < Viral::Component
       attr_reader :container, :label, :name, :value, :checked
 
-      def initialize(container:, name:, value:, label:, checked:)
+      def initialize(container:, name:, value:, label:, checked: false)
         @container = container
         @name = name
         @value = value
