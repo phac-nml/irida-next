@@ -57,7 +57,6 @@ module WorkflowExecutions
 
       perform_enqueued_jobs do
         WorkflowExecutionNewJob.perform_now
-        WorkflowExecutionPreparationJob.perform_now
       end
 
       assert_equal 'prepared', @workflow_execution.reload.state
