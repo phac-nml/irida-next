@@ -23,15 +23,12 @@ module WorkflowExecutions
       workflow = Struct.new(:name, :id, :description, :version, :metadata, :type, :type_version, :engine,
                             :engine_version, :url, :execute_loc)
       metadata = { workflow_name: 'irida-next-example', workflow_version: '1.0dev' }
-      @workflow = workflow.new('Super Awesome Workflow', 1, 'This is a super awesome workflow', '1.0.1', metadata,
+      @workflow = workflow.new('phac-nml/iridanextexample', 1, 'IRIDA Next Example Pipeline', '1.0.1', metadata,
                                'DSL2', '22.10.7', 'nextflow', '', 'https://github.com/phac-nml/iridanextexample', 'azure')
     end
 
     def workflows
-      workflow = Struct.new(:name, :id, :description, :version)
-      awesome_flow = workflow.new('Super Awesome Workflow', 1, 'This is a super awesome workflow', '1.0.0')
-      slow_flow = workflow.new('Incredibly Slow Workflow', 2, 'This is a super slow workflow', '0.0.1')
-      @workflows = [awesome_flow, slow_flow]
+      @workflows = [workflow]
     end
 
     def samples
