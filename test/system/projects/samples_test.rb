@@ -355,6 +355,7 @@ module Projects
         assert_text 'test_file_A.fastq'
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+        assert_html5_inputs_valid
       end
       within %(turbo-frame[id="attachments"]) do
         assert_text 'concatenated_file'
@@ -384,6 +385,7 @@ module Projects
         assert_text 'test_file_rev_3.fastq'
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+        assert_html5_inputs_valid
       end
       within %(turbo-frame[id="attachments"]) do
         assert_text 'concatenated_file'
@@ -404,6 +406,7 @@ module Projects
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         check 'Delete originals'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+        assert_html5_inputs_valid
       end
       within %(turbo-frame[id="attachments"]) do
         assert_text 'concatenated_file'
@@ -434,6 +437,7 @@ module Projects
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         check 'Delete originals'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+        assert_html5_inputs_valid
       end
       within %(turbo-frame[id="attachments"]) do
         assert_text 'concatenated_file_1.fastq'
@@ -466,6 +470,7 @@ module Projects
         assert_text 'test_file_D.fastq'
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+        assert_html5_inputs_valid
       end
       within %(turbo-frame[id="concatenation-alert"]) do
         assert_text I18n.t('services.attachments.concatenation.incorrect_file_types')
@@ -489,6 +494,7 @@ module Projects
         assert_text 'test_file_2.fastq.gz'
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+        assert_html5_inputs_valid
       end
       within %(turbo-frame[id="concatenation-alert"]) do
         assert_text I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
@@ -502,6 +508,33 @@ module Projects
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
 
       assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 0
+    end
+
+    test 'shouldn\'t concatenate files as the basename provided is not in the correct format' do
+      login_as users(:jeff_doe)
+      project = projects(:projectA)
+      sample = samples(:sampleB)
+      namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
+        find('table #attachments-table-body tr', text: 'test_file_fwd_1.fastq').find('input').click
+        find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
+        find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
+      end
+      click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file_fwd_1.fastq'
+        assert_text 'test_file_rev_1.fastq'
+        assert_text 'test_file_fwd_2.fastq'
+        assert_text 'test_file_rev_2.fastq'
+        assert_text 'test_file_fwd_3.fastq'
+        assert_text 'test_file_rev_3.fastq'
+        fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated file'
+        check 'Delete originals'
+        click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+        !assert_html5_inputs_valid
+      end
     end
   end
 end

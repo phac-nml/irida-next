@@ -26,7 +26,14 @@
         <% invalid_basename = @sample.errors.include?(:basename) %>
         <div class="form-field <%= 'invalid' if invalid_basename%>">
           <%= form.label :basename, t(".basename") %>
-          <%= form.text_field :basename, required: true %>
+          <%= form.text_field :basename,
+                          required: true,
+                          pattern: /^[[a-zA-Z0-9_\-\.]]*$/,
+                          title:
+                            t(
+                              :"projects.samples.attachments.concatenations.create.basename_help"
+                            ),
+                          class: "form-control" %>
           <%= render "shared/form/field_errors",
           errors: @sample.errors.full_messages_for(:basename) %>
         </div>
