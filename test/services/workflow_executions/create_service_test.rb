@@ -8,8 +8,8 @@ module WorkflowExecutions
       @user = users(:john_doe)
     end
 
-    test 'prepare new workflow execution' do
-      hash1 = {
+    test 'test create new workflow execution' do
+      workflow_params1 = {
         metadata:
         { workflow_name: 'irida-next-example-new', workflow_version: '1.0dev' },
         workflow_params:
@@ -29,7 +29,7 @@ module WorkflowExecutions
         state: 'new'
       }
 
-      hash2 = {
+      workflow_params2 = {
         metadata:
         { workflow_name: 'irida-next-example-new2', workflow_version: '1.0dev' },
         workflow_params:
@@ -49,8 +49,8 @@ module WorkflowExecutions
         state: 'new'
       }
 
-      @workflow_execution = WorkflowExecutions::CreateService.new(@user, hash1).execute
-      @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, hash2).execute
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
+      @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
 
       assert_equal 'new', @workflow_execution.state
       assert_equal 'new', @workflow_execution2.state
@@ -59,6 +59,61 @@ module WorkflowExecutions
 
       assert_equal 'prepared', @workflow_execution.reload.state
       assert_equal 'prepared', @workflow_execution2.reload.state
+    end
+
+    test 'test create new workflow execution with missing required workflow name' do
+      workflow_params = {
+        metadata:
+        { workflow_version: '1.0dev' },
+        workflow_params:
+        {
+          '-r': 'dev',
+          '--input': '/blah/samplesheet.csv',
+          '--outdir': '/blah/output'
+        },
+        workflow_type: 'DSL2',
+        workflow_type_version: '22.10.7',
+        tags: [],
+        workflow_engine: 'nextflow',
+        workflow_engine_version: '',
+        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
+        submitter_id: @user.id,
+        state: 'new'
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert @workflow_execution.errors.full_messages.include?('Metadata root is missing required keys: workflow_name')
+      assert_enqueued_jobs 0
+    end
+
+    test 'test create new workflow execution with missing required workflow version' do
+      workflow_params = {
+        metadata:
+        { workflow_name: 'irida-next-example-new' },
+        workflow_params:
+        {
+          '-r': 'dev',
+          '--input': '/blah/samplesheet.csv',
+          '--outdir': '/blah/output'
+        },
+        workflow_type: 'DSL2',
+        workflow_type_version: '22.10.7',
+        tags: [],
+        workflow_engine: 'nextflow',
+        workflow_engine_version: '',
+        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
+        submitter_id: @user.id,
+        state: 'new'
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert @workflow_execution.errors.full_messages
+                                .include?('Metadata root is missing required keys: workflow_version')
+      assert_enqueued_jobs 0
     end
   end
 end

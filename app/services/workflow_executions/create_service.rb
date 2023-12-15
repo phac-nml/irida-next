@@ -13,9 +13,8 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecution.new(params)
       @workflow_execution.submitter = current_user
       @workflow_execution.state = 'new'
-      @workflow_execution.save
 
-      WorkflowExecutionPreparationJob.perform_later
+      WorkflowExecutionPreparationJob.perform_later if @workflow_execution.save
 
       @workflow_execution
     end
