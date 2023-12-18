@@ -14,7 +14,7 @@ module Projects
         @namespace = groups(:group_one)
       end
 
-      test 'update metadata params' do
+      test 'updating metadata' do
         patch namespace_project_sample_metadata_path(@namespace, @project1, @sample1),
               params: { metadata: { metadata: { key1: 'value1' } }, format: :turbo_stream }
         assert_redirected_to namespace_project_path(@namespace, @project1)
