@@ -20,8 +20,7 @@ module Integrations
         # Default: server url with endpoint is set from credentials file as ga4gh_wes:server_url_endpoint
         def initialize(api_server_url = nil)
           @api_endpoint = if api_server_url.nil? && Rails.application.credentials.ga4gh_wes.nil?
-                            'http://www.example.com/' + Ga4ghWesApi::API_SERVER_ENDPOINT_PATH +
-                              V1::API_SERVER_ENDPOINT_VERSION
+                            "http://www.example.com/#{Ga4ghWesApi::API_SERVER_ENDPOINT_PATH}#{V1::API_SERVER_ENDPOINT_VERSION}"
                           elsif api_server_url.nil? && Rails.application.credentials.ga4gh_wes.present?
                             Rails.application.credentials.dig(:ga4gh_wes, :server_url_endpoint)
                           else
