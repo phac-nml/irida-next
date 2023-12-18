@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'webmock/minitest'
 
 module WorkflowExecutions
   class CreateServiceTest < ActiveSupport::TestCase
@@ -64,7 +65,7 @@ module WorkflowExecutions
       assert_equal 'new', @workflow_execution2.state
 
       perform_enqueued_jobs do
-        WorkflowExecutionNewJob.perform_now
+        WorkflowExecutionPreparationJob.perform_now
       end
 
       assert_equal 'submitted', @workflow_execution.reload.state

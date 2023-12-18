@@ -16,7 +16,6 @@ require_relative '../config/environment'
 require 'rails/test_help'
 require 'action_policy/test_helper'
 require 'test_helpers/array_helpers'
-require 'webmock/minitest'
 
 module ActiveSupport
   class TestCase
