@@ -317,6 +317,7 @@ en:
       title: Your work
       groups: Groups
       projects: Projects
+      workflows: Workflow Executions
     navbar:
       collapse:
         aria_label: Collapse navigation menu
@@ -870,6 +871,8 @@ en:
         updated_at: Last Updated
         action: Action
   workflow_executions:
+    index:
+      title: Workflow Executions
     submissions:
         pipeline_selection:
           title: Workflow Selection

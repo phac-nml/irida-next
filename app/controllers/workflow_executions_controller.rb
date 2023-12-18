@@ -2,6 +2,21 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
+  before_action :current_page
+
+  def index
+    # @q = authorized_workflow_executions(params).ransack(params[:q])
+    # set_default_sort
+    # respond_to do |format|
+    #   format.html do
+    #     @has_workflow_executions = @q.result.count.positive?
+    #   end
+    #   format.turbo_stream do
+    #     @pagy, @workflow_executions = pagy(@q.result)
+    #   end
+    # end
+  end
+
   def create
     @workflow_execution = WorkflowExecution.new(workflow_execution_params)
     @workflow_execution.submitter = current_user
@@ -40,5 +55,9 @@ class WorkflowExecutionsController < ApplicationController
       :sample_id,
       { samplesheet_params: {} }
     ]
+  end
+
+  def current_page
+    @current_page = I18n.t(:'general.default_sidebar.workflows')
   end
 end
