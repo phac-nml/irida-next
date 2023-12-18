@@ -64,10 +64,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_21_200855) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.datetime "deleted_at"
-    t.date "expires_at"
     t.index ["created_by_id"], name: "index_members_on_created_by_id"
     t.index ["deleted_at"], name: "index_members_on_deleted_at"
-    t.index ["expires_at"], name: "index_members_on_expires_at"
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
     t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["user_id"], name: "index_members_on_user_id"

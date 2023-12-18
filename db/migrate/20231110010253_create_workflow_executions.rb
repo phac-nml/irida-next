@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Migration to add WorkflowExecution table
-class WorkflowExecution < ActiveRecord::Migration[7.1]
+class CreateWorkflowExecutions < ActiveRecord::Migration[7.1]
   def change # rubocop:disable Metrics/MethodLength
     create_table :workflow_executions do |t|
       t.jsonb :metadata, null: false, default: { workflow_name: '', workflow_version: '' }
