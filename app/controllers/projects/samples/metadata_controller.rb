@@ -6,9 +6,10 @@ module Projects
     class MetadataController < Projects::Samples::ApplicationController
       def update # rubocop:disable Metrics/AbcSize
         authorize! @project, to: :update_sample?
+        params = { metadata: { metadata: { key1: 'value1' }, analysis_id: 1 } }
         respond_to do |format|
           metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
-                                                                   metadata_params).execute
+                                                                   params).execute
           if validate_updated_metadata(metadata_fields)
             flash[:success] =
               t('.success', metadata_fields: metadata_fields[:updated].join(', '), sample_name: @sample.name)
