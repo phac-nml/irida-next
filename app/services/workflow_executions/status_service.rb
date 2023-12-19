@@ -19,13 +19,13 @@ module WorkflowExecutions
     end
 
     def execute
-      return if @workflow_execution.run_id.nil?
+      return false if @workflow_execution.run_id.nil?
 
       run_status = @wes_client.get_run_status(@workflow_execution.run_id)
 
       state = run_status[:state]
 
-      @workflow_execution.state = 'complete' if state == 'COMPLETE'
+      @workflow_execution.state = 'completed' if state == 'COMPLETE'
 
       @workflow_execution.state = 'canceled' if CANCELATION_STATES.include?(state)
 
