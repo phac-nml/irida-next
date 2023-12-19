@@ -4,13 +4,9 @@
 class WorkflowExecutionPreparationJob < ApplicationJob
   queue_as :default
 
-  def perform
-    workflow_executions = WorkflowExecution.where(state: 'new')
+  def perform(workflow_execution)
+    return unless WorkflowExecutions::PreparationService.new(workflow_execution).execute
 
-    workflow_executions.each do |workflow_execution|
-      if WorkflowExecutions::PreparationService.new(workflow_execution).execute
-        WorkflowExecutionSubmissionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
-      end
-    end
+    WorkflowExecutionSubmissionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
   end
 end

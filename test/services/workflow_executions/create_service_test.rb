@@ -61,10 +61,20 @@ module WorkflowExecutions
       assert_equal 'new', @workflow_execution2.state
 
       perform_enqueued_jobs do
-        WorkflowExecutionPreparationJob.perform_now
+        WorkflowExecutionPreparationJob.perform_now(@workflow_execution)
       end
 
       assert_equal 'submitted', @workflow_execution.reload.state
+      assert_equal 'new', @workflow_execution2.reload.state
+
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "run234" }',
+                                                                                headers: { content_type:
+                 'application/json' })
+
+      perform_enqueued_jobs do
+        WorkflowExecutionPreparationJob.perform_now(@workflow_execution2)
+      end
+
       assert_equal 'submitted', @workflow_execution2.reload.state
     end
 

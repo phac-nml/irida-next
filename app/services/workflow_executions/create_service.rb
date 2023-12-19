@@ -14,7 +14,9 @@ module WorkflowExecutions
       @workflow_execution.submitter = current_user
       @workflow_execution.state = 'new'
 
-      WorkflowExecutionPreparationJob.set(wait_until: 30.seconds.from_now).perform_later if @workflow_execution.save
+      if @workflow_execution.save
+        WorkflowExecutionPreparationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow)
+      end
 
       @workflow_execution
     end
