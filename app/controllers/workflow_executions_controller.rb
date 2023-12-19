@@ -5,10 +5,9 @@ class WorkflowExecutionsController < ApplicationController
   layout :resolve_layout
 
   before_action :current_page
+  before_action :workflow, only: %i[show samples]
 
-  def show
-    @workflow = WorkflowExecution.find(params[:id])
-  end
+  def show; end
 
   def index
     @workflows = WorkflowExecution.where(submitter: current_user)
@@ -51,6 +50,10 @@ class WorkflowExecutionsController < ApplicationController
       :sample_id,
       { samplesheet_params: {} }
     ]
+  end
+
+  def workflow
+    @workflow = WorkflowExecution.find(params[:id])
   end
 
   def resolve_layout

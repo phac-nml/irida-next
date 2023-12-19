@@ -12,7 +12,7 @@
         selected: @current_page == t(:"projects.sidebar.details").downcase
       ) %>
       <%= render section.with_item(
-        url: '',
+        url: workflow_execution_samples_path(@workflow),
         icon: "beaker",
         label: t(:"projects.sidebar.samples"),
         selected: @current_page == t(:"projects.sidebar.samples").downcase
