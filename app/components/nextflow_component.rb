@@ -16,8 +16,4 @@ class NextflowComponent < Component
   def show_section?(properties)
     properties.values.any? { |property| !property.key?('hidden') }
   end
-
-  def show_section?(properties)
-    properties.values.any? { |property| !property.key?('hidden') }
-  end
 end
