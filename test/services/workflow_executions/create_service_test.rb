@@ -54,7 +54,14 @@ module WorkflowExecutions
                                                                                 headers: { content_type:
                                                                                            'application/json' })
 
-      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/run123/status')
+        .to_return(body: '{ "run_id": "run123", "state": "COMPLETE" }',
+                   headers: { content_type:
+                            'application/json' })
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(
+        @user, workflow_params1
+      ).execute
       @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
 
       assert_equal 'new', @workflow_execution.state
@@ -64,18 +71,23 @@ module WorkflowExecutions
         WorkflowExecutionPreparationJob.perform_now(@workflow_execution)
       end
 
-      assert_equal 'submitted', @workflow_execution.reload.state
+      assert_equal 'complete', @workflow_execution.reload.state
       assert_equal 'new', @workflow_execution2.reload.state
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "run234" }',
                                                                                 headers: { content_type:
                  'application/json' })
 
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/run234/status')
+        .to_return(body: '{ "run_id": "run234", "state": "COMPLETE" }',
+                   headers: { content_type:
+                            'application/json' })
+
       perform_enqueued_jobs do
         WorkflowExecutionPreparationJob.perform_now(@workflow_execution2)
       end
 
-      assert_equal 'submitted', @workflow_execution2.reload.state
+      assert_equal 'complete', @workflow_execution2.reload.state
     end
 
     test 'test create new workflow execution with missing required workflow name' do
