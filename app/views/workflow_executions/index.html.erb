@@ -1,1 +1,54 @@
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+
+<div class="flex flex-col">
+  <div class="overflow-x-auto">
+    <div class="inline-block min-w-full align-middle">
+      <div class="overflow-hidden shadow">
+        <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
+          <thead class="bg-gray-100 dark:bg-gray-700">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              ID
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">VERSION</th>
+            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">STATE</th>
+            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">CREATED
+              AT
+            </th>
+            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">UPDATED
+              AT
+            </th>
+          </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+          <% @workflows.each do |workflow| %>
+            <tr>
+              <td class="w-4 p-4 whitespace-nowrap">
+                <%= workflow.run_id %>
+              </td>
+              <td class="w-4 p-4 whitespace-nowrap">
+                <%= workflow.metadata["workflow_name"] %>
+              </td>
+              <td class="w-4 p-4 whitespace-nowrap">
+                <%= workflow.metadata["workflow_version"] %>
+              </td>
+              <td class="w-4 p-4 whitespace-nowrap">
+                <%= workflow["state"] || "NEW" %>
+              </td>
+              <td class="w-4 p-4 whitespace-nowrap">
+                <%= viral_time_ago(original_time: workflow["created_at"]) %>
+              </td>
+              <td class="w-4 p-4 whitespace-nowrap">
+                <%= viral_time_ago(original_time: workflow["updated_at"]) %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

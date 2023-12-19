@@ -5,16 +5,7 @@ class WorkflowExecutionsController < ApplicationController
   before_action :current_page
 
   def index
-    # @q = authorized_workflow_executions(params).ransack(params[:q])
-    # set_default_sort
-    # respond_to do |format|
-    #   format.html do
-    #     @has_workflow_executions = @q.result.count.positive?
-    #   end
-    #   format.turbo_stream do
-    #     @pagy, @workflow_executions = pagy(@q.result)
-    #   end
-    # end
+    @workflows = WorkflowExecution.where(submitter: current_user)
   end
 
   def create
