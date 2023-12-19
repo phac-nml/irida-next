@@ -47,6 +47,21 @@ james_doe_namespace_route:
   path: james.doe_at_localhost
   source: james_doe_namespace (Namespace)
 
+user_26_namespace_route:
+  name: user.26@localhost
+  path: user.26_at_localhost
+  source: user_26_namespace (Namespace)
+
+private_joan_namespace_route:
+  name: private.joan@localhost
+  path: private.joan_at_localhost
+  source: private_joan_namespace (Namespace)
+
+private_ryan_namespace_route:
+  name: private.ryan@localhost
+  path: private.ryan_at_localhost
+  source: private_ryan_namespace (Namespace)
+
 project1_namespace_route:
   name: Group 1 / Project 1
   path: group-1/project-1
@@ -96,6 +111,11 @@ david_doe_namespace_route:
   name: david.doe@localhost
   path: david.doe_at_localhost
   source: david_doe_namespace (Namespace)
+
+alph_abet_namespace_route:
+  name: alph.abet@localhost
+  path: alph.abet_at_localhost
+  source: alph_abet_namespace (Namespace)
 
 david_doe_group_four_route:
   name: Group 4
@@ -258,3 +278,48 @@ project_alpha_1_namespace_route:
   name: Group Alpha / Subgroup 1 / Project Alpha 1
   path: group-alpha/subgroup-1/project-alpha1
   source: projectAlpha1_namespace (Namespace)
+
+group_eleven_route:
+  name: Group 11
+  path: group-11
+  source: group_eleven (Namespace)
+
+group_delta_route:
+  name: Group Delta
+  path: group-delta
+  source: group_delta (Namespace)
+
+group_echo_route:
+  name: Group Echo
+  path: group-echo
+  source: group_echo (Namespace)
+
+subgroup_a_group_delta_route:
+  name: Group Delta / Subgroup A
+  path: group-delta/subgroup-a
+  source: group_delta_subgroupA (Namespace)
+
+subgroup_b_group_echo_route:
+  name: Group Echo / Subgroup B
+  path: group-echo/subgroup-b
+  source: group_echo_subgroupB (Namespace)
+
+project_delta_namespace_route:
+  name: Group Delta / Project Delta
+  path: group-delta/project-delta
+  source: projectDelta_namespace (Namespace)
+
+project_echo_namespace_route:
+  name: Group Echo / Project Echo
+  path: group-echo/project-echo
+  source: projectEcho_namespace (Namespace)
+
+project_delta_subgroupA_namespace_route:
+  name: Group Delta / Subgroup A / Project Delta
+  path: group-delta/subgroup-a/project-delta
+  source: projectDeltaSubgroupA_namespace (Namespace)
+
+project_echo_subgroupB_namespace_route:
+  name: Group Echo / Subgroup B / Project Echo
+  path: group-echo/subgroup-b/project-echo
+  source: projectEchoSubgroupB_namespace (Namespace)

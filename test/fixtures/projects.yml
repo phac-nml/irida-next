@@ -143,3 +143,19 @@ projectCharlie:
 projectAlpha1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1_namespace) %>
+
+projectDelta:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectDelta_namespace) %>
+
+projectEcho:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEcho_namespace) %>
+
+projectDeltaSubgroupA:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectDeltaSubgroupA_namespace) %>
+
+projectEchoSubgroupB:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEchoSubgroupB_namespace) %>

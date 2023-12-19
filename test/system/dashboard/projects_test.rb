@@ -26,6 +26,25 @@ module Dashboard
       assert_selector 'h1', text: projects(:project1).name
     end
 
+    test 'can see the list of projects in user\'s groups and namespace group links' do
+      login_as users(:david_doe)
+      visit dashboard_projects_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_selector 'tr', count: 20
+      assert_text projects(:project1).human_name
+      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+
+      click_on I18n.t(:'components.pagination.next')
+      assert_selector 'tr', count: 2
+      click_on I18n.t(:'components.pagination.previous')
+      assert_selector 'tr', count: 20
+
+      click_link projects(:project1).human_name
+      assert_selector 'h1', text: projects(:project1).name
+    end
+
     test 'can filter the list of projects to only see personal ones' do
       visit dashboard_projects_url
 

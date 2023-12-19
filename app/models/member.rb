@@ -51,17 +51,13 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def can_modify?(user, object_namespace)
-      [
-        Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
-      ].include?(
+      Member::AccessLevel.manageable.include?(
         effective_access_level(object_namespace, user)
       )
     end
 
     def can_create?(user, object_namespace)
-      [
-        Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
-      ].include?(
+      Member::AccessLevel.manageable.include?(
         effective_access_level(object_namespace, user)
       )
     end
@@ -79,9 +75,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def can_transfer_into_namespace?(user, object_namespace)
-      [
-        Member::AccessLevel::MAINTAINER, Member::AccessLevel::OWNER
-      ].include?(
+      Member::AccessLevel.manageable.include?(
         effective_access_level(object_namespace, user)
       )
     end
@@ -223,6 +217,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       # Method to return the human readable access level (passed in as a numeric value)
       def human_access(access_level)
         access_level_options_owner.key(access_level).to_s
+      end
+
+      def manageable
+        [MAINTAINER, OWNER]
       end
     end
   end

@@ -41,3 +41,39 @@ private_ryan_namespace:
   path: private.ryan_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+
+joan_doe_namespace:
+  name: joan.doe@localhost
+  path: joan.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe) %>
+
+micha_doe_namespace:
+  name: micha.doe@localhost
+  path: micha.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe) %>
+
+ryan_doe_namespace:
+  name: ryan.doe@localhost
+  path: ryan.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe) %>
+
+user_26_namespace:
+  name: user.26@localhost
+  path: user.26_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user26) %>
+
+alph_abet_namespace:
+  name: alph.abet@localhost
+  path: alph.abet_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet) %>
+
+private_joan_namespace:
+  name: private.joan@localhost
+  path: private.joan_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
