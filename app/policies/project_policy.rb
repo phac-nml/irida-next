@@ -113,8 +113,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  # Can we simplify this further?
-
   scope_for :relation do |relation|
     relation
       .with(
@@ -128,9 +126,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         Namespace.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids
         .where(type: Group.sti_name) }).select(:id),
         linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
-        Group.where(id: NamespaceGroupLink
-          .where(group: user.groups.self_and_descendants).not_expired.select(:namespace_id)).self_and_descendants })
-          .select(:id)
+        Group.where(id: NamespaceGroupLink.where(
+          group: Group.where(id: user.members.not_expired.joins(:namespace).select(:namespace_id)).self_and_descendants
+        ).not_expired.select(:namespace_id)).self_and_descendants }).select(:id)
       ).where(
         Arel.sql(
           'projects.id in (select * from personal_projects)
