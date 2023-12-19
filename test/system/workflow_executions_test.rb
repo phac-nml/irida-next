@@ -12,5 +12,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     visit workflow_executions_path
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    assert_selector 'table#workflow_executions tbody tr', count: 4
   end
 end

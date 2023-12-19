@@ -873,6 +873,14 @@ en:
   workflow_executions:
     index:
       title: Workflow Executions
+      empty: There are no workflow executions.
+      headers:
+        id: ID
+        name: Name
+        version: Version
+        state: State
+        created_at: Created
+        updated_at: Last Updated
     submissions:
         pipeline_selection:
           title: Workflow Selection

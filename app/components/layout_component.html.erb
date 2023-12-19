@@ -20,7 +20,7 @@
         <%= breadcrumb %>
       </turbo-frame>
     </nav>
-    <main class="absolute bottom-0 left-0 right-0 p-4 overflow-y-auto top-12 border-t border-slate-200 dark:border-slate-950">
+    <main class="absolute bottom-0 left-0 right-0 p-4 overflow-y-auto top-12 border-t border-slate-200 dark:border-slate-950" tabindex="0">
       <div class="<%= @layout %>"><%= body %></div>
     </main>
     <%= render ConfirmationComponent.new %>
