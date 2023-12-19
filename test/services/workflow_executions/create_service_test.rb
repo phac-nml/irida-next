@@ -50,13 +50,9 @@ module WorkflowExecutions
         state: 'new'
       }
 
-      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "workflow1" }',
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "run123" }',
                                                                                 headers: { content_type:
                                                                                            'application/json' })
-
-      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "workflow2" }',
-                                                                                headers: { content_type:
-                                                                                          'application/json' })
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
       @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
