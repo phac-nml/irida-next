@@ -113,8 +113,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  # Can we simplify this further?
-
   scope_for :relation do |relation|
     relation
       .with(
