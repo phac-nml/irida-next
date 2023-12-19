@@ -3,10 +3,9 @@
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
   def create
-    @workflow_execution = WorkflowExecution.new(workflow_execution_params)
-    @workflow_execution.submitter = current_user
+    @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
 
-    if @workflow_execution.save
+    if @workflow_execution.persisted?
       render turbo_stream: [], status: :ok
     else
       render turbo_stream: [], status: :unprocessable_entity
