@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html class="light" lang="<%= locale %>">
+<%= render "layouts/partials/head" %>
+<body class="bg-white dark:bg-gray-900">
+<%= render LayoutComponent.new(user: current_user) do |layout| %>
+  <% layout.with_sidebar(label: turbo_frame_tag("sidebar_project_name") { @workflow.metadata["workflow_name"] }, icon_name: "rectangle_stack") do |navigation| %>
+    <%= navigation.with_section do |section| %>
+      <%= render section.with_item(
+        url: '',
+        icon: "clipboard_document",
+        label: t(:"projects.sidebar.details"),
+        selected: @current_page == t(:"projects.sidebar.details").downcase
+      ) %>
+      <%= render section.with_item(
+        url: '',
+        icon: "beaker",
+        label: t(:"projects.sidebar.samples"),
+        selected: @current_page == t(:"projects.sidebar.samples").downcase
+      ) %>
+
+    <% end %>
+    <% layout.with_body do %>
+      <%= turbo_frame_tag("errors") %>
+      <%= yield %>
+    <% end %>
+  <% end %>
+<% end %>
+</body>
+</html>

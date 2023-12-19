@@ -2,7 +2,13 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
+  layout :resolve_layout
+
   before_action :current_page
+
+  def show
+    @workflow = WorkflowExecution.find(params[:id])
+  end
 
   def index
     @workflows = WorkflowExecution.where(submitter: current_user)
@@ -45,6 +51,15 @@ class WorkflowExecutionsController < ApplicationController
       :sample_id,
       { samplesheet_params: {} }
     ]
+  end
+
+  def resolve_layout
+    case action_name
+    when 'create'
+      'application'
+    else
+      'workflow_executions'
+    end
   end
 
   def current_page

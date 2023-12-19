@@ -1,0 +1,47 @@
+<%= render Viral::PageHeaderComponent.new(title: @workflow.metadata["workflow_name"]) %>
+
+<div class="grid grid-cols-1 gap-4">
+  <%= viral_card(title: "General") do %>
+    <dl class="text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+      <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Name</dt>
+        <dd class="text-lg font-semibold"><%= @workflow.metadata["workflow_name"] %></dd>
+      </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Version</dt>
+        <dd class="text-lg font-semibold"><%= @workflow.metadata["workflow_version"] %></dd>
+      </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Workflow Type</dt>
+        <dd class="text-lg font-semibold"><%= @workflow["workflow_type"] %></dd>
+      </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Workflow Type Version</dt>
+        <dd class="text-lg font-semibold"><%= @workflow["workflow_type_version"] %></dd>
+      </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Workflow Engine</dt>
+        <dd class="text-lg font-semibold"><%= @workflow["workflow_engine"] %></dd>
+      </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Workflow Engine Version</dt>
+        <dd class="text-lg font-semibold"><%= @workflow["workflow_engine_version"] %></dd>
+      </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Workflow URL</dt>
+        <dd class="text-lg font-semibold">
+          <a href="<%= @workflow["workflow_url"] %>" class="text-blue-600 dark:text-blue-500 hover:underline" target="_blank"><%= @workflow["workflow_url"] %></a>
+        </dd>
+      </div>
+
+      <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Phone number</dt>
+        <dd class="text-lg font-semibold">+00 123 456 789 / +12 345 678</dd>
+      </div>
+    </dl>
+  <% end %>
+
+  <%= viral_card(title: "Parameters") do %>
+    <p class="text-gray-500 dark:text-gray-400">Will need to pull the nextflow schema to get full labels???</p>
+  <% end %>
+</div>
