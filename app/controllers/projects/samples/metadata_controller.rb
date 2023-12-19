@@ -9,7 +9,7 @@ module Projects
         respond_to do |format|
           metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
                                                                    metadata_params).execute
-          if validate_updated_metadata(metadata_fields)
+          if !metadata_fields.nil? && metadata_fields[:updated].count.positive?
             flash[:success] =
               t('.success', metadata_fields: metadata_fields[:updated].join(', '), sample_name: @sample.name)
           end
@@ -22,10 +22,6 @@ module Projects
 
       def metadata_params
         params.require(:metadata).permit(:analysis_id, metadata: {})
-      end
-
-      def validate_updated_metadata(metadata_fields)
-        !metadata_fields.nil? && metadata_fields[:updated].count.positive?
       end
     end
   end
