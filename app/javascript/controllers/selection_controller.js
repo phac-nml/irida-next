@@ -3,17 +3,16 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   // # indicates private attribute or method
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
+  #storageKey = null;
 
   static targets = ["rowSelection"];
-  static values = {
-    storageKey: {
-      type: String,
-      default: `${location.protocol}//${location.host}${location.pathname}`,
-    },
-  };
   static outlets = ["action-link"];
 
   connect() {
+    this.#storageKey =
+      this.element.dataset.storageKey ||
+      `${location.protocol}//${location.host}${location.pathname}`;
+
     this.element.setAttribute("data-controller-connected", "true");
 
     const storageValue = this.#getStoredSamples();
@@ -39,14 +38,12 @@ export default class extends Controller {
   }
 
   remove({ params: { id } }) {
-    this.#addOrRemove(false, id.toString());
+    id = JSON.stringify(id).replaceAll(",", ", ");
+    this.#addOrRemove(false, id);
   }
 
   save(storageValue) {
-    sessionStorage.setItem(
-      this.storageKeyValue,
-      JSON.stringify([...storageValue])
-    );
+    sessionStorage.setItem(this.#storageKey, JSON.stringify([...storageValue]));
   }
 
   #addOrRemove(add, storageValue) {
@@ -66,7 +63,7 @@ export default class extends Controller {
   }
 
   #getStoredSamples() {
-    return JSON.parse(sessionStorage.getItem(this.storageKeyValue)) || [];
+    return JSON.parse(sessionStorage.getItem(this.#storageKey)) || [];
   }
 
   #updateActionLinks(count) {
