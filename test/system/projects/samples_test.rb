@@ -560,6 +560,7 @@ module Projects
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated file'
         check 'Delete originals'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
+        !assert_html5_inputs_valid # rubocop:disable Lint/Void
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
