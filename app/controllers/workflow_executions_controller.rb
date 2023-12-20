@@ -5,7 +5,7 @@ class WorkflowExecutionsController < ApplicationController
   layout :resolve_layout
 
   before_action :current_page
-  before_action :workflow, only: %i[show samples]
+  before_action :workflow, only: %i[show]
 
   def show; end
 
@@ -57,12 +57,7 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def resolve_layout
-    case action_name
-    when 'create'
-      'application'
-    else
-      'workflow_executions'
-    end
+    'application'
   end
 
   def current_page
