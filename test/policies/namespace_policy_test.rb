@@ -9,8 +9,6 @@ class NamespacePolicyTest < ActiveSupport::TestCase
   end
 
   test 'named scope with expired memberships' do
-    # assuming personal projects cannot be expired
-
     group_member = members(:group_four_member_david_doe)
     group_member.expires_at = 10.days.ago.to_date
     group_member.save

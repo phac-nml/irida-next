@@ -85,8 +85,6 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   end
 
   test 'scope expired memberships' do
-    # assuming personal projects cannot be expired
-
     group_member = members(:group_one_member_john_doe)
     group_member.expires_at = 10.days.ago.to_date
     group_member.save
@@ -155,8 +153,6 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   end
 
   test 'manageable scope expired memberships' do
-    # assuming personal projects cannot be expired
-
     group_member = members(:group_one_member_john_doe)
     group_member.expires_at = 10.days.ago.to_date
     group_member.save
