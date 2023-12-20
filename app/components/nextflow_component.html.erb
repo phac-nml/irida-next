@@ -24,7 +24,7 @@
   >
     <%= schema["description"] %>
   </p>
-  <%= form_with url: url do |form| %>
+  <%= form_with url: url, data: { turbo_frame: "_top" } do |form| %>
     <input type="hidden" name="format" value="turbo_stream"/>
 
     <%= fields_for :workflow_execution do |workflow| %>

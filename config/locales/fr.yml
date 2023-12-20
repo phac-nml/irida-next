@@ -858,6 +858,9 @@ fr:
         created_at: Created
         updated_at: Last Updated
         action: Action
+      metadata:
+        update:
+          success: 'Metadata fields %{metadata_fields} for sample %{sample_name} were updated'
   workflow_executions:
     submissions:
       pipeline_selection:

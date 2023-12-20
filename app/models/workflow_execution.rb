@@ -36,6 +36,7 @@ class WorkflowExecution < ApplicationRecord
       workflow_params:,
       workflow_type:,
       workflow_type_version:,
+      tags: { createdBy: "#{submitter.first_name} #{submitter.last_name}" },
       workflow_engine:,
       workflow_engine_version:,
       workflow_engine_parameters:,
