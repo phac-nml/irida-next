@@ -8,6 +8,21 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     @policy = NamespacePolicy.new(user: @user)
   end
 
+  test 'named scope with expired memberships' do
+    # assuming personal projects cannot be expired
+
+    group_member = members(:group_four_member_david_doe)
+    group_member.expires_at = 10.days.ago.to_date
+    group_member.save
+
+    scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, name: :manageable)
+
+    assert_equal 1, scoped_namespaces.count
+
+    scoped_namespaces_names = scoped_namespaces.pluck(:name)
+    assert_not scoped_namespaces_names.include?(groups(:david_doe_group_four).name)
+  end
+
   test 'named scope without modify access to namespace via namespace group link' do
     scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, name: :manageable)
     user_namespace = namespaces_user_namespaces(:david_doe_namespace)

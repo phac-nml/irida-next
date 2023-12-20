@@ -143,20 +143,20 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     relation.with(
       personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id),
       direct_projects: relation.where(
-        namespace: user.members.joins(:namespace).where(
+        namespace: user.members.not_expired.joins(:namespace).where(
           access_level: Member::AccessLevel.manageable,
           namespace: { type: Namespaces::ProjectNamespace.sti_name }
         ).select(:namespace_id)
       ).select(:id),
       group_projects: relation.joins(:namespace).where(namespace: { parent: Namespace.where(id:
-        user.members.joins(:namespace).where(
+        user.members.not_expired.joins(:namespace).where(
           namespace_id: user.groups.self_and_descendants,
           access_level: Member::AccessLevel.manageable,
           namespace: { type: Group.sti_name }
         ).select(:namespace_id), type: Group.sti_name).self_and_descendants.select(:id) }).select(:id),
       linked_projects: relation.joins(:namespace).where(namespace: { parent_id:
         Group.where(id: NamespaceGroupLink.where(
-          group: user.groups.where(id: user.members.joins(:namespace)
+          group: user.groups.where(id: user.members.not_expired.joins(:namespace)
           .where(access_level: Member::AccessLevel.manageable,
                  namespace: { type: Group.sti_name })
                                                           .select(:namespace_id)).self_and_descendants,

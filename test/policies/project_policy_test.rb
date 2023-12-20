@@ -84,7 +84,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert_equal 22, scoped_projects.count
   end
 
-  test 'scope expired project member' do
+  test 'scope expired memberships' do
     # assuming personal projects cannot be expired
 
     group_member = members(:group_one_member_john_doe)
@@ -132,7 +132,9 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     assert_equal 9, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
-    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project28_namespace).name)
+    assert_not scoped_projects_names.include?(
+      namespaces_project_namespaces(:namespace_group_link_group_one_project1_namespace).name
+    )
   end
 
   test 'manageable scope' do
@@ -150,6 +152,48 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     # none through namespace group links as manageable access has not
     # been set for any of the links
     assert_equal 1, scoped_projects.count
+  end
+
+  test 'manageable scope expired memberships' do
+    # assuming personal projects cannot be expired
+
+    group_member = members(:group_one_member_john_doe)
+    group_member.expires_at = 10.days.ago.to_date
+    group_member.save
+
+    scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
+
+    assert_equal 10, scoped_projects.count
+    scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project5_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project6_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project7_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project8_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project9_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project10_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project11_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project12_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project13_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project14_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project15_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project16_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project17_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project18_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project19_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project20_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project21_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project24_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project25_namespace).name)
+
+    project_member = members(:project_one_member_john_doe)
+    project_member.expires_at = 10.days.ago.to_date
+    project_member.save
+
+    scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
+
+    assert_equal 9, scoped_projects.count
+    scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project1_namespace).name)
   end
 
   test 'named scope with modify access to namespace via a namespace group link ' do
