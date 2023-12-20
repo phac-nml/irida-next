@@ -317,6 +317,7 @@ en:
       title: Your work
       groups: Groups
       projects: Projects
+      workflows: Workflow Executions
     navbar:
       collapse:
         aria_label: Collapse navigation menu
@@ -873,6 +874,16 @@ en:
         update:
           success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
   workflow_executions:
+    index:
+      title: Workflow Executions
+      empty: There are no workflow executions.
+      headers:
+        id: ID
+        name: Name
+        version: Version
+        state: State
+        created_at: Created
+        updated_at: Last Updated
     submissions:
         pipeline_selection:
           title: Workflow Selection
