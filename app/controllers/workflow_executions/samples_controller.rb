@@ -5,13 +5,17 @@ module WorkflowExecutions
   class SamplesController < ApplicationController
     layout 'workflow_executions'
     before_action :current_page
+    before_action :workflow
 
     def index
-      @workflow = WorkflowExecution.find(params[:workflow_execution_id])
       @samples = SamplesWorkflowExecution.where(workflow_execution: @workflow)
     end
 
     private
+
+    def workflow
+      @workflow = WorkflowExecution.find(params[:workflow_execution_id])
+    end
 
     def current_page
       @current_page = I18n.t(:'projects.sidebar.samples')
