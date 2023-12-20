@@ -27,6 +27,14 @@ class WorkflowExecution < ApplicationRecord
     state == 'submitted'
   end
 
+  def completed?
+    state == 'completed'
+  end
+
+  def error?
+    state == 'error'
+  end
+
   def canceling?
     state == 'canceling'
   end
