@@ -1,0 +1,8 @@
+<%= render Viral::PageHeaderComponent.new(title: t(:'workflow_executions.samples.title')) %>
+
+<% @samples.each do |record| %>
+  <strong><%= record.sample.name %></strong><br>
+  <% record.sample.attachments.each do |attachment| %>
+    <%= attachment.file.filename %>
+  <% end %>
+<% end %>

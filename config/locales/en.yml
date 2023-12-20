@@ -890,6 +890,8 @@ en:
         new:
           title: '%{workflow} parameters'
           submit: Submit
+    samples:
+      title: Samples
   services:
     attachments:
       concatenation:

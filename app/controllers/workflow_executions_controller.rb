@@ -66,6 +66,9 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def current_page
-    @current_page = I18n.t(:'general.default_sidebar.workflows')
+    @current_page = case action_name
+                    when 'show'
+                      I18n.t(:'projects.sidebar.details')
+                    end
   end
 end

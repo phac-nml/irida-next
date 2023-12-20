@@ -6,16 +6,16 @@
   <% layout.with_sidebar(label: turbo_frame_tag("sidebar_project_name") { @workflow.metadata["workflow_name"] }, icon_name: "rectangle_stack") do |navigation| %>
     <%= navigation.with_section do |section| %>
       <%= render section.with_item(
-        url: '',
+        url: workflow_execution_path(@workflow),
         icon: "clipboard_document",
         label: t(:"projects.sidebar.details"),
-        selected: @current_page == t(:"projects.sidebar.details").downcase
+        selected: @current_page == t(:"projects.sidebar.details")
       ) %>
       <%= render section.with_item(
         url: workflow_execution_samples_path(@workflow),
         icon: "beaker",
         label: t(:"projects.sidebar.samples"),
-        selected: @current_page == t(:"projects.sidebar.samples").downcase
+        selected: @current_page == t(:"projects.sidebar.samples")
       ) %>
 
     <% end %>
