@@ -15,7 +15,7 @@ module WorkflowExecutions
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: 'abc123' }
+          { run_id: 'status_test_1' }
         ]
       end
 
@@ -25,16 +25,16 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'abc123', @workflow_execution.run_id
+      assert_equal 'status_test_1', @workflow_execution.run_id
 
       assert_equal 'submitted', @workflow_execution.state
 
       stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.get('/runs/abc123/status') do
+      stubs.get('/runs/status_test_1/status') do
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: 'abc123', state: 'COMPLETE' }
+          { run_id: 'status_test_1', state: 'COMPLETE' }
         ]
       end
 
@@ -53,7 +53,7 @@ module WorkflowExecutions
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: 'abc123' }
+          { run_id: 'status_test_2' }
         ]
       end
 
@@ -63,16 +63,16 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'abc123', @workflow_execution.run_id
+      assert_equal 'status_test_2', @workflow_execution.run_id
 
       assert_equal 'submitted', @workflow_execution.state
 
       stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.get('/runs/abc123/status') do
+      stubs.get('/runs/status_test_2/status') do
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: 'abc123', state: 'CANCELED' }
+          { run_id: 'status_test_2', state: 'CANCELED' }
         ]
       end
 
@@ -91,7 +91,7 @@ module WorkflowExecutions
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: 'abc123' }
+          { run_id: 'status_test_3' }
         ]
       end
 
@@ -101,16 +101,16 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'abc123', @workflow_execution.run_id
+      assert_equal 'status_test_3', @workflow_execution.run_id
 
       assert_equal 'submitted', @workflow_execution.state
 
       stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.get('/runs/abc123/status') do
+      stubs.get('/runs/status_test_3/status') do
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: 'abc123', state: 'SYSTEM_ERROR' }
+          { run_id: 'status_test_3', state: 'SYSTEM_ERROR' }
         ]
       end
 
