@@ -10,7 +10,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false unless @workflow_execution.state in ['submitted', 'running??'] # other states that can be cancelled?
+      return false unless @workflow_execution.submitted?
 
       # throws exception if failed
       @wes_client.cancel_run(@workflow_execution.run_id)

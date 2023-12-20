@@ -57,3 +57,23 @@ irida_next_example_prepared:
   workflow_url: "https://github.com/phac-nml/iridanextexample"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   state: "prepared"
+
+irida_next_example_submitted:
+  metadata:
+    { "workflow_name": "irida-next-example", "workflow_version": "1.0dev" }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  state: "submitted"
+  run_id: "cancel123"

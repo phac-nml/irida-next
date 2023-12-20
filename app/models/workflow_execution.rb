@@ -23,6 +23,14 @@ class WorkflowExecution < ApplicationRecord
     state == 'prepared'
   end
 
+  def submitted?
+    state == 'submitted'
+  end
+
+  def cancelled?
+    state == 'cancelled'
+  end
+
   def as_wes_params
     {
       workflow_params:,
