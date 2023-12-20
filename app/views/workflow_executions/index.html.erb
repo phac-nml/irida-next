@@ -32,7 +32,8 @@
               <%= workflow.run_id %>
             </td>
             <td class="w-4 p-4 whitespace-nowrap">
-              <%= workflow.metadata["workflow_name"] %>
+              <%= link_to workflow.metadata["workflow_name"], workflow_execution_path(workflow),
+                          class: "font-medium text-primary-600 dark:text-primary-500 hover:underline" %>
             </td>
             <td class="w-4 p-4 whitespace-nowrap">
               <%= workflow.metadata["workflow_version"] %>
