@@ -50,12 +50,12 @@ module WorkflowExecutions
         state: 'new'
       }
 
-      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "run123" }',
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_1" }',
                                                                                 headers: { content_type:
                                                                                            'application/json' })
 
-      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/run123/status')
-        .to_return(body: '{ "run_id": "run123", "state": "COMPLETE" }',
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/create_run_1/status')
+        .to_return(body: '{ "run_id": "create_run_1", "state": "COMPLETE" }',
                    headers: { content_type:
                             'application/json' })
 
@@ -74,12 +74,12 @@ module WorkflowExecutions
       assert_equal 'completed', @workflow_execution.reload.state
       assert_equal 'new', @workflow_execution2.reload.state
 
-      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "run234" }',
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_2" }',
                                                                                 headers: { content_type:
                  'application/json' })
 
-      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/run234/status')
-        .to_return(body: '{ "run_id": "run234", "state": "COMPLETE" }',
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/create_run_2/status')
+        .to_return(body: '{ "run_id": "create_run_2", "state": "COMPLETE" }',
                    headers: { content_type:
                             'application/json' })
 
@@ -145,7 +145,7 @@ module WorkflowExecutions
       assert_enqueued_jobs 0
     end
 
-    test 'test workflow execution cancelled' do
+    test 'test workflow execution canceled' do
       workflow_params = {
         metadata:
         { workflow_name: 'irida-next-example-new', workflow_version: '1.0dev' },
@@ -166,11 +166,11 @@ module WorkflowExecutions
         state: 'new'
       }
 
-      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "run123" }',
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_4" }',
                                                                                 headers: { content_type:
                                                                                            'application/json' })
 
-      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/run123/status')
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/create_run_4/status')
         .to_return(body: '{ "run_id": "run123", "state": "CANCELING" }',
                    headers: { content_type:
                             'application/json' })
@@ -185,7 +185,7 @@ module WorkflowExecutions
         WorkflowExecutionPreparationJob.perform_now(@workflow_execution)
       end
 
-      assert_equal 'cancelled', @workflow_execution.reload.state
+      assert_equal 'canceled', @workflow_execution.reload.state
     end
 
     test 'test workflow execution error' do
@@ -209,12 +209,12 @@ module WorkflowExecutions
         state: 'new'
       }
 
-      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "run123" }',
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_5" }',
                                                                                 headers: { content_type:
                                                                                            'application/json' })
 
-      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/run123/status')
-        .to_return(body: '{ "run_id": "run123", "state": "EXECUTOR_ERROR" }',
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/create_run_5/status')
+        .to_return(body: '{ "run_id": "create_run_5", "state": "EXECUTOR_ERROR" }',
                    headers: { content_type:
                             'application/json' })
 

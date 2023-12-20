@@ -20,7 +20,7 @@ module WorkflowExecutions
       @workflow_execution.state = 'completed' if state == 'COMPLETE'
 
       if Integrations::Ga4ghWesApi::V1::States::CANCELATION_STATES.include?(state)
-        @workflow_execution.state = 'cancelled'
+        @workflow_execution.state = 'canceled'
       end
 
       @workflow_execution.state = 'error' if Integrations::Ga4ghWesApi::V1::States::ERROR_STATES.include?(state)
