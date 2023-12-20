@@ -12,7 +12,7 @@ class GroupShareActionsConcernTest < ActionDispatch::IntegrationTest
     get group_group_links_path(group, format: :turbo_stream)
 
     assert_response :success
-    assert_equal 3, group.shared_with_group_links.of_ancestors_and_self.count
+    assert_equal 4, group.shared_with_group_links.of_ancestors_and_self.count
   end
 
   test 'group to group link' do
@@ -28,7 +28,7 @@ class GroupShareActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_equal 2, namespace.shared_with_group_links.of_ancestors_and_self.count
+    assert_equal 3, namespace.shared_with_group_links.of_ancestors_and_self.count
   end
 
   test 'group to group link destroy' do
@@ -36,14 +36,14 @@ class GroupShareActionsConcernTest < ActionDispatch::IntegrationTest
     namespace_group_link = namespace_group_links(:namespace_group_link2)
     namespace = namespace_group_link.namespace
 
-    assert_equal 3, namespace.shared_with_group_links.of_ancestors_and_self.count
+    assert_equal 4, namespace.shared_with_group_links.of_ancestors_and_self.count
 
     delete group_group_link_path(namespace, namespace_group_link.id,
                                  format: :turbo_stream)
 
     assert_response :success
 
-    assert_equal 2, namespace.shared_with_group_links.of_ancestors_and_self.count
+    assert_equal 3, namespace.shared_with_group_links.of_ancestors_and_self.count
   end
 
   test 'group to group link update' do

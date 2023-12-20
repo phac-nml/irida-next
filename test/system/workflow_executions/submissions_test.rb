@@ -20,8 +20,8 @@ class SubmissionsTest < ApplicationSystemTestCase
 
     click_on I18n.t(:'projects.samples.index.workflows.button_sr')
     assert_selector 'dialog' do
-      assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submission.pipeline_selection.title')
-      assert_selector 'button', text: 'Super Awesome Workflow'
+      assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_selector 'button', text: 'phac-nml/iridanextexample'
     end
   end
 end

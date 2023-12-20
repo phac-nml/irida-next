@@ -28,6 +28,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def edit
     authorize! @group
+    @authorized_namespaces -= [@group]
   end
 
   def create

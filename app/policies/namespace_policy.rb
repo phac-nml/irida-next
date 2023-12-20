@@ -3,23 +3,29 @@
 # Base policy for namespace authorization
 class NamespacePolicy < ApplicationPolicy
   scope_for :relation, :manageable do |relation|
-    relation
-      .where(
-        type: [Namespaces::UserNamespace.sti_name],
-        owner: user
-      ).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name).include_route
-      .or(
-        relation.where(
-          type: [Group.sti_name],
-          id:
-            Member.where(
-              user:,
-              access_level: [
-                Member::AccessLevel::MAINTAINER,
-                Member::AccessLevel::OWNER
-              ]
-            ).select(:namespace_id)
-        ).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name)
-      ).include_route
+    relation.with(
+      personal_namespaces: relation.where(id: user.namespace.id).select(:id),
+      membership_in_namespaces: relation.where(type: Group.sti_name,
+                                               id: user.members.joins(:namespace).where(
+                                                 access_level: Member::AccessLevel.manageable,
+                                                 namespace: { type: Group.sti_name }
+                                               ).select(:namespace_id)).self_and_descendants.where.not(
+                                                 type: Namespaces::ProjectNamespace.sti_name
+                                               ).select(:id),
+      linked_namespaces: relation.where(id: NamespaceGroupLink.where(
+        group: user.groups.where(id: user.members.joins(:namespace).where(access_level: Member::AccessLevel.manageable,
+                                                                          namespace: { type: Group.sti_name })
+                                                        .select(:namespace_id)).self_and_descendants,
+        group_access_level: Member::AccessLevel.manageable,
+        namespace_type: Group.sti_name
+      ).not_expired.select(:namespace_id)).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name)
+      .select(:id)
+    ).where(
+      Arel.sql(
+        'namespaces.id in (select * from personal_namespaces)
+        or namespaces.id in (select * from membership_in_namespaces)
+        or namespaces.id in (select * from linked_namespaces)'
+      )
+    ).include_route
   end
 end

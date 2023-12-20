@@ -26,6 +26,20 @@ module Attachments
       assert_equal concatenated_file_size, (attachmentg_file_size + attachmenth_file_size)
 
       assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last.file.filename.to_s
+
+      assert_equal 'fastq', sample.attachments.last.metadata['format']
+    end
+
+    test 'concatenate single end files with spaces in provided basename' do
+      sample = samples(:sampleC)
+      params = { attachment_ids: { '0' => attachments(:attachmentG).id, '1' => attachments(:attachmentH).id },
+                 basename: 'new concatenated file' }
+
+      assert_no_difference -> { Attachment.count } do
+        Attachments::ConcatenationService.new(@user, sample, params).execute
+      end
+
+      assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_basename'))
     end
 
     test 'concatenate paired end files' do
@@ -53,6 +67,25 @@ module Attachments
 
       assert_equal 'new-concatenated-file_1.fastq', sample.attachments.last(2).first.file.filename.to_s
       assert_equal 'new-concatenated-file_2.fastq', sample.attachments.last(2).last.file.filename.to_s
+
+      assert_equal 'fastq', sample.attachments.last(2).first.metadata['format']
+      assert_equal 'fastq', sample.attachments.last(2).last.metadata['format']
+
+      assert_equal 'pe', sample.attachments.last(2).first.metadata['type']
+      assert_equal 'pe', sample.attachments.last(2).last.metadata['type']
+    end
+
+    test 'concatenate paired end files with spaces in provided basename' do
+      sample = samples(:sampleB)
+      params = { attachment_ids: { '0' => [attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
+                                   '1' => [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id] },
+                 basename: 'new concatenated file' }
+
+      assert_no_difference -> { Attachment.count } do
+        Attachments::ConcatenationService.new(@user, sample, params).execute
+      end
+
+      assert sample.errors.full_messages.include?(I18n.t('services.attachments.concatenation.incorrect_basename'))
     end
 
     test 'concatenate illumina paired end files' do
@@ -80,13 +113,21 @@ module Attachments
 
       assert_equal 'new-concatenated-file_S1_L001_R1_001.fastq', sample.attachments.last(2).first.file.filename.to_s
       assert_equal 'new-concatenated-file_S1_L001_R2_001.fastq', sample.attachments.last(2).last.file.filename.to_s
+
+      assert_equal 'fastq', sample.attachments.last(2).first.metadata['format']
+      assert_equal 'fastq', sample.attachments.last(2).last.metadata['format']
+
+      assert_equal 'illumina_pe', sample.attachments.last(2).first.metadata['type']
+      assert_equal 'illumina_pe', sample.attachments.last(2).last.metadata['type']
     end
 
     test 'should concatenate more than 2 pairs of paired-end files' do
       sample = samples(:sampleB)
       params = { attachment_ids: { '0' => [attachments(:attachmentPEFWD1).id, attachments(:attachmentPEREV1).id],
-                                   '1' => [attachments(:attachmentPEFWD2).id, attachments(:attachmentPEREV2).id],
-                                   '2' => [attachments(:attachmentPEFWD3).id, attachments(:attachmentPEREV3).id] },
+                                   '1' => [attachments(:attachmentPEFWD2).id,
+                                           attachments(:attachmentPEREV2).id],
+                                   '2' => [attachments(:attachmentPEFWD3).id,
+                                           attachments(:attachmentPEREV3).id] },
                  basename: 'new-concatenated-file' }
 
       assert_difference -> { Attachment.count } => 2 do
@@ -109,6 +150,12 @@ module Attachments
 
       assert_equal concatenatedrev_file_size,
                    (attachmentrev1_file_size + attachmentrev2_file_size + attachmentrev3_file_size)
+
+      assert_equal 'fastq', sample.attachments.last(2).first.metadata['format']
+      assert_equal 'fastq', sample.attachments.last(2).last.metadata['format']
+
+      assert_equal 'pe', sample.attachments.last(2).first.metadata['type']
+      assert_equal 'pe', sample.attachments.last(2).last.metadata['type']
     end
 
     test 'concatenate fastq.gz files' do
@@ -128,6 +175,9 @@ module Attachments
       assert_equal concatenatedgz_file_size, (attachmentgz1_file_size + attachmentgz2_file_size)
 
       assert_equal 'new-concatenated-file_1.fastq.gz', sample.attachments.last.file.filename.to_s
+
+      assert_equal 'fastq', sample.attachments.last.metadata['format']
+      assert_equal 'gzip', sample.attachments.last.metadata['compression']
     end
 
     test 'concatenate fq files' do
@@ -155,6 +205,12 @@ module Attachments
 
       assert_equal 'new-concatenated-file_S1_L001_R1_001.fastq', sample.attachments.last(2).first.file.filename.to_s
       assert_equal 'new-concatenated-file_S1_L001_R2_001.fastq', sample.attachments.last(2).last.file.filename.to_s
+
+      assert_equal 'fastq', sample.attachments.last(2).first.metadata['format']
+      assert_equal 'fastq', sample.attachments.last(2).last.metadata['format']
+
+      assert_equal 'illumina_pe', sample.attachments.last(2).first.metadata['type']
+      assert_equal 'illumina_pe', sample.attachments.last(2).last.metadata['type']
     end
 
     test 'concatenate fq.gz files' do
@@ -174,6 +230,9 @@ module Attachments
       assert_equal concatenatedgz_file_size, (attachmentgz1_file_size + attachmentgz2_file_size)
 
       assert_equal 'new-concatenated-file_1.fastq.gz', sample.attachments.last.file.filename.to_s
+
+      assert_equal 'fastq', sample.attachments.last.metadata['format']
+      assert_equal 'gzip', sample.attachments.last.metadata['compression']
     end
 
     test 'shouldn\'t concatenate single end with paired end files' do

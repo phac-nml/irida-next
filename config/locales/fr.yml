@@ -302,6 +302,8 @@ fr:
       error_icon: X icon
       warning_icon: Exclamation icon
       information_icon: Information icon
+    nextflow:
+      required: Required
   layouts:
     application:
       site_title: IRIDA Next
@@ -856,6 +858,12 @@ fr:
         created_at: Created
         updated_at: Last Updated
         action: Action
+  workflow_executions:
+    submissions:
+      pipeline_selection:
+        title: Workflow Selection
+      show:
+        title: '%{workflow} Parameters'
   services:
     attachments:
       concatenation:

@@ -1,45 +1,98 @@
-<h1
-  class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900  md:text-5xl lg:text-4xl dark:text-white"
->
-  <%= schema["title"] %>
-</h1>
-<p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-  <%= schema["description"] %>
-</p>
-<form method="post" action="#">
-  <% schema["definitions"].each do |_item, definition| %>
-    <%- if definition["properties"]
-      .values
-      .filter { |property| !property.key?("hidden") }
-      .length > 0 %>
-      <h2 class="text-2xl font-extrabold dark:text-white">
-        <%= definition["title"] %>
-      </h2>
-      <p class="mb-2 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-        <%= definition["description"] %>
-      </p>
-      <div class="grid grid-cols-1 gap-4 mb-8">
-        <% definition["properties"].each do |name, property| %>
-          <%- if property["enum"] %>
-             <%= viral_select(
-               name:,
-                label: property["description"],
-                options: property["enum"].map { |option| { value: option, label: option } },
-                selected_value: property["default"],
-                required: property["required"],
-                help_text: property["help_text"],
-                hidden: property["hidden"]
-              ) %>
-          <% else %>
-            <%= form_input(
-                  name,
-                  property,
-                  definition["required"].present? && definition["required"].include?(name)
-                ) %>
-          <% end %>
-        <% end %>
-      </div>
+<div>
+  <h1
+    class="
+      mb-4
+      text-2xl
+      font-extrabold
+      leading-none
+      tracking-tight
+      text-slate-900
+      md:text-5xl
+      lg:text-4xl
+      dark:text-white
+    "
+  ><%= schema["title"] %></h1>
+  <p
+    class="
+      mb-4
+      text-lg
+      font-normal
+      text-slate-500
+      lg:text-xl
+      dark:text-slate-400
+    "
+  >
+    <%= schema["description"] %>
+  </p>
+  <%= form_with url: url do |form| %>
+    <input type="hidden" name="format" value="turbo_stream"/>
+
+    <%= fields_for :workflow_execution do |workflow| %>
+      <%= workflow.hidden_field :workflow_version, value: @workflow.version %>
+      <%= workflow.hidden_field :workflow_type, value: @workflow.type %>
+      <%= workflow.hidden_field :workflow_type_version, value: @workflow.type_version %>
+      <%= workflow.hidden_field :workflow_engine, value: @workflow.engine %>
+      <%= workflow.hidden_field :workflow_engine_version, value: @workflow.engine_version %>
+      <%= workflow.hidden_field :workflow_url, value: @workflow.url %>
+
+      <%= workflow.fields_for "workflow_engine_parameters" do |engine| %>
+        <%= engine.hidden_field :engine, value: @workflow.engine %>
+        <%= engine.hidden_field :execute_loc, value: @workflow.execute_loc %>
+      <% end %>
+
+      <%= workflow.fields_for "metadata" do |metadata| %>
+        <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
+        <%= metadata.hidden_field :workflow_version, value: @workflow.version %>
+      <% end %>
     <% end %>
+
+    <% schema["definitions"].each do |item, definition| %>
+      <%- if show_section?(definition["properties"]) %>
+        <h2 class="text-lg font-extrabold dark:text-white">
+          <%= definition["title"] %>
+        </h2>
+        <p class="mb-2 font-normal text-slate-500 dark:text-slate-400">
+          <%= definition["description"] %>
+        </p>
+        <div class="grid grid-cols-1 gap-4 mb-8">
+          <%= fields_for "workflow_execution[workflow_params]" do |fields| %>
+            <% definition["properties"].each do |name, property| %>
+              <% formatted_name = format_name_as_arg(name) %>
+              <% if name == "outdir" || name == "email" %>
+                <!-- Don't do anything, skip these fields -->
+              <% elsif item == "input_output_options" && property["format"] == "file-path" %>
+                <%= render Nextflow::SamplesheetComponent.new(
+                  schema: samplesheet_schema(property["schema"]),
+                  samples: @samples
+                ) %>
+              <% elsif !property["hidden"] %>
+                <div>
+                  <%= fields.label formatted_name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
+                    <%= property["description"] %>
+                    <% if definition["required"].present? && definition["required"].include?(name) %>
+                      <%= viral_pill(text: t(:"components.nextflow.required"), color: :blue) %>
+                    <% end %>
+                  <% end %>
+                  <%= form_input(
+                    fields,
+                    formatted_name,
+                    property,
+                    definition["required"].present? && definition["required"].include?(name)
+                  ) %>
+                  <% if property['help_text'].present? %>
+                    <%= viral_help_text do %>
+                      <%= property["help_text"] %>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+    <button type="submit" class="button button--state-primary button--size-default">
+      <%= t(:"workflow_executions.submissions.new.submit") %>
+    </button>
   <% end %>
-  <button type="submit" class="button button--state-primary button--size-default">Submit</button>
-</form>
+</div>

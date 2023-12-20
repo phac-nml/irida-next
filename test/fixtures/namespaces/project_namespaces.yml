@@ -320,3 +320,35 @@ projectAlpha1_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha_subgroup1) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
   metadata_summary: {}
+
+projectDelta_namespace:
+  name: Project Delta
+  path: project-delta
+  description: Project Delta description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta) %>
+  metadata_summary: {}
+
+projectDeltaSubgroupA_namespace:
+  name: Project Delta Subgroup A
+  path: project-delta-subgroup-a
+  description: Project Delta Subgroup A description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta_subgroupA) %>
+  metadata_summary: {}
+
+projectEcho_namespace:
+  name: Project Echo
+  path: project-echo
+  description: Project Echo description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo) %>
+  metadata_summary: {}
+
+projectEchoSubgroupB_namespace:
+  name: Project Echo Subgroup B
+  path: project-echo-subgroup-b
+  description: Project Echo Subgroup B description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo_subgroupB) %>
+  metadata_summary: {}

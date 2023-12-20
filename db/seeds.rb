@@ -617,4 +617,17 @@ if Rails.env.development?
     seed_namespace_group_links(proj.namespace.owner, proj.namespace, direct_group_to_link_to_namespace,
                                Member::AccessLevel::ANALYST)
   end
+
+  WorkflowExecution.create(
+    metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
+    workflow_params: { '-r': 'dev' },
+    workflow_type: 'DSL2',
+    workflow_type_version: '22.10.7',
+    tags: [],
+    workflow_engine: 'nextflow',
+    workflow_engine_version: '',
+    workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+    workflow_url: 'https://github.com/phac-nml/iridanextexample',
+    submitter: User.find(2)
+  )
 end

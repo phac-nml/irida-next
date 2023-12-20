@@ -311,7 +311,7 @@ module Projects
 
       assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group')
 
-      assert_selector 'tr', count: 3 + header_row_count
+      assert_selector 'tr', count: 4 + header_row_count
 
       assert_text I18n.t(:'activerecord.models.namespace_group_link.direct'), count: 1
 
@@ -319,7 +319,9 @@ module Projects
       assert_not_nil find(:table_row, { 'Source' => parent_namespace_group_link.name })
 
       parent_namespace_group_link = namespace_group_link.namespace.parent.parent
-      assert_not_nil find(:table_row, { 'Source' => parent_namespace_group_link.name })
+
+      assert_not_nil find(:table_row, { 'Group' => 'Group 4', 'Source' => parent_namespace_group_link.name })
+      assert_not_nil find(:table_row, { 'Group' => 'Group 11', 'Source' => parent_namespace_group_link.name })
     end
   end
 end

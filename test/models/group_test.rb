@@ -138,11 +138,12 @@ class GroupTest < ActiveSupport::TestCase
 
     group_group_links = subgroup2.shared_with_group_links.of_ancestors
 
-    assert_equal 3, group_group_links.count
+    assert_equal 4, group_group_links.count
 
     assert group_group_links.include?(group_group_link1)
     assert group_group_links.include?(group_group_link2)
     assert group_group_links.include?(namespace_group_links(:namespace_group_link2))
+    assert group_group_links.include?(namespace_group_links(:namespace_group_link14))
     assert_not group_group_links.include?(group_group_link3)
   end
 
@@ -157,12 +158,13 @@ class GroupTest < ActiveSupport::TestCase
 
     group_group_links = subgroup2.shared_with_group_links.of_ancestors_and_self
 
-    assert_equal 4, group_group_links.count
+    assert_equal 5, group_group_links.count
 
     assert group_group_links.include?(group_group_link1)
     assert group_group_links.include?(group_group_link2)
     assert group_group_links.include?(group_group_link3)
     assert group_group_links.include?(namespace_group_links(:namespace_group_link2))
+    assert group_group_links.include?(namespace_group_links(:namespace_group_link14))
   end
 
   test 'group should have metadata summary with metadata fields and their counts from projects within' do

@@ -52,7 +52,7 @@ module Attachments
     private
 
     # Validates params
-    def validate_params
+    def validate_params # rubocop:disable Metrics/AbcSize
       if !concatenation_params.key?(:attachment_ids) || concatenation_params[:attachment_ids].empty?
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.no_files_selected')
@@ -61,6 +61,11 @@ module Attachments
       if !concatenation_params.key?(:basename) || concatenation_params[:basename].empty?
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.filename_missing')
+      end
+
+      if concatenation_params.key?(:basename) && !concatenation_params[:basename].match?(/^[[a-zA-Z0-9_\-\.]]*$/)
+        raise AttachmentConcatenationError,
+              I18n.t('services.attachments.concatenation.incorrect_basename')
       end
 
       true

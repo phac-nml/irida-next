@@ -324,17 +324,8 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
 
     within %(form[action="/group-1/transfer"]) do
-      find('#new_namespace_id').find("option[value='#{group.id}']").select_option
-      click_on I18n.t('groups.edit.advanced.transfer.submit')
+      assert_no_selector "option[value='#{group.id}']"
     end
-
-    within('#turbo-confirm') do
-      assert_text I18n.t('components.confirmation.title')
-      find('input[type=text]').fill_in with: group.path
-      click_on I18n.t('components.confirmation.confirm')
-    end
-
-    assert_text I18n.t('services.groups.transfer.same_group_and_namespace')
   end
 
   test 'cannot create subgroup' do
