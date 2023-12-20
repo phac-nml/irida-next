@@ -3,14 +3,6 @@
 module WorkflowExecutions
   # Service used to update the status of a WorkflowExecution
   class StatusService < BaseService
-    CANCELATION_STATES = %w[
-      CANCELED CANCELING PREEMPTED
-    ].freeze
-
-    ERROR_STATES = %w[
-      EXECUTOR_ERROR SYSTEM_ERROR
-    ].freeze
-
     def initialize(workflow_execution, wes_connection, user = nil, params = {})
       super(user, params)
 
@@ -27,9 +19,11 @@ module WorkflowExecutions
 
       @workflow_execution.state = 'completed' if state == 'COMPLETE'
 
-      @workflow_execution.state = 'canceled' if CANCELATION_STATES.include?(state)
+      if Integrations::Ga4ghWesApi::V1::States::CANCELATION_STATES.include?(state)
+        @workflow_execution.state = 'cancelled'
+      end
 
-      @workflow_execution.state = 'error' if ERROR_STATES.include?(state)
+      @workflow_execution.state = 'error' if Integrations::Ga4ghWesApi::V1::States::ERROR_STATES.include?(state)
 
       @workflow_execution.save
 

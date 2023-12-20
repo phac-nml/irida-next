@@ -31,8 +31,8 @@ class WorkflowExecution < ApplicationRecord
     state == 'error'
   end
 
-  def canceled?
-    state == 'canceled'
+  def cancelled?
+    state == 'cancelled'
   end
 
   def as_wes_params

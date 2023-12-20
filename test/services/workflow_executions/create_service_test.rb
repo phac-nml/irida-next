@@ -145,7 +145,7 @@ module WorkflowExecutions
       assert_enqueued_jobs 0
     end
 
-    test 'test workflow execution canceled' do
+    test 'test workflow execution cancelled' do
       workflow_params = {
         metadata:
         { workflow_name: 'irida-next-example-new', workflow_version: '1.0dev' },
@@ -185,7 +185,7 @@ module WorkflowExecutions
         WorkflowExecutionPreparationJob.perform_now(@workflow_execution)
       end
 
-      assert_equal 'canceled', @workflow_execution.reload.state
+      assert_equal 'cancelled', @workflow_execution.reload.state
     end
 
     test 'test workflow execution error' do

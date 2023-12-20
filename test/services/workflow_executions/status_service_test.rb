@@ -48,7 +48,7 @@ module WorkflowExecutions
       assert_equal 'completed', @workflow_execution.state
     end
 
-    test 'get status of workflow execution which has been canceled' do
+    test 'get status of workflow execution which has been cancelled' do
       run_id = 'status_test_2'
       stubs = Faraday::Adapter::Test::Stubs.new
       stubs.post('/runs') do
@@ -84,7 +84,7 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'canceled', @workflow_execution.state
+      assert_equal 'cancelled', @workflow_execution.state
     end
 
     test 'get status of workflow execution which has errored' do
