@@ -38,7 +38,7 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
              }
            }
 
-      assert_response :success
+      assert_response :redirect
     end
 
     created_workflow_execution = WorkflowExecution.last
