@@ -12,7 +12,7 @@ class WorkflowExecutionsController < ApplicationController
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
 
     if @workflow_execution.persisted?
-      render turbo_stream: [], status: :ok
+      redirect_to workflow_executions_path
     else
       render turbo_stream: [], status: :unprocessable_entity
     end
