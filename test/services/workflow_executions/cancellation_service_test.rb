@@ -6,11 +6,11 @@ module WorkflowExecutions
   class CancellationServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
-      @workflow_execution = workflow_executions(:irida_next_example_submitted)
+      @workflow_execution = workflow_executions(:irida_next_example_cancelling)
     end
 
-    test 'cancel submitted workflow_execution' do
-      assert 'submitted', @workflow_execution.state
+    test 'cancel cancelling workflow_execution' do
+      assert 'cancelling', @workflow_execution.state
 
       run_id = 'cancel123'
 
@@ -34,10 +34,10 @@ module WorkflowExecutions
       assert_equal 'cancelled', @workflow_execution.state
     end
 
-    test 'cancel unsubmitted workflow_execution' do
+    test 'cancel non cancelling workflow_execution' do
       @workflow_execution = workflow_executions(:irida_next_example)
 
-      assert_not_equal 'submitted', @workflow_execution.state
+      assert_not_equal 'cancelling', @workflow_execution.state
 
       # no run_id on WorkflowExecution, so .cancel_job will be run with nil
       run_id = nil
@@ -59,7 +59,7 @@ module WorkflowExecutions
 
       assert_nil @workflow_execution.run_id
 
-      assert_not_equal 'submitted', @workflow_execution.state
+      assert_not_equal 'cancelling', @workflow_execution.state
       assert_not_equal 'cancelled', @workflow_execution.state
     end
   end

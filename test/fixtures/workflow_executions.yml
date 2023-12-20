@@ -58,7 +58,7 @@ irida_next_example_prepared:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   state: "prepared"
 
-irida_next_example_submitted:
+irida_next_example_cancelling:
   metadata:
     { "workflow_name": "irida-next-example", "workflow_version": "1.0dev" }
   workflow_params:
@@ -75,5 +75,5 @@ irida_next_example_submitted:
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/iridanextexample"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
-  state: "submitted"
+  state: "cancelling"
   run_id: "cancel123"

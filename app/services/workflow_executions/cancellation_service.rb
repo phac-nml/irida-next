@@ -10,7 +10,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false unless @workflow_execution.submitted?
+      return false unless @workflow_execution.cancelling?
 
       # throws exception if failed
       @wes_client.cancel_run(@workflow_execution.run_id)
