@@ -15,6 +15,11 @@
   <% end %>
 
   <%= turbo_stream.update(
+    "clear_selection",
+    partial: "projects/samples/attachments/clear_selection"
+  ) %>
+
+  <%= turbo_stream.update(
     "attachments",
     partial: "projects/samples/attachments/table",
     locals: {

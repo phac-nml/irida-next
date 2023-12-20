@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 //creates hidden fields within a form for selected files
 export default class extends Controller {
-  static targets = ["field"];
+  static targets = ["field", "clearSelectionDiv"];
 
   static values = {
     fieldName: String,
@@ -17,31 +17,33 @@ export default class extends Controller {
       sessionStorage.getItem(this.storageKeyValue)
     );
 
-    if (storageValues) {
-      for (let [storageValueIndex, storageValue] of storageValues.entries()) {
-        const value = JSON.parse(storageValue);
+    if (this.hasFieldTarget) {
+      if (storageValues) {
+        for (let [storageValueIndex, storageValue] of storageValues.entries()) {
+          const value = JSON.parse(storageValue);
 
-        if (value instanceof Array) {
-          for (let arrayValue of value) {
+          if (value instanceof Array) {
+            for (let arrayValue of value) {
+              this.#addHiddenInput(
+                `${this.fieldNameValue}[${storageValueIndex}][]`,
+                arrayValue
+              );
+            }
+          } else {
             this.#addHiddenInput(
-              `${this.fieldNameValue}[${storageValueIndex}][]`,
-              arrayValue
+              `${this.fieldNameValue}[${storageValueIndex}]`,
+              value
             );
           }
-        } else {
-          this.#addHiddenInput(
-            `${this.fieldNameValue}[${storageValueIndex}]`,
-            value
-          );
         }
       }
+    } else if (this.hasClearSelectionDivTarget) {
+      this.#clear();
     }
   }
 
-  clear(event) {
-    if (event.detail.success) {
-      sessionStorage.removeItem(this.storageKeyValue);
-    }
+  #clear() {
+    sessionStorage.removeItem(this.storageKeyValue);
   }
 
   #addHiddenInput(name, value) {

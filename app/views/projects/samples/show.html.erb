@@ -1,4 +1,5 @@
 <%= turbo_frame_tag "sample_files_modal" %>
+<%= turbo_frame_tag "clear_selection" %>
 
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, subtitle: @sample.description) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
