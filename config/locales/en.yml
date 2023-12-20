@@ -317,7 +317,7 @@ en:
       title: Your work
       groups: Groups
       projects: Projects
-      workflows: Workflow Executions
+      workflow_executions: Workflow Executions
     navbar:
       collapse:
         aria_label: Collapse navigation menu
