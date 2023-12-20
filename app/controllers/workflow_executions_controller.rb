@@ -57,7 +57,12 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def resolve_layout
-    'application'
+    case action_name
+    when 'show'
+      'workflow_executions'
+    else
+      'application'
+    end
   end
 
   def current_page
