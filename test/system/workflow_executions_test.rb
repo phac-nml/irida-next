@@ -13,6 +13,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector 'table#workflow_executions tbody tr', count: 4
+    assert_selector 'table#workflow_executions tbody tr', count: 5
   end
 end
