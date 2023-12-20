@@ -34,5 +34,42 @@ module Namespaces
     def self.sti_name
       'Project'
     end
+
+    def update_metadata_summary(metadata_to_delete, metadata_to_add)
+      namespaces_to_update = self_and_parents
+      delete_metadata(namespaces_to_update, metadata_to_delete) unless metadata_to_delete.empty?
+      add_metadata(namespaces_to_update, metadata_to_add) unless metadata_to_add.empty?
+      namespaces_to_update.each(&:save)
+    end
+
+    def self_and_parents
+      namespaces = [self]
+      namespaces += parent.self_and_ancestors unless parent.nil? || parent.type == 'User'
+      namespaces
+    end
+
+    def delete_metadata(namespaces_to_update, metadata_to_delete)
+      metadata_to_delete.each do |metadata_field, _v|
+        namespaces_to_update.each do |namespace|
+          if namespace.metadata_summary[metadata_field] == 1
+            namespace.metadata_summary.delete(metadata_field)
+          else
+            namespace.metadata_summary[metadata_field] -= 1
+          end
+        end
+      end
+    end
+
+    def add_metadata(namespaces_to_update, metadata_to_add)
+      metadata_to_add.each do |metadata_field, _v|
+        namespaces_to_update.each do |namespace|
+          if namespace.metadata_summary.key?(metadata_field)
+            namespace.metadata_summary[metadata_field] += 1
+          else
+            namespace.metadata_summary[metadata_field] = 1
+          end
+        end
+      end
+    end
   end
 end

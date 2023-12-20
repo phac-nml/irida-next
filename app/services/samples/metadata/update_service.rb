@@ -28,6 +28,8 @@ module Samples
 
         @sample.save
 
+        update_metadata_summary
+
         fields_not_updated(metadata_fields_update_status)
         metadata_fields_update_status
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
@@ -96,6 +98,22 @@ module Samples
               I18n.t('services.samples.metadata.user_cannot_update_metadata',
                      sample_name: @sample.name,
                      metadata_fields: metadata_fields_not_updated.join(', '))
+      end
+
+      def update_metadata_summary
+        return unless @sample.previous_changes['metadata']
+
+        old_metadata = @sample.previous_changes['metadata'][0]
+        new_metadata = @sample.previous_changes['metadata'][1]
+
+        # Checks which keys are overlapping after metadata changes.
+        # Keys that are overlapping will not affect summary counts, therefore can be deleted from both hashes
+        old_metadata.each do |metadata_field, _v|
+          if new_metadata.key?(metadata_field)
+            old_metadata.delete(metadata_field) && new_metadata.delete(metadata_field)
+          end
+        end
+        @project.namespace.update_metadata_summary(old_metadata, new_metadata)
       end
     end
   end
