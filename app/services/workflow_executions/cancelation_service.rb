@@ -2,7 +2,7 @@
 
 module WorkflowExecutions
   # Service used to Cancel a WorkflowExecution
-  class CancellationService < BaseService
+  class CancelationService < BaseService
     def initialize(workflow_execution, wes_connection, user = nil, params = {})
       super(user, params)
       @workflow_execution = workflow_execution
@@ -10,13 +10,13 @@ module WorkflowExecutions
     end
 
     def execute
-      return false unless @workflow_execution.cancelling?
+      return false unless @workflow_execution.canceling?
 
       # throws exception if failed
       @wes_client.cancel_run(@workflow_execution.run_id)
 
-      # mark workflow execution as cancelled
-      @workflow_execution.state = 'cancelled'
+      # mark workflow execution as canceled
+      @workflow_execution.state = 'canceled'
 
       @workflow_execution.save
     end

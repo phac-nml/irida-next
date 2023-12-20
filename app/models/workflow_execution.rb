@@ -27,12 +27,12 @@ class WorkflowExecution < ApplicationRecord
     state == 'submitted'
   end
 
-  def cancelling?
-    state == 'cancelling'
+  def canceling?
+    state == 'canceling'
   end
 
-  def cancelled?
-    state == 'cancelled'
+  def canceled?
+    state == 'canceled'
   end
 
   def as_wes_params

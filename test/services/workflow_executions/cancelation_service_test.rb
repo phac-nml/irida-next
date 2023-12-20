@@ -3,14 +3,14 @@
 require 'test_helper'
 
 module WorkflowExecutions
-  class CancellationServiceTest < ActiveSupport::TestCase
+  class CancelationServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
-      @workflow_execution = workflow_executions(:irida_next_example_cancelling)
+      @workflow_execution = workflow_executions(:irida_next_example_canceling)
     end
 
-    test 'cancel cancelling workflow_execution' do
-      assert 'cancelling', @workflow_execution.state
+    test 'cancel canceling workflow_execution' do
+      assert 'canceling', @workflow_execution.state
 
       run_id = 'cancel123'
 
@@ -27,17 +27,17 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert WorkflowExecutions::CancellationService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::CancelationService.new(@workflow_execution, conn, @user, {}).execute
 
       assert_equal run_id, @workflow_execution.run_id
 
-      assert_equal 'cancelled', @workflow_execution.state
+      assert_equal 'canceled', @workflow_execution.state
     end
 
-    test 'cancel non cancelling workflow_execution' do
+    test 'cancel non canceling workflow_execution' do
       @workflow_execution = workflow_executions(:irida_next_example)
 
-      assert_not_equal 'cancelling', @workflow_execution.state
+      assert_not_equal 'canceling', @workflow_execution.state
 
       # no run_id on WorkflowExecution, so .cancel_job will be run with nil
       run_id = nil
@@ -55,12 +55,12 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert_not WorkflowExecutions::CancellationService.new(@workflow_execution, conn, @user, {}).execute
+      assert_not WorkflowExecutions::CancelationService.new(@workflow_execution, conn, @user, {}).execute
 
       assert_nil @workflow_execution.run_id
 
-      assert_not_equal 'cancelling', @workflow_execution.state
-      assert_not_equal 'cancelled', @workflow_execution.state
+      assert_not_equal 'canceling', @workflow_execution.state
+      assert_not_equal 'canceled', @workflow_execution.state
     end
   end
 end
