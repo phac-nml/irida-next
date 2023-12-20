@@ -7,11 +7,11 @@ class WorkflowExecutionsController < ApplicationController
   before_action :current_page
   before_action :workflow, only: %i[show]
 
-  def show; end
-
   def index
     @workflows = WorkflowExecution.where(submitter: current_user)
   end
+
+  def show; end
 
   def create
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
@@ -69,6 +69,8 @@ class WorkflowExecutionsController < ApplicationController
     @current_page = case action_name
                     when 'show'
                       I18n.t(:'projects.sidebar.details')
+                    else
+                      I18n.t(:'general.default_sidebar.workflows')
                     end
   end
 end
