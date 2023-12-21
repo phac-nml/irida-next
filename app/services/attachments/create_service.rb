@@ -81,7 +81,7 @@ module Attachments
 
       # identify pe attachments based on fastq filename convention
       attachments.each do |att|
-        next unless /^(?<sample_name>.+_)(?<region>[1-2])\./ =~ att.filename.to_s
+        next unless /^(?<sample_name>.+_)R?(?<region>[1-2])\./ =~ att.filename.to_s
 
         case region
         when '1'

@@ -45,6 +45,35 @@ module Attachments
       assert created_attachments.last.metadata['associated_attachment_id'] == created_attachments.first.id
     end
 
+    test 'create attachments with valid paired end forward and reverse fastq files' do
+      valid_params = { files: [active_storage_blobs(:attachmentK_gz_file_test_file_fastq_blob),
+                               active_storage_blobs(:attachmentL_gz_file_test_file_fastq_blob)] }
+
+      assert_difference -> { Attachment.count } => 2 do
+        Attachments::CreateService.new(@user, @sample, valid_params).execute
+      end
+
+      created_attachments = Attachment.last(2)
+
+      assert created_attachments.first.metadata.key?('type')
+      assert created_attachments.first.metadata['type'] == 'pe'
+      assert created_attachments.first.metadata.key?('direction')
+      assert created_attachments.first.metadata['direction'] == 'forward'
+      assert created_attachments.first.metadata.key?('compression')
+      assert created_attachments.first.metadata['compression'] == 'gzip'
+      assert created_attachments.first.metadata.key?('associated_attachment_id')
+      assert created_attachments.first.metadata['associated_attachment_id'] == created_attachments.last.id
+
+      assert created_attachments.last.metadata.key?('type')
+      assert created_attachments.last.metadata['type'] == 'pe'
+      assert created_attachments.last.metadata.key?('direction')
+      assert created_attachments.last.metadata['direction'] == 'reverse'
+      assert created_attachments.first.metadata.key?('compression')
+      assert created_attachments.first.metadata['compression'] == 'gzip'
+      assert created_attachments.last.metadata.key?('associated_attachment_id')
+      assert created_attachments.last.metadata['associated_attachment_id'] == created_attachments.first.id
+    end
+
     test 'create attachments with valid illumina paired end forward fastq file' do
       valid_params = { files: [@testsample_illumina_pe_fwd_blob] }
 

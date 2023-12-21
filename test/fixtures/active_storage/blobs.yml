@@ -48,3 +48,7 @@ attachmentH_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filena
 attachmentI_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test-fq-file_S1_L001_R1_001.fq.gz", service_name: "test" %>
 
 attachmentJ_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test-fq-file2_S1_L001_R1_001.fq.gz", service_name: "test" %>
+
+attachmentK_gz_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "A_R1.fastq.gz", service_name: "test" %>
+
+attachmentL_gz_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "A_R2.fastq.gz", service_name: "test" %>
