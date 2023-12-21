@@ -28,5 +28,5 @@
 <% end %>
 
 <%= turbo_stream.update "project_samples_hidden_search_value" do %>
-  <%= render Ransack::HiddenFieldComponent.new(@q) %>
+  <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
 <% end %>
