@@ -107,9 +107,9 @@ module WorkflowExecutions
       when 'ActiveStorage::Service::AzureStorageService'
         format('az://%<container>s/%<key>s', container: @storage_service.container, key: blob_key)
       when 'ActiveStorage::Service::S3Service'
-        format('s3://%<bucket>s/%<key>s', bucket: @storage_serviceblob.service.bucket, key: blob_key)
+        format('s3://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
       when 'ActiveStorage::Service::GCSService'
-        format('gcs://%<bucket>s/%<key>s', bucket: @storage_serviceblob.service.bucket, key: blob_key)
+        format('gcs://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
       else
         ActiveStorage::Blob.service.path_for(blob_key)
       end
