@@ -113,7 +113,7 @@ module Samples
             old_metadata.delete(metadata_field) && new_metadata.delete(metadata_field)
           end
         end
-        @project.namespace.update_metadata_summary(old_metadata, new_metadata)
+        @project.namespace.update_metadata_summary_by_update_service(old_metadata, new_metadata)
       end
     end
   end

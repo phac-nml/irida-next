@@ -70,9 +70,9 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     policy = NamespacePolicy.new(user:)
     scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
 
-    # John Doe has manageable access to 24 namespaces
-    # (1 user namespace and 23 group namespaces)
-    assert_equal 24, scoped_namespaces.count
+    # John Doe has manageable access to 28 namespaces
+    # (1 user namespace and 27 group namespaces)
+    assert_equal 28, scoped_namespaces.count
 
     assert_not scoped_namespaces.include?(namespace_group_link.namespace)
 
@@ -84,10 +84,10 @@ class NamespacePolicyTest < ActiveSupport::TestCase
 
     scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
 
-    # John Doe has manageable access to 24 namespaces (1 user namespace,
-    # 23 group namespaces, and 1 group namespace via a namespace
+    # John Doe has manageable access to 28 namespaces (1 user namespace,
+    # 27 group namespaces, and 1 group namespace via a namespace
     # group link)
-    assert_equal 25, scoped_namespaces.count
+    assert_equal 29, scoped_namespaces.count
 
     assert scoped_namespaces.include?(namespace_group_link.namespace)
   end

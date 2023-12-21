@@ -294,6 +294,41 @@ group_eleven_route:
   path: group-11
   source: group_eleven (Namespace)
 
+group_twelve_route:
+  name: Group 12
+  path: group-12
+  source: group_twelve (Namespace)
+
+subgroup12a_route:
+  name: Group 12 / Subgroup 12 A
+  path: group-12/subgroup-12-a
+  source: subgroup_twelve_a (Namespace)
+
+subgroup12b_route:
+  name: Group 12 / Subgroup 12 B
+  path: group-12/subgroup-12-b
+  source: subgroup_twelve_b (Namespace)
+
+subgroup12aa_route:
+  name: Group 12 / Subgroup 12 A / Subgroup 12 AA
+  path: group-12/subgroup-12-a/subgroup-12-a-a
+  source: subgroup_twelve_a_a (Namespace)
+
+project29_namespace_route:
+  name: Group 12 / Subgroup 12 A / Project 29
+  path: group-12/subgroup-12-a/project-29
+  source: project29_namespace (Namespace)
+
+project30_namespace_route:
+  name: Group 12 / Subgroup 12 B / Project 30
+  path: group-12/subgroup-12-b/project-30
+  source: project30_namespace (Namespace)
+
+project31_namespace_route:
+  name: Group 12 / Subgroup 12 A / Subgroup 12 A A / Project 31
+  path: group-12/subgroup-12-a/subgroup-12-a-a/project-31
+  source: project31_namespace (Namespace)
+
 group_delta_route:
   name: Group Delta
   path: group-delta

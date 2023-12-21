@@ -68,11 +68,11 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
-    # John Doe has access to 30 projects. 29 through his namespace
+    # John Doe has access to 33 projects. 32 through his namespace
     # and projects under groups in which he is a member plus a project
     # from David Doe's Group Four which is shared with subgroup 1 under
     # John Doe's group Group 1
-    assert_equal 30, scoped_projects.count
+    assert_equal 33, scoped_projects.count
 
     user = users(:david_doe)
     policy = ProjectPolicy.new(user:)
@@ -140,7 +140,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     # John Doe has manageable access to just projects under his namespace
     # and projects under groups in which he is a member
-    assert_equal 29, scoped_projects.count
+    assert_equal 32, scoped_projects.count
 
     user = users(:david_doe)
     policy = ProjectPolicy.new(user:)

@@ -77,6 +77,32 @@ sample31:
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
 
+sample32:
+  name: Sample 32
+  description: Sample 32 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project29) %>
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'user' }, 'metadatafield2': { 'id': 1, 'source': 'user' } }
+
+sample33:
+  name: Sample33
+  description: Sample 33 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project30) %>
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'user' }, 'metadatafield2': { 'id': 1, 'source': 'user' } }
+
+sample34:
+  name: Sample 34
+  description: Sample 34 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project31) %>
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis' }, 'metadatafield2': { 'id': 1, 'source': 'analysis' } }
+
+sample35:
+  name: Sample 35
+  description: Sample 35 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project31) %>
+
 sampleAlpha:
   name: Sample Alpha
   description: Sample Alpha description.

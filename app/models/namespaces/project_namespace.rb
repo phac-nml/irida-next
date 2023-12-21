@@ -35,10 +35,20 @@ module Namespaces
       'Project'
     end
 
-    def update_metadata_summary(metadata_to_delete, metadata_to_add)
+    def update_metadata_summary_by_update_service(metadata_to_delete, metadata_to_add)
       namespaces_to_update = self_and_parents
-      delete_metadata(namespaces_to_update, metadata_to_delete) unless metadata_to_delete.empty?
-      add_metadata(namespaces_to_update, metadata_to_add) unless metadata_to_add.empty?
+
+      unless metadata_to_delete.empty?
+        namespaces_to_update.each do |namespace|
+          delete_metadata(namespace, metadata_to_delete)
+        end
+      end
+
+      unless metadata_to_add.empty?
+        namespaces_to_update.each do |namespace|
+          add_metadata(namespace, metadata_to_add)
+        end
+      end
       namespaces_to_update.each(&:save)
     end
 
@@ -48,26 +58,22 @@ module Namespaces
       namespaces
     end
 
-    def delete_metadata(namespaces_to_update, metadata_to_delete)
+    def delete_metadata(namespace, metadata_to_delete)
       metadata_to_delete.each do |metadata_field, _v|
-        namespaces_to_update.each do |namespace|
-          if namespace.metadata_summary[metadata_field] == 1
-            namespace.metadata_summary.delete(metadata_field)
-          else
-            namespace.metadata_summary[metadata_field] -= 1
-          end
+        if namespace.metadata_summary[metadata_field] == 1
+          namespace.metadata_summary.delete(metadata_field)
+        else
+          namespace.metadata_summary[metadata_field] -= 1
         end
       end
     end
 
-    def add_metadata(namespaces_to_update, metadata_to_add)
+    def add_metadata(namespace, metadata_to_add)
       metadata_to_add.each do |metadata_field, _v|
-        namespaces_to_update.each do |namespace|
-          if namespace.metadata_summary.key?(metadata_field)
-            namespace.metadata_summary[metadata_field] += 1
-          else
-            namespace.metadata_summary[metadata_field] = 1
-          end
+        if namespace.metadata_summary.key?(metadata_field)
+          namespace.metadata_summary[metadata_field] += 1
+        else
+          namespace.metadata_summary[metadata_field] = 1
         end
       end
     end
