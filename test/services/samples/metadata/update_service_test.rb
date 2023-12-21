@@ -30,7 +30,6 @@ module Samples
                      @sample32.metadata_provenance)
         assert_equal({ updated: %w[metadatafield1 metadatafield2], not_updated: [] }, metadata_fields_update_status)
 
-        @project29.reload
         @subgroup12a.reload
         @group12.reload
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
@@ -49,7 +48,6 @@ module Samples
                      @sample35.metadata_provenance)
         assert_equal({ updated: %w[metadatafield1 metadatafield2], not_updated: [] }, metadata_fields_update_status)
 
-        @project31.reload
         @subgroup12aa.reload
         @subgroup12a.reload
         @group12.reload
@@ -72,7 +70,6 @@ module Samples
                      @sample33.metadata_provenance)
         assert_equal({ updated: %w[metadatafield1 metadatafield3], not_updated: [] }, metadata_fields_update_status)
 
-        @project30.reload
         @subgroup12b.reload
         @group12.reload
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
@@ -96,7 +93,6 @@ module Samples
                      @sample33.metadata_provenance)
         assert_equal({ updated: %w[metadatafield1 metadatafield3], not_updated: [] }, metadata_fields_update_status)
 
-        @project30.reload
         @subgroup12b.reload
         @group12.reload
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
@@ -125,7 +121,6 @@ module Samples
                  metadata_fields: 'metadatafield1')
         )
 
-        @project31.reload
         @subgroup12aa.reload
         @subgroup12a.reload
         @group12.reload
@@ -148,7 +143,6 @@ module Samples
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis' } }, @sample34.metadata_provenance)
         assert_equal({ updated: %w[metadatafield2], not_updated: [] }, metadata_fields_update_status)
 
-        @project31.reload
         @subgroup12aa.reload
         @subgroup12a.reload
         @group12.reload
@@ -171,7 +165,6 @@ module Samples
         assert_equal({ 'metadatafield2' => { 'id' => 1, 'source' => 'user' } }, @sample33.metadata_provenance)
         assert_equal({ updated: %w[metadatafield1], not_updated: [] }, metadata_fields_update_status)
 
-        @project30.reload
         @subgroup12b.reload
         @group12.reload
         assert_equal({ 'metadatafield2' => 1 },
