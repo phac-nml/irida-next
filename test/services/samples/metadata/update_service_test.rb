@@ -238,13 +238,16 @@ module Samples
       end
 
       test 'metadata summary updates parents but not projects/groups of same level on different branch' do
+        # Reference group/projects descendants tree:
+        # group12 < subgroup12b (project30 > sample 33)
+        #    |
+        #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
         params1 = { 'metadata' => { 'metadatafield4' => 'value4' } }
+
         assert_no_changes @subgroup12b.metadata_summary do
           Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params1).execute
         end
 
-        @project31.reload
-        @subgroup12b.reload
         @subgroup12aa.reload
         @subgroup12a.reload
         @group12.reload
@@ -265,11 +268,9 @@ module Samples
           end
         end
 
-        @project31.reload
         @subgroup12b.reload
-        @subgroup12aa.reload
-        @subgroup12a.reload
         @group12.reload
+
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield5' => 1 },
                      @project30.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield5' => 1 },
@@ -285,9 +286,6 @@ module Samples
           end
         end
 
-        @project31.reload
-        @subgroup12b.reload
-        @subgroup12aa.reload
         @subgroup12a.reload
         @group12.reload
 
