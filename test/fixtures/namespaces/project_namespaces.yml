@@ -352,3 +352,20 @@ projectEchoSubgroupB_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo_subgroupB) %>
   metadata_summary: {}
+
+projectFoxtrotSubgroupA_namespace:
+  name: Project Foxtrot Subgroup A
+  path: project-foxtrot-subgroup-a
+  description: Project Foxtrot Subgroup A description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot_subgroupA) %>
+  metadata_summary: {}
+
+user27_project1_namespace:
+  name: Personal Project 1
+  path: personal-project-1
+  description: Personal Project 1 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:user27_namespace) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user27) %>
+  metadata_summary: {}

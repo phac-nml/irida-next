@@ -77,3 +77,15 @@ private_joan_namespace:
   path: private.joan_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
+
+private_micha_namespace:
+  name: private.micha@localhost
+  path: private.micha_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_micha) %>
+
+user27_namespace:
+  name: user.27@localhost
+  path: user.27_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user27) %>

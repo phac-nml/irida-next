@@ -52,6 +52,11 @@ user_26_namespace_route:
   path: user.26_at_localhost
   source: user_26_namespace (Namespace)
 
+user_27_namespace_route:
+  name: user.27@localhost
+  path: user.27_at_localhost
+  source: user27_namespace (Namespace)
+
 private_joan_namespace_route:
   name: private.joan@localhost
   path: private.joan_at_localhost
@@ -61,6 +66,11 @@ private_ryan_namespace_route:
   name: private.ryan@localhost
   path: private.ryan_at_localhost
   source: private_ryan_namespace (Namespace)
+
+private_micha_namespace_route:
+  name: private.micha@localhost
+  path: private.micha_at_localhost
+  source: private_micha_namespace (Namespace)
 
 project1_namespace_route:
   name: Group 1 / Project 1
@@ -323,3 +333,28 @@ project_echo_subgroupB_namespace_route:
   name: Group Echo / Subgroup B / Project Echo
   path: group-echo/subgroup-b/project-echo
   source: projectEchoSubgroupB_namespace (Namespace)
+
+group_foxtrot_route:
+  name: Group Foxtrot
+  path: group-foxtrot
+  source: group_foxtrot (Namespace)
+
+subgroup_a_group_foxtrot_route:
+  name: Group Foxtrot / Subgroup A
+  path: group-foxtrot/subgroup-a
+  source: group_foxtrot_subgroupA (Namespace)
+
+project_foxtrot_subgroupA_namespace_route:
+  name: Group Foxtrot / Subgroup A / Project Foxtrot
+  path: group-foxtrot/subgroup-a/project-foxtrot
+  source: projectFoxtrotSubgroupA_namespace (Namespace)
+
+group_golf_route:
+  name: Group Golf
+  path: group-golf
+  source: group_golf (Namespace)
+
+user27_project_1_namespace_route:
+  name: user.27@localhost / Project 1
+  path: user.27_at_localhost/project-1
+  source: user27_project1_namespace (Namespace)

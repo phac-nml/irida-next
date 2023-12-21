@@ -159,3 +159,11 @@ projectDeltaSubgroupA:
 projectEchoSubgroupB:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEchoSubgroupB_namespace) %>
+
+projectFoxtrotSubgroupA:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:private_micha) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectFoxtrotSubgroupA_namespace) %>
+
+project27:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:user27) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:user27_project1_namespace) %>

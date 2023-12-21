@@ -159,7 +159,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 10, scoped_projects.count
+    assert_equal 11, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project5_namespace).name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project6_namespace).name)
@@ -179,7 +179,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project20_namespace).name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project21_namespace).name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project24_namespace).name)
-    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project25_namespace).name)
+    assert scoped_projects_names.include?(namespaces_project_namespaces(:project25_namespace).name)
 
     project_member = members(:project_one_member_john_doe)
     project_member.expires_at = 10.days.ago.to_date
@@ -187,7 +187,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 9, scoped_projects.count
+    assert_equal 10, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project1_namespace).name)
   end
@@ -211,7 +211,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     direct_groups = user.groups.self_and_descendant_ids
 
     # Group Delta and Subgroup A
-    assert 2, direct_groups.length
+    assert_equal 2, direct_groups.length
 
     direct_groups.each do |direct_group|
       expected_projects << direct_group.project_namespaces.pluck(:name)
@@ -219,17 +219,49 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     linked_namespaces = NamespaceGroupLink.where(group: direct_groups)
 
-    assert 1, linked_namespaces.length
+    assert_equal 1, linked_namespaces.length
     assert linked_namespaces.include?(namespace_group_links(:namespace_group_link15))
 
     linked_namespaces.each do |linked_namespace|
-      expected_projects << linked_namespace.group.project_namespaces.pluck(:name)
+      expected_projects << linked_namespace.namespace.project_namespaces.pluck(:name)
+
+      descendant_groups = linked_namespace.namespace.descendants
+      descendant_groups.each do |descendant_group|
+        expected_projects << descendant_group.project_namespaces.pluck(:name)
+      end
     end
 
     expected_projects = expected_projects.flatten.sort
     actual_projects = scoped_projects_names.flatten.sort
 
-    assert expected_projects.count, actual_projects.count
-    assert expected_projects.flatten.sort, actual_projects.flatten.sort
+    assert_equal expected_projects.count, actual_projects.count
+    assert_equal expected_projects.flatten.sort, actual_projects.flatten.sort
+  end
+
+  test 'relation scope with direct linked projects' do
+    user = users(:user27)
+    policy = ProjectPolicy.new(user:)
+    scoped_projects = policy.apply_scope(Project, type: :relation)
+    scoped_projects_namespaces = Namespace.where(id: scoped_projects.select(:namespace_id))
+    scoped_projects_names = scoped_projects_namespaces.pluck(:name)
+
+    assert_equal 2, scoped_projects.count
+
+    assert scoped_projects_names.include?(namespaces_project_namespaces(:user27_project1_namespace).name)
+    assert scoped_projects_names.include?(namespaces_project_namespaces(:projectFoxtrotSubgroupA_namespace).name)
+  end
+
+  test 'manageable scope with direct linked projects' do
+    user = users(:user27)
+    policy = ProjectPolicy.new(user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :manageable)
+    scoped_projects_namespaces = Namespace.where(id: scoped_projects.select(:namespace_id))
+    scoped_projects_names = scoped_projects_namespaces.pluck(:name)
+
+    assert_equal 1, scoped_projects.count
+
+    assert scoped_projects_names.include?(namespaces_project_namespaces(:user27_project1_namespace).name)
+    assert_not scoped_projects_names.include?(namespaces_project_namespaces(:projectFoxtrotSubgroupA_namespace).name)
   end
 end
