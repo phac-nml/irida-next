@@ -10,10 +10,12 @@ In IRIDA Next, members are the users and groups which have access to your projec
 
 IRIDA Next has two types of membership
 
-| Membership Type | Process                                            |
-| :-------------- | :------------------------------------------------- |
-| Direct          | The user is added directly to the group or project |
-| Inherited       | The user is a member of an ancestor group          |
+| Membership Type  | Process                                                                      |
+| :--------------- | :--------------------------------------------------------------------------- |
+| Direct           | The user is added directly to the group or project                           |
+| Inherited        | The user is a member of an ancestor group                                    |
+| Direct Shared    | The user is a direct member of a group that the namespace is shared with     |
+| Inherited Shared | The user is an inherited member of a group that the namespace is shared with |
 
 ## Direct Membership
 
@@ -36,6 +38,20 @@ For Example:
 - Group 1 has a subgroup Subgroup 1
 - Project 1 belongs to Subgroup 1
 - User 0 has the inherited membership in Project 1 through the ancestor (Group 1) of Subgroup 1 with the **Maintainer** role
+
+## Direct Shared Membership
+
+When the project belongs to a group, if a user is added directly to a project, and then shared with a group and then is shared with a group,
+the minimum of the effective group access level and the user's access level in the project applies
+
+For Example:
+
+## Inherited Shared Membership
+
+When the project belongs to a group, if a user is a member of the group or any of it's ancestors, and then is shared with a group,
+the minimum of the effective group access level and the user's access level in their group applies
+
+For Example:
 
 ## Add members to a group
 
