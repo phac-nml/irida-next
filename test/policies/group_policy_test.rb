@@ -97,7 +97,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 19, scoped_groups.count
+    assert_equal 23, scoped_groups.count
     scoped_groups_names = scoped_groups.pluck(:name)
     assert_not scoped_groups_names.include?(groups(:group_one).name)
     assert_not scoped_groups_names.include?(groups(:subgroup3).name)
@@ -111,7 +111,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 18, scoped_groups.count
+    assert_equal 22, scoped_groups.count
     scoped_groups_names = scoped_groups.pluck(:name)
     assert_not scoped_groups_names.include?(groups(:namespace_group_link_group_one).name)
   end

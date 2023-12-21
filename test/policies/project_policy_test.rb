@@ -91,7 +91,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
-    assert_equal 11, scoped_projects.count
+    assert_equal 14, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project5_namespace).name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project6_namespace).name)
@@ -118,7 +118,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
-    assert_equal 10, scoped_projects.count
+    assert_equal 13, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project1_namespace).name)
 
@@ -128,7 +128,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
-    assert_equal 9, scoped_projects.count
+    assert_equal 12, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(
       namespaces_project_namespaces(:namespace_group_link_group_one_project1_namespace).name
@@ -159,7 +159,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 11, scoped_projects.count
+    assert_equal 14, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project5_namespace).name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project6_namespace).name)
@@ -187,7 +187,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 10, scoped_projects.count
+    assert_equal 13, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project1_namespace).name)
   end
