@@ -11,6 +11,7 @@ module WorkflowExecutions
       @workflow_execution = workflow_execution
       @samplesheet_headers = %w[sample fastq_1 fastq_2]
       @samplesheet_rows = []
+      @storage_service = ActiveStorage::Blob.service
     end
 
     def execute
@@ -28,8 +29,9 @@ module WorkflowExecutions
 
       @workflow_execution.workflow_params = @workflow_execution.workflow_params.merge(
         {
-          '--input': samplesheet_key,
-          '--outdir': generate_input_key('output')
+          '--input': blob_key_to_service_path(samplesheet_key),
+          '--outdir': blob_key_to_service_path(generate_input_key('output')),
+          '--validate-params': 'false' # This is real bad and only present due to this issue https://github.com/nextflow-io/nf-validation/issues/130
         }
       )
 
@@ -97,19 +99,19 @@ module WorkflowExecutions
 
       attachable.inputs.attach(blob.signed_id)
 
-      blob_to_service_path(blob)
+      blob_key_to_service_path(blob.key)
     end
 
-    def blob_to_service_path(blob)
-      case blob.service.class.to_s
+    def blob_key_to_service_path(blob_key)
+      case @storage_service.class.to_s
       when 'ActiveStorage::Service::AzureStorageService'
-        format('az://%<container>s/%<key>s', container: blob.service.container, key: blob.key)
+        format('az://%<container>s/%<key>s', container: @storage_service.container, key: blob_key)
       when 'ActiveStorage::Service::S3Service'
-        format('s3://%<bucket>s/%<key>s', bucket: blob.service.bucket, key: blob.key)
+        format('s3://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
       when 'ActiveStorage::Service::GCSService'
-        format('gcs://%<bucket>s/%<key>s', bucket: blob.service.bucket, key: blob.key)
+        format('gcs://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
       else
-        ActiveStorage::Blob.service.path_for(blob.key)
+        ActiveStorage::Blob.service.path_for(blob_key)
       end
     end
 
