@@ -31,6 +31,17 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test 'should not show the group if member is expired in linked group' do
+    sign_in users(:david_doe)
+
+    group_member = members(:group_four_member_david_doe)
+    group_member.expires_at = 10.days.ago.to_date
+    group_member.save
+    group = groups(:david_doe_group_four)
+    get group_path(group)
+    assert_response :unauthorized
+  end
+
   test 'should display create new group page' do
     sign_in users(:john_doe)
 
