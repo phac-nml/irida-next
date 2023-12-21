@@ -91,6 +91,62 @@ module Dashboard
       end
     end
 
+    test 'can filter and then sort the list of projects' do
+      visit dashboard_projects_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_selector 'tr', count: 20
+      within first('tr') do
+        assert_text projects(:project1).human_name
+      end
+      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
+
+      assert_selector 'tr', count: 12
+      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+
+      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+      sleep 1
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+
+      assert_selector 'tr', count: 12
+      within first('tr') do
+        assert_text projects(:project19).human_name
+      end
+    end
+
+    test 'can sort and then filter the list of projects' do
+      visit dashboard_projects_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_selector 'tr', count: 20
+      within first('tr') do
+        assert_text projects(:project1).human_name
+      end
+
+      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+      sleep 1
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+
+      assert_selector 'tr', count: 20
+      within first('tr') do
+        assert_text projects(:project9).human_name
+      end
+
+      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
+
+      assert_selector 'tr', count: 12
+      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+
+      within first('tr') do
+        assert_text projects(:project19).human_name
+      end
+      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+    end
+
     test 'can create a project from index page' do
       project_name = 'New Project'
       project_description = 'New Project Description'

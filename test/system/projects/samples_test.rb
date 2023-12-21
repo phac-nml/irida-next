@@ -11,6 +11,7 @@ module Projects
       @sample2 = samples(:sample2)
       @sample3 = samples(:sample30)
       @project = projects(:project1)
+      @project2 = projects(:projectA)
       @namespace = groups(:group_one)
     end
 
@@ -322,6 +323,7 @@ module Projects
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
+      assert_no_text @sample3.name
     end
 
     test 'can sort the list of samples' do
@@ -337,10 +339,59 @@ module Projects
 
       assert_text I18n.t(:'projects.samples.index.sorting.name_desc')
       assert_selector 'table#samples-table tbody tr', count: 3
-
       within first('tbody tr td:nth-child(2)') do
         assert_text @sample3.name
       end
+    end
+
+    test 'can filter and then sort the list of samples' do
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody tr td:nth-child(2)') do
+        assert_text @sample1.name
+      end
+
+      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+
+      assert_selector 'table#samples-table tbody tr', count: 1
+      assert_text @sample1.name
+      assert_no_text @sample2.name
+      assert_no_text @sample3.name
+
+      click_on I18n.t(:'projects.samples.index.sorting.updated_at_desc')
+      click_on I18n.t(:'projects.samples.index.sorting.name_desc')
+
+      assert_text I18n.t(:'projects.samples.index.sorting.name_desc')
+      assert_selector 'table#samples-table tbody tr', count: 1
+      within first('tbody tr td:nth-child(2)') do
+        assert_text @sample1.name
+      end
+    end
+
+    test 'can sort and then filter the list of samples' do
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody tr td:nth-child(2)') do
+        assert_text @sample1.name
+      end
+
+      click_on I18n.t(:'projects.samples.index.sorting.updated_at_desc')
+      click_on I18n.t(:'projects.samples.index.sorting.name_desc')
+
+      assert_text I18n.t(:'projects.samples.index.sorting.name_desc')
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody tr td:nth-child(2)') do
+        assert_text @sample3.name
+      end
+
+      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+
+      assert_selector 'table#samples-table tbody tr', count: 1
+      assert_text @sample1.name
+      assert_no_text @sample2.name
+      assert_no_text @sample3.name
     end
 
     test 'should concatenate single end attachment files and keep originals' do

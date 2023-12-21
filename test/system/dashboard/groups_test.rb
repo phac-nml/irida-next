@@ -51,10 +51,10 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
-      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.name_desc')
       sleep 1
-      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+      assert_text I18n.t(:'dashboard.groups.index.sorting.name_desc')
 
       within 'ul.groups-list.namespace-list-tree' do
         within first('li') do
@@ -75,10 +75,10 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
-      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_asc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.name_asc')
       sleep 1
-      assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_asc')
+      assert_text I18n.t(:'dashboard.groups.index.sorting.name_asc')
 
       within 'ul.groups-list.namespace-list-tree' do
         within first('li') do
@@ -99,10 +99,10 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
-      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.updated_at_desc')
       sleep 1
-      assert_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      assert_text I18n.t(:'dashboard.groups.index.sorting.updated_at_desc')
 
       within 'ul.groups-list.namespace-list-tree' do
         within first('li') do
@@ -123,10 +123,10 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
-      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_asc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.updated_at_asc')
       sleep 1
-      assert_text I18n.t(:'dashboard.projects.index.sorting.updated_at_asc')
+      assert_text I18n.t(:'dashboard.groups.index.sorting.updated_at_asc')
 
       within 'ul.groups-list.namespace-list-tree' do
         within first('li') do
@@ -147,10 +147,10 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_desc')
-      click_on I18n.t(:'dashboard.projects.index.sorting.created_at_asc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_asc')
       sleep 1
-      assert_text I18n.t(:'dashboard.projects.index.sorting.created_at_asc')
+      assert_text I18n.t(:'dashboard.groups.index.sorting.created_at_asc')
 
       within 'ul.groups-list.namespace-list-tree' do
         within first('li') do

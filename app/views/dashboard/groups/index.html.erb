@@ -21,14 +21,7 @@
     "
   >
     <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
-      <%= sorting_dropdown(@q) do |dropdown| %>
-        <%= sorting_item(dropdown, @q, :updated_at, :desc) %>
-        <%= sorting_item(dropdown, @q, :created_at, :desc) %>
-        <%= sorting_item(dropdown, @q, :name, :asc) %>
-        <%= sorting_item(dropdown, @q, :name, :desc) %>
-        <%= sorting_item(dropdown, @q, :updated_at, :asc) %>
-        <%= sorting_item(dropdown, @q, :created_at, :asc) %>
-      <% end %>
+      <%= turbo_frame_tag "groups_sort_dropdown" %>
     </div>
   </div>
   <div class="flex flex-col" data-turbo-temporary>
