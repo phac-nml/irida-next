@@ -54,7 +54,7 @@ module Namespaces
 
     def self_and_parents
       namespaces = [self]
-      namespaces += parent.self_and_ancestors unless parent.nil? || parent.type == 'User'
+      namespaces += parent.self_and_ancestors unless parent.type == 'User'
       namespaces
     end
 

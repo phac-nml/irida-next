@@ -298,6 +298,21 @@ module Samples
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 2, 'metadatafield4' => 1, 'metadatafield5' => 1 },
                      @group12.metadata_summary)
       end
+
+      test 'user namespace metadata summary does not update' do
+        params = { 'metadata' => { 'metadatafield4' => 'value4' } }
+        project = projects(:john_doe_project2)
+        sample = samples(:sample24)
+        namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+        assert_no_changes namespace.metadata_summary do
+          Samples::Metadata::UpdateService.new(project, sample, @user, params).execute
+        end
+
+        assert_equal({ 'metadatafield4' => 'value4' }, sample.metadata)
+        assert_equal({ 'metadatafield4' => { 'id' => @user.id, 'source' => 'user' } }, sample.metadata_provenance)
+        assert_equal({ 'metadatafield4' => 1 }, project.namespace.metadata_summary)
+      end
     end
   end
 end
