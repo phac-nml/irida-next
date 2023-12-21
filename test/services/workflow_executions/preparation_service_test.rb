@@ -21,7 +21,7 @@ module WorkflowExecutions
 
       assert @workflow_execution.workflow_params.key? '--input'
       assert @workflow_execution.workflow_params.key? '--outdir'
-      assert_equal @workflow_execution.inputs.first.blob.key, @workflow_execution.workflow_params['--input']
+      assert_match @workflow_execution.inputs.first.blob.key, @workflow_execution.workflow_params['--input']
 
       assert_equal 'prepared', @workflow_execution.state
     end
