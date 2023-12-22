@@ -46,7 +46,7 @@ module Attachments
     end
 
     test 'create attachments with valid paired end forward and reverse fastq filenames' do
-      paired_blob_files_list = [
+      paired_blobs_list = [
         [active_storage_blobs(:attachmentK_file_test_file_fastq_blob),
          active_storage_blobs(:attachmentL_file_test_file_fastq_blob)],
         [active_storage_blobs(:attachmentM_file_test_file_fastq_blob),
@@ -57,8 +57,8 @@ module Attachments
          active_storage_blobs(:attachmentR_file_test_file_fastq_blob)]
       ]
 
-      paired_blob_files_list.each do |paired_blob_files|
-        valid_params = { files: [paired_blob_files.first, paired_blob_files.last] }
+      paired_blobs_list.each do |paired_blob|
+        valid_params = { files: [paired_blob.first, paired_blob.last] }
 
         assert_difference -> { Attachment.count } => 2 do
           Attachments::CreateService.new(@user, @sample, valid_params).execute
