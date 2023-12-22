@@ -8,6 +8,9 @@ module Projects
 
     def index
       authorize! @project, to: :sample_listing?
+      @templates = [{ id: 0, label: 'Default' }, { id: 1, label: 'Template 1' },
+                    { id: 2, label: 'Template 2' }]
+      @template = template(params[:template] || 'Default')
 
       @q = load_samples.ransack(params[:q])
       set_default_sort
@@ -114,6 +117,21 @@ module Projects
 
     def set_default_sort
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    end
+
+    def load_samples
+      Sample.where(project_id: @project.id)
+    end
+
+    def template(id)
+      case id
+      when '1'
+        %w[province onset]
+      when '2'
+        %w[province food gender age onset]
+      else
+        %w[]
+      end
     end
   end
 end

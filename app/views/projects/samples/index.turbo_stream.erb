@@ -12,6 +12,20 @@
                       pagy: @pagy
                     } %>
 
+<%= turbo_stream.update "project_metadata_template" do %>
+  <%= viral_dropdown(label: "Template", caret: true) do |dropdown| %>
+    <%= @templates.each do |template| %>
+      <%= dropdown.with_item(
+            label: template[:label],
+            url: pagy_template_url_for(@pagy, template[:id]).gsub("samples.turbo_stream", "samples"),
+            data: {
+              turbo_stream: true
+            }
+          ) %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <%= turbo_stream.update "project_samples_hidden_search_value" do %>
   <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
 <% end %>

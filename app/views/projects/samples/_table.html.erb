@@ -18,7 +18,12 @@
       <th scope="col" class="px-4 py-3 text-left">
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".updated_at"), url: sorting_url(@q, :updated_at), field: :updated_at) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-right cursor-not-allowed"><%= t(".action") %></th>
+      <% @template.each do |column| %>
+        <th scope="col" class="px-4 py-3 text-left"><%= column %></th>
+      <% end %>
+      <% if allowed_to?(:update_sample?, project) %>
+        <th scope="col" class="px-4 py-3 text-right"><%= t(".action") %></th>
+      <% end %>
     </tr>
   </thead>
   <tbody
@@ -64,6 +69,11 @@
         <td class="px-4 py-3">
           <%= viral_time_ago(original_time: sample.updated_at) %>
         </td>
+        <% @template.each do |column| %>
+          <td class="px-4 py-3">
+            <%= sample[column].present? ? sample[column] : sample.metadata[column] %>
+          </td>
+        <% end %>
         <% if allowed_to?(:update_sample?, project) %>
           <td class="px-4 py-3">
             <div class="flex items-center justify-end">
