@@ -81,12 +81,12 @@ module Attachments
 
       # identify pe attachments based on fastq filename convention
       attachments.each do |att|
-        next unless /^(?<sample_name>.+_)R?(?<region>[1-2])\./ =~ att.filename.to_s
+        next unless /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\./ =~ att.filename.to_s
 
         case region
-        when '1'
+        when '1', 'R1', 'F', 'f'
           pe[sample_name.to_s]['forward'] = att
-        when '2'
+        when '2', 'R2', 'R', 'r'
           pe[sample_name.to_s]['reverse'] = att
         end
       end
