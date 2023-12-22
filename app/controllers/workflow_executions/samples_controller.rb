@@ -8,15 +8,9 @@ module WorkflowExecutions
     before_action :workflow, only: %i[index]
 
     def index
-      samples = {}
-
-      SamplesWorkflowExecution.where(workflow_execution: @workflow).each do |record|
-        samples[record.sample.id] = record.sample
-      end
-
       @samples = []
       @workflow.samples_workflow_executions.each do |params|
-        s = samples[params.sample_id] # actual sample
+        sample = params.sample
 
         files = []
         params.samplesheet_params.each do |_key, value|
@@ -24,12 +18,12 @@ module WorkflowExecutions
           next unless matches
 
           id = matches[1]
-          s.attachments.each do |file|
+          sample.attachments.each do |file|
             files << file.file if file.file.id == id.to_i
           end
         end
 
-        @samples << { sample: s, files: }
+        @samples << { sample:, files: }
       end
     end
 
