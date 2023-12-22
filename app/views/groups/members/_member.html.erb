@@ -44,7 +44,9 @@
       <%= viral_tooltip(title: t(:"groups.members.index.inherited_from")) do %>
         <%= link_to member_source[:label],
         member_source[:inherited_namespace_path],
-        data: {turbo_frame: "_top"},
+        data: {
+          turbo_frame: "_top"
+        },
         class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
       <% end %>
     <% end %>
@@ -53,8 +55,9 @@
     <div>
       <% if member.user.email != member.created_by.email %>
         <%= viral_time_ago(original_time: member.created_at) %>
-        by <span class="block">
-        <%= member.created_by.email %>
+        by
+        <span class="block">
+          <%= member.created_by.email %>
         </span>
       <% else %>
         <%= viral_time_ago(original_time: member.created_at) %>
@@ -62,12 +65,49 @@
 
       <%= turbo_frame_tag("member-#{member.id}-access-level-updated") do %>
         <% if member.created_at < member.updated_at %>
-          <%= render UpdatedComponent.new(
-            updated_at: member.updated_at
-          ) %>
+          <%= render UpdatedComponent.new(updated_at: member.updated_at) %>
         <% end %>
       <% end %>
     </div>
+  </td>
+  <td class="px-6 py-4">
+    <% if (member.user != current_user && allowed_to?(:update_member?, @namespace) &&
+     member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
+      <%= form_with( model: member, url: group_member_path(id: member.id), method: :patch) do |form| %>
+        <div class="form-field datepicker" data-controller="datepicker">
+          <div class="relative max-w-sm">
+            <div
+              class="
+                absolute
+                inset-y-0
+                left-0
+                flex
+                items-center
+                pl-3
+                pointer-events-none
+              "
+            >
+              <%= viral_icon(
+                name: :calendar_days,
+                classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+              ) %>
+            </div>
+            <%= form.text_field :expires_at,
+                            placeholder: I18n.t("date.formats.iso"),
+                            autocomplete: "off",
+                            value: member.expires_at,
+                            id: "group-member-#{member.id}-expiration",
+                            "data-datepicker-target": "datePicker",
+                            "data-datepicker-autosubmit": "true",
+                            "aria-label": t(:"groups.members.index.aria_labels.expires_at") %>
+
+            <input type="hidden" name="format" value="turbo_stream"/>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <%= member.expires_at %>
+    <% end %>
   </td>
   <% if (current_user == member.user || allowed_to?(:destroy_member?, @namespace)) && !member_source.key?(:inherited_namespace_path) %>
     <td class="px-4 py-3 text-right">

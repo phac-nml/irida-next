@@ -130,6 +130,7 @@ en:
       member:
         access_level: Access Level
         user_id: User
+        expires_at: Access expiration (optional)
       user:
         password: Password
         password_confirmation: Password confirmation
@@ -582,6 +583,8 @@ en:
           level_20: Analyst
           level_30: Maintainer
           level_40: Owner
+        aria_labels:
+          expires_at: Group member expiration
         actions:
           button_add_aria_label: Add new group member button
           link_remove_aria_label: "Remove group member %{member} button"
@@ -595,6 +598,7 @@ en:
           access_level: Access Level
           source: Source
           access_granted: Access Granted
+          expiration: Expiration
           action: Action
         tabs:
           members: Members
@@ -743,6 +747,8 @@ en:
           level_20: Analyst
           level_30: Maintainer
           level_40: Owner
+        aria_labels:
+          expires_at: Project member expiration
         actions:
           button_add_aria_label: Add new project member button
           link_remove_aria_label: "Remove project member %{member} button"
@@ -756,6 +762,7 @@ en:
           access_level: Access Level
           source: Source
           access_granted: Access Granted
+          expiration: Expiration
           action: Action
         tabs:
           members: Members
