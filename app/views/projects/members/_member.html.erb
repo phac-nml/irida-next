@@ -71,7 +71,8 @@
     </div>
   </td>
   <td class="px-6 py-4">
-    <% if (current_user != member.user && allowed_to?(:update_member?, @namespace)) && !member_source.key?(:inherited_namespace_path) %>
+    <% if (member.user != current_user && allowed_to?(:update_member?, @namespace) &&
+        member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
       <%= form_with( model: member, url: namespace_project_member_path(id: member.id), method: :patch) do |form| %>
         <div class="form-field datepicker" data-controller="datepicker">
           <div class="relative max-w-sm">
