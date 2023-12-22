@@ -59,7 +59,7 @@ Add users to a group so they can have access to subgroups and projects within th
 
 Prerequisite:
 
-You must have the **Owner** or **Maintainer** role, or you must be the owner of the group
+You must have at least a **Maintainer** role, or you must be the owner of the group
 
 To add a user to a group:
 
@@ -68,7 +68,26 @@ To add a user to a group:
 3. Click the **Add Member** button
 4. Select the user you want to add to the group
 5. Select an access level (role)
-6. Click the **Add member to group** button
+6. Select an optional **Access expiration**
+7. Click the **Add member to group** button
+
+## Edit member for a group or project
+
+Prerequisite:
+
+You must have at least a **Maintainer** role, or you must be the owner of the group
+
+1. From the left sidebar, select **Projects** or **Groups**, and find your project or group for which you would like to update a member
+2. From the left sidebar, select **Members**
+3. Find the member that you would like to update
+
+To update a member's role:
+
+1. In the **Access Level** column, select the new role for the member in the dropdown
+
+To update a member's access expiration:
+
+1. In the **Expiration** column, select the input and set a date using the date picker.
 
 ## Add members to a project
 
@@ -76,7 +95,7 @@ Add users to a project so they become direct members and have permission to perf
 
 Prerequisite:
 
-You must have the **Owner** or **Maintainer** role, or the project must be under your user namespace.
+You must have at least a **Maintainer** role, or the project must be under your user namespace.
 
 To add a direct user to a project:
 
@@ -85,7 +104,8 @@ To add a direct user to a project:
 3. Click the **Add Member** button
 4. Select the user you want to add to the project
 5. Select an access level (role)
-6. Click the **Add member to project** button
+6. Select an optional **Access expiration**
+7. Click the **Add member to project** button
 
 ## Which roles you can assign
 
