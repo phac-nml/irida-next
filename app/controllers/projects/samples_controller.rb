@@ -8,7 +8,7 @@ module Projects
 
     def index
       authorize! @project, to: :sample_listing?
-      @templates = [{ id: 0, label: 'Default' }, { id: 1, label: 'Template 1' },
+      @templates = [{ id: 0, label: 'None' }, { id: 1, label: 'Template 1' },
                     { id: 2, label: 'Template 2' }]
       @template = template(params[:template] || 0)
 
