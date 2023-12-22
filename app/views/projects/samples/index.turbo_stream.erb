@@ -13,7 +13,7 @@
                     } %>
 
 <%= turbo_stream.update "project_metadata_template" do %>
-  <%= viral_dropdown(label: "Template", caret: true) do |dropdown| %>
+  <%= viral_dropdown(label: "Metadata", caret: true) do |dropdown| %>
     <%= @templates.each do |template| %>
       <%= dropdown.with_item(
             label: template[:label],
