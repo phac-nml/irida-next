@@ -619,6 +619,8 @@ en:
       index:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
+        search:
+          placeholder: Filter by name
       table:
         sample: Sample
         project: Project
