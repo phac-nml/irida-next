@@ -103,5 +103,59 @@ module Samples
                           name: @current_project.name),
                    exception.result.message
     end
+
+    test 'metadata summary updates after sample transfer' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      @sample32 = samples(:sample32)
+      @sample33 = samples(:sample33)
+      @sample34 = samples(:sample34)
+      @sample35 = samples(:sample35)
+      @project29 = projects(:project29)
+      @project30 = projects(:project30)
+      @project31 = projects(:project31)
+      @group12 = groups(:group_twelve)
+      @subgroup12a = groups(:subgroup_twelve_a)
+      @subgroup12b = groups(:subgroup_twelve_b)
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
+
+      @sample_transfer_params1 = { new_project_id: @project30.id,
+                                   sample_ids: [@sample34.id, @sample35.id] }
+
+      assert_no_changes -> { @group12.metadata_summary } do
+        Samples::TransferService.new(@project31, @john_doe).execute(@sample_transfer_params1[:new_project_id],
+                                                                    @sample_transfer_params1[:sample_ids])
+      end
+
+      @subgroup12aa.reload
+      @subgroup12a.reload
+      @subgroup12b.reload
+
+      assert_equal({}, @project31.namespace.metadata_summary)
+      assert_equal({}, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.metadata_summary)
+
+      @sample_transfer_params2 = { new_project_id: @project29.id,
+                                   sample_ids: [@sample33.id, @sample34.id, @sample35.id] }
+      assert_no_changes -> { @group12.metadata_summary } do
+        assert_no_changes -> { @subgroup12aa.metadata_summary } do
+          Samples::TransferService.new(@project30, @john_doe).execute(@sample_transfer_params2[:new_project_id],
+                                                                      @sample_transfer_params2[:sample_ids])
+        end
+      end
+
+      @subgroup12aa.reload
+      @subgroup12a.reload
+      @subgroup12b.reload
+
+      assert_equal({}, @project30.namespace.metadata_summary)
+      assert_equal({}, @project31.namespace.metadata_summary)
+      assert_equal({}, @subgroup12b.metadata_summary)
+      assert_equal({}, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.metadata_summary)
+    end
   end
 end
