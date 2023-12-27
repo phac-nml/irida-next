@@ -47,7 +47,20 @@ module Namespaces
       add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
     end
 
-    def subtract_sample_from_metadata_summary(sample)
+    def update_metadata_summary_by_sample_transfer(transferred_samples_ids, new_project_id)
+      new_project = Project.find(new_project_id)
+      transferred_samples_ids.each do |sample_id|
+        sample = Sample.find(sample_id)
+        unless sample.metadata.empty?
+          subtract_sample_from_old_metadata_summary(sample)
+          add_sample_to_new_metadata_summary(new_project, sample)
+        end
+      end
+    end
+
+    private
+
+    def subtract_sample_from_old_metadata_summary(sample)
       namespaces_to_update = self_and_parents
       namespaces_to_update.each do |namespace|
         sample.metadata.each do |metadata_field, _v|
