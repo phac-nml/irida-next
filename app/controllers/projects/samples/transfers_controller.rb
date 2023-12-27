@@ -37,11 +37,6 @@ module Projects
                  locals: { sample_ids: [], type: :alert,
                            message: @errors, errors: [] }
         end
-
-        return unless transferred_samples_ids.count.positive?
-
-        @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
-                                                                      new_project_id)
       end
 
       private

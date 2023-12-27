@@ -47,7 +47,7 @@ module Samples
             I18n.t('services.samples.transfer.maintainer_transfer_not_allowed')
     end
 
-    def transfer(new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength
+    def transfer(new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       transferred_samples_ids = []
       not_found_sample_ids = []
       sample_ids.each do |sample_id|
@@ -68,6 +68,12 @@ module Samples
                            I18n.t('services.samples.transfer.samples_not_found',
                                   sample_ids: not_found_sample_ids.join(', ')))
       end
+
+      if transferred_samples_ids.count.positive?
+        @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
+                                                                      new_project_id)
+      end
+
       transferred_samples_ids
     end
   end
