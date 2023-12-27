@@ -45,12 +45,16 @@
           },
           class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
         </td>
-        <td class="px-6 py-4"><%= link_to sample.project.name,
-          project_path(sample.project),
-          data: {
-            turbo: false
-          },
-          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %></td>
+        <td class="px-6 py-4">
+          <%= viral_tooltip(title: project_path(sample.project)) do %>
+            <%= link_to sample.project.name,
+            project_path(sample.project),
+            data: {
+              turbo: false
+            },
+            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+          <% end %>
+        </td>
         <td class="px-4 py-3">
           <%= l(sample.created_at.localtime, format: :full_date) %>
         </td>
