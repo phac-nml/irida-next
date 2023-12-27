@@ -50,15 +50,19 @@ module Namespaces
     def subtract_sample_from_metadata_summary(sample)
       namespaces_to_update = self_and_parents
       namespaces_to_update.each do |namespace|
-        subtract_one_from_metadata_summary(namespace, sample.metadata)
+        sample.metadata.each do |metadata_field, _v|
+          subtract_from_metadata_summary(namespace, metadata_field, 1)
+        end
       end
       namespaces_to_update.each(&:save)
     end
 
-    def add_sample_to_metadata_summary(new_project, sample)
+    def add_sample_to_new_metadata_summary(new_project, sample)
       namespaces_to_update = new_project.namespace.self_and_parents
       namespaces_to_update.each do |namespace|
-        add_one_to_metadata_summary(namespace, sample.metadata)
+        sample.metadata.each do |metadata_field, _v|
+          add_to_metadata_summary(namespace, metadata_field, 1)
+        end
       end
       namespaces_to_update.each(&:save)
     end
