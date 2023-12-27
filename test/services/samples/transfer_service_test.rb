@@ -109,7 +109,6 @@ module Samples
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      @sample32 = samples(:sample32)
       @sample33 = samples(:sample33)
       @sample34 = samples(:sample34)
       @sample35 = samples(:sample35)
