@@ -47,7 +47,7 @@
         </td>
         <td class="px-6 py-4">
           <%= viral_tooltip(title: project_path(sample.project)) do %>
-            <%= link_to sample.project.name,
+            <%= link_to sample.project.abbreviated_path,
             project_path(sample.project),
             data: {
               turbo: false
