@@ -52,7 +52,7 @@ module Samples
         @subgroup12a.reload
         @group12.reload
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.metadata_summary)
         assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.metadata_summary)
       end
@@ -126,7 +126,7 @@ module Samples
         @group12.reload
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
                      @project31.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield3' => 1 },
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
                      @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield3' => 1 },
                      @subgroup12a.metadata_summary)
@@ -148,7 +148,7 @@ module Samples
         @group12.reload
         assert_equal({ 'metadatafield1' => 1 },
                      @project31.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 1 },
+        assert_equal({ 'metadatafield1' => 1 },
                      @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 1 },
                      @subgroup12a.metadata_summary)
@@ -235,6 +235,7 @@ module Samples
         # group12 < subgroup12b (project30 > sample 33)
         #    |
         #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+
         params1 = { 'metadata' => { 'metadatafield4' => 'value4' } }
 
         assert_no_changes @subgroup12b.metadata_summary do
@@ -246,7 +247,7 @@ module Samples
         @group12.reload
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
                      @project31.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield4' => 1 },
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
                      @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield4' => 1 },
                      @subgroup12a.metadata_summary)

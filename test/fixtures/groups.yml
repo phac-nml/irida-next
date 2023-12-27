@@ -222,7 +222,7 @@ subgroup_twelve_a_a:
   description: Subgroup 12 A A description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a) %>
-  metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
 
 group_delta:
   name: Group Delta

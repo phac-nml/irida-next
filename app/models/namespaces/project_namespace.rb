@@ -40,17 +40,19 @@ module Namespaces
 
       unless metadata_to_delete.empty?
         namespaces_to_update.each do |namespace|
-          delete_metadata(namespace, metadata_to_delete)
+          subtract_one_from_metadata_summary(namespace, metadata_to_delete)
         end
       end
 
       unless metadata_to_add.empty?
         namespaces_to_update.each do |namespace|
-          add_metadata(namespace, metadata_to_add)
+          add_one_to_metadata_summary(namespace, metadata_to_add)
         end
       end
       namespaces_to_update.each(&:save)
     end
+
+    private
 
     def self_and_parents
       namespaces = [self]
@@ -58,7 +60,7 @@ module Namespaces
       namespaces
     end
 
-    def delete_metadata(namespace, metadata_to_delete)
+    def subtract_one_from_metadata_summary(namespace, metadata_to_delete)
       metadata_to_delete.each do |metadata_field, _v|
         if namespace.metadata_summary[metadata_field] == 1
           namespace.metadata_summary.delete(metadata_field)
@@ -68,7 +70,7 @@ module Namespaces
       end
     end
 
-    def add_metadata(namespace, metadata_to_add)
+    def add_one_to_metadata_summary(namespace, metadata_to_add)
       metadata_to_add.each do |metadata_field, _v|
         if namespace.metadata_summary.key?(metadata_field)
           namespace.metadata_summary[metadata_field] += 1
