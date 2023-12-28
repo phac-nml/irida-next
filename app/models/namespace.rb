@@ -272,6 +272,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
         end
         namespace.save
       end
+      namespace.save
     end
   end
 
@@ -290,6 +291,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
         end
         namespace.save
       end
+      namespace.save
     end
   end
 end
