@@ -35,48 +35,47 @@ module Namespaces
       'Project'
     end
 
-    def update_metadata_summary_by_update_service(metadata_to_delete, metadata_to_add)
-      namespaces_to_update = self_and_parents
-
-      unless metadata_to_delete.empty?
-        namespaces_to_update.each do |namespace|
-          subtract_one_from_metadata_summary(namespace, metadata_to_delete)
-        end
-      end
-
-      unless metadata_to_add.empty?
-        namespaces_to_update.each do |namespace|
-          add_one_to_metadata_summary(namespace, metadata_to_add)
-        end
-      end
-      namespaces_to_update.each(&:save)
-    end
-
-    private
-
     def self_and_parents
       namespaces = [self]
       namespaces += parent.self_and_ancestors unless parent.type == 'User'
       namespaces
     end
 
-    def subtract_one_from_metadata_summary(namespace, metadata_to_delete)
-      metadata_to_delete.each do |metadata_field, _v|
-        if namespace.metadata_summary[metadata_field] == 1
-          namespace.metadata_summary.delete(metadata_field)
-        else
-          namespace.metadata_summary[metadata_field] -= 1
+    def update_metadata_summary_by_update_service(metadata_to_subtract, metadata_to_add)
+      namespaces_to_update = self_and_parents
+      unless metadata_to_subtract.empty?
+        subtract_from_metadata_summary(namespaces_to_update, metadata_to_subtract, true)
+      end
+      add_to_metadata_summary(namespaces_to_update, metadata_to_add, true) unless metadata_to_add.empty?
+    end
+
+    private
+
+    def subtract_from_metadata_summary(namespaces, metadata, update_by_one)
+      namespaces.each do |namespace|
+        metadata.each do |metadata_field, value|
+          value = 1 if update_by_one
+          if namespace.metadata_summary[metadata_field] == value
+            namespace.metadata_summary.delete(metadata_field)
+          else
+            namespace.metadata_summary[metadata_field] -= value
+          end
         end
+        namespace.save
       end
     end
 
-    def add_one_to_metadata_summary(namespace, metadata_to_add)
-      metadata_to_add.each do |metadata_field, _v|
-        if namespace.metadata_summary.key?(metadata_field)
-          namespace.metadata_summary[metadata_field] += 1
-        else
-          namespace.metadata_summary[metadata_field] = 1
+    def add_to_metadata_summary(namespaces, metadata, update_by_one)
+      namespaces.each do |namespace|
+        metadata.each do |metadata_field, value|
+          value = 1 if update_by_one
+          if namespace.metadata_summary.key?(metadata_field)
+            namespace.metadata_summary[metadata_field] += value
+          else
+            namespace.metadata_summary[metadata_field] = value
+          end
         end
+        namespace.save
       end
     end
   end
