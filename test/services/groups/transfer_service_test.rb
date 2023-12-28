@@ -79,5 +79,40 @@ module Groups
       end
       assert_enqueued_with(job: UpdateMembershipsJob)
     end
+
+    test 'metadata summary updates after group transfer' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)\
+      @group12 = groups(:group_twelve)
+      @subgroup12a = groups(:subgroup_twelve_a)
+      @subgroup12b = groups(:subgroup_twelve_b)
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
+
+      Groups::TransferService.new(@subgroup12aa, @john_doe).execute(@subgroup12b)
+
+      @group12.reload
+      @subgroup12aa.reload
+      @subgroup12a.reload
+      @subgroup12b.reload
+
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+      Groups::TransferService.new(@subgroup12b, @john_doe).execute(@subgroup12a)
+
+      @group12.reload
+      @subgroup12aa.reload
+      @subgroup12a.reload
+      @subgroup12b.reload
+
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+    end
   end
 end
