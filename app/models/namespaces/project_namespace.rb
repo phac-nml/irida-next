@@ -59,26 +59,10 @@ module Namespaces
       end
     end
 
-    private
+    def update_metadata_summary_by_sample_deletion(sample)
+      return if sample.metadata.empty?
 
-    def subtract_sample_from_old_metadata_summary(sample)
-      namespaces_to_update = self_and_parents
-      namespaces_to_update.each do |namespace|
-        sample.metadata.each do |metadata_field, _v|
-          subtract_from_metadata_summary(namespace, metadata_field, 1)
-        end
-      end
-      namespaces_to_update.each(&:save)
-    end
-
-    def add_sample_to_new_metadata_summary(new_project, sample)
-      namespaces_to_update = new_project.namespace.self_and_parents
-      namespaces_to_update.each do |namespace|
-        sample.metadata.each do |metadata_field, _v|
-          add_to_metadata_summary(namespace, metadata_field, 1)
-        end
-      end
-      namespaces_to_update.each(&:save)
+      subtract_from_metadata_summary(self_and_parents, sample.metadata, true)
     end
   end
 end

@@ -84,7 +84,7 @@ module Groups
       # Reference group/projects descendants tree:
       # group12 < subgroup12b (project30 > sample 33)
       #    |
-      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)\
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
       @group12 = groups(:group_twelve)
       @subgroup12a = groups(:subgroup_twelve_a)
       @subgroup12b = groups(:subgroup_twelve_b)

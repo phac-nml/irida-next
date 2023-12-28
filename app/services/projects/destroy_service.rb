@@ -7,6 +7,10 @@ module Projects
       authorize! project, to: :destroy?
 
       project.namespace.destroy!
+
+      return unless project.namespace.deleted? && project.namespace.parent.type != 'User'
+
+      project.namespace.update_metadata_summary_by_namespace_deletion
     end
   end
 end

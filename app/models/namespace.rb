@@ -232,6 +232,12 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     add_to_metadata_summary(self_and_ancestors, metadata_to_update, false)
   end
 
+  def update_metadata_summary_by_namespace_deletion
+    return if metadata_summary.empty?
+
+    subtract_from_metadata_summary(parent.self_and_ancestors, metadata_summary, false)
+  end
+
   private
 
   # Method to restore namespace routes when the namespace is restored
