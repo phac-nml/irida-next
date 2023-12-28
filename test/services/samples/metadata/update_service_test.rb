@@ -306,15 +306,16 @@ module Samples
 
         params1 = { 'metadata' => { 'metadatafield4' => 'value4' } }
 
-        assert_no_changes @subgroup12b.metadata_summary do
-          Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params1).execute
-        end
+        Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params1).execute
 
+        @subgroup12b.reload
         @subgroup12aa.reload
         @subgroup12a.reload
         @group12.reload
+
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
                      @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
                      @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield4' => 1 },
@@ -324,35 +325,38 @@ module Samples
 
         params2 = { 'metadata' => { 'metadatafield5' => 'value5' } }
 
-        assert_no_changes -> { @subgroup12a.metadata_summary } do
-          assert_no_changes -> { @subgroup12aa.metadata_summary } do
-            Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params2).execute
-          end
-        end
+        Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params2).execute
 
         @subgroup12b.reload
+        @subgroup12aa.reload
+        @subgroup12a.reload
         @group12.reload
 
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield5' => 1 },
                      @project30.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield5' => 1 },
                      @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
+                     @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield4' => 1 },
+                     @subgroup12a.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadatafield4' => 1, 'metadatafield5' => 1 },
                      @group12.metadata_summary)
 
         params3 = { 'metadata' => { 'metadatafield2' => '' } }
 
-        assert_no_changes -> { @subgroup12b.metadata_summary } do
-          assert_no_changes -> { @subgroup12aa.metadata_summary } do
-            Samples::Metadata::UpdateService.new(@project29, @sample32, @user, params3).execute
-          end
-        end
+        Samples::Metadata::UpdateService.new(@project29, @sample32, @user, params3).execute
 
+        @subgroup12b.reload
+        @subgroup12aa.reload
         @subgroup12a.reload
         @group12.reload
 
-        assert_equal({ 'metadatafield1' => 1 },
-                     @project29.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1 }, @project29.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield5' => 1 },
+                     @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
+                     @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 1, 'metadatafield4' => 1 },
                      @subgroup12a.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 2, 'metadatafield4' => 1, 'metadatafield5' => 1 },
@@ -366,10 +370,10 @@ module Samples
         sample = samples(:sample24)
         namespace = namespaces_user_namespaces(:john_doe_namespace)
 
-        assert_no_changes namespace.metadata_summary do
-          Samples::Metadata::UpdateService.new(project, sample, @user, params).execute
-        end
+        Samples::Metadata::UpdateService.new(project, sample, @user, params).execute
 
+        namespace.reload
+        assert_equal({}, namespace.metadata_summary)
         assert_equal({ 'metadatafield4' => 'value4' }, sample.metadata)
         assert_equal({ 'metadatafield4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      sample.metadata_provenance)

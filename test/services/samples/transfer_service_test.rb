@@ -123,28 +123,25 @@ module Samples
       @sample_transfer_params1 = { new_project_id: @project30.id,
                                    sample_ids: [@sample34.id, @sample35.id] }
 
-      assert_no_changes -> { @group12.metadata_summary } do
-        Samples::TransferService.new(@project31, @john_doe).execute(@sample_transfer_params1[:new_project_id],
-                                                                    @sample_transfer_params1[:sample_ids])
-      end
+      Samples::TransferService.new(@project31, @john_doe).execute(@sample_transfer_params1[:new_project_id],
+                                                                  @sample_transfer_params1[:sample_ids])
 
-      @subgroup12aa.reload
       @subgroup12a.reload
+      @subgroup12aa.reload
       @subgroup12b.reload
 
       assert_equal({}, @project31.namespace.metadata_summary)
       assert_equal({}, @subgroup12aa.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.metadata_summary)
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 },
+                   @group12.metadata_summary)
 
       @sample_transfer_params2 = { new_project_id: @project29.id,
                                    sample_ids: [@sample33.id, @sample34.id, @sample35.id] }
-      assert_no_changes -> { @group12.metadata_summary } do
-        assert_no_changes -> { @subgroup12aa.metadata_summary } do
-          Samples::TransferService.new(@project30, @john_doe).execute(@sample_transfer_params2[:new_project_id],
-                                                                      @sample_transfer_params2[:sample_ids])
-        end
-      end
+
+      Samples::TransferService.new(@project30, @john_doe).execute(@sample_transfer_params2[:new_project_id],
+                                                                  @sample_transfer_params2[:sample_ids])
 
       @subgroup12aa.reload
       @subgroup12a.reload
