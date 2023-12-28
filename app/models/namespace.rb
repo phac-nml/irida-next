@@ -223,7 +223,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     metadata_to_update = transferred_namespace.metadata_summary
     return if metadata_to_update.empty?
 
-    if old_namespace.type != 'User'
+    unless old_namespace.nil? || old_namespace.type == 'User'
       subtract_from_metadata_summary(old_namespace.self_and_ancestors, metadata_to_update, false)
     end
 
