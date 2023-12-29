@@ -48,35 +48,5 @@ module Namespaces
       end
       add_to_metadata_summary(namespaces_to_update, metadata_to_add, true) unless metadata_to_add.empty?
     end
-
-    private
-
-    def subtract_from_metadata_summary(namespaces, metadata, update_by_one)
-      namespaces.each do |namespace|
-        metadata.each do |metadata_field, value|
-          value = 1 if update_by_one
-          if namespace.metadata_summary[metadata_field] == value
-            namespace.metadata_summary.delete(metadata_field)
-          else
-            namespace.metadata_summary[metadata_field] -= value
-          end
-        end
-        namespace.save
-      end
-    end
-
-    def add_to_metadata_summary(namespaces, metadata, update_by_one)
-      namespaces.each do |namespace|
-        metadata.each do |metadata_field, value|
-          value = 1 if update_by_one
-          if namespace.metadata_summary.key?(metadata_field)
-            namespace.metadata_summary[metadata_field] += value
-          else
-            namespace.metadata_summary[metadata_field] = value
-          end
-        end
-        namespace.save
-      end
-    end
   end
 end
