@@ -632,7 +632,7 @@ en:
         sample: Sample
         project: Project
         created_at: Created
-        updated_at: Updated
+        updated_at: Last Updated
   projects:
     create:
       success: "Project %{project_name} was successfully created"
