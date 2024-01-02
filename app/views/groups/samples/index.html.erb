@@ -34,7 +34,7 @@
           >
             <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
           </div>
-          <%= f.hidden_field :s, value: params[:q].try(:[], :s) %>
+          <%= turbo_frame_tag "group_samples_hidden_search_value" %>
           <%= f.search_field :name_cont,
                          "data-action": "filters#submit",
                          class:
@@ -42,6 +42,7 @@
                          placeholder: t(".search.placeholder") %>
         </div>
       <% end %>
+      <%= turbo_frame_tag "group_samples_sort_dropdown" %>
     </div>
   </div>
 
