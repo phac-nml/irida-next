@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Helper functions for anything to do with URLs
 module UrlHelper
   def pagy_template_url_for(pagy, template)
     pagy_url = pagy_url_for(pagy, pagy.page)
