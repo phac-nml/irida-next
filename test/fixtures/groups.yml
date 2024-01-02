@@ -218,3 +218,25 @@ group_echo_subgroupB:
   description: Subgroup B description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo) %>
   metadata_summary: {}
+
+group_foxtrot:
+  name: Group Foxtrot
+  path: group-foxtrot
+  type: Group
+  description: Group Foxtrot description
+  metadata_summary: {}
+
+group_foxtrot_subgroupA:
+  name: Subgroup A
+  path: group-foxtrot/subgroup-a
+  type: Group
+  description: Subgroup A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot) %>
+  metadata_summary: {}
+
+group_golf:
+  name: Group Golf
+  path: group-golf
+  type: Group
+  description: Group Golf description
+  metadata_summary: {}
