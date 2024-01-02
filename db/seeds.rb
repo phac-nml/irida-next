@@ -2,6 +2,8 @@
 
 require 'faker'
 
+Faker::Config.locale = 'en-CA'
+
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
 # This file should contain all the record creation needed to seed the database with its default values.
@@ -59,6 +61,16 @@ def seed_namespace_group_links(user, namespace, group, group_access_level)
                                      expires_at: @namespace_group_link_expiry_date }).execute
 end
 
+def fake_metadata
+  {
+    'province' => Faker::Address.state,
+    'food' => Faker::Food.dish,
+    'gender' => Faker::Gender.binary_type,
+    'age' => Faker::Number.between(from: 1, to: 100),
+    'onset' => Faker::Date.between(from: 2.years.ago, to: Time.zone.today)
+  }
+end
+
 def seed_samples(project, sample_count)
   1.upto(sample_count) do |i|
     sample = Samples::CreateService.new(
@@ -68,14 +80,7 @@ def seed_samples(project, sample_count)
     ).execute
 
     # Add metadata
-    params = { 'metadata' => {
-      'province' => Faker::Address.state,
-      'food' => Faker::Food.dish,
-      'gender' => Faker::Gender.binary_type,
-      'age' => Faker::Number.between(from: 1, to: 100),
-      'onset' => Faker::Date.between(from: 2.years.ago, to: Date.today)
-    } }
-    Samples::Metadata::UpdateService.new(project, sample, project.creator, params).execute
+    Samples::Metadata::UpdateService.new(project, sample, project.creator, { 'metadata' => fake_metadata }).execute
 
     # exit if max total samples has been reached
     next unless @maximum_total_sample_attachments == -1 ||
