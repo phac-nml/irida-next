@@ -72,7 +72,7 @@ def fake_metadata
 end
 
 def seed_samples(project, sample_count)
-  # rubocop:disable Metrics/MethodLength Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   1.upto(sample_count) do |i|
     sample = Samples::CreateService.new(
       project.creator, project,
