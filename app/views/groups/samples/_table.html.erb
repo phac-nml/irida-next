@@ -1,12 +1,4 @@
-<table
-  class="
-    min-w-full
-    divide-y
-    divide-slate-200
-    table-fixed
-    dark:divide-slate-600
-  "
->
+<table class=" min-w-full table-fixed dark:divide-slate-600 ">
   <thead
     class="
       text-slate-700
@@ -23,7 +15,16 @@
       <th scope="col" class="px-6 py-3"><%= t(".updated_at") %></th>
     </tr>
   </thead>
-  <tbody id="group-samples-table-body">
+  <tbody
+    id="group-samples-table-body"
+    class="
+      bg-white
+      divide-y
+      divide-slate-200
+      dark:bg-slate-800
+      dark:divide-slate-700
+    "
+  >
     <% samples.each do |sample| %>
       <tr
         id="<%= dom_id(sample) %>"
@@ -34,7 +35,7 @@
           dark:text-slate-400
         "
       >
-        <td class="px-6 py-4"><%= link_to sample.name,
+        <td class="px-4 py-3"><%= link_to sample.name,
           namespace_project_sample_path(
             id: sample.id,
             namespace_id: sample.project.namespace.parent.full_path,
@@ -45,7 +46,7 @@
           },
           class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
         </td>
-        <td class="px-6 py-4">
+        <td class="px-4 py-3">
           <%= viral_tooltip(title: project_path(sample.project)) do %>
             <%= link_to sample.project.abbreviated_path,
             project_path(sample.project),
