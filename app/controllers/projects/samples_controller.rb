@@ -10,7 +10,7 @@ module Projects
       authorize! @project, to: :sample_listing?
       @templates = [{ id: 0, label: 'None' }, { id: 1, label: 'Template 1' },
                     { id: 2, label: 'Template 2' }]
-      @template = template(params[:template] || 0)
+      @template = template(params[:template] || '0')
 
       @q = load_samples.ransack(params[:q])
       set_default_sort
