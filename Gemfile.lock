@@ -546,7 +546,7 @@ DEPENDENCIES
   devise (~> 4.9.2)
   erb-formatter (~> 0.4.3)
   faraday
-  faraday-net_http
+  faraday-net_http_persistent (~> 2.0)
   fx
   good_job (~> 3.21)
   google-cloud-storage (~> 1.11)

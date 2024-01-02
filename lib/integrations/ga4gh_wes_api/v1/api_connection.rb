@@ -29,7 +29,7 @@ module Integrations
                           end
         end
 
-        def conn
+        def conn # rubocop:disable Metrics/MethodLength
           headers = { 'Content-Type': 'application/json' }
           extra_headers = Rails.application.credentials.dig(:ga4gh_wes, :headers)
           headers = headers.merge(extra_headers) unless extra_headers.nil?
@@ -45,7 +45,10 @@ module Integrations
             f.response :logger # logs request and responses
             f.response :json # decode response bodies as JSON
             f.response :raise_error, include_request: true
-            f.adapter :net_http # Use the Net::HTTP adapter
+            f.adapter :net_http_persistent, pool_size: 5 do |http|
+              # yields Net::HTTP::Persistent
+              http.idle_timeout = 100
+            end
           end
         end
       end
