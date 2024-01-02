@@ -67,12 +67,12 @@ def fake_metadata
     'food' => Faker::Food.dish,
     'gender' => Faker::Gender.binary_type,
     'age' => Faker::Number.between(from: 1, to: 100),
-    'onset' => Faker::Date.between(from: 2.years.ago, to: Time.zone.today)
+    'onset' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today)
   }
 end
 
 def seed_samples(project, sample_count)
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength Metrics/AbcSize
   1.upto(sample_count) do |i|
     sample = Samples::CreateService.new(
       project.creator, project,
