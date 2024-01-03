@@ -80,25 +80,23 @@ module Attachments
       pe = Hash.new { |h, k| h[k] = {} }
 
       # identify pe attachments based on fastq filename convention
-      # TODO: use match and case
       forward_attachments = attachments.select { |attachment| /^.+_(R?1|[Ff])\./ =~ attachment.filename.to_s }
       forward_attachments.each do |forward_attachment|
-        if /^(?<sample_name>.+_)1\./ =~ forward_attachment.filename.to_s
-          reverse_attachments = attachments.select { |attachment| /^#{sample_name}2\./ =~ attachment.filename.to_s }
-        elsif /^(?<sample_name>.+_)R1\./ =~ forward_attachment.filename.to_s
-          reverse_attachments = attachments.select { |attachment| /^#{sample_name}R2\./ =~ attachment.filename.to_s }
-        elsif /^(?<sample_name>.+_)f\./ =~ forward_attachment.filename.to_s
-          reverse_attachments = attachments.select { |attachment| /^#{sample_name}r\./ =~ attachment.filename.to_s }
-        elsif /^(?<sample_name>.+_)F\./ =~ forward_attachment.filename.to_s
-          reverse_attachments = attachments.select { |attachment| /^#{sample_name}R\./ =~ attachment.filename.to_s }
-        else
-          next
-        end
+        reverse_attachment =
+          if /^(?<sample_name>.+_)1\./ =~ forward_attachment.filename.to_s
+            attachments.detect { |attachment| /^#{sample_name}2\./ =~ attachment.filename.to_s }
+          elsif /^(?<sample_name>.+_)R1\./ =~ forward_attachment.filename.to_s
+            attachments.detect { |attachment| /^#{sample_name}R2\./ =~ attachment.filename.to_s }
+          elsif /^(?<sample_name>.+_)f\./ =~ forward_attachment.filename.to_s
+            attachments.detect { |attachment| /^#{sample_name}r\./ =~ attachment.filename.to_s }
+          elsif /^(?<sample_name>.+_)F\./ =~ forward_attachment.filename.to_s
+            attachments.detect { |attachment| /^#{sample_name}R\./ =~ attachment.filename.to_s }
+          end
 
-        next unless reverse_attachments.length == 1
+        next if reverse_attachment.nil?
 
         pe[sample_name.to_s]['forward'] = forward_attachment
-        pe[sample_name.to_s]['reverse'] = reverse_attachments[0]
+        pe[sample_name.to_s]['reverse'] = reverse_attachment
       end
 
       # assign metadata to detected pe files that contain fwd and rev
