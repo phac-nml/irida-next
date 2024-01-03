@@ -75,20 +75,30 @@ module Attachments
       end
     end
 
-    def identify_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
+    def identify_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       pe = Hash.new { |h, k| h[k] = {} }
 
       # identify pe attachments based on fastq filename convention
-      attachments.each do |att|
-        next unless /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\./ =~ att.filename.to_s
-
-        case region
-        when '1', 'R1', 'F', 'f'
-          pe[sample_name.to_s]['forward'] = att
-        when '2', 'R2', 'R', 'r'
-          pe[sample_name.to_s]['reverse'] = att
+      # TODO: use match and case
+      forward_attachments = attachments.select { |attachment| /^.+_(R?1|[Ff])\./ =~ attachment.filename.to_s }
+      forward_attachments.each do |forward_attachment|
+        if /^(?<sample_name>.+_)1\./ =~ forward_attachment.filename.to_s
+          reverse_attachments = attachments.select { |attachment| /^#{sample_name}2\./ =~ attachment.filename.to_s }
+        elsif /^(?<sample_name>.+_)R1\./ =~ forward_attachment.filename.to_s
+          reverse_attachments = attachments.select { |attachment| /^#{sample_name}R2\./ =~ attachment.filename.to_s }
+        elsif /^(?<sample_name>.+_)f\./ =~ forward_attachment.filename.to_s
+          reverse_attachments = attachments.select { |attachment| /^#{sample_name}r\./ =~ attachment.filename.to_s }
+        elsif /^(?<sample_name>.+_)F\./ =~ forward_attachment.filename.to_s
+          reverse_attachments = attachments.select { |attachment| /^#{sample_name}R\./ =~ attachment.filename.to_s }
+        else
+          next
         end
+
+        next unless reverse_attachments.length == 1
+
+        pe[sample_name.to_s]['forward'] = forward_attachment
+        pe[sample_name.to_s]['reverse'] = reverse_attachments[0]
       end
 
       # assign metadata to detected pe files that contain fwd and rev

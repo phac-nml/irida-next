@@ -64,3 +64,5 @@ attachmentP_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filena
 attachmentQ_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "germ_f.fastq", service_name: "test" %>
 
 attachmentR_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "germ_r.fastq", service_name: "test" %>
+
+attachmentS_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "germ_1.fastq", service_name: "test" %>

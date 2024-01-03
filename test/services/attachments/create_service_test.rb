@@ -82,6 +82,25 @@ module Attachments
       end
     end
 
+    test 'create attachments with invalid paired end forward and reverse fastq filenames' do
+      valid_params = { files: [active_storage_blobs(:attachmentR_file_test_file_fastq_blob),
+                               active_storage_blobs(:attachmentS_file_test_file_fastq_blob)] }
+
+      assert_difference -> { Attachment.count } => 2 do
+        Attachments::CreateService.new(@user, @sample, valid_params).execute
+      end
+
+      created_attachments = Attachment.last(2)
+
+      assert_not created_attachments.first.metadata.key?('type')
+      assert_not created_attachments.first.metadata.key?('direction')
+      assert_not created_attachments.first.metadata.key?('associated_attachment_id')
+
+      assert_not created_attachments.last.metadata.key?('type')
+      assert_not created_attachments.last.metadata.key?('direction')
+      assert_not created_attachments.last.metadata.key?('associated_attachment_id')
+    end
+
     test 'create attachments with valid illumina paired end forward fastq file' do
       valid_params = { files: [@testsample_illumina_pe_fwd_blob] }
 
