@@ -10,7 +10,7 @@ module System
       assert_text '15 days ago'
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_selector '[data-viral--tooltip-target="target"]', visible: false
-        find('span.text-sm', text: '15 days ago').hover
+        find('span', text: '15 days ago').hover
         assert_text (DateTime.now - 15.days).strftime('%B %d, %Y %H:%M')
         assert_selector '[data-viral--tooltip-target="target"]', visible: true
       end
@@ -22,7 +22,7 @@ module System
       assert_text '5 days ago'
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_selector '[data-viral--tooltip-target="target"]', visible: false
-        find('span.text-sm', text: '5 days ago').hover
+        find('span', text: '5 days ago').hover
         assert_text (DateTime.now - 15.days).strftime('%B %d, %Y %H:%M')
         assert_selector '[data-viral--tooltip-target="target"]', visible: true
       end
