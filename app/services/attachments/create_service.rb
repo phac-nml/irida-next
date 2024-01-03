@@ -69,24 +69,23 @@ module Attachments
       attachments.each do |att|
         next unless /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\./ =~ att.filename.to_s
 
-        # TODO: Come up with a better hash key
         case region
         when '1'
-          pe["#{sample_name}_A"]['forward'] = att
+          pe["#{sample_name}_1-2"]['forward'] = att
         when 'R1'
-          pe["#{sample_name}_B"]['forward'] = att
+          pe["#{sample_name}_R1-R2"]['forward'] = att
         when 'F'
-          pe["#{sample_name}_C"]['forward'] = att
+          pe["#{sample_name}_F-R"]['forward'] = att
         when 'f'
-          pe["#{sample_name}_D"]['forward'] = att
+          pe["#{sample_name}_f-r"]['forward'] = att
         when '2'
-          pe["#{sample_name}_A"]['reverse'] = att
+          pe["#{sample_name}_1-2"]['reverse'] = att
         when 'R2'
-          pe["#{sample_name}_B"]['reverse'] = att
+          pe["#{sample_name}_R1-R2"]['reverse'] = att
         when 'R'
-          pe["#{sample_name}_C"]['reverse'] = att
+          pe["#{sample_name}_F-R"]['reverse'] = att
         when 'r'
-          pe["#{sample_name}_D"]['reverse'] = att
+          pe["#{sample_name}_f-r"]['reverse'] = att
         end
       end
 
