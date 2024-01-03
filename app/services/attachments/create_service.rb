@@ -61,28 +61,33 @@ module Attachments
       assign_metadata(illumina_pe, 'illumina_pe')
     end
 
-    def identify_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity
+    def identify_paired_end_files(attachments) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       pe = Hash.new { |h, k| h[k] = {} }
 
       # identify pe attachments based on fastq filename convention
-      forward_attachments = attachments.select { |attachment| /^.+_(R?1|[Ff])\./ =~ attachment.filename.to_s }
-      forward_attachments.each do |forward_attachment|
-        reverse_attachment =
-          if /^(?<sample_name>.+_)1\./ =~ forward_attachment.filename.to_s
-            attachments.detect { |attachment| /^#{sample_name}2\./ =~ attachment.filename.to_s }
-          elsif /^(?<sample_name>.+_)R1\./ =~ forward_attachment.filename.to_s
-            attachments.detect { |attachment| /^#{sample_name}R2\./ =~ attachment.filename.to_s }
-          elsif /^(?<sample_name>.+_)f\./ =~ forward_attachment.filename.to_s
-            attachments.detect { |attachment| /^#{sample_name}r\./ =~ attachment.filename.to_s }
-          elsif /^(?<sample_name>.+_)F\./ =~ forward_attachment.filename.to_s
-            attachments.detect { |attachment| /^#{sample_name}R\./ =~ attachment.filename.to_s }
-          end
+      attachments.each do |att|
+        next unless /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\./ =~ att.filename.to_s
 
-        next if reverse_attachment.nil?
-
-        pe[sample_name.to_s]['forward'] = forward_attachment
-        pe[sample_name.to_s]['reverse'] = reverse_attachment
+        # TODO: Come up with a better hash key
+        case region
+        when '1'
+          pe["#{sample_name}_A"]['forward'] = att
+        when 'R1'
+          pe["#{sample_name}_B"]['forward'] = att
+        when 'F'
+          pe["#{sample_name}_C"]['forward'] = att
+        when 'f'
+          pe["#{sample_name}_D"]['forward'] = att
+        when '2'
+          pe["#{sample_name}_A"]['reverse'] = att
+        when 'R2'
+          pe["#{sample_name}_B"]['reverse'] = att
+        when 'R'
+          pe["#{sample_name}_C"]['reverse'] = att
+        when 'r'
+          pe["#{sample_name}_D"]['reverse'] = att
+        end
       end
 
       # assign metadata to detected pe files that contain fwd and rev
