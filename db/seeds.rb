@@ -71,8 +71,7 @@ def fake_metadata
   }
 end
 
-# rubocop:disable Metrics/AbcSize
-def seed_samples(project, sample_count)
+def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize
   1.upto(sample_count) do |i|
     sample = Samples::CreateService.new(
       project.creator, project,
@@ -95,8 +94,6 @@ def seed_samples(project, sample_count)
     end
   end
 end
-
-# rubocop:enable Metrics/AbcSize
 
 def seed_attachments(sample)
   (0..(@attachments_per_sample - 1)).each do |i| # file list is index'd at 0
