@@ -38,7 +38,7 @@
   >
     <% samples.each do |sample| %>
       <tr
-        id="<%= dom_id(sample) %>"
+        id="<%= sample.id %>"
         class="bg-white border-b dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600"
       >
         <% if allowed_to?(:transfer_sample?, project) %>
