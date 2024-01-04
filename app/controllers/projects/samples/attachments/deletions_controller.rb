@@ -19,21 +19,21 @@ module Projects
         def destroy # rubocop:disable Metrics/MethodLength
           authorize! @project, to: :update_sample?
 
-          attachments_to_del = get_attachments(deletion_params['attachment_ids'])
-          attachments_to_del_count = attachments_to_del.count
+          atts_to_delete = get_attachments(deletion_params['attachment_ids'])
+          atts_to_delete_count = atts_to_delete.count
 
-          attachments_to_del.each do |attachment|
-            attachments_to_del -= ::Attachments::DestroyService.new(@sample, attachment, current_user).execute
+          atts_to_delete.each do |attachment|
+            atts_to_delete -= ::Attachments::DestroyService.new(@sample, attachment, current_user).execute
           end
           respond_to do |format|
-            status = get_response_status(attachments_to_del, attachments_to_del_count)
+            status = get_response_status(atts_to_delete, atts_to_delete_count)
             format.turbo_stream do
               if status == :unprocessable_entity
-                render status:, locals: { message: nil, attachments: attachments_to_del }
+                render status:, locals: { message: nil, attachments: atts_to_delete }
               elsif status == :multi_status
                 render status:,
                        locals: { type: :success, message: t('.partial_success'),
-                                 attachments: attachments_to_del }
+                                 attachments: atts_to_delete }
               else
                 render status: :ok, locals: { type: :success, message: t('.success'), attachments: nil }
               end
@@ -48,19 +48,19 @@ module Projects
         end
 
         def get_attachments(attachment_ids)
-          attachments_to_del = []
+          atts_to_delete = []
           attachment_ids.each do |_k, attachment_id|
             if attachment_id.is_a?(Array)
               attachment_one = Attachment.find(attachment_id[0])
               attachment_two = Attachment.find(attachment_id[1])
-              attachments_to_del << attachment_one
-              attachments_to_del << attachment_two
+              atts_to_delete << attachment_one
+              atts_to_delete << attachment_two
             else
               attachment = Attachment.find(attachment_id)
-              attachments_to_del << attachment
+              atts_to_delete << attachment
             end
           end
-          attachments_to_del
+          atts_to_delete
         end
 
         def get_response_status(attachments, attachments_count)
