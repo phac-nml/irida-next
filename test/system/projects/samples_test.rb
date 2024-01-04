@@ -100,7 +100,10 @@ module Projects
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
-      click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+
+      within('#attachments-table-body') do
+        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      end
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
@@ -142,7 +145,9 @@ module Projects
       end
 
       # Destroy paired files
-      click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      within('#attachments-table-body') do
+        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      end
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')

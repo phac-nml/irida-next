@@ -25,15 +25,14 @@ module Projects
           atts_to_delete.each do |attachment|
             atts_to_delete -= ::Attachments::DestroyService.new(@sample, attachment, current_user).execute
           end
+
           respond_to do |format|
             status = get_response_status(atts_to_delete, atts_to_delete_count)
             format.turbo_stream do
               if status == :unprocessable_entity
                 render status:, locals: { message: nil, attachments: atts_to_delete }
               elsif status == :multi_status
-                render status:,
-                       locals: { type: :success, message: t('.partial_success'),
-                                 attachments: atts_to_delete }
+                render status:, locals: { type: :success, message: t('.partial_success'), attachments: atts_to_delete }
               else
                 render status: :ok, locals: { type: :success, message: t('.success'), attachments: nil }
               end
@@ -51,10 +50,9 @@ module Projects
           atts_to_delete = []
           attachment_ids.each do |_k, attachment_id|
             if attachment_id.is_a?(Array)
-              attachment_one = Attachment.find(attachment_id[0])
-              attachment_two = Attachment.find(attachment_id[1])
-              atts_to_delete << attachment_one
-              atts_to_delete << attachment_two
+              attachment_id.each do |attachment|
+                atts_to_delete << Attachment.find(attachment)
+              end
             else
               attachment = Attachment.find(attachment_id)
               atts_to_delete << attachment
