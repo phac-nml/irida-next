@@ -846,6 +846,25 @@ fr:
           success: Samples were successfully transferred.
           error: "The following list of samples failed to transfer:"
       attachments:
+        concatenations:
+          create:
+            success: Files were successfully concatenated.
+            basename_help: The basename can only contain letters, numbers, hyphens, periods, and underscores
+          modal:
+            title: Concatenate Files
+            description: "The following files were selected to be concatenated:"
+            basename: Filename
+            delete_originals: Delete Originals
+            submit_button: Concatenate
+        deletions:
+          modal:
+            title: File Deletion
+            description: "The following files were selected for deletion:"
+            submit_button: Delete
+          destroy:
+            success: Files were successfully deleted.
+            partial_success: Some files were successfully deleted.
+            error: 'File %{filename} was not removed due to the following errors: %{errors}'
         attachment:
           delete: Delete
           delete_confirm: Are you sure that you want to delete this file from the sample?
