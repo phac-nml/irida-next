@@ -30,11 +30,13 @@ module Projects
             status = get_response_status(atts_to_delete, atts_to_delete_count)
             format.turbo_stream do
               if status == :unprocessable_entity
-                render status:, locals: { message: nil, attachments: atts_to_delete }
+                render status:, locals: { message: nil, not_deleted_atts: atts_to_delete }
               elsif status == :multi_status
-                render status:, locals: { type: :success, message: t('.partial_success'), attachments: atts_to_delete }
+                render status:,
+                       locals: { type: :success, message: t('.partial_success'),
+                                 not_deleted_atts: atts_to_delete }
               else
-                render status: :ok, locals: { type: :success, message: t('.success'), attachments: nil }
+                render status: :ok, locals: { type: :success, message: t('.success'), not_deleted_atts: nil }
               end
             end
           end
