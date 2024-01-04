@@ -1,0 +1,37 @@
+<%= turbo_stream.update(
+  "sample_files_modal",
+  partial: "modal",
+  locals: {
+    open: false
+  }
+) %>
+
+<% if !message.nil? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+<% end %>
+
+<% if !attachments.nil? %>
+  <% attachments.each do |attachment| %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= viral_flash(
+        type: :error,
+        data:
+          t(
+            ".error",
+            filename: attachment.file.filename,
+            errors: attachment.errors.full_messages.first
+          )
+      ) %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update(
+  "attachments",
+  partial: "projects/samples/attachments/table",
+  locals: {
+    attachments: @sample.attachments
+  }
+) %>

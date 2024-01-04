@@ -7,20 +7,20 @@
     <div class="mb-4 font-normal text-gray-500 dark:text-gray-400">
       <p class="mb-4"><%= t(".description") %></p>
       <div
-        data-controller="projects--samples--attachments--concatenations-files"
-        data-projects--samples--attachments--concatenations-files-target="field"
+        data-controller="projects--samples--attachments--files"
+        data-projects--samples--attachments--files-target="field"
       ></div>
     </div>
 
     <%= form_for(:concatenation, url: namespace_project_sample_attachments_concatenation_path,
     data: {
-      controller: "projects--samples--attachments--concatenations",
-      'projects--samples--attachments--concatenations-field-name-value':"concatenation[attachment_ids]",
-      'data-projects--samples--attachments--concatenations-storage-key-value':namespace_project_sample_url(id: @sample.id),
-      action: 'turbo:submit-end->projects--samples--attachments--concatenations#clear'
+      controller: "projects--samples--attachments--selected-attachments",
+      'projects--samples--attachments--selected-attachments-field-name-value':"concatenation[attachment_ids]",
+      'data-projects--samples--attachments--selected-attachments-storage-key-value':namespace_project_sample_url(id: @sample.id),
+      action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
     }, method: :post) do |form| %>
 
-      <div data-projects--samples--attachments--concatenations-target="field"></div>
+      <div data-projects--samples--attachments--selected-attachments-target="field"></div>
 
       <div class="grid gap-4">
         <% invalid_basename = @sample.errors.include?(:basename) %>
