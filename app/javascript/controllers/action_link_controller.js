@@ -7,7 +7,7 @@ export default class extends Controller {
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
   #event_classes = ["pointer-events-none", "cursor-not-allowed"];
 
-  #default_colours = ["bg-slate-100", "text-slate-600"];
+  #default_colours = ["bg-slate-100", "text-slate-600", "dark:bg-gray-600", "dark:text-slate-300"];
 
   #primary_colours = ["bg-primary-200", "text-slate-400", "border-primary-200"];
 
