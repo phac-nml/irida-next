@@ -50,8 +50,8 @@ module Projects
           atts_to_delete = []
           attachment_ids.each do |_k, attachment_id|
             if attachment_id.is_a?(Array)
-              attachment_id.each do |attachment|
-                atts_to_delete << Attachment.find(attachment)
+              attachment_id.each do |paired_attachment_id|
+                atts_to_delete << Attachment.find(paired_attachment_id)
               end
             else
               attachment = Attachment.find(attachment_id)
