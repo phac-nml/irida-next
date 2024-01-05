@@ -32,6 +32,12 @@ module Types
     field :samples, Types::SampleType.connection_type, null: true, resolver: Resolvers::SamplesResolver,
                                                        description: 'Find samples.'
 
+    field :workflow_executions,
+          Types::WorkflowExecutionType.connection_type,
+          null: true,
+          resolver: Resolvers::WorkflowExecutionsResolver,
+          description: 'Find workflow executions'
+
     def current_user
       context[:current_user]
     end
