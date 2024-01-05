@@ -37,6 +37,11 @@ module Types
 
     field :project_sample, Types::SampleType, null: true, resolver: Resolvers::ProjectSampleResolver,
                                               description: 'Find a sample within a project.'
+    field :workflow_executions,
+          Types::WorkflowExecutionType.connection_type,
+          null: true,
+          resolver: Resolvers::WorkflowExecutionsResolver,
+          description: 'Find workflow executions'
 
     field :is_puid, Boolean, null: false, resolver: Resolvers::IsPuidResolver,
                              description: 'Check if id is in puid format'
