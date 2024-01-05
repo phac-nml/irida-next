@@ -34,5 +34,14 @@ module Namespaces
     def self.sti_name
       'Project'
     end
+
+    # QUESTIONS:
+    # =========
+    # search terms: key and value? other fields?
+    # provenance?
+    def self.search(query)
+      # where(project: Project.where(samples: Sample.where('metadata @> ?', query.to_json)))
+      joins(project: [:samples]).where('metadata @> ?', query.to_json)
+    end
   end
 end

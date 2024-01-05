@@ -135,4 +135,8 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal 10, @project_namespace.metadata_summary['metadatafield1']
     assert_equal 35, @project_namespace.metadata_summary['metadatafield2']
   end
+
+  test 'project namespace search' do
+    assert_equal @project_namespace, Namespaces::ProjectNamespace.search({ 'metadatafield1' => 10 }).first
+  end
 end
