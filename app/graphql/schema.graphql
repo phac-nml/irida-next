@@ -849,6 +849,31 @@ type Query {
     """
     last: Int
   ): SampleConnection
+
+  """
+  Find workflow executions
+  """
+  workflowExecutions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): WorkflowExecutionConnection
 }
 
 """
@@ -1019,4 +1044,94 @@ type User {
   ID of the user.
   """
   id: ID!
+}
+
+"""
+A workflow execution
+"""
+type WorkflowExecution implements Node {
+  """
+  Description of the workflow execution.
+  """
+  description: String
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Samples on the workflow execution
+  """
+  samples(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): SampleConnection
+
+  """
+  todo
+  """
+  submitter: User!
+
+  """
+  todo
+  """
+  workflowType: String
+}
+
+"""
+The connection type for WorkflowExecution.
+"""
+type WorkflowExecutionConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowExecutionEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [WorkflowExecution]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type WorkflowExecutionEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowExecution
 }

@@ -30,6 +30,8 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
       Types::ProjectType
     when Sample
       Types::SampleType
+    when WorkflowExecution
+      Types::WorkflowExecutionType
     else
       raise("Unexpected object: #{obj}")
     end
