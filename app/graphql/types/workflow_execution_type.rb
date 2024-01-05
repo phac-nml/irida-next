@@ -2,15 +2,25 @@
 
 module Types
   # WorkflowExecutions Type
-  class WorkflowExecutionType < Types::BaseObject
+  class WorkflowExecutionType < Types::BaseObject # rubocop:disable convention:GraphQL/ExtractType
     implements GraphQL::Types::Relay::Node
     description 'A workflow execution'
 
-    field :description, String, null: true, description: 'Description of the workflow execution.'
-    # field :metadata, String, nul: true, description: 'todo'
-    # field :workflow_params
-    field :workflow_type, String, null: true, description: 'todo'
+    # TODO: should fields like this have extra types or is an array of strings good enough?
+    field :metadata, [String], null: true, description: 'todo'
+    field :run_id, String, null: true, description: 'todo'
+    field :state, String, null: true, description: 'todo'
     field :submitter, UserType, null: false, description: 'todo'
+    field :submitter_id, String, null: true, description: 'todo'
+    field :tags, [String], null: true, description: 'todo'
+
+    field :workflow_engine, String, null: true, description: 'todo'
+    field :workflow_engine_parameters, [String], null: true, description: 'todo'
+    field :workflow_engine_version, String, null: true, description: 'todo'
+    field :workflow_params, [String], null: true, description: 'todo'
+    field :workflow_type, String, null: true, description: 'todo'
+    field :workflow_type_version, String, null: true, description: 'todo'
+    field :workflow_url, String, null: true, description: 'todo'
 
     field :samples,
           SampleType.connection_type,
