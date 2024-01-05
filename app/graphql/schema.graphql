@@ -2977,14 +2977,19 @@ A workflow execution
 """
 type WorkflowExecution implements Node {
   """
-  Description of the workflow execution.
-  """
-  description: String
-
-  """
   ID of the object.
   """
   id: ID!
+
+  """
+  todo
+  """
+  metadata: [String!]
+
+  """
+  todo
+  """
+  runId: String
 
   """
   Samples on the workflow execution
@@ -3014,12 +3019,57 @@ type WorkflowExecution implements Node {
   """
   todo
   """
+  state: String
+
+  """
+  todo
+  """
   submitter: User!
 
   """
   todo
   """
+  submitterId: String
+
+  """
+  todo
+  """
+  tags: [String!]
+
+  """
+  todo
+  """
+  workflowEngine: String
+
+  """
+  todo
+  """
+  workflowEngineParameters: [String!]
+
+  """
+  todo
+  """
+  workflowEngineVersion: String
+
+  """
+  todo
+  """
+  workflowParams: [String!]
+
+  """
+  todo
+  """
   workflowType: String
+
+  """
+  todo
+  """
+  workflowTypeVersion: String
+
+  """
+  todo
+  """
+  workflowUrl: String
 }
 
 """
