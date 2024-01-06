@@ -6,7 +6,7 @@
   }
 ) %>
 
-<% if !message.nil? %>
+<% unless message.nil? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
