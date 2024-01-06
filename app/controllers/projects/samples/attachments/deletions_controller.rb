@@ -16,7 +16,7 @@ module Projects
                                                    }), status: :ok
         end
 
-        def destroy # rubocop:disable Metrics/MethodLength
+        def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
           authorize! @project, to: :update_sample?
 
           atts_to_delete = get_attachments(deletion_params['attachment_ids'])
@@ -27,14 +27,12 @@ module Projects
           end
 
           respond_to do |format|
-            status = get_response_status(atts_to_delete, atts_to_delete_count)
             format.turbo_stream do
-              if status == :unprocessable_entity
-                render status:, locals: { message: nil, not_deleted_atts: atts_to_delete }
-              elsif status == :multi_status
-                render status:,
-                       locals: { type: :success, message: t('.partial_success'),
-                                 not_deleted_atts: atts_to_delete }
+              if atts_to_delete.count == atts_to_delete_count
+                render status: :unprocessable_entity, locals: { message: nil, not_deleted_atts: atts_to_delete }
+              elsif atts_to_delete.count.positive?
+                render status: :multi_status,
+                       locals: { type: :success, message: t('.partial_success'), not_deleted_atts: atts_to_delete }
               else
                 render status: :ok, locals: { type: :success, message: t('.success'), not_deleted_atts: nil }
               end
@@ -61,14 +59,6 @@ module Projects
             end
           end
           atts_to_delete
-        end
-
-        def get_response_status(attachments, attachments_count)
-          if attachments.count.positive?
-            attachments.count == attachments_count ? :unprocessable_entity : :multi_status
-          else
-            :ok
-          end
         end
       end
     end
