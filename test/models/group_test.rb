@@ -90,6 +90,10 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal 'g/subgroup-1', @subgroup_one.abbreviated_path
   end
 
+  test '#abbreviated_path with nested group' do
+    assert_equal 'g/s/s/s/s/s/s/s/s/s/subgroup-10', groups('subgroup10').abbreviated_path
+  end
+
   test '#destroy removes descendant groups, project namespaces, projects, and members' do
     self_and_descendants_count = @group_three.self_and_descendants.count
     project_namespaces = Namespaces::ProjectNamespace.where(parent: @group_three.self_and_descendants)
