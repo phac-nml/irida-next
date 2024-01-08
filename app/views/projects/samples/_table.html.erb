@@ -69,6 +69,7 @@
                     turbo: false
                   }
                 ) %>
+                <% if allowed_to?(:destroy_sample?, @project) %>
                   <%= dropdown.with_item(
                     label: t(:"projects.samples.index.remove_button"),
                     url: namespace_project_sample_path(id: sample.id),
@@ -77,6 +78,7 @@
                       turbo_confirm: t(:"projects.samples.index.remove_button_confirmation")
                     }
                   ) %>
+                <% end %>
               <% end %>
             </div>
           </td>

@@ -94,6 +94,8 @@ fr:
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
+      sample:
+        destroy_attachment?: You are not authorized to destroy attachments belonging to sample %{name}.
       user:
         create?: You are not authorized to create a user on this server.
         destroy?: You are not authorized to remove user %{name} from this server.

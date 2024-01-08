@@ -25,10 +25,10 @@ module Attachments
         Attachments::DestroyService.new(@sample, @attachment1, user).execute
       end
 
-      assert_equal ProjectPolicy, exception.policy
-      assert_equal :destroy_sample?, exception.rule
+      assert_equal SamplePolicy, exception.policy
+      assert_equal :destroy_attachment?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.project.destroy_sample?', name: @sample.project.name),
+      assert_equal I18n.t(:'action_policy.policy.sample.destroy_attachment?', name: @sample.name),
                    exception.result.message
     end
 
