@@ -2,6 +2,15 @@
 
 # Policy samples authorization
 class SamplePolicy < ApplicationPolicy
+  def destroy_attachment?
+    project = Project.find(record.project_id)
+    return true if project.namespace.parent.user_namespace? && project.namespace.parent.owner == user
+    return true if Member.namespace_owners_include_user?(user, project.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation, :group_samples do |relation, options|
     group = options[:group]
 

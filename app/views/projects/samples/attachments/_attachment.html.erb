@@ -99,7 +99,7 @@
   </td>
 
   <td class="px-6 py-4">
-    <% if allowed_to?(:destroy_sample?, @project) %>
+    <% if allowed_to?(:destroy_attachment?, @sample) %>
       <%= button_to(
         t(".delete"),
         namespace_project_sample_attachment_path(
