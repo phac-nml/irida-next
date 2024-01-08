@@ -14,12 +14,13 @@ class SamplePolicyTest < ActiveSupport::TestCase
   end
 
   test 'scope' do
-    policy = SamplePolicy.new(groups(:group_one), user: @user)
+    group_one = groups(:group_one)
+    policy = SamplePolicy.new(group_one, user: @user)
     scoped_samples = policy.apply_scope(Sample, type: :relation, name: :group_samples,
-                                                scope_options: { group: @group })
+                                                scope_options: { group: group_one })
 
     projects_samples_count = 0
-    group_self_and_descendants = @group.self_and_descendants
+    group_self_and_descendants = group_one.self_and_descendants
 
     # Sample counts from projects belonging to group and it's descendants
     group_self_and_descendants.each do |group|
