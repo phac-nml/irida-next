@@ -135,4 +135,11 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal 10, @project_namespace.metadata_summary['metadatafield1']
     assert_equal 35, @project_namespace.metadata_summary['metadatafield2']
   end
+
+  test 'project namespace sort metadata' do
+    sample1 = samples(:sample1)
+    sample1.metadata = { 'metadatafield1' => 10 }
+    sample1.save
+    assert_equal sample1, @project_namespace.metadata_sort('metadatafield1').first
+  end
 end
