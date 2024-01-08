@@ -9,6 +9,7 @@ export default class extends Controller {
   static outlets = ["action-link"];
 
   connect() {
+
     this.#storageKey =
       this.element.dataset.storageKey ||
       `${location.protocol}//${location.host}${location.pathname}`;
@@ -23,6 +24,7 @@ export default class extends Controller {
           row.checked = true;
         }
       });
+      this.#updateActionLinks(storageValue.length);
     } else {
       this.save([]);
     }
