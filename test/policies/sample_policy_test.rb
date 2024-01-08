@@ -5,13 +5,18 @@ require 'test_helper'
 class SamplePolicyTest < ActiveSupport::TestCase
   def setup
     @user = users(:john_doe)
-    @group = groups(:group_one)
-    @policy = SamplePolicy.new(@group, user: @user)
+    @sample = samples(:sample1)
+    @policy = SamplePolicy.new(@sample, user: @user)
+  end
+
+  test '#destroy_attachment?' do
+    assert @policy.destroy_attachment?
   end
 
   test 'scope' do
-    scoped_samples = @policy.apply_scope(Sample, type: :relation, name: :group_samples,
-                                                 scope_options: { group: @group })
+    policy = SamplePolicy.new(groups(:group_one), user: @user)
+    scoped_samples = policy.apply_scope(Sample, type: :relation, name: :group_samples,
+                                                scope_options: { group: @group })
 
     projects_samples_count = 0
     group_self_and_descendants = @group.self_and_descendants
