@@ -11,7 +11,7 @@ module Attachments
     end
 
     def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      authorize! @attachable.project, to: :destroy?
+      authorize! @attachable.project, to: :destroy_sample?
       destroyed_attachments = []
       if @attachment.attachable_id != @attachable.id
         raise AttachmentsDestroyError, I18n.t('services.attachments.destroy.does_not_belong_to_attachable')
