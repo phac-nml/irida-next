@@ -23,7 +23,7 @@
         <th scope="col" class="px-6 py-3 text-left"><%= column %></th>
       <% end %>
       <% if allowed_to?(:update_sample?, project) %>
-      <th scope="col" class="px-6 py-3 text-right"><%= t(".action") %></th>
+        <th scope="col" class="px-6 py-3 text-right"><%= t(".action") %></th>
       <% end %>
     </tr>
   </thead>
@@ -41,28 +41,26 @@
         id="<%= sample.id %>"
         class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
       >
-        <% if allowed_to?(:transfer_sample?, project) %>
-          <td class="w-10 ps-4">
+        <td class="px-6 py-3 whitespace-nowrap sticky left-0 bg-white dark:bg-slate-800">
+          <% if allowed_to?(:transfer_sample?, project) %>
             <%= check_box_tag "sample_ids[]",
-            sample.id,
-            nil,
-            id: dom_id(sample),
-            "aria-label": sample.name,
-            data: {
-              action: "input->selection#toggle",
-              selection_target: "rowSelection"
-            },
-            class:
-              "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
-          </td>
-        <% end %>
-        <td class="px-6 py-3 whitespace-nowrap">
+                              sample.id,
+                              nil,
+                              id: dom_id(sample),
+                              "aria-label": sample.name,
+                              data: {
+                                action: "input->selection#toggle",
+                                selection_target: "rowSelection"
+                              },
+                              class:
+                                "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+          <% end %>
           <%= link_to sample.name,
           namespace_project_sample_path(id: sample.id),
           data: {
             turbo: false
           },
-          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
         </td>
         <td class="px-6 py-3 whitespace-nowrap">
           <%= l(sample.created_at.localtime, format: :full_date) %>
