@@ -48,3 +48,21 @@ attachmentH_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filena
 attachmentI_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test-fq-file_S1_L001_R1_001.fq.gz", service_name: "test" %>
 
 attachmentJ_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test-fq-file2_S1_L001_R1_001.fq.gz", service_name: "test" %>
+
+attachmentK_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "file_1.fastq", service_name: "test" %>
+
+attachmentL_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "file_2.fastq", service_name: "test" %>
+
+attachmentM_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "seq_R1.fastq", service_name: "test" %>
+
+attachmentN_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "seq_R2.fastq", service_name: "test" %>
+
+attachmentO_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "samp_F.fastq", service_name: "test" %>
+
+attachmentP_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "samp_R.fastq", service_name: "test" %>
+
+attachmentQ_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "germ_f.fastq", service_name: "test" %>
+
+attachmentR_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "germ_r.fastq", service_name: "test" %>
+
+attachmentS_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "germ_1.fastq", service_name: "test" %>

@@ -38,7 +38,7 @@ module Attachments
 
     private
 
-    def identify_illumina_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
+    def identify_illumina_paired_end_files(attachments)
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       illumina_pe = Hash.new { |h, k| h[k] = {} }
 
@@ -58,51 +58,53 @@ module Attachments
       end
 
       # assign metadata to detected illumina pe files that contain fwd and rev
-      illumina_pe.each do |_key, pe_attachments|
-        next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
-
-        fwd_metadata = {
-          associated_attachment_id: pe_attachments['reverse'].id, type: 'illumina_pe', direction: 'forward'
-        }
-
-        pe_attachments['forward'].update(metadata: pe_attachments['forward'].metadata.merge(fwd_metadata))
-
-        rev_metadata = {
-          associated_attachment_id: pe_attachments['forward'].id, type: 'illumina_pe', direction: 'reverse'
-        }
-
-        pe_attachments['reverse'].update(metadata: pe_attachments['reverse'].metadata.merge(rev_metadata))
-      end
+      assign_metadata(illumina_pe, 'illumina_pe')
     end
 
-    def identify_paired_end_files(attachments) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
+    def identify_paired_end_files(attachments) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       pe = Hash.new { |h, k| h[k] = {} }
 
       # identify pe attachments based on fastq filename convention
       attachments.each do |att|
-        next unless /^(?<sample_name>.+_)(?<region>[1-2])\./ =~ att.filename.to_s
+        next unless /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\./ =~ att.filename.to_s
 
         case region
         when '1'
-          pe[sample_name.to_s]['forward'] = att
+          pe["#{sample_name}_1-2"]['forward'] = att
+        when 'R1'
+          pe["#{sample_name}_R1-R2"]['forward'] = att
+        when 'F'
+          pe["#{sample_name}_F-R"]['forward'] = att
+        when 'f'
+          pe["#{sample_name}_f-r"]['forward'] = att
         when '2'
-          pe[sample_name.to_s]['reverse'] = att
+          pe["#{sample_name}_1-2"]['reverse'] = att
+        when 'R2'
+          pe["#{sample_name}_R1-R2"]['reverse'] = att
+        when 'R'
+          pe["#{sample_name}_F-R"]['reverse'] = att
+        when 'r'
+          pe["#{sample_name}_f-r"]['reverse'] = att
         end
       end
 
       # assign metadata to detected pe files that contain fwd and rev
-      pe.each do |_key, pe_attachments|
+      assign_metadata(pe, 'pe')
+    end
+
+    def assign_metadata(paired_ends, type)
+      paired_ends.each do |_key, pe_attachments|
         next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
 
         fwd_metadata = {
-          associated_attachment_id: pe_attachments['reverse'].id, type: 'pe', direction: 'forward'
+          associated_attachment_id: pe_attachments['reverse'].id, type:, direction: 'forward'
         }
 
         pe_attachments['forward'].update(metadata: pe_attachments['forward'].metadata.merge(fwd_metadata))
 
         rev_metadata = {
-          associated_attachment_id: pe_attachments['forward'].id, type: 'pe', direction: 'reverse'
+          associated_attachment_id: pe_attachments['forward'].id, type:, direction: 'reverse'
         }
 
         pe_attachments['reverse'].update(metadata: pe_attachments['reverse'].metadata.merge(rev_metadata))
