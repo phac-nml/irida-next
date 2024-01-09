@@ -30,7 +30,7 @@ module WorkflowExecutions
       @workflow_execution.workflow_params = @workflow_execution.workflow_params.merge(
         {
           '--input': blob_key_to_service_path(samplesheet_key),
-          '--outdir': blob_key_to_service_path(generate_input_key('output'))
+          '--outdir': blob_key_to_service_path(generate_input_key('output'), directory: true)
         }
       )
 
@@ -101,17 +101,21 @@ module WorkflowExecutions
       blob_key_to_service_path(blob.key)
     end
 
-    def blob_key_to_service_path(blob_key)
-      case @storage_service.class.to_s
-      when 'ActiveStorage::Service::AzureStorageService'
-        format('az://%<container>s/%<key>s', container: @storage_service.container, key: blob_key)
-      when 'ActiveStorage::Service::S3Service'
-        format('s3://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
-      when 'ActiveStorage::Service::GCSService'
-        format('gcs://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
-      else
-        ActiveStorage::Blob.service.path_for(blob_key)
-      end
+    def blob_key_to_service_path(blob_key, directory: false)
+      path = case @storage_service.class.to_s
+             when 'ActiveStorage::Service::AzureStorageService'
+               format('az://%<container>s/%<key>s', container: @storage_service.container, key: blob_key)
+             when 'ActiveStorage::Service::S3Service'
+               format('s3://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
+             when 'ActiveStorage::Service::GCSService'
+               format('gcs://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
+             else
+               ActiveStorage::Blob.service.path_for(blob_key)
+             end
+
+      path = "#{path}/" if directory
+
+      path
     end
 
     def samplesheet_file
