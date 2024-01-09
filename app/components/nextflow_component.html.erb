@@ -36,7 +36,6 @@
       <%= workflow.hidden_field :workflow_url, value: @workflow.url %>
 
       <%= workflow.fields_for "workflow_engine_parameters" do |engine| %>
-        <%= engine.hidden_field :engine, value: @workflow.engine %>
         <%= engine.hidden_field :execute_loc, value: @workflow.execute_loc %>
       <% end %>
 

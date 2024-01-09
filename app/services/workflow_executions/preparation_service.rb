@@ -30,8 +30,7 @@ module WorkflowExecutions
       @workflow_execution.workflow_params = @workflow_execution.workflow_params.merge(
         {
           '--input': blob_key_to_service_path(samplesheet_key),
-          '--outdir': blob_key_to_service_path(generate_input_key('output')),
-          '--validate-params': 'false' # This is real bad and only present due to this issue https://github.com/nextflow-io/nf-validation/issues/130
+          '--outdir': blob_key_to_service_path(generate_input_key('output'))
         }
       )
 

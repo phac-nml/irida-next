@@ -24,7 +24,7 @@ module WorkflowExecutions
                             :engine_version, :url, :execute_loc)
       metadata = { workflow_name: 'irida-next-example', workflow_version: '1.0dev' }
       @workflow = workflow.new('phac-nml/iridanextexample', 1, 'IRIDA Next Example Pipeline', '1.0.1', metadata,
-                               'DSL2', '22.10.7', 'nextflow', '',
+                               'NFL', 'DSL2', 'nextflow', '23.10.0',
                                'https://github.com/phac-nml/iridanextexample', 'azure')
     end
 
