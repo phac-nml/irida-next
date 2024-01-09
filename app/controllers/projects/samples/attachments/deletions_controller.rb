@@ -16,7 +16,7 @@ module Projects
                                                    }), status: :ok
         end
 
-        def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        def destroy # rubocop:disable Metrics/AbcSize
           authorize! @project, to: :update_sample?
 
           atts_to_delete = get_attachments(deletion_params['attachment_ids'])
@@ -26,20 +26,16 @@ module Projects
             atts_to_delete -= ::Attachments::DestroyService.new(@sample, attachment, current_user).execute
           end
 
-          respond_to do |format|
-            format.turbo_stream do
-              # No selected attachments were destroyed
-              if atts_to_delete.count.positive? && atts_to_delete.count == atts_to_delete_count
-                render status: :unprocessable_entity, locals: { message: nil, not_deleted_atts: atts_to_delete }
-              # Only some selected attachments were destroyed
-              elsif atts_to_delete.count.positive?
-                render status: :multi_status,
-                       locals: { type: :success, message: t('.partial_success'), not_deleted_atts: atts_to_delete }
-              # All selected attachments were destroyed
-              else
-                render status: :ok, locals: { type: :success, message: t('.success'), not_deleted_atts: nil }
-              end
-            end
+          # No selected attachments were destroyed
+          if atts_to_delete.count.positive? && atts_to_delete.count == atts_to_delete_count
+            render status: :unprocessable_entity, locals: { message: nil, not_deleted_atts: atts_to_delete }
+          # Only some selected attachments were destroyed
+          elsif atts_to_delete.count.positive?
+            render status: :multi_status,
+                   locals: { type: :success, message: t('.partial_success'), not_deleted_atts: atts_to_delete }
+          # All selected attachments were destroyed
+          else
+            render status: :ok, locals: { type: :success, message: t('.success'), not_deleted_atts: nil }
           end
         end
 
