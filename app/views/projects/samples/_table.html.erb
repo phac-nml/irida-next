@@ -1,4 +1,4 @@
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg" data-turbo-temporary>
+<div class="relative overflow-x-auto" data-turbo-temporary>
   <table
   id="samples-table"
   class="w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400"
@@ -39,7 +39,7 @@
     <% samples.each do |sample| %>
       <tr
         id="<%= sample.id %>"
-        class="bg-white border-b dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600"
+        class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
       >
         <% if allowed_to?(:transfer_sample?, project) %>
           <td class="w-10 ps-4">
