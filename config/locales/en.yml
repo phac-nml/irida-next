@@ -619,6 +619,20 @@ en:
       index:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
+        search:
+          placeholder: Filter by name
+        sorting:
+          updated_at_desc: Updated At
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          created_at_asc: Oldest created
+      table:
+        sample: Sample
+        project: Project
+        created_at: Created
+        updated_at: Last Updated
   projects:
     create:
       success: "Project %{project_name} was successfully created"

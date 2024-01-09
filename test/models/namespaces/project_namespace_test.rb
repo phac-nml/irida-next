@@ -68,6 +68,10 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal @project_namespace.route.path, @project_namespace.full_path
   end
 
+  test '#abbreviated_path' do
+    assert_equal 'g/project-1', @project_namespace.abbreviated_path
+  end
+
   test '#destroy removes dependant project, and members' do
     members_count = @project_namespace.project_members.count
     assert_difference(

@@ -66,4 +66,8 @@ class UserNamespaceTest < ActiveSupport::TestCase
   test '#full_path' do
     assert_equal @user_namespace.route.path, @user_namespace.full_path
   end
+
+  test '#abbreviated_path' do
+    assert_equal 'john.doe_at_localhost', @user_namespace.abbreviated_path
+  end
 end

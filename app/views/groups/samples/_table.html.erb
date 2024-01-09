@@ -1,0 +1,68 @@
+<table class="min-w-full table-fixed dark:divide-slate-600">
+  <thead
+    class="
+      text-slate-700
+      bg-slate-50
+      dark:bg-slate-700
+      dark:text-slate-400
+      text-left
+    "
+  >
+    <tr>
+      <th scope="col" class="px-6 py-3"><%= t(".sample") %></th>
+      <th scope="col" class="px-6 py-3"><%= t(".project") %></th>
+      <th scope="col" class="px-6 py-3"><%= t(".created_at") %></th>
+      <th scope="col" class="px-6 py-3"><%= t(".updated_at") %></th>
+    </tr>
+  </thead>
+  <tbody
+    id="group-samples-table-body"
+    class="
+      bg-white
+      divide-y
+      divide-slate-200
+      dark:bg-slate-800
+      dark:divide-slate-700
+    "
+  >
+    <% samples.each do |sample| %>
+      <tr
+        id="<%= dom_id(sample) %>"
+        class="
+          text-sm
+          font-normal
+          text-slate-500
+          dark:text-slate-400
+        "
+      >
+        <td class="px-4 py-3"><%= link_to sample.name,
+          namespace_project_sample_path(
+            id: sample.id,
+            namespace_id: sample.project.namespace.parent.full_path,
+            project_id: sample.project.path
+          ),
+          data: {
+            turbo: false
+          },
+          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+        </td>
+        <td class="px-4 py-3">
+          <%= viral_tooltip(title: project_path(sample.project)) do %>
+            <%= link_to sample.project.abbreviated_path,
+            project_path(sample.project),
+            data: {
+              turbo: false
+            },
+            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+          <% end %>
+        </td>
+        <td class="px-4 py-3">
+          <%= l(sample.created_at.localtime, format: :full_date) %>
+        </td>
+        <td class="px-4 py-3">
+          <%= viral_time_ago(original_time: sample.updated_at) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

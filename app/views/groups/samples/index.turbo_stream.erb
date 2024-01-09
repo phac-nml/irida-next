@@ -1,66 +1,31 @@
-<%= turbo_stream.update "group_samples_list" do %>
-  <table
-    class="
-      min-w-full
-      divide-y
-      divide-slate-200
-      table-fixed
-      dark:divide-slate-600
-    "
-  >
-    <thead
-      class="
-        text-slate-700
-        bg-slate-50
-        dark:bg-slate-700
-        dark:text-slate-400
-        text-left
-      "
-    >
-      <tr>
-        <th scope="col" class="px-6 py-3"><%= t("activerecord.models.sample.one") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("activerecord.models.namespaces/project_namespace.one") %></th>
-      </tr>
-    </thead>
-    <tbody id="group-samples-table-body">
-      <% @samples.each do |sample| %>
-        <tr
-          id="<%= dom_id(sample) %>"
-          class="
-            text-sm
-            font-normal
-            text-slate-500
-            dark:text-slate-400
-          "
-        >
-          <td class="px-6 py-4"><%= link_to sample.name,
-            namespace_project_sample_path(
-              id: sample.id,
-              namespace_id: sample.project.namespace.parent.full_path,
-              project_id: sample.project.path
-            ),
-            data: {
-              turbo: false
-            },
-            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-            <div><%= sample.description %></div></td>
+<%= turbo_stream.update "group_samples_list",
+                    partial: "table",
+                    locals: {
+                      group: @group,
+                      samples: @samples
+                    } %>
 
-          <td class="px-6 py-4"><%= link_to sample.project.name,
-            project_path(sample.project),
-            data: {
-              turbo: false
-            },
-            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<%= turbo_stream.update "group_samples_pagination",
+                    partial: "pagination",
+                    locals: {
+                      pagy: @pagy
+                    } %>
+
+<%= turbo_stream.update "group_samples_sort_dropdown" do %>
+  <%= render Ransack::SortDropdownComponent.new(
+    @q,
+    "samples",
+    [
+      { name: "updated_at", dir: "desc" },
+      { name: "updated_at", dir: "asc" },
+      { name: "name", dir: "asc" },
+      { name: "name", dir: "desc" },
+      { name: "created_at", dir: "desc" },
+      { name: "created_at", dir: "asc" }
+    ]
+  ) %>
 <% end %>
 
-<%= turbo_stream.update "group_samples_pagination" do %>
-  <%= render PaginationComponent.new(
-    info: pagy_info(@pagy),
-    prev_url: (@pagy.prev ? group_samples_url(@group, page: @pagy.prev) : nil),
-    next_url: (@pagy.next ? group_samples_url(@group, page: @pagy.next) : nil)
-  ) %>
+<%= turbo_stream.update "group_samples_hidden_search_value" do %>
+  <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
 <% end %>

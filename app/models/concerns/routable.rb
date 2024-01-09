@@ -49,6 +49,19 @@ module Routable
     end
   end
 
+  def abbreviated_path
+    new_path = []
+    paths = route&.path&.split('/')
+    paths.each do |path_part|
+      new_path << if path_part == path
+                    path_part
+                  else
+                    path_part[0]
+                  end
+    end
+    new_path.join('/')
+  end
+
   def build_full_path
     if parent && path
       "#{parent.full_path}/#{path}"
