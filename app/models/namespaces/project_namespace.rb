@@ -34,18 +34,5 @@ module Namespaces
     def self.sti_name
       'Project'
     end
-
-    def metadata_sort(metadata_field, direction = 'asc')
-      return [] unless %w[asc desc].include?(direction.downcase)
-
-      project = self.project
-      # Sample.where('project_id = :project_id and metadata @> :metadata', metadata: { metadatafield1: 10 }.to_json,
-      #                                                                    project_id: project.id)
-      # Sample.where('project_id = :project_id and metadata ? :metadata_key', metadata_key: 'metadatafield1',
-      #                                                                       project_id: project.id)
-      Sample.where('project_id = :project_id and metadata ? :metadata_key',
-                   metadata_key: metadata_field,
-                   project_id: project.id).order("metadata #{direction}")
-    end
   end
 end

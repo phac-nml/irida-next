@@ -22,4 +22,18 @@ class Sample < ApplicationRecord
   def self.ransackable_associations(_auth_object = nil)
     %w[]
   end
+
+  def self.metadata_sort(field, dir)
+    metadata_field = Arel::Nodes::InfixOperation.new(
+      '->',
+      Sample.arel_table[:metadata],
+      Arel::Nodes.build_quoted(field)
+    )
+
+    if dir.to_sym == :desc
+      metadata_field.desc
+    else
+      metadata_field.asc
+    end
+  end
 end
