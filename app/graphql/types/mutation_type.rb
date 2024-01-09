@@ -5,6 +5,8 @@ module Types
   class MutationType < Types::BaseObject
     description 'The mutation root of this schema'
 
+    field :create_sample, mutation: Mutations::CreateSample
+
     # TODO: remove me
     field :test_field, String, null: false,
                                description: 'An example field added by the generator'
