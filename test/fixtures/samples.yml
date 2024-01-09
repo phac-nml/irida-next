@@ -4,7 +4,6 @@ sample1:
   name: Project 1 Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
-  metadata: { "metadatafield1": 10 }
 
 sample2:
   name: Project 1 Sample 2
