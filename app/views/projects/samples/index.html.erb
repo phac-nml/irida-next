@@ -47,7 +47,7 @@
     <div class="flex flex-row items-center mb-2 ml-auto space-x-2 font-normal">
       <%= search_form_for @q, url: namespace_project_samples_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
-        <%= f.label :name_cont, placeholder: t(".search.placeholder"), class: "sr-only" %>
+        <%= f.label :search, placeholder: t(".search.placeholder"), class: "sr-only" %>
         <div class="relative lg:w-72">
           <div
             class="
