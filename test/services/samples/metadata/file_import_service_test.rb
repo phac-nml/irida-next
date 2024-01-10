@@ -170,6 +170,22 @@ module Samples
                      @sample1.reload.metadata)
         assert_equal({}, @sample2.reload.metadata)
       end
+
+      test 'import sample metadata with permission' do
+        assert_authorized_to(:update_sample?, @project,
+                             with: ProjectPolicy,
+                             context: { user: @john_doe }) do
+          Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                   {}).execute
+        end
+      end
+
+      test 'import sample metadata without permission' do
+        assert_raises(ActionPolicy::Unauthorized) do
+          Samples::Metadata::FileImportService.new(@project, @jane_doe,
+                                                   {}).execute
+        end
+      end
     end
   end
 end
