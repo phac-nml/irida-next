@@ -31,7 +31,7 @@ class GraphqlController < ApplicationController
   end
 
   def context
-    @context ||= { current_user: }
+    @context ||= { current_user:, token: }
   end
 
   private

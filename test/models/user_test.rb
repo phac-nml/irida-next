@@ -27,7 +27,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#personal_access_tokens' do
-    assert_equal 4, @user.personal_access_tokens.size
+    assert_equal 5, @user.personal_access_tokens.size
   end
 
   test '#destroy removes dependant user namespace, and projects' do

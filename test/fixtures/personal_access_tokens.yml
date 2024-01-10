@@ -30,6 +30,16 @@ john_doe_valid_pat:
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "JQ2w5maQc4zgvC8GGMEp") %>
   last_used_at: nil
 
+john_doe_valid_read_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  scopes:
+    - read_api
+  name: Valid PAT
+  revoked: false
+  expires_at: <%= 10.days.from_now.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "X83wwK3sWCjn4xdCyZtH") %>
+  last_used_at: nil
+
 john_doe_non_expirable_pat:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   scopes:

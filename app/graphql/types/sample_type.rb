@@ -15,7 +15,7 @@ module Types
         allowed_to?(
           :read_sample?,
           object.project,
-          context: { user: context[:current_user] }
+          context: { user: context[:current_user], token: context[:token] }
         )
     end
   end
