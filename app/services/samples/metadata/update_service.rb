@@ -28,7 +28,9 @@ module Samples
 
         @sample.save
 
-        update_metadata_summary
+        if metadata_fields_update_status[:metadata_was_added] || metadata_fields_update_status[:metadata_was_deleted]
+          update_metadata_summary
+        end
 
         fields_not_updated(metadata_fields_update_status)
         metadata_fields_update_status
@@ -60,20 +62,21 @@ module Samples
       end
 
       def perform_metadata_update
-        update_status = { updated: [], not_updated: [] }
+        @update_status = { updated: [], not_updated: [], metadata_was_added: false, metadata_was_deleted: false }
         @metadata.each do |key, value|
           if value.blank?
             if @sample.metadata.key?(key)
               @sample.metadata.delete(key)
               @sample.metadata_provenance.delete(key)
-              update_status[:updated].append(key)
+              @update_status[:updated].append(key)
+              @update_status[:metadata_was_deleted] = true unless @update_status[:metadata_was_deleted]
             end
           else
             metadata_updated = assign_metadata_to_sample(key, value)
-            metadata_updated ? update_status[:updated].append(key) : update_status[:not_updated].append(key)
+            metadata_updated ? @update_status[:updated].append(key) : @update_status[:not_updated].append(key)
           end
         end
-        update_status
+        @update_status
       end
 
       def assign_metadata_to_sample(key, value)
@@ -83,6 +86,9 @@ module Samples
            @sample.metadata_provenance[key]['source'] == 'analysis'
           false
         else
+          unless @sample.metadata.key?(key) && @update_status[:metadata_was_added]
+            @update_status[:metadata_was_added] = true
+          end
           @sample.metadata_provenance[key] =
             @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
           @sample.metadata[key] = value
@@ -108,9 +114,11 @@ module Samples
 
         # Checks which keys are overlapping after metadata changes.
         # Keys that are overlapping will not affect summary counts, therefore can be deleted from both hashes
-        old_metadata.each do |metadata_field, _v|
-          if new_metadata.key?(metadata_field)
-            old_metadata.delete(metadata_field) && new_metadata.delete(metadata_field)
+        if old_metadata.count.positive? && new_metadata.count.positive?
+          old_metadata.each do |metadata_field, _v|
+            if new_metadata.key?(metadata_field)
+              old_metadata.delete(metadata_field) && new_metadata.delete(metadata_field)
+            end
           end
         end
         @project.namespace.update_metadata_summary_by_update_service(old_metadata, new_metadata)

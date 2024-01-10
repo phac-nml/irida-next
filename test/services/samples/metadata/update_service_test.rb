@@ -28,7 +28,10 @@ module Samples
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user' },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user' } },
                      @sample32.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1 metadatafield2], not_updated: [] }, metadata_fields_update_status)
+        assert_equal(
+          { updated: %w[metadatafield1 metadatafield2], not_updated: [], metadata_was_added: true,
+            metadata_was_deleted: false }, metadata_fields_update_status
+        )
 
         @subgroup12a.reload
         @group12.reload
@@ -46,7 +49,8 @@ module Samples
         assert_equal({ 'metadatafield1' => { 'id' => 2, 'source' => 'analysis' },
                        'metadatafield2' => { 'id' => 2, 'source' => 'analysis' } },
                      @sample35.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1 metadatafield2], not_updated: [] }, metadata_fields_update_status)
+        assert_equal({ updated: %w[metadatafield1 metadatafield2], not_updated: [], metadata_was_added: true,
+                       metadata_was_deleted: false }, metadata_fields_update_status)
 
         @subgroup12aa.reload
         @subgroup12a.reload
@@ -68,7 +72,8 @@ module Samples
                        'metadatafield2' => { 'id' => 1, 'source' => 'user' },
                        'metadatafield3' => { 'id' => 10, 'source' => 'analysis' } },
                      @sample33.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1 metadatafield3], not_updated: [] }, metadata_fields_update_status)
+        assert_equal({ updated: %w[metadatafield1 metadatafield3], not_updated: [], metadata_was_added: true,
+                       metadata_was_deleted: false }, metadata_fields_update_status)
 
         @subgroup12b.reload
         @group12.reload
@@ -91,7 +96,8 @@ module Samples
                        'metadatafield2' => { 'id' => 1, 'source' => 'user' },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } },
                      @sample33.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1 metadatafield3], not_updated: [] }, metadata_fields_update_status)
+        assert_equal({ updated: %w[metadatafield1 metadatafield3], not_updated: [], metadata_was_added: true,
+                       metadata_was_deleted: false }, metadata_fields_update_status)
 
         @subgroup12b.reload
         @group12.reload
@@ -114,7 +120,8 @@ module Samples
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis' },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } },
                      @sample34.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield3], not_updated: %w[metadatafield1] }, metadata_fields_update_status)
+        assert_equal({ updated: %w[metadatafield3], not_updated: %w[metadatafield1], metadata_was_added: true,
+                       metadata_was_deleted: false }, metadata_fields_update_status)
         assert @sample34.errors.full_messages.include?(
           I18n.t('services.samples.metadata.user_cannot_update_metadata',
                  sample_name: @sample34.name,
@@ -141,7 +148,8 @@ module Samples
 
         assert_equal({ 'metadatafield1' => 'value1' }, @sample34.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis' } }, @sample34.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield2], not_updated: [] }, metadata_fields_update_status)
+        assert_equal({ updated: %w[metadatafield2], not_updated: [], metadata_was_added: false,
+                       metadata_was_deleted: true }, metadata_fields_update_status)
 
         @subgroup12aa.reload
         @subgroup12a.reload
@@ -163,7 +171,8 @@ module Samples
 
         assert_equal({ 'metadatafield2' => 'value2' }, @sample33.metadata)
         assert_equal({ 'metadatafield2' => { 'id' => 1, 'source' => 'user' } }, @sample33.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1], not_updated: [] }, metadata_fields_update_status)
+        assert_equal({ updated: %w[metadatafield1], not_updated: [], metadata_was_added: false,
+                       metadata_was_deleted: true }, metadata_fields_update_status)
 
         @subgroup12b.reload
         @group12.reload
@@ -172,6 +181,54 @@ module Samples
         assert_equal({ 'metadatafield2' => 1 },
                      @subgroup12b.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 3 },
+                     @group12.metadata_summary)
+      end
+
+      test 'add, update, and remove metadata in same request to mimic batch update request with analysis' do
+        params = { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => 'newvalue2',
+                                   'metadatafield3' => 'value3' }, 'analysis_id' => 1 }
+        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project30, @sample33, @user,
+                                                                             params).execute
+
+        assert_equal({ 'metadatafield2' => 'newvalue2', 'metadatafield3' => 'value3' }, @sample33.metadata)
+        assert_equal(
+          { 'metadatafield2' => { 'id' => 1, 'source' => 'analysis' },
+            'metadatafield3' => { 'id' => 1, 'source' => 'analysis' } }, @sample33.metadata_provenance
+        )
+        assert_equal({ updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [],
+                       metadata_was_added: true, metadata_was_deleted: true }, metadata_fields_update_status)
+
+        @subgroup12b.reload
+        @group12.reload
+        assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
+                     @project30.namespace.metadata_summary)
+        assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
+                     @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 3, 'metadatafield3' => 1 },
+                     @group12.metadata_summary)
+      end
+
+      test 'add, update, and remove metadata in same request to mimic batch update with user' do
+        params = { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => 'newvalue2',
+                                   'metadatafield3' => 'value3' } }
+        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project30, @sample33, @user,
+                                                                             params).execute
+
+        assert_equal({ 'metadatafield2' => 'newvalue2', 'metadatafield3' => 'value3' }, @sample33.metadata)
+        assert_equal(
+          { 'metadatafield2' => { 'id' => @user.id, 'source' => 'user' },
+            'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } }, @sample33.metadata_provenance
+        )
+        assert_equal({ updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [],
+                       metadata_was_added: true, metadata_was_deleted: true }, metadata_fields_update_status)
+
+        @subgroup12b.reload
+        @group12.reload
+        assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
+                     @project30.namespace.metadata_summary)
+        assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
+                     @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 3, 'metadatafield3' => 1 },
                      @group12.metadata_summary)
       end
 
