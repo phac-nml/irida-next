@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 
-# Policy for groups authorization
+# Policy for graphql authorization
 class GraphqlPolicy < ApplicationPolicy
-  authorize :token
+  # nil is allowed as a user accessing the api through graphiql while logged into the website would not have a token
+  authorize :token, allow_nil: true
 
   def query?
-    return true if token&.scopes&.include?(:api) || token&.scopes&.include?(:read_api)
+    return true if token&.scopes&.any? { |scope| %w[api read_api].include? scope }
+    return true if token.nil? && !user.nil? # allow users with a session to query the api
 
     false
   end
 
   def mutate?
-    return true if token&.scopes&.include?(:api)
+    return true if token&.scopes&.include?('api')
+    return true if token.nil? && !user.nil? # allow users with a session to mutate the api
 
     false
   end
