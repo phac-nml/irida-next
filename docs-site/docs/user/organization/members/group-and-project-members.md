@@ -8,7 +8,7 @@ In IRIDA Next, members are the users and groups which have access to your projec
 
 ## Membership Types
 
-IRIDA Next has two types of membership
+IRIDA Next has four types of membership
 
 | Membership Type  | Process                                                                      |
 | :--------------- | :--------------------------------------------------------------------------- |
@@ -41,17 +41,25 @@ For Example:
 
 ## Direct Shared Membership
 
-When the project belongs to a group, if a user is added directly to a project, and then shared with a group and then is shared with a group,
-the minimum of the effective group access level and the user's access level in the project applies
+When the project belongs to a group, if the project is shared directly with another group, the minimum of the effective group access level and the user's access level in their group applies
 
 For Example:
+
+- User 0 is a member of Group A with **Analyst** role
+- Project 1 belongs to Group B
+- Project 1 is shared with Group A with a group access level **Maintainer**
+- User 0 will have a maximum role of **Analyst** from their group when accessing Project 1
 
 ## Inherited Shared Membership
 
-When the project belongs to a group, if a user is a member of the group or any of it's ancestors, and then is shared with a group,
-the minimum of the effective group access level and the user's access level in their group applies
+When the project belongs to a group, and the group is shared with another group in which a user has membership, the minimum of the effective group access level and the user's access level in their group applies
 
 For Example:
+
+- User 0 is a member of Group A with **Analyst** role
+- Project 1 belongs to Group B
+- Group B is shared with Group A with a group access level **Maintainer**
+- User 0 will have a maximum role of **Analyst** from their group when accessing Group B and it's descendants (subgroups and projects)
 
 ## Add members to a group
 
@@ -124,7 +132,7 @@ If a user is:
 Prerequisites:
 
 - To remove direct members that have the:
-  - Maintainer, Developer, Analyst, or Guest role, you must have the Maintainer role.
+  - Maintainer, Developer, Analyst, Uploader, or Guest role, you must have the Maintainer role.
   - Owner role, you must have the Owner role.
 
 To remove a member from a project:
@@ -144,7 +152,7 @@ If a user is:
 Prerequisites:
 
 - To remove direct members that have the:
-  - Maintainer, Developer, Analyst, or Guest role, you must have the Maintainer role.
+  - Maintainer, Developer, Analyst, Uploader, or Guest role, you must have the Maintainer role.
   - Owner role, you must have the Owner role.
 
 To remove a member from a group:
