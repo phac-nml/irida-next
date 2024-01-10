@@ -61,6 +61,22 @@ module Projects
       assert_text @sample1.description
     end
 
+    test 'user with role >= Maintainer should be able to see upload, concatenate and delete files buttons' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 1
+      assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button'), count: 1
+    end
+
+    test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
+      user = users(:ryan_doe)
+      login_as user
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 0
+      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 0
+      assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button'), count: 0
+    end
+
     test 'user with role >= Maintainer should be able to attach a file to a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
       assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
@@ -100,7 +116,10 @@ module Projects
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
-      click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+
+      within('#attachments-table-body') do
+        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      end
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
@@ -142,7 +161,9 @@ module Projects
       end
 
       # Destroy paired files
-      click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      within('#attachments-table-body') do
+        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      end
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
@@ -621,6 +642,67 @@ module Projects
         assert_text 'concatenated_file_2.fastq'
         assert_selector 'table #attachments-table-body tr', count: 4
       end
+    end
+
+    test 'should be able to delete multiple attachments' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 2
+        find('table #attachments-table-body tr', text: 'test_file.fastq').find('input').click
+        find('table #attachments-table-body tr', text: 'test_file_A.fastq').find('input').click
+      end
+      click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file.fastq'
+        assert_text 'test_file_A.fastq'
+        click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
+        assert_html5_inputs_valid
+      end
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 0
+        assert_no_text 'test_file.fastq'
+        assert_no_text 'test_file_A.fastq'
+        assert_text I18n.t('projects.samples.show.no_files')
+        assert_text I18n.t('projects.samples.show.no_associated_files')
+      end
+      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
+    end
+
+    test 'should be able to delete multiple attachments including paired files' do
+      login_as users(:jeff_doe)
+      project = projects(:projectA)
+      sample = samples(:sampleB)
+      namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
+        find('table #attachments-table-body tr', text: 'test_file_fwd_1.fastq').find('input').click
+        find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
+        find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
+        find('table #attachments-table-body tr', text: 'test_file_D.fastq').find('input').click
+      end
+      click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text 'test_file_fwd_1.fastq'
+        assert_text 'test_file_rev_1.fastq'
+        assert_text 'test_file_fwd_2.fastq'
+        assert_text 'test_file_rev_2.fastq'
+        assert_text 'test_file_fwd_3.fastq'
+        assert_text 'test_file_rev_3.fastq'
+        assert_text 'test_file_D.fastq'
+        click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
+      end
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 2
+        assert_no_text 'test_file_fwd_1.fastq'
+        assert_no_text 'test_file_rev_1.fastq'
+        assert_no_text 'test_file_fwd_2.fastq'
+        assert_no_text 'test_file_rev_2.fastq'
+        assert_no_text 'test_file_fwd_3.fastq'
+        assert_no_text 'test_file_rev_3.fastq'
+        assert_no_text 'test_file_D.fastq'
+      end
+      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
     end
   end
 end

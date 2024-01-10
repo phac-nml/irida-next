@@ -33,6 +33,9 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             collection do
               resource :concatenation, only: %i[create new]
             end
+            collection do
+              resource :deletion, only: %i[new destroy]
+            end
           end
         end
         resource :metadata, module: :samples, only: %i[update]
