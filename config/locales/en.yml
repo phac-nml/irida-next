@@ -965,6 +965,10 @@ en:
         sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '${project_name}'"
         empty_metadata: "No metadata was received to update sample '%{sample_name}'"
         user_cannot_update_metadata: "Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis. "
+        import_file:
+          empty_file: The file cannot be empty.
+          empty_sample_id_column: The sample id column cannot be empty.
+          invalid_file_extension: The file can only be a csv or excel.
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
