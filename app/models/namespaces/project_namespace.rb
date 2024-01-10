@@ -43,9 +43,6 @@ module Namespaces
 
     def update_metadata_summary_by_update_service(metadata_to_subtract, metadata_to_add)
       namespaces_to_update = self_and_parents
-      puts 'in update metadata summary by update service'
-      puts metadata_to_subtract
-      puts metadata_to_add
       unless metadata_to_subtract.empty?
         subtract_from_metadata_summary(namespaces_to_update, metadata_to_subtract, true)
       end
