@@ -865,7 +865,7 @@ en:
             submit_button: Concatenate
         deletions:
           modal:
-            title: File Deletion
+            title: Delete Files
             description: "The following files were selected for deletion:"
             submit_button: Delete
           destroy:

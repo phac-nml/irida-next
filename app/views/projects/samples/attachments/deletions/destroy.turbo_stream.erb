@@ -12,8 +12,8 @@
   <% end %>
 <% end %>
 
-<% unless not_deleted_atts.nil? %>
-  <% not_deleted_atts.each do |attachment| %>
+<% unless not_deleted_attachments.nil? %>
+  <% not_deleted_attachments.each do |attachment| %>
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(
         type: :error,
