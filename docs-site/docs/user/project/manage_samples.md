@@ -8,7 +8,7 @@ In IRIDA Next samples are stored inside of a project
 
 ## View Samples
 
-Prerequisites:
+Prerequisite:
 
 - You must have access to the project either through membership, or through a namespace share
 
@@ -110,6 +110,8 @@ To upload files to a sample:
 
 ## Delete Sample files
 
+Prerequisites:
+
 - You must have access to the project either through membership, or through a namespace share
 - You must have an **Owner** role
 
@@ -119,6 +121,8 @@ To upload files to a sample:
 4. To delete individual single end and paired-end reads, select **Delete** for the files you would like to delete.
 
 ## Concatenate Sample files
+
+Prerequisites:
 
 - You must have access to the project either through membership, or through a namespace share
 - You must have an **Maintainer** role

@@ -31,7 +31,7 @@ To create a project under your user namespace:
 
 To create a project under group namespace:
 
-Prerequisites:
+Prerequisite:
 
 - You must have at least the Maintainer role for the group if creating a project under a group
 
@@ -45,7 +45,7 @@ Prerequisites:
 
 ## Edit Project Details
 
-Prerequisites:
+Prerequisite:
 
 - You must have at least the Maintainer role for the project.
 
@@ -61,7 +61,7 @@ To edit the project details:
 
 ## Edit Project URL
 
-Prerequisites:
+Prerequisite:
 
 - You must have at least the Maintainer role for the project.
 
@@ -91,7 +91,7 @@ To transfer the project into another namespace:
 
 ## Delete Project
 
-Prerequisites:
+Prerequisite:
 
 - You must have at least the Owner role for the project.
 
