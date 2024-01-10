@@ -8,6 +8,7 @@ class ApplicationPolicy < ActionPolicy::Base
   #   authorize :account, optional: true
   #
   # Read more about authorization context: https://actionpolicy.evilmartians.io/#/authorization_context
+  authorize :token, optional: true
 
   # Define shared methods useful for most policies.
   # For example:

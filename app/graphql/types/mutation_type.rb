@@ -9,6 +9,7 @@ module Types
     field :test_field, String, null: false,
                                description: 'An example field added by the generator'
     def test_field
+      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
       'Hello World'
     end
   end

@@ -9,16 +9,20 @@ module SessionlessAuthentication
     user = User.find_by(email: username)
     return unless user
 
-    pat = user.personal_access_tokens.find_by_token(access_token) # rubocop:disable Rails/DynamicFindBy
-    return unless pat&.active?
+    @token = user.personal_access_tokens.find_by_token(access_token) # rubocop:disable Rails/DynamicFindBy
+    return unless token&.active?
 
-    pat.touch(:last_used_at) # rubocop:disable Rails/SkipsModelValidations
+    token.touch(:last_used_at) # rubocop:disable Rails/SkipsModelValidations
 
     sessionless_sign_in(user)
   end
 
   def sessionless_sign_in(user)
     sign_in(user, store: false)
+  end
+
+  def token
+    @token
   end
 
   private
@@ -41,7 +45,7 @@ module SessionlessAuthentication
   end
 
   def decode_basic_credentials_token(encoded_header)
-    Base64.decode64(encoded_header).split(/:/, 2).last
+    Base64.decode64(encoded_header).split(':', 2).last
   end
 
   def username_from_basic_header(header, pattern)
@@ -50,7 +54,7 @@ module SessionlessAuthentication
   end
 
   def decode_basic_credentials_username(encoded_header)
-    Base64.decode64(encoded_header).split(/:/, 2).first
+    Base64.decode64(encoded_header).split(':', 2).first
   end
 
   def base64?(value)
