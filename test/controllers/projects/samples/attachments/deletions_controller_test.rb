@@ -35,7 +35,7 @@ module Projects
           assert_response :unauthorized
         end
 
-        test 'should delete attachments for a member with role >= maintainer' do
+        test 'should delete attachments for a member with role == owner' do
           delete namespace_project_sample_attachments_deletion_path(@namespace, @project1, @sample1,
                                                                     format: :turbo_stream),
                  params: {
@@ -85,7 +85,7 @@ module Projects
           assert_response :unprocessable_entity
         end
 
-        test 'should not delete attachments for a non member' do
+        test 'should not delete attachments with role <= owner' do
           user = users(:micha_doe)
           login_as user
 

@@ -8,7 +8,7 @@ module Projects
         respond_to :turbo_stream
 
         def new
-          authorize! @project, to: :update_sample?
+          authorize! @sample, to: :destroy_attachment?
           render turbo_stream: turbo_stream.update('sample_files_modal',
                                                    partial: 'modal',
                                                    locals: {
@@ -17,7 +17,7 @@ module Projects
         end
 
         def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-          authorize! @project, to: :update_sample?
+          authorize! @sample, to: :destroy_attachment?
 
           attachments_to_delete = get_attachments(deletion_params['attachment_ids'])
           attachments_to_delete_count = attachments_to_delete.count
