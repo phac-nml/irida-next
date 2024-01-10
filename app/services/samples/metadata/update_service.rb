@@ -13,6 +13,7 @@ module Samples
         @sample = sample
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
+        @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [] }
       end
 
       def execute
@@ -24,19 +25,17 @@ module Samples
 
         transform_metadata_keys
 
-        metadata_fields_update_status = perform_metadata_update
+        perform_metadata_update
 
         @sample.save
 
-        if metadata_fields_update_status[:metadata_was_added] || metadata_fields_update_status[:metadata_was_deleted]
-          update_metadata_summary
-        end
+        update_metadata_summary
 
-        fields_not_updated(metadata_fields_update_status)
-        metadata_fields_update_status
+        assign_errors_to_not_updated_fields
+        @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
-        metadata_fields_update_status || nil
+        @metadata_changes
       end
 
       private
@@ -62,66 +61,48 @@ module Samples
       end
 
       def perform_metadata_update
-        @update_status = { updated: [], not_updated: [], metadata_was_added: false, metadata_was_deleted: false }
         @metadata.each do |key, value|
           if value.blank?
             if @sample.metadata.key?(key)
               @sample.metadata.delete(key)
               @sample.metadata_provenance.delete(key)
-              @update_status[:updated].append(key)
-              @update_status[:metadata_was_deleted] = true unless @update_status[:metadata_was_deleted]
+              @metadata_changes[:deleted] << key
             end
           else
-            metadata_updated = assign_metadata_to_sample(key, value)
-            metadata_updated ? @update_status[:updated].append(key) : @update_status[:not_updated].append(key)
+            assign_metadata_to_sample(key, value)
           end
         end
         @update_status
       end
 
-      def assign_metadata_to_sample(key, value)
+      def assign_metadata_to_sample(key, value) # rubocop:disable Metrics/AbcSize
         # We don't overwrite existing @sample.metadata_provenance or @sample.metadata
         # that has a {source: 'analysis'} with a user
         if @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
            @sample.metadata_provenance[key]['source'] == 'analysis'
-          false
+          @metadata_changes[:not_updated] << key
         else
-          unless @sample.metadata.key?(key) && @update_status[:metadata_was_added]
-            @update_status[:metadata_was_added] = true
-          end
+          @sample.metadata.key?(key) ? @metadata_changes[:updated] << key : @metadata_changes[:added] << key
           @sample.metadata_provenance[key] =
             @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
           @sample.metadata[key] = value
-          true
         end
       end
 
-      def fields_not_updated(metadata_fields_update_status)
-        metadata_fields_not_updated = metadata_fields_update_status[:not_updated]
+      def assign_errors_to_not_updated_fields
+        metadata_fields_not_updated = @metadata_changes[:not_updated]
         return unless metadata_fields_not_updated.count.positive?
 
         raise SampleMetadataUpdateError,
               I18n.t('services.samples.metadata.user_cannot_update_metadata',
-                     sample_name: @sample.name,
-                     metadata_fields: metadata_fields_not_updated.join(', '))
+                     sample_name: @sample.name, metadata_fields: metadata_fields_not_updated.join(', '))
       end
 
       def update_metadata_summary
-        return unless @sample.previous_changes['metadata']
+        return unless @metadata_changes[:added].count.positive? || @metadata_changes[:deleted].count.positive?
 
-        old_metadata = @sample.previous_changes['metadata'][0]
-        new_metadata = @sample.previous_changes['metadata'][1]
-
-        # Checks which keys are overlapping after metadata changes.
-        # Keys that are overlapping will not affect summary counts, therefore can be deleted from both hashes
-        if old_metadata.count.positive? && new_metadata.count.positive?
-          old_metadata.each do |metadata_field, _v|
-            if new_metadata.key?(metadata_field)
-              old_metadata.delete(metadata_field) && new_metadata.delete(metadata_field)
-            end
-          end
-        end
-        @project.namespace.update_metadata_summary_by_update_service(old_metadata, new_metadata)
+        @project.namespace.update_metadata_summary_by_update_service(@metadata_changes[:deleted],
+                                                                     @metadata_changes[:added])
       end
     end
   end

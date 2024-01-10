@@ -20,37 +20,34 @@ module Samples
         @subgroup12aa = groups(:subgroup_twelve_a_a)
       end
 
-      test 'update sample metadata with sample containing no existing metadata and user in metadata provenanc' do
+      test 'add metadata to sample containing no existing metadata by user' do
         params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project29, @sample32, @user,
-                                                                             params).execute
-        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
+        metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user' },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user' } },
-                     @sample32.metadata_provenance)
-        assert_equal(
-          { updated: %w[metadatafield1 metadatafield2], not_updated: [], metadata_was_added: true,
-            metadata_was_deleted: false }, metadata_fields_update_status
-        )
-
+                     @sample35.metadata_provenance)
+        assert_equal({ added: %w[metadatafield1 metadatafield2], updated: [], deleted: [],
+                       not_updated: [] }, metadata_changes)
+        @subgroup12aa.reload
         @subgroup12a.reload
         @group12.reload
-        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
-        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.metadata_summary)
       end
 
-      test 'update sample metadata with sample containing no existing metadata and analysis in metadata provenance' do
+      test 'add metadata to sample containing no existing metadata by analysis' do
         params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, 'analysis_id' => 2 }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project31, @sample35, @user,
-                                                                             params).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => 2, 'source' => 'analysis' },
                        'metadatafield2' => { 'id' => 2, 'source' => 'analysis' } },
                      @sample35.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1 metadatafield2], not_updated: [], metadata_was_added: true,
-                       metadata_was_deleted: false }, metadata_fields_update_status)
+        assert_equal({ added: %w[metadatafield1 metadatafield2], updated: [], deleted: [],
+                       not_updated: [] }, metadata_changes)
 
         @subgroup12aa.reload
         @subgroup12a.reload
@@ -63,8 +60,7 @@ module Samples
 
       test 'update sample metadata merge with new metadata and analysis overwritting user' do
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' }, 'analysis_id' => 10 }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project30, @sample33, @user,
-                                                                             params).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value4', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
                      @sample33.metadata)
@@ -72,8 +68,8 @@ module Samples
                        'metadatafield2' => { 'id' => 1, 'source' => 'user' },
                        'metadatafield3' => { 'id' => 10, 'source' => 'analysis' } },
                      @sample33.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1 metadatafield3], not_updated: [], metadata_was_added: true,
-                       metadata_was_deleted: false }, metadata_fields_update_status)
+        assert_equal({ added: %w[metadatafield3], updated: %w[metadatafield1], deleted: [],
+                       not_updated: [] }, metadata_changes)
 
         @subgroup12b.reload
         @group12.reload
@@ -87,8 +83,7 @@ module Samples
 
       test 'update sample metadata merge with new metadata and user overwritting user' do
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' } }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project30, @sample33, @user,
-                                                                             params).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value4', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
                      @sample33.metadata)
@@ -96,8 +91,8 @@ module Samples
                        'metadatafield2' => { 'id' => 1, 'source' => 'user' },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } },
                      @sample33.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1 metadatafield3], not_updated: [], metadata_was_added: true,
-                       metadata_was_deleted: false }, metadata_fields_update_status)
+        assert_equal({ added: %w[metadatafield3], updated: %w[metadatafield1], deleted: [],
+                       not_updated: [] }, metadata_changes)
 
         @subgroup12b.reload
         @group12.reload
@@ -111,8 +106,7 @@ module Samples
 
       test 'update sample metadata merge with new metadata and user unable to overwrite analysis' do
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' } }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project31, @sample34, @user,
-                                                                             params).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
                      @sample34.metadata)
@@ -120,8 +114,8 @@ module Samples
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis' },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } },
                      @sample34.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield3], not_updated: %w[metadatafield1], metadata_was_added: true,
-                       metadata_was_deleted: false }, metadata_fields_update_status)
+        assert_equal({ added: %w[metadatafield3], updated: [], deleted: [],
+                       not_updated: %w[metadatafield1] }, metadata_changes)
         assert @sample34.errors.full_messages.include?(
           I18n.t('services.samples.metadata.user_cannot_update_metadata',
                  sample_name: @sample34.name,
@@ -143,13 +137,11 @@ module Samples
 
       test 'remove metadata key with user' do
         params = { 'metadata' => { 'metadatafield2' => '' } }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project31, @sample34, @user,
-                                                                             params).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1' }, @sample34.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis' } }, @sample34.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield2], not_updated: [], metadata_was_added: false,
-                       metadata_was_deleted: true }, metadata_fields_update_status)
+        assert_equal({ added: [], updated: [], deleted: %w[metadatafield2], not_updated: [] }, metadata_changes)
 
         @subgroup12aa.reload
         @subgroup12a.reload
@@ -166,13 +158,11 @@ module Samples
 
       test 'remove metadata key with analysis' do
         params = { 'metadata' => { 'metadatafield1' => '' }, 'analysis_id' => 1 }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project30, @sample33, @user,
-                                                                             params).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'value2' }, @sample33.metadata)
         assert_equal({ 'metadatafield2' => { 'id' => 1, 'source' => 'user' } }, @sample33.metadata_provenance)
-        assert_equal({ updated: %w[metadatafield1], not_updated: [], metadata_was_added: false,
-                       metadata_was_deleted: true }, metadata_fields_update_status)
+        assert_equal({ added: [], updated: [], deleted: %w[metadatafield1], not_updated: [] }, metadata_changes)
 
         @subgroup12b.reload
         @group12.reload
@@ -187,16 +177,17 @@ module Samples
       test 'add, update, and remove metadata in same request to mimic batch update request with analysis' do
         params = { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => 'newvalue2',
                                    'metadatafield3' => 'value3' }, 'analysis_id' => 1 }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project30, @sample33, @user,
-                                                                             params).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'newvalue2', 'metadatafield3' => 'value3' }, @sample33.metadata)
         assert_equal(
           { 'metadatafield2' => { 'id' => 1, 'source' => 'analysis' },
             'metadatafield3' => { 'id' => 1, 'source' => 'analysis' } }, @sample33.metadata_provenance
         )
-        assert_equal({ updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [],
-                       metadata_was_added: true, metadata_was_deleted: true }, metadata_fields_update_status)
+        assert_equal(
+          { added: %w[metadatafield3], updated: %w[metadatafield2], deleted: %w[metadatafield1],
+            not_updated: [] }, metadata_changes
+        )
 
         @subgroup12b.reload
         @group12.reload
@@ -211,16 +202,17 @@ module Samples
       test 'add, update, and remove metadata in same request to mimic batch update with user' do
         params = { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => 'newvalue2',
                                    'metadatafield3' => 'value3' } }
-        metadata_fields_update_status = Samples::Metadata::UpdateService.new(@project30, @sample33, @user,
-                                                                             params).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'newvalue2', 'metadatafield3' => 'value3' }, @sample33.metadata)
         assert_equal(
           { 'metadatafield2' => { 'id' => @user.id, 'source' => 'user' },
             'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } }, @sample33.metadata_provenance
         )
-        assert_equal({ updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [],
-                       metadata_was_added: true, metadata_was_deleted: true }, metadata_fields_update_status)
+        assert_equal(
+          { added: %w[metadatafield3], updated: %w[metadatafield2], deleted: %w[metadatafield1],
+            not_updated: [] }, metadata_changes
+        )
 
         @subgroup12b.reload
         @group12.reload
@@ -259,9 +251,9 @@ module Samples
       test 'sample does not belong to project' do
         params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
         project = projects(:projectA)
-        assert_no_changes -> { @sample33 } do
-          assert_nil Samples::Metadata::UpdateService.new(project, @sample33, @user, params).execute
-        end
+        metadata_changes = Samples::Metadata::UpdateService.new(project, @sample33, @user, params).execute
+
+        assert_equal({ added: [], updated: [], deleted: [], not_updated: [] }, metadata_changes)
         assert @sample33.errors.full_messages.include?(
           I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample33.name,
                                                                                 project_name: project.name)
@@ -269,9 +261,9 @@ module Samples
       end
 
       test 'metadata is nil' do
-        assert_no_changes -> { @sample } do
-          assert_nil Samples::Metadata::UpdateService.new(@project30, @sample33, @user, {}).execute
-        end
+        metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, {}).execute
+
+        assert_equal({ added: [], updated: [], deleted: [], not_updated: [] }, metadata_changes)
         assert @sample33.errors.full_messages.include?(
           I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample33.name)
         )
@@ -279,9 +271,9 @@ module Samples
 
       test 'metadata is empty hash' do
         params = { 'metadata' => {} }
-        assert_no_changes -> { @sample } do
-          assert_nil Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
-        end
+        metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
+
+        assert_equal({ added: [], updated: [], deleted: [], not_updated: [] }, metadata_changes)
         assert @sample33.errors.full_messages.include?(
           I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample33.name)
         )
