@@ -4,7 +4,7 @@ id: share_groups
 title: Share Groups
 ---
 
-In IRIDA Next you can invite a group to a group to allow them members of the group access to the shared group
+In IRIDA Next you can invite a group to a group to allow the members of the group access to the shared group
 
 ## Share a group with a group
 
