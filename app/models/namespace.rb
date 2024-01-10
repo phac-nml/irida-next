@@ -226,7 +226,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     Route.restore(Route.only_deleted.find_by(source_id: id).id, recursive: true)
   end
 
-  def subtract_from_metadata_summary(namespaces, metadata, update_by_one)
+  def subtract_from_metadata_summary_count(namespaces, metadata, update_by_one)
     namespaces.each do |namespace|
       metadata.each do |metadata_field, value|
         value = 1 if update_by_one
@@ -240,7 +240,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def add_to_metadata_summary(namespaces, metadata, update_by_one)
+  def add_to_metadata_summary_count(namespaces, metadata, update_by_one)
     namespaces.each do |namespace|
       metadata.each do |metadata_field, value|
         value = 1 if update_by_one

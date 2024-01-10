@@ -35,18 +35,10 @@ module Namespaces
       'Project'
     end
 
-    def self_and_parents
-      namespaces = [self]
-      namespaces += parent.self_and_ancestors unless parent.type == 'User'
-      namespaces
-    end
-
-    def update_metadata_summary_by_update_service(metadata_to_subtract, metadata_to_add)
-      namespaces_to_update = self_and_parents
-      unless metadata_to_subtract.empty?
-        subtract_from_metadata_summary(namespaces_to_update, metadata_to_subtract, true)
-      end
-      add_to_metadata_summary(namespaces_to_update, metadata_to_add, true) unless metadata_to_add.empty?
+    def update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
+      namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
+      subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata, true) unless deleted_metadata.empty?
+      add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
     end
   end
 end
