@@ -65,7 +65,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def can_view?(user, object_namespace)
-      effective_access_level(object_namespace, user) > Member::AccessLevel::NO_ACCESS
+      effective_access_level = effective_access_level(object_namespace, user)
+      return false if effective_access_level == Member::AccessLevel::UPLOADER
+
+      effective_access_level > Member::AccessLevel::NO_ACCESS
     end
 
     def can_destroy?(user, object_namespace)
@@ -182,9 +185,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   class AccessLevel
     NO_ACCESS      = 0  # Access is disabled
     GUEST          = 10 # Read Only access
-    ANALYST        = 20 # Can modify data in project but cannot add members
-    MAINTAINER     = 30 # Can grant access to other users upto their level
-    OWNER          = 40 # Full control
+    UPLOADER       = 20 # Allows access to the api for the uploader
+    ANALYST        = 30 # Can modify data in project but cannot add members
+    MAINTAINER     = 40 # Can grant access to other users upto their level
+    OWNER          = 50 # Full control
 
     class << self
       def all_values_with_owner
@@ -194,6 +198,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       def access_level_options
         {
           I18n.t('activerecord.models.member.access_level.guest') => GUEST,
+          I18n.t('activerecord.models.member.access_level.uploader') => UPLOADER,
           I18n.t('activerecord.models.member.access_level.analyst') => ANALYST,
           I18n.t('activerecord.models.member.access_level.maintainer') => MAINTAINER
         }

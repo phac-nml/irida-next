@@ -184,6 +184,7 @@ en:
         access_level:
           no_access: No Access
           guest: Guest
+          uploader: Uploader
           analyst: Analyst
           maintainer: Maintainer
           owner: Owner
