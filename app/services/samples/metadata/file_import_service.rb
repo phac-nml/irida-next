@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'roo'
+
 module Samples
   module Metadata
     # Service used to import sample metadata via a file
@@ -17,7 +19,7 @@ module Samples
       def execute
         authorize! @project, to: :update_sample?
 
-        validate_params
+        validate_sample_id_column
 
         validate_file
 
@@ -31,12 +33,7 @@ module Samples
 
       private
 
-      def validate_params
-        if @file.nil?
-          raise SampleMetadataFileImportError,
-                I18n.t('services.samples.metadata.import_file.empty_file')
-        end
-
+      def validate_sample_id_column
         return unless @sample_id_column.nil?
 
         raise SampleMetadataFileImportError,
@@ -44,17 +41,20 @@ module Samples
       end
 
       def validate_file
+        if @file.nil?
+          raise SampleMetadataFileImportError,
+                I18n.t('services.samples.metadata.import_file.empty_file')
+        end
+
         file_extension = File.extname(@file).downcase
 
-        if file_extension == '.csv'
-          puts 'CSV'
-        elsif %w[.xls .xlsx].include?(file_extension)
-          puts 'EXCEL'
-        else
-          puts 'OTHER'
+        unless %w[.csv .xls .xlsx].include?(file_extension)
           raise SampleMetadataFileImportError,
                 I18n.t('services.samples.metadata.import_file.invalid_file_extension')
         end
+
+        spreadsheet = Roo::Spreadsheet.open(@file)
+        pp spreadsheet.info
       end
     end
   end

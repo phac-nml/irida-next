@@ -10,16 +10,13 @@ module Samples
         @jane_doe = users(:jane_doe)
         @project = projects(:project1)
 
-        @csv = File.open('test/fixtures/files/metadata/valid.csv', 'r')
-        @excel = File.open('test/fixtures/files/metadata/valid.xlsx', 'r')
-        @other = File.open('test/fixtures/files/metadata/invalid.txt', 'r')
+        @csv = File.new('test/fixtures/files/metadata/valid.csv', 'r')
+        @xls = File.new('test/fixtures/files/metadata/valid.xls', 'r')
+        @xlsx = File.new('test/fixtures/files/metadata/valid.xlsx', 'r')
+        @other = File.new('test/fixtures/files/metadata/invalid.txt', 'r')
       end
 
       # bin/rails test test/services/samples/metadata/file_import_service_test.rb
-
-      test 'import sample metadata with empty params' do
-        assert_not Samples::Metadata::FileImportService.new(@project, @john_doe, {}).execute
-      end
 
       test 'import sample metadata with permission' do
         assert_authorized_to(:update_sample?, @project,
@@ -37,14 +34,24 @@ module Samples
         end
       end
 
+      test 'import sample metadata with empty params' do
+        assert_not Samples::Metadata::FileImportService.new(@project, @john_doe, {}).execute
+      end
+
       test 'import sample metadata via csv file' do
         params = { file: @csv, sample_id_column: 'sample_name', ignore_empty_values: true }
         assert Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                         params).execute
       end
 
-      test 'import sample metadata via excel file' do
-        params = { file: @excel, sample_id_column: 'sample_name', ignore_empty_values: true }
+      test 'import sample metadata via xls file' do
+        params = { file: @xls, sample_id_column: 'sample_name', ignore_empty_values: true }
+        assert Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                        params).execute
+      end
+
+      test 'import sample metadata via xlsx file' do
+        params = { file: @xlsx, sample_id_column: 'sample_name', ignore_empty_values: true }
         assert Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                         params).execute
       end

@@ -105,6 +105,10 @@ gem 'google-cloud-storage', '~> 1.11', require: false
 # job queueing
 gem 'good_job', '~> 3.21'
 
+# spreadsheet parser [https://github.com/roo-rb/roo]
+gem 'roo', '~> 2.10.0'
+gem 'roo-xls'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
