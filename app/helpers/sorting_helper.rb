@@ -8,19 +8,22 @@ module SortingHelper
     true
   end
 
-  def sorting_item(dropdown, ransack_obj, field, dir, sort_item)
+  def sorting_item(dropdown, ransack_obj, field, dir)
     dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
-                       url: sort_url(ransack_obj, format('%<field>s %<dir>s', field:, dir:)).gsub(
-                         "#{sort_item}.turbo_stream", sort_item
-                       ),
+                       url: sorting_url(ransack_obj, field, dir:),
                        icon_name: active_sort(ransack_obj, field, dir) ? 'check' : 'blank',
                        data: {
                          turbo_stream: true
                        })
   end
 
-  def sorting_url(ransack_obj, field)
-    url = sort_url(ransack_obj, field).to_s
+  def sorting_url(ransack_obj, field, dir: nil)
+    url = if dir.nil?
+            sort_url(ransack_obj,
+                     field).to_s
+          else
+            sort_url(ransack_obj, format('%<field>s %<dir>s', field:, dir:)).to_s
+          end
     url.include?('.turbo_stream') ? url.gsub!('.turbo_stream', '') : url
   end
 end
