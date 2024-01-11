@@ -11,7 +11,6 @@ module Samples
         @project = projects(:project1)
 
         @csv = File.open('test/fixtures/files/metadata/valid.csv', 'r')
-        @other = File.open('test/fixtures/files/metadata/invalid.txt', 'r')
         @sample1 = samples(:sample1)
         @sample2 = samples(:sample2)
       end
