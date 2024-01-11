@@ -9,9 +9,16 @@
       <% if allowed_to?(:transfer_sample?, project) %>
       <th aria-hidden="true"></th>
       <% end %>
-      <th scope="col" class="px-4 py-3 text-left"><%= t(".sample") %></th>
-      <th scope="col" class="px-4 py-3 text-left"><%= t(".created_at") %></th>
-      <th scope="col" class="px-4 py-3 text-left"><%= t(".updated_at") %></th>
+      <th scope="col" class="px-4 py-3 text-left">
+        <%= %>
+        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".sample"), url: sorting_url(@q, :name), field: :name) %>
+      </th>
+      <th scope="col" class="px-4 py-3 text-left">
+        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".created_at"), url: sorting_url(@q, :created_at), field: :created_at) %>
+      </th>
+      <th scope="col" class="px-4 py-3 text-left">
+        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".updated_at"), url: sorting_url(@q, :updated_at), field: :updated_at) %>
+      </th>
       <th scope="col" class="px-4 py-3 text-right"><%= t(".action") %></th>
     </tr>
   </thead>

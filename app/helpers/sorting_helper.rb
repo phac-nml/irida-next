@@ -18,4 +18,9 @@ module SortingHelper
                          turbo_stream: true
                        })
   end
+
+  def sorting_url(ransack_obj, field)
+    url = sort_url(ransack_obj, field).to_s
+    url.include?('.turbo_stream') ? url.gsub!('.turbo_stream', '') : url
+  end
 end
