@@ -13,7 +13,9 @@ module Ransack
     end
 
     def icon
-      return unless @ransack_obj.sorts[0].attr_name == @field.to_s
+      unless @ransack_obj.present? && @ransack_obj.sorts.present? && @ransack_obj.sorts[0].attr_name == @field.to_s
+        return
+      end
 
       @ransack_obj.sorts[0].dir == 'asc' ? 'arrow_up' : 'arrow_down'
     end

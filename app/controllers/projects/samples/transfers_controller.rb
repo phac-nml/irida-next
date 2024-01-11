@@ -3,13 +3,14 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Transfer
-    class TransfersController < Projects::ApplicationController
+    class TransfersController < Projects::SamplesController
       respond_to :turbo_stream
       before_action :projects
 
       def new
         authorize! @project, to: :transfer_sample?
 
+        @q = Sample.where(project_id: @project.id).ransack(params[:q])
         respond_to do |format|
           format.turbo_stream do
             render status: :ok
@@ -22,7 +23,8 @@ module Projects
         sample_ids = transfer_params[:sample_ids]
         transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
                                                                                                  sample_ids)
-        @pagy, @samples = pagy(Sample.where(project_id: @project.id))
+        @q = Sample.where(project_id: @project.id).ransack(params[:q])
+        @pagy, @samples = pagy(@q.result)
 
         if transferred_samples_ids.length == sample_ids.length
           render status: :ok, locals: { sample_ids:, type: :success, message: t('.success'), errors: [] }
