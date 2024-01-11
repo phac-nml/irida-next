@@ -969,6 +969,9 @@ en:
           empty_file: The file cannot be empty.
           empty_sample_id_column: The sample id column cannot be empty.
           invalid_file_extension: The file can only be a csv or excel.
+          missing_sample_id_column: The file is missing the sample id column.
+          missing_metadata_column: The file does not have any metadata columns.
+          missing_metadata_row: The file does not have any metadata rows.
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.

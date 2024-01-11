@@ -40,7 +40,7 @@ module Samples
               I18n.t('services.samples.metadata.import_file.empty_sample_id_column')
       end
 
-      def validate_file
+      def validate_file # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         if @file.nil?
           raise SampleMetadataFileImportError,
                 I18n.t('services.samples.metadata.import_file.empty_file')
@@ -48,13 +48,31 @@ module Samples
 
         file_extension = File.extname(@file).downcase
 
+        # Question: Would it be so bad if we handled ODS too?
         unless %w[.csv .xls .xlsx].include?(file_extension)
           raise SampleMetadataFileImportError,
                 I18n.t('services.samples.metadata.import_file.invalid_file_extension')
         end
 
         spreadsheet = Roo::Spreadsheet.open(@file)
-        pp spreadsheet.info
+        headers = spreadsheet.row(1)
+
+        unless headers.include?(@sample_id_column)
+          raise SampleMetadataFileImportError,
+                I18n.t('services.samples.metadata.import_file.missing_sample_id_column')
+        end
+
+        unless headers.count { |header| header != @sample_id_column } > 1
+          raise SampleMetadataFileImportError,
+                I18n.t('services.samples.metadata.import_file.missing_metadata_column')
+        end
+
+        first_row = spreadsheet.row(2)
+
+        return unless first_row.compact.empty?
+
+        raise SampleMetadataFileImportError,
+              I18n.t('services.samples.metadata.import_file.missing_metadata_row')
       end
     end
   end
