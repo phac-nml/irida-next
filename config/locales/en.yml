@@ -525,9 +525,10 @@ en:
         access_level:
           level_0: No Access
           level_10: Guest
-          level_20: Analyst
-          level_30: Maintainer
-          level_40: Owner
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
         inherited_from: "Inherited from"
         table_header:
           group: Group
@@ -581,9 +582,10 @@ en:
         access_level:
           level_0: No Access
           level_10: Guest
-          level_20: Analyst
-          level_30: Maintainer
-          level_40: Owner
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
         aria_labels:
           expires_at: Group member expiration
         actions:
@@ -703,9 +705,10 @@ en:
         access_level:
           level_0: No Access
           level_10: Guest
-          level_20: Analyst
-          level_30: Maintainer
-          level_40: Owner
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
         inherited_from: "Inherited from"
         table_header:
           group: Group
@@ -759,9 +762,10 @@ en:
         access_level:
           level_0: No Access
           level_10: Guest
-          level_20: Analyst
-          level_30: Maintainer
-          level_40: Owner
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
         aria_labels:
           expires_at: Project member expiration
         actions:
