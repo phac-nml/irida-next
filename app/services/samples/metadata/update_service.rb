@@ -31,7 +31,7 @@ module Samples
 
         update_metadata_summary
 
-        assign_errors_to_not_updated_fields
+        handle_not_updated_fields
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
@@ -89,7 +89,10 @@ module Samples
         end
       end
 
-      def assign_errors_to_not_updated_fields
+      # Metadata fields that were not updated due to a user trying to overwrite metadata previously added by an
+      # analysis in assign_metadata_to_sample are handled here, where they are assigned to the @sample.error
+      # and will be used for a :error flash message in the UI.
+      def handle_not_updated_fields
         metadata_fields_not_updated = @metadata_changes[:not_updated]
         return unless metadata_fields_not_updated.count.positive?
 
