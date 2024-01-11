@@ -2,10 +2,9 @@
 
 # Policy samples authorization
 class SamplePolicy < ApplicationPolicy
-  def destroy_attachment?
-    project = Project.find(record.project_id)
-    return true if project.namespace.parent.user_namespace? && project.namespace.parent.owner == user
-    return true if Member.namespace_owners_include_user?(user, project.namespace) == true
+  def destroy_attachment? # rubocop:disable Metrics/AbcSize
+    return true if record.project.namespace.parent.user_namespace? && record.project.namespace.parent.owner == user
+    return true if Member.namespace_owners_include_user?(user, record.project.namespace) == true
 
     details[:name] = record.name
     false
