@@ -4,12 +4,15 @@ module Mutations
   # Base Mutation
   class CreateSample < BaseMutation
     null true
-    argument :description, String
-    argument :name, String
-    argument :project_id, ID
+    description 'Create a new sample within an existing project.'
+    argument :description, String, description: 'The description to give the sample.'
+    argument :name, String, required: true, description: 'The name to give the sample.'
+    argument :project_id, ID, # rubocop:disable GraphQL/ExtractInputType
+             required: true,
+             description: 'The Node ID of the project to switch the sample will be created in.'
 
-    field :errors, [String], null: false
-    field :sample, Types::SampleType
+    field :errors, [String], null: false, description: 'A list of errors that prevented the mutation.'
+    field :sample, Types::SampleType, description: 'The newly created sample.'
 
     def resolve(name:, description:, project_id:)
       project = IridaSchema.object_from_id(project_id, { expected_type: Project })
@@ -25,6 +28,10 @@ module Mutations
           errors: sample.errors.full_messages
         }
       end
+    end
+
+    def ready?(**_args)
+      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
     end
   end
 end
