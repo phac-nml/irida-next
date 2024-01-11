@@ -413,6 +413,35 @@ module Projects
       end
     end
 
+    test 'can sort samples by column' do
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody tr td:nth-child(2)') do
+        assert_text @sample1.name
+      end
+
+      click_on I18n.t('projects.samples.table.sample')
+
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
+      end
+
+      click_on I18n.t('projects.samples.table.sample')
+
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
+      end
+    end
+
     test 'can filter and then sort the list of samples' do
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
