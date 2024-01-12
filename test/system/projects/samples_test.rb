@@ -723,5 +723,20 @@ module Projects
         assert_text I18n.t('projects.samples.attachments.attachment.delete'), count: 0
       end
     end
+
+    test 'user with role >= Maintainer can see attachment checkboxes' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body input[type=checkbox]', count: 2
+      end
+    end
+
+    test 'user with role < Maintainer should not see checkboxes' do
+      login_as users(:ryan_doe)
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body input[type=checkbox]', count: 0
+      end
+    end
   end
 end

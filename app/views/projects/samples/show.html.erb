@@ -27,7 +27,7 @@
 <% end %>
 
 <%= viral_card do |card| %>
-  <% if allowed_to?(:update?, @project) %>
+  <% if allowed_to?(:update_sample?, @project) %>
     <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
       <% header.with_action do %>
         <%= link_to t(".new_attachment_button"),
