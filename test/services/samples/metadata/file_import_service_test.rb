@@ -9,6 +9,8 @@ module Samples
         @john_doe = users(:john_doe)
         @jane_doe = users(:jane_doe)
         @project = projects(:project1)
+        @sample1 = samples(:sample1)
+        @sample2 = samples(:sample2)
 
         @csv = File.open('test/fixtures/files/metadata/valid.csv', 'r')
         @sample1 = samples(:sample1)
