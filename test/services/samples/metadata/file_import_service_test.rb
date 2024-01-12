@@ -34,7 +34,7 @@ module Samples
       end
 
       test 'import sample metadata with empty params' do
-        assert_not Samples::Metadata::FileImportService.new(@project, @john_doe, {}).execute
+        assert_empty Samples::Metadata::FileImportService.new(@project, @john_doe, {}).execute
       end
 
       test 'import sample metadata via csv file' do
@@ -72,29 +72,29 @@ module Samples
       test 'import sample metadata via other file' do
         other = File.new('test/fixtures/files/metadata/invalid.txt', 'r')
         params = { file: other, sample_id_column: 'sample_name', ignore_empty_values: true }
-        assert_not Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                            params).execute
+        assert_empty Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                              params).execute
       end
 
       test 'import sample metadata with no sample_id_column' do
         csv = File.new('test/fixtures/files/metadata/missing_sample_id_column.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: true }
-        assert_not Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                            params).execute
+        assert_empty Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                              params).execute
       end
 
       test 'import sample metadata with no metadata columns' do
         csv = File.new('test/fixtures/files/metadata/missing_metadata_columns.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: true }
-        assert_not Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                            params).execute
+        assert_empty Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                              params).execute
       end
 
       test 'import sample metadata with no metadata rows' do
         csv = File.new('test/fixtures/files/metadata/missing_metadata_rows.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: true }
-        assert_not Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                            params).execute
+        assert_empty Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                              params).execute
       end
     end
   end

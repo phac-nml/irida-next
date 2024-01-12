@@ -25,23 +25,10 @@ module Samples
 
         validate_file
 
-        parse_settings = @headers.zip(@headers).to_h
-        parse_settings[:clean] = true
-        @spreadsheet.each_with_index(parse_settings) do |metadata, index|
-          next unless index.positive?
-
-          sample = Sample.find_by(name: metadata[@sample_id_column]) # TODO: Change to ID.
-          metadata.delete(@sample_id_column)
-
-          # NOTE: Update service does not accept symbols.
-          status = UpdateService.new(@project, sample, @current_user, { 'metadata' => metadata }).execute
-          # pp status
-        end
-
-        true
+        perform_file_import
       rescue Samples::Metadata::FileImportService::SampleMetadataFileImportError => e
         @project.errors.add(:base, e.message)
-        false
+        {}
       end
 
       private
@@ -87,6 +74,22 @@ module Samples
 
         raise SampleMetadataFileImportError,
               I18n.t('services.samples.metadata.import_file.missing_metadata_row')
+      end
+
+      def perform_file_import
+        response = {}
+        parse_settings = @headers.zip(@headers).to_h
+        parse_settings[:clean] = true
+        @spreadsheet.each_with_index(parse_settings) do |metadata, index|
+          next unless index.positive?
+
+          sample = Sample.find_by(name: metadata[@sample_id_column]) # TODO: Change to ID.
+          metadata.delete(@sample_id_column)
+
+          # NOTE: Update service does not accept symbols.
+          status = UpdateService.new(@project, sample, @current_user, { 'metadata' => metadata }).execute
+          response[sample.id] = status
+        end
       end
     end
   end
