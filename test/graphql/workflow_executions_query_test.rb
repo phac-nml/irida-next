@@ -73,4 +73,20 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
     assert_not_empty data, 'workflow execution type should work'
     assert_equal 'my_run_id_1', data['runId'], 'workflow execution run id should match'
   end
+
+  test 'workflow executions nodes query for samples should work' do
+    workflow_execution_id = IridaSchema.execute(
+      WORKFLOW_EXECUTIONS_QUERY,
+      context: { current_user: @user },
+      variables: { first: 1 }
+    )['data']['workflowExecutions']['nodes'][0]['id']
+
+    result = IridaSchema.execute(WORKFLOW_EXECUTIONS_NODE_QUERY, context: { current_user: @user },
+                                                                 variables: { workflow_execution_id: })
+
+    data = result['data']['node']
+
+    assert_not_empty data['samples']['nodes'], 'workflow execution samples resolver should work'
+    assert_equal 'gid://irida/Sample/21002189', data['samples']['nodes'][0]['id'], 'sample id should match'
+  end
 end
