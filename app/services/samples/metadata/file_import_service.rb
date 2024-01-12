@@ -14,6 +14,8 @@ module Samples
         @file = params[:file]
         @sample_id_column = params[:sample_id_column]
         @ignore_empty_values = params[:ignore_empty_values] || false
+        @spreadsheet = nil
+        @headers = nil
       end
 
       def execute
@@ -23,7 +25,17 @@ module Samples
 
         validate_file
 
-        # TODO: call Samples::Metadata::UpdateService
+        columns = @headers.zip(@headers).to_h
+        @spreadsheet.each_with_index(columns) do |metadata, index|
+          next unless index.positive?
+
+          sample = Sample.find_by(name: metadata[@sample_id_column]) # TODO: Change to ID.
+          metadata.delete(@sample_id_column)
+
+          # NOTE: Update service does not accept symbols.
+          status = UpdateService.new(@project, sample, @current_user, { 'metadata' => metadata }).execute
+          pp status
+        end
 
         true
       rescue Samples::Metadata::FileImportService::SampleMetadataFileImportError => e
@@ -54,21 +66,22 @@ module Samples
                 I18n.t('services.samples.metadata.import_file.invalid_file_extension')
         end
 
-        spreadsheet = Roo::Spreadsheet.open(@file)
-        headers = spreadsheet.row(1)
+        @spreadsheet = Roo::Spreadsheet.open(@file)
+        @headers = @spreadsheet.row(1)
 
-        unless headers.include?(@sample_id_column)
+        unless @headers.include?(@sample_id_column)
           raise SampleMetadataFileImportError,
                 I18n.t('services.samples.metadata.import_file.missing_sample_id_column')
         end
 
-        unless headers.count { |header| header != @sample_id_column } > 1
+        unless @headers.count { |header| header != @sample_id_column } > 1
           raise SampleMetadataFileImportError,
                 I18n.t('services.samples.metadata.import_file.missing_metadata_column')
         end
 
-        first_row = spreadsheet.row(2)
+        # Question: Should we also check for duplicate headers? What if there's a duplicate sample_id_column?
 
+        first_row = @spreadsheet.row(2)
         return unless first_row.compact.empty?
 
         raise SampleMetadataFileImportError,
