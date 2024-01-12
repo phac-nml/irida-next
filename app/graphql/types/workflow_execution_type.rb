@@ -33,7 +33,7 @@ module Types
       super &&
         allowed_to?(
           :read?,
-          object.submitter, # TODO: Should we display only for submitter? Should a WorkflowExecution policy be made?
+          object.submitter,
           context: { user: context[:current_user] }
         )
     end
