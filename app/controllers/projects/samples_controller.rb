@@ -23,6 +23,7 @@ module Projects
 
     def show
       authorize! @sample.project, to: :read_sample?
+      @tab = params[:tab]
     end
 
     def new

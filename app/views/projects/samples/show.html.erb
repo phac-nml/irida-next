@@ -26,56 +26,60 @@
   <% end %>
 <% end %>
 
-<%= viral_card do |card| %>
-  <% if allowed_to?(:update_sample?, @project) %>
-    <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
-      <% header.with_action do %>
-        <%= link_to t(".new_attachment_button"),
-        new_namespace_project_sample_attachment_path(sample_id: @sample.id),
-        data: {
-          turbo_frame: "sample_files_modal",
-          turbo_stream: true
-        },
-        class: "button button--size-default button--state-default" %>
-      <% end %>
-      <% header.with_action do %>
-        <%= link_to t(".concatenate_button"),
-        new_namespace_project_sample_attachments_concatenation_path(
-          sample_id: @sample.id
-        ),
-        data: {
-          turbo_frame: "sample_files_modal",
-          turbo_stream: false,
-          controller: "action-link",
-          action_link_required_value: 2
-        },
-        class: "button button--size-default button--state-default action-link" %>
-      <% end %>
-      <% if allowed_to?(:destroy_attachment?, @sample) %>
-        <% header.with_action do %>
-          <%= link_to t(".delete_files_button"),
-          new_namespace_project_sample_attachments_deletion_path(
-            sample_id: @sample.id
-          ),
-          data: {
-            turbo_frame: "sample_files_modal",
-            turbo_stream: false,
-            controller: "action-link",
-            action_link_required_value: 1
-          },
-          class: "button button--size-default button--state-destructive action-link" %>
+<div class="bg-white dark:bg-slate-800">
+  <%= turbo_frame_tag "new_member_modal" %>
+  <%= turbo_frame_tag "member-update-alert" %>
+
+  <%= viral_tabs(id: "sample-data-tabs", label: "Files table") do |tabs| %>
+    <%= tabs.with_tab(url: namespace_project_sample_path(id: @sample.id, tab: 'files'), controls: "sample-data-tabs", selected: @tab == "files" || @tab.nil?) do %>
+      <%= t(:"projects.samples.show.tabs.files") %>
+    <% end %>
+
+    <%= tabs.with_tab(url: namespace_project_sample_path(id: @sample.id, tab: 'metadata'), controls: "sample-data-tabs", selected: @tab == "metadata") do %>
+      <%= t(:"projects.samples.show.tabs.metadata") %>
+    <% end %>
+
+    <%= tabs.with_tab_content do %>
+      <div class="flex flex-col">
+        <%= turbo_frame_tag "table-listing", "data-turbo-temporary": true,
+                            src:
+                              (
+                                namespace_project_sample_path(
+                                  format: :turbo_stream,
+                                  tab: @tab
+                                )
+                              ),
+                            loading: :lazy do %>
+          <table class="min-w-full table-fixed dark:divide-gray-600">
+            <tbody
+              class="
+                bg-white
+                divide-y
+                divide-gray-200
+                dark:bg-gray-800
+                dark:divide-gray-700
+              "
+            >
+              <% 10.times do %>
+                <tr>
+
+                  <td class="p-4 animate-pulse">
+                    <div class="flex-1 py-1 space-y-6">
+                      <div class="space-y-3">
+                        <div class="w-48 h-2 rounded bg-slate-200"></div>
+                        <div class="w-32 h-2 rounded bg-slate-200"></div>
+                      </div>
+                    </div>
+                  </td>
+
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         <% end %>
-      <%end%>
-    <% end %>
-  <% else %>
-    <% card.with_header(title: t("projects.samples.show.files")) %>
-  <% end %>
-  <% card.with_section do %>
-    <%= turbo_frame_tag("attachments") do %>
-      <%= render partial: "projects/samples/attachments/table",
-      locals: {
-        attachments: @sample.attachments
-      } %>
+        <%= turbo_frame_tag "pagination", "data-turbo-temporary": true %>
+      </div>
     <% end %>
   <% end %>
-<% end %>
+
+</div>

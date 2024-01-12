@@ -815,6 +815,13 @@ en:
           size: Size
           created_at: Uploaded
           action: Action
+          metadata_field: Metadata Field
+          value: Value
+          provider: Provider
+          last_modified: Last Modified
+        tabs:
+          files: Files
+          metadata: Metadata
       create:
         success: Sample was successfully created.
       new:

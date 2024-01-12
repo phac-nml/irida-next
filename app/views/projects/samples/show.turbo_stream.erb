@@ -1,0 +1,10 @@
+<%= turbo_stream.update "table-listing" do %>
+  <% if @tab == 'metadata' %>
+    <% render partial: "projects/samples/metadata/table" %>
+  <% else %>
+    <% render partial: "projects/samples/attachments/table",
+    locals: {
+      attachments: @sample.attachments
+    } %>
+  <% end %>
+<% end %>
