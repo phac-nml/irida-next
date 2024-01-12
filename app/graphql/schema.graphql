@@ -2982,12 +2982,12 @@ type WorkflowExecution implements Node {
   id: ID!
 
   """
-  todo
+  WorkflowExecution metadata
   """
   metadata: [String!]
 
   """
-  todo
+  WorkflowExecution run id
   """
   runId: String
 
@@ -3017,57 +3017,57 @@ type WorkflowExecution implements Node {
   ): SampleConnection
 
   """
-  todo
+  WorkflowExecution state
   """
   state: String
 
   """
-  todo
+  WorkflowExecution submitter (User)
   """
   submitter: User!
 
   """
-  todo
+  WorkflowExecution submitter_id
   """
   submitterId: String
 
   """
-  todo
+  WorkflowExecution tags
   """
   tags: [String!]
 
   """
-  todo
+  WorkflowExecution workflow engine
   """
   workflowEngine: String
 
   """
-  todo
+  WorkflowExecution workflow engine parameters
   """
   workflowEngineParameters: [String!]
 
   """
-  todo
+  WorkflowExecution workflow engine version
   """
   workflowEngineVersion: String
 
   """
-  todo
+  WorkflowExecution params
   """
   workflowParams: [String!]
 
   """
-  todo
+  WorkflowExecution type
   """
   workflowType: String
 
   """
-  todo
+  WorkflowExecution type version
   """
   workflowTypeVersion: String
 
   """
-  todo
+  WorkflowExecution url
   """
   workflowUrl: String
 }
