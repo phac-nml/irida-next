@@ -25,8 +25,9 @@ module Samples
 
         validate_file
 
-        columns = @headers.zip(@headers).to_h
-        @spreadsheet.each_with_index(columns) do |metadata, index|
+        parse_settings = @headers.zip(@headers).to_h
+        parse_settings[:clean] = true
+        @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
           sample = Sample.find_by(name: metadata[@sample_id_column]) # TODO: Change to ID.
@@ -34,7 +35,7 @@ module Samples
 
           # NOTE: Update service does not accept symbols.
           status = UpdateService.new(@project, sample, @current_user, { 'metadata' => metadata }).execute
-          pp status
+          # pp status
         end
 
         true
@@ -52,7 +53,7 @@ module Samples
               I18n.t('services.samples.metadata.import_file.empty_sample_id_column')
       end
 
-      def validate_file # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def validate_file # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
         if @file.nil?
           raise SampleMetadataFileImportError,
                 I18n.t('services.samples.metadata.import_file.empty_file')
@@ -67,7 +68,7 @@ module Samples
         end
 
         @spreadsheet = Roo::Spreadsheet.open(@file)
-        @headers = @spreadsheet.row(1)
+        @headers = @spreadsheet.row(1).collect(&:strip)
 
         unless @headers.include?(@sample_id_column)
           raise SampleMetadataFileImportError,

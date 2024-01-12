@@ -9,6 +9,8 @@ module Samples
         @john_doe = users(:john_doe)
         @jane_doe = users(:jane_doe)
         @project = projects(:project1)
+        @sample1 = samples(:sample1)
+        @sample2 = samples(:sample2)
 
         @csv = File.new('test/fixtures/files/metadata/valid.csv', 'r')
       end
@@ -39,6 +41,10 @@ module Samples
         params = { file: @csv, sample_id_column: 'sample_name', ignore_empty_values: true }
         assert Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                         params).execute
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
+                     @sample2.reload.metadata)
       end
 
       test 'import sample metadata via xls file' do
@@ -46,6 +52,10 @@ module Samples
         params = { file: xls, sample_id_column: 'sample_name', ignore_empty_values: true }
         assert Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                         params).execute
+        assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 20, 'metadatafield3' => 30 },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => 15, 'metadatafield2' => 25, 'metadatafield3' => 35 },
+                     @sample2.reload.metadata)
       end
 
       test 'import sample metadata via xlsx file' do
@@ -53,6 +63,10 @@ module Samples
         params = { file: xlsx, sample_id_column: 'sample_name', ignore_empty_values: true }
         assert Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                         params).execute
+        assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 20, 'metadatafield3' => 30 },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => 15, 'metadatafield2' => 25, 'metadatafield3' => 35 },
+                     @sample2.reload.metadata)
       end
 
       test 'import sample metadata via other file' do
