@@ -194,7 +194,7 @@ module Projects
       assert_no_selector 'table#samples-table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       assert_selector 'table#samples-table tbody tr', count: 2
-      within first('tbody tr td:nth-child(2)') do
+      within first('tbody tr td:first-child') do
         assert_text @sample2.name
       end
     end
@@ -424,7 +424,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'table#samples-table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
+      within first('tbody tr td:first-child') do
         assert_text @sample1.name
       end
 
@@ -489,7 +489,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'table#samples-table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
+      within first('tbody tr td:first-child') do
         assert_text @sample1.name
       end
 
@@ -503,7 +503,7 @@ module Projects
       click_on I18n.t('projects.samples.table.sample')
 
       assert_selector 'table#samples-table tbody tr', count: 1
-      within first('tbody tr td:nth-child(2)') do
+      within first('tbody tr td:first-child') do
         assert_text @sample1.name
       end
     end
@@ -512,7 +512,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'table#samples-table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
+      within first('tbody tr td:first-child') do
         assert_text @sample1.name
       end
 
@@ -520,7 +520,7 @@ module Projects
       click_on I18n.t('projects.samples.table.sample')
 
       assert_selector 'table#samples-table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
+      within first('tbody tr td:first-child') do
         assert_text @sample3.name
       end
 
