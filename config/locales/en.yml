@@ -805,6 +805,9 @@ en:
         files: Files
         no_files: No Files
         no_associated_files: There are no files associated with this sample.
+        sorting:
+          updated_at_desc: Updated At
+          updated_at_asc: Oldest updated
         upload: Upload
         upload_files: Upload Files
         uploading: Uploading

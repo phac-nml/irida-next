@@ -24,6 +24,18 @@ module Projects
     def show
       authorize! @sample.project, to: :read_sample?
       @tab = params[:tab]
+      puts params
+      @q = load_samples.ransack(params[:q])
+      puts @q
+      set_default_sort
+      respond_to do |format|
+        format.html do
+          @has_samples = @q.result.count.positive?
+        end
+        format.turbo_stream do
+          @pagy, @samples = pagy(@q.result)
+        end
+      end
     end
 
     def new
