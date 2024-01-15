@@ -26,8 +26,6 @@ module Samples
         validate_file
 
         perform_file_import
-
-        # TODO: Recover from SampleMetadataUpdateErrors
       rescue Samples::Metadata::FileImportService::SampleMetadataFileImportError => e
         @project.errors.add(:base, e.message)
         {}
@@ -86,13 +84,16 @@ module Samples
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
-          sample = Sample.find_by(name: metadata[@sample_id_column]) # TODO: Change to ID.
-          metadata.delete(@sample_id_column)
-          metadata.compact! if @ignore_empty_values
-
-          # NOTE: Update service does not accept symbols.
-          status = UpdateService.new(@project, sample, @current_user, { 'metadata' => metadata }).execute
-          response[sample.id] = status
+          begin
+            sample = Sample.find_by(name: metadata[@sample_id_column]) # TODO: Change to ID.
+            metadata.delete(@sample_id_column)
+            metadata.compact! if @ignore_empty_values
+            status = UpdateService.new(@project, sample, @current_user, { 'metadata' => metadata }).execute
+            response[sample.id] = status
+          rescue StandardError
+            # Question: What do we do if the sample can't be found?
+            next
+          end
         end
       end
     end

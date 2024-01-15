@@ -119,6 +119,16 @@ module Samples
         assert_equal({ 'metadatafield2' => '20', 'metadatafield3' => '30' }, @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield3' => '35' }, @sample2.reload.metadata)
       end
+
+      test 'import sample metadata with a sample that does not belong to project' do
+        csv = File.new('test/fixtures/files/metadata/mixed_project_samples.csv', 'r')
+        params = { file: csv, sample_id_column: 'sample_name' }
+        assert Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                        params).execute
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+                     @sample1.reload.metadata)
+        assert_equal({}, @sample2.reload.metadata)
+      end
     end
   end
 end
