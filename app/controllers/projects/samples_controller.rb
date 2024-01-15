@@ -24,9 +24,7 @@ module Projects
     def show
       authorize! @sample.project, to: :read_sample?
       @tab = params[:tab]
-      puts params
       @q = load_samples.ransack(params[:q])
-      puts @q
       set_default_sort
       respond_to do |format|
         format.html do
