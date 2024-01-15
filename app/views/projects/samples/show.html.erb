@@ -27,9 +27,6 @@
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
-  <%= turbo_frame_tag "new_member_modal" %>
-  <%= turbo_frame_tag "member-update-alert" %>
-
   <%= viral_tabs(id: "sample-data-tabs", label: "Files table") do |tabs| %>
     <%= tabs.with_tab(url: namespace_project_sample_path(id: @sample.id, tab: 'files'), controls: "sample-data-tabs", selected: @tab == "files" || @tab.nil?) do %>
       <%= t(:"projects.samples.show.tabs.files") %>
@@ -77,7 +74,11 @@
             </tbody>
           </table>
         <% end %>
-        <%= turbo_frame_tag "pagination", "data-turbo-temporary": true %>
+        <%
+=begin%>
+ <%= turbo_frame_tag "pagination", "data-turbo-temporary": true %>
+<%
+=end%>
       </div>
     <% end %>
   <% end %>
