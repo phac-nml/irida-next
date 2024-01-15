@@ -395,24 +395,6 @@ module Projects
       assert_no_text @sample3.name
     end
 
-    test 'can sort the list of samples' do
-      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-
-      assert_selector 'table#samples-table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
-        assert_text @sample1.name
-      end
-
-      click_on I18n.t(:'projects.samples.index.sorting.updated_at_desc')
-      click_on I18n.t(:'projects.samples.index.sorting.name_desc')
-
-      assert_text I18n.t(:'projects.samples.index.sorting.name_desc')
-      assert_selector 'table#samples-table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
-        assert_text @sample3.name
-      end
-    end
-
     test 'can sort samples by column' do
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
@@ -457,10 +439,8 @@ module Projects
       assert_no_text @sample2.name
       assert_no_text @sample3.name
 
-      click_on I18n.t(:'projects.samples.index.sorting.updated_at_desc')
-      click_on I18n.t(:'projects.samples.index.sorting.name_desc')
+      click_on I18n.t('projects.samples.table.sample')
 
-      assert_text I18n.t(:'projects.samples.index.sorting.name_desc')
       assert_selector 'table#samples-table tbody tr', count: 1
       within first('tbody tr td:nth-child(2)') do
         assert_text @sample1.name
@@ -475,10 +455,9 @@ module Projects
         assert_text @sample1.name
       end
 
-      click_on I18n.t(:'projects.samples.index.sorting.updated_at_desc')
-      click_on I18n.t(:'projects.samples.index.sorting.name_desc')
+      click_on I18n.t('projects.samples.table.sample')
+      click_on I18n.t('projects.samples.table.sample')
 
-      assert_text I18n.t(:'projects.samples.index.sorting.name_desc')
       assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr td:nth-child(2)') do
         assert_text @sample3.name
