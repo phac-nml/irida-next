@@ -26,6 +26,8 @@ module Samples
         validate_file
 
         perform_file_import
+
+        # TODO: Recover from SampleMetadataUpdateErrors
       rescue Samples::Metadata::FileImportService::SampleMetadataFileImportError => e
         @project.errors.add(:base, e.message)
         {}
