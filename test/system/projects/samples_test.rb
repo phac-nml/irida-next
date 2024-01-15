@@ -704,5 +704,39 @@ module Projects
       end
       assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
     end
+
+    test 'user can see delete buttons as owner' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      assert_text I18n.t('projects.samples.show.delete_files_button'), count: 1
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 2
+        assert_text I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+      end
+    end
+
+    test 'user should not see sample attachment delete buttons if they are non-owner' do
+      login_as users(:ryan_doe)
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      assert_text I18n.t('projects.samples.show.delete_files_button'), count: 0
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body tr', count: 2
+        assert_text I18n.t('projects.samples.attachments.attachment.delete'), count: 0
+      end
+    end
+
+    test 'user with role >= Maintainer can see attachment checkboxes' do
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body input[type=checkbox]', count: 2
+      end
+    end
+
+    test 'user with role < Maintainer should not see checkboxes' do
+      login_as users(:ryan_doe)
+      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      within %(turbo-frame[id="attachments"]) do
+        assert_selector 'table #attachments-table-body input[type=checkbox]', count: 0
+      end
+    end
   end
 end
