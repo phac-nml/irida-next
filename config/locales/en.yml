@@ -805,6 +805,8 @@ en:
         files: Files
         no_files: No Files
         no_associated_files: There are no files associated with this sample.
+        no_metadata: No Metadata
+        no_associated_metadata: This sample has no metadata.
         sorting:
           updated_at_desc: Updated At
           updated_at_asc: Oldest updated
