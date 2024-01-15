@@ -144,8 +144,12 @@ module Samples
         params = { file: csv, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                             params).execute
-        assert_equal({ @sample1.name =>
-        { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] } }, response)
+
+        assert_equal(
+          { @sample1.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] },
+            'Project 2 Sample 1' => I18n.t('services.samples.metadata.import_file.sample_not_found',
+                                           sample_name: 'Project 2 Sample 1') }, response
+        )
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({}, @sample2.reload.metadata)
