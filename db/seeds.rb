@@ -63,11 +63,14 @@ end
 
 def fake_metadata
   {
-    'province' => Faker::Address.state,
+    'WGS_id' => Faker::Number.number(digits: 10),
+    'NCBI_ACCESSION' => "NM_#{Faker::Number.decimal(l_digits: 7, r_digits: 1)}",
+    'country' => Faker::Address.country,
     'food' => Faker::Food.dish,
     'gender' => Faker::Gender.binary_type,
     'age' => Faker::Number.between(from: 1, to: 100),
     'onset' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today)
+    # SourceState	earliest_date	species	subspecies	serovar	patient_sex	patient_age	source_type	source_site	TypeDetails	Event ID	Outbreak	FNC travel comments	Category
   }
 end
 
