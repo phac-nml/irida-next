@@ -80,7 +80,7 @@ module Projects
     test 'user with role >= Maintainer should be able to attach a file to a Sample' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
       assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
-      within('#attachments') do
+      within('#table-listing') do
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
         assert_no_text 'test_file.fastq'
@@ -93,7 +93,7 @@ module Projects
       end
 
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
-      within('#attachments') do
+      within('#table-listing') do
         assert_no_text I18n.t('projects.samples.show.no_files')
         assert_no_text I18n.t('projects.samples.show.no_associated_files')
         assert_text 'test_file.fastq'
@@ -126,7 +126,7 @@ module Projects
       end
 
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
-      within('#attachments') do
+      within('#table-listing') do
         assert_no_text 'test_file.fastq'
       end
     end
@@ -135,7 +135,7 @@ module Projects
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample2.id)
       # Initial View
       assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
-      within('#attachments') do
+      within('#table-listing') do
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
         assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 0
@@ -154,7 +154,7 @@ module Projects
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq')
 
       # View paired files
-      within('#attachments') do
+      within('#table-listing') do
         assert_text 'TestSample_S1_L001_R1_001.fastq'
         assert_text 'TestSample_S1_L001_R2_001.fastq'
         assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
@@ -171,7 +171,7 @@ module Projects
 
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq')
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq')
-      within('#attachments') do
+      within('#table-listing') do
         assert_no_text 'TestSample_S1_L001_R1_001.fastq'
         assert_no_text 'TestSample_S1_L001_R2_001.fastq'
         assert_text I18n.t('projects.samples.show.no_files')
@@ -534,7 +534,7 @@ module Projects
 
     test 'should concatenate single end attachment files and keep originals' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -546,7 +546,7 @@ module Projects
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
       end
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_text 'concatenated_file'
         assert_selector 'table #attachments-table-body tr', count: 3
       end
@@ -558,7 +558,7 @@ module Projects
       sample = samples(:sampleB)
       namespace = namespaces_user_namespaces(:jeff_doe_namespace)
       visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
         find('table #attachments-table-body tr', text: 'test_file_fwd_1.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
@@ -576,7 +576,7 @@ module Projects
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
       end
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_text 'concatenated_file'
         assert_selector 'table #attachments-table-body tr', count: 7
       end
@@ -584,7 +584,7 @@ module Projects
 
     test 'should concatenate single end attachment files and remove originals' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -597,7 +597,7 @@ module Projects
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
       end
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_text 'concatenated_file'
         assert_selector 'table #attachments-table-body tr', count: 1
       end
@@ -609,7 +609,7 @@ module Projects
       sample = samples(:sampleB)
       namespace = namespaces_user_namespaces(:jeff_doe_namespace)
       visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
         find('table #attachments-table-body tr', text: 'test_file_fwd_1.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
@@ -628,7 +628,7 @@ module Projects
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
       end
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_text 'concatenated_file_1.fastq'
         assert_text 'concatenated_file_2.fastq'
         assert_selector 'table #attachments-table-body tr', count: 4
@@ -641,7 +641,7 @@ module Projects
       sample = samples(:sampleB)
       namespace = namespaces_user_namespaces(:jeff_doe_namespace)
       visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
         find('table #attachments-table-body tr', text: 'test_file_fwd_1.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
@@ -672,7 +672,7 @@ module Projects
       sample = samples(:sampleB)
       namespace = namespaces_user_namespaces(:jeff_doe_namespace)
       visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
         find('table #attachments-table-body tr', text: 'test_file_D.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_2.fastq').find('input').click
@@ -705,7 +705,7 @@ module Projects
       sample = samples(:sampleB)
       namespace = namespaces_user_namespaces(:jeff_doe_namespace)
       visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
         find('table #attachments-table-body tr', text: 'test_file_fwd_1.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
@@ -732,7 +732,7 @@ module Projects
       sample = samples(:sampleB)
       namespace = namespaces_user_namespaces(:jeff_doe_namespace)
       visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
         find('table #attachments-table-body tr', text: 'test_file_fwd_1.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
@@ -754,7 +754,7 @@ module Projects
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
       end
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_text 'concatenated_file_1.fastq'
         assert_text 'concatenated_file_2.fastq'
         assert_selector 'table #attachments-table-body tr', count: 4
@@ -763,7 +763,7 @@ module Projects
 
     test 'should be able to delete multiple attachments' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
         find('table #attachments-table-body tr', text: 'test_file.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_A.fastq').find('input').click
@@ -775,7 +775,7 @@ module Projects
         click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
         assert_html5_inputs_valid
       end
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 0
         assert_no_text 'test_file.fastq'
         assert_no_text 'test_file_A.fastq'
@@ -791,7 +791,7 @@ module Projects
       sample = samples(:sampleB)
       namespace = namespaces_user_namespaces(:jeff_doe_namespace)
       visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 6
         find('table #attachments-table-body tr', text: 'test_file_fwd_1.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
@@ -809,7 +809,7 @@ module Projects
         assert_text 'test_file_D.fastq'
         click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
       end
-      within %(turbo-frame[id="attachments"]) do
+      within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
         assert_no_text 'test_file_fwd_1.fastq'
         assert_no_text 'test_file_rev_1.fastq'

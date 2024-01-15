@@ -36,10 +36,11 @@ module Projects
              params: { sample: {
                description: @sample1.description,
                name: 'New Sample'
-             } }
+             } },
+             as: :turbo_stream
       end
 
-      assert_redirected_to namespace_project_sample_url(id: Sample.last.id)
+      assert_redirected_to namespace_project_sample_url(id: Sample.last.id, format: :html)
     end
 
     test 'should not create a sample with wrong parameters' do
@@ -89,8 +90,9 @@ module Projects
     test 'should update sample in which the user is a member in a parent group with a role >= Maintainer' do
       patch namespace_project_sample_url(@namespace, @project, @sample1),
             params: { sample: { description: @sample1.description, name: 'New Sample Name',
-                                project_id: @sample1.project_id } }
-      assert_redirected_to namespace_project_sample_url(@namespace, @project, @sample1)
+                                project_id: @sample1.project_id } },
+            as: :turbo_stream
+      assert_redirected_to namespace_project_sample_url(@namespace, @project, @sample1, format: :html)
     end
 
     test 'should update sample in which the the project is in the user\'s namespace' do
@@ -100,8 +102,9 @@ module Projects
 
       patch namespace_project_sample_url(namespace, project, sample),
             params: { sample: { description: sample.description, name: 'New Sample Name',
-                                project_id: sample.project_id } }
-      assert_redirected_to namespace_project_sample_url(namespace, project, sample)
+                                project_id: sample.project_id } },
+            as: :turbo_stream
+      assert_redirected_to namespace_project_sample_url(namespace, project, sample, format: :html)
     end
 
     test 'should not update a sample with wrong parameters' do
