@@ -39,8 +39,11 @@ module Samples
 
       test 'import sample metadata via csv file' do
         params = { file: @csv, sample_id_column: 'sample_name' }
-        assert Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                        params).execute
+        response = Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                            params).execute
+        assert_equal({ @sample1.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] },
+                       @sample2.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          not_updated: [] } }, response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
@@ -50,8 +53,12 @@ module Samples
       test 'import sample metadata via xls file' do
         xls = File.new('test/fixtures/files/metadata/valid.xls', 'r')
         params = { file: xls, sample_id_column: 'sample_name' }
-        assert Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                        params).execute
+        response = Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                            params).execute
+        assert_equal(
+          { @sample1.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] },
+            @sample2.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] } }, response
+        )
         assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 20, 'metadatafield3' => 30 },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => 15, 'metadatafield2' => 25, 'metadatafield3' => 35 },
@@ -61,8 +68,12 @@ module Samples
       test 'import sample metadata via xlsx file' do
         xlsx = File.new('test/fixtures/files/metadata/valid.xlsx', 'r')
         params = { file: xlsx, sample_id_column: 'sample_name' }
-        assert Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                        params).execute
+        response = Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                            params).execute
+        assert_equal(
+          { @sample1.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] },
+            @sample2.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] } }, response
+        )
         assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 20, 'metadatafield3' => 30 },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => 15, 'metadatafield2' => 25, 'metadatafield3' => 35 },
@@ -102,8 +113,12 @@ module Samples
         @sample1.save
         csv = File.new('test/fixtures/files/metadata/contains_empty_values.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: true }
-        assert Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                        params).execute
+        response = Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                            params).execute
+        assert_equal(
+          { @sample1.name => { updated: %w[metadatafield2 metadatafield3], not_updated: [] },
+            @sample2.name => { updated: %w[metadatafield1 metadatafield3], not_updated: [] } }, response
+        )
         assert_equal({ 'metadatafield1' => '1', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield3' => '35' }, @sample2.reload.metadata)
@@ -114,8 +129,12 @@ module Samples
         @sample1.save
         csv = File.new('test/fixtures/files/metadata/contains_empty_values.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: false }
-        assert Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                        params).execute
+        response = Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                            params).execute
+        assert_equal(
+          { @sample1.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] },
+            @sample2.name => { updated: %w[metadatafield1 metadatafield3], not_updated: [] } }, response
+        )
         assert_equal({ 'metadatafield2' => '20', 'metadatafield3' => '30' }, @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield3' => '35' }, @sample2.reload.metadata)
       end
@@ -123,8 +142,10 @@ module Samples
       test 'import sample metadata with a sample that does not belong to project' do
         csv = File.new('test/fixtures/files/metadata/mixed_project_samples.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name' }
-        assert Samples::Metadata::FileImportService.new(@project, @john_doe,
-                                                        params).execute
+        response = Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                            params).execute
+        assert_equal({ @sample1.name => { updated: %w[metadatafield1 metadatafield2 metadatafield3], not_updated: [] } },
+                     response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({}, @sample2.reload.metadata)
