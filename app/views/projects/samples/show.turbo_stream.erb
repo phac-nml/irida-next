@@ -11,3 +11,15 @@
     } %>
   <% end %>
 <% end %>
+
+<%= turbo_stream.update "metadata_sort_dropdown" do %>
+  <%= render Ransack::SortDropdownComponent.new(
+    @q,
+    "samples",
+    [{ name: "updated_at", dir: "desc" }, { name: "updated_at", dir: "asc" }]
+  ) %>
+<% end %>
+
+<%= turbo_stream.update "metadata_hidden_search_value" do %>
+  <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
+<% end %>
