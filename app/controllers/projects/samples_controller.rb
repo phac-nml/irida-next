@@ -62,7 +62,7 @@ module Projects
       respond_to do |format|
         if ::Samples::UpdateService.new(@sample, current_user, sample_params).execute
           flash[:success] = t('.success')
-          format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
+          format.turbo_stream { redirect_to namespace_project_sample_path(id: @sample.id, format: :html) }
         else
           format.html { render :edit, status: :unprocessable_entity }
         end
