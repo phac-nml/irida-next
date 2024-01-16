@@ -130,9 +130,9 @@ module Projects
     def template
       @template = case params[:template]
                   when '1'
-                    %w[WGS_id country onset]
+                    %w[WGS_id country earliest_date]
                   when '2'
-                    %w[WGS_id NCBI_ACCESSION country food gender age onset]
+                    %w[WGS_id NCBI_ACCESSION country patient_sex earliest_date]
                   else
                     %w[]
                   end

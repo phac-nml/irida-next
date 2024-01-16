@@ -69,8 +69,10 @@ def fake_metadata
     'food' => Faker::Food.dish,
     'gender' => Faker::Gender.binary_type,
     'age' => Faker::Number.between(from: 1, to: 100),
-    'onset' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today)
-    # SourceState	earliest_date	species	subspecies	serovar	patient_sex	patient_age	source_type	source_site	TypeDetails	Event ID	Outbreak	FNC travel comments	Category
+    'onset' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today),
+    'earliest_date' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today),
+    'patient_sex' => Faker::Gender.binary_type
+    # SourceState	species	subspecies	serovar	patient_sex	patient_age	source_type	source_site	TypeDetails	Event ID	Outbreak	FNC travel comments	Category
   }
 end
 
