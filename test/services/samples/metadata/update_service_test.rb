@@ -21,11 +21,12 @@ module Samples
       end
 
       test 'add metadata to sample containing no existing metadata by user' do
+        freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
         metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.metadata)
-        assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user' },
-                       'metadatafield2' => { 'id' => @user.id, 'source' => 'user' } },
+        assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
+                       'metadatafield2' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      @sample35.metadata_provenance)
         assert_equal({ added: %w[metadatafield1 metadatafield2], updated: [], deleted: [],
                        not_updated: [] }, metadata_changes)
@@ -39,12 +40,13 @@ module Samples
       end
 
       test 'add metadata to sample containing no existing metadata by analysis' do
+        freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, 'analysis_id' => 2 }
         metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.metadata)
-        assert_equal({ 'metadatafield1' => { 'id' => 2, 'source' => 'analysis' },
-                       'metadatafield2' => { 'id' => 2, 'source' => 'analysis' } },
+        assert_equal({ 'metadatafield1' => { 'id' => 2, 'source' => 'analysis', 'updated_at' => Time.current },
+                       'metadatafield2' => { 'id' => 2, 'source' => 'analysis', 'updated_at' => Time.current } },
                      @sample35.metadata_provenance)
         assert_equal({ added: %w[metadatafield1 metadatafield2], updated: [], deleted: [],
                        not_updated: [] }, metadata_changes)
@@ -59,14 +61,16 @@ module Samples
       end
 
       test 'update sample metadata merge with new metadata and analysis overwritting user' do
+        freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' }, 'analysis_id' => 10 }
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value4', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
                      @sample33.metadata)
-        assert_equal({ 'metadatafield1' => { 'id' => 10, 'source' => 'analysis' },
-                       'metadatafield2' => { 'id' => 1, 'source' => 'user' },
-                       'metadatafield3' => { 'id' => 10, 'source' => 'analysis' } },
+        assert_equal({ 'metadatafield1' => { 'id' => 10, 'source' => 'analysis', 'updated_at' => Time.current },
+                       'metadatafield2' => { 'id' => 1, 'source' => 'user',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                       'metadatafield3' => { 'id' => 10, 'source' => 'analysis', 'updated_at' => Time.current } },
                      @sample33.metadata_provenance)
         assert_equal({ added: %w[metadatafield3], updated: %w[metadatafield1], deleted: [],
                        not_updated: [] }, metadata_changes)
@@ -82,14 +86,16 @@ module Samples
       end
 
       test 'update sample metadata merge with new metadata and user overwritting user' do
+        freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' } }
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value4', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
                      @sample33.metadata)
-        assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user' },
-                       'metadatafield2' => { 'id' => 1, 'source' => 'user' },
-                       'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } },
+        assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
+                       'metadatafield2' => { 'id' => 1, 'source' => 'user',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                       'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      @sample33.metadata_provenance)
         assert_equal({ added: %w[metadatafield3], updated: %w[metadatafield1], deleted: [],
                        not_updated: [] }, metadata_changes)
@@ -105,14 +111,17 @@ module Samples
       end
 
       test 'update sample metadata merge with new metadata and user unable to overwrite analysis' do
+        freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' } }
         metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
                      @sample34.metadata)
-        assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis' },
-                       'metadatafield2' => { 'id' => 1, 'source' => 'analysis' },
-                       'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } },
+        assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                       'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                       'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      @sample34.metadata_provenance)
         assert_equal({ added: %w[metadatafield3], updated: [], deleted: [],
                        not_updated: %w[metadatafield1] }, metadata_changes)
@@ -140,7 +149,10 @@ module Samples
         metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1' }, @sample34.metadata)
-        assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis' } }, @sample34.metadata_provenance)
+        assert_equal(
+          { 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
+                                  'updated_at' => '2000-01-01T00:00:00.000+00:00' } }, @sample34.metadata_provenance
+        )
         assert_equal({ added: [], updated: [], deleted: %w[metadatafield2], not_updated: [] }, metadata_changes)
 
         @subgroup12aa.reload
@@ -161,7 +173,10 @@ module Samples
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'value2' }, @sample33.metadata)
-        assert_equal({ 'metadatafield2' => { 'id' => 1, 'source' => 'user' } }, @sample33.metadata_provenance)
+        assert_equal(
+          { 'metadatafield2' => { 'id' => 1, 'source' => 'user',
+                                  'updated_at' => '2000-01-01T00:00:00.000+00:00' } }, @sample33.metadata_provenance
+        )
         assert_equal({ added: [], updated: [], deleted: %w[metadatafield1], not_updated: [] }, metadata_changes)
 
         @subgroup12b.reload
@@ -175,14 +190,16 @@ module Samples
       end
 
       test 'add, update, and remove metadata in same request to mimic batch update request with analysis' do
+        freeze_time
         params = { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => 'newvalue2',
                                    'metadatafield3' => 'value3' }, 'analysis_id' => 1 }
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'newvalue2', 'metadatafield3' => 'value3' }, @sample33.metadata)
         assert_equal(
-          { 'metadatafield2' => { 'id' => 1, 'source' => 'analysis' },
-            'metadatafield3' => { 'id' => 1, 'source' => 'analysis' } }, @sample33.metadata_provenance
+          { 'metadatafield2' => { 'id' => 1, 'source' => 'analysis', 'updated_at' => Time.current },
+            'metadatafield3' => { 'id' => 1, 'source' => 'analysis',
+                                  'updated_at' => Time.current } }, @sample33.metadata_provenance
         )
         assert_equal(
           { added: %w[metadatafield3], updated: %w[metadatafield2], deleted: %w[metadatafield1],
@@ -200,14 +217,16 @@ module Samples
       end
 
       test 'add, update, and remove metadata in same request to mimic batch update with user' do
+        freeze_time
         params = { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => 'newvalue2',
                                    'metadatafield3' => 'value3' } }
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'newvalue2', 'metadatafield3' => 'value3' }, @sample33.metadata)
         assert_equal(
-          { 'metadatafield2' => { 'id' => @user.id, 'source' => 'user' },
-            'metadatafield3' => { 'id' => @user.id, 'source' => 'user' } }, @sample33.metadata_provenance
+          { 'metadatafield2' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
+            'metadatafield3' => { 'id' => @user.id, 'source' => 'user',
+                                  'updated_at' => Time.current } }, @sample33.metadata_provenance
         )
         assert_equal(
           { added: %w[metadatafield3], updated: %w[metadatafield2], deleted: %w[metadatafield1],
@@ -341,6 +360,7 @@ module Samples
       end
 
       test 'user namespace metadata summary does not update' do
+        freeze_time
         params = { 'metadata' => { 'metadatafield4' => 'value4' } }
         project = projects(:john_doe_project2)
         sample = samples(:sample24)
@@ -351,7 +371,8 @@ module Samples
         end
 
         assert_equal({ 'metadatafield4' => 'value4' }, sample.metadata)
-        assert_equal({ 'metadatafield4' => { 'id' => @user.id, 'source' => 'user' } }, sample.metadata_provenance)
+        assert_equal({ 'metadatafield4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
+                     sample.metadata_provenance)
         assert_equal({ 'metadatafield4' => 1 }, project.namespace.metadata_summary)
       end
     end
