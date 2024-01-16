@@ -71,9 +71,8 @@ def fake_metadata
     'age' => Faker::Number.between(from: 1, to: 100),
     'onset' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today),
     'earliest_date' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today),
-    'patient_sex' => Faker::Gender.binary_type
-    # SourceState	species	subspecies	serovar	patient_sex	patient_age
-    # source_type	source_site	TypeDetails	Event ID	Outbreak	FNC travel comments	Category
+    'patient_sex' => Faker::Gender.binary_type,
+    'patient_age' => Faker::Number.between(from: 1, to: 100)
   }
 end
 

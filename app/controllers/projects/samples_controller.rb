@@ -132,7 +132,7 @@ module Projects
                   when '1'
                     %w[WGS_id country earliest_date]
                   when '2'
-                    %w[WGS_id NCBI_ACCESSION country patient_sex earliest_date]
+                    %w[WGS_id NCBI_ACCESSION country patient_age patient_sex earliest_date]
                   else
                     %w[]
                   end
