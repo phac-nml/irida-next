@@ -368,6 +368,30 @@ group_eleven_member_user_26:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eleven) %>
   access_level: <%= Member::AccessLevel::OWNER %>
 
+group_twelve_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+project_twenty_nine_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+project_thirty_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project30_namespace) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+project_thirty_one_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project31_namespace) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
 group_delta_member_joan_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>

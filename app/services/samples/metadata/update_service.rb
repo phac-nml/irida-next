@@ -13,6 +13,7 @@ module Samples
         @sample = sample
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
+        @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [] }
       end
 
       def execute
@@ -24,15 +25,17 @@ module Samples
 
         transform_metadata_keys
 
-        metadata_fields_update_status = perform_metadata_update
+        perform_metadata_update
 
         @sample.save
 
-        fields_not_updated(metadata_fields_update_status)
-        metadata_fields_update_status
+        update_metadata_summary
+
+        handle_not_updated_fields
+        @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
-        metadata_fields_update_status || nil
+        @metadata_changes
       end
 
       private
@@ -58,44 +61,50 @@ module Samples
       end
 
       def perform_metadata_update
-        update_status = { updated: [], not_updated: [] }
         @metadata.each do |key, value|
           if value.blank?
             if @sample.metadata.key?(key)
               @sample.metadata.delete(key)
               @sample.metadata_provenance.delete(key)
-              update_status[:updated].append(key)
+              @metadata_changes[:deleted] << key
             end
           else
-            metadata_updated = assign_metadata_to_sample(key, value)
-            metadata_updated ? update_status[:updated].append(key) : update_status[:not_updated].append(key)
+            assign_metadata_to_sample(key, value)
           end
         end
-        update_status
       end
 
-      def assign_metadata_to_sample(key, value)
+      def assign_metadata_to_sample(key, value) # rubocop:disable Metrics/AbcSize
         # We don't overwrite existing @sample.metadata_provenance or @sample.metadata
         # that has a {source: 'analysis'} with a user
         if @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
            @sample.metadata_provenance[key]['source'] == 'analysis'
-          false
+          @metadata_changes[:not_updated] << key
         else
+          @sample.metadata.key?(key) ? @metadata_changes[:updated] << key : @metadata_changes[:added] << key
           @sample.metadata_provenance[key] =
             @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
           @sample.metadata[key] = value
-          true
         end
       end
 
-      def fields_not_updated(metadata_fields_update_status)
-        metadata_fields_not_updated = metadata_fields_update_status[:not_updated]
+      # Metadata fields that were not updated due to a user trying to overwrite metadata previously added by an
+      # analysis in assign_metadata_to_sample are handled here, where they are assigned to the @sample.error
+      # and will be used for a :error flash message in the UI.
+      def handle_not_updated_fields
+        metadata_fields_not_updated = @metadata_changes[:not_updated]
         return unless metadata_fields_not_updated.count.positive?
 
         raise SampleMetadataUpdateError,
               I18n.t('services.samples.metadata.user_cannot_update_metadata',
-                     sample_name: @sample.name,
-                     metadata_fields: metadata_fields_not_updated.join(', '))
+                     sample_name: @sample.name, metadata_fields: metadata_fields_not_updated.join(', '))
+      end
+
+      def update_metadata_summary
+        return unless @metadata_changes[:added].count.positive? || @metadata_changes[:deleted].count.positive?
+
+        @project.namespace.update_metadata_summary_by_update_service(@metadata_changes[:deleted],
+                                                                     @metadata_changes[:added])
       end
     end
   end

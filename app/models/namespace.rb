@@ -225,4 +225,58 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def restore_routes
     Route.restore(Route.only_deleted.find_by(source_id: id).id, recursive: true)
   end
+
+  # The add and subtract_from_metadata_summary count functions are used by all update_metadata_summary functions
+  # (update_service, namespace_transfer, namespace_deletion, sample_transfer, sample_deletion)
+  # to update parental namespace metadata_summary attributes.
+  #
+  # When a sample is transferred, deleted, or updated, namespaces are the non-user parental namespaces, metadata is
+  # equal to sample.metadata, and update_by_one is assigned true. Because we are passing actual metadata values
+  # (ie: sample.metadata = {metadatafield1: metadatavalue1}), we assign true to update_by_one and value = 1 when
+  # calling these functions because we will update the samples' parents by a count of 1, regardless of what the actual
+  # metadata value is (ie: sample.metadata above with a value of metadatavalue1 will result in
+  # metadata_summary['metadatafield1'] += 1 for all parental namespaces).
+  #
+  # When namespaces are transferred or deleted, namespaces are the non-user parental namespaces, metadata is equal to
+  # the namespace.metadata_summary, and update_by_one is false. With namespaces, we will pass metadata_summary
+  # (ie: project.namespace.metadata_summary = {metadatafield1: 5, metadatafield2: 10}), and we can iterate over the
+  # summary and utilize the hash values to update all parental namespaces, so setting value = 1 is unnecessary and
+  # we assign false to update_by_one (ie: all parental namespaces will have their metadata_summary updated by
+  # 5 for metadatafield1 and 10 for metadatafield2).
+  #
+  # Subtract will be called for namespace_transfer (original parents), namespace_deletion,
+  # sample_transfer (original parents), sample_deletion, and update_service when metadata is deleted from a sample.
+  def subtract_from_metadata_summary_count(namespaces, metadata, update_by_one)
+    namespaces.each do |namespace|
+      namespace.with_lock do
+        metadata.each do |metadata_field, value|
+          value = 1 if update_by_one
+          if namespace.metadata_summary[metadata_field] == value
+            namespace.metadata_summary.delete(metadata_field)
+          else
+            namespace.metadata_summary[metadata_field] -= value
+          end
+        end
+        namespace.save
+      end
+    end
+  end
+
+  # Add will be called for namespace_transfer (new parents), sample_transfer (new parents),
+  # and update_service when metadata is added to a sample.
+  def add_to_metadata_summary_count(namespaces, metadata, update_by_one)
+    namespaces.each do |namespace|
+      namespace.with_lock do
+        metadata.each do |metadata_field, value|
+          value = 1 if update_by_one
+          if namespace.metadata_summary.key?(metadata_field)
+            namespace.metadata_summary[metadata_field] += value
+          else
+            namespace.metadata_summary[metadata_field] = value
+          end
+        end
+        namespace.save
+      end
+    end
+  end
 end

@@ -189,6 +189,41 @@ group_eleven:
   description: Group 11 description
   metadata_summary: {}
 
+group_twelve:
+  name: Group 12
+  path: group-12
+  type: Group
+  description: Group 12 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: { "metadatafield1": 3, "metadatafield2": 3 }
+
+subgroup_twelve_a:
+  name: Subgroup 12 A
+  path: subgroup-12-a
+  type: Group
+  description: Subgroup 12 A description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve) %>
+  metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
+
+subgroup_twelve_b:
+  name: Subgroup 12 B
+  path: subgroup-12-b
+  type: Group
+  description: Subgroup 12 B description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve) %>
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+
+subgroup_twelve_a_a:
+  name: Subgroup 12 A A
+  path: subgroup-12-a-a
+  type: Group
+  description: Subgroup 12 A A description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a) %>
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+
 group_delta:
   name: Group Delta
   path: group-delta

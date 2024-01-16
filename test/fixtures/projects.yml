@@ -128,6 +128,18 @@ project28:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project28_namespace) %>
 
+project29:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace) %>
+
+project30:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project30_namespace) %>
+
+project31:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project31_namespace) %>
+
 projectAlpha:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha_namespace) %>

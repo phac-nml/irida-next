@@ -34,5 +34,11 @@ module Namespaces
     def self.sti_name
       'Project'
     end
+
+    def update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
+      namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
+      subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata, true) unless deleted_metadata.empty?
+      add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
+    end
   end
 end

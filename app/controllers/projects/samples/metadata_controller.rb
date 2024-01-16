@@ -9,7 +9,8 @@ module Projects
         respond_to do |format|
           metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
                                                                    metadata_params).execute
-          if !metadata_fields.nil? && metadata_fields[:updated].count.positive?
+          modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
+          if modified_metadata.count.positive?
             flash[:success] =
               t('.success', metadata_fields: metadata_fields[:updated].join(', '), sample_name: @sample.name)
           end
