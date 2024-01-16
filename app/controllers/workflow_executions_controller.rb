@@ -18,6 +18,10 @@ class WorkflowExecutionsController < ApplicationController
     end
   end
 
+  def cancel
+    @cancelling = true
+  end
+
   private
 
   def workflow_execution_params

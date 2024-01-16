@@ -23,6 +23,9 @@
           <th scope="col" class="px-6 py-3">
             <%= t(:'.headers.updated_at') %>
           </th>
+          <th scope="col" class="px-6 py-3">
+            ACTIONS___
+          </th>
         </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -45,6 +48,12 @@
             </td>
             <td class="w-4 p-4 whitespace-nowrap">
               <%= viral_time_ago(original_time: workflow["updated_at"]) %>
+            </td>
+            <td class="w-4 p-4 whitespace-nowrap">
+              <%= form_with method: :put, url: workflow_execution_cancel_path(workflow) do |form| %>
+                <%= form.submit "Cancel" %>
+              <% end %>
+
             </td>
           </tr>
         <% end %>
