@@ -23,7 +23,18 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         scope module: :samples, as: :samples do
           collection do
             resource :transfer, only: %i[create new]
+
+            resource :file_import, module: :metadata, only: %i[create], controller: :file_import
+
+            # scope module: :metadata, as: :metadata do
+            #   resource :file_import, only: %i[create], controller: :file_import
+            # end
           end
+          # scope module: :metadata, as: :metadata do
+          #   collection do
+          #     resource :file_import, only: %i[create], controller: :file_import
+          #   end
+          # end
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           member do
@@ -38,18 +49,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             end
           end
         end
-        resource :metadata, module: :samples, only: %i[update] do
-          # Question: Which is preferrable?
-          #
-          # scope module: :metadata, as: :metadata do
-          #   collection do
-          #     resource :file_import, as: :import_file, only: %i[create], controller: :file_import
-          #   end
-          # end
-          scope module: :metadata do
-            resource :file_import, as: :import_file, only: %i[create], controller: :file_import
-          end
-        end
+        resource :metadata, module: :samples, only: %i[update]
       end
     end
   end

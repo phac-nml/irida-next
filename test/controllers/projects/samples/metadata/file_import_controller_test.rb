@@ -10,12 +10,15 @@ module Projects
           sign_in users(:john_doe)
           @namespace = groups(:group_one)
           @project = projects(:project1)
-          @sample = samples(:sample1)
+          @sample1 = samples(:sample1)
+          @sample2 = samples(:sample2)
+          @csv = File.new('test/fixtures/files/metadata/valid.csv', 'r')
         end
 
-        test 'should create sample metadata file import' do
-          post namespace_project_sample_metadata_import_file_path(@namespace, @project, @sample)
+        # bin/rails test test/controllers/projects/samples/metadata/file_import_controller_test.rb
 
+        test 'should create sample metadata file import' do
+          post namespace_project_samples_file_import_path(@namespace, @project)
           assert_response :success
         end
       end
