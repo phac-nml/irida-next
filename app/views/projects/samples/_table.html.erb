@@ -41,7 +41,7 @@
         id="<%= sample.id %>"
         class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
       >
-        <td class="px-6 py-3 whitespace-nowrap sticky left-0 bg-slate-50 dark:bg-slate-800">
+        <td class="px-6 py-3 whitespace-nowrap sticky left-0 bg-slate-50 dark:bg-slate-900">
           <% if allowed_to?(:transfer_sample?, project) %>
             <%= check_box_tag "sample_ids[]",
                               sample.id,
