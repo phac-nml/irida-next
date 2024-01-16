@@ -276,8 +276,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
             namespace.metadata_summary[metadata_field] -= value
           end
         end
+        namespace.save
       end
-      namespace.save
     end
   end
 
@@ -294,8 +294,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
             namespace.metadata_summary[metadata_field] = value
           end
         end
+        namespace.save
       end
-      namespace.save
     end
   end
 end
