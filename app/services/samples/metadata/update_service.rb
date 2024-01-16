@@ -72,7 +72,6 @@ module Samples
             assign_metadata_to_sample(key, value)
           end
         end
-        @update_status
       end
 
       def assign_metadata_to_sample(key, value) # rubocop:disable Metrics/AbcSize
