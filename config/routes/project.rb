@@ -38,7 +38,18 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             end
           end
         end
-        resource :metadata, module: :samples, only: %i[update]
+        resource :metadata, module: :samples, only: %i[update] do
+          # Question: Which is preferrable?
+          #
+          # scope module: :metadata, as: :metadata do
+          #   collection do
+          #     resource :file_import, as: :import_file, only: %i[create], controller: :file_import
+          #   end
+          # end
+          scope module: :metadata do
+            resource :file_import, as: :import_file, only: %i[create], controller: :file_import
+          end
+        end
       end
     end
   end
