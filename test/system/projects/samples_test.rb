@@ -422,6 +422,42 @@ module Projects
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
+
+      click_on I18n.t('projects.samples.table.created_at')
+
+      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
+      within first('tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
+      end
+
+      click_on I18n.t('projects.samples.table.created_at')
+
+      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
+      within first('tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
+      end
+
+      click_on I18n.t('projects.samples.table.updated_at')
+
+      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      within first('tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
+      end
+
+      click_on I18n.t('projects.samples.table.updated_at')
+
+      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
+      within first('tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
+      end
     end
 
     test 'can filter and then sort the list of samples' do
