@@ -119,8 +119,8 @@ To add a direct user to a project:
 
 The maximum role you can assign depends on whether you have the **Owner** or **Maintainer** role for the group ancestory. For example, the maximum role you can set is:
 
-- Owner (40), if you have the Owner role for the project.
-- Maintainer (30), if you have the Maintainer role on the project.
+- Owner, if you have the Owner role for the project.
+- Maintainer, if you have the Maintainer role on the project.
 
 ## Remove a member from a project
 
@@ -132,8 +132,8 @@ If a user is:
 Prerequisites:
 
 - To remove direct members that have the:
-  - Maintainer, Developer, Analyst, Uploader, or Guest role, you must have the Maintainer role.
-  - Owner role, you must have the Owner role.
+  - Maintainer, Developer, Analyst, Uploader, or Guest role, you must have the Maintainer or Owner role.
+  - Owner role, you must also have an Owner role.
 
 To remove a member from a project:
 
