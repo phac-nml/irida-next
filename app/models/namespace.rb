@@ -223,19 +223,19 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     metadata_to_update = transferred_namespace.metadata_summary
     return if metadata_to_update.empty?
 
-    unless old_namespace.nil? || old_namespace.type == 'User'
-      subtract_from_metadata_summary(old_namespace.self_and_ancestors, metadata_to_update, false)
+    unless old_namespace.nil? || old_namespace.type == Namespaces::UserNamespace.sti_name
+      subtract_from_metadata_summary_count(old_namespace.self_and_ancestors, metadata_to_update, false)
     end
 
-    return unless type != 'User'
+    return unless type != Namespaces::UserNamespace.sti_name
 
-    add_to_metadata_summary(self_and_ancestors, metadata_to_update, false)
+    add_to_metadata_summary_count(self_and_ancestors, metadata_to_update, false)
   end
 
   def update_metadata_summary_by_namespace_deletion
     return if metadata_summary.empty?
 
-    subtract_from_metadata_summary(parent.self_and_ancestors, metadata_summary, false)
+    subtract_from_metadata_summary_count(parent.self_and_ancestors, metadata_summary, false)
   end
 
   private
@@ -276,7 +276,6 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
             namespace.metadata_summary[metadata_field] -= value
           end
         end
-        namespace.save
       end
       namespace.save
     end
@@ -295,7 +294,6 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
             namespace.metadata_summary[metadata_field] = value
           end
         end
-        namespace.save
       end
       namespace.save
     end
