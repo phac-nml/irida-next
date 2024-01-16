@@ -219,6 +219,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     errors.add(:parent_id, 'nesting level too deep')
   end
 
+  # self = namespace receiving transferred_namespace
+  # old_namespace = the old namespace transferred_namespace originated from
   def update_metadata_summary_by_namespace_transfer(transferred_namespace, old_namespace)
     metadata_to_update = transferred_namespace.metadata_summary
     return if metadata_to_update.empty?

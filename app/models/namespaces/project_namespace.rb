@@ -41,6 +41,9 @@ module Namespaces
       add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
     end
 
+    # self = the original parent of the transferred samples
+    # new_project_id = the project ID receiving the new samples
+    # transferred_samples_ids contains the IDs of the transferred samples
     def update_metadata_summary_by_sample_transfer(transferred_samples_ids, new_project_id) # rubocop:disable Metrics/AbcSize
       old_namespaces = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
       new_project_namespace = Project.find(new_project_id).namespace
