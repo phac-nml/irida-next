@@ -51,7 +51,7 @@
             </td>
             <td class="w-4 p-4 whitespace-nowrap">
               <%= form_with method: :put, url: workflow_execution_cancel_path(workflow) do |form| %>
-                <%= form.submit "Cancel" %>
+                <%= form.submit "Cancel", class: "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
               <% end %>
 
             </td>
