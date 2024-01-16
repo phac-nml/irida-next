@@ -8,7 +8,7 @@ module Projects
 
       project.namespace.destroy!
 
-      return unless project.namespace.deleted? && project.namespace.parent.type != 'User'
+      return unless project.namespace.deleted? && project.namespace.where.not(type: Namespaces::UserNamespace.sti_name)
 
       project.namespace.update_metadata_summary_by_namespace_deletion
     end
