@@ -248,15 +248,17 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # sample_transfer (original parents), sample_deletion, and update_service when metadata is deleted from a sample.
   def subtract_from_metadata_summary_count(namespaces, metadata, update_by_one)
     namespaces.each do |namespace|
-      metadata.each do |metadata_field, value|
-        value = 1 if update_by_one
-        if namespace.metadata_summary[metadata_field] == value
-          namespace.metadata_summary.delete(metadata_field)
-        else
-          namespace.metadata_summary[metadata_field] -= value
+      namespace.with_lock do
+        metadata.each do |metadata_field, value|
+          value = 1 if update_by_one
+          if namespace.metadata_summary[metadata_field] == value
+            namespace.metadata_summary.delete(metadata_field)
+          else
+            namespace.metadata_summary[metadata_field] -= value
+          end
         end
+        namespace.save
       end
-      namespace.save
     end
   end
 
@@ -264,15 +266,17 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # and update_service when metadata is added to a sample.
   def add_to_metadata_summary_count(namespaces, metadata, update_by_one)
     namespaces.each do |namespace|
-      metadata.each do |metadata_field, value|
-        value = 1 if update_by_one
-        if namespace.metadata_summary.key?(metadata_field)
-          namespace.metadata_summary[metadata_field] += value
-        else
-          namespace.metadata_summary[metadata_field] = value
+      namespace.with_lock do
+        metadata.each do |metadata_field, value|
+          value = 1 if update_by_one
+          if namespace.metadata_summary.key?(metadata_field)
+            namespace.metadata_summary[metadata_field] += value
+          else
+            namespace.metadata_summary[metadata_field] = value
+          end
         end
+        namespace.save
       end
-      namespace.save
     end
   end
 end
