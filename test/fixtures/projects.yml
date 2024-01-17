@@ -112,6 +112,10 @@ project26:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace) %>
 
+project32:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project32_namespace) %>
+
 projectA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace) %>

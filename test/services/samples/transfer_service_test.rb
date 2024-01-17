@@ -7,6 +7,7 @@ module Samples
     def setup
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
+      @joan_doe = users(:joan_doe)
       @current_project = projects(:project1)
       @new_project = projects(:project2)
       @sample1 = samples(:sample1)
@@ -21,6 +22,32 @@ module Samples
         Samples::TransferService.new(@current_project, @john_doe).execute(@sample_transfer_params[:new_project_id],
                                                                           @sample_transfer_params[:sample_ids])
       end
+    end
+
+    test 'transfer project samples with maintainer permission within hierarchy' do
+      @sample_transfer_params = { new_project_id: @new_project.id,
+                                  sample_ids: [@sample1.id, @sample2.id] }
+
+      assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
+        Samples::TransferService.new(@current_project, @joan_doe).execute(@sample_transfer_params[:new_project_id],
+                                                                          @sample_transfer_params[:sample_ids])
+      end
+    end
+
+    test 'transfer project samples with maintainer permission but outside of hierarchy' do
+      new_project = projects(:project32)
+
+      @sample_transfer_params = { new_project_id: new_project.id,
+                                  sample_ids: [@sample1.id, @sample2.id] }
+
+      assert_no_changes -> { @sample1.reload.project.id } do
+        Samples::TransferService.new(@current_project, @joan_doe).execute(@sample_transfer_params[:new_project_id],
+                                                                          @sample_transfer_params[:sample_ids])
+      end
+
+      assert @current_project.errors.full_messages.include?(
+        I18n.t('services.samples.transfer.maintainer_transfer_not_allowed')
+      )
     end
 
     test 'transfer project samples without specifying details' do

@@ -192,6 +192,11 @@ project26_namespace_route:
   path: john.doe_at_localhost/project-26
   source: project26_namespace (Namespace)
 
+project32_namespace_route:
+  name: Group 8 / Project 32
+  path: group-8/project-32
+  source: project32_namespace (Namespace)
+
 <% [*("a".."z")].each do |letter| %>
 group_<%= letter %>_route:
   name: <%= "Group #{letter.capitalize}" %>
