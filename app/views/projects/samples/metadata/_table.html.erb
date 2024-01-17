@@ -21,16 +21,9 @@
           <% if @sample.metadata_provenance[metadata_field]["source"] == 'user' %>
               <td class="px-6 py-4"><%= User.find(@sample.metadata_provenance[metadata_field]["id"]).email %></td>
           <% else %>
-              <td class="px-6 py-4">Analysis <%= @sample.metadata_provenance[metadata_field]["id"] %></td>
+              <td class="px-6 py-4"><%= t("projects.samples.show.metadata.analysis") %> <%= @sample.metadata_provenance[metadata_field]["id"] %></td>
           <% end %>
-          <td class="px-6 py-4">time placeholder</td>
-
-        <%
-=begin%>
- <td class="px-6 py-4"><%= viral_time_ago(original_time: @sample.metadata_provenance[metadata_field]["updated_at"]) %></td>
-<%
-=end%>
-
+          <td class="px-6 py-4"><%= viral_time_ago(original_time: @sample.metadata_provenance[metadata_field]["updated_at"]) %></td>
         </tr>
       <% end %>
     </tbody>
