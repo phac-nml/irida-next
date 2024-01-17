@@ -24,17 +24,12 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           collection do
             resource :transfer, only: %i[create new]
 
-            resource :file_import, module: :metadata, only: %i[create], controller: :file_import
+            resource :file_import, module: :metadata, only: %i[create]
 
             # scope module: :metadata, as: :metadata do
-            #   resource :file_import, only: %i[create], controller: :file_import
+            #   resource :file_import, only: %i[create]
             # end
           end
-          # scope module: :metadata, as: :metadata do
-          #   collection do
-          #     resource :file_import, only: %i[create], controller: :file_import
-          #   end
-          # end
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           member do

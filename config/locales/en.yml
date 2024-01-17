@@ -860,6 +860,10 @@ en:
           success: Samples were successfully transferred.
           error: "The following list of samples failed to transfer:"
           no_samples_transferred_error: "Samples were not transferred for the following reasons:"
+      metadata:
+        file_imports:
+          create:
+            success: File was successfully imported.
       attachments:
         concatenations:
           create:
