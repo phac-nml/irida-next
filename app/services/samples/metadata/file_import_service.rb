@@ -76,7 +76,7 @@ module Samples
               I18n.t('services.samples.metadata.import_file.missing_metadata_row')
       end
 
-      def perform_file_import # rubocop:disable Metrics/MethodLength,
+      def perform_file_import
         response = {}
         parse_settings = @headers.zip(@headers).to_h
 
@@ -84,7 +84,7 @@ module Samples
           next unless index.positive?
 
           name = metadata[@sample_id_column]
-          sample = Sample.find_by(name:, project_id: @project.id) # TODO: Change to ID.
+          sample = Sample.find_by(name:, project_id: @project.id)
           if sample.nil?
             response[name] = I18n.t('services.samples.metadata.import_file.sample_not_found', sample_name: name)
             next
@@ -92,8 +92,7 @@ module Samples
 
           metadata.delete(@sample_id_column)
           metadata.compact! if @ignore_empty_values
-          status = UpdateService.new(@project, sample, @current_user, { 'metadata' => metadata }).execute
-          response[name] = status
+          response[name] = UpdateService.new(@project, sample, current_user, { 'metadata' => metadata }).execute
         end
         response
       end
