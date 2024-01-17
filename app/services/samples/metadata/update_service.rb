@@ -25,9 +25,10 @@ module Samples
 
         transform_metadata_keys
 
-        perform_metadata_update
-
-        @sample.save
+        @sample.with_lock do
+          perform_metadata_update
+          @sample.save
+        end
 
         update_metadata_summary
 
@@ -83,7 +84,11 @@ module Samples
         else
           @sample.metadata.key?(key) ? @metadata_changes[:updated] << key : @metadata_changes[:added] << key
           @sample.metadata_provenance[key] =
-            @analysis_id.nil? ? { source: 'user', id: current_user.id } : { source: 'analysis', id: @analysis_id }
+            if @analysis_id.nil?
+              { source: 'user', id: current_user.id, updated_at: Time.current }
+            else
+              { source: 'analysis', id: @analysis_id, updated_at: Time.current }
+            end
           @sample.metadata[key] = value
         end
       end
