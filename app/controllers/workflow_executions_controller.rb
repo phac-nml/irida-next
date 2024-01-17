@@ -2,6 +2,9 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
+  include WorkflowExecutionHelper
+
+  before_action :authenticate_user!
   before_action :current_page
 
   def index
@@ -19,6 +22,7 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def cancel
+    @workflow_execution = WorkflowExecution.find(params[:workflow_execution_id])
     @cancelling = true
   end
 
