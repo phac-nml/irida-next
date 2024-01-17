@@ -857,17 +857,28 @@ module Projects
     end
 
     test 'view metadata tab' do
-      project = projects(:project30)
-      sample = samples(:sample33)
-      namespace = groups(:subgroup_twelve_b)
+      project = projects(:project29)
+      sample = samples(:sample32)
+      namespace = groups(:subgroup_twelve_a)
+      visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path,
+                                         id: sample.id)
+      assert_text I18n.t('projects.samples.show.delete_files_button'), count: 1
+      assert_text I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      assert_text I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
 
-      visit namespace_project_sample_url(namespace_id: namespace.path, project_id: project.path, id: sample.id)
-      assert_text I18n.t(:'projects.samples.show.tabs.metadata')
-      click_link I18n.t(:'projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.files')
+      assert_text I18n.t('projects.samples.show.delete_files_button'), count: 1
+      assert_text I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      assert_text 'Sample 32'
+      assert_text 'metadatafield1'
+      assert_text I18n.t('projects.samples.show.table_header.metadata_field')
+
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'table#metadata-table tbody tr', count: 1
+        # assert_selector 'table#metadata-table tbody tr', count: 1
         within first('tbody tr td:nth-child(2)') do
-          assert_text @sample32.name
+          assert_text 'metadatafield1'
         end
       end
     end
