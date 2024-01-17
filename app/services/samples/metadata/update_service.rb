@@ -25,9 +25,10 @@ module Samples
 
         transform_metadata_keys
 
-        perform_metadata_update
-
-        @sample.save
+        @sample.with_lock do
+          perform_metadata_update
+          @sample.save
+        end
 
         update_metadata_summary
 
