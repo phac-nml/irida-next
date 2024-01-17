@@ -13,11 +13,14 @@ If you add a user to both a project’s group and the project itself, the higher
 The available roles are:
 
 - Guest
+- Uploader
 - Analyst
 - Maintainer
 - Owner
 
 A user assigned the Guest role has the least permissions, and the Owner has the most.
+
+The **Uploader** is to be used for api access for the uploader
 
 All users can create top-level groups and projects.
 
@@ -61,6 +64,7 @@ When you add a member to a subgroup where they are also a member of one of the p
 | Create Samples        |       |         | ✓          | ✓     |
 | Edit Samples          |       |         | ✓          | ✓     |
 | Delete Samples        |       |         |            | ✓     |
-| Transfer Samples      |       |         |            | ✓     |
+| Transfer Samples      |       |         | ✓(2)       | ✓     |
 
 1. A user with the **Maintainer** role can only modify members upto and including their role
+2. A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project
