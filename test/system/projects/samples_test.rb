@@ -256,6 +256,40 @@ module Projects
       end
     end
 
+    test 'should transfer samples for maintainer within hierarchy' do
+      user = users(:joan_doe)
+      login_as user
+
+      project2 = projects(:project2)
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      assert_selector 'table#samples-table tbody tr', count: 3
+      all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        select project2.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
+        click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
+      end
+      within %(turbo-frame[id="project_samples_list"]) do
+        assert_selector 'table#samples-table tbody tr', count: 0
+      end
+    end
+
+    test 'should not transfer samples for maintainer outside of hierarchy' do
+      user = users(:joan_doe)
+      login_as user
+
+      # Project is a part of Group 8 and not a part of the current project hierarchy
+      project32 = projects(:project32)
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      assert_selector 'table#samples-table tbody tr', count: 3
+      all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_no_selector "option[value='#{project32.full_path}']"
+      end
+    end
+
     test 'user with maintainer access should be able to see the transfer samples button' do
       user = users(:joan_doe)
       login_as user
