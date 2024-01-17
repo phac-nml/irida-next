@@ -5,6 +5,7 @@ require 'application_system_test_case'
 module System
   class TimeAgoComponentTest < ApplicationSystemTestCase
     test 'default tooltip' do
+      freeze_time
       visit('/rails/view_components/viral_time_ago_component/default')
       assert_text '15 days ago'
       within('.Viral-Preview > [data-controller-connected="true"]') do
@@ -16,6 +17,7 @@ module System
     end
 
     test 'current time input tooltip' do
+      freeze_time
       visit('/rails/view_components/viral_time_ago_component/current_time_input')
       assert_text '5 days ago'
       within('.Viral-Preview > [data-controller-connected="true"]') do
