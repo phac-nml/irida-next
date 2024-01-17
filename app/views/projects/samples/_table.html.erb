@@ -19,7 +19,7 @@
       <th scope="col" class="px-4 py-3 text-left">
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".updated_at"), url: sorting_url(@q, :updated_at), field: :updated_at) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-right"><%= t(".action") %></th>
+      <th scope="col" class="px-4 py-3 text-right cursor-not-allowed"><%= t(".action") %></th>
     </tr>
   </thead>
   <tbody
