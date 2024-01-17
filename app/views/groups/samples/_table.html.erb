@@ -9,10 +9,18 @@
     "
   >
     <tr>
-      <th scope="col" class="px-6 py-3"><%= t(".sample") %></th>
-      <th scope="col" class="px-6 py-3"><%= t(".project") %></th>
-      <th scope="col" class="px-6 py-3"><%= t(".created_at") %></th>
-      <th scope="col" class="px-6 py-3"><%= t(".updated_at") %></th>
+      <th scope="col" class="px-6 py-3">
+        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".sample"), url: sorting_url(@q, :name), field: :name) %>
+      </th>
+      <th scope="col" class="px-6 py-3 cursor-not-allowed">
+        <%= t(".project") %>
+      </th>
+      <th scope="col" class="px-6 py-3">
+        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".created_at"), url: sorting_url(@q, :created_at), field: :created_at) %>
+      </th>
+      <th scope="col" class="px-6 py-3">
+        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".updated_at"), url: sorting_url(@q, :updated_at), field: :updated_at) %>
+      </th>
     </tr>
   </thead>
   <tbody

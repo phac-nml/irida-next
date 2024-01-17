@@ -10,7 +10,6 @@
       <th aria-hidden="true"></th>
       <% end %>
       <th scope="col" class="px-4 py-3 text-left">
-        <%= %>
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".sample"), url: sorting_url(@q, :name), field: :name) %>
       </th>
       <th scope="col" class="px-4 py-3 text-left">
