@@ -46,7 +46,9 @@ module Projects
       end
 
       def projects
-        @projects = authorized_scope(Project, type: :relation, as: :manageable).where.not(namespace_id: project.namespace_id) # rubocop:disable Layout/LineLength
+        @projects = authorized_scope(Project, type: :relation, as: :project_samples_transferable,
+                                              scope_options: { project: })
+                    .where.not(namespace_id: project.namespace_id)
       end
     end
   end
