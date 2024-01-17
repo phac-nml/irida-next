@@ -199,7 +199,7 @@ group_twelve:
 
 subgroup_twelve_a:
   name: Subgroup 12 A
-  path: subgroup-12-a
+  path: group-12/subgroup-12-a
   type: Group
   description: Subgroup 12 A description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
@@ -208,7 +208,7 @@ subgroup_twelve_a:
 
 subgroup_twelve_b:
   name: Subgroup 12 B
-  path: subgroup-12-b
+  path: group-12/subgroup-12-b
   type: Group
   description: Subgroup 12 B description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
@@ -217,7 +217,7 @@ subgroup_twelve_b:
 
 subgroup_twelve_a_a:
   name: Subgroup 12 A A
-  path: subgroup-12-a-a
+  path: group-12/subgroup-12-a/subgroup-12-a-a
   type: Group
   description: Subgroup 12 A A description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
