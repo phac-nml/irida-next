@@ -98,7 +98,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def transfer_sample?
+  def transfer_sample? # rubocop:disable Metrics/AbcSize
+    # Maintainer is allowed to transfer a sample to another namespace which has the same parent or ancestor
+    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false)
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_transfer_sample?(user, record.namespace) == true
 
@@ -107,6 +109,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer_sample_into_project?
+    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false) &&
+                   Member.can_transfer_sample_to_project?(user, record.namespace, false) == true
     return true if Member.can_transfer_sample_to_project?(user, record.namespace) == true
 
     details[:name] = record.name
