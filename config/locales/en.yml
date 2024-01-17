@@ -993,6 +993,9 @@ en:
         state: State
         created_at: Created
         updated_at: Last Updated
+        actions: Actions
+      actions:
+        cancel: Cancel
     submissions:
       pipeline_selection:
         title: Workflow Selection
