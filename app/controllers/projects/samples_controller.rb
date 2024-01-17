@@ -122,17 +122,18 @@ module Projects
       Sample.where(project_id: @project.id)
     end
 
+    def all_metadata_fields
+      @all_metadata_fields = @project.namespace.metadata_summary
+    end
+
     def templates
-      @templates = [{ id: 0, label: 'None' }, { id: 1, label: 'Template 1' },
-                    { id: 2, label: 'Template 2' }]
+      @templates = [{ id: 0, label: 'None' }, { id: 1, label: 'All' }]
     end
 
     def template
       @template = case params[:template]
                   when '1'
-                    %w[WGS_id country earliest_date]
-                  when '2'
-                    %w[WGS_id NCBI_ACCESSION country patient_age patient_sex earliest_date]
+                    @project.namespace.metadata_summary.keys
                   else
                     %w[]
                   end
