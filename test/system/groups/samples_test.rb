@@ -10,6 +10,8 @@ module Groups
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
       @sample9 = samples(:sample9)
+      @sample29 = samples(:sample29)
+      @sample31 = samples(:sample31)
     end
 
     test 'visiting the index' do
@@ -94,17 +96,28 @@ module Groups
       visit group_samples_url(@group)
 
       assert_selector 'table tbody#group-samples-table-body tr', count: 20
-      within first('table tbody#group-samples-table-body tr td') do
-        assert_text @sample1.name
+      within first('table tbody#group-samples-table-body') do
+        assert_selector 'tr:first-child td:first-child', text: @sample1.name
       end
 
-      click_on I18n.t(:'groups.samples.index.sorting.updated_at_desc')
-      click_on I18n.t(:'groups.samples.index.sorting.name_desc')
+      click_on I18n.t('groups.samples.table.sample')
+      within first('table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @sample1.name
+        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.name
+      end
 
-      assert_text I18n.t(:'groups.samples.index.sorting.name_desc')
-      assert_selector 'table tbody#group-samples-table-body tr', count: 20
-      within first('table tbody#group-samples-table-body tr:nth-child(3) td') do
-        assert_text @sample9.name
+      click_on I18n.t('groups.samples.table.created_at')
+      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
+      within first('table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @sample29.name
+        assert_selector 'tr:nth-child(2) td:first-child', text: @sample31.name
+      end
+
+      click_on I18n.t('groups.samples.table.created_at')
+      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
+      within first('table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @sample1.name
+        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.name
       end
     end
 
