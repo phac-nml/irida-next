@@ -5,11 +5,19 @@ module Resolvers
   class SampleMetadataResolver < BaseResolver
     type GraphQL::Types::JSON, null: false
 
+    argument :keys, [GraphQL::Types::String],
+             required: false,
+             description: 'Optional array of keys to limit metadata result to.',
+             default_value: nil
+
     alias sample object
 
-    def resolve
+    def resolve(args)
       scope = sample
-      scope.metadata
+
+      return scope.metadata unless args[:keys]
+
+      scope.metadata.slice(*args[:keys])
     end
   end
 end
