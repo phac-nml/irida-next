@@ -112,25 +112,25 @@ sample32:
   description: Sample 32 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project29) %>
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': 1, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
 sample33:
   name: Sample33
   description: Sample 33 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project30) %>
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': 1, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
 sample34:
   name: Sample 34
   description: Sample 34 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project31) %>
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'analysis',
   'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> }}
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> }}
 
 sample35:
   name: Sample 35
