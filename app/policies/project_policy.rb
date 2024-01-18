@@ -149,7 +149,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   scope_for :relation, :project_samples_transferable do |relation, options|
-    if Member.user_has_namespace_maintainer_access?(user, options[:project], false)
+    if Member.user_has_namespace_maintainer_access?(user, options[:project].namespace, false)
       top_level_ancestor = options[:project].parent.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
       group_and_subgroup_ids = top_level_ancestor.self_and_descendant_ids
 
