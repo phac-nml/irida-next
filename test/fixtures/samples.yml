@@ -150,9 +150,9 @@ sample34:
   project_id: <%= ActiveRecord::FixtureSet.identify(:project31) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 20.hours.ago) %>
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'analysis',
   'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> }}
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> }}
 
 sample35:
   name: Sample 35
