@@ -74,4 +74,21 @@ class SampleTest < ActiveSupport::TestCase
       Sample.restore(@sample.id, recursive: true)
     end
   end
+
+  test 'metadata_with_provenance' do
+    sample = samples(:sample32)
+    user = users(:john_doe)
+    expected_metadata_with_provenance = [{
+      metadata_field: 'metadatafield1',
+      value: 'value1',
+      provider: user.email,
+      last_modified: DateTime.new(2000, 1, 1)
+    }, {
+      metadata_field: 'metadatafield2',
+      value: 'value2',
+      provider: user.email,
+      last_modified: DateTime.new(2000, 1, 1)
+    }]
+    assert_equal(expected_metadata_with_provenance, sample.metadata_with_provenance)
+  end
 end
