@@ -42,7 +42,7 @@ module Projects
         end
 
         test 'import sample metadata with invalid file' do
-          other = File.new('test/fixtures/files/metadata/invalid.txt', 'r')
+          other = fixture_file_upload('test/fixtures/files/metadata/invalid.txt')
           post namespace_project_samples_file_import_path(@namespace, @project),
                params: {
                  file_import: {
@@ -52,6 +52,19 @@ module Projects
                }
 
           assert_response :unprocessable_entity
+        end
+
+        test 'import sample metadata with a sample that does not belong to project' do
+          csv = fixture_file_upload('test/fixtures/files/metadata/mixed_project_samples.csv')
+          post namespace_project_samples_file_import_path(@namespace, @project),
+               params: {
+                 file_import: {
+                   file: csv,
+                   sample_id_column: 'sample_name'
+                 }
+               }
+
+          assert_response :partial_content
         end
       end
     end

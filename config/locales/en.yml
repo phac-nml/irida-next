@@ -864,6 +864,7 @@ en:
         file_imports:
           create:
             success: File was successfully imported.
+            error: "The following list of samples failed:"
       attachments:
         concatenations:
           create:

@@ -9,16 +9,16 @@ module Projects
 
         def create
           authorize! @project, to: :update_sample?
-
           @imported_metadata = ::Samples::Metadata::FileImportService.new(@project, current_user,
                                                                           file_import_params).execute
-          pp @imported_metadata
-
           if @project.errors.empty?
             render status: :ok, locals: { type: :success, message: t('.success') }
+          elsif @project.errors.include?(:sample)
+            errors = @project.errors.messages_for(:sample)
+            render status: :partial_content, locals: { type: :alert, message: t('.error'), errors: }
           else
-            @error = @project.errors.full_messages.first
-            render status: :unprocessable_entity, locals: { type: :danger, message: @error }
+            error = @project.errors.full_messages_for(:base).first
+            render status: :unprocessable_entity, locals: { type: :danger, message: error }
           end
         end
 
