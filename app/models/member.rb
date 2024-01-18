@@ -41,13 +41,13 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
-    def effective_access_level(namespace, user)
+    def effective_access_level(namespace, user, include_group_links = true) # rubocop:disable Metrics/CyclomaticComplexity, Style/OptionalBooleanParameter
       return AccessLevel::OWNER if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
       access_level = Member.for_namespace_and_ancestors(namespace).not_expired
                            .where(user:).order(:access_level).last&.access_level
 
-      access_level = access_level_in_namespace_group_links(user, namespace) if access_level.nil?
+      access_level = access_level_in_namespace_group_links(user, namespace) if include_group_links && access_level.nil?
 
       access_level.nil? ? AccessLevel::NO_ACCESS : access_level
     end
@@ -79,9 +79,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       namespace_owners_include_user?(user, object_namespace)
     end
 
-    def can_transfer_into_namespace?(user, object_namespace)
+    def can_transfer_into_namespace?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
       Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user)
+        effective_access_level(object_namespace, user, include_group_links)
       )
     end
 
@@ -89,8 +89,8 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       namespace_owners_include_user?(user, object_namespace)
     end
 
-    def can_transfer_sample_to_project?(user, object_namespace)
-      can_transfer_into_namespace?(user, object_namespace)
+    def can_transfer_sample_to_project?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      can_transfer_into_namespace?(user, object_namespace, include_group_links)
     end
 
     def can_link_namespace_to_group?(user, object_namespace)
@@ -109,8 +109,8 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       effective_access_level(namespace, user) == Member::AccessLevel::OWNER
     end
 
-    def user_has_namespace_maintainer_access?(user, namespace)
-      effective_access_level(namespace, user) == Member::AccessLevel::MAINTAINER
+    def user_has_namespace_maintainer_access?(user, namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      effective_access_level(namespace, user, include_group_links) == Member::AccessLevel::MAINTAINER
     end
 
     def access_level_in_namespace_group_links(user, namespace)

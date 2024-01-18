@@ -961,6 +961,7 @@ en:
         same_project: The samples already exist in the project. Please select a different project.
         sample_exists: "Sample '%{sample_name}' already exists in the target project"
         samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
+        maintainer_transfer_not_allowed: A maintainer can only transfer samples to other projects within the same hierarchy with a common ancestor
       metadata:
         sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '${project_name}'"
         empty_metadata: "No metadata was received to update sample '%{sample_name}'"

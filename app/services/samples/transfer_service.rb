@@ -15,6 +15,9 @@ module Samples
       @new_project = Project.find_by(id: new_project_id)
       authorize! @new_project, to: :transfer_sample_into_project?
 
+      validate_maintainer_sample_transfer if Member.user_has_namespace_maintainer_access?(current_user,
+                                                                                          @project.namespace, false)
+
       transfer(new_project_id, sample_ids)
     rescue Samples::TransferService::TransferError => e
       project.errors.add(:base, e.message)
@@ -32,6 +35,16 @@ module Samples
 
       raise TransferError,
             I18n.t('services.samples.transfer.same_project')
+    end
+
+    def validate_maintainer_sample_transfer
+      project_parent_and_ancestors = @project.namespace.parent.self_and_ancestor_ids
+      new_project_parent_and_ancestors = @new_project.namespace.parent.self_and_ancestor_ids
+
+      return if project_parent_and_ancestors.intersect?(new_project_parent_and_ancestors)
+
+      raise TransferError,
+            I18n.t('services.samples.transfer.maintainer_transfer_not_allowed')
     end
 
     def transfer(new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength

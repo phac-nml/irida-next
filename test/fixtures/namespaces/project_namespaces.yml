@@ -252,6 +252,15 @@ project26_namespace:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   metadata_summary: {}
 
+project32_namespace:
+  name: Project 32
+  path: project-32
+  description: Project 32 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_eight) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
+
 projectA_namespace:
   name: Project A
   path: project-a
@@ -295,7 +304,7 @@ project29_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1}
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
 
 project30_namespace:
   name: Project 30

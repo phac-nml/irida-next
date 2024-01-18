@@ -98,7 +98,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def transfer_sample?
+  def transfer_sample? # rubocop:disable Metrics/AbcSize
+    # Maintainer is allowed to transfer a sample to another namespace which has the same parent or ancestor
+    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false)
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_transfer_sample?(user, record.namespace) == true
 
@@ -107,6 +109,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer_sample_into_project?
+    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false) &&
+                   Member.can_transfer_sample_to_project?(user, record.namespace, false) == true
     return true if Member.can_transfer_sample_to_project?(user, record.namespace) == true
 
     details[:name] = record.name
@@ -142,6 +146,42 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
           or projects.id in (select * from direct_linked_projects)'
         )
       ).include_route
+  end
+
+  scope_for :relation, :project_samples_transferable do |relation, options|
+    if Member.user_has_namespace_maintainer_access?(user, options[:project], false)
+      top_level_ancestor = options[:project].parent.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
+      group_and_subgroup_ids = top_level_ancestor.self_and_descendant_ids
+
+      authorized_scope(relation, type: :relation,
+                                 as: :manageable_without_shared_links)
+        .where(namespace: { parent_id: group_and_subgroup_ids })
+
+    else
+      authorized_scope(relation, type: :relation, as: :manageable)
+    end
+  end
+
+  scope_for :relation, :manageable_without_shared_links do |relation|
+    relation.with(
+      direct_projects: relation.where(
+        namespace: user.members.not_expired.joins(:namespace).where(
+          access_level: Member::AccessLevel.manageable,
+          namespace: { type: Namespaces::ProjectNamespace.sti_name }
+        ).select(:namespace_id)
+      ).select(:id),
+      group_projects: relation.joins(:namespace).where(namespace: { parent: Namespace.where(id:
+        user.members.not_expired.joins(:namespace).where(
+          namespace_id: user.groups.self_and_descendants,
+          access_level: Member::AccessLevel.manageable,
+          namespace: { type: Group.sti_name }
+        ).select(:namespace_id), type: Group.sti_name).self_and_descendants.select(:id) }).select(:id)
+    ).where(
+      Arel.sql(
+        'projects.id in (select * from group_projects)
+        or projects.id in (select * from direct_projects)'
+      )
+    ).include_route
   end
 
   scope_for :relation, :manageable do |relation| # rubocop:disable Metrics/BlockLength

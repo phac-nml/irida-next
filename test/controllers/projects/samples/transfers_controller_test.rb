@@ -72,18 +72,18 @@ module Projects
         assert_response :success
       end
 
-      test 'should not create sample transfer for a member that is a maintainer' do
+      test 'should create sample transfer for a member that is a maintainer' do
         user = users(:joan_doe)
         login_as user
 
-        post namespace_project_samples_transfer_path(@namespace, @project1),
+        post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
              params: {
                transfer: {
                  new_project_id: @project2.id,
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }
-        assert_response :unauthorized
+        assert_response :success
       end
 
       test 'should not create sample transfer for a member that is a guest' do
