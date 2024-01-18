@@ -15,10 +15,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_163859) do
   enable_extension "hstore"
   enable_extension "plpgsql"
 
-  # Custom types defined in this database.
-  # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "old_access_level", ["20", "30", "40"]
-
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
