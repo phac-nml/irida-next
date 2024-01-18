@@ -126,3 +126,8 @@ sampleAlpha1:
   name: Sample Alpha 1
   description: Sample Alpha 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1) %>
+
+sample36:
+  name: Sample 36
+  description: Sample 36 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel) %>

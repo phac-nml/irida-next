@@ -275,3 +275,11 @@ group_golf:
   type: Group
   description: Group Golf description
   metadata_summary: {}
+
+group_hotel:
+  name: Group Hotel
+  path: group-hotel
+  type: Group
+  description: Group Hotel description
+  metadata_summary: {}
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
