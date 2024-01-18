@@ -560,7 +560,12 @@ type Sample implements Node {
   """
   Metadata for the sample
   """
-  metadata: JSON!
+  metadata(
+    """
+    Optional array of keys to limit metadata result to.
+    """
+    keys: [String!] = null
+  ): JSON!
 
   """
   Name of the sample.
