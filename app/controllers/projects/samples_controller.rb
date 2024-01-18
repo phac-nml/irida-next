@@ -24,7 +24,6 @@ module Projects
     def show
       authorize! @sample.project, to: :read_sample?
       @tab = params[:tab]
-      puts @sample.metadata_with_provenance
       @table_listing = if @tab == 'metadata'
                          @sample.metadata_with_provenance
                        else
