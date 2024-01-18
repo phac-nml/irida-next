@@ -809,9 +809,6 @@ en:
         no_associated_files: There are no files associated with this sample.
         no_metadata: No Metadata
         no_associated_metadata: This sample has no metadata.
-        sorting:
-          updated_at_desc: Updated At
-          updated_at_asc: Oldest updated
         upload: Upload
         upload_files: Upload Files
         uploading: Uploading
