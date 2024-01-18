@@ -972,7 +972,7 @@ en:
           missing_sample_id_column: The file is missing the sample id column.
           missing_metadata_column: The file does not have any metadata columns.
           missing_metadata_row: The file does not have any metadata rows.
-          sample_not_found: "Sample '%{sample_name}' is not found within this project"
+          sample_not_found: "'%{sample_name}' is not found within this project"
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
