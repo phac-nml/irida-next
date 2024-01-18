@@ -22,4 +22,18 @@ class Sample < ApplicationRecord
   def self.ransackable_associations(_auth_object = nil)
     %w[]
   end
+
+  def metadata_with_provenance
+    sample_metadata = []
+    metadata.each do |metadata_field, value|
+      provider = if metadata_provenance[metadata_field]['source'] == 'user'
+                   User.find(metadata_provenance[metadata_field]['id']).email
+                 else
+                   "Analysis #{metadata_provenance[metadata_field]['id']}"
+                 end
+      sample_metadata << { metadata_field:, value:, provider:,
+                           last_modified: metadata_provenance[metadata_field]['updated_at'] }
+    end
+    sample_metadata
+  end
 end

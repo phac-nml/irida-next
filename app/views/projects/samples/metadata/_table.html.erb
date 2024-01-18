@@ -14,16 +14,12 @@
       </tr>
     </thead>
     <tbody>
-      <% @sample.metadata.each do |metadata_field, value| %>
-        <tr id="<%= metadata_field%>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-          <td class="px-6 py-4"><%= metadata_field %></td>
-          <td class="px-6 py-4"><%= value %></td>
-          <% if @sample.metadata_provenance[metadata_field]["source"] == 'user' %>
-              <td class="px-6 py-4"><%= User.find(@sample.metadata_provenance[metadata_field]["id"]).email %></td>
-          <% else %>
-              <td class="px-6 py-4"><%= t("projects.samples.show.metadata.analysis") %> <%= @sample.metadata_provenance[metadata_field]["id"] %></td>
-          <% end %>
-          <td class="px-6 py-4"><%= viral_time_ago(original_time: @sample.metadata_provenance[metadata_field]["updated_at"]) %></td>
+      <% sample_metadata.each do |metadata| %>
+        <tr id="<%= metadata[:metadata_field] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+          <td class="px-6 py-4"><%= metadata[:metadata_field] %></td>
+          <td class="px-6 py-4"><%= metadata[:value] %></td>
+          <td class="px-6 py-4"><%= metadata[:provider] %></td>
+          <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_modified]) %></td>
         </tr>
       <% end %>
     </tbody>
