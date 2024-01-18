@@ -27,7 +27,7 @@ module Samples
 
         @sample.with_lock do
           perform_metadata_update
-          @sample.save!
+          @sample.save
         end
 
         update_metadata_summary
