@@ -406,7 +406,7 @@ module Projects
     end
 
     test 'can search the list of samples by name' do
-      visit namespace_project_samples_url(@namespace.path, @project.path)
+      visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'table#samples-table tbody tr', count: 3
       assert_text @sample1.name
@@ -823,7 +823,7 @@ module Projects
     end
 
     test 'user can see delete buttons as owner' do
-      visit namespace_project_sample_url(@namespace.path, @project.path, @sample1)
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
       assert_text I18n.t('projects.samples.show.delete_files_button'), count: 1
       within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
