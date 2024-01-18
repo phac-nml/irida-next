@@ -16,7 +16,7 @@ module Projects
         # bin/rails test test/controllers/projects/samples/metadata/file_import_controller_test.rb
 
         test 'import sample metadata with permission' do
-          post namespace_project_samples_file_import_path(@namespace, @project),
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
                params: {
                  file_import: {
                    file: @csv,
@@ -30,7 +30,7 @@ module Projects
         test 'import sample metadata without permission' do
           login_as users(:micha_doe)
 
-          post namespace_project_samples_file_import_path(@namespace, @project),
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
                params: {
                  file_import: {
                    file: @csv,
@@ -43,7 +43,7 @@ module Projects
 
         test 'import sample metadata with invalid file' do
           other = fixture_file_upload('test/fixtures/files/metadata/invalid.txt')
-          post namespace_project_samples_file_import_path(@namespace, @project),
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
                params: {
                  file_import: {
                    file: other,
@@ -56,7 +56,7 @@ module Projects
 
         test 'import sample metadata with a sample that does not belong to project' do
           csv = fixture_file_upload('test/fixtures/files/metadata/mixed_project_samples.csv')
-          post namespace_project_samples_file_import_path(@namespace, @project),
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
                params: {
                  file_import: {
                    file: csv,
