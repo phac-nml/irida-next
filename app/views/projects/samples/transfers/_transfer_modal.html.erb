@@ -19,6 +19,7 @@
         <div class="flex flex-row-reverse">
           <%= form.submit t("projects.samples.transfers._transfer_modal.submit_button"),
                       class: "button button--size-default button--state-primary",
+                      disabled: @projects.count.zero?,
                       data: {
                         action: "click->projects--samples--transfers#clear"
                       } %>

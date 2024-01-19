@@ -35,7 +35,7 @@ module Projects
           @errors = @project.errors.full_messages_for(:base)
           render status: :unprocessable_entity,
                  locals: { sample_ids: [], type: :alert,
-                           message: @errors, errors: [] }
+                           message: t('.no_samples_transferred_error'), errors: @errors }
         end
       end
 

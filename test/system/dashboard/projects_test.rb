@@ -18,7 +18,7 @@ module Dashboard
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
-      assert_selector 'tr', count: 14
+      assert_selector 'tr', count: 15
       click_on I18n.t(:'components.pagination.previous')
       assert_selector 'tr', count: 20
 
@@ -87,7 +87,7 @@ module Dashboard
 
       assert_selector 'tr', count: 20
       within first('tr') do
-        assert_text projects(:project9).human_name
+        assert_text projects(:projectHotel).human_name
       end
     end
 
@@ -132,7 +132,7 @@ module Dashboard
 
       assert_selector 'tr', count: 20
       within first('tr') do
-        assert_text projects(:project9).human_name
+        assert_text projects(:projectHotel).human_name
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name

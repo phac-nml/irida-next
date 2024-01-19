@@ -183,3 +183,7 @@ projectFoxtrotSubgroupA:
 project27:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user27) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:user27_project1_namespace) %>
+
+projectHotel:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel_namespace) %>

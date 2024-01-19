@@ -89,3 +89,9 @@ user27_namespace:
   path: user.27_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user27) %>
+
+user28_namespace:
+  name: user.28@localhost
+  path: user.28_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user28) %>

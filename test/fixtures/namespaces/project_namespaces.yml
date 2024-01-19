@@ -405,3 +405,11 @@ user27_project1_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:user27_namespace) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user27) %>
   metadata_summary: {}
+
+projectHotel_namespace:
+  name: Project Hotel
+  path: project-hotel
+  description: Project Hotel description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel) %>
+  metadata_summary: {}

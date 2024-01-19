@@ -403,3 +403,15 @@ group_golf_member_user_27:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:user27) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_golf) %>
   access_level: <%= Member::AccessLevel::GUEST %>
+
+group_hotel_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_hotel_project_one_member_user_28:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user28) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:user28) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>

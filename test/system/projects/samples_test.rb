@@ -274,6 +274,20 @@ module Projects
       end
     end
 
+    test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
+      user = users(:user28)
+      login_as user
+      namespace = groups(:group_hotel)
+      project2 = projects(:projectHotel)
+      visit namespace_project_samples_url(namespace, project2)
+      assert_selector 'table#samples-table tbody tr', count: 1
+      all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_no_selector 'option'
+      end
+    end
+
     test 'should not transfer samples for maintainer outside of hierarchy' do
       user = users(:joan_doe)
       login_as user

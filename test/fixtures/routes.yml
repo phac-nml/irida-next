@@ -57,6 +57,11 @@ user_27_namespace_route:
   path: user.27_at_localhost
   source: user27_namespace (Namespace)
 
+user_28_namespace_route:
+  name: user.28@localhost
+  path: user.28_at_localhost
+  source: user28_namespace (Namespace)
+
 private_joan_namespace_route:
   name: private.joan@localhost
   path: private.joan_at_localhost
@@ -398,3 +403,13 @@ user27_project_1_namespace_route:
   name: user.27@localhost / Project 1
   path: user.27_at_localhost/project-1
   source: user27_project1_namespace (Namespace)
+
+group_hotel_route:
+  name: Group Hotel
+  path: group-hotel
+  source: group_hotel (Namespace)
+
+project_hotel_namespace_route:
+  name: Group Hotel / Project Hotel
+  path: group-hotel/project-hotel
+  source: projectHotel_namespace (Namespace)
