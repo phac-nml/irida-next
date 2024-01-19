@@ -155,17 +155,21 @@ module Projects
       @subgroup12b = groups(:subgroup_twelve_b)
       @subgroup12aa = groups(:subgroup_twelve_a_a)
 
-      Projects::TransferService.new(@project31, @john_doe).execute(@subgroup12b)
-
-      @group12.reload
-      @subgroup12aa.reload
-      @subgroup12a.reload
-      @subgroup12b.reload
-
-      assert_equal({}, @subgroup12aa.metadata_summary)
-      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.metadata_summary)
-      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
       assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+      assert_no_changes -> { @group12.reload.metadata_summary } do
+        assert_no_changes -> { @project31.namespace.reload.metadata_summary } do
+          Projects::TransferService.new(@project31, @john_doe).execute(@subgroup12b)
+        end
+      end
+
+      assert_equal({}, @subgroup12aa.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.reload.metadata_summary)
     end
 
     test 'user namespace metadata summary does not update after project transfer' do

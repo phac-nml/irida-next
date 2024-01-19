@@ -123,35 +123,36 @@ module Samples
       @sample_transfer_params1 = { new_project_id: @project30.id,
                                    sample_ids: [@sample34.id, @sample35.id] }
 
-      Samples::TransferService.new(@project31, @john_doe).execute(@sample_transfer_params1[:new_project_id],
-                                                                  @sample_transfer_params1[:sample_ids])
-
-      @subgroup12a.reload
-      @subgroup12aa.reload
-      @subgroup12b.reload
-
-      assert_equal({}, @project31.namespace.metadata_summary)
-      assert_equal({}, @subgroup12aa.metadata_summary)
-      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.metadata_summary)
-      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
       assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 },
                    @group12.metadata_summary)
+
+      assert_no_changes -> { @group12.reload.metadata_summary } do
+        Samples::TransferService.new(@project31, @john_doe).execute(@sample_transfer_params1[:new_project_id],
+                                                                    @sample_transfer_params1[:sample_ids])
+      end
+
+      assert_equal({}, @project31.namespace.reload.metadata_summary)
+      assert_equal({}, @subgroup12aa.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.reload.metadata_summary)
 
       @sample_transfer_params2 = { new_project_id: @project29.id,
                                    sample_ids: [@sample33.id, @sample34.id, @sample35.id] }
 
-      Samples::TransferService.new(@project30, @john_doe).execute(@sample_transfer_params2[:new_project_id],
-                                                                  @sample_transfer_params2[:sample_ids])
+      assert_no_changes -> { @group12.reload.metadata_summary } do
+        Samples::TransferService.new(@project30, @john_doe).execute(@sample_transfer_params2[:new_project_id],
+                                                                    @sample_transfer_params2[:sample_ids])
+      end
 
-      @subgroup12aa.reload
-      @subgroup12a.reload
-      @subgroup12b.reload
-
-      assert_equal({}, @project30.namespace.metadata_summary)
-      assert_equal({}, @project31.namespace.metadata_summary)
-      assert_equal({}, @subgroup12b.metadata_summary)
-      assert_equal({}, @subgroup12aa.metadata_summary)
-      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.metadata_summary)
+      assert_equal({}, @project30.namespace.reload.metadata_summary)
+      assert_equal({}, @project31.namespace.reload.metadata_summary)
+      assert_equal({}, @subgroup12b.reload.metadata_summary)
+      assert_equal({}, @subgroup12aa.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.reload.metadata_summary)
     end
   end
 end

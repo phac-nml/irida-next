@@ -46,19 +46,24 @@ module Samples
       @subgroup12a = groups(:subgroup_twelve_a)
       @subgroup12b = groups(:subgroup_twelve_b)
       @subgroup12aa = groups(:subgroup_twelve_a_a)
+      @project31 = projects(:project31)
       @sample34 = samples(:sample34)
 
-      Samples::DestroyService.new(@sample34, @user).execute
-
-      @group12.reload
-      @subgroup12aa.reload
-      @subgroup12a.reload
-      @subgroup12b.reload
-
-      assert_equal({}, @subgroup12aa.metadata_summary)
-      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
-      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @group12.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+      assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
+        Samples::DestroyService.new(@sample34, @user).execute
+      end
+
+      assert_equal({}, @project31.namespace.reload.metadata_summary)
+      assert_equal({}, @subgroup12aa.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @group12.reload.metadata_summary)
     end
   end
 end

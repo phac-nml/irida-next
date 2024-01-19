@@ -90,29 +90,30 @@ module Groups
       @subgroup12b = groups(:subgroup_twelve_b)
       @subgroup12aa = groups(:subgroup_twelve_a_a)
 
-      Groups::TransferService.new(@subgroup12aa, @john_doe).execute(@subgroup12b)
-
-      @group12.reload
-      @subgroup12aa.reload
-      @subgroup12a.reload
-      @subgroup12b.reload
-
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
-      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.metadata_summary)
-      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
       assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-      Groups::TransferService.new(@subgroup12b, @john_doe).execute(@subgroup12a)
+      assert_no_changes -> { @group12.reload.metadata_summary } do
+        assert_no_changes -> { @subgroup12aa.reload.metadata_summary } do
+          Groups::TransferService.new(@subgroup12aa, @john_doe).execute(@subgroup12b)
+        end
+      end
 
-      @group12.reload
-      @subgroup12aa.reload
-      @subgroup12a.reload
-      @subgroup12b.reload
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.reload.metadata_summary)
 
-      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
-      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.metadata_summary)
-      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.metadata_summary)
-      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+      assert_no_changes -> { @group12.reload.metadata_summary } do
+        assert_no_changes -> { @subgroup12aa.reload.metadata_summary } do
+          assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
+            Groups::TransferService.new(@subgroup12b, @john_doe).execute(@subgroup12a)
+          end
+        end
+      end
+
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.reload.metadata_summary)
     end
   end
 end
