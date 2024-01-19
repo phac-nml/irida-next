@@ -424,6 +424,13 @@ GEM
       railties (>= 5.2)
     retriable (3.1.2)
     rexml (3.2.6)
+    roo (2.10.0)
+      nokogiri (~> 1)
+      rubyzip (>= 1.3.0, < 3.0.0)
+    roo-xls (1.2.0)
+      nokogiri
+      roo (>= 2.0.0, < 3)
+      spreadsheet (> 0.9.0)
     rouge (4.2.0)
     rubocop (1.56.2)
       base64 (~> 0.1.1)
@@ -446,11 +453,13 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
     ruby-next-core (0.15.3)
+    ruby-ole (1.2.12.2)
     ruby-progressbar (1.13.0)
     ruby-saml (1.15.0)
       nokogiri (>= 1.13.10)
       rexml
     ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
     signet (0.18.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -467,6 +476,8 @@ GEM
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
+    spreadsheet (1.3.0)
+      ruby-ole
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -567,6 +578,8 @@ DEPENDENCIES
   puma (~> 6.4)
   rails (~> 7.1.1)
   ransack (~> 4.1, >= 4.1.1)
+  roo (~> 2.10.0)
+  roo-xls
   rubocop
   rubocop-graphql
   rubocop-rails
