@@ -99,9 +99,5 @@ module Projects
     def set_default_sort
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
     end
-
-    def load_samples
-      Sample.where(project_id: @project.id)
-    end
   end
 end

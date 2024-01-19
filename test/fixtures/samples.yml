@@ -4,78 +4,108 @@ sample1:
   name: Project 1 Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
 
 sample2:
   name: Project 1 Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
+  created_at: <%= 2.weeks.ago %>
+  updated_at: <%= 2.day.ago %>
 
 <% (3..22).each do |n| %>
 sample<%= (n) %>:
   name: <%= "Project 2 Sample #{n}" %>
   description: <%= "Sample #{n} description." %>
   project_id: <%= ActiveRecord::FixtureSet.identify(:project2) %>
+  created_at: <%= n.weeks.ago %>
+  updated_at: <%= n.day.ago %>
 <% end %>
 
 sample23:
   name: Project 4 Sample 23
   description: Sample 23 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project4) %>
+  created_at: <%= 23.weeks.ago %>
+  updated_at: <%= 23.day.ago %>
 
 sample24:
   name: John Doe Project 2 Sample 1
   description: John Doe Project 2 Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2) %>
+  created_at: <%= 24.week.ago %>
+  updated_at: <%= 24.day.ago %>
 
 sample25:
   name: Project 25 Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project25) %>
+  created_at: <%= 25.week.ago %>
+  updated_at: <%= 25.day.ago %>
 
 sample26:
   name: Project 26 Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
+  created_at: <%= 26.week.ago %>
+  updated_at: <%= 26.day.ago %>
 
 sample27:
   name: Project 26 Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
+  created_at: <%= 27.week.ago %>
+  updated_at: <%= 27.day.ago %>
 
 sampleA:
   name: Project A Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>
+  created_at: <%= 28.week.ago %>
+  updated_at: <%= 28.day.ago %>
 
 sampleB:
   name: Project A Sample B
   description: Sample B description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>
+  created_at: <%= 29.week.ago %>
+  updated_at: <%= 29.day.ago %>
 
 sampleC:
   name: Project A Sample C
   description: Sample C description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>
+  created_at: <%= 30.week.ago %>
+  updated_at: <%= 30.day.ago %>
 
 sample28:
   name: Project 28 Sample 1
   description: Sample 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project28) %>
+  created_at: <%= 31.week.ago %>
+  updated_at: <%= 31.day.ago %>
 
 sample29:
   name: Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project25) %>
+  created_at: <%= 32.week.ago %>
+  updated_at: <%= 32.day.ago %>
 
 sample30:
   name: Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
+  created_at: <%= 33.week.ago %>
+  updated_at: <%= 33.day.ago %>
 
 sample31:
   name: Sample 2
   description: Sample 2 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
+  created_at: <%= 34.week.ago %>
+  updated_at: <%= 34.day.ago %>
 
 sample32:
   name: Sample 32
@@ -111,21 +141,29 @@ sampleAlpha:
   name: Sample Alpha
   description: Sample Alpha description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha) %>
+  created_at: <%= 35.week.ago %>
+  updated_at: <%= 35.day.ago %>
 
 sampleBravo:
   name: Sample Bravo
   description: Sample Bravo description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo) %>
+  created_at: <%= 36.week.ago %>
+  updated_at: <%= 36.day.ago %>
 
 sampleCharlie:
   name: Sample Charlie
   description: Sample Charlie description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie) %>
+  created_at: <%= 37.week.ago %>
+  updated_at: <%= 37.day.ago %>
 
 sampleAlpha1:
   name: Sample Alpha 1
   description: Sample Alpha 1 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1) %>
+  created_at: <%= 38.week.ago %>
+  updated_at: <%= 38.day.ago %>
 
 sample36:
   name: Sample 36

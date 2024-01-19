@@ -10,6 +10,7 @@ module Projects
       def new
         authorize! @project, to: :transfer_sample?
 
+        @q = load_samples.ransack(params[:q])
         respond_to do |format|
           format.turbo_stream do
             render status: :ok
@@ -22,7 +23,8 @@ module Projects
         sample_ids = transfer_params[:sample_ids]
         transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
                                                                                                  sample_ids)
-        @pagy, @samples = pagy(Sample.where(project_id: @project.id))
+        @q = load_samples.ransack(params[:q])
+        @pagy, @samples = pagy(@q.result)
 
         if transferred_samples_ids.length == sample_ids.length
           render status: :ok, locals: { sample_ids:, type: :success, message: t('.success'), errors: [] }

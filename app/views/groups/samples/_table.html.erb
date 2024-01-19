@@ -1,18 +1,33 @@
 <table class="min-w-full table-fixed dark:divide-slate-600">
-  <thead
-    class="
-      text-slate-700
-      bg-slate-50
-      dark:bg-slate-700
-      dark:text-slate-400
-      text-left
-    "
-  >
+  <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
     <tr>
-      <th scope="col" class="px-6 py-3"><%= t(".sample") %></th>
-      <th scope="col" class="px-6 py-3"><%= t(".project") %></th>
-      <th scope="col" class="px-6 py-3"><%= t(".created_at") %></th>
-      <th scope="col" class="px-6 py-3"><%= t(".updated_at") %></th>
+      <th scope="col" class="px-4 py-3 text-left">
+        <%= render Ransack::SortComponent.new(
+          ransack_obj: @q,
+          label: t(".sample"),
+          url: sorting_url(@q, :name),
+          field: :name
+        ) %>
+      </th>
+      <th scope="col" class="px-4 py-3 text-left cursor-not-allowed">
+        <%= t(".project") %>
+      </th>
+      <th scope="col" class="px-4 py-3 text-left">
+        <%= render Ransack::SortComponent.new(
+          ransack_obj: @q,
+          label: t(".created_at"),
+          url: sorting_url(@q, :created_at),
+          field: :created_at
+        ) %>
+      </th>
+      <th scope="col" class="px-4 py-3 text-left">
+        <%= render Ransack::SortComponent.new(
+          ransack_obj: @q,
+          label: t(".updated_at"),
+          url: sorting_url(@q, :updated_at),
+          field: :updated_at
+        ) %>
+      </th>
     </tr>
   </thead>
   <tbody
@@ -28,14 +43,9 @@
     <% samples.each do |sample| %>
       <tr
         id="<%= dom_id(sample) %>"
-        class="
-          text-sm
-          font-normal
-          text-slate-500
-          dark:text-slate-400
-        "
+        class="text-sm font-normal text-slate-500 dark:text-slate-400"
       >
-        <td class="px-4 py-3"><%= link_to sample.name,
+        <td class="px-4 py-3 whitespace-nowrap"><%= link_to sample.name,
           namespace_project_sample_path(
             id: sample.id,
             namespace_id: sample.project.namespace.parent.full_path,
@@ -46,7 +56,7 @@
           },
           class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
         </td>
-        <td class="px-4 py-3">
+        <td class="px-4 py-3 whitespace-nowrap">
           <%= viral_tooltip(title: project_path(sample.project)) do %>
             <%= link_to sample.project.abbreviated_path,
             project_path(sample.project),
@@ -56,10 +66,10 @@
             class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
           <% end %>
         </td>
-        <td class="px-4 py-3">
+        <td class="px-4 py-3 whitespace-nowrap">
           <%= l(sample.created_at.localtime, format: :full_date) %>
         </td>
-        <td class="px-4 py-3">
+        <td class="px-4 py-3 whitespace-nowrap">
           <%= viral_time_ago(original_time: sample.updated_at) %>
         </td>
       </tr>

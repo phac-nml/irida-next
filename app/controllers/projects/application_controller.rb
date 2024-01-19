@@ -19,5 +19,9 @@ module Projects
     def context_crumbs
       @context_crumbs = route_to_context_crumbs(@project.namespace.route)
     end
+
+    def load_samples
+      Sample.where(project_id: @project.id)
+    end
   end
 end
