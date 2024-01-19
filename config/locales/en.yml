@@ -863,8 +863,8 @@ en:
       metadata:
         file_imports:
           create:
-            success: File was successfully imported.
-            error: "The following list of samples failed:"
+            success: Sample metadata was successfully imported.
+            error: "Metadata was not successfully imported for the following samples:"
       attachments:
         concatenations:
           create:

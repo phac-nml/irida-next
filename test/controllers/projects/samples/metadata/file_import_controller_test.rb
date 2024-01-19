@@ -13,8 +13,6 @@ module Projects
           @csv = fixture_file_upload('test/fixtures/files/metadata/valid.csv')
         end
 
-        # bin/rails test test/controllers/projects/samples/metadata/file_import_controller_test.rb
-
         test 'import sample metadata with permission' do
           post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
                params: {
