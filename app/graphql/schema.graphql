@@ -184,6 +184,11 @@ type GroupEdge {
 }
 
 """
+Represents untyped JSON
+"""
+scalar JSON
+
+"""
 The mutation root of this schema
 """
 type Mutation {
@@ -551,6 +556,16 @@ type Sample implements Node {
   ID of the object.
   """
   id: ID!
+
+  """
+  Metadata for the sample
+  """
+  metadata(
+    """
+    Optional array of keys to limit metadata result to.
+    """
+    keys: [String!] = null
+  ): JSON!
 
   """
   Name of the sample.

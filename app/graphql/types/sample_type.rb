@@ -10,6 +10,12 @@ module Types
     field :name, String, null: false, description: 'Name of the sample.'
     field :project, ProjectType, null: false, description: 'Project the sample is on.'
 
+    field :metadata,
+          GraphQL::Types::JSON,
+          null: false,
+          description: 'Metadata for the sample',
+          resolver: Resolvers::SampleMetadataResolver
+
     def self.authorized?(object, context)
       super &&
         allowed_to?(
