@@ -969,10 +969,10 @@ en:
           empty_file: The file cannot be empty.
           empty_sample_id_column: The sample id column cannot be empty.
           invalid_file_extension: The file can only be a csv or excel.
-          duplicate_column_names: The file has duplicate column header names.
-          missing_sample_id_column: The file is missing the sample id column.
-          missing_metadata_column: The file does not have any metadata columns.
-          missing_metadata_row: The file does not have any metadata rows.
+          duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
+          missing_sample_id_column: The file is missing the sample id column.  Please make sure the sample id column exists and retry uploading.
+          missing_metadata_column: The file does not have any metadata columns. Please add some columns of metadata to the file and retry uploading.
+          missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
           sample_not_found: "'%{sample_name}' is not found within this project"
     projects:
       transfer:
