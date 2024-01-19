@@ -4,16 +4,19 @@
 >
   <td class="w-16 p-2 whitespace-nowrap">
     <%= viral_avatar(
-          name: project.name,
-          colour_string: "#{project.name}-#{project.id}",
-          data: {
-            turbo: false
-          },
-          url: namespace_project_path(project.namespace.parent, project)
-        ) %>
+      name: project.name,
+      colour_string: "#{project.name}-#{project.id}",
+      data: {
+        turbo: false
+      },
+      url: namespace_project_path(project.namespace.parent, project)
+    ) %>
 
   </td>
   <td class="p-4 whitespace-nowrap">
+    <% if defined?params[:q][:namespace_name_cont] %>
+      <%= params[:q][:namespace_name_cont] %>
+    <% end %>
     <%= link_to namespace_project_path(project.namespace.parent, project),
                 data: {
                   turbo: false
@@ -21,7 +24,16 @@
                 class: "text-slate-800 dark:text-slate-300 hover:underline" do %>
       <span><%= project.namespace.parent.full_name %>
         /
-      </span><span class="font-semibold"><%= project.namespace.name %></span>
+      </span><span class="font-semibold"><%= highlight(
+          project.namespace.name,
+          (
+            if defined?(params[:q][:namespace_name_cont])
+              params[:q][:namespace_name_cont]
+            else
+              ""
+            end
+          )
+        ) %></span>
     <% end %>
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
