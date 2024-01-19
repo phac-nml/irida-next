@@ -14,8 +14,6 @@ module Samples
         @csv = File.new('test/fixtures/files/metadata/valid.csv', 'r')
       end
 
-      # bin/rails test test/services/samples/metadata/file_import_service_test.rb
-
       test 'import sample metadata with permission' do
         assert_authorized_to(:update_sample?, @project,
                              with: ProjectPolicy,
@@ -46,6 +44,8 @@ module Samples
       end
 
       test 'import sample metadata via csv file' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
         params = { file: @csv, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                             params).execute
@@ -60,6 +60,8 @@ module Samples
       end
 
       test 'import sample metadata via xls file' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
         xls = File.new('test/fixtures/files/metadata/valid.xls', 'r')
         params = { file: xls, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project, @john_doe, params).execute
@@ -74,6 +76,8 @@ module Samples
       end
 
       test 'import sample metadata via xlsx file' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
         xlsx = File.new('test/fixtures/files/metadata/valid.xlsx', 'r')
         params = { file: xlsx, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project, @john_doe, params).execute
@@ -130,6 +134,7 @@ module Samples
       test 'import sample metadata with empty values set to true' do
         sample32 = samples(:sample32)
         project29 = projects(:project29)
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample32.metadata)
         csv = File.new('test/fixtures/files/metadata/contains_empty_values.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: true }
         response = Samples::Metadata::FileImportService.new(project29, @john_doe, params).execute
@@ -142,6 +147,7 @@ module Samples
       test 'import sample metadata with empty values set to false' do
         sample32 = samples(:sample32)
         project29 = projects(:project29)
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample32.metadata)
         csv = File.new('test/fixtures/files/metadata/contains_empty_values.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: false }
         response = Samples::Metadata::FileImportService.new(project29, @john_doe, params).execute
@@ -151,6 +157,8 @@ module Samples
       end
 
       test 'import sample metadata with a sample that does not belong to project' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
         csv = File.new('test/fixtures/files/metadata/mixed_project_samples.csv', 'r')
         params = { file: csv, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project, @john_doe, params).execute
