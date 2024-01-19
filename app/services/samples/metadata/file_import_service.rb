@@ -98,18 +98,18 @@ module Samples
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
-          sample_id_column = metadata[@sample_id_column]
-          sample = Sample.find_by(name: sample_id_column, project_id: @project.id)
+          sample_id = metadata[@sample_id_column]
+          sample = Sample.find_by(name: sample_id, project_id: @project.id)
 
           metadata.delete(@sample_id_column)
           metadata.compact! if @ignore_empty_values
           begin
-            response[sample_id_column] =
+            response[sample_id] =
               UpdateService.new(@project, sample, current_user, { 'metadata' => metadata }).execute
           rescue StandardError
             @project.errors.add(:sample,
                                 I18n.t('services.samples.metadata.import_file.sample_not_found',
-                                       sample_name: sample_id_column))
+                                       sample_name: sample_id))
             next
           end
         end
