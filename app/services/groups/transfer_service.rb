@@ -14,6 +14,8 @@ module Groups
       # Authorize if user can transfer group into namespace
       authorize! new_namespace, to: :transfer_into_namespace?
 
+      old_namespace = @group.parent unless @group.parent.nil?
+
       if Group.where(parent_id: new_namespace.id).exists?(['path = ? or name = ?', @group.path,
                                                            @group.name])
         raise TransferError, I18n.t('services.groups.transfer.namespace_group_exists')
@@ -26,6 +28,8 @@ module Groups
       @group.update(parent_id: new_namespace.id)
 
       UpdateMembershipsJob.perform_later(new_namespace_member_ids)
+
+      new_namespace.update_metadata_summary_by_namespace_transfer(@group, old_namespace)
 
       true
     rescue Groups::TransferService::TransferError => e

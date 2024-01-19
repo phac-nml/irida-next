@@ -13,6 +13,10 @@ module Groups
     def execute
       authorize! @group, to: :destroy?
       group.destroy
+
+      return unless group.deleted? && !group.parent.nil?
+
+      group.update_metadata_summary_by_namespace_deletion
     end
   end
 end

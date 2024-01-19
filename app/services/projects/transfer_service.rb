@@ -5,8 +5,9 @@ module Projects
   class TransferService < BaseProjectService
     TransferError = Class.new(StandardError)
 
-    def execute(new_namespace)
+    def execute(new_namespace) # rubocop:disable Metrics/AbcSize
       @new_namespace = new_namespace
+      old_namespace = @project.parent
 
       raise TransferError, I18n.t('services.projects.transfer.namespace_empty') if @new_namespace.blank?
 
@@ -22,6 +23,8 @@ module Projects
       authorize! @new_namespace, to: :transfer_into_namespace?
 
       transfer(project)
+
+      @new_namespace.update_metadata_summary_by_namespace_transfer(@project.namespace, old_namespace)
 
       true
     rescue Projects::TransferService::TransferError => e

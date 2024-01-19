@@ -219,6 +219,27 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     errors.add(:parent_id, 'nesting level too deep')
   end
 
+  # self = namespace receiving transferred_namespace
+  # old_namespace = the old namespace transferred_namespace originated from
+  def update_metadata_summary_by_namespace_transfer(transferred_namespace, old_namespace)
+    metadata_to_update = transferred_namespace.metadata_summary
+    return if metadata_to_update.empty?
+
+    unless old_namespace.nil? || old_namespace.type == Namespaces::UserNamespace.sti_name
+      subtract_from_metadata_summary_count(old_namespace.self_and_ancestors, metadata_to_update, false)
+    end
+
+    return unless type != Namespaces::UserNamespace.sti_name
+
+    add_to_metadata_summary_count(self_and_ancestors, metadata_to_update, false)
+  end
+
+  def update_metadata_summary_by_namespace_deletion
+    return if metadata_summary.empty?
+
+    subtract_from_metadata_summary_count(parent.self_and_ancestors, metadata_summary, false)
+  end
+
   private
 
   # Method to restore namespace routes when the namespace is restored

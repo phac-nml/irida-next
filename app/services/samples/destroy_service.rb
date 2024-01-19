@@ -14,6 +14,8 @@ module Samples
       authorize! sample.project, to: :destroy_sample?
 
       sample.destroy
+
+      sample.project.namespace.update_metadata_summary_by_sample_deletion(sample) if sample.deleted?
     end
   end
 end

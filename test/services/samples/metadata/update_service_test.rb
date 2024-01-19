@@ -23,6 +23,12 @@ module Samples
       test 'add metadata to sample containing no existing metadata by user' do
         freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
@@ -30,18 +36,22 @@ module Samples
                      @sample35.metadata_provenance)
         assert_equal({ added: %w[metadatafield1 metadatafield2], updated: [], deleted: [],
                        not_updated: [] }, metadata_changes)
-        @subgroup12aa.reload
-        @subgroup12a.reload
-        @group12.reload
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.metadata_summary)
-        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.metadata_summary)
-        assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.metadata_summary)
+
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.namespace.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.reload.metadata_summary)
       end
 
       test 'add metadata to sample containing no existing metadata by analysis' do
         freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, 'analysis_id' => 2 }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.metadata)
@@ -51,18 +61,23 @@ module Samples
         assert_equal({ added: %w[metadatafield1 metadatafield2], updated: [], deleted: [],
                        not_updated: [] }, metadata_changes)
 
-        @subgroup12aa.reload
-        @subgroup12a.reload
-        @group12.reload
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.metadata_summary)
-        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.metadata_summary)
-        assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.namespace.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.reload.metadata_summary)
       end
 
       test 'update sample metadata merge with new metadata and analysis overwritting user' do
         freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' }, 'analysis_id' => 10 }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 },
+                     @project30.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 },
+                     @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 },
+                     @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value4', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
@@ -75,19 +90,22 @@ module Samples
         assert_equal({ added: %w[metadatafield3], updated: %w[metadatafield1], deleted: [],
                        not_updated: [] }, metadata_changes)
 
-        @subgroup12b.reload
-        @group12.reload
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @project30.namespace.metadata_summary)
+                     @project30.namespace.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @subgroup12b.metadata_summary)
+                     @subgroup12b.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadatafield3' => 1 },
-                     @group12.metadata_summary)
+                     @group12.reload.metadata_summary)
       end
 
       test 'update sample metadata merge with new metadata and user overwritting user' do
         freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' } }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project30.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value4', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
@@ -100,19 +118,23 @@ module Samples
         assert_equal({ added: %w[metadatafield3], updated: %w[metadatafield1], deleted: [],
                        not_updated: [] }, metadata_changes)
 
-        @subgroup12b.reload
-        @group12.reload
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @project30.namespace.metadata_summary)
+                     @project30.namespace.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @subgroup12b.metadata_summary)
+                     @subgroup12b.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadatafield3' => 1 },
-                     @group12.metadata_summary)
+                     @group12.reload.metadata_summary)
       end
 
       test 'update sample metadata merge with new metadata and user unable to overwrite analysis' do
         freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' } }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
@@ -131,21 +153,24 @@ module Samples
                  metadata_fields: 'metadatafield1')
         )
 
-        @subgroup12aa.reload
-        @subgroup12a.reload
-        @group12.reload
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @project31.namespace.metadata_summary)
+                     @project31.namespace.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @subgroup12aa.metadata_summary)
+                     @subgroup12aa.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield3' => 1 },
-                     @subgroup12a.metadata_summary)
+                     @subgroup12a.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadatafield3' => 1 },
-                     @group12.metadata_summary)
+                     @group12.reload.metadata_summary)
       end
 
       test 'remove metadata key with user' do
         params = { 'metadata' => { 'metadatafield2' => '' } }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1' }, @sample34.metadata)
@@ -155,21 +180,19 @@ module Samples
         )
         assert_equal({ added: [], updated: [], deleted: %w[metadatafield2], not_updated: [] }, metadata_changes)
 
-        @subgroup12aa.reload
-        @subgroup12a.reload
-        @group12.reload
-        assert_equal({ 'metadatafield1' => 1 },
-                     @project31.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 1 },
-                     @subgroup12aa.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 1 },
-                     @subgroup12a.metadata_summary)
-        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 2 },
-                     @group12.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1 }, @project31.namespace.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1 }, @subgroup12aa.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 2 }, @group12.reload.metadata_summary)
       end
 
       test 'remove metadata key with analysis' do
         params = { 'metadata' => { 'metadatafield1' => '' }, 'analysis_id' => 1 }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project30.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'value2' }, @sample33.metadata)
@@ -179,20 +202,20 @@ module Samples
         )
         assert_equal({ added: [], updated: [], deleted: %w[metadatafield1], not_updated: [] }, metadata_changes)
 
-        @subgroup12b.reload
-        @group12.reload
-        assert_equal({ 'metadatafield2' => 1 },
-                     @project30.namespace.metadata_summary)
-        assert_equal({ 'metadatafield2' => 1 },
-                     @subgroup12b.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 3 },
-                     @group12.metadata_summary)
+        assert_equal({ 'metadatafield2' => 1 }, @project30.namespace.reload.metadata_summary)
+        assert_equal({ 'metadatafield2' => 1 }, @subgroup12b.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 3 }, @group12.reload.metadata_summary)
       end
 
       test 'add, update, and remove metadata in same request to mimic batch update request with analysis' do
         freeze_time
         params = { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => 'newvalue2',
                                    'metadatafield3' => 'value3' }, 'analysis_id' => 1 }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project30.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'newvalue2', 'metadatafield3' => 'value3' }, @sample33.metadata)
@@ -206,20 +229,21 @@ module Samples
             not_updated: [] }, metadata_changes
         )
 
-        @subgroup12b.reload
-        @group12.reload
-        assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @project30.namespace.metadata_summary)
-        assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 }, @project30.namespace.reload.metadata_summary)
+        assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 }, @subgroup12b.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 3, 'metadatafield3' => 1 },
-                     @group12.metadata_summary)
+                     @group12.reload.metadata_summary)
       end
 
       test 'add, update, and remove metadata in same request to mimic batch update with user' do
         freeze_time
         params = { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => 'newvalue2',
                                    'metadatafield3' => 'value3' } }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project30.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
         metadata_changes = Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params).execute
 
         assert_equal({ 'metadatafield2' => 'newvalue2', 'metadatafield3' => 'value3' }, @sample33.metadata)
@@ -233,14 +257,12 @@ module Samples
             not_updated: [] }, metadata_changes
         )
 
-        @subgroup12b.reload
-        @group12.reload
         assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @project30.namespace.metadata_summary)
+                     @project30.namespace.reload.metadata_summary)
         assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
-                     @subgroup12b.metadata_summary)
+                     @subgroup12b.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 3, 'metadatafield3' => 1 },
-                     @group12.metadata_summary)
+                     @group12.reload.metadata_summary)
       end
 
       test 'update sample metadata with valid permission' do
@@ -306,57 +328,52 @@ module Samples
 
         params1 = { 'metadata' => { 'metadatafield4' => 'value4' } }
 
-        assert_no_changes @subgroup12b.metadata_summary do
-          Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params1).execute
-        end
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-        @subgroup12aa.reload
-        @subgroup12a.reload
-        @group12.reload
+        Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params1).execute
+
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
-                     @project31.namespace.metadata_summary)
+                     @project31.namespace.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
-                     @subgroup12aa.metadata_summary)
+                     @subgroup12aa.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield4' => 1 },
-                     @subgroup12a.metadata_summary)
+                     @subgroup12a.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadatafield4' => 1 },
-                     @group12.metadata_summary)
+                     @group12.reload.metadata_summary)
 
         params2 = { 'metadata' => { 'metadatafield5' => 'value5' } }
 
-        assert_no_changes -> { @subgroup12a.metadata_summary } do
-          assert_no_changes -> { @subgroup12aa.metadata_summary } do
-            Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params2).execute
-          end
-        end
-
-        @subgroup12b.reload
-        @group12.reload
+        Samples::Metadata::UpdateService.new(@project30, @sample33, @user, params2).execute
 
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield5' => 1 },
-                     @project30.namespace.metadata_summary)
+                     @project30.namespace.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield5' => 1 },
-                     @subgroup12b.metadata_summary)
+                     @subgroup12b.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
+                     @subgroup12aa.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield4' => 1 },
+                     @subgroup12a.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadatafield4' => 1, 'metadatafield5' => 1 },
-                     @group12.metadata_summary)
+                     @group12.reload.metadata_summary)
 
         params3 = { 'metadata' => { 'metadatafield2' => '' } }
 
-        assert_no_changes -> { @subgroup12b.metadata_summary } do
-          assert_no_changes -> { @subgroup12aa.metadata_summary } do
-            Samples::Metadata::UpdateService.new(@project29, @sample32, @user, params3).execute
-          end
-        end
+        Samples::Metadata::UpdateService.new(@project29, @sample32, @user, params3).execute
 
-        @subgroup12a.reload
-        @group12.reload
-
-        assert_equal({ 'metadatafield1' => 1 },
-                     @project29.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1 }, @project29.namespace.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield5' => 1 },
+                     @subgroup12b.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield4' => 1 },
+                     @subgroup12aa.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 1, 'metadatafield4' => 1 },
-                     @subgroup12a.metadata_summary)
+                     @subgroup12a.reload.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 2, 'metadatafield4' => 1, 'metadatafield5' => 1 },
-                     @group12.metadata_summary)
+                     @group12.reload.metadata_summary)
       end
 
       test 'user namespace metadata summary does not update' do
@@ -366,14 +383,13 @@ module Samples
         sample = samples(:sample24)
         namespace = namespaces_user_namespaces(:john_doe_namespace)
 
-        assert_no_changes namespace.metadata_summary do
-          Samples::Metadata::UpdateService.new(project, sample, @user, params).execute
-        end
+        Samples::Metadata::UpdateService.new(project, sample, @user, params).execute
 
+        assert_equal({}, namespace.reload.metadata_summary)
         assert_equal({ 'metadatafield4' => 'value4' }, sample.metadata)
         assert_equal({ 'metadatafield4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      sample.metadata_provenance)
-        assert_equal({ 'metadatafield4' => 1 }, project.namespace.metadata_summary)
+        assert_equal({ 'metadatafield4' => 1 }, project.namespace.reload.metadata_summary)
       end
     end
   end

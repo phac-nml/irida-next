@@ -7,6 +7,10 @@ module Projects
       authorize! project, to: :destroy?
 
       project.namespace.destroy!
+
+      return unless project.namespace.deleted? && project.namespace.type != Namespaces::UserNamespace.sti_name
+
+      project.namespace.update_metadata_summary_by_namespace_deletion
     end
   end
 end
