@@ -1,5 +1,22 @@
-<table class="min-w-full table-fixed dark:divide-slate-600">
-  <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+<table
+  class="
+    w-full
+    text-sm
+    text-left
+    rtl:text-right
+    text-slate-500
+    dark:text-slate-400
+  "
+>
+  <thead
+    class="
+      text-xs
+      uppercase
+      text-slate-700
+      bg-slate-50
+      dark:bg-slate-700
+      dark:text-slate-400
+    ">
     <tr>
       <th scope="col" class="px-4 py-3 text-left">
         <%= render Ransack::SortComponent.new(
@@ -43,9 +60,9 @@
     <% samples.each do |sample| %>
       <tr
         id="<%= dom_id(sample) %>"
-        class="text-sm font-normal text-slate-500 dark:text-slate-400"
+        class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
       >
-        <td class="px-4 py-3 whitespace-nowrap"><%= link_to sample.name,
+        <td class="px-6 py-3 whitespace-nowrap"><%= link_to sample.name,
           namespace_project_sample_path(
             id: sample.id,
             namespace_id: sample.project.namespace.parent.full_path,
@@ -56,7 +73,7 @@
           },
           class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
         </td>
-        <td class="px-4 py-3 whitespace-nowrap">
+        <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_tooltip(title: project_path(sample.project)) do %>
             <%= link_to sample.project.abbreviated_path,
             project_path(sample.project),
@@ -66,10 +83,10 @@
             class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
           <% end %>
         </td>
-        <td class="px-4 py-3 whitespace-nowrap">
+        <td class="px-6 py-3 whitespace-nowrap">
           <%= l(sample.created_at.localtime, format: :full_date) %>
         </td>
-        <td class="px-4 py-3 whitespace-nowrap">
+        <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_time_ago(original_time: sample.updated_at) %>
         </td>
       </tr>
