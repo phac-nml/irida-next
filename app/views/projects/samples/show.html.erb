@@ -106,6 +106,16 @@
           class: "button button--size-default button--state-destructive action-link" %>
         </div>
       <% end %>
+    <% elsif @tab == 'metadata' %>
+      <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
+        <%= link_to t(".add_metadata"),
+          new_namespace_project_sample_metadata_path(sample_id: @sample.id),
+          data: {
+            turbo_frame: "sample_files_modal",
+            turbo_stream: true
+          },
+          class: "button button--size-default button--state-default" %>
+      </div>
     <% end %>
   </div>
   <div class="flex flex-col" data-turbo-temporary>

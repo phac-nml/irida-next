@@ -809,6 +809,7 @@ fr:
         leave_success: "You have successfully left the project %{name}"
     samples:
       show:
+        add_metadata: Add Metadata
         new_attachment_button: Upload Files
         concatenate_button: Concatenate Files
         delete_files_button: Delete Files

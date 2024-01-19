@@ -1,0 +1,38 @@
+<%= form_with(model: @sample, url: namespace_project_sample_metadata_path(sample_id: @sample.id), method: :post) do |form| %>
+  <%= form.hidden_field :metadata %>
+  <div class="grid gap-4" data-controller="add-metadata">
+
+    <div class="form-field">
+        <%
+=begin%>
+ <div class="flex justify-around w-full">
+<%
+=end%>
+        <div style='display: flex; justify-content: space-around;'>
+          <%= form.label :field,
+                        class:
+                        "mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+          <%= form.label :value,
+                        class:
+                        "mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+        </div>
+        <div id='input-field-0' class="flex space-x-2 mb-2 inputField">
+            <%= form.text_field :key_0, required: true %>
+            <%= form.text_field :value_0, required: true %>
+        </div>
+    </div>
+    <div class="text-center">
+        <%= form.button "Add another metadata field",
+            type: 'button',
+            class: 'mb-2 text-sm font-medium text-slate-900 dark:text-white underline',
+            "data-action": 'add-metadata#addField'
+        %>
+    </div>
+    <div>
+      <%= form.submit 'Add',
+                  class: "button button--state-primary button--size-default",
+                  'data-action': 'add-metadata#buildMetadata'
+                  %>
+    </div>
+  </div>
+<% end %>
