@@ -40,7 +40,7 @@ module Projects
              as: :turbo_stream
       end
 
-      assert_redirected_to namespace_project_sample_url(id: Sample.last.id, format: :html)
+      assert_redirected_to namespace_project_sample_url(id: Sample.last.id)
     end
 
     test 'should not create a sample with wrong parameters' do
