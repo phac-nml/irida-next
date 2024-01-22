@@ -179,10 +179,35 @@ module Projects
       end
     end
 
-    test 'should destroy Sample' do
+    test 'should destroy Sample from sample show page' do
       visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
       assert_selector 'a', text: I18n.t('projects.samples.index.remove_button'), count: 1
       click_link I18n.t(:'projects.samples.index.remove_button')
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name,
+                                                             project_name: @project.namespace.human_name)
+
+      assert_no_selector 'table#samples-table tbody tr', text: @sample1.name
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
+      assert_selector 'table#samples-table tbody tr', count: 2
+      within first('tbody tr td:nth-child(2)') do
+        assert_text @sample2.name
+      end
+    end
+
+    test 'should destroy Sample from sample listing page' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      table_row = find(:table_row, { 'Sample' => @sample1.name })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link 'Remove'
+      end
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')

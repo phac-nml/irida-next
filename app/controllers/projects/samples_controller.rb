@@ -57,13 +57,23 @@ module Projects
       end
     end
 
-    def destroy # rubocop:disable Metrics/AbcSize
+    def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       ::Samples::DestroyService.new(@sample, current_user).execute
       @pagy, @samples = pagy(load_samples)
+      @q = load_samples.ransack(params[:q])
 
       if @sample.deleted?
-        flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
-        redirect_to namespace_project_samples_path(format: :html)
+        respond_to do |format|
+          format.html do
+            flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
+            redirect_to namespace_project_samples_path(format: :html)
+          end
+          format.turbo_stream do
+            render status: :ok, locals: { type: 'success',
+                                          message: t('.success', sample_name: @sample.name,
+                                                                 project_name: @project.namespace.human_name) }
+          end
+        end
       else
         respond_to do |format|
           format.turbo_stream do
