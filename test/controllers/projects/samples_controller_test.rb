@@ -40,7 +40,7 @@ module Projects
              as: :turbo_stream
       end
 
-      assert_redirected_to namespace_project_sample_url(id: Sample.last.id, format: :html)
+      assert_redirected_to namespace_project_sample_url(id: Sample.last.id)
     end
 
     test 'should not create a sample with wrong parameters' do
@@ -92,7 +92,7 @@ module Projects
             params: { sample: { description: @sample1.description, name: 'New Sample Name',
                                 project_id: @sample1.project_id } },
             as: :turbo_stream
-      assert_redirected_to namespace_project_sample_url(@namespace, @project, @sample1, format: :html)
+      assert_redirected_to namespace_project_sample_url(@namespace, @project, @sample1)
     end
 
     test 'should update sample in which the the project is in the user\'s namespace' do
@@ -104,7 +104,7 @@ module Projects
             params: { sample: { description: sample.description, name: 'New Sample Name',
                                 project_id: sample.project_id } },
             as: :turbo_stream
-      assert_redirected_to namespace_project_sample_url(namespace, project, sample, format: :html)
+      assert_redirected_to namespace_project_sample_url(namespace, project, sample)
     end
 
     test 'should not update a sample with wrong parameters' do
