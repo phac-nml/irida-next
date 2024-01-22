@@ -19,6 +19,22 @@ class SamplesQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  GROUP_SAMPLES_QUERY = <<~GRAPHQL
+    query($group_id: ID!) {
+      samples(groupId: $group_id) {
+        nodes {
+          name
+          description
+          id
+          project {
+            id
+          }
+        }
+        totalCount
+      }
+    }
+  GRAPHQL
+
   SAMPLE_AND_METADATA_QUERY = <<~GRAPHQL
     query($sample_id: ID!) {
       sample: node(id: $sample_id) {
@@ -54,6 +70,18 @@ class SamplesQueryTest < ActiveSupport::TestCase
   test 'samples query should work' do
     result = IridaSchema.execute(SAMPLES_QUERY, context: { current_user: @user },
                                                 variables: { first: 1 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']
+
+    assert_not_empty data, 'samples type should work'
+    assert_not_empty data['nodes']
+  end
+
+  test 'group samples query should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY, context: { current_user: @user },
+                                                variables: { groupId: 'group-one' })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
