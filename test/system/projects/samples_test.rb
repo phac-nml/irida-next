@@ -421,7 +421,7 @@ module Projects
     end
 
     test 'can sort samples by column' do
-      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr td:nth-child(2)') do
