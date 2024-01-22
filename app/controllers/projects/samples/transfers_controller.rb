@@ -3,7 +3,7 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Transfer
-    class TransfersController < Projects::SamplesController
+    class TransfersController < Projects::ApplicationController
       respond_to :turbo_stream
       before_action :projects
       before_action :templates, only: %i[new create]

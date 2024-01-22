@@ -117,26 +117,5 @@ module Projects
     def set_default_sort
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
     end
-
-    def load_samples
-      Sample.where(project_id: @project.id)
-    end
-
-    def all_metadata_fields
-      @all_metadata_fields = @project.namespace.metadata_summary
-    end
-
-    def templates
-      @templates = [{ id: 0, label: 'None' }, { id: 1, label: 'All' }]
-    end
-
-    def template
-      @template = case params[:template]
-                  when '1'
-                    @project.namespace.metadata_summary.keys
-                  else
-                    %w[]
-                  end
-    end
   end
 end
