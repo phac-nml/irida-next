@@ -12,8 +12,8 @@ module Resolvers
 
     def resolve(group_id:)
       if group_id
-        @group = Group.find_by_full_path(group_id) # rubocop:disable Rails/DynamicFindBy
-        authorized_scope(Sample, type: :relation, as: :group_samples, scope_options: { group: @group })
+        group = IridaSchema.object_from_id(group_id, { expected_type: Group })
+        authorized_scope(Sample, type: :relation, as: :group_samples, scope_options: { group: })
       else
         scope = authorized_scope Project, type: :relation
         Sample.where(project_id: scope.select(:id))

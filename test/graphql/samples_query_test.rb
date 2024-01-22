@@ -80,8 +80,9 @@ class SamplesQueryTest < ActiveSupport::TestCase
   end
 
   test 'group samples query should work' do
-    result = IridaSchema.execute(SAMPLES_QUERY, context: { current_user: @user },
-                                                variables: { groupId: 'group-one' })
+    result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: @user },
+                                                      variables:
+                                                      { group_id: "gid://irida/Group/#{groups(:group_one).id}" })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
