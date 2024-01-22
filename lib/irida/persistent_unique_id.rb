@@ -7,15 +7,13 @@ module Irida
 
     FORMAT = '%<prefix>s_%<model_prefix>s_%<base32_string>s'
 
-    def generate(object = nil)
+    def generate(object = nil, time = Time.now.utc)
       return unless object
 
       prefix = 'GSP' # TODO: pull from config
-      model_prefix = model.class.model_prefix
+      model_prefix = object.class.model_prefix
 
-      current_time = Time.now.utc
-
-      base32_string = time_to_base32(current_time)
+      base32_string = time_to_base32(time)
       format(FORMAT, prefix:, model_prefix:, base32_string:)
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_11_163859) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_22_144035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -157,11 +157,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_163859) do
     t.datetime "deleted_at"
     t.jsonb "metadata", default: {}, null: false
     t.jsonb "metadata_provenance", default: {}, null: false
+    t.string "puid", null: false
     t.index ["deleted_at"], name: "index_samples_on_deleted_at"
     t.index ["metadata"], name: "index_samples_on_metadata", using: :gin
     t.index ["metadata_provenance"], name: "index_samples_on_metadata_provenance", using: :gin
     t.index ["name", "project_id"], name: "index_samples_on_name_and_project_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["project_id"], name: "index_samples_on_project_id"
+    t.index ["puid"], name: "index_samples_on_puid", unique: true
   end
 
   create_table "samples_workflow_executions", force: :cascade do |t|
