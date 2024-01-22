@@ -65,9 +65,7 @@ module Projects
 
       if @sample.persisted?
         flash[:success] = t('.success')
-        respond_to do |format|
-          format.turbo_stream { redirect_to namespace_project_sample_path(id: @sample.id, format: :html) }
-        end
+        redirect_to namespace_project_sample_path(id: @sample.id)
       else
         render :new, status: :unprocessable_entity
       end
@@ -77,7 +75,7 @@ module Projects
       respond_to do |format|
         if ::Samples::UpdateService.new(@sample, current_user, sample_params).execute
           flash[:success] = t('.success')
-          format.turbo_stream { redirect_to namespace_project_sample_path(id: @sample.id, format: :html) }
+          format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
         else
           format.html { render :edit, status: :unprocessable_entity }
         end
