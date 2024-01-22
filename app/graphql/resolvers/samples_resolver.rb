@@ -19,5 +19,12 @@ module Resolvers
         Sample.where(project_id: scope.select(:id))
       end
     end
+
+    def ready?(**args)
+      authorize!(to: :query?, with: GraphqlPolicy, context: { token: context[:token] })
+
+      group = IridaSchema.object_from_id(args[:group_id], { expected_type: Group })
+      authorize! group, to: :sample_listing?, with: GroupPolicy
+    end
   end
 end
