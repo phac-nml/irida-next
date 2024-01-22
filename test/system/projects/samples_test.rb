@@ -180,7 +180,7 @@ module Projects
     end
 
     test 'should destroy Sample from sample show page' do
-      visit namespace_project_sample_url(namespace_id: @namespace.path, project_id: @project.path, id: @sample1.id)
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
       assert_selector 'a', text: I18n.t('projects.samples.index.remove_button'), count: 1
       click_link I18n.t(:'projects.samples.index.remove_button')
 
