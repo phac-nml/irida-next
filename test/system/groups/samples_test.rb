@@ -102,21 +102,22 @@ module Groups
       end
 
       click_on I18n.t('groups.samples.table.sample')
-      within first('table tbody') do
+      assert_selector 'table thead th:first-child svg.icon-arrow_up'
+      within first('table tbody#group-samples-table-body') do
         assert_selector 'tr:first-child td:first-child', text: @sample1.name
         assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.name
       end
 
       click_on I18n.t('groups.samples.table.created_at')
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
-      within first('table tbody') do
+      within first('table tbody#group-samples-table-body') do
         assert_selector 'tr:first-child td:first-child', text: @sample29.name
         assert_selector 'tr:nth-child(2) td:first-child', text: @sample31.name
       end
 
       click_on I18n.t('groups.samples.table.created_at')
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
-      within first('table tbody') do
+      within first('table tbody#group-samples-table-body') do
         assert_selector 'tr:first-child td:first-child', text: @sample1.name
         assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.name
       end
