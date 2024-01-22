@@ -24,10 +24,6 @@ module Projects
       end
 
       def create
-        puts '748673489673498673486738497698347689347698346'
-        puts 'hi in create'
-        puts params
-        puts add_metadata_params['metadata']
         # add_metadata_params['metadata'].each do |k, v|
         #   puts k
         #   puts v
