@@ -631,6 +631,9 @@ en:
         project: Project
         created_at: Created
         updated_at: Last Updated
+  models:
+    sample:
+      analysis: Analysis
   projects:
     create:
       success: "Project %{project_name} was successfully created"
@@ -819,10 +822,10 @@ en:
           size: Size
           created_at: Uploaded
           action: Action
-          metadata_field: Metadata Field
+          key: Key
           value: Value
-          provider: Provider
-          last_modified: Last Modified
+          source: Source
+          last_updated: Last Updated
         tabs:
           files: Files
           metadata: Metadata

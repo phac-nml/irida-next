@@ -866,7 +866,7 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_text I18n.t('projects.samples.show.table_header.metadata_field')
+        assert_text I18n.t('projects.samples.show.table_header.key')
         assert_selector 'table#metadata-table tbody tr', count: 2
         within first('tbody tr td:nth-child(1)') do
           assert_text 'metadatafield1'
