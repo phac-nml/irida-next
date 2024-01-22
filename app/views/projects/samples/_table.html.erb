@@ -7,9 +7,6 @@
 >
     <thead class="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
     <tr>
-      <% if allowed_to?(:transfer_sample?, project) %>
-      <th aria-hidden="true"></th>
-      <% end %>
       <th scope="col" class="px-6 py-3 text-left">
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".sample"), url: sorting_url(@q, :name), field: :name) %>
       </th>
