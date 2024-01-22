@@ -92,6 +92,21 @@ class SamplesQueryTest < ActiveSupport::TestCase
     assert_not_empty data['nodes']
   end
 
+  test 'group samples query should throw authorization error' do
+    result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: @user },
+                                                      variables:
+                                                      { group_id: "gid://irida/Group/#{groups(:group_a).id}" })
+
+    assert_not_nil result['errors'], 'should work and have auhtorization errors.'
+
+    assert_equal "You are not authorized to view samples for group #{groups(:group_a).name} on this server.",
+                 result['errors'].first['message']
+
+    data = result['data']['samples']
+
+    assert_nil data
+  end
+
   test 'sample and metadata fields query should work' do
     result = IridaSchema.execute(SAMPLE_AND_METADATA_QUERY, context: { current_user: @user },
                                                             variables: { sample_id: @sample32.to_global_id.to_s })
