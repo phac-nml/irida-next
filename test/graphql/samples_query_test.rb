@@ -97,7 +97,7 @@ class SamplesQueryTest < ActiveSupport::TestCase
                                                       variables:
                                                       { group_id: "gid://irida/Group/#{groups(:group_a).id}" })
 
-    assert_not_nil result['errors'], 'should work and have auhtorization errors.'
+    assert_not_nil result['errors'], 'should not work and have authorization errors.'
 
     assert_equal "You are not authorized to view samples for group #{groups(:group_a).name} on this server.",
                  result['errors'].first['message']
