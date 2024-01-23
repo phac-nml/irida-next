@@ -39,6 +39,50 @@ module Projects
           assert_response :unauthorized
         end
 
+        test 'import sample metadata with no file' do
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
+               params: {
+                 file_import: { sample_id_column: 'sample_name' }
+               }
+          assert_response :unprocessable_entity
+        end
+
+        test 'import sample metadata with no sample_id_column' do
+          csv = File.new('test/fixtures/files/metadata/missing_sample_id_column.csv', 'r')
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
+               params: {
+                 file_import: { file: csv, sample_id_column: 'sample_name' }
+               }
+          assert_response :unprocessable_entity
+        end
+
+        test 'import sample metadata with duplicate column names' do
+          csv = File.new('test/fixtures/files/metadata/duplicate_headers.csv', 'r')
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
+               params: {
+                 file_import: { file: csv, sample_id_column: 'sample_name' }
+               }
+          assert_response :unprocessable_entity
+        end
+
+        test 'import sample metadata with no metadata columns' do
+          csv = File.new('test/fixtures/files/metadata/missing_metadata_columns.csv', 'r')
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
+               params: {
+                 file_import: { file: csv, sample_id_column: 'sample_name' }
+               }
+          assert_response :unprocessable_entity
+        end
+
+        test 'import sample metadata with no metadata rows' do
+          csv = File.new('test/fixtures/files/metadata/missing_metadata_rows.csv', 'r')
+          post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
+               params: {
+                 file_import: { file: csv, sample_id_column: 'sample_name' }
+               }
+          assert_response :unprocessable_entity
+        end
+
         test 'import sample metadata with invalid file' do
           other = fixture_file_upload('test/fixtures/files/metadata/invalid.txt')
           post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
