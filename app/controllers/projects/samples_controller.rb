@@ -8,7 +8,7 @@ module Projects
     before_action :sample, only: %i[show edit update destroy]
     before_action :current_page
     before_action only: %i[index] do
-      get_fields(@project.namespace, params[:metadata].to_i)
+      fields_for_namespace(@project.namespace, params[:metadata].to_i)
     end
 
     def index

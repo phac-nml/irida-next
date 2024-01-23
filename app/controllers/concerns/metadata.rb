@@ -4,7 +4,7 @@
 module Metadata
   extend ActiveSupport::Concern
 
-  def get_fields(namespace = nil, template_id = 0)
+  def fields_for_namespace(namespace = nil, template_id = 0)
     @fields = template_id.zero? || namespace.nil? ? [] : namespace.metadata_summary.keys
   end
 end
