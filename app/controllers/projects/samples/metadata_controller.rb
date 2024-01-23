@@ -8,18 +8,21 @@ module Projects
         authorize! @project, to: :update_sample?
 
         metadata_change = find_changed_metadata(form_metadata_params['metadata'])
-        validate_new_key(metadata_change[:new_key]) if metadata_change[:field_to_change] == 'key'
-
-        metadata_params = build_metadata_for_update(metadata_change)
         respond_to do |format|
-          metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
-                                                                   metadata_params).execute
-          modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
-          if modified_metadata.count.positive?
-            flash[:success] =
-              t('.success', metadata_fields: metadata_fields[:updated].join(', '), sample_name: @sample.name)
+          if metadata_change[:field_to_change] == 'key' && validate_new_key(metadata_change[:new_key])
+            flash[:error] = t('.key_exists', key: metadata_change[:new_key])
+          else
+            metadata_params = build_metadata_for_update(metadata_change)
+
+            metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                                     metadata_params).execute
+            modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
+            if modified_metadata.count.positive?
+              flash[:success] =
+                t('.success', metadata_fields: metadata_fields[:updated].join(', '), sample_name: @sample.name)
+            end
+            flash[:error] = @sample.errors.full_messages.first if @sample.errors.any?
           end
-          flash[:error] = @sample.errors.full_messages.first if @sample.errors.any?
           format.turbo_stream { redirect_to(namespace_project_sample_path(id: @sample.id, tab: 'metadata')) }
         end
       end
@@ -44,7 +47,11 @@ module Projects
         metadata_to_update
       end
 
-      def validate_new_key(key); end
+      def validate_new_key(key)
+        @sample.metadata.each do |k, _v|
+          true if k.downcase == key.downcase
+        end
+      end
 
       def build_metadata_for_update(metadata)
         if metadata[:field_to_change] == 'key'
