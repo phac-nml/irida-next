@@ -967,6 +967,9 @@ fr:
           remove_field: Remove Field
           submit_button: Add
           value: Value
+        update:
+          success: 'Metadata fields %{metadata_fields} for sample %{sample_name} were updated'
+          key_exists: Metadata key '%{key}' already exists.
   workflow_executions:
     submissions:
       pipeline_selection:

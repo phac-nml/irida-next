@@ -1007,6 +1007,10 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
+      metadata:
+        update:
+          success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
+          key_exists: Metadata key '%{key}' already exists.
   workflow_executions:
     index:
       title: Workflow Executions
