@@ -27,7 +27,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }
 
-  scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now) }
+  scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
 
   class << self
     def access_levels(member)

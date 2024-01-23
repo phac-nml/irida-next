@@ -82,7 +82,7 @@ class SamplesQueryTest < ActiveSupport::TestCase
   test 'group samples query should work' do
     result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: @user },
                                                       variables:
-                                                      { group_id: "gid://irida/Group/#{groups(:group_one).id}" })
+                                                      { group_id: groups(:group_one).to_global_id.to_s })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -95,7 +95,7 @@ class SamplesQueryTest < ActiveSupport::TestCase
   test 'group samples query should throw authorization error' do
     result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: @user },
                                                       variables:
-                                                      { group_id: "gid://irida/Group/#{groups(:group_a).id}" })
+                                                      { group_id: groups(:group_a).to_global_id.to_s })
 
     assert_not_nil result['errors'], 'should not work and have authorization errors.'
 
