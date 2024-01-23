@@ -5,6 +5,8 @@ module Irida
   module PersistentUniqueId
     mattr_accessor :app_prefix
 
+    GenerationError = Class.new(StandardError)
+
     module_function
 
     FORMAT = '%<app_prefix>s_%<model_prefix>s_%<base32_string>s'
@@ -12,11 +14,15 @@ module Irida
     def generate(object = nil, object_class: nil, time: Time.now.utc)
       return if object.nil? && object_class.nil?
 
-      model_prefix = if object.present?
-                       object.class.model_prefix
-                     else
-                       object_class.model_prefix
-                     end
+      begin
+        model_prefix = if object.present?
+                         object.class.model_prefix
+                       else
+                         object_class.model_prefix
+                       end
+      rescue NoMethodError
+        raise GenerationError
+      end
 
       base32_string = time_to_base32(time)
       format(FORMAT, app_prefix:, model_prefix:, base32_string:)
