@@ -1,4 +1,5 @@
 <div class="table-container">
+  <%= form_with(model: @sample, url: namespace_project_sample_metadata_path(sample_id: @sample.id), method: :patch) do |form| %>
   <table
     class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4"
     data-controller="selection"
@@ -15,15 +16,20 @@
     </thead>
     <tbody>
       <% sample_metadata.each do |metadata| %>
+      <%= form.fields_for :metadata do |metadata_field| %>
         <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-          <td class="px-6 py-4"><%= metadata[:key] %></td>
-          <td class="px-6 py-4"><%= metadata[:value] %></td>
+
+          <td class="px-6 py-4"><%= metadata_field.text_field "#{metadata[:key]}_key", value: metadata[:key], onchange: "this.form.requestSubmit()" %></td>
+          <td class="px-6 py-4"><%= metadata_field.text_field "#{metadata[:key]}_value", value: metadata[:value], onchange: "this.form.requestSubmit()" %></td>
           <td class="px-6 py-4"><%= metadata[:source] %></td>
           <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_updated]) %></td>
+
         </tr>
+        <%end%>
       <% end %>
     </tbody>
   </table>
+  <% end %>
   <div class="empty_state_message">
     <%= viral_empty(
       title: t(:"projects.samples.show.no_metadata"),

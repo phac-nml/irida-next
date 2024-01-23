@@ -16,24 +16,24 @@ module Projects
 
       test 'updating metadata with no analysis_id' do
         patch namespace_project_sample_metadata_path(@namespace, @project1, @sample1),
-              params: { metadata: { metadata: { key1: 'value1' } }, format: :turbo_stream }
-        assert_redirected_to namespace_project_path(@namespace, @project1)
+              params: { sample: { metadata: { metadata: { key1: 'value1' } } }, format: :turbo_stream }
+        assert_redirected_to namespace_project_sample_path(@namespace, @project1, @sample1, tab: 'metadata')
       end
       test 'updating metadata with analysis_id' do
         patch namespace_project_sample_metadata_path(@namespace, @project1, @sample1),
-              params: { metadata: { metadata: { key1: 'value1' }, analysis_id: 1 }, format: :turbo_stream }
-        assert_redirected_to namespace_project_path(@namespace, @project1)
+              params: { sample: { metadata: { metadata: { key1: 'value1' }, analysis_id: 1 } }, format: :turbo_stream }
+        assert_redirected_to namespace_project_sample_path(@namespace, @project1, @sample1, tab: 'metadata')
       end
 
       test 'updating metadata to delete field value from sample' do
         patch namespace_project_sample_metadata_path(@namespace, @project1, @sample1),
-              params: { metadata: { metadata: { key1: '' } }, format: :turbo_stream }
-        assert_redirected_to namespace_project_path(@namespace, @project1)
+              params: { sample: { metadata: { metadata: { key1: '' } } }, format: :turbo_stream }
+        assert_redirected_to namespace_project_sample_path(@namespace, @project1, @sample1, tab: 'metadata')
       end
 
       test 'cannot update sample, if it does not belong to the project' do
         patch namespace_project_sample_metadata_path(@namespace, @project1, @sample23),
-              params: { metadata: { metadata: { key1: 'value1' } }, format: :turbo_stream }
+              params: { sample: { metadata: { metadata: { key1: 'value1' } } }, format: :turbo_stream }
         assert_response :not_found
       end
 
@@ -44,7 +44,7 @@ module Projects
         sample = samples(:sample24)
 
         patch namespace_project_sample_metadata_path(namespace, project, sample),
-              params: { metadata: { metadata: { key1: 'value1' } }, format: :turbo_stream }
+              params: { sample: { metadata: { metadata: { key1: 'value1' } } }, format: :turbo_stream }
         assert_response :unauthorized
       end
     end
