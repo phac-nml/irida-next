@@ -3,14 +3,15 @@
 module Irida
   # Module to encapsulate persistent unique id for IRIDA
   module PersistentUniqueId
+    mattr_accessor :app_prefix
+
     module_function
 
-    FORMAT = '%<prefix>s_%<model_prefix>s_%<base32_string>s'
+    FORMAT = '%<app_prefix>s_%<model_prefix>s_%<base32_string>s'
 
     def generate(object = nil, object_class: nil, time: Time.now.utc)
       return if object.nil? && object_class.nil?
 
-      prefix = 'GSP' # TODO: pull from config
       model_prefix = if object.present?
                        object.class.model_prefix
                      else
@@ -18,7 +19,7 @@ module Irida
                      end
 
       base32_string = time_to_base32(time)
-      format(FORMAT, prefix:, model_prefix:, base32_string:)
+      format(FORMAT, app_prefix:, model_prefix:, base32_string:)
     end
 
     def time_to_base32(time)
