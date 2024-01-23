@@ -48,9 +48,12 @@ module Projects
       end
 
       def validate_new_key(key)
+        key_exists = false
         @sample.metadata.each do |k, _v|
-          true if k.downcase == key.downcase
+          key_exists = true if k.downcase == key.downcase
+          break if key_exists
         end
+        key_exists
       end
 
       def build_metadata_for_update(metadata)
