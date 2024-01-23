@@ -3,19 +3,18 @@
 module Mutations
   # Mutation that updates sample metadata
   class UpdateSampleMetadata < BaseMutation
-    # null true
     description 'Update metadata for a sample.'
-    argument :metadata, GraphQL::Types::JSON, required: true, description: 'The sample metadata.'
+    argument :metadata, GraphQL::Types::JSON, required: true, description: 'The metadata to update the sample with.'
     argument :sample_id, ID,
              required: true,
-             description: 'The sample identifier.'
+             description: 'The Node ID of the sample to be updated.'
 
     field :errors, [String], null: false, description: 'A list of errors that prevented the mutation.'
     field :sample, Types::SampleType, null: false, description: 'The updated sample.'
     field :status, GraphQL::Types::JSON, null: false, description: 'The status of the mutation.'
 
     def resolve(sample_id:, metadata:)
-      sample = Sample.find(sample_id) # TODO: Replace with object_from_id????
+      sample = IridaSchema.object_from_id(sample_id, { expected_type: Sample })
       metadata_changes = Samples::Metadata::UpdateService.new(sample.project, sample, current_user,
                                                               { 'metadata' => metadata }).execute
 
@@ -26,8 +25,8 @@ module Mutations
       }
     end
 
-    # def ready?(**_args)
-    #   authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
-    # end
+    def ready?(**_args)
+      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
+    end
   end
 end
