@@ -16,7 +16,7 @@
       <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".updated_at"), url: sorting_url(@q, :updated_at), field: :updated_at) %>
       </th>
-      <% @template.each do |column| %>
+      <% @fields.each do |column| %>
         <th scope="col" class="px-6 py-3 text-left whitespace-nowrap"><%= column %></th>
       <% end %>
       <% if allowed_to?(:update_sample?, project) %>
@@ -65,7 +65,7 @@
         <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_time_ago(original_time: sample.updated_at) %>
         </td>
-        <% @template.each do |column| %>
+        <% @fields.each do |column| %>
           <td class="px-6 py-3 whitespace-nowrap">
             <%= sample[column].present? ? sample[column] : sample.metadata[column] %>
           </td>

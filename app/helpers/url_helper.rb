@@ -8,6 +8,6 @@ module UrlHelper
     params = Rack::Utils.parse_query(uri.query)
     params['template'] = template
     uri.query = Rack::Utils.build_query(params)
-    uri.to_s
+    uri.to_s.gsub('samples.turbo_stream', 'samples')
   end
 end

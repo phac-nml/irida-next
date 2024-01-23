@@ -3,13 +3,12 @@
 module Projects
   # Controller actions for Samples
   class SamplesController < Projects::ApplicationController
-    include MetadataTemplates
+    include Metadata
 
     before_action :sample, only: %i[show edit update destroy]
     before_action :current_page
-    before_action :templates, only: %i[index]
     before_action only: %i[index] do
-      template(@project.namespace, params[:template].to_i)
+      get_fields(@project.namespace, params[:metadata].to_i)
     end
 
     def index
