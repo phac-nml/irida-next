@@ -23,6 +23,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         scope module: :samples, as: :samples do
           collection do
             resource :transfer, only: %i[create new]
+            resource :file_import, module: :metadata, only: %i[create]
           end
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
