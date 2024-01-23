@@ -16,13 +16,12 @@ module Projects
 
       @q = load_samples.ransack(params[:q])
       set_default_sort
+      @pagy, @samples = pagy(@q.result)
       respond_to do |format|
         format.html do
           @has_samples = @q.result.count.positive?
         end
-        format.turbo_stream do
-          @pagy, @samples = pagy(@q.result)
-        end
+        format.turbo_stream
       end
     end
 

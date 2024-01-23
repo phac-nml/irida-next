@@ -12,10 +12,6 @@
                       pagy: @pagy
                     } %>
 
-<%= turbo_stream.update "metadata_fields_toggle" do %>
-  <%= render MetadataFieldsToggleComponent.new(pagy_url_for(@pagy, @pagy.page).gsub(".turbo_stream", ""), params[:metadata].to_i == 1) %>
-<% end %>
-
 <%= turbo_stream.update "project_samples_hidden_values" do %>
   <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
   <%= hidden_field_tag "template", params[:template] %>
