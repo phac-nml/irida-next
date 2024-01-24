@@ -4,7 +4,6 @@
 class ProjectsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
   layout :resolve_layout
-  before_action :project, only: %i[show edit update activity transfer destroy]
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
   before_action :current_page
 
@@ -174,6 +173,8 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
                       'details'
                     when 'new'
                       'projects'
+                    when 'history'
+                      'history'
                     else
                       'settings'
                     end

@@ -674,6 +674,21 @@ en:
             points_html:
               - To prevent accidental actions we ask you to confirm your intention.
               - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
+    history:
+      index:
+        title: Project Change Log
+        subtitle: These are the changes that have been made to the project
+        created: Created
+        updated: Updated
+        version: Version
+        type: Type
+        user: User
+        date_time: Date & Time
+      project_history_modal:
+        close: Close
+        project_created: Project was created
+        project_modified: Project attributes were modified
+        version_number: "Version %{version_number}"
     new:
       title: Create project
       placeholder: Awesome project name
@@ -684,6 +699,7 @@ en:
       cancel: Cancel
     sidebar:
       details: Details
+      history: History
       members: Members
       samples: Samples
       settings: Settings

@@ -1,0 +1,55 @@
+<%= render Viral::PageHeaderComponent.new(title: t(:".title"), subtitle: t(:".subtitle")) do |component| %>
+  <%= component.with_icon(name: "list_bullet", classes: "h-14 w-14 text-primary-700") %>
+<% end %>
+
+<div>
+  <%= turbo_frame_tag "history_modal" %>
+  <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
+    <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+      <tr>
+        <th scope="col" class="px-6 py-3"><%= t(".version") %></th>
+        <th scope="col" class="px-6 py-3"><%= t(".type") %></th>
+        <th scope="col" class="px-6 py-3"><%= t(".user") %></th>
+        <th scope="col" class="px-6 py-3"><%= t(".date_time") %></th>
+      </tr>
+    </thead>
+    <tbody id="history-table-body">
+      <% @project_with_log_data.each_with_index do |changes, index| %>
+        <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+          <td class="px-6 py-4">
+            <%= link_to changes[:version],
+            new_project_history_path(@project, version: changes[:version]),
+            data: {
+              "turbo-frame" => "history_modal",
+              :turbo_stream => true
+            } %>
+          </td>
+          <td class="px-6 py-4">
+            <span
+              class="
+                bg-green-200
+                text-green-800
+                text-xs
+                font-medium
+                ml-2
+                px-2.5
+                py-0.5
+                rounded-full
+                dark:bg-green-900
+                dark:text-green-300
+              "
+            >
+              <% if changes[:version] == 1 %>
+                <%= t(".created") %>
+              <% else %>
+                <%= t(".updated") %>
+              <% end %>
+            </span>
+          </td>
+          <td class="px-6 py-4"><%= changes[:user] %></td>
+          <td class="px-6 py-4"><%= changes[:updated_at] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

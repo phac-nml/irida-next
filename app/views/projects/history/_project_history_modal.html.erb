@@ -1,0 +1,39 @@
+<%= viral_dialog(open: true, classes: ["overflow-visible"]) do |dialog| %>
+  <%= dialog.with_header(
+    title: t(".version_number", version_number: project_with_log_data[:version])
+  ) %>
+  <%= dialog.with_section do %>
+    <div class="grid gap-4">
+      <div>
+        <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
+          <% if project_with_log_data[:changes_from_prev_version]["created_at"] == project_with_log_data[:changes_from_prev_version]["updated_at"] %>
+            <p class="dark:text-gray-400"><%= t(".project_created") %>
+              by
+              <%= project_with_log_data[:user] %></p>
+          <% else %>
+            <p class="dark:text-gray-400"><%= t(".project_modified") %>
+              by
+              <%= project_with_log_data[:user] %></p>
+          <% end %>
+        </div>
+        <% if !project_with_log_data[:previous_version].nil? %>
+          <% project_with_log_data[:previous_version].each do |key, value| %>
+            <p><%= "#{key.to_s}: #{value}" %></p>
+          <% end %>
+        <% end %>
+        <% project_with_log_data[:changes_from_prev_version].each do |key, value| %>
+          <p><%= "#{key.to_s}: #{value}" %></p>
+        <% end %>
+      </div>
+      <div class="my-4">
+        <button
+          type="button"
+          class="button button--size-default button--state-default"
+          data-action="click->viral--dialog#close"
+        >
+          <%= t(".close") %>
+        </button>
+      </div>
+    </div>
+  <% end %>
+<% end %>

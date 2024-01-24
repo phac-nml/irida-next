@@ -19,6 +19,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       post :transfer
       resources :members, only: %i[create destroy index new update]
       resources :group_links, only: %i[create destroy update index new]
+      resources :history, only: %i[index new]
       resources :samples do
         scope module: :samples, as: :samples do
           collection do

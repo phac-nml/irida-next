@@ -23,6 +23,14 @@
             label: t(:"projects.sidebar.samples"),
             selected: @current_page == t(:"projects.sidebar.samples").downcase
           ) %>
+          <% if allowed_to?(:history?, @project) %>
+            <%= render section.with_item(
+              url: project_history_index_path(@project),
+              icon: "list_bullet",
+              label: t(:"projects.sidebar.history"),
+              selected: @current_page == t(:"projects.sidebar.history").downcase
+            ) %>
+          <% end %>
           <% if allowed_to?(:update?, @project) %>
             <%= render section.with_item(
               url: project_edit_path(@project),

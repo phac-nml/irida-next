@@ -64,8 +64,8 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       )
     end
 
-    def can_view?(user, object_namespace)
-      effective_access_level = effective_access_level(object_namespace, user)
+    def can_view?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      effective_access_level = effective_access_level(object_namespace, user, include_group_links)
       return false if effective_access_level == Member::AccessLevel::UPLOADER
 
       effective_access_level > Member::AccessLevel::NO_ACCESS
