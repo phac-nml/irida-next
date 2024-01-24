@@ -1,24 +1,10 @@
 <table
-  class="
-    w-full
-    text-sm
-    text-left
-    rtl:text-right
-    text-slate-500
-    dark:text-slate-400
-  "
+  class="w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400"
 >
   <thead
-    class="
-      text-xs
-      uppercase
-      text-slate-700
-      bg-slate-50
-      dark:bg-slate-700
-      dark:text-slate-400
-    ">
+    class="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
     <tr>
-      <th scope="col" class="px-4 py-3 text-left">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-20">
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
           label: t(".sample"),
@@ -26,10 +12,13 @@
           field: :name
         ) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-left cursor-not-allowed">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left cursor-not-allowed">
         <%= t(".project") %>
       </th>
-      <th scope="col" class="px-4 py-3 text-left">
+      <% @fields.each do |column| %>
+        <th scope="col" class="px-6 py-3 text-left whitespace-nowrap cursor-not-allowed"><%= column %></th>
+      <% end %>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
           label: t(".created_at"),
@@ -37,7 +26,7 @@
           field: :created_at
         ) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-left">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
           label: t(".updated_at"),
@@ -71,7 +60,7 @@
           data: {
             turbo: false
           },
-          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                                                            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
         </td>
         <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_tooltip(title: project_path(sample.project)) do %>
@@ -80,9 +69,14 @@
             data: {
               turbo: false
             },
-            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                        class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           <% end %>
         </td>
+        <% @fields.each do |column| %>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= sample[column].present? ? sample[column] : sample.metadata[column] %>
+          </td>
+        <% end %>
         <td class="px-6 py-3 whitespace-nowrap">
           <%= l(sample.created_at.localtime, format: :full_date) %>
         </td>

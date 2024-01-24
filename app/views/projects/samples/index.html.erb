@@ -54,15 +54,15 @@
         </div>
       <% end %>
       <%= turbo_frame_tag "project_samples_sort_dropdown" %>
-      <%= render MetadataFieldsToggleComponent.new(pagy_url_for(@pagy, @pagy.page).gsub(".turbo_stream", ""), params[:metadata].to_i == 1) %>
+      <%= render MetadataFieldsToggleComponent.new(pagy_url_for(@pagy, @pagy.page), params[:metadata].to_i == 1) %>
     </div>
   </div>
   <%= turbo_frame_tag "project_samples_list",
                       src: project_samples_path(@project, format: :turbo_stream, **request.query_parameters),
                       loading: :lazy do %>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table class="w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400">
       <tbody
-        class="bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700"
+        class="bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700"
       >
       <% 15.times do %>
         <tr>

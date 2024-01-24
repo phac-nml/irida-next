@@ -17,7 +17,7 @@
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".updated_at"), url: sorting_url(@q, :updated_at), field: :updated_at) %>
       </th>
       <% @fields.each do |column| %>
-        <th scope="col" class="px-6 py-3 text-left whitespace-nowrap"><%= column %></th>
+        <th scope="col" class="px-6 py-3 text-left whitespace-nowrap cursor-not-allowed"><%= column %></th>
       <% end %>
       <% if allowed_to?(:update_sample?, project) %>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-right"><%= t(".action") %></th>
