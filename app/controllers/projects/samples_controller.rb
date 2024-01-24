@@ -78,6 +78,7 @@ module Projects
             redirect_to namespace_project_samples_path(format: :html)
           end
           format.turbo_stream do
+            fields_for_namespace(@project.namespace, params[:q] ? params[:q][:metadata].to_i : 0)
             render status: :ok, locals: { type: 'success',
                                           message: t('.success', sample_name: @sample.name,
                                                                  project_name: @project.namespace.human_name) }
