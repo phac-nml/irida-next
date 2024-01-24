@@ -33,29 +33,47 @@ module Projects
         params.require(:sample).permit(:analysis_id, metadata: {})
       end
 
+      # find_changed_metadata will receive all of a sample's metadata in the following format:
+      # if sample.metadata = {metadatafield1: value1, metadatafield2: value2},
+      # The metadata argument below will be:
+      # {metadatafield1_key: metadatafield1,
+      #   metadatafield1_value: value1,
+      #   metadatafield2_key: metadatafield2,
+      #   metadatafield2_value: value2}
+      # We will loop through the hash, split off key or value so we know what we're comparing to, find what has been
+      # changed and return metadata_to_update containing the field that changed (key or value),
+      # its original and its changed value.
       def find_changed_metadata(metadata)
-        metadata_to_update = { field_to_change: '', original_value: '', new_value: '' }
+        metadata_to_update = {}
         metadata.each do |k, v|
           key = k.split('_')[0]
           type = k.split('_')[1]
-          if type == 'key'
-            metadata_to_update = { field_to_change: 'key', original_key: key, new_key: v } if key != v
+          if type == 'key' && key != v
+            metadata_to_update = { field_to_change: 'key', original_key: key, new_key: v }
+            break
           elsif @sample.metadata[key] != v
             metadata_to_update = { field_to_change: 'value', original_key: key, new_value: v }
+            break
           end
         end
         metadata_to_update
       end
 
+      # Checks to ensure the user has not changed a metadata key to one that already exists
       def validate_new_key(key)
         key_exists = false
         @sample.metadata.each do |k, _v|
-          key_exists = true if k.downcase == key.downcase
-          break if key_exists
+          if k.downcase == key.downcase
+            key_exists = true
+            break
+          end
         end
         key_exists
       end
 
+      # Takes the hash containing the metadata change from find_changed_metadata and puts the metadata to update into
+      # the expected update_service format. If they key is being changed, we delete the old key and create a new key
+      # with the old value. If the value is changed, we simply overwrite the old value.
       def build_metadata_for_update(metadata)
         if metadata[:field_to_change] == 'key'
           { 'metadata' => { metadata[:original_key] => '',
