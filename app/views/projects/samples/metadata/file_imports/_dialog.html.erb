@@ -1,6 +1,18 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
-
+    <%= form_for(:file_import, url: namespace_project_samples_transfer_path, method: :post) do |form| %>
+      <div class="grid gap-4">
+        <div class="form-field">
+          <%= form.label :file, t(".file") %>
+          <%= form.file_field :file %>
+        </div>
+        <div class="flex flex-row-reverse">
+          <%= form.submit t(".submit_button"),
+                      class: "button button--size-default button--state-primary",
+                      disabled: true %>
+        </div>
+      </div>
+    <% end %>
   <% end %>
 <% end %>

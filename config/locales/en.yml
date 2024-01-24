@@ -940,6 +940,8 @@ en:
             error: "Metadata was not successfully imported for the following samples:"
           dialog:
             title: Upload Sample Metadata
+            file: File
+            submit_button: Import Metadata
   workflow_executions:
     index:
       title: Workflow Executions
