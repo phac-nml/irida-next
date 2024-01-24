@@ -59,7 +59,7 @@ gem 'faraday-net_http_persistent', '~> 2.0'
 
 # Tailwind CSS [https://tailwindcss.com]
 gem 'tailwindcss-rails', '~> 2.0'
-gem 'view_component', '~> 3.7'
+gem 'view_component', '~> 3.9'
 
 # Pagy
 gem 'pagy', '~> 6.1' # omit patch digit
