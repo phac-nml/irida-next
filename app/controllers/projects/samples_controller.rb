@@ -7,21 +7,20 @@ module Projects
 
     before_action :sample, only: %i[show edit update destroy]
     before_action :current_page
-    before_action only: %i[index] do
-      fields_for_namespace(@project.namespace, params[:metadata].to_i)
-    end
 
     def index
       authorize! @project, to: :sample_listing?
 
       @q = load_samples.ransack(params[:q])
       set_default_sort
-      @pagy, @samples = pagy(@q.result)
       respond_to do |format|
         format.html do
           @has_samples = @q.result.count.positive?
         end
-        format.turbo_stream
+        format.turbo_stream do
+          @pagy, @samples = pagy(@q.result)
+          fields_for_namespace(@project.namespace, params[:q] ? params[:q][:metadata].to_i : 0)
+        end
       end
     end
 

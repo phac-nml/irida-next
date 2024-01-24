@@ -35,26 +35,70 @@
 <% end %>
 <% if @has_samples %>
   <div
-    class="flex text-sm font-medium text-center border-b text-slate-500 border-slate-200 dark:text-slate-400 dark:border-slate-700"
+    class="flex text-sm font-medium text-center flex-row border-b text-slate-500 border-slate-200 dark:text-slate-400 dark:border-slate-700"
   >
     <div class="flex flex-row items-center mb-2 ml-auto space-x-2 font-normal">
       <%= search_form_for @q, url: namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters" } do |f| %>
         <input type="hidden" name="format" value="turbo_stream" />
-        <%= f.label :name_cont, placeholder: t(".search.placeholder"), class: "sr-only" %>
-        <div class="relative lg:w-72">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
+        <div>
+          <%= f.label :name_cont, placeholder: t(".search.placeholder"), class: "sr-only" %>
+          <div class="flex flex-row items-center space-x-2">
+            <div class="relative lg:w-72">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
+              </div>
+              <%= turbo_frame_tag "project_samples_hidden_values" %>
+              <%= f.search_field :name_cont,
+                                 "data-action": "filters#submit",
+                                 class:
+                                   "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                                 placeholder: t(".search.placeholder") %>
+            </div>
+            <div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <%= f.check_box(
+                      :metadata,
+                      {
+                        checked: params[:metadata].to_i == 1,
+                        onchange: "Turbo.navigator.submitForm(this.form)",
+                        class: "sr-only peer"
+                      }
+                    ) %>
+                <div
+                  class="
+        w-11
+        h-6
+        bg-gray-200
+        peer-focus:outline-none
+        peer-focus:ring-4
+        peer-focus:ring-primary-300
+        dark:peer-focus:ring-primary-800
+        rounded-full
+        peer
+        dark:bg-gray-700
+        peer-checked:after:translate-x-full
+        rtl:peer-checked:after:-translate-x-full
+        peer-checked:after:border-white
+        after:content-['']
+        after:absolute
+        after:top-[2px]
+        after:start-[2px]
+        after:bg-white
+        after:border-gray-300
+        after:border
+        after:rounded-full
+        after:h-5
+        after:w-5
+        after:transition-all
+        dark:border-gray-600
+        peer-checked:bg-primary-600
+      "
+                ></div>
+                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">FIELDS</span>
+              </label></div>
           </div>
-          <%= turbo_frame_tag "project_samples_hidden_values" %>
-          <%= f.search_field :name_cont,
-                             "data-action": "filters#submit",
-                             class:
-                               "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                             placeholder: t(".search.placeholder") %>
         </div>
       <% end %>
-      <%= turbo_frame_tag "project_samples_sort_dropdown" %>
-      <%= render MetadataFieldsToggleComponent.new(pagy_url_for(@pagy, @pagy.page), params[:metadata].to_i == 1) %>
     </div>
   </div>
   <%= turbo_frame_tag "project_samples_list",
