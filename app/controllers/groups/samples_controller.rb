@@ -7,13 +7,11 @@ module Groups
     include Metadata
     before_action :group, :current_page, only: %i[index]
 
-    def index
+    def index # rubocop:disable Metrics/AbcSize
       authorize! @group, to: :sample_listing?
 
       @q = authorized_samples.ransack(params[:q])
-
       set_default_sort
-
       respond_to do |format|
         format.html do
           @has_samples = @q.result.count.positive?
