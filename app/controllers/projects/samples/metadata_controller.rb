@@ -7,12 +7,12 @@ module Projects
       def update # rubocop:disable Metrics
         authorize! @project, to: :update_sample?
 
-        metadata_change = find_changed_metadata(form_metadata_params['metadata'])
+        metadata_to_update = find_metadata_update(form_metadata_params['metadata'])
         respond_to do |format|
-          if metadata_change[:field_to_change] == 'key' && validate_new_key(metadata_change[:new_key])
-            flash[:error] = t('.key_exists', key: metadata_change[:new_key])
+          if metadata_to_update[:field_to_change] == 'key' && validate_new_key(metadata_to_update[:new_key])
+            flash[:error] = t('.key_exists', key: metadata_to_update[:new_key])
           else
-            metadata_params = build_metadata_for_update(metadata_change)
+            metadata_params = build_metadata_for_update(metadata_to_update)
 
             metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
                                                                      metadata_params).execute
@@ -33,26 +33,26 @@ module Projects
         params.require(:sample).permit(:analysis_id, metadata: {})
       end
 
-      # find_changed_metadata will receive all of a sample's metadata in the following format:
+      # find_metadata_update will receive all of a sample's metadata in the following format:
       # if sample.metadata = {metadatafield1: value1, metadatafield2: value2},
       # The metadata argument below will be:
       # {metadatafield1_key: metadatafield1,
       #   metadatafield1_value: value1,
       #   metadatafield2_key: metadatafield2,
       #   metadatafield2_value: value2}
-      # We will loop through the hash, split off key or value so we know what we're comparing to, find what has been
-      # changed and return metadata_to_update containing the field that changed (key or value),
+      # We will loop through the hash, split off key or value and assign that to type so we know what we're comparing
+      # to, find what has been changed and return metadata_to_update containing the field that changed (key or value),
       # its original and its changed value.
-      def find_changed_metadata(metadata)
+      def find_metadata_update(metadata)
         metadata_to_update = {}
-        metadata.each do |k, v|
-          key = k.split('_')[0]
-          type = k.split('_')[1]
-          if type == 'key' && key != v
-            metadata_to_update = { field_to_change: 'key', original_key: key, new_key: v }
+        metadata.each do |metadata_key, key_or_value_to_check|
+          key = metadata_key.split('_')[0]
+          type = metadata_key.split('_')[1]
+          if type == 'key' && key != key_or_value_to_check
+            metadata_to_update = { field_to_change: 'key', original_key: key, new_key: key_or_value_to_check }
             break
-          elsif @sample.metadata[key] != v
-            metadata_to_update = { field_to_change: 'value', original_key: key, new_value: v }
+          elsif @sample.metadata[key] != key_or_value_to_check
+            metadata_to_update = { field_to_change: 'value', original_key: key, new_value: key_or_value_to_check }
             break
           end
         end
@@ -71,8 +71,8 @@ module Projects
         key_exists
       end
 
-      # Takes the hash containing the metadata change from find_changed_metadata and puts the metadata to update into
-      # the expected update_service format. If they key is being changed, we delete the old key and create a new key
+      # Takes the hash containing the metadata change from find_metadata_update and puts the metadata to update into
+      # the expected update_service format. If the key is being changed, we delete the old key and create a new key
       # with the old value. If the value is changed, we simply overwrite the old value.
       def build_metadata_for_update(metadata)
         if metadata[:field_to_change] == 'key'
