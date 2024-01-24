@@ -91,4 +91,12 @@ class SampleTest < ActiveSupport::TestCase
     }]
     assert_equal(expected_metadata_with_provenance, sample.metadata_with_provenance)
   end
+
+  test 'sample has a puid' do
+    assert @sample.has_attribute?(:puid)
+  end
+
+  test '#model_prefix' do
+    assert_equal 'SAM', Sample.model_prefix
+  end
 end

@@ -5,6 +5,8 @@ class Sample < ApplicationRecord
   has_logidze
   acts_as_paranoid
 
+  include HasPuid
+
   belongs_to :project
 
   has_many :attachments, as: :attachable, dependent: :destroy
@@ -14,6 +16,10 @@ class Sample < ApplicationRecord
 
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
   validates :name, uniqueness: { scope: %i[name project_id] }
+
+  def self.model_prefix
+    'SAM'
+  end
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[id name created_at updated_at]
