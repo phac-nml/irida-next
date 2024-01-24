@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_22_144035) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_24_170054) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -128,9 +128,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_22_144035) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.string "puid", null: false
     t.index ["creator_id"], name: "index_projects_on_creator_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
     t.index ["namespace_id"], name: "index_projects_on_namespace_id"
+    t.index ["puid"], name: "index_projects_on_puid", unique: true
   end
 
   create_table "routes", force: :cascade do |t|
