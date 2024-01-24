@@ -14,5 +14,5 @@
 
 <%= turbo_stream.update "project_samples_hidden_values" do %>
   <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
-  <%= hidden_field_tag "template", params[:template] %>
+  <%= hidden_field_tag "metadata", params[:metadata] %>
 <% end %>

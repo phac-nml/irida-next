@@ -2,7 +2,7 @@
                     partial: "table",
                     locals: {
                       group: @group,
-                      samples: @samples
+                      samples: @samples,
                     } %>
 
 <%= turbo_stream.update "group_samples_pagination",
@@ -13,4 +13,5 @@
 
 <%= turbo_stream.update "group_samples_hidden_search_value" do %>
   <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
+  <%= hidden_field_tag "metadata", params[:metadata] %>
 <% end %>

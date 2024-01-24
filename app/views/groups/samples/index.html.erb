@@ -45,7 +45,7 @@
         </div>
       <% end %>
     </div>
-    <%= render MetadataFieldsToggleComponent.new(pagy_url_for(@pagy, @pagy.page).gsub(".turbo_stream", ""), params[:metadata].to_i == 1) %>
+    <%= render MetadataFieldsToggleComponent.new(pagy_url_for(@pagy, @pagy.page), params[:metadata].to_i == 1) %>
   </div>
 
   <div class="bg-white dark:bg-slate-800">
