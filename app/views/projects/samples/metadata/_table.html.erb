@@ -1,0 +1,34 @@
+<div class="table-container">
+  <table
+    class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4"
+    data-controller="selection"
+    data-selection-action-link-outlet=".action-link"
+    id="metadata-table"
+  >
+    <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+      <tr>
+        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.key") %></th>
+        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.value") %></th>
+        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.source") %></th>
+        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.last_updated") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% sample_metadata.each do |metadata| %>
+        <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+          <td class="px-6 py-4"><%= metadata[:key] %></td>
+          <td class="px-6 py-4"><%= metadata[:value] %></td>
+          <td class="px-6 py-4"><%= metadata[:source] %></td>
+          <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_updated]) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: t(:"projects.samples.show.no_metadata"),
+      description: t(:"projects.samples.show.no_associated_metadata"),
+      icon_name: :document_text
+    ) %>
+  </div>
+</div>

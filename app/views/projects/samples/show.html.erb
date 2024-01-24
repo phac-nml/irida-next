@@ -26,34 +26,74 @@
   <% end %>
 <% end %>
 
-<%= viral_card do |card| %>
-  <% if allowed_to?(:update_sample?, @project) %>
-    <% card.with_header(title: t("projects.samples.show.files")) do |header| %>
-      <% header.with_action do %>
+<div class="bg-white dark:bg-slate-800">
+  <div
+    class="
+      flex
+      text-sm
+      font-medium
+      text-center
+      border-b
+      text-slate-500
+      border-slate-200
+      dark:text-slate-400
+      dark:border-slate-700
+    "
+  >
+    <ul class="flex flex-wrap -mb-px">
+      <li class="mr-2">
+        <%= link_to t(:"projects.samples.show.tabs.files"),
+        namespace_project_sample_path(id: @sample.id, tab: 'files'),
+        class:
+          (
+            if @tab == 'files' || @tab == nil
+              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
+            else
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
+            end
+          ),
+        aria: {
+          current: (@tab == 'files' || @tab == nil) ? "page" : "false"
+        } %>
+      </li>
+      <li class="mr-2">
+        <%= link_to t(:"projects.samples.show.tabs.metadata"),
+        namespace_project_sample_path(id: @sample.id, tab: 'metadata'),
+        class:
+          (
+            if @tab == 'metadata'
+              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
+            else
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
+            end
+          ),
+        aria: {
+          current: @tab == 'metadata' ? "page" : "false"
+        } %>
+      </li>
+    </ul>
+    <% if @tab == 'files' || @tab == nil %>
+      <% if allowed_to?(:update_sample?, @project) %>
+        <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
         <%= link_to t(".new_attachment_button"),
-        new_namespace_project_sample_attachment_path(sample_id: @sample.id),
-        data: {
-          turbo_frame: "sample_files_modal",
-          turbo_stream: true
-        },
-        class: "button button--size-default button--state-default" %>
-      <% end %>
-      <% header.with_action do %>
+          new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+          data: {
+            turbo_frame: "sample_files_modal",
+            turbo_stream: true
+          },
+          class: "button button--size-default button--state-default" %>
         <%= link_to t(".concatenate_button"),
-        new_namespace_project_sample_attachments_concatenation_path(
-          sample_id: @sample.id
-        ),
-        data: {
-          turbo_frame: "sample_files_modal",
-          turbo_stream: false,
-          controller: "action-link",
-          action_link_required_value: 2
-        },
-        class: "button button--size-default button--state-default action-link" %>
-      <% end %>
-      <% if allowed_to?(:destroy_attachment?, @sample) %>
-        <% header.with_action do %>
-          <%= link_to t(".delete_files_button"),
+          new_namespace_project_sample_attachments_concatenation_path(
+            sample_id: @sample.id
+          ),
+          data: {
+            turbo_frame: "sample_files_modal",
+            turbo_stream: false,
+            controller: "action-link",
+            action_link_required_value: 2
+          },
+          class: "button button--size-default button--state-default action-link" %>
+        <%= link_to t(".delete_files_button"),
           new_namespace_project_sample_attachments_deletion_path(
             sample_id: @sample.id
           ),
@@ -64,18 +104,36 @@
             action_link_required_value: 1
           },
           class: "button button--size-default button--state-destructive action-link" %>
-        <% end %>
-      <%end%>
+        </div>
+      <% end %>
     <% end %>
-  <% else %>
-    <% card.with_header(title: t("projects.samples.show.files")) %>
-  <% end %>
-  <% card.with_section do %>
-    <%= turbo_frame_tag("attachments") do %>
-      <%= render partial: "projects/samples/attachments/table",
-      locals: {
-        attachments: @sample.attachments
-      } %>
+  </div>
+  <div class="flex flex-col" data-turbo-temporary>
+    <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab), loading: :lazy do %>
+      <table class="min-w-full table-fixed dark:divide-slate-600">
+        <tbody
+          class="
+            bg-white
+            divide-y
+            divide-slate-200
+            dark:bg-slate-800
+            dark:divide-slate-700
+          "
+        >
+          <% 15.times do %>
+            <tr>
+              <td class="p-4 animate-pulse">
+                <div class="flex-1 py-1 space-y-6">
+                  <div class="space-y-3">
+                    <div class="w-48 h-2 rounded bg-slate-200"></div>
+                    <div class="w-32 h-2 rounded bg-slate-200"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     <% end %>
-  <% end %>
-<% end %>
+  </div>
+</div>

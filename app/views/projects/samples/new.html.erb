@@ -17,7 +17,7 @@
         dark:bg-slate-800
       "
     >
-      <%= form_with(model: @sample, url: namespace_project_samples_path, method: :post) do |form| %>
+      <%= form_with(model: @sample, url: namespace_project_samples_path, data: {turbo: false}, method: :post) do |form| %>
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 

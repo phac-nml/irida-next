@@ -617,6 +617,9 @@ fr:
       index:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
+  models:
+    sample:
+      analysis: Analysis
   projects:
     create:
       success: "Project %{project_name} was successfully created"
@@ -784,8 +787,12 @@ fr:
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
         error: The sample does not exist within the project.
         files: Files
+        metadata:
+          analysis: Analysis
         no_files: No Files
         no_associated_files: There are no files associated with this sample.
+        no_metadata: No Metadata
+        no_associated_metadata: This sample has no metadata.
         upload: Upload
         upload_files: Upload Files
         uploading: Uploading
@@ -796,6 +803,13 @@ fr:
           size: Size
           created_at: Uploaded
           action: Action
+          key: Key
+          value: Value
+          source: Source
+          last_updated: Last Updated
+        tabs:
+          files: Files
+          metadata: Metadata
       create:
         success: Sample was successfully created.
       new:

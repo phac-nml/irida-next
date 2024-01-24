@@ -309,17 +309,17 @@ group_twelve_route:
   path: group-12
   source: group_twelve (Namespace)
 
-subgroup12a_route:
+subgroup_twelve_a_route:
   name: Group 12 / Subgroup 12 A
   path: group-12/subgroup-12-a
   source: subgroup_twelve_a (Namespace)
 
-subgroup12b_route:
+subgroup_twelve_b_route:
   name: Group 12 / Subgroup 12 B
   path: group-12/subgroup-12-b
   source: subgroup_twelve_b (Namespace)
 
-subgroup12aa_route:
+subgroup_twelve_a_a_route:
   name: Group 12 / Subgroup 12 A / Subgroup 12 AA
   path: group-12/subgroup-12-a/subgroup-12-a-a
   source: subgroup_twelve_a_a (Namespace)
