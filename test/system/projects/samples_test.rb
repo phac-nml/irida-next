@@ -898,6 +898,8 @@ module Projects
         assert_selector 'td:nth-child(4)', text: 'value1'
         assert_selector 'td:nth-child(5)', text: 'value2'
       end
+      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      assert_selector 'table#samples-table thead tr th', count: 4
     end
   end
 end

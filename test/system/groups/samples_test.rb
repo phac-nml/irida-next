@@ -180,14 +180,16 @@ module Groups
     test 'should be able to toggle metadata' do
       visit group_samples_url(@group)
       assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
-      assert_selector 'table#samples-table thead tr th', count: 4
+      assert_selector 'table thead tr th', count: 4
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
-      assert_selector 'table#samples-table thead tr th', count: 6
-      within first('table#samples-table tbody tr:first-child') do
+      assert_selector 'table thead tr th', count: 6
+      within first('table tbody tr:first-child') do
         assert_text @sample1.name
-        assert_selector 'td:nth-child(4)', text: 'value1'
-        assert_selector 'td:nth-child(5)', text: 'value2'
+        assert_selector 'td:nth-child(3)', text: 'value1'
+        assert_selector 'td:nth-child(4)', text: 'value2'
       end
+      find('label', text: I18n.t('groups.samples.index.search.metadata')).click
+      assert_selector 'table thead tr th', count: 4
     end
   end
 end
