@@ -1,4 +1,4 @@
-<%= viral_dialog(open: true, classes: ["overflow-visible"]) do |dialog| %>
+<%= viral_dialog(open: true, size: :extra_large, classes: ["overflow-visible"]) do |dialog| %>
   <%= dialog.with_header(
     title: t(".version_number", version_number: project_with_log_data[:version])
   ) %>
@@ -6,7 +6,7 @@
     <div class="grid gap-4">
       <div>
         <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
-          <% if project_with_log_data[:changes_from_prev_version]["created_at"] == project_with_log_data[:changes_from_prev_version]["updated_at"] %>
+          <% if project_with_log_data[:version] == 1 %>
             <p class="dark:text-gray-400"><%= t(".project_created") %>
               by
               <%= project_with_log_data[:user] %></p>
@@ -16,14 +16,32 @@
               <%= project_with_log_data[:user] %></p>
           <% end %>
         </div>
-        <% if !project_with_log_data[:previous_version].nil? %>
-          <% project_with_log_data[:previous_version].each do |key, value| %>
-            <p><%= "#{key.to_s}: #{value}" %></p>
+        <dl
+          class="
+            max-w-md
+            text-gray-900
+            divide-y
+            divide-gray-200
+            dark:text-white
+            dark:divide-gray-700
+          "
+        >
+          <% project_with_log_data[:changes_from_prev_version].each do |key, value| %>
+
+            <div class="grid grid-flow-col justify-stretch">
+              <% if project_with_log_data[:version].to_i != 1 %>
+                <div class="flex-col">
+                  <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400"><%= key.to_s %></dt>
+                  <dd class="text-sm bg-[#ffebe9]"><%= project_with_log_data[:previous_version][key.to_s] %></dd>
+                </div>
+              <% end %>
+              <div class="flex-col">
+                <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400"><%= key.to_s %></dt>
+                <dd class="text-sm bg-[#ccffd8]"><%= value %></dd>
+              </div>
+            </div>
           <% end %>
-        <% end %>
-        <% project_with_log_data[:changes_from_prev_version].each do |key, value| %>
-          <p><%= "#{key.to_s}: #{value}" %></p>
-        <% end %>
+        </dl>
       </div>
       <div class="my-4">
         <button

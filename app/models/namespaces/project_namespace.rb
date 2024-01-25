@@ -1,8 +1,11 @@
+# rubocop:disable Metrics/AbcSize
 # frozen_string_literal: true
 
 module Namespaces
   # Namespace for Projects
   class ProjectNamespace < Namespace
+    include History
+
     has_one :project, inverse_of: :namespace, foreign_key: :namespace_id, dependent: :destroy
     has_many :project_members, foreign_key: :namespace_id, inverse_of: :project_namespace,
                                class_name: 'Member', dependent: :destroy
@@ -64,28 +67,6 @@ module Namespaces
 
       namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
       subtract_from_metadata_summary_count(namespaces_to_update, sample.metadata, true)
-    end
-
-    def log_data_without_changes
-      log_data = []
-      reload_log_data.data['h'].each do |change_log|
-        responsible = User.find(change_log['m']['_r']).email
-        log_data << { version: change_log['v'], user: responsible, updated_at: change_log['c']['updated_at'] }
-      end
-      log_data
-    end
-
-    def log_data_with_changes(version)
-      log_data = reload_log_data.data['h']
-
-      prev_change_log = log_data.detect { |h| h['v'] == version.to_i - 1 }
-      change_log = log_data.detect { |h| h['v'] == version.to_i }
-
-      responsible = User.find(change_log['m']['_r']).email
-
-      { version: change_log['v'], user: responsible,
-        changes_from_prev_version: change_log['c'],
-        previous_version: prev_change_log.nil? ? nil : prev_change_log['c'] }
     end
   end
 end
