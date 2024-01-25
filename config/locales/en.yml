@@ -626,6 +626,7 @@ en:
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         search:
           placeholder: Filter by name
+          metadata: Metadata
       table:
         sample: Sample
         project: Project
@@ -853,6 +854,7 @@ en:
           remove: Remove sample
         search:
           placeholder: Filter by name
+          metadata: Metadata
       update:
         success: Sample was successfully updated.
       edit:
