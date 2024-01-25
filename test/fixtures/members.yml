@@ -374,6 +374,12 @@ group_twelve_member_john_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve) %>
   access_level: <%= Member::AccessLevel::OWNER %>
 
+group_twelve_member_jane_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve) %>
+  access_level: <%= Member::AccessLevel::GUEST %>
+
 project_twenty_nine_member_john_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>

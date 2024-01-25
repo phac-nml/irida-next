@@ -10,9 +10,12 @@ module Projects
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
       @sample3 = samples(:sample30)
+      @sample32 = samples(:sample32)
       @project = projects(:project1)
       @project2 = projects(:projectA)
+      @project29 = projects(:project29)
       @namespace = groups(:group_one)
+      @group12a = groups(:subgroup_twelve_a)
     end
 
     test 'visiting the index' do
@@ -867,10 +870,7 @@ module Projects
     end
 
     test 'view sample metadata' do
-      project = projects(:project29)
-      sample = samples(:sample32)
-      namespace = groups(:subgroup_twelve_a)
-      visit namespace_project_sample_url(namespace, project, sample)
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
@@ -878,10 +878,83 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text I18n.t('projects.samples.show.table_header.key')
         assert_selector 'table#metadata-table tbody tr', count: 2
-        within('#metadata-table') do
-          assert_selector 'input#sample_metadata_metadatafield1_key', count: 1
-          assert_selector 'input#sample_metadata_metadatafield1_value', count: 1
-        end
+        assert_selector 'input#sample_metadata_metadatafield1_key[value="metadatafield1"]', count: 1
+        assert_selector 'input#sample_metadata_metadatafield1_value[value="value1"]', count: 1
+        assert_selector 'input#sample_metadata_metadatafield2_key[value="metadatafield2"]', count: 1
+        assert_selector 'input#sample_metadata_metadatafield2_value[value="value2"]', count: 1
+      end
+    end
+
+    test 'edit metadata key' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        find('input[id="sample_metadata_metadatafield1_key"]').fill_in with: 'new metadata key'
+      end
+
+      assert_text I18n.t('projects.samples.metadata.update.key_change_success', old_key: 'metadatafield1',
+                                                                                new_key: 'new metadata key')
+    end
+
+    test 'edit metadata value' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        find('input[id="sample_metadata_metadatafield1_value"]').fill_in with: 'new metadata value'
+      end
+
+      assert_text I18n.t('projects.samples.metadata.update.value_change_success', key: 'metadatafield1',
+                                                                                  value: 'new metadata value')
+    end
+
+    test 'cannot edit metadata key with key that already exists' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        find('input[id="sample_metadata_metadatafield1_key"]').fill_in with: 'metadatafield2'
+      end
+
+      assert_text I18n.t('projects.samples.metadata.update.key_exists', key: 'metadatafield2')
+    end
+
+    test 'metadata inputs with analysis source should be disabled' do
+      namespace = groups(:subgroup_twelve_a_a)
+      project = projects(:project31)
+      sample = samples(:sample34)
+
+      visit namespace_project_sample_url(namespace, project, sample)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'input[id="sample_metadata_metadatafield1_key"]:disabled', count: 1
+        assert_selector 'input[id="sample_metadata_metadatafield1_value"]:disabled', count: 1
+        assert_selector 'input[id="sample_metadata_metadatafield2_key"]:disabled', count: 1
+        assert_selector 'input[id="sample_metadata_metadatafield2_value"]:disabled', count: 1
+      end
+    end
+
+    test 'user without editing privilege can only view plain text metadata not input fields' do
+      sign_in users(:jane_doe)
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_selector 'input#sample_metadata_metadatafield1_key[value="metadatafield1"]', count: 1
+        assert_no_selector 'input#sample_metadata_metadatafield1_value[value="value1"]', count: 1
+        assert_no_selector 'input#sample_metadata_metadatafield2_key[value="metadatafield2"]', count: 1
+        assert_no_selector 'input#sample_metadata_metadatafield2_value[value="value2"]', count: 1
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
       end
     end
 
