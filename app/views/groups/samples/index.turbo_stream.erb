@@ -11,7 +11,7 @@
                       pagy: @pagy
                     } %>
 
-<%= turbo_stream.update "group_samples_hidden_search_value" do %>
+<%= turbo_stream.update "group_samples_hidden_values" do %>
   <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
   <%= hidden_field_tag "metadata", params[:metadata] %>
 <% end %>
