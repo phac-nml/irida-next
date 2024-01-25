@@ -13,12 +13,12 @@ export default class extends Controller {
 
     <div id='input-field-${nextFieldId}' class="flex space-x-2 mb-2 inputField">
       <div class="relative z-0 w-full group">
-      <input type="text" name="key_${nextFieldId}" id="key_${nextFieldId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
+      <input type="text" name="key_${nextFieldId}" id="key_${nextFieldId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" "  />
       <label for="key_${nextFieldId}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Key</label>
 
     </div>
     <div class="relative z-0 w-full group">
-      <input type="text" name="value_${nextFieldId}" id="value_${nextFieldId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
+      <input type="text" name="value_${nextFieldId}" id="value_${nextFieldId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " />
       <label for="value_${nextFieldId}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Value</label>
     </div>
     <button type="button" data-action="add-metadata#removeField" class="ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2 focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white dark:bg-slate-800 dark:hover:bg-slate-700" data-dismiss-target="#toast-success" aria-label="Close">
@@ -40,18 +40,15 @@ export default class extends Controller {
         const inputRows = document.getElementsByClassName('inputField')
         const firstInputRow = parseInt(inputRows[0].id.split('-')[2])
         const lastInputRow = parseInt(inputRows[inputRows.length - 1].id.split('-')[2])
-
-        let metadata = []
+        let metadata = {}
 
         for (let i = firstInputRow; i < lastInputRow + 1; i++) {
 
-            let metadata_field = document.getElementById(`sample_key_${i}`).value
-            let value = document.getElementById(`sample_value_${i}`).value
+            let metadata_field = document.getElementById(`key_${i}`).value
+            let value = document.getElementById(`value_${i}`).value
 
             if (metadata_field && value) {
-                let metadata_to_add = {}
-                metadata_to_add[metadata_field] = value
-                metadata.push(metadata_to_add)
+                metadata[metadata_field] = value
             }
         }
         document.getElementById('sample_metadata').value = JSON.stringify(metadata)

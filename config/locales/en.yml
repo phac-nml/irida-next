@@ -985,6 +985,11 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
+      metadata:
+        update:
+          success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
+        create:
+          success: "Metadata keys '%{keys}' for sample '%{sample_name}' were added."
   workflow_executions:
     index:
       title: Workflow Executions
