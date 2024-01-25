@@ -6,8 +6,6 @@ module Projects
     class TransfersController < Projects::ApplicationController
       respond_to :turbo_stream
       before_action :projects
-      before_action :templates, only: %i[new create]
-      before_action :template, only: %i[new create]
 
       def new
         authorize! @project, to: :transfer_sample?
