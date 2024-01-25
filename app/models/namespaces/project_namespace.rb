@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/AbcSize
 # frozen_string_literal: true
 
 module Namespaces
