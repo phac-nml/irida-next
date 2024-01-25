@@ -8,22 +8,34 @@ module Projects
         authorize! @project, to: :update_sample?
 
         metadata_to_update = find_metadata_update(form_metadata_params['metadata'])
-        respond_to do |format|
-          if metadata_to_update[:field_to_change] == 'key' && validate_new_key(metadata_to_update[:new_key])
-            flash[:error] = t('.key_exists', key: metadata_to_update[:new_key])
-          else
-            metadata_params = build_metadata_for_update(metadata_to_update)
+        status = ''
+        render_locals = ''
+        if metadata_to_update[:field_to_change] == 'key' && validate_new_key(metadata_to_update[:new_key])
+          status = :unprocessable_entity
+          render_locals = { type: 'error',
+                            message: t('.key_exists', key: metadata_to_update[:new_key]),
+                            table_listing: @sample.metadata_with_provenance }
+        else
+          metadata_params = build_metadata_for_update(metadata_to_update)
 
-            metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
-                                                                     metadata_params).execute
-            modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
-            if modified_metadata.count.positive?
-              flash[:success] =
-                t('.success', metadata_fields: metadata_fields[:updated].join(', '), sample_name: @sample.name)
-            end
-            flash[:error] = @sample.errors.full_messages.first if @sample.errors.any?
+          metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                                   metadata_params).execute
+          modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
+          if modified_metadata.count.positive?
+            status = :ok
+            render_locals = { type: 'success',
+                              message: t('.success', metadata_fields: metadata_fields[:updated].join(', '),
+                                                     sample_name: @sample.name),
+                              table_listing: @sample.metadata_with_provenance }
+
           end
-          format.turbo_stream { redirect_to(namespace_project_sample_path(id: @sample.id, tab: 'metadata')) }
+
+          # flash[:error] = @sample.errors.full_messages.first if @sample.errors.any?
+        end
+        respond_to do |format|
+          format.turbo_stream do
+            render status:, locals: render_locals
+          end
         end
       end
 

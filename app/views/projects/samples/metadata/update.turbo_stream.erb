@@ -1,0 +1,10 @@
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type:, data: message) %>
+<% end %>
+
+<%= turbo_stream.update "table-listing" do %>
+  <% render partial: "projects/samples/metadata/table",
+  locals: {
+    sample_metadata: table_listing
+  } %>
+<% end %>
