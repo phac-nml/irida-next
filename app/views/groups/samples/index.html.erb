@@ -4,7 +4,7 @@
 
 <% if @has_samples %>
   <div
-    class="text-sm font-medium  border-b text-slate-500 border-slate-200 dark:text-slate-400 dark:border-slate-700"
+    class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2"
   >
     <%= search_form_for @q, url: group_samples_url(**request.query_parameters), html: { "data-controller": "filters" } do |f| %>
       <div class="flex flex-row-reverse items-center space-x-2">
