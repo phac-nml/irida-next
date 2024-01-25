@@ -893,8 +893,8 @@ module Projects
       assert_selector 'table#samples-table thead tr th', count: 4
       find('label', text: I18n.t('projects.samples.index.search.metadata')).click
       assert_selector 'table#samples-table thead tr th', count: 6
-      within first('table#samples-table tbody tr:first-child') do
-        assert_text @sample1.name
+      within first('table#samples-table tbody tr:nth-child(3)') do
+        assert_text @sample3.name
         assert_selector 'td:nth-child(4)', text: 'value1'
         assert_selector 'td:nth-child(5)', text: 'value2'
       end

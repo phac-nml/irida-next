@@ -7,10 +7,6 @@ sample1:
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 1.week.ago) %>
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
 sample2:
   name: Project 1 Sample 2
@@ -117,6 +113,10 @@ sample30:
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 33.weeks.ago) %>
   created_at: <%= 33.weeks.ago %>
   updated_at: <%= 33.days.ago %>
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
 sample31:
   name: Sample 2
