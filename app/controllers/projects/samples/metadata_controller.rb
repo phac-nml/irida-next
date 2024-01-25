@@ -35,7 +35,7 @@ module Projects
       private
 
       def metadata_params
-        params.require(:sample).permit(metadata: {})
+        params.require(:sample).permit(:analysis_id, metadata: {})
       end
 
       # find_metadata_update will receive all of a sample's metadata in the following format:

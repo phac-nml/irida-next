@@ -16,79 +16,79 @@
     </thead>
     <tbody>
       <% sample_metadata.each do |metadata| %>
-      <%= form.fields_for :metadata do |metadata_field| %>
-        <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-          <% if allowed_to?(:update_sample?, @project) %>
-            <% if metadata[:source_type] == 'user' %>
-              <td class="px-6 py-4">
-                <div class='form-field'>
+        <%= form.fields_for :metadata do |metadata_field| %>
+          <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+            <% if allowed_to?(:update_sample?, @project) %>
+              <% if metadata[:source_type] == 'user' %>
+                <td class="px-6 py-4">
+                  <div class='form-field'>
+                    <%= metadata_field.text_field "#{metadata[:key]}_key",
+                    value: metadata[:key],
+                    onchange: "this.form.requestSubmit()",
+                    required: true %>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class='form-field'>
+                    <%= metadata_field.text_field "#{metadata[:key]}_value",
+                    value: metadata[:value],
+                    onchange: "this.form.requestSubmit()",
+                    required: true %>
+                  </div>
+                </td>
+              <% else %>
+                <td class="px-6 py-4">
                   <%= metadata_field.text_field "#{metadata[:key]}_key",
                   value: metadata[:key],
-                  onchange: "this.form.requestSubmit()",
-                  required: true %>
-                </div>
-              </td>
-              <td class="px-6 py-4">
-                <div class='form-field'>
+                  disabled: true,
+                  class: "
+                    bg-slate-100
+                    border
+                    border-slate-100
+                    text-slate-600
+                    text-sm
+                    rounded-lg
+                    focus:ring-primary-500
+                    focus:border-primary-500
+                    block
+                    w-full
+                    p-2.5
+                    dark:bg-slate-600
+                    dark:border-slate-600
+                    dark:placeholder-slate-400
+                    dark:text-slate-300
+                  " %>
+                <td class="px-6 py-4">
                   <%= metadata_field.text_field "#{metadata[:key]}_value",
                   value: metadata[:value],
-                  onchange: "this.form.requestSubmit()",
-                  required: true %>
-                </div>
-              </td>
-            <% else %>
-              <td class="px-6 py-4">
-                <%= metadata_field.text_field "#{metadata[:key]}_key",
-                value: metadata[:key],
-                disabled: true,
-                class: "
-                  bg-slate-100
-                  border
-                  border-slate-100
-                  text-slate-600
-                  text-sm
-                  rounded-lg
-                  focus:ring-primary-500
-                  focus:border-primary-500
-                  block
-                  w-full
-                  p-2.5
-                  dark:bg-slate-600
-                  dark:border-slate-600
-                  dark:placeholder-slate-400
-                  dark:text-slate-300
-                " %>
-              <td class="px-6 py-4">
-                <%= metadata_field.text_field "#{metadata[:key]}_value",
-                value: metadata[:value],
-                disabled: true,
-                class: "
-                  bg-slate-100
-                  border
-                  border-slate-100
-                  text-slate-600
-                  text-sm
-                  rounded-lg
-                  focus:ring-primary-500
-                  focus:border-primary-500
-                  block
-                  w-full
-                  p-2.5
-                  dark:bg-slate-600
-                  dark:border-slate-600
-                  dark:placeholder-slate-400
-                  dark:text-slate-300
-                " %>
-              </td>
-              <% end %>
-            <% else %>
-            <td class="px-6 py-4"><%= metadata[:key] %></td>
-            <td class="px-6 py-4"><%= metadata[:value] %></td>
-          <% end %>
-            <td class="px-6 py-4"><%= metadata[:source] %></td>
-            <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_updated]) %></td>
-        </tr>
-        <%end%>
+                  disabled: true,
+                  class: "
+                    bg-slate-100
+                    border
+                    border-slate-100
+                    text-slate-600
+                    text-sm
+                    rounded-lg
+                    focus:ring-primary-500
+                    focus:border-primary-500
+                    block
+                    w-full
+                    p-2.5
+                    dark:bg-slate-600
+                    dark:border-slate-600
+                    dark:placeholder-slate-400
+                    dark:text-slate-300
+                  " %>
+                </td>
+                <% end %>
+              <% else %>
+              <td class="px-6 py-4"><%= metadata[:key] %></td>
+              <td class="px-6 py-4"><%= metadata[:value] %></td>
+            <% end %>
+              <td class="px-6 py-4"><%= metadata[:source] %></td>
+              <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_updated]) %></td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>

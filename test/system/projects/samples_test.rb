@@ -878,11 +878,9 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text I18n.t('projects.samples.show.table_header.key')
         assert_selector 'table#metadata-table tbody tr', count: 2
-        within first('tbody tr td:nth-child(1)') do
-          assert_text 'metadatafield1'
-        end
-        within first('tbody tr td:nth-child(2)') do
-          assert_text 'value1'
+        within('#metadata-table') do
+          assert_selector 'input#sample_metadata_metadatafield1_key', count: 1
+          assert_selector 'input#sample_metadata_metadatafield1_value', count: 1
         end
       end
     end

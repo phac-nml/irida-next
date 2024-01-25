@@ -7,44 +7,39 @@ module Projects
     class MetadataControllerTest < ActionDispatch::IntegrationTest
       setup do
         sign_in users(:john_doe)
-        @sample1 = samples(:sample1)
         @sample23 = samples(:sample23)
-        @project1 = projects(:project1)
-        @project2 = projects(:project2)
-        @namespace = groups(:group_one)
+        @sample32 = samples(:sample32)
+        @project4 = projects(:project4)
+        @project29 = projects(:project29)
+        @namespace = groups(:subgroup_twelve_a)
       end
 
-      test 'updating metadata with no analysis_id' do
-        patch namespace_project_sample_metadata_path(@namespace, @project1, @sample1),
-              params: { sample: { metadata: { metadata: { key1: 'value1' } } }, format: :turbo_stream }
-        assert_redirected_to namespace_project_sample_path(@namespace, @project1, @sample1, tab: 'metadata')
-      end
-      test 'updating metadata with analysis_id' do
-        patch namespace_project_sample_metadata_path(@namespace, @project1, @sample1),
-              params: { sample: { metadata: { metadata: { key1: 'value1' }, analysis_id: 1 } }, format: :turbo_stream }
-        assert_redirected_to namespace_project_sample_path(@namespace, @project1, @sample1, tab: 'metadata')
+      test 'update metadata' do
+        patch namespace_project_sample_metadata_path(@namespace, @project29, @sample32),
+              params: { 'sample' => { 'metadata' => { 'metadatafield1_key' => 'metadatafield3' } },
+                        format: :turbo_stream }
+        assert_response :ok
       end
 
-      test 'updating metadata to delete field value from sample' do
-        patch namespace_project_sample_metadata_path(@namespace, @project1, @sample1),
-              params: { sample: { metadata: { metadata: { key1: '' } } }, format: :turbo_stream }
-        assert_redirected_to namespace_project_sample_path(@namespace, @project1, @sample1, tab: 'metadata')
+      test 'cannot update metadata key with key that already exists' do
+        patch namespace_project_sample_metadata_path(@namespace, @project29, @sample32),
+              params: { 'sample' => { 'metadata' => { 'metadatafield1_key' => 'metadatafield2' } },
+                        format: :turbo_stream }
+        assert_response :unprocessable_entity
       end
 
       test 'cannot update sample, if it does not belong to the project' do
-        patch namespace_project_sample_metadata_path(@namespace, @project1, @sample23),
-              params: { sample: { metadata: { metadata: { key1: 'value1' } } }, format: :turbo_stream }
+        patch namespace_project_sample_metadata_path(@namespace, @project4, @sample32),
+              params: { 'sample' => { 'metadata' => { 'metadatafield1_key' => 'metadatafield3' } },
+                        format: :turbo_stream }
         assert_response :not_found
       end
 
       test 'cannot update sample if not a member with access to the project' do
         sign_in users(:david_doe)
-        namespace = namespaces_user_namespaces(:john_doe_namespace)
-        project = projects(:john_doe_project2)
-        sample = samples(:sample24)
-
-        patch namespace_project_sample_metadata_path(namespace, project, sample),
-              params: { sample: { metadata: { metadata: { key1: 'value1' } } }, format: :turbo_stream }
+        patch namespace_project_sample_metadata_path(@namespace, @project29, @sample32),
+              params: { 'sample' => { 'metadata' => { 'metadatafield1_key' => 'metadatafield3' } },
+                        format: :turbo_stream }
         assert_response :unauthorized
       end
     end
