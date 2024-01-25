@@ -17,7 +17,6 @@ module Mutations
       sample = IridaSchema.object_from_id(sample_id, { expected_type: Sample })
       metadata_changes = Samples::Metadata::UpdateService.new(sample.project, sample, current_user,
                                                               { 'metadata' => metadata }).execute
-
       {
         sample:,
         status: metadata_changes,
