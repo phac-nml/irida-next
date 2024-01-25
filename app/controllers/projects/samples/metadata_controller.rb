@@ -4,45 +4,38 @@ module Projects
   module Samples
     # Controller actions for Project Samples Attachments
     class MetadataController < Projects::Samples::ApplicationController
-      def update # rubocop:disable Metrics
+      def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         authorize! @project, to: :update_sample?
-
-        metadata_to_update = find_metadata_update(form_metadata_params['metadata'])
-        status = ''
-        render_locals = ''
-        if metadata_to_update[:field_to_change] == 'key' && validate_new_key(metadata_to_update[:new_key])
-          status = :unprocessable_entity
-          render_locals = { type: 'error',
-                            message: t('.key_exists', key: metadata_to_update[:new_key]),
-                            table_listing: @sample.metadata_with_provenance }
-        else
-          metadata_params = build_metadata_for_update(metadata_to_update)
-
-          metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
-                                                                   metadata_params).execute
-          modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
-          if modified_metadata.count.positive?
-            status = :ok
-            render_locals = { type: 'success',
-                              message: t('.success', metadata_fields: metadata_fields[:updated].join(', '),
-                                                     sample_name: @sample.name),
-                              table_listing: @sample.metadata_with_provenance }
-
-          end
-
-          # flash[:error] = @sample.errors.full_messages.first if @sample.errors.any?
-        end
+        metadata_to_update = find_metadata_update(metadata_params['metadata'])
         respond_to do |format|
-          format.turbo_stream do
-            render status:, locals: render_locals
+          if metadata_to_update[:field_to_change] == 'key' && validate_new_key(metadata_to_update[:new_key])
+            format.turbo_stream do
+              render status: :unprocessable_entity, locals: { type: 'error',
+                                                              message: t('.key_exists',
+                                                                         key: metadata_to_update[:new_key]),
+                                                              table_listing: @sample.metadata_with_provenance }
+            end
+          else
+            params_for_update = build_metadata_for_update(metadata_to_update)
+            metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                                     params_for_update).execute
+            modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
+            if modified_metadata.count.positive?
+              message = get_flash_message(metadata_fields, metadata_to_update)
+              format.turbo_stream do
+                render status: :ok, locals: { type: 'success',
+                                              message:,
+                                              table_listing: @sample.metadata_with_provenance }
+              end
+            end
           end
         end
       end
 
       private
 
-      def form_metadata_params
-        params.require(:sample).permit(:analysis_id, metadata: {})
+      def metadata_params
+        params.require(:sample).permit(metadata: {})
       end
 
       # find_metadata_update will receive all of a sample's metadata in the following format:
@@ -63,7 +56,7 @@ module Projects
           if type == 'key' && key != key_or_value_to_check
             metadata_to_update = { field_to_change: 'key', original_key: key, new_key: key_or_value_to_check }
             break
-          elsif @sample.metadata[key] != key_or_value_to_check
+          elsif type == 'value' && @sample.metadata[key] != key_or_value_to_check
             metadata_to_update = { field_to_change: 'value', original_key: key, new_value: key_or_value_to_check }
             break
           end
@@ -92,6 +85,14 @@ module Projects
                             metadata[:new_key] => @sample.metadata[metadata[:original_key]] } }
         else
           { 'metadata' => { metadata[:original_key] => metadata[:new_value] } }
+        end
+      end
+
+      def get_flash_message(metadata_fields, metadata_to_update)
+        if metadata_fields[:added].count.positive? && metadata_fields[:deleted].count.positive?
+          t('.key_change_success', old_key: metadata_fields[:deleted][0], new_key: metadata_fields[:added][0])
+        else
+          t('.value_change_success', key: metadata_fields[:updated][0], value: metadata_to_update[:new_value])
         end
       end
     end
