@@ -941,6 +941,8 @@ en:
           dialog:
             title: Upload Sample Metadata
             file: File
+            sample_id_column: Sample ID Column
+            select_sample_id_column: Select a Sample ID Column
             submit_button: Import Metadata
   workflow_executions:
     index:

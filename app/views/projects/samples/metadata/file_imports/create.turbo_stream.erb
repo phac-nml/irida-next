@@ -1,1 +1,7 @@
-
+<% if @project.errors.empty? %>
+  <%= turbo_stream.replace "metadata-file-import-dialog-content", "other error" %>
+<% elsif @project.errors.include?(:sample) %>
+  <%= turbo_stream.replace "metadata-file-import-dialog-content", "sample errors" %>
+<% else %>
+  <%= turbo_stream.replace "metadata-file-import-dialog-content", "success" %>
+<% end %>

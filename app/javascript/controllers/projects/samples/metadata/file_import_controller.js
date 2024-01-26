@@ -14,8 +14,7 @@ export default class extends Controller {
   }
 
   #toggleSubmitButton(event) {
-    const { target } = event;
-    const { value } = target;
+    const { value } = event.target;
     if (value) {
       this.submitButtonTarget.disabled = false;
     } else {
@@ -24,12 +23,11 @@ export default class extends Controller {
   }
 
   #readFile(event) {
-    const { target } = event;
-    const { files } = target;
+    const { files } = event.target;
 
     if (!files.length) return;
 
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsArrayBuffer(files[0]);
 
     reader.onload = () => {
@@ -42,7 +40,7 @@ export default class extends Controller {
   }
 
   #addSelectOptions(headers) {
-    for (let header of headers) {
+    for (var header of headers) {
       const option = document.createElement("option");
       option.value = header;
       option.text = header;

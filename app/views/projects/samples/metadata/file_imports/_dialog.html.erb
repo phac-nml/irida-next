@@ -1,52 +1,54 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
-    <%= form_for(:file_import, url: namespace_project_samples_transfer_path, method: :post) do |form| %>
-      <div
-        class="grid gap-4"
-        data-controller="projects--samples--metadata--file-import"
-      >
-        <div class="form-field">
-          <%= form.label :file, t(".file") %>
-          <%= form.file_field :file,
-                          required: true,
-                          accept:
-                            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-                            "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                          data: {
-                            "projects--samples--metadata--file-import-target": "fileInput"
-                          } %>
+    <%= turbo_frame_tag "metadata-file-import-dialog-content" do %>
+      <%= form_for(:file_import, url: namespace_project_samples_file_import_path, method: :post) do |form| %>
+        <div
+          class="grid gap-4"
+          data-controller="projects--samples--metadata--file-import"
+        >
+          <div class="form-field">
+            <%= form.label :file, t(".file") %>
+            <%= form.file_field :file,
+                            required: true,
+                            accept:
+                              # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+                              "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            data: {
+                              "projects--samples--metadata--file-import-target": "fileInput"
+                            } %>
+          </div>
+          <div class="form-field">
+            <%= form.label :sample_id_column, t(".sample_id_column") %>
+            <%= form.select :sample_id_column,
+                        {},
+                        { prompt: t(".select_sample_id_column") },
+                        required: true,
+                        data: {
+                          "projects--samples--metadata--file-import-target": "selectInput"
+                        } %>
+          </div>
+          <div class="flex items-center">
+            <%= form.check_box :ignore_empty_values,
+                           {
+                             class:
+                               "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
+                           },
+                           true,
+                           false %>
+            <%= form.label :ignore_empty_values,
+                       class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
+          </div>
+          <div class="flex flex-row-reverse">
+            <%= form.submit t(".submit_button"),
+                        class: "button button--size-default button--state-primary",
+                        disabled: true,
+                        data: {
+                          "projects--samples--metadata--file-import-target": "submitButton"
+                        } %>
+          </div>
         </div>
-        <div class="form-field">
-          <%= form.label :sample_id_column %>
-          <%= form.select :sample_id_column,
-                      {},
-                      { prompt: "Select something..." },
-                      required: true,
-                      data: {
-                        "projects--samples--metadata--file-import-target": "selectInput"
-                      } %>
-        </div>
-        <div class="flex items-center">
-          <%= form.check_box :ignore_empty_values,
-                         {
-                           class:
-                             "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
-                         },
-                         true,
-                         false %>
-          <%= form.label :ignore_empty_values,
-                     class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
-        </div>
-        <div class="flex flex-row-reverse">
-          <%= form.submit t(".submit_button"),
-                      class: "button button--size-default button--state-primary",
-                      disabled: true,
-                      data: {
-                        "projects--samples--metadata--file-import-target": "submitButton"
-                      } %>
-        </div>
-      </div>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
