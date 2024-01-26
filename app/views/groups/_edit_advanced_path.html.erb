@@ -1,7 +1,7 @@
 <%= viral_card do |card| %>
   <% card.with_header(title: t(:"groups.edit.advanced.path.title")) %>
   <% card.with_section do %>
-    <%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
+    <%= form_with(model: @group, url: group_path, method: :patch) do |form| %>
       <div class="grid gap-4">
         <p class="text-slate-600 dark:text-slate-400">
           <%= t(:"groups.edit.advanced.path.description") %>
