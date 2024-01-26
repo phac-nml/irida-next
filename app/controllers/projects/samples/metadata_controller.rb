@@ -6,9 +6,9 @@ module Projects
     class MetadataController < Projects::Samples::ApplicationController
       def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         authorize! @project, to: :update_sample?
-        metadata_to_update = find_metadata_update(metadata_params['metadata'])
+        metadata_to_update = parse_metadata_input(metadata_params['metadata'])
         respond_to do |format|
-          if metadata_to_update[:field_to_change] == 'key' && validate_new_key(metadata_to_update[:new_key])
+          if metadata_to_update[:field_to_edit] == 'key' && validate_new_key(metadata_to_update[:new_key])
             format.turbo_stream do
               render status: :unprocessable_entity, locals: { type: 'error',
                                                               message: t('.key_exists',
@@ -38,30 +38,24 @@ module Projects
         params.require(:sample).permit(:analysis_id, metadata: {})
       end
 
-      # find_metadata_update will receive all of a sample's metadata in the following format:
-      # if sample.metadata = {metadatafield1: value1, metadatafield2: value2},
-      # The metadata argument below will be:
-      # {metadatafield1_key: metadatafield1,
-      #   metadatafield1_value: value1,
-      #   metadatafield2_key: metadatafield2,
-      #   metadatafield2_value: value2}
-      # We will loop through the hash, split off key or value and assign that to type so we know what we're comparing
-      # to, find what has been changed and return metadata_to_update containing the field that changed (key or value),
-      # its original and its changed value.
-      def find_metadata_update(metadata)
-        metadata_to_update = {}
-        metadata.each do |metadata_key, key_or_value_to_check|
-          key = metadata_key.split('_')[0]
-          type = metadata_key.split('_')[1]
-          if type == 'key' && key != key_or_value_to_check
-            metadata_to_update = { field_to_change: 'key', original_key: key, new_key: key_or_value_to_check }
-            break
-          elsif type == 'value' && @sample.metadata[key] != key_or_value_to_check
-            metadata_to_update = { field_to_change: 'value', original_key: key, new_value: key_or_value_to_check }
-            break
-          end
+      # When editing a param, we receive a single param that will have a key containing what field will be edited and
+      # the metadata key, and a value that will either be the new metadata key or value
+      # Example:
+      # For a key update, we will receive:
+      # param = {key_metadatakey1: metadatakey2} where the old key metadatakey1 will be updated to metadatakey2
+      #
+      # For a value update, we will receive:
+      # param = {value_metadatakey1: newvalue1} where we will update metadatakey1 to value newvalue1
+      def parse_metadata_input(param)
+        split_metadata_hash = param.keys[0].split('_')
+        field_to_edit = split_metadata_hash[0]
+        if field_to_edit == 'key'
+          { field_to_edit:, old_key: split_metadata_hash[1],
+            new_key: metadata_params['metadata'].values[0] }
+        else
+          { field_to_edit:, key: split_metadata_hash[1],
+            new_value: metadata_params['metadata'].values[0] }
         end
-        metadata_to_update
       end
 
       # Checks to ensure the user has not changed a metadata key to one that already exists
@@ -80,11 +74,11 @@ module Projects
       # the expected update_service format. If the key is being changed, we delete the old key and create a new key
       # with the old value. If the value is changed, we simply overwrite the old value.
       def build_metadata_for_update(metadata)
-        if metadata[:field_to_change] == 'key'
-          { 'metadata' => { metadata[:original_key] => '',
-                            metadata[:new_key] => @sample.metadata[metadata[:original_key]] } }
+        if metadata[:field_to_edit] == 'key'
+          { 'metadata' => { metadata[:new_key] => @sample.metadata[metadata[:old_key]],
+                            metadata[:old_key] => '' } }
         else
-          { 'metadata' => { metadata[:original_key] => metadata[:new_value] } }
+          { 'metadata' => { metadata[:key] => metadata[:new_value] } }
         end
       end
 

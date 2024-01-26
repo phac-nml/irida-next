@@ -1,5 +1,10 @@
 <div class="table-container">
-  <%= form_with(model: @sample, url: namespace_project_sample_metadata_path(sample_id: @sample.id), method: :patch) do |form| %>
+  <%= form_with(model: @sample, url: namespace_project_sample_metadata_path(sample_id: @sample.id),
+  data: {
+    controller: "projects--samples--metadata--edit"
+  },
+  method: :patch) do |form| %>
+
   <table
     class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4"
     data-controller="selection"
@@ -17,6 +22,7 @@
     <tbody>
       <% sample_metadata.each do |metadata| %>
         <%= form.fields_for :metadata do |metadata_field| %>
+        <input type='hidden' data-projects--samples--metadata--edit-target="metadataEdit">
           <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
             <% if allowed_to?(:update_sample?, @project) %>
               <% if metadata[:source_type] == 'user' %>
@@ -24,7 +30,10 @@
                   <div class='form-field'>
                     <%= metadata_field.text_field "#{metadata[:key]}_key",
                     value: metadata[:key],
-                    onchange: "this.form.requestSubmit()",
+                    data: {
+                      action: "change->projects--samples--metadata--edit#edit"
+                    },
+                    class: 'metadata-input',
                     required: true %>
                   </div>
                 </td>
@@ -32,7 +41,10 @@
                   <div class='form-field'>
                     <%= metadata_field.text_field "#{metadata[:key]}_value",
                     value: metadata[:value],
-                    onchange: "this.form.requestSubmit()",
+                    data: {
+                      action: "change->projects--samples--metadata--edit#edit"
+                    },
+                    class: 'metadata-input',
                     required: true %>
                   </div>
                 </td>
