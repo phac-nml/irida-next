@@ -23,24 +23,27 @@ module Projects
                                                  }), status: :ok
       end
 
-      def create # rubocop:disable Metrics
-        metadata_to_add = add_metadata_params['metadata'].split('{')[1].split('}')[0].split(',')
-        metadata_params_for_update = { 'metadata' => {} }
-        metadata_to_add.each do |metadata|
-          key = metadata.split(':')[0].split('"')[1]
-          value = metadata.split(':')[1].split('"')[1]
-          metadata_params_for_update['metadata'][key] = value
+      def create # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        new_metadata = validate_new_metadata(metadata_params['metadata'])
+        flash_messages = {}
+
+        unless new_metadata['to_add']['metadata'].empty?
+          metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                                   new_metadata['to_add']).execute
+          flash_messages[:success] =
+            { type: 'success',
+              message: t('.success', new_keys: metadata_fields[:added].join(', '), sample_name: @sample.name) }
         end
-        metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
-                                                                 metadata_params_for_update).execute
+
+        if new_metadata['exists'].count.positive?
+          flash_messages[:error] = { type: 'error',
+                                     message: t('.error', existing_keys: new_metadata['exists'].join(', ')) }
+        end
+
+        status = get_add_status(flash_messages)
         respond_to do |format|
-          if metadata_fields[:added].count.positive?
-            format.turbo_stream do
-              render status: :ok, locals: { type: 'success',
-                                            message: t('.success', keys: metadata_fields[:added].join(', '),
-                                                                   sample_name: @sample.name),
-                                            table_listing: @sample.metadata_with_provenance }
-            end
+          format.turbo_stream do
+            render status:, locals: { flash_messages:, table_listing: @sample.metadata_with_provenance }
           end
         end
       end
@@ -63,11 +66,53 @@ module Projects
       private
 
       def metadata_params
-        params.require(:metadata).permit(:analysis_id, metadata: {})
+        params.require(:sample).permit(metadata: {})
       end
 
-      def add_metadata_params
-        params.require(:sample).permit(:metadata)
+      def validate_new_metadata(metadata)
+        validated_metadata = { 'to_add' => { 'metadata' => {} }, 'exists' => [] }
+        metadata.each do |key, value|
+          key_exists = validate_new_key(key)
+          key_exists ? validated_metadata['exists'] << key : validated_metadata['to_add']['metadata'][key] = value
+        end
+        validated_metadata
+      end
+
+      # Checks to ensure the user has not changed a metadata key to one that already exists
+      def validate_new_key(key)
+        key_exists = false
+        @sample.metadata.each do |k, _v|
+          if k.downcase == key.downcase
+            key_exists = true
+            break
+          end
+        end
+        key_exists
+      end
+
+      def get_add_messages(added_metadata, existing_metadata)
+        messages = {}
+        if added_metadata.count.positive?
+          messages[:success] = { type: 'success',
+                                 message: t('.success', new_keys: added_metadata.join(', '),
+                                                        sample_name: @sample.name) }
+        end
+
+        if existing_metadata.count.positive?
+          messages[:error] = { type: 'error',
+                               message: t('.error', existing_keys: existing_metadata.join(', ')) }
+        end
+        get_add_status(messages)
+      end
+
+      def get_add_status(messages)
+        if messages[:success] && (messages[:error] || @sample.errors.any?)
+          :multi_status
+        elsif messages[:success]
+          :ok
+        else
+          :unprocessable_entity
+        end
       end
     end
   end

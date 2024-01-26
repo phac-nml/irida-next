@@ -950,7 +950,8 @@ fr:
         update:
           success: 'Metadata fields %{metadata_fields} for sample %{sample_name} were updated'
         create:
-          success: "Metadata keys '%{keys}' for sample '%{sample_name}' were added."
+          success: "Metadata keys '%{new_keys}' were added to sample '%{sample_name}'."
+          error: "Metadata keys '%{existing_keys}' already exist."
   workflow_executions:
     submissions:
       pipeline_selection:

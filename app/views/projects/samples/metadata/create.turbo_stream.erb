@@ -1,5 +1,25 @@
-<%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type:, data: message) %>
+<% if flash_messages[:success] %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(
+      type: flash_messages[:success][:type],
+      data: flash_messages[:success][:message]
+    ) %>
+  <% end %>
+<% end %>
+
+<% if flash_messages[:error] %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(
+      type: flash_messages[:error][:type],
+      data: flash_messages[:error][:message]
+    ) %>
+  <% end %>
+<% end %>
+
+<% if @sample.errors.any? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type: "error", data: @sample.errors.full_messages.first) %>
+  <% end %>
 <% end %>
 
 <%= turbo_stream.update "table-listing" do %>
