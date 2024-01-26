@@ -38,7 +38,7 @@
               <%= workflow.metadata["workflow_version"] %>
             </td>
             <td class="w-4 p-4 whitespace-nowrap">
-              <%= workflow["state"] || "NEW" %>
+              <%= workflow["state"] || "new" %>
             </td>
             <td class="w-4 p-4 whitespace-nowrap">
               <%= viral_time_ago(original_time: workflow["created_at"]) %>

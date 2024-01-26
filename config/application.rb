@@ -53,7 +53,7 @@ module Irida
     end
 
     # Only enables en and fr locales, avoiding unnecessarily loading other locales
-    config.i18n.available_locales = %i[en fr]
+    config.i18n.available_locales = %i[en fr en-CA]
     # Set default locale
     config.i18n.default_locale = :en
 

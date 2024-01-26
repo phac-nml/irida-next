@@ -12,6 +12,6 @@
                       pagy: @pagy
                     } %>
 
-<%= turbo_stream.update "project_samples_hidden_search_value" do %>
+<%= turbo_stream.update "project_samples_hidden_values" do %>
   <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
 <% end %>

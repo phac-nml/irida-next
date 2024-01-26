@@ -171,6 +171,8 @@ GEM
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
+    faker (3.2.2)
+      i18n (>= 1.8.11, < 2)
     faraday (2.0.0)
       ruby2_keywords (>= 0.0.4)
     faraday-follow_redirects (0.3.0)
@@ -557,6 +559,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9.2)
   erb-formatter (~> 0.4.3)
+  faker
   faraday
   faraday-net_http_persistent (~> 2.0)
   fx

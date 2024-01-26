@@ -12,6 +12,7 @@ module Groups
       @sample9 = samples(:sample9)
       @sample25 = samples(:sample25)
       @sample29 = samples(:sample29)
+      @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
     end
 
@@ -175,6 +176,22 @@ module Groups
       assert_text @sample1.name
       assert_no_text @sample2.name
       assert_no_text @sample9.name
+    end
+
+    test 'should be able to toggle metadata' do
+      visit group_samples_url(@group)
+      click_on I18n.t('groups.samples.table.updated_at')
+      assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
+      assert_selector 'table thead tr th', count: 4
+      find('label', text: I18n.t('groups.samples.index.search.metadata')).click
+      assert_selector 'table thead tr th', count: 6
+      within first('table tbody tr:first-child') do
+        assert_text @sample30.name
+        assert_selector 'td:nth-child(5)', text: 'value1'
+        assert_selector 'td:nth-child(6)', text: 'value2'
+      end
+      find('label', text: I18n.t('groups.samples.index.search.metadata')).click
+      assert_selector 'table thead tr th', count: 4
     end
   end
 end

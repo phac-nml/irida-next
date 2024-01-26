@@ -2,11 +2,13 @@
 
 module Projects
   # Controller actions for Samples
-  class SamplesController < Projects::ApplicationController
+  class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
+    include Metadata
+
     before_action :sample, only: %i[show edit update destroy]
     before_action :current_page
 
-    def index
+    def index # rubocop:disable Metrics/AbcSize
       authorize! @project, to: :sample_listing?
 
       @q = load_samples.ransack(params[:q])
@@ -17,6 +19,10 @@ module Projects
         end
         format.turbo_stream do
           @pagy, @samples = pagy(@q.result)
+          fields_for_namespace(
+            namespace: @project.namespace,
+            show_fields: params[:q] && params[:q][:metadata].to_i == 1
+          )
         end
       end
     end
@@ -75,6 +81,10 @@ module Projects
             redirect_to namespace_project_samples_path(format: :html)
           end
           format.turbo_stream do
+            fields_for_namespace(
+              namespace: @project.namespace,
+              show_fields: params[:q] && params[:q][:metadata].to_i == 1
+            )
             render status: :ok, locals: { type: 'success',
                                           message: t('.success', sample_name: @sample.name,
                                                                  project_name: @project.namespace.human_name) }

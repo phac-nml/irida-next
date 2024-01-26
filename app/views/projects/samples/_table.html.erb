@@ -1,24 +1,27 @@
-<table
+<div class="relative overflow-x-auto" data-turbo-temporary>
+  <table
   id="samples-table"
-  class="min-w-full table-fixed dark:divide-slate-600"
+  class="w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400"
   data-controller="selection"
   data-selection-action-link-outlet=".action-link"
 >
-<thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+    <thead class="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
     <tr>
-      <% if allowed_to?(:transfer_sample?, project) %>
-      <th aria-hidden="true"></th>
-      <% end %>
-      <th scope="col" class="px-4 py-3 text-left">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-10">
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".sample"), url: sorting_url(@q, :name), field: :name) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-left">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".created_at"), url: sorting_url(@q, :created_at), field: :created_at) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-left">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
         <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".updated_at"), url: sorting_url(@q, :updated_at), field: :updated_at) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-right cursor-not-allowed"><%= t(".action") %></th>
+      <% @fields.each do |column| %>
+        <th scope="col" class="px-6 py-3 text-left whitespace-nowrap cursor-not-allowed"><%= column %></th>
+      <% end %>
+      <% if allowed_to?(:update_sample?, project) %>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-right"><%= t(".action") %></th>
+      <% end %>
     </tr>
   </thead>
   <tbody
@@ -33,39 +36,42 @@
     <% samples.each do |sample| %>
       <tr
         id="<%= sample.id %>"
-        class="text-sm font-normal text-slate-500 dark:text-slate-400"
+        class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
       >
-        <% if allowed_to?(:transfer_sample?, project) %>
-          <td class="w-10 ps-4">
+        <td class="px-6 py-3 whitespace-nowrap sticky left-0 bg-slate-50 dark:bg-slate-900">
+          <% if allowed_to?(:transfer_sample?, project) %>
             <%= check_box_tag "sample_ids[]",
-            sample.id,
-            nil,
-            id: dom_id(sample),
-            "aria-label": sample.name,
-            data: {
-              action: "input->selection#toggle",
-              selection_target: "rowSelection"
-            },
-            class:
-              "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
-          </td>
-        <% end %>
-        <td class="px-4 py-3 whitespace-nowrap">
+                              sample.id,
+                              nil,
+                              id: dom_id(sample),
+                              "aria-label": sample.name,
+                              data: {
+                                action: "input->selection#toggle",
+                                selection_target: "rowSelection"
+                              },
+                              class:
+                                "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+          <% end %>
           <%= link_to sample.name,
           namespace_project_sample_path(id: sample.id),
           data: {
             turbo: false
           },
-          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
         </td>
-        <td class="px-4 py-3">
+        <td class="px-6 py-3 whitespace-nowrap">
           <%= l(sample.created_at.localtime, format: :full_date) %>
         </td>
-        <td class="px-4 py-3">
+        <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_time_ago(original_time: sample.updated_at) %>
         </td>
+        <% @fields.each do |column| %>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= sample.metadata[column] %>
+          </td>
+        <% end %>
         <% if allowed_to?(:update_sample?, project) %>
-          <td class="px-4 py-3">
+          <td class="px-6 py-3 whitespace-nowrap">
             <div class="flex items-center justify-end">
               <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
                 <%= dropdown.with_item(
@@ -93,3 +99,4 @@
     <% end %>
   </tbody>
 </table>
+</div>

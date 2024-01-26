@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'faker'
+
+Faker::Config.locale = 'en-CA'
+
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
 # This file should contain all the record creation needed to seed the database with its default values.
@@ -57,13 +61,32 @@ def seed_namespace_group_links(user, namespace, group, group_access_level)
                                      expires_at: @namespace_group_link_expiry_date }).execute
 end
 
-def seed_samples(project, sample_count)
+def fake_metadata
+  {
+    'WGS_id' => Faker::Number.number(digits: 10),
+    'NCBI_ACCESSION' => "NM_#{Faker::Number.decimal(l_digits: 7, r_digits: 1)}",
+    'country' => Faker::Address.country,
+    'food' => Faker::Food.dish,
+    'gender' => Faker::Gender.binary_type,
+    'age' => Faker::Number.between(from: 1, to: 100),
+    'onset' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today),
+    'earliest_date' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today),
+    'patient_sex' => Faker::Gender.binary_type,
+    'patient_age' => Faker::Number.between(from: 1, to: 100)
+  }
+end
+
+def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize
   1.upto(sample_count) do |i|
     sample = Samples::CreateService.new(
       project.creator, project,
       { name: "#{project.namespace.parent.name}/#{project.name} Sample #{i}",
         description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{i}." }
     ).execute
+
+    # Add metadata
+    Samples::Metadata::UpdateService.new(project, sample, project.creator, { 'metadata' => fake_metadata }).execute
+
     # exit if max total samples has been reached
     next unless @maximum_total_sample_attachments == -1 ||
                 @total_sample_attachment_count < @maximum_total_sample_attachments

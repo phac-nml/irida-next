@@ -4,21 +4,21 @@ module Groups
   # Controller actions for Samples within a Group
   class SamplesController < ApplicationController
     layout 'groups'
+    include Metadata
     before_action :group, :current_page, only: %i[index]
 
-    def index
+    def index # rubocop:disable Metrics/AbcSize
       authorize! @group, to: :sample_listing?
 
       @q = authorized_samples.ransack(params[:q])
-
       set_default_sort
-
       respond_to do |format|
         format.html do
           @has_samples = @q.result.count.positive?
         end
         format.turbo_stream do
           @pagy, @samples = pagy(@q.result)
+          fields_for_namespace(namespace: @group, show_fields: params[:q] && params[:q][:metadata].to_i == 1)
         end
       end
     end

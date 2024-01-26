@@ -60,7 +60,7 @@
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
           </div>
-          <%= turbo_frame_tag "project_hidden_search_value" %>
+          <%= turbo_frame_tag "project_hidden_values" %>
           <%= f.search_field :namespace_name_cont,
                     "data-action": "filters#submit",
                     class:

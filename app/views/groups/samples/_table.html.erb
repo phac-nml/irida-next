@@ -1,7 +1,39 @@
-<table class="min-w-full table-fixed dark:divide-slate-600">
-  <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+<div class="relative overflow-x-auto" data-turbo-temporary>
+  <table
+    class="
+      w-full
+      text-sm
+      text-left
+      rtl:text-right
+      text-slate-500
+      dark:text-slate-400
+    "
+  >
+    <thead
+      class="
+        text-xs
+        text-slate-700
+        uppercase
+        bg-slate-50
+        dark:bg-slate-700
+        dark:text-slate-400
+      "
+    >
     <tr>
-      <th scope="col" class="px-4 py-3 text-left">
+      <th
+        scope="col"
+        class="
+            px-6
+            py-3
+            whitespace-nowrap
+            text-left
+            bg-slate-50
+            dark:bg-slate-700
+            sticky
+            left-0
+            z-10
+          "
+      >
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
           label: t(".sample"),
@@ -9,10 +41,13 @@
           field: :name
         ) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-left cursor-not-allowed">
+      <th
+        scope="col"
+        class="px-6 py-3 whitespace-nowrap text-left cursor-not-allowed"
+      >
         <%= t(".project") %>
       </th>
-      <th scope="col" class="px-4 py-3 text-left">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
           label: t(".created_at"),
@@ -20,7 +55,7 @@
           field: :created_at
         ) %>
       </th>
-      <th scope="col" class="px-4 py-3 text-left">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
           label: t(".updated_at"),
@@ -28,51 +63,64 @@
           field: :updated_at
         ) %>
       </th>
+      <% @fields.each do |column| %>
+        <th
+          scope="col"
+          class="px-6 py-3 text-left whitespace-nowrap cursor-not-allowed"
+        ><%= column %></th>
+      <% end %>
     </tr>
-  </thead>
-  <tbody
-    id="group-samples-table-body"
-    class="
-      bg-white
-      divide-y
-      divide-slate-200
-      dark:bg-slate-800
-      dark:divide-slate-700
-    "
-  >
+    </thead>
+    <tbody
+      id="group-samples-table-body"
+      class="
+        bg-white
+        divide-y
+        divide-slate-200
+        dark:bg-slate-800
+        dark:divide-slate-700
+      "
+    >
     <% samples.each do |sample| %>
       <tr
         id="<%= dom_id(sample) %>"
-        class="text-sm font-normal text-slate-500 dark:text-slate-400"
+        class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
       >
-        <td class="px-4 py-3 whitespace-nowrap"><%= link_to sample.name,
-          namespace_project_sample_path(
-            id: sample.id,
-            namespace_id: sample.project.namespace.parent.full_path,
-            project_id: sample.project.path
-          ),
-          data: {
-            turbo: false
-          },
-          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+        <td class="px-6 py-3 whitespace-nowrap left-0 sticky bg-white dark:bg-slate-800">
+          <%= link_to sample.name,
+                      namespace_project_sample_path(
+                        id: sample.id,
+                        namespace_id: sample.project.namespace.parent.full_path,
+                        project_id: sample.project.path
+                      ),
+                      data: {
+                        turbo: false
+                      },
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
         </td>
-        <td class="px-4 py-3 whitespace-nowrap">
+        <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_tooltip(title: project_path(sample.project)) do %>
             <%= link_to sample.project.abbreviated_path,
-            project_path(sample.project),
-            data: {
-              turbo: false
-            },
-            class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                        project_path(sample.project),
+                        data: {
+                          turbo: false
+                        },
+                        class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           <% end %>
         </td>
-        <td class="px-4 py-3 whitespace-nowrap">
+        <td class="px-6 py-3 whitespace-nowrap">
           <%= l(sample.created_at.localtime, format: :full_date) %>
         </td>
-        <td class="px-4 py-3 whitespace-nowrap">
+        <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_time_ago(original_time: sample.updated_at) %>
         </td>
+        <% @fields.each do |column| %>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= sample.metadata[column] %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
