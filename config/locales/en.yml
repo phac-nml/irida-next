@@ -676,7 +676,7 @@ en:
               - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
     history:
       index:
-        title: Project Change Log
+        title: History
         subtitle: These are the changes that have been made to the project
         created: Created
         updated: Updated

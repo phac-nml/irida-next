@@ -8,13 +8,13 @@ module Projects
     def index
       authorize! @project, to: :history?
 
-      @project_with_log_data = @project.namespace.log_data_without_changes
+      @log_data = @project.namespace.log_data_without_changes
     end
 
     def new
       authorize! @project, to: :history?
 
-      @project_with_log_data = @project.namespace.log_data_with_changes(params[:version])
+      @log_data = @project.namespace.log_data_with_changes(params[:version])
       respond_to do |format|
         format.turbo_stream do
           render status: :ok
@@ -29,8 +29,8 @@ module Projects
       case action_name
       when 'index', 'new'
         @context_crumbs += [{
-          name: I18n.t('projects.members.index.title'),
-          path: namespace_project_members_path
+          name: I18n.t('projects.history.index.title'),
+          path: namespace_project_history_index_path
         }]
       end
     end

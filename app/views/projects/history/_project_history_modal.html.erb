@@ -1,43 +1,33 @@
 <%= viral_dialog(open: true, size: :extra_large, classes: ["overflow-visible"]) do |dialog| %>
   <%= dialog.with_header(
-    title: t(".version_number", version_number: project_with_log_data[:version])
+    title: t(".version_number", version_number: log_data[:version])
   ) %>
   <%= dialog.with_section do %>
     <div class="grid gap-4">
       <div>
         <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
-          <% if project_with_log_data[:version] == 1 %>
+          <% if log_data[:version] == 1 %>
             <p class="dark:text-gray-400"><%= t(".project_created") %>
               by
-              <%= project_with_log_data[:user] %></p>
+              <%= log_data[:user] %></p>
           <% else %>
             <p class="dark:text-gray-400"><%= t(".project_modified") %>
               by
-              <%= project_with_log_data[:user] %></p>
+              <%= log_data[:user] %></p>
           <% end %>
         </div>
-        <dl
-          class="
-            max-w-md
-            text-gray-900
-            divide-y
-            divide-gray-200
-            dark:text-white
-            dark:divide-gray-700
-          "
-        >
-          <% project_with_log_data[:changes_from_prev_version].each do |key, value| %>
-
-            <div class="grid grid-flow-col justify-stretch">
-              <% if project_with_log_data[:version].to_i != 1 %>
-                <div class="flex-col">
+        <dl class=" max-w-md text-gray-900 dark:text-white ">
+          <% log_data[:changes_from_prev_version].each do |key, value| %>
+            <div class="grid grid-cols-8 gap-4">
+              <% if log_data[:version].to_i != 1 %>
+                <div class="col-span-4">
                   <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400"><%= key.to_s %></dt>
-                  <dd class="text-sm bg-[#ffebe9]"><%= project_with_log_data[:previous_version][key.to_s] %></dd>
+                  <dd class="text-sm bg-[#ffebe9]"><%= log_data[:previous_version][key.to_s] %></dd>
                 </div>
               <% end %>
-              <div class="flex-col">
+              <div class="col-span-4">
                 <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400"><%= key.to_s %></dt>
-                <dd class="text-sm bg-[#ccffd8]"><%= value %></dd>
+                <dd class="text-sm bg-[#ccffd8] break-words"><%= value %></dd>
               </div>
             </div>
           <% end %>
