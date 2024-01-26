@@ -31,7 +31,7 @@
             dark:bg-slate-700
             sticky
             left-0
-            z-20
+            z-10
           "
       >
         <%= render Ransack::SortComponent.new(
@@ -86,16 +86,17 @@
         id="<%= dom_id(sample) %>"
         class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
       >
-        <td class="px-6 py-3 whitespace-nowrap"><%= link_to sample.name,
-                                                            namespace_project_sample_path(
-                                                              id: sample.id,
-                                                              namespace_id: sample.project.namespace.parent.full_path,
-                                                              project_id: sample.project.path
-                                                            ),
-                                                            data: {
-                                                              turbo: false
-                                                            },
-                                                            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+        <td class="px-6 py-3 whitespace-nowrap left-0 sticky bg-white dark:bg-slate-800">
+          <%= link_to sample.name,
+                      namespace_project_sample_path(
+                        id: sample.id,
+                        namespace_id: sample.project.namespace.parent.full_path,
+                        project_id: sample.project.path
+                      ),
+                      data: {
+                        turbo: false
+                      },
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
         </td>
         <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_tooltip(title: project_path(sample.project)) do %>
