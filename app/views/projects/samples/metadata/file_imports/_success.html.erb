@@ -1,0 +1,7 @@
+<div class="text-center">
+  <%= viral_icon(name: "check_circle_solid", color: :success, classes: "w-50 h-50") %>
+  <p class="mb-4"><%= t(".description") %></p>
+  <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
+    <%= t(".ok_button") %>
+  <% end %>
+</div>

@@ -15,17 +15,16 @@ export default class extends Controller {
 
   #toggleSubmitButton(event) {
     const { value } = event.target;
-    if (value) {
-      this.submitButtonTarget.disabled = false;
-    } else {
-      this.submitButtonTarget.disabled = true;
-    }
+    this.submitButtonTarget.disabled = !value;
   }
 
   #readFile(event) {
     const { files } = event.target;
 
     if (!files.length) return;
+
+    //TODO: check file extension?
+    //TODO: clear select options before population
 
     const reader = new FileReader();
     reader.readAsArrayBuffer(files[0]);

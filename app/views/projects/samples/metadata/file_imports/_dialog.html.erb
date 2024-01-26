@@ -1,7 +1,10 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
-    <%= turbo_frame_tag "metadata-file-import-dialog-content" do %>
+    <%= turbo_frame_tag "import_metadata_dialog_content" do %>
+
+      <%= turbo_frame_tag "import_metadata_dialog_alert" %>
+
       <%= form_for(:file_import, url: namespace_project_samples_file_import_path, method: :post) do |form| %>
         <div
           class="grid gap-4"
