@@ -67,7 +67,7 @@
         </td>
         <% @fields.each do |column| %>
           <td class="px-6 py-3 whitespace-nowrap">
-            <%= sample[column].present? ? sample[column] : sample.metadata[column] %>
+            <%= sample.metadata[column] %>
           </td>
         <% end %>
         <% if allowed_to?(:update_sample?, project) %>
