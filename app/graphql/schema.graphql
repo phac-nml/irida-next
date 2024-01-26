@@ -698,6 +698,11 @@ type Sample implements Node {
   description: String
 
   """
+  signedBlobId of files on the sample
+  """
+  files: [String!]
+
+  """
   ID of the object.
   """
   id: ID!

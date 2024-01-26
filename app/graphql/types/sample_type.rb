@@ -16,6 +16,12 @@ module Types
           description: 'Metadata for the sample',
           resolver: Resolvers::SampleMetadataResolver
 
+    field :files,
+          [String],
+          null: true,
+          description: 'signedBlobId[???] of files on the sample',
+          resolver: Resolvers::SampleAttachmentsResolver
+
     def self.authorized?(object, context)
       super &&
         allowed_to?(
