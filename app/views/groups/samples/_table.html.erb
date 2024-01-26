@@ -47,12 +47,6 @@
       >
         <%= t(".project") %>
       </th>
-      <% @fields.each do |column| %>
-        <th
-          scope="col"
-          class="px-6 py-3 text-left whitespace-nowrap cursor-not-allowed"
-        ><%= column %></th>
-      <% end %>
       <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
@@ -69,6 +63,12 @@
           field: :updated_at
         ) %>
       </th>
+      <% @fields.each do |column| %>
+        <th
+          scope="col"
+          class="px-6 py-3 text-left whitespace-nowrap cursor-not-allowed"
+        ><%= column %></th>
+      <% end %>
     </tr>
     </thead>
     <tbody
@@ -108,17 +108,17 @@
                         class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           <% end %>
         </td>
-        <% @fields.each do |column| %>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= sample.metadata[column] %>
-          </td>
-        <% end %>
         <td class="px-6 py-3 whitespace-nowrap">
           <%= l(sample.created_at.localtime, format: :full_date) %>
         </td>
         <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_time_ago(original_time: sample.updated_at) %>
         </td>
+        <% @fields.each do |column| %>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= sample.metadata[column] %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
     </tbody>
