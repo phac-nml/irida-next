@@ -8,7 +8,8 @@ module History
     log_data = []
     reload_log_data.data['h'].each do |change_log|
       responsible = responsible_user_for_version(change_log)
-      log_data << { version: change_log['v'], user: responsible, updated_at: change_log['c']['updated_at'] }
+      log_data << { version: change_log['v'], user: responsible,
+                    updated_at: DateTime.parse(change_log['c']['updated_at']).strftime('%a %b %e %Y %H:%M') }
     end
     log_data
   end
@@ -30,8 +31,8 @@ module History
     responsible = responsible_user_for_version(current_version)
 
     { version:, user: responsible,
-      changes_from_prev_version: current_version['c'],
-      previous_version: initial_version['c'] }
+      changes_from_prev_version: format_changes(current_version['c']),
+      previous_version: format_changes(initial_version['c']) }
   end
 
   def responsible_user_for_version(current_version)
@@ -39,5 +40,28 @@ module History
     return 'System' unless current_version.key?('m') && current_version['m'].key?('_r')
 
     User.find(current_version['m']['_r']).email
+  end
+
+  # Format keys in changes to format required
+  # Currently converts string to date time and formats to YYYY-MM-DD H:M
+  # for created_at, deleted_at, and updated_at
+  def format_changes(changes)
+    datetime_format = I18n.t('time.formats.default')
+
+    if changes.key?('created_at')
+      changes['created_at'] =
+        DateTime.parse(changes['created_at']).strftime(datetime_format)
+    end
+
+    if changes.key?('deleted_at') && !changes['deleted_at'].nil?
+      changes['deleted_at'] =
+        DateTime.parse(changes['deleted_at']).strftime(datetime_format)
+    end
+
+    if changes.key?('updated_at')
+      changes['updated_at'] =
+        DateTime.parse(changes['updated_at']).strftime(datetime_format)
+    end
+    changes
   end
 end
