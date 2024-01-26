@@ -18,8 +18,11 @@
         </div>
         <dl class=" max-w-md text-gray-900 dark:text-white ">
           <% log_data[:changes_from_prev_version].each do |key, value| %>
+            <% if log_data[:version] == 1 %>
+              <% next if value.blank? %>
+            <% end %>
             <div class="grid grid-cols-8 gap-4">
-              <% if log_data[:version].to_i != 1 %>
+              <% if log_data[:version] != 1 %>
                 <div class="col-span-4">
                   <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400"><%= key.to_s %></dt>
                   <dd class="text-sm bg-[#ffebe9]"><%= log_data[:previous_version][key.to_s] %></dd>
