@@ -19,7 +19,10 @@ module Projects
         end
         format.turbo_stream do
           @pagy, @samples = pagy(@q.result)
-          fields_for_namespace(@project.namespace, params[:q] ? params[:q][:metadata].to_i : 0)
+          fields_for_namespace(
+            namespace: @project.namespace,
+            show_fields: params[:q] && params[:q][:metadata].to_i == 1
+          )
         end
       end
     end
@@ -78,7 +81,10 @@ module Projects
             redirect_to namespace_project_samples_path(format: :html)
           end
           format.turbo_stream do
-            fields_for_namespace(@project.namespace, params[:q] ? params[:q][:metadata].to_i : 0)
+            fields_for_namespace(
+              namespace: @project.namespace,
+              show_fields: params[:q] && params[:q][:metadata].to_i == 1
+            )
             render status: :ok, locals: { type: 'success',
                                           message: t('.success', sample_name: @sample.name,
                                                                  project_name: @project.namespace.human_name) }

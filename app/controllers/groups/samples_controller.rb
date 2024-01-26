@@ -18,7 +18,7 @@ module Groups
         end
         format.turbo_stream do
           @pagy, @samples = pagy(@q.result)
-          fields_for_namespace(@group, params[:q] ? params[:q][:metadata].to_i : 0)
+          fields_for_namespace(namespace: @group, show_fields: params[:q] && params[:q][:metadata].to_i == 1)
         end
       end
     end
