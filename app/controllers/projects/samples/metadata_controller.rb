@@ -24,6 +24,8 @@ module Projects
       end
 
       def create # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        puts 'helloooooo'
+        puts params
         new_metadata = validate_new_metadata(metadata_params['metadata'])
         flash_messages = {}
 

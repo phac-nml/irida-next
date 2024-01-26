@@ -42,13 +42,11 @@ export default class extends Controller {
     const inputRows = document.getElementsByClassName('inputField')
     const firstInputRow = parseInt(inputRows[0].id.split('-')[2])
     const lastInputRow = parseInt(inputRows[inputRows.length - 1].id.split('-')[2])
-
     for (let i = firstInputRow; i < lastInputRow + 1; i++) {
 
       let metadata_field = document.getElementById(`key_${i}`)
       let value = document.getElementById(`value_${i}`)
-      console.log(metadata_field.name)
-      if (metadata_field && value) {
+      if (metadata_field.value && value.value) {
         let metadataField = `<input type='hidden' name="sample[metadata][${metadata_field.value}]" value="${value.value}">`
         this.metadataToAddTarget.insertAdjacentHTML("beforeend", metadataField)
       }
