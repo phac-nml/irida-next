@@ -13,7 +13,7 @@ module Ransack
     end
 
     def icon
-      unless @ransack_obj.present? && @ransack_obj.sorts.present? && @ransack_obj.sorts[0].attr_name == @field.to_s
+      unless @ransack_obj.present? && @ransack_obj.sorts.present? && @ransack_obj.sorts[0].name == URI.encode_www_form_component(@field.to_s)
         return
       end
 

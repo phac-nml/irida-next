@@ -18,7 +18,7 @@ module Projects
           @has_samples = @q.result.count.positive?
         end
         format.turbo_stream do
-          @pagy, @samples = pagy(@q.result)
+          @pagy, @samples = custom_pagy
           fields_for_namespace(
             namespace: @project.namespace,
             show_fields: params[:q] && params[:q][:metadata].to_i == 1
@@ -122,7 +122,24 @@ module Projects
       @current_page = 'samples'
     end
 
+    def custom_pagy
+      result = @q.result
+
+      if !@q.sorts.empty? && Sample.ransackable_attributes.exclude?(@q.sorts.first.name)
+        field = @q.sorts.first.name.gsub('metadata_', '')
+        dir = @q.sorts.first.dir
+        result = result.order(Sample.metadata_sort(field, dir))
+      end
+
+      pagy(result)
+    end
+
     def set_default_sort
+      # remove metadata sort if metadata not visible
+      if !@q.sorts.empty? && @q.sorts[0].name.start_with?('metadata_') && params[:q][:metadata].to_i != 1
+        @q.sorts.slice!(0)
+      end
+
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
     end
   end

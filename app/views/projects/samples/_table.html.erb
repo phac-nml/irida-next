@@ -1,102 +1,163 @@
 <div class="relative overflow-x-auto" data-turbo-temporary>
   <table
-  id="samples-table"
-  class="w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400"
-  data-controller="selection"
-  data-selection-action-link-outlet=".action-link"
->
-    <thead class="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
-    <tr>
-      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-10">
-        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".sample"), url: sorting_url(@q, :name), field: :name) %>
-      </th>
-      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".created_at"), url: sorting_url(@q, :created_at), field: :created_at) %>
-      </th>
-      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-        <%= render Ransack::SortComponent.new(ransack_obj: @q, label: t(".updated_at"), url: sorting_url(@q, :updated_at), field: :updated_at) %>
-      </th>
-      <% @fields.each do |column| %>
-        <th scope="col" class="px-6 py-3 text-left whitespace-nowrap cursor-not-allowed"><%= column %></th>
-      <% end %>
-      <% if allowed_to?(:update_sample?, project) %>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-right"><%= t(".action") %></th>
-      <% end %>
-    </tr>
-  </thead>
-  <tbody
+    id="samples-table"
     class="
-      bg-white
-      divide-y
-      divide-slate-200
-      dark:bg-slate-800
-      dark:divide-slate-700
+      w-full
+      text-sm
+      text-left
+      rtl:text-right
+      text-slate-500
+      dark:text-slate-400
     "
+    data-controller="selection"
+    data-selection-action-link-outlet=".action-link"
   >
-    <% samples.each do |sample| %>
-      <tr
-        id="<%= sample.id %>"
-        class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
-      >
-        <td class="px-6 py-3 whitespace-nowrap sticky left-0 bg-slate-50 dark:bg-slate-900">
-          <% if allowed_to?(:transfer_sample?, project) %>
-            <%= check_box_tag "sample_ids[]",
-                              sample.id,
-                              nil,
-                              id: dom_id(sample),
-                              "aria-label": sample.name,
-                              data: {
-                                action: "input->selection#toggle",
-                                selection_target: "rowSelection"
-                              },
-                              class:
-                                "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
-          <% end %>
-          <%= link_to sample.name,
-          namespace_project_sample_path(id: sample.id),
-          data: {
-            turbo: false
-          },
-                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-        </td>
-        <td class="px-6 py-3 whitespace-nowrap">
-          <%= l(sample.created_at.localtime, format: :full_date) %>
-        </td>
-        <td class="px-6 py-3 whitespace-nowrap">
-          <%= viral_time_ago(original_time: sample.updated_at) %>
-        </td>
+    <thead
+      class="
+        text-xs
+        text-slate-700
+        uppercase
+        bg-slate-50
+        dark:bg-slate-700
+        dark:text-slate-400
+      "
+    >
+      <tr>
+        <th
+          scope="col"
+          class="
+            px-6
+            py-3
+            whitespace-nowrap
+            text-left
+            bg-slate-50
+            dark:bg-slate-700
+            sticky
+            left-0
+            z-10
+          "
+        >
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".sample"),
+            url: sorting_url(@q, :name),
+            field: :name
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".created_at"),
+            url: sorting_url(@q, :created_at),
+            field: :created_at
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".updated_at"),
+            url: sorting_url(@q, :updated_at),
+            field: :updated_at
+          ) %>
+        </th>
         <% @fields.each do |column| %>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= sample.metadata[column] %>
-          </td>
+          <th scope="col" class="px-6 py-3 text-left whitespace-nowrap">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: column,
+              url: sorting_url(@q, URI.encode_www_form_component("metadata_#{column}")),
+              field: "metadata_#{column}"
+            ) %>
+          </th>
         <% end %>
         <% if allowed_to?(:update_sample?, project) %>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <div class="flex items-center justify-end">
-              <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
-                <%= dropdown.with_item(
-                  label: t(:"projects.samples.index.edit_button"),
-                  url: edit_namespace_project_sample_path(id: sample.id),
-                  data: {
-                    turbo: false
-                  }
-                ) %>
-                <% if allowed_to?(:destroy_sample?, @project) %>
-                  <%= dropdown.with_item(
-                    label: t(:"projects.samples.index.remove_button"),
-                    url: namespace_project_sample_path(id: sample.id),
-                    data: {
-                      turbo_method: :delete,
-                      turbo_confirm: t(:"projects.samples.index.remove_button_confirmation")
-                    }
-                  ) %>
-                <% end %>
-              <% end %>
-            </div>
-          </td>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap text-right"><%= t(".action") %></th>
         <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody
+      class="
+        bg-white
+        divide-y
+        divide-slate-200
+        dark:bg-slate-800
+        dark:divide-slate-700
+      "
+    >
+      <% samples.each do |sample| %>
+        <tr
+          id="<%= sample.id %>"
+          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+        >
+          <td
+            class="
+              px-6
+              py-3
+              whitespace-nowrap
+              sticky
+              left-0
+              bg-slate-50
+              dark:bg-slate-900
+            "
+          >
+            <% if allowed_to?(:transfer_sample?, project) %>
+              <%= check_box_tag "sample_ids[]",
+              sample.id,
+              nil,
+              id: dom_id(sample),
+              "aria-label": sample.name,
+              data: {
+                action: "input->selection#toggle",
+                selection_target: "rowSelection"
+              },
+              class:
+                "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+            <% end %>
+            <%= link_to sample.name,
+            namespace_project_sample_path(id: sample.id),
+            data: {
+              turbo: false
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= l(sample.created_at.localtime, format: :full_date) %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= viral_time_ago(original_time: sample.updated_at) %>
+          </td>
+          <% @fields.each do |column| %>
+            <td class="px-6 py-3 whitespace-nowrap">
+              <%= sample.metadata[column] %>
+            </td>
+          <% end %>
+          <% if allowed_to?(:update_sample?, project) %>
+            <td class="px-6 py-3 whitespace-nowrap">
+              <div class="flex items-center justify-end">
+                <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
+                  <%= dropdown.with_item(
+                    label: t(:"projects.samples.index.edit_button"),
+                    url: edit_namespace_project_sample_path(id: sample.id),
+                    data: {
+                      turbo: false
+                    }
+                  ) %>
+                  <% if allowed_to?(:destroy_sample?, @project) %>
+                    <%= dropdown.with_item(
+                      label: t(:"projects.samples.index.remove_button"),
+                      url: namespace_project_sample_path(id: sample.id),
+                      data: {
+                        turbo_method: :delete,
+                        turbo_confirm: t(:"projects.samples.index.remove_button_confirmation")
+                      }
+                    ) %>
+                  <% end %>
+                <% end %>
+              </div>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
