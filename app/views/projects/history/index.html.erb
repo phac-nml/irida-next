@@ -2,7 +2,7 @@
   <%= component.with_icon(name: "list_bullet", classes: "h-14 w-14 text-primary-700") %>
 <% end %>
 
-<div class="grid gap-4">
+<div class="grid gap-4 px-4">
   <%= turbo_frame_tag "history_modal" %>
   <% @log_data.reverse.each_with_index do |changes, index| %>
     <ol class="relative border-s border-gray-200 dark:border-gray-700">
@@ -15,7 +15,7 @@
             justify-center
             w-6
             h-6
-            bg-gray-100
+            bg-green-100
             rounded-full
             -start-3
             ring-8
@@ -23,19 +23,7 @@
             dark:ring-gray-900
             dark:bg-blue-900
           "
-        >
-          <% if changes[:version] == 1 %>
-            <%= render Viral::IconComponent.new(
-              name: "folder_plus",
-              classes: "w-5 h-5 text-slate-500 dark:text-slate-400"
-            ) %>
-          <% else %>
-            <%= render Viral::IconComponent.new(
-              name: "pencil_square",
-              classes: "w-5 h-5 text-slate-500 dark:text-slate-400"
-            ) %>
-          <% end %>
-        </span>
+        ></span>
         <h3
           class="
             flex
@@ -67,7 +55,7 @@
                 dark:bg-green-900
                 dark:text-green-300
               "
-            >Current</span>
+            ><%= t(".latest") %></span>
           <% end %>
         </h3>
         <time
@@ -83,11 +71,9 @@
         ><%= changes[:updated_at] %></time>
         <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
           <% if changes[:version] == 1 %>
-            Project created by
-            <%= changes[:user] %>
+            <%= t(".created_by", user: changes[:user]) %>
           <% else %>
-            Project was modified by
-            <%= changes[:user] %>
+            <%= t(".modified_by", user: changes[:user]) %>
           <% end %>
         </p>
       </li>

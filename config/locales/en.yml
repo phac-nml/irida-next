@@ -678,12 +678,9 @@ en:
       index:
         title: History
         subtitle: These are the changes that have been made to the project
-        created: Created
-        updated: Updated
-        version: Version
-        type: Type
-        user: User
-        date_time: Date & Time
+        latest: Latest
+        created_by: "Project created by %{user}"
+        modified_by: "Project modified by %{user}"
       project_history_modal:
         close: Close
         project_created: Project was created

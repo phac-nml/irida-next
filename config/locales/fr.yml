@@ -659,6 +659,18 @@ fr:
             points_html:
               - To prevent accidental actions we ask you to confirm your intention.
               - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
+    history:
+      index:
+        title: History
+        subtitle: These are the changes that have been made to the project
+        latest: Latest
+        created_by: "Project created by %{user}"
+        modified_by: "Project modified by %{user}"
+      project_history_modal:
+        close: Close
+        project_created: Project was created
+        project_modified: Project attributes were modified
+        version_number: "Version %{version_number}"
     new:
       title: Create project
       placeholder: Awesome project name
