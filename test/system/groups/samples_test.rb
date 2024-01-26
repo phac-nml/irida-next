@@ -187,8 +187,8 @@ module Groups
       assert_selector 'table thead tr th', count: 6
       within first('table tbody tr:first-child') do
         assert_text @sample30.name
-        assert_selector 'td:nth-child(3)', text: 'value1'
-        assert_selector 'td:nth-child(4)', text: 'value2'
+        assert_selector 'td:nth-child(5)', text: 'value1'
+        assert_selector 'td:nth-child(6)', text: 'value2'
       end
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
       assert_selector 'table thead tr th', count: 4
