@@ -5,7 +5,7 @@ module Projects
     # Controller actions for Project Samples Metadata
     class MetadataController < Projects::Samples::ApplicationController
       def new
-        render turbo_stream: turbo_stream.update('sample_files_modal',
+        render turbo_stream: turbo_stream.update('sample_modal',
                                                  partial: 'new_metadata_modal',
                                                  locals: {
                                                    open: true
