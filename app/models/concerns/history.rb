@@ -37,7 +37,9 @@ module History
 
   def responsible_user_for_version(current_version)
     # Change was made outside the web request (ie. rails console)
-    return 'System' unless current_version.key?('m') && current_version['m'].key?('_r')
+    unless current_version.key?('m') && current_version['m'].key?('_r')
+      return I18n.t('activerecord.concerns.history.system')
+    end
 
     User.find(current_version['m']['_r']).email
   end

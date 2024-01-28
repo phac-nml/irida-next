@@ -179,6 +179,9 @@ en:
     exceptions:
       personal_access_token:
         not_found: "Could not find personal access token with id %{token_id}"
+    concerns:
+      history:
+        system: System
     models:
       member:
         one: Member
@@ -307,6 +310,11 @@ en:
       information_icon: Information icon
     nextflow:
       required: Required
+    history:
+      latest: Latest
+      created_by: "%{type} created by %{user}"
+      modified_by: "%{type} modified by %{user}"
+      link_text: "Version %{version}"
   layouts:
     application:
       site_title: IRIDA Next
