@@ -10,7 +10,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def history?
+  def view_history?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_view?(user, record.namespace, false) == true
 

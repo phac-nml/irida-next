@@ -6,13 +6,13 @@ module Projects
     before_action :current_page
 
     def index
-      authorize! @project, to: :history?
+      authorize! @project, to: :view_history?
 
       @log_data = @project.namespace.log_data_without_changes
     end
 
     def new
-      authorize! @project, to: :history?
+      authorize! @project, to: :view_history?
 
       @log_data = @project.namespace.log_data_with_changes(params[:version])
       respond_to do |format|
