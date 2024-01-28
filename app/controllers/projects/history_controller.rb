@@ -3,23 +3,20 @@
 module Projects
   # Controller actions for project history
   class HistoryController < Projects::ApplicationController
+    include HistoryActions
+
     before_action :current_page
 
-    def index
-      authorize! @project, to: :view_history?
+    private
 
-      @log_data = @project.namespace.log_data_without_changes
+    # The model the log data is attached to
+    def set_model
+      @model = @project.namespace
     end
 
-    def new
-      authorize! @project, to: :view_history?
-
-      @log_data = @project.namespace.log_data_with_changes(params[:version])
-      respond_to do |format|
-        format.turbo_stream do
-          render status: :ok
-        end
-      end
+    # The record to authorize the user against
+    def set_authorization_object
+      @authorize_object = @project
     end
 
     protected
