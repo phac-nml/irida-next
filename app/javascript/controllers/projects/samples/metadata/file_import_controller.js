@@ -21,9 +21,10 @@ export default class extends Controller {
   #readFile(event) {
     const { files } = event.target;
 
-    if (!files.length) return;
-
-    //QUESTION: Check file extension?  we already have an acceptance mime type list on the input file field.
+    if (!files.length) {
+      this.#removeSelectOptions();
+      return;
+    }
 
     const reader = new FileReader();
     reader.readAsArrayBuffer(files[0]);
@@ -33,22 +34,27 @@ export default class extends Controller {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       const headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+      this.#removeSelectOptions();
       this.#addSelectOptions(headers);
     };
   }
 
-  #addSelectOptions(headers) {
-    //clear the select options
-    for (var i = this.selectInputTarget.options.length - 1; i > 0; i--) {
-      this.selectInputTarget.remove(i);
+  #removeSelectOptions() {
+    while (this.selectInputTarget.options.length > 1) {
+      this.selectInputTarget.remove(this.selectInputTarget.options.length - 1);
     }
-    //populate select options
+    this.selectInputTarget.disabled = true;
+    this.submitButtonTarget.disabled = true;
+  }
+
+  #addSelectOptions(headers) {
     for (var header of headers) {
       const option = document.createElement("option");
       option.value = header;
       option.text = header;
       this.selectInputTarget.append(option);
     }
+    this.selectInputTarget.disabled = false;
   }
 
   disconnect() {

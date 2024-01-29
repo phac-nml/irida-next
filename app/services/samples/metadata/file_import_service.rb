@@ -61,7 +61,7 @@ module Samples
                 I18n.t('services.samples.metadata.import_file.missing_sample_id_column')
         end
 
-        return if @headers.count { |header| header != @sample_id_column } > 1
+        return if @headers.count { |header| header != @sample_id_column }.positive?
 
         raise SampleMetadataFileImportError,
               I18n.t('services.samples.metadata.import_file.missing_metadata_column')
