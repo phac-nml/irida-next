@@ -61,11 +61,11 @@
             </div>
             <% if log_data[:version] != 1 %>
               <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                <dd class="text-md"><%= log_data[:previous_version][key.to_s] %></dd>
+                <dd class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></dd>
               </div>
             <% end %>
             <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-              <dd class="text-md break-words"><%= value %></dd>
+              <dd class="text-md p-1 break-words"><%= value %></dd>
             </div>
           </div>
         <% end %>
