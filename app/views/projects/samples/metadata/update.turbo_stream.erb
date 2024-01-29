@@ -1,3 +1,13 @@
+<%= turbo_stream.update(
+  "sample_files_modal",
+  partial: "projects/samples/metadata/edit_metadata_modal",
+  locals: {
+    open: @sample.errors.any?,
+    key: nil,
+    value: nil
+  }
+) %>
+
 <%= turbo_stream.append "flashes" do %>
   <%= viral_flash(type:, data: message) %>
 <% end %>

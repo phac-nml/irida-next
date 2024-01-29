@@ -1,10 +1,4 @@
 <div class="table-container">
-  <%= form_with(model: @sample, url: namespace_project_sample_metadata_path(sample_id: @sample.id),
-  data: {
-    controller: "projects--samples--metadata--edit"
-  },
-  method: :patch) do |form| %>
-
   <table
     class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4"
     data-controller="selection"
@@ -17,94 +11,40 @@
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.value") %></th>
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.source") %></th>
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.last_updated") %></th>
+        <% if allowed_to?(:update_sample?, @project) %>
+          <th scope="col" class="px-6 py-3 text-right"><%= t("projects.samples.show.table_header.action") %></th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
       <% sample_metadata.each do |metadata| %>
-        <%= form.fields_for :metadata do |metadata_field| %>
-        <input type='hidden' data-projects--samples--metadata--edit-target="editSubmission">
-          <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-            <% if allowed_to?(:update_sample?, @project) %>
-              <% if metadata[:source_type] == 'user' %>
-                <td class="px-6 py-4">
-                  <div class='form-field'>
-                    <%= metadata_field.text_field "#{metadata[:key]}_key",
-                    value: metadata[:key],
-                    data: {
-                      action: "change->projects--samples--metadata--edit#edit"
-                    },
-                    class: 'metadata-input',
-                    required: true %>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class='form-field'>
-                    <%= metadata_field.text_field "#{metadata[:key]}_value",
-                    value: metadata[:value],
-                    data: {
-                      action: "change->projects--samples--metadata--edit#edit"
-                    },
-                    class: 'metadata-input',
-                    required: true %>
-                  </div>
-                </td>
-              <% else %>
-                <td class="px-6 py-4">
-                  <%= metadata_field.text_field "#{metadata[:key]}_key",
-                  value: metadata[:key],
-                  disabled: true,
-                  class: "
-                    bg-slate-100
-                    border
-                    border-slate-100
-                    text-slate-600
-                    text-sm
-                    rounded-lg
-                    focus:ring-primary-500
-                    focus:border-primary-500
-                    block
-                    w-full
-                    p-2.5
-                    dark:bg-slate-600
-                    dark:border-slate-600
-                    dark:placeholder-slate-400
-                    dark:text-slate-300
-                  " %>
-                <td class="px-6 py-4">
-                  <%= metadata_field.text_field "#{metadata[:key]}_value",
-                  value: metadata[:value],
-                  disabled: true,
-                  class: "
-                    bg-slate-100
-                    border
-                    border-slate-100
-                    text-slate-600
-                    text-sm
-                    rounded-lg
-                    focus:ring-primary-500
-                    focus:border-primary-500
-                    block
-                    w-full
-                    p-2.5
-                    dark:bg-slate-600
-                    dark:border-slate-600
-                    dark:placeholder-slate-400
-                    dark:text-slate-300
-                  " %>
-                </td>
+        <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+          <td class="px-6 py-4"><%= metadata[:key] %></td>
+          <td class="px-6 py-4"><%= metadata[:value] %></td>
+          <td class="px-6 py-4"><%= metadata[:source] %></td>
+          <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_updated]) %></td>
+          <% if allowed_to?(:update_sample?, @project) %>
+            <td class="px-6 py-4">
+              <div class="flex items-center justify-end">
+                <%= viral_dropdown(icon: "ellipsis_vertical",
+                aria:
+                  { label: t(:'projects.samples.show.metadata.actions.metadata_dropdown_aria_label',
+                  key: metadata[:key])}) do |dropdown| %>
+                  <%= dropdown.with_item(
+                    label: t(:'projects.samples.show.metadata.actions.dropdown.edit'),
+                    url: edit_namespace_project_sample_metadata_path(
+                      sample_id: @sample.id,
+                      key: metadata[:key],
+                      value: metadata[:value])
+                  ) %>
                 <% end %>
-              <% else %>
-              <td class="px-6 py-4"><%= metadata[:key] %></td>
-              <td class="px-6 py-4"><%= metadata[:value] %></td>
-            <% end %>
-              <td class="px-6 py-4"><%= metadata[:source] %></td>
-              <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_updated]) %></td>
-          </tr>
-        <% end %>
+              </div>
+            </td>
+          <% end %>
+        </tr>
       <% end %>
     </tbody>
   </table>
-  <% end %>
   <div class="empty_state_message">
     <%= viral_empty(
       title: t(:"projects.samples.show.no_metadata"),

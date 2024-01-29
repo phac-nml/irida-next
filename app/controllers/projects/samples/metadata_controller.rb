@@ -2,31 +2,30 @@
 
 module Projects
   module Samples
-    # Controller actions for Project Samples Attachments
+    # Controller actions for Project Samples Metadata
     class MetadataController < Projects::Samples::ApplicationController
-      def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def edit
         authorize! @project, to: :update_sample?
-        metadata_to_update = parse_metadata_input(metadata_params['metadata'])
+        render turbo_stream: turbo_stream.update('sample_files_modal',
+                                                 partial: 'edit_metadata_modal',
+                                                 locals: {
+                                                   open: true,
+                                                   key: params[:key],
+                                                   value: params[:value]
+                                                 }), status: :ok
+      end
+
+      def update
+        authorize! @project, to: :update_sample?
         respond_to do |format|
-          if metadata_to_update[:field_to_edit] == 'key' && validate_new_key(metadata_to_update[:new_key])
+          metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                                   metadata_params).execute
+          modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
+          if modified_metadata.count.positive?
             format.turbo_stream do
-              render status: :unprocessable_entity, locals: { type: 'error',
-                                                              message: t('.key_exists',
-                                                                         key: metadata_to_update[:new_key]),
-                                                              table_listing: @sample.metadata_with_provenance }
-            end
-          else
-            params_for_update = build_metadata_for_update(metadata_to_update)
-            metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
-                                                                     params_for_update).execute
-            modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
-            if modified_metadata.count.positive?
-              message = get_flash_message(metadata_fields, metadata_to_update)
-              format.turbo_stream do
-                render status: :ok, locals: { type: 'success',
-                                              message:,
-                                              table_listing: @sample.metadata_with_provenance }
-              end
+              render status: :ok, locals: { type: 'success',
+                                            message: t('.success'),
+                                            table_listing: @sample.metadata_with_provenance }
             end
           end
         end
@@ -34,6 +33,12 @@ module Projects
 
       private
 
+      # new service field-update-service
+      # new controller
+      #   samples-metadata-field-update-controller
+      #   - initially receives payload
+      #   - check key_exists
+      #   - create payload for updateservice
       def metadata_params
         params.require(:sample).permit(:analysis_id, metadata: {})
       end
