@@ -817,6 +817,7 @@ fr:
         edit_button: Edit this sample
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
+        edit_metadata: Edit Metadata
         error: The sample does not exist within the project.
         files: Files
         metadata:

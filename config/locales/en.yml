@@ -947,7 +947,7 @@ en:
             success: Sample metadata was successfully imported.
             error: "Metadata was not successfully imported for the following samples:"
         update:
-          success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
+          success: "Metadata was successfully updated"
         file_imports:
           create:
             success: Sample metadata was successfully imported.
@@ -1007,11 +1007,6 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
-      metadata:
-        update:
-          key_change_success: "Metadata key '%{old_key} was successfully updated to '%{new_key}'."
-          value_change_success: "Metadata key '%{key}' value was updated to '%{value}'."
-          key_exists: Metadata key '%{key}' already exists.
   workflow_executions:
     index:
       title: Workflow Executions
