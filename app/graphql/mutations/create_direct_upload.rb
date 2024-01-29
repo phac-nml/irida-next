@@ -42,7 +42,6 @@ module Mutations
     end
 
     def ready?(**_args)
-      # TODO: add check with api token??
       authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
     end
   end
