@@ -7,7 +7,7 @@ class AddPuidToProject < ActiveRecord::Migration[7.1]
 
     reversible do |dir|
       dir.up do
-        Project.all.each do |project|
+        Project.with_deleted.all.each do |project|
           project.update!(puid: Irida::PersistentUniqueId.generate(project, time: project.created_at))
         end
         change_column :projects, :puid, :string, null: false

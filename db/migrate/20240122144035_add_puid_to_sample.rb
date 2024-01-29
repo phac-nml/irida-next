@@ -7,7 +7,7 @@ class AddPuidToSample < ActiveRecord::Migration[7.1]
 
     reversible do |dir|
       dir.up do
-        Sample.all.each do |sample|
+        Sample.with_deleted.all.each do |sample|
           sample.update!(puid: Irida::PersistentUniqueId.generate(sample, time: sample.created_at))
         end
         change_column :samples, :puid, :string, null: false
