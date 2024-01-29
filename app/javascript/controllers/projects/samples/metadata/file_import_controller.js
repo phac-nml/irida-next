@@ -23,8 +23,7 @@ export default class extends Controller {
 
     if (!files.length) return;
 
-    //TODO: check file extension?
-    //TODO: clear select options before population
+    //QUESTION: Check file extension?  we already have an acceptance mime type list on the input file field.
 
     const reader = new FileReader();
     reader.readAsArrayBuffer(files[0]);
@@ -39,6 +38,7 @@ export default class extends Controller {
   }
 
   #addSelectOptions(headers) {
+    this.selectInputTarget.innerText = null;
     for (var header of headers) {
       const option = document.createElement("option");
       option.value = header;
