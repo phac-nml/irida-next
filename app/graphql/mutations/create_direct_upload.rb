@@ -5,20 +5,6 @@ module Mutations
   class CreateDirectUpload < BaseMutation
     description 'Create blob to upload data to.'
 
-    # File information required to prepare a direct upload
-    # class CreateDirectUploadInput < GraphQL::Schema::InputObject
-    #   description 'File information required to prepare a direct upload'
-
-    #   argument :byte_size, Int, 'File size (bytes)', required: true
-    #   argument :checksum, String, 'MD5 file checksum as base64', required: true
-    #   argument :content_type, String, 'File content type', required: true # rubocop:disable GraphQL/ExtractInputType
-    #   argument :filename, String, 'Original file name', required: true # rubocop:disable GraphQL/ExtractInputType
-    # end
-
-    # argument :input,
-    #          CreateDirectUploadInput,
-    #          required: true,
-    #          description: 'File information required to prepare a direct upload'
     argument :byte_size, Int, 'File size (bytes)', required: true
     argument :checksum, String, 'MD5 file checksum as base64', required: true
     argument :content_type, String, 'File content type', required: true # rubocop:disable GraphQL/ExtractInputType
@@ -46,8 +32,7 @@ module Mutations
 
       {
         direct_upload: {
-          # TODO: test this when a host is provided
-          # url: blob.service_url_for_direct_upload,
+          url: blob.service_url_for_direct_upload,
           # NOTE: we pass headers as JSON since they have no schema
           headers: blob.service_headers_for_direct_upload.to_json,
           blob_id: blob.id,
@@ -56,8 +41,9 @@ module Mutations
       }
     end
 
-    # def ready?(**_args)
-    #   authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
-    # end
+    def ready?(**_args)
+      # TODO: add check with api token??
+      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
+    end
   end
 end
