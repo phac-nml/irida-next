@@ -901,5 +901,45 @@ module Projects
       find('label', text: I18n.t('projects.samples.index.search.metadata')).click
       assert_selector 'table#samples-table thead tr th', count: 4
     end
+
+    test 'can sort samples by metadata column' do
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector 'label', text: I18n.t('projects.samples.index.search.metadata'), count: 1
+      assert_selector 'table#samples-table thead tr th', count: 4
+      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      assert_selector 'table#samples-table thead tr th', count: 6
+
+      click_on 'metadatafield1'
+
+      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @sample3.name
+        assert_selector 'tr:nth-child(2) td:first-child', text: @sample1.name
+        assert_selector 'tr:last-child td:first-child', text: @sample2.name
+      end
+
+      click_on 'metadatafield2'
+
+      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @sample3.name
+        assert_selector 'tr:nth-child(2) td:first-child', text: @sample1.name
+        assert_selector 'tr:last-child td:first-child', text: @sample2.name
+      end
+
+      # toggling metadata again causes sort to be reset
+      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      assert_selector 'table#samples-table thead tr th', count: 4
+
+      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @sample1.name
+        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.name
+        assert_selector 'tr:last-child td:first-child', text: @sample3.name
+      end
+    end
   end
 end
