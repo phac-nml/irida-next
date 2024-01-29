@@ -4,7 +4,8 @@
 module History
   extend ActiveSupport::Concern
 
-  def log_data_without_changes
+  def log_data_without_changes # rubocop:disable Metrics/AbcSize
+    version = version.to_i
     log_data = []
 
     reload_log_data.data['h'].each do |change_log|
