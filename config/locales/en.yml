@@ -694,6 +694,8 @@ en:
         project_created: "Project was created by %{user}"
         project_modified: "Project attributes were modified by %{user}"
         version_number: "Version %{version_number}"
+        previous_version: "Previous (Version %{version})"
+        current_version: "Current (Version %{version})"
     new:
       title: Create project
       placeholder: Awesome project name

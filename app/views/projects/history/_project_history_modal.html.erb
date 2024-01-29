@@ -1,46 +1,61 @@
-<%= viral_dialog(open: true, size: :extra_large, classes: ["overflow-visible"]) do |dialog| %>
+<%= viral_dialog(open: true, size: :large) do |dialog| %>
   <%= dialog.with_header(
     title: t(".version_number", version_number: log_data[:version])
   ) %>
   <%= dialog.with_section do %>
-    <div class="grid gap-4">
-      <div>
-        <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
+    <div>
+      <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+        <% if log_data[:version] == 1 %>
+          <p class="dark:text-slate-400"><%= t(".project_created", user: log_data[:user]) %></p>
+        <% else %>
+          <p class="dark:text-slate-400"><%= t(".project_modified", user: log_data[:user]) %></p>
+        <% end %>
+      </div>
+      <div class="grid grid-cols-3 gap-2 py-4">
+        <div class="col-span-1"></div>
+        <% if log_data[:version] != 1 %>
+          <div class="col-span-1 text-lg font-normal text-slate-500 dark:text-slate-400"><%= t(".previous_version", version: log_data[:version] - 1) %></div>
+        <% end %>
+        <div class="col-span-1 text-lg font-normal text-slate-500 dark:text-slate-400"><%= t(".current_version", version: log_data[:version]) %></div>
+      </div>
+      <dl
+        class="
+          text-slate-900
+          dark:text-white
+          divide-y
+          divide-slate-200
+          dark:divide-slate-700
+        "
+      >
+        <% log_data[:changes_from_prev_version].each do |key, value| %>
           <% if log_data[:version] == 1 %>
-            <p class="dark:text-gray-400"><%= t(".project_created", user: log_data[:user]) %></p>
-          <% else %>
-            <p class="dark:text-gray-400"><%= t(".project_modified", user: log_data[:user]) %></p>
+            <% next if value.blank? %>
           <% end %>
-        </div>
-        <dl class=" max-w-md text-gray-900 dark:text-white ">
-          <% log_data[:changes_from_prev_version].each do |key, value| %>
-            <% if log_data[:version] == 1 %>
-              <% next if value.blank? %>
-            <% end %>
-            <div class="grid grid-cols-8 gap-4">
-              <% if log_data[:version] != 1 %>
-                <div class="col-span-4">
-                  <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400"><%= key.to_s %></dt>
-                  <dd class="text-sm bg-[#ffebe9]"><%= log_data[:previous_version][key.to_s] %></dd>
-                </div>
-              <% end %>
-              <div class="col-span-4">
-                <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400"><%= key.to_s %></dt>
-                <dd class="text-sm bg-[#ccffd8] break-words"><%= value %></dd>
-              </div>
+          <div class="grid grid-cols-3 gap-2 py-2">
+            <div class="col-span-1">
+              <dt class="mb-1 text-slate-500 md:text-md dark:text-slate-400"><%= key.to_s %></dt>
             </div>
-          <% end %>
-        </dl>
-      </div>
-      <div class="my-4">
-        <button
-          type="button"
-          class="button button--size-default button--state-default"
-          data-action="click->viral--dialog#close"
-        >
-          <%= t(".close") %>
-        </button>
-      </div>
+            <% if log_data[:version] != 1 %>
+              <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+                <dd class="text-md"><%= log_data[:previous_version][key.to_s] %></dd>
+              </div>
+            <% end %>
+            <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+              <dd class="text-md break-words"><%= value %></dd>
+            </div>
+          </div>
+        <% end %>
+      </dl>
     </div>
+    <div class="my-4">
+      <button
+        type="button"
+        class="button button--size-default button--state-default"
+        data-action="click->viral--dialog#close"
+      >
+        <%= t(".close") %>
+      </button>
+    </div>
+
   <% end %>
 <% end %>
