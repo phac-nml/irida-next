@@ -15,6 +15,7 @@ module Projects
                                                  }), status: :ok
       end
 
+      # Receives the already validated metadata_param from metadata/fields_controller#update
       def update
         authorize! @project, to: :update_sample?
         metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
