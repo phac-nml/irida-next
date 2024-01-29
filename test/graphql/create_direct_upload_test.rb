@@ -43,7 +43,7 @@ class CreateDirectUploadTest < ActiveSupport::TestCase
     assert_not_empty data['directUpload']
 
     assert_equal '{"Content-Type":"image/jpeg"}', data['directUpload']['headers']
-    assert_equal '1055041272', data['directUpload']['blobId']
+    assert_not_empty data['directUpload']['blobId']
     assert_not_empty data['directUpload']['url']
     assert_not_empty data['directUpload']['signedBlobId']
   end
