@@ -38,12 +38,16 @@ export default class extends Controller {
   }
 
   #addSelectOptions(headers) {
-    this.selectInputTarget.innerText = null;
+    //clear the select options
+    for (var i = this.selectInputTarget.options.length - 1; i > 0; i--) {
+      this.selectInputTarget.remove(i);
+    }
+    //populate select options
     for (var header of headers) {
       const option = document.createElement("option");
       option.value = header;
       option.text = header;
-      this.selectInputTarget.appendChild(option);
+      this.selectInputTarget.append(option);
     }
   }
 
