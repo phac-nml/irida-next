@@ -691,8 +691,8 @@ en:
         modified_by: "Project modified by %{user}"
       project_history_modal:
         close: Close
-        project_created: Project was created
-        project_modified: Project attributes were modified
+        project_created: "Project was created by %{user}"
+        project_modified: "Project attributes were modified by %{user}"
         version_number: "Version %{version_number}"
     new:
       title: Create project
