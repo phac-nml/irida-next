@@ -26,10 +26,7 @@ class WorkflowExecutionsController < ApplicationController
     @workflow_execution.state = 'canceling'
     @workflow_execution.save
 
-    @workflows = WorkflowExecution.where(submitter: current_user)
-
-    render turbo_stream: turbo_stream.replace('workflow_executions', partial: 'workflow_executions/table',
-                                                                     locals: { workflows: @workflows })
+    render 'cancel'
 
     # WorkflowExecutionStatusJob.perform_now(@workflow_execution)
   end
