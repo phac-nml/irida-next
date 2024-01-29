@@ -20,6 +20,8 @@ module Samples
         def execute
           authorize! @project, to: :update_sample?
 
+          validate_sample_in_project
+
           validate_edit_fields
 
           construct_metadata_update_params
@@ -29,6 +31,15 @@ module Samples
         end
 
         private
+
+        def validate_sample_in_project
+          return unless @project.id != @sample.project.id
+
+          raise SampleMetadataUpdateError,
+                I18n.t('services.samples.metadata.fields.sample_does_not_belong_to_project',
+                       sample_name: @sample.name,
+                       project_name: @project.name)
+        end
 
         # Checks if neither key or value were changed
         def validate_edit_fields
