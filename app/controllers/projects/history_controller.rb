@@ -27,7 +27,7 @@ module Projects
       when 'index', 'new'
         @context_crumbs += [{
           name: I18n.t('projects.history.index.title'),
-          path: namespace_project_history_index_path
+          path: namespace_project_history_path
         }]
       end
     end

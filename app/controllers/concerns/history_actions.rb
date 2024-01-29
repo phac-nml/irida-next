@@ -12,7 +12,12 @@ module HistoryActions
   def index
     authorize! @authorize_object, to: :view_history?
 
-    @log_data = @model.log_data_without_changes
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        @log_data = @model.log_data_without_changes
+      end
+    end
   end
 
   def new

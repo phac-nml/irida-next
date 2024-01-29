@@ -4,9 +4,12 @@
 
 <div class="grid gap-4 px-4">
   <%= turbo_frame_tag "history_modal" %>
-  <%= render HistoryComponent.new(
-    data: @log_data.reverse,
-    type: "Project",
-    url: new_project_history_path(@project)
-  ) %>
+
+  <%= turbo_frame_tag "project_history",
+  src:
+    namespace_project_history_url(
+      format: :turbo_stream,
+      **request.query_parameters
+    ),
+  loading: :lazy %>
 </div>
