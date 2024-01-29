@@ -982,6 +982,8 @@ en:
         edit_fields:
           metadata_was_not_changed: "Metadata fields were not changed."
           key_exists: "Sample already contains metadata field '%{key}'."
+        fields:
+          sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         import_file:
           empty_file: The file cannot be empty.
           empty_sample_id_column: The sample id column cannot be empty.

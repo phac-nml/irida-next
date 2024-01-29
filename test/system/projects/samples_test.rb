@@ -878,10 +878,10 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text I18n.t('projects.samples.show.table_header.key')
         assert_selector 'table#metadata-table tbody tr', count: 2
-        assert_selector 'input#sample_metadata_metadatafield1_key[value="metadatafield1"]', count: 1
-        assert_selector 'input#sample_metadata_metadatafield1_value[value="value1"]', count: 1
-        assert_selector 'input#sample_metadata_metadatafield2_key[value="metadatafield2"]', count: 1
-        assert_selector 'input#sample_metadata_metadatafield2_value[value="value2"]', count: 1
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
       end
     end
 
@@ -891,15 +891,24 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        find('input[id="sample_metadata_metadatafield1_key"]').fill_in with: 'newMetadataKey'
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        first('button.Viral-Dropdown--icon').click
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.edit')
       end
 
-      assert_text I18n.t('projects.samples.metadata.update.key_change_success', old_key: 'metadatafield1',
-                                                                                new_key: 'newMetadataKey')
+      within %(turbo-frame[id="sample_files_modal"]) do
+        assert_text I18n.t('projects.samples.show.metadata.edit.edit_metadata')
+        assert_selector 'input#sample_edit_field_key_metadatafield1', count: 1
+        assert_selector 'input#sample_edit_field_value_value1', count: 1
+        find('input#sample_edit_field_key_metadatafield1').fill_in with: 'newMetadataKey'
+        click_on I18n.t('projects.samples.show.metadata.edit.edit')
+      end
 
-      assert_selector 'input#sample_metadata_newMetadataKey_key[value="newMetadataKey"]',
-                      count: 1
-      assert_no_selector 'input#sample_metadata_metadatafield1_key[value="metadatafield1"]'
+      assert_text I18n.t('projects.samples.metadata.update.success')
+      assert_no_text 'metadatafield1'
+      assert_text 'newMetadataKey'
+      assert_text 'value1'
     end
 
     test 'edit metadata value' do
