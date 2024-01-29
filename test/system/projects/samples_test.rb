@@ -891,11 +891,15 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        find('input[id="sample_metadata_metadatafield1_key"]').fill_in with: 'new metadata key'
+        find('input[id="sample_metadata_metadatafield1_key"]').fill_in with: 'newMetadataKey'
       end
 
       assert_text I18n.t('projects.samples.metadata.update.key_change_success', old_key: 'metadatafield1',
-                                                                                new_key: 'new metadata key')
+                                                                                new_key: 'newMetadataKey')
+
+      assert_selector 'input#sample_metadata_newMetadataKey_key[value="newMetadataKey"]',
+                      count: 1
+      assert_no_selector 'input#sample_metadata_metadatafield1_key[value="metadatafield1"]'
     end
 
     test 'edit metadata value' do
@@ -904,11 +908,13 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        find('input[id="sample_metadata_metadatafield1_value"]').fill_in with: 'new metadata value'
+        find('input[id="sample_metadata_metadatafield1_value"]').fill_in with: 'newMetadataValue'
       end
 
       assert_text I18n.t('projects.samples.metadata.update.value_change_success', key: 'metadatafield1',
-                                                                                  value: 'new metadata value')
+                                                                                  value: 'newMetadataValue')
+      assert_selector 'input#sample_metadata_metadatafield1_value[value="newMetadataValue"]', count: 1
+      assert_no_selector 'input#sample_metadata_metadatafield1_value[value="value1"]'
     end
 
     test 'cannot edit metadata key with key that already exists' do

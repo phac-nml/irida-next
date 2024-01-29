@@ -22,7 +22,7 @@
     <tbody>
       <% sample_metadata.each do |metadata| %>
         <%= form.fields_for :metadata do |metadata_field| %>
-        <input type='hidden' data-projects--samples--metadata--edit-target="metadataEdit">
+        <input type='hidden' data-projects--samples--metadata--edit-target="editSubmission">
           <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
             <% if allowed_to?(:update_sample?, @project) %>
               <% if metadata[:source_type] == 'user' %>
