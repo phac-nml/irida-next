@@ -313,7 +313,9 @@ en:
     history:
       latest: Latest
       created_by: "%{type} created by %{user}"
+      deleted_by: "%{type} deleted by %{user}"
       modified_by: "%{type} modified by %{user}"
+      restored_by: "%{type} restored by %{user}"
       link_text: "Version %{version}"
   layouts:
     application:
@@ -692,7 +694,9 @@ en:
       project_history_modal:
         close: Close
         project_created: "Project was created by %{user}"
+        project_deleted: "Project was deleted by %{user}"
         project_modified: "Project attributes were modified by %{user}"
+        project_restored: "Project was restored by %{user}"
         version_number: "Version %{version_number}"
         previous_version: "Previous (Version %{version})"
         current_version: "Current (Version %{version})"

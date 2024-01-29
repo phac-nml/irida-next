@@ -67,6 +67,10 @@
       <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
         <% if changes[:version] == 1 %>
           <%= t(:"components.history.created_by", type: @type, user: changes[:user]) %>
+        <% elsif changes[:deleted] %>
+          <%= t(:"components.history.deleted_by", type: @type, user: changes[:user]) %>
+        <% elsif changes[:restored] %>
+          <%= t(:"components.history.restored_by", type: @type, user: changes[:user]) %>
         <% else %>
           <%= t(:"components.history.modified_by", type: @type, user: changes[:user]) %>
         <% end %>
