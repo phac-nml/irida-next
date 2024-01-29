@@ -2,8 +2,17 @@
   "sample_files_modal",
   partial: "projects/samples/metadata/edit_metadata_modal",
   locals: {
-    open: @sample.errors.any?,
+    open: true,
     key:,
     value:
   }
 ) %>
+
+<% if @sample.errors.any? %>
+  <%= turbo_stream.update "update-alert",
+                      viral_alert(
+                        type: "alert",
+                        message: @sample.errors.full_messages.first,
+                        classes: "mb-4"
+                      ) %>
+<% end %>
