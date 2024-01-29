@@ -7,13 +7,9 @@
       <div>
         <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
           <% if log_data[:version] == 1 %>
-            <p class="dark:text-gray-400"><%= t(".project_created") %>
-              by
-              <%= log_data[:user] %></p>
+            <p class="dark:text-gray-400"><%= t(".project_created", user: log_data[:user]) %></p>
           <% else %>
-            <p class="dark:text-gray-400"><%= t(".project_modified") %>
-              by
-              <%= log_data[:user] %></p>
+            <p class="dark:text-gray-400"><%= t(".project_modified", user: log_data[:user]) %></p>
           <% end %>
         </div>
         <dl class=" max-w-md text-gray-900 dark:text-white ">
