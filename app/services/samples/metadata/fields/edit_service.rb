@@ -30,12 +30,14 @@ module Samples
 
         private
 
+        # Checks if neither key or value were changed
         def validate_edit_fields
           return unless @key_edit.keys[0] == @key_edit.values[0] && @value_edit.keys[0] == @value_edit.values[0]
 
           raise SampleMetadataFieldsEditError, I18n.t('services.samples.metadata.edit_fields.metadata_was_not_changed')
         end
 
+        # Constructs the expected param for metadata update_service
         def construct_metadata_update_params
           metadata_update_params = { metadata: {} }
           if @key_edit.keys[0] != @key_edit.values[0]
@@ -51,6 +53,7 @@ module Samples
           metadata_update_params
         end
 
+        # Checks if the new key already exists within the @sample.metadata
         def validate_new_key
           key_exists = false
           @sample.metadata.each do |k, _v|
