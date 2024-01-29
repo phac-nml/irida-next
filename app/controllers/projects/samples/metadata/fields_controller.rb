@@ -9,8 +9,8 @@ module Projects
 
         def update # rubocop:disable Metrics/AbcSize
           authorize! @project, to: :update_sample?
-          metadata_update_params = ::Samples::Metadata::EditFieldsService.new(@project, @sample, current_user,
-                                                                              edit_field_params).execute
+          metadata_update_params = ::Samples::Metadata::Fields::EditService.new(@project, @sample, current_user,
+                                                                                edit_field_params).execute
           if metadata_update_params.empty?
             render status: :unprocessable_entity,
                    locals: { key: edit_field_params['edit_field']['key'].values[0],
