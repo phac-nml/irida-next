@@ -59,8 +59,6 @@ module History
   end
 
   # Format keys in changes to format required
-  # Currently converts string to date time and formats to YYYY-MM-DD H:M
-  # for created_at, deleted_at, and updated_at
   def format_changes(changes)
     datetime_format = I18n.t('time.formats.default')
 
