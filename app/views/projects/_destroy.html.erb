@@ -6,7 +6,7 @@
     </p>
     <div class="mt-4">
       <%= link_to t(:"projects.edit.advanced.destroy.submit"),
-      project_path(project),
+      namespace_project_path,
       data: {
         turbo_method: :delete,
         turbo_confirm: t(:"projects.edit.advanced.destroy.confirm")

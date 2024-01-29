@@ -949,11 +949,6 @@ en:
       destroy:
         does_not_belong_to_attachable: This attachment does not belong to this sample.
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
-    groups:
-      transfer:
-        namespace_empty: The new namespace is empty.
-        same_group_and_namespace: The new namespace must be different from the group.
-        namespace_group_exists: A group with the same name/path already exists in the new namespace.
     members:
       create:
         role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"
@@ -983,15 +978,19 @@ en:
           missing_metadata_column: The file does not have any metadata columns. Please add some columns of metadata to the file and retry uploading.
           missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
           sample_not_found: "'%{sample_name}' is not found within this project"
-    projects:
-      transfer:
-        namespace_project_exists: Project with the same name or path already exists in the target namespace.
-    groups:
-      share:
-        group_not_found: Group with id %{group_id} to share namespace with cannot be found.
     namespaces:
       share:
         invalid_namespace_type: Only a group or project namespace can be shared with a group.
+    groups:
+      transfer:
+        namespace_empty: The new namespace is empty.
+        same_group_and_namespace: The new namespace must be different from the group.
+        namespace_group_exists: A group with the same name/path already exists in the new namespace.
+      share:
+        group_not_found: Group with id %{group_id} to share namespace with cannot be found.
+    projects:
+      transfer:
+        namespace_project_exists: Project with the same name or path already exists in the target namespace.
   application:
     errors:
       access_denied: Access Denied.

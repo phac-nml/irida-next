@@ -42,11 +42,7 @@ module Routable
   end
 
   def full_path
-    if route&.persisted? && route&.invalid?
-      route.reload.path
-    else
-      (route&.path || build_full_path)
-    end
+    (route&.path || build_full_path)
   end
 
   def abbreviated_path
