@@ -71,6 +71,8 @@
           <%= t(:"components.history.deleted_by", type: @type, user: changes[:user]) %>
         <% elsif changes[:restored] %>
           <%= t(:"components.history.restored_by", type: @type, user: changes[:user]) %>
+        <% elsif changes[:transferred] %>
+          <%= t(:"components.history.transferred_by", type: @type, user: changes[:user]) %>
         <% else %>
           <%= t(:"components.history.modified_by", type: @type, user: changes[:user]) %>
         <% end %>

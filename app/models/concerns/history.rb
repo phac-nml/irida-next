@@ -13,7 +13,8 @@ module History
       log_data << { version: change_log['v'], user: responsible,
                     updated_at: DateTime.parse(change_log['c']['updated_at']).strftime('%a %b %e %Y %H:%M'),
                     restored: record_restored?(change_log, version),
-                    deleted: record_deleted?(change_log) }
+                    deleted: record_deleted?(change_log),
+                    transferred: record_transferred?(change_log, version) }
     end
     log_data
   end
@@ -80,5 +81,11 @@ module History
     return false if version == 1
 
     change_log['c'].key?('deleted_at') && change_log['c']['deleted_at'].blank?
+  end
+
+  def record_transferred?(change_log, version)
+    return false if version == 1
+
+    change_log['c'].key?('parent_id') || change_log['c'].key?('project_id')
   end
 end
