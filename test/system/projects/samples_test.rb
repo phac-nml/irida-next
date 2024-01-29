@@ -762,7 +762,7 @@ module Projects
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated file'
         check 'Delete originals'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
-        !assert_html5_inputs_valid # rubocop:disable Lint/Void
+        assert_html5_inputs_valid
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
@@ -1075,6 +1075,53 @@ module Projects
         assert_selector 'tr:first-child td:first-child', text: @sample1.name
         assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.name
         assert_selector 'tr:last-child td:first-child', text: @sample3.name
+      end
+    end
+
+    test 'should not import metadata' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text I18n.t('projects.samples.index.import_metadata_button'), count: 0
+    end
+
+    test 'should import metadata' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+    end
+
+    test 'should import metadata with file validation errors' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_row')
+      end
+    end
+
+    test 'should import metadata with missing sample errors' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.errors.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
       end
     end
   end
