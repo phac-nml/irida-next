@@ -897,7 +897,7 @@ module Projects
         click_on I18n.t('projects.samples.show.metadata.actions.dropdown.edit')
       end
 
-      within %(turbo-frame[id="sample_files_modal"]) do
+      within %(turbo-frame[id="sample_modal"]) do
         assert_text I18n.t('projects.samples.show.metadata.edit.edit_metadata')
         assert_selector 'input#sample_edit_field_key_metadatafield1', count: 1
         assert_selector 'input#sample_edit_field_value_value1', count: 1

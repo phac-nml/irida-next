@@ -9,7 +9,7 @@ module Projects
 
         def new
           authorize! @sample, to: :destroy_attachment?
-          render turbo_stream: turbo_stream.update('sample_files_modal',
+          render turbo_stream: turbo_stream.update('sample_modal',
                                                    partial: 'modal',
                                                    locals: {
                                                      open: true
