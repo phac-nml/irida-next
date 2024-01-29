@@ -28,36 +28,8 @@
           </th>
         </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-        <% @workflows.each do |workflow| %>
-          <tr>
-            <td class="w-4 p-4 whitespace-nowrap">
-              <%= workflow.run_id %>
-            </td>
-            <td class="w-4 p-4 whitespace-nowrap">
-              <%= workflow.metadata["workflow_name"] %>
-            </td>
-            <td class="w-4 p-4 whitespace-nowrap">
-              <%= workflow.metadata["workflow_version"] %>
-            </td>
-            <td class="w-4 p-4 whitespace-nowrap">
-              <%= workflow["state"] || "new" %>
-            </td>
-            <td class="w-4 p-4 whitespace-nowrap">
-              <%= viral_time_ago(original_time: workflow["created_at"]) %>
-            </td>
-            <td class="w-4 p-4 whitespace-nowrap">
-              <%= viral_time_ago(original_time: workflow["updated_at"]) %>
-            </td>
-            <td class="w-4 p-4 whitespace-nowrap">
-              <% if cancellable?(workflow) %>
-                <%= form_with method: :put, url: workflow_execution_cancel_path(workflow) do |form| %>
-                  <%= form.submit t(:'.actions.cancel'), class: "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
-                <% end %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
+        <tbody>
+        <%= render partial: "workflow_execution", collection: @workflows %>
         </tbody>
       </table>
     </div>

@@ -1,0 +1,31 @@
+<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" id="<%= dom_id(workflow_execution) %>">
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%=workflow_execution.run_id %>
+  </td>
+  <td
+    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+  >
+    <%=workflow_execution.metadata["workflow_name"] %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%=workflow_execution.metadata["workflow_version"] %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%=workflow_execution["state"] || "NEW" %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= l(workflow_execution["created_at"].localtime, format: :full_date) %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= viral_time_ago(original_time:workflow_execution["updated_at"]) %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <% if cancellable?(workflow_execution) %>
+      <%= form_with method: :put, url: workflow_execution_cancel_path(workflow_execution) do |form| %>
+        <%= form.submit t(:'workflow_executions.index.actions.cancel'),
+                        class:
+                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>
