@@ -27,7 +27,6 @@ module Mutations
     field :direct_upload, DirectUpload, null: false, description: 'Represents direct upload credentials'
 
     def resolve(byte_size:, checksum:, content_type:, filename:)
-      # TODO: connect to host api and verify token
       blob = ActiveStorage::Blob.create_before_direct_upload!(byte_size:, checksum:, content_type:, filename:)
 
       {
