@@ -12,11 +12,8 @@ class SessionsController < Devise::SessionsController
       if resource_class.omniauth_providers.empty?
         render :new_with_no_providers
       else
-        @local_account = if flash.empty?
-                           params[:local]
-                         else
-                           'true'
-                         end
+        @local_account = params[:local]
+
         render :new_with_providers
       end
       return
