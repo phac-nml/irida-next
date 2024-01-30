@@ -47,7 +47,7 @@ module Integrations
                           workflow_attachment: '' }
           post(
             endpoint: 'runs',
-            params: base_params.merge(params)
+            data: base_params.merge(params)
           )
         end
 
@@ -96,7 +96,7 @@ module Integrations
             workflow_type: 'NEXTFLOW',
             workflow_type_version: '21.04.0',
             workflow_url: 'https://github.com/jb-adams/md5-nf',
-            workflow_params: '{ file_int: 3 }'
+            workflow_params: { file_int: 3 }
           )
         end
       end

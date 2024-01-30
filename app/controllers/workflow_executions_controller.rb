@@ -23,10 +23,8 @@ class WorkflowExecutionsController < ApplicationController
 
   def cancel
     @workflow_execution = WorkflowExecution.find(params[:workflow_execution_id])
-    @workflow_execution.state = 'canceling'
-    @workflow_execution.save
 
-    WorkflowExecutionCancelationJob.perform_now(@workflow_execution, current_user)
+    @workflow_execution = WorkflowExecutionCancelationJob.perform_now(@workflow_execution, current_user)
 
     render 'cancel'
   end
