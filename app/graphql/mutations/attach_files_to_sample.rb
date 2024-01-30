@@ -15,7 +15,7 @@ module Mutations
 
     def resolve(sample_id:, files:)
       sample = IridaSchema.object_from_id(sample_id, { expected_type: Sample })
-      files_attached = Attachments::CreateService.new(current_user, sample, { 'files' => files }).execute
+      files_attached = Attachments::CreateService.new(current_user, sample, { files: }).execute
       {
         sample:,
         status: files_attached,
