@@ -16,8 +16,35 @@ module Projects
             @namespace = groups(:subgroup_twelve_a)
           end
 
+          test 'update metadata key' do
+            patch namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
+                  params: { 'sample' => { 'edit_field' => {
+                    'key' => { 'metadatafield1' => 'metadatafield3' },
+                    'value' => { 'value1' => 'value1' }
+                  } }, format: :turbo_stream }
+            assert_response :ok
+          end
+
+          test 'update metadata value' do
+            patch namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
+                  params: { 'sample' => { 'edit_field' => {
+                    'key' => { 'metadatafield1' => 'metadatafield1' },
+                    'value' => { 'value1' => 'value2' }
+                  } }, format: :turbo_stream }
+            assert_response :ok
+          end
+
+          test 'update metadata key and value' do
+            patch namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
+                  params: { 'sample' => { 'edit_field' => {
+                    'key' => { 'metadatafield1' => 'metadatafield3' },
+                    'value' => { 'value1' => 'value2' }
+                  } }, format: :turbo_stream }
+            assert_response :ok
+          end
+
           test 'cannot update metadata key with key that already exists' do
-            patch namespace_project_sample_metadata_path(@namespace, @project29, @sample32),
+            patch namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
                   params: { 'sample' => { 'edit_field' => {
                     'key' => { 'metadatafield1' => 'metadatafield2' },
                     'value' => { 'value1' => 'value1' }
@@ -25,17 +52,17 @@ module Projects
             assert_response :unprocessable_entity
           end
 
-          test 'metadata was not updated' do
-            patch namespace_project_sample_metadata_path(@namespace, @project29, @sample32),
+          test 'update metadata with unchanged metadata' do
+            patch namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
                   params: { 'sample' => { 'edit_field' => {
-                    'key' => { 'metadatafield1' => 'metadatafield3' },
-                    'value' => { 'value1' => 'value3' }
+                    'key' => { 'metadatafield1' => 'metadatafield1' },
+                    'value' => { 'value1' => 'value1' }
                   } }, format: :turbo_stream }
             assert_response :unprocessable_entity
           end
 
           test 'cannot edit metadata if sample does not belong to the project' do
-            patch namespace_project_sample_metadata_path(@namespace, @project4, @sample32),
+            patch namespace_project_sample_metadata_field_path(@namespace, @project4, @sample32),
                   params: { 'sample' => { 'edit_field' => {
                     'key' => { 'metadatafield1' => 'metadatafield3' },
                     'value' => { 'value1' => 'value3' }
@@ -45,7 +72,7 @@ module Projects
 
           test 'cannot update sample if not a member with access to the project' do
             sign_in users(:david_doe)
-            patch namespace_project_sample_metadata_path(@namespace, @project29, @sample32),
+            patch namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
                   params: { 'sample' => { 'edit_field' => {
                     'key' => { 'metadatafield1' => 'metadatafield3' },
                     'value' => { 'value1' => 'value3' }

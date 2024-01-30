@@ -22,14 +22,6 @@ module Projects
                                                    value: params[:value]
                                                  }), status: :ok
       end
-
-      def get_flash_message(metadata_fields, metadata_to_update)
-        if metadata_fields[:added].count.positive? && metadata_fields[:deleted].count.positive?
-          t('.key_change_success', old_key: metadata_fields[:deleted][0], new_key: metadata_fields[:added][0])
-        else
-          t('.value_change_success', key: metadata_fields[:updated][0], value: metadata_to_update[:new_value])
-        end
-      end
     end
   end
 end
