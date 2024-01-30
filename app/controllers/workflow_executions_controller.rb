@@ -26,9 +26,9 @@ class WorkflowExecutionsController < ApplicationController
     @workflow_execution.state = 'canceling'
     @workflow_execution.save
 
-    render 'cancel'
+    WorkflowExecutionCancelationJob.perform_now(@workflow_execution, current_user)
 
-    # WorkflowExecutionStatusJob.perform_now(@workflow_execution)
+    render 'cancel'
   end
 
   private
