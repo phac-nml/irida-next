@@ -23,31 +23,35 @@ module Projects
                                                  }), status: :ok
       end
 
-      def create # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        puts 'helloooooo'
+      def create
+        puts 'params'
         puts params
-        new_metadata = validate_new_metadata(metadata_params['metadata'])
-        flash_messages = {}
+        puts metadata_params['existing_keys']
+        metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                                 metadata_params).execute
+        render_params = get_add_status_and_messages(metadata_fields, metadata_params['existing_keys'])
+        # new_metadata = validate_new_metadata(metadata_params['metadata'])
+        # flash_messages = {}
 
-        unless new_metadata['to_add']['metadata'].empty?
-          metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
-                                                                   new_metadata['to_add']).execute
-          flash_messages[:success] =
-            { type: 'success',
-              message: t('.success', new_keys: metadata_fields[:added].join(', '), sample_name: @sample.name) }
-        end
+        # unless new_metadata['to_add']['metadata'].empty?
+        #   metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+        #                                                            new_metadata['to_add']).execute
+        #   flash_messages[:success] =
+        #     { type: 'success',
+        #       message: t('.success', new_keys: metadata_fields[:added].join(', '), sample_name: @sample.name) }
+        # end
 
-        if new_metadata['exists'].count.positive?
-          flash_messages[:error] = { type: 'error',
-                                     message: t('.error', existing_keys: new_metadata['exists'].join(', ')) }
-        end
+        # if new_metadata['exists'].count.positive?
+        #   flash_messages[:error] = { type: 'error',
+        #                              message: t('.error', existing_keys: new_metadata['exists'].join(', ')) }
+        # end
 
-        status = get_add_status(flash_messages)
-        respond_to do |format|
-          format.turbo_stream do
-            render status:, locals: { flash_messages:, table_listing: @sample.metadata_with_provenance }
-          end
-        end
+        # status = get_add_status(flash_messages)
+        # respond_to do |format|
+        #   format.turbo_stream do
+        #     render status:, locals: { flash_messages:, table_listing: @sample.metadata_with_provenance }
+        #   end
+        # end
       end
 
       def update # rubocop:disable Metrics/AbcSize
@@ -67,54 +71,20 @@ module Projects
 
       private
 
+      def add_metadata_params
+        params.require(:sample).permit(metadata: {}, existing_keys: [])
+      end
+
       def metadata_params
         params.require(:sample).permit(metadata: {})
       end
 
-      def validate_new_metadata(metadata)
-        validated_metadata = { 'to_add' => { 'metadata' => {} }, 'exists' => [] }
-        metadata.each do |key, value|
-          key_exists = validate_new_key(key)
-          key_exists ? validated_metadata['exists'] << key : validated_metadata['to_add']['metadata'][key] = value
-        end
-        validated_metadata
-      end
+      def get_add_status_and_messages(metadata, existing_keys)
+        puts 'keys exist' if existing_keys.count.positive?
 
-      # Checks to ensure the user has not changed a metadata key to one that already exists
-      def validate_new_key(key)
-        key_exists = false
-        @sample.metadata.each do |k, _v|
-          if k.downcase == key.downcase
-            key_exists = true
-            break
-          end
-        end
-        key_exists
-      end
+        return unless metadata[:added]
 
-      def get_add_messages(added_metadata, existing_metadata)
-        messages = {}
-        if added_metadata.count.positive?
-          messages[:success] = { type: 'success',
-                                 message: t('.success', new_keys: added_metadata.join(', '),
-                                                        sample_name: @sample.name) }
-        end
-
-        if existing_metadata.count.positive?
-          messages[:error] = { type: 'error',
-                               message: t('.error', existing_keys: existing_metadata.join(', ')) }
-        end
-        get_add_status(messages)
-      end
-
-      def get_add_status(messages)
-        if messages[:success] && (messages[:error] || @sample.errors.any?)
-          :multi_status
-        elsif messages[:success]
-          :ok
-        else
-          :unprocessable_entity
-        end
+        puts 'added metadata'
       end
     end
   end

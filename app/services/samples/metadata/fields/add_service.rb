@@ -7,14 +7,15 @@ module Samples
       # to metadata_controller#update and Samples::Metadata::UpdateService
       class AddService < BaseService
         SampleMetadataFieldsAddError = Class.new(StandardError)
-        attr_accessor :project, :sample, :add_fields, :metadata_update_params
+        attr_accessor :project, :sample, :add_fields, :metadata_update_params, :existing_keys
 
         def initialize(project, sample, user = nil, add_fields = {})
           super(user, params)
           @project = project
           @sample = sample
           @add_fields = add_fields
-          @metadata_update_params = { metadata: {}, key_exists: [] }
+          @metadata_update_params = { metadata: {} }
+          @existing_keys = []
         end
 
         def execute
@@ -23,6 +24,11 @@ module Samples
           validate_sample_in_project
 
           construct_metadata_update_params
+
+          updated_metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                                           @metadata_update_params).execute
+
+          { updated_metadata_fields:, existing_keys: @metadata_update_params[:existing_keys] }
         rescue Samples::Metadata::Fields::AddService::SampleMetadataFieldsAddError => e
           @sample.errors.add(:base, e.message)
           @metadata_update_params
@@ -42,7 +48,7 @@ module Samples
         def construct_metadata_update_params
           @add_fields.each do |k, v|
             if validate_key(k)
-              @metadata_update_params[:key_exists] << key
+              @metadata_update_params[:existing_keys] << k
             else
               @metadata_update_params[:metadata][k] = v
             end

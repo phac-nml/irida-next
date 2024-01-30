@@ -6,6 +6,19 @@ module Projects
       # Controller actions for Project Samples Metadata Fields Controller
       class FieldsController < Projects::Samples::ApplicationController
         respond_to :turbo_stream
+        def create
+          authorize! @project, to: :update_sample?
+          metadata_fields = ::Samples::Metadata::Fields::AddService.new(@project, @sample, current_user,
+                                                                        add_field_params['add_fields']).execute
+
+          puts 'metadata update params'
+          puts metadata_update_params
+          request[:sample] = metadata_update_params
+          Projects::Samples::MetadataController.dispatch(:create, request, response)
+        end
+
+        # Validates metadata edit params and builds the expected update_service param prior to calling
+        # MetadataController and the metadata update_service
 
         # Param is received as:
         # params: {sample: {edit_field: {key: {old_key: new_key}, value: {old_value: new_value}}}
