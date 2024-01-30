@@ -4,7 +4,7 @@ module Mutations
   # Mutation that attaches files to sample
   class AttachFilesToSample < BaseMutation
     description 'Attaches files to sample.'
-    argument :files, [String], required: true, description: 'A list of files to attach to the sample'
+    argument :files, [String], required: true, description: 'A list of files (signedBlobId) to attach to the sample'
     argument :sample_id, ID,
              required: true,
              description: 'The Node ID of the sample to be updated.'

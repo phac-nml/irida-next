@@ -19,7 +19,7 @@ module Types
     field :files,
           [String],
           null: true,
-          description: 'signedBlobId[???] of files on the sample',
+          description: 'signedBlobId\'s of files on the sample',
           resolver: Resolvers::SampleAttachmentsResolver
 
     def self.authorized?(object, context)

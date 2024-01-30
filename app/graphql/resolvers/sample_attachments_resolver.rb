@@ -10,7 +10,7 @@ module Resolvers
     def resolve
       scope = sample
 
-      scope.attachments # todo, return list of signedBlobId[???] strings, not obj id
+      scope.attachments
     end
   end
 end
