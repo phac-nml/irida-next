@@ -1003,6 +1003,22 @@ module Projects
         assert_text 'value2'
       end
     end
+    test 'user cannot edit metadata added by an analysis' do
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
+      @project31 = projects(:project31)
+      @sample34 = samples(:sample34)
+
+      visit namespace_project_sample_url(@subgroup12aa, @project31, @sample34)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text "#{I18n.t('models.sample.analysis')} 1"
+        first('button.Viral-Dropdown--icon').click
+        assert_no_text I18n.t('projects.samples.show.metadata.actions.dropdown.edit')
+      end
+    end
 
     test 'should be able to toggle metadata' do
       visit namespace_project_samples_url(@namespace, @project)

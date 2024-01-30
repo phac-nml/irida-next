@@ -30,13 +30,15 @@
                 aria:
                   { label: t(:'projects.samples.show.metadata.actions.metadata_dropdown_aria_label',
                   key: metadata[:key])}) do |dropdown| %>
-                  <%= dropdown.with_item(
-                    label: t(:'projects.samples.show.metadata.actions.dropdown.edit'),
-                    url: edit_namespace_project_sample_metadata_path(
-                      sample_id: @sample.id,
-                      key: metadata[:key],
-                      value: metadata[:value])
-                  ) %>
+                  <% unless metadata[:source_type] == 'analysis' %>
+                    <%= dropdown.with_item(
+                      label: t(:'projects.samples.show.metadata.actions.dropdown.edit'),
+                      url: edit_namespace_project_sample_metadata_path(
+                        sample_id: @sample.id,
+                        key: metadata[:key],
+                        value: metadata[:value])
+                    ) %>
+                  <% end %>
                 <% end %>
               </div>
             </td>
