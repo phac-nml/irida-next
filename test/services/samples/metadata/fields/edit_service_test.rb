@@ -9,16 +9,10 @@ module Samples
         def setup
           @user = users(:john_doe)
           @sample32 = samples(:sample32)
-          @sample33 = samples(:sample33)
-          @sample34 = samples(:sample34)
-          @sample35 = samples(:sample35)
           @project29 = projects(:project29)
           @project30 = projects(:project30)
-          @project31 = projects(:project31)
           @group12 = groups(:group_twelve)
           @subgroup12a = groups(:subgroup_twelve_a)
-          @subgroup12b = groups(:subgroup_twelve_b)
-          @subgroup12aa = groups(:subgroup_twelve_a_a)
         end
 
         test 'edit metadata key' do
@@ -32,6 +26,7 @@ module Samples
           assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
           metadata_changes = Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+
           assert_equal({ 'metadatafield2' => 'value2', 'metadatafield3' => 'value1' }, @sample32.metadata)
           assert_equal({ 'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
                                                'updated_at' => '2000-01-01T00:00:00.000+00:00' },
@@ -39,7 +34,6 @@ module Samples
                        @sample32.metadata_provenance)
           assert_equal({ added: %w[metadatafield3], updated: [], deleted: %w[metadatafield1],
                          not_updated: [] }, metadata_changes)
-
           assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
                        @project29.namespace.reload.metadata_summary)
           assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 2, 'metadatafield3' => 1 },
@@ -59,6 +53,7 @@ module Samples
           assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
           metadata_changes = Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+
           assert_equal({ 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'value2' }, @sample32.metadata)
           assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
                          'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
@@ -81,6 +76,7 @@ module Samples
           assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
           metadata_changes = Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+
           assert_equal({ 'metadatafield2' => 'value2', 'metadatafield3' => 'newvalue1' }, @sample32.metadata)
           assert_equal({ 'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
                                                'updated_at' => '2000-01-01T00:00:00.000+00:00' },
@@ -88,7 +84,6 @@ module Samples
                        @sample32.metadata_provenance)
           assert_equal({ added: %w[metadatafield3], updated: [], deleted: %w[metadatafield1],
                          not_updated: [] }, metadata_changes)
-
           assert_equal({ 'metadatafield2' => 1, 'metadatafield3' => 1 },
                        @project29.namespace.reload.metadata_summary)
           assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 2, 'metadatafield3' => 1 },
