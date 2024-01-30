@@ -51,11 +51,11 @@
           dark:divide-slate-700
         "
       >
-        <% log_data[:changes_from_prev_version].each do |key, value| %>
-          <% if log_data[:version] == 1 %>
-            <% next if value.blank? %>
-          <% end %>
-          <div class="grid grid-cols-3 gap-2 py-2">
+        <div class="grid grid-cols-3 gap-2 py-2">
+          <% log_data[:changes_from_prev_version].each do |key, value| %>
+            <% if log_data[:version] == 1 %>
+              <% next if value.blank? %>
+            <% end %>
             <div class="col-span-1">
               <dt class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key.to_s %></dt>
             </div>
@@ -64,11 +64,16 @@
                 <dd class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></dd>
               </div>
             <% end %>
-            <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+            <% if log_data[:version] == 1 %>
+              <% col_span = "col-span-2" %>
+            <% else %>
+              <% col_span = "col-span-1" %>
+            <% end %>
+            <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
               <dd class="text-md p-1 break-words"><%= value %></dd>
             </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </dl>
     </div>
     <div class="my-4">
