@@ -6,6 +6,7 @@ module Projects
       # Controller actions for Project Samples Metadata Fields Controller
       class FieldsController < Projects::Samples::ApplicationController
         respond_to :turbo_stream
+
         def create
           authorize! @project, to: :update_sample?
           metadata_fields = ::Samples::Metadata::Fields::AddService.new(@project, @sample, current_user,
