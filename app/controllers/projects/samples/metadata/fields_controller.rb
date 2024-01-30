@@ -11,30 +11,14 @@ module Projects
           metadata_fields = ::Samples::Metadata::Fields::AddService.new(@project, @sample, current_user,
                                                                         add_field_params['add_fields']).execute
 
-          puts 'metadata update params'
-          puts metadata_update_params
-          request[:sample] = metadata_update_params
-          Projects::Samples::MetadataController.dispatch(:create, request, response)
-        end
-
-        # Validates metadata edit params and builds the expected update_service param prior to calling
-        # MetadataController and the metadata update_service
-
-        # Param is received as:
-        # params: {sample: {edit_field: {key: {old_key: new_key}, value: {old_value: new_value}}}
-        # Fields that have not been changed will have equal old and new
-        def update # rubocop:disable Metrics/AbcSize
-          authorize! @project, to: :update_sample?
-          updated_metadata_field = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
-                                                                                  edit_field_params).execute
           if @sample.errors.any?
             render status: :unprocessable_entity,
-                   locals: { key: edit_field_params['update_field']['key'].keys[0],
-                             value: edit_field_params['update_field']['value'].keys[0] }
+                   locals: { type: 'error', message: @sample.errors.full_messages.first }
           else
-            render_params = get_render_status_and_message(updated_metadata_field)
-            render status: render_params[:status], locals: { type: render_params[:message][:type],
-                                                             message: render_params[:message][:message] }
+            render_params = get_add_status_and_messages(metadata_fields[:updated_metadata_fields][:added],
+                                                        metadata_fields[:existing_keys])
+            render status: render_params[:status],
+                   locals: { messages: render_params[:messages] }
           end
         end
 
@@ -44,18 +28,22 @@ module Projects
           params.require(:sample).permit(update_field: { key: {}, value: {} })
         end
 
-        def get_render_status_and_message(updated_metadata_field)
-          render_params = {}
-          modified_metadata = updated_metadata_field[:added] + updated_metadata_field[:updated] +
-                              updated_metadata_field[:deleted]
-          if modified_metadata.count.positive?
-            render_params[:status] = :ok
-            render_params[:message] = { type: 'success', message: t('.success') }
+        def get_add_status_and_messages(added_keys, existing_keys)
+          params = { status: '', messages: [] }
+          success_msg = { type: 'success', message: t('.success', keys: added_keys.join(', ')) }
+          error_msg = { type: 'error', message: t('.keys_exist', keys: existing_keys.join(', ')) }
+
+          if added_keys.count.positive? && existing_keys.count.positive?
+            params[:status] = :multi_status
+            params[:messages] = [success_msg, error_msg]
+          elsif existing_keys.count.positive?
+            params[:status] = :unprocessable_entity
+            params[:messages] = [error_msg]
           else
-            render_params[:status] = :unprocessable_entity
-            render_params[:message] = { type: 'error', message: @sample.errors.full_messages.first }
+            params[:status] = :ok
+            params[:messages] = [success_msg]
           end
-          render_params
+          params
         end
       end
     end

@@ -925,6 +925,9 @@ en:
         edit:
           edit: Edit
         fields:
+          create:
+            success: Metadata keys '%{keys}' were successfully added.
+            keys_exist: Metadata keys '%{keys}' already exist
           update:
             success: "Metadata was successfully updated"
         file_imports:
@@ -985,12 +988,6 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
-      metadata:
-        update:
-          success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
-        create:
-          success: "Metadata keys '%{new_keys}' were added to sample '%{sample_name}'."
-          error: "Metadata keys '%{existing_keys}' already exist."
   workflow_executions:
     index:
       title: Workflow Executions
@@ -1040,6 +1037,8 @@ en:
       metadata:
         sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         empty_metadata: "No metadata was received to update sample '%{sample_name}'"
+        fields:
+          all_keys_exist: Metadata keys '%{keys}' already exist.
         user_cannot_update_metadata: "Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis. "
         update_fields:
           metadata_was_not_changed: "Metadata fields were not changed."

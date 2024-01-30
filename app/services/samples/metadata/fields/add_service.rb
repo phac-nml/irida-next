@@ -7,15 +7,14 @@ module Samples
       # to metadata_controller#update and Samples::Metadata::UpdateService
       class AddService < BaseService
         SampleMetadataFieldsAddError = Class.new(StandardError)
-        attr_accessor :project, :sample, :add_fields, :metadata_update_params, :existing_keys
+        attr_accessor :project, :sample, :add_fields, :metadata_update_params
 
         def initialize(project, sample, user = nil, add_fields = {})
           super(user, params)
           @project = project
           @sample = sample
           @add_fields = add_fields
-          @metadata_update_params = { metadata: {} }
-          @existing_keys = []
+          @metadata_update_params = { 'metadata' => {}, 'existing_keys' => [] }
         end
 
         def execute
@@ -25,10 +24,12 @@ module Samples
 
           construct_metadata_update_params
 
+          validate_metadata_params
+
           updated_metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
                                                                            @metadata_update_params).execute
 
-          { updated_metadata_fields:, existing_keys: @metadata_update_params[:existing_keys] }
+          { updated_metadata_fields:, existing_keys: @metadata_update_params['existing_keys'] }
         rescue Samples::Metadata::Fields::AddService::SampleMetadataFieldsAddError => e
           @sample.errors.add(:base, e.message)
           @metadata_update_params
@@ -48,9 +49,9 @@ module Samples
         def construct_metadata_update_params
           @add_fields.each do |k, v|
             if validate_key(k)
-              @metadata_update_params[:existing_keys] << k
+              @metadata_update_params['existing_keys'] << k
             else
-              @metadata_update_params[:metadata][k] = v
+              @metadata_update_params['metadata'][k] = v
             end
           end
         end
@@ -65,6 +66,15 @@ module Samples
             end
           end
           key_exists
+        end
+
+        # Checks if all new keys already exist
+        def validate_metadata_params
+          return unless @metadata_update_params['metadata'].empty?
+
+          raise SampleMetadataFieldsAddError,
+                I18n.t('services.samples.metadata.fields.all_keys_exist',
+                       keys: @metadata_update_params['existing_keys'].join(', '))
         end
       end
     end
