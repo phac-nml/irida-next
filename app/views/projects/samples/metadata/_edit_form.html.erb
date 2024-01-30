@@ -9,6 +9,7 @@
                     "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
         <%= metadata_key.text_field key,
                         value: key,
+                        required: true,
                         class:
                           "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
       </div>
@@ -20,6 +21,7 @@
                     "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
         <%= metadata_value.text_field value,
                         value: value,
+                        required: true,
                         class:
                           "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
       </div>
