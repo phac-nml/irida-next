@@ -1,6 +1,6 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
 
-  <%= f.hidden_field :local, value: params[:local], id: :local, name: :local %>
+  <input type="hidden" name="local" value="<%=params[:local]%>"/>
 
   <div class="form-field">
     <%= f.label :email %>
