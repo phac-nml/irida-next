@@ -5,17 +5,16 @@ module Samples
     module Fields
       # Service used to validate the edit_fields param and construct the metadata update param to be passed
       # to metadata_controller#update and Samples::Metadata::UpdateService
-      class EditService < BaseService
-        SampleMetadataFieldsEditError = Class.new(StandardError)
-        attr_accessor :project, :sample, :add_fields
+      class AddService < BaseService
+        SampleMetadataFieldsAddError = Class.new(StandardError)
+        attr_accessor :project, :sample, :add_fields, :metadata_update_params
 
-        def initialize(project, sample, user = nil, params = {})
+        def initialize(project, sample, user = nil, add_fields = {})
           super(user, params)
           @project = project
           @sample = sample
-          @key_edit = params['edit_field']['key']
-          @value_edit = params['edit_field']['value']
-          @metadata_update_params = {}
+          @add_fields = add_fields
+          @metadata_update_params = { metadata: {}, key_exists: [] }
         end
 
         def execute
@@ -23,10 +22,8 @@ module Samples
 
           validate_sample_in_project
 
-          validate_edit_fields
-
           construct_metadata_update_params
-        rescue Samples::Metadata::Fields::EditService::SampleMetadataFieldsEditError => e
+        rescue Samples::Metadata::Fields::AddService::SampleMetadataFieldsAddError => e
           @sample.errors.add(:base, e.message)
           @metadata_update_params
         end
@@ -36,40 +33,27 @@ module Samples
         def validate_sample_in_project
           return unless @project.id != @sample.project.id
 
-          raise SampleMetadataUpdateError,
+          raise SampleMetadataFieldsAddError,
                 I18n.t('services.samples.metadata.fields.sample_does_not_belong_to_project',
-                       sample_name: @sample.name,
-                       project_name: @project.name)
-        end
-
-        # Checks if neither key or value were changed
-        def validate_edit_fields
-          return unless @key_edit.keys[0] == @key_edit.values[0] && @value_edit.keys[0] == @value_edit.values[0]
-
-          raise SampleMetadataFieldsEditError, I18n.t('services.samples.metadata.edit_fields.metadata_was_not_changed')
+                       sample_name: @sample.name, project_name: @project.name)
         end
 
         # Constructs the expected param for metadata update_service
         def construct_metadata_update_params
-          metadata_update_params = { metadata: {} }
-          if @key_edit.keys[0] != @key_edit.values[0]
-            if validate_new_key
-              raise SampleMetadataFieldsEditError,
-                    I18n.t('services.samples.metadata.edit_fields.key_exists', key: @key_edit.values[0])
+          @add_fields.each do |k, v|
+            if validate_key(k)
+              @metadata_update_params[:key_exists] << key
+            else
+              @metadata_update_params[:metadata][k] = v
             end
-
-            metadata_update_params[:metadata][@key_edit.keys[0]] = ''
           end
-
-          metadata_update_params[:metadata][@key_edit.values[0]] = @value_edit.values[0]
-          metadata_update_params
         end
 
         # Checks if the new key already exists within the @sample.metadata
-        def validate_new_key
+        def validate_key(key)
           key_exists = false
           @sample.metadata.each do |k, _v|
-            if k.downcase == @key_edit.values[0].downcase
+            if k.downcase == key.downcase
               key_exists = true
               break
             end
