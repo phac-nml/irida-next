@@ -34,6 +34,7 @@
 # Ignore credentials files
 /config/credentials.yml.enc
 /config/credentials/*
+/config/credentials/development.key
 !/config/credentials/
 !/config/credentials/.keep
 /config/master.key
@@ -60,5 +61,3 @@ __blobstorage__
 !/app/assets/builds/.keep
 
 logfile
-
-/config/credentials/development.key
