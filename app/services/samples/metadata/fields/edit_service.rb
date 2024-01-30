@@ -36,7 +36,7 @@ module Samples
         def validate_sample_in_project
           return unless @project.id != @sample.project.id
 
-          raise SampleMetadataUpdateError,
+          raise SampleMetadataFieldsEditError,
                 I18n.t('services.samples.metadata.fields.sample_does_not_belong_to_project',
                        sample_name: @sample.name,
                        project_name: @project.name)
