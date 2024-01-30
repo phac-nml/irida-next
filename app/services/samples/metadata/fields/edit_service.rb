@@ -7,7 +7,7 @@ module Samples
       # to metadata_controller#update and Samples::Metadata::UpdateService
       class EditService < BaseService
         SampleMetadataFieldsEditError = Class.new(StandardError)
-        attr_accessor :project, :sample, :edit_fields
+        attr_accessor :project, :sample, :key_edit, :value_edit, :metadata_update_params
 
         def initialize(project, sample, user = nil, params = {})
           super(user, params)
