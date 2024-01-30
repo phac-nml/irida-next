@@ -47,7 +47,7 @@ export default class extends Controller {
       let metadata_field = document.getElementById(`key_${i}`)
       let value = document.getElementById(`value_${i}`)
       if (metadata_field.value && value.value) {
-        let metadataField = `<input type='hidden' name="sample[metadata][${metadata_field.value}]" value="${value.value}">`
+        let metadataField = `<input type='hidden' name="sample[add_fields][${metadata_field.value}]" value="${value.value}">`
         this.metadataToAddTarget.insertAdjacentHTML("beforeend", metadataField)
       }
       metadata_field.name = ''
