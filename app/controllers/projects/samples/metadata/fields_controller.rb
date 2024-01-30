@@ -11,8 +11,8 @@ module Projects
         # MetadataController and the metadata update_service
 
         # Param is received as:
-        # params: {edit_field: {key: {old_key: new_key}, value: {old_value: new_value}}
-        # If a field has not been changed, the old and new values will be equal.
+        # params: {sample: {edit_field: {key: {old_key: new_key}, value: {old_value: new_value}}}
+        # Fields that have not been changed will have equal old and new
         def update # rubocop:disable Metrics/AbcSize
           authorize! @project, to: :update_sample?
           metadata_update_params = ::Samples::Metadata::Fields::EditService.new(@project, @sample, current_user,

@@ -34,7 +34,7 @@ module Projects
       private
 
       def metadata_params
-        params.require(:sample).permit(:analysis_id, metadata: {})
+        params.require(:sample).permit(metadata: {})
       end
 
       def get_render_status_and_message(metadata_fields)

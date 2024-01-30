@@ -785,7 +785,6 @@ fr:
         edit_button: Edit this sample
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
-        edit_metadata: Edit Metadata
         error: The sample does not exist within the project.
         files: Files
         metadata:
@@ -794,6 +793,11 @@ fr:
               edit: Edit
             metadata_dropdown_aria_label: Dropdown options for metadata field %{key}
           analysis: Analysis
+          edit:
+            edit: Edit
+            edit_metadata: Edit Metadata
+            key: Key
+            value: Value
         no_files: No Files
         no_associated_files: There are no files associated with this sample.
         no_metadata: No Metadata
@@ -956,6 +960,8 @@ fr:
         edit_fields:
           metadata_was_not_changed: "Metadata fields were not changed."
           key_exists: "Sample already contains metadata field '%{key}'."
+        fields:
+          sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         import_file:
           empty_file: The file cannot be empty.
           empty_sample_id_column: The sample id column cannot be empty.
