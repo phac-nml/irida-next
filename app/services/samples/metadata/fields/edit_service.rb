@@ -15,7 +15,7 @@ module Samples
           @sample = sample
           @key_edit = params['edit_field']['key']
           @value_edit = params['edit_field']['value']
-          @metadata_update_params = {}
+          @metadata_update_params = { 'metadata' => {} }
         end
 
         def execute
@@ -26,6 +26,8 @@ module Samples
           validate_edit_fields
 
           construct_metadata_update_params
+
+          ::Samples::Metadata::UpdateService.new(@project, @sample, current_user, @metadata_update_params).execute
         rescue Samples::Metadata::Fields::EditService::SampleMetadataFieldsEditError => e
           @sample.errors.add(:base, e.message)
           @metadata_update_params
@@ -51,18 +53,16 @@ module Samples
 
         # Constructs the expected param for metadata update_service
         def construct_metadata_update_params
-          metadata_update_params = { metadata: {} }
           if @key_edit.keys[0] != @key_edit.values[0]
             if validate_new_key
               raise SampleMetadataFieldsEditError,
                     I18n.t('services.samples.metadata.edit_fields.key_exists', key: @key_edit.values[0])
             end
 
-            metadata_update_params[:metadata][@key_edit.keys[0]] = ''
+            @metadata_update_params['metadata'][@key_edit.keys[0]] = ''
           end
 
-          metadata_update_params[:metadata][@key_edit.values[0]] = @value_edit.values[0]
-          metadata_update_params
+          @metadata_update_params['metadata'][@key_edit.values[0]] = @value_edit.values[0]
         end
 
         # Checks if the new key already exists within the @sample.metadata

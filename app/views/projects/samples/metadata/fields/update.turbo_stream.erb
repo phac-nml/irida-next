@@ -2,9 +2,9 @@
   "sample_modal",
   partial: "projects/samples/metadata/edit_metadata_modal",
   locals: {
-    open: true,
-    key:,
-    value:
+    open: @sample.errors.any?,
+    key: defined?(key) ? key : nil,
+    value: defined?(value) ? value : nil
   }
 ) %>
 
@@ -15,4 +15,15 @@
                         message: @sample.errors.full_messages.first,
                         classes: "mb-4"
                       ) %>
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+
+  <%= turbo_stream.update "table-listing" do %>
+    <% render partial: "projects/samples/metadata/table",
+    locals: {
+      sample_metadata: @sample.metadata_with_provenance
+    } %>
+  <% end %>
 <% end %>

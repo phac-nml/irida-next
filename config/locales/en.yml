@@ -888,12 +888,13 @@ en:
       metadata:
         edit:
           edit: Edit
+        fields:
+          update:
+            success: "Metadata was successfully updated"
         file_imports:
           create:
             success: Sample metadata was successfully imported.
             error: "Metadata was not successfully imported for the following samples:"
-        update:
-          success: "Metadata was successfully updated"
       attachments:
         concatenations:
           create:

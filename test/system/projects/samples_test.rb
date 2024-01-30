@@ -905,7 +905,7 @@ module Projects
         click_on I18n.t('projects.samples.show.metadata.edit.edit')
       end
 
-      assert_text I18n.t('projects.samples.metadata.update.success')
+      assert_text I18n.t('projects.samples.metadata.fields.update.success')
       assert_no_text 'metadatafield1'
       assert_text 'newMetadataKey'
       assert_text 'value1'
@@ -931,7 +931,7 @@ module Projects
         click_on I18n.t('projects.samples.show.metadata.edit.edit')
       end
 
-      assert_text I18n.t('projects.samples.metadata.update.success')
+      assert_text I18n.t('projects.samples.metadata.fields.update.success')
       assert_no_text 'value1'
       assert_text 'metadatafield1'
       assert_text 'newMetadataValue'
@@ -958,7 +958,7 @@ module Projects
         click_on I18n.t('projects.samples.show.metadata.edit.edit')
       end
 
-      assert_text I18n.t('projects.samples.metadata.update.success')
+      assert_text I18n.t('projects.samples.metadata.fields.update.success')
       assert_no_text 'metadatafield1'
       assert_no_text 'value1'
       assert_text 'newMetadataKey'
