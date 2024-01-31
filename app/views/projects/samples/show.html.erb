@@ -43,83 +43,123 @@
     <ul class="flex flex-wrap -mb-px">
       <li class="mr-2">
         <%= link_to t(:"projects.samples.show.tabs.files"),
-        namespace_project_sample_path(id: @sample.id, tab: 'files'),
+        namespace_project_sample_path(id: @sample.id, tab: "files"),
         class:
           (
-            if @tab == 'files' || @tab == nil
+            if @tab == "files" || @tab == nil
               "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
             else
               "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
             end
           ),
         aria: {
-          current: (@tab == 'files' || @tab == nil) ? "page" : "false"
+          current: (@tab == "files" || @tab == nil) ? "page" : "false"
         } %>
       </li>
       <li class="mr-2">
         <%= link_to t(:"projects.samples.show.tabs.metadata"),
-        namespace_project_sample_path(id: @sample.id, tab: 'metadata'),
+        namespace_project_sample_path(id: @sample.id, tab: "metadata"),
         class:
           (
-            if @tab == 'metadata'
+            if @tab == "metadata"
               "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
             else
               "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
             end
           ),
         aria: {
-          current: @tab == 'metadata' ? "page" : "false"
+          current: @tab == "metadata" ? "page" : "false"
+        } %>
+      </li>
+      <li class="mr-2">
+        <%= link_to t(:"projects.samples.show.tabs.history"),
+        namespace_project_sample_path(id: @sample.id, tab: "history"),
+        class:
+          (
+            if @tab == "history"
+              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
+            else
+              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
+            end
+          ),
+        aria: {
+          current: @tab == "history" ? "page" : "false"
         } %>
       </li>
     </ul>
     <% if allowed_to?(:update_sample?, @project) %>
       <% if @tab == 'files' || @tab == nil %>
-          <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
+        <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
           <%= link_to t(".new_attachment_button"),
-            new_namespace_project_sample_attachment_path(sample_id: @sample.id),
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: true
-            },
-            class: "button button--size-default button--state-default" %>
+          new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: true
+          },
+          class: "button button--size-default button--state-default" %>
           <%= link_to t(".concatenate_button"),
-            new_namespace_project_sample_attachments_concatenation_path(
-              sample_id: @sample.id
-            ),
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: false,
-              controller: "action-link",
-              action_link_required_value: 2
-            },
-            class: "button button--size-default button--state-default action-link" %>
+          new_namespace_project_sample_attachments_concatenation_path(
+            sample_id: @sample.id
+          ),
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: false,
+            controller: "action-link",
+            action_link_required_value: 2
+          },
+          class: "button button--size-default button--state-default action-link" %>
           <%= link_to t(".delete_files_button"),
-            new_namespace_project_sample_attachments_deletion_path(
-              sample_id: @sample.id
-            ),
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: false,
-              controller: "action-link",
-              action_link_required_value: 1
-            },
-            class: "button button--size-default button--state-destructive action-link" %>
-          </div>
+          new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: false,
+            controller: "action-link",
+            action_link_required_value: 1
+          },
+          class: "button button--size-default button--state-destructive action-link" %>
+        </div>
       <% elsif @tab == 'metadata' %>
         <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
           <%= link_to t(".add_metadata"),
-            new_namespace_project_sample_metadata_path(sample_id: @sample.id),
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: true
-            },
-            class: "button button--size-default button--state-default" %>
+          new_namespace_project_sample_metadata_path(sample_id: @sample.id),
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: true
+          },
+          class: "button button--size-default button--state-default" %>
+          <%= link_to t(".new_attachment_button"),
+          new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: true
+          },
+          class: "button button--size-default button--state-default" %>
+          <%= link_to t(".concatenate_button"),
+          new_namespace_project_sample_attachments_concatenation_path(
+            sample_id: @sample.id
+          ),
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: false,
+            controller: "action-link",
+            action_link_required_value: 2
+          },
+          class: "button button--size-default button--state-default action-link" %>
+          <%= link_to t(".delete_files_button"),
+          new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: false,
+            controller: "action-link",
+            action_link_required_value: 1
+          },
+          class: "button button--size-default button--state-destructive action-link" %>
         </div>
       <% end %>
     <% end %>
   </div>
   <div class="flex flex-col" data-turbo-temporary>
-    <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab), loading: :lazy do %>
+    <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files'), loading: :lazy do %>
       <table class="min-w-full table-fixed dark:divide-slate-600">
         <tbody
           class="

@@ -4,10 +4,18 @@
     locals: {
       sample_metadata: @table_listing
     } %>
-  <% else %>
+  <% elsif @tab == 'files' %>
     <% render partial: "projects/samples/attachments/table",
     locals: {
       attachments: @table_listing
     } %>
+  <% elsif @tab == 'history' %>
+    <div class="grid gap-4 px-4 py-8">
+      <%= render HistoryComponent.new(
+        data: @log_data.reverse,
+        type: "Sample",
+        url: namespace_project_sample_view_history_version_path(sample_id: @sample.id)
+      ) %>
+    </div>
   <% end %>
 <% end %>

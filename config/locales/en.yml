@@ -874,6 +874,16 @@ en:
         tabs:
           files: Files
           metadata: Metadata
+          history: History
+        history:
+          modal:
+            created_by: "Sample created by %{user}"
+            deleted_by: "Sample deleted by %{user}"
+            modified_by: "Sample attributes modified by %{user}"
+            restored_by: "Sample restored by %{user}"
+            transferred_by: "Sample transferred by %{user}"
+            version: "Version %{version}"
+            close: Close
       create:
         success: Sample was successfully created.
       new:

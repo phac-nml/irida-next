@@ -1,0 +1,78 @@
+<%= viral_dialog(open: true, size: :large) do |dialog| %>
+  <%= dialog.with_header(
+    title:  t(
+        "projects.samples.show.history.modal.version",
+        version: log_data[:version]
+      )
+  ) %>
+  <%= dialog.with_section do %>
+    <div>
+      <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+          <% if log_data[:version] == 1 %>
+            <p class="dark:text-slate-400"><%= t("projects.samples.show.history.modal.created_by", user: log_data[:user]) %></p>
+          <% elsif log_data[:changes_from_prev_version].key?('deleted_at') %>
+            <% if log_data[:changes_from_prev_version]['deleted_at'].blank? %>
+              <p class="dark:text-slate-400"><%= t("projects.samples.show.history.modal.restored_by", user: log_data[:user]) %></p>
+            <% elsif log_data[:changes_from_prev_version]['deleted_at'].present? %>
+              <p class="dark:text-slate-400"><%= t("projects.samples.show.history.modal.deleted_by", user: log_data[:user]) %></p>
+            <% end %>
+          <% elsif log_data[:changes_from_prev_version]['project_id'].present? %>
+            <p class="dark:text-slate-400"><%= t("projects.samples.show.history.modal.transferred_by", user: log_data[:user]) %></p>
+          <% else %>
+            <p class="dark:text-slate-400"><%= t("projects.samples.show.history.modal.modified_by", user: log_data[:user]) %></p>
+          <% end %>
+      <div class="grid grid-cols-3 gap-2 py-4">
+        <div class="col-span-1"></div>
+        <% if log_data[:version] != 1 %>
+          <div class="col-span-1 text-lg font-normal text-slate-500 dark:text-slate-400">Previous (<%= t("projects.samples.show.history.modal.version", version: log_data[:version] - 1) %>)</div>
+        <% end %>
+        <div class="col-span-1 text-lg font-normal text-slate-500 dark:text-slate-400">Current (<%= t("projects.samples.show.history.modal.version", version: log_data[:version]) %>)</div>
+      </div>
+      <dl
+        class="
+          text-slate-900
+          dark:text-white
+          divide-y
+          divide-slate-200
+          dark:divide-slate-700
+        "
+      >
+        <div class="grid grid-cols-3 gap-2 py-2">
+          <% log_data[:changes_from_prev_version].each do |key, value| %>
+            <% if log_data[:version] == 1 %>
+              <% next if value.blank? %>
+            <% end %>
+
+              <div class="col-span-1">
+                <dt class="mb-1 text-slate-500 md:text-md dark:text-slate-400"><%= key.to_s %></dt>
+              </div>
+              <% if log_data[:version] != 1 %>
+                <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+                  <dd class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></dd>
+                </div>
+              <% end %>
+              <% if log_data[:version] == 1 %>
+                  <% col_span = "col-span-2" %>
+              <% else %>
+                <% col_span = "col-span-1" %>
+              <% end %>
+              <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+                <dd class="text-md p-1 break-words"><%= value %></dd>
+              </div>
+
+          <% end %>
+        </div>
+      </dl>
+    </div>
+    <div class="my-4">
+      <button
+        type="button"
+        class="button button--size-default button--state-default"
+        data-action="click->viral--dialog#close"
+      >
+        <%= t("projects.samples.show.history.modal.close") %>
+      </button>
+    </div>
+
+  <% end %>
+<% end %>
