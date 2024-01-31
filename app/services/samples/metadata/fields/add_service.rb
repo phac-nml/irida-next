@@ -29,7 +29,8 @@ module Samples
           updated_metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
                                                                            @metadata_update_params).execute
 
-          { updated_metadata_fields:, existing_keys: @metadata_update_params['existing_keys'] }
+          { added_keys: updated_metadata_fields[:added],
+            existing_keys: @metadata_update_params['existing_keys'] }
         rescue Samples::Metadata::Fields::AddService::SampleMetadataFieldsAddError => e
           @sample.errors.add(:base, e.message)
           @metadata_update_params

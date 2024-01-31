@@ -13,13 +13,10 @@ module Projects
                                                                         add_field_params['add_fields']).execute
 
           if @sample.errors.any?
-            render status: :unprocessable_entity,
-                   locals: { type: 'error', message: @sample.errors.full_messages.first }
+            render status: :unprocessable_entity, locals: { type: 'error', message: @sample.errors.full_messages.first }
           else
-            render_params = get_add_status_and_messages(metadata_fields[:updated_metadata_fields][:added],
-                                                        metadata_fields[:existing_keys])
-            render status: render_params[:status],
-                   locals: { messages: render_params[:messages] }
+            render_params = get_add_status_and_messages(metadata_fields[:added_keys], metadata_fields[:existing_keys])
+            render status: render_params[:status], locals: { messages: render_params[:messages] }
           end
         end
 
