@@ -24,7 +24,7 @@ export default class extends Controller {
   // If you have Fields 1 to 4, and 2 is deleted, Fields 3 and 4 are adjusted to Fields 2 and 3, respectively,
   // along with the associated IDs.
   removeField(event) {
-    const fieldIdToDelete = event.target.parentElement.parentElement.id.split("-")[2]
+    const fieldIdToDelete = event.target.id.split("-")[2]
     document.getElementById(`input-field-${fieldIdToDelete}`).remove()
     for (let i = parseInt(fieldIdToDelete) + 1; i < nextAddFieldId; i++) {
       let currentKey = document.getElementById(`key-${i}`).value
@@ -67,10 +67,10 @@ export default class extends Controller {
           <input type="text" name="value-${id}" id="value-${id}" value="${value}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " />
           <label for="value-${id}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">${valueText}</label>
         </div>
-        <button id="delete-field-${id}"  type="button" data-action="projects--samples--metadata--add#removeField" class="ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2 focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white dark:bg-slate-800 dark:hover:bg-slate-700" aria-label="Close">
-          <span class="h-5 w-5 Viral-Icon">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="Viral-Icon__Svg icon-x_mark" focusable="false">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        <button id="delete-field-${id}"  type="button" data-action="projects--samples--metadata--add#removeField" class="ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2 focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white dark:bg-slate-800 dark:hover:bg-slate-700" aria-label="Remove field">
+          <span class="h-5 w-5 Viral-Icon pointer-events-none">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="Viral-Icon__Svg icon-x_mark pointer-events-none" focusable="false">
+              <path class="pointer-events-none" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </span>
         </button>

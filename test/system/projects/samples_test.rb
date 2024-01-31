@@ -1355,43 +1355,43 @@ module Projects
       end
     end
 
-    # test 'add new metadata after deleting fields' do
-    #   visit namespace_project_sample_url(@group12a, @project29, @sample32)
+    test 'add new metadata after deleting fields' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
-    #   click_on I18n.t('projects.samples.show.tabs.metadata')
-    #   click_on I18n.t('projects.samples.show.add_metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
 
-    #   within %(turbo-frame[id="sample_modal"]) do
-    #     find('input#key-0').fill_in with: 'metadatafield3'
-    #     find('input#value-0').fill_in with: 'value3'
-    #     click_on I18n.t('projects.samples.metadata.form.add_field_button')
-    #     find('input#key-1').fill_in with: 'metadatafield4'
-    #     find('input#value-1').fill_in with: 'value4'
-    #     click_on I18n.t('projects.samples.metadata.form.add_field_button')
-    #     find('input#key-2').fill_in with: 'metadatafield5'
-    #     find('input#value-2').fill_in with: 'value5'
-    #     click_on I18n.t('projects.samples.metadata.form.add_field_button')
-    #     find('input#key-3').fill_in with: 'metadatafield6'
-    #     find('input#value-3').fill_in with: 'value6'
-    #     assert_selector 'button#delete-field-1 span svg'
-    #     find('button#delete-field-2 span svg').click
-    #     find('button#delete-field-1 span svg').click
-    #     click_on I18n.t('projects.samples.metadata.form.submit_button')
-    #   end
+      within %(turbo-frame[id="sample_modal"]) do
+        find('input#key-0').fill_in with: 'metadatafield3'
+        find('input#value-0').fill_in with: 'value3'
+        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        find('input#key-1').fill_in with: 'metadatafield4'
+        find('input#value-1').fill_in with: 'value4'
+        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        find('input#key-2').fill_in with: 'metadatafield5'
+        find('input#value-2').fill_in with: 'value5'
+        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        find('input#key-3').fill_in with: 'metadatafield6'
+        find('input#value-3').fill_in with: 'value6'
 
-    #   assert_text I18n.t('projects.samples.metadata.fields.create.success',
-    #                      keys: %w[metadatafield3 metadatafield6].join(', '))
+        find('button#delete-field-2').click
+        find('button#delete-field-1').click
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
 
-    # within %(turbo-frame[id="table-listing"]) do
-    #   assert_text 'metadatafield3'
-    #   assert_text 'value3'
-    #   assert_text 'metadatafield6'
-    #   assert_text 'value6'
-    #   assert_no_text 'metadatafield4'
-    #   assert_no_text 'value4'
-    #   assert_no_text 'metadatafield5'
-    #   assert_no_text 'value5'
-    # end
-    # end
+      assert_text I18n.t('projects.samples.metadata.fields.create.success',
+                         keys: %w[metadatafield3 metadatafield6].join(', '))
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield3'
+        assert_text 'value3'
+        assert_text 'metadatafield6'
+        assert_text 'value6'
+        assert_no_text 'metadatafield4'
+        assert_no_text 'value4'
+        assert_no_text 'metadatafield5'
+        assert_no_text 'value5'
+      end
+    end
   end
 end
