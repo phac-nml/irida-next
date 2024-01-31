@@ -18,7 +18,8 @@
                               # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
                               "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             data: {
-                              "projects--samples--metadata--file-import-target": "fileInput"
+                              action:
+                                "change->projects--samples--metadata--file-import#readFile"
                             } %>
           </div>
           <div class="form-field">
@@ -29,7 +30,9 @@
                         required: true,
                         disabled: true,
                         data: {
-                          "projects--samples--metadata--file-import-target": "selectInput"
+                          "projects--samples--metadata--file-import-target": "selectInput",
+                          action:
+                            "change->projects--samples--metadata--file-import#toggleSubmitButton"
                         } %>
           </div>
           <div class="flex items-center">

@@ -2,23 +2,14 @@ import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
 
 export default class extends Controller {
-  static targets = ["fileInput", "selectInput", "submitButton"];
+  static targets = ["selectInput", "submitButton"];
 
-  connect() {
-    this.fileInputTarget.addEventListener("change", (event) => {
-      this.#readFile(event);
-    });
-    this.selectInputTarget.addEventListener("change", (event) => {
-      this.#toggleSubmitButton(event);
-    });
-  }
-
-  #toggleSubmitButton(event) {
+  toggleSubmitButton(event) {
     const { value } = event.target;
     this.submitButtonTarget.disabled = !value;
   }
 
-  #readFile(event) {
+  readFile(event) {
     const { files } = event.target;
 
     if (!files.length) {
@@ -55,14 +46,5 @@ export default class extends Controller {
       this.selectInputTarget.append(option);
     }
     this.selectInputTarget.disabled = false;
-  }
-
-  disconnect() {
-    this.fileInputTarget.removeEventListener("change", (event) => {
-      this.#readFile(event);
-    });
-    this.selectInputTarget.removeEventListener("change", (event) => {
-      this.#toggleSubmitButton(event);
-    });
   }
 }
