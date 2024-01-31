@@ -28,7 +28,9 @@
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300"><%= t(".file_help") %></p>
           </div>
           <div class="form-field">
-            <%= form.label :sample_id_column, t(".sample_id_column") %>
+            <%= form.label :sample_id_column,
+                       t(".sample_id_column"),
+                       class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
             <%= form.select :sample_id_column,
                         {},
                         { prompt: t(".select_sample_id_column") },
@@ -38,7 +40,9 @@
                           "projects--samples--metadata--file-import-target": "selectInput",
                           action:
                             "change->projects--samples--metadata--file-import#toggleSubmitButton"
-                        } %>
+                        },
+                        class:
+                          "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
           </div>
           <div class="flex items-center">
             <%= form.check_box :ignore_empty_values,
