@@ -951,7 +951,7 @@ fr:
         fields:
           create:
             success: Metadata keys '%{keys}' were successfully added.
-            keys_exist: Metadata keys '%{keys}' already exist
+            keys_exist: Metadata keys '%{keys}' already exists.
         form:
           add_field_button: Add another metadata field
           field: Field
