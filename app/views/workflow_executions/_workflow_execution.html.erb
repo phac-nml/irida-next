@@ -24,7 +24,8 @@
       <%= form_with method: :put, url: workflow_execution_cancel_path(workflow_execution) do |form| %>
         <%= form.submit t(:'workflow_executions.index.actions.cancel'),
                         class:
-                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
+                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                        data: { turbo_confirm: t(:'workflow_executions.index.actions.confirm') } %>
       <% end %>
     <% end %>
   </td>
