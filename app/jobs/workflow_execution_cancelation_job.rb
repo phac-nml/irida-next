@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Perform actions required to cancel a workflow execution
 class WorkflowExecutionCancelationJob < ApplicationJob
   queue_as :default
 
