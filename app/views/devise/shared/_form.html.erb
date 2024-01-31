@@ -1,4 +1,7 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
+
+  <input type="hidden" name="local" value="<%=params[:local]%>"/>
+
   <div class="form-field">
     <%= f.label :email %>
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>

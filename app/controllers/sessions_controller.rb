@@ -13,6 +13,7 @@ class SessionsController < Devise::SessionsController
         render :new_with_no_providers
       else
         @local_account = params[:local]
+
         render :new_with_providers
       end
       return
