@@ -28,7 +28,7 @@ module Projects
         private
 
         def edit_field_params
-          params.require(:sample).permit(edit_field: {})
+          params.require(:sample).permit(edit_field: { key: {}, value: {} })
         end
 
         def get_render_status_and_message(updated_metadata_field)
