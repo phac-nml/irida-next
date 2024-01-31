@@ -16,6 +16,57 @@ module Projects
             @namespace = groups(:subgroup_twelve_a)
           end
 
+          test 'add new metadata' do
+            post namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
+                 params: {
+                   'sample' => { 'add_fields' => { 'metadatafield3' => 'value3',
+                                                   'metadatafield4' => 'value4' } },
+                   format: :turbo_stream
+                 }
+            assert_response :ok
+          end
+
+          test 'add new metadata where keys exist' do
+            post namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
+                 params: {
+                   'sample' => { 'add_fields' => { 'metadatafield1' => 'value3',
+                                                   'metadatafield2' => 'value4' } },
+                   format: :turbo_stream
+                 }
+            assert_response :unprocessable_entity
+          end
+
+          test 'add new metadata where keys both exist and don\'t exist' do
+            post namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
+                 params: {
+                   'sample' => { 'add_fields' => { 'metadatafield3' => 'value3',
+                                                   'metadatafield1' => 'value4' } },
+                   format: :turbo_stream
+                 }
+            assert_response :multi_status
+          end
+
+          test 'cannot add metadata if sample does not belong to the project' do
+            post namespace_project_sample_metadata_field_path(@namespace, @project4, @sample32),
+                 params: {
+                   'sample' => { 'add_fields' => { 'metadatafield3' => 'value3',
+                                                   'metadatafield4' => 'value4' } },
+                   format: :turbo_stream
+                 }
+            assert_response :not_found
+          end
+
+          test 'cannot add metadata if not a member with access to the project' do
+            sign_in users(:david_doe)
+            post namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
+                 params: {
+                   'sample' => { 'add_fields' => { 'metadatafield3' => 'value3',
+                                                   'metadatafield4' => 'value4' } },
+                   format: :turbo_stream
+                 }
+            assert_response :unauthorized
+          end
+
           test 'update metadata key' do
             patch namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
                   params: { 'sample' => { 'update_field' => {

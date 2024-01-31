@@ -5,8 +5,8 @@ module Samples
     module Fields
       # Service used to validate the edit_fields param and construct the metadata update param to be passed
       # to metadata_controller#update and Samples::Metadata::UpdateService
-      class AddService < BaseService
-        SampleMetadataFieldsAddError = Class.new(StandardError)
+      class CreateService < BaseService
+        SampleMetadataFieldsCreateError = Class.new(StandardError)
         attr_accessor :project, :sample, :add_fields, :metadata_update_params
 
         def initialize(project, sample, user = nil, add_fields = {})
@@ -31,7 +31,7 @@ module Samples
 
           { added_keys: updated_metadata_fields[:added],
             existing_keys: @metadata_update_params['existing_keys'] }
-        rescue Samples::Metadata::Fields::AddService::SampleMetadataFieldsAddError => e
+        rescue Samples::Metadata::Fields::CreateService::SampleMetadataFieldsCreateError => e
           @sample.errors.add(:base, e.message)
           @metadata_update_params
         end
@@ -41,7 +41,7 @@ module Samples
         def validate_sample_in_project
           return unless @project.id != @sample.project.id
 
-          raise SampleMetadataFieldsAddError,
+          raise SampleMetadataFieldsCreateError,
                 I18n.t('services.samples.metadata.fields.sample_does_not_belong_to_project',
                        sample_name: @sample.name, project_name: @project.name)
         end
@@ -73,7 +73,7 @@ module Samples
         def validate_new_added_keys
           return unless @metadata_update_params['metadata'].empty?
 
-          raise SampleMetadataFieldsAddError,
+          raise SampleMetadataFieldsCreateError,
                 I18n.t('services.samples.metadata.fields.all_keys_exist',
                        keys: @metadata_update_params['existing_keys'].join(', '))
         end

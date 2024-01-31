@@ -953,8 +953,10 @@ fr:
             success: Metadata keys '%{keys}' were successfully added.
             keys_exist: Metadata keys '%{keys}' already exist
         form:
+          add_field_button: Add another metadata field
           field: Field
           key: Key
+          submit_button: Add
           value: Value
   workflow_executions:
     submissions:

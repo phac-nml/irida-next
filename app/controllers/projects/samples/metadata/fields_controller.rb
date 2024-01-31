@@ -9,13 +9,15 @@ module Projects
 
         def create
           authorize! @project, to: :update_sample?
-          metadata_fields = ::Samples::Metadata::Fields::AddService.new(@project, @sample, current_user,
-                                                                        add_field_params['add_fields']).execute
+          create_metadata_fields =
+            ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user,
+                                                           add_field_params['add_fields']).execute
 
           if @sample.errors.any?
             render status: :unprocessable_entity, locals: { type: 'error', message: @sample.errors.full_messages.first }
           else
-            render_params = get_add_status_and_messages(metadata_fields[:added_keys], metadata_fields[:existing_keys])
+            render_params = get_add_status_and_messages(create_metadata_fields[:added_keys],
+                                                        create_metadata_fields[:existing_keys])
             render status: render_params[:status], locals: { messages: render_params[:messages] }
           end
         end

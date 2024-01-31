@@ -3,31 +3,31 @@
   <div id='test' class="grid gap-2" data-controller="projects--samples--metadata--add">
     <div data-projects--samples--metadata--add-target="metadataToAdd"></div>
     <div id='input-field-0' class='inputField'>
-      <div id="field_label_0" class="text-slate-700 dark:text-slate-400 text-sm mb-2">
+      <div id="field-label-0" class="text-slate-700 dark:text-slate-400 text-sm mb-2">
         <%= t(".field")%> 1:
       </div>
 
       <div class="flex space-x-2 mb-2">
         <div class="relative z-0 w-full group">
-          <input type="text" name="key_0" id="key_0" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
-          <label for="key_0" id="key_label" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"><%= t(".key") %></label>
+          <input type="text" name="key-0" id="key-0" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
+          <label for="key-0" id="key-label" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"><%= t(".key") %></label>
         </div>
         <div class="relative z-0 w-full group">
-          <input type="text" name="value_0" id="value_0" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
-          <label for="value_0" id="value_label" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"><%= t(".value") %></label>
+          <input type="text" name="value-0" id="value-0" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
+          <label for="value-0" id="value-label" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"><%= t(".value") %></label>
         </div>
         <div class="w-[4.5rem]"></div>
       </div>
     </div>
     <div class="text-center">
-        <%= form.button "Add another metadata field",
+        <%= form.button t(".add_field_button"),
             type: 'button',
             class: 'button button--size-default button--state-default',
             "data-action": 'projects--samples--metadata--add#addNewField'
         %>
     </div>
     <div>
-      <%= form.submit 'Add',
+      <%= form.submit t(".submit_button"),
                   class: "button button--state-primary button--size-default",
                   'data-action': 'projects--samples--metadata--add#buildMetadata'
                   %>
