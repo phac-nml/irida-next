@@ -12,6 +12,11 @@ const valueText = document.getElementById('value-label').innerText
 export default class extends Controller {
   static targets = ["metadataToAdd"]
 
+  // Resets nextAddFieldId to 1 in case modal was opened with multiple fields, closed, then reopened without submission
+  connect() {
+    nextAddFieldId = 1
+  }
+
   // Add new field with next ID increment
   addNewField() {
     const newField = this.getField(nextAddFieldId, '', '')
