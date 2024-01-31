@@ -27,8 +27,8 @@ export default class extends Controller {
     const fieldIdToDelete = event.target.id.split("-")[2]
     document.getElementById(`input-field-${fieldIdToDelete}`).remove()
     for (let i = parseInt(fieldIdToDelete) + 1; i < nextAddFieldId; i++) {
-      let currentKey = document.getElementById(`key-${i}`).value
-      let currentValue = document.getElementById(`value-${i}`).value
+      const currentKey = document.getElementById(`key-${i}`).value
+      const currentValue = document.getElementById(`value-${i}`).value
       document.getElementById(`input-field-${i}`).remove()
       const replacementField = this.getField((i - 1), currentKey, currentValue)
       document.getElementById(`input-field-${i - 2}`).insertAdjacentHTML("afterend", replacementField)
