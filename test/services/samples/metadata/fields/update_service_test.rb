@@ -5,7 +5,7 @@ require 'test_helper'
 module Samples
   module Metadata
     module Fields
-      class EditServiceTest < ActiveSupport::TestCase
+      class UpdateServiceTest < ActiveSupport::TestCase
         def setup
           @user = users(:john_doe)
           @sample32 = samples(:sample32)
@@ -25,7 +25,7 @@ module Samples
           assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
           assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-          metadata_changes = Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+          metadata_changes = Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
 
           assert_equal({ 'metadatafield2' => 'value2', 'metadatafield3' => 'value1' }, @sample32.metadata)
           assert_equal({ 'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
@@ -52,7 +52,7 @@ module Samples
           assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
           assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-          metadata_changes = Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+          metadata_changes = Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
 
           assert_equal({ 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'value2' }, @sample32.metadata)
           assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
@@ -75,7 +75,7 @@ module Samples
           assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
           assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-          metadata_changes = Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+          metadata_changes = Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
 
           assert_equal({ 'metadatafield2' => 'value2', 'metadatafield3' => 'newvalue1' }, @sample32.metadata)
           assert_equal({ 'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
@@ -98,7 +98,7 @@ module Samples
 
           assert_authorized_to(:update_sample?, @sample32.project, with: ProjectPolicy,
                                                                    context: { user: @user }) do
-            Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+            Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
           end
         end
 
@@ -108,7 +108,7 @@ module Samples
                                        'value' => { 'value1' => 'value1' } } }
 
           exception = assert_raises(ActionPolicy::Unauthorized) do
-            Samples::Metadata::Fields::EditService.new(@project29, @sample32, user, params).execute
+            Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, user, params).execute
           end
 
           assert_equal ProjectPolicy, exception.policy
@@ -122,7 +122,7 @@ module Samples
           params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
                                        'value' => { 'value1' => 'value1' } } }
 
-          Samples::Metadata::Fields::EditService.new(@project30, @sample32, @user, params).execute
+          Samples::Metadata::Fields::UpdateService.new(@project30, @sample32, @user, params).execute
 
           assert @sample32.errors.full_messages.include?(
             I18n.t('services.samples.metadata.fields.sample_does_not_belong_to_project', sample_name: @sample32.name,
@@ -134,7 +134,7 @@ module Samples
           params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield1' },
                                        'value' => { 'value1' => 'value1' } } }
 
-          Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+          Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
 
           assert @sample32.errors.full_messages.include?(
             I18n.t('services.samples.metadata.edit_fields.metadata_was_not_changed')
@@ -145,7 +145,7 @@ module Samples
           params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield2' },
                                        'value' => { 'value1' => 'value1' } } }
 
-          Samples::Metadata::Fields::EditService.new(@project29, @sample32, @user, params).execute
+          Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
 
           assert @sample32.errors.full_messages.include?(
             I18n.t('services.samples.metadata.edit_fields.key_exists', key: 'metadatafield2')

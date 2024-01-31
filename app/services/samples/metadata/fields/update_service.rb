@@ -5,8 +5,8 @@ module Samples
     module Fields
       # Service used to validate the edit_fields param and construct the metadata update param to be passed
       # to metadata_controller#update and Samples::Metadata::UpdateService
-      class EditService < BaseService
-        SampleMetadataFieldsEditError = Class.new(StandardError)
+      class UpdateService < BaseService
+        SampleMetadataFieldsUpdateError = Class.new(StandardError)
         attr_accessor :project, :sample, :key_edit, :value_edit, :metadata_update_params
 
         def initialize(project, sample, user = nil, params = {})
@@ -28,7 +28,7 @@ module Samples
           construct_metadata_update_params
 
           ::Samples::Metadata::UpdateService.new(@project, @sample, current_user, @metadata_update_params).execute
-        rescue Samples::Metadata::Fields::EditService::SampleMetadataFieldsEditError => e
+        rescue Samples::Metadata::Fields::UpdateService::SampleMetadataFieldsUpdateError => e
           @sample.errors.add(:base, e.message)
           @metadata_update_params
         end
@@ -38,7 +38,7 @@ module Samples
         def validate_sample_in_project
           return unless @project.id != @sample.project.id
 
-          raise SampleMetadataFieldsEditError,
+          raise SampleMetadataFieldsUpdateError,
                 I18n.t('services.samples.metadata.fields.sample_does_not_belong_to_project',
                        sample_name: @sample.name,
                        project_name: @project.name)
@@ -48,14 +48,15 @@ module Samples
         def validate_edit_fields
           return unless @key_edit.keys[0] == @key_edit.values[0] && @value_edit.keys[0] == @value_edit.values[0]
 
-          raise SampleMetadataFieldsEditError, I18n.t('services.samples.metadata.edit_fields.metadata_was_not_changed')
+          raise SampleMetadataFieldsUpdateError,
+                I18n.t('services.samples.metadata.edit_fields.metadata_was_not_changed')
         end
 
         # Constructs the expected param for metadata update_service
         def construct_metadata_update_params
           if @key_edit.keys[0] != @key_edit.values[0]
             if validate_new_key
-              raise SampleMetadataFieldsEditError,
+              raise SampleMetadataFieldsUpdateError,
                     I18n.t('services.samples.metadata.edit_fields.key_exists', key: @key_edit.values[0])
             end
 

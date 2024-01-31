@@ -12,8 +12,8 @@ module Projects
         # Fields that have not been changed will have equal old and new
         def update # rubocop:disable Metrics/AbcSize
           authorize! @project, to: :update_sample?
-          updated_metadata_field = ::Samples::Metadata::Fields::EditService.new(@project, @sample, current_user,
-                                                                                edit_field_params).execute
+          updated_metadata_field = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
+                                                                                  edit_field_params).execute
           if @sample.errors.any?
             render status: :unprocessable_entity,
                    locals: { key: edit_field_params['edit_field']['key'].keys[0],

@@ -6,7 +6,7 @@ module Projects
   module Samples
     module Metadata
       module Fields
-        class EditControllerTest < ActionDispatch::IntegrationTest
+        class FieldsControllerTest < ActionDispatch::IntegrationTest
           setup do
             sign_in users(:john_doe)
             @sample23 = samples(:sample23)
