@@ -1,29 +1,29 @@
 <%= form_with(model: @sample, url: namespace_project_sample_metadata_field_path(sample_id: @sample.id), method: :post) do |form| %>
 
-  <div class="grid gap-2" data-controller="projects--samples--metadata--add">
+  <div id='test' class="grid gap-2" data-controller="projects--samples--metadata--add">
     <div data-projects--samples--metadata--add-target="metadataToAdd"></div>
-    <div id="field_label_0" class="text-slate-700 dark:text-slate-400 text-sm">
-    Field 1:
-    </div>
+    <div id='input-field-0' class='inputField'>
+      <div id="field_label_0" class="text-slate-700 dark:text-slate-400 text-sm mb-2">
+        <%= t(".field")%> 1:
+      </div>
 
-    <div id='input-field-0' class="flex space-x-2 mb-2 inputField">
-      <div class="relative z-0 w-full group">
-        <input type="text" name="key_0" id="key_0" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
-        <label for="key_0" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Key</label>
+      <div class="flex space-x-2 mb-2">
+        <div class="relative z-0 w-full group">
+          <input type="text" name="key_0" id="key_0" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
+          <label for="key_0" id="key_label" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"><%= t(".key") %></label>
+        </div>
+        <div class="relative z-0 w-full group">
+          <input type="text" name="value_0" id="value_0" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
+          <label for="value_0" id="value_label" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"><%= t(".value") %></label>
+        </div>
+        <div class="w-[4.5rem]"></div>
       </div>
-      <div class="relative z-0 w-full group">
-        <input type="text" name="value_0" id="value_0" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " required />
-        <label for="value_0" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Value</label>
-      </div>
-      <button type="button" data-action="projects--samples--metadata--add#removeField" class="ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2 focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white dark:bg-slate-800 dark:hover:bg-slate-700" aria-label="Close">
-        <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-      </button>
     </div>
     <div class="text-center">
         <%= form.button "Add another metadata field",
             type: 'button',
             class: 'button button--size-default button--state-default',
-            "data-action": 'projects--samples--metadata--add#addField'
+            "data-action": 'projects--samples--metadata--add#addNewField'
         %>
     </div>
     <div>

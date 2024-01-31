@@ -24,7 +24,7 @@ module Samples
 
           construct_metadata_update_params
 
-          validate_metadata_params
+          validate_new_added_keys
 
           updated_metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
                                                                            @metadata_update_params).execute
@@ -69,7 +69,7 @@ module Samples
         end
 
         # Checks if all new keys already exist
-        def validate_metadata_params
+        def validate_new_added_keys
           return unless @metadata_update_params['metadata'].empty?
 
           raise SampleMetadataFieldsAddError,

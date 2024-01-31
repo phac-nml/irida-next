@@ -71,20 +71,8 @@ module Projects
 
       private
 
-      def add_metadata_params
-        params.require(:sample).permit(metadata: {}, existing_keys: [])
-      end
-
       def metadata_params
         params.require(:sample).permit(metadata: {})
-      end
-
-      def get_add_status_and_messages(metadata, existing_keys)
-        puts 'keys exist' if existing_keys.count.positive?
-
-        return unless metadata[:added]
-
-        puts 'added metadata'
       end
     end
   end

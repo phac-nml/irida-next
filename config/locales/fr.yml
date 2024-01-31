@@ -332,6 +332,7 @@ fr:
       title: Your work
       groups: Groups
       projects: Projects
+      workflows: Workflow Executions
     navbar:
       collapse:
         aria_label: Collapse navigation menu
@@ -947,11 +948,14 @@ fr:
         updated_at: Last Updated
         action: Action
       metadata:
-        update:
-          success: 'Metadata fields %{metadata_fields} for sample %{sample_name} were updated'
-        create:
-          success: "Metadata keys '%{new_keys}' were added to sample '%{sample_name}'."
-          error: "Metadata keys '%{existing_keys}' already exist."
+        fields:
+          create:
+            success: Metadata keys '%{keys}' were successfully added.
+            keys_exist: Metadata keys '%{keys}' already exist
+        form:
+          field: Field
+          key: Key
+          value: Value
   workflow_executions:
     submissions:
       pipeline_selection:
