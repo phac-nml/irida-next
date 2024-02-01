@@ -43,10 +43,11 @@ export default class extends Controller {
   // When a field is removed, all fields 'after' will have their "Field #" label and data-field-id reduced by 1.
   removeField(event) {
     const fieldToDelete = event.target.closest('.inputField')
-    const inputId = parseInt(fieldToDelete.dataset.fieldId)
+    const deleteFieldId = parseInt(fieldToDelete.dataset.fieldId)
     fieldToDelete.remove()
-    const inputFields = document.getElementsByClassName('inputField')
-    for (let i = inputId; i < inputFields.length; i++) {
+
+    let inputFields = document.getElementsByClassName('inputField')
+    for (let i = deleteFieldId; i < inputFields.length; i++) {
       inputFields[i].querySelector(".fieldLabel").innerText = `${this.fieldLabel} ${i + 1}:`
       inputFields[i].dataset.fieldId = i
     }
@@ -60,8 +61,8 @@ export default class extends Controller {
       let metadata_field = input.querySelector('.keyInput')
       let value = input.querySelector('.valueInput')
       if (metadata_field.value && value.value) {
-        let metadataFieldInput = `<input type='hidden' name="sample[add_fields][${metadata_field.value}]" value="${value.value}">`
-        this.metadataToAddTarget.insertAdjacentHTML("beforeend", metadataFieldInput)
+        let metadataInput = `<input type='hidden' name="sample[add_fields][${metadata_field.value}]" value="${value.value}">`
+        this.metadataToAddTarget.insertAdjacentHTML("beforeend", metadataInput)
       }
       metadata_field.name = ''
       value.name = ''
