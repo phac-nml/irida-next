@@ -40,7 +40,7 @@ export default class extends Controller {
     this.inputsContainerTarget.insertAdjacentHTML("beforeend", newField)
   }
 
-  // When a field is removed, all fields 'after' will have their "Field #" label and data-field-num reduced by 1.
+  // When a field is removed, all fields 'after' will have their "Field #" label and data-field-id reduced by 1.
   removeField(event) {
     const fieldToDelete = event.target.closest('.inputField')
     const inputId = parseInt(fieldToDelete.dataset.fieldId)
