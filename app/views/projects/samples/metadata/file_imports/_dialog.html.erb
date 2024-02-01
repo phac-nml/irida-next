@@ -35,14 +35,11 @@
                         {},
                         { prompt: t(".select_sample_id_column") },
                         required: true,
-                        disabled: true,
                         data: {
                           "projects--samples--metadata--file-import-target": "selectInput",
                           action:
                             "change->projects--samples--metadata--file-import#toggleSubmitButton"
-                        },
-                        class:
-                          "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+                        } %>
           </div>
           <div class="flex items-center">
             <%= form.check_box :ignore_empty_values,
@@ -58,7 +55,6 @@
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button--size-default button--state-primary",
-                        disabled: true,
                         data: {
                           "projects--samples--metadata--file-import-target": "submitButton"
                         } %>

@@ -4,6 +4,31 @@ import * as XLSX from "xlsx";
 export default class extends Controller {
   static targets = ["selectInput", "submitButton"];
 
+  #disabled_classes = [
+    "bg-gray-50",
+    "border",
+    "border-gray-300",
+    "text-gray-900",
+    "text-sm",
+    "rounded-lg",
+    "focus:ring-blue-500",
+    "focus:border-blue-500",
+    "block",
+    "w-full",
+    "p-2.5",
+    "dark:bg-gray-700",
+    "dark:border-gray-600",
+    "dark:placeholder-gray-400",
+    "dark:text-white",
+    "dark:focus:ring-blue-500",
+    "dark:focus:border-blue-500",
+  ];
+
+  connect() {
+    this.#disableSelectInput();
+    this.submitButtonTarget.disabled = true;
+  }
+
   toggleSubmitButton(event) {
     const { value } = event.target;
     this.submitButtonTarget.disabled = !value;
@@ -34,7 +59,7 @@ export default class extends Controller {
     while (this.selectInputTarget.options.length > 1) {
       this.selectInputTarget.remove(this.selectInputTarget.options.length - 1);
     }
-    this.selectInputTarget.disabled = true;
+    this.#disableSelectInput();
     this.submitButtonTarget.disabled = true;
   }
 
@@ -46,5 +71,11 @@ export default class extends Controller {
       this.selectInputTarget.append(option);
     }
     this.selectInputTarget.disabled = false;
+    this.selectInputTarget.classList.remove(...this.#disabled_classes);
+  }
+
+  #disableSelectInput() {
+    this.selectInputTarget.disabled = true;
+    this.selectInputTarget.classList.add(...this.#disabled_classes);
   }
 }
