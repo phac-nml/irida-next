@@ -5,11 +5,6 @@ export default class extends Controller {
 
 
   connect() {
-    // Tracks the current number of fields to be used through the inputs form
-    // If a field is added, totalNumberOfFields += 1
-    // If a field is deleted, totalNumberOfFields -= 1
-    this.totalNumberOfFields = 1
-
     // Grabs labels for field manipulation in case of translations
     this.fieldLabel = this.inputsContainerTarget.querySelector('#field-label').innerText.split(" ")[0]
     this.keyLabel = this.inputsContainerTarget.querySelector('#key-label').innerText
@@ -18,7 +13,7 @@ export default class extends Controller {
 
   // Add new field with next ID increment
   addNewField() {
-    const id = this.totalNumberOfFields
+    const id = document.getElementsByClassName('inputField').length
     const newField =
       `<div class='inputField' data-field-num="${id}">
         <div class="fieldLabel text-slate-700 dark:text-slate-400 text-sm mb-2">
@@ -43,7 +38,6 @@ export default class extends Controller {
         </div>
       </div>`
     this.inputsContainerTarget.insertAdjacentHTML("beforeend", newField)
-    this.totalNumberOfFields += 1
   }
 
   // When a field is removed, all fields 'after' will have their "Field #" label and data-field-num reduced by 1.
@@ -56,7 +50,6 @@ export default class extends Controller {
       inputFields[i].querySelector(".fieldLabel").innerText = `${this.fieldLabel} ${i + 1}:`
       inputFields[i].dataset.fieldNum = i
     }
-    this.totalNumberOfFields -= 1
   }
 
   // Metadata is constructed and validated before submission to the backend. Any fields that has key and/or value blank,
@@ -73,6 +66,5 @@ export default class extends Controller {
       metadata_field.name = ''
       value.name = ''
     }
-    this.totalNumberOfFields = 1
   }
 }
