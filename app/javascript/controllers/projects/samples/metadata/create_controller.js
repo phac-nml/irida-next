@@ -45,8 +45,8 @@ export default class extends Controller {
     const fieldToDelete = event.target.closest('.inputField')
     const inputId = parseInt(fieldToDelete.dataset.fieldId)
     fieldToDelete.remove()
-    const inputFields = document.getElementsByClassName('inputField')
-    for (let i = inputId; i < inputFields.length; i++) {
+    const totalInputFields = document.getElementsByClassName('inputField').length
+    for (let i = inputId; i < totalInputFields; i++) {
       inputFields[i].querySelector(".fieldLabel").innerText = `${this.fieldLabel} ${i + 1}:`
       inputFields[i].dataset.fieldId = i
     }
