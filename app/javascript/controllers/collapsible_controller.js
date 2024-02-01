@@ -4,9 +4,9 @@ export default class extends Controller {
   static targets = ["item", "icon"];
 
   toggle() {
-    const isClosed = this.itemTarget.classList.contains("hidden");
+    const isCollapsed = this.itemTarget.classList.contains("hidden");
 
-    if (isClosed) {
+    if (isCollapsed) {
       this.itemTarget.classList.remove("hidden");
       this.#updateIcon(false);
     } else {
