@@ -5,7 +5,7 @@ class WorkflowExecutionSubmissionJob < ApplicationJob
   queue_as :default
 
   def perform(workflow_execution)
-    return unless workflow_execution.canceling? || workflow_execution.canceled?
+    return if workflow_execution.canceling? || workflow_execution.canceled?
 
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::SubmissionService.new(workflow_execution, wes_connection).execute
