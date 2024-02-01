@@ -5,10 +5,11 @@ module History
   extend ActiveSupport::Concern
 
   def log_data_without_changes
-    version = version.to_i
     log_data = []
 
     reload_log_data.data['h'].each do |change_log|
+      version = change_log['v'].to_i
+
       responsible = responsible_user_for_version(change_log)
       log_data << { version: change_log['v'], user: responsible,
                     updated_at: DateTime.parse(change_log['c']['updated_at']).strftime('%a %b %e %Y %H:%M'),

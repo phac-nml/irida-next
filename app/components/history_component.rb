@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# UI History Component
+# UI History Listing Component
 class HistoryComponent < Component
   include PathHelper
 

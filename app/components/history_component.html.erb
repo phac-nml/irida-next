@@ -1,31 +1,33 @@
-<div class=" max-h-[75dvh] overflow-y-auto">
+<div class="max-h-[75dvh] overflow-y-auto p-3">
   <ol class=" relative border-s border-slate-200 dark:border-slate-700 ">
     <% @data.each_with_index do |changes, index| %>
-      <li class="mb-10 ms-6">
-        <span
+      <li class="mb-10 ms-4">
+        <div
           class="
             absolute
-            flex
-            items-center
-            justify-center
-            w-6
-            h-6
-            bg-green-100
+            w-3
+            h-3
+            bg-gray-200
             rounded-full
-            -start-3
-            dark:bg-green-100
+            mt-1.5
+            -start-1.5
+            border
+            border-white
+            dark:border-gray-900
+            dark:bg-gray-700
           "
-        ></span>
-        <h3
+        ></div>
+        <time
           class="
-            flex
-            items-center
             mb-1
-            font-semibold
-            text-slate-900
-            dark:text-white
+            text-sm
+            font-normal
+            leading-none
+            text-gray-400
+            dark:text-gray-500
           "
-        >
+        ><%= changes[:updated_at] %></time>
+        <h3 class=" text-lg font-semibold text-gray-900 dark:text-white ">
           <% unless @url.nil? %>
             <%= link_to t(:"components.history.link_text", version: changes[:version]),
             path_with_params(@url, { version: changes[:version] }),
@@ -54,18 +56,7 @@
           <% end %>
         </h3>
 
-        <time
-          class="
-            block
-            mb-2
-            text-sm
-            font-normal
-            leading-none
-            text-slate-400
-            dark:text-slate-500
-          "
-        ><%= changes[:updated_at] %></time>
-        <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
+        <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
           <% if changes[:version] == 1 %>
             <%= t(:"components.history.created_by", type: @type, user: changes[:user]) %>
           <% elsif changes[:deleted] %>
