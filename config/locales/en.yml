@@ -927,7 +927,7 @@ en:
         fields:
           create:
             success: Metadata keys '%{keys}' were successfully added.
-            keys_exist: Metadata keys '%{keys}' already exist
+            keys_exist: Metadata keys '%{keys}' already exist.
           update:
             success: "Metadata was successfully updated"
         file_imports:
