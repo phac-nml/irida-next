@@ -7,7 +7,7 @@ module Projects
       def edit
         authorize! @project, to: :update_sample?
         render turbo_stream: turbo_stream.update('sample_modal',
-                                                 partial: 'edit_metadata_modal',
+                                                 partial: 'update_metadata_modal',
                                                  locals: {
                                                    open: true,
                                                    key: params[:key],

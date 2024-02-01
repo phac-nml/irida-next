@@ -885,7 +885,7 @@ module Projects
       end
     end
 
-    test 'edit metadata key' do
+    test 'update metadata key' do
       visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
@@ -894,15 +894,15 @@ module Projects
         assert_text 'metadatafield1'
         assert_text 'value1'
         first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.edit')
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
       end
 
       within %(turbo-frame[id="sample_modal"]) do
-        assert_text I18n.t('projects.samples.show.metadata.edit.edit_metadata')
-        assert_selector 'input#sample_edit_field_key_metadatafield1', count: 1
-        assert_selector 'input#sample_edit_field_value_value1', count: 1
-        find('input#sample_edit_field_key_metadatafield1').fill_in with: 'newMetadataKey'
-        click_on I18n.t('projects.samples.show.metadata.edit.edit')
+        assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
+        assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
+        assert_selector 'input#sample_update_field_value_value1', count: 1
+        find('input#sample_update_field_key_metadatafield1').fill_in with: 'newMetadataKey'
+        click_on I18n.t('projects.samples.show.metadata.update.update')
       end
 
       assert_text I18n.t('projects.samples.metadata.fields.update.success')
@@ -911,7 +911,7 @@ module Projects
       assert_text 'value1'
     end
 
-    test 'edit metadata value' do
+    test 'update metadata value' do
       visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
@@ -920,15 +920,15 @@ module Projects
         assert_text 'metadatafield1'
         assert_text 'value1'
         first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.edit')
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
       end
 
       within %(turbo-frame[id="sample_modal"]) do
-        assert_text I18n.t('projects.samples.show.metadata.edit.edit_metadata')
-        assert_selector 'input#sample_edit_field_key_metadatafield1', count: 1
-        assert_selector 'input#sample_edit_field_value_value1', count: 1
-        find('input#sample_edit_field_value_value1').fill_in with: 'newMetadataValue'
-        click_on I18n.t('projects.samples.show.metadata.edit.edit')
+        assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
+        assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
+        assert_selector 'input#sample_update_field_value_value1', count: 1
+        find('input#sample_update_field_value_value1').fill_in with: 'newMetadataValue'
+        click_on I18n.t('projects.samples.show.metadata.update.update')
       end
 
       assert_text I18n.t('projects.samples.metadata.fields.update.success')
@@ -937,7 +937,7 @@ module Projects
       assert_text 'newMetadataValue'
     end
 
-    test 'edit both metadata key and value at same time' do
+    test 'update both metadata key and value at same time' do
       visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
@@ -946,16 +946,16 @@ module Projects
         assert_text 'metadatafield1'
         assert_text 'value1'
         first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.edit')
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
       end
 
       within %(turbo-frame[id="sample_modal"]) do
-        assert_text I18n.t('projects.samples.show.metadata.edit.edit_metadata')
-        assert_selector 'input#sample_edit_field_key_metadatafield1', count: 1
-        assert_selector 'input#sample_edit_field_value_value1', count: 1
-        find('input#sample_edit_field_key_metadatafield1').fill_in with: 'newMetadataKey'
-        find('input#sample_edit_field_value_value1').fill_in with: 'newMetadataValue'
-        click_on I18n.t('projects.samples.show.metadata.edit.edit')
+        assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
+        assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
+        assert_selector 'input#sample_update_field_value_value1', count: 1
+        find('input#sample_update_field_key_metadatafield1').fill_in with: 'newMetadataKey'
+        find('input#sample_update_field_value_value1').fill_in with: 'newMetadataValue'
+        click_on I18n.t('projects.samples.show.metadata.update.update')
       end
 
       assert_text I18n.t('projects.samples.metadata.fields.update.success')
@@ -965,7 +965,7 @@ module Projects
       assert_text 'newMetadataValue'
     end
 
-    test 'cannot edit metadata key with key that already exists' do
+    test 'cannot update metadata key with key that already exists' do
       visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
@@ -974,21 +974,21 @@ module Projects
         assert_text 'metadatafield1'
         assert_text 'metadatafield2'
         first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.edit')
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
       end
 
       within %(turbo-frame[id="sample_modal"]) do
-        assert_text I18n.t('projects.samples.show.metadata.edit.edit_metadata')
-        assert_selector 'input#sample_edit_field_key_metadatafield1', count: 1
-        assert_selector 'input#sample_edit_field_value_value1', count: 1
-        find('input#sample_edit_field_key_metadatafield1').fill_in with: 'metadatafield2'
-        click_on I18n.t('projects.samples.show.metadata.edit.edit')
+        assert_text I18n.t('projects.samples.show.metadata.update.update_metadata')
+        assert_selector 'input#sample_update_field_key_metadatafield1', count: 1
+        assert_selector 'input#sample_update_field_value_value1', count: 1
+        find('input#sample_update_field_key_metadatafield1').fill_in with: 'metadatafield2'
+        click_on I18n.t('projects.samples.show.metadata.update.update')
       end
 
-      assert_text I18n.t('services.samples.metadata.edit_fields.key_exists', key: 'metadatafield2')
+      assert_text I18n.t('services.samples.metadata.update_fields.key_exists', key: 'metadatafield2')
     end
 
-    test 'user with access level < Maintainer cannot view edit action' do
+    test 'user with access level < Maintainer cannot view update action' do
       sign_in users(:jane_doe)
       visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
@@ -1003,7 +1003,8 @@ module Projects
         assert_text 'value2'
       end
     end
-    test 'user cannot edit metadata added by an analysis' do
+
+    test 'user cannot update metadata added by an analysis' do
       @subgroup12aa = groups(:subgroup_twelve_a_a)
       @project31 = projects(:project31)
       @sample34 = samples(:sample34)
@@ -1016,7 +1017,9 @@ module Projects
         assert_text 'metadatafield1'
         assert_text "#{I18n.t('models.sample.analysis')} 1"
         first('button.Viral-Dropdown--icon').click
-        assert_no_text I18n.t('projects.samples.show.metadata.actions.dropdown.edit')
+        within('div[data-viral--dropdown-target="menu"] ul') do
+          assert_no_text I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        end
       end
     end
 

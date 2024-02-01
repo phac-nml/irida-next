@@ -16,8 +16,8 @@ module Projects
                                                                                   edit_field_params).execute
           if @sample.errors.any?
             render status: :unprocessable_entity,
-                   locals: { key: edit_field_params['edit_field']['key'].keys[0],
-                             value: edit_field_params['edit_field']['value'].keys[0] }
+                   locals: { key: edit_field_params['update_field']['key'].keys[0],
+                             value: edit_field_params['update_field']['value'].keys[0] }
           else
             render_params = get_render_status_and_message(updated_metadata_field)
             render status: render_params[:status], locals: { type: render_params[:message][:type],
@@ -28,7 +28,7 @@ module Projects
         private
 
         def edit_field_params
-          params.require(:sample).permit(edit_field: { key: {}, value: {} })
+          params.require(:sample).permit(update_field: { key: {}, value: {} })
         end
 
         def get_render_status_and_message(updated_metadata_field)

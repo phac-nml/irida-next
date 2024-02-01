@@ -15,10 +15,10 @@ module Samples
           @subgroup12a = groups(:subgroup_twelve_a)
         end
 
-        test 'edit metadata key' do
+        test 'update metadata key' do
           freeze_time
-          params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
-                                       'value' => { 'value1' => 'value1' } } }
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
+                                         'value' => { 'value1' => 'value1' } } }
 
           assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
           assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
@@ -42,10 +42,10 @@ module Samples
                        @group12.reload.metadata_summary)
         end
 
-        test 'edit metadata value' do
+        test 'update metadata value' do
           freeze_time
-          params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield1' },
-                                       'value' => { 'value1' => 'newvalue1' } } }
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield1' },
+                                         'value' => { 'value1' => 'newvalue1' } } }
 
           assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
           assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
@@ -65,10 +65,10 @@ module Samples
           assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
         end
 
-        test 'edit metadata key and value' do
+        test 'update metadata key and value' do
           freeze_time
-          params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
-                                       'value' => { 'value1' => 'newvalue1' } } }
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
+                                         'value' => { 'value1' => 'newvalue1' } } }
 
           assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
           assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
@@ -93,8 +93,8 @@ module Samples
         end
 
         test 'update sample metadata with valid permission' do
-          params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
-                                       'value' => { 'value1' => 'value1' } } }
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
+                                         'value' => { 'value1' => 'value1' } } }
 
           assert_authorized_to(:update_sample?, @sample32.project, with: ProjectPolicy,
                                                                    context: { user: @user }) do
@@ -104,8 +104,8 @@ module Samples
 
         test 'update sample metadata without permission to update sample' do
           user = users(:ryan_doe)
-          params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
-                                       'value' => { 'value1' => 'value1' } } }
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
+                                         'value' => { 'value1' => 'value1' } } }
 
           exception = assert_raises(ActionPolicy::Unauthorized) do
             Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, user, params).execute
@@ -119,8 +119,8 @@ module Samples
         end
 
         test 'sample does not belong to project' do
-          params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
-                                       'value' => { 'value1' => 'value1' } } }
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
+                                         'value' => { 'value1' => 'value1' } } }
 
           Samples::Metadata::Fields::UpdateService.new(@project30, @sample32, @user, params).execute
 
@@ -131,24 +131,24 @@ module Samples
         end
 
         test 'metadata was not changed' do
-          params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield1' },
-                                       'value' => { 'value1' => 'value1' } } }
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield1' },
+                                         'value' => { 'value1' => 'value1' } } }
 
           Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
 
           assert @sample32.errors.full_messages.include?(
-            I18n.t('services.samples.metadata.edit_fields.metadata_was_not_changed')
+            I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
           )
         end
 
-        test 'edit metadata key to key that already exists' do
-          params = { 'edit_field' => { 'key' => { 'metadatafield1' => 'metadatafield2' },
-                                       'value' => { 'value1' => 'value1' } } }
+        test 'update metadata key to key that already exists' do
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield2' },
+                                         'value' => { 'value1' => 'value1' } } }
 
           Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
 
           assert @sample32.errors.full_messages.include?(
-            I18n.t('services.samples.metadata.edit_fields.key_exists', key: 'metadatafield2')
+            I18n.t('services.samples.metadata.update_fields.key_exists', key: 'metadatafield2')
           )
         end
       end

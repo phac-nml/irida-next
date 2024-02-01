@@ -1,10 +1,10 @@
 <%= form_with(model: @sample, url: namespace_project_sample_metadata_field_path(sample_id: @sample.id), method: :patch) do |form| %>
   <%= turbo_frame_tag 'update-alert' %>
   <div class="grid gap-4">
-  <%= form.fields_for :edit_field do |field| %>
+  <%= form.fields_for :update_field do |field| %>
     <%= field.fields_for :key do |metadata_key| %>
       <div class="form-field">
-        <%= metadata_key.label t("projects.samples.show.metadata.edit.key"),
+        <%= metadata_key.label t("projects.samples.show.metadata.update.key"),
                   class:
                     "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
         <%= metadata_key.text_field key,
@@ -17,7 +17,7 @@
     <% end %>
      <%= field.fields_for :value do |metadata_value| %>
       <div class="form-field">
-        <%= metadata_value.label t("projects.samples.show.metadata.edit.value"),
+        <%= metadata_value.label t("projects.samples.show.metadata.update.value"),
                   class:
                     "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
         <%= metadata_value.text_field value,
@@ -29,7 +29,7 @@
     <% end %>
 
     <div>
-      <%= field.submit t("projects.samples.show.metadata.edit.edit"),
+      <%= field.submit t("projects.samples.show.metadata.update.update"),
                   class: "button button--state-primary button--size-default"
                   %>
     </div>

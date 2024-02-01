@@ -32,7 +32,7 @@
                   key: metadata[:key])}) do |dropdown| %>
                   <% unless metadata[:source_type] == 'analysis' %>
                     <%= dropdown.with_item(
-                      label: t(:'projects.samples.show.metadata.actions.dropdown.edit'),
+                      label: t(:'projects.samples.show.metadata.actions.dropdown.update'),
                       url: edit_namespace_project_sample_metadata_path(
                         sample_id: @sample.id,
                         key: metadata[:key],

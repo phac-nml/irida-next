@@ -810,12 +810,12 @@ en:
         metadata:
           actions:
             dropdown:
-              edit: Edit
+              update: Update
             metadata_dropdown_aria_label: Dropdown options for metadata field %{key}
           analysis: Analysis
-          edit:
-            edit: Edit
-            edit_metadata: Edit Metadata
+          update:
+            update: Update
+            update_metadata: Update Metadata
             key: Key
             value: Value
         no_files: No Files
@@ -980,7 +980,7 @@ en:
         sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         empty_metadata: "No metadata was received to update sample '%{sample_name}'"
         user_cannot_update_metadata: "Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis. "
-        edit_fields:
+        update_fields:
           metadata_was_not_changed: "Metadata fields were not changed."
           key_exists: "Sample already contains metadata field '%{key}'."
         fields:

@@ -1,6 +1,6 @@
 <%= turbo_stream.update(
   "sample_modal",
-  partial: "projects/samples/metadata/edit_metadata_modal",
+  partial: "projects/samples/metadata/update_metadata_modal",
   locals: {
     open: @sample.errors.any?,
     key: defined?(key) ? key : nil,
