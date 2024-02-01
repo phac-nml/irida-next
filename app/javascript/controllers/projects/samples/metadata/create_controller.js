@@ -15,7 +15,7 @@ export default class extends Controller {
   addNewField() {
     const id = document.getElementsByClassName('inputField').length
     const newField =
-      `<div class='inputField' data-field-num="${id}">
+      `<div class='inputField' data-field-id="${id}">
         <div class="fieldLabel text-slate-700 dark:text-slate-400 text-sm mb-2">
           ${this.fieldLabel} ${id + 1}:
         </div>
@@ -43,12 +43,12 @@ export default class extends Controller {
   // When a field is removed, all fields 'after' will have their "Field #" label and data-field-num reduced by 1.
   removeField(event) {
     const fieldToDelete = event.target.closest('.inputField')
-    const inputId = parseInt(fieldToDelete.dataset.fieldNum)
+    const inputId = parseInt(fieldToDelete.dataset.fieldId)
     fieldToDelete.remove()
     const inputFields = document.getElementsByClassName('inputField')
     for (let i = inputId; i < inputFields.length; i++) {
       inputFields[i].querySelector(".fieldLabel").innerText = `${this.fieldLabel} ${i + 1}:`
-      inputFields[i].dataset.fieldNum = i
+      inputFields[i].dataset.fieldId = i
     }
   }
 
