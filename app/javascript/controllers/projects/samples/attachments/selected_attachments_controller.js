@@ -8,7 +8,7 @@ export default class extends Controller {
     fieldName: String,
     storageKey: {
       type: String,
-      default: `${location.protocol}//${location.host}${location.pathname}`,
+      default: `${location.protocol}//${location.host}${location.pathname}${location.search}`,
     },
   };
 

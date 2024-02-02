@@ -12,7 +12,7 @@ export default class extends Controller {
 
     this.#storageKey =
       this.element.dataset.storageKey ||
-      `${location.protocol}//${location.host}${location.pathname}`;
+      `${location.protocol}//${location.host}${location.pathname}${location.search}`;
 
     this.element.setAttribute("data-controller-connected", "true");
 

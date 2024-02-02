@@ -837,6 +837,7 @@ en:
         new_attachment_button: Upload Files
         concatenate_button: Concatenate Files
         delete_files_button: Delete Files
+        delete_metadata_button: Delete Metadata
         edit_button: Edit this sample
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
