@@ -1,10 +1,4 @@
-<%= turbo_stream.update(
-  "sample_files_modal",
-  partial: "modal",
-  locals: {
-    open: false
-  }
-) %>
+<%= turbo_stream.update("sample_modal", partial: "modal", locals: { open: false }) %>
 
 <% unless message.nil? %>
   <%= turbo_stream.append "flashes" do %>

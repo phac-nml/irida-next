@@ -808,7 +808,16 @@ en:
         error: The sample does not exist within the project.
         files: Files
         metadata:
+          actions:
+            dropdown:
+              update: Update
+            metadata_dropdown_aria_label: Dropdown options for metadata field %{key}
           analysis: Analysis
+          update:
+            update: Update
+            update_metadata: Update Metadata
+            key: Key
+            value: Value
         no_files: No Files
         no_associated_files: There are no files associated with this sample.
         no_metadata: No Metadata
@@ -877,6 +886,11 @@ en:
           error: "The following list of samples failed to transfer:"
           no_samples_transferred_error: "Samples were not transferred for the following reasons:"
       metadata:
+        edit:
+          edit: Edit
+        fields:
+          update:
+            success: "Metadata was successfully updated"
         file_imports:
           create:
             success: Sample metadata was successfully imported.
@@ -916,9 +930,6 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
-      metadata:
-        update:
-          success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
   workflow_executions:
     index:
       title: Workflow Executions
@@ -966,9 +977,15 @@ en:
         samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
         maintainer_transfer_not_allowed: A maintainer can only transfer samples to other projects within the same hierarchy with a common ancestor
       metadata:
-        sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '${project_name}'"
+        sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         empty_metadata: "No metadata was received to update sample '%{sample_name}'"
         user_cannot_update_metadata: "Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis. "
+        update_fields:
+          metadata_was_not_changed: "Metadata fields were not changed."
+          key_exists: "Sample already contains metadata field '%{key}'."
+          user_cannot_edit_metadata_key: "Metadata key '%{key}' cannot be updated by a user."
+        fields:
+          sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         import_file:
           empty_file: The file cannot be empty.
           empty_sample_id_column: The sample id column cannot be empty.

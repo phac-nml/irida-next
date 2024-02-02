@@ -2,27 +2,17 @@
 
 module Projects
   module Samples
-    # Controller actions for Project Samples Attachments
+    # Controller actions for Project Samples Metadata
     class MetadataController < Projects::Samples::ApplicationController
-      def update # rubocop:disable Metrics/AbcSize
+      def edit
         authorize! @project, to: :update_sample?
-        respond_to do |format|
-          metadata_fields = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
-                                                                   metadata_params).execute
-          modified_metadata = metadata_fields[:added] + metadata_fields[:updated] + metadata_fields[:deleted]
-          if modified_metadata.count.positive?
-            flash[:success] =
-              t('.success', metadata_fields: metadata_fields[:updated].join(', '), sample_name: @sample.name)
-          end
-          flash[:error] = @sample.errors.full_messages.first if @sample.errors.any?
-          format.turbo_stream { redirect_to(project_path(@project)) }
-        end
-      end
-
-      private
-
-      def metadata_params
-        params.require(:metadata).permit(:analysis_id, metadata: {})
+        render turbo_stream: turbo_stream.update('sample_modal',
+                                                 partial: 'update_metadata_modal',
+                                                 locals: {
+                                                   open: true,
+                                                   key: params[:key],
+                                                   value: params[:value]
+                                                 }), status: :ok
       end
     end
   end

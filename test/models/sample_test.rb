@@ -82,11 +82,13 @@ class SampleTest < ActiveSupport::TestCase
       key: 'metadatafield1',
       value: 'value1',
       source: user.email,
+      source_type: 'user',
       last_updated: DateTime.new(2000, 1, 1)
     }, {
       key: 'metadatafield2',
       value: 'value2',
       source: user.email,
+      source_type: 'user',
       last_updated: DateTime.new(2000, 1, 1)
     }]
     assert_equal(expected_metadata_with_provenance, sample.metadata_with_provenance)

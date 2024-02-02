@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "sample_files_modal" %>
+<%= turbo_frame_tag "sample_modal" %>
 
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, subtitle: @sample.description) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
@@ -78,7 +78,7 @@
         <%= link_to t(".new_attachment_button"),
           new_namespace_project_sample_attachment_path(sample_id: @sample.id),
           data: {
-            turbo_frame: "sample_files_modal",
+            turbo_frame: "sample_modal",
             turbo_stream: true
           },
           class: "button button--size-default button--state-default" %>
@@ -87,7 +87,7 @@
             sample_id: @sample.id
           ),
           data: {
-            turbo_frame: "sample_files_modal",
+            turbo_frame: "sample_modal",
             turbo_stream: false,
             controller: "action-link",
             action_link_required_value: 2
@@ -98,7 +98,7 @@
             sample_id: @sample.id
           ),
           data: {
-            turbo_frame: "sample_files_modal",
+            turbo_frame: "sample_modal",
             turbo_stream: false,
             controller: "action-link",
             action_link_required_value: 1

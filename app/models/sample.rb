@@ -46,12 +46,13 @@ class Sample < ApplicationRecord
   def metadata_with_provenance
     sample_metadata = []
     metadata.each do |key, value|
-      source = if metadata_provenance[key]['source'] == 'user'
+      source_type = metadata_provenance[key]['source']
+      source = if source_type == 'user'
                  User.find(metadata_provenance[key]['id']).email
                else
                  "#{I18n.t('models.sample.analysis')} #{metadata_provenance[key]['id']}"
                end
-      sample_metadata << { key:, value:, source:,
+      sample_metadata << { key:, value:, source:, source_type:,
                            last_updated: metadata_provenance[key]['updated_at'] }
     end
     sample_metadata
