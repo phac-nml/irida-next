@@ -907,6 +907,11 @@ fr:
           error: "The following list of samples failed to transfer:"
           no_samples_transferred_error: "Samples were not transferred for the following reasons:"
       metadata:
+        deletions:
+          modal:
+            title: Delete Metadata
+            description: This is a description
+            submit_button: Delete
         destroy:
           success: Metadata field '%{deleted_key}' was successfully deleted.
         edit:
