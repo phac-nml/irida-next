@@ -20,13 +20,13 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
   GRAPHQL
 
   def setup
-    @user = users(:john_doe)
-    @api_scope_token = personal_access_tokens(:john_doe_valid_pat)
-    @read_api_scope_token = personal_access_tokens(:john_doe_valid_read_pat)
+    @user = users(:jeff_doe)
+    @api_scope_token = personal_access_tokens(:jeff_doe_valid_pat)
+    @read_api_scope_token = personal_access_tokens(:jeff_doe_valid_read_pat)
   end
 
   test 'attachFilesToSample mutation should work with valid params and api scope token' do
-    sample = samples(:sample37)
+    sample = samples(:sampleJeff)
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
     assert_equal 0, sample.attachments.count
@@ -51,7 +51,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
   end
 
   test 'attachFilesToSample mutation should not work with read api scope token' do
-    sample = samples(:sample37)
+    sample = samples(:sampleJeff)
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
     assert_equal 0, sample.attachments.count

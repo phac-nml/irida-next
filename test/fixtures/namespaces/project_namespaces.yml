@@ -413,3 +413,12 @@ projectHotel_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel) %>
   metadata_summary: {}
+
+project_jeff_namespace:
+  name: Project Uncounted
+  path: project-uncounted
+  description: Project Uncounted description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>
+  metadata_summary: {}
