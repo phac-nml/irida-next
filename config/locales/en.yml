@@ -896,6 +896,25 @@ en:
           create:
             success: Sample metadata was successfully imported.
             error: "Metadata was not successfully imported for the following samples:"
+        update:
+          success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
+        file_imports:
+          create:
+            success: Sample metadata was successfully imported.
+            error: "Metadata was not successfully imported for the following samples:"
+          dialog:
+            title: Upload Sample Metadata
+            file: File
+            file_help: CSV, XLS or XLSX.
+            sample_id_column: Sample ID Column
+            select_sample_id_column: Select a Sample ID Column
+            submit_button: Import Metadata
+          errors:
+            description: "The sample metadata import completed with the following errors:"
+            ok_button: OK
+          success:
+            description: The metadata was imported successfully!
+            ok_button: OK
       attachments:
         concatenations:
           create:
@@ -931,26 +950,6 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
-      metadata:
-        update:
-          success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
-        file_imports:
-          create:
-            success: Sample metadata was successfully imported.
-            error: "Metadata was not successfully imported for the following samples:"
-          dialog:
-            title: Upload Sample Metadata
-            file: File
-            file_help: CSV, XLS or XLSX.
-            sample_id_column: Sample ID Column
-            select_sample_id_column: Select a Sample ID Column
-            submit_button: Import Metadata
-          errors:
-            description: "The sample metadata import completed with the following errors:"
-            ok_button: OK
-          success:
-            description: The metadata was imported successfully!
-            ok_button: OK
   workflow_executions:
     index:
       title: Workflow Executions
