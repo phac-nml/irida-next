@@ -79,6 +79,32 @@ module Projects
                   } }, format: :turbo_stream }
             assert_response :unauthorized
           end
+
+          test 'cannot update metadata key originally added by an analysis' do
+            sample34 = samples(:sample34)
+            project31 = projects(:project31)
+            namespace = groups(:subgroup_twelve_a_a)
+
+            patch namespace_project_sample_metadata_field_path(namespace, project31, sample34),
+                  params: { 'sample' => { 'update_field' => {
+                    'key' => { 'metadatafield1' => 'metadatafield3' },
+                    'value' => { 'value1' => 'value1' }
+                  } }, format: :turbo_stream }
+            assert_response :unprocessable_entity
+          end
+
+          test 'cannot update metadata value originally added by an analysis' do
+            sample34 = samples(:sample34)
+            project31 = projects(:project31)
+            namespace = groups(:subgroup_twelve_a_a)
+
+            patch namespace_project_sample_metadata_field_path(namespace, project31, sample34),
+                  params: { 'sample' => { 'update_field' => {
+                    'key' => { 'metadatafield1' => 'metadatafield1' },
+                    'value' => { 'value1' => 'value2' }
+                  } }, format: :turbo_stream }
+            assert_response :unprocessable_entity
+          end
         end
       end
     end

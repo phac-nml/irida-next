@@ -92,6 +92,68 @@ module Samples
                        @group12.reload.metadata_summary)
         end
 
+        test 'user cannot update metadata key originally provided by analysis' do
+          sample34 = samples(:sample34)
+          project31 = projects(:project31)
+          subgroup12aa = groups(:subgroup_twelve_a_a)
+
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
+                                         'value' => { 'value1' => 'value1' } } }
+
+          assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample34.metadata)
+          assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, project31.namespace.metadata_summary)
+          assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, subgroup12aa.metadata_summary)
+          assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+          assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+          assert_no_changes -> { sample34.metadata } do
+            assert_no_changes -> { project31.namespace.reload.metadata_summary } do
+              assert_no_changes -> { subgroup12aa.reload.metadata_summary } do
+                assert_no_changes -> { @subgroup12a.reload.metadata_summary } do
+                  assert_no_changes -> { @group12.reload.metadata_summary } do
+                    Samples::Metadata::Fields::UpdateService.new(project31, sample34, @user, params).execute
+                  end
+                end
+              end
+            end
+          end
+
+          assert sample34.errors.full_messages.include?(
+            I18n.t('services.samples.metadata.update_fields.user_cannot_edit_metadata_key', key: 'metadatafield1')
+          )
+        end
+
+        test 'user cannot update metadata value originally provided by analysis' do
+          sample34 = samples(:sample34)
+          project31 = projects(:project31)
+          subgroup12aa = groups(:subgroup_twelve_a_a)
+
+          params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield1' },
+                                         'value' => { 'value1' => 'newvalue1' } } }
+
+          assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample34.metadata)
+          assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, project31.namespace.metadata_summary)
+          assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, subgroup12aa.metadata_summary)
+          assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+          assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+          assert_no_changes -> { sample34.metadata } do
+            assert_no_changes -> { project31.namespace.reload.metadata_summary } do
+              assert_no_changes -> { subgroup12aa.reload.metadata_summary } do
+                assert_no_changes -> { @subgroup12a.reload.metadata_summary } do
+                  assert_no_changes -> { @group12.reload.metadata_summary } do
+                    Samples::Metadata::Fields::UpdateService.new(project31, sample34, @user, params).execute
+                  end
+                end
+              end
+            end
+          end
+
+          assert sample34.errors.full_messages.include?(
+            I18n.t('services.samples.metadata.update_fields.user_cannot_edit_metadata_key', key: 'metadatafield1')
+          )
+        end
+
         test 'update sample metadata with valid permission' do
           params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
                                          'value' => { 'value1' => 'value1' } } }

@@ -46,16 +46,23 @@ module Samples
 
         # Checks if neither key or value were changed
         def validate_update_fields
-          return unless @key_update.keys[0] == @key_update.values[0] && @value_update.keys[0] == @value_update.values[0]
+          if @key_update.keys[0] == @key_update.values[0] && @value_update.keys[0] == @value_update.values[0]
+
+            raise SampleMetadataFieldsUpdateError,
+                  I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
+          end
+
+          return unless @sample.metadata_provenance[@key_update.keys[0]]['source'] == 'analysis'
 
           raise SampleMetadataFieldsUpdateError,
-                I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
+                I18n.t('services.samples.metadata.update_fields.user_cannot_edit_metadata_key',
+                       key: @key_update.keys[0])
         end
 
         # Constructs the expected param for metadata update_service
-        def construct_metadata_update_params
+        def construct_metadata_update_params # rubocop:disable Metrics/AbcSize
           if @key_update.keys[0] != @key_update.values[0]
-            if validate_new_key
+            if @sample.metadata.transform_keys(&:downcase).key?(@key_update.values[0].downcase)
               raise SampleMetadataFieldsUpdateError,
                     I18n.t('services.samples.metadata.update_fields.key_exists', key: @key_update.values[0])
             end
@@ -64,18 +71,6 @@ module Samples
           end
 
           @metadata_update_params['metadata'][@key_update.values[0]] = @value_update.values[0]
-        end
-
-        # Checks if the new key already exists within the @sample.metadata
-        def validate_new_key
-          key_exists = false
-          @sample.metadata.each do |k, _v|
-            if k.downcase == @key_update.values[0].downcase
-              key_exists = true
-              break
-            end
-          end
-          key_exists
         end
       end
     end
