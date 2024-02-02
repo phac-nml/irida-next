@@ -19,7 +19,9 @@ class HistoryVersionComponentPreview < ViewComponent::Preview
   #
   def collapsible_json
     project_namespace = Project.first.namespace
-    @log_data = project_namespace.log_data_with_changes(3)
+    version = 3
+
+    @log_data = project_namespace.log_data_with_changes(version)
 
     render_with_template(locals: {
 
