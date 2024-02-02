@@ -32,6 +32,8 @@ class HistoryComponentTest < ViewComponentTestCase
 
     assert_selector 'li', count: 3
     assert_selector 'h3', count: 3
+    assert_selector 'p', text: 'Project created by user@email.com', count: 1
+    assert_selector 'p', text: 'Project modified by user@email.com', count: 2
 
     assert_selector 'h3', text: 'Version 3'
     assert_selector 'a[href="/user_at_email.com/project-1/-/history/new?version=3"]', count: 1
