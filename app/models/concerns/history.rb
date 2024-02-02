@@ -32,8 +32,8 @@ module History
     current_version = add_puid_to_current_version(current_version) if version == 1
 
     { version:, user: responsible,
-      changes_from_prev_version: format_changes(current_version['c'].except('id', 'created_at', 'updated_at')),
-      previous_version: format_changes(initial_version['c']) }
+      changes_from_prev_version: format_datetime(current_version['c'].except('id', 'created_at', 'updated_at')),
+      previous_version: format_datetime(initial_version['c']) }
   end
 
   private
@@ -55,7 +55,7 @@ module History
   end
 
   # If the version doesn't have metadata for the responsible user
-  # we set the user to `System`
+  # we set the user to `System` otherwise the user's email
   def responsible_user_for_version(current_version)
     # Change was made outside the web request (ie. rails console)
     unless current_version.key?('m') && current_version['m'].key?('_r')
@@ -72,7 +72,7 @@ module History
   end
 
   # Format keys in changes to format required
-  def format_changes(changes)
+  def format_datetime(changes)
     datetime_format = I18n.t('time.formats.default')
 
     if changes.key?('deleted_at') && !changes['deleted_at'].nil?
