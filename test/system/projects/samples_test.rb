@@ -1084,7 +1084,7 @@ module Projects
       assert_text I18n.t('projects.samples.index.import_metadata_button'), count: 0
     end
 
-    test 'should import metadata' do
+    test 'should import metadata via csv' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -1098,7 +1098,118 @@ module Projects
       end
     end
 
-    test 'should import metadata with file validation errors' do
+    test 'should import metadata via xls' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+    end
+
+    test 'should import metadata via xlsx' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+    end
+
+    test 'should import metadata via invalid file type' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.invalid_file_extension')
+      end
+    end
+
+    test 'should import metadata with ignore empty values' do
+      namespace = groups(:subgroup_twelve_a)
+      project = projects(:project29)
+      sample = samples(:sample32)
+      visit namespace_project_samples_url(namespace, project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        check 'Ignore empty values'
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+      visit namespace_project_sample_url(namespace, project, sample)
+      assert_text I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text I18n.t('projects.samples.show.table_header.key')
+        assert_selector 'table#metadata-table tbody tr', count: 3
+        within first('tbody tr td:nth-child(1)') do
+          assert_text 'metadatafield1'
+        end
+        within first('tbody tr td:nth-child(2)') do
+          assert_text 'value1'
+        end
+      end
+    end
+
+    test 'should import metadata without ignore empty values' do
+      namespace = groups(:subgroup_twelve_a)
+      project = projects(:project29)
+      sample = samples(:sample32)
+      visit namespace_project_samples_url(namespace, project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        assert_not find_field('Ignore empty values').checked?
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+      visit namespace_project_sample_url(namespace, project, sample)
+      assert_text I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text I18n.t('projects.samples.show.table_header.key')
+        assert_selector 'table#metadata-table tbody tr', count: 2
+        assert_no_text 'metadatafield1'
+      end
+    end
+
+    test 'should import metadata with duplicate header errors' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.duplicate_column_names')
+      end
+    end
+
+    test 'should import metadata with missing metadata row errors' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -1108,6 +1219,19 @@ module Projects
       end
       within %(turbo-frame[id="import_metadata_dialog_alert"]) do
         assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_row')
+      end
+    end
+
+    test 'should import metadata with missing metadata column errors' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_column')
       end
     end
 
