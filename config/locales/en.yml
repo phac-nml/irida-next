@@ -846,6 +846,8 @@ en:
           actions:
             dropdown:
               update: Update
+              delete: Delete
+            delete_confirm: confirm
             metadata_dropdown_aria_label: Dropdown options for metadata field %{key}
           analysis: Analysis
           update:

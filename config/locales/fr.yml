@@ -823,6 +823,7 @@ fr:
           actions:
             dropdown:
               update: Update
+              delete: Delete
             metadata_dropdown_aria_label: Dropdown options for metadata field %{key}
           analysis: Analysis
           update:

@@ -42,6 +42,16 @@
                         value: metadata[:value])
                     ) %>
                   <% end %>
+                  <%= dropdown.with_item(
+                      label: t(:'projects.samples.show.metadata.actions.dropdown.delete'),
+                      url: namespace_project_sample_metadata_path(
+                        sample_id: @sample.id,
+                        sample: {metadata: {metadata[:key] => ''}}),
+                        data: {
+                          turbo_method: :delete,
+                          turbo_confirm: t(:'projects.samples.show.metadata.actions.delete_confirm')
+                        },
+                    ) %>
                 <% end %>
               </div>
             </td>

@@ -22,6 +22,18 @@ module Projects
                                                    value: params[:value]
                                                  }), status: :ok
       end
+
+      def destroy
+        puts params
+        metadata = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
+                                                                  deletion_params).execute
+      end
+
+      private
+
+      def deletion_params
+        params.require(:sample).permit(metadata: {})
+      end
     end
   end
 end
