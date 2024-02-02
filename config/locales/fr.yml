@@ -824,6 +824,7 @@ fr:
             dropdown:
               update: Update
               delete: Delete
+            delete_confirm: Are you sure you want to remove this metadata field from the sample?
             metadata_dropdown_aria_label: Dropdown options for metadata field %{key}
           analysis: Analysis
           update:
@@ -905,6 +906,8 @@ fr:
           error: "The following list of samples failed to transfer:"
           no_samples_transferred_error: "Samples were not transferred for the following reasons:"
       metadata:
+        destroy:
+          success: Metadata field '%{deleted_key}' was successfully deleted.
         edit:
           edit: Edit
         file_imports:

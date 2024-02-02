@@ -24,9 +24,20 @@ module Projects
       end
 
       def destroy
-        puts params
-        metadata = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
-                                                                  deletion_params).execute
+        metadata = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                          deletion_params).execute
+        respond_to do |format|
+          if metadata[:deleted].count.positive?
+            format.turbo_stream do
+              render status: :ok, locals: { type: 'success',
+                                            message: t('.success', deleted_key: metadata[:deleted][0]) }
+            end
+          else
+            format.turbo_stream do
+              render status: :unprocessable_entity, locals: { type: 'error', message: t('.error') }
+            end
+          end
+        end
       end
 
       private
