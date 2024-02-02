@@ -127,3 +127,8 @@ attachmentJ_file_test_file_fastq:
   name: file
   record: attachmentJ (Attachment)
   blob: attachmentJ_file_test_file_fastq_blob
+
+# attachment_attach_files_to_sample_test:
+#   name: file
+#   record: attachment_afts (Attachment)
+#   blob: attachment_attach_files_to_sample_test_blob
