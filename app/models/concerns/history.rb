@@ -14,7 +14,7 @@ module History
       log_data << { version: change_log['v'], user: responsible,
                     updated_at: DateTime.parse(change_log['c']['updated_at']).strftime('%a %b %e %Y %H:%M'),
                     restored: record_restored?(change_log, version),
-                    deleted: record_deleted?(change_log),
+                    deleted: record_deleted?(change_log, version),
                     transferred: record_transferred?(change_log, version) }
     end
     log_data
@@ -22,18 +22,21 @@ module History
 
   def log_data_with_changes(version)
     version = version.to_i
+
     log_data = reload_log_data.data['h']
     initial_version = log_data.detect { |h| h['v'] == 1 }
+
     # version requested
     current_version = log_data.detect { |h| h['v'] == version }
+
     initial_version = merge_changes_to_initial_version(log_data, initial_version, version)
 
     responsible = responsible_user_for_version(current_version)
     current_version = add_puid_to_current_version(current_version) if version == 1
 
     { version:, user: responsible,
-      changes_from_prev_version: format_datetime(current_version['c'].except('id', 'created_at', 'updated_at')),
-      previous_version: format_datetime(initial_version['c']) }
+      changes_from_prev_version: format_changes(current_version),
+      previous_version: format_changes(initial_version) }
   end
 
   private
@@ -71,18 +74,22 @@ module History
     current_version
   end
 
-  # Format keys in changes to format required
-  def format_datetime(changes)
+  # Format keys in changes to format required and remove
+  # any keys that don't need to be displayed to user
+  def format_changes(changes)
+    changes = changes['c']
+
     datetime_format = I18n.t('time.formats.default')
 
     if changes.key?('deleted_at') && !changes['deleted_at'].nil?
       changes['deleted_at'] =
         DateTime.parse(changes['deleted_at']).strftime(datetime_format)
     end
-    changes
+    changes.except('id', 'created_at', 'updated_at')
   end
 
-  def record_deleted?(change_log)
+  def record_deleted?(change_log, version)
+    return false if version == 1
     return false unless change_log['c'].key?('deleted_at')
 
     change_log['c'].key?('deleted_at') && change_log['c']['deleted_at'].present?
