@@ -132,7 +132,7 @@
     <% else %>
       <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
       <%= link_to t(".delete_metadata_button"),
-          new_namespace_project_sample_attachments_deletion_path(
+          new_namespace_project_sample_metadata_deletion_path(
             sample_id: @sample.id
           ),
           data: {

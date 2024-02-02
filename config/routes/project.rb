@@ -44,6 +44,9 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             collection do
               resource :field, only: %i[update create]
             end
+            collection do
+              resource :deletion, only: %i[new destroy]
+            end
           end
         end
 

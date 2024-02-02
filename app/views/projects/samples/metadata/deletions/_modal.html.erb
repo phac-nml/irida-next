@@ -1,0 +1,25 @@
+<%= viral_dialog(open: open, classes: ["overflow-x-visible"]) do |dialog| %>
+  <%= dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_section do %>
+
+    <%= turbo_frame_tag("deletion-alert") %>
+
+    <%= form_for(:deletion, url: namespace_project_sample_metadata_deletion_path,
+    data: {
+      controller: "projects--samples--metadata--destroy",
+      'projects--samples--metadata--destroy-field-name-value':"deletion[metadata_keys]",
+      'data-projects--samples--metadata--destroy-storage-key-value':namespace_project_sample_url(id: @sample.id),
+      action: 'turbo:submit-end->projects--samples--metadata--destroy#clear'
+    }, method: :delete) do |form| %>
+
+      <div data-projects--samples--metadata--destroy-target="field"></div>
+
+      <div class="grid gap-4">
+        <div class="flex">
+          <%= form.submit t(".submit_button"),
+                      class: "button button--size-default button--state-destructive" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
