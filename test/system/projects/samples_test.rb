@@ -1125,7 +1125,7 @@ module Projects
       end
     end
 
-    test 'should import metadata via invalid file type' do
+    test 'should not import metadata via invalid file type' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -1195,7 +1195,7 @@ module Projects
       end
     end
 
-    test 'should import metadata with duplicate header errors' do
+    test 'should not import metadata with duplicate header errors' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -1208,7 +1208,7 @@ module Projects
       end
     end
 
-    test 'should import metadata with missing metadata row errors' do
+    test 'should not import metadata with missing metadata row errors' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -1221,7 +1221,7 @@ module Projects
       end
     end
 
-    test 'should import metadata with missing metadata column errors' do
+    test 'should not import metadata with missing metadata column errors' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -1234,7 +1234,7 @@ module Projects
       end
     end
 
-    test 'should import metadata with missing sample errors' do
+    test 'should partially import metadata with missing sample errors' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
