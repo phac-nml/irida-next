@@ -16,7 +16,7 @@ export default class extends Controller {
     const storageValues = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue)
     );
-    console.log(storageValues)
+
     if (storageValues) {
       for (let [storageValueIndex, storageValue] of storageValues.entries()) {
         const value = JSON.parse(storageValue);
