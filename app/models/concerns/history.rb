@@ -20,19 +20,13 @@ module History
     log_data
   end
 
-  def log_data_with_changes(version) # rubocop:disable Metrics/AbcSize
+  def log_data_with_changes(version)
     version = version.to_i
     log_data = reload_log_data.data['h']
     initial_version = log_data.detect { |h| h['v'] == 1 }
     # version requested
     current_version = log_data.detect { |h| h['v'] == version }
-    versions_after_initial = log_data.reject { |h| h['v'] == 1 || h['v'] >= version }
-
-    # Loop through the versions after the initial one and
-    # merge the changes to the initial_version
-    versions_after_initial.each do |ver|
-      initial_version['c'].merge!(ver['c'])
-    end
+    initial_version = merge_changes_to_initial_version(log_data, initial_version, version)
 
     responsible = responsible_user_for_version(current_version)
     current_version = add_puid_to_current_version(current_version) if version == 1
@@ -44,6 +38,24 @@ module History
 
   private
 
+  # Since versions > version 1 only track the changes made in each version we
+  # merge the changes into the initial version which will be used
+  # to display the differences between the previous version and the
+  # current version
+  def merge_changes_to_initial_version(log_data, initial_version, version)
+    versions_after_initial = log_data.reject { |h| h['v'] == 1 || h['v'] >= version }
+
+    # Loop through the versions after the initial one and
+    # merge the changes to the initial_version
+    versions_after_initial.each do |ver|
+      initial_version['c'].merge!(ver['c'])
+    end
+
+    initial_version
+  end
+
+  # If the version doesn't have metadata for the responsible user
+  # we set the user to `System`
   def responsible_user_for_version(current_version)
     # Change was made outside the web request (ie. rails console)
     unless current_version.key?('m') && current_version['m'].key?('_r')
