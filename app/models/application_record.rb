@@ -2,7 +2,5 @@
 
 # Base Entity Class
 class ApplicationRecord < ActiveRecord::Base
-  include PublicActivity::Common
-
   primary_abstract_class
 end
