@@ -32,6 +32,10 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
+  def set_current_user
+    Current.user = current_user
+  end
+
   def not_found(err_msg = 'Resource not found')
     if defined?(err_msg.message)
       match_data = err_msg.message.match(/Couldn't find (\w+) with 'id'=(\d+)/)

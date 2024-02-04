@@ -64,11 +64,16 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     @activities = PublicActivity::Activity.where(trackable_id: @project.namespace.id, trackable_type: 'Namespace')
   end
 
-  def transfer # rubocop:disable Metrics/AbcSize
+  def transfer # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
-      generate_activity(@project.namespace, :transfer,
-                        { project_name: @project.name, old_namespace: @project.namespace.name,
-                          new_namespace: new_namespace.name })
+      @project.namespace.create_activity key: 'namespaces_project_namespace.transfer', owner: current_user,
+                                         parameters:
+                                         {
+                                           project_name: @project.name,
+                                           old_namespace: @project.namespace.name,
+                                           new_namespace: new_namespace.name
+                                         }
+
       flash[:success] = t('.success', project_name: @project.name)
       respond_to do |format|
         format.turbo_stream { redirect_to project_path(@project) }

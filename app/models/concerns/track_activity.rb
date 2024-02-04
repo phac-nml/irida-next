@@ -6,6 +6,6 @@ module TrackActivity
 
   included do
     include PublicActivity::Model
-    tracked owner: proc{ |controller, _model| controller.current_user }
+    tracked owner: Current.user
   end
 end
