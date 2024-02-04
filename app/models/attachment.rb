@@ -3,6 +3,7 @@
 # entity class for Attachment
 class Attachment < ApplicationRecord
   include HasPuid
+  include TrackActivity
 
   FORMAT_REGEX = {
     'fasta' => /^\S+\.fn?a(sta)?(\.gz)?$/,

@@ -1,5 +1,3 @@
 <h1>Project Activity</h1>
 
-<% @activities.each do |activity| %>
-  <%= render_activity(activity, locals: { activity: }) %>
-<% end %>
+<%= render ActivityComponent.new(activities: @activities) %>

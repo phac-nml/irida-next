@@ -2,6 +2,8 @@
 
 # entity class for NamespaceGroupLink
 class NamespaceGroupLink < ApplicationRecord
+  include TrackActivity
+
   has_logidze
   acts_as_paranoid
 
