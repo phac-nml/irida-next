@@ -24,7 +24,6 @@ module Projects
         @attachments = ::Attachments::CreateService.new(current_user, @sample, attachment_params).execute
 
         status = if @attachments.count.positive?
-                   generate_activity(@sample, :attachment_create, { name: @sample.name, project_name: @project.name })
                    if @attachments.count(&:persisted?) == @attachments.count
                      :ok
                    else
@@ -58,7 +57,6 @@ module Projects
         respond_to do |format|
           if @destroyed_attachments.count.positive?
             status = destroy_status(@attachment, @destroyed_attachments.length)
-            generate_activity(@sample, :attachment_destroy, { name: @sample.name, project_name: @project.name })
             format.turbo_stream do
               render status:, locals: { destroyed_attachments: @destroyed_attachments }
             end

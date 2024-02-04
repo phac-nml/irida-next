@@ -218,28 +218,29 @@ en:
       create: "%{user} created group %{name}"
       destroy: "%{user} removed group %{name}"
       update: "%{user} updated group %{name}"
-      member_create: "%{user} added new member %{member_name} to group %{namespace_name}"
-      member_destroy: "%{user} removed member %{member_name} from group %{namespace_name}"
-      member_update: "%{user} updated member %{member_name} attributes in group %{namespace_name}"
-      namespace_group_link_create: "%{user} shared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
-      namespace_group_link_destroy: "%{user} unshared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
-      namespace_group_link_update: "%{user} updated %{namespace_type} %{namespace_name} share attributes with group %{invited_group_name}"
     namespaces_project_namespace:
       create: "%{user} created project %{name}"
       destroy: "%{user} removed project %{name}"
       update: "%{user} updated project %{name}"
-      member_create: "%{user} added new member %{member_name} to project %{namespace_name}"
-      member_destroy: "%{user} removed member %{member_name} from project %{namespace_name}"
-      member_update: "%{user} updated member %{member_name} attributes in project %{namespace_name}"
-      namespace_group_link_create: "%{user} shared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
-      namespace_group_link_destroy: "%{user} unshared %{namespace_type} %{namespace_name} with group %{invited_group_name}"
-      namespace_group_link_update: "%{user} updated %{namespace_type} %{namespace_name} share attributes with group %{invited_group_name}"
-      sample_create: "%{user} added new sample %{sample_name} to project %{project_name}"
-      sample_destroy: "%{user} removed sample %{sample_name} from project %{project_name}"
-      sample_update: "%{user} updated sample %{sample_name} in project %{project_name}"
+    namespaces_user_namespace:
+      create: "%{user} created new user %{new_user_name}"
+      destroy: "%{user} removed user %{user_name}"
+      update: "%{user} updated user %{user_name}"
     sample:
-      attachment_create: "%{user} uploaded sequencing data to project %{project_name} sample %{sample_name}"
-      attachment_destroy: "%{user} removed sequencing data from project %{project_name} sample %{sample_name}"
+      create: "%{user} created sample %{sample_name}"
+      destroy: "%{user} removed sample %{sample_name}"
+      update: "%{user} updated sample %{sample_name}"
+    attachment:
+      create: "%{user} uploaded sequencing data to project %{project_name} sample %{sample_name}"
+      destroy: "%{user} removed sequencing data from project %{project_name} sample %{sample_name}"
+    member:
+      create: "%{user} added member %{member} to %{namespace_type} %{name}"
+      destroy: "%{user} removed member %{member} from %{namespace_type} %{name}"
+      update: "%{user} updated %{namespace_type} %{name} member %{member}"
+    namespace_group_link:
+      create: "%{user} shared %{namespace_type} %{name} with group %{group_name}"
+      destroy: "%{user} unshared %{namespace_type} %{name} with group %{group_name}"
+      update: "%{user} updated share between %{namespace_type} %{name} and group %{group_name}"
   datetime:
     distance_in_words:
       updated:

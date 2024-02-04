@@ -2,6 +2,7 @@
 
 # Main application controller
 class ApplicationController < ActionController::Base
+  include PublicActivity::StoreController
   include Irida::Auth
   include Pagy::Backend
   include RouteHelper
@@ -64,8 +65,4 @@ class ApplicationController < ActionController::Base
   def pipelines_enabled?
     @pipelines_enabled = Irida::Pipelines.instance.available_pipelines.any?
   end
-end
-
-def generate_activity(object, action, params)
-  object.create_activity action, owner: current_user, params:
 end

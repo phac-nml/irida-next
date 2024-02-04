@@ -39,12 +39,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     @new_member = Members::CreateService.new(current_user, @namespace, member_params, true).execute
 
     if @new_member.persisted?
-      generate_activity(@namespace,
-                        :member_create, {
-                          member: @new_member.user.email,
-                          namespace_type: @namespace.type.downcase,
-                          namespace_name: @namespace.human_name
-                        })
       respond_to do |format|
         format.turbo_stream do
           render status: :ok, locals: { member: @new_member, type: 'success',
@@ -66,12 +60,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     Members::DestroyService.new(@member, @namespace, current_user).execute
 
     if @member.deleted?
-      generate_activity(@namespace,
-                        :member_destroy, {
-                          member: @member.user.email,
-                          namespace_type: @namespace.type.downcase,
-                          namespace_name: @namespace.human_name
-                        })
       if current_user == @member.user
         flash[:success] = t('concerns.membership_actions.destroy.leave_success', name: @namespace.name)
         if @namespace.group_namespace?
@@ -109,12 +97,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
     respond_to do |format|
       if updated
-        generate_activity(@namespace,
-                          :member_update, {
-                            member: @member.user.email,
-                            namespace_type: @namespace.type.downcase,
-                            namespace_name: @namespace.human_name
-                          })
         format.turbo_stream do
           render status: :ok, locals: { member: @member, access_levels: @access_levels, type: 'success',
                                         message: t('concerns.membership_actions.update.success',
