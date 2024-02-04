@@ -1,4 +1,4 @@
-<ol class="relative border-s border-gray-200 dark:border-gray-700">
+<ol class="relative border-s border-slate-200 dark:border-slate-700">
   <% activities.each do |activity| %>
     <li class="mb-10 ms-4">
       <div
@@ -6,14 +6,14 @@
           absolute
           w-3
           h-3
-          bg-gray-200
+          bg-slate-200
           rounded-full
           mt-1.5
           -start-1.5
           border
           border-white
-          dark:border-gray-900
-          dark:bg-gray-700
+          dark:border-slate-900
+          dark:bg-slate-700
         "
       ></div>
       <time
@@ -22,12 +22,12 @@
           text-sm
           font-normal
           leading-none
-          text-gray-400
-          dark:text-gray-500
+          text-slate-400
+          dark:text-slate-500
         "
       ><%= activity.created_at %></time>
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white"></h3>
-      <p class="text-base font-normal text-gray-500 dark:text-gray-400">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-white"></h3>
+      <p class="text-base font-normal text-slate-500 dark:text-slate-400">
         <%= t(
           "activity.namespaces_project_namespace.create",
           user: activity.owner.email,
