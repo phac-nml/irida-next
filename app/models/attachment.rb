@@ -2,6 +2,8 @@
 
 # entity class for Attachment
 class Attachment < ApplicationRecord
+  include TrackActivity
+
   has_logidze
   acts_as_paranoid
 

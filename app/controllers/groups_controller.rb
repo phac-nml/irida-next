@@ -34,7 +34,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def create
     @new_group = Groups::CreateService.new(current_user, group_params).execute
     if @new_group.persisted?
-      generate_activity(@new_group, :create, { name: @new_group.name })
       flash[:success] = t('.success')
       redirect_to group_path(@new_group.full_path)
     else
@@ -47,7 +46,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     respond_to do |format|
       @updated = Groups::UpdateService.new(@group, current_user, group_params).execute
       if @updated
-        generate_activity(@group, :update, { name: @group.name })
         if group_params[:path]
           flash[:success] = t('.success', group_name: @group.name)
           format.turbo_stream { redirect_to edit_group_path(@group) }
@@ -67,7 +65,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def destroy
     Groups::DestroyService.new(@group, current_user).execute
     if @group.deleted?
-      generate_activity(@group, :destroy, { name: @group.name })
       flash[:success] = t('.success', group_name: @group.name)
       redirect_to dashboard_groups_path(format: :html)
     else
@@ -80,7 +77,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     respond_to do |format|
       if Groups::TransferService.new(@group, current_user).execute(new_namespace)
-        generate_activity(@group, :transfer, { name: @group.name, old_namespace: @group.parent, new_namespace: })
+        #generate_activity(@group, :transfer, { name: @group.name, old_namespace: @group.parent, new_namespace: })
         flash[:success] = t('.success')
         format.turbo_stream { redirect_to edit_group_path(@group) }
       else

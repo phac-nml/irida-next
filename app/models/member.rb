@@ -2,6 +2,8 @@
 
 # entity class for Member
 class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  include TrackActivity
+
   has_logidze
   acts_as_paranoid
 
