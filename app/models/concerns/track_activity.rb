@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Concern to make a Model activity trackable
-module TrackActivity
+module TrackActivity # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
@@ -9,7 +9,7 @@ module TrackActivity
     tracked owner: Current.user
   end
 
-  def human_readable_activity(public_activities)
+  def human_readable_activity(public_activities) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     activities = []
     public_activities.each do |activity|
       if activity.trackable_type == 'Namespace' && activity.key.include?('project_namespace')
