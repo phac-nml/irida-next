@@ -3,11 +3,11 @@
 # entity class for Sample
 class Sample < ApplicationRecord
   include History
+  include TrackActivity
+  include HasPuid
 
   has_logidze
   acts_as_paranoid
-
-  include HasPuid
 
   belongs_to :project
 

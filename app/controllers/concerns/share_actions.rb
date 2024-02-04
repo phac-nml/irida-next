@@ -38,12 +38,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
                              message: @created_namespace_group_link.errors.full_messages.first }
           end
         else
-          generate_activity(@namespace,
-                            :namespace_group_link_create, {
-                              namespace_type: @namespace.type.downcase,
-                              namespace_name: @namespace.human_name,
-                              invited_group_name: @created_namespace_group_link.group.name
-                            })
           @group_invited = true
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @created_namespace_group_link,
@@ -71,12 +65,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     respond_to do |format| # rubocop:disable Metrics/BlockLength
       if @namespace_group_link
         if @namespace_group_link.deleted?
-          generate_activity(@namespace,
-                            :namespace_group_link_destroy, {
-                              namespace_type: @namespace.type.downcase,
-                              namespace_name: @namespace.human_name,
-                              invited_group_name: @namespace_group_link.group.name
-                            })
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @namespace_group_link, type: 'success',
                                           message: t('.success', namespace_name: @namespace.human_name,
@@ -109,12 +97,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
     respond_to do |format|
       if @updated
-        generate_activity(@namespace,
-                          :namespace_group_link_update, {
-                            namespace_type: @namespace.type.downcase,
-                            namespace_name: @namespace.human_name,
-                            invited_group_name: @namespace_group_link.group.name
-                          })
         format.turbo_stream do
           render status: :ok, locals: { namespace_group_link: @namespace_group_link,
                                         access_levels: @access_levels,

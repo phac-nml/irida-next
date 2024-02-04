@@ -2,6 +2,7 @@
 
 # Main application controller
 class ApplicationController < ActionController::Base
+  include PublicActivity::StoreController
   include Irida::Auth
   include Pagy::Backend
   include RouteHelper
@@ -53,8 +54,4 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound do |exception|
     not_found(exception)
   end
-end
-
-def generate_activity(object, action, params)
-  object.create_activity action, owner: current_user, params:
 end
