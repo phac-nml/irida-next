@@ -6,15 +6,19 @@ module Types
     implements GraphQL::Types::Relay::Node
     description 'An attachment'
 
-    field :filename, String, null: false, description: 'Attachment file name'
-    field :metadata, String, null: false, description: 'Attachment metadata'
-    # field :byte_size, Integer, null: false, description: 'Attachment file size'
+    field :byte_size,
+          GraphQL::Types::Int,
+          null: false,
+          description: 'Attachment file size',
+          resolver: Resolvers::AttachmentByteSizeResolver
 
-    # field :metadata,
-    #       GraphQL::Types::JSON,
-    #       null: false,
-    #       description: 'Metadata for the attachment',
-    #       resolver: Resolvers::AttachmentMetadataResolver
+    field :filename, String, null: false, description: 'Attachment file name'
+
+    field :metadata,
+          GraphQL::Types::JSON,
+          null: false,
+          description: 'Metadata for the attachment',
+          resolver: Resolvers::AttachmentMetadataResolver
 
     def self.authorized?(object, context)
       super &&
