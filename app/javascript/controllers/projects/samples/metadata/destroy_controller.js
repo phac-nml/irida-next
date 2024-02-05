@@ -14,13 +14,15 @@ export default class extends Controller {
         const storageValues = JSON.parse(
             sessionStorage.getItem(this.storageKeyValue)
         );
-        for (const storageValue of storageValues) {
-            const element = document.createElement("input");
-            element.type = "hidden";
-            element.id = storageValue;
-            element.name = `sample[metadata[${storageValue}]]`;
-            element.value = '';
-            this.fieldTarget.appendChild(element);
+        if (storageValues) {
+            for (const storageValue of storageValues) {
+                const element = document.createElement("input");
+                element.type = "hidden";
+                element.id = storageValue;
+                element.name = `sample[metadata[${storageValue}]]`;
+                element.value = '';
+                this.fieldTarget.appendChild(element);
+            }
         }
     }
 

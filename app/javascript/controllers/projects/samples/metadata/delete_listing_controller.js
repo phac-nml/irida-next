@@ -6,7 +6,6 @@ export default class extends Controller {
 
     connect() {
         const body = document.getElementById("metadata-table-body");
-        const table = body.parentElement;
 
         for (let row of body.rows) {
             const isChecked = row.cells[0].children[0].checked;
@@ -23,9 +22,5 @@ export default class extends Controller {
                 }
             }
         }
-
-        // const newBody = this.tableTarget.getElementsByTagName("tbody")[0];
-        // newBody.classList = body.classList;
-        // this.fieldTarget.appendChild(this.tableTarget);
     }
 }
