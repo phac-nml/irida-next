@@ -125,6 +125,25 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def clone_sample? # rubocop:disable Metrics/AbcSize
+    # Maintainer is allowed to clone a sample to another namespace which has the same parent or ancestor
+    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false)
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_clone_sample?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def clone_sample_into_project?
+    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false) &&
+                   Member.can_clone_sample_to_project?(user, record.namespace, false) == true
+    return true if Member.can_clone_sample_to_project?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(

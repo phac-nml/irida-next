@@ -66,6 +66,14 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.transfer_sample_into_project?
   end
 
+  test '#clone_sample?' do
+    assert @policy.clone_sample?
+  end
+
+  test '#clone_sample_into_project?' do
+    assert @policy.clone_sample_into_project?
+  end
+
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
     # John Doe has access to 33 projects. 32 through his namespace

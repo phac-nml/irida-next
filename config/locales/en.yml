@@ -82,6 +82,8 @@ en:
         update_sample?: You are not authorized to update samples for project %{name} on this server.
         transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
         transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
+        clone_sample?: You are not authorized to clone samples for project %{name} on this server.
+        clone_sample_into_project?: You are not authorized to clone samples to project %{name} on this server.
       namespaces/project_namespace:
         update?: You are not authorized to update the namespace for project %{name} on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.

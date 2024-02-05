@@ -4,8 +4,12 @@ module Samples
   # Service used to clone samples
   class CloneService < BaseProjectService
     def execute(new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      cloned_sample_ids = {}
+      authorize! @project, to: :clone_sample?
+
       @new_project = Project.find_by(id: new_project_id)
+      authorize! @new_project, to: :clone_sample_into_project?
+
+      cloned_sample_ids = {}
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         clone = sample.dup

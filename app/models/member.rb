@@ -93,6 +93,20 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       can_transfer_into_namespace?(user, object_namespace, include_group_links)
     end
 
+    def can_clone_into_namespace?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      Member::AccessLevel.manageable.include?(
+        effective_access_level(object_namespace, user, include_group_links)
+      )
+    end
+
+    def can_clone_sample?(user, object_namespace)
+      namespace_owners_include_user?(user, object_namespace)
+    end
+
+    def can_clone_sample_to_project?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      can_clone_into_namespace?(user, object_namespace, include_group_links)
+    end
+
     def can_link_namespace_to_group?(user, object_namespace)
       can_modify?(user, object_namespace)
     end

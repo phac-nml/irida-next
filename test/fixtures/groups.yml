@@ -283,3 +283,10 @@ group_hotel:
   description: Group Hotel description
   metadata_summary: {}
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+
+group_thirteen:
+  name: Group 13
+  path: group-13
+  type: Group
+  description: Group 13 description
+  metadata_summary: {}

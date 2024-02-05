@@ -421,3 +421,16 @@ group_hotel_project_one_member_user_28:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:user28) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
+
+group_thirteen_member_jane_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_thirteen_member_james_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen) %>
+  access_level: <%= Member::AccessLevel::GUEST %>
+
