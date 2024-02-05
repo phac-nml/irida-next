@@ -9,21 +9,21 @@ module TrackActivity
     tracked owner: proc { |controller, _model| controller&.current_user || nil }
   end
 
-  def formatted_activities(activities)
-    res = []
-    activities.each do |activity|
+  def human_readable_activity(public_activities) # rubocop:disable Metrics/AbcSize
+    activities = []
+    public_activities.each do |activity|
       if activity.trackable_type == 'Namespace' && activity.key.include?('namespaces_project_namespace')
-        res << project_activity(activity)
+        activities << project_activity(activity)
       elsif activity.trackable_type == 'Sample'
-        res << sample_activity(activity)
+        activities << sample_activity(activity)
       elsif activity.trackable_type == 'Member'
-        res << member_activity(activity)
+        activities << member_activity(activity)
       elsif activity.trackable_type == 'NamespaceGroupLink'
-        res << namespace_group_link_activity(activity)
+        activities << namespace_group_link_activity(activity)
       end
     end
 
-    res
+    activities
   end
 
   private
