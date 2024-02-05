@@ -20,7 +20,7 @@ module Projects
           else
             create_render_params = get_create_status_and_messages(create_metadata_fields[:added_keys],
                                                                   create_metadata_fields[:existing_keys])
-            render status: create_render_params[:status], locals: { messages: render_params[:messages] }
+            render status: create_render_params[:status], locals: { messages: create_render_params[:messages] }
           end
         end
 
