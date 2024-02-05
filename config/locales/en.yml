@@ -652,6 +652,8 @@ en:
         revoke:
           success: "Successfully revoked personal access token %{pat_name}"
           error: "There was an error revoking personal access token %{pat_name}"
+    activity:
+      title: Project Activity
     new:
       title: Create project
       placeholder: Awesome project name

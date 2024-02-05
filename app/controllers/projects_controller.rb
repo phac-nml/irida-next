@@ -74,7 +74,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
          )).or(PublicActivity::Activity.where(trackable_id: @project.namespace.shared_with_group_links.select(:id),
                                               trackable_type: 'NamespaceGroupLink'))
 
-    @activities = @project.namespace.formatted_activities(@public_activity)
+    @activities = @project.namespace.human_readable_activity(@public_activity)
   end
 
   def transfer # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
