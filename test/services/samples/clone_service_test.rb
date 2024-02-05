@@ -26,7 +26,15 @@ module Samples
         assert_equal sample.description,
                      clone.description
         assert_equal sample.metadata, clone.metadata
-        # assert_equal sample.attachments, clone.attachments
+        sample_blobs = []
+        sample.attachments.each do |attachment|
+          sample_blobs << attachment.file.blob
+        end
+        clone_blobs = []
+        clone.attachments.each do |attachment|
+          clone_blobs << attachment.file.blob
+        end
+        assert_equal sample_blobs, clone_blobs
       end
     end
   end
