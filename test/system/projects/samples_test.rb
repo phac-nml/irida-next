@@ -1296,7 +1296,7 @@ module Projects
         click_on I18n.t('projects.samples.metadata.form.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.metadata.fields.create.keys_exist', keys: ['metadatafield1'].join(', '))
+      assert_text I18n.t('services.samples.metadata.fields.all_keys_exist', keys: ['metadatafield1'].join(', '))
     end
 
     test 'add both new and existing metadata' do
