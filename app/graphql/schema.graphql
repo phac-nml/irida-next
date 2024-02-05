@@ -48,6 +48,11 @@ An attachment
 """
 type Attachment implements Node {
   """
+  Attachment download url
+  """
+  attachmentUrl: String!
+
+  """
   Attachment file size
   """
   byteSize: Int!
