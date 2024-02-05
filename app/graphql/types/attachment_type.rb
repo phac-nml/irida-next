@@ -6,12 +6,7 @@ module Types
     implements GraphQL::Types::Relay::Node
     description 'An attachment'
 
-    field :byte_size,
-          GraphQL::Types::Int,
-          null: false,
-          description: 'Attachment file size',
-          resolver: Resolvers::AttachmentByteSizeResolver
-
+    field :byte_size, Integer, null: false, description: 'Attachment file size'
     field :filename, String, null: false, description: 'Attachment file name'
 
     field :metadata,
