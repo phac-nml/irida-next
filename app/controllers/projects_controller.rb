@@ -59,9 +59,18 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def activity
+  def activity # rubocop:disable Metrics/AbcSize
     authorize! @project
-    @activities = PublicActivity::Activity.where(trackable_id: @project.namespace.id, trackable_type: 'Namespace')
+    @public_activity = PublicActivity::Activity.where(trackable_id: @project.namespace.id,
+                                                      trackable_type: 'Namespace').or(
+                                                        PublicActivity::Activity.where(
+                                                          trackable_id: @project.samples.select(:id), trackable_type: 'Sample'
+                                                        )
+                                                      ).or(PublicActivity::Activity.where(trackable_id: @project.namespace.project_members.select(:id),
+                                                                                          trackable_type: 'Member')).or(PublicActivity::Activity.where(trackable_id: @project.namespace.shared_with_group_links.select(:id),
+                                                                                                                                                       trackable_type: 'NamespaceGroupLink'))
+
+    @activities = @project.namespace.formatted_activities(@public_activity)
   end
 
   def transfer # rubocop:disable Metrics/AbcSize
@@ -69,10 +78,10 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
       @project.namespace.create_activity key: 'namespaces_project_namespace.transfer', owner: current_user,
                                          parameters:
                                          {
-                                          project_name: @project.name,
-                                          old_namespace: @project.namespace.name,
-                                          new_namespace: new_namespace.name
-                                        }
+                                           project_name: @project.name,
+                                           old_namespace: @project.namespace.name,
+                                           new_namespace: new_namespace.name
+                                         }
 
       flash[:success] = t('.transfer.success', project_name: @project.name)
       respond_to do |format|
@@ -179,6 +188,8 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
                       t(:'general.default_sidebar.projects')
                     when 'history'
                       t(:'projects.sidebar.history')
+                    when 'activity'
+                      t(:'projects.sidebar.activity')
                     else
                       t(:'projects.sidebar.general')
                     end
