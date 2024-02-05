@@ -25,16 +25,16 @@ module Projects
         end
 
         # Param is received as:
-        # params: {sample: {edit_field: {key: {old_key: new_key}, value: {old_value: new_value}}}
+        # params: {sample: {update_field: {key: {old_key: new_key}, value: {old_value: new_value}}}
         # Fields that have not been changed will have equal old and new
         def update # rubocop:disable Metrics/AbcSize
           authorize! @project, to: :update_sample?
           updated_metadata_field = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
-                                                                                  edit_field_params).execute
+                                                                                  update_field_params).execute
           if @sample.errors.any?
             render status: :unprocessable_entity,
-                   locals: { key: edit_field_params['update_field']['key'].keys[0],
-                             value: edit_field_params['update_field']['value'].keys[0] }
+                   locals: { key: update_field_params['update_field']['key'].keys[0],
+                             value: update_field_params['update_field']['value'].keys[0] }
           else
             update_render_params = get_update_status_and_message(updated_metadata_field)
             render status: update_render_params[:status], locals: { type: update_render_params[:message][:type],
@@ -48,7 +48,7 @@ module Projects
           params.require(:sample).permit(create_fields: {})
         end
 
-        def edit_field_params
+        def update_field_params
           params.require(:sample).permit(update_field: { key: {}, value: {} })
         end
 

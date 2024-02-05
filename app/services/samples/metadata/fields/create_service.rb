@@ -3,8 +3,8 @@
 module Samples
   module Metadata
     module Fields
-      # Service used to validate the edit_fields param and construct the metadata update param to be passed
-      # to metadata_controller#update and Samples::Metadata::UpdateService
+      # Service used to validate the create_fields param and construct the metadata update param to be passed
+      # to Samples::Metadata::UpdateService
       class CreateService < BaseService
         SampleMetadataFieldsCreateError = Class.new(StandardError)
         attr_accessor :project, :sample, :create_fields, :metadata_update_params
