@@ -1040,8 +1040,12 @@ en:
         cannot_update_self: "You cannot update your own %{namespace_type} role"
         role_not_allowed: "A maintainer can only update a member's role up to the Maintainer role"
     samples:
+      clone:
+        empty_new_project_id: Destination project was not selected.
+        empty_sample_ids: The sample ids are empty.
+        same_project: The samples already exist in the project. Please select a different project.
       transfer:
-        empty_new_project_id: Destination project was not selected
+        empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
         same_project: The samples already exist in the project. Please select a different project.
         sample_exists: "Sample '%{sample_name}' already exists in the target project"
