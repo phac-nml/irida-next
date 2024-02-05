@@ -7,15 +7,11 @@
       <%= render partial: "project_history_modal_description", locals: { log_data: } %>
       <%= render HistoryVersionComponent.new(log_data: log_data) %>
     </div>
-    <div class="my-4">
-      <button
-        type="button"
-        class="button button--size-default button--state-default"
-        data-action="click->viral--dialog#close"
-      >
+    <% dialog.with_secondary_action do %>
+      <%= viral_button(data: { action: 'click->viral--dialog#close' }) do %>
         <%= t(".close") %>
-      </button>
-    </div>
+      <% end %>
+    <% end %>
 
   <% end %>
 <% end %>
