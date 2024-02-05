@@ -7,13 +7,13 @@ module Samples
       # to metadata_controller#update and Samples::Metadata::UpdateService
       class CreateService < BaseService
         SampleMetadataFieldsCreateError = Class.new(StandardError)
-        attr_accessor :project, :sample, :add_fields, :metadata_update_params
+        attr_accessor :project, :sample, :create_fields, :metadata_update_params
 
-        def initialize(project, sample, user = nil, add_fields = {})
+        def initialize(project, sample, user = nil, create_fields = {})
           super(user, params)
           @project = project
           @sample = sample
-          @add_fields = add_fields
+          @create_fields = create_fields
           @metadata_update_params = { 'metadata' => {}, 'existing_keys' => [] }
         end
 
@@ -48,7 +48,7 @@ module Samples
 
         # Constructs the expected param for metadata update_service
         def construct_metadata_update_params
-          @add_fields.each do |k, v|
+          @create_fields.each do |k, v|
             if validate_key(k)
               @metadata_update_params['existing_keys'] << k
             else

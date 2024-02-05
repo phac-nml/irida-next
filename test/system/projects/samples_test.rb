@@ -1308,7 +1308,7 @@ module Projects
       within %(turbo-frame[id="sample_modal"]) do
         find('input[name="key-0"]').fill_in with: 'metadatafield1'
         find('input[name="value-0"]').fill_in with: 'value1'
-        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
         find('input[name="key-1"]').fill_in with: 'metadatafield3'
         find('input[name="value-1"]').fill_in with: 'value3'
         click_on I18n.t('projects.samples.metadata.form.submit_button')
@@ -1332,11 +1332,11 @@ module Projects
       within %(turbo-frame[id="sample_modal"]) do
         find('input[name="key-0"]').fill_in with: 'metadatafield3'
         find('input[name="value-0"]').fill_in with: 'value3'
-        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
         find('input[name="key-1"]').fill_in with: 'metadatafield4'
-        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
         find('input[name="value-2"]').fill_in with: 'value4'
-        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
         find('input[name="key-3"]').fill_in with: 'metadatafield5'
         find('input[name="value-3"]').fill_in with: 'value5'
         click_on I18n.t('projects.samples.metadata.form.submit_button')
@@ -1364,13 +1364,13 @@ module Projects
       within %(turbo-frame[id="sample_modal"]) do
         find('input[name="key-0"]').fill_in with: 'metadatafield3'
         find('input[name="value-0"]').fill_in with: 'value3'
-        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
         find('input[name="key-1"]').fill_in with: 'metadatafield4'
         find('input[name="value-1"]').fill_in with: 'value4'
-        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
         find('input[name="key-2"]').fill_in with: 'metadatafield5'
         find('input[name="value-2"]').fill_in with: 'value5'
-        click_on I18n.t('projects.samples.metadata.form.add_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
         find('input[name="key-3"]').fill_in with: 'metadatafield6'
         find('input[name="value-3"]').fill_in with: 'value6'
 

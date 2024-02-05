@@ -19,8 +19,8 @@ module Projects
           test 'add new metadata' do
             post namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
                  params: {
-                   'sample' => { 'add_fields' => { 'metadatafield3' => 'value3',
-                                                   'metadatafield4' => 'value4' } },
+                   'sample' => { 'create_fields' => { 'metadatafield3' => 'value3',
+                                                      'metadatafield4' => 'value4' } },
                    format: :turbo_stream
                  }
             assert_response :ok
@@ -29,8 +29,8 @@ module Projects
           test 'add new metadata where keys exist' do
             post namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
                  params: {
-                   'sample' => { 'add_fields' => { 'metadatafield1' => 'value3',
-                                                   'metadatafield2' => 'value4' } },
+                   'sample' => { 'create_fields' => { 'metadatafield1' => 'value3',
+                                                      'metadatafield2' => 'value4' } },
                    format: :turbo_stream
                  }
             assert_response :unprocessable_entity
@@ -39,8 +39,8 @@ module Projects
           test 'add new metadata where keys both exist and don\'t exist' do
             post namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
                  params: {
-                   'sample' => { 'add_fields' => { 'metadatafield3' => 'value3',
-                                                   'metadatafield1' => 'value4' } },
+                   'sample' => { 'create_fields' => { 'metadatafield3' => 'value3',
+                                                      'metadatafield1' => 'value4' } },
                    format: :turbo_stream
                  }
             assert_response :multi_status
@@ -49,8 +49,8 @@ module Projects
           test 'cannot add metadata if sample does not belong to the project' do
             post namespace_project_sample_metadata_field_path(@namespace, @project4, @sample32),
                  params: {
-                   'sample' => { 'add_fields' => { 'metadatafield3' => 'value3',
-                                                   'metadatafield4' => 'value4' } },
+                   'sample' => { 'create_fields' => { 'metadatafield3' => 'value3',
+                                                      'metadatafield4' => 'value4' } },
                    format: :turbo_stream
                  }
             assert_response :not_found
@@ -60,8 +60,8 @@ module Projects
             sign_in users(:david_doe)
             post namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
                  params: {
-                   'sample' => { 'add_fields' => { 'metadatafield3' => 'value3',
-                                                   'metadatafield4' => 'value4' } },
+                   'sample' => { 'create_fields' => { 'metadatafield3' => 'value3',
+                                                      'metadatafield4' => 'value4' } },
                    format: :turbo_stream
                  }
             assert_response :unauthorized

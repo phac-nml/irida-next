@@ -11,13 +11,13 @@ module Projects
           authorize! @project, to: :update_sample?
           create_metadata_fields =
             ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user,
-                                                           add_field_params['add_fields']).execute
+                                                           create_field_params['create_fields']).execute
 
           if @sample.errors.any?
             render status: :unprocessable_entity, locals: { type: 'error', message: @sample.errors.full_messages.first }
           else
-            render_params = get_add_status_and_messages(create_metadata_fields[:added_keys],
-                                                        create_metadata_fields[:existing_keys])
+            render_params = get_create_status_and_messages(create_metadata_fields[:added_keys],
+                                                           create_metadata_fields[:existing_keys])
             render status: render_params[:status], locals: { messages: render_params[:messages] }
           end
         end
@@ -42,15 +42,15 @@ module Projects
 
         private
 
-        def add_field_params
-          params.require(:sample).permit(add_fields: {})
+        def create_field_params
+          params.require(:sample).permit(create_fields: {})
         end
 
         def edit_field_params
           params.require(:sample).permit(update_field: { key: {}, value: {} })
         end
 
-        def get_add_status_and_messages(added_keys, existing_keys)
+        def get_create_status_and_messages(added_keys, existing_keys)
           params = { status: '', messages: [] }
           success_msg = { type: 'success', message: t('.success', keys: added_keys.join(', ')) }
           error_msg = { type: 'error', message: t('.keys_exist', keys: existing_keys.join(', ')) }

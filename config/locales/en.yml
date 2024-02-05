@@ -954,7 +954,7 @@ en:
             description: The metadata was imported successfully!
             ok_button: OK
         form:
-          add_field_button: Add another metadata field
+          create_field_button: Add another metadata field
           field: Field
           key: Key
           submit_button: Add

@@ -948,12 +948,18 @@ fr:
         updated_at: Last Updated
         action: Action
       metadata:
+        edit:
+          edit: Edit
         fields:
           create:
             success: Metadata keys '%{keys}' were successfully added.
             keys_exist: Metadata keys '%{keys}' already exist.
+        file_imports:
+          create:
+            success: Sample metadata was successfully imported.
+            error: "Metadata was not successfully imported for the following samples:"
         form:
-          add_field_button: Add another metadata field
+          create_field_button: Add another metadata field
           field: Field
           key: Key
           submit_button: Add
