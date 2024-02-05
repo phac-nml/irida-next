@@ -909,7 +909,7 @@ fr:
       metadata:
         deletions:
           destroy:
-            success: Metadata fields '%{deleted_keys} were successfully deleted.'
+            success: Metadata keys '%{deleted_keys} were successfully deleted.'
           modal:
             description: "Metadata fields selected for deletion:"
             key_header: Key
@@ -917,7 +917,7 @@ fr:
             title: Delete Metadata
             value_header: Value
         destroy:
-          success: Metadata field '%{deleted_key}' was successfully deleted.
+          success: Metadata key '%{deleted_key}' was successfully deleted.
         edit:
           edit: Edit
         file_imports:
