@@ -59,7 +59,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def activity # rubocop:disable Metrics/AbcSize
+  def activity
     authorize! @project
 
     @activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
