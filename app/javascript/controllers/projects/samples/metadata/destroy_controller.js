@@ -18,7 +18,6 @@ export default class extends Controller {
             for (const storageValue of storageValues) {
                 const element = document.createElement("input");
                 element.type = "hidden";
-                element.id = storageValue;
                 element.name = `sample[metadata[${storageValue}]]`;
                 element.value = '';
                 this.fieldTarget.appendChild(element);

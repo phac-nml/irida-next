@@ -1547,4 +1547,27 @@ module Projects
       end
     end
   end
+
+  test 'delete metadata key by dropdown action' do
+    visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+    click_on I18n.t('projects.samples.show.tabs.metadata')
+
+    within %(turbo-frame[id="table-listing"]) do
+      assert_text 'metadatafield1'
+      assert_text 'value1'
+      first('button.Viral-Dropdown--icon').click
+      click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+    end
+
+    within('#turbo-confirm[open]') do
+      assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm')
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
+
+    within %(turbo-frame[id="table-listing"]) do
+      assert_no_text 'metadatafield1'
+      assert_no_text 'value1'
+    end
+  end
 end
