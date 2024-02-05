@@ -12,7 +12,8 @@ module History
 
       responsible = responsible_user_for_version(change_log)
       log_data << { version: change_log['v'], user: responsible,
-                    updated_at: DateTime.parse(change_log['c']['updated_at']).strftime('%a %b %e %Y %H:%M'),
+                    updated_at: DateTime.parse(Time.zone.at(0, change_log['ts'], :millisecond).to_s)
+                                        .strftime('%a %b%e %Y %H:%M'),
                     restored: record_restored?(change_log, version),
                     deleted: record_deleted?(change_log, version),
                     transferred: record_transferred?(change_log, version) }
@@ -85,7 +86,7 @@ module History
       changes['deleted_at'] =
         DateTime.parse(changes['deleted_at']).strftime(datetime_format)
     end
-    changes.except('id', 'created_at', 'updated_at')
+    changes.except('id')
   end
 
   def record_deleted?(change_log, version)
