@@ -31,6 +31,12 @@
               selected: @current_page == t(:"projects.sidebar.history").downcase
             ) %>
           <% end %>
+          <%= render section.with_item(
+            url: project_activity_path(@project),
+            icon: "beaker",
+            label: t(:"projects.sidebar.activity"),
+            selected: @current_page == t(:"projects.sidebar.activity").downcase
+          ) %>
           <% if allowed_to?(:update?, @project) %>
             <%= render section.with_item(
               url: project_edit_path(@project),
