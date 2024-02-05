@@ -892,6 +892,7 @@ en:
       history: History
       members: Members
       samples: Samples
+      activity: Activity
       settings: Settings
       general: General
       bot_accounts: Bot Accounts
