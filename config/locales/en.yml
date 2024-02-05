@@ -936,10 +936,14 @@ en:
           no_samples_transferred_error: "Samples were not transferred for the following reasons:"
       metadata:
         deletions:
+          destroy:
+            success: Metadata fields '%{deleted_keys} were successfully deleted.'
           modal:
-            title: Delete Metadata
-            description: This is a description
+            description: "Metadata fields selected for deletion:"
+            key_header: Key
             submit_button: Delete
+            title: Delete Metadata
+            value_header: Value
         destroy:
           success: Metadata field '%{deleted_key}' was successfully deleted.
         edit:

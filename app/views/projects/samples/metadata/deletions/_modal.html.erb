@@ -4,15 +4,27 @@
 
     <%= turbo_frame_tag("deletion-alert") %>
 
+    <div class="mb-4 font-normal text-gray-500 dark:text-gray-400">
+      <p class="mb-4"><%= t(".description") %></p>
+      <div data-controller="projects--samples--metadata--delete-listing">
+        <table data-projects--samples--metadata--delete-listing-target="table" class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
+            <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+                <td class="px-6 py-4"><%= t(".key_header") %></td>
+                <td class="px-6 py-4"><%= t(".value_header") %></td>
+            </thead>
+        </table>
+      </div>
+    </div>
+
     <%= form_for(:deletion, url: namespace_project_sample_metadata_deletion_path,
     data: {
       controller: "projects--samples--metadata--destroy",
-      'projects--samples--metadata--destroy-field-name-value':"deletion[metadata_keys]",
       'data-projects--samples--metadata--destroy-storage-key-value':namespace_project_sample_url(id: @sample.id),
       action: 'turbo:submit-end->projects--samples--metadata--destroy#clear'
     }, method: :delete) do |form| %>
 
-      <div data-projects--samples--metadata--destroy-target="field"></div>
+      <div data-projects--samples--metadata--destroy-target="field">
+      </div>
 
       <div class="grid gap-4">
         <div class="flex">

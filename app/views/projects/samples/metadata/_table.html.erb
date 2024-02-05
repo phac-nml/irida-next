@@ -19,7 +19,7 @@
         <% end %>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="metadata-table-body">
       <% sample_metadata.each do |metadata| %>
         <tr id="<%= metadata[:key] %>" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
           <% if allowed_to?(:update_sample?, @project) %>

@@ -4,7 +4,6 @@ export default class extends Controller {
     static targets = ["field"];
 
     static values = {
-        fieldName: String,
         storageKey: {
             type: String,
             default: `${location.protocol}//${location.host}${location.pathname}${location.search}`
@@ -19,8 +18,8 @@ export default class extends Controller {
             const element = document.createElement("input");
             element.type = "hidden";
             element.id = storageValue;
-            element.name = `sample[delete_keys[${storageValue}]]`;
-            element.value = storageValue;
+            element.name = `sample[metadata[${storageValue}]]`;
+            element.value = '';
             this.fieldTarget.appendChild(element);
         }
     }

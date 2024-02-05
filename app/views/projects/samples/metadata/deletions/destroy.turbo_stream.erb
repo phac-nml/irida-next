@@ -1,0 +1,5 @@
+<%= turbo_stream.update("sample_modal", partial: "modal", locals: { open: false }) %>
+
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type:, data: message) %>
+<% end %>

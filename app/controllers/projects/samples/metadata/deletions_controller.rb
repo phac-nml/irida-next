@@ -19,6 +19,22 @@ module Projects
         def destroy
           puts 'DESTROY!'
           puts params
+
+          metadata_fields_update = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                                          deletion_params).execute
+          if @sample.errors.any?
+            puts 'hi'
+          else
+            render status: :ok, locals: { type: 'success',
+                                          message: t('.success',
+                                                     deleted_keys: metadata_fields_update[:deleted].join(', ')) }
+          end
+        end
+
+        private
+
+        def deletion_params
+          params.require(:sample).permit(metadata: {})
         end
       end
     end
