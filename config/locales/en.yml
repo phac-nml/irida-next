@@ -879,6 +879,8 @@ en:
       personal_access_tokens:
         create:
           success: Successfully generated new personal access token for bot
+    activity:
+      title: Project Activity
     new:
       title: Create project
       placeholder: Awesome project name
