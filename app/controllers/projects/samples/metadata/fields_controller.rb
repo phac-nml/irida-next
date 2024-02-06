@@ -63,7 +63,6 @@ module Projects
         end
 
         def get_create_messages(added_keys, existing_keys)
-          puts '458394YH698346Y938467Y384976394876394876394869384'
           messages = []
           if added_keys.count == 1
             messages << { type: 'success', message: t('.single_success', key: added_keys[0]) }
@@ -72,10 +71,8 @@ module Projects
           end
 
           if existing_keys.count == 1
-            puts 'hi'
             messages << { type: 'error', message: t('.single_key_exists', key: existing_keys[0]) }
           elsif existing_keys.count.positive?
-            puts 'bye'
             messages << { type: 'error', message: t('.multi_keys_exists', keys: existing_keys.join(', ')) }
           end
           messages
