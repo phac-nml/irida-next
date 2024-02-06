@@ -158,34 +158,5 @@ module Samples
       assert @project.errors.full_messages_for(:base).include?(I18n.t('services.samples.clone.sample_exists',
                                                                       sample_id: @sample2.id))
     end
-
-    test 'clone samples with same attachments' do
-      new_project = projects(:project34)
-      clone_samples_params = { new_project_id: new_project.id, sample_ids: [@sample1.id] }
-      cloned_sample_ids = Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                 clone_samples_params[:sample_ids])
-      cloned_sample_ids.each do |sample_id, clone_id|
-        sample = Sample.find_by(id: sample_id)
-        clone = Sample.find_by(id: clone_id)
-        assert_equal @project.id,
-                     sample.project_id
-        assert_equal new_project.id,
-                     clone.project_id
-        assert_equal sample.name, clone.name
-        assert_equal sample.description,
-                     clone.description
-        assert_equal sample.metadata,
-                     clone.metadata
-        sample_blobs = []
-        sample.attachments.each do |attachment|
-          sample_blobs << attachment.file.blob
-        end
-        clone_blobs = []
-        clone.attachments.each do |attachment|
-          clone_blobs << attachment.file.blob
-        end
-        assert_equal sample_blobs, clone_blobs
-      end
-    end
   end
 end

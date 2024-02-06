@@ -28,8 +28,7 @@ module Samples
 
       return unless @project.id == new_project_id.to_i
 
-      raise CloneError,
-            I18n.t('services.samples.clone.same_project')
+      raise CloneError, I18n.t('services.samples.clone.same_project')
     end
 
     def clone_samples(new_project, sample_ids)
@@ -42,8 +41,7 @@ module Samples
         clone.save!
         cloned_sample_ids[sample.id] = clone.id
       rescue ActiveRecord::RecordInvalid
-        @project.errors.add(:base, I18n.t('services.samples.clone.sample_exists',
-                                          sample_id:))
+        @project.errors.add(:base, I18n.t('services.samples.clone.sample_exists', sample_id:))
       end
       cloned_sample_ids
     end
