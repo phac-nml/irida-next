@@ -18,9 +18,9 @@ module Projects
           if @sample.errors.any?
             render status: :unprocessable_entity, locals: { type: 'error', message: @sample.errors.full_messages.first }
           else
-            create_render_params = get_create_status_and_messages(create_metadata_fields[:added_keys],
-                                                                  create_metadata_fields[:existing_keys])
-            render status: create_render_params[:status], locals: { messages: create_render_params[:messages] }
+            status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
+            messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
+            render status:, locals: { messages: }
           end
         end
 
@@ -52,22 +52,33 @@ module Projects
           params.require(:sample).permit(update_field: { key: {}, value: {} })
         end
 
-        def get_create_status_and_messages(added_keys, existing_keys)
-          create_render_params = { status: '', messages: [] }
-          success_msg = { type: 'success', message: t('.success', keys: added_keys.join(', ')) }
-          error_msg = { type: 'error', message: t('.keys_exist', keys: existing_keys.join(', ')) }
-
+        def get_create_status(added_keys, existing_keys)
           if added_keys.count.positive? && existing_keys.count.positive?
-            create_render_params[:status] = :multi_status
-            create_render_params[:messages] = [success_msg, error_msg]
+            :multi_status
           elsif existing_keys.count.positive?
-            create_render_params[:status] = :unprocessable_entity
-            create_render_params[:messages] = [error_msg]
+            :unprocessable_entity
           else
-            create_render_params[:status] = :ok
-            create_render_params[:messages] = [success_msg]
+            :ok
           end
-          create_render_params
+        end
+
+        def get_create_messages(added_keys, existing_keys)
+          puts '458394YH698346Y938467Y384976394876394876394869384'
+          messages = []
+          if added_keys.count == 1
+            messages << { type: 'success', message: t('.single_success', key: added_keys[0]) }
+          elsif added_keys.count.positive?
+            messages << { type: 'success', message: t('.multi_success', keys: added_keys.join(', ')) }
+          end
+
+          if existing_keys.count == 1
+            puts 'hi'
+            messages << { type: 'error', message: t('.single_key_exists', key: existing_keys[0]) }
+          elsif existing_keys.count.positive?
+            puts 'bye'
+            messages << { type: 'error', message: t('.multi_keys_exists', keys: existing_keys.join(', ')) }
+          end
+          messages
         end
 
         def get_update_status_and_message(updated_metadata_field)

@@ -61,9 +61,15 @@ module Samples
         def validate_new_added_keys
           return unless @metadata_update_params['metadata'].empty?
 
-          raise SampleMetadataFieldsCreateError,
-                I18n.t('services.samples.metadata.fields.all_keys_exist',
-                       keys: @metadata_update_params['existing_keys'].join(', '))
+          if @metadata_update_params['existing_keys'].count == 1
+            raise SampleMetadataFieldsCreateError,
+                  I18n.t('services.samples.metadata.fields.single_all_keys_exist',
+                         key: @metadata_update_params['existing_keys'][0])
+          else
+            raise SampleMetadataFieldsCreateError,
+                  I18n.t('services.samples.metadata.fields.multi_all_keys_exist',
+                         keys: @metadata_update_params['existing_keys'].join(', '))
+          end
         end
       end
     end

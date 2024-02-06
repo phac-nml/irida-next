@@ -952,8 +952,10 @@ fr:
           edit: Edit
         fields:
           create:
-            success: Metadata keys '%{keys}' were successfully added.
-            keys_exist: Metadata keys '%{keys}' already exist.
+            single_success: Metadata key '%{key}' was successfully added.
+            multi_success: Metadata keys '%{keys}' were successfully added.
+            single_key_exists: Metadata key '%{key}' already exists.
+            multi_keys_exists: Metadata keys '%{keys}' already exists.
         file_imports:
           create:
             success: Sample metadata was successfully imported.
@@ -1006,14 +1008,14 @@ fr:
         sample_does_not_belong_to_project: "Sample '%{sample_name}' does not belong to project '%{project_name}'"
         empty_metadata: "No metadata was received to update sample '%{sample_name}'"
         fields:
-          all_keys_exist: Metadata keys '%{keys}' already exist.
+          single_all_keys_exist: Metadata key '%{key}' already exists.
+          multi_all_keys_exist: Metadata keys '%{keys}' already exists.
+          sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         user_cannot_update_metadata: "Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis. "
         update_fields:
           metadata_was_not_changed: "Metadata fields were not changed."
           key_exists: "Sample already contains metadata field '%{key}'."
           user_cannot_edit_metadata_key: "Metadata key '%{key}' cannot be updated by a user."
-        fields:
-          sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         import_file:
           empty_file: The file cannot be empty.
           empty_sample_id_column: The sample id column cannot be empty.
