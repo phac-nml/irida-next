@@ -44,8 +44,6 @@ module Samples
       rescue ActiveRecord::RecordInvalid
         @project.errors.add(:base, I18n.t('services.samples.clone.sample_exists',
                                           sample_id:))
-      rescue StandardError => e
-        @project.errors.add(:base, e)
       end
       cloned_sample_ids
     end
