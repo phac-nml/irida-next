@@ -42,15 +42,25 @@ export default class extends Controller {
 
   // When a field is removed, all fields 'after' will have their "Field #" label and data-field-id reduced by 1.
   removeField(event) {
-    const fieldToDelete = event.target.closest('.inputField')
-    const deleteFieldId = parseInt(fieldToDelete.dataset.fieldId)
-    fieldToDelete.remove()
+    const totalInputFields = document.getElementsByClassName('inputField').length
 
-    let inputFields = document.getElementsByClassName('inputField')
-    for (let i = deleteFieldId; i < inputFields.length; i++) {
-      inputFields[i].querySelector(".fieldLabel").innerText = `${this.fieldLabel} ${i + 1}:`
-      inputFields[i].dataset.fieldId = i
+    // If there's only 1 input field, we will clear the inputs rather than delete the field.
+    if (totalInputFields == 1) {
+      const fieldToClear = event.target.closest('.inputField')
+      fieldToClear.querySelector('.keyInput').value = ''
+      fieldToClear.querySelector('.valueInput').value = ''
+    } else {
+      const fieldToDelete = event.target.closest('.inputField')
+      const deleteFieldId = parseInt(fieldToDelete.dataset.fieldId)
+      fieldToDelete.remove()
+
+      let inputFields = document.getElementsByClassName('inputField')
+      for (let i = deleteFieldId; i < inputFields.length; i++) {
+        inputFields[i].querySelector(".fieldLabel").innerText = `${this.fieldLabel} ${i + 1}:`
+        inputFields[i].dataset.fieldId = i
+      }
     }
+
   }
 
   // Metadata is constructed and validated before submission to the backend. Any fields that has key and/or value blank,
