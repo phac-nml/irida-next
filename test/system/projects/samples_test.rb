@@ -1548,8 +1548,8 @@ module Projects
     end
   end
 
-  test 'delete metadata key by dropdown action' do
-    visit namespace_project_sample_url(@group12a, @project29, @sample32)
+    test 'delete metadata key added by user by dropdown action' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
     click_on I18n.t('projects.samples.show.tabs.metadata')
 
@@ -1565,9 +1565,118 @@ module Projects
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
-    within %(turbo-frame[id="table-listing"]) do
-      assert_no_text 'metadatafield1'
-      assert_no_text 'value1'
+      assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+      end
+    end
+
+    test 'delete metadata key added by anaylsis by dropdown action' do
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
+      @project31 = projects(:project31)
+      @sample34 = samples(:sample34)
+
+      visit namespace_project_sample_url(@subgroup12aa, @project31, @sample34)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        first('button.Viral-Dropdown--icon').click
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+      end
+
+      within('#turbo-confirm[open]') do
+        assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm')
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+      end
+    end
+
+    test 'delete one metadata key by delete metadata modal' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        find('input#metadatafield1').click
+      end
+
+      click_on I18n.t('projects.samples.show.delete_metadata_button')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        click_on I18n.t('projects.samples.metadata.deletions.modal.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.deletions.destroy.success', deleted_keys: 'metadatafield1')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+      end
+    end
+
+    test 'delete multiple metadata keys by delete metadata modal' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
+        find('input#metadatafield1').click
+        find('input#metadatafield2').click
+      end
+
+      click_on I18n.t('projects.samples.show.delete_metadata_button')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
+        click_on I18n.t('projects.samples.metadata.deletions.modal.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.deletions.destroy.success',
+                         deleted_keys: 'metadatafield1, metadatafield2')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+        assert_no_text 'metadatafield2'
+        assert_no_text 'value2'
+      end
+    end
+
+    test 'user with access < Maintainer cannot view delete checkboxes, delete action or delete metadata button' do
+      sign_in users(:jane_doe)
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
+        assert_no_selector 'input[type="checkbox"]'
+        assert_no_text I18n.t('projects.samples.show.table_header.action')
+        assert_no_selector 'button.Viral-Dropdown--icon'
+      end
+
+      assert_no_selector I18n.t('projects.samples.show.delete_metadata_button')
     end
   end
 end
