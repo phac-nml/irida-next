@@ -24,7 +24,9 @@ class WorkflowExecutionsController < ApplicationController
   def cancel
     @workflow_execution = WorkflowExecution.find(params[:workflow_execution_id])
 
-    @workflow_execution = WorkflowExecutionCancelationJob.perform_now(@workflow_execution, current_user)
+    @workflow_execution = WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
+
+    return unless @workflow_execution.persisted?
 
     render 'cancel'
   end

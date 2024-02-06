@@ -49,5 +49,9 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @sample1, created_workflow_execution.samples_workflow_executions.first.sample
   end
 
+  test 'should cancel a workflow with valid params' do
+    workflow_execution = WorkflowExecution.last
+  end
+
   # rubocop:enable Naming/VariableNumber
 end
