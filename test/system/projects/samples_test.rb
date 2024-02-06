@@ -1657,6 +1657,8 @@ module Projects
         assert_no_text 'value1'
         assert_no_text 'metadatafield2'
         assert_no_text 'value2'
+        assert_text I18n.t('projects.samples.show.no_metadata')
+        assert_text I18n.t('projects.samples.show.no_associated_metadata')
       end
     end
 
