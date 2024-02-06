@@ -1399,5 +1399,13 @@ module Projects
         assert_no_text 'value5'
       end
     end
+
+    test 'user with access < Maintainer cannot see add metadata' do
+      sign_in users(:jane_doe)
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      assert_no_text I18n.t('projects.samples.show.add_metadata')
+    end
   end
 end
