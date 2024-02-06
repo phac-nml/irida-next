@@ -1400,6 +1400,25 @@ module Projects
       end
     end
 
+    test 'clicking remove button in add modal with one metadata field clears inputs but doesn\'t delete field' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        assert_selector 'input[name="key-0"]'
+        assert_selector 'input[name="value-0"]'
+
+        within %(div[data-field-id="0"]) do
+          first('button').click
+        end
+
+        assert_selector 'input[name="key-0"]'
+        assert_selector 'input[name="value-0"]'
+      end
+    end
+
     test 'user with access < Maintainer cannot see add metadata' do
       sign_in users(:jane_doe)
       visit namespace_project_sample_url(@group12a, @project29, @sample32)
