@@ -41,8 +41,9 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     data = result['data']['attachFilesToSample']
 
     assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
+    expected_status = { 'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47' => :success } # rubocop:disable Layout/LineLength
+    assert_equal expected_status, data['status']
     assert_not_empty data['sample']
-    assert_not_empty data['status']
 
     assert_equal 1, sample.attachments.count
 
@@ -69,4 +70,94 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 'You are not authorized to perform this action', error_message
   end
+
+  test 'attachFilesToSample mutation attach same file to sample error' do
+    sample = samples(:sampleJeff)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+
+    assert_equal 0, sample.attachments.count
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file.signed_id],
+                                              sampleId: sample.to_global_id.to_s })
+
+    assert_equal 1, sample.attachments.count
+    data = result['data']['attachFilesToSample']
+    assert_equal 0, data['errors'].count, 'should work and have no errors.'
+    expected_status = { 'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47' => :success } # rubocop:disable Layout/LineLength
+    assert_equal expected_status, data['status']
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file.signed_id],
+                                              sampleId: sample.to_global_id.to_s })
+
+    assert_equal 1, sample.attachments.count # should not increase
+    data = result['data']['attachFilesToSample']
+    expected_status = { 'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47' => :error } # rubocop:disable Layout/LineLength
+    assert_equal expected_status, data['status']
+    assert_equal 1, data['errors'].count, 'shouldn\'t work and have errors.'
+    expected_error = 'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47["File checksum matches existing file"]' # rubocop:disable Layout/LineLength
+    assert_equal expected_error, data['errors'][0]
+    assert_equal :error, data['status']['eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47'] # rubocop:disable Layout/LineLength
+  end
+
+  # test 'attachFilesToSample mutation attach file with same checksum' do
+  #   sample = samples(:sampleJeff)
+  #   blob_file_a = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+  #   blob_file_b = active_storage_blobs(:attachment_attach_files_to_sample_b_test_blob)
+
+  #   # assert_equal 0, sample.attachments.count
+
+  #   # result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+  #   #                              context: { current_user: @user, token: @api_scope_token },
+  #   #                              variables: { files: [blob_file.signed_id],
+  #   #                                           sampleId: sample.to_global_id.to_s })
+
+  #   # assert_equal 1, sample.attachments.count
+  #   # data = result['data']['attachFilesToSample']
+  #   # assert_equal 0, data['errors'].count, 'should work and have no errors.'
+  #   # assert_equal :success, data['status']
+
+  #   # result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+  #   #                              context: { current_user: @user, token: @api_scope_token },
+  #   #                              variables: { files: [blob_file.signed_id],
+  #   #                                           sampleId: sample.to_global_id.to_s })
+
+  #   # assert_equal 1, sample.attachments.count # should not increase
+  #   # data = result['data']['attachFilesToSample']
+  #   # assert_equal 1, data['errors'].count, 'shouldn\'t work and have errors.'
+  #   # assert_equal 'File checksum matches existing file', data['errors'][0]
+  #   # assert_equal :error, data['status']
+  # end
+
+  # test 'attachFilesToSample mutation attach 2 files' do
+  #   sample = samples(:sampleJeff)
+  #   blob_file_a = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+  #   blob_file_b = active_storage_blobs(:attachment_attach_files_to_sample_b_test_blob)
+
+  #   # assert_equal 0, sample.attachments.count
+
+  #   # result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+  #   #                              context: { current_user: @user, token: @api_scope_token },
+  #   #                              variables: { files: [blob_file.signed_id],
+  #   #                                           sampleId: sample.to_global_id.to_s })
+
+  #   # assert_equal 1, sample.attachments.count
+  #   # data = result['data']['attachFilesToSample']
+  #   # assert_equal 0, data['errors'].count, 'should work and have no errors.'
+  #   # assert_equal :success, data['status']
+
+  #   # result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+  #   #                              context: { current_user: @user, token: @api_scope_token },
+  #   #                              variables: { files: [blob_file.signed_id],
+  #   #                                           sampleId: sample.to_global_id.to_s })
+
+  #   # assert_equal 1, sample.attachments.count # should not increase
+  #   # data = result['data']['attachFilesToSample']
+  #   # assert_equal 1, data['errors'].count, 'shouldn\'t work and have errors.'
+  #   # assert_equal 'File checksum matches existing file', data['errors'][0]
+  #   # assert_equal :error, data['status']
+  # end
 end
