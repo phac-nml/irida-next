@@ -3,7 +3,7 @@
 module Projects
   module Samples
     module Metadata
-      # Controller actions for Project Samples Metadata Fields Controller
+      # Controller actions for Project Samples Metadata Deletions Controller
       class DeletionsController < Projects::Samples::ApplicationController
         respond_to :turbo_stream
 

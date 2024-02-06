@@ -15,7 +15,7 @@ export default class extends Controller {
                 newRow.classList = row.classList;
 
                 for (let cell of row.cells) {
-                    // copy file name, type, and sze
+                    // Copies key and value
                     if ([1, 2].includes(cell.cellIndex)) {
                         newRow.append(cell.cloneNode(true));
                     }
