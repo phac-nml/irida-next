@@ -7,12 +7,10 @@ class HistoryComponent < Component
   def initialize(
     data: nil,
     type: nil,
-    url: nil,
-    **system_arguments
+    url: nil
   )
     @data = data
     @type = type
     @url = url
-    @system_arguments = system_arguments
   end
 end

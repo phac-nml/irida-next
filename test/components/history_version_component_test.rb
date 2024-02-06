@@ -16,12 +16,10 @@ class HistoryVersionComponentTest < ViewComponentTestCase
                         'v' => 1,
                         'ts' => 1_706_733_537_855 }
 
-    current_version = { 'c' => { 'updated_at' => '2024-01-31 21:06:02.109167',
-                                 'metadata_summary' => '{"key1": 1, "key2": 1, "key3": 1}' },
+    current_version = { 'c' => { 'description' => 'New description for Project 1' },
                         'v' => 3, 'ts' => 1_706_735_162_109 }
 
-    versions_after_initial = [{ 'c' => { 'updated_at' => '2024-01-31 21:04:39.663407',
-                                         'metadata_summary' => '{"key1": 1, "key2": 1}' }, 'v' => 2,
+    versions_after_initial = [{ 'c' => { 'description' => 'Another new description for this project' }, 'v' => 2,
                                 'ts' => 1_706_735_079_663 }]
 
     versions_after_initial.each do |ver|
@@ -31,18 +29,17 @@ class HistoryVersionComponentTest < ViewComponentTestCase
     responsible = 'user@email.com'
 
     @log_data = { version:, user: responsible,
-                  changes_from_prev_version: current_version['c'].except('id', 'created_at', 'updated_at',
-                                                                         'deleted_at'),
-                  previous_version: initial_version['c'].except('id', 'created_at', 'updated_at', 'deleted_at') }
+                  changes_from_prev_version: current_version['c'].except('id'),
+                  previous_version: initial_version['c'].except('id') }
 
     render_inline HistoryVersionComponent.new(log_data: @log_data)
 
     assert_selector 'dt', count: 1
     assert_selector 'dd', count: 2
 
-    assert_selector 'dt', text: 'key3'
+    assert_selector 'dt', text: 'description'
 
-    assert_selector 'dd', text: ''
-    assert_selector 'dd', text: '1'
+    assert_selector 'dd', text: 'New description for Project 1'
+    assert_selector 'dd', text: 'Another new description for this project'
   end
 end
