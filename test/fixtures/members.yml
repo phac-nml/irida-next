@@ -434,3 +434,8 @@ group_thirteen_member_james_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen) %>
   access_level: <%= Member::AccessLevel::GUEST %>
 
+group_fourteen_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fourteen) %>
+  access_level: <%= Member::AccessLevel::OWNER %>

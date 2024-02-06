@@ -290,3 +290,10 @@ group_thirteen:
   type: Group
   description: Group 13 description
   metadata_summary: {}
+
+group_fourteen:
+  name: Group 14
+  path: group-14
+  type: Group
+  description: Group 14 description
+  metadata_summary: {}

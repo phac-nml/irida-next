@@ -8,6 +8,14 @@ attachment2:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)
 
+attachment3:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample37 (Sample)
+
+attachment4:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample37 (Sample)
+
 attachmentA:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)

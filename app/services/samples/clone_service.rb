@@ -15,7 +15,7 @@ module Samples
 
       clone_samples(@new_project, sample_ids)
     rescue Samples::CloneService::CloneError => e
-      project.errors.add(:base, e.message)
+      @project.errors.add(:base, e.message)
       {}
     end
 
@@ -38,11 +38,14 @@ module Samples
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         clone = sample.dup
         clone.project_id = new_project.id
-        clone_attachments(sample, clone)
+        clone_attachments(sample, clone) if clone.valid?
         clone.save!
         cloned_sample_ids[sample.id] = clone.id
+      rescue ActiveRecord::RecordInvalid
+        @project.errors.add(:base, I18n.t('services.samples.clone.sample_exists',
+                                          sample_id:))
       rescue StandardError => e
-        project.errors.add(:base, e)
+        @project.errors.add(:base, e)
       end
       cloned_sample_ids
     end

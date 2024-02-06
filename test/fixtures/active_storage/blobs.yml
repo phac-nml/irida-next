@@ -2,6 +2,10 @@ attachment1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filena
 
 attachment2_file_test_file_A_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test" %>
 
+attachment3_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
+
+attachment4_file_test_file_A_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test" %>
+
 test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
 
 testsample_illumina_pe_forward_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_L001_R1_001.fastq", service_name: "test" %>

@@ -431,3 +431,12 @@ project33_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
   metadata_summary: {}
+
+project34_namespace:
+  name: Project 34
+  path: project-34
+  description: Project 34 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_fourteen) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  metadata_summary: {}
