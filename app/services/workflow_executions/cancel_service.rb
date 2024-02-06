@@ -8,7 +8,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false unless @workflow_execution.state != 'Canceled'
+      return false unless @workflow_execution.cancellable?
 
       @workflow_execution.state = 'canceling'
       @workflow_execution.save

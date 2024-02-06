@@ -20,7 +20,7 @@
     <%= viral_time_ago(original_time:workflow_execution["updated_at"]) %>
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
-    <% if cancellable?(workflow_execution) %>
+    <% if workflow_execution.cancellable? %>
       <%= form_with method: :put, url: workflow_execution_cancel_path(workflow_execution) do |form| %>
         <%= form.submit t(:'workflow_executions.index.actions.cancel'),
                         class:

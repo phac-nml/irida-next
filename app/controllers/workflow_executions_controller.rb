@@ -2,8 +2,6 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
-  include WorkflowExecutionHelper
-
   before_action :authenticate_user!
   before_action :current_page
 
