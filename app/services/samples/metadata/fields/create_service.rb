@@ -49,24 +49,12 @@ module Samples
         # Constructs the expected param for metadata update_service
         def construct_metadata_update_params
           @create_fields.each do |k, v|
-            if validate_key(k)
+            if @sample.metadata.transform_keys(&:downcase).key?(k.downcase)
               @metadata_update_params['existing_keys'] << k
             else
               @metadata_update_params['metadata'][k] = v
             end
           end
-        end
-
-        # Checks if the new key already exists within the @sample.metadata
-        def validate_key(key)
-          key_exists = false
-          @sample.metadata.each do |k, _v|
-            if k.downcase == key.downcase
-              key_exists = true
-              break
-            end
-          end
-          key_exists
         end
 
         # Checks if all new keys already exist
