@@ -262,7 +262,7 @@ body {
   }
 
   .dialog--header {
-    @apply flex items-start justify-between p-4 border-b rounded-t dark:border-slate-600;
+    @apply flex items-start justify-between p-5 border-b rounded-t dark:border-slate-600;
   }
 
   .dialog--title {
@@ -278,7 +278,7 @@ body {
   }
 
   .dialog--footer {
-    @apply flex items-center p-6 space-x-2 border-t rounded-b border-slate-200 dark:border-slate-600;
+    @apply flex items-center p-5 space-x-2 border-t rounded-b border-slate-200 dark:border-slate-600;
   }
 
   .avatar {
