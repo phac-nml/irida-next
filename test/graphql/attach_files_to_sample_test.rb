@@ -41,7 +41,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     data = result['data']['attachFilesToSample']
 
     assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
-    expected_status = { 'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47' => :success } # rubocop:disable Layout/LineLength
+    expected_status = { blob_file.signed_id => :success }
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
 
@@ -85,7 +85,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     assert_equal 1, sample.attachments.count
     data = result['data']['attachFilesToSample']
     assert_equal 0, data['errors'].count, 'should work and have no errors.'
-    expected_status = { 'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47' => :success } # rubocop:disable Layout/LineLength
+    expected_status = { blob_file.signed_id => :success }
     assert_equal expected_status, data['status']
 
     result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
@@ -95,12 +95,12 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 1, sample.attachments.count # should not increase
     data = result['data']['attachFilesToSample']
-    expected_status = { 'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47' => :error } # rubocop:disable Layout/LineLength
+    expected_status = { blob_file.signed_id => :error }
     assert_equal expected_status, data['status']
     assert_equal 1, data['errors'].count, 'shouldn\'t work and have errors.'
-    expected_error = 'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47["File checksum matches existing file"]' # rubocop:disable Layout/LineLength
+    expected_error = "#{blob_file.signed_id}[\"File checksum matches existing file\"]"
     assert_equal expected_error, data['errors'][0]
-    assert_equal :error, data['status']['eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47'] # rubocop:disable Layout/LineLength
+    assert_equal :error, data['status'][blob_file.signed_id]
   end
 
   test 'attachFilesToSample mutation attach file with same checksum' do
@@ -121,7 +121,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     data = result['data']['attachFilesToSample']
 
     assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
-    expected_status = { 'eyJfcmFpbHMiOnsiZGF0YSI6MzAzNDg0NDkzLCJwdXIiOiJibG9iX2lkIn19--4487c7e7ecee462e14bba9e588d90a542d02cc05' => :success } # rubocop:disable Layout/LineLength
+    expected_status = { blob_file_a.signed_id => :success }
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
     assert_equal 1, sample.attachments.count
@@ -138,10 +138,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     data = result['data']['attachFilesToSample']
 
     assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
-    expected_status = { 'eyJfcmFpbHMiOnsiZGF0YSI6MjAwNTgzMjQ4LCJwdXIiOiJibG9iX2lkIn19--a38a64c5562aacf1978595e0c9ebaa3228b5fc94' => :error } # rubocop:disable Layout/LineLength
+    expected_status = { blob_file_b.signed_id => :error }
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
-    assert_equal ['eyJfcmFpbHMiOnsiZGF0YSI6MjAwNTgzMjQ4LCJwdXIiOiJibG9iX2lkIn19--a38a64c5562aacf1978595e0c9ebaa3228b5fc94["File checksum matches existing file"]'], # rubocop:disable Layout/LineLength
+    assert_equal ["#{blob_file_b.signed_id}[\"File checksum matches existing file\"]"],
                  data['errors']
     assert_equal 1, sample.attachments.count
   end
@@ -164,8 +164,8 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
     expected_status = {
-      'eyJfcmFpbHMiOnsiZGF0YSI6ODkzNjcyOTMyLCJwdXIiOiJibG9iX2lkIn19--110d021a6b4bd25adabc846a8c05799511670d47' => :success, # rubocop:disable Layout/LineLength
-      'eyJfcmFpbHMiOnsiZGF0YSI6MTAxODg3MDQ0MiwicHVyIjoiYmxvYl9pZCJ9fQ==--bdb9957bb41aa3b8671863fe711a998f8cd4df59' => :success # rubocop:disable Layout/LineLength
+      blob_file_a.signed_id => :success,
+      blob_file_b.signed_id => :success
     }
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
