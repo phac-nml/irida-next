@@ -17,11 +17,11 @@ export default class extends Controller {
 
   #updateIcon(collapsed) {
     if (collapsed) {
-      this.iconTarget.classList.remove("rotate-0");
-      this.iconTarget.classList.add("rotate-180");
-    } else {
       this.iconTarget.classList.remove("rotate-180");
       this.iconTarget.classList.add("rotate-0");
+    } else {
+      this.iconTarget.classList.remove("rotate-0");
+      this.iconTarget.classList.add("rotate-180");
     }
   }
 }
