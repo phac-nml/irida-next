@@ -116,7 +116,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
                                  variables: { files: [blob_file_a.signed_id],
                                               sampleId: sample.to_global_id.to_s })
 
-                                              assert_nil result['errors'], 'should work and have no errors.'
+    assert_nil result['errors'], 'should work and have no errors.'
 
     data = result['data']['attachFilesToSample']
 
