@@ -158,7 +158,7 @@ module Samples
         response = Samples::Metadata::FileImportService.new(project31, @john_doe, params).execute
         assert_empty response
         assert_equal("Sample 'Sample 34' with field(s) 'metadatafield1' cannot be updated.",
-                     project31.errors.full_messages_for(:sample).first)
+                     project31.errors.messages_for(:sample).first)
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => '20' },
                      sample34.reload.metadata)
       end
@@ -184,7 +184,7 @@ module Samples
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [] } }, response)
         assert_equal("Sample 'Project 2 Sample 1' is not found within this project",
-                     @project.errors.full_messages_for(:sample).first)
+                     @project.errors.messages_for(:sample).first)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({}, @sample2.reload.metadata)
