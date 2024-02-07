@@ -16,6 +16,7 @@ module HistoryActions
       format.html
       format.turbo_stream do
         @log_data = @model.log_data_without_changes
+        render status: :ok
       end
     end
   end
