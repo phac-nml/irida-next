@@ -1247,5 +1247,21 @@ module Projects
         click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
       end
     end
+
+    test 'should not import metadata with analysis values' do
+      subgroup12aa = groups(:subgroup_twelve_a_a)
+      project31 = projects(:project31)
+      visit namespace_project_samples_url(subgroup12aa, project31)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.errors.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
+      end
+    end
   end
 end

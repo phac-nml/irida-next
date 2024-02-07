@@ -91,7 +91,7 @@ module Samples
         validate_file_rows
       end
 
-      def perform_file_import # rubocop:disable Metrics/MethodLength
+      def perform_file_import # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         response = {}
         parse_settings = @headers.zip(@headers).to_h
 
@@ -104,8 +104,16 @@ module Samples
           metadata.delete(@sample_id_column)
           metadata.compact! if @ignore_empty_values
           begin
-            response[sample_id] =
-              UpdateService.new(@project, sample, current_user, { 'metadata' => metadata }).execute
+            metadata_changes = UpdateService.new(@project, sample, current_user, { 'metadata' => metadata }).execute
+            not_updated_metadata_changes = metadata_changes[:not_updated]
+            if not_updated_metadata_changes.empty?
+              response[sample_id] = metadata_changes
+            else
+              @project.errors.add(:sample,
+                                  I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+                                         sample_name: sample_id,
+                                         metadata_fields: not_updated_metadata_changes.join(', ')))
+            end
           rescue StandardError
             @project.errors.add(:sample,
                                 I18n.t('services.samples.metadata.import_file.sample_not_found',

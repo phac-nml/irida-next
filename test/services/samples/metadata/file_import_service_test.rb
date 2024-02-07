@@ -144,6 +144,25 @@ module Samples
                      sample32.reload.metadata)
       end
 
+      test 'import sample metadata with user unable to overwrite analysis' do
+        sample34 = samples(:sample34)
+        project31 = projects(:project31)
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample34.metadata)
+        assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                       'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' } },
+                     sample34.metadata_provenance)
+        csv = File.new('test/fixtures/files/metadata/contains_analysis_values.csv', 'r')
+        params = { file: csv, sample_id_column: 'sample_name' }
+        response = Samples::Metadata::FileImportService.new(project31, @john_doe, params).execute
+        assert_empty response
+        assert_equal("Sample 'Sample 34' with field(s) 'metadatafield1' cannot be updated.",
+                     project31.errors.full_messages_for(:sample).first)
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => '20' },
+                     sample34.reload.metadata)
+      end
+
       test 'import sample metadata with empty values set to false' do
         sample32 = samples(:sample32)
         project29 = projects(:project29)
