@@ -8,10 +8,8 @@ class HistoryVersionComponentTest < ViewComponentTestCase
 
     initial_version = { 'c' => { 'id' => 254, 'name' => 'Project 1', 'path' => 'project-1', 'type' => 'Project',
                                  'owner_id' => 1,
-                                 'parent_id' => 1, 'created_at' => '2024-01-31T20:38:57.855327', 'deleted_at' => nil,
-                                 'updated_at' => '2024-01-31T20:38:57.855327', 'description' => '',
-                                 'puid' => 'INXT_PRJ_AYB7CITB2Q',
-                                 'metadata_summary' => '{}' },
+                                 'parent_id' => 1, 'deleted_at' => nil, 'description' => '',
+                                 'puid' => 'INXT_PRJ_AYB7CITB2Q' },
                         'm' => { '_r' => 1 },
                         'v' => 1,
                         'ts' => 1_706_733_537_855 }
