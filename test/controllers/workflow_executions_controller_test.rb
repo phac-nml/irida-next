@@ -50,7 +50,11 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should cancel a workflow with valid params' do
-    workflow_execution = WorkflowExecution.last
+    workflow_execution = WorkflowExecution.first
+
+    put workflow_execution_cancel_path(workflow_execution, format: :turbo_stream)
+    assert_response :success
+    assert_equal 'canceling', WorkflowExecution.first.state
   end
 
   # rubocop:enable Naming/VariableNumber
