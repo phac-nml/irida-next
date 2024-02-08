@@ -35,20 +35,11 @@
           },
           class: "text-slate-800 dark:text-white hover:underline" %>
           <% if index == 0 %>
-            <span
-              class="
-                bg-green-200
-                text-green-800
-                text-xs
-                font-medium
-                ml-2
-                px-2.5
-                py-0.5
-                rounded-full
-                dark:bg-green-900
-                dark:text-green-300
-              "
-            ><%= t(:"components.history.latest") %></span>
+            <%= viral_pill(
+              text: t(:"components.history.latest"),
+              color: :green,
+              classes: "ml-2"
+            ) %>
           <% end %>
         <% else %>
           <%= t(:"components.history.link_text", version: changes[:version]) %>

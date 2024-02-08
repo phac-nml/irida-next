@@ -34,6 +34,7 @@ fr:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
+      abbreviated: "%a %b%e %Y %H:%M"
     updated: Updated
   date:
     formats:

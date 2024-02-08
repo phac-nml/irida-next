@@ -48,4 +48,37 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
     assert_not_nil log_data[:changes_from_prev_version]
     assert_not_nil log_data[:previous_version]
   end
+
+  test 'get project logidze log data with delete and restore actions' do
+    sign_in users(:john_doe)
+    project = projects(:project1)
+    project.namespace.create_logidze_snapshot!
+
+    project.namespace.destroy
+    project.namespace.create_logidze_snapshot!
+
+    Project.restore(project.id, recursive: true)
+    project.namespace.create_logidze_snapshot!
+
+    assert project.namespace.reload_log_data.versions.length == 3
+
+    log_data = project.namespace.log_data_without_changes
+
+    assert log_data.is_a?(Array)
+
+    assert log_data[0][:version] == 1
+    assert_equal 'System', log_data[0][:user]
+    assert_equal false, log_data[0][:deleted]
+    assert_equal false, log_data[0][:restored]
+
+    assert log_data[1][:version] == 2
+    assert_equal 'System', log_data[1][:user]
+    assert_equal true, log_data[1][:deleted]
+    assert_equal false, log_data[1][:restored]
+
+    assert log_data[2][:version] == 3
+    assert_equal 'System', log_data[2][:user]
+    assert_equal false, log_data[2][:deleted]
+    assert_equal true, log_data[2][:restored]
+  end
 end

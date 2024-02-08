@@ -34,6 +34,7 @@ en:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
+      abbreviated: "%a %b%e %Y %H:%M"
   date:
     formats:
       iso: "YYYY-MM-DD"
