@@ -959,6 +959,7 @@ en:
           create_field_button: Add another metadata field
           field: Field
           key: Key
+          remove_field: Remove Field
           submit_button: Add
           value: Value
       attachments:
