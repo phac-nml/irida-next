@@ -6,58 +6,40 @@ export default class extends Controller {
 
   connect() {
     // Grabs labels for field manipulation in case of translations
-    this.fieldLabel = this.inputsContainerTarget.querySelector('#field-label').innerText.split(" ")[0]
-    this.keyLabel = this.inputsContainerTarget.querySelector('#key-label').innerText
-    this.valueLabel = this.inputsContainerTarget.querySelector('#value-label').innerText
+    this.fieldLabel = this.inputsContainerTarget.querySelector('.field-label').innerText.split(" ")[0]
+
+    // Used to create new fields
+    this.newFieldTemplate = document.getElementById('wrapper')
+
+    // Assigns required after assigning template without required to newFieldTemplate
+    this.inputsContainerTarget.querySelector('.key-input').required = true
+    this.inputsContainerTarget.querySelector('.value-input').required = true
   }
 
   // Add new field with next ID increment
   addNewField() {
-    const id = document.getElementsByClassName('inputField').length
-    const newField =
-      `<div class='inputField' data-field-id="${id}">
-        <div class="fieldLabel text-slate-700 dark:text-slate-400 text-sm mb-2">
-          ${this.fieldLabel} ${id + 1}:
-        </div>
-        <div class="flex space-x-2 mb-2">
-          <div class="relative z-0 w-full group">
-            <input type="text" name="key-${id}" class="keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" "  />
-            <label for="key-${id}" class="peer-focus:font-medium absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">${this.keyLabel}</label>
-          </div>
-          <div class="relative z-0 w-full group">
-            <input type="text" name="value-${id}" class="valueInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " />
-            <label for="value-${id}" class="peer-focus:font-medium absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">${this.valueLabel}</label>
-          </div>
-          <button type="button" data-action="projects--samples--metadata--create#removeField" class="ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2 focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white dark:bg-slate-800 dark:hover:bg-slate-700" aria-label="Remove field">
-            <span class="h-5 w-5 Viral-Icon pointer-events-none">
-              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="Viral-Icon__Svg icon-x_mark pointer-events-none" focusable="false">
-                <path class="pointer-events-none" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </span>
-          </button>
-        </div>
-      </div>`
-    this.inputsContainerTarget.insertAdjacentHTML("beforeend", newField)
+    const id = document.getElementsByClassName('input-field').length
+    const newFieldWithIds = this.assignFieldIdNumbering(this.newFieldTemplate.cloneNode(true), id)
+    this.inputsContainerTarget.insertAdjacentHTML("beforeend", newFieldWithIds.innerHTML)
   }
 
   // When a field is removed, all fields 'after' will have their "Field #" label and data-field-id reduced by 1.
   removeField(event) {
-    const totalInputFields = document.getElementsByClassName('inputField').length
+    const totalInputFields = document.getElementsByClassName('input-field').length
 
     // If there's only 1 input field, we will clear the inputs rather than delete the field.
     if (totalInputFields == 1) {
-      const fieldToClear = event.target.closest('.inputField')
-      fieldToClear.querySelector('.keyInput').value = ''
-      fieldToClear.querySelector('.valueInput').value = ''
+      const fieldToClear = event.target.closest('.input-field')
+      fieldToClear.querySelector('.key-input').value = ''
+      fieldToClear.querySelector('.value-input').value = ''
     } else {
-      const fieldToDelete = event.target.closest('.inputField')
-      const deleteFieldId = parseInt(fieldToDelete.dataset.fieldId)
+      const fieldToDelete = event.target.closest('.input-field')
+      const deleteFieldId = parseInt(fieldToDelete.querySelector(".field-label").innerHTML.split(" ")[1]) - 1
       fieldToDelete.remove()
 
-      let inputFields = document.getElementsByClassName('inputField')
+      let inputFields = document.getElementsByClassName('input-field')
       for (let i = deleteFieldId; i < inputFields.length; i++) {
-        inputFields[i].querySelector(".fieldLabel").innerText = `${this.fieldLabel} ${i + 1}:`
-        inputFields[i].dataset.fieldId = i
+        this.assignFieldIdNumbering(inputFields[i], i)
       }
     }
 
@@ -66,10 +48,10 @@ export default class extends Controller {
   // Metadata is constructed and validated before submission to the backend. Any fields that has key and/or value blank,
   // we ignore and do not submit those fields.
   buildMetadata() {
-    const inputFields = document.getElementsByClassName('inputField')
+    const inputFields = document.getElementsByClassName('input-field')
     for (let input of inputFields) {
-      let metadata_field = input.querySelector('.keyInput')
-      let value = input.querySelector('.valueInput')
+      let metadata_field = input.querySelector('.key-input')
+      let value = input.querySelector('.value-input')
       if (metadata_field.value && value.value) {
         let metadataInput = `<input type='hidden' name="sample[create_fields][${metadata_field.value}]" value="${value.value}">`
         this.metadataToAddTarget.insertAdjacentHTML("beforeend", metadataInput)
@@ -77,5 +59,17 @@ export default class extends Controller {
       metadata_field.name = ''
       value.name = ''
     }
+  }
+
+  // Used by add and remove fields to relabel all ids/names/fors for continuous numbering
+  assignFieldIdNumbering(field, id) {
+    field.querySelector(".field-label").innerText = `${this.fieldLabel} ${id + 1}:`
+    field.querySelector('.key-input').id = `key-${id}`
+    field.querySelector('.key-input').name = `key-${id}`
+    field.querySelector('.key-label').htmlFor = `key-${id}`
+    field.querySelector('.value-input').id = `value-${id}`
+    field.querySelector('.value-input').name = `value-${id}`
+    field.querySelector('.value-label').htmlFor = `value-${id}`
+    return field
   }
 }
