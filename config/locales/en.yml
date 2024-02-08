@@ -856,6 +856,7 @@ en:
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
         transfer_button: Transfer samples
+        import_metadata_button: Import metadata
         actions:
           button_add_aria_label: Add new sample button
           dropdown_aria_label: Dropdown options for sample %{sample_name}
@@ -895,6 +896,25 @@ en:
           create:
             success: Sample metadata was successfully imported.
             error: "Metadata was not successfully imported for the following samples:"
+        update:
+          success: "Metadata fields '%{metadata_fields}' for sample '%{sample_name}' were updated"
+        file_imports:
+          create:
+            success: Sample metadata was successfully imported.
+            error: "Metadata was not successfully imported for the following samples:"
+          dialog:
+            title: Upload Sample Metadata
+            file: File
+            file_help: CSV, XLS or XLSX.
+            sample_id_column: Sample ID Column
+            select_sample_id_column: Select a Sample ID Column
+            submit_button: Import Metadata
+          errors:
+            description: "The sample metadata import completed with the following errors:"
+            ok_button: OK
+          success:
+            description: The metadata was imported successfully!
+            ok_button: OK
       attachments:
         concatenations:
           create:
@@ -914,7 +934,7 @@ en:
           destroy:
             success: Files were successfully deleted.
             partial_success: Some files were successfully deleted.
-            error: 'File %{filename} was not removed due to the following errors: %{errors}'
+            error: "File %{filename} was not removed due to the following errors: %{errors}"
         attachment:
           delete: Delete
           delete_confirm: Are you sure that you want to delete this file from the sample?
@@ -923,7 +943,7 @@ en:
           failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
         destroy:
           success: File %{filename} was successfully removed.
-          error: 'File %{filename} was not removed due to the following errors: %{errors}'
+          error: "File %{filename} was not removed due to the following errors: %{errors}"
         error: File %{filename} was not removed.
       table:
         sample: Sample
@@ -942,17 +962,17 @@ en:
         created_at: Created
         updated_at: Last Updated
     submissions:
-        pipeline_selection:
-          title: Workflow Selection
-        new:
-          title: '%{workflow} parameters'
-          submit: Submit
+      pipeline_selection:
+        title: Workflow Selection
+      new:
+        title: "%{workflow} parameters"
+        submit: Submit
   services:
     attachments:
       concatenation:
         filename_missing: Base file name not provided. Please provide a base name for the concatenated file.
         incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
-        incorrect_file_types: 'Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.'
+        incorrect_file_types: "Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files."
         incorrect_attachable: All or some of then selected files do not belong to the sample.
         incorrect_fastq_file_types: "Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files"
         no_files_selected: No files were selected to concatenate. Please select files then try again.
@@ -994,7 +1014,8 @@ en:
           missing_sample_id_column: The file is missing the sample id column.  Please make sure the sample id column exists and retry uploading.
           missing_metadata_column: The file does not have any metadata columns. Please add some columns of metadata to the file and retry uploading.
           missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
-          sample_not_found: "'%{sample_name}' is not found within this project"
+          sample_not_found: "Sample '%{sample_name}' is not found within this project"
+          sample_metadata_fields_not_updated: "Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated."
     namespaces:
       share:
         invalid_namespace_type: Only a group or project namespace can be shared with a group.
