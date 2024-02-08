@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module WorkflowExecutions
-  # Service used to initiate the cancel of a WorkflowExecution
+  # Service used to initiate the cancelation of a WorkflowExecution
   class CancelService < BaseService
     def initialize(workflow_execution, user = nil)
       super(user, {})
