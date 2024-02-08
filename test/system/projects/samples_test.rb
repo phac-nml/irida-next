@@ -1091,7 +1091,7 @@ module Projects
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
       end
-      within %(turbo-frame[id="import_metadata_dialog"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
         click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
       end
@@ -1105,7 +1105,7 @@ module Projects
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
       end
-      within %(turbo-frame[id="import_metadata_dialog"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
         click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
       end
@@ -1119,7 +1119,7 @@ module Projects
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
       end
-      within %(turbo-frame[id="import_metadata_dialog"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
         click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
       end
@@ -1150,7 +1150,7 @@ module Projects
         check 'Ignore empty values'
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
       end
-      within %(turbo-frame[id="import_metadata_dialog"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
         click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
       end
@@ -1181,7 +1181,7 @@ module Projects
         assert_not find_field('Ignore empty values').checked?
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
       end
-      within %(turbo-frame[id="import_metadata_dialog"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
         click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
       end
@@ -1242,7 +1242,7 @@ module Projects
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
       end
-      within %(turbo-frame[id="import_metadata_dialog"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.metadata.file_imports.errors.description')
         click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
       end
@@ -1258,7 +1258,7 @@ module Projects
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
       end
-      within %(turbo-frame[id="import_metadata_dialog"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.metadata.file_imports.errors.description')
         click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
       end

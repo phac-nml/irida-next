@@ -64,7 +64,7 @@ export default class extends Controller {
   }
 
   #addSelectOptions(headers) {
-    for (var header of headers) {
+    for (let header of headers) {
       const option = document.createElement("option");
       option.value = header;
       option.text = header;
