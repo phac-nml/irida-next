@@ -1,10 +1,14 @@
 <div>
   <div class="grid grid-cols-3 gap-2 py-4">
-    <div class="col-span-1"></div>
+    <% current_version_classes =
+      "col-start-2 col-end-3 text-sm font-semibold text-slate-500 dark:text-slate-400" %>
     <% if log_data[:version] != 1 %>
+      <% current_version_classes =
+        "col-start-3 col-end-4 text-sm font-semibold text-slate-500 dark:text-slate-400" %>
       <div
         class="
-          col-span-1
+          col-start-2
+          col-end-3
           text-sm
           font-semibold
           text-slate-500
@@ -15,15 +19,7 @@
           version: log_data[:version] - 1
         ) %></div>
     <% end %>
-    <div
-      class="
-        col-span-1
-        text-sm
-        font-semibold
-        text-slate-500
-        dark:text-slate-400
-      "
-    ><%= t(:"components.history_version.current_version", version: log_data[:version]) %></div>
+    <div class="<%= current_version_classes %>"><%= t(:"components.history_version.current_version", version: log_data[:version]) %></div>
   </div>
 
   <dl
