@@ -1,63 +1,39 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["metadataToAdd", "inputsContainer", "wrapper"]
-
+  static targets = ["metadataToAdd", "fieldsContainer", "fieldTemplate"]
 
   connect() {
-    // Grabs labels for field manipulation in case of translations
-    this.fieldLabel = this.wrapperTarget.querySelector('.fieldLabel').innerText.split(" ")[0]
-
-    // Used to create new fields
-    this.newFieldTemplate = this.wrapperTarget.cloneNode(true)
-
-    // Assigns required after cloning the template
-    this.wrapperTarget.querySelector('.keyInput').required = true
-    this.wrapperTarget.querySelector('.valueInput').required = true
+    this.addField()
+    this.addRequired()
   }
 
-  // Add new field with next ID increment
+  // Add new field and replace the PLACEHOLDER with a current datetime for unique identifier
   addField() {
-    const id = document.getElementsByClassName('inputField').length
-    let newFieldWithIds = this.assignFieldIds(this.newFieldTemplate, id)
-    this.inputsContainerTarget.insertAdjacentHTML("beforeend", newFieldWithIds.innerHTML)
+    let newField = this.fieldTemplateTarget.innerHTML.replace(/PLACEHOLDER/g, new Date().getTime())
+    this.fieldsContainerTarget.insertAdjacentHTML("beforeend", newField)
   }
 
-  // When a field is removed, all fields 'after' will have their "Field #" and identifiers reduced by 1
-  // to have continuous numbering in the field list.
   removeField(event) {
-    let inputFields = document.getElementsByClassName('inputField')
-    let fieldToDelete = event.target.closest('.inputField')
-    // If there's only 1 input field, we will clear the inputs rather than delete the field.
-    if (inputFields.length == 1) {
-      fieldToDelete.querySelector('.keyInput').value = ''
-      fieldToDelete.querySelector('.valueInput').value = ''
-    } else {
-      const deleteFieldId = parseInt(fieldToDelete.id.slice(-1))
-      fieldToDelete.remove()
+    let needRequired = false
+    let allInputFields = document.querySelectorAll('.inputField')
 
-      for (let i = deleteFieldId; i < inputFields.length; i++) {
-        this.assignFieldIds(inputFields[i], i)
-      }
+    // Captures if the first field was deleted, we need to assign the new first field required = true
+    if (allInputFields[0] == event.target.closest('.inputField')) {
+      needRequired = true
     }
-  }
 
-  // Used by add and remove fields to relabel all ids/names/fors for continuous numbering
-  assignFieldIds(field, id) {
-    // addField will have an additional wrapper which has no id and will require a query
-    field.id ? field.id = `inputField${id}` : field.querySelector(".inputField").id = `inputField${id}`
-    field.querySelector(".fieldLabel").innerText = `${this.fieldLabel} ${id + 1}:`
+    event.target.closest('.inputField').remove()
 
-    let keyInput = field.querySelector('.keyInput')
-    keyInput.id = `key${id}`
-    keyInput.name = `key${id}`
-    field.querySelector('.keyLabel').htmlFor = `key${id}`
+    // If only one field existed and was deleted, we need to re-add a field and assign required = true
+    if (document.querySelectorAll('.inputField').length == 0) {
+      this.addField()
+      needRequired = true
+    }
 
-    let valueInput = field.querySelector('.valueInput')
-    valueInput.id = `value${id}`
-    valueInput.name = `value${id}`
-    field.querySelector('.valueLabel').htmlFor = `value${id}`
-    return field
+    if (needRequired) {
+      this.addRequired()
+    }
   }
 
   // Metadata is constructed and validated before submission to the backend. Any fields that has key and/or value blank,
@@ -74,5 +50,11 @@ export default class extends Controller {
       metadata_field.name = ''
       value.name = ''
     }
+  }
+
+  // Makes the first create metadata field required for submissions
+  addRequired() {
+    this.fieldsContainerTarget.querySelectorAll('.keyInput')[0].required = true
+    this.fieldsContainerTarget.querySelectorAll('.valueInput')[0].required = true
   }
 }
