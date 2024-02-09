@@ -14,7 +14,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
     # Begin on /-/ scope.
     # Use this for all project routes.
     scope '-' do
-      get :view_history_version
       get :activity
       get :edit
       post :transfer
@@ -47,6 +46,8 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             end
           end
         end
+
+        get :view_history_version
       end
 
       get '/history' => 'history#index', as: :history
