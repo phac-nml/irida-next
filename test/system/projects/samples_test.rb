@@ -1114,7 +1114,7 @@ module Projects
     test 'should import metadata via xlsx' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
@@ -1128,7 +1128,7 @@ module Projects
     test 'should not import metadata via invalid file type' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
@@ -1144,7 +1144,7 @@ module Projects
       sample = samples(:sample32)
       visit namespace_project_samples_url(namespace, project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         check 'Ignore empty values'

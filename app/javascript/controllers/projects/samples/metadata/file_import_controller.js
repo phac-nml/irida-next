@@ -3,6 +3,9 @@ import * as XLSX from "xlsx";
 
 export default class extends Controller {
   static targets = ["selectInput", "submitButton"];
+  static values = {
+    loaded: Boolean
+  };
 
   #disabled_classes = [
     "bg-slate-50",
@@ -27,6 +30,7 @@ export default class extends Controller {
   connect() {
     this.#disableSelectInput();
     this.submitButtonTarget.disabled = true;
+    this.loadedValue = true;
   }
 
   toggleSubmitButton(event) {
