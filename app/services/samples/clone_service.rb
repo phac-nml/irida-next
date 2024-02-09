@@ -35,8 +35,9 @@ module Samples
       cloned_sample_ids = {}
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
-        clone = sample.dup
-        clone.project_id = new_project.id
+        clone = Sample.new(name: sample.name, description: sample.description, project_id: new_project.id)
+        Samples::Metadata::UpdateService.new(new_project, clone, @current_user,
+                                             { 'metadata' => sample.metadata }).execute
         clone_attachments(sample, clone) if clone.valid?
         clone.save!
         cloned_sample_ids[sample.id] = clone.id
