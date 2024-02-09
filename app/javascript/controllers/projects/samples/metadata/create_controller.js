@@ -5,7 +5,6 @@ export default class extends Controller {
 
   connect() {
     this.addField()
-    this.addRequired()
   }
 
   // Add new field and replace the PLACEHOLDER with a current datetime for unique identifier
@@ -15,24 +14,11 @@ export default class extends Controller {
   }
 
   removeField(event) {
-    let needRequired = false
-    let allInputFields = document.querySelectorAll('.inputField')
-
-    // Captures if the first field was deleted, we need to assign the new first field required = true
-    if (allInputFields[0] == event.target.closest('.inputField')) {
-      needRequired = true
-    }
-
     event.target.closest('.inputField').remove()
 
-    // If only one field existed and was deleted, we need to re-add a field and assign required = true
+    // If only one field existed and was deleted, we re-add a new field
     if (document.querySelectorAll('.inputField').length == 0) {
       this.addField()
-      needRequired = true
-    }
-
-    if (needRequired) {
-      this.addRequired()
     }
   }
 
@@ -50,11 +36,5 @@ export default class extends Controller {
       metadata_field.name = ''
       value.name = ''
     }
-  }
-
-  // Makes the first create metadata field required for submissions
-  addRequired() {
-    this.fieldsContainerTarget.querySelectorAll('.keyInput')[0].required = true
-    this.fieldsContainerTarget.querySelectorAll('.valueInput')[0].required = true
   }
 }
