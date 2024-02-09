@@ -1619,7 +1619,7 @@ module Projects
         click_on I18n.t('projects.samples.metadata.deletions.modal.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.metadata.deletions.destroy.success', deleted_keys: 'metadatafield1')
+      assert_text I18n.t('projects.samples.metadata.deletions.destroy.single_success', deleted_key: 'metadatafield1')
       within %(turbo-frame[id="table-listing"]) do
         assert_no_text 'metadatafield1'
         assert_no_text 'value1'
@@ -1650,7 +1650,7 @@ module Projects
         click_on I18n.t('projects.samples.metadata.deletions.modal.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.metadata.deletions.destroy.success',
+      assert_text I18n.t('projects.samples.metadata.deletions.destroy.multi_success',
                          deleted_keys: 'metadatafield1, metadatafield2')
       within %(turbo-frame[id="table-listing"]) do
         assert_no_text 'metadatafield1'

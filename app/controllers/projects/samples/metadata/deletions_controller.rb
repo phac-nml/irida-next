@@ -20,9 +20,10 @@ module Projects
           metadata_fields_update = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
                                                                           deletion_params).execute
 
-          destroy_render_params = get_destroy_status_and_messages(metadata_fields_update[:deleted])
+          status = get_destroy_status(metadata_fields_update[:deleted])
+          messages = get_destroy_messages(metadata_fields_update[:deleted])
 
-          render status: destroy_render_params[:status], locals: { messages: destroy_render_params[:messages] }
+          render status:, locals: { messages: }
         end
 
         private
@@ -31,23 +32,26 @@ module Projects
           params.require(:sample).permit(metadata: {})
         end
 
-        def get_destroy_status_and_messages(deleted_keys)
-          destroy_render_params = { status: '', messages: [] }
-          success_msg = { type: 'success', message: t('.success',
-                                                      deleted_keys: deleted_keys.join(', ')) }
-          error_msg = { type: 'error', message: @sample.errors.full_messages.first }
-
+        def get_destroy_status(deleted_keys)
           if @sample.errors.any? && deleted_keys.count.positive?
-            destroy_render_params[:status] = :multi_status
-            destroy_render_params[:messages] = [success_msg, error_msg]
+            :multi_status
           elsif @sample.errors.any?
-            destroy_render_params[:status] = :unprocessable_entity
-            destroy_render_params[:messages] = [error_msg]
+            :unprocessable_entity
           else
-            destroy_render_params[:status] = :ok
-            destroy_render_params[:messages] = [success_msg]
+            :ok
           end
-          destroy_render_params
+        end
+
+        def get_destroy_messages(deleted_keys)
+          messages = []
+
+          if deleted_keys.count == 1
+            messages << { type: 'success', message: t('.single_success', deleted_key: deleted_keys[0]) }
+          elsif deleted_keys.count.positive?
+            messages << { type: 'success', message: t('.multi_success', deleted_keys: deleted_keys.join(', ')) }
+          end
+          messages << { type: 'error', message: @sample.errors.full_messages.first } if @sample.errors.any?
+          messages
         end
       end
     end
