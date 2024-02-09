@@ -12,13 +12,13 @@ module Samples
       @sample2 = samples(:sample2)
     end
 
-    test 'clone samples with empty params' do
+    test 'not clone samples with empty params' do
       assert_empty Samples::CloneService.new(@project, @john_doe).execute(nil, nil)
       assert_equal(@project.errors.full_messages_for(:base).first,
                    I18n.t('services.samples.clone.empty_new_project_id'))
     end
 
-    test 'clone samples with no sample ids' do
+    test 'not clone samples with no sample ids' do
       clone_samples_params = { new_project_id: @new_project.id, sample_ids: [] }
       assert_empty Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
                                                                           clone_samples_params[:sample_ids])
@@ -26,7 +26,7 @@ module Samples
                    I18n.t('services.samples.clone.empty_sample_ids'))
     end
 
-    test 'clone samples with into same project' do
+    test 'not clone samples with into same project' do
       clone_samples_params = { new_project_id: @project.id, sample_ids: [@sample1.id, @sample2.id] }
       assert_empty Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
                                                                           clone_samples_params[:sample_ids])
