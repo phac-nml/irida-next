@@ -39,7 +39,7 @@ export default class extends Controller {
   // Metadata is constructed and validated before submission to the backend. Any fields that has key and/or value blank,
   // we ignore and do not submit those fields.
   buildMetadata() {
-    const inputFields = document.getElementsByClassName('inputField')
+    const inputFields = document.querySelectorAll('.inputField')
     for (let input of inputFields) {
       let metadata_field = input.querySelector('.keyInput')
       let value = input.querySelector('.valueInput')
