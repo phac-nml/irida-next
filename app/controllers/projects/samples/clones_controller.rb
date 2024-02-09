@@ -7,10 +7,9 @@ module Projects
       respond_to :turbo_stream
 
       def create # rubocop:disable Metrics/AbcSize
-        authorize! @project, to: :update_sample?
-
         new_project_id = clone_params[:new_project_id]
         sample_ids = clone_params[:sample_ids]
+
         @cloned_sample_ids = ::Samples::CloneService.new(@project, current_user).execute(new_project_id, sample_ids)
 
         if @project.errors.empty?
