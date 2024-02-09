@@ -1,0 +1,6 @@
+<%= turbo_stream.update "history_modal",
+                    partial: "project_history_modal",
+                    locals: {
+                      open: true,
+                      log_data: @log_data
+                    } %>

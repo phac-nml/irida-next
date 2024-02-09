@@ -34,6 +34,7 @@ fr:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
+      abbreviated: "%a %b%e %Y %H:%M"
     updated: Updated
   date:
     formats:
@@ -179,6 +180,9 @@ fr:
     exceptions:
       personal_access_token:
         not_found: "Could not find personal access token with id %{token_id}"
+    concerns:
+      history:
+        system: System
     models:
       member:
         one: Member
@@ -306,6 +310,14 @@ fr:
       information_icon: Information icon
     nextflow:
       required: Required
+    history:
+      latest: Latest
+      created_by: "%{type} created by %{user}"
+      deleted_by: "%{type} deleted by %{user}"
+      modified_by: "%{type} modified by %{user}"
+      restored_by: "%{type} restored by %{user}"
+      transferred_by: "%{type} transferred by %{user}"
+      link_text: "Version %{version}"
   layouts:
     application:
       site_title: IRIDA Next
@@ -659,6 +671,23 @@ fr:
             points_html:
               - To prevent accidental actions we ask you to confirm your intention.
               - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
+    history:
+      index:
+        title: History
+        subtitle: These are the changes that have been made to the project
+        latest: Latest
+        created_by: "Project created by %{user}"
+        modified_by: "Project modified by %{user}"
+      project_history_modal:
+        close: Close
+        project_created: "Project was created by %{user}"
+        project_deleted: "Project was deleted by %{user}"
+        project_modified: "Project attributes were modified by %{user}"
+        project_restored: "Project was restored by %{user}"
+        project_transferred: "Project was transferred by %{user}"
+        version_number: "Version %{version_number}"
+        previous_version: "Previous (Version %{version})"
+        current_version: "Current (Version %{version})"
     new:
       title: Create project
       placeholder: Awesome project name
@@ -669,6 +698,7 @@ fr:
       cancel: Cancel
     sidebar:
       details: Details
+      history: History
       members: Members
       samples: Samples
       settings: Settings

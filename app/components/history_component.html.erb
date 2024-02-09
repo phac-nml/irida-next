@@ -1,0 +1,64 @@
+<ol class=" relative border-s border-slate-200 dark:border-slate-700 ">
+  <% @data.each_with_index do |changes, index| %>
+    <li class="mb-10 ms-4">
+      <div
+        class="
+          absolute
+          w-3
+          h-3
+          bg-slate-200
+          rounded-full
+          mt-1.5
+          -start-1.5
+          border
+          border-white
+          dark:border-slate-700
+          dark:bg-slate-700
+        "
+      ></div>
+      <time
+        class="
+          mb-1
+          text-sm
+          font-normal
+          leading-none
+          text-slate-500
+          dark:text-slate-400
+        "
+      ><%= changes[:updated_at] %></time>
+      <h2 class=" text-lg font-semibold text-slate-900 dark:text-white ">
+        <% unless @url.nil? %>
+          <%= link_to t(:"components.history.link_text", version: changes[:version]),
+          path_with_params(@url, { version: changes[:version] }),
+          data: {
+            turbo_stream: true
+          },
+          class: "text-slate-800 dark:text-white hover:underline" %>
+          <% if index == 0 %>
+            <%= viral_pill(
+              text: t(:"components.history.latest"),
+              color: :green,
+              classes: "ml-2"
+            ) %>
+          <% end %>
+        <% else %>
+          <%= t(:"components.history.link_text", version: changes[:version]) %>
+        <% end %>
+      </h2>
+
+      <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
+        <% if changes[:version] == 1 %>
+          <%= t(:"components.history.created_by", type: @type, user: changes[:user]) %>
+        <% elsif changes[:deleted] %>
+          <%= t(:"components.history.deleted_by", type: @type, user: changes[:user]) %>
+        <% elsif changes[:restored] %>
+          <%= t(:"components.history.restored_by", type: @type, user: changes[:user]) %>
+        <% elsif changes[:transferred] %>
+          <%= t(:"components.history.transferred_by", type: @type, user: changes[:user]) %>
+        <% else %>
+          <%= t(:"components.history.modified_by", type: @type, user: changes[:user]) %>
+        <% end %>
+      </p>
+    </li>
+  <% end %>
+</ol>

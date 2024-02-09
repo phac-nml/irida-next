@@ -1,0 +1,140 @@
+<div>
+  <div class="grid grid-cols-3 gap-2 py-4">
+    <% current_version_classes =
+      "col-start-2 col-end-3 text-sm font-semibold text-slate-500 dark:text-slate-400" %>
+    <% if log_data[:version] != 1 %>
+      <% current_version_classes =
+        "col-start-3 col-end-4 text-sm font-semibold text-slate-500 dark:text-slate-400" %>
+      <div
+        class="
+          col-start-2
+          col-end-3
+          text-sm
+          font-semibold
+          text-slate-500
+          dark:text-slate-400
+        "
+      ><%= t(
+          :"components.history_version.previous_version",
+          version: log_data[:version] - 1
+        ) %></div>
+    <% end %>
+    <div class="<%= current_version_classes %>"><%= t(:"components.history_version.current_version", version: log_data[:version]) %></div>
+  </div>
+
+  <dl
+    class="
+      text-slate-900
+      dark:text-white
+      divide-y
+      divide-slate-200
+      dark:divide-slate-700
+    "
+  >
+    <div>
+      <% log_data[:changes_from_prev_version].each_with_index do |(key,value),index| %>
+        <% if log_data[:version] == 1 %>
+          <% next if value.blank? || value == "{}" %>
+        <% end %>
+
+        <% changes_from_prev_version_hash = json_string_to_hash(value) %>
+
+        <% if !changes_from_prev_version_hash.nil? %>
+          <div data-controller="collapsible">
+            <h2 id=<%= "accordion-collapse-heading-#{index + 1}" %>>
+              <button
+                type="button"
+                class="
+                  flex
+                  items-center
+                  justify-between
+                  w-full
+                  p-5
+                  font-medium
+                  rtl:text-right
+                  text-slate-500
+                  border
+                  border-slate-200
+                  focus:ring-4
+                  focus:ring-slate-200
+                  dark:focus:ring-slate-800
+                  dark:border-slate-700
+                  dark:text-slate-400
+                  hover:bg-slate-100
+                  dark:hover:bg-slate-800
+                  gap-3
+                "
+                data-action="collapsible#toggle"
+                aria-expanded="true"
+                aria-controls=<%= "accordion-collapse-body-#{index + 1}" %>
+              >
+                <span><%= key.to_s %></span>
+                <%= viral_icon(
+                  name: "chevron_down",
+                  classes: "mr-0 w-4 h-4 rotate-0",
+                  "data-collapsible-target": "icon"
+                ) %>
+              </button>
+            </h2>
+            <div
+              data-collapsible-target="item"
+              id=<%= "accordion-collapse-body-#{index + 1}" %>
+              class="hidden"
+              aria-labelledby=<%= "accordion-collapse-heading-#{index + 1}" %>
+            >
+              <div
+                class="
+                  p-5
+                  border
+                  border-slate-200
+                  dark:border-slate-700
+                  dark:bg-slate-900
+                "
+              >
+                <div class="grid grid-cols-3 gap-2 py-2">
+                  <% prev_changes_value_hash = json_string_to_hash(log_data[:previous_version][key]) %>
+
+                  <% if !prev_changes_value_hash.nil? %>
+                    <% changes_from_prev_version_hash.each do |k,v| %>
+                      <% next if prev_changes_value_hash[k] == v %>
+                      <% col_span = "col-span-1" %>
+
+                      <% if log_data[:version] == 1 %>
+                        <% col_span = "col-span-2" %>
+                      <% end %>
+                      <div class="col-span-1">
+                        <dt class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= k.to_s %></dt>
+                      </div>
+                      <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+                        <dd class="text-md p-1"><%= prev_changes_value_hash[k] %></dd>
+                      </div>
+                      <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+                        <dd class="text-md p-1 break-words"><%= v %></dd>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <div class="grid grid-cols-3 gap-2 py-2">
+            <div class="col-span-1">
+              <dt class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key.to_s %></dt>
+            </div>
+            <% col_span = "col-span-2" %>
+            <% if log_data[:version] != 1 %>
+              <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+                <dd class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></dd>
+              </div>
+              <% col_span = "col-span-1" %>
+            <% end %>
+            <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+              <dd class="text-md p-1 break-words"><%= value %></dd>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </dl>
+</div>
