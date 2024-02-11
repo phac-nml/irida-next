@@ -218,6 +218,8 @@ en:
     concerns:
       history:
         system: System
+      track_activity:
+        system: System
     models:
       member:
         one: Member
@@ -263,8 +265,8 @@ en:
       destroy: "%{user} removed sample %{sample_name}"
       update: "%{user} updated sample %{sample_name}"
     attachment:
-      create: "%{user} uploaded sequencing data to project %{project_name} sample %{sample_name}"
-      destroy: "%{user} removed sequencing data from project %{project_name} sample %{sample_name}"
+      create: "%{user} uploaded sequencing data to sample %{sample_name}"
+      destroy: "%{user} removed sequencing data from sample %{sample_name}"
     member:
       create: "%{user} added member %{member} to %{namespace_type} %{name}"
       destroy: "%{user} removed member %{member} from %{namespace_type} %{name}"
