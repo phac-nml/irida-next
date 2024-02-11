@@ -184,7 +184,12 @@ en:
               inclusion: can only contain available scopes
     exceptions:
       personal_access_token:
-        not_found: Could not find personal access token with id %{token_id}
+        not_found: "Could not find personal access token with id %{token_id}"
+    concerns:
+      history:
+        system: System
+      track_activity:
+        system: System
     models:
       group:
         one: Group
@@ -231,8 +236,8 @@ en:
       destroy: "%{user} removed sample %{sample_name}"
       update: "%{user} updated sample %{sample_name}"
     attachment:
-      create: "%{user} uploaded sequencing data to project %{project_name} sample %{sample_name}"
-      destroy: "%{user} removed sequencing data from project %{project_name} sample %{sample_name}"
+      create: "%{user} uploaded sequencing data to sample %{sample_name}"
+      destroy: "%{user} removed sequencing data from sample %{sample_name}"
     member:
       create: "%{user} added member %{member} to %{namespace_type} %{name}"
       destroy: "%{user} removed member %{member} from %{namespace_type} %{name}"

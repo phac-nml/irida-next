@@ -59,7 +59,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def activity # rubocop:disable Metrics/AbcSize
+  def activity # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     authorize! @project
     @public_activity = PublicActivity::Activity.where(
       trackable_id: @project.namespace.id,
@@ -68,13 +68,17 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
       PublicActivity::Activity.where(
         trackable_id: @project.samples.select(:id), trackable_type: 'Sample'
       )
-    ).or(PublicActivity::Activity.where(
-           trackable_id: @project.namespace.project_members.select(:id),
-           trackable_type: 'Member'
-         )).or(PublicActivity::Activity.where(trackable_id: @project.namespace.shared_with_group_links.select(:id),
-                                              trackable_type: 'NamespaceGroupLink'))
+    ).or(
+      PublicActivity::Activity.where(
+        trackable_id: Attachment.where(attachable_id: @project.samples.select(:id)), trackable_type: 'Attachment'
+      )
+    ).or(PublicActivity::Activity.where(trackable_id: @project.namespace.project_members.select(:id),
+                                        trackable_type: 'Member')).or(PublicActivity::Activity.where(
+                                                                        trackable_id: @project.namespace.shared_with_group_links.select(:id),
+                                                                        trackable_type: 'NamespaceGroupLink'
+                                                                      ))
 
-    @activities = @project.namespace.human_readable_activity(@public_activity)
+    @activities = @project.namespace.human_readable_activity(@public_activity).reverse
   end
 
   def transfer # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
