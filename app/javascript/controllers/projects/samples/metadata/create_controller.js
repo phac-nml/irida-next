@@ -9,8 +9,11 @@ export default class extends Controller {
 
   // Add new field and replace the PLACEHOLDER with a current datetime for unique identifier
   addField() {
-    let newField = this.fieldTemplateTarget.innerHTML.replace(/PLACEHOLDER/g, new Date().getTime())
+    const currentTime = new Date().getTime()
+    let newField = this.fieldTemplateTarget.innerHTML.replace(/PLACEHOLDER/g, currentTime)
     this.fieldsContainerTarget.insertAdjacentHTML("beforeend", newField)
+
+    document.getElementById(`key[${currentTime}]`).focus()
   }
 
   removeField(event) {
