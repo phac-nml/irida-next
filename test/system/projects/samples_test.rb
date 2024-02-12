@@ -1113,7 +1113,12 @@ module Projects
 
     test 'should import metadata via xlsx' do
       visit namespace_project_samples_url(@namespace, @project)
+
+      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      assert_selector 'table#samples-table thead tr th', count: 6
+
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+
       within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1123,6 +1128,7 @@ module Projects
         assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
         click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
       end
+      assert_selector 'table#samples-table thead tr th', count: 7
     end
 
     test 'should not import metadata via invalid file type' do
@@ -1236,6 +1242,10 @@ module Projects
 
     test 'should partially import metadata with missing sample errors' do
       visit namespace_project_samples_url(@namespace, @project)
+
+      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      assert_selector 'table#samples-table thead tr th', count: 6
+
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
@@ -1246,6 +1256,7 @@ module Projects
         assert_text I18n.t('projects.samples.metadata.file_imports.errors.description')
         click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
       end
+      assert_selector 'table#samples-table thead tr th', count: 7
     end
 
     test 'should not import metadata with analysis values' do
