@@ -43,7 +43,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         resource :metadata, module: :samples, only: %i[new update edit create] do
           scope module: :metadata, as: :metadata do
             collection do
-              resource :field, only: %i[update create edit]
+              resource :field, only: %i[update create]
             end
           end
         end
