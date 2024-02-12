@@ -180,8 +180,6 @@ en:
     exceptions:
       personal_access_token:
         not_found: "Could not find personal access token with id %{token_id}"
-      user:
-        not_found: 'test user not found error msg'
     concerns:
       history:
         system: System
