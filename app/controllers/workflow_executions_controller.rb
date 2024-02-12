@@ -2,7 +2,6 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
-  before_action :authenticate_user!
   before_action :current_page
 
   def index
