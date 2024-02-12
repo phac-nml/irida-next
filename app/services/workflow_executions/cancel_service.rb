@@ -12,7 +12,6 @@ module WorkflowExecutions
       return false unless @workflow_execution.cancellable?
 
       @workflow_execution.state = 'canceling'
-      @workflow_execution.save
 
       return unless @workflow_execution.save
 
