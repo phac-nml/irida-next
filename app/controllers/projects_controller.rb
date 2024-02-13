@@ -68,7 +68,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
                                                         )
                                                       ).or(
                                                         PublicActivity::Activity.where(
-                                                          trackable_id: Attachment.where(attachable_id: @project.samples.select(:id)), trackable_type: 'Attachment'
+                                                          trackable_id: Attachment.with_deleted.where(attachable_id: @project.samples.select(:id)), trackable_type: 'Attachment'
                                                         )
                                                       )
                                                .or(PublicActivity::Activity.where(trackable_id: @project.namespace.project_members.select(:id),
