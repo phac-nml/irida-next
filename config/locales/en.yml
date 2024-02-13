@@ -82,7 +82,7 @@ en:
         update_sample?: You are not authorized to update samples for project %{name} on this server.
         transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
         transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
-        clone_sample?: You are not authorized to clone samples for project %{name} on this server.
+        clone_sample?: You are not authorized to clone samples from project %{name} on this server.
         clone_sample_into_project?: You are not authorized to clone samples to project %{name} on this server.
       namespaces/project_namespace:
         update?: You are not authorized to update the namespace for project %{name} on this server.
@@ -1045,7 +1045,7 @@ en:
         empty_sample_ids: The sample ids are empty.
         same_project: The samples already exist in the project. Please select a different project.
         sample_exists: "Sample '%{sample_id}' already exists in the target project"
-        sample_metadata_fields_not_updated: "Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated."
+        sample_metadata_fields_not_updated: "Sample '%{sample_id}' with field(s) '%{metadata_fields}' cannot be updated."
       transfer:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
