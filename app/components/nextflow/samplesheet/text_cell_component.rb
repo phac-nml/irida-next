@@ -4,12 +4,11 @@ module Nextflow
   module Samplesheet
     # Render a single cell of a Nextflow samplesheet for a property that requires a text input
     class TextCellComponent < ViewComponent::Base
-      attr_reader :name, :fields, :required
+      attr_reader :name, :fields
 
-      def initialize(name, fields:, required: false)
+      def initialize(name, fields:)
         @name = name
         @fields = fields
-        @required = required
       end
     end
   end

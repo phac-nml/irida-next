@@ -15,9 +15,6 @@
         <th class="px-6 py-3 font-semibold tracking-wider">
           <div class="flex items-center space-x-2">
             <span class="uppercase"><%= header %></span>
-            <% if required.include?(header) %>
-              <%= viral_pill(text: t(".required"), color: :blue) %>
-            <% end %>
           </div>
         </th>
       <% end %>
@@ -27,7 +24,7 @@
     <% samples.each_with_index do |sample, index| %>
       <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}]".to_s do |s| %>
         <%= s.hidden_field :sample_id, value: sample.id %>
-        <tr class="border-b dark:border-slate-700">
+        <tr class="border-b dark:border-slate-700" data-controller="nextflow--samplesheet">
           <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}][samplesheet_params]".to_s do |fields| %>
           <% properties.keys.each do |property| %>
             <%= render_cell_type(property, properties[property], sample, fields) %>

@@ -3,7 +3,7 @@
 module Nextflow
   # Render the contents of a Nextflow samplesheet to a table
   class SamplesheetComponent < Component
-    attr_reader :properties, :required, :samples
+    attr_reader :properties, :samples
 
     def initialize(schema:, samples:)
       @samples = samples
@@ -12,11 +12,15 @@ module Nextflow
 
     def extract_properties(schema)
       @properties = schema['items']['properties']
-      @required = schema['items']['required']
+      @properties.each_key do |property|
+        @properties[property]['required'] = schema['items']['required'].include?(property)
+      end
     end
 
     def filter_files(sample, properties)
-      names = sample.attachments.map { |a| [a.file.filename.to_s, a.to_global_id] }
+      paired = sample.attachments.reject { |n| n.metadata['direction'].nil? }
+
+      names = sample.attachments.map { |a| [a.file.filename.to_s, a.to_global_id, a.metadata['direction']] }
       pattern = properties['pattern']
       pattern = properties['anyOf'].find { |p| p['pattern'].present? }['pattern'] if pattern.nil?
       names.select { |n| n[0].match(/#{Regexp.new(pattern.to_s)}/) }
@@ -41,8 +45,7 @@ module Nextflow
                property,
                filter_files(sample, entry),
                fields:,
-               prompt: t('.file_prompt'),
-               required: @required.include?(property)
+               prompt: t('.file_prompt')
              ))
     end
 
@@ -51,16 +54,14 @@ module Nextflow
                property,
                entry['enum'],
                fields:,
-               prompt: t('.dropdown_prompt'),
-               required: @required.include?(property)
+               prompt: t('.dropdown_prompt')
              ))
     end
 
     def render_input_cell(property, fields)
       render(Samplesheet::TextCellComponent.new(
                property,
-               fields:,
-               required: @required.include?(property)
+               fields:
              ))
     end
   end
