@@ -197,23 +197,14 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     assert_equal actual_error, expected_error
   end
 
-  # test 'attachFilesToSample mutation should not work with invalid sample id' do
-  #   # sample = samples(:sampleJeff)
-  #   blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+  test 'attachFilesToSample mutation should not work with invalid sample id' do
+    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
-  #   # assert_equal 0, sample.attachments.count
-
-  #   result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
-  #                                context: { current_user: @user, token: @api_scope_token },
-  #                                variables: { files: [blob_file.signed_id],
-  #                                             sampleId: 'this is not a valid sample id' })
-
-  #   assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
-
-  #   # assert_equal 0, sample.attachments.count
-
-  #   error_message = result['errors'][0]['message']
-
-  #   assert_equal "Couldn't find Sample with 'id'=NAN", error_message
-  # end
+    assert_raises RuntimeError do
+      IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+                          context: { current_user: @user, token: @api_scope_token },
+                          variables: { files: [blob_file.signed_id],
+                                       sampleId: 'this is not a valid sample id' })
+    end
+  end
 end
