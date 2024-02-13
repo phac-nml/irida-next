@@ -9,7 +9,7 @@ module Mutations
              required: true,
              description: 'The Node ID of the sample to be updated.'
 
-    field :errors, [String], null: false, description: 'A list of errors that prevented the mutation.'
+    field :errors, GraphQL::Types::JSON, null: false, description: 'Errors that prevented the mutation.'
     field :sample, Types::SampleType, null: false, description: 'The updated sample.'
     field :status, GraphQL::Types::JSON, null: false, description: 'The status of the mutation.'
 
@@ -18,6 +18,7 @@ module Mutations
       files_attached = Attachments::CreateService.new(current_user, sample, { files: }).execute
 
       status, errors = attachment_status_and_errors(files_attached)
+      errors['query'] = sample.errors.full_messages if sample.errors.count.positive?
 
       {
         sample:,
@@ -28,7 +29,7 @@ module Mutations
 
     def attachment_status_and_errors(files_attached)
       status = {}
-      errors = [] # errors must be returned as a list, so key value pairs cannot be returned
+      errors = {}
 
       files_attached.each do |attachment|
         id = attachment.file.blob.signed_id
@@ -36,7 +37,7 @@ module Mutations
           status[id] = :success
         else
           status[id] = :error
-          errors.append(id + attachment.errors.full_messages.to_s)
+          errors[id] = attachment.errors.full_messages
         end
       end
 
