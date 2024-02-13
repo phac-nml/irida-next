@@ -119,39 +119,7 @@
   <%= turbo_frame_tag "project_samples_list",
                         src: project_samples_path(@project, format: :turbo_stream, **request.query_parameters),
                         loading: :lazy do %>
-    <table
-      class="
-        w-full
-        text-sm
-        text-left
-        rtl:text-right
-        text-slate-500
-        dark:text-slate-400
-      "
-    >
-      <tbody
-        class="
-          bg-white
-          divide-y
-          divide-slate-200
-          dark:bg-slate-800
-          dark:divide-slate-700
-        "
-      >
-        <% 15.times do %>
-          <tr>
-            <td class="p-4 animate-pulse">
-              <div class="flex-1 py-1 space-y-6">
-                <div class="space-y-3">
-                  <div class="w-48 h-2 rounded bg-slate-200"></div>
-                  <div class="w-32 h-2 rounded bg-slate-200"></div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <%= render partial: "shared/loading/table" %>
   <% end %>
   <%= turbo_frame_tag "project_samples_pagination" %>
 <% end %>
