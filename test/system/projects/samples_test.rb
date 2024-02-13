@@ -1166,10 +1166,10 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text I18n.t('projects.samples.show.table_header.key')
         assert_selector 'table#metadata-table tbody tr', count: 3
-        within first('tbody tr td:nth-child(1)') do
+        within first('tbody tr td:nth-child(2)') do
           assert_text 'metadatafield1'
         end
-        within first('tbody tr td:nth-child(2)') do
+        within first('tbody tr td:nth-child(3)') do
           assert_text 'value1'
         end
       end
@@ -1290,9 +1290,9 @@ module Projects
       assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadatafield3')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield3'
+        assert_selector 'tr#metadatafield3_field'
 
-        within %(tr#metadatafield3) do
+        within %(tr#metadatafield3_field) do
           assert_text 'metadatafield3'
           assert_text 'value3'
         end
@@ -1319,15 +1319,15 @@ module Projects
                          keys: %w[metadatafield3 metadatafield4].join(', '))
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield3'
-        assert_selector 'tr#metadatafield4'
+        assert_selector 'tr#metadatafield3_field'
+        assert_selector 'tr#metadatafield4_field'
 
-        within %(tr#metadatafield3) do
+        within %(tr#metadatafield3_field) do
           assert_text 'metadatafield3'
           assert_text 'value3'
         end
 
-        within %(tr#metadatafield4) do
+        within %(tr#metadatafield4_field) do
           assert_text 'metadatafield4'
           assert_text 'value4'
         end
@@ -1340,9 +1340,9 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield1'
+        assert_selector 'tr#metadatafield1_field'
 
-        within %(tr#metadatafield1) do
+        within %(tr#metadatafield1_field) do
           assert_text 'metadatafield1'
           assert_text 'value1'
         end
@@ -1365,16 +1365,16 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield1'
+        assert_selector 'tr#metadatafield1_field'
 
-        within %(tr#metadatafield1) do
+        within %(tr#metadatafield1_field) do
           assert_text 'metadatafield1'
           assert_text 'value1'
         end
 
-        assert_selector 'tr#metadatafield1'
+        assert_selector 'tr#metadatafield2_field'
 
-        within %(tr#metadatafield2) do
+        within %(tr#metadatafield2_field) do
           assert_text 'metadatafield2'
           assert_text 'value2'
         end
@@ -1402,11 +1402,11 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield1'
-        assert_no_selector 'tr#metadatafield3'
+        assert_selector 'tr#metadatafield1_field'
+        assert_no_selector 'tr#metadatafield3_field'
         assert_no_text 'metadatafield3'
 
-        within %(tr#metadatafield1) do
+        within %(tr#metadatafield1_field) do
           assert_text 'metadatafield1'
           assert_text 'value1'
         end
@@ -1427,8 +1427,8 @@ module Projects
       assert_text I18n.t('projects.samples.metadata.fields.create.single_key_exists', key: 'metadatafield1')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield3'
-        within %(tr#metadatafield3) do
+        assert_selector 'tr#metadatafield3_field'
+        within %(tr#metadatafield3_field) do
           assert_text 'metadatafield3'
           assert_text 'value3'
         end
@@ -1469,14 +1469,14 @@ module Projects
         assert_no_text 'metadatafield5'
         assert_no_text 'value5'
 
-        assert_selector 'tr#metadatafield3'
-        within %(tr#metadatafield3) do
+        assert_selector 'tr#metadatafield3_field'
+        within %(tr#metadatafield3_field) do
           assert_text 'metadatafield3'
           assert_text 'value3'
         end
 
-        assert_selector 'tr#metadatafield6'
-        within %(tr#metadatafield6) do
+        assert_selector 'tr#metadatafield6_field'
+        within %(tr#metadatafield6_field) do
           assert_text 'metadatafield6'
           assert_text 'value6'
         end
@@ -1546,24 +1546,23 @@ module Projects
         assert_selector 'dd', text: @sample1.project.id
       end
     end
-  end
 
     test 'delete metadata key added by user by dropdown action' do
       visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
-    click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
 
-    within %(turbo-frame[id="table-listing"]) do
-      assert_text 'metadatafield1'
-      assert_text 'value1'
-      first('button.Viral-Dropdown--icon').click
-      click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
-    end
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        first('button.Viral-Dropdown--icon').click
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+      end
 
-    within('#turbo-confirm[open]') do
-      assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm')
-      click_button I18n.t(:'components.confirmation.confirm')
-    end
+      within('#turbo-confirm[open]') do
+        assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm')
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
 
       assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')
       within %(turbo-frame[id="table-listing"]) do
