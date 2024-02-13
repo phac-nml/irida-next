@@ -137,5 +137,32 @@ module Projects
 
       assert_response :unauthorized
     end
+
+    test 'show sample history listing' do
+      sign_in users(:john_doe)
+      namespace = groups(:group_one)
+      project = projects(:project1)
+      sample = samples(:sample1)
+
+      sample.create_logidze_snapshot!
+
+      get namespace_project_sample_path(namespace, project, sample, tab: 'history')
+
+      assert_response :success
+    end
+
+    test 'view sample history version' do
+      sign_in users(:john_doe)
+      namespace = groups(:group_one)
+      project = projects(:project1)
+      sample = samples(:sample1)
+
+      sample.create_logidze_snapshot!
+
+      get namespace_project_sample_view_history_version_path(namespace, project, sample, version: 1,
+                                                                                         format: :turbo_stream)
+
+      assert_response :success
+    end
   end
 end
