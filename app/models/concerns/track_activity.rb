@@ -31,25 +31,30 @@ module TrackActivity
   private
 
   def project_activity(activity)
+    activity_trackable = activity_trackable(activity, Project)
     {
       created_at: activity.created_at,
-      description: I18n.t("activity.#{activity.key}", user: activity_creator(activity), name: activity.trackable.name)
+      description: I18n.t("activity.#{activity.key}", user: activity_creator(activity), name: activity_trackable.name)
     }
   end
 
   def sample_activity(activity)
+    activity_trackable = activity_trackable(activity, Sample)
+
     {
       created_at: activity.created_at,
       description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
-                                                      sample_name: activity.trackable.name)
+                                                      sample_name: activity_trackable.name)
     }
   end
 
   def attachment_activity(activity)
+    activity_trackable = activity_trackable(activity, Attachment)
+
     {
       created_at: activity.created_at,
       description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
-                                                      sample_name: activity.trackable.attachable.name)
+                                                      sample_name: activity_trackable.attachable.name)
     }
   end
 
@@ -75,5 +80,9 @@ module TrackActivity
 
   def activity_creator(activity)
     activity.owner.nil? ? I18n.t('activerecord.concerns.track_activity.system') : activity.owner.email
+  end
+
+  def activity_trackable(activity, relation)
+    activity.trackable.nil? ? relation.with_deleted.find(activity.trackable_id) : activity.trackable
   end
 end
