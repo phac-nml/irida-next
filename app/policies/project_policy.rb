@@ -126,7 +126,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def clone_sample?
-    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false)
     return true if Member.can_clone_sample?(user, record.namespace) == true
 
     details[:name] = record.name
@@ -134,7 +133,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def clone_sample_into_project?
-    return true if Member.can_clone_sample_to_project?(user, record.namespace, false) == true
     return true if Member.can_clone_sample_to_project?(user, record.namespace) == true
 
     details[:name] = record.name
