@@ -58,7 +58,7 @@ module Samples
 
       @project.errors.add(:sample,
                           I18n.t('services.samples.clone.sample_metadata_fields_not_updated',
-                                 sample_id: sample.id, metadata_fields: not_updated_metadata_changes.join(', ')))
+                                 sample_name: sample.name, metadata_fields: not_updated_metadata_changes.join(', ')))
     end
 
     def clone_attachments(sample, clone)
