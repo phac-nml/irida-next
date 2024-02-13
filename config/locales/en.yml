@@ -831,6 +831,7 @@ en:
         leave_success: "You have successfully left the project %{name}"
     samples:
       show:
+        add_metadata: Add Metadata
         new_attachment_button: Upload Files
         concatenate_button: Concatenate Files
         delete_files_button: Delete Files
@@ -922,6 +923,11 @@ en:
         edit:
           edit: Edit
         fields:
+          create:
+            single_success: Metadata key '%{key}' was successfully added.
+            multi_success: Metadata keys '%{keys}' were successfully added.
+            single_key_exists: Metadata key '%{key}' already exist.
+            multi_keys_exists: Metadata keys '%{keys}' already exist.
           update:
             success: "Metadata was successfully updated"
         file_imports:
@@ -947,6 +953,13 @@ en:
           success:
             description: The metadata was imported successfully!
             ok_button: OK
+        form:
+          create_field_button: Add another metadata field
+          field: Field
+          key: Key
+          remove_field: Remove Field
+          submit_button: Add
+          value: Value
       attachments:
         concatenations:
           create:
@@ -1035,13 +1048,15 @@ en:
       metadata:
         sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         empty_metadata: "No metadata was received to update sample '%{sample_name}'"
+        fields:
+          single_all_keys_exist: Metadata key '%{key}' already exist.
+          multi_all_keys_exist: Metadata keys '%{keys}' already exist.
+          sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         user_cannot_update_metadata: "Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis. "
         update_fields:
           metadata_was_not_changed: "Metadata fields were not changed."
           key_exists: "Sample already contains metadata field '%{key}'."
           user_cannot_edit_metadata_key: "Metadata key '%{key}' cannot be updated by a user."
-        fields:
-          sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
         import_file:
           empty_file: The file cannot be empty.
           empty_sample_id_column: The sample id column cannot be empty.

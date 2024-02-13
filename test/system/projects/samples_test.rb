@@ -1263,5 +1263,238 @@ module Projects
         click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
       end
     end
+
+    test 'add single new metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        find('input.keyInput').fill_in with: 'metadatafield3'
+        find('input.valueInput').fill_in with: 'value3'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadatafield3')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield3'
+
+        within %(tr#metadatafield3) do
+          assert_text 'metadatafield3'
+          assert_text 'value3'
+        end
+      end
+    end
+
+    test 'add multiple new metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        all('input.keyInput')[0].fill_in with: 'metadatafield3'
+        all('input.valueInput')[0].fill_in with: 'value3'
+
+        all('input.keyInput')[1].fill_in with: 'metadatafield4'
+        all('input.valueInput')[1].fill_in with: 'value4'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
+                         keys: %w[metadatafield3 metadatafield4].join(', '))
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield3'
+        assert_selector 'tr#metadatafield4'
+
+        within %(tr#metadatafield3) do
+          assert_text 'metadatafield3'
+          assert_text 'value3'
+        end
+
+        within %(tr#metadatafield4) do
+          assert_text 'metadatafield4'
+          assert_text 'value4'
+        end
+      end
+    end
+
+    test 'add single existing metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield1'
+
+        within %(tr#metadatafield1) do
+          assert_text 'metadatafield1'
+          assert_text 'value1'
+        end
+      end
+
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        find('input.keyInput').fill_in with: 'metadatafield1'
+        find('input.valueInput').fill_in with: 'newValue1'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('services.samples.metadata.fields.single_all_keys_exist', key: 'metadatafield1')
+    end
+
+    test 'add multiple existing metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield1'
+
+        within %(tr#metadatafield1) do
+          assert_text 'metadatafield1'
+          assert_text 'value1'
+        end
+
+        assert_selector 'tr#metadatafield1'
+
+        within %(tr#metadatafield2) do
+          assert_text 'metadatafield2'
+          assert_text 'value2'
+        end
+      end
+
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        all('input.keyInput')[0].fill_in with: 'metadatafield1'
+        all('input.valueInput')[0].fill_in with: 'newValue1'
+
+        all('input.keyInput')[1].fill_in with: 'metadatafield2'
+        all('input.valueInput')[1].fill_in with: 'newValue2'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('services.samples.metadata.fields.multi_all_keys_exist',
+                         keys: %w[metadatafield1 metadatafield2].join(', '))
+    end
+
+    test 'add both new and existing metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield1'
+        assert_no_selector 'tr#metadatafield3'
+        assert_no_text 'metadatafield3'
+
+        within %(tr#metadatafield1) do
+          assert_text 'metadatafield1'
+          assert_text 'value1'
+        end
+      end
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        all('input.keyInput')[0].fill_in with: 'metadatafield1'
+        all('input.valueInput')[0].fill_in with: 'newValue1'
+
+        all('input.keyInput')[1].fill_in with: 'metadatafield3'
+        all('input.valueInput')[1].fill_in with: 'value3'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadatafield3')
+      assert_text I18n.t('projects.samples.metadata.fields.create.single_key_exists', key: 'metadatafield1')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield3'
+        within %(tr#metadatafield3) do
+          assert_text 'metadatafield3'
+          assert_text 'value3'
+        end
+      end
+    end
+
+    test 'add new metadata after deleting fields' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        all('input.keyInput')[0].fill_in with: 'metadatafield3'
+        all('input.valueInput')[0].fill_in with: 'value3'
+        all('input.keyInput')[1].fill_in with: 'metadatafield4'
+        all('input.valueInput')[1].fill_in with: 'value4'
+        all('input.keyInput')[2].fill_in with: 'metadatafield5'
+        all('input.valueInput')[2].fill_in with: 'value5'
+        all('input.keyInput')[3].fill_in with: 'metadatafield6'
+        all('input.valueInput')[3].fill_in with: 'value6'
+
+        all('button[data-action="projects--samples--metadata--create#removeField"]')[2].click
+        all('button[data-action="projects--samples--metadata--create#removeField"]')[1].click
+
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
+                         keys: %w[metadatafield3 metadatafield6].join(', '))
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield4'
+        assert_no_text 'value4'
+        assert_no_text 'metadatafield5'
+        assert_no_text 'value5'
+
+        assert_selector 'tr#metadatafield3'
+        within %(tr#metadatafield3) do
+          assert_text 'metadatafield3'
+          assert_text 'value3'
+        end
+
+        assert_selector 'tr#metadatafield6'
+        within %(tr#metadatafield6) do
+          assert_text 'metadatafield6'
+          assert_text 'value6'
+        end
+      end
+    end
+
+    test 'clicking remove button in add modal with one metadata field clears inputs but doesn\'t delete field' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        assert_selector 'input.keyInput', count: 1
+        assert_selector 'input.valueInput', count: 1
+
+        all('button[data-action="projects--samples--metadata--create#removeField"]')[0].click
+
+        assert_selector 'input.keyInput', count: 1
+        assert_selector 'input.valueInput', count: 1
+      end
+    end
+
+    test 'user with access < Maintainer cannot see add metadata' do
+      sign_in users(:jane_doe)
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      assert_no_text I18n.t('projects.samples.show.add_metadata')
+    end
   end
 end

@@ -180,7 +180,7 @@ module Samples
                        exception.result.message
         end
 
-        test 'sample does not belong to project' do
+        test 'cannot update sample that does not belong to project' do
           params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },
                                          'value' => { 'value1' => 'value1' } } }
 
