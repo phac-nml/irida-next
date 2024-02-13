@@ -6,10 +6,12 @@ module Samples
   class CloneServiceTest < ActiveSupport::TestCase
     def setup
       @john_doe = users(:john_doe)
+      @group = groups(:group_one)
       @project = projects(:project1)
       @new_project = projects(:project2)
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
+      @sample30 = samples(:sample30)
     end
 
     test 'not clone samples with empty params' do
@@ -134,8 +136,7 @@ module Samples
         assert_equal @project.id, sample.project_id
         assert_equal @new_project.id, clone.project_id
         assert_equal sample.name, clone.name
-        assert_equal sample.description,
-                     clone.description
+        assert_equal sample.description, clone.description
         assert_equal sample.metadata, clone.metadata
         sample_blobs = []
         sample.attachments.each do |attachment|
@@ -149,14 +150,46 @@ module Samples
       end
     end
 
+    test 'clone samples with metadata' do
+      assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample30.metadata)
+      assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 35 }, @project.namespace.metadata_summary)
+      assert_equal({}, @new_project.namespace.metadata_summary)
+      assert_equal({ 'metadatafield1' => 633, 'metadatafield2' => 106 }, @group.metadata_summary)
+      clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample30.id] }
+      cloned_sample_ids = Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
+                                                                                 clone_samples_params[:sample_ids])
+      cloned_sample_ids.each do |sample_id, clone_id|
+        sample = Sample.find_by(id: sample_id)
+        clone = Sample.find_by(id: clone_id)
+        assert_equal @project.id, sample.project_id
+        assert_equal @new_project.id, clone.project_id
+        assert_equal sample.name, clone.name
+        assert_equal sample.description, clone.description
+        assert_equal sample.metadata, clone.metadata
+        sample_blobs = []
+        sample.attachments.each do |attachment|
+          sample_blobs << attachment.file.blob
+        end
+        clone_blobs = []
+        clone.attachments.each do |attachment|
+          clone_blobs << attachment.file.blob
+        end
+        assert_equal sample_blobs, clone_blobs
+      end
+      assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample30.metadata)
+      assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 35 }, @project.namespace.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @new_project.namespace.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 634, 'metadatafield2' => 107 }, @group.reload.metadata_summary)
+    end
+
     test 'not clone samples with same sample name' do
       new_project = projects(:project34)
       clone_samples_params = { new_project_id: new_project.id, sample_ids: [@sample2.id] }
       cloned_sample_ids = Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
                                                                                  clone_samples_params[:sample_ids])
       assert_empty cloned_sample_ids
-      assert @project.errors.full_messages_for(:base).include?(I18n.t('services.samples.clone.sample_exists',
-                                                                      sample_id: @sample2.id))
+      assert @project.errors.messages_for(:sample).include?(I18n.t('services.samples.clone.sample_exists',
+                                                                   sample_id: @sample2.id))
     end
   end
 end

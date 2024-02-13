@@ -31,18 +31,25 @@ module Samples
       raise CloneError, I18n.t('services.samples.clone.same_project')
     end
 
-    def clone_samples(new_project, sample_ids)
+    def clone_samples(new_project, sample_ids) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       cloned_sample_ids = {}
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         clone = Sample.new(name: sample.name, description: sample.description, project_id: new_project.id)
-        Samples::Metadata::UpdateService.new(new_project, clone, @current_user,
-                                             { 'metadata' => sample.metadata }).execute
+        metadata_changes = Samples::Metadata::UpdateService.new(new_project, clone, @current_user,
+                                                                { 'metadata' => sample.metadata }).execute
+        not_updated_metadata_changes = metadata_changes[:not_updated]
+        unless not_updated_metadata_changes.empty?
+          @project.errors.add(:sample,
+                              I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+                                     sample_id:, metadata_fields: not_updated_metadata_changes.join(', ')))
+          next
+        end
         clone_attachments(sample, clone) if clone.valid?
         clone.save!
         cloned_sample_ids[sample.id] = clone.id
       rescue ActiveRecord::RecordInvalid
-        @project.errors.add(:base, I18n.t('services.samples.clone.sample_exists', sample_id:))
+        @project.errors.add(:sample, I18n.t('services.samples.clone.sample_exists', sample_id:))
       end
       cloned_sample_ids
     end
