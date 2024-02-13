@@ -51,14 +51,14 @@ module Samples
     end
 
     def clone_metadata(sample, clone)
-      metadata_changes = Samples::Metadata::UpdateService.new(@new_project, clone, @current_user,
+      metadata_changes = Samples::Metadata::UpdateService.new(@new_project, clone, current_user,
                                                               { 'metadata' => sample.metadata }).execute
       not_updated_metadata_changes = metadata_changes[:not_updated]
       return if not_updated_metadata_changes.empty?
 
       @project.errors.add(:sample,
-                          I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                                 sample_id:, metadata_fields: not_updated_metadata_changes.join(', ')))
+                          I18n.t('services.samples.clone.sample_metadata_fields_not_updated',
+                                 sample_id: sample.id, metadata_fields: not_updated_metadata_changes.join(', ')))
     end
 
     def clone_attachments(sample, clone)
@@ -66,7 +66,7 @@ module Samples
       sample.attachments.each do |attachment|
         files << attachment.file.blob
       end
-      Attachments::CreateService.new(@current_user, clone, { files: }).execute
+      Attachments::CreateService.new(current_user, clone, { files: }).execute
     end
   end
 end
