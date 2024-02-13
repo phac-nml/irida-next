@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// creates a table listing all the selected files
+// creates a table listing all selected metadata for deletion
 export default class extends Controller {
     static targets = ["table"];
 

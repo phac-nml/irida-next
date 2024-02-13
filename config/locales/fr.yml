@@ -971,6 +971,8 @@ fr:
             multi_success: Metadata keys '%{keys}' were successfully added.
             single_key_exists: Metadata key '%{key}' already exist.
             multi_keys_exists: Metadata keys '%{keys}' already exist.
+          update:
+            success: "Metadata was successfully updated"
         file_imports:
           create:
             success: Sample metadata was successfully imported.
@@ -982,10 +984,6 @@ fr:
           remove_field: Remove Field
           submit_button: Add
           value: Value
-        update:
-          key_change_success: "Metadata key '%{old_key} was successfully updated to '%{new_key}'."
-          value_change_success: "Metadata key '%{key}' value was updated to '%{value}'."
-          key_exists: Metadata key '%{key}' already exists.
   workflow_executions:
     submissions:
       pipeline_selection:
