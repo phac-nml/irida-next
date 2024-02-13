@@ -2,10 +2,6 @@
 
 require 'test_helper'
 
-# good case
-# bad case
-# already attached case
-
 class AttachFilesToSampleTest < ActiveSupport::TestCase
   ATTACH_FILES_TO_SAMPLE_MUTATION = <<~GRAPHQL
     mutation($files: [String!]!, $sampleId: ID!) {
@@ -172,7 +168,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 2, sample.attachments.count
 
-    # check that filenames matche
+    # check that filenames matches
     assert [sample.attachments[0].filename.to_s, sample.attachments[1].filename.to_s].include? 'afts.fastq'
     assert [sample.attachments[0].filename.to_s, sample.attachments[1].filename.to_s].include? 'afts_b.fastq'
   end
