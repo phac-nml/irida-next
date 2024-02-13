@@ -20,6 +20,9 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     resources :samples, only: %i[index]
     resources :subgroups, only: %i[index]
     resources :shared_projects, only: %i[index]
+
+    get '/history' => 'history#index', as: :history
+    get '/history/new' => 'history#new', as: :view_history
   end
 
   scope(path: '*id',

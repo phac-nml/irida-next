@@ -1,0 +1,7 @@
+<%= turbo_stream.update "group_history" do %>
+  <%= render HistoryComponent.new(
+    data: @log_data.reverse,
+    type: "Group",
+    url: group_view_history_path(@group)
+  ) %>
+<% end %>
