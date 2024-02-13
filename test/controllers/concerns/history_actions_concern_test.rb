@@ -28,4 +28,30 @@ class HistoryActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test 'group history index' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_one)
+
+    group.create_logidze_snapshot!
+
+    get group_history_path(group)
+
+    assert_response :success
+  end
+
+  test 'view group history version' do
+    sign_in users(:john_doe)
+
+    group = groups(:group_one)
+
+    group.create_logidze_snapshot!
+
+    get group_history_path(group)
+
+    get group_view_history_path(group, version: 1, format: :turbo_stream)
+
+    assert_response :success
+  end
 end

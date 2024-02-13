@@ -72,7 +72,7 @@ module History
 
   # Add puid to the first version (create)
   def add_puid_to_current_version(current_version)
-    return current_version if type != 'Project'
+    return current_version if self.class.name != 'Namespaces::ProjectNamespace'
 
     current_version['c'].merge!(puid: project.puid) if project && !current_version['c'].key?('puid')
     current_version
