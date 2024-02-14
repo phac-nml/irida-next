@@ -56,7 +56,7 @@ module Projects
                  sample_ids: [@sample2.id]
                }
              }
-        assert_response :unprocessable_entity
+        assert_response :partial_content
       end
 
       test 'clone samples with permission' do
