@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 // creates a table listing all selected metadata for deletion
 export default class extends Controller {
-    static targets = ["table"];
+    static targets = ["tableBody"];
 
     connect() {
         const body = document.getElementById("metadata-table-body");
@@ -11,7 +11,7 @@ export default class extends Controller {
             const isChecked = row.cells[0].children[0].checked;
 
             if (isChecked) {
-                const newRow = this.tableTarget.insertRow(-1);
+                const newRow = this.tableBodyTarget.insertRow(-1);
                 newRow.classList = row.classList;
 
                 for (let cell of row.cells) {
