@@ -151,7 +151,6 @@ module Samples
     end
 
     test 'clone samples with metadata' do
-      assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample30.metadata)
       assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 35 }, @project.namespace.metadata_summary)
       assert_equal({}, @new_project.namespace.metadata_summary)
       assert_equal({ 'metadatafield1' => 633, 'metadatafield2' => 106 }, @group.metadata_summary)
@@ -166,6 +165,7 @@ module Samples
         assert_equal sample.name, clone.name
         assert_equal sample.description, clone.description
         assert_equal sample.metadata, clone.metadata
+        assert_equal sample.metadata_provenance, clone.metadata_provenance
         sample_blobs = []
         sample.attachments.each do |attachment|
           sample_blobs << attachment.file.blob
@@ -176,7 +176,6 @@ module Samples
         end
         assert_equal sample_blobs, clone_blobs
       end
-      assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample30.metadata)
       assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 35 }, @project.namespace.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @new_project.namespace.reload.metadata_summary)
       assert_equal({ 'metadatafield1' => 634, 'metadatafield2' => 107 }, @group.reload.metadata_summary)

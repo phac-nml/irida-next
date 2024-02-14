@@ -43,22 +43,12 @@ module Samples
 
     def clone_sample(sample_id)
       sample = Sample.find_by(id: sample_id, project_id: @project.id)
-      clone = Sample.new(name: sample.name, description: sample.description, project_id: @new_project.id)
-      clone_metadata(sample, clone) if clone.valid?
+      clone = sample.dup
+      clone.project_id = @new_project.id
+      clone.project.namespace.update_metadata_summary_by_sample_addition(sample) if clone.valid?
       clone_attachments(sample, clone) if clone.valid?
-      clone.save! if @project.errors.empty?
+      clone.save!
       clone.id
-    end
-
-    def clone_metadata(sample, clone)
-      metadata_changes = Samples::Metadata::UpdateService.new(@new_project, clone, current_user,
-                                                              { 'metadata' => sample.metadata }).execute
-      not_updated_metadata_changes = metadata_changes[:not_updated]
-      return if not_updated_metadata_changes.empty?
-
-      @project.errors.add(:sample,
-                          I18n.t('services.samples.clone.sample_metadata_fields_not_updated',
-                                 sample_name: sample.name, metadata_fields: not_updated_metadata_changes.join(', ')))
     end
 
     def clone_attachments(sample, clone)
