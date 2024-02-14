@@ -30,13 +30,13 @@ module Projects
     def show
       authorize! @sample.project, to: :read_sample?
       @tab = params[:tab]
-      @table_listing = if @tab == 'metadata'
-                         @sample.metadata_with_provenance
-                       elsif @tab == 'history'
-                         @log_data = @sample.log_data_without_changes
-                       else
-                         @sample.attachments
-                       end
+      if @tab == 'metadata'
+        @sample_metadata = @sample.metadata_with_provenance
+      elsif @tab == 'history'
+        @log_data = @sample.log_data_without_changes
+      else
+        @sample_attachments = @sample.attachments
+      end
     end
 
     def view_history_version
