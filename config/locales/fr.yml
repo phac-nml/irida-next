@@ -909,8 +909,8 @@ fr:
       metadata:
         deletions:
           destroy:
-            single_success: Metadata key '%{deleted_key} was successfully deleted.'
-            multi_success: Metadata keys '%{deleted_keys} were successfully deleted.'
+            single_success: Metadata key '%{deleted_key}' was successfully deleted.
+            multi_success: Metadata keys '%{deleted_keys}' were successfully deleted.
           modal:
             description: "Metadata fields selected for deletion:"
             key_header: Key
