@@ -135,6 +135,7 @@ module Samples
         clone = Sample.find_by(id: clone_id)
         assert_equal @project.id, sample.project_id
         assert_equal @new_project.id, clone.project_id
+        assert_not_equal sample.puid, clone.puid
         assert_equal sample.name, clone.name
         assert_equal sample.description, clone.description
         assert_equal sample.metadata, clone.metadata
@@ -146,7 +147,7 @@ module Samples
         clone.attachments.each do |attachment|
           clone_blobs << attachment.file.blob
         end
-        assert_equal sample_blobs, clone_blobs
+        assert_equal sample_blobs.sort, clone_blobs.sort
       end
     end
 
@@ -162,6 +163,7 @@ module Samples
         clone = Sample.find_by(id: clone_id)
         assert_equal @project.id, sample.project_id
         assert_equal @new_project.id, clone.project_id
+        assert_not_equal sample.puid, clone.puid
         assert_equal sample.name, clone.name
         assert_equal sample.description, clone.description
         assert_equal sample.metadata, clone.metadata
@@ -174,7 +176,7 @@ module Samples
         clone.attachments.each do |attachment|
           clone_blobs << attachment.file.blob
         end
-        assert_equal sample_blobs, clone_blobs
+        assert_equal sample_blobs.sort, clone_blobs.sort
       end
       assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 35 }, @project.namespace.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @new_project.namespace.reload.metadata_summary)
