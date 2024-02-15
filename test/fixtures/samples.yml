@@ -197,3 +197,9 @@ sample36:
   description: Sample 36 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 23.hours.ago) %>
+
+sampleJeff:
+  name: Sample Jeff
+  description: Sample Jeff description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 24.hours.ago) %>

@@ -16,6 +16,9 @@ module Attachments
       params[:files].each do |file|
         @attachments << Attachment.new(attachable:, file:) if file.present?
       end
+    rescue ActiveSupport::MessageVerifier::InvalidSignature => e
+      @attachable.errors.add(:base, "#{e.message}: Invalid blob id")
+      @attachments
     end
 
     def execute # rubocop:disable Metrics/CyclomaticComplexity
