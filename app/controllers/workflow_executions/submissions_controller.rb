@@ -9,6 +9,7 @@ module WorkflowExecutions
     respond_to :turbo_stream
     before_action :workflows, only: %i[pipeline_selection new]
     before_action :samples, only: %i[new]
+    before_action :workflow, only: %i[new]
     before_action :workflow_schema, only: %i[new]
 
     def pipeline_selection
@@ -16,7 +17,6 @@ module WorkflowExecutions
     end
 
     def new
-      @workflow = @workflows[1]
       render status: :ok
     end
 
@@ -26,16 +26,19 @@ module WorkflowExecutions
       @workflows = available_workflows
     end
 
+    def workflow
+      workflow_index = @workflows.index { |workflow| workflow.id == params['workflow_id'].to_i }
+      @workflow = @workflows[workflow_index]
+    end
+
     def samples
       sample_ids = params[:sample_ids]
       @samples = Sample.where(id: sample_ids)
     end
 
     def workflow_schema
-      schema_loc = @workflows[0].schema_loc
-
       # Need to get a schema file path from the workflow
-      @workflow_schema = JSON.parse(Rails.root.join(schema_loc).read)
+      @workflow_schema = JSON.parse(Rails.root.join(workflow.schema_loc).read)
     end
   end
 end
