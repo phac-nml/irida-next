@@ -6,9 +6,9 @@ module Samples
     CloneError = Class.new(StandardError)
 
     def execute(new_project_id, sample_ids)
-      validate(new_project_id, sample_ids)
-
       authorize! @project, to: :clone_sample?
+
+      validate(new_project_id, sample_ids)
 
       @new_project = Project.find_by(id: new_project_id)
       authorize! @new_project, to: :clone_sample_into_project?
