@@ -40,7 +40,7 @@ module Irida
       dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/nextflow_schema.json").dirname
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      IO.copy_stream(URI.open(nextflow_schema_url), nextflow_schema_location)
+      IO.copy_stream(URI.open(nextflow_schema_url), nextflow_schema_location) unless File.directory?(dir)
 
       nextflow_schema_location
     end
@@ -52,7 +52,7 @@ module Irida
       dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/schema_input.json").dirname
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      IO.copy_stream(URI.open(schema_input_url), schema_input_location)
+      IO.copy_stream(URI.open(schema_input_url), schema_input_location) unless File.directory?(dir)
 
       schema_input_location
     end
