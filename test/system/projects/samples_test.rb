@@ -1679,5 +1679,38 @@ module Projects
 
       assert_no_selector I18n.t('projects.samples.show.delete_metadata_button')
     end
+
+    test 'hidden div for attachments containing sample ID is only avilable on files tab' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      assert_selector 'div[id="filesSampleId"]'
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      assert_no_selector 'div[id="filesSampleId"]'
+    end
+
+    test 'initially checking off files and click files tab will still have same files checked' do
+      login_as users(:jeff_doe)
+      project = projects(:projectA)
+      sample = samples(:sampleB)
+      namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      visit namespace_project_sample_url(namespace, project, sample)
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
+        all('input[type="checkbox"]')[0].click
+        all('input[type="checkbox"]')[2].click
+        all('input[type="checkbox"]')[4].click
+      end
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.files')
+      within %(turbo-frame[id="table-listing"]) do
+        assert all('input[type="checkbox"]')[0].checked?
+        assert all('input[type="checkbox"]')[2].checked?
+        assert all('input[type="checkbox"]')[4].checked?
+        assert_not all('input[type="checkbox"]')[1].checked?
+        assert_not all('input[type="checkbox"]')[3].checked?
+        assert_not all('input[type="checkbox"]')[5].checked?
+      end
+    end
   end
 end
