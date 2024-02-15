@@ -18,12 +18,25 @@ module Nextflow
     end
 
     def filter_files(sample, properties)
-      paired = sample.attachments.reject { |n| n.metadata['direction'].nil? }
+      first = []
+      second = []
 
-      names = sample.attachments.map { |a| [a.file.filename.to_s, a.to_global_id, a.metadata['direction']] }
       pattern = properties['pattern']
       pattern = properties['anyOf'].find { |p| p['pattern'].present? }['pattern'] if pattern.nil?
-      names.select { |n| n[0].match(/#{Regexp.new(pattern.to_s)}/) }
+      sample.attachments.each do |attachment|
+        # Check that the file meets the requirements for the pipeline
+        next unless attachment.file.filename.to_s.match(/#{Regexp.new(pattern.to_s)}/)
+
+        if attachment.metadata['associated_attachment_id'].nil? || attachment.metadata['direction'].eql?('forward')
+          first << [attachment.file.filename.to_s, attachment.to_global_id,
+                    attachment.metadata['associated_attachment_id']]
+        else
+          second << [attachment.file.filename.to_s, attachment.to_global_id,
+                     attachment.metadata['associated_attachment_id']]
+        end
+      end
+
+      [first, second]
     end
 
     def render_cell_type(property, entry, sample, fields)
@@ -41,11 +54,14 @@ module Nextflow
     end
 
     def render_file_cell(property, entry, sample, fields)
+      files = filter_files(sample, entry)
+      primary = entry['required'].present?
       render(Samplesheet::DropdownCellComponent.new(
                property,
-               filter_files(sample, entry),
-               fields:,
-               prompt: t('.file_prompt')
+               primary ? files[0] : files[1],
+               fields,
+               t('.file_prompt'),
+               primary
              ))
     end
 
