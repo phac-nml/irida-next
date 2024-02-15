@@ -14,8 +14,8 @@ export default class extends Controller {
     // want to handle the same stored checkboxes, a hidden div in views/projects/samples/attachments/_table
     // contains the sample ID in its class, and we check if that exists. If it exists and we're on the intial
     // path which doesn't contain the query, we hard-code add the query for the storageKey.
-    if (document.getElementById('sampleId') &&
-      location.pathname.endsWith(`/-/samples/${document.getElementById('sampleId').classList[0]}`)) {
+    if (document.getElementById('filesSampleId') &&
+      location.pathname.endsWith(`/-/samples/${document.getElementById('filesSampleId').classList[0]}`)) {
       this.#storageKey = `${location.protocol}//${location.host}${location.pathname}?tab=files`;
     } else {
       this.#storageKey =
