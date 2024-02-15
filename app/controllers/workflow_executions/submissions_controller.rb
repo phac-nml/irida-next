@@ -4,7 +4,7 @@ module WorkflowExecutions
   # Workflow submission controller
   class SubmissionsController < ApplicationController
     include Irida::Pipelines
-    cattr_reader :available_workflows
+    cattr_reader :available_pipelines
 
     respond_to :turbo_stream
     before_action :workflows
@@ -23,7 +23,7 @@ module WorkflowExecutions
     private
 
     def workflows
-      @workflows = available_workflows
+      @workflows = available_pipelines
     end
 
     def workflow
@@ -37,8 +37,9 @@ module WorkflowExecutions
     end
 
     def workflow_schema
+      puts workflow.schema_loc
       # Need to get a schema file path from the workflow
-      @workflow_schema = JSON.parse(Rails.root.join(workflow.schema_loc).read)
+      @workflow_schema = JSON.parse(workflow.schema_loc.read)
     end
   end
 end

@@ -5,13 +5,20 @@ module Irida
   module Pipeline
     module_function
 
-    def init(name = nil, id = nil, description = nil, version = nil, type = nil, # rubocop:disable Metrics/ParameterLists
-             type_version = nil, engine = nil, engine_version = nil, url = nil, execute_loc = nil, schema_loc = nil)
-
+    def init(id, entry, version, schema_loc)
       workflow = Struct.new(:name, :id, :description, :version, :metadata, :type, :type_version, :engine,
                             :engine_version, :url, :execute_loc, :schema_loc)
 
+      name = entry['name']
+      description = entry['description']
       metadata = { workflow_name: name, workflow_version: version }
+      type = nil
+      type_version = nil
+      engine = nil
+      engine_version = nil
+      url = entry['url']
+      execute_loc = 'azure'
+      # schema_loc = 'test/fixtures/files/nextflow/nextflow_schema.json'
 
       @workflow = workflow.new(name, id, description, version, metadata, type, type_version, engine, engine_version,
                                url, execute_loc, schema_loc)

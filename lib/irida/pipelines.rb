@@ -1,31 +1,27 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'open-uri'
 require 'irida/pipeline'
 
 module Irida
-  # Module to that reads a workflow config file and registers the available workflows
+  # Module that reads a workflow config file and registers the available pipelines
   module Pipelines
     mattr_accessor :register_pipelines
-    cattr_accessor :available_workflows
+    cattr_accessor :available_pipelines
 
-    @@available_workflows = [] # rubocop:disable Style/ClassVars
+    @@available_pipelines = [] # rubocop:disable Style/ClassVars
 
     module_function
 
     def register_pipelines
-      # Read config/pipelines/pipelines.json and loop through the entries
       data = read_json_config
 
       data.each_with_index do |entry, index|
         entry['versions'].each do |version|
-          # 1) For each entry download the nextflow_schema.json file for the pipeline
-          # Get file from https://raw.githubusercontent.com/:organization/:repo/:name/nextflow_schema.json
-          # 2) Save file to to private/pipelines/:name/:version/nextflow_schema.json
-          # 2) Get file from https://raw.githubusercontent.com/:organization/:repo/:name/assets/schema_input.json
-          # 3) Save file to to private/pipelines/:name/:version/assets/schema_input.json
-          @@available_workflows << Pipeline.init(entry['name'], index + 1, entry['description'], version['name'], nil, nil,
-                                                 nil, nil, entry['url'], 'azure', 'test/fixtures/files/nextflow/nextflow_schema.json')
+          nextflow_schema_location = download_nextflow_schema(entry, version)
+          schema_input_location = download_schema_input(entry, version)
+          @@available_pipelines << Pipeline.init(index + 1, entry, version, nextflow_schema_location)
         end
       end
     end
@@ -34,6 +30,31 @@ module Irida
     def read_json_config
       path = File.basename('pipelines.json')
       JSON.parse(Rails.root.join('config/pipelines/', path).read)
+    end
+
+    def download_nextflow_schema(entry, version)
+      nextflow_schema_url = "https://raw.githubusercontent.com/#{entry['name']}/#{version['name']}/nextflow_schema.json"
+      nextflow_schema_location =
+        Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/nextflow_schema.json")
+
+      dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/nextflow_schema.json").dirname
+      FileUtils.mkdir_p(dir) unless File.directory?(dir)
+
+      IO.copy_stream(URI.open(nextflow_schema_url), nextflow_schema_location)
+
+      nextflow_schema_location
+    end
+
+    def download_schema_input(entry, version)
+      schema_input_url = "https://raw.githubusercontent.com/#{entry['name']}/#{version['name']}/assets/schema_input.json"
+      schema_input_location =
+        Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/schema_input.json")
+      dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/schema_input.json").dirname
+      FileUtils.mkdir_p(dir) unless File.directory?(dir)
+
+      IO.copy_stream(URI.open(schema_input_url), schema_input_location)
+
+      schema_input_location
     end
   end
 end

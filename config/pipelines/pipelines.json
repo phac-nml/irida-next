@@ -8,15 +8,5 @@
         "name": "1.0.2"
       }
     ]
-  },
-  {
-    "url": "https://github.com/phac-nml/iridanextexample2",
-    "name": "phac-nml/iridanextexample2",
-    "description": "IRIDA Next Example Pipeline2",
-    "versions": [
-      {
-        "name": "1.0.2"
-      }
-    ]
   }
 ]
