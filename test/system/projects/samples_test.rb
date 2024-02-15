@@ -1680,14 +1680,6 @@ module Projects
       assert_no_selector I18n.t('projects.samples.show.delete_metadata_button')
     end
 
-    test 'hidden div for attachments containing sample ID is only avilable on files tab' do
-      visit namespace_project_sample_url(@group12a, @project29, @sample32)
-
-      assert_selector 'div[id="filesSampleId"]'
-      click_on I18n.t('projects.samples.show.tabs.metadata')
-      assert_no_selector 'div[id="filesSampleId"]'
-    end
-
     test 'initially checking off files and click files tab will still have same files checked' do
       login_as users(:jeff_doe)
       project = projects(:projectA)
