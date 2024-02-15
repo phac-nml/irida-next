@@ -1,9 +1,12 @@
 ---
 sidebar_position: 1
 id: intro
-title: IRIDA Next Docs
+title: Intro
 hide_table_of_contents: true
 ---
+
+IRIDA Next Docs
+===============
 
 Welcome to the IRIDA Next documentation.
 
