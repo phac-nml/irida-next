@@ -114,7 +114,7 @@
                 "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
             <% end %>
             <%= link_to sample.name,
-            namespace_project_sample_path(id: sample.id, tab: "files"),
+            namespace_project_sample_path(id: sample.id),
             data: {
               turbo: false
             },

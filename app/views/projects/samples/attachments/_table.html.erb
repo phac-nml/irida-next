@@ -4,6 +4,7 @@
     data-controller="selection"
     data-selection-action-link-outlet=".action-link"
   >
+  <div id="sampleId" class="<%= @sample && @sample.id%>">
     <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
       <tr>
         <% if allowed_to?(:update_sample?, @project) %>
