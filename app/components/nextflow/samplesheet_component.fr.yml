@@ -1,5 +1,4 @@
 fr:
   label: Samples
   required: Required
-  file_prompt: Select a file
   dropdown_prompt: Select an option

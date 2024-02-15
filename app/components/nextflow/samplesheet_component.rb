@@ -27,12 +27,13 @@ module Nextflow
         # Check that the file meets the requirements for the pipeline
         next unless attachment.file.filename.to_s.match(/#{Regexp.new(pattern.to_s)}/)
 
-        if attachment.metadata['associated_attachment_id'].nil? || attachment.metadata['direction'].eql?('forward')
-          first << [attachment.file.filename.to_s, attachment.to_global_id,
-                    attachment.metadata['associated_attachment_id']]
+        item = [attachment.file.filename.to_s, attachment.to_global_id]
+        if attachment.metadata['associated_attachment_id'].nil?
+          first << item
+        elsif attachment.metadata['direction'].eql?('forward')
+          first.unshift(item)
         else
-          second << [attachment.file.filename.to_s, attachment.to_global_id,
-                     attachment.metadata['associated_attachment_id']]
+          second.unshift(item)
         end
       end
 
@@ -59,9 +60,7 @@ module Nextflow
       render(Samplesheet::DropdownCellComponent.new(
                property,
                primary ? files[0] : files[1],
-               fields,
-               t('.file_prompt'),
-               primary
+               fields
              ))
     end
 

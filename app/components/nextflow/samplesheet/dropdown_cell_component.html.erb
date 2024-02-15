@@ -1,6 +1,6 @@
 <td>
   <%= fields.select name,
-                    options_for_select(values.map { |value| [value[0], value[1], { 'data-associated-id' => value[2], }] }),
+                    values,
                     {},
                 {
                       'data-action': 'change->nextflow--samplesheet#file_selected',
