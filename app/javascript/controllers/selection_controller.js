@@ -9,7 +9,6 @@ export default class extends Controller {
   static outlets = ["action-link"];
 
   connect() {
-    console.log('hi')
     // When you are first routed to a sample#show page, the path will not contain any query information about the
     // current tab. Because the path .../project/-/samples/sampleId and .../project/-/samples/sampleId?tab=files
     // want to handle the same stored checkboxes, a hidden div in views/projects/samples/attachments/_table
