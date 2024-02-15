@@ -1,0 +1,27 @@
+development:
+  omniauth_providers:
+    developer, saml, azure_activedirectory_v2
+  dev_override_text:
+  dev_override_icon:
+  saml_override_text:
+  saml_override_icon:
+  azure_activedirectory_v2_override_text: my_dev_org
+  azure_activedirectory_v2_override_icon:
+
+test:
+  omniauth_providers: [developer, saml, azure_activedirectory_v2]
+  dev_override_text:
+  dev_override_icon:
+  saml_override_text:
+  saml_override_icon:
+  azure_activedirectory_v2_override_text: my_test_org
+  azure_activedirectory_v2_override_icon:
+
+production:
+  omniauth_providers:
+  dev_override_text:
+  dev_override_icon:
+  saml_override_text:
+  saml_override_icon:
+  azure_activedirectory_v2_override_text: my_prod_org
+  azure_activedirectory_v2_override_icon:

@@ -81,5 +81,8 @@ module Irida
         description: 'Permanently deletes expired data exports.'
       }
     }
+
+    # Omniauth Configuration
+    config.auth_config = config_for(:auth_config)
   end
 end
