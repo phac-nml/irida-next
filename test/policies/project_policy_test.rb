@@ -66,13 +66,21 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.transfer_sample_into_project?
   end
 
+  test '#clone_sample?' do
+    assert @policy.clone_sample?
+  end
+
+  test '#clone_sample_into_project?' do
+    assert @policy.clone_sample_into_project?
+  end
+
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
     # John Doe has access to 33 projects. 32 through his namespace
     # and projects under groups in which he is a member plus a project
     # from David Doe's Group Four which is shared with subgroup 1 under
     # John Doe's group Group 1
-    assert_equal 35, scoped_projects.count
+    assert_equal 36, scoped_projects.count
 
     user = users(:david_doe)
     policy = ProjectPolicy.new(user:)
@@ -91,7 +99,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
-    assert_equal 16, scoped_projects.count
+    assert_equal 17, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project5_namespace).name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project6_namespace).name)
@@ -118,7 +126,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
-    assert_equal 15, scoped_projects.count
+    assert_equal 16, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project1_namespace).name)
 
@@ -128,7 +136,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
-    assert_equal 14, scoped_projects.count
+    assert_equal 15, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(
       namespaces_project_namespaces(:namespace_group_link_group_one_project1_namespace).name
@@ -140,7 +148,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     # John Doe has manageable access to just projects under his namespace
     # and projects under groups in which he is a member
-    assert_equal 34, scoped_projects.count
+    assert_equal 35, scoped_projects.count
 
     user = users(:david_doe)
     policy = ProjectPolicy.new(user:)
@@ -159,7 +167,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 16, scoped_projects.count
+    assert_equal 17, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project5_namespace).name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project6_namespace).name)
@@ -187,7 +195,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
-    assert_equal 15, scoped_projects.count
+    assert_equal 16, scoped_projects.count
     scoped_projects_names = Namespaces::ProjectNamespace.where(id: scoped_projects.select(:namespace_id)).pluck(:name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:project1_namespace).name)
   end

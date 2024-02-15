@@ -125,6 +125,20 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def clone_sample?
+    return true if Member.can_clone_sample?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def clone_sample_into_project?
+    return true if Member.can_clone_sample_to_project?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(

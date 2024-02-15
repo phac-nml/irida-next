@@ -413,3 +413,23 @@ project_hotel_namespace_route:
   name: Group Hotel / Project Hotel
   path: group-hotel/project-hotel
   source: projectHotel_namespace (Namespace)
+
+group_13_route:
+  name: Group 13
+  path: group-13
+  source: group_thirteen (Namespace)
+
+project33_namespace_route:
+  name: Group 13 / Project 33
+  path: group-13/project-33
+  source: project33_namespace (Namespace)
+
+group_14_route:
+  name: Group 14
+  path: group-14
+  source: group_fourteen (Namespace)
+
+project34_namespace_route:
+  name: Group 14 / Project 34
+  path: group-14/project-34
+  source: project34_namespace (Namespace)
