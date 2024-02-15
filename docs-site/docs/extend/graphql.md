@@ -168,13 +168,13 @@ To use the GraphQL API with [any of the GraphQL Clients](https://graphql.org/cod
 
 ### Navigate to the Access Tokens screen
 
-When you are signed in to IRIDA Next, click `Edit profile`,
+Once you are signed in to IRIDA Next follow these steps.
 
-![Edit Profile Button](edit_profile.png)
+1. From the top bar on the left sidebar, select the **Profile Icon** next to the plus sign
+2. From the drop down options, select **Edit profile**
+3. From the left sidebar, select **Access Tokens**
 
-and then select `Access Tokens` from the sidebar.
-
-![Access Tokens Button](access_tokens.png)
+This page lets you add new personal access tokens, and view/remove existing tokens.
 
 ### Token Scopes
 
