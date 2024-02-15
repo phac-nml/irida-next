@@ -5,17 +5,18 @@ module Irida
   module Pipeline
     module_function
 
-    def init(name = nil, id = nil, description = nil, version = nil, metadata = nil, type = nil,
-             type_version = nil, engine = nil, engine_version = nil, url = nil, execute_loc = nil)
+    def init(name = nil, id = nil, description = nil, version = nil, type = nil, # rubocop:disable Metrics/ParameterLists
+             type_version = nil, engine = nil, engine_version = nil, url = nil, execute_loc = nil, schema_loc = nil)
 
       workflow = Struct.new(:name, :id, :description, :version, :metadata, :type, :type_version, :engine,
-      :engine_version, :url, :execute_loc)
+                            :engine_version, :url, :execute_loc, :schema_loc)
 
-      metadata = { workflow_name: 'irida-next-example', workflow_version: '1.0dev' }
+      metadata = { workflow_name: name, workflow_version: version }
 
-      @workflow = workflow.new(name, id, description, version, metadata, type, type_version, engine, engine_version, url, execute_loc)
+      @workflow = workflow.new(name, id, description, version, metadata, type, type_version, engine, engine_version,
+                               url, execute_loc, schema_loc)
 
-      @workflow_schema = nil #JSON.parse(Rails.root.join("private/pipelines/#{name}/#{version}/nextflow_schema.json").read)
+      @workflow
     end
   end
 end
