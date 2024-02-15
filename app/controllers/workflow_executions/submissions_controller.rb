@@ -7,7 +7,7 @@ module WorkflowExecutions
     cattr_reader :available_workflows
 
     respond_to :turbo_stream
-    before_action :workflows, only: %i[pipeline_selection new]
+    before_action :workflows
     before_action :samples, only: %i[new]
     before_action :workflow, only: %i[new]
     before_action :workflow_schema, only: %i[new]

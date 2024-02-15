@@ -4,14 +4,14 @@ require 'json'
 require 'irida/pipeline'
 
 module Irida
-  # Module to store pipeline values
+  # Module to that reads a workflow config file and registers the available workflows
   module Pipelines
     mattr_accessor :register_pipelines
     cattr_accessor :available_workflows
 
-    module_function
-
     @@available_workflows = [] # rubocop:disable Style/ClassVars
+
+    module_function
 
     def register_pipelines
       # Read config/pipelines/pipelines.json and loop through the entries
