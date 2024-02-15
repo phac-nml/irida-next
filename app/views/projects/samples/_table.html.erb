@@ -47,6 +47,14 @@
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,
+            label: t(".puid"),
+            url: sorting_url(@q, :puid),
+            field: :puid
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
             label: t(".created_at"),
             url: sorting_url(@q, :created_at),
             field: :created_at
@@ -119,6 +127,9 @@
               turbo: false
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= sample.puid %>
           </td>
           <td class="px-6 py-3 whitespace-nowrap">
             <%= l(sample.created_at.localtime, format: :full_date) %>
