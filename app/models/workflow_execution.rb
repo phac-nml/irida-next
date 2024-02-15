@@ -43,6 +43,13 @@ class WorkflowExecution < ApplicationRecord
     state == 'canceled'
   end
 
+  def cancellable?
+    state == 'running' ||
+      state == 'queued' ||
+      state == 'prepared' ||
+      state == 'new'
+  end
+
   def as_wes_params
     {
       workflow_params:,

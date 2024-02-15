@@ -32,7 +32,8 @@ def seed_project(project_params:, creator:, namespace:)
                                         {
                                           namespace_attributes: project_params.slice(
                                             :name,
-                                            :path
+                                            :path,
+                                            :description
                                           ).merge({ parent: namespace, owner: creator })
                                         }).execute
 
@@ -430,6 +431,7 @@ if Rails.env.development?
     {
       name: "Outbreak #{current_year - 2}",
       path: "outbreak-#{current_year - 2}",
+      description: "This is a description for project Outbreak #{current_year - 2}",
       sample_count: 10,
       member_emails_by_role:
 
@@ -437,6 +439,7 @@ if Rails.env.development?
     {
       name: "Outbreak #{current_year - 1}",
       path: "outbreak-#{current_year - 1}",
+      description: "This is a description for project Outbreak #{current_year - 1}",
       sample_count: 10,
       member_emails_by_role:
     }

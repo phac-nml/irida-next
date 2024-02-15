@@ -1,0 +1,68 @@
+<%= viral_dialog(open: open) do |dialog| %>
+  <%= dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_section do %>
+    <%= turbo_frame_tag "import_metadata_dialog_content" do %>
+
+      <%= turbo_frame_tag "import_metadata_dialog_alert" %>
+
+      <%= form_for(:file_import, url: namespace_project_samples_file_import_path, method: :post) do |form| %>
+        <div
+          class="grid gap-4"
+          data-controller="projects--samples--metadata--file-import"
+        >
+          <div class="form-field">
+            <%= form.label :file,
+                       t(".file"),
+                       class:
+                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+            <%= form.file_field :file,
+                            required: true,
+                            accept:
+                              # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+                              "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            data: {
+                              action:
+                                "change->projects--samples--metadata--file-import#readFile"
+                            },
+                            class:
+                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300"><%= t(".file_help") %></p>
+          </div>
+          <div class="form-field">
+            <%= form.label :sample_id_column,
+                       t(".sample_id_column"),
+                       class:
+                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+            <%= form.select :sample_id_column,
+                        {},
+                        { prompt: t(".select_sample_id_column") },
+                        required: true,
+                        data: {
+                          "projects--samples--metadata--file-import-target": "selectInput",
+                          action:
+                            "change->projects--samples--metadata--file-import#toggleSubmitButton"
+                        } %>
+          </div>
+          <div class="flex items-center">
+            <%= form.check_box :ignore_empty_values,
+                           {
+                             class:
+                               "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
+                           },
+                           true,
+                           false %>
+            <%= form.label :ignore_empty_values,
+                       class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
+          </div>
+          <div>
+            <%= form.submit t(".submit_button"),
+                        class: "button button--size-default button--state-primary",
+                        data: {
+                          "projects--samples--metadata--file-import-target": "submitButton"
+                        } %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

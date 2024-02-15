@@ -762,7 +762,6 @@ module Projects
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated file'
         check 'Delete originals'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
-        !assert_html5_inputs_valid # rubocop:disable Lint/Void
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
@@ -1076,6 +1075,437 @@ module Projects
         assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.name
         assert_selector 'tr:last-child td:first-child', text: @sample3.name
       end
+    end
+
+    test 'should not import metadata' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text I18n.t('projects.samples.index.import_metadata_button'), count: 0
+    end
+
+    test 'should import metadata via csv' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+    end
+
+    test 'should import metadata via xls' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+    end
+
+    test 'should import metadata via xlsx' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      assert_selector 'table#samples-table thead tr th', count: 6
+
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+      assert_selector 'table#samples-table thead tr th', count: 7
+    end
+
+    test 'should not import metadata via invalid file type' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.invalid_file_extension')
+      end
+    end
+
+    test 'should import metadata with ignore empty values' do
+      namespace = groups(:subgroup_twelve_a)
+      project = projects(:project29)
+      sample = samples(:sample32)
+      visit namespace_project_samples_url(namespace, project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        check 'Ignore empty values'
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+      visit namespace_project_sample_url(namespace, project, sample)
+      assert_text I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text I18n.t('projects.samples.show.table_header.key')
+        assert_selector 'table#metadata-table tbody tr', count: 3
+        within first('tbody tr td:nth-child(1)') do
+          assert_text 'metadatafield1'
+        end
+        within first('tbody tr td:nth-child(2)') do
+          assert_text 'value1'
+        end
+      end
+    end
+
+    test 'should import metadata without ignore empty values' do
+      namespace = groups(:subgroup_twelve_a)
+      project = projects(:project29)
+      sample = samples(:sample32)
+      visit namespace_project_samples_url(namespace, project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        assert_not find_field('Ignore empty values').checked?
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
+      end
+      visit namespace_project_sample_url(namespace, project, sample)
+      assert_text I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text I18n.t('projects.samples.show.table_header.key')
+        assert_selector 'table#metadata-table tbody tr', count: 2
+        assert_no_text 'metadatafield1'
+      end
+    end
+
+    test 'should not import metadata with duplicate header errors' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.duplicate_column_names')
+      end
+    end
+
+    test 'should not import metadata with missing metadata row errors' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_row')
+      end
+    end
+
+    test 'should not import metadata with missing metadata column errors' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_column')
+      end
+    end
+
+    test 'should partially import metadata with missing sample errors' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      assert_selector 'table#samples-table thead tr th', count: 6
+
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.errors.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
+      end
+      assert_selector 'table#samples-table thead tr th', count: 7
+    end
+
+    test 'should not import metadata with analysis values' do
+      subgroup12aa = groups(:subgroup_twelve_a_a)
+      project31 = projects(:project31)
+      visit namespace_project_samples_url(subgroup12aa, project31)
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
+      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.metadata.file_imports.errors.description')
+        click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
+      end
+    end
+
+    test 'add single new metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        find('input.keyInput').fill_in with: 'metadatafield3'
+        find('input.valueInput').fill_in with: 'value3'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadatafield3')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield3'
+
+        within %(tr#metadatafield3) do
+          assert_text 'metadatafield3'
+          assert_text 'value3'
+        end
+      end
+    end
+
+    test 'add multiple new metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        all('input.keyInput')[0].fill_in with: 'metadatafield3'
+        all('input.valueInput')[0].fill_in with: 'value3'
+
+        all('input.keyInput')[1].fill_in with: 'metadatafield4'
+        all('input.valueInput')[1].fill_in with: 'value4'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
+                         keys: %w[metadatafield3 metadatafield4].join(', '))
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield3'
+        assert_selector 'tr#metadatafield4'
+
+        within %(tr#metadatafield3) do
+          assert_text 'metadatafield3'
+          assert_text 'value3'
+        end
+
+        within %(tr#metadatafield4) do
+          assert_text 'metadatafield4'
+          assert_text 'value4'
+        end
+      end
+    end
+
+    test 'add single existing metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield1'
+
+        within %(tr#metadatafield1) do
+          assert_text 'metadatafield1'
+          assert_text 'value1'
+        end
+      end
+
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        find('input.keyInput').fill_in with: 'metadatafield1'
+        find('input.valueInput').fill_in with: 'newValue1'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('services.samples.metadata.fields.single_all_keys_exist', key: 'metadatafield1')
+    end
+
+    test 'add multiple existing metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield1'
+
+        within %(tr#metadatafield1) do
+          assert_text 'metadatafield1'
+          assert_text 'value1'
+        end
+
+        assert_selector 'tr#metadatafield1'
+
+        within %(tr#metadatafield2) do
+          assert_text 'metadatafield2'
+          assert_text 'value2'
+        end
+      end
+
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        all('input.keyInput')[0].fill_in with: 'metadatafield1'
+        all('input.valueInput')[0].fill_in with: 'newValue1'
+
+        all('input.keyInput')[1].fill_in with: 'metadatafield2'
+        all('input.valueInput')[1].fill_in with: 'newValue2'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('services.samples.metadata.fields.multi_all_keys_exist',
+                         keys: %w[metadatafield1 metadatafield2].join(', '))
+    end
+
+    test 'add both new and existing metadata' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield1'
+        assert_no_selector 'tr#metadatafield3'
+        assert_no_text 'metadatafield3'
+
+        within %(tr#metadatafield1) do
+          assert_text 'metadatafield1'
+          assert_text 'value1'
+        end
+      end
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        all('input.keyInput')[0].fill_in with: 'metadatafield1'
+        all('input.valueInput')[0].fill_in with: 'newValue1'
+
+        all('input.keyInput')[1].fill_in with: 'metadatafield3'
+        all('input.valueInput')[1].fill_in with: 'value3'
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadatafield3')
+      assert_text I18n.t('projects.samples.metadata.fields.create.single_key_exists', key: 'metadatafield1')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'tr#metadatafield3'
+        within %(tr#metadatafield3) do
+          assert_text 'metadatafield3'
+          assert_text 'value3'
+        end
+      end
+    end
+
+    test 'add new metadata after deleting fields' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        click_on I18n.t('projects.samples.metadata.form.create_field_button')
+        all('input.keyInput')[0].fill_in with: 'metadatafield3'
+        all('input.valueInput')[0].fill_in with: 'value3'
+        all('input.keyInput')[1].fill_in with: 'metadatafield4'
+        all('input.valueInput')[1].fill_in with: 'value4'
+        all('input.keyInput')[2].fill_in with: 'metadatafield5'
+        all('input.valueInput')[2].fill_in with: 'value5'
+        all('input.keyInput')[3].fill_in with: 'metadatafield6'
+        all('input.valueInput')[3].fill_in with: 'value6'
+
+        all('button[data-action="projects--samples--metadata--create#removeField"]')[2].click
+        all('button[data-action="projects--samples--metadata--create#removeField"]')[1].click
+
+        click_on I18n.t('projects.samples.metadata.form.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
+                         keys: %w[metadatafield3 metadatafield6].join(', '))
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield4'
+        assert_no_text 'value4'
+        assert_no_text 'metadatafield5'
+        assert_no_text 'value5'
+
+        assert_selector 'tr#metadatafield3'
+        within %(tr#metadatafield3) do
+          assert_text 'metadatafield3'
+          assert_text 'value3'
+        end
+
+        assert_selector 'tr#metadatafield6'
+        within %(tr#metadatafield6) do
+          assert_text 'metadatafield6'
+          assert_text 'value6'
+        end
+      end
+    end
+
+    test 'clicking remove button in add modal with one metadata field clears inputs but doesn\'t delete field' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.add_metadata')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        assert_selector 'input.keyInput', count: 1
+        assert_selector 'input.valueInput', count: 1
+
+        all('button[data-action="projects--samples--metadata--create#removeField"]')[0].click
+
+        assert_selector 'input.keyInput', count: 1
+        assert_selector 'input.valueInput', count: 1
+      end
+    end
+
+    test 'user with access < Maintainer cannot see add metadata' do
+      sign_in users(:jane_doe)
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      assert_no_text I18n.t('projects.samples.show.add_metadata')
     end
   end
 end

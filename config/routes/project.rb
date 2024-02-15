@@ -19,11 +19,12 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       post :transfer
       resources :members, only: %i[create destroy index new update]
       resources :group_links, only: %i[create destroy update index new]
+
       resources :samples do
         scope module: :samples, as: :samples do
           collection do
             resource :transfer, only: %i[create new]
-            resource :file_import, module: :metadata, only: %i[create]
+            resource :file_import, module: :metadata, only: %i[create new]
           end
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
@@ -39,14 +40,17 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             end
           end
         end
-        resource :metadata, module: :samples, only: %i[update edit] do
+        resource :metadata, module: :samples, only: %i[new update edit create] do
           scope module: :metadata, as: :metadata do
             collection do
-              resource :field, only: %i[update]
+              resource :field, only: %i[update create]
             end
           end
         end
       end
+
+      get '/history' => 'history#index', as: :history
+      get '/history/new' => 'history#new', as: :view_history
     end
   end
 end
