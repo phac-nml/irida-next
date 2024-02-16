@@ -13,9 +13,9 @@
     <% end %>
 
     <div>
-      <div>
+      <div class="flex items-center">
         <h1 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white inline"><%= title %></h1>
-        <% if @id %> <%= viral_pill(text: @id, color: :blue, classes: "ml-2") %><% end %>
+        <% if @id %> <%= viral_pill(text: @id, color: :primary, classes: "ml-2") %><% end %>
       </div>
       <% if subtitle != nil %>
         <p class="text-slate-500 dark:text-slate-400"><%= subtitle %></p>
