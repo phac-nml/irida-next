@@ -8,8 +8,7 @@ module NextflowHelper
     return checkbox_input(container, name, property) if property['type'] == 'boolean'
 
     if property['enum'].present?
-      return viral_select(container:, name:, options: property['enum'], hidden: property['hidden'],
-                          selected_value: property['default'], help_text: property['help_text'])
+      return viral_select(container:, name:, options: property['enum'], selected_value: property['default'])
     end
 
     viral_text_input(container:, name:, required:, pattern: property['pattern'])
