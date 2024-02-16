@@ -17,7 +17,7 @@ module Nextflow
       end
     end
 
-    def filter_files(sample, properties)
+    def filter_files(sample, properties) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       first = []
       second = []
 
