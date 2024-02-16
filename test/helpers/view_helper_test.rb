@@ -10,4 +10,13 @@ class ViewHelperTest < ActionView::TestCase
     assert source.include? 'focusable="false"'
     assert source.include? 'aria-hidden="true"'
   end
+
+  test 'should load override icons' do
+    %w[developer saml azure_activedirectory_v2].each do |provider|
+      Rails.configuration.auth_config["#{provider}_icon"] = '../test/fixtures/files/tyrell.svg'
+      source = viral_icon_source("#{provider}_icon")
+      assert source.include? %(class="Viral-Icon__Svg icon-#{provider}_icon")
+      assert source.include? 'viewbox="0 0 1140 1012"'
+    end
+  end
 end
