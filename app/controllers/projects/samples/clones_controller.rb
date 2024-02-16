@@ -6,7 +6,7 @@ module Projects
     class ClonesController < Projects::ApplicationController
       respond_to :turbo_stream
 
-      def create # rubocop:disable Metrics/AbcSize
+      def create
         new_project_id = clone_params[:new_project_id]
         sample_ids = clone_params[:sample_ids]
 
@@ -15,8 +15,7 @@ module Projects
         if @project.errors.empty?
           render status: :ok, locals: { type: :success, message: t('.success') }
         elsif @project.errors.include?(:sample)
-          errors = @project.errors.messages_for(:sample)
-          render status: :partial_content, locals: { type: :alert, message: t('.error'), errors: }
+          render_sample_errors
         else
           error = @project.errors.full_messages_for(:base).first
           render status: :unprocessable_entity, locals: { type: :danger, message: error }
@@ -27,6 +26,15 @@ module Projects
 
       def clone_params
         params.require(:clone).permit(:new_project_id, sample_ids: [])
+      end
+
+      def render_sample_errors
+        errors = @project.errors.messages_for(:sample)
+        if @cloned_sample_ids.count.positive?
+          render status: :partial_content, locals: { type: :alert, message: t('.error'), errors: }
+        else
+          render status: :unprocessable_entity, locals: { type: :alert, message: t('.error'), errors: }
+        end
       end
     end
   end

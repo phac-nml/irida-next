@@ -47,13 +47,25 @@ module Projects
         assert_response :unprocessable_entity
       end
 
-      test 'not clone samples with same sample name' do
+      test 'not clone one sample with same sample name' do
         new_project = projects(:project34)
         post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
              params: {
                clone: {
                  new_project_id: new_project.id,
                  sample_ids: [@sample2.id]
+               }
+             }
+        assert_response :unprocessable_entity
+      end
+
+      test 'clone good sample & not clone sample with same sample name' do
+        new_project = projects(:project34)
+        post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
+             params: {
+               clone: {
+                 new_project_id: new_project.id,
+                 sample_ids: [@sample1.id, @sample2.id]
                }
              }
         assert_response :partial_content
