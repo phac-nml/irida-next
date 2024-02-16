@@ -15,10 +15,16 @@
                     },
                     class: "button button--state-default button--size-default w-full" do %>
         <div class="inline-flex items-center text-center">
-          <%= viral_icon(name: provider, classes: "w-4 h-4 mr-2 -ml-1") %>
-          <%# <%= t(".omniauth", provider: OmniAuth::Utils.camelize(provider)) %>
-          <%# TODO: This should be conditional on override text being filled, otherwise use above %>
-          <%= t(".omniauth", provider: Rails.configuration.auth_config["#{provider}_override_text"] ) %>
+          <% if Rails.configuration.auth_config["#{provider}_icon"] %>
+            <%= viral_icon(name: "#{provider}_icon", classes: "w-4 h-4 mr-2 -ml-1") %>
+          <% else %>
+            <%= viral_icon(name: provider, classes: "w-4 h-4 mr-2 -ml-1") %>
+          <% end %>
+          <% if Rails.configuration.auth_config["#{provider}_text"] %>
+            <%= t(".omniauth", provider: Rails.configuration.auth_config["#{provider}_text"] ) %>
+          <% else %>
+            <%= t(".omniauth", provider: OmniAuth::Utils.camelize(provider)) %>
+          <% end %>
         </div>
       <% end %>
     <% end %>
