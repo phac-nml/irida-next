@@ -21,7 +21,7 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
 
     const storageValue = this.#getStoredSamples();
-    console.log(storageValue)
+
     if (storageValue) {
       this.rowSelectionTargets.map((row) => {
         if (storageValue.indexOf(row.value) > -1) {
