@@ -18,6 +18,7 @@ module Irida
       engine_version = nil
       url = entry['url']
       execute_loc = 'azure'
+      version = version['name']
 
       @workflow = workflow.new(name, id, description, version, metadata, type, type_version, engine, engine_version,
                                url, execute_loc, schema_loc)

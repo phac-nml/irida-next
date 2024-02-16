@@ -27,7 +27,13 @@ module WorkflowExecutions
     end
 
     def workflow
-      workflow_index = @workflows.index { |workflow| workflow.id == params['workflow_id'].to_i }
+      workflow_name = params[:workflow_name]
+      workflow_version = params[:workflow_version]
+
+      workflow_index = @workflows.index do |workflow|
+        (workflow.name == workflow_name) && (workflow.version == workflow_version)
+      end
+
       @workflow = @workflows[workflow_index]
     end
 
