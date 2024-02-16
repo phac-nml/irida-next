@@ -16,7 +16,7 @@
     data: {
       controller: "projects--samples--attachments--selected-attachments",
       'projects--samples--attachments--selected-attachments-field-name-value':"deletion[attachment_ids]",
-      'data-projects--samples--attachments--selected-attachments-storage-key-value':namespace_project_sample_url(id: @sample.id),
+      'projects--samples--attachments--selected-attachments-storage-key-value': "files-#{@sample.id}",
       action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
     }, method: :delete) do |form| %>
 

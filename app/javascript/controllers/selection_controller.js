@@ -8,26 +8,20 @@ export default class extends Controller {
   static targets = ["rowSelection"];
   static outlets = ["action-link"];
 
-  connect() {
-    // When you are first routed to a sample#show page, the path will not contain any query information about the
-    // current tab. Because the path .../project/-/samples/sampleId and .../project/-/samples/sampleId?tab=files
-    // want to handle the same stored checkboxes, a hidden div in views/projects/samples/attachments/_table
-    // contains the sample ID in its class, and we check if that exists. If it exists and we're on the intial
-    // path which doesn't contain the query, we hard-code add the query for the storageKey.
-    if (document.getElementById('filesSampleId') &&
-      location.pathname.endsWith(`/-/samples/${document.getElementById('filesSampleId').classList[0]}`)) {
-      this.#storageKey = `${location.protocol}//${location.host}${location.pathname}?tab=files`;
-    } else {
-      this.#storageKey =
-        this.element.dataset.storageKey ||
-        `${location.protocol}//${location.host}${location.pathname}${location.search}`;
-    }
+  static values = {
+    storageKey: {
+      type: String
+    },
+  };
 
+  connect() {
+    this.#storageKey =
+      this.storageKeyValue || `${location.protocol}//${location.host}${location.pathname}${location.search}`;
 
     this.element.setAttribute("data-controller-connected", "true");
 
     const storageValue = this.#getStoredSamples();
-
+    console.log(storageValue)
     if (storageValue) {
       this.rowSelectionTargets.map((row) => {
         if (storageValue.indexOf(row.value) > -1) {
