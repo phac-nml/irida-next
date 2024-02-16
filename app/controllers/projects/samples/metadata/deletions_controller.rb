@@ -8,7 +8,7 @@ module Projects
         respond_to :turbo_stream
 
         def new
-          authorize! @sample, to: :update_sample?
+          authorize! @sample.project, to: :update_sample?
           render turbo_stream: turbo_stream.update('sample_modal',
                                                    partial: 'modal',
                                                    locals: {
