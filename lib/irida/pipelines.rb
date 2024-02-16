@@ -17,11 +17,11 @@ module Irida
     def register_pipelines
       data = read_json_config
 
-      data.each_with_index do |entry, index|
+      data.each do |entry|
         entry['versions'].each do |version|
           nextflow_schema_location = download_nextflow_schema(entry, version)
           # schema_input_location = download_schema_input(entry, version)
-          @@available_pipelines << Pipeline.init(index + 1, entry, version, nextflow_schema_location)
+          @@available_pipelines << Pipeline.init(entry, version, nextflow_schema_location)
         end
       end
     end
