@@ -18,7 +18,6 @@ module Irida
       engine_version = nil
       url = entry['url']
       execute_loc = 'azure'
-      # schema_loc = 'test/fixtures/files/nextflow/nextflow_schema.json'
 
       @workflow = workflow.new(name, id, description, version, metadata, type, type_version, engine, engine_version,
                                url, execute_loc, schema_loc)
