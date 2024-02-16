@@ -8,11 +8,15 @@ export default class extends Controller {
   static targets = ["rowSelection"];
   static outlets = ["action-link"];
 
-  connect() {
+  static values = {
+    storageKey: {
+      type: String
+    },
+  };
 
+  connect() {
     this.#storageKey =
-      this.element.dataset.storageKey ||
-      `${location.protocol}//${location.host}${location.pathname}`;
+      this.storageKeyValue || `${location.protocol}//${location.host}${location.pathname}${location.search}`;
 
     this.element.setAttribute("data-controller-connected", "true");
 

@@ -1,0 +1,19 @@
+<% if @sample.errors.any? %>
+  <%= turbo_stream.update "update-alert",
+                      viral_alert(
+                        type: "alert",
+                        message: @sample.errors.full_messages.first,
+                        classes: "mb-4"
+                      ) %>
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+
+  <%= turbo_stream.update "table-listing" do %>
+    <% render partial: "projects/samples/metadata/table",
+    locals: {
+      sample_metadata: @sample.metadata_with_provenance
+    } %>
+  <% end %>
+<% end %>

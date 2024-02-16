@@ -66,10 +66,8 @@ module Samples
               raise SampleMetadataFieldsUpdateError,
                     I18n.t('services.samples.metadata.update_fields.key_exists', key: @key_update.values[0])
             end
-
             @metadata_update_params['metadata'][@key_update.keys[0]] = ''
           end
-
           @metadata_update_params['metadata'][@key_update.values[0]] = @value_update.values[0]
         end
       end

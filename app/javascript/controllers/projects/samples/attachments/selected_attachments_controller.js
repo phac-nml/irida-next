@@ -7,8 +7,7 @@ export default class extends Controller {
   static values = {
     fieldName: String,
     storageKey: {
-      type: String,
-      default: `${location.protocol}//${location.host}${location.pathname}`,
+      type: String
     },
   };
 

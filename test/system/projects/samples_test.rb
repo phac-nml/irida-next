@@ -1166,10 +1166,10 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text I18n.t('projects.samples.show.table_header.key')
         assert_selector 'table#metadata-table tbody tr', count: 3
-        within first('tbody tr td:nth-child(1)') do
+        within first('tbody tr td:nth-child(2)') do
           assert_text 'metadatafield1'
         end
-        within first('tbody tr td:nth-child(2)') do
+        within first('tbody tr td:nth-child(3)') do
           assert_text 'value1'
         end
       end
@@ -1290,9 +1290,9 @@ module Projects
       assert_text I18n.t('projects.samples.metadata.fields.create.single_success', key: 'metadatafield3')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield3'
+        assert_selector 'tr#metadatafield3_field'
 
-        within %(tr#metadatafield3) do
+        within %(tr#metadatafield3_field) do
           assert_text 'metadatafield3'
           assert_text 'value3'
         end
@@ -1319,15 +1319,15 @@ module Projects
                          keys: %w[metadatafield3 metadatafield4].join(', '))
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield3'
-        assert_selector 'tr#metadatafield4'
+        assert_selector 'tr#metadatafield3_field'
+        assert_selector 'tr#metadatafield4_field'
 
-        within %(tr#metadatafield3) do
+        within %(tr#metadatafield3_field) do
           assert_text 'metadatafield3'
           assert_text 'value3'
         end
 
-        within %(tr#metadatafield4) do
+        within %(tr#metadatafield4_field) do
           assert_text 'metadatafield4'
           assert_text 'value4'
         end
@@ -1340,9 +1340,9 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield1'
+        assert_selector 'tr#metadatafield1_field'
 
-        within %(tr#metadatafield1) do
+        within %(tr#metadatafield1_field) do
           assert_text 'metadatafield1'
           assert_text 'value1'
         end
@@ -1365,16 +1365,16 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield1'
+        assert_selector 'tr#metadatafield1_field'
 
-        within %(tr#metadatafield1) do
+        within %(tr#metadatafield1_field) do
           assert_text 'metadatafield1'
           assert_text 'value1'
         end
 
-        assert_selector 'tr#metadatafield1'
+        assert_selector 'tr#metadatafield2_field'
 
-        within %(tr#metadatafield2) do
+        within %(tr#metadatafield2_field) do
           assert_text 'metadatafield2'
           assert_text 'value2'
         end
@@ -1402,11 +1402,11 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield1'
-        assert_no_selector 'tr#metadatafield3'
+        assert_selector 'tr#metadatafield1_field'
+        assert_no_selector 'tr#metadatafield3_field'
         assert_no_text 'metadatafield3'
 
-        within %(tr#metadatafield1) do
+        within %(tr#metadatafield1_field) do
           assert_text 'metadatafield1'
           assert_text 'value1'
         end
@@ -1427,8 +1427,8 @@ module Projects
       assert_text I18n.t('projects.samples.metadata.fields.create.single_key_exists', key: 'metadatafield1')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_selector 'tr#metadatafield3'
-        within %(tr#metadatafield3) do
+        assert_selector 'tr#metadatafield3_field'
+        within %(tr#metadatafield3_field) do
           assert_text 'metadatafield3'
           assert_text 'value3'
         end
@@ -1469,14 +1469,14 @@ module Projects
         assert_no_text 'metadatafield5'
         assert_no_text 'value5'
 
-        assert_selector 'tr#metadatafield3'
-        within %(tr#metadatafield3) do
+        assert_selector 'tr#metadatafield3_field'
+        within %(tr#metadatafield3_field) do
           assert_text 'metadatafield3'
           assert_text 'value3'
         end
 
-        assert_selector 'tr#metadatafield6'
-        within %(tr#metadatafield6) do
+        assert_selector 'tr#metadatafield6_field'
+        within %(tr#metadatafield6_field) do
           assert_text 'metadatafield6'
           assert_text 'value6'
         end
@@ -1544,6 +1544,164 @@ module Projects
         assert_selector 'dd', text: 'Sample 1 description.'
         assert_selector 'dd', text: @sample1.puid
         assert_selector 'dd', text: @sample1.project.id
+      end
+    end
+
+    test 'delete metadata key added by user by dropdown action' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        first('button.Viral-Dropdown--icon').click
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+      end
+
+      within('#turbo-confirm[open]') do
+        assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm', deleted_key: 'metadatafield1')
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+      end
+    end
+
+    test 'delete metadata key added by anaylsis by dropdown action' do
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
+      @project31 = projects(:project31)
+      @sample34 = samples(:sample34)
+
+      visit namespace_project_sample_url(@subgroup12aa, @project31, @sample34)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        first('button.Viral-Dropdown--icon').click
+        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+      end
+
+      within('#turbo-confirm[open]') do
+        assert_text I18n.t('projects.samples.show.metadata.actions.delete_confirm', deleted_key: 'metadatafield1')
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.destroy.success', deleted_key: 'metadatafield1')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+      end
+    end
+
+    test 'delete one metadata key by delete metadata modal' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        find('input#metadatafield1').click
+      end
+
+      click_on I18n.t('projects.samples.show.delete_metadata_button')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        click_on I18n.t('projects.samples.metadata.deletions.modal.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.deletions.destroy.single_success', deleted_key: 'metadatafield1')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+      end
+    end
+
+    test 'delete multiple metadata keys by delete metadata modal' do
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
+        find('input#metadatafield1').click
+        find('input#metadatafield2').click
+      end
+
+      click_on I18n.t('projects.samples.show.delete_metadata_button')
+
+      within %(turbo-frame[id="sample_modal"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
+        click_on I18n.t('projects.samples.metadata.deletions.modal.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.metadata.deletions.destroy.multi_success',
+                         deleted_keys: 'metadatafield1, metadatafield2')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_no_text 'metadatafield1'
+        assert_no_text 'value1'
+        assert_no_text 'metadatafield2'
+        assert_no_text 'value2'
+        assert_text I18n.t('projects.samples.show.no_metadata')
+        assert_text I18n.t('projects.samples.show.no_associated_metadata')
+      end
+    end
+
+    test 'user with access < Maintainer cannot view delete checkboxes, delete action or delete metadata button' do
+      sign_in users(:jane_doe)
+      visit namespace_project_sample_url(@group12a, @project29, @sample32)
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text 'metadatafield1'
+        assert_text 'value1'
+        assert_text 'metadatafield2'
+        assert_text 'value2'
+        assert_no_selector 'input[type="checkbox"]'
+        assert_no_text I18n.t('projects.samples.show.table_header.action')
+        assert_no_selector 'button.Viral-Dropdown--icon'
+      end
+
+      assert_no_selector I18n.t('projects.samples.show.delete_metadata_button')
+    end
+
+    test 'initially checking off files and click files tab will still have same files checked' do
+      login_as users(:jeff_doe)
+      project = projects(:projectA)
+      sample = samples(:sampleB)
+      namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      visit namespace_project_sample_url(namespace, project, sample)
+      within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
+        all('input[type="checkbox"]')[0].click
+        all('input[type="checkbox"]')[2].click
+        all('input[type="checkbox"]')[4].click
+      end
+
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.files')
+      within %(turbo-frame[id="table-listing"]) do
+        assert all('input[type="checkbox"]')[0].checked?
+        assert all('input[type="checkbox"]')[2].checked?
+        assert all('input[type="checkbox"]')[4].checked?
+        assert_not all('input[type="checkbox"]')[1].checked?
+        assert_not all('input[type="checkbox"]')[3].checked?
+        assert_not all('input[type="checkbox"]')[5].checked?
       end
     end
   end
