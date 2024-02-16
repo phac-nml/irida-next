@@ -3,36 +3,39 @@
   <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
     <thead
       class="
-          text-xs
-          text-slate-700
-          bg-slate-50
-          dark:bg-slate-700
-          dark:text-slate-400
-        "
+        text-xs
+        text-slate-700
+        bg-slate-50
+        dark:bg-slate-700
+        dark:text-slate-400
+      "
     >
-    <tr>
-      <% properties.keys.each do |header| %>
-        <th class="px-6 py-3 font-semibold tracking-wider">
-          <div class="flex items-center space-x-2">
-            <span class="uppercase"><%= header %></span>
-          </div>
-        </th>
-      <% end %>
-    </tr>
+      <tr>
+        <% properties.keys.each do |header| %>
+          <th class="px-6 py-3 font-semibold tracking-wider">
+            <div class="flex items-center space-x-2">
+              <span class="uppercase"><%= header %></span>
+            </div>
+          </th>
+        <% end %>
+      </tr>
     </thead>
     <tbody>
-    <% samples.each_with_index do |sample, index| %>
-      <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}]".to_s do |s| %>
-        <%= s.hidden_field :sample_id, value: sample.id %>
-        <tr class="border-b dark:border-slate-700" data-controller="nextflow--samplesheet">
-          <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}][samplesheet_params]".to_s do |fields| %>
-          <% properties.keys.each do |property| %>
-            <%= render_cell_type(property, properties[property], sample, fields) %>
-          <% end %>
-          <% end %>
-        </tr>
+      <% samples.each_with_index do |sample, index| %>
+        <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}]".to_s do |s| %>
+          <%= s.hidden_field :sample_id, value: sample.id %>
+          <tr
+            class="border-b dark:border-slate-700"
+            data-controller="nextflow--samplesheet"
+          >
+            <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}][samplesheet_params]".to_s do |fields| %>
+              <% properties.keys.each do |property| %>
+                <%= render_cell_type(property, properties[property], sample, fields) %>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
       <% end %>
-    <% end %>
     </tbody>
   </table>
 </div>
