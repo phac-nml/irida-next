@@ -37,7 +37,6 @@ module WorkflowExecutions
     end
 
     def workflow_schema
-      puts workflow.schema_loc
       # Need to get a schema file path from the workflow
       @workflow_schema = JSON.parse(workflow.schema_loc.read)
     end

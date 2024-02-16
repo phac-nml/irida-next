@@ -20,7 +20,7 @@ module Irida
       data.each_with_index do |entry, index|
         entry['versions'].each do |version|
           nextflow_schema_location = download_nextflow_schema(entry, version)
-          schema_input_location = download_schema_input(entry, version)
+          # schema_input_location = download_schema_input(entry, version)
           @@available_pipelines << Pipeline.init(index + 1, entry, version, nextflow_schema_location)
         end
       end
