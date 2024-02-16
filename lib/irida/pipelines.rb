@@ -33,26 +33,32 @@ module Irida
     end
 
     def download_nextflow_schema(entry, version)
-      nextflow_schema_url = "https://raw.githubusercontent.com/#{entry['name']}/#{version['name']}/nextflow_schema.json"
+      filename = 'nextflow_schema.json'
+      nextflow_schema_url = "https://raw.githubusercontent.com/#{entry['name']}/#{version['name']}/#{filename}"
       nextflow_schema_location =
-        Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/nextflow_schema.json")
+        Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/#{filename}")
 
-      dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/nextflow_schema.json").dirname
+      dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/#{filename}").dirname
+
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      IO.copy_stream(URI.open(nextflow_schema_url), nextflow_schema_location) unless File.directory?(dir)
+      unless File.exist?("#{dir}/#{filename}")
+        IO.copy_stream(URI.parse(nextflow_schema_url).open,
+                       nextflow_schema_location)
+      end
 
       nextflow_schema_location
     end
 
     def download_schema_input(entry, version)
-      schema_input_url = "https://raw.githubusercontent.com/#{entry['name']}/#{version['name']}/assets/schema_input.json"
+      filename = 'schema_input.json'
+      schema_input_url = "https://raw.githubusercontent.com/#{entry['name']}/#{version['name']}/assets/#{filename}"
       schema_input_location =
-        Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/schema_input.json")
-      dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/schema_input.json").dirname
+        Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/#{filename}")
+      dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/#{filename}").dirname
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      IO.copy_stream(URI.open(schema_input_url), schema_input_location) unless File.directory?(dir)
+      IO.copy_stream(URI.parse(schema_input_url).open, schema_input_location) unless File.exist?("#{dir}/#{filename}")
 
       schema_input_location
     end
