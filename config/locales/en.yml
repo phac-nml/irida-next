@@ -647,6 +647,7 @@ en:
       table:
         sample: Sample
         project: Project
+        puid: ID
         created_at: Created
         updated_at: Last Updated
   models:
