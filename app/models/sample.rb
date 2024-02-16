@@ -2,6 +2,8 @@
 
 # entity class for Sample
 class Sample < ApplicationRecord
+  include History
+
   has_logidze
   acts_as_paranoid
 

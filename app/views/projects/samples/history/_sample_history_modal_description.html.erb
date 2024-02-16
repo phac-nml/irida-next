@@ -1,0 +1,17 @@
+<div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+  <p class="dark:text-slate-400">
+    <% if log_data[:version] == 1 %>
+      <%= t("projects.samples.show.history.modal.created_by", user: log_data[:user]) %>
+    <% elsif log_data[:changes_from_prev_version].key?('deleted_at') %>
+      <% if log_data[:changes_from_prev_version]['deleted_at'].blank? %>
+        <%= t("projects.samples.show.history.modal.restored_by", user: log_data[:user]) %>
+      <% elsif log_data[:changes_from_prev_version]['deleted_at'].present? %>
+        <%= t("projects.samples.show.history.modal.deleted_by", user: log_data[:user]) %>
+      <% end %>
+    <% elsif log_data[:changes_from_prev_version]['project_id'].present? %>
+      <%= t("projects.samples.show.history.modal.transferred_by", user: log_data[:user]) %>
+    <% else %>
+      <%= t("projects.samples.show.history.modal.modified_by", user: log_data[:user]) %>
+    <% end %>
+  </p>
+</div>

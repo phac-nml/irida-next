@@ -28,7 +28,7 @@ module Projects
       end
     end
 
-    test 'can see list of project members which are inherited from parent group' do
+    test 'can see modal with changes to project from previous version' do
       visit namespace_project_history_path(@namespace, @project)
       click_on 'Version 1'
 
@@ -51,9 +51,10 @@ module Projects
         assert_selector 'dd', text: 'Project 1'
         assert_selector 'dd', text: 'project-1'
         assert_selector 'dd', text: 'Project'
-        assert_selector 'dd', text: '408913340'
-        assert_selector 'dd', text: '972975755'
+        assert_selector 'dd', text: @project.namespace.owner.id
+        assert_selector 'dd', text: @project.namespace.parent.id
         assert_selector 'dd', text: 'Project 1 description'
+        assert_selector 'dd', text: @project.puid
       end
     end
   end

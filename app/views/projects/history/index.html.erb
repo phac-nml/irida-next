@@ -11,5 +11,7 @@
       format: :turbo_stream,
       **request.query_parameters
     ),
-  loading: :lazy %>
+  loading: :lazy do %>
+    <%= render partial: "shared/loading/history" %>
+  <% end %>
 </div>

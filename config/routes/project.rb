@@ -19,7 +19,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       post :transfer
       resources :members, only: %i[create destroy index new update]
       resources :group_links, only: %i[create destroy update index new]
-
       resources :samples do
         scope module: :samples, as: :samples do
           collection do
@@ -47,6 +46,8 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             end
           end
         end
+
+        get :view_history_version
       end
 
       get '/history' => 'history#index', as: :history

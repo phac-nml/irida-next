@@ -5,7 +5,7 @@ module Projects
   class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
 
-    before_action :sample, only: %i[show edit update destroy]
+    before_action :sample, only: %i[show edit update destroy view_history_version]
     before_action :current_page
 
     def index # rubocop:disable Metrics/AbcSize
@@ -30,11 +30,24 @@ module Projects
     def show
       authorize! @sample.project, to: :read_sample?
       @tab = params[:tab]
-      @table_listing = if @tab == 'metadata'
-                         @sample.metadata_with_provenance
-                       else
-                         @sample.attachments
-                       end
+      if @tab == 'metadata'
+        @sample_metadata = @sample.metadata_with_provenance
+      elsif @tab == 'history'
+        @log_data = @sample.log_data_without_changes
+      else
+        @sample_attachments = @sample.attachments
+      end
+    end
+
+    def view_history_version
+      authorize! @sample.project, to: :view_history?
+
+      @log_data = @sample.log_data_with_changes(params[:version])
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
     end
 
     def new
@@ -103,7 +116,7 @@ module Projects
     private
 
     def sample
-      @sample = Sample.find_by(id: params[:id], project_id: project.id) || not_found
+      @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
     end
 
     def sample_params

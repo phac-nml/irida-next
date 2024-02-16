@@ -27,7 +27,9 @@
   <div class="flex flex-col" data-turbo-temporary>
     <%= turbo_frame_tag "groups_tree",
     src: dashboard_groups_url(format: :turbo_stream, **request.query_parameters),
-    loading: :lazy %>
+    loading: :lazy do %>
+      <%= render partial: "shared/loading/table" %>
+    <% end %>
     <%= turbo_frame_tag "groups_pagination" %>
   </div>
 </div>
