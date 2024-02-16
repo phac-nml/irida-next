@@ -118,7 +118,7 @@
 
                     <% if keys_no_longer_existent.length.positive? %>
                       <div class="col-span-3">
-                        <p class="text-red-500 dark:text-red-400">Keys Deleted:</p>
+                        <p class="text-red-500 dark:text-red-400"><%= t(:"components.history_version.keys_deleted") %></p>
                       </div>
                       <% keys_no_longer_existent.each do |key_no_longer_existent| %>
                         <div class="col-span-1">
