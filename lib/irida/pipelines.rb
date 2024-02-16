@@ -2,6 +2,7 @@
 
 require 'json'
 require 'open-uri'
+require 'uri'
 require 'irida/pipeline'
 
 module Irida
@@ -34,11 +35,12 @@ module Irida
 
     def download_nextflow_schema(entry, version)
       filename = 'nextflow_schema.json'
-      nextflow_schema_url = "https://raw.githubusercontent.com/#{entry['name']}/#{version['name']}/#{filename}"
+      uri = URI.parse(entry['url'])
+      nextflow_schema_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/#{filename}"
       nextflow_schema_location =
-        Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/#{filename}")
+        Rails.root.join("private/pipelines/#{uri.path}/#{version['name']}/#{filename}")
 
-      dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/#{filename}").dirname
+      dir = Rails.root.join("private/pipelines/#{uri.path}/#{version['name']}/#{filename}").dirname
 
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
@@ -52,10 +54,11 @@ module Irida
 
     def download_schema_input(entry, version)
       filename = 'schema_input.json'
-      schema_input_url = "https://raw.githubusercontent.com/#{entry['name']}/#{version['name']}/assets/#{filename}"
+      uri = URI.parse(entry['url'])
+      schema_input_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/assets/#{filename}"
       schema_input_location =
-        Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/#{filename}")
-      dir = Rails.root.join("private/pipelines/#{entry['name']}/#{version['name']}/#{filename}").dirname
+        Rails.root.join("private/pipelines/#{uri.path}/#{version['name']}/#{filename}")
+      dir = Rails.root.join("private/pipelines/#{uri.path}/#{version['name']}/#{filename}").dirname
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
       IO.copy_stream(URI.parse(schema_input_url).open, schema_input_location) unless File.exist?("#{dir}/#{filename}")
