@@ -64,7 +64,7 @@
                         sample: {metadata: {metadata[:key] => ''}}),
                         data: {
                           turbo_method: :delete,
-                          turbo_confirm: t(:'projects.samples.show.metadata.actions.delete_confirm')
+                          turbo_confirm: t(:'projects.samples.show.metadata.actions.delete_confirm', deleted_key: metadata[:key])
                         },
                     ) %>
                 <% end %>

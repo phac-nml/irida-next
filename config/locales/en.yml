@@ -848,7 +848,7 @@ en:
             dropdown:
               update: Update
               delete: Delete
-            delete_confirm: Are you sure you want to remove this metadata field from the sample?
+            delete_confirm: Are you sure you want to remove metadata field '%{deleted_key}' from the sample?
             metadata_dropdown_aria_label: Dropdown options for metadata field %{key}
           analysis: Analysis
           update:
