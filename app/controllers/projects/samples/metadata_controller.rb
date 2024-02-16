@@ -24,7 +24,6 @@ module Projects
       end
 
       def destroy
-        authorize! @project, to: :update_sample?
         metadata = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
                                                           deletion_params).execute
         respond_to do |format|
