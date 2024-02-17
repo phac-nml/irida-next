@@ -209,6 +209,7 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
     assert_equal false, log_data[2][:deleted]
     assert_equal true, log_data[2][:restored]
   end
+
   test 'get group logidze log data with delete and restore actions' do
     sign_in users(:john_doe)
     group = groups(:group_one)
