@@ -642,7 +642,7 @@ en:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         search:
-          placeholder: Filter by name
+          placeholder: Filter by ID or name
           metadata: Metadata
       table:
         sample: Sample
@@ -912,7 +912,7 @@ en:
         dropdown:
           remove: Remove sample
         search:
-          placeholder: Filter by name
+          placeholder: Filter by ID or name
           metadata: Metadata
       update:
         success: Sample was successfully updated.

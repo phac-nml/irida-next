@@ -9,8 +9,10 @@ module Groups
 
     def index # rubocop:disable Metrics/AbcSize
       authorize! @group, to: :sample_listing?
-
+      puts '475834759834758934798573498573498759834759843759834789573489'
+      puts params
       @q = authorized_samples.ransack(params[:q])
+      puts @q
       set_default_sort
       respond_to do |format|
         format.html do
