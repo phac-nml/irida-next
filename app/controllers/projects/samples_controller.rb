@@ -125,10 +125,18 @@ module Projects
 
     def context_crumbs
       super
-      @context_crumbs += [{
-        name: I18n.t('projects.samples.index.title'),
-        path: namespace_project_samples_path
-      }]
+      @context_crumbs +=
+        [{
+          name: I18n.t('projects.samples.index.title'),
+          path: namespace_project_samples_path
+        }]
+      return unless action_name == 'show'
+
+      @context_crumbs +=
+        [{
+          name: @sample.puid,
+          path: namespace_project_sample_path(id: @sample.id)
+        }]
     end
 
     def current_page

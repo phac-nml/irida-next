@@ -36,9 +36,9 @@
       >
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
-          label: t(".sample"),
-          url: sorting_url(@q, :name),
-          field: :name
+          label: t(".puid"),
+          url: sorting_url(@q, :puid),
+          field: :puid
         ) %>
       </th>
       <th
@@ -57,9 +57,9 @@
       >
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
-          label: t(".puid"),
-          url: sorting_url(@q, :puid),
-          field: :puid
+          label: t(".sample"),
+          url: sorting_url(@q, :name),
+          field: :name
         ) %>
       </th>
       <th
@@ -111,7 +111,7 @@
         class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
       >
         <td class="px-6 py-3 whitespace-nowrap left-0 sticky bg-white dark:bg-slate-800">
-          <%= link_to sample.name,
+          <%= link_to sample.puid,
                       namespace_project_sample_path(
                         id: sample.id,
                         namespace_id: sample.project.namespace.parent.full_path,
@@ -123,7 +123,16 @@
                       class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
         </td>
         <td class="px-6 py-3 whitespace-nowrap">
-          <%= sample.puid %>
+          <%= link_to sample.name,
+                      namespace_project_sample_path(
+                        id: sample.id,
+                        namespace_id: sample.project.namespace.parent.full_path,
+                        project_id: sample.project.path
+                      ),
+                      data: {
+                        turbo: false
+                      },
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
         </td>
         <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_tooltip(title: project_path(sample.project)) do %>

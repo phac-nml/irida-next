@@ -23,6 +23,14 @@
       "
     >
       <tr>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".puid"),
+            url: sorting_url(@q, :puid),
+            field: :puid
+          ) %>
+        </th>
         <th
           scope="col"
           class="
@@ -42,14 +50,6 @@
             label: t(".sample"),
             url: sorting_url(@q, :name),
             field: :name
-          ) %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= render Ransack::SortComponent.new(
-            ransack_obj: @q,
-            label: t(".puid"),
-            url: sorting_url(@q, :puid),
-            field: :puid
           ) %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
@@ -97,8 +97,7 @@
           id="<%= sample.id %>"
           class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
         >
-          <td
-            class="
+          <td class="
               px-6
               py-3
               whitespace-nowrap
@@ -106,8 +105,7 @@
               left-0
               bg-slate-50
               dark:bg-slate-900
-            "
-          >
+            ">
             <% if allowed_to?(:transfer_sample?, project) %>
               <%= check_box_tag "sample_ids[]",
               sample.id,
@@ -121,7 +119,7 @@
               class:
                 "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
             <% end %>
-            <%= link_to sample.name,
+            <%= link_to sample.puid,
             namespace_project_sample_path(id: sample.id),
             data: {
               turbo: false
@@ -129,7 +127,12 @@
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </td>
           <td class="px-6 py-3 whitespace-nowrap">
-            <%= sample.puid %>
+            <%= link_to sample.name,
+            namespace_project_sample_path(id: sample.id),
+            data: {
+              turbo: false
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </td>
           <td class="px-6 py-3 whitespace-nowrap">
             <%= l(sample.created_at.localtime, format: :full_date) %>
