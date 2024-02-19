@@ -68,8 +68,7 @@ module Nextflow
       render(Samplesheet::DropdownCellComponent.new(
                property,
                entry['enum'],
-               fields:,
-               prompt: t('.dropdown_prompt')
+               fields:
              ))
     end
 
