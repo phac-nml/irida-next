@@ -219,11 +219,12 @@ module Projects
       assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name,
                                                              project_name: @project.namespace.human_name)
 
+      assert_no_selector 'table#samples-table tbody tr', text: @sample1.puid
       assert_no_selector 'table#samples-table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       assert_selector 'table#samples-table tbody tr', count: 2
       within first('tbody tr td:first-child') do
-        assert_text @sample2.name
+        assert_text @sample2.puid
       end
     end
 

@@ -130,7 +130,7 @@ module Projects
           name: I18n.t('projects.samples.index.title'),
           path: namespace_project_samples_path
         }]
-      return unless action_name == 'show'
+      return unless action_name == 'show' && !@sample.nil?
 
       @context_crumbs +=
         [{
