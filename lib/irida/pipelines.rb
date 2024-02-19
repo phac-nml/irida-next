@@ -3,6 +3,7 @@
 require 'json'
 require 'open-uri'
 require 'uri'
+require 'net/http'
 require 'irida/pipeline'
 
 module Irida
@@ -36,15 +37,16 @@ module Irida
     def download_nextflow_schema(entry, version)
       filename = 'nextflow_schema.json'
       uri = URI.parse(entry['url'])
+      pipeline_schema_files_path = "private/pipelines/#{uri.path}/#{version['name']}"
       nextflow_schema_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/#{filename}"
       nextflow_schema_location =
-        Rails.root.join("private/pipelines/#{uri.path}/#{version['name']}/#{filename}")
+        Rails.root.join("#{pipeline_schema_files_path}/#{filename}")
 
-      dir = Rails.root.join("private/pipelines/#{uri.path}/#{version['name']}/#{filename}").dirname
+      dir = Rails.root.join("#{pipeline_schema_files_path}/#{filename}").dirname
 
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      unless File.exist?("#{dir}/#{filename}")
+      unless resource_etag_exists(nextflow_schema_url, pipeline_schema_files_path)
         IO.copy_stream(URI.parse(nextflow_schema_url).open,
                        nextflow_schema_location)
       end
@@ -55,15 +57,61 @@ module Irida
     def download_schema_input(entry, version)
       filename = 'schema_input.json'
       uri = URI.parse(entry['url'])
+      pipeline_schema_files_path = "private/pipelines/#{uri.path}/#{version['name']}"
       schema_input_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/assets/#{filename}"
       schema_input_location =
-        Rails.root.join("private/pipelines/#{uri.path}/#{version['name']}/#{filename}")
-      dir = Rails.root.join("private/pipelines/#{uri.path}/#{version['name']}/#{filename}").dirname
+        Rails.root.join("#{pipeline_schema_files_path}/#{filename}")
+      dir = Rails.root.join("#{pipeline_schema_files_path}/#{filename}").dirname
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      IO.copy_stream(URI.parse(schema_input_url).open, schema_input_location) unless File.exist?("#{dir}/#{filename}")
+      unless resource_etag_exists(schema_input_url, pipeline_schema_files_path)
+        IO.copy_stream(URI.parse(schema_input_url).open, schema_input_location)
+      end
 
       schema_input_location
+    end
+
+    def resource_etag_exists(resource_url, status_file_location)
+      status_file_location = Rails.root.join("#{status_file_location}/status.json")
+      # File currently at pipeline url
+      current_file_etag = resource_etag(resource_url)
+
+      if File.exist?(status_file_location)
+        etag_file = File.read(status_file_location)
+        existing_etag = JSON.parse(etag_file)['etag']
+
+        return true if current_file_etag == existing_etag
+      end
+
+      data_to_write = {}
+      data_to_write['etag'] = current_file_etag
+      File.open(status_file_location, 'w') { |output_file| output_file << data_to_write.to_json }
+
+      false
+    end
+
+    def resource_etag(resource_url) # rubocop:disable Metrics/AbcSize
+      url = URI(resource_url)
+
+      request_options = { use_ssl: url.scheme == 'https' }
+
+      response = Net::HTTP.start(url.host, url.port, request_options) do |http|
+        http.head(url.path).to_hash
+      end
+
+      # Handle Redirects
+      if response['location']
+        response_location = response['location'].join
+        url = URI("#{url.scheme}://#{url.host}#{response_location}")
+
+        response = Net::HTTP.start(url.host, url.port, request_options) do |http|
+          http.head(url.path).to_hash
+        end
+
+        return response['etag'].join.scan(/"([^"]*)"/).join
+      end
+
+      response['etag'].join.scan(/"([^"]*)"/).join
     end
   end
 end
