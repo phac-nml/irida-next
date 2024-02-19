@@ -41,7 +41,7 @@
 
         <% if !changes_from_prev_version_hash.nil? %>
           <div data-controller="collapsible">
-            <h2 id=<%= "accordion-collapse-heading-#{index + 1}" %>>
+            <h2 id="<%= "accordion-collapse-heading-#{index + 1}" %>">
               <button
                 type="button"
                 class="
@@ -66,7 +66,7 @@
                 "
                 data-action="collapsible#toggle"
                 aria-expanded="true"
-                aria-controls=<%= "accordion-collapse-body-#{index + 1}" %>
+                aria-controls="<%= "accordion-collapse-body-#{index + 1}" %>"
               >
                 <span><%= key.to_s %></span>
                 <%= viral_icon(
@@ -78,9 +78,9 @@
             </h2>
             <div
               data-collapsible-target="item"
-              id=<%= "accordion-collapse-body-#{index + 1}" %>
+              id="<%= "accordion-collapse-body-#{index + 1}" %>"
               class="<%= index == 0 ? "" : "hidden"%>"
-              aria-labelledby=<%= "accordion-collapse-heading-#{index + 1}" %>
+              aria-labelledby="<%= "accordion-collapse-heading-#{index + 1}" %>"
             >
               <div
                 class="
