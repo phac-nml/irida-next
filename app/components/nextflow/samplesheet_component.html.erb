@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <% samples.each_with_index do |sample, index| %>
+    <% samples.each do |sample| %>
         <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}]".to_s do |s| %>
           <%= s.hidden_field :sample_id, value: sample.id %>
           <tr
