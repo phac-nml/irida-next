@@ -1,0 +1,26 @@
+<% @cloned_sample_ids.keys.each do |cloned_sample_id| %>
+  <%= turbo_stream.update_session_storage_item(
+    namespace_project_samples_url,
+    cloned_sample_id
+  ) %>
+<% end %>
+<% if @project.errors.messages_for(:base).empty? %>
+  <% if message %>
+    <%= turbo_stream.update "samples_alert" do %>
+      <%= viral_alert(type:, message:, classes: "mb-4 h-30 overflow-y-auto") do %>
+        <% if defined?(errors) && !errors.empty? %>
+          <ul class="mt-1.5 ml-4 list-disc list-inside">
+            <% errors.each do |error| %>
+              <li><%= error %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= turbo_stream.update "samples_dialog", partial: "dialog", locals: { open: false } %>
+<% end %>
+<%= turbo_stream.replace "project_samples_list" do %>
+  <%= turbo_frame_tag "project_samples_list",
+  src: project_samples_path(@project, format: :turbo_stream) %>
+<% end %>

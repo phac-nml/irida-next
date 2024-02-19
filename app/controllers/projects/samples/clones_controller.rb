@@ -5,6 +5,7 @@ module Projects
     # Controller actions for Project Samples Clone Controller
     class ClonesController < Projects::ApplicationController
       respond_to :turbo_stream
+      before_action :projects
 
       def create
         new_project_id = clone_params[:new_project_id]
@@ -35,6 +36,11 @@ module Projects
         else
           render status: :unprocessable_entity, locals: { type: :alert, message: t('.error'), errors: }
         end
+      end
+
+      def projects
+        @projects = authorized_scope(Project, type: :relation,
+                                              as: :manageable).where.not(namespace_id: @project.namespace_id)
       end
     end
   end
