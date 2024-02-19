@@ -23,14 +23,6 @@
       "
     >
       <tr>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= render Ransack::SortComponent.new(
-            ransack_obj: @q,
-            label: t(".puid"),
-            url: sorting_url(@q, :puid),
-            field: :puid
-          ) %>
-        </th>
         <th
           scope="col"
           class="
@@ -45,6 +37,14 @@
             z-10
           "
         >
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".puid"),
+            url: sorting_url(@q, :puid),
+            field: :puid
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,
             label: t(".sample"),
