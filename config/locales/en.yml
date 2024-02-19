@@ -324,6 +324,7 @@ en:
     history_version:
       previous_version: "Previous (Version %{version})"
       current_version: "Current (Version %{version})"
+      keys_deleted: "Keys deleted:"
   layouts:
     application:
       site_title: IRIDA Next

@@ -41,7 +41,7 @@
 
         <% if !changes_from_prev_version_hash.nil? %>
           <div data-controller="collapsible">
-            <h2 id=<%= "accordion-collapse-heading-#{index + 1}" %>>
+            <h2 id="<%= "accordion-collapse-heading-#{index + 1}" %>">
               <button
                 type="button"
                 class="
@@ -66,7 +66,7 @@
                 "
                 data-action="collapsible#toggle"
                 aria-expanded="true"
-                aria-controls=<%= "accordion-collapse-body-#{index + 1}" %>
+                aria-controls="<%= "accordion-collapse-body-#{index + 1}" %>"
               >
                 <span><%= key.to_s %></span>
                 <%= viral_icon(
@@ -78,9 +78,9 @@
             </h2>
             <div
               data-collapsible-target="item"
-              id=<%= "accordion-collapse-body-#{index + 1}" %>
+              id="<%= "accordion-collapse-body-#{index + 1}" %>"
               class="<%= index == 0 ? "" : "hidden"%>"
-              aria-labelledby=<%= "accordion-collapse-heading-#{index + 1}" %>
+              aria-labelledby="<%= "accordion-collapse-heading-#{index + 1}" %>"
             >
               <div
                 class="
@@ -91,10 +91,10 @@
                   dark:bg-slate-900
                 "
               >
-                <div class="grid grid-cols-3 gap-2 py-2">
+                <div class="grid grid-cols-3 gap-4 py-2">
                   <% prev_changes_value_hash = json_string_to_hash(log_data[:previous_version][key]) %>
-
                   <% if !prev_changes_value_hash.nil? %>
+
                     <% changes_from_prev_version_hash.each do |k,v| %>
                       <% next if prev_changes_value_hash[k] == v %>
                       <% col_span = "col-span-1" %>
@@ -111,6 +111,26 @@
                       <div class="<%= col_span %> bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
                         <dd class="text-md p-1 break-words"><%= v %></dd>
                       </div>
+                    <% end %>
+
+                    <% keys_no_longer_existent =
+                      prev_changes_value_hash.keys - changes_from_prev_version_hash.keys %>
+
+                    <% if keys_no_longer_existent.length.positive? %>
+                      <div class="col-span-3">
+                        <p class="text-red-500 dark:text-red-400"><%= t(:"components.history_version.keys_deleted") %></p>
+                      </div>
+                      <% keys_no_longer_existent.each do |key_no_longer_existent| %>
+                        <div class="col-span-1">
+                          <dt class="mb-1 text-slate-500 text-md dark:text-slate-400"><%= key_no_longer_existent %></dt>
+                        </div>
+                        <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+                          <dd class="text-md p-1"><%= prev_changes_value_hash[key_no_longer_existent] %></dd>
+                        </div>
+                        <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
+                          <dd class="text-md p-1 break-words"></dd>
+                        </div>
+                      <% end %>
                     <% end %>
                   <% end %>
                 </div>
