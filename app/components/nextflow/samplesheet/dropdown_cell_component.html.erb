@@ -1,9 +1,11 @@
 <td>
   <%= fields.select name,
                     values,
-                    {},
                     {
-                      required: @required,
+                      selected: values[0]
+                    },
+                    {
+                      required:,
                       "data-action": "change->nextflow--samplesheet#file_selected",
                       "data-nextflow--samplesheet-target": "select",
                       class:
