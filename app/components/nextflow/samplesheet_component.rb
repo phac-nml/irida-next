@@ -60,7 +60,8 @@ module Nextflow
       render(Samplesheet::DropdownCellComponent.new(
                property,
                primary ? files[0] : files[1],
-               fields
+               fields,
+               entry['required'].present?
              ))
     end
 
@@ -68,7 +69,8 @@ module Nextflow
       render(Samplesheet::DropdownCellComponent.new(
                property,
                entry['enum'],
-               fields:
+               fields,
+               entry['required'].present?
              ))
     end
 
