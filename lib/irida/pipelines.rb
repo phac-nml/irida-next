@@ -80,7 +80,7 @@ module Irida
       if File.exist?(status_file_location)
         status_file = File.read(status_file_location)
         parsed_file = JSON.parse(status_file)
-        existing_etag = JSON.parse(status_file)[etag_type] if parsed_file.key?(etag_type)
+        existing_etag = parsed_file[etag_type] if parsed_file.key?(etag_type)
 
         return true if current_file_etag == existing_etag
 
