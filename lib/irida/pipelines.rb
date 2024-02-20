@@ -86,8 +86,6 @@ module Irida
 
         parsed_file[etag_type] = current_file_etag
         data_to_write = parsed_file
-
-        return false
       else
         data_to_write = {}
         data_to_write[etag_type] = current_file_etag
