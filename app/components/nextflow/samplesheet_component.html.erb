@@ -21,20 +21,8 @@
       </tr>
     </thead>
     <tbody>
-    <% samples.each do |sample| %>
-        <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}]".to_s do |s| %>
-          <%= s.hidden_field :sample_id, value: sample.id %>
-          <tr
-            class="border-b dark:border-slate-700"
-            data-controller="nextflow--samplesheet"
-          >
-            <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{sample.id}][samplesheet_params]".to_s do |fields| %>
-              <% properties.keys.each do |property| %>
-                <%= render_cell_type(property, properties[property], sample, fields) %>
-              <% end %>
-            <% end %>
-          </tr>
-        <% end %>
+      <% samples.each do |sample| %>
+        <%= render Nextflow::Samplesheet::RowComponent.new(sample, properties) %>
       <% end %>
     </tbody>
   </table>
