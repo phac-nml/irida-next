@@ -6,9 +6,17 @@ class NextflowComponentPreview < ViewComponent::Preview
     sample1 = Sample.find_by(id: 1)
     sample2 = Sample.find_by(id: 2)
 
+    workflow = Struct.new(:name, :id, :description, :version, :metadata, :type, :type_version, :engine,
+                          :engine_version, :url, :execute_loc)
+    metadata = { workflow_name: 'irida-next-example', workflow_version: '1.0dev' }
+    flow = workflow.new('phac-nml/iridanextexample', 1, 'IRIDA Next Example Pipeline', '1.0.1', metadata,
+                        'NFL', 'DSL2', 'nextflow', '23.10.0',
+                        'https://github.com/phac-nml/iridanextexample', 'azure')
+
     render_with_template(locals: {
                            schema_file:,
-                           samples: [sample1, sample2]
+                           samples: [sample1, sample2],
+                           workflow: flow
                          })
   end
 
