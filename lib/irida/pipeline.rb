@@ -5,9 +5,9 @@ module Irida
   module Pipeline
     module_function
 
-    def init(entry, version, schema_loc)
+    def init(entry, version, schema_loc, schema_input_loc)
       workflow = Struct.new(:name, :description, :version, :metadata, :type, :type_version, :engine,
-                            :engine_version, :url, :execute_loc, :schema_loc)
+                            :engine_version, :url, :execute_loc, :schema_loc, :schema_input_loc)
 
       name = entry['name']
       description = entry['description']
@@ -21,7 +21,7 @@ module Irida
       version = version['name']
 
       @workflow = workflow.new(name, description, version, metadata, type, type_version, engine, engine_version,
-                               url, execute_loc, schema_loc)
+                               url, execute_loc, schema_loc, schema_input_loc)
 
       @workflow
     end

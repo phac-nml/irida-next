@@ -22,8 +22,8 @@ module Irida
       data.each do |entry|
         entry['versions'].each do |version|
           nextflow_schema_location = download_nextflow_schema(entry, version)
-          # schema_input_location = download_schema_input(entry, version)
-          @@available_pipelines << Pipeline.init(entry, version, nextflow_schema_location)
+          schema_input_location = download_schema_input(entry, version)
+          @@available_pipelines << Pipeline.init(entry, version, nextflow_schema_location, schema_input_location)
         end
       end
     end
@@ -46,7 +46,7 @@ module Irida
 
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      unless resource_etag_exists(nextflow_schema_url, pipeline_schema_files_path)
+      unless resource_etag_exists(nextflow_schema_url, pipeline_schema_files_path, 'nextflow_schema')
         IO.copy_stream(URI.parse(nextflow_schema_url).open,
                        nextflow_schema_location)
       end
@@ -64,29 +64,36 @@ module Irida
       dir = Rails.root.join("#{pipeline_schema_files_path}/#{filename}").dirname
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      unless resource_etag_exists(schema_input_url, pipeline_schema_files_path)
+      unless resource_etag_exists(schema_input_url, pipeline_schema_files_path, 'schema_input')
         IO.copy_stream(URI.parse(schema_input_url).open, schema_input_location)
       end
 
       schema_input_location
     end
 
-    def resource_etag_exists(resource_url, status_file_location)
+    def resource_etag_exists(resource_url, status_file_location, etag_type) # rubocop:disable Metrics/MethodLength
       status_file_location = Rails.root.join("#{status_file_location}/status.json")
       # File currently at pipeline url
       current_file_etag = resource_etag(resource_url)
+      existing_etag = false
 
       if File.exist?(status_file_location)
-        etag_file = File.read(status_file_location)
-        existing_etag = JSON.parse(etag_file)['etag']
+        status_file = File.read(status_file_location)
+        parsed_file = JSON.parse(status_file)
+        existing_etag = JSON.parse(status_file)[etag_type] if parsed_file.key?(etag_type)
 
         return true if current_file_etag == existing_etag
+
+        parsed_file[etag_type] = current_file_etag
+        data_to_write = parsed_file
+
+        return false
+      else
+        data_to_write = {}
+        data_to_write[etag_type] = current_file_etag
       end
 
-      data_to_write = {}
-      data_to_write['etag'] = current_file_etag
       File.open(status_file_location, 'w') { |output_file| output_file << data_to_write.to_json }
-
       false
     end
 
@@ -107,8 +114,6 @@ module Irida
         response = Net::HTTP.start(url.host, url.port, request_options) do |http|
           http.head(url.path).to_hash
         end
-
-        return response['etag'].join.scan(/"([^"]*)"/).join
       end
 
       response['etag'].join.scan(/"([^"]*)"/).join
