@@ -8,7 +8,6 @@ export default class extends Controller {
       event.target === this.selectTargets[0]
         ? this.selectTargets[1]
         : this.selectTargets[0];
-    console.log(updateSelect);
     const index = [...event.target.options].findIndex((e) => e.selected);
     if (updateSelect.options.length > index) {
       updateSelect.options[index].selected = true;
