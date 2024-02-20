@@ -16,13 +16,15 @@ module Irida
 
     module_function
 
+    # Registers the available pipelines. This method is called
+    # by an initializer which runs when the server is started up
     def register_pipelines
       data = read_json_config
 
       data.each do |entry|
         entry['versions'].each do |version|
-          nextflow_schema_location = download_nextflow_schema(entry, version)
-          schema_input_location = download_schema_input(entry, version)
+          nextflow_schema_location = prepare_schema_download(entry, version, 'nextflow_schema')
+          schema_input_location = prepare_schema_download(entry, version, 'schema_input')
           @@available_pipelines << Pipeline.init(entry, version, nextflow_schema_location, schema_input_location)
         end
       end
@@ -34,43 +36,43 @@ module Irida
       JSON.parse(Rails.root.join('config/pipelines/', path).read)
     end
 
-    def download_nextflow_schema(entry, version)
-      filename = 'nextflow_schema.json'
+    # Sets up the file names, paths, and urls to be used
+    # by the write_schema_file method
+    def prepare_schema_download(entry, version, type)
+      filename = "#{type}.json"
       uri = URI.parse(entry['url'])
       pipeline_schema_files_path = "private/pipelines/#{uri.path}/#{version['name']}"
-      nextflow_schema_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/#{filename}"
-      nextflow_schema_location =
+
+      if type == 'nextflow_schema'
+        schema_file_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/#{filename}"
+      elsif type == 'schema_input'
+        schema_file_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/assets/#{filename}"
+      end
+
+      schema_location =
         Rails.root.join("#{pipeline_schema_files_path}/#{filename}")
 
+      write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
+
+      schema_location
+    end
+
+    # Create directory if it doesn't exist and write the schema file unless the resource etag matches
+    # the currently stored resource etag
+    def write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
       dir = Rails.root.join("#{pipeline_schema_files_path}/#{filename}").dirname
 
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      unless resource_etag_exists(nextflow_schema_url, pipeline_schema_files_path, 'nextflow_schema')
-        IO.copy_stream(URI.parse(nextflow_schema_url).open,
-                       nextflow_schema_location)
-      end
+      return if resource_etag_exists(schema_file_url, pipeline_schema_files_path, type)
 
-      nextflow_schema_location
+      IO.copy_stream(URI.parse(schema_file_url).open, schema_location)
     end
 
-    def download_schema_input(entry, version)
-      filename = 'schema_input.json'
-      uri = URI.parse(entry['url'])
-      pipeline_schema_files_path = "private/pipelines/#{uri.path}/#{version['name']}"
-      schema_input_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/assets/#{filename}"
-      schema_input_location =
-        Rails.root.join("#{pipeline_schema_files_path}/#{filename}")
-      dir = Rails.root.join("#{pipeline_schema_files_path}/#{filename}").dirname
-      FileUtils.mkdir_p(dir) unless File.directory?(dir)
-
-      unless resource_etag_exists(schema_input_url, pipeline_schema_files_path, 'schema_input')
-        IO.copy_stream(URI.parse(schema_input_url).open, schema_input_location)
-      end
-
-      schema_input_location
-    end
-
+    # Checks if the current local stored resource etag matches the etag of
+    # the resource at the url. If not we overwrite the existing etag for the
+    # local stored file, otherwise we just write the new etag to the status.json
+    # file
     def resource_etag_exists(resource_url, status_file_location, etag_type) # rubocop:disable Metrics/MethodLength
       status_file_location = Rails.root.join("#{status_file_location}/status.json")
       # File currently at pipeline url
@@ -95,6 +97,8 @@ module Irida
       false
     end
 
+    # Get the etag from http.head which will be used to check if newer
+    # schema files is required to be downloaded for a pipeline
     def resource_etag(resource_url) # rubocop:disable Metrics/AbcSize
       url = URI(resource_url)
 
