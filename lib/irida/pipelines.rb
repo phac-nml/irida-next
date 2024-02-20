@@ -10,7 +10,12 @@ module Irida
   # Module that reads a workflow config file and registers the available pipelines
   module Pipelines
     mattr_accessor :register_pipelines
-    cattr_accessor :available_pipelines
+    cattr_accessor :available_pipelines, :PIPELINE_CONFIG_DIR, :PIPELINE_SCHEMA_FILE_DIR
+
+    PIPELINE_CONFIG_DIR = 'config/pipelines/'
+    PIPELINE_CONFIG_FILE = 'pipelines.json'
+    PIPELINE_SCHEMA_FILE_DIR = 'private/pipelines'
+    PIPELINE_SCHEMA_STATUS_FILE = 'status.json'
 
     @@available_pipelines = [] # rubocop:disable Style/ClassVars
 
@@ -32,8 +37,8 @@ module Irida
 
     # read in the json config from config/pipelines/pipelines.json
     def read_json_config
-      path = File.basename('pipelines.json')
-      JSON.parse(Rails.root.join('config/pipelines/', path).read)
+      path = File.basename(PIPELINE_CONFIG_FILE)
+      JSON.parse(Rails.root.join(PIPELINE_CONFIG_DIR, path).read)
     end
 
     # Sets up the file names, paths, and urls to be used
@@ -41,7 +46,7 @@ module Irida
     def prepare_schema_download(entry, version, type)
       filename = "#{type}.json"
       uri = URI.parse(entry['url'])
-      pipeline_schema_files_path = "private/pipelines/#{uri.path}/#{version['name']}"
+      pipeline_schema_files_path = "#{PIPELINE_SCHEMA_FILE_DIR}/#{uri.path}/#{version['name']}"
 
       if type == 'nextflow_schema'
         schema_file_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/#{filename}"
@@ -73,7 +78,7 @@ module Irida
     # local stored file, otherwise we just write the new etag to the status.json
     # file
     def resource_etag_exists(resource_url, status_file_location, etag_type)
-      status_file_location = Rails.root.join("#{status_file_location}/status.json")
+      status_file_location = Rails.root.join("#{status_file_location}/#{PIPELINE_SCHEMA_STATUS_FILE}")
       # File currently at pipeline url
       current_file_etag = resource_etag(resource_url)
       existing_etag = false
