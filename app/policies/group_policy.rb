@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Policy for groups authorization
-class GroupPolicy < NamespacePolicy
+class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def create?
     return true if Member.can_create?(user, record) == true
 
@@ -11,6 +11,13 @@ class GroupPolicy < NamespacePolicy
 
   def create_subgroup?
     return true if Member.can_create?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def view_history?
+    return true if Member.can_view?(user, record, false) == true
 
     details[:name] = record.name
     false

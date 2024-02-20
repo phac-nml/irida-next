@@ -244,7 +244,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   # Method to restore namespace routes when the namespace is restored
   def restore_routes
-    Route.restore(Route.only_deleted.find_by(source_id: id).id, recursive: true)
+    Route.restore(Route.only_deleted.find_by(source_id: id)&.id, recursive: true)
   end
 
   # The add and subtract_from_metadata_summary count functions are used by all update_metadata_summary functions

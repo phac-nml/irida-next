@@ -458,6 +458,7 @@ en:
     sidebar:
       details: Details
       members: Members
+      history: History
       settings: Settings
     index:
       create_group_button: New group
@@ -473,6 +474,18 @@ en:
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
       submit: Create group
       cancel: Cancel
+    history:
+      index:
+        title: History
+      group_history_modal:
+        close: Close
+        version_number: "Version %{version_number}"
+      group_history_modal_description:
+        group_created: "Group was created by %{user}"
+        group_deleted: "Group was deleted by %{user}"
+        group_modified: "Group attributes were modified by %{user}"
+        group_restored: "Group was restored by %{user}"
+        group_transferred: "Group was transferred by %{user}"
     destroy:
       success: "Group %{group_name} was deleted"
       error: "Could not delete %{group_name}"
