@@ -9,7 +9,7 @@ require 'irida/pipeline'
 module Irida
   # Module that reads a workflow config file and registers the available pipelines
   module Pipelines
-    mattr_accessor :register_pipelines
+    mattr_accessor :register_pipelines, :find_pipeline_by
     cattr_accessor :available_pipelines, :PIPELINE_CONFIG_DIR, :PIPELINE_SCHEMA_FILE_DIR
 
     PIPELINE_CONFIG_DIR = 'config/pipelines/'
@@ -30,7 +30,7 @@ module Irida
         entry['versions'].each do |version|
           nextflow_schema_location = prepare_schema_download(entry, version, 'nextflow_schema')
           schema_input_location = prepare_schema_download(entry, version, 'schema_input')
-          @@available_pipelines << Pipeline.init(entry, version, nextflow_schema_location, schema_input_location)
+          @@available_pipelines << Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
         end
       end
     end
@@ -87,7 +87,7 @@ module Irida
       if File.exist?(status_file_location)
         status_file = File.read(status_file_location)
         data = JSON.parse(status_file)
-        existing_etag = data[etag_type] if data.key?(etag_type)
+        existing_etag = data[etag_type] if data.key?(etag_type) && data[etag_type].present?
 
         return true if current_file_etag == existing_etag
       end
@@ -120,6 +120,12 @@ module Irida
       request_options = { use_ssl: url.scheme == 'https' }
       Net::HTTP.start(url.host, url.port, request_options) do |http|
         http.head(url.path).to_hash
+      end
+    end
+
+    def find_pipeline_by(name, version)
+      @workflows.index do |workflow|
+        (workflow.name == name) && (workflow.version == version)
       end
     end
   end
