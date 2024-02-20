@@ -49,9 +49,9 @@ module Irida
       pipeline_schema_files_path = "#{PIPELINE_SCHEMA_FILE_DIR}/#{uri.path}/#{version['name']}"
 
       if type == 'nextflow_schema'
-        schema_file_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/#{filename}"
+        schema_file_url = "https://raw.githubusercontent.com#{uri.path}/#{version['name']}/#{filename}"
       elsif type == 'schema_input'
-        schema_file_url = "https://raw.githubusercontent.com/#{uri.path}/#{version['name']}/assets/#{filename}"
+        schema_file_url = "https://raw.githubusercontent.com#{uri.path}/#{version['name']}/assets/#{filename}"
       end
 
       schema_location =
@@ -124,9 +124,11 @@ module Irida
     end
 
     def find_pipeline_by(name, version)
-      @workflows.index do |workflow|
+      index = @@available_pipelines.index do |workflow|
         (workflow.name == name) && (workflow.version == version)
       end
+
+      @@available_pipelines[index]
     end
   end
 end

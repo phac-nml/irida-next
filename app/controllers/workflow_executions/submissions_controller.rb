@@ -30,7 +30,7 @@ module WorkflowExecutions
       workflow_name = params[:workflow_name]
       workflow_version = params[:workflow_version]
 
-      @workflow = @workflows[find_pipeline_by(workflow_name, workflow_version)]
+      @workflow = find_pipeline_by(workflow_name, workflow_version)
     end
 
     def samples
