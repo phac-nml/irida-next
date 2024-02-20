@@ -8,8 +8,9 @@ module Viral
     renders_one :icon
     renders_one :buttons
 
-    def initialize(title:, subtitle: nil)
+    def initialize(title:, id: nil, subtitle: nil)
       @title = title
+      @id = id
       @subtitle = subtitle
     end
   end

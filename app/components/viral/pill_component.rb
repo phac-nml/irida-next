@@ -13,7 +13,8 @@ module Viral
       yellow: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
       indigo: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300',
       purple: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-      pink: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300'
+      pink: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300',
+      primary: 'bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400'
     }.freeze
 
     def initialize(
@@ -27,7 +28,7 @@ module Viral
       @system_arguments[:classes] = class_names(
         COLORS[@color],
         # Tailwind classes pertaining to all pill component colors
-        'text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full',
+        'text-xs font-medium px-2.5 py-0.5 rounded-full',
         @system_arguments[:classes]
       )
     end

@@ -88,7 +88,7 @@
             </span>
           </label>
         </div>
-        <%= f.label :name_cont, placeholder: t(".search.placeholder"), class: "sr-only" %>
+        <%= f.label :name_or_puid_cont, placeholder: t(".search.placeholder"), class: "sr-only" %>
         <div class="flex flex-row items-center space-x-2">
           <div class="relative lg:w-72">
             <div
@@ -105,7 +105,7 @@
               <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
             </div>
             <%= turbo_frame_tag "project_samples_hidden_values" %>
-            <%= f.search_field :name_cont,
+            <%= f.search_field :name_or_puid_cont,
                            "data-action": "filters#submit",
                            class:
                              "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",

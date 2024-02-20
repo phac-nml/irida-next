@@ -643,11 +643,12 @@ en:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         search:
-          placeholder: Filter by name
+          placeholder: Filter by ID or name
           metadata: Metadata
       table:
         sample: Sample
         project: Project
+        puid: ID
         created_at: Created
         updated_at: Last Updated
   models:
@@ -912,7 +913,7 @@ en:
         dropdown:
           remove: Remove sample
         search:
-          placeholder: Filter by name
+          placeholder: Filter by ID or name
           metadata: Metadata
       update:
         success: Sample was successfully updated.
@@ -1020,6 +1021,7 @@ en:
         error: File %{filename} was not removed.
       table:
         sample: Sample
+        puid: ID
         created_at: Created
         updated_at: Last Updated
         action: Action
