@@ -98,7 +98,7 @@ module Irida
     end
 
     # Get the etag from http.head which will be used to check if newer
-    # schema files is required to be downloaded for a pipeline
+    # schema files are required to be downloaded for a pipeline
     def resource_etag(resource_url) # rubocop:disable Metrics/AbcSize
       url = URI(resource_url)
 
