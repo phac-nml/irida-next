@@ -10,7 +10,7 @@ module Irida
   # Module that reads a workflow config file and registers the available pipelines
   module Pipelines
     mattr_accessor :register_pipelines, :find_pipeline_by
-    cattr_accessor :available_pipelines, :PIPELINE_CONFIG_DIR, :PIPELINE_SCHEMA_FILE_DIR
+    cattr_accessor :available_pipelines
 
     PIPELINE_CONFIG_DIR = 'config/pipelines/'
     PIPELINE_CONFIG_FILE = 'pipelines.json'
