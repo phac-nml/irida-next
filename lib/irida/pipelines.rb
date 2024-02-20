@@ -61,7 +61,6 @@ module Irida
     # the currently stored resource etag
     def write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
       dir = Rails.root.join("#{pipeline_schema_files_path}/#{filename}").dirname
-
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
       return if resource_etag_exists(schema_file_url, pipeline_schema_files_path, type)
@@ -73,52 +72,50 @@ module Irida
     # the resource at the url. If not we overwrite the existing etag for the
     # local stored file, otherwise we just write the new etag to the status.json
     # file
-    def resource_etag_exists(resource_url, status_file_location, etag_type) # rubocop:disable Metrics/MethodLength
+    def resource_etag_exists(resource_url, status_file_location, etag_type)
       status_file_location = Rails.root.join("#{status_file_location}/status.json")
       # File currently at pipeline url
       current_file_etag = resource_etag(resource_url)
       existing_etag = false
+      data = {}
 
       if File.exist?(status_file_location)
         status_file = File.read(status_file_location)
-        parsed_file = JSON.parse(status_file)
-        existing_etag = parsed_file[etag_type] if parsed_file.key?(etag_type)
+        data = JSON.parse(status_file)
+        existing_etag = data[etag_type] if data.key?(etag_type)
 
         return true if current_file_etag == existing_etag
-
-        parsed_file[etag_type] = current_file_etag
-        data_to_write = parsed_file
-      else
-        data_to_write = {}
-        data_to_write[etag_type] = current_file_etag
       end
 
-      File.open(status_file_location, 'w') { |output_file| output_file << data_to_write.to_json }
+      data[etag_type] = current_file_etag
+
+      File.open(status_file_location, 'w') { |output_file| output_file << data.to_json }
       false
     end
 
-    # Get the etag from http.head which will be used to check if newer
+    # Get the etag from headers which will be used to check if newer
     # schema files are required to be downloaded for a pipeline
-    def resource_etag(resource_url) # rubocop:disable Metrics/AbcSize
+    def resource_etag(resource_url)
       url = URI(resource_url)
-
-      request_options = { use_ssl: url.scheme == 'https' }
-
-      response = Net::HTTP.start(url.host, url.port, request_options) do |http|
-        http.head(url.path).to_hash
-      end
+      headers = retrieve_headers(url)
 
       # Handle Redirects
-      if response['location']
-        response_location = response['location'].join
+      if headers['location']
+        response_location = headers['location'].join
         url = URI("#{url.scheme}://#{url.host}#{response_location}")
 
-        response = Net::HTTP.start(url.host, url.port, request_options) do |http|
-          http.head(url.path).to_hash
-        end
+        headers = retrieve_headers(url)
       end
 
-      response['etag'].join.scan(/"([^"]*)"/).join
+      headers['etag'].join.scan(/"([^"]*)"/).join
+    end
+
+    # Get the headers for the resource
+    def retrieve_headers(url)
+      request_options = { use_ssl: url.scheme == 'https' }
+      Net::HTTP.start(url.host, url.port, request_options) do |http|
+        http.head(url.path).to_hash
+      end
     end
   end
 end
