@@ -630,6 +630,15 @@ fr:
       index:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
+        search:
+          placeholder: Filter by ID or name
+          metadata: Metadata
+      table:
+        sample: Sample
+        project: Project
+        puid: ID
+        created_at: Created
+        updated_at: Last Updated
   models:
     sample:
       analysis: Analysis
@@ -877,7 +886,8 @@ fr:
         dropdown:
           remove: Remove sample
         search:
-          placeholder: Filter by name
+          placeholder: Filter by ID or name
+          metadata: Metadata
         sorting:
           updated_at_desc: Updated At
           created_at_desc: Last created
