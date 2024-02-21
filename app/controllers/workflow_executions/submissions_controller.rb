@@ -3,9 +3,6 @@
 module WorkflowExecutions
   # Workflow submission controller
   class SubmissionsController < ApplicationController
-    include Irida::Pipelines
-    cattr_reader :available_pipelines
-
     respond_to :turbo_stream
     before_action :workflows
     before_action :samples, only: %i[new]
@@ -23,14 +20,14 @@ module WorkflowExecutions
     private
 
     def workflows
-      @workflows = available_pipelines
+      @workflows = Irida::Pipelines.available_pipelines
     end
 
     def workflow
       workflow_name = params[:workflow_name]
       workflow_version = params[:workflow_version]
 
-      @workflow = find_pipeline_by(workflow_name, workflow_version)
+      @workflow = Irida::Pipelines.find_pipeline_by(workflow_name, workflow_version)
     end
 
     def samples

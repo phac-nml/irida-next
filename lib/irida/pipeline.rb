@@ -11,10 +11,10 @@ module Irida
       @name = entry['name']
       @description = entry['description']
       @metadata = { workflow_name: name, workflow_version: version }
-      @type = nil
-      @type_version = nil
-      @engine = nil
-      @engine_version = nil
+      @type = 'NFL'
+      @type_version = 'DSL2'
+      @engine = 'nextflow'
+      @engine_version = '23.10.0'
       @url = entry['url']
       @execute_loc = 'azure'
       @version = version['name']

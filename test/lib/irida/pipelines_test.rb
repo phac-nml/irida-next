@@ -26,17 +26,12 @@ class PipelinesTest < ActiveSupport::TestCase
 
   setup do
     @pipeline_schema_file_dir = 'tmp/storage/pipelines'
-    @original_config_dir = Irida::Pipelines.pipeline_config_dir
-    @original_schema_dir = Irida::Pipelines.pipeline_schema_file_dir
 
     Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines'
     Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
   end
 
   teardown do
-    Irida::Pipelines.pipeline_config_dir = @original_config_dir
-    Irida::Pipelines.pipeline_config_dir = @original_schema_dir
-
     FileUtils.remove_dir(@pipeline_schema_file_dir)
   end
 
