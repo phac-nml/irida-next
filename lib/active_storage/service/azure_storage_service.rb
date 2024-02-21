@@ -11,7 +11,7 @@ module ActiveStorage
   #
   # Wraps the Microsoft Azure Storage Blob Service as an Active Storage service.
   # See ActiveStorage::Service for the generic API documentation that applies to all services.
-  class Service::AzureStorageService < Services
+  class Service::AzureStorageService < Service
     attr_reader :client, :container, :signer
 
     def initialize(storage_account_name:, storage_access_key:, container:, public: false, **)
