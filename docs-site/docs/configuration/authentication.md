@@ -14,32 +14,32 @@ It looks like this.
 
 ```yml
 development:
-  omniauth_providers: [developer, saml, azure_activedirectory_v2]
-  developer_text:
-  developer_icon:
-  saml_text:
-  saml_icon:
-  azure_activedirectory_v2_text:
-  azure_activedirectory_v2_icon:
+  omniauth_providers: [developer]
+  # developer_text:
+  # developer_icon:
+  # saml_text:
+  # saml_icon:
+  # azure_activedirectory_v2_text:
+  # azure_activedirectory_v2_icon:
 
 test:
   omniauth_providers: [developer, saml, azure_activedirectory_v2]
-  developer_text:
-  developer_icon:
-  saml_text:
-  saml_icon:
-  azure_activedirectory_v2_text:
-  azure_activedirectory_v2_icon:
+  # developer_text:
+  # developer_icon:
+  # saml_text:
+  # saml_icon:
+  # azure_activedirectory_v2_text:
+  # azure_activedirectory_v2_icon:
 
-production:
-  omniauth_providers:
-  saml_text:
-  saml_icon:
-  azure_activedirectory_v2_text:
-  azure_activedirectory_v2_icon:
+# production:
+  # omniauth_providers:
+  # saml_text:
+  # saml_icon:
+  # azure_activedirectory_v2_text:
+  # azure_activedirectory_v2_icon:
 ```
 
-For your production environment, edit `production: omniauth_providers:` with the appropriate provider.
+For your production environment, uncomment and edit the relevant `production` lines.
 
 For Azure
 
@@ -95,15 +95,15 @@ In the `config/auth_config.yml` file, edit `_text` and `_icon` fields appropriat
 
 Put your organizations name in the `_text` field.
 
-Place a `.svg` icon file in the `config/` directory and add the filename to the `_icon` field.
+Place a `.svg` icon file in the `config/auth/icons/` directory and add the filename to the `_icon` field.
 
 Example:
 
 ```yml
 production:
   omniauth_providers: [azure_activedirectory_v2]
-  saml_text:
-  saml_icon:
+  # saml_text:
+  # saml_icon:
   azure_activedirectory_v2_text: Tyrell Corporation
   azure_activedirectory_v2_icon: tyrell.svg
 ```

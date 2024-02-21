@@ -1,24 +1,24 @@
 development:
-  omniauth_providers: [developer, saml, azure_activedirectory_v2]
-  developer_text:
-  developer_icon:
-  saml_text:
-  saml_icon:
-  azure_activedirectory_v2_text:
-  azure_activedirectory_v2_icon:
+  omniauth_providers: [developer]
+  # developer_text:
+  # developer_icon:
+  # saml_text:
+  # saml_icon:
+  # azure_activedirectory_v2_text:
+  # azure_activedirectory_v2_icon:
 
 test:
   omniauth_providers: [developer, saml, azure_activedirectory_v2]
-  developer_text:
-  developer_icon:
-  saml_text:
-  saml_icon:
-  azure_activedirectory_v2_text:
-  azure_activedirectory_v2_icon:
+  # developer_text:
+  # developer_icon:
+  # saml_text:
+  # saml_icon:
+  # azure_activedirectory_v2_text:
+  # azure_activedirectory_v2_icon:
 
-production:
-  omniauth_providers:
-  saml_text:
-  saml_icon:
-  azure_activedirectory_v2_text:
-  azure_activedirectory_v2_icon:
+# production:
+  # omniauth_providers:
+  # saml_text:
+  # saml_icon:
+  # azure_activedirectory_v2_text:
+  # azure_activedirectory_v2_icon:
