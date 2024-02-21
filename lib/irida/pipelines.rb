@@ -123,11 +123,7 @@ module Irida
     end
 
     def find_pipeline_by(name, version)
-      index = @@available_pipelines.index do |workflow|
-        (workflow.name == name) && (workflow.version == version)
-      end
-
-      @@available_pipelines[index]
+      @@available_pipelines.detect { |h| h.name == name && h.version == version }
     end
   end
 end
