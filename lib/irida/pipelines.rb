@@ -123,7 +123,7 @@ module Irida
     end
 
     def find_pipeline_by(name, version)
-      @@available_pipelines.detect { |h| h.name == name && h.version == version }
+      @@available_pipelines.detect { |pipeline| (pipeline.name == name) && (pipeline.version == version) }
     end
   end
 end
