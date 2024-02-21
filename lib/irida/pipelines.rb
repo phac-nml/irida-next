@@ -34,7 +34,7 @@ module Irida
       end
     end
 
-    # read in the json config from config/pipelines/pipelines.json
+    # read in the json pipeline config
     def read_json_config
       path = File.basename(@@pipeline_config_file)
       JSON.parse(Rails.root.join(@@pipeline_config_dir, path).read)
