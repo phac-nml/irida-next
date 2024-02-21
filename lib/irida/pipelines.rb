@@ -9,8 +9,6 @@ require 'irida/pipeline'
 module Irida
   # Module that reads a workflow config file and registers the available pipelines
   module Pipelines
-    mattr_accessor :register_pipelines, :find_pipeline_by, :available_pipelines
-
     @pipeline_config_dir = 'config/pipelines'
     @pipeline_schema_file_dir = 'private/pipelines'
     @pipeline_config_file = 'pipelines.json'
