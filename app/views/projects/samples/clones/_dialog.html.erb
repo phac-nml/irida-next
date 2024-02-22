@@ -3,10 +3,10 @@
   <%= dialog.with_section do %>
     <%= form_for(:clone, url: namespace_project_samples_clone_path, method: :post) do |form| %>
       <div
-        data-controller="projects--samples--transfers"
-        data-projects--samples--transfers-storage-key-value=<%=namespace_project_samples_url%>
-        data-projects--samples--transfers-target="field"
-        data-projects--samples--transfers-field-name-value="clone[sample_ids][]"
+        data-controller="sessionstorage-amend-form"
+        data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
+        data-sessionstorage-amend-form-target="field"
+        data-sessionstorage-amend-form-field-name-value="clone[sample_ids][]"
       />
       <div class="grid gap-4">
         <div class="form-field">
