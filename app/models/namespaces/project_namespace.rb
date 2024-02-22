@@ -98,7 +98,8 @@ module Namespaces
         trackable_type: 'Namespace'
       ).or(
         PublicActivity::Activity.where(
-          trackable_id: Sample.with_deleted.where(project:), trackable_type: 'Sample'
+          trackable_id: Sample.with_deleted.where(project:),
+          trackable_type: 'Sample'
         )
       ).or(
         PublicActivity::Activity.where(
