@@ -3,8 +3,13 @@
 require 'application_system_test_case'
 
 class SignInDisplayTest < ApplicationSystemTestCase
+  setup do
+    @test_file_relative_path = '../../../test/fixtures/files/tyrell.svg'
+  end
+
   teardown do
     %w[developer saml azure_activedirectory_v2].each do |provider|
+      Rails.configuration.auth_config["#{provider}_text"] = nil
       Rails.configuration.auth_config["#{provider}_icon"] = nil
     end
   end
@@ -29,7 +34,7 @@ class SignInDisplayTest < ApplicationSystemTestCase
     custom_provider = 'azure_activedirectory_v2'
     custom_text = 'Tyrell Corporation'
     Rails.configuration.auth_config["#{custom_provider}_text"] = custom_text
-    Rails.configuration.auth_config["#{custom_provider}_icon"] = '../test/fixtures/files/tyrell.svg'
+    Rails.configuration.auth_config["#{custom_provider}_icon"] = @test_file_relative_path
 
     visit new_user_session_path
 
