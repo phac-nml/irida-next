@@ -58,6 +58,11 @@ type Attachment implements Node {
   byteSize: Int!
 
   """
+  Attachment creation date
+  """
+  createdAt: String!
+
+  """
   Attachment file name
   """
   filename: String!
