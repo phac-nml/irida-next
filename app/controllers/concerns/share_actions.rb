@@ -29,7 +29,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
                                                                      group_link_params).execute
     @pagy, @namespace_group_links = pagy(load_namespace_group_links)
 
-    respond_to do |format| # rubocop:disable Metrics/BlockLength
+    respond_to do |format|
       if @created_namespace_group_link
         if @created_namespace_group_link.errors.full_messages.count.positive?
           format.turbo_stream do
@@ -62,7 +62,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
     @pagy, @namespace_group_links = pagy(load_namespace_group_links)
 
-    respond_to do |format| # rubocop:disable Metrics/BlockLength
+    respond_to do |format|
       if @namespace_group_link
         if @namespace_group_link.deleted?
           format.turbo_stream do
@@ -87,7 +87,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def update # rubocop:disable Metrics/MethodLength
     @updated = GroupLinks::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
     updated_param = if group_link_params[:group_access_level].nil?
                       t('.params.expiration_date')
