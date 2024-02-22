@@ -7,6 +7,7 @@ module Types
     description 'An attachment'
 
     field :byte_size, Integer, null: false, description: 'Attachment file size'
+    field :created_at, String, null: false, description: 'Attachment creation date'
     field :filename, String, null: false, description: 'Attachment file name'
 
     field :metadata,

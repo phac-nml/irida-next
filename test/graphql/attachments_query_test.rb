@@ -42,9 +42,49 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  ATTACHMENTS_METADATA_QUERY = <<~GRAPHQL
+    query($first: Int) {
+      samples(first: $first) {
+        nodes {
+          id
+          attachments {
+            edges {
+              node {
+                id,
+                metadata(
+                  keys: ["format"]
+                )
+              }
+            }
+          }
+        }
+      }
+    }
+  GRAPHQL
+
+  ATTACHMENTS_PAIRED_QUERY = <<~GRAPHQL
+    query($first: Int, $samp_id: ID!) {
+      node(id: $samp_id) {
+        ... on Sample{
+          id
+          attachments(first: $first) {
+            edges {
+              node {
+                id,
+                metadata
+              }
+            }
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   def setup
     @user = users(:john_doe)
     @sample = samples(:sample1)
+    @user_paired = users(:jeff_doe)
+    @sample_paired = samples(:sampleB)
   end
 
   test 'attachment query should work' do
@@ -94,5 +134,47 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
     assert_equal file_url1, attachments[0]['node']['attachmentUrl']
     assert_equal file_url2, attachments[1]['node']['attachmentUrl']
+  end
+
+  test 'attachment metadata delimit query should work' do
+    result = IridaSchema.execute(ATTACHMENTS_METADATA_QUERY, context: { current_user: @user },
+                                                             variables: { first: 1 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    attachments = result['data']['samples']['nodes'][0]['attachments']['edges']
+    metadata1 = attachments[0]['node']['metadata']
+    metadata2 = attachments[1]['node']['metadata']
+
+    assert_equal 'fastq', metadata1['format'], "should have requested 'format'"
+    assert_equal 'fastq', metadata2['format'], "should have requested 'format'"
+
+    assert_nil metadata1['compression'], 'should not have field that was not requested'
+    assert_nil metadata2['compression'], 'should not have field that was not requested'
+  end
+
+  test 'attachment paired query should work' do
+    result = IridaSchema.execute(
+      ATTACHMENTS_PAIRED_QUERY,
+      context: { current_user: @user_paired },
+      variables: { first: 2, samp_id: @sample_paired.to_global_id.to_s }
+    )
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    attachment1 = result['data']['node']['attachments']['edges'][0]
+    attachment2 = result['data']['node']['attachments']['edges'][1]
+    metadata1 = attachment1['node']['metadata']
+    metadata2 = attachment2['node']['metadata']
+
+    assert_equal 'forward', metadata1['direction']
+    assert_equal 'reverse', metadata2['direction']
+
+    assert_equal 'pe', metadata1['type']
+    assert_equal 'pe', metadata2['type']
+
+    # check they reference each other
+    assert_equal attachment1['node']['id'], "gid://irida/Attachment/#{metadata2['associated_attachment_id']}"
+    assert_equal attachment2['node']['id'], "gid://irida/Attachment/#{metadata1['associated_attachment_id']}"
   end
 end
