@@ -10,7 +10,7 @@ title: Connecting to an Authentication Server
 
 By default, remote authentication is disabled. To enable it you will need to edit the config file `config/auth_config.yml`
 
-It looks like this.
+The auth_config.yml has the format below.
 
 ```yml
 development:
