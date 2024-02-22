@@ -59,22 +59,26 @@ module TrackActivity
   end
 
   def member_activity(activity)
+    activity_trackable = activity_trackable(activity, Member)
+
     {
       created_at: activity.created_at,
       description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
-                                                      namespace_type: activity.trackable.namespace.type.downcase,
-                                                      name: activity.trackable.namespace.name,
-                                                      member: activity.trackable.user.email)
+                                                      namespace_type: activity_trackable.namespace.type.downcase,
+                                                      name: activity_trackable.namespace.name,
+                                                      member: activity_trackable.user.email)
     }
   end
 
   def namespace_group_link_activity(activity)
+    activity_trackable = activity_trackable(activity, NamespaceGroupLink)
+
     {
       created_at: activity.created_at,
       description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
-                                                      namespace_type: activity.trackable.namespace.type.downcase,
-                                                      name: activity.trackable.namespace.name,
-                                                      group_name: activity.trackable.group.name)
+                                                      namespace_type: activity_trackable.namespace.type.downcase,
+                                                      name: activity_trackable.namespace.name,
+                                                      group_name: activity_trackable.group.name)
     }
   end
 

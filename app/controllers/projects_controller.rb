@@ -59,27 +59,13 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def activity # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def activity
     authorize! @project
-    @public_activity = PublicActivity::Activity.where(trackable_id: @project.namespace.id,
-                                                      trackable_type: 'Namespace').or(
-                                                        PublicActivity::Activity.where(
-                                                          trackable_id: @project.samples.select(:id), trackable_type: 'Sample'
-                                                        )
-                                                      ).or(
-                                                        PublicActivity::Activity.where(
-                                                          trackable_id: Attachment.with_deleted.where(attachable_id: @project.samples.select(:id)), trackable_type: 'Attachment'
-                                                        )
-                                                      )
-                                               .or(PublicActivity::Activity.where(trackable_id: @project.namespace.project_members.select(:id),
-                                                                                  trackable_type: 'Member'))
-                                               .or(PublicActivity::Activity.where(trackable_id: @project.namespace.shared_with_group_links.select(:id),
-                                                                                  trackable_type: 'NamespaceGroupLink'))
 
-    @activities = @project.namespace.human_readable_activity(@public_activity).reverse
+    @activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
   end
 
-  def transfer # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def transfer # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       @project.namespace.create_activity key: 'namespaces_project_namespace.transfer', owner: current_user,
                                          parameters:
