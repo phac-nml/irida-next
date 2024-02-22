@@ -8,8 +8,7 @@ module Resolvers
     alias sample object
 
     def resolve
-      scope = sample
-      scope.attachments
+      sample.attachments
     end
   end
 end

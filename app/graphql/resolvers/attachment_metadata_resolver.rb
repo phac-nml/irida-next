@@ -13,11 +13,9 @@ module Resolvers
     alias attachment object
 
     def resolve(args)
-      scope = attachment
+      return attachment.metadata unless args[:keys]
 
-      return scope.metadata unless args[:keys]
-
-      scope.metadata.slice(*args[:keys])
+      attachment.metadata.slice(*args[:keys])
     end
   end
 end
