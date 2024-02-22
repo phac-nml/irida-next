@@ -12,6 +12,7 @@ class WorkflowExecution < ApplicationRecord
   has_many :samples_workflow_executions, dependent: :destroy
   has_many :samples, through: :samples_workflow_executions
   has_many_attached :inputs
+  has_many_attached :outputs
 
   accepts_nested_attributes_for :samples_workflow_executions
 
@@ -27,6 +28,10 @@ class WorkflowExecution < ApplicationRecord
 
   def completed?
     state == 'completed'
+  end
+
+  def finalized?
+    state == 'finalized'
   end
 
   def error?
