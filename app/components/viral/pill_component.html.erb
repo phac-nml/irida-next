@@ -1,3 +1,7 @@
 <%= render(Viral::BaseComponent.new(tag: 'span', **system_arguments)) do %>
-  <%= text %>
+  <% if text.present? %>
+    <%= text %>
+  <% else %>
+    <%= content %>
+  <% end %>
 <% end %>

@@ -22,5 +22,10 @@ module Viral
       assert_selector '.bg-pink-100.text-pink-800.underline.decoration-wavy.decoration-black',
                       text: 'This is pink and has multiple added classes'
     end
+
+    test 'with_content' do
+      render_preview(:with_content)
+      assert_selector 'span.bg-primary-100', count: 1, text: 'This is the content'
+    end
   end
 end
