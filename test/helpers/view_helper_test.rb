@@ -7,7 +7,7 @@ class ViewHelperTest < ActionView::TestCase
 
   setup do
     %w[developer saml azure_activedirectory_v2].each do |provider|
-      Rails.configuration.auth_config["#{provider}_icon"] = '../test/fixtures/files/tyrell.svg'
+      Rails.configuration.auth_config["#{provider}_icon"] = '../../../test/fixtures/files/tyrell.svg'
     end
   end
 
