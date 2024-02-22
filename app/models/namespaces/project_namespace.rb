@@ -74,5 +74,31 @@ module Namespaces
       namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
       add_to_metadata_summary_count(namespaces_to_update, sample.metadata, true)
     end
+
+    def retrieve_project_activity # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      PublicActivity::Activity.where(
+        trackable_id: id,
+        trackable_type: 'Namespace'
+      ).or(
+        PublicActivity::Activity.where(
+          trackable_id: Sample.with_deleted.where(project:), trackable_type: 'Sample'
+        )
+      ).or(
+        PublicActivity::Activity.where(
+          trackable_id: Attachment.with_deleted.where(
+            attachable_id: Sample.with_deleted.where(project:).select(:id)
+          ), trackable_type: 'Attachment'
+        )
+      ).or(
+        PublicActivity::Activity.where(
+          trackable_id: Member.with_deleted.where(namespace: self).select(:id), trackable_type: 'Member'
+        )
+      ).or(
+        PublicActivity::Activity.where(
+          trackable_id: NamespaceGroupLink.with_deleted.where(namespace: self).select(:id),
+          trackable_type: 'NamespaceGroupLink'
+        )
+      )
+    end
   end
 end
