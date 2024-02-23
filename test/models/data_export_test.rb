@@ -9,6 +9,10 @@ class DataExportTest < ActiveSupport::TestCase
   end
 
   test 'valid data export' do
-    assert_equal @export1.file, 'data_export_1.zip'
+    assert @export1.valid?
+  end
+
+  test 'export attachment' do
+    assert_equal 'data_export_1.zip', @export1.file.filename
   end
 end
