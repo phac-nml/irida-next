@@ -32,7 +32,7 @@ class SamplesCleanupJobTest < ActiveJob::TestCase
 
     travel 8.days
 
-    assert_difference -> { ActiveRecord::Base.connection.execute('select * from samples').count } => -1,
+    assert_difference -> { Sample.only.count } => -1,
                       -> { Sample.only_deleted.count } => -1,
                       -> { Attachment.only_deleted.count } => -2,
                       -> { ActiveStorage::Attachment.count } => -2,
@@ -50,7 +50,7 @@ class SamplesCleanupJobTest < ActiveJob::TestCase
 
     travel 5.days
 
-    assert_difference -> { ActiveRecord::Base.connection.execute('select * from samples').count } => -1,
+    assert_difference -> { Sample.only.count } => -1,
                       -> { Sample.only_deleted.count } => -1,
                       -> { Attachment.only_deleted.count } => -2,
                       -> { ActiveStorage::Attachment.count } => -2,
