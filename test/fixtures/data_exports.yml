@@ -1,17 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  export_name: MyString
-  export_type: MyString
-  status: MyString
-  export_parameters: 
-  expires_at: 2024-02-23 11:31:35
-  email_notification: false
+data_export_one:
+  export_name: Data Export 1
+  export_type: sample
+  status: processing
+  export_parameters: {sample_ids: [<%= ActiveRecord::FixtureSet.identify(:sample1) %>, <%= ActiveRecord::FixtureSet.identify(:sample) %>]}
+  expires_at: null
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
 
-two:
-  export_name: MyString
-  export_type: MyString
-  status: MyString
-  export_parameters: 
-  expires_at: 2024-02-23 11:31:35
+data_export_two:
+  export_name: Data Export 2
+  export_type: analysis
+  status: ready
+  export_parameters: {anaylsis_ids: [1, 2]}
+  expires_at: null
   email_notification: false
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>

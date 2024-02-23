@@ -11,7 +11,7 @@ class AddLogidzeToDataExports < ActiveRecord::Migration[7.1]
       end
 
       dir.down do
-        execute <<~SQL
+        execute <<~SQL.squish
           DROP TRIGGER IF EXISTS "logidze_on_data_exports" on "data_exports";
         SQL
       end
