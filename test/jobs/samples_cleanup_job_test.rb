@@ -5,8 +5,6 @@ require 'test_helper'
 class SamplesCleanupJobTest < ActiveJob::TestCase
   def setup
     @sample1 = samples(:sample1)
-    @sample2 = samples(:sample2)
-    @sample3 = samples(:sample3)
   end
 
   test 'invalid argument string' do
@@ -27,43 +25,46 @@ class SamplesCleanupJobTest < ActiveJob::TestCase
     end
   end
 
+  # NOTE: When calling `Sample.all.count` the query being run is actually:
+  # SELECT COUNT(*) FROM "samples" WHERE "samples"."deleted_at" IS NULL`
+  # Sample.where.not(deleted_at: nil).count
+  # SELECT COUNT(*) FROM "samples" WHERE "samples"."deleted_at" IS NULL AND "samples"."deleted_at" IS NOT NULL
+  # Sample.exists?(id:1419)
+  # SELECT 1 AS one FROM "samples" WHERE "samples"."deleted_at" IS NULL AND "samples"."id" = $1
+
   test 'deletion after default 7 days' do
     assert_nil @sample1.deleted_at
     @sample1.destroy
     assert_not_nil @sample1.deleted_at
-    travel 4.days
-    assert_nil @sample2.deleted_at
-    @sample2.destroy
-    assert_not_nil @sample2.deleted_at
-    travel 5.days
-    assert_nil @sample3.deleted_at
 
-    assert_difference -> { Sample.only_deleted.count } => -1 do
+    travel 8.days
+
+    assert_difference -> { ActiveRecord::Base.connection.execute('select * from samples').count } => -1,
+                      -> { Sample.only_deleted.count } => -1,
+                      -> { Attachment.only_deleted.count } => -2,
+                      -> { ActiveStorage::Attachment.count } => -2,
+                      -> { SamplesWorkflowExecution.only_deleted.count } => 0 do
       SamplesCleanupJob.perform_now
     end
 
     assert_not(Sample.exists?(@sample1.id))
-    assert(Sample.only_deleted.where(id: @sample2.id))
-    assert(Sample.exists?(@sample3.id))
   end
 
-  test 'deletion after 8 days' do
+  test 'deletion after specified 4 days' do
     assert_nil @sample1.deleted_at
     @sample1.destroy
     assert_not_nil @sample1.deleted_at
-    travel 4.days
-    assert_nil @sample2.deleted_at
-    @sample2.destroy
-    assert_not_nil @sample2.deleted_at
-    travel 5.days
-    assert_nil @sample3.deleted_at
 
-    assert_difference -> { Sample.only_deleted.count } => -1 do
-      SamplesCleanupJob.perform_now(days_old: 8)
+    travel 5.days
+
+    assert_difference -> { ActiveRecord::Base.connection.execute('select * from samples').count } => -1,
+                      -> { Sample.only_deleted.count } => -1,
+                      -> { Attachment.only_deleted.count } => -2,
+                      -> { ActiveStorage::Attachment.count } => -2,
+                      -> { SamplesWorkflowExecution.only_deleted.count } => 0 do
+      SamplesCleanupJob.perform_now(days_old: 4)
     end
 
     assert_not(Sample.exists?(@sample1.id))
-    assert(Sample.only_deleted.where(id: @sample2.id))
-    assert(Sample.exists?(@sample3.id))
   end
 end
