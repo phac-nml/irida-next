@@ -67,6 +67,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def transfer # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
+
       @project.namespace.create_activity key: 'namespaces_project_namespace.transfer', owner: current_user,
                                          parameters:
                                          {
