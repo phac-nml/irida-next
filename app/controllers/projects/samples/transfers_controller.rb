@@ -26,6 +26,14 @@ module Projects
         @q = load_samples.ransack(params[:q])
         @pagy, @samples = pagy(@q.result)
 
+        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer', owner: current_user,
+                                           parameters:
+                                         {
+                                           project_name: @project.name,
+                                           new_project_name: Project.find(new_project_id).namespace.name,
+                                           transferred_samples_ids: transferred_samples_ids.join
+                                         }
+
         if transferred_samples_ids.length == sample_ids.length
           render status: :ok, locals: { sample_ids:, type: :success, message: t('.success'), errors: [] }
         elsif @project.errors.include?(:samples)
