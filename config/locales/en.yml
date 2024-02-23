@@ -227,6 +227,8 @@ en:
       create: "%{user} created project %{name}"
       destroy: "%{user} removed project %{name}"
       update: "%{user} updated project %{name}"
+      samples:
+        transfer: "%{user} transferred samples %{transferred_samples_ids} to project %{new_project_name}"
     namespaces_user_namespace:
       create: "%{user} created new user %{new_user_name}"
       destroy: "%{user} removed user %{user_name}"
