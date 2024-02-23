@@ -10,4 +10,20 @@ class DataExportTest < ActiveSupport::TestCase
   test 'valid data export' do
     assert @export1.valid?
   end
+
+  test '#destroy removes export ' do
+    assert_difference(-> { DataExport.count } => -1) do
+      @export1.destroy
+    end
+  end
+
+  test '#destroy removes export, then is restored' do
+    assert_difference(-> { DataExport.count } => -1) do
+      @export1.destroy
+    end
+
+    assert_difference(-> { DataExport.count } => +1) do
+      DataExport.restore(@export1.id, recursive: true)
+    end
+  end
 end
