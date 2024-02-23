@@ -127,3 +127,8 @@ attachmentJ_file_test_file_fastq:
   name: file
   record: attachmentJ (Attachment)
   blob: attachmentJ_file_test_file_fastq_blob
+
+data_export_1_test_export:
+  name: file
+  record: data_export_one (DataExport)
+  blob: data_export_1_test_export_blob

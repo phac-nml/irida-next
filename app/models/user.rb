@@ -22,6 +22,7 @@ class User < ApplicationRecord
   acts_as_paranoid
 
   has_many :personal_access_tokens, dependent: :destroy
+  has_many :data_exports, dependent: :destroy
 
   validates :first_name, presence: true
   validates :last_name, presence: true
