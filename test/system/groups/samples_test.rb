@@ -10,6 +10,7 @@ module Groups
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
       @sample9 = samples(:sample9)
+      @sample21 = samples(:sample21)
       @sample25 = samples(:sample25)
       @sample28 = samples(:sample28)
       @sample30 = samples(:sample30)
