@@ -25,13 +25,6 @@ class SamplesCleanupJobTest < ActiveJob::TestCase
     end
   end
 
-  # NOTE: When calling `Sample.all.count` the query being run is actually:
-  # SELECT COUNT(*) FROM "samples" WHERE "samples"."deleted_at" IS NULL`
-  # Sample.where.not(deleted_at: nil).count
-  # SELECT COUNT(*) FROM "samples" WHERE "samples"."deleted_at" IS NULL AND "samples"."deleted_at" IS NOT NULL
-  # Sample.exists?(id:1419)
-  # SELECT 1 AS one FROM "samples" WHERE "samples"."deleted_at" IS NULL AND "samples"."id" = $1
-
   test 'deletion after default 7 days' do
     assert_nil @sample1.deleted_at
     @sample1.destroy
