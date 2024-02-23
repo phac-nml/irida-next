@@ -99,40 +99,27 @@
             </span>
           </label>
         </div>
-        <%= viral_dialog do |dialog| %>
+        <%= viral_dialog('data-controller': 'filter-list') do |dialog| %>
           <%= dialog.with_trigger do %>
             <%= viral_button(data: { action: "click->viral--dialog#open" }) do %>
               <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
             <% end %>
           <% end %>
-          <%= dialog.with_header(title: "This is a dialog with a trigger") %>
+          <%= dialog.with_header(title: "Filter by sample names or ID") %>
           <%= dialog.with_section do %>
-            <textarea
-              id="message"
-              rows="4"
-              class="
-                block
-                font-mono
-                p-2.5
-                w-full
-                text-sm
-                text-slate-900
-                bg-slate-50
-                rounded-lg
-                border
-                border-slate-300
-                focus:ring-primary-500
-                focus:border-primary-500
-                dark:bg-slate-700
-                dark:border-slate-600
-                dark:placeholder-slate-400
-                dark:text-white
-                dark:focus:ring-primary-500
-                dark:focus:border-primary-500
-              "
-              placeholder="Write your thoughts here..."
-            ></textarea>
+
+            <template data-filter-list-target="success">
+              <%= viral_pill(color: :primary, classes: "inline-flex items-center px-2 py-1 me-2") do %>
+                <%= f.search_field :name_or_puid_in, multiple: true, class: "hidden" %>
+                <sapn class="label"></span>
+              <% end %>
+            </template>
+
+            <%= render partial: 'projects/samples/tagged_filter' %>
+
+
           <% end %>
+          <%= dialog.with_primary_action("data-action": "filters#submit") { "Primary button" } %>
         <% end %>
         <%= f.label :name_or_puid_cont,
                 placeholder: t(".search.placeholder"),
