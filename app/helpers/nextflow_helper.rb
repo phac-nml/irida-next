@@ -14,13 +14,12 @@ module NextflowHelper
     viral_text_input(container:, name:, required:, pattern: property['pattern'])
   end
 
-  def checkbox_input(_fields, name, property)
+  def checkbox_input(fields, name, property)
     viral_checkbox(
-      name: "metadata[#{name}]",
+      container: fields,
+      name:,
       label: property['description'],
-      default: property['default'],
-      help_text: property['help_text'],
-      value: name
+      value: true
     )
   end
 

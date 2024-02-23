@@ -14,5 +14,15 @@
         "name": "1.0.0"
       }
     ]
+  },
+  {
+    "url": "https://github.com/phac-nml/snvphylnfc",
+    "name": "phac-nml/snvphylnfc",
+    "description": "IRIDA SNVphyl",
+    "versions": [
+      {
+        "name": "2.0.0"
+      }
+    ]
   }
 ]
