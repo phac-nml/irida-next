@@ -1868,7 +1868,7 @@ module Projects
       within %(turbo-frame[id="project_samples_list"]) do
         assert_not find_field(@sample1.name).checked?
         assert_not find_field(@sample2.name).checked?
-        assert find_field(@sample3.name).checked?
+        assert_not find_field(@sample3.name).checked?
       end
     end
   end
