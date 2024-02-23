@@ -4,16 +4,20 @@ require 'view_component_test_case'
 
 class NextflowComponentTest < ViewComponentTestCase
   test 'default' do
-    workflow = Struct.new(:name, :id, :description, :version, :metadata, :type, :type_version, :engine,
-                          :engine_version, :url, :execute_loc)
-    metadata = { workflow_name: 'irida-next-example', workflow_version: '1.0dev' }
+    workflow = Irida::Pipeline.new(
+      {
+        name: 'irida-next-example',
+        description: 'This is a test workflow',
+        url: 'https://nf-co.re/testpipeline'
+      },
+      '2.0.0',
+      Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+      Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json')
+    )
 
     render_inline NextflowComponent.new(
-      workflow: workflow.new('phac-nml/iridanextexample', 1, 'IRIDA Next Example Pipeline', '1.0.1', metadata,
-                             'DSL2', '22.10.7', 'nextflow', '',
-                             'https://github.com/phac-nml/iridanextexample', 'azure'),
+      workflow:,
       samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
-      schema: JSON.parse(File.read('test/fixtures/files/nextflow/nextflow_schema.json')),
       url: 'https://nf-co.re/testpipeline'
     )
 
