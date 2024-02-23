@@ -8,6 +8,4 @@ class DataExport < ApplicationRecord
   belongs_to :user
 
   has_one_attached :file
-
-  validates :file, attached: true
 end
