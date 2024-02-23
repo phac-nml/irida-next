@@ -61,7 +61,7 @@
                 <!-- Don't do anything, skip these fields -->
               <% elsif item == "input_output_options" && property["format"] == "file-path" %>
                 <%= render Nextflow::SamplesheetComponent.new(
-                  schema: samplesheet_schema(property["schema"]),
+                  schema: JSON.parse(@workflow.schema_input_loc.read),
                   samples: @samples
                 ) %>
               <% elsif !property["hidden"] %>

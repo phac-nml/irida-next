@@ -7,7 +7,6 @@ module WorkflowExecutions
     before_action :workflows
     before_action :samples, only: %i[new]
     before_action :workflow, only: %i[new]
-    before_action :workflow_schema, only: %i[new]
 
     def pipeline_selection
       render status: :ok
@@ -33,11 +32,6 @@ module WorkflowExecutions
     def samples
       sample_ids = params[:sample_ids]
       @samples = Sample.where(id: sample_ids)
-    end
-
-    def workflow_schema
-      # Need to get a schema file path from the workflow
-      @workflow_schema = JSON.parse(workflow.schema_loc.read)
     end
   end
 end

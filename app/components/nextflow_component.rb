@@ -6,9 +6,9 @@ class NextflowComponent < Component
 
   attr_reader :schema, :url, :workflow
 
-  def initialize(schema:, url:, samples:, workflow:)
+  def initialize(url:, samples:, workflow:)
     @samples = samples
-    @schema = schema
+    @schema = JSON.parse(workflow.schema_loc.read)
     @url = url
     @workflow = workflow
   end
