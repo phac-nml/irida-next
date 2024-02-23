@@ -11,7 +11,14 @@ class DataExportTest < ActiveSupport::TestCase
     assert @export1.valid?
   end
 
-  test '#destroy removes export ' do
+  test 'attach zip to export' do
+    @export1.file.attach(io: Rails.root.join('test/fixtures/files/data_export_1.zip').open,
+                         filename: 'data_export_1.zip')
+    @export1.save
+    assert_equal 'data_export_1.zip', @export1.file.filename.to_s
+  end
+
+  test '#destroy removes export' do
     assert_difference(-> { DataExport.count } => -1) do
       @export1.destroy
     end
