@@ -33,6 +33,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   def project_activity(activity)
     activity_trackable = activity_trackable(activity, Project)
+
     {
       created_at: activity.created_at.strftime(
         I18n.t('time.formats.abbreviated')
