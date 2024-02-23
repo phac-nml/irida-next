@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_09_155131) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -53,6 +53,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_09_155131) do
     t.jsonb "log_data"
     t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable"
     t.index ["metadata"], name: "index_attachments_on_metadata", using: :gin
+  end
+
+  create_table "data_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "export_name"
+    t.string "export_type", null: false
+    t.string "status", null: false
+    t.jsonb "export_parameters", default: {}, null: false
+    t.datetime "expires_at"
+    t.boolean "email_notification", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "log_data"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_data_exports_on_deleted_at"
   end
 
   create_table "members", force: :cascade do |t|
@@ -617,5 +631,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_09_155131) do
   SQL
   create_trigger :logidze_on_attachments, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_attachments BEFORE INSERT OR UPDATE ON public.attachments FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_data_exports, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_data_exports BEFORE INSERT OR UPDATE ON public.data_exports FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end

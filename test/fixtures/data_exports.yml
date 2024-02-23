@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  export_name: MyString
+  export_type: MyString
+  status: MyString
+  export_parameters: 
+  expires_at: 2024-02-23 11:31:35
+  email_notification: false
+
+two:
+  export_name: MyString
+  export_type: MyString
+  status: MyString
+  export_parameters: 
+  expires_at: 2024-02-23 11:31:35
+  email_notification: false
