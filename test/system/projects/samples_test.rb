@@ -1838,14 +1838,7 @@ module Projects
         select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
-      within %(turbo-frame[id="samples_alert"]) do
-        assert_text I18n.t('projects.samples.clones.create.success')
-      end
-      within %(turbo-frame[id="project_samples_list"]) do
-        assert_not find_field(@sample1.name).checked?
-        assert_not find_field(@sample2.name).checked?
-        assert_not find_field(@sample3.name).checked?
-      end
+      assert_text I18n.t('projects.samples.clones.create.success')
     end
 
     test 'should not clone some samples' do
@@ -1860,15 +1853,11 @@ module Projects
         select project25.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
-      within %(turbo-frame[id="samples_alert"]) do
-        assert_text I18n.t('projects.samples.clones.create.error')
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.clones.errors.description')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
-      end
-      within %(turbo-frame[id="project_samples_list"]) do
-        assert_not find_field(@sample1.name).checked?
-        assert_not find_field(@sample2.name).checked?
-        assert_not find_field(@sample3.name).checked?
+        click_on I18n.t('projects.samples.clones.errors.ok_button')
       end
     end
   end

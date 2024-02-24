@@ -958,6 +958,9 @@ en:
           title: Clone Samples
           new_project_id: Project to clone samples to
           submit_button: Submit
+        errors:
+          description: "Cloning samples completed with the following errors:"
+          ok_button: OK
       metadata:
         deletions:
           destroy:
