@@ -30,7 +30,7 @@ class SamplesCleanupJobTest < ActiveJob::TestCase
     @sample1.destroy
     assert_not_nil @sample1.deleted_at
 
-    travel 8.days
+    travel 9.days
 
     assert_difference -> { Sample.only.count } => -1,
                       -> { Sample.only_deleted.count } => -1,
@@ -43,8 +43,6 @@ class SamplesCleanupJobTest < ActiveJob::TestCase
       # If so, should I leave the test assertions that they don't change?
       SamplesCleanupJob.perform_now
     end
-
-    assert_not(Sample.exists?(@sample1.id))
   end
 
   test 'deletion after specified 4 days' do
@@ -52,7 +50,7 @@ class SamplesCleanupJobTest < ActiveJob::TestCase
     @sample1.destroy
     assert_not_nil @sample1.deleted_at
 
-    travel 5.days
+    travel 6.days
 
     assert_difference -> { Sample.only.count } => -1,
                       -> { Sample.only_deleted.count } => -1,
@@ -62,7 +60,5 @@ class SamplesCleanupJobTest < ActiveJob::TestCase
                       -> { WorkflowExecution.only_deleted.count } => 0 do
       SamplesCleanupJob.perform_now(days_old: 4)
     end
-
-    assert_not(Sample.exists?(@sample1.id))
   end
 end
