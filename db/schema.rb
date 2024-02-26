@@ -58,7 +58,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
   create_table "data_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name"
-    t.string "category", null: false
+    t.string "export_type", null: false
     t.string "status", null: false
     t.jsonb "export_parameters", default: {}, null: false
     t.datetime "expires_at"
