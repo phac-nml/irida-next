@@ -1,8 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 data_export_one:
-  export_name: Data Export 1
-  export_type: sample
+  name: Data Export 1
+  category: sample
   status: processing
   export_parameters: {sample_ids: [<%= ActiveRecord::FixtureSet.identify(:sample1) %>, <%= ActiveRecord::FixtureSet.identify(:sample) %>]}
   email_notification: true
