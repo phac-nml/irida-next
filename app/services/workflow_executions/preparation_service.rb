@@ -9,7 +9,7 @@ module WorkflowExecutions
     def initialize(workflow_execution, user = nil, params = {})
       super(user, params)
       @workflow_execution = workflow_execution
-      @samplesheet_headers = %w[sample fastq_1 fastq_2]
+      @samplesheet_headers = samplesheet_headers
       @samplesheet_rows = []
       @storage_service = ActiveStorage::Blob.service
     end
@@ -128,6 +128,13 @@ module WorkflowExecutions
           end
         end
       end
+    end
+
+    def samplesheet_headers
+      workflow = Irida::Pipelines.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+                                                   @workflow_execution.metadata['workflow_version'])
+      sample_sheet = JSON.parse(JSON.parse(workflow.schema_input_loc.read))
+      sample_sheet['items']['properties']
     end
   end
 end
