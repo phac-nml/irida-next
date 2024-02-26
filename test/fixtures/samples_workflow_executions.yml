@@ -42,6 +42,24 @@ sample1_irida_next_example_prepared:
     "fastq_2": ""
   }
 
+sample1_irida_next_example_completed:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed) %>
+  samplesheet_params: {
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_irida_next_example_error:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_error) %>
+  samplesheet_params: {
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1)}" %>,
+    "fastq_2": ""
+  }
+
 sample1_irida_next_example_canceling:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_canceling, :uuid) %>
