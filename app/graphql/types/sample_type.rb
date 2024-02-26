@@ -16,6 +16,13 @@ module Types
           description: 'Metadata for the sample',
           resolver: Resolvers::SampleMetadataResolver
 
+    field :attachments,
+          AttachmentType.connection_type,
+          null: true,
+          description: 'Attachments on the sample',
+          complexity: 5,
+          resolver: Resolvers::SampleAttachmentsResolver
+
     def self.authorized?(object, context)
       super &&
         allowed_to?(

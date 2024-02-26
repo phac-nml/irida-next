@@ -17,6 +17,8 @@ class Attachment < ApplicationRecord
 
   delegate :filename, to: :file
 
+  delegate :byte_size, to: :file
+
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment
   def destroy
     update(deleted_at: Time.current)
