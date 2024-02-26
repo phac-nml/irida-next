@@ -1,11 +1,11 @@
 development:
-  omniauth_providers: [developer]
+  omniauth_providers: [developer, azure_activedirectory_v2]
   # developer_text:
   # developer_icon:
   # saml_text:
   # saml_icon:
-  # azure_activedirectory_v2_text:
-  # azure_activedirectory_v2_icon:
+  azure_activedirectory_v2_text: Tyrell Corp
+  azure_activedirectory_v2_icon: tyrell.svg
 
 test:
   omniauth_providers: [developer, saml, azure_activedirectory_v2]

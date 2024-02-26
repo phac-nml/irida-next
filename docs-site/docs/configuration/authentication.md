@@ -8,7 +8,7 @@ title: Connecting to an Authentication Server
 
 ### Enable remote authentication
 
-By default, remote authentication is disabled. To enable it you will need to edit the config file `config/auth_config.yml`
+By default, remote authentication is disabled. To enable it you will need to edit the config file `config/authentication/auth_config.yml`
 
 The auth_config.yml has the format below.
 
@@ -91,11 +91,11 @@ saml:
 
 You can change the display name and icon to match your organization.
 
-In the `config/auth_config.yml` file, edit `_text` and `_icon` fields appropriate for your Azure or SAML setup.
+In the `config/authentication/auth_config.yml` file, edit `_text` and `_icon` fields appropriate for your Azure or SAML setup.
 
 Put your organizations name in the `_text` field.
 
-Place a `.svg` icon file in the `config/auth/icons/` directory and add the filename to the `_icon` field.
+Place a `.svg` icon file in the `config/authentication/icons/` directory and add the filename to the `_icon` field.
 
 Example:
 

@@ -37,7 +37,7 @@ module ViewHelper
 
   def viral_icon_source(name)
     path = if Rails.configuration.auth_config[name]
-             Rails.root.join('config', 'auth', 'icons', Rails.configuration.auth_config[name]) # Auth Icon Overrides
+             Rails.root.join('config', 'authentication', 'icons', Rails.configuration.auth_config[name]) # Auth Icon Overrides
            else
              Rails.root.join('app', 'assets', 'icons', 'heroicons', "#{name}.svg")
            end
