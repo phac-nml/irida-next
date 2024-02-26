@@ -4,8 +4,8 @@ development:
   # developer_icon:
   # saml_text:
   # saml_icon:
-  azure_activedirectory_v2_text:
-  azure_activedirectory_v2_icon:
+  # azure_activedirectory_v2_text:
+  # azure_activedirectory_v2_icon:
 
 test:
   omniauth_providers: [developer, saml, azure_activedirectory_v2]
