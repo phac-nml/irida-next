@@ -93,7 +93,7 @@ module WorkflowExecutions
     test 'test create new workflow execution with missing required workflow name' do
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+          { workflow_version: '1.0.2' },
         workflow_params:
         {
           '-r': 'dev',
@@ -120,7 +120,7 @@ module WorkflowExecutions
     test 'test create new workflow execution with missing required workflow version' do
       workflow_params = {
         metadata:
-          { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+          { workflow_name: 'phac-nml/iridanextexample' },
         workflow_params:
         {
           '-r': 'dev',
