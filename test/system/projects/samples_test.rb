@@ -1854,7 +1854,7 @@ module Projects
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('projects.samples.clones.errors.description')
+        assert_text I18n.t('projects.samples.clones.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
         click_on I18n.t('projects.samples.clones.errors.ok_button')

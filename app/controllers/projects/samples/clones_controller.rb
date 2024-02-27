@@ -18,8 +18,9 @@ module Projects
         elsif @project.errors.include?(:sample)
           render_sample_errors
         else
-          error = @project.errors.full_messages_for(:base).first
-          render status: :unprocessable_entity, locals: { type: :danger, message: error }
+          errors = @project.errors.full_messages_for(:base)
+          render status: :unprocessable_entity,
+                 locals: { type: :alert, message: t('.no_samples_cloned_error'), errors: }
         end
       end
 

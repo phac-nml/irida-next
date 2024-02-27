@@ -954,12 +954,12 @@ en:
         create:
           success: Samples were successfully cloned.
           error: "The following list of samples failed to clone:"
+          no_samples_cloned_error: "Samples were not cloned for the following reasons:"
         dialog:
           title: Clone Samples
           new_project_id: Project to clone samples to
           submit_button: Submit
         errors:
-          description: "Cloning samples completed with the following errors:"
           ok_button: OK
       metadata:
         deletions:
