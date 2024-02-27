@@ -28,7 +28,7 @@ workflow_execution_invalid_metadata:
 
 irida_next_example:
   metadata:
-    { "workflow_name": "irida-next-example", "workflow_version": "1.0dev" }
+    { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' }
   workflow_params: { "-r": "dev" }
   workflow_type: "DSL2"
   workflow_type_version: "22.10.7"
