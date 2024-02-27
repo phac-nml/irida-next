@@ -28,6 +28,18 @@ class WorkflowExecutionsController < ApplicationController
     render 'cancel'
   end
 
+  def destroy
+    @workflow_execution = WorkflowExecution.find(params[:id])
+    WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
+
+    if @workflow_execution.deleted?
+      flash[:success] = 'Success'
+    else
+      flash[:error] = 'Error'
+    end
+    redirect_to workflow_executions_path
+  end
+
   private
 
   def workflow_execution_params
