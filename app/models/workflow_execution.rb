@@ -9,7 +9,7 @@ class WorkflowExecution < ApplicationRecord
 
   belongs_to :submitter, class_name: 'User'
 
-  has_many :samples_workflow_executions, dependent: :nullify
+  has_many :samples_workflow_executions, dependent: :destroy
   has_many :samples, through: :samples_workflow_executions
   has_many_attached :inputs
 
