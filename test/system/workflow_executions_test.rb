@@ -13,7 +13,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector 'table#workflow_executions tbody tr', count: 5
+    assert_selector 'table#workflow_executions tbody tr', count: 7
   end
 
   test 'should be able to cancel a workflow' do
