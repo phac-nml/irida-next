@@ -64,10 +64,16 @@ module Irida
     # Configure cron with a hash that has a unique key for each recurring job
     config.good_job.cron = {
       attachments_cleanup_task: {
-        cron: '0 0 1 * * *', # Daily, 1 AM
+        cron: '0 1 * * *', # Daily, 1 AM
         class: 'AttachmentsCleanupJob', # job class as a String, must be an ActiveJob job
         kwargs: { days_old: 7 }, # number of days old an attachment must be for deletion
-        description: 'delete/destroy attachements that have been deleted some time ago'
+        description: 'Permanently deletes attachments that have been soft-deleted some time ago.'
+      },
+      samples_cleanup_task: {
+        cron: '0 2 * * *', # Daily, 2 AM
+        class: 'SamplesCleanupJob', # job class as a String, must be an ActiveJob job
+        kwargs: { days_old: 7 }, # number of days old a sample must be for deletion
+        description: 'Permanently deletes samples that have been soft-deleted some time ago.'
       }
     }
   end
