@@ -28,6 +28,8 @@ module DataExports
       false
     end
 
+    private
+
     # export_type and export_parameters[ids] are required for data_exports
     def validate_params
       unless params.key?('export_type') && params.key?('export_parameters') && params['export_parameters'].key?('ids')
