@@ -16,6 +16,15 @@ module Groups
       @sample31 = samples(:sample31)
     end
 
+    def retrieve_puids
+      puids = []
+      within first('table tbody#group-samples-table-body') do
+        (1..4).each do |n|
+          puids << first("tr:nth-child(#{n}) td:first-child").text
+        end
+      end
+      puids
+    end
     test 'visiting the index' do
       visit group_samples_url(@group)
 
@@ -95,22 +104,22 @@ module Groups
     end
 
     test 'can sort the list of samples' do
-      freeze_time
       visit group_samples_url(@group)
 
+      # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
+      # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
+      # they are ordered as expected against one another.
       assert_selector 'table tbody#group-samples-table-body tr', count: 20
-      within first('table tbody#group-samples-table-body') do
-        assert_selector 'tr:first-child td:first-child', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
+      puids = retrieve_puids
+      (puids.length - 1).times do |n|
+        assert puids[n] > puids[n + 1]
       end
 
       click_on I18n.t('groups.samples.table.puid')
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
-      within first('table tbody#group-samples-table-body') do
-        assert_selector 'tr:nth-child(3) td:first-child', text: @sample28.puid
-        assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-        assert_selector 'tr:nth-child(4) td:first-child', text: @sample25.puid
-        assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
+      puids = retrieve_puids
+      (puids.length - 1).times do |n|
+        assert puids[n] < puids[n + 1]
       end
 
       click_on I18n.t('groups.samples.table.puid')
