@@ -8,4 +8,7 @@ class DataExport < ApplicationRecord
   belongs_to :user
 
   has_one_attached :file
+
+  validates :status, acceptance: { accept: %w[processing ready deleted] }
+  validates :export_type, acceptance: { accept: %w[sample analysis] }
 end
