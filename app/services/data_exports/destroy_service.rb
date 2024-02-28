@@ -11,7 +11,7 @@ module DataExports
     def execute
       authorize! @data_export, to: :destroy?
 
-      @data_export.file.purge if @data_export.file
+      @data_export.file.blank? || @data_export.file.purge
 
       @data_export.destroy
     end

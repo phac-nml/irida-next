@@ -49,6 +49,8 @@ en:
       transfer?: You are not authorized to transfer the requested resource.
       transfer_into_namespace?: You are not authorized to transfer to the requested namespace.
       update?: You are not authorized to update this resource on this server.
+      data_export:
+        destroy?: You are not authorized to remove this data export on this server.
       group:
         create?: You are not authorized to create a project under group %{name} on this server.
         create_subgroup?: You are not authorized to create a subgroup within group %{name} on this server.
