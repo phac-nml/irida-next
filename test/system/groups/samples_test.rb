@@ -19,10 +19,9 @@ module Groups
     def retrieve_puids
       within first('table tbody#group-samples-table-body') do
         puids = []
-        puids << first('tr:nth-child(1) td:first-child').text
-        puids << first('tr:nth-child(2) td:first-child').text
-        puids << first('tr:nth-child(3) td:first-child').text
-        puids << first('tr:nth-child(4) td:first-child').text
+        (1..4).each do |n|
+          puids << first("tr:nth-child(#{n}) td:first-child").text
+        end
         puids
       end
     end
