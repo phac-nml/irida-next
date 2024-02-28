@@ -1,6 +1,7 @@
 <div
   class="
     flex
+    flex-wrap
     font-mono
     bg-slate-50
     border
@@ -20,6 +21,7 @@
     dark:focus-within:border-primary-500k
   "
   data-filter-list-target="tags"
+  data-action="click->filter-list#focus"
 >
   <input
     type="text"
@@ -32,6 +34,7 @@
     "
     autofocus
     data-action='input->filter-list#handleInput'
+    data-filter-list-target="input"
   />
 
 </div>

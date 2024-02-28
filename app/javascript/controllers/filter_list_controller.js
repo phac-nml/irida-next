@@ -1,34 +1,19 @@
 import { Controller } from "@hotwired/stimulus";
 import _ from "lodash";
 
-function add_tag(item, event) {}
 
 export default class extends Controller {
-  static targets = ["tags", "success"];
-  connect() {
-    console.log(this.tagsTarget);
-  }
+  static targets = ["tags", "template", "input"];
 
   handleInput(event) {
-    const data = event.data.trim();
-    if (data === "") return;
-    console.log(data);
+    if (event.data === "") return;
 
     if (event.inputType === "insertFromPaste") {
       const items = this.#getNamesAndPUID(event);
-      items.forEach((value) =>
-        this.tagsTarget.insertBefore(this.#formatTag(value), event.target),
+      items.forEach((item) =>
+        this.tagsTarget.insertBefore(this.#formatTag(item), event.target),
       );
-      event.target.value = "";
-      event.target.focus();
-    } else if (data === ",") {
-      const value = event.target.value.replace(",", "");
-      if (value.length > 0) {
-        // A 0 length value would be if there was just a ',' entered
-        this.tagsTarget.insertBefore(this.#formatTag(value), event.target);
-      }
-      event.target.value = "";
-      event.target.focus();
+      this.#clearAndFocus(event);
     } else {
       const value = event.target.value.replace(",", "");
       this.#addDelayed(value, event);
@@ -52,13 +37,18 @@ export default class extends Controller {
   }
 
   #formatTag(item) {
-    const clone = this.successTarget.content.cloneNode(true);
+    const clone = this.templateTarget.content.cloneNode(true);
     clone.querySelector(".label").innerText = item;
     clone.querySelector("input").value = item;
     return clone;
   }
 
-  #addDelayed = _.debounce((item, event) => {
-    console.log(item);
+  #addDelayed = _.debounce((value, event) => {
+    this.tagsTarget.insertBefore(this.#formatTag(value), event.target);
+    this.#clearAndFocus(event);
   }, 1000);
+
+  focus() {
+    this.inputTarget.focus();
+  }
 }
