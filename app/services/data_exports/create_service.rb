@@ -51,7 +51,6 @@ module DataExports
       projects.each do |project|
         authorize! project, to: :export_sample_data?
       end
-      projects
     end
 
     def validate_analysis_id

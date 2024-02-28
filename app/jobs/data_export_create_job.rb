@@ -33,6 +33,7 @@ class DataExportCreateJob < ApplicationJob
     end
 
     data_export.file.attach(io: new_zip.open, filename: "#{data_export.id}.zip")
+    data_export.status = 'ready'
     data_export.save
     new_zip.close
     new_zip.unlink
