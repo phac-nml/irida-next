@@ -1,23 +1,23 @@
 <div
   class="
-    block
+    flex
     font-mono
-    p-2.5
-    w-full
-    text-sm
-    text-slate-900
     bg-slate-50
-    rounded-lg
     border
     border-slate-300
-    focus:ring-primary-500
-    focus:border-primary-500
+    text-slate-900
+    text-sm
+    rounded-lg
+    focus-within:ring-primary-500
+    focus-within:border-primary-500
+    w-full
+    p-2.5
     dark:bg-slate-700
     dark:border-slate-600
     dark:placeholder-slate-400
     dark:text-white
-    dark:focus:ring-primary-500
-    dark:focus:border-primary-500
+    dark:focus-within:ring-primary-500
+    dark:focus-within:border-primary-500k
   "
   data-filter-list-target="tags"
 >
@@ -28,7 +28,9 @@
       focus:ring-0
       border-none
       bg-transparent
+      grow
     "
+    autofocus
     data-action='input->filter-list#handleInput'
   />
 

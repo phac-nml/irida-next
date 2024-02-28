@@ -1,4 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
+import _ from "lodash";
+
+function add_tag(item, event) {}
 
 export default class extends Controller {
   static targets = ["tags", "success"];
@@ -7,8 +10,9 @@ export default class extends Controller {
   }
 
   handleInput(event) {
-    if (event.data === " ") return;
-    console.log(event.data);
+    const data = event.data.trim();
+    if (data === "") return;
+    console.log(data);
 
     if (event.inputType === "insertFromPaste") {
       const items = this.#getNamesAndPUID(event);
@@ -17,18 +21,18 @@ export default class extends Controller {
       );
       event.target.value = "";
       event.target.focus();
-    } else if (event.data === ",") {
+    } else if (data === ",") {
       const value = event.target.value.replace(",", "");
-      this.tagsTarget.insertBefore(this.#formatTag(value), event.target);
+      if (value.length > 0) {
+        // A 0 length value would be if there was just a ',' entered
+        this.tagsTarget.insertBefore(this.#formatTag(value), event.target);
+      }
       event.target.value = "";
       event.target.focus();
     } else {
-      console.log("Waiting...need to debounce here", event);
+      const value = event.target.value.replace(",", "");
+      this.#addDelayed(value, event);
     }
-  }
-
-  handlePaste(event) {
-    console.log("PASTE", event);
   }
 
   #getNamesAndPUID(event) {
@@ -38,10 +42,23 @@ export default class extends Controller {
       .filter(Boolean);
   }
 
+  #addToDOM(tag, event) {
+    this.tagsTarget.insertBefore(tag, event.target);
+  }
+
+  #clearAndFocus(event) {
+    event.target.value = "";
+    event.target.focus();
+  }
+
   #formatTag(item) {
     const clone = this.successTarget.content.cloneNode(true);
     clone.querySelector(".label").innerText = item;
     clone.querySelector("input").value = item;
     return clone;
   }
+
+  #addDelayed = _.debounce((item, event) => {
+    console.log(item);
+  }, 1000);
 }
