@@ -33,9 +33,9 @@ class WorkflowExecutionsController < ApplicationController
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
 
     if @workflow_execution.deleted?
-      flash[:success] = 'Success'
+      flash[:success] = t('.success', workflow_name: @workflow_execution.metadata['workflow_name'])
     else
-      flash[:error] = 'Error'
+      flash[:error] = t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
     end
     redirect_to workflow_executions_path
   end
