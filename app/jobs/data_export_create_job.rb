@@ -29,22 +29,13 @@ class DataExportCreateJob < ApplicationJob
           zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(paired_attachment.file.key))
         end
       end
-      puts @manifest
       zipfile.get_output_stream('manifest.json') { |f| f.write @manifest.to_json }
     end
-    # @manifest.replace('=>', ': ')
-    # puts @manifest
-    # uid = UUIDv6::Sequence.new.call
-    # We have to use string concatenation as the file pathing does not work with string interpolation
-    # filename = uid + '.zip'
 
-    # data_export = DataExport.new(export_name: 'test', export_id: uid, export_type: 'sample', status: 'processing',
-    #                              export_parameters: { sample_ids: [1421, 1422, 1423] })
-
-    # data_export.file.attach(io: new_zip.open, filename:)
-    # data_export.save
-    # new_zip.close
-    # new_zip.unlink
+    data_export.file.attach(io: new_zip.open, filename: "#{data_export.id}.zip")
+    data_export.save
+    new_zip.close
+    new_zip.unlink
   end
 
   def initialize_manifest(export_type)
@@ -75,10 +66,14 @@ class DataExportCreateJob < ApplicationJob
       if attachment.metadata.key?('associated_attachment_id')
 
         attachment_hash = { 'name' => attachment.file.filename, 'type' => 'file',
-                            'metadata' => { 'type' => attachment.metadata['type'], 'format' => attachment.metadata['format'], 'direction' => attachment.metadata['direction'] } }
+                            'metadata' => { 'type' => attachment.metadata['type'],
+                                            'format' => attachment.metadata['format'],
+                                            'direction' => attachment.metadata['direction'] } }
         paired_attachment = Attachment.find(attachment.metadata['associated_attachment_id'])
         paired_attachment_hash = { 'name' => paired_attachment.file.filename, 'type' => 'file',
-                                   'metadata' => { 'type' => paired_attachment.metadata['type'], 'format' => paired_attachment.metadata['format'], 'direction' => paired_attachment.metadata['direction'] } }
+                                   'metadata' => { 'type' => paired_attachment.metadata['type'],
+                                                   'format' => paired_attachment.metadata['format'],
+                                                   'direction' => paired_attachment.metadata['direction'] } }
 
         attachment_folder_hash['children'] << attachment_hash
         attachment_folder_hash['children'] << paired_attachment_hash
