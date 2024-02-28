@@ -16,6 +16,16 @@ module Groups
       @sample31 = samples(:sample31)
     end
 
+    def retrieve_puids
+      within first('table tbody#group-samples-table-body') do
+        puids = []
+        puids << first('tr:nth-child(1) td:first-child').text
+        puids << first('tr:nth-child(2) td:first-child').text
+        puids << first('tr:nth-child(3) td:first-child').text
+        puids << first('tr:nth-child(4) td:first-child').text
+        puids
+      end
+    end
     test 'visiting the index' do
       visit group_samples_url(@group)
 
@@ -97,29 +107,20 @@ module Groups
     test 'can sort the list of samples' do
       visit group_samples_url(@group)
 
+      # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
+      # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
+      # they are ordered as expected against one another.
       assert_selector 'table tbody#group-samples-table-body tr', count: 20
-      within first('table tbody#group-samples-table-body') do
-        puids = []
-        puids << first('tr:nth-child(1) td:first-child').text
-        puids << first('tr:nth-child(2) td:first-child').text
-        puids << first('tr:nth-child(3) td:first-child').text
-        puids << first('tr:nth-child(4) td:first-child').text
-        3.times do |n|
-          assert puids[n] > puids[n + 1]
-        end
+      puids = retrieve_puids
+      3.times do |n|
+        assert puids[n] > puids[n + 1]
       end
 
       click_on I18n.t('groups.samples.table.puid')
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
-      within first('table tbody#group-samples-table-body') do
-        puids = []
-        puids << first('tr:nth-child(1) td:first-child').text
-        puids << first('tr:nth-child(2) td:first-child').text
-        puids << first('tr:nth-child(3) td:first-child').text
-        puids << first('tr:nth-child(4) td:first-child').text
-        3.times do |n|
-          assert puids[n] < puids[n + 1]
-        end
+      puids = retrieve_puids
+      3.times do |n|
+        assert puids[n] < puids[n + 1]
       end
 
       click_on I18n.t('groups.samples.table.puid')
