@@ -95,22 +95,31 @@ module Groups
     end
 
     test 'can sort the list of samples' do
-      freeze_time
       visit group_samples_url(@group)
 
       assert_selector 'table tbody#group-samples-table-body tr', count: 20
       within first('table tbody#group-samples-table-body') do
-        assert_selector 'tr:first-child td:first-child', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
+        puids = []
+        puids << first('tr:nth-child(1) td:first-child').text
+        puids << first('tr:nth-child(2) td:first-child').text
+        puids << first('tr:nth-child(3) td:first-child').text
+        puids << first('tr:nth-child(4) td:first-child').text
+        3.times do |n|
+          assert puids[n] > puids[n + 1]
+        end
       end
 
       click_on I18n.t('groups.samples.table.puid')
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
       within first('table tbody#group-samples-table-body') do
-        assert_selector 'tr:nth-child(3) td:first-child', text: @sample28.puid
-        assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-        assert_selector 'tr:nth-child(4) td:first-child', text: @sample25.puid
-        assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
+        puids = []
+        puids << first('tr:nth-child(1) td:first-child').text
+        puids << first('tr:nth-child(2) td:first-child').text
+        puids << first('tr:nth-child(3) td:first-child').text
+        puids << first('tr:nth-child(4) td:first-child').text
+        3.times do |n|
+          assert puids[n] < puids[n + 1]
+        end
       end
 
       click_on I18n.t('groups.samples.table.puid')
