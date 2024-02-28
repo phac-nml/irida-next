@@ -50,7 +50,6 @@ module DataExports
       project_ids.each do |project_id|
         authorize! Project.find(project_id), to: :export_sample_data?
       end
-      projects
     end
   end
 end
