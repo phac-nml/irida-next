@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import _ from "lodash";
 
-
 export default class extends Controller {
   static targets = ["tags", "template", "input"];
 
@@ -20,15 +19,20 @@ export default class extends Controller {
     }
   }
 
+  remove(event) {
+    const item = event.target.closest("span.filter-item");
+    item.parentNode.removeChild(item);
+  }
+
+  focus() {
+    this.inputTarget.focus();
+  }
+
   #getNamesAndPUID(event) {
     return event.target.value
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
-  }
-
-  #addToDOM(tag, event) {
-    this.tagsTarget.insertBefore(tag, event.target);
   }
 
   #clearAndFocus(event) {
@@ -47,8 +51,4 @@ export default class extends Controller {
     this.tagsTarget.insertBefore(this.#formatTag(value), event.target);
     this.#clearAndFocus(event);
   }, 1000);
-
-  focus() {
-    this.inputTarget.focus();
-  }
 }

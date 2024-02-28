@@ -109,17 +109,36 @@
           <%= dialog.with_section do %>
 
             <template data-filter-list-target="template">
-              <%= viral_pill(color: :blue, classes: "inline-flex items-center me-2 my-2 p-4") do %>
+              <%= viral_pill(color: :blue, classes: "inline-flex items-center filter-item mb-1 mr-1") do %>
                 <%= f.search_field :name_or_puid_in, multiple: true, class: "hidden" %>
-                <span class="label"></span>
+                <span class="label font-mono text-base font-semibold mr-1"></span>
+                <button
+                  type="button"
+                  class="
+                    inline-flex
+                    items-center
+                    p-1
+                    text-sm
+                    text-slate-400
+                    bg-transparent
+                    rounded-full
+                    hover:bg-blue-200
+                    hover:text-blue-900
+                    dark:hover:bg-blue-600
+                    dark:hover:text-blue-300
+                  "
+                  data-action="click->filter-list#remove"
+                  aria-label="Remove"
+                >
+                  <%= viral_icon(name: "x_mark", classes: "w-4 h-4") %>
+                </button>
               <% end %>
             </template>
 
-            <%= render partial: 'projects/samples/tagged_filter' %>
-
+            <%= render partial: "projects/samples/tagged_filter" %>
 
           <% end %>
-          <%= dialog.with_primary_action("data-action": "filters#submit") { "Primary button" } %>
+          <%= dialog.with_primary_action("data-action": "filters#submit") { "Apply Filter" } %>
         <% end %>
         <%= f.label :name_or_puid_cont,
                 placeholder: t(".search.placeholder"),
