@@ -138,7 +138,7 @@
             <%= render partial: "projects/samples/tagged_filter" %>
 
           <% end %>
-          <%= dialog.with_primary_action("data-action": "filters#submit") { "Apply Filter" } %>
+          <%= dialog.with_primary_action("data-action": "filters#submit filter-list#store viral--dialog#close") { "Apply Filter" } %>
         <% end %>
         <%= f.label :name_or_puid_cont,
                 placeholder: t(".search.placeholder"),
