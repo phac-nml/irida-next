@@ -35,6 +35,7 @@ google:
 # Use bin/rails credentials:edit to set the Azure Storage secret (as azure_storage:storage_access_key)
 microsoft:
   service: AzureStorage
+  api_version: 2023-01-03
   storage_account_name: <%= ENV.fetch('AZURE_STORAGE_ACCOUNT_NAME', 'your_account_name') %>
   storage_access_key: <%= Rails.application.credentials.dig(:azure_storage, :storage_access_key) %>
   container: <%= ENV.fetch('AZURE_STORAGE_CONTAINER_NAME', "your_container_name-#{Rails.env}") %>
