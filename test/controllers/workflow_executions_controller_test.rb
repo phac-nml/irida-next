@@ -58,4 +58,44 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # rubocop:enable Naming/VariableNumber
+
+  test 'should not delete a prepared workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_prepared)
+    assert workflow_execution.prepared?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution)
+    end
+    assert_redirected_to workflow_executions_path
+  end
+
+  test 'should delete a completed workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+    assert workflow_execution.completed?
+    assert_difference -> { WorkflowExecution.count } => -1,
+                      -> { SamplesWorkflowExecution.count } => -1 do
+      delete workflow_execution_path(workflow_execution)
+    end
+    assert_redirected_to workflow_executions_path
+  end
+
+  test 'should delete an errored workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_error)
+    assert workflow_execution.error?
+    assert_difference -> { WorkflowExecution.count } => -1,
+                      -> { SamplesWorkflowExecution.count } => -1 do
+      delete workflow_execution_path(workflow_execution)
+    end
+    assert_redirected_to workflow_executions_path
+  end
+
+  test 'should not delete a canceling workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_canceling)
+    assert workflow_execution.canceling?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution)
+    end
+    assert_redirected_to workflow_executions_path
+  end
 end

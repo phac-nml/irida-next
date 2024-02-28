@@ -8,7 +8,7 @@ module WorkflowExecutions
       @user = users(:john_doe)
     end
 
-    test 'not destroy prepared workflow execution' do
+    test 'should not destroy a prepared workflow execution' do
       workflow_execution = workflow_executions(:irida_next_example_prepared)
       assert workflow_execution.prepared?
 
@@ -18,7 +18,7 @@ module WorkflowExecutions
       end
     end
 
-    test 'destroy completed workflow execution' do
+    test 'should destroy a completed workflow execution' do
       workflow_execution = workflow_executions(:irida_next_example_completed)
       assert workflow_execution.completed?
 
@@ -29,7 +29,7 @@ module WorkflowExecutions
       end
     end
 
-    test 'destroy error workflow execution' do
+    test 'should destroy an errored workflow execution' do
       workflow_execution = workflow_executions(:irida_next_example_error)
       assert workflow_execution.error?
 
@@ -40,7 +40,7 @@ module WorkflowExecutions
       end
     end
 
-    test 'not destroy canceling workflow execution' do
+    test 'should not destroy a canceling workflow execution' do
       workflow_execution = workflow_executions(:irida_next_example_canceling)
       assert workflow_execution.canceling?
 
