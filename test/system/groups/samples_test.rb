@@ -17,13 +17,13 @@ module Groups
     end
 
     def retrieve_puids
+      puids = []
       within first('table tbody#group-samples-table-body') do
-        puids = []
         (1..4).each do |n|
           puids << first("tr:nth-child(#{n}) td:first-child").text
         end
-        puids
       end
+      puids
     end
     test 'visiting the index' do
       visit group_samples_url(@group)
