@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DataExports
-  # Service used to Create Attachments
+  # Service used to Create Data Export
   class CreateService < BaseService
     DataExportCreateError = Class.new(StandardError)
     def initialize(user = nil, params = {})
