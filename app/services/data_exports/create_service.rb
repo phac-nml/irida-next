@@ -12,6 +12,7 @@ module DataExports
       @data_export = DataExport.new(params)
 
       validate_params
+
       validate_sample_export if @data_export.export_type == 'sample'
 
       @data_export.user = current_user
@@ -27,17 +28,25 @@ module DataExports
       false
     end
 
+    # export_type and export_parameters[ids] are required for data_exports
     def validate_params
       unless params.key?('export_type') && params.key?('export_parameters') && params['export_parameters'].key?('ids')
         raise DataExportCreateError, I18n.t('services.data_exports.create.missing_required_parameters')
       end
     end
 
+    # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
+    # to export the chosen samples' data
     def validate_sample_export
-      projects = []
+      project_ids = []
       params['export_parameters']['ids'].each do |sample_id|
-        project = Project.find(Sample.find(sample_id).project_id)
-        projects << project unless projects.include?(project)
+        project_id = Sample.find(sample_id).project_id
+        project_ids << project_id unless project_ids.include?(project_id)
+      end
+
+      projects = []
+      project_ids.each do |project_id|
+        projects << Project.find(project_id)
       end
       projects.each do |project|
         authorize! project, to: :export_sample_data?
