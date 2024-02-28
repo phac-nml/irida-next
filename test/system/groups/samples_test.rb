@@ -111,14 +111,14 @@ module Groups
       # they are ordered as expected against one another.
       assert_selector 'table tbody#group-samples-table-body tr', count: 20
       puids = retrieve_puids
-      3.times do |n|
+      (0...(puids.length - 1)).each do |n|
         assert puids[n] > puids[n + 1]
       end
 
       click_on I18n.t('groups.samples.table.puid')
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
       puids = retrieve_puids
-      3.times do |n|
+      (0...(puids.length - 1)).each do |n|
         assert puids[n] < puids[n + 1]
       end
 
