@@ -40,7 +40,6 @@ module DataExports
     # to export the chosen samples' data
     def validate_sample_export
       project_ids = []
-
       params['export_parameters']['ids'].each do |sample_id|
         sample = Sample.find_by(id: sample_id)
         raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_sample_id') if sample.nil?
