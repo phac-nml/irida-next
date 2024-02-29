@@ -60,7 +60,11 @@ export default class extends Controller {
 
   #updateCount() {
     const count = this.tagsTarget.querySelectorAll(".search-tag").length;
-    console.log({ count });
-    this.countTarget.innerText = count;
+    if (count > 0) {
+      this.countTarget.innerText = count;
+      this.countTarget.classList.remove("hidden");
+    } else {
+      this.countTarget.classList.add("hidden");
+    }
   }
 }

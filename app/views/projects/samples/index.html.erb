@@ -104,7 +104,7 @@
             <%= dialog.with_trigger do %>
               <%= viral_button(data: { action: "click->viral--dialog#open" }, classes: "relative") do %>
                 <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
-                <div data-filter-list-target="count" class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-slate-900">8</div>
+                <div data-filter-list-target="count" class="hidden absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-slate-900">8</div>
               <% end %>
             <% end %>
             <%= dialog.with_header(title: "Filter by sample names or ID") %>
