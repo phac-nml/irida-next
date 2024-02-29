@@ -189,8 +189,10 @@ module Samples
       cloned_sample_ids = Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
                                                                                  clone_samples_params[:sample_ids])
       assert_empty cloned_sample_ids
-      assert @project.errors.messages_for(:sample).include?(I18n.t('services.samples.clone.sample_exists',
-                                                                   sample_name: @sample2.name, sample_puid: @sample2.puid))
+      assert @project.errors.messages_for(:sample).include?(
+        I18n.t('services.samples.clone.sample_exists',
+               sample_name: @sample2.name, sample_puid: @sample2.puid)
+      )
     end
   end
 end
