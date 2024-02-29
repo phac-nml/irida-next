@@ -10,22 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
 
-  create_table "active_storage_attachments", force: :cascade do |t|
+  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.uuid "record_id", null: false
+    t.uuid "blob_id", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.index ["created_at"], name: "index_active_storage_attachments_on_created_at"
+    t.index ["record_id"], name: "index_active_storage_attachments_on_record_id"
   end
 
-  create_table "active_storage_blobs", force: :cascade do |t|
+  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -34,16 +35,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
     t.bigint "byte_size", null: false
     t.string "checksum"
     t.datetime "created_at", null: false
+    t.index ["created_at"], name: "index_active_storage_blobs_on_created_at"
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "variation_digest", null: false
-    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+    t.uuid "blob_id", null: false
+    t.index ["blob_id"], name: "index_active_storage_variant_records_on_blob_id"
   end
 
-  create_table "attachments", force: :cascade do |t|
+  create_table "attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "metadata", default: {}, null: false
     t.datetime "deleted_at"
     t.string "attachable_type", null: false
@@ -52,11 +54,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable"
+    t.index ["created_at"], name: "index_attachments_on_created_at"
     t.index ["metadata"], name: "index_attachments_on_metadata", using: :gin
   end
 
   create_table "data_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "name"
     t.string "export_type", null: false
     t.string "status", null: false
@@ -67,31 +69,31 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.datetime "deleted_at"
+    t.uuid "user_id", null: false
+    t.index ["created_at"], name: "index_data_exports_on_created_at"
     t.index ["deleted_at"], name: "index_data_exports_on_deleted_at"
     t.index ["user_id"], name: "index_data_exports_on_user_id"
   end
 
-  create_table "members", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "namespace_id"
-    t.bigint "created_by_id"
+  create_table "members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "access_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.datetime "deleted_at"
     t.date "expires_at"
+    t.uuid "user_id", null: false
+    t.uuid "namespace_id", null: false
+    t.uuid "created_by_id", null: false
+    t.index ["created_at"], name: "index_members_on_created_at"
     t.index ["created_by_id"], name: "index_members_on_created_by_id"
     t.index ["deleted_at"], name: "index_members_on_deleted_at"
     t.index ["expires_at"], name: "index_members_on_expires_at"
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
-    t.index ["user_id", "namespace_id"], name: "index_members_on_user_id_and_namespace_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
-  create_table "namespace_group_links", force: :cascade do |t|
-    t.bigint "group_id", null: false
-    t.bigint "namespace_id", null: false
+  create_table "namespace_group_links", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.date "expires_at"
     t.integer "group_access_level", null: false
     t.string "namespace_type"
@@ -99,30 +101,34 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.jsonb "log_data"
+    t.uuid "group_id", null: false
+    t.uuid "namespace_id", null: false
+    t.index ["created_at"], name: "index_namespace_group_links_on_created_at"
     t.index ["deleted_at"], name: "index_namespace_group_links_on_deleted_at"
-    t.index ["group_id", "namespace_id"], name: "index_group_link_group_with_namespace", unique: true, where: "(deleted_at IS NULL)"
+    t.index ["group_id"], name: "index_namespace_group_links_on_group_id"
+    t.index ["namespace_id"], name: "index_namespace_group_links_on_namespace_id"
   end
 
-  create_table "namespaces", force: :cascade do |t|
+  create_table "namespaces", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "path"
-    t.bigint "owner_id"
     t.string "type"
     t.string "description"
-    t.bigint "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.datetime "deleted_at"
     t.jsonb "metadata_summary", default: {}
+    t.uuid "owner_id", null: false
+    t.uuid "parent_id"
+    t.index ["created_at"], name: "index_namespaces_on_created_at"
     t.index ["deleted_at"], name: "index_namespaces_on_deleted_at"
     t.index ["metadata_summary"], name: "index_namespaces_on_metadata_summary", using: :gin
     t.index ["owner_id"], name: "index_namespaces_on_owner_id"
     t.index ["parent_id"], name: "index_namespaces_on_parent_id"
   end
 
-  create_table "personal_access_tokens", force: :cascade do |t|
-    t.bigint "user_id", null: false
+  create_table "personal_access_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "scopes"
     t.string "name"
     t.boolean "revoked", default: false, null: false
@@ -133,42 +139,45 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.datetime "deleted_at"
+    t.uuid "user_id", null: false
+    t.index ["created_at"], name: "index_personal_access_tokens_on_created_at"
     t.index ["deleted_at"], name: "index_personal_access_tokens_on_deleted_at"
     t.index ["token_digest"], name: "index_personal_access_tokens_on_token_digest", unique: true
     t.index ["user_id"], name: "index_personal_access_tokens_on_user_id"
   end
 
-  create_table "projects", force: :cascade do |t|
-    t.bigint "creator_id"
-    t.bigint "namespace_id"
+  create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.string "puid", null: false
+    t.uuid "creator_id", null: false
+    t.uuid "namespace_id", null: false
+    t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["creator_id"], name: "index_projects_on_creator_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
     t.index ["namespace_id"], name: "index_projects_on_namespace_id"
     t.index ["puid"], name: "index_projects_on_puid", unique: true
   end
 
-  create_table "routes", force: :cascade do |t|
+  create_table "routes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "path"
     t.string "name"
     t.string "source_type"
-    t.bigint "source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.uuid "source_id", null: false
+    t.index ["created_at"], name: "index_routes_on_created_at"
     t.index ["deleted_at"], name: "index_routes_on_deleted_at"
     t.index ["name"], name: "index_routes_on_name", unique: true, where: "(deleted_at IS NULL)"
     t.index ["path"], name: "index_routes_on_path", unique: true, where: "(deleted_at IS NULL)"
-    t.index ["source_type", "source_id"], name: "index_routes_on_source"
+    t.index ["source_id"], name: "index_routes_on_source_id"
   end
 
-  create_table "samples", force: :cascade do |t|
+  create_table "samples", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.bigint "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
@@ -176,26 +185,28 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
     t.jsonb "metadata", default: {}, null: false
     t.jsonb "metadata_provenance", default: {}, null: false
     t.string "puid", null: false
+    t.uuid "project_id", null: false
+    t.index ["created_at"], name: "index_samples_on_created_at"
     t.index ["deleted_at"], name: "index_samples_on_deleted_at"
     t.index ["metadata"], name: "index_samples_on_metadata", using: :gin
     t.index ["metadata_provenance"], name: "index_samples_on_metadata_provenance", using: :gin
-    t.index ["name", "project_id"], name: "index_samples_on_name_and_project_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["project_id"], name: "index_samples_on_project_id"
     t.index ["puid"], name: "index_samples_on_puid", unique: true
   end
 
-  create_table "samples_workflow_executions", force: :cascade do |t|
+  create_table "samples_workflow_executions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "samplesheet_params", default: {}, null: false
     t.bigint "sample_id"
-    t.bigint "workflow_execution_id"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "workflow_execution_id", null: false
+    t.index ["created_at"], name: "index_samples_workflow_executions_on_created_at"
     t.index ["sample_id"], name: "index_samples_workflow_executions_on_sample_id"
     t.index ["workflow_execution_id"], name: "index_samples_workflow_executions_on_workflow_execution_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -210,12 +221,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
     t.string "first_name"
     t.string "last_name"
     t.string "locale", default: "en"
+    t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true, where: "(deleted_at IS NULL)"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, where: "(deleted_at IS NULL)"
   end
 
-  create_table "workflow_executions", force: :cascade do |t|
+  create_table "workflow_executions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "metadata", default: {"workflow_name"=>"", "workflow_version"=>""}, null: false
     t.jsonb "workflow_params", default: {}, null: false
     t.string "workflow_type"
@@ -231,18 +243,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_174555) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_attachments", "attachments", column: "record_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "data_exports", "users"
   add_foreign_key "members", "namespaces"
   add_foreign_key "members", "users"
-  add_foreign_key "namespaces", "namespaces", column: "parent_id"
+  add_foreign_key "namespace_group_links", "namespaces"
+  add_foreign_key "namespaces", "users", column: "owner_id"
   add_foreign_key "personal_access_tokens", "users"
   add_foreign_key "projects", "namespaces"
+  add_foreign_key "projects", "users", column: "creator_id"
+  add_foreign_key "routes", "namespaces", column: "source_id"
   add_foreign_key "samples", "projects"
+  add_foreign_key "samples_workflow_executions", "workflow_executions"
   create_function :logidze_capture_exception, sql_definition: <<-'SQL'
       CREATE OR REPLACE FUNCTION public.logidze_capture_exception(error_data jsonb)
        RETURNS boolean
