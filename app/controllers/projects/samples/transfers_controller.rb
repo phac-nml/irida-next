@@ -27,17 +27,15 @@ module Projects
         @pagy, @samples = pagy(@q.result)
 
         if transferred_samples_ids.length == sample_ids.length
-          render status: :ok, locals: { sample_ids:, type: :success, message: t('.success'), errors: [] }
+          render status: :ok, locals: { type: :success, message: t('.success') }
         elsif @project.errors.include?(:samples)
-          @errors = @project.errors.messages_for(:samples)
+          errors = @project.errors.messages_for(:samples)
           render status: :partial_content,
-                 locals: { sample_ids: transferred_samples_ids, type: :alert,
-                           message: t('.error'), errors: @errors }
+                 locals: { type: :alert, message: t('.error'), errors: }
         else
-          @errors = @project.errors.full_messages_for(:base)
+          errors = @project.errors.full_messages_for(:base)
           render status: :unprocessable_entity,
-                 locals: { sample_ids: [], type: :alert,
-                           message: t('.no_samples_transferred_error'), errors: @errors }
+                 locals: { type: :alert, message: t('.no_samples_transferred_error'), errors: }
         end
       end
 
