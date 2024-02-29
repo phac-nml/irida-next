@@ -41,6 +41,7 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = ENV.fetch('RAILS_STORAGE_SERVICE', 'local').to_sym
+  config.active_storage.urls_expire_in = 15.minutes
 
   config.action_mailer.default_url_options = { host: ENV.fetch('RAILS_HOST', 'example.com'),
                                                protocol: ENV.fetch('RAILS_PROTOCOL', 'http') }

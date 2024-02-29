@@ -6,6 +6,7 @@ SimpleCov.start 'rails' do
   add_group 'View Components', 'app/components'
   add_group 'Policies', 'app/policies'
   add_filter 'lib/active_storage/service/'
+  add_filter 'lib/azure/'
   add_filter '/test/'
   add_filter '/vendor/'
   enable_coverage :branch
