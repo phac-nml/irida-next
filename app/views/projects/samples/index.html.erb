@@ -99,7 +99,7 @@
             </span>
           </label>
         </div>
-        <%= viral_dialog('data-controller': 'filter-list') do |dialog| %>
+        <%= viral_dialog(data: { controller: 'filter-list', 'filter-list-selection-outlet': '#samples-table' }) do |dialog| %>
           <%= dialog.with_trigger do %>
             <%= viral_button(data: { action: "click->viral--dialog#open" }) do %>
               <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
@@ -138,7 +138,7 @@
             <%= render partial: "projects/samples/tagged_filter" %>
 
           <% end %>
-          <%= dialog.with_primary_action("data-action": "filters#submit filter-list#store viral--dialog#close") { "Apply Filter" } %>
+          <%= dialog.with_primary_action("data-action": "filter-list#clearStorage filters#submit viral--dialog#close") { "Apply Filter" } %>
         <% end %>
         <%= f.label :name_or_puid_cont,
                 placeholder: t(".search.placeholder"),

@@ -48,6 +48,10 @@ export default class extends Controller {
     this.#addOrRemove(false, id);
   }
 
+  clear() {
+    sessionStorage.removeItem(this.#storageKey);
+  }
+
   save(storageValue) {
     sessionStorage.setItem(this.#storageKey, JSON.stringify([...storageValue]));
   }

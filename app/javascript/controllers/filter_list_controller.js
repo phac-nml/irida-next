@@ -3,6 +3,7 @@ import _ from "lodash";
 
 export default class extends Controller {
   static targets = ["tags", "template", "input"];
+  static outlets = ["selection"];
 
   handleInput(event) {
     if (event.data === "") return;
@@ -26,6 +27,10 @@ export default class extends Controller {
 
   focus() {
     this.inputTarget.focus();
+  }
+
+  clearStorage() {
+    this.selectionOutlet.clear();
   }
 
   #getNamesAndPUID(event) {
