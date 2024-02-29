@@ -57,7 +57,7 @@ module Samples
       rescue StandardError
         if sample
           project.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
-                                              sample_name: sample.name))
+                                              sample_name: sample.name, sample_puid: sample.puid))
         else
           not_found_sample_ids << sample_id
         end
