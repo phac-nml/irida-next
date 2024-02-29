@@ -1097,7 +1097,7 @@ en:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
         same_project: The source and destination projects are the same. Please select a different destination project.
-        sample_exists: "Sample '%{sample_id}' already exists in the target project"
+        sample_exists: "Sample %{sample_puid}: Conflicts with Sample named '%{sample_name}' in target project"
       transfer:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
