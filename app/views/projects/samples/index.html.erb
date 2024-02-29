@@ -99,15 +99,40 @@
             </span>
           </label>
         </div>
-        <div data-controller="filter-list" data-filter-list-selection-outlet="#samples-table">
+        <div
+          data-controller="filter-list"
+          data-filter-list-selection-outlet="#samples-table"
+          data-action="keydown.esc->filter-list#handleEsc"
+        >
           <%= viral_dialog() do |dialog| %>
             <%= dialog.with_trigger do %>
               <%= viral_button(data: { action: "click->viral--dialog#open" }, classes: "relative") do %>
                 <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
-                <div data-filter-list-target="count" class="hidden absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-slate-900">8</div>
+                <div
+                  data-filter-list-target="count"
+                  class="
+                    hidden
+                    absolute
+                    inline-flex
+                    items-center
+                    justify-center
+                    w-6
+                    h-6
+                    text-xs
+                    font-bold
+                    text-white
+                    bg-red-500
+                    border-2
+                    border-white
+                    rounded-full
+                    -top-2
+                    -end-2
+                    dark:border-slate-900
+                  "
+                >8</div>
               <% end %>
             <% end %>
-            <%= dialog.with_header(title: "Filter by sample names or ID") %>
+            <%= dialog.with_header(title: "Filter by sample names or ID", closable: false) %>
             <%= dialog.with_section do %>
 
               <template data-filter-list-target="template">
@@ -117,18 +142,18 @@
                   <button
                     type="button"
                     class="
-                            inline-flex
-                            items-center
-                            p-1
-                            text-sm
-                            text-slate-400
-                            bg-transparent
-                            rounded-full
-                            hover:bg-blue-200
-                            hover:text-blue-900
-                            dark:hover:bg-blue-600
-                            dark:hover:text-blue-300
-                          "
+                      inline-flex
+                      items-center
+                      p-1
+                      text-sm
+                      text-slate-400
+                      bg-transparent
+                      rounded-full
+                      hover:bg-blue-200
+                      hover:text-blue-900
+                      dark:hover:bg-blue-600
+                      dark:hover:text-blue-300
+                    "
                     data-action="click->filter-list#remove"
                     aria-label="Remove"
                   >
@@ -140,7 +165,9 @@
               <%= render partial: "projects/samples/tagged_filter" %>
 
             <% end %>
-            <%= dialog.with_primary_action("data-action": "filter-list#afterSubmit filters#submit viral--dialog#close") { "Apply Filter" } %>
+            <%= dialog.with_primary_action(
+              "data-action": "filter-list#afterSubmit filters#submit viral--dialog#close"
+            ) { "Apply Filter" } %>
           <% end %>
         </div>
         <%= f.label :name_or_puid_cont,

@@ -20,9 +20,14 @@ export default class extends Controller {
     }
   }
 
-  remove(event) {
-    const item = event.target.closest("span.filter-item");
+  remove({ target }) {
+    const item = target.closest("span.filter-item");
     item.parentNode.removeChild(item);
+  }
+
+  clear() {
+    const tags = this.tagsTarget.querySelectorAll(".search-tag");
+    [...tags].forEach((tag) => this.tagsTarget.removeChild(tag));
   }
 
   focus() {
@@ -32,6 +37,10 @@ export default class extends Controller {
   afterSubmit() {
     this.selectionOutlet.clear();
     this.#updateCount();
+  }
+
+  handleEsc(event) {
+    event.preventDefault();
   }
 
   #getNamesAndPUID(event) {

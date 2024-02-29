@@ -1,5 +1,6 @@
 <div
   class="
+    relative
     flex
     flex-wrap
     font-mono
@@ -36,5 +37,32 @@
     data-action='input->filter-list#handleInput'
     data-filter-list-target="input"
   />
-
+  <button
+    type="button"
+    class="
+      absolute
+      inline-flex
+      items-center
+      justify-center
+      w-6
+      h-6
+      text-xs
+      font-bold
+      text-slate-600
+      bg-slate-100
+      border-3
+      border-slate-10
+      rounded-full
+      bottom-2
+      end-2
+      dark:text-slate-300
+      dark:border-slate-900
+      dark:bg-slate-600
+      dark:hover:bg-slate-500
+      hover:bg-slate-300
+    "
+    data-action="click->filter-list#clear"
+  >
+    <%= viral_icon(name: "x_mark", classes: "h-4 w-4") %>
+  </button>
 </div>
