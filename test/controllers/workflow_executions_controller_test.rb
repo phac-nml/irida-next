@@ -64,9 +64,9 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert workflow_execution.prepared?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution)
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_redirected_to workflow_executions_path
+    assert_response :unprocessable_entity
   end
 
   test 'should delete a completed workflow' do
@@ -74,9 +74,9 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert workflow_execution.completed?
     assert_difference -> { WorkflowExecution.count } => -1,
                       -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(workflow_execution)
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_redirected_to workflow_executions_path
+    assert_response :success
   end
 
   test 'should delete an errored workflow' do
@@ -84,9 +84,9 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert workflow_execution.error?
     assert_difference -> { WorkflowExecution.count } => -1,
                       -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(workflow_execution)
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_redirected_to workflow_executions_path
+    assert_response :success
   end
 
   test 'should not delete a canceling workflow' do
@@ -94,8 +94,8 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert workflow_execution.canceling?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution)
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_redirected_to workflow_executions_path
+    assert_response :unprocessable_entity
   end
 end

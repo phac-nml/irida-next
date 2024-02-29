@@ -2,11 +2,11 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
+  respond_to :turbo_stream
+  before_action :workflows, only: %i[index destroy]
   before_action :current_page
 
-  def index
-    @workflows = WorkflowExecution.where(submitter: current_user)
-  end
+  def index; end
 
   def create
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
@@ -23,9 +23,7 @@ class WorkflowExecutionsController < ApplicationController
 
     @workflow_execution = WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
 
-    return unless @workflow_execution.persisted?
-
-    render 'cancel'
+    nil unless @workflow_execution.persisted?
   end
 
   def destroy
@@ -33,14 +31,21 @@ class WorkflowExecutionsController < ApplicationController
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
 
     if @workflow_execution.deleted?
-      flash[:success] = t('.success', workflow_name: @workflow_execution.metadata['workflow_name'])
+      render status: :ok,
+             locals: { type: 'success',
+                       message: t('.success', workflow_name: @workflow_execution.metadata['workflow_name']) }
     else
-      flash[:error] = t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
+      render status: :unprocessable_entity, locals: {
+        type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
+      }
     end
-    redirect_to workflow_executions_path
   end
 
   private
+
+  def workflows
+    @workflows = WorkflowExecution.where(submitter: current_user)
+  end
 
   def workflow_execution_params
     params.require(:workflow_execution).permit(workflow_execution_params_attributes)
