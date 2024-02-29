@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import _ from "lodash";
 
 export default class extends Controller {
-  static targets = ["tags", "template", "input"];
+  static targets = ["tags", "template", "input", "count"];
   static outlets = ["selection"];
 
   handleInput(event) {
@@ -29,8 +29,9 @@ export default class extends Controller {
     this.inputTarget.focus();
   }
 
-  clearStorage() {
+  afterSubmit() {
     this.selectionOutlet.clear();
+    this.#updateCount();
   }
 
   #getNamesAndPUID(event) {
@@ -56,4 +57,10 @@ export default class extends Controller {
     this.tagsTarget.insertBefore(this.#formatTag(value), event.target);
     this.#clearAndFocus(event);
   }, 1000);
+
+  #updateCount() {
+    const count = this.tagsTarget.querySelectorAll(".search-tag").length;
+    console.log({ count });
+    this.countTarget.innerText = count;
+  }
 }

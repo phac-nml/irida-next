@@ -99,47 +99,50 @@
             </span>
           </label>
         </div>
-        <%= viral_dialog(data: { controller: 'filter-list', 'filter-list-selection-outlet': '#samples-table' }) do |dialog| %>
-          <%= dialog.with_trigger do %>
-            <%= viral_button(data: { action: "click->viral--dialog#open" }) do %>
-              <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
-            <% end %>
-          <% end %>
-          <%= dialog.with_header(title: "Filter by sample names or ID") %>
-          <%= dialog.with_section do %>
-
-            <template data-filter-list-target="template">
-              <%= viral_pill(color: :blue, classes: "inline-flex items-center filter-item mb-1 mr-1") do %>
-                <%= f.search_field :name_or_puid_in, multiple: true, class: "hidden" %>
-                <span class="label font-mono text-base font-semibold mr-1"></span>
-                <button
-                  type="button"
-                  class="
-                    inline-flex
-                    items-center
-                    p-1
-                    text-sm
-                    text-slate-400
-                    bg-transparent
-                    rounded-full
-                    hover:bg-blue-200
-                    hover:text-blue-900
-                    dark:hover:bg-blue-600
-                    dark:hover:text-blue-300
-                  "
-                  data-action="click->filter-list#remove"
-                  aria-label="Remove"
-                >
-                  <%= viral_icon(name: "x_mark", classes: "w-4 h-4") %>
-                </button>
+        <div data-controller="filter-list" data-filter-list-selection-outlet="#samples-table">
+          <%= viral_dialog() do |dialog| %>
+            <%= dialog.with_trigger do %>
+              <%= viral_button(data: { action: "click->viral--dialog#open" }, classes: "relative") do %>
+                <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
+                <div data-filter-list-target="count" class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-slate-900">8</div>
               <% end %>
-            </template>
+            <% end %>
+            <%= dialog.with_header(title: "Filter by sample names or ID") %>
+            <%= dialog.with_section do %>
 
-            <%= render partial: "projects/samples/tagged_filter" %>
+              <template data-filter-list-target="template">
+                <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1") do %>
+                  <%= f.search_field :name_or_puid_in, multiple: true, class: "hidden" %>
+                  <span class="label font-mono text-base font-semibold mr-1"></span>
+                  <button
+                    type="button"
+                    class="
+                            inline-flex
+                            items-center
+                            p-1
+                            text-sm
+                            text-slate-400
+                            bg-transparent
+                            rounded-full
+                            hover:bg-blue-200
+                            hover:text-blue-900
+                            dark:hover:bg-blue-600
+                            dark:hover:text-blue-300
+                          "
+                    data-action="click->filter-list#remove"
+                    aria-label="Remove"
+                  >
+                    <%= viral_icon(name: "x_mark", classes: "w-4 h-4") %>
+                  </button>
+                <% end %>
+              </template>
 
+              <%= render partial: "projects/samples/tagged_filter" %>
+
+            <% end %>
+            <%= dialog.with_primary_action("data-action": "filter-list#afterSubmit filters#submit viral--dialog#close") { "Apply Filter" } %>
           <% end %>
-          <%= dialog.with_primary_action("data-action": "filter-list#clearStorage filters#submit viral--dialog#close") { "Apply Filter" } %>
-        <% end %>
+        </div>
         <%= f.label :name_or_puid_cont,
                 placeholder: t(".search.placeholder"),
                 class: "sr-only" %>
