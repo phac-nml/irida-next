@@ -1,0 +1,29 @@
+<%= viral_dialog(open: open) do |dialog| %>
+  <%= dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_section do %>
+    <%= turbo_frame_tag "clone_samples_dialog_content" do %>
+      <%= form_for(:clone, url: namespace_project_samples_clone_path, method: :post) do |form| %>
+        <div
+          data-controller="sessionstorage-amend-form"
+          data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
+          data-sessionstorage-amend-form-target="field"
+          data-sessionstorage-amend-form-field-name-value="clone[sample_ids][]"
+        />
+        <div class="grid gap-4">
+          <div class="form-field">
+            <%= form.label :new_project_id, t(".new_project_id") %>
+            <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
+          </div>
+          <div>
+            <%= form.submit t(".submit_button"),
+                        class: "button button--size-default button--state-primary",
+                        disabled: @projects.count.zero?,
+                        data: {
+                          action: "click->sessionstorage-amend-form#clear"
+                        } %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

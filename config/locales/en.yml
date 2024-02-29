@@ -920,6 +920,7 @@ en:
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
         transfer_button: Transfer samples
         import_metadata_button: Import metadata
+        clone_button: Clone samples
         actions:
           button_add_aria_label: Add new sample button
           dropdown_aria_label: Dropdown options for sample %{sample_name}
@@ -949,6 +950,17 @@ en:
           success: Samples were successfully transferred.
           error: "The following list of samples failed to transfer:"
           no_samples_transferred_error: "Samples were not transferred for the following reasons:"
+      clones:
+        create:
+          success: Samples were successfully cloned.
+          error: "The following list of samples failed to clone:"
+          no_samples_cloned_error: "Samples were not cloned for the following reasons:"
+        dialog:
+          title: Clone Samples
+          new_project_id: Project to clone samples to
+          submit_button: Submit
+        errors:
+          ok_button: OK
       metadata:
         deletions:
           destroy:
@@ -1085,7 +1097,7 @@ en:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
         same_project: The source and destination projects are the same. Please select a different destination project.
-        sample_exists: "Sample '%{sample_id}' already exists in the target project"
+        sample_exists: "Sample %{sample_puid}: Conflicts with Sample named '%{sample_name}' in target project"
       transfer:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.

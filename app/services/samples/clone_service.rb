@@ -34,9 +34,8 @@ module Samples
     def clone_samples(sample_ids)
       cloned_sample_ids = {}
       sample_ids.each do |sample_id|
-        cloned_sample_ids[sample_id] = clone_sample(sample_id)
-      rescue ActiveRecord::RecordInvalid
-        @project.errors.add(:sample, I18n.t('services.samples.clone.sample_exists', sample_id:))
+        cloned_sample_id = clone_sample(sample_id)
+        cloned_sample_ids[sample_id] = cloned_sample_id unless cloned_sample_id.nil?
       end
       cloned_sample_ids
     end
@@ -49,6 +48,10 @@ module Samples
       clone_attachments(sample, clone) if clone.valid?
       clone.save!
       clone.id
+    rescue ActiveRecord::RecordInvalid
+      @project.errors.add(:sample, I18n.t('services.samples.clone.sample_exists', sample_name: sample.name,
+                                                                                  sample_puid: sample.puid))
+      nil
     end
 
     def clone_attachments(sample, clone)

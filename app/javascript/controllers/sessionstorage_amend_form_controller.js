@@ -16,13 +16,15 @@ export default class extends Controller {
       sessionStorage.getItem(this.storageKeyValue)
     );
 
-    for (const storageValue of storageValues) {
-      const element = document.createElement("input");
-      element.type = "hidden";
-      element.id = this.fieldNameValue;
-      element.name = this.fieldNameValue;
-      element.value = storageValue;
-      this.fieldTarget.appendChild(element);
+    if (storageValues) {
+      for (const storageValue of storageValues) {
+        const element = document.createElement("input");
+        element.type = "hidden";
+        element.id = this.fieldNameValue;
+        element.name = this.fieldNameValue;
+        element.value = storageValue;
+        this.fieldTarget.appendChild(element);
+      }
     }
   }
 

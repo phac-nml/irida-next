@@ -1,0 +1,19 @@
+<% if @project.errors.empty? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+  <%= turbo_stream.update "samples_dialog", partial: "dialog", locals: { open: false } %>
+<% else %>
+  <%= turbo_stream.replace "clone_samples_dialog_content",
+                       partial: "errors",
+                       locals: {
+                         type: type,
+                         message: message,
+                         errors: errors
+                       } %>
+<% end %>
+
+<%= turbo_stream.replace "project_samples_list" do %>
+  <%= turbo_frame_tag "project_samples_list",
+  src: project_samples_path(@project, format: :turbo_stream) %>
+<% end %>

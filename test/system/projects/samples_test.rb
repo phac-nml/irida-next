@@ -256,7 +256,7 @@ module Projects
         select project26.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
-      within %(turbo-frame[id="transfer_alert"]) do
+      within %(turbo-frame[id="samples_alert"]) do
         assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
@@ -279,7 +279,7 @@ module Projects
         select project25.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
         click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
       end
-      within %(turbo-frame[id="transfer_alert"]) do
+      within %(turbo-frame[id="samples_alert"]) do
         assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
@@ -1805,6 +1805,59 @@ module Projects
         assert_not all('input[type="checkbox"]')[1].checked?
         assert_not all('input[type="checkbox"]')[3].checked?
         assert_not all('input[type="checkbox"]')[5].checked?
+      end
+    end
+
+    test 'user with maintainer access should be able to see the clone samples button' do
+      user = users(:joan_doe)
+      login_as user
+
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.clone_button'), count: 1
+    end
+
+    test 'user with guest access should not be able to see the clone samples button' do
+      user = users(:ryan_doe)
+      login_as user
+
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.clone_button'), count: 0
+    end
+
+    test 'should clone samples' do
+      project2 = projects(:project2)
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'table#samples-table tbody' do
+        assert_selector 'tr', count: 3
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.index.clone_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
+        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+      end
+      assert_text I18n.t('projects.samples.clones.create.success')
+    end
+
+    test 'should not clone some samples' do
+      project25 = projects(:project25)
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'table#samples-table tbody' do
+        assert_selector 'tr', count: 3
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.index.clone_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        select project25.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
+        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.clones.create.error')
+        errors = @project.errors.full_messages_for(:samples)
+        errors.each { |error| assert_text error }
+        click_on I18n.t('projects.samples.clones.errors.ok_button')
       end
     end
   end

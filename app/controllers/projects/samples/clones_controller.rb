@@ -5,6 +5,7 @@ module Projects
     # Controller actions for Project Samples Clone Controller
     class ClonesController < Projects::ApplicationController
       respond_to :turbo_stream
+      before_action :projects
 
       def create
         new_project_id = clone_params[:new_project_id]
@@ -17,8 +18,9 @@ module Projects
         elsif @project.errors.include?(:sample)
           render_sample_errors
         else
-          error = @project.errors.full_messages_for(:base).first
-          render status: :unprocessable_entity, locals: { type: :danger, message: error }
+          errors = @project.errors.full_messages_for(:base)
+          render status: :unprocessable_entity,
+                 locals: { type: :alert, message: t('.no_samples_cloned_error'), errors: }
         end
       end
 
@@ -35,6 +37,11 @@ module Projects
         else
           render status: :unprocessable_entity, locals: { type: :alert, message: t('.error'), errors: }
         end
+      end
+
+      def projects
+        @projects = authorized_scope(Project, type: :relation,
+                                              as: :manageable).where.not(namespace_id: @project.namespace_id)
       end
     end
   end
