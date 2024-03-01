@@ -29,8 +29,8 @@ class SubmissionsTest < ApplicationSystemTestCase
       assert_selector 'div.sample-sheet' do
         assert_selector 'table' do
           assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-          assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample1.name, count: 1
-          assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample2.name, count: 1
+          assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample1.puid, count: 1
+          assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample2.puid, count: 1
         end
       end
     end
