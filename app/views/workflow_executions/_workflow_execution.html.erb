@@ -41,16 +41,16 @@
                     } %>
       <% end %>
     <% end %>
-    <%# <% if workflow_execution.completed? || workflow_execution.error? %>
-    <%= form_with method: :delete, url: workflow_execution_path(workflow_execution) do |form| %>
-      <%= form.submit t(:"workflow_executions.index.actions.delete_button"),
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                  data: {
-                    turbo_confirm:
-                      t(:"workflow_executions.index.actions.delete_confirm")
-                  } %>
+    <% if workflow_execution.completed? || workflow_execution.error? %>
+      <%= form_with method: :delete, url: workflow_execution_path(workflow_execution) do |form| %>
+        <%= form.submit t(:"workflow_executions.index.actions.delete_button"),
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                    data: {
+                      turbo_confirm:
+                        t(:"workflow_executions.index.actions.delete_confirm")
+                    } %>
+      <% end %>
     <% end %>
-    <%# <% end %>
   </td>
 </tr>
