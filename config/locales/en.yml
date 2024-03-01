@@ -941,6 +941,9 @@ en:
       destroy:
         success: Sample %{sample_name} was successfully removed from project %{project_name}.
         error: The sample does not exist within the project.
+      shared:
+        errors:
+          ok_button: OK
       transfers:
         dialog:
           title: Transfer Samples
@@ -950,8 +953,6 @@ en:
           success: Samples were successfully transferred.
           error: "The following list of samples failed to transfer:"
           no_samples_transferred_error: "Samples were not transferred for the following reasons:"
-        errors:
-          ok_button: OK
       clones:
         create:
           success: Samples were successfully cloned.
@@ -961,8 +962,6 @@ en:
           title: Clone Samples
           new_project_id: Project to clone samples to
           submit_button: Submit
-        errors:
-          ok_button: OK
       metadata:
         deletions:
           destroy:

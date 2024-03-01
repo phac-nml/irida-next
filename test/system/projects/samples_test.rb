@@ -1848,7 +1848,7 @@ module Projects
         assert_text I18n.t('projects.samples.clones.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
-        click_on I18n.t('projects.samples.clones.errors.ok_button')
+        click_on I18n.t('projects.samples.shared.errors.ok_button')
       end
     end
 

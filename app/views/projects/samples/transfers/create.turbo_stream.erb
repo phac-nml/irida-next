@@ -5,7 +5,7 @@
   <%= turbo_stream.update "samples_dialog", partial: "dialog", locals: { open: false } %>
 <% else %>
   <%= turbo_stream.replace "transfer_samples_dialog_content",
-                       partial: "errors",
+                       partial: "projects/samples/shared/errors",
                        locals: {
                          type: type,
                          message: message,
