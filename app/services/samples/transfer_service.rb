@@ -20,7 +20,7 @@ module Samples
 
       transfer(new_project_id, sample_ids)
     rescue Samples::TransferService::TransferError => e
-      project.errors.add(:base, e.message)
+      @project.errors.add(:base, e.message)
       []
     end
 
@@ -56,17 +56,17 @@ module Samples
         transferred_samples_ids << sample_id
       rescue StandardError
         if sample
-          project.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
-                                              sample_name: sample.name, sample_puid: sample.puid))
+          @project.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
+                                               sample_name: sample.name, sample_puid: sample.puid))
         else
           not_found_sample_ids << sample_id
         end
         next
       end
       unless not_found_sample_ids.empty?
-        project.errors.add(:samples,
-                           I18n.t('services.samples.transfer.samples_not_found',
-                                  sample_ids: not_found_sample_ids.join(', ')))
+        @project.errors.add(:samples,
+                            I18n.t('services.samples.transfer.samples_not_found',
+                                   sample_ids: not_found_sample_ids.join(', ')))
       end
 
       if transferred_samples_ids.count.positive?
