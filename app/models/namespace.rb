@@ -125,7 +125,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
         .where(
           Arel.sql(
             format(
-              "(select concat(path,'/') from routes where source_id = %i) like concat(routes.path, '/%%')", id
+              "(select concat(path,'/') from routes where source_id = '%s') like concat(routes.path, '/%%')", id
             )
           )
         )

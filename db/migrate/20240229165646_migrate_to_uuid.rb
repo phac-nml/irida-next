@@ -51,6 +51,9 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
       UPDATE active_storage_variant_records SET blob_uuid = active_storage_blobs.uuid
       FROM active_storage_blobs WHERE active_storage_variant_records.blob_id = active_storage_blobs.id;
 
+      UPDATE attachments SET metadata['associated_attachment_id'] = to_jsonb(a.uuid)
+      FROM attachments a WHERE (attachments.metadata['associated_attachment_id'])::int = a.id;
+
       UPDATE members SET user_uuid = users.uuid
       FROM users WHERE members.user_id = users.id;
 
