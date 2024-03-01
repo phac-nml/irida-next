@@ -34,6 +34,16 @@ module Viral
 
     test 'with_multiple_sections dialog' do
       render_preview(:with_multiple_sections)
+
+      assert_selector '.dialog--header'
+      assert_selector ".dialog--header button[data-label='<%= t(:components.dialog.close) %>']"
+    end
+
+    test 'non closable dialog' do
+      render_preview(:non_closable)
+
+      assert_selector '.dialog--header'
+      assert_no_selector ".dialog--header button[data-label='<%= t(:components.dialog.close) %>']"
     end
   end
 end
