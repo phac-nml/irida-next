@@ -12,7 +12,7 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
     assert_selector 'table' do
       assert_selector 'thead th', count: 4
       assert_selector 'tbody tr', count: 3
-      assert_selector 'tbody tr:first td:first', text: 'Project 1 Sample 1'
+      assert_selector 'tbody tr:first td:first', text: samples(:sample1).puid
       assert_selector 'tbody tr:first td:nth-child(3) select', count: 1
       assert_selector 'tbody tr:first td:nth-child(4) select', count: 1
       assert_selector 'tbody tr:first td:nth-child(5) select', count: 1
