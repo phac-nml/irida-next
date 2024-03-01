@@ -102,9 +102,8 @@
         <div
           data-controller="filter-list"
           data-filter-list-selection-outlet="#samples-table"
-          data-action="keydown.esc->filter-list#handleEsc"
         >
-          <%= viral_dialog() do |dialog| %>
+          <%= viral_dialog(closable: false) do |dialog| %>
             <%= dialog.with_trigger do %>
               <%= viral_button(data: { action: "click->viral--dialog#open" }, classes: "relative") do %>
                 <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
@@ -132,7 +131,7 @@
                 >8</div>
               <% end %>
             <% end %>
-            <%= dialog.with_header(title: "Filter by sample names or ID", closable: false) %>
+            <%= dialog.with_header(title: t("projects.samples.tagged_filter.title")) %>
             <%= dialog.with_section do %>
 
               <template data-filter-list-target="template">
@@ -161,8 +160,14 @@
                   </button>
                 <% end %>
               </template>
+              <div class="space-y-4">
 
-              <%= render partial: "projects/samples/tagged_filter" %>
+                <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                  <%= raw t(:"projects.samples.tagged_filter.description") %>
+                </p>
+
+                <%= render partial: "projects/samples/tagged_filter" %>
+              </div>
 
             <% end %>
             <%= dialog.with_primary_action(

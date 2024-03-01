@@ -39,10 +39,6 @@ export default class extends Controller {
     this.#updateCount();
   }
 
-  handleEsc(event) {
-    event.preventDefault();
-  }
-
   #getNamesAndPUID(event) {
     return event.target.value
       .split(",")

@@ -1050,6 +1050,10 @@ en:
         created_at: Created
         updated_at: Last Updated
         action: Action
+      tagged_filter:
+        title: Filter by sample names or Id
+        clear: Remove all tags
+        description: 'Pasta a list of <kbd>,</kbd> sample names or identifier'
   workflow_executions:
     index:
       title: Workflow Executions

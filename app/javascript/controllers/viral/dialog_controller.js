@@ -19,4 +19,8 @@ export default class extends Controller {
   close() {
     this.dialog.close();
   }
+
+  handleEsc(event) {
+    event.preventDefault();
+  }
 }

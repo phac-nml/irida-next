@@ -1,6 +1,6 @@
 <%= render Viral::BaseComponent.new(tag: :span, data: {
   controller: "viral--dialog",
-  "viral--dialog-open-value": open
+  "viral--dialog-open-value": open,
 }) do %>
 
   <% if trigger.present? %>
@@ -33,6 +33,6 @@
           <% end %>
         </div>
       <% end %>
-     <% end %>
+    <% end %>
   </div>
 <% end %>
