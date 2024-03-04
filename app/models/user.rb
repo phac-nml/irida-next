@@ -2,6 +2,8 @@
 
 # entity class for User
 class User < ApplicationRecord
+  self.implicit_order_column = 'created_at'
+
   has_logidze
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

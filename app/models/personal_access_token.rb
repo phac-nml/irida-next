@@ -2,6 +2,8 @@
 
 # Personal Access Token class
 class PersonalAccessToken < ApplicationRecord
+  self.implicit_order_column = 'created_at'
+
   has_logidze
   serialize :scopes, type: Array, coder: YAML
 

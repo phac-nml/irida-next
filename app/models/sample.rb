@@ -2,6 +2,8 @@
 
 # entity class for Sample
 class Sample < ApplicationRecord
+  self.implicit_order_column = 'created_at'
+
   include History
 
   has_logidze
