@@ -26,6 +26,7 @@
 >
   <input
     type="text"
+    name="filter-text"
     class="
       focus:outline-none
       focus:ring-0
@@ -34,6 +35,7 @@
       grow
     "
     autofocus
+    aria-label="<%= t(:'projects.samples.tagged_filter.description') %>"
     data-action='input->filter-list#handleInput'
     data-filter-list-target="input"
   />

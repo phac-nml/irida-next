@@ -105,7 +105,7 @@
         >
           <%= viral_dialog(closable: false) do |dialog| %>
             <%= dialog.with_trigger do %>
-              <%= viral_button(data: { action: "click->viral--dialog#open" }, classes: "relative") do %>
+              <%= viral_button(data: { action: "click->viral--dialog#open" }, aria: { label: t(:'projects.samples.tagged_filter.title') }, title: t(:'projects.samples.tagged_filter.title'), classes: "relative") do %>
                 <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
                 <div
                   data-filter-list-target="count"
@@ -154,7 +154,7 @@
                       dark:hover:text-blue-300
                     "
                     data-action="click->filter-list#remove"
-                    aria-label="Remove"
+                    aria-label="<%= t(:'projects.samples.tagged_filter.remove_tag') %>"
                   >
                     <%= viral_icon(name: "x_mark", classes: "w-4 h-4") %>
                   </button>
@@ -172,7 +172,7 @@
             <% end %>
             <%= dialog.with_primary_action(
               "data-action": "filter-list#afterSubmit filters#submit viral--dialog#close"
-            ) { "Apply Filter" } %>
+                ) { t(:'projects.samples.tagged_filter.apply') } %>
           <% end %>
         </div>
         <%= f.label :name_or_puid_cont,

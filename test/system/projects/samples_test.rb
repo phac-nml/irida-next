@@ -1860,5 +1860,33 @@ module Projects
         click_on I18n.t('projects.samples.clones.errors.ok_button')
       end
     end
+
+    test 'filtering samples by list of sample puids' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'table#samples-table tbody' do
+        assert_selector 'tr', count: 3
+      end
+      find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
+      within 'dialog' do
+        assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
+        find("input[type='text']").send_keys "#{@sample1.puid}, #{@sample2.puid},"
+        assert_selector 'span.label', count: 2
+        assert_selector 'span.label', text: @sample1.puid
+        assert_selector 'span.label', text: @sample2.puid
+        click_button I18n.t(:'projects.samples.tagged_filter.apply')
+      end
+      within 'table#samples-table tbody' do
+        assert_selector 'tr', count: 2
+      end
+      find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
+      within 'dialog' do
+        assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
+        click_button I18n.t(:'projects.samples.tagged_filter.clear')
+        click_button I18n.t(:'projects.samples.tagged_filter.apply')
+      end
+      within 'table#samples-table tbody' do
+        assert_selector 'tr', count: 3
+      end
+    end
   end
 end

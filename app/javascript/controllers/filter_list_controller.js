@@ -6,17 +6,16 @@ export default class extends Controller {
   static outlets = ["selection"];
 
   handleInput(event) {
-    if (event.data === "") return;
+    if (event.data === "" || event.data === " ") return;
 
-    if (event.inputType === "insertFromPaste") {
+    if (event.inputType === "insertFromPaste" || event.data === ",") {
       const items = this.#getNamesAndPUID(event);
       items.forEach((item) =>
         this.tagsTarget.insertBefore(this.#formatTag(item), event.target),
       );
       this.#clearAndFocus(event);
     } else {
-      const value = event.target.value.replace(",", "");
-      this.#addDelayed(value, event);
+      this.#addDelayed(event);
     }
   }
 
@@ -55,11 +54,15 @@ export default class extends Controller {
     const clone = this.templateTarget.content.cloneNode(true);
     clone.querySelector(".label").innerText = item;
     clone.querySelector("input").value = item;
+    clone.querySelector("input").id = Date.now().toString(36);
     return clone;
   }
 
-  #addDelayed = _.debounce((value, event) => {
-    this.tagsTarget.insertBefore(this.#formatTag(value), event.target);
+  #addDelayed = _.debounce((event) => {
+    this.tagsTarget.insertBefore(
+      this.#formatTag(event.target.value),
+      event.target,
+    );
     this.#clearAndFocus(event);
   }, 1000);
 
@@ -68,7 +71,9 @@ export default class extends Controller {
     if (count > 0) {
       this.countTarget.innerText = count;
       this.countTarget.classList.remove("hidden");
+      this.countTarget.classList.add("inline-flex");
     } else {
+      this.countTarget.classList.remove("inline-flex");
       this.countTarget.classList.add("hidden");
     }
   }
