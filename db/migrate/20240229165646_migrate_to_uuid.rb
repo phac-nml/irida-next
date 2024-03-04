@@ -244,7 +244,8 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
     add_foreign_key :samples_workflow_executions, :samples
     add_foreign_key :workflow_executions, :users, column: :submitter_id
     add_foreign_key :active_storage_attachments, :active_storage_blobs, column: :blob_id
-    add_foreign_key :active_storage_attachments, :attachments, column: :record_id
+    # add_foreign_key :active_storage_attachments, :data_exports, column: :record_id
+    # add_foreign_key :active_storage_attachments, :attachments, column: :record_id
     add_foreign_key :active_storage_variant_records, :active_storage_blobs, column: :blob_id
     add_foreign_key :attachments, :samples, column: :attachable_id
     add_foreign_key :data_exports, :users
