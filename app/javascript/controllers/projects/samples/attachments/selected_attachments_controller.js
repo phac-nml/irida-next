@@ -18,7 +18,13 @@ export default class extends Controller {
 
     if (storageValues) {
       for (let [storageValueIndex, storageValue] of storageValues.entries()) {
-        const value = JSON.parse(JSON.stringify(storageValue));
+        let value = ''
+        if (storageValue.includes("[") && storageValue.includes("]")) {
+          value = JSON.parse(storageValue);
+        } else {
+          value = JSON.parse(JSON.stringify(storageValue));
+        }
+
 
         if (value instanceof Array) {
           for (let arrayValue of value) {
