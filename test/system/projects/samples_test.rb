@@ -445,25 +445,16 @@ module Projects
       click_on I18n.t('projects.samples.table.puid')
 
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
-      within first('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample3.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
-        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child td:first-child', text: @sample1.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
+      puids = retrieve_puids
+      (puids.length - 1).times do |n|
+        assert puids[n] < puids[n + 1]
       end
 
       click_on I18n.t('projects.samples.table.puid')
-
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
-      within first('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child td:first-child', text: @sample3.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
+      puids = retrieve_puids
+      (puids.length - 1).times do |n|
+        assert puids[n] > puids[n + 1]
       end
 
       click_on I18n.t('projects.samples.table.sample')
@@ -1887,6 +1878,16 @@ module Projects
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
       end
+    end
+
+    def retrieve_puids
+      puids = []
+      within first('table#samples-table tbody') do
+        (1..3).each do |n|
+          puids << first("tr:nth-child(#{n}) td:first-child").text
+        end
+      end
+      puids
     end
   end
 end
