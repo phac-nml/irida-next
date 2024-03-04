@@ -27,7 +27,7 @@ attachmentPEFWD1:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV1) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV1, :uuid) %>,
     }
   attachable: sampleB (Sample)
 
@@ -38,7 +38,7 @@ attachmentPEREV1:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD1) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD1, :uuid) %>,
     }
   attachable: sampleB (Sample)
 
@@ -49,7 +49,7 @@ attachmentPEFWD2:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV2) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV2, :uuid) %>,
     }
   attachable: sampleB (Sample)
 
@@ -60,7 +60,7 @@ attachmentPEREV2:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD2) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD2, :uuid) %>,
     }
   attachable: sampleB (Sample)
 
@@ -71,7 +71,7 @@ attachmentPEFWD3:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV3) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV3, :uuid) %>,
     }
   attachable: sampleB (Sample)
 
@@ -82,7 +82,7 @@ attachmentPEREV3:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD3) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD3, :uuid) %>,
     }
   attachable: sampleB (Sample)
 

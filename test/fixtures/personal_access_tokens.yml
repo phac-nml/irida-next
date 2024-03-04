@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 john_doe_expired_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   scopes:
     - api
   name: Expired PAT
@@ -11,7 +11,7 @@ john_doe_expired_pat:
   last_used_at: nil
 
 john_doe_revoked_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   scopes:
     - api
   name: Revoked PAT
@@ -21,7 +21,7 @@ john_doe_revoked_pat:
   last_used_at: nil
 
 john_doe_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   scopes:
     - api
   name: Valid PAT
@@ -31,7 +31,7 @@ john_doe_valid_pat:
   last_used_at: nil
 
 john_doe_valid_read_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   scopes:
     - read_api
   name: Valid PAT
@@ -41,7 +41,7 @@ john_doe_valid_read_pat:
   last_used_at: nil
 
 john_doe_non_expirable_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   scopes:
     - api
   name: Non Expirable PAT
@@ -51,7 +51,7 @@ john_doe_non_expirable_pat:
   last_used_at: nil
 
 jane_doe_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
   scopes:
     - api
   name: Valid PAT
@@ -61,7 +61,7 @@ jane_doe_valid_pat:
   last_used_at: nil
 
 jeff_doe_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   scopes:
     - api
   name: Valid PAT
@@ -71,7 +71,7 @@ jeff_doe_valid_pat:
   last_used_at: nil
 
 jeff_doe_valid_read_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   scopes:
     - read_api
   name: Valid PAT

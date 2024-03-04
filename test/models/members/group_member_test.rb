@@ -55,7 +55,7 @@ class GroupMemberTest < ActiveSupport::TestCase
   end
 
   test '#validates uniquess of user in group namespace' do
-    @group_member.user_id = ActiveRecord::FixtureSet.identify(:joan_doe)
+    @group_member.user_id = ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
     assert_not @group_member.valid?
   end
 

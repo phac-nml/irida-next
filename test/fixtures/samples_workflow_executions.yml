@@ -1,8 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 samples_workflow_executions_valid:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid) %>
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
   samplesheet_params:
     {
       key_c: 'value_c'
@@ -10,14 +10,14 @@ samples_workflow_executions_valid:
 
 samples_workflow_executions_invalid_no_sample:
   sample_id: null
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
   samplesheet_params:
     {
       key_c: 'value_c'
     }
 
 samples_workflow_executions_invalid_no_workflow_execution:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
   workflow_execution_id: null
   samplesheet_params:
     {
@@ -25,28 +25,28 @@ samples_workflow_executions_invalid_no_workflow_execution:
     }
 
 sample1_irida_next_example:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example) %>
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example, :uuid) %>
   samplesheet_params: {
-    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1)}" %>,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1)}" %>,
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1, :uuid)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
     "fastq_2": ""
   }
 
 sample1_irida_next_example_prepared:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_prepared) %>
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_prepared, :uuid) %>
   samplesheet_params: {
-    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1)}" %>,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1)}" %>,
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1, :uuid)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
     "fastq_2": ""
   }
 
 sample1_irida_next_example_canceling:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_canceling) %>
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_canceling, :uuid) %>
   samplesheet_params: {
-    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1)}" %>,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1)}" %>,
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1, :uuid)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
     "fastq_2": ""
   }

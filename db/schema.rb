@@ -49,11 +49,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
     t.jsonb "metadata", default: {}, null: false
     t.datetime "deleted_at"
     t.string "attachable_type", null: false
-    t.bigint "attachable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
-    t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable"
+    t.uuid "attachable_id", null: false
+    t.index ["attachable_id"], name: "index_attachments_on_attachable_id"
     t.index ["created_at"], name: "index_attachments_on_created_at"
     t.index ["metadata"], name: "index_attachments_on_metadata", using: :gin
   end
@@ -119,7 +119,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
     t.jsonb "log_data"
     t.datetime "deleted_at"
     t.jsonb "metadata_summary", default: {}
-    t.uuid "owner_id", null: false
+    t.uuid "owner_id"
     t.uuid "parent_id"
     t.index ["created_at"], name: "index_namespaces_on_created_at"
     t.index ["deleted_at"], name: "index_namespaces_on_deleted_at"
@@ -196,11 +196,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
 
   create_table "samples_workflow_executions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "samplesheet_params", default: {}, null: false
-    t.bigint "sample_id"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "workflow_execution_id", null: false
+    t.uuid "workflow_execution_id"
+    t.uuid "sample_id"
     t.index ["created_at"], name: "index_samples_workflow_executions_on_created_at"
     t.index ["sample_id"], name: "index_samples_workflow_executions_on_sample_id"
     t.index ["workflow_execution_id"], name: "index_samples_workflow_executions_on_workflow_execution_id"
@@ -238,11 +238,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
     t.jsonb "workflow_engine_parameters", default: {}, null: false
     t.string "workflow_url"
     t.string "run_id"
-    t.bigint "submitter_id"
     t.string "state"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "submitter_id", null: false
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
   end
@@ -250,6 +250,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_attachments", "attachments", column: "record_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "attachments", "samples", column: "attachable_id"
+  add_foreign_key "data_exports", "users"
   add_foreign_key "members", "namespaces"
   add_foreign_key "members", "users"
   add_foreign_key "namespace_group_links", "namespaces"
@@ -259,7 +261,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
   add_foreign_key "projects", "users", column: "creator_id"
   add_foreign_key "routes", "namespaces", column: "source_id"
   add_foreign_key "samples", "projects"
+  add_foreign_key "samples_workflow_executions", "samples"
   add_foreign_key "samples_workflow_executions", "workflow_executions"
+  add_foreign_key "workflow_executions", "users", column: "submitter_id"
   create_function :logidze_capture_exception, sql_definition: <<-'SQL'
       CREATE OR REPLACE FUNCTION public.logidze_capture_exception(error_data jsonb)
        RETURNS boolean

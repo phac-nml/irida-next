@@ -20,9 +20,12 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
 
     # Add UUID columns for associations
     add_column :samples_workflow_executions, :workflow_execution_uuid, :uuid
+    add_column :samples_workflow_executions, :sample_uuid, :uuid
+    add_column :workflow_executions, :submitter_uuid, :uuid
     add_column :active_storage_attachments, :record_uuid, :uuid
     add_column :active_storage_attachments, :blob_uuid, :uuid
     add_column :active_storage_variant_records, :blob_uuid, :uuid
+    add_column :attachments, :attachable_uuid, :uuid
     add_column :data_exports, :user_uuid, :uuid
     add_column :members, :user_uuid, :uuid
     add_column :members, :namespace_uuid, :uuid
@@ -42,6 +45,12 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
       UPDATE samples_workflow_executions SET workflow_execution_uuid = workflow_executions.uuid
       FROM workflow_executions WHERE samples_workflow_executions.workflow_execution_id = workflow_executions.id;
 
+      UPDATE samples_workflow_executions SET sample_uuid = samples.uuid
+      FROM samples WHERE samples_workflow_executions.sample_id = samples.id;
+
+      UPDATE workflow_executions SET submitter_uuid = users.uuid
+      FROM users WHERE workflow_executions.submitter_id = users.id;
+
       UPDATE active_storage_attachments SET record_uuid = attachments.uuid
       FROM attachments WHERE active_storage_attachments.record_id = attachments.id;
 
@@ -51,8 +60,14 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
       UPDATE active_storage_variant_records SET blob_uuid = active_storage_blobs.uuid
       FROM active_storage_blobs WHERE active_storage_variant_records.blob_id = active_storage_blobs.id;
 
+      UPDATE attachments SET attachable_uuid = samples.uuid
+      FROM samples WHERE attachments.attachable_id = samples.id;
+
       UPDATE attachments SET metadata['associated_attachment_id'] = to_jsonb(a.uuid)
       FROM attachments a WHERE (attachments.metadata['associated_attachment_id'])::int = a.id;
+
+      UPDATE data_exports SET user_uuid = users.uuid
+      FROM users WHERE data_exports.user_id = users.id;
 
       UPDATE members SET user_uuid = users.uuid
       FROM users WHERE members.user_id = users.id;
@@ -92,17 +107,20 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
     SQL
 
     # Change null
-    change_column_null :samples_workflow_executions, :workflow_execution_uuid, false
+    change_column_null :samples_workflow_executions, :workflow_execution_uuid, true
+    change_column_null :samples_workflow_executions, :sample_uuid, true
+    change_column_null :workflow_executions, :submitter_uuid, false
     change_column_null :active_storage_attachments, :record_uuid, false
     change_column_null :active_storage_attachments, :blob_uuid, false
     change_column_null :active_storage_variant_records, :blob_uuid, false
+    change_column_null :attachments, :attachable_uuid, false
     change_column_null :data_exports, :user_uuid, false
     change_column_null :members, :user_uuid, false
     change_column_null :members, :namespace_uuid, false
     change_column_null :members, :created_by_uuid, false
     change_column_null :namespace_group_links, :group_uuid, false # Doesn't look like it should be true
     change_column_null :namespace_group_links, :namespace_uuid, false # Doesn't look like it should be true
-    change_column_null :namespaces, :owner_uuid, false
+    change_column_null :namespaces, :owner_uuid, true
     change_column_null :namespaces, :parent_uuid, true
     change_column_null :personal_access_tokens, :user_uuid, false
     change_column_null :projects, :creator_uuid, false
@@ -112,9 +130,12 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
 
     # Migrate UUID to ID for associations
     remove_column :samples_workflow_executions, :workflow_execution_id
+    remove_column :samples_workflow_executions, :sample_id
+    remove_column :workflow_executions, :submitter_id
     remove_column :active_storage_attachments, :record_id
     remove_column :active_storage_attachments, :blob_id
     remove_column :active_storage_variant_records, :blob_id
+    remove_column :attachments, :attachable_id
     remove_column :data_exports, :user_id
     remove_column :members, :user_id
     remove_column :members, :namespace_id
@@ -130,9 +151,12 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
     remove_column :samples, :project_id
 
     rename_column :samples_workflow_executions, :workflow_execution_uuid, :workflow_execution_id
+    rename_column :samples_workflow_executions, :sample_uuid, :sample_id
+    rename_column :workflow_executions, :submitter_uuid, :submitter_id
     rename_column :active_storage_attachments, :record_uuid, :record_id
     rename_column :active_storage_attachments, :blob_uuid, :blob_id
     rename_column :active_storage_variant_records, :blob_uuid, :blob_id
+    rename_column :attachments, :attachable_uuid, :attachable_id
     rename_column :data_exports, :user_uuid, :user_id
     rename_column :members, :user_uuid, :user_id
     rename_column :members, :namespace_uuid, :namespace_id
@@ -149,9 +173,12 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
 
     # Add indexes for associations
     add_index :samples_workflow_executions, :workflow_execution_id
+    add_index :samples_workflow_executions, :sample_id
+    add_index :workflow_executions, :submitter_id
     add_index :active_storage_attachments, :blob_id
     add_index :active_storage_attachments, :record_id
     add_index :active_storage_variant_records, :blob_id
+    add_index :attachments, :attachable_id
     add_index :data_exports, :user_id
     add_index :members, :user_id
     add_index :members, :namespace_id
@@ -214,9 +241,13 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
 
     # Add foreign keys
     add_foreign_key :samples_workflow_executions, :workflow_executions
+    add_foreign_key :samples_workflow_executions, :samples
+    add_foreign_key :workflow_executions, :users, column: :submitter_id
     add_foreign_key :active_storage_attachments, :active_storage_blobs, column: :blob_id
     add_foreign_key :active_storage_attachments, :attachments, column: :record_id
     add_foreign_key :active_storage_variant_records, :active_storage_blobs, column: :blob_id
+    add_foreign_key :attachments, :samples, column: :attachable_id
+    add_foreign_key :data_exports, :users
     add_foreign_key :members, :users
     add_foreign_key :members, :namespaces
     add_foreign_key :namespace_group_links, :namespaces
