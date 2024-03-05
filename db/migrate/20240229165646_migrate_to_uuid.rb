@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 # migration to change primary IDs to UUIDs
-class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
-  def up # rubocop:disable Metrics
-    # rubocop:disable Metrics
-    Logidze.without_logging do
+class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/ClassLength
+  def up # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    Logidze.without_logging do # rubocop:disable Metrics/BlockLength
       add_column :attachments, :uuid, :uuid, null: false, default: -> { 'gen_random_uuid()' }
       add_column :samples_workflow_executions, :uuid, :uuid, null: false, default: -> { 'gen_random_uuid()' }
       add_column :workflow_executions, :uuid, :uuid, null: false, default: -> { 'gen_random_uuid()' }
