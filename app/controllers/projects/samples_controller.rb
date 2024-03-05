@@ -116,8 +116,12 @@ module Projects
     def select
       authorize! @project, to: :sample_listing?
 
-      @q = load_samples.ransack(params[:q])
-      @samples = @q.result.select(:id)
+      respond_to do |format|
+        format.turbo_stream do
+          @q = load_samples.ransack(params[:q])
+          @samples = @q.result.select(:id)
+        end
+      end
     end
 
     private
