@@ -85,7 +85,7 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
-    token_to_revoke = @user.personal_access_tokens.active.first
+    token_to_revoke = PersonalAccessToken.find_by(user_id: @user.id, name: 'Non Expirable PAT')
 
     assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
                        count: @active_token_count)

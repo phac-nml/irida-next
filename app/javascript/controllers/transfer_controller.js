@@ -5,7 +5,7 @@ export default class extends Controller {
   static values = { project: String };
 
   onChange(event) {
-    if (!Number.isNaN(Number.parseInt(event.target.value))) {
+    if (event.target.value.length == 36) {
       this.submitButtonTarget.removeAttribute("disabled");
     } else {
       this.submitButtonTarget.setAttribute("disabled", "disabled");
