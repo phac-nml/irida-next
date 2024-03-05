@@ -113,6 +113,13 @@ module Projects
       end
     end
 
+    def select
+      authorize! @project, to: :sample_listing?
+
+      @q = load_samples.ransack(params[:q])
+      @samples = @q.result.select(:id)
+    end
+
     private
 
     def sample
