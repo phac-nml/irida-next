@@ -105,6 +105,30 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/Cla
 
       UPDATE samples SET project_uuid = projects.uuid
       FROM projects WHERE samples.project_id = projects.id;
+
+      WITH t as (
+        SELECT s.id as id, json_object_agg(metadata_key, json_object(array['id', 'source', 'updated_at']::text[], array[u.uuid, 'user', s.metadata_provenance->metadata_key->>'updated_at']::text[])) as updated_metadata_provenance
+        FROM users u, samples s
+        JOIN jsonb_object_keys(s.metadata_provenance) metadata_key ON true
+        WHERE s.metadata_provenance->metadata_key->>'source' = 'user'
+        AND (s.metadata_provenance->metadata_key->'id')::int = u.id
+        GROUP BY s.id
+      )
+      UPDATE samples set metadata_provenance = metadata_provenance || t.updated_metadata_provenance::jsonb
+      FROM t
+      WHERE samples.id = t.id;
+
+      WITH t as (
+        SELECT s.id as id, json_object_agg(metadata_key, json_object(array['id', 'source', 'updated_at']::text[], array[a.uuid, 'analysis', s.metadata_provenance->metadata_key->>'updated_at']::text[])) as updated_metadata_provenance
+        FROM workflow_executions a, samples s
+        JOIN jsonb_object_keys(s.metadata_provenance) metadata_key ON true
+        WHERE s.metadata_provenance->metadata_key->>'source' = 'analysis'
+        AND (s.metadata_provenance->metadata_key->'id')::int = a.id
+        GROUP BY s.id
+      )
+      UPDATE samples set metadata_provenance = metadata_provenance || t.updated_metadata_provenance::jsonb
+      FROM t
+      WHERE samples.id = t.id;
       SQL
 
       # Change null
