@@ -1,5 +1,9 @@
-<ul>
-  <% @samples.each do |sample| %>
-    <li><%= sample.id %></li>
-  <% end %>
-</ul>
+<turbo-stream action="update" target="selected">
+  <template>
+    <ul class="hidden" >
+      <% @samples.each do |sample| %>
+        <li><%= sample.id %></li>
+      <% end %>
+    </ul>
+  </template>
+</turbo-stream>
