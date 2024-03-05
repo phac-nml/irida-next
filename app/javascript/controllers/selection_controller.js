@@ -23,12 +23,7 @@ export default class extends Controller {
     const storageValue = this.#getStoredSamples();
 
     if (storageValue) {
-      this.rowSelectionTargets.map((row) => {
-        if (storageValue.indexOf(row.value) > -1) {
-          row.checked = true;
-        }
-      });
-      this.#updateActionLinks(storageValue.length);
+      this.#updateUI(storageValue);
     } else {
       this.save([]);
     }
@@ -56,6 +51,11 @@ export default class extends Controller {
     sessionStorage.setItem(this.#storageKey, JSON.stringify([...storageValue]));
   }
 
+  update(ids) {
+    this.save(ids);
+    this.#updateUI(ids);
+  }
+
   #addOrRemove(add, storageValue) {
     const newStorageValue = this.#getStoredSamples();
 
@@ -70,6 +70,15 @@ export default class extends Controller {
 
     this.save(newStorageValue);
     this.#updateActionLinks(newStorageValue.length);
+  }
+
+  #updateUI(ids) {
+    this.rowSelectionTargets.map((row) => {
+      if (ids.indexOf(row.value) > -1) {
+        row.checked = true;
+      }
+    });
+    this.#updateActionLinks(ids.length);
   }
 
   #getStoredSamples() {
