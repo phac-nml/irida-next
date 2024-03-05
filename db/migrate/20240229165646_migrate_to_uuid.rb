@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # migration to change primary IDs to UUIDs
-
 class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
   def up # rubocop:disable Metrics
     # rubocop:disable Metrics
@@ -121,8 +120,8 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics
       change_column_null :members, :user_uuid, false
       change_column_null :members, :namespace_uuid, false
       change_column_null :members, :created_by_uuid, false
-      change_column_null :namespace_group_links, :group_uuid, false # Doesn't look like it should be true
-      change_column_null :namespace_group_links, :namespace_uuid, false # Doesn't look like it should be true
+      change_column_null :namespace_group_links, :group_uuid, false
+      change_column_null :namespace_group_links, :namespace_uuid, false
       change_column_null :namespaces, :owner_uuid, true
       change_column_null :namespaces, :parent_uuid, true
       change_column_null :personal_access_tokens, :user_uuid, false
