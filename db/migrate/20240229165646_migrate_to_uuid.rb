@@ -132,6 +132,39 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/Cla
       SQL
 
       # Change null
+      #
+      # do $$
+      #   declare
+      #       sample_log_data jsonb = samples.log_data FROM samples;
+      #       element varchar(128);
+      #   begin
+      #   FOR element IN
+      #       SELECT jsonb_array_elements FROM jsonb_array_elements(sample_log_data->'h')
+      #   LOOP
+      #     WITH t as (
+      #       SELECT s.id as id, jsonb_object_agg(log_data_key, element['c']->log_data_key|| jsonb_object(array['project_id']::text[], array[n.uuid]::text[])) as updated_log_data
+      #       FROM namespaces n, samples s
+      #       JOIN jsonb_object_keys(s.element['c']) log_data_key ON true
+      #       WHERE (s.element['c']->log_data_key->'project_id')::int = n.id
+      #       GROUP BY s.id
+      #     )
+      #     UPDATE samples set element['c'] = element['c'] || t.updated_log_data
+      #     FROM t
+      #     WHERE samples.id = t.id;
+      #   END LOOP;
+      # end;
+      # $$;
+
+      # WITH t as (
+      #   SELECT s.id as id, jsonb_object_agg(log_data_key, s.log_data['h'][0]->log_data_key|| jsonb_object(array['id']::text[], array[sa.uuid]::text[])) as updated_log_data
+      #   FROM samples sa, samples s
+      #   JOIN jsonb_object_keys(s.log_data['h'][0]) log_data_key ON true
+      #   WHERE (s.log_data['h'][0]->log_data_key->'id')::int = sa.id
+      #   GROUP BY s.id
+      # )
+      # UPDATE samples set log_data['h'][0] = log_data['h'][0] || t.updated_log_data
+      # FROM t
+      # WHERE samples.id = t.id;
       change_column_null :samples_workflow_executions, :workflow_execution_uuid, true
       change_column_null :samples_workflow_executions, :sample_uuid, true
       change_column_null :workflow_executions, :submitter_uuid, false
