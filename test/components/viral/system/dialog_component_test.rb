@@ -76,5 +76,15 @@ module System
         assert_selector 'hr', count: 1
       end
     end
+
+    test 'non closable dialog' do
+      visit('rails/view_components/viral_dialog_component/non_closable')
+      within('span[data-controller-connected="true"] dialog') do
+        assert_accessible
+        assert_selector 'input[type="text"]', count: 1
+        find('input[type="text"]').send_keys :escape
+      end
+      assert_selector 'span[data-controller-connected="true"] dialog'
+    end
   end
 end

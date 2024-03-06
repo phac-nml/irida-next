@@ -2,12 +2,14 @@
   <h1 class="dialog--title">
     <%= title %>
   </h1>
-  <button
-    type="button"
-    class="dialog--close"
-    data-action="click->viral--dialog#close"
-    aria-label="<%= t(:"components.dialog.close") %>"
-  >
-    <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-  </button>
+  <%- if closable %>
+    <button
+      type="button"
+      class="dialog--close"
+      data-action="click->viral--dialog#close"
+      aria-label="<%= t(:"components.dialog.close") %>"
+    >
+      <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
+    </button>
+  <% end %>
 <% end %>

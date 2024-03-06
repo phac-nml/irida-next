@@ -1,0 +1,75 @@
+<div
+  class="
+    relative
+    flex
+    flex-wrap
+    font-mono
+    bg-slate-50
+    border
+    border-slate-300
+    text-slate-900
+    text-sm
+    rounded-lg
+    focus-within:ring-primary-500
+    focus-within:border-primary-500
+    w-full
+    p-2.5
+    dark:bg-slate-700
+    dark:border-slate-600
+    dark:placeholder-slate-400
+    dark:text-white
+    dark:focus-within:ring-primary-500
+    dark:focus-within:border-primary-500k
+  "
+  data-filter-list-target="tags"
+  data-action="click->filter-list#focus"
+>
+  <input
+    type="text"
+    name="filter-text"
+    class="
+      focus:outline-none
+      focus:ring-0
+      border-none
+      bg-transparent
+      grow
+    "
+    autofocus
+    aria-label="<%= t(:'projects.samples.tagged_filter.description') %>"
+    data-action='
+      keydown->filter-list#handleInput
+      paste->filter-list#handlePaste
+    '
+    data-filter-list-target="input"
+  />
+  <button
+    type="button"
+    class="
+      absolute
+      inline-flex
+      items-center
+      justify-center
+      w-6
+      h-6
+      text-xs
+      font-bold
+      text-slate-600
+      bg-slate-100
+      border-3
+      border-slate-10
+      rounded-full
+      bottom-2
+      end-2
+      dark:text-slate-300
+      dark:border-slate-900
+      dark:bg-slate-600
+      dark:hover:bg-slate-500
+      hover:bg-slate-300
+    "
+    data-action="click->filter-list#clear"
+    aria-label="<%= t(:'projects.samples.tagged_filter.clear') %>"
+    title="<%= t(:'projects.samples.tagged_filter.clear') %>"
+  >
+    <%= viral_icon(name: "x_mark", classes: "h-4 w-4") %>
+  </button>
+</div>

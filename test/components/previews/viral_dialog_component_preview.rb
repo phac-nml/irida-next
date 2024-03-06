@@ -16,4 +16,6 @@ class ViralDialogComponentPreview < ViewComponent::Preview
   def with_trigger; end
 
   def with_multiple_sections; end
+
+  def non_closable; end
 end

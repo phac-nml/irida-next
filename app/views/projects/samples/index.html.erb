@@ -68,14 +68,14 @@
               class="
                 w-11
                 h-6
-                bg-gray-200
+                bg-slate-200
                 peer-focus:outline-none
                 peer-focus:ring-4
                 peer-focus:ring-primary-300
                 dark:peer-focus:ring-primary-800
                 rounded-full
                 peer
-                dark:bg-gray-700
+                dark:bg-slate-700
                 peer-checked:after:translate-x-full
                 rtl:peer-checked:after:-translate-x-full
                 peer-checked:after:border-white
@@ -84,22 +84,99 @@
                 after:top-[2px]
                 after:start-[2px]
                 after:bg-white
-                after:border-gray-300
+                after:border-slate-300
                 after:border
                 after:rounded-full
                 after:h-5
                 after:w-5
                 after:transition-all
-                dark:border-gray-600
+                dark:border-slate-600
                 peer-checked:bg-primary-600
               "
             ></div>
-            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            <span class="ms-3 text-sm font-medium text-slate-900 dark:text-slate-300">
               <%= t(:".search.metadata") %>
             </span>
           </label>
         </div>
-        <%= f.label :name_or_puid_cont, placeholder: t(".search.placeholder"), class: "sr-only" %>
+        <div
+          data-controller="filter-list"
+          data-filter-list-selection-outlet="#samples-table"
+        >
+          <%= viral_dialog(closable: false) do |dialog| %>
+            <%= dialog.with_trigger do %>
+              <%= viral_button(data: { action: "click->viral--dialog#open" }, aria: { label: t(:'projects.samples.tagged_filter.title') }, title: t(:'projects.samples.tagged_filter.title'), classes: "relative") do %>
+                <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
+                <div
+                  data-filter-list-target="count"
+                  class="
+                    hidden
+                    absolute
+                    items-center
+                    justify-center
+                    w-6
+                    h-6
+                    text-xs
+                    font-bold
+                    text-white
+                    bg-red-500
+                    border-2
+                    border-white
+                    rounded-full
+                    -top-2
+                    -end-2
+                    dark:border-slate-900
+                  "
+                >8</div>
+              <% end %>
+            <% end %>
+            <%= dialog.with_header(title: t("projects.samples.tagged_filter.title")) %>
+            <%= dialog.with_section do %>
+
+              <template data-filter-list-target="template">
+                <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1 py-1.5") do %>
+                  <%= f.search_field :name_or_puid_in, multiple: true, class: "hidden" %>
+                  <span class="label font-mono text-base font-semibold mr-1"></span>
+                  <button
+                    type="button"
+                    class="
+                      inline-flex
+                      items-center
+                      p-1
+                      text-sm
+                      text-slate-400
+                      bg-transparent
+                      rounded-full
+                      hover:bg-blue-200
+                      hover:text-blue-900
+                      dark:hover:bg-blue-600
+                      dark:hover:text-blue-300
+                    "
+                    data-action="click->filter-list#remove"
+                    aria-label="<%= t(:'projects.samples.tagged_filter.remove_tag') %>"
+                  >
+                    <%= viral_icon(name: "x_mark", classes: "w-4 h-4") %>
+                  </button>
+                <% end %>
+              </template>
+              <div class="space-y-4">
+
+                <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                  <%= raw t(:"projects.samples.tagged_filter.description") %>
+                </p>
+
+                <%= render partial: "projects/samples/tagged_filter" %>
+              </div>
+
+            <% end %>
+            <%= dialog.with_primary_action(
+              "data-action": "filter-list#afterSubmit filters#submit viral--dialog#close"
+            ) { t(:"projects.samples.tagged_filter.apply") } %>
+          <% end %>
+        </div>
+        <%= f.label :name_or_puid_cont,
+                placeholder: t(".search.placeholder"),
+                class: "sr-only" %>
         <div class="flex flex-row items-center space-x-2">
           <div class="relative lg:w-72">
             <div
