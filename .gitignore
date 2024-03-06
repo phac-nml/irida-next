@@ -40,6 +40,7 @@
 !/config/credentials/.keep
 /config/master.key
 
+/config/authentication/*
 
 /public/packs
 /public/packs-test

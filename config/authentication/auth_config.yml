@@ -1,5 +1,5 @@
 development:
-  omniauth_providers: [developer]
+  # omniauth_providers:
   # developer_text:
   # developer_icon:
   # saml_text:
