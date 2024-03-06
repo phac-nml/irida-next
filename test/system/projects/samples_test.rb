@@ -1856,6 +1856,8 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
+        assert_selector 'tr td', text: @sample1.puid
+        assert_selector 'tr td', text: @sample2.puid
       end
       find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
       within 'dialog' do

@@ -6,15 +6,20 @@ export default class extends Controller {
   static outlets = ["selection"];
 
   handleInput(event) {
-    if (event.keyCode === 8 && event.target.value.length === 0) {
+    const value = event.target.value.trim();
+    if (event.keyCode === 8 && value.length === 0) {
       // Handle backspace event
       this.#handleBackspace(event);
     } else if (event.target.value.trim() === "") {
       return;
     } else if (event.keyCode === 86 && event.ctrlKey === true) {
       return;
+    } else if (value.endsWith(",")) {
+      const removed = value.substring(0, value.length - 1);
+      this.#clearAndFocus();
+      this.tagsTarget.insertBefore(this.#formatTag(removed), this.inputTarget);
     } else {
-      this.#addDelayed(event);
+      this.#addDelayed(value);
     }
   }
 
@@ -77,12 +82,9 @@ export default class extends Controller {
     return clone;
   }
 
-  #addDelayed = _.debounce((event) => {
-    if (event.target.value.length > 0) {
-      this.tagsTarget.insertBefore(
-        this.#formatTag(event.target.value),
-        event.target,
-      );
+  #addDelayed = _.debounce((value) => {
+    if (value.length > 0) {
+      this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
       this.#clearAndFocus(event);
     }
   }, 1000);
