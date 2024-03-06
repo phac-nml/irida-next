@@ -8,18 +8,24 @@ export default class extends Controller {
   handleInput(event) {
     if (event.keyCode === 8 && event.target.value.length === 0) {
       // Handle backspace event
-      this.#handleBackspace();
+      this.#handleBackspace(event);
     } else if (event.target.value.trim() === "") {
       return;
     } else if (event.keyCode === 86 && event.ctrlKey === true) {
-      const items = this.#getNamesAndPUID(event.target.value);
-      items.forEach((item) =>
-        this.tagsTarget.insertBefore(this.#formatTag(item), event.target),
-      );
-      this.#clearAndFocus(event);
+      return;
     } else {
       this.#addDelayed(event);
     }
+  }
+
+  handlePaste(event) {
+    event.preventDefault();
+    const data = (event.clipboardData || window.clipboardData).getData("text");
+    const items = this.#getNamesAndPUID(data);
+    items.forEach((item) =>
+      this.tagsTarget.insertBefore(this.#formatTag(item), event.target),
+    );
+    this.#clearAndFocus();
   }
 
   remove({ target }) {
@@ -41,13 +47,14 @@ export default class extends Controller {
     this.#updateCount();
   }
 
-  #handleBackspace() {
+  #handleBackspace(event) {
     const tags = this.tagsTarget.querySelectorAll("span.search-tag");
     if (tags.length === 0) return;
     const last = tags[tags.length - 1];
     const text = last.querySelector(".label").innerText;
     this.tagsTarget.removeChild(last);
     this.inputTarget.value = text;
+    this.#addDelayed(event);
   }
 
   #getNamesAndPUID(value) {
@@ -57,9 +64,9 @@ export default class extends Controller {
       .filter(Boolean);
   }
 
-  #clearAndFocus(event) {
-    event.target.value = "";
-    event.target.focus();
+  #clearAndFocus() {
+    this.inputTarget.value = "";
+    this.inputTarget.focus();
   }
 
   #formatTag(item) {
@@ -71,11 +78,13 @@ export default class extends Controller {
   }
 
   #addDelayed = _.debounce((event) => {
-    this.tagsTarget.insertBefore(
-      this.#formatTag(event.target.value),
-      event.target,
-    );
-    this.#clearAndFocus(event);
+    if (event.target.value.length > 0) {
+      this.tagsTarget.insertBefore(
+        this.#formatTag(event.target.value),
+        event.target,
+      );
+      this.#clearAndFocus(event);
+    }
   }, 1000);
 
   #updateCount() {

@@ -36,7 +36,10 @@
     "
     autofocus
     aria-label="<%= t(:'projects.samples.tagged_filter.description') %>"
-    data-action='keyup->filter-list#handleInput'
+    data-action='
+      keydown->filter-list#handleInput
+      paste->filter-list#handlePaste
+    '
     data-filter-list-target="input"
   />
   <button
