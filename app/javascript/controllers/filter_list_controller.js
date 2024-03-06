@@ -6,10 +6,13 @@ export default class extends Controller {
   static outlets = ["selection"];
 
   handleInput(event) {
-    if (event.data === "" || event.data === " ") return;
-
-    if (event.inputType === "insertFromPaste" || event.data === ",") {
-      const items = this.#getNamesAndPUID(event);
+    if (event.keyCode === 8 && event.target.value.length === 0) {
+      // Handle backspace event
+      this.#handleBackspace();
+    } else if (event.target.value.trim() === "") {
+      return;
+    } else if (event.keyCode === 86 && event.ctrlKey === true) {
+      const items = this.#getNamesAndPUID(event.target.value);
       items.forEach((item) =>
         this.tagsTarget.insertBefore(this.#formatTag(item), event.target),
       );
@@ -38,8 +41,17 @@ export default class extends Controller {
     this.#updateCount();
   }
 
-  #getNamesAndPUID(event) {
-    return event.target.value
+  #handleBackspace() {
+    const tags = this.tagsTarget.querySelectorAll("span.search-tag");
+    if (tags.length === 0) return;
+    const last = tags[tags.length - 1];
+    const text = last.querySelector(".label").innerText;
+    this.tagsTarget.removeChild(last);
+    this.inputTarget.value = text;
+  }
+
+  #getNamesAndPUID(value) {
+    return value
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
