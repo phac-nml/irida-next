@@ -135,7 +135,7 @@
             <%= dialog.with_section do %>
 
               <template data-filter-list-target="template">
-                <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1") do %>
+                <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1 py-1.5") do %>
                   <%= f.search_field :name_or_puid_in, multiple: true, class: "hidden" %>
                   <span class="label font-mono text-base font-semibold mr-1"></span>
                   <button
@@ -172,7 +172,7 @@
             <% end %>
             <%= dialog.with_primary_action(
               "data-action": "filter-list#afterSubmit filters#submit viral--dialog#close"
-                ) { t(:'projects.samples.tagged_filter.apply') } %>
+            ) { t(:"projects.samples.tagged_filter.apply") } %>
           <% end %>
         </div>
         <%= f.label :name_or_puid_cont,
