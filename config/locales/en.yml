@@ -69,6 +69,7 @@ en:
         link_namespace_with_group?: You are not authorized to link group %{name} with other groups on this server.
         unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
         update_namespace_with_group_link?: You are not authorized to update group %{name} links with other groups on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within group %{name} on this server.
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.

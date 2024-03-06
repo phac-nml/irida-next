@@ -61,10 +61,6 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.member_listing?
   end
 
-  test '#sample_listing?' do
-    assert @policy.sample_listing?
-  end
-
   test '#link_namespace_with_group?' do
     assert @policy.link_namespace_with_group?
   end
@@ -75,6 +71,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
   test '#update_namespace_with_group_link?' do
     assert @policy.update_namespace_with_group_link?
+  end
+
+  test '#submit_workflow?' do
+    assert @policy.submit_workflow?
   end
 
   test 'scope' do

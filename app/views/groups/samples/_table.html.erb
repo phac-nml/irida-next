@@ -126,17 +126,19 @@
               dark:bg-slate-800
             "
           >
-            <%= check_box_tag "sample_ids[]",
-            sample.id,
-            nil,
-            id: dom_id(sample),
-            "aria-label": sample.name,
-            data: {
-              action: "input->selection#toggle",
-              selection_target: "rowSelection"
-            },
-            class:
-              "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+            <% if allowed_to?(:submit_workflow?, @group) %>
+              <%= check_box_tag "sample_ids[]",
+              sample.id,
+              nil,
+              id: dom_id(sample),
+              "aria-label": sample.name,
+              data: {
+                action: "input->selection#toggle",
+                selection_target: "rowSelection"
+              },
+              class:
+                "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+            <% end %>
             <%= link_to namespace_project_sample_path(
                         id: sample.id,
                         namespace_id: sample.project.namespace.parent.full_path,
