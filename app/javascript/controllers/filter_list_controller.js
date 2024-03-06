@@ -7,18 +7,24 @@ export default class extends Controller {
 
   handleInput(event) {
     const value = event.target.value.trim();
+
     if (event.keyCode === 8 && value.length === 0) {
       // Handle backspace event
       this.#handleBackspace(event);
-    } else if (event.target.value.trim() === "") {
-      return;
+    } else if (value.length === 0 && event.keyCode === 188) {
+      // Handle when a `,` is entered alone
+      event.preventDefault();
     } else if (event.keyCode === 86 && event.ctrlKey === true) {
+      // Skip handling paste, this gets handled by the paste event
       return;
-    } else if (value.endsWith(",")) {
-      const removed = value.substring(0, value.length - 1);
+    } else if (event.keyCode === 188) {
+      // If string ends with a coma, directly add the tag without debounce
+      event.preventDefault();
       this.#clearAndFocus();
-      this.tagsTarget.insertBefore(this.#formatTag(removed), this.inputTarget);
+      this.#addDelayed.cancel();
+      this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
     } else {
+      // Just text entered so debounce the value incase user adds more text
       this.#addDelayed(value);
     }
   }
@@ -41,6 +47,7 @@ export default class extends Controller {
   clear() {
     const tags = this.tagsTarget.querySelectorAll(".search-tag");
     [...tags].forEach((tag) => this.tagsTarget.removeChild(tag));
+    this.inputTarget.value = "";
   }
 
   focus() {
@@ -83,9 +90,9 @@ export default class extends Controller {
   }
 
   #addDelayed = _.debounce((value) => {
-    if (value.length > 0) {
+    if (value.length > 0 && value !== ",") {
       this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
-      this.#clearAndFocus(event);
+      this.#clearAndFocus();
     }
   }, 1000);
 
