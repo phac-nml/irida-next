@@ -129,7 +129,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def submit_workflow?
-    return true if Member.can_modify?(user, record) == true
+    return true if Member.can_submit_workflow?(user, record) == true
 
     details[:name] = record.name
     false

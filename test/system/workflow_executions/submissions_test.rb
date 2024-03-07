@@ -59,4 +59,13 @@ class SubmissionsTest < ApplicationSystemTestCase
       end
     end
   end
+
+  test 'should not display a launch pipeline button for group samples' do
+    user = users(:ryan_doe)
+    login_as user
+
+    visit group_samples_url(@namespace)
+
+    assert_no_text I18n.t(:'groups.samples.index.workflows.button_sr')
+  end
 end
