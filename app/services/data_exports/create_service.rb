@@ -20,12 +20,9 @@ module DataExports
 
       @data_export.save
 
-      if @data_export.valid?
-        # Call DataExportsCreateJob once created
-        true
-      else
-        false
-      end
+      return true if @data_export.valid?
+
+      false
     rescue DataExports::CreateService::DataExportCreateError => e
       @data_export.errors.add(:base, e.message)
       false
