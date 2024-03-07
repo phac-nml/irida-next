@@ -61,6 +61,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.member_listing?
   end
 
+  test '#sample_listing?' do
+    assert @policy.sample_listing?
+  end
+
   test '#link_namespace_with_group?' do
     assert @policy.link_namespace_with_group?
   end
