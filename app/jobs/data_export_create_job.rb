@@ -4,39 +4,14 @@
 class DataExportCreateJob < ApplicationJob
   queue_as :default
 
-  def perform(data_export) # rubocop:disable Metrics
+  def perform(data_export)
     @manifest = ''
+
     initialize_manifest(data_export.export_type)
 
-    new_zip = Tempfile.new
-    Zip::File.open(new_zip.path, create: true) do |zipfile|
-      data_export.export_parameters['ids'].each do |sample_id|
-        sample = Sample.find(sample_id)
-        project = Project.find(sample.project_id)
+    zip = create_zip(data_export)
 
-        update_manifest(sample, project)
-        sample.attachments.each do |attachment|
-          next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
-
-          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{attachment.file.filename}"
-
-          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(attachment.file.key))
-          next unless attachment.metadata.key?('associated_attachment_id')
-
-          paired_attachment = Attachment.find(attachment.metadata['associated_attachment_id'])
-          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{paired_attachment.file.filename}"
-
-          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(paired_attachment.file.key))
-        end
-      end
-      zipfile.get_output_stream('manifest.json') { |f| f.write @manifest.to_json }
-    end
-
-    data_export.file.attach(io: new_zip.open, filename: "#{data_export.id}.zip")
-    data_export.status = 'ready'
-    data_export.save
-    new_zip.close
-    new_zip.unlink
+    attach_zip_to_export(data_export, zip)
   end
 
   def initialize_manifest(export_type)
@@ -53,41 +28,77 @@ class DataExportCreateJob < ApplicationJob
                                  'irida-next-name' => project.namespace.name, 'children' => [] }
     end
 
-    project_hash = @manifest['children'].select { |proj| proj['name'] == project.puid }
+    project_directory = @manifest['children'].select { |proj| proj['name'] == project.puid }
 
-    sample_hash = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
-                    'irida-next-name' => sample.name, 'children' => [] }
+    sample_directory = { 'name' => sample.puid,
+                         'type' => 'folder',
+                         'irida-next-type' => 'sample',
+                         'irida-next-name' => sample.name,
+                         'children' => create_attachment_manifest_directories(sample) }
 
+    project_directory[0]['children'] << sample_directory
+  end
+
+  def create_attachment_manifest_directories(sample)
+    attachment_directories = []
     sample.attachments.each do |attachment|
       next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
 
-      attachment_folder_hash = { 'name' => attachment.id, 'type' => 'folder', 'irida-next-type' => 'attachment',
-                                 'children' => [] }
-
+      attachment_directory = { 'name' => attachment.id, 'type' => 'folder', 'irida-next-type' => 'attachment',
+                               'children' => [] }
       if attachment.metadata.key?('associated_attachment_id')
-
-        attachment_hash = { 'name' => attachment.file.filename, 'type' => 'file',
-                            'metadata' => { 'type' => attachment.metadata['type'],
-                                            'format' => attachment.metadata['format'],
-                                            'direction' => attachment.metadata['direction'] } }
-        paired_attachment = Attachment.find(attachment.metadata['associated_attachment_id'])
-        paired_attachment_hash = { 'name' => paired_attachment.file.filename, 'type' => 'file',
-                                   'metadata' => { 'type' => paired_attachment.metadata['type'],
-                                                   'format' => paired_attachment.metadata['format'],
-                                                   'direction' => paired_attachment.metadata['direction'] } }
-
-        attachment_folder_hash['children'] << attachment_hash
-        attachment_folder_hash['children'] << paired_attachment_hash
-
-      else
-        attachment_hash = { 'name' => attachment.file.filename, 'type' => 'file',
-                            'metadata' => { 'format' => attachment.metadata['format'] } }
-        attachment_hash['metadata']['type'] = attachment.metadata['type'] if attachment.metadata.key?('type')
-        attachment_folder_hash['children'] << attachment_hash
-
+        attachment_directory['children'] << create_attachment_file_manifest(attachment.associated_attachment)
       end
-      sample_hash['children'] << attachment_folder_hash
+      attachment_directory['children'] << create_attachment_file_manifest(attachment)
+
+      attachment_directories << attachment_directory
     end
-    project_hash[0]['children'] << sample_hash
+    attachment_directories
+  end
+
+  def create_attachment_file_manifest(attachment)
+    attachment_manifest_file = { 'name' => attachment.file.filename,
+                                 'type' => 'file',
+                                 'metadata' => { 'format' => attachment.metadata['format'] } }
+    if attachment.metadata.key?('direction')
+      attachment_manifest_file['metadata']['direction'] = attachment.metadata['direction']
+    end
+    attachment_manifest_file['metadata']['type'] = attachment.metadata['type'] if attachment.metadata.key?('type')
+    attachment_manifest_file
+  end
+
+  def create_zip(data_export) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    zip_file = Tempfile.new
+    Zip::File.open(zip_file.path, create: true) do |zipfile|
+      data_export.export_parameters['ids'].each do |sample_id|
+        sample = Sample.find(sample_id)
+        project = Project.find(sample.project_id)
+
+        update_manifest(sample, project)
+        sample.attachments.each do |attachment|
+          next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
+
+          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{attachment.file.filename}"
+
+          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(attachment.file.key))
+          next unless attachment.metadata.key?('associated_attachment_id')
+
+          paired_attachment = attachment.associated_attachment
+          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{paired_attachment.file.filename}"
+
+          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(paired_attachment.file.key))
+        end
+      end
+      zipfile.get_output_stream('manifest.json') { |f| f.write JSON.pretty_generate(JSON.parse(@manifest.to_json)) }
+    end
+    zip_file
+  end
+
+  def attach_zip_to_export(data_export, zip)
+    data_export.file.attach(io: zip.open, filename: "#{data_export.id}.zip")
+    data_export.status = 'ready'
+    data_export.save
+    zip.close
+    zip.unlink
   end
 end
