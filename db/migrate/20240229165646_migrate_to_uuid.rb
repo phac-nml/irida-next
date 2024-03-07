@@ -305,14 +305,14 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/Cla
     PersonalAccessToken.reset_log_data
     Sample.reset_log_data
 
-    Attachment.create_logidze_snapshot(timestamp: :created_at)
-    DataExport.create_logidze_snapshot(timestamp: :created_at)
-    User.create_logidze_snapshot(timestamp: :created_at)
-    Member.create_logidze_snapshot(timestamp: :created_at)
-    NamespaceGroupLink.create_logidze_snapshot(timestamp: :created_at)
-    Namespace.create_logidze_snapshot(timestamp: :created_at)
-    PersonalAccessToken.create_logidze_snapshot(timestamp: :created_at)
-    Sample.create_logidze_snapshot(timestamp: :created_at)
+    Attachment.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
+    DataExport.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
+    User.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
+    Member.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
+    NamespaceGroupLink.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
+    Namespace.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at metadata_summary])
+    PersonalAccessToken.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
+    Sample.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at metadata_provenance])
   end
 
   def down
