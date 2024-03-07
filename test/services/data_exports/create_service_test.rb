@@ -35,6 +35,22 @@ module DataExports
       end
     end
 
+    test 'cannot create data export with incorrect export_type param' do
+      invalid_params = { 'export_type' => 'invalid', 'export_parameters' => { 'ids' => [@sample1.id, @sample2.id] } }
+
+      assert_no_difference ['DataExport.count'] do
+        DataExports::CreateService.new(@user, invalid_params).execute
+      end
+    end
+
+    test 'cannot create data export with invalid sample id' do
+      invalid_params = { 'export_type' => 'sample', 'export_parameters' => { 'ids' => [99_999_999_999_999] } }
+
+      assert_no_difference ['DataExport.count'] do
+        DataExports::CreateService.new(@user, invalid_params).execute
+      end
+    end
+
     test 'valid authorization to create sample' do
       valid_params = { 'export_type' => 'sample', 'export_parameters' => { 'ids' => [@sample1.id, @sample2.id] } }
 

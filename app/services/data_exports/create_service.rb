@@ -20,9 +20,12 @@ module DataExports
 
       @data_export.save
 
-      # Call DataExportsCreateJob once created
-
-      true
+      if @data_export.valid?
+        # Call DataExportsCreateJob once created
+        true
+      else
+        false
+      end
     rescue DataExports::CreateService::DataExportCreateError => e
       @data_export.errors.add(:base, e.message)
       false
@@ -41,17 +44,17 @@ module DataExports
     # to export the chosen samples' data
     def validate_sample_export
       project_ids = []
+
       params['export_parameters']['ids'].each do |sample_id|
-        project_id = Sample.find(sample_id).project_id
+        sample = Sample.find_by(id: sample_id)
+        raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_sample_id') if sample.nil?
+
+        project_id = sample.project_id
         project_ids << project_id unless project_ids.include?(project_id)
       end
 
-      projects = []
       project_ids.each do |project_id|
-        projects << Project.find(project_id)
-      end
-      projects.each do |project|
-        authorize! project, to: :export_sample_data?
+        authorize! Project.find(project_id), to: :export_sample_data?
       end
     end
   end

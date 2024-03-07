@@ -1095,6 +1095,7 @@ en:
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
     data_exports:
       create:
+        invalid_sample_id: A sample selected for export does not exist.
         missing_required_parameters: A parameter required to create a valid Data Export is missing.
     members:
       create:
