@@ -41,7 +41,8 @@ module Projects
 
     def view_history_version
       authorize! @sample.project, to: :view_history?
-
+      puts 'hi4545345934850348584305830485430'
+      puts params[:version]
       @log_data = @sample.log_data_with_changes(params[:version])
       respond_to do |format|
         format.turbo_stream do
