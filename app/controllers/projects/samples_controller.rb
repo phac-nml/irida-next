@@ -118,8 +118,12 @@ module Projects
 
       respond_to do |format|
         format.turbo_stream do
-          @q = load_samples.ransack(params[:q])
-          @samples = @q.result.select(:id)
+          if params[:select].present?
+            @q = load_samples.ransack(params[:q])
+            @samples = @q.result.select(:id)
+          else
+            @samples = []
+          end
         end
       end
     end

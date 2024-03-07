@@ -74,9 +74,7 @@ export default class extends Controller {
 
   #updateUI(ids) {
     this.rowSelectionTargets.map((row) => {
-      if (ids.indexOf(row.value) > -1) {
-        row.checked = true;
-      }
+      row.checked = ids.indexOf(row.value) > -1;
     });
     this.#updateActionLinks(ids.length);
   }
