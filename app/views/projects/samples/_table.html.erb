@@ -10,6 +10,7 @@
       dark:text-slate-400
     "
     data-controller="selection"
+    data-selection-total-value="<%= @pagy.count %>"
     data-selection-action-link-outlet=".action-link"
   >
     <thead
@@ -38,11 +39,17 @@
           "
         >
           <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters" }, class: "filters" do |f| %>
-            <input type="hidden" name="format" value="turbo_stream" />
+            <input type="hidden" name="format" value="turbo_stream"/>
 
             <div class="flex flex-row items-center space-x-2">
-              <%= @pagy.count %>
-              <input type="checkbox" name="select" onchange="Turbo.navigator.submitForm(this.form)" />
+              /
+              <%= @pagy.count %><span data-selection-target="count"></span>
+              <input
+                type="checkbox"
+                name="select"
+                data-selection-target="selectAll"
+                onchange="Turbo.navigator.submitForm(this.form)"
+              />
             </div>
           <% end %>
           <%= render Ransack::SortComponent.new(
@@ -144,10 +151,10 @@
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
               <span class="font-semibold">
                 <%= highlight(
-                      sample.puid,
-                      defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-                    ) %>
+                  sample.puid,
+                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+                ) %>
               </span>
             <% end %>
           </td>
@@ -159,10 +166,10 @@
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
               <span class="font-semibold">
                 <%= highlight(
-                      sample.name,
-                      defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-                    ) %>
+                  sample.name,
+                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+                ) %>
               </span>
             <% end %>
           </td>
