@@ -16,4 +16,4 @@ pin 'lodash', to: 'https://ga.jspm.io/npm:lodash@4.17.21/lodash.js'
 pin '@rails/activestorage', to: 'https://ga.jspm.io/npm:@rails/activestorage@7.0.8/app/assets/javascripts/activestorage.esm.js'
 pin_all_from 'app/javascript/controllers', under: 'controllers'
 pin 'xlsx', to: 'https://ga.jspm.io/npm:xlsx@0.18.5/xlsx.mjs'
-pin "validator", to: "https://ga.jspm.io/npm:validator@13.11.0/index.js"
+pin 'validator', to: 'https://ga.jspm.io/npm:validator@13.11.0/index.js'
