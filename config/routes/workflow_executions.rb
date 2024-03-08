@@ -7,7 +7,7 @@ resources :workflow_executions, only: %i[create cancel] do
 
   scope module: :workflow_executions, as: :workflow_executions do
     collection do
-      resources :submissions, only: %i[new] do
+      resources :submissions, only: %i[create] do
         collection do
           get :pipeline_selection, as: :pipeline_selection
         end

@@ -21,9 +21,6 @@ require 'test_helpers/array_helpers'
 
 module ActiveSupport
   class TestCase
-    # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
-
     parallelize_setup do |worker|
       SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
       ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{worker}"
@@ -34,6 +31,9 @@ module ActiveSupport
       FileUtils.rm_rf(ActiveStorage::Blob.service.root)
       FileUtils.rm_rf(ActiveStorage::Blob.services.fetch(:test_fixtures).root)
     end
+
+    # Run tests in parallel with specified workers
+    parallelize(workers: :number_of_processors)
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
