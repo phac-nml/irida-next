@@ -25,7 +25,7 @@ export default class extends Controller {
       this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
     } else {
       // Just text entered so debounce the value incase user adds more text
-      this.#addDelayed(value);
+      this.#addDelayed();
     }
   }
 
@@ -66,7 +66,7 @@ export default class extends Controller {
     const text = last.querySelector(".label").innerText;
     this.tagsTarget.removeChild(last);
     this.inputTarget.value = text;
-    this.#addDelayed(event);
+    this.#addDelayed();
   }
 
   #getNamesAndPUID(value) {
@@ -91,7 +91,10 @@ export default class extends Controller {
 
   #addDelayed = _.debounce((value) => {
     if (value.length > 0 && value !== ",") {
-      this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
+      this.tagsTarget.insertBefore(
+        this.#formatTag(this.inputTarget.value),
+        this.inputTarget,
+      );
       this.#clearAndFocus();
     }
   }, 1000);
