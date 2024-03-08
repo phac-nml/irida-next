@@ -2,8 +2,6 @@
 
 # entity class for DataExport
 class DataExport < ApplicationRecord
-  self.implicit_order_column = 'created_at'
-
   has_logidze
   acts_as_paranoid
 

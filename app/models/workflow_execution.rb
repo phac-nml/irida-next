@@ -2,8 +2,6 @@
 
 # entity class for Sample
 class WorkflowExecution < ApplicationRecord
-  self.implicit_order_column = 'created_at'
-
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
 
   has_logidze

@@ -2,8 +2,6 @@
 
 # entity class for Project
 class Project < ApplicationRecord
-  self.implicit_order_column = 'created_at'
-
   acts_as_paranoid
 
   include HasPuid

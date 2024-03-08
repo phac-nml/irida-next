@@ -2,8 +2,6 @@
 
 # entity class for NamespaceGroupLink
 class NamespaceGroupLink < ApplicationRecord
-  self.implicit_order_column = 'created_at'
-
   has_logidze
   acts_as_paranoid
 

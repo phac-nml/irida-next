@@ -2,8 +2,6 @@
 
 # entity class for Sample
 class SamplesWorkflowExecution < ApplicationRecord
-  self.implicit_order_column = 'created_at'
-
   has_logidze
   acts_as_paranoid
 

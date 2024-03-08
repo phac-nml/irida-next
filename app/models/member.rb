@@ -2,8 +2,6 @@
 
 # entity class for Member
 class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
-  self.implicit_order_column = 'created_at'
-
   has_logidze
   acts_as_paranoid
 

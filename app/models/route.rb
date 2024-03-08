@@ -2,8 +2,6 @@
 
 # entity used to store fully qualified routes
 class Route < ApplicationRecord
-  self.implicit_order_column = 'created_at'
-
   acts_as_paranoid
 
   belongs_to :source, polymorphic: true, inverse_of: :route

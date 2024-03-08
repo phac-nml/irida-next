@@ -2,8 +2,6 @@
 
 # Namespace for Groups
 class Group < Namespace
-  self.implicit_order_column = 'created_at'
-
   include History
 
   has_many :group_members, foreign_key: :namespace_id, inverse_of: :group,

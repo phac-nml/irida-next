@@ -26,7 +26,7 @@ module Samples
 
       raise CloneError, I18n.t('services.samples.clone.empty_sample_ids') if sample_ids.blank?
 
-      return unless @project.id == new_project_id.to_s
+      return unless @project.id == new_project_id
 
       raise CloneError, I18n.t('services.samples.clone.same_project')
     end
