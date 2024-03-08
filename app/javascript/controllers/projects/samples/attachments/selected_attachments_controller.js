@@ -19,12 +19,12 @@ export default class extends Controller {
     if (storageValues) {
       for (let [storageValueIndex, storageValue] of storageValues.entries()) {
         let value = ''
-        if (storageValue.includes("[") && storageValue.includes("]")) {
-          value = JSON.parse(storageValue);
-        } else {
-          value = JSON.parse(JSON.stringify(storageValue));
+        try {
+          // Parse required for array ie: paired attachments
+          value = JSON.parse(storageValue)
+        } catch {
+          value = storageValue
         }
-
 
         if (value instanceof Array) {
           for (let arrayValue of value) {
