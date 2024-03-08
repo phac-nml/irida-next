@@ -8,6 +8,10 @@ class DataExportCreateJobTest < ActiveJob::TestCase
   end
 
   test 'creating export and updating data_export status and expiry' do
+    assert @data_export.status = 'processing'
+    assert_nil @data_export.expires_at
+    assert_not @data_export.file.valid?
+
     assert_difference -> { ActiveStorage::Attachment.count } => +1 do
       DataExportCreateJob.perform_now(@data_export)
     end
@@ -18,6 +22,7 @@ class DataExportCreateJobTest < ActiveJob::TestCase
       assert_equal Date.current + 6.days, @data_export.expires_at
     end
 
+    assert @data_export.file.valid?
     assert_equal "#{@data_export.id}.zip", @data_export.file.filename.to_s
   end
 end
