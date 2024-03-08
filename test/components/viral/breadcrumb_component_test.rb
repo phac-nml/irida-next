@@ -27,7 +27,7 @@ module Viral
       # Mock context breadcrumb
       context_crumbs = route_to_context_crumbs(mock_route)
       context_crumbs += [{ name: I18n.t('projects.edit.title', raise: true),
-                           path: "#{groups(:group_one).path}/-/edit`" }]
+                           path: "#{groups(:group_one).path}/-/edit" }]
 
       render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
@@ -54,7 +54,7 @@ module Viral
       # Mock context breadcrumb
       context_crumbs = route_to_context_crumbs(mock_route)
       context_crumbs += [{ name: I18n.t('projects.edit.title', raise: true),
-                           path: "#{groups(:group_one).path}/-/groups/new`" }]
+                           path: "#{groups(:group_one).path}/-/groups/new" }]
 
       render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
