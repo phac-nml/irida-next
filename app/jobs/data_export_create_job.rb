@@ -11,7 +11,11 @@ class DataExportCreateJob < ApplicationJob
 
     zip = create_zip(data_export)
 
-    attach_zip_to_export(data_export, zip)
+    attach_zip(data_export, zip)
+
+    data_export.expires_at = set_expiry
+    data_export.status = 'ready'
+    data_export.save
   end
 
   def initialize_manifest(export_type)
@@ -94,11 +98,18 @@ class DataExportCreateJob < ApplicationJob
     zip_file
   end
 
-  def attach_zip_to_export(data_export, zip)
+  def attach_zip(data_export, zip)
     data_export.file.attach(io: zip.open, filename: "#{data_export.id}.zip")
-    data_export.status = 'ready'
-    data_export.save
     zip.close
     zip.unlink
+  end
+
+  def set_expiry
+    today = Date.current
+    if today.monday? || today.tuesday?
+      today + 3.days
+    else
+      today + 5.days
+    end
   end
 end
