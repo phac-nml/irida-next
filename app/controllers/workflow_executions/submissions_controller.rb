@@ -31,7 +31,7 @@ module WorkflowExecutions
 
     def samples
       sample_ids = params[:sample_ids]
-      @samples = Sample.where(id: sample_ids)
+      @samples = Sample.where(id: sample_ids).includes(attachments: :file_attachment)
     end
   end
 end
