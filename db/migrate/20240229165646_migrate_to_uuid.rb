@@ -52,7 +52,16 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/Cla
       FROM users WHERE workflow_executions.submitter_id = users.id;
 
       UPDATE active_storage_attachments SET record_uuid = attachments.uuid
-      FROM attachments WHERE active_storage_attachments.record_id = attachments.id;
+      FROM attachments WHERE active_storage_attachments.record_id = attachments.id
+      and active_storage_attachments.record_type = 'Attachment';
+
+      UPDATE active_storage_attachments SET record_uuid = workflow_executions.uuid
+      FROM workflow_executions WHERE active_storage_attachments.record_id = workflow_executions.id
+      and active_storage_attachments.record_type = 'WorkflowExecution';
+
+      UPDATE active_storage_attachments SET record_uuid = samples_workflow_executions.uuid
+      FROM samples_workflow_executions WHERE active_storage_attachments.record_id = samples_workflow_executions.id
+      and active_storage_attachments.record_type = 'SamplesWorkflowExecution';
 
       UPDATE active_storage_attachments SET blob_uuid = active_storage_blobs.uuid
       FROM active_storage_blobs WHERE active_storage_attachments.blob_id = active_storage_blobs.id;
