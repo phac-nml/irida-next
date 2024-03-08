@@ -112,6 +112,19 @@ module Projects
         assert_response :unprocessable_entity
       end
 
+      test 'should not transfer one sample with same sample name' do
+        sample3 = samples(:sample3)
+        post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
+             params: {
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [sample3.id]
+               }
+             }
+
+        assert_response :unprocessable_entity
+      end
+
       test 'should do a partial sample transfer' do
         sample3 = samples(:sample3)
         post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),

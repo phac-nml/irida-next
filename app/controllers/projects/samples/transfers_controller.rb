@@ -18,26 +18,22 @@ module Projects
         end
       end
 
-      def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def create # rubocop:disable Metrics/AbcSize
         new_project_id = transfer_params[:new_project_id]
         sample_ids = transfer_params[:sample_ids]
-        transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
-                                                                                                 sample_ids)
+        @transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
+                                                                                                  sample_ids)
         @q = load_samples.ransack(params[:q])
         @pagy, @samples = pagy(@q.result)
 
-        if transferred_samples_ids.length == sample_ids.length
-          render status: :ok, locals: { sample_ids:, type: :success, message: t('.success'), errors: [] }
+        if @project.errors.empty?
+          render status: :ok, locals: { type: :success, message: t('.success') }
         elsif @project.errors.include?(:samples)
-          @errors = @project.errors.messages_for(:samples)
-          render status: :partial_content,
-                 locals: { sample_ids: transferred_samples_ids, type: :alert,
-                           message: t('.error'), errors: @errors }
+          render_sample_errors
         else
-          @errors = @project.errors.full_messages_for(:base)
+          errors = @project.errors.full_messages_for(:base)
           render status: :unprocessable_entity,
-                 locals: { sample_ids: [], type: :alert,
-                           message: t('.no_samples_transferred_error'), errors: @errors }
+                 locals: { type: :alert, message: t('.no_samples_transferred_error'), errors: }
         end
       end
 
@@ -45,6 +41,15 @@ module Projects
 
       def transfer_params
         params.require(:transfer).permit(:new_project_id, sample_ids: [])
+      end
+
+      def render_sample_errors
+        errors = @project.errors.messages_for(:samples)
+        if @transferred_samples_ids.count.positive?
+          render status: :partial_content, locals: { type: :alert, message: t('.error'), errors: }
+        else
+          render status: :unprocessable_entity, locals: { type: :alert, message: t('.error'), errors: }
+        end
       end
 
       def projects

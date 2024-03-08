@@ -237,11 +237,28 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        select project2.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
-        click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
+        select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
-      within %(turbo-frame[id="project_samples_list"]) do
-        assert_selector 'table#samples-table tbody tr', count: 0
+    end
+
+    test 'should not transfer samples with session storage cleared' do
+      project2 = projects(:project2)
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'table#samples-table tbody' do
+        assert_selector 'tr', count: 3
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      Capybara.execute_script 'sessionStorage.clear()'
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
+        errors = @project.errors.full_messages_for(:samples)
+        errors.each { |error| assert_text error }
       end
     end
 
@@ -253,16 +270,13 @@ module Projects
 
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        select project26.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
-        click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
+        select project26.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
-      within %(turbo-frame[id="samples_alert"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
-      end
-      within %(turbo-frame[id="project_samples_list"]) do
-        assert_selector 'table#samples-table tbody tr', count: 3
       end
     end
 
@@ -276,16 +290,13 @@ module Projects
 
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        select project25.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
-        click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
+        select project25.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
-      within %(turbo-frame[id="samples_alert"]) do
+      within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
-      end
-      within %(turbo-frame[id="project_samples_list"]) do
-        assert_selector 'table#samples-table tbody tr', count: 1
       end
     end
 
@@ -301,11 +312,8 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        select project2.full_path, from: I18n.t('projects.samples.transfers._transfer_modal.new_project_id')
-        click_on I18n.t('projects.samples.transfers._transfer_modal.submit_button')
-      end
-      within %(turbo-frame[id="project_samples_list"]) do
-        assert_selector 'table#samples-table tbody tr', count: 0
+        select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
     end
 
@@ -1832,6 +1840,27 @@ module Projects
       assert_text I18n.t('projects.samples.clones.create.success')
     end
 
+    test 'should not clone samples with session storage cleared' do
+      project2 = projects(:project2)
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'table#samples-table tbody' do
+        assert_selector 'tr', count: 3
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      Capybara.execute_script 'sessionStorage.clear()'
+      click_link I18n.t('projects.samples.index.clone_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
+        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('projects.samples.clones.create.no_samples_cloned_error')
+        errors = project2.errors.full_messages_for(:base)
+        errors.each { |error| assert_text error }
+        click_on I18n.t('projects.samples.shared.errors.ok_button')
+      end
+    end
+
     test 'should not clone some samples' do
       project25 = projects(:project25)
       visit namespace_project_samples_url(@namespace, @project)
@@ -1848,7 +1877,7 @@ module Projects
         assert_text I18n.t('projects.samples.clones.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
-        click_on I18n.t('projects.samples.clones.errors.ok_button')
+        click_on I18n.t('projects.samples.shared.errors.ok_button')
       end
     end
 

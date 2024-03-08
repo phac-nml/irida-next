@@ -14,7 +14,7 @@ module Projects
         @sample2 = samples(:sample2)
       end
 
-      test 'not clone samples with empty params' do
+      test 'should not clone samples with empty params' do
         post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
              params: {
                clone: {
@@ -25,7 +25,7 @@ module Projects
         assert_response :unprocessable_entity
       end
 
-      test 'not clone samples with no sample ids' do
+      test 'should not clone samples with no sample ids' do
         post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
              params: {
                clone: {
@@ -36,7 +36,7 @@ module Projects
         assert_response :unprocessable_entity
       end
 
-      test 'not clone samples with into same project' do
+      test 'should not clone samples with into same project' do
         post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
              params: {
                clone: {
@@ -47,7 +47,7 @@ module Projects
         assert_response :unprocessable_entity
       end
 
-      test 'not clone one sample with same sample name' do
+      test 'should not clone one sample with same sample name' do
         new_project = projects(:project34)
         post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
              params: {
@@ -59,7 +59,7 @@ module Projects
         assert_response :unprocessable_entity
       end
 
-      test 'clone good sample & not clone sample with same sample name' do
+      test 'should clone good sample & not clone sample with same sample name' do
         new_project = projects(:project34)
         post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
              params: {
@@ -71,7 +71,7 @@ module Projects
         assert_response :partial_content
       end
 
-      test 'clone samples with permission' do
+      test 'should clone samples with permission' do
         post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
              params: {
                clone: {
@@ -83,7 +83,7 @@ module Projects
         assert_response :success
       end
 
-      test 'not clone samples without permission' do
+      test 'should not clone samples without permission' do
         new_project = projects(:project33)
         post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
              params: {

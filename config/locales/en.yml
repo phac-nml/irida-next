@@ -941,8 +941,11 @@ en:
       destroy:
         success: Sample %{sample_name} was successfully removed from project %{project_name}.
         error: The sample does not exist within the project.
+      shared:
+        errors:
+          ok_button: OK
       transfers:
-        _transfer_modal:
+        dialog:
           title: Transfer Samples
           new_project_id: Project to transfer samples to
           submit_button: Submit
@@ -959,8 +962,6 @@ en:
           title: Clone Samples
           new_project_id: Project to clone samples to
           submit_button: Submit
-        errors:
-          ok_button: OK
       metadata:
         deletions:
           destroy:
@@ -1103,12 +1104,12 @@ en:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
         same_project: The source and destination projects are the same. Please select a different destination project.
-        sample_exists: "Sample %{sample_puid}: Conflicts with Sample named '%{sample_name}' in target project"
+        sample_exists: "Sample %{sample_puid}: Conflicts with sample named '%{sample_name}' in the target project"
       transfer:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
         same_project: The samples already exist in the project. Please select a different project.
-        sample_exists: "Sample '%{sample_name}' already exists in the target project"
+        sample_exists: "Sample %{sample_puid}: Conflicts with sample named '%{sample_name}' in the target project"
         samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
         maintainer_transfer_not_allowed: A maintainer can only transfer samples to other projects within the same hierarchy with a common ancestor
       metadata:
