@@ -107,9 +107,10 @@ class DataExportCreateJob < ApplicationJob
   def set_expiry
     today = Date.current
     if today.monday? || today.tuesday?
-      today + 3.days
+      # Monday export will expire Thurs 12 AM
+      today + 4.days
     else
-      today + 5.days
+      today + 6.days
     end
   end
 end
