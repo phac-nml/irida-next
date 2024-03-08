@@ -5,14 +5,14 @@ module WorkflowExecutions
   class SubmissionsController < ApplicationController
     respond_to :turbo_stream
     before_action :workflows
-    before_action :samples, only: %i[new]
-    before_action :workflow, only: %i[new]
+    before_action :samples, only: %i[create]
+    before_action :workflow, only: %i[create]
 
     def pipeline_selection
       render status: :ok
     end
 
-    def new
+    def create
       render status: :ok
     end
 
@@ -31,7 +31,7 @@ module WorkflowExecutions
 
     def samples
       sample_ids = params[:sample_ids]
-      @samples = Sample.where(id: sample_ids)
+      @samples = Sample.where(id: sample_ids).includes(attachments: :file_attachment)
     end
   end
 end

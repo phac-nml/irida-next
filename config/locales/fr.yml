@@ -1010,7 +1010,7 @@ fr:
     submissions:
       pipeline_selection:
         title: Workflow Selection
-      show:
+      create:
         title: '%{workflow} Parameters'
   services:
     attachments:

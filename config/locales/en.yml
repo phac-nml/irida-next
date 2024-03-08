@@ -1075,7 +1075,7 @@ en:
     submissions:
       pipeline_selection:
         title: Workflow Selection
-      new:
+      create:
         title: "%{workflow} parameters"
         submit: Submit
   services:
