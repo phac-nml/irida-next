@@ -4,9 +4,9 @@ data_export_one:
   name: Data Export 1
   export_type: sample
   status: processing
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sample1) %>, <%= ActiveRecord::FixtureSet.identify(:sample2) %>]}
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>]}
   email_notification: true
   expires_at : <%= Time.now + 3.days %>
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>

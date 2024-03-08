@@ -3,7 +3,7 @@
 sample1:
   name: Project 1 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 1.week.ago) %>
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
@@ -11,7 +11,7 @@ sample1:
 sample2:
   name: Project 1 Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 2.weeks.ago) %>
   created_at: <%= 2.weeks.ago %>
   updated_at: <%= 2.days.ago %>
@@ -20,7 +20,7 @@ sample2:
 sample<%= (n) %>:
   name: <%= "Project 2 Sample #{n}" %>
   description: <%= "Sample #{n} description." %>
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project2) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project2, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: n.weeks.ago) %>
   created_at: <%= n.weeks.ago %>
   updated_at: <%= n.days.ago %>
@@ -29,7 +29,7 @@ sample<%= (n) %>:
 sample23:
   name: Project 4 Sample 23
   description: Sample 23 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project4) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project4, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 23.weeks.ago) %>
   created_at: <%= 23.weeks.ago %>
   updated_at: <%= 23.days.ago %>
@@ -37,7 +37,7 @@ sample23:
 sample24:
   name: John Doe Project 2 Sample 1
   description: John Doe Project 2 Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 24.weeks.ago) %>
   created_at: <%= 24.weeks.ago %>
   updated_at: <%= 24.days.ago %>
@@ -45,7 +45,7 @@ sample24:
 sample25:
   name: Project 25 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project25) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project25, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 25.weeks.ago) %>
   created_at: <%= 25.weeks.ago %>
   updated_at: <%= 25.days.ago %>
@@ -53,7 +53,7 @@ sample25:
 sample26:
   name: Project 26 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project26, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 26.weeks.ago) %>
   created_at: <%= 26.weeks.ago %>
   updated_at: <%= 26.days.ago %>
@@ -61,7 +61,7 @@ sample26:
 sample27:
   name: Project 26 Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project26, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 27.weeks.ago) %>
   created_at: <%= 27.weeks.ago %>
   updated_at: <%= 27.days.ago %>
@@ -69,7 +69,7 @@ sample27:
 sampleA:
   name: Project A Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 28.weeks.ago) %>
   created_at: <%= 28.weeks.ago %>
   updated_at: <%= 28.days.ago %>
@@ -77,7 +77,7 @@ sampleA:
 sampleB:
   name: Project A Sample B
   description: Sample B description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 29.weeks.ago) %>
   created_at: <%= 29.weeks.ago %>
   updated_at: <%= 29.days.ago %>
@@ -85,7 +85,7 @@ sampleB:
 sampleC:
   name: Project A Sample C
   description: Sample C description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 30.weeks.ago) %>
   created_at: <%= 30.weeks.ago %>
   updated_at: <%= 30.days.ago %>
@@ -93,7 +93,7 @@ sampleC:
 sample28:
   name: Project 28 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project28) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project28, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 31.weeks.ago) %>
   created_at: <%= 31.weeks.ago %>
   updated_at: <%= 31.days.ago %>
@@ -101,7 +101,7 @@ sample28:
 sample29:
   name: Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project25) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project25, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 32.weeks.ago) %>
   created_at: <%= 32.weeks.ago %>
   updated_at: <%= 32.days.ago %>
@@ -109,7 +109,7 @@ sample29:
 sample30:
   name: Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project1) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 33.weeks.ago) %>
   created_at: <%= 33.weeks.ago %>
   updated_at: <%= 33.days.ago %>
@@ -121,7 +121,7 @@ sample30:
 sample31:
   name: Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project26) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project26, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 34.weeks.ago) %>
   created_at: <%= 34.weeks.ago %>
   updated_at: <%= 34.days.ago %>
@@ -129,25 +129,25 @@ sample31:
 sample32:
   name: Sample 32
   description: Sample 32 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project29) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project29, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 16.hours.ago) %>
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
 sample33:
   name: Sample33
   description: Sample 33 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project30) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project30, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 18.hours.ago) %>
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
 sample34:
   name: Sample 34
   description: Sample 34 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project31) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project31, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 20.hours.ago) %>
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
@@ -157,13 +157,13 @@ sample34:
 sample35:
   name: Sample 35
   description: Sample 35 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project31) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project31, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 22.hours.ago) %>
 
 sampleAlpha:
   name: Sample Alpha
   description: Sample Alpha description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 35.weeks.ago) %>
   created_at: <%= 35.week.ago %>
   updated_at: <%= 35.day.ago %>
@@ -171,7 +171,7 @@ sampleAlpha:
 sampleBravo:
   name: Sample Bravo
   description: Sample Bravo description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 36.weeks.ago) %>
   created_at: <%= 36.week.ago %>
   updated_at: <%= 36.day.ago %>
@@ -179,7 +179,7 @@ sampleBravo:
 sampleCharlie:
   name: Sample Charlie
   description: Sample Charlie description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 37.weeks.ago) %>
   created_at: <%= 37.week.ago %>
   updated_at: <%= 37.day.ago %>
@@ -187,7 +187,7 @@ sampleCharlie:
 sampleAlpha1:
   name: Sample Alpha 1
   description: Sample Alpha 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 38.weeks.ago) %>
   created_at: <%= 38.week.ago %>
   updated_at: <%= 38.day.ago %>
@@ -195,17 +195,17 @@ sampleAlpha1:
 sample36:
   name: Sample 36
   description: Sample 36 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 23.hours.ago) %>
 
 sampleJeff:
   name: Sample Jeff
   description: Sample Jeff description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 24.hours.ago) %>
 
 sample37:
   name: Project 1 Sample 2
   description: Sample with the same name.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project34) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project34, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 63.days.ago) %>

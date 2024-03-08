@@ -4,94 +4,94 @@ john_doe_namespace:
   name: john.doe@localhost
   path: john.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
 
 jane_doe_namespace:
   name: jane.doe@localhost
   path: jane.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
 
 jean_doe_namespace:
   name: jean.doe@localhost
   path: jean.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jean_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:jean_doe, :uuid) %>
 
 james_doe_namespace:
   name: james.doe@localhost
   path: james.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:james_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
 
 david_doe_namespace:
   name: david.doe@localhost
   path: david.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
 
 jeff_doe_namespace:
   name: jeff.doe@localhost
   path: jeff.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
 
 private_ryan_namespace:
   name: private.ryan@localhost
   path: private.ryan_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
 
 joan_doe_namespace:
   name: joan.doe@localhost
   path: joan.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
 
 micha_doe_namespace:
   name: micha.doe@localhost
   path: micha.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
 
 ryan_doe_namespace:
   name: ryan.doe@localhost
   path: ryan.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
 
 user_26_namespace:
   name: user.26@localhost
   path: user.26_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user26) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>
 
 alph_abet_namespace:
   name: alph.abet@localhost
   path: alph.abet_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet, :uuid) %>
 
 private_joan_namespace:
   name: private.joan@localhost
   path: private.joan_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_joan) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
 
 private_micha_namespace:
   name: private.micha@localhost
   path: private.micha_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_micha) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_micha, :uuid) %>
 
 user27_namespace:
   name: user.27@localhost
   path: user.27_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user27) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
 
 user28_namespace:
   name: user.28@localhost
   path: user.28_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user28) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user28, :uuid) %>

@@ -1,97 +1,97 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 namespace_group_link1:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project20_namespace) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project20_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Project"
 
 namespace_group_link2:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Group"
 
 namespace_group_link3:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project25_namespace) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project25_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Project"
 
 namespace_group_link4:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Group"
 
 namespace_group_link5:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
 namespace_group_link6:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
 namespace_group_link7:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup2) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup2, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
 namespace_group_link8:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
 namespace_group_link9:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
 namespace_group_link10:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one_project1_namespace) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one_project1_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
 namespace_group_link11:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
 namespace_group_link12:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo_namespace) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Project"
 
 namespace_group_link13:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
 namespace_group_link14:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_eleven) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_eleven, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Group"
 
 namespace_group_link15:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_delta_subgroupA) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_echo) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_delta_subgroupA, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Group"
 
 namespace_group_link16:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_golf) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectFoxtrotSubgroupA_namespace) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_golf, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectFoxtrotSubgroupA_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Project"

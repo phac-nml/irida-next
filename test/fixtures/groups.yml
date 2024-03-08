@@ -5,7 +5,7 @@ group_one:
   path: group-1
   type: Group
   description: Group 1 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 633, "metadatafield2": 106 }
 
 subgroup1:
@@ -13,7 +13,7 @@ subgroup1:
   path: subgroup-1
   type: Group
   description: Subgroup 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   metadata_summary: {}
 
 <% (Namespace::MAX_ANCESTORS-1).times do |n| %>
@@ -22,7 +22,7 @@ subgroup<%= (n+2) %>:
   path: <%= "subgroup-#{n+2}" %>
   type: Group
   description: <%= "Subgroup #{n+2} description" %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}") %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}", :uuid) %>
   metadata_summary: {}
 <% end %>
 
@@ -45,7 +45,7 @@ subgroup_one_group_three:
   path: subgroup-1-group-3
   type: Group
   description: Subgroup 1 Group 3
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
   metadata_summary: {}
 
 david_doe_group_four:
@@ -67,7 +67,7 @@ subgroup_one_group_five:
   path: subgroup-1-group-5
   type: Group
   description: Subgroup 1 Group 5
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
   metadata_summary: {}
 
 group_six:
@@ -82,7 +82,7 @@ subgroup_one_group_six:
   path: group-6
   type: Group
   description: Subgroup 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
   metadata_summary: {}
 
 group_seven:
@@ -143,7 +143,7 @@ subgroup_one_group_nine:
   path: subgroup-1-group-9
   type: Group
   description: Subgroup 1 Group 9 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
   metadata_summary: {}
 
 group_ten:
@@ -151,7 +151,7 @@ group_ten:
   path: group-10-subgroup-1-group-9
   type: Group
   description: Group 10 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
   metadata_summary: {}
 
 group_alpha:
@@ -194,7 +194,7 @@ group_twelve:
   path: group-12
   type: Group
   description: Group 12 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 3, "metadatafield2": 3 }
 
 subgroup_twelve_a:
@@ -202,8 +202,8 @@ subgroup_twelve_a:
   path: subgroup-12-a
   type: Group
   description: Subgroup 12 A description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
 
 subgroup_twelve_b:
@@ -211,8 +211,8 @@ subgroup_twelve_b:
   path: subgroup-12-b
   type: Group
   description: Subgroup 12 B description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
 
 subgroup_twelve_a_a:
@@ -220,8 +220,8 @@ subgroup_twelve_a_a:
   path: subgroup-12-a-a
   type: Group
   description: Subgroup 12 A A description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
 
 group_delta:
@@ -236,7 +236,7 @@ group_delta_subgroupA:
   path: group-delta/subgroup-a
   type: Group
   description: Subgroup A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
   metadata_summary: {}
 
 group_echo:
@@ -251,7 +251,7 @@ group_echo_subgroupB:
   path: group-echo/subgroup-b
   type: Group
   description: Subgroup B description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
   metadata_summary: {}
 
 group_foxtrot:
@@ -266,7 +266,7 @@ group_foxtrot_subgroupA:
   path: group-foxtrot/subgroup-a
   type: Group
   description: Subgroup A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid) %>
   metadata_summary: {}
 
 group_golf:
@@ -282,7 +282,7 @@ group_hotel:
   type: Group
   description: Group Hotel description
   metadata_summary: {}
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
 
 group_thirteen:
   name: Group 13

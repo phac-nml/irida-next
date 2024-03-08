@@ -31,7 +31,7 @@ module Samples
 
       raise TransferError, I18n.t('services.samples.transfer.empty_sample_ids') if sample_ids.blank?
 
-      return unless @project.id == new_project_id.to_i
+      return unless @project.id == new_project_id
 
       raise TransferError,
             I18n.t('services.samples.transfer.same_project')

@@ -146,7 +146,7 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
 end
 
 def seed_workflow_executions # rubocop:disable Metrics/MethodLength
-  WorkflowExecution.create(
+  workflow_exection = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
     workflow_params: { '-r': 'dev' },
     workflow_type: 'DSL2',
@@ -156,13 +156,13 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
     workflow_engine_version: '',
     workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
-    submitter: User.find(2)
+    submitter: User.find_by(email: 'user1@email.com')
   )
 
   SamplesWorkflowExecution.create(
     samplesheet_params: { my_key1: 'my_value_1', my_key2: 'my_value_2' },
-    sample: Sample.find(1),
-    workflow_execution: WorkflowExecution.find(1)
+    sample: Sample.first,
+    workflow_execution: workflow_exection
   )
 end
 
