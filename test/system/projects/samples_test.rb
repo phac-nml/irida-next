@@ -1891,7 +1891,7 @@ module Projects
       find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
       within 'dialog' do
         assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
-        find("input[type='text']").send_keys "#{@sample1.puid}, #{@sample2.puid},"
+        find("input[type='text']").send_keys "#{@sample1.puid}, #{@sample2.puid}"
         assert_selector 'span.label', count: 2
         assert_selector 'span.label', text: @sample1.puid
         assert_selector 'span.label', text: @sample2.puid

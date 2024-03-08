@@ -89,12 +89,10 @@ export default class extends Controller {
     return clone;
   }
 
-  #addDelayed = _.debounce((value) => {
+  #addDelayed = _.debounce(() => {
+    const value = this.inputTarget.value.trim();
     if (value.length > 0 && value !== ",") {
-      this.tagsTarget.insertBefore(
-        this.#formatTag(this.inputTarget.value),
-        this.inputTarget,
-      );
+      this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
       this.#clearAndFocus();
     }
   }, 1000);
