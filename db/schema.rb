@@ -202,6 +202,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_142828) do
     t.datetime "updated_at", null: false
     t.uuid "workflow_execution_id"
     t.uuid "sample_id"
+    t.datetime "attachments_updated_at"
     t.index ["created_at"], name: "index_samples_workflow_executions_on_created_at"
     t.index ["sample_id"], name: "index_samples_workflow_executions_on_sample_id"
     t.index ["workflow_execution_id"], name: "index_samples_workflow_executions_on_workflow_execution_id"
@@ -244,6 +245,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_142828) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "submitter_id", null: false
+    t.datetime "attachments_updated_at"
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
   end
