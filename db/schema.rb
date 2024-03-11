@@ -186,7 +186,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_142828) do
     t.jsonb "metadata_provenance", default: {}, null: false
     t.string "puid", null: false
     t.uuid "project_id", null: false
-    t.datetime "files_updated_at"
+    t.datetime "attachments_updated_at"
     t.index ["created_at"], name: "index_samples_on_created_at"
     t.index ["deleted_at"], name: "index_samples_on_deleted_at"
     t.index ["metadata"], name: "index_samples_on_metadata", using: :gin
@@ -645,7 +645,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_142828) do
       CREATE TRIGGER logidze_on_members BEFORE INSERT OR UPDATE ON public.members FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
   create_trigger :logidze_on_samples, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_samples BEFORE INSERT OR UPDATE ON public.samples FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{created_at,metadata_provenance,updated_at,files_updated_at}')
+      CREATE TRIGGER logidze_on_samples BEFORE INSERT OR UPDATE ON public.samples FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{created_at,metadata_provenance,updated_at,attachments_updated_at}')
   SQL
   create_trigger :logidze_on_personal_access_tokens, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_personal_access_tokens BEFORE INSERT OR UPDATE ON public.personal_access_tokens FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
