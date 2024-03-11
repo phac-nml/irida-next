@@ -19,7 +19,7 @@ This `pipelines.json` file should be in the format below and must include the fo
 - **URL** of the pipeline Github repository
 - **name** of the pipeline
 - **description** of the pipeline
-- **versions** of the pipeline that should be available to launch
+- **versions** of the pipeline that should be available to launch. **Note:** The `name` in the versions refers to the `-r` flag used by nextflow.
 
 ```json
 [
