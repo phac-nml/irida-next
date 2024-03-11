@@ -43,8 +43,10 @@
             <input type="hidden" name="format" value="turbo_stream"/>
 
             <% if allowed_to?(:transfer_sample?, project) %>
+              <label for="select-all" class="sr-only"><%= t(:'.selectAll') %></label>
               <input
                 type="checkbox"
+                id="select-all"
                 name="select"
                 class="
                   w-4

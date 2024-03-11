@@ -1055,6 +1055,7 @@ en:
         error: File %{filename} was not removed.
       table:
         description: The project samples table contains all samples related to this project
+        selectAll: Select / Deslect Samples
         sample: Sample
         puid: ID
         created_at: Created
