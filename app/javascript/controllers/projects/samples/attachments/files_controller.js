@@ -19,7 +19,7 @@ export default class extends Controller {
 
         for (let cell of row.cells) {
           // copy file name, type, and sze
-          if ([1, 3, 4].includes(cell.cellIndex)) {
+          if ([1, 2, 4, 5].includes(cell.cellIndex)) {
             newRow.append(cell.cloneNode(true));
           }
         }
