@@ -9,7 +9,7 @@ class DataExportCreateJob < ApplicationJob
 
     initialize_manifest(data_export.export_type)
 
-    zip = create_zip(data_export)
+    zip = create_sample_zip(data_export) if data_export.export_type == 'sample'
 
     attach_zip(data_export, zip)
 
@@ -26,7 +26,34 @@ class DataExportCreateJob < ApplicationJob
                 end
   end
 
-  def update_manifest(sample, project) # rubocop:disable Metrics
+  def create_sample_zip(data_export) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    zip_file = Tempfile.new
+    Zip::File.open(zip_file.path, create: true) do |zipfile|
+      data_export.export_parameters['ids'].each do |sample_id|
+        sample = Sample.find(sample_id)
+        project = Project.find(sample.project_id)
+
+        update_sample_manifest(sample, project)
+        sample.attachments.each do |attachment|
+          next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
+
+          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{attachment.file.filename}"
+
+          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(attachment.file.key))
+          next unless attachment.metadata.key?('associated_attachment_id')
+
+          paired_attachment = attachment.associated_attachment
+          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{paired_attachment.file.filename}"
+
+          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(paired_attachment.file.key))
+        end
+      end
+      zipfile.get_output_stream('manifest.json') { |f| f.write JSON.pretty_generate(JSON.parse(@manifest.to_json)) }
+    end
+    zip_file
+  end
+
+  def update_sample_manifest(sample, project) # rubocop:disable Metrics
     unless @manifest['children'].any? { |h| h['name'] == project.puid }
       @manifest['children'] << { 'name' => project.puid, 'type' => 'folder', 'irida-next-type' => 'project',
                                  'irida-next-name' => project.namespace.name, 'children' => [] }
@@ -50,10 +77,11 @@ class DataExportCreateJob < ApplicationJob
 
       attachment_directory = { 'name' => attachment.id, 'type' => 'folder', 'irida-next-type' => 'attachment',
                                'children' => [] }
+
+      attachment_directory['children'] << create_attachment_file_manifest(attachment)
       if attachment.metadata.key?('associated_attachment_id')
         attachment_directory['children'] << create_attachment_file_manifest(attachment.associated_attachment)
       end
-      attachment_directory['children'] << create_attachment_file_manifest(attachment)
 
       attachment_directories << attachment_directory
     end
@@ -69,33 +97,6 @@ class DataExportCreateJob < ApplicationJob
     end
     attachment_manifest_file['metadata']['type'] = attachment.metadata['type'] if attachment.metadata.key?('type')
     attachment_manifest_file
-  end
-
-  def create_zip(data_export) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    zip_file = Tempfile.new
-    Zip::File.open(zip_file.path, create: true) do |zipfile|
-      data_export.export_parameters['ids'].each do |sample_id|
-        sample = Sample.find(sample_id)
-        project = Project.find(sample.project_id)
-
-        update_manifest(sample, project)
-        sample.attachments.each do |attachment|
-          next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
-
-          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{attachment.file.filename}"
-
-          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(attachment.file.key))
-          next unless attachment.metadata.key?('associated_attachment_id')
-
-          paired_attachment = attachment.associated_attachment
-          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{paired_attachment.file.filename}"
-
-          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(paired_attachment.file.key))
-        end
-      end
-      zipfile.get_output_stream('manifest.json') { |f| f.write JSON.pretty_generate(JSON.parse(@manifest.to_json)) }
-    end
-    zip_file
   end
 
   def attach_zip(data_export, zip)
