@@ -24,17 +24,17 @@ module Attachments
     def execute # rubocop:disable Metrics/CyclomaticComplexity
       authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
-      @attachments.each(&:save)
+      valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
 
-      persisted_fastq_attachments = @attachments.select { |attachment| attachment.persisted? && attachment.fastq? }
+      identify_illumina_paired_end_files(valid_fastq_attachments) if valid_fastq_attachments.count > 1
 
-      identify_illumina_paired_end_files(persisted_fastq_attachments) if persisted_fastq_attachments.count > 1
-
-      unidentified_fastq_attachments = persisted_fastq_attachments.reject do |attachment|
+      unidentified_fastq_attachments = valid_fastq_attachments.reject do |attachment|
         attachment.metadata['type'] == 'illumina_pe'
       end
 
       identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.count > 1
+
+      @attachments.each(&:save)
 
       @attachments
     end
@@ -96,21 +96,26 @@ module Attachments
       assign_metadata(pe, 'pe')
     end
 
-    def assign_metadata(paired_ends, type)
+    def assign_metadata(paired_ends, type) # rubocop:disable Metrics/AbcSize
       paired_ends.each do |_key, pe_attachments|
         next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
+
+        # update the PUID to be same for forward and reverse and then save so that we have the ids
+        pe_attachments['reverse'].puid = pe_attachments['forward'].puid
+        pe_attachments['forward'].save
+        pe_attachments['reverse'].save
 
         fwd_metadata = {
           associated_attachment_id: pe_attachments['reverse'].id, type:, direction: 'forward'
         }
 
-        pe_attachments['forward'].update(metadata: pe_attachments['forward'].metadata.merge(fwd_metadata))
+        pe_attachments['forward'].metadata = pe_attachments['forward'].metadata.merge(fwd_metadata)
 
         rev_metadata = {
           associated_attachment_id: pe_attachments['forward'].id, type:, direction: 'reverse'
         }
 
-        pe_attachments['reverse'].update(metadata: pe_attachments['reverse'].metadata.merge(rev_metadata))
+        pe_attachments['reverse'].metadata = pe_attachments['reverse'].metadata.merge(rev_metadata)
       end
     end
   end

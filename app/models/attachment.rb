@@ -5,6 +5,8 @@ class Attachment < ApplicationRecord
   has_logidze
   acts_as_paranoid
 
+  include HasPuid
+
   belongs_to :attachable, polymorphic: true
 
   has_one_attached :file
@@ -13,11 +15,15 @@ class Attachment < ApplicationRecord
 
   validates_with AttachmentChecksumValidator
 
-  before_create :assign_metadata
+  after_initialize :assign_metadata
 
   delegate :filename, to: :file
 
   delegate :byte_size, to: :file
+
+  def self.model_prefix
+    'ATT'
+  end
 
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment
   def destroy
