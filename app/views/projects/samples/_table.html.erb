@@ -39,26 +39,37 @@
             z-10
           "
         >
-          <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters" }, class: "filters" do |f| %>
+          <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters" }, class: "filters flex align-middle" do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
 
-            <div class="flex flex-row items-center space-x-2">
-              /
-              <%= @pagy.count %><span data-selection-target="count"></span>
-              <input
-                type="checkbox"
-                name="select"
-                data-selection-target="selectAll"
-                onchange="Turbo.navigator.submitForm(this.form)"
-              />
-            </div>
+            <input
+              type="checkbox"
+              name="select"
+              class="
+                w-4
+                h-4
+                mr-2.5
+                text-primary-600
+                bg-slate-100
+                border-slate-300
+                rounded
+                focus:ring-primary-500
+                dark:focus:ring-primary-600
+                dark:ring-offset-slate-800
+                focus:ring-2
+                dark:bg-slate-700
+                dark:border-slate-600
+              "
+              data-selection-target="selectAll"
+              onchange="Turbo.navigator.submitForm(this.form)"
+            />
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(".puid"),
+              url: sorting_url(@q, :puid),
+              field: :puid
+            ) %>
           <% end %>
-          <%= render Ransack::SortComponent.new(
-            ransack_obj: @q,
-            label: t(".puid"),
-            url: sorting_url(@q, :puid),
-            field: :puid
-          ) %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
           <%= render Ransack::SortComponent.new(
@@ -218,5 +229,35 @@
         </tr>
       <% end %>
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">
+          <div
+            class="
+              sticky
+              bottom-0
+              right-0
+              items-center
+              w-full
+              p-4
+              bg-white
+              border-t
+              border-gray-200
+              dark:bg-gray-800
+              dark:border-gray-700
+            "
+          >
+            <span>
+              <%= t(".counts.samples") %>:
+              <strong data-selection-target="total">0</strong>
+            </span>
+            <span>
+              <%= t(".counts.selected") %>:
+              <strong data-selection-target="selected">0</strong>
+            </span>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </div>

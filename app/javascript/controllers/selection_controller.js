@@ -5,7 +5,7 @@ export default class extends Controller {
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
   #storageKey = null;
 
-  static targets = ["rowSelection", "count", "selectAll"];
+  static targets = ["rowSelection", "selectAll", "total", "selected"];
   static outlets = ["action-link"];
 
   static values = {
@@ -26,10 +26,11 @@ export default class extends Controller {
 
     if (storageValue) {
       this.#updateUI(storageValue);
-      this.updateSelectionCounts(storageValue.length);
     } else {
       this.save([]);
     }
+
+    this.#updatedCounts(storageValue.length);
   }
 
   actionLinkOutletConnected(outlet) {
@@ -59,10 +60,6 @@ export default class extends Controller {
     this.#updateUI(ids);
   }
 
-  updateSelectionCounts(count) {
-    this.countTarget.innerText = count;
-  }
-
   #addOrRemove(add, storageValue) {
     const newStorageValue = this.#getStoredSamples();
 
@@ -77,8 +74,8 @@ export default class extends Controller {
 
     this.save(newStorageValue);
     this.#updateActionLinks(newStorageValue.length);
-    this.updateSelectionCounts(newStorageValue.length);
     this.#updateSelectAllCB(newStorageValue.length);
+    this.#updatedCounts(newStorageValue.length);
   }
 
   #updateUI(ids) {
@@ -86,8 +83,8 @@ export default class extends Controller {
       row.checked = ids.indexOf(row.value) > -1;
     });
     this.#updateActionLinks(ids.length);
-    this.updateSelectionCounts(ids.length);
     this.#updateSelectAllCB(ids.length);
+    this.#updatedCounts(ids.length);
   }
 
   #getStoredSamples() {
@@ -102,5 +99,10 @@ export default class extends Controller {
 
   #updateSelectAllCB(total) {
     this.selectAllTarget.checked = this.totalValue === total;
+  }
+
+  #updatedCounts(selected) {
+    this.totalTarget.innerText = this.totalValue;
+    this.selectedTarget.innerText = selected;
   }
 }

@@ -1061,6 +1061,9 @@ en:
         updated_at: Last Updated
         files_updated_at: Files Last Updated
         action: Action
+        counts:
+          samples: Samples
+          selected: Selected
       tagged_filter:
         title: Filter by sample names or Id
         clear: Remove all tags
