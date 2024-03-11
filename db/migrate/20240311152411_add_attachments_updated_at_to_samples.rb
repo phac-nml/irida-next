@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# migration to add files updated at column to samples table
-class AddFilesUpdatedAtToSamples < ActiveRecord::Migration[7.1]
+# migration to add attachments updated at column to samples table
+class AddAttachmentsUpdatedAtToSamples < ActiveRecord::Migration[7.1]
   def up
     add_column :samples, :attachments_updated_at, :datetime
 
