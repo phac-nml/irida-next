@@ -42,27 +42,29 @@
           <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters" }, class: "filters flex align-middle" do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
 
-            <input
-              type="checkbox"
-              name="select"
-              class="
-                w-4
-                h-4
-                mr-2.5
-                text-primary-600
-                bg-slate-100
-                border-slate-300
-                rounded
-                focus:ring-primary-500
-                dark:focus:ring-primary-600
-                dark:ring-offset-slate-800
-                focus:ring-2
-                dark:bg-slate-700
-                dark:border-slate-600
-              "
-              data-selection-target="selectAll"
-              onchange="Turbo.navigator.submitForm(this.form)"
-            />
+            <% if allowed_to?(:transfer_sample?, project) %>
+              <input
+                type="checkbox"
+                name="select"
+                class="
+                  w-4
+                  h-4
+                  mr-2.5
+                  text-primary-600
+                  bg-slate-100
+                  border-slate-300
+                  rounded
+                  focus:ring-primary-500
+                  dark:focus:ring-primary-600
+                  dark:ring-offset-slate-800
+                  focus:ring-2
+                  dark:bg-slate-700
+                  dark:border-slate-600
+                "
+                data-selection-target="selectAll"
+                onchange="Turbo.navigator.submitForm(this.form)"
+              />
+            <% end %>
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
               label: t(".puid"),
