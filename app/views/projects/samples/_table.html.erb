@@ -165,7 +165,9 @@
             <%= viral_time_ago(original_time: sample.updated_at) %>
           </td>
           <td class="px-6 py-3 whitespace-nowrap">
-            <%= viral_time_ago(original_time: sample.attachments_updated_at) %>
+            <% if sample.attachments.count.positive? %>
+              <%= viral_time_ago(original_time: sample.attachments_updated_at) %>
+            <% end %>
           </td>
           <% @fields.each do |column| %>
             <td class="px-6 py-3 whitespace-nowrap">
