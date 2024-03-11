@@ -71,6 +71,14 @@
           field: :updated_at
         ) %>
       </th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <%= render Ransack::SortComponent.new(
+          ransack_obj: @q,
+          label: t(".files_updated_at"),
+          url: sorting_url(@q, :files_updated_at),
+          field: :files_updated_at
+        ) %>
+      </th>
       <% @fields.each do |column| %>
         <th scope="col" class="px-6 py-3 text-left whitespace-nowrap">
             <%= render Ransack::SortComponent.new(
@@ -148,6 +156,9 @@
         </td>
         <td class="px-6 py-3 whitespace-nowrap">
           <%= viral_time_ago(original_time: sample.updated_at) %>
+        </td>
+        <td class="px-6 py-3 whitespace-nowrap">
+          <%= viral_time_ago(original_time: sample.files_updated_at) %>
         </td>
         <% @fields.each do |column| %>
           <td class="px-6 py-3 whitespace-nowrap">

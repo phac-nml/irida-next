@@ -667,6 +667,7 @@ en:
         puid: ID
         created_at: Created
         updated_at: Last Updated
+        files_updated_at: Files Last Updated
   models:
     sample:
       analysis: Analysis
@@ -1054,6 +1055,7 @@ en:
         puid: ID
         created_at: Created
         updated_at: Last Updated
+        files_updated_at: Files Last Updated
         action: Action
       tagged_filter:
         title: Filter by sample names or Id

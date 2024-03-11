@@ -68,6 +68,14 @@
             field: :updated_at
           ) %>
         </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".files_updated_at"),
+            url: sorting_url(@q, :files_updated_at),
+            field: :files_updated_at
+          ) %>
+        </th>
         <% @fields.each do |column| %>
           <th scope="col" class="px-6 py-3 text-left whitespace-nowrap">
             <%= render Ransack::SortComponent.new(
@@ -97,7 +105,8 @@
           id="<%= sample.id %>"
           class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
         >
-          <td class="
+          <td
+            class="
               px-6
               py-3
               whitespace-nowrap
@@ -105,7 +114,8 @@
               left-0
               bg-slate-50
               dark:bg-slate-900
-            ">
+            "
+          >
             <% if allowed_to?(:transfer_sample?, project) %>
               <%= check_box_tag "sample_ids[]",
               sample.id,
@@ -124,12 +134,13 @@
               turbo: false
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
-            <span class="font-semibold">
-              <%= highlight(
-                sample.puid, defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-              ) %>
-            </span>
+              <span class="font-semibold">
+                <%= highlight(
+                  sample.puid,
+                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+                ) %>
+              </span>
             <% end %>
           </td>
           <td class="px-6 py-3 whitespace-nowrap">
@@ -138,19 +149,23 @@
               turbo: false
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
-            <span class="font-semibold">
-              <%= highlight(
-                sample.name, defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-              ) %>
-            </span>
-          <% end %>
+              <span class="font-semibold">
+                <%= highlight(
+                  sample.name,
+                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+                ) %>
+              </span>
+            <% end %>
           </td>
           <td class="px-6 py-3 whitespace-nowrap">
             <%= l(sample.created_at.localtime, format: :full_date) %>
           </td>
           <td class="px-6 py-3 whitespace-nowrap">
             <%= viral_time_ago(original_time: sample.updated_at) %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= viral_time_ago(original_time: sample.files_updated_at) %>
           </td>
           <% @fields.each do |column| %>
             <td class="px-6 py-3 whitespace-nowrap">

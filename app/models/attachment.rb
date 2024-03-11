@@ -7,7 +7,7 @@ class Attachment < ApplicationRecord
 
   include HasPuid
 
-  belongs_to :attachable, polymorphic: true
+  belongs_to :attachable, touch: :attachments_updated_at, polymorphic: true
 
   has_one_attached :file
 
