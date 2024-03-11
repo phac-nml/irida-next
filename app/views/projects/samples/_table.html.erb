@@ -39,7 +39,7 @@
             z-10
           "
         >
-          <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters" }, class: "filters flex align-middle" do |f| %>
+          <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters", id: "select-all-form" }, class: "filters flex align-middle" do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
 
             <% if allowed_to?(:transfer_sample?, project) %>
