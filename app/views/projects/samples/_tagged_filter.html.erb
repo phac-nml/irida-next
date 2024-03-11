@@ -21,8 +21,8 @@
     dark:focus-within:ring-primary-500
     dark:focus-within:border-primary-500k
   "
-  data-filter-list-target="tags"
-  data-action="click->filter-list#focus"
+  data-list-filter-target="tags"
+  data-action="click->list-filter#focus"
 >
   <input
     type="text"
@@ -37,10 +37,10 @@
     autofocus
     aria-label="<%= t(:'projects.samples.tagged_filter.description') %>"
     data-action='
-      keydown->filter-list#handleInput
-      paste->filter-list#handlePaste
+      keydown->list-filter#handleInput
+      paste->list-filter#handlePaste
     '
-    data-filter-list-target="input"
+    data-list-filter-target="input"
   />
   <button
     type="button"
@@ -66,7 +66,7 @@
       dark:hover:bg-slate-500
       hover:bg-slate-300
     "
-    data-action="click->filter-list#clear"
+    data-action="click->list-filter#clear"
     aria-label="<%= t(:'projects.samples.tagged_filter.clear') %>"
     title="<%= t(:'projects.samples.tagged_filter.clear') %>"
   >
