@@ -1911,6 +1911,33 @@ module Projects
       end
     end
 
+    test 'selecting all samples' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+      find('input[name="select"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
+      within 'tbody' do
+        first('input[name="sample_ids[]"]').click
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '2'
+      end
+    end
+
     def retrieve_puids
       puids = []
       within first('table#samples-table tbody') do
