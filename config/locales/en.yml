@@ -1054,6 +1054,7 @@ en:
           error: "File %{filename} was not removed due to the following errors: %{errors}"
         error: File %{filename} was not removed.
       table:
+        description: The project samples table contains all samples related to this project
         sample: Sample
         puid: ID
         created_at: Created
