@@ -3,7 +3,7 @@
 # migration to add files updated at column to samples table
 class AddFilesUpdatedAtToSamples < ActiveRecord::Migration[7.1]
   def up
-    add_column :samples, :files_updated_at, :datetime
+    add_column :samples, :attachments_updated_at, :datetime
 
     execute <<-SQL.squish
       with t AS (
@@ -12,7 +12,7 @@ class AddFilesUpdatedAtToSamples < ActiveRecord::Migration[7.1]
         GROUP BY attachments.attachable_id
       )
 
-      UPDATE samples SET files_updated_at = t.max_created_datetime
+      UPDATE samples SET attachments_updated_at = t.max_created_datetime
       FROM t
       WHERE samples.id = t.attachable_id;
     SQL
