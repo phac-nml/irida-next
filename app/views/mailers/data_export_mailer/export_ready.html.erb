@@ -1,0 +1,28 @@
+<div>
+  <p style='margin-bottom: 24px;'>
+    <%= t(:'mailers.data_export_mailer.export_ready.greeting', user: @user.first_name || @user.email) %>
+  </p>
+  <p>
+    <%= t(:'mailers.data_export_mailer.export_ready.email_body.start') %>
+    <strong><%= @data_export.name || @data_export.id %></strong>
+    <%= t(:'mailers.data_export_mailer.export_ready.email_body.middle') %>
+    <strong><%= (@data_export.expires_at - 1.day).strftime("%A, %B %d, %Y") %></strong>
+    <%= t(:'mailers.data_export_mailer.export_ready.email_body.end') %>
+  </p>
+  <p style='margin-bottom: 24px;'>
+    <%= t(:'mailers.data_export_mailer.export_ready.download_link.start') %>
+    <%= link_to t(:'mailers.data_export_mailer.export_ready.irida_next'),
+      root_url %>
+    <%= t(:'mailers.data_export_mailer.export_ready.download_link.end') %>
+  </p>
+  <p style='margin-bottom: 0px;'>
+    <%= t(:'mailers.data_export_mailer.export_ready.sincerely') %>
+  </p>
+  <p style='margin-top: 0px; margin-bottom: 24px'>
+    <%= t(:'mailers.data_export_mailer.export_ready.irida_next') %>
+  </p>
+  <p style='font-style: italic;'>
+    <%= t(:'mailers.data_export_mailer.export_ready.automated_message') %>
+  </p>
+</div>
+
