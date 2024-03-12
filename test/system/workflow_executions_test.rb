@@ -13,7 +13,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector 'table#workflow_executions tbody tr', count: 7
+    assert_selector 'table#workflow_executions tbody tr', count: 8
   end
 
   test 'should be able to cancel a workflow' do
@@ -108,5 +108,26 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
       assert_no_selector 'input[type="submit"][value="Delete"]'
     end
+  end
+
+  test 'should delete a canceled workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_canceled)
+
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+
+    within tr do
+      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'input[type="submit"][value="Delete"]', count: 1
+      find('input[type="submit"][value="Delete"]').click
+    end
+
+    assert_text 'Confirmation required'
+    click_button 'Confirm'
+
+    assert_no_text workflow_execution.run_id
   end
 end

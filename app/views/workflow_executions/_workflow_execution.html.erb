@@ -41,7 +41,7 @@
                     } %>
       <% end %>
     <% end %>
-    <% if workflow_execution.completed? || workflow_execution.error? %>
+    <% if workflow_execution.deletable? %>
       <%= form_with method: :delete, url: workflow_execution_path(workflow_execution) do |form| %>
         <%= form.submit t(:"workflow_executions.index.actions.delete_button"),
                     class:

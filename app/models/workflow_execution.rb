@@ -45,6 +45,10 @@ class WorkflowExecution < ApplicationRecord
     %w[running queued prepared new].include?(state)
   end
 
+  def deletable?
+    %w[completed error canceled].include?(state)
+  end
+
   def as_wes_params
     {
       workflow_params:,

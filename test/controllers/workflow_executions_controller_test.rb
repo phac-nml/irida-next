@@ -98,4 +98,14 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :unprocessable_entity
   end
+
+  test 'should delete a canceled workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_canceled)
+    assert workflow_execution.canceled?
+    assert_difference -> { WorkflowExecution.count } => -1,
+                      -> { SamplesWorkflowExecution.count } => -1 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :success
+  end
 end

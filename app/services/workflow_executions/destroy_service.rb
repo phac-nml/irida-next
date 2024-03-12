@@ -9,7 +9,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return unless @workflow_execution.completed? || @workflow_execution.error?
+      return unless @workflow_execution.deletable?
 
       @workflow_execution.destroy
     end

@@ -49,5 +49,16 @@ module WorkflowExecutions
         WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
       end
     end
+
+    test 'should destroy a canceled workflow execution' do
+      workflow_execution = workflow_executions(:irida_next_example_canceled)
+      assert workflow_execution.canceled?
+
+      assert_difference -> { WorkflowExecution.count } => -1,
+                        -> { SamplesWorkflowExecution.count } => -1,
+                        -> { Sample.count } => 0 do
+        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+      end
+    end
   end
 end
