@@ -41,6 +41,18 @@ class WorkflowExecution < ApplicationRecord
     state == 'canceled'
   end
 
+  def running?
+    state == 'running'
+  end
+
+  def queued?
+    state == 'queued'
+  end
+
+  def new?
+    state == 'new'
+  end
+
   def cancellable?
     %w[running queued prepared new].include?(state)
   end

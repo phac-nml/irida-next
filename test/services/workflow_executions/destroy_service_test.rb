@@ -29,6 +29,16 @@ module WorkflowExecutions
       end
     end
 
+    test 'should not destroy a submitted workflow execution' do
+      workflow_execution = workflow_executions(:irida_next_example_submitted)
+      assert workflow_execution.submitted?
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+      end
+    end
+
     test 'should destroy a completed workflow execution' do
       workflow_execution = workflow_executions(:irida_next_example_completed)
       assert workflow_execution.completed?
@@ -68,6 +78,36 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
+        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+      end
+    end
+
+    test 'should not destroy a running workflow execution' do
+      workflow_execution = workflow_executions(:irida_next_example_running)
+      assert workflow_execution.running?
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+      end
+    end
+
+    test 'should not destroy a queued workflow execution' do
+      workflow_execution = workflow_executions(:irida_next_example_queued)
+      assert workflow_execution.queued?
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+      end
+    end
+
+    test 'should not destroy a new workflow execution' do
+      workflow_execution = workflow_executions(:irida_next_example_new)
+      assert workflow_execution.new?
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
         WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
       end
     end

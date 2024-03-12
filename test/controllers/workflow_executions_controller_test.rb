@@ -69,6 +69,16 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test 'should not delete a submitted workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_submitted)
+    assert workflow_execution.submitted?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
+
   test 'should delete a completed workflow' do
     workflow_execution = workflow_executions(:irida_next_example_completed)
     assert workflow_execution.completed?
@@ -107,5 +117,35 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
     assert_response :success
+  end
+
+  test 'should not delete a running workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_running)
+    assert workflow_execution.running?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not delete a queued workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_queued)
+    assert workflow_execution.queued?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not delete a new workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_new)
+    assert workflow_execution.new?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
   end
 end
