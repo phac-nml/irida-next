@@ -266,10 +266,8 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'can delete a group' do
-    visit dashboard_groups_path
-    assert_text groups(:group_two).name
-
-    find('div.title a', text: groups(:group_two).name).click
+    group2 = groups(:group_two)
+    visit group_url(group2)
 
     click_link I18n.t('groups.sidebar.settings')
 

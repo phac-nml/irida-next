@@ -10,6 +10,7 @@
         <% if allowed_to?(:update_sample?, @project) %>
           <th aria-hidden="true" class="px-6 py-3"></th>
         <% end %>
+        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.puid") %></th>
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.filename") %></th>
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.format") %></th>
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.type") %></th>

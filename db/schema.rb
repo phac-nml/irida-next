@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_11_145704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -53,9 +53,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_165646) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.uuid "attachable_id", null: false
+    t.string "puid", null: false
     t.index ["attachable_id"], name: "index_attachments_on_attachable_id"
     t.index ["created_at"], name: "index_attachments_on_created_at"
     t.index ["metadata"], name: "index_attachments_on_metadata", using: :gin
+    t.index ["puid"], name: "index_attachments_on_puid"
   end
 
   create_table "data_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

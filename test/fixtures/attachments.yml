@@ -3,22 +3,27 @@
 attachment1:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 1.weeks.ago) %>
 
 attachment2:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 2.weeks.ago) %>
 
 attachmentA:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 3.weeks.ago) %>
 
 attachmentB:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 4.weeks.ago) %>
 
 attachmentC:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 5.weeks.ago) %>
 
 attachmentPEFWD1:
   metadata:
@@ -30,6 +35,7 @@ attachmentPEFWD1:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV1, :uuid) %>,
     }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 6.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEREV1:
   metadata:
@@ -41,6 +47,7 @@ attachmentPEREV1:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD1, :uuid) %>,
     }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 6.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEFWD2:
   metadata:
@@ -52,6 +59,7 @@ attachmentPEFWD2:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV2, :uuid) %>,
     }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 7.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEREV2:
   metadata:
@@ -63,6 +71,7 @@ attachmentPEREV2:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD2, :uuid) %>,
     }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 7.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEFWD3:
   metadata:
@@ -74,6 +83,7 @@ attachmentPEFWD3:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV3, :uuid) %>,
     }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 8.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEREV3:
   metadata:
@@ -85,6 +95,7 @@ attachmentPEREV3:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD3, :uuid) %>,
     }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 8.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEFWD4:
   metadata:
@@ -95,6 +106,7 @@ attachmentPEFWD4:
       "compression": "none",
     }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 9.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEREV4:
   metadata:
@@ -105,6 +117,7 @@ attachmentPEREV4:
       "compression": "none",
     }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 9.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEFWD5:
   metadata:
@@ -115,6 +128,7 @@ attachmentPEFWD5:
       "compression": "none",
     }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 10.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEREV5:
   metadata:
@@ -125,26 +139,32 @@ attachmentPEREV5:
       "compression": "none",
     }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 10.weeks.ago.at_beginning_of_day) %>
 
 attachmentD:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 11.weeks.ago.at_beginning_of_day) %>
 
 attachmentE:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 12.weeks.ago.at_beginning_of_day) %>
 
 attachmentF:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 13.weeks.ago.at_beginning_of_day) %>
 
 attachmentG:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 14.weeks.ago.at_beginning_of_day) %>
 
 attachmentH:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 15.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEFWD6:
   metadata:
@@ -155,6 +175,7 @@ attachmentPEFWD6:
       "compression": "none",
     }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 16.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEREV6:
   metadata:
@@ -165,6 +186,7 @@ attachmentPEREV6:
       "compression": "none",
     }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 16.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEFWD7:
   metadata:
@@ -175,6 +197,7 @@ attachmentPEFWD7:
       "compression": "none",
     }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 17.weeks.ago.at_beginning_of_day) %>
 
 attachmentPEREV7:
   metadata:
@@ -185,11 +208,14 @@ attachmentPEREV7:
       "compression": "none",
     }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 18.weeks.ago.at_beginning_of_day) %>
 
 attachmentI:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 19.weeks.ago.at_beginning_of_day) %>
 
 attachmentJ:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleC (Sample)
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Attachment, time: 20.weeks.ago.at_beginning_of_day) %>

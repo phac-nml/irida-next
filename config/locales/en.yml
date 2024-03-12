@@ -879,6 +879,7 @@ en:
         upload_files: Upload Files
         uploading: Uploading
         table_header:
+          puid: ID
           filename: Filename
           format: Format
           type: Type
