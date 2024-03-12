@@ -7,6 +7,7 @@ sample1:
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 1.week.ago) %>
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
 
 sample2:
   name: Project 1 Sample 2
@@ -73,6 +74,7 @@ sampleA:
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 28.weeks.ago) %>
   created_at: <%= 28.weeks.ago %>
   updated_at: <%= 28.days.ago %>
+  attachments_updated_at: <%= 28.hours.ago %>
 
 sampleB:
   name: Project A Sample B
@@ -81,6 +83,7 @@ sampleB:
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 29.weeks.ago) %>
   created_at: <%= 29.weeks.ago %>
   updated_at: <%= 29.days.ago %>
+  attachments_updated_at: <%= 29.hours.ago %>
 
 sampleC:
   name: Project A Sample C
@@ -89,6 +92,7 @@ sampleC:
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 30.weeks.ago) %>
   created_at: <%= 30.weeks.ago %>
   updated_at: <%= 30.days.ago %>
+  attachments_updated_at: <%= 30.hours.ago %>
 
 sample28:
   name: Project 28 Sample 1

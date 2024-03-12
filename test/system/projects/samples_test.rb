@@ -1118,39 +1118,26 @@ module Projects
     test 'should be able to toggle metadata' do
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'label', text: I18n.t('projects.samples.index.search.metadata'), count: 1
-      assert_selector 'table#samples-table thead tr th', count: 5
+      assert_selector 'table#samples-table thead tr th', count: 6
       find('label', text: I18n.t('projects.samples.index.search.metadata')).click
-      assert_selector 'table#samples-table thead tr th', count: 7
+      assert_selector 'table#samples-table thead tr th', count: 8
       within first('table#samples-table tbody tr:nth-child(3)') do
         assert_text @sample3.name
-        assert_selector 'td:nth-child(5)', text: 'value1'
-        assert_selector 'td:nth-child(6)', text: 'value2'
+        assert_selector 'td:nth-child(6)', text: 'value1'
+        assert_selector 'td:nth-child(7)', text: 'value2'
       end
       find('label', text: I18n.t('projects.samples.index.search.metadata')).click
-      assert_selector 'table#samples-table thead tr th', count: 5
+      assert_selector 'table#samples-table thead tr th', count: 6
     end
 
     test 'can sort samples by metadata column' do
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'label', text: I18n.t('projects.samples.index.search.metadata'), count: 1
-      assert_selector 'table#samples-table thead tr th', count: 5
+      assert_selector 'table#samples-table thead tr th', count: 6
       find('label', text: I18n.t('projects.samples.index.search.metadata')).click
-      assert_selector 'table#samples-table thead tr th', count: 7
+      assert_selector 'table#samples-table thead tr th', count: 8
 
       click_on 'metadatafield1'
-
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
-      assert_selector 'table#samples-table tbody tr', count: 3
-      within first('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample3.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
-        assert_selector 'tr:nth-child(2) td:first-child', text: @sample1.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:last-child td:first-child', text: @sample2.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample2.name
-      end
-
-      click_on 'metadatafield2'
 
       assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
       assert_selector 'table#samples-table tbody tr', count: 3
@@ -1163,9 +1150,22 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample2.name
       end
 
+      click_on 'metadatafield2'
+
+      assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @sample3.puid
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:nth-child(2) td:first-child', text: @sample1.puid
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample1.name
+        assert_selector 'tr:last-child td:first-child', text: @sample2.puid
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample2.name
+      end
+
       # toggling metadata again causes sort to be reset
       find('label', text: I18n.t('projects.samples.index.search.metadata')).click
-      assert_selector 'table#samples-table thead tr th', count: 5
+      assert_selector 'table#samples-table thead tr th', count: 6
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
       assert_selector 'table#samples-table tbody tr', count: 3
@@ -1217,7 +1217,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       find('label', text: I18n.t('projects.samples.index.search.metadata')).click
-      assert_selector 'table#samples-table thead tr th', count: 7
+      assert_selector 'table#samples-table thead tr th', count: 8
 
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
 
@@ -1346,7 +1346,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       find('label', text: I18n.t('projects.samples.index.search.metadata')).click
-      assert_selector 'table#samples-table thead tr th', count: 7
+      assert_selector 'table#samples-table thead tr th', count: 8
 
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
