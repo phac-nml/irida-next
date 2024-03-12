@@ -35,7 +35,7 @@
       grow
     "
     autofocus
-    aria-label="<%= t(:'projects.samples.tagged_filter.description') %>"
+    aria-label="<%= t(:'components.list_filter.description') %>"
     data-action='
       keydown->list-filter#handleInput
       paste->list-filter#handlePaste
@@ -67,8 +67,8 @@
       hover:bg-slate-300
     "
     data-action="click->list-filter#clear"
-    aria-label="<%= t(:'projects.samples.tagged_filter.clear') %>"
-    title="<%= t(:'projects.samples.tagged_filter.clear') %>"
+    aria-label="<%= t(:'components.list_filter.clear') %>"
+    title="<%= t(:'components.list_filter.clear') %>"
   >
     <%= viral_icon(name: "x_mark", classes: "h-4 w-4") %>
   </button>
