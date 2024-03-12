@@ -101,4 +101,8 @@ class SampleTest < ActiveSupport::TestCase
   test '#model_prefix' do
     assert_equal 'SAM', Sample.model_prefix
   end
+
+  test 'sample has an attachments_updated_at attribute' do
+    assert @sample.has_attribute?(:attachments_updated_at)
+  end
 end
