@@ -19,13 +19,10 @@ module DataExports
       @data_export.status = 'processing'
 
       @data_export.save
-
-      return true if @data_export.valid?
-
-      false
+      @data_export
     rescue DataExports::CreateService::DataExportCreateError => e
       @data_export.errors.add(:base, e.message)
-      false
+      @data_export
     end
 
     private
