@@ -5,11 +5,8 @@ class DataExportMailer < ApplicationMailer
   default from: 'notifications@example.com'
 
   def notification(data_export)
-    puts 'hi in notification email dataexportmailer'
     @user = data_export.user
     @data_export = data_export
-    puts 'about to mail'
-    mail(to: 'chris.huynh333@gmail.com', subject: 'Welcome to My Awesome Site')
-    puts 'finished mailer'
+    mail(to: @user.email, subject: 'Welcome to My Awesome Site')
   end
 end
