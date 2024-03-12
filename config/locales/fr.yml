@@ -83,6 +83,9 @@ fr:
         update_sample?: You are not authorized to update samples for project %{name} on this server.
         transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
         transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
+        clone_sample?: You are not authorized to clone samples from project %{name} on this server.
+        clone_sample_into_project?: You are not authorized to clone samples to project %{name} on this server.
+        export_sample_data?: You are not authorized to export samples from project %{name} on this server.
       namespaces/project_namespace:
         update?: You are not authorized to update the namespace for project %{name} on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
@@ -1024,6 +1027,10 @@ fr:
       destroy:
         does_not_belong_to_attachable: This attachment does not belong to this sample.
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
+    data_exports:
+      create:
+        invalid_sample_id: A sample selected for export does not exist.
+        missing_required_parameters: A parameter required to create a valid Data Export is missing.
     groups:
       transfer:
         namespace_empty: The new namespace is empty.

@@ -105,6 +105,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       )
     end
 
+    def can_export_data?(user, object_namespace)
+      effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
+    end
+
     def can_link_namespace_to_group?(user, object_namespace)
       can_modify?(user, object_namespace)
     end
