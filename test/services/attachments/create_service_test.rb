@@ -16,13 +16,19 @@ module Attachments
     test 'create attachments with valid params' do
       valid_params = { files: [@fastq_se_blob] }
 
+      assert_nil @sample.attachments_updated_at
+
       assert_difference -> { Attachment.count } => 1 do
         Attachments::CreateService.new(@user, @sample, valid_params).execute
       end
+
+      assert_not_nil @sample.attachments_updated_at
     end
 
     test 'create attachments with valid illumina paired end forward and reverse fastq files' do
       valid_params = { files: [@testsample_illumina_pe_fwd_blob, @testsample_illumina_pe_rev_blob] }
+
+      assert_nil @sample.attachments_updated_at
 
       assert_difference -> { Attachment.count } => 2 do
         Attachments::CreateService.new(@user, @sample, valid_params).execute
@@ -43,6 +49,8 @@ module Attachments
       assert created_attachments.last.metadata['direction'] == 'reverse'
       assert created_attachments.last.metadata.key?('associated_attachment_id')
       assert created_attachments.last.metadata['associated_attachment_id'] == created_attachments.first.id
+
+      assert_not_nil @sample.attachments_updated_at
     end
 
     test 'create attachments with valid paired end forward and reverse fastq filenames' do
@@ -56,6 +64,8 @@ module Attachments
         [active_storage_blobs(:attachmentQ_file_test_file_fastq_blob),
          active_storage_blobs(:attachmentR_file_test_file_fastq_blob)]
       ]
+
+      assert_nil @sample.attachments_updated_at
 
       paired_blobs_list.each do |paired_blob|
         valid_params = { files: [paired_blob.first, paired_blob.last] }
@@ -80,11 +90,15 @@ module Attachments
         assert created_attachments.last.metadata.key?('associated_attachment_id')
         assert created_attachments.last.metadata['associated_attachment_id'] == created_attachments.first.id
       end
+
+      assert_not_nil @sample.attachments_updated_at
     end
 
     test 'create attachments with invalid paired end forward and reverse fastq filenames' do
       valid_params = { files: [active_storage_blobs(:attachmentR_file_test_file_fastq_blob),
                                active_storage_blobs(:attachmentS_file_test_file_fastq_blob)] }
+
+      assert_nil @sample.attachments_updated_at
 
       assert_difference -> { Attachment.count } => 2 do
         Attachments::CreateService.new(@user, @sample, valid_params).execute
@@ -99,11 +113,15 @@ module Attachments
       assert_not created_attachments.last.metadata.key?('type')
       assert_not created_attachments.last.metadata.key?('direction')
       assert_not created_attachments.last.metadata.key?('associated_attachment_id')
+
+      assert_not_nil @sample.attachments_updated_at
     end
 
     test 'create attachments with valid illumina paired end forward fastq file' do
       valid_params = { files: [@testsample_illumina_pe_fwd_blob] }
 
+      assert_nil @sample.attachments_updated_at
+
       assert_difference -> { Attachment.count } => 1 do
         Attachments::CreateService.new(@user, @sample, valid_params).execute
       end
@@ -113,11 +131,15 @@ module Attachments
       assert_not created_attachment.metadata.key?('type')
       assert_not created_attachment.metadata.key?('direction')
       assert_not created_attachment.metadata.key?('associated_attachment_id')
+
+      assert_not_nil @sample.attachments_updated_at
     end
 
     test 'create attachments with valid illumina paired end reverse fastq file' do
       valid_params = { files: [@testsample_illumina_pe_rev_blob] }
 
+      assert_nil @sample.attachments_updated_at
+
       assert_difference -> { Attachment.count } => 1 do
         Attachments::CreateService.new(@user, @sample, valid_params).execute
       end
@@ -127,26 +149,40 @@ module Attachments
       assert_not created_attachment.metadata.key?('type')
       assert_not created_attachment.metadata.key?('direction')
       assert_not created_attachment.metadata.key?('associated_attachment_id')
+
+      assert_not_nil @sample.attachments_updated_at
     end
 
     test 'create attachments with empty params' do
+      assert_nil @sample.attachments_updated_at
+
       assert_no_difference -> { Attachment.count } do
         Attachments::CreateService.new(@user, @sample, {}).execute
       end
+
+      assert_nil @sample.attachments_updated_at
     end
 
     test 'create attachments with empty files params' do
+      assert_nil @sample.attachments_updated_at
+
       assert_no_difference -> { Attachment.count } do
         Attachments::CreateService.new(@user, @sample, { files: [''] }).execute
       end
+
+      assert_nil @sample.attachments_updated_at
     end
 
     test 'create attachments with file matching existing checksum' do
       params = { files: [@fastq_se_blob] }
 
+      assert_nil @sample.attachments_updated_at
+
       assert_no_difference -> { Attachment.count } do
         Attachments::CreateService.new(@user, @sample1, params).execute
       end
+
+      assert_nil @sample.attachments_updated_at
     end
   end
 end
