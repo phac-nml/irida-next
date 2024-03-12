@@ -1115,6 +1115,21 @@ fr:
         namespace_name_desc: Name, descending
         updated_at_asc: Oldest updated
         created_at_asc: Oldest created
+  mailers:
+    data_export_mailer:
+      email_subject: Your export is ready for download on IRIDA Next
+      export_ready:
+        greeting: Dear %{user},
+        sincerely: Sincerely,
+        irida_next: IRIDA Next
+        automated_message: This email was sent from an automated system. Please do not reply to this email.
+        email_body:
+          start: Your export
+          middle: is ready for download. You will have until
+          end: to download the export before it's deleted
+        download_link:
+          start: Please visit
+          end: to download your export.
   data_exports:
     create:
       success: Data export '%{name}' was successfully started.
