@@ -27,8 +27,8 @@ class DataExportCreateJob < ApplicationJob
   end
 
   def create_sample_zip(data_export) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    zip_file = Tempfile.new
-    Zip::File.open(zip_file.path, create: true) do |zipfile|
+    new_zip_file = Tempfile.new
+    Zip::File.open(new_zip_file.path, create: true) do |zipfile|
       data_export.export_parameters['ids'].each do |sample_id|
         sample = Sample.find(sample_id)
         project = Project.find(sample.project_id)
@@ -37,20 +37,18 @@ class DataExportCreateJob < ApplicationJob
         sample.attachments.each do |attachment|
           next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
 
-          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{attachment.file.filename}"
+          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}"
 
           zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(attachment.file.key))
           next unless attachment.metadata.key?('associated_attachment_id')
 
-          paired_attachment = attachment.associated_attachment
-          current_directory = "#{project.puid}/#{sample.puid}/#{attachment.id}/#{paired_attachment.file.filename}"
-
-          zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(paired_attachment.file.key))
+          zipfile.add(current_directory,
+                      ActiveStorage::Blob.service.path_for(attachment.associated_attachment.file.key))
         end
       end
       zipfile.get_output_stream('manifest.json') { |f| f.write JSON.pretty_generate(JSON.parse(@manifest.to_json)) }
     end
-    zip_file
+    new_zip_file
   end
 
   def update_sample_manifest(sample, project) # rubocop:disable Metrics
@@ -75,7 +73,9 @@ class DataExportCreateJob < ApplicationJob
     sample.attachments.each do |attachment|
       next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
 
-      attachment_directory = { 'name' => attachment.id, 'type' => 'folder', 'irida-next-type' => 'attachment',
+      attachment_directory = { 'name' => attachment.puid,
+                               'type' => 'folder',
+                               'irida-next-type' => 'attachment',
                                'children' => [] }
 
       attachment_directory['children'] << create_attachment_file_manifest(attachment)
@@ -91,7 +91,9 @@ class DataExportCreateJob < ApplicationJob
   def create_attachment_file_manifest(attachment)
     attachment_manifest_file = { 'name' => attachment.file.filename,
                                  'type' => 'file',
-                                 'metadata' => { 'format' => attachment.metadata['format'] } }
+                                 'metadata' => {
+                                   'format' => attachment.metadata['format']
+                                 } }
     if attachment.metadata.key?('direction')
       attachment_manifest_file['metadata']['direction'] = attachment.metadata['direction']
     end
