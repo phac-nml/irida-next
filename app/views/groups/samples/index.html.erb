@@ -17,79 +17,85 @@
 <% end %>
 
 <% if @has_samples %>
-  <div class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
-    <%= search_form_for @q, url: group_samples_url(**request.query_parameters), html: { "data-controller": "filters" } do |f| %>
-      <div class="flex flex-row-reverse items-center space-x-2">
-        <input type="hidden" name="format" value="turbo_stream"/>
-        <div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <%= f.check_box(
-              :metadata,
-              {
-                checked: params[:metadata].to_i == 1,
-                onchange: "Turbo.navigator.submitForm(this.form)",
-                class: "sr-only peer"
-              }
-            ) %>
-            <div
-              class="
-                w-11
-                h-6
-                bg-gray-200
-                peer-focus:outline-none
-                peer-focus:ring-4
-                peer-focus:ring-primary-300
-                dark:peer-focus:ring-primary-800
-                rounded-full
-                peer
-                dark:bg-gray-700
-                peer-checked:after:translate-x-full
-                rtl:peer-checked:after:-translate-x-full
-                peer-checked:after:border-white
-                after:content-['']
-                after:absolute
-                after:top-[2px]
-                after:start-[2px]
-                after:bg-white
-                after:border-gray-300
-                after:border
-                after:rounded-full
-                after:h-5
-                after:w-5
-                after:transition-all
-                dark:border-gray-600
-                peer-checked:bg-primary-600
-              "
-            ></div>
-            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-              <%= t(:".search.metadata") %>
-            </span>
-          </label>
-        </div>
-        <%= f.label :name_or_puid_cont,
-                placeholder: t(".search.placeholder"),
-                class: "sr-only" %>
-        <div class="relative lg:w-72">
+
+  <%= search_form_for @q, url: group_samples_url(**request.query_parameters), html: { "data-controller": "filters", class: "mb-2" } do |f| %>
+    <div class="flex flex-row-reverse items-center space-x-2">
+      <input type="hidden" name="format" value="turbo_stream" />
+
+      <div>
+        <label
+          class="relative inline-flex items-center cursor-pointer"
+          for="q[metadata]"
+        >
+          <%= f.check_box(
+                :metadata,
+                {
+                  checked: params[:metadata].to_i == 1,
+                  onchange: "Turbo.navigator.submitForm(this.form)",
+                  class: "sr-only peer"
+                }
+              ) %>
           <div
             class="
-              absolute
-              inset-y-0
-              left-0
-              flex
-              items-center
-              pl-3
-              pointer-events-none
+              w-11
+              h-6
+              bg-gray-200
+              peer-focus:outline-none
+              peer-focus:ring-4
+              peer-focus:ring-primary-300
+              dark:peer-focus:ring-primary-800
+              rounded-full
+              peer
+              dark:bg-gray-700
+              peer-checked:after:translate-x-full
+              rtl:peer-checked:after:-translate-x-full
+              peer-checked:after:border-white
+              after:content-['']
+              after:absolute
+              after:top-[2px]
+              after:start-[2px]
+              after:bg-white
+              after:border-gray-300
+              after:border
+              after:rounded-full
+              after:h-5
+              after:w-5
+              after:transition-all
+              dark:border-gray-600
+              peer-checked:bg-primary-600
             "
           >
-            <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
+
           </div>
-          <%= turbo_frame_tag "group_samples_hidden_values" %>
-          <%= f.search_field :name_or_puid_cont,
-                         "data-action": "filters#submit",
-                         class:
-                           "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                         placeholder: t(".search.placeholder") %>
+          <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            <%= t(:".search.metadata") %>
+          </span>
+        </label>
+      </div>
+      <%= render ListFilterComponent.new(form: f) %>
+      <%= f.label :name_or_puid_cont,
+                  placeholder: t(".search.placeholder"),
+                  class: "sr-only" %>
+      <div class="relative lg:w-72">
+        <div
+          class="
+            absolute
+            inset-y-0
+            left-0
+            flex
+            items-center
+            pl-3
+            pointer-events-none
+          "
+        >
+          <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
         </div>
+        <%= turbo_frame_tag "group_samples_hidden_values" %>
+        <%= f.search_field :name_or_puid_cont,
+                           "data-action": "filters#submit",
+                           class:
+                             "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                           placeholder: t(".search.placeholder") %>
       </div>
     <% end %>
   </div>
@@ -98,8 +104,8 @@
     <div class="flex flex-col">
       <div class="overflow-x-auto">
         <%= turbo_frame_tag "group_samples_list",
-        src: group_samples_path(@group, format: :turbo_stream, page: params[:page]),
-        loading: :lazy %>
+                            src: group_samples_path(@group, format: :turbo_stream, page: params[:page]),
+                            loading: :lazy %>
         <%= turbo_frame_tag "group_samples_pagination" %>
       </div>
     </div>
