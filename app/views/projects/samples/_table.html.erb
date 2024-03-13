@@ -42,6 +42,16 @@
           <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters", id: "select-all-form" }, class: "filters flex align-middle" do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
 
+            <% @search_params.each do |key, value| %>
+              <% if value.is_a?(Array) %>
+                <% value.each do |val| %>
+                  <input type="hidden" name="q[<%= key %>][]" value="<%= val %>">
+                <% end %>
+              <% else %>
+                <input type="hidden" name="q[<%= key %>]" value="<%= value %>">
+              <% end %>
+            <% end %>
+
             <% if allowed_to?(:transfer_sample?, project) %>
               <label for="select-all" class="sr-only"><%= t(:'.selectAll') %></label>
               <input

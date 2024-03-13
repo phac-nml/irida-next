@@ -18,6 +18,7 @@ module Projects
           @has_samples = @q.result.count.positive?
         end
         format.turbo_stream do
+          @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
           @pagy, @samples = pagy_with_metadata_sort(@q.result)
           fields_for_namespace(
             namespace: @project.namespace,
