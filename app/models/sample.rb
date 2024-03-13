@@ -13,6 +13,12 @@ class Sample < ApplicationRecord
 
   has_many :attachments, as: :attachable, dependent: :destroy
 
+  scope :sort_by_attachments_updated_at_nulls_last_asc,
+        -> { order('attachments_updated_at ASC NULLS LAST') }
+
+  scope :sort_by_attachments_updated_at_nulls_last_desc,
+        -> { order('attachments_updated_at DESC NULLS LAST') }
+
   has_many :samples_workflow_executions, dependent: :nullify
   has_many :workflow_executions, through: :samples_workflow_executions
 

@@ -72,8 +72,8 @@
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,
             label: t(".files_updated_at"),
-            url: sorting_url(@q, :attachments_updated_at),
-            field: :attachments_updated_at
+            url: sorting_url(@q, :attachments_updated_at_nulls_last),
+            field: :attachments_updated_at_nulls_last
           ) %>
         </th>
         <% @fields.each do |column| %>
