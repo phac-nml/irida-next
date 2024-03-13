@@ -3,8 +3,10 @@ import _ from "lodash";
 
 // Connects to data-controller="filters"
 export default class extends Controller {
+  static outlets = ["selection"];
+
   initialize() {
-    this.submit = this.submit.bind(this)
+    this.submit = this.submit.bind(this);
   }
 
   connect() {
@@ -13,5 +15,6 @@ export default class extends Controller {
 
   submit() {
     this.element.requestSubmit();
+    this.selectionOutlet.clear();
   }
 }
