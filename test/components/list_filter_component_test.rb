@@ -4,6 +4,7 @@ require 'view_component_test_case'
 
 class ListFilterComponentTest < ViewComponentTestCase
   test 'should create a tag from input after waiting 1 second' do
+    render_preview(:default)
     find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
     within 'dialog' do
       assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
