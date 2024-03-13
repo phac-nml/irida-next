@@ -1888,23 +1888,23 @@ module Projects
         assert_selector 'tr td', text: @sample1.puid
         assert_selector 'tr td', text: @sample2.puid
       end
-      find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
+      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
       within 'div[data-controller="filter-list"] dialog' do
-        assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
         find("input[type='text']").send_keys "#{@sample1.puid}, #{@sample2.puid}"
         assert_selector 'span.label', count: 2
         assert_selector 'span.label', text: @sample1.puid
         assert_selector 'span.label', text: @sample2.puid
-        click_button I18n.t(:'projects.samples.tagged_filter.apply')
+        click_button I18n.t(:'components.list_filter.apply')
       end
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 2
       end
-      find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
+      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
       within 'div[data-controller="filter-list"] dialog' do
-        assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
-        click_button I18n.t(:'projects.samples.tagged_filter.clear')
-        click_button I18n.t(:'projects.samples.tagged_filter.apply')
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        click_button I18n.t(:'components.list_filter.clear')
+        click_button I18n.t(:'components.list_filter.apply')
       end
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
