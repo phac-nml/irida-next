@@ -3,11 +3,10 @@
 # entity class for DataExport
 class DataExport < ApplicationRecord
   has_logidze
-  acts_as_paranoid
 
   belongs_to :user
 
-  has_one_attached :file
+  has_one_attached :file, dependent: :purge_later
 
   validates :status, acceptance: { accept: %w[processing ready deleted] }
   validates :export_type, acceptance: { accept: %w[sample analysis] }
