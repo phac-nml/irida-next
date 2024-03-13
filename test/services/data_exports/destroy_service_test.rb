@@ -18,14 +18,13 @@ module DataExports
     test 'destroy data export including attachment with valid permission' do
       @data_export.file.attach(io: Rails.root.join('test/fixtures/files/data_export_1.zip').open,
                                filename: 'data_export_1.zip')
-      file = @data_export.file
-      assert_equal 'data_export_1.zip', file.filename.to_s
+      assert_equal 'data_export_1.zip', @data_export.filename.to_s
 
       assert_difference -> { DataExport.count } => -1 do
-        DataExports::DestroyService.new(@data_export, @user).execute
+        assert_difference -> { ActiveStorage::Attachment.count } => -1 do
+          DataExports::DestroyService.new(@data_export, @user).execute
+        end
       end
-
-      assert file.blank?
     end
 
     test 'unable to destroy data export due to invalid permission' do
