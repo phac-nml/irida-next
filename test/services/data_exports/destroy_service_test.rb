@@ -30,8 +30,6 @@ module DataExports
     test 'unable to destroy data export due to invalid permission' do
       user = users(:steve_doe)
 
-      assert_raises(ActionPolicy::Unauthorized) { DataExports::DestroyService.new(@data_export, user).execute }
-
       exception = assert_raises(ActionPolicy::Unauthorized) do
         DataExports::DestroyService.new(@data_export, user).execute
       end
