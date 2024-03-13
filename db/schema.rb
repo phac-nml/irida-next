@@ -241,13 +241,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_142828) do
     t.string "workflow_url"
     t.string "run_id"
     t.string "state"
-    t.string "blob_run_directory"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "submitter_id", null: false
     t.datetime "attachments_updated_at"
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
+    t.string "blob_run_directory"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
   end
 
