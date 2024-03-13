@@ -18,7 +18,7 @@ module DataExports
     test 'destroy data export including attachment with valid permission' do
       @data_export.file.attach(io: Rails.root.join('test/fixtures/files/data_export_1.zip').open,
                                filename: 'data_export_1.zip')
-      assert_equal 'data_export_1.zip', @data_export.filename.to_s
+      assert_equal 'data_export_1.zip', @data_export.file.filename.to_s
 
       assert_difference -> { DataExport.count } => -1 do
         assert_difference -> { ActiveStorage::Attachment.count } => -1 do
