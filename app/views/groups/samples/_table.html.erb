@@ -25,10 +25,6 @@
         <th
           scope="col"
           class="
-      <tr>
-        <th
-          scope="col"
-          class="
             px-6
             py-3
             whitespace-nowrap
@@ -96,9 +92,6 @@
           </th>
         <% end %>
       </tr>
-          </th>
-        <% end %>
-      </tr>
     </thead>
     <tbody
       id="group-samples-table-body"
@@ -159,17 +152,6 @@
           </td>
           <td class="px-6 py-3 whitespace-nowrap">
             <%= link_to namespace_project_sample_path(
-              <span class="font-semibold">
-                <%= highlight(
-                  sample.puid,
-                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-                ) %>
-              </span>
-            <% end %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= link_to namespace_project_sample_path(
                         id: sample.id,
                         namespace_id: sample.project.namespace.parent.full_path,
                         project_id: sample.project.path
@@ -178,38 +160,6 @@
                         turbo: false
                       },
                       class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
-              <span class="font-semibold">
-                <%= highlight(
-                  sample.name,
-                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-                ) %>
-              </span>
-            <% end %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= viral_tooltip(title: project_path(sample.project)) do %>
-              <%= link_to sample.project.abbreviated_path,
-              project_path(sample.project),
-              data: {
-                turbo: false
-              },
-              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-            <% end %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= l(sample.created_at.localtime, format: :full_date) %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= viral_time_ago(original_time: sample.updated_at) %>
-          </td>
-          <% @fields.each do |column| %>
-            <td class="px-6 py-3 whitespace-nowrap">
-              <%= sample.metadata[column] %>
-            </td>
-          <% end %>
-        </tr>
-      <% end %>
               <span class="font-semibold">
                 <%= highlight(
                   sample.name,
