@@ -11,8 +11,8 @@ class WorkflowExecution < ApplicationRecord
 
   has_many :samples_workflow_executions, dependent: :destroy
   has_many :samples, through: :samples_workflow_executions
+  has_many :outputs, dependent: :nullify, class_name: 'Attachment', as: :attachable
   has_many_attached :inputs
-  has_many_attached :outputs
 
   accepts_nested_attributes_for :samples_workflow_executions
 
