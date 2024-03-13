@@ -13,7 +13,7 @@ class DataExportCreateJobTest < ActiveJob::TestCase
     assert_not @data_export.file.valid?
 
     assert_difference -> { ActiveStorage::Attachment.count } => +1 do
-      DataExportCreateJob.perform_now(@data_export)
+      DataExports::CreateJob.perform_now(@data_export)
     end
     assert @data_export.status = 'ready'
     if Date.current.monday? || Date.current.tuesday?
