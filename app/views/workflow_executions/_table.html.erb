@@ -1,0 +1,57 @@
+<% if @workflows.length > 0 %>
+  <div class="bg-white dark:bg-slate-800">
+    <div class="flex flex-col">
+      <table
+        id="workflow_executions"
+        class="
+          w-full
+          text-sm
+          text-left
+          rtl:text-right
+          text-gray-500
+          dark:text-gray-400
+        "
+      >
+        <thead
+          class="
+            text-xs
+            text-gray-700
+            uppercase
+            bg-gray-50
+            dark:bg-gray-700
+            dark:text-gray-400
+          "
+        >
+          <tr>
+            <th scope="col" class="px-6 py-3">
+              <%= t(:".headers.id") %>
+            </th>
+            <th scope="col" class="px-6 py-3">
+              <%= t(:".headers.name") %>
+            </th>
+            <th scope="col" class="px-6 py-3">
+              <%= t(:".headers.version") %>
+            </th>
+            <th scope="col" class="px-6 py-3">
+              <%= t(:".headers.state") %>
+            </th>
+            <th scope="col" class="px-6 py-3">
+              <%= t(:".headers.created_at") %>
+            </th>
+            <th scope="col" class="px-6 py-3">
+              <%= t(:".headers.updated_at") %>
+            </th>
+            <th scope="col" class="px-6 py-3">
+              <%= t(:".headers.actions") %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render partial: "workflow_execution", collection: @workflows %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <%= viral_alert(type: :info, message: t(:".empty")) %>
+<% end %>

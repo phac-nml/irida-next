@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-resources :workflow_executions, only: %i[create cancel] do
+resources :workflow_executions, only: %i[create cancel destroy] do
   scope '-' do
     put :cancel
   end

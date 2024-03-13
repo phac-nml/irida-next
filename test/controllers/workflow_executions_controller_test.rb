@@ -58,4 +58,94 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # rubocop:enable Naming/VariableNumber
+
+  test 'should not delete a prepared workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_prepared)
+    assert workflow_execution.prepared?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not delete a submitted workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_submitted)
+    assert workflow_execution.submitted?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test 'should delete a completed workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+    assert workflow_execution.completed?
+    assert_difference -> { WorkflowExecution.count } => -1,
+                      -> { SamplesWorkflowExecution.count } => -1 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :success
+  end
+
+  test 'should delete an errored workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_error)
+    assert workflow_execution.error?
+    assert_difference -> { WorkflowExecution.count } => -1,
+                      -> { SamplesWorkflowExecution.count } => -1 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :success
+  end
+
+  test 'should not delete a canceling workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_canceling)
+    assert workflow_execution.canceling?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test 'should delete a canceled workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_canceled)
+    assert workflow_execution.canceled?
+    assert_difference -> { WorkflowExecution.count } => -1,
+                      -> { SamplesWorkflowExecution.count } => -1 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :success
+  end
+
+  test 'should not delete a running workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_running)
+    assert workflow_execution.running?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not delete a queued workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_queued)
+    assert workflow_execution.queued?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not delete a new workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_new)
+    assert workflow_execution.new?
+    assert_difference -> { WorkflowExecution.count } => 0,
+                      -> { SamplesWorkflowExecution.count } => 0 do
+      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+    end
+    assert_response :unprocessable_entity
+  end
 end

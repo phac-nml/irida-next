@@ -9,11 +9,9 @@ class WorkflowExecution < ApplicationRecord
 
   belongs_to :submitter, class_name: 'User'
 
-  has_many :samples_workflow_executions, dependent: :nullify
+  has_many :samples_workflow_executions, dependent: :destroy
   has_many :samples, through: :samples_workflow_executions
   has_many_attached :inputs
-
-  accepts_nested_attributes_for :samples_workflow_executions
 
   accepts_nested_attributes_for :samples_workflow_executions
 
@@ -43,11 +41,24 @@ class WorkflowExecution < ApplicationRecord
     state == 'canceled'
   end
 
+  def running?
+    state == 'running'
+  end
+
+  def queued?
+    state == 'queued'
+  end
+
+  def new?
+    state == 'new'
+  end
+
   def cancellable?
-    state == 'running' ||
-      state == 'queued' ||
-      state == 'prepared' ||
-      state == 'new'
+    %w[running queued prepared new].include?(state)
+  end
+
+  def deletable?
+    %w[completed error canceled].include?(state)
   end
 
   def as_wes_params

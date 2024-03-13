@@ -12,7 +12,7 @@ module WorkflowExecutions
     test 'cancel canceling workflow_execution' do
       assert 'canceling', @workflow_execution.state
 
-      run_id = 'cancel123'
+      run_id = @workflow_execution.run_id
 
       stubs = Faraday::Adapter::Test::Stubs.new
       stubs.post("/runs/#{run_id}/cancel") do

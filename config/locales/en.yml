@@ -1064,6 +1064,12 @@ en:
   workflow_executions:
     index:
       title: Workflow Executions
+      actions:
+        cancel_button: Cancel
+        cancel_confirm: Are you sure you want to cancel this workflow execution?
+        delete_button: Delete
+        delete_confirm: Are you sure you want to delete this workflow execution?
+    table:
       empty: There are no workflow executions.
       headers:
         id: ID
@@ -1073,9 +1079,9 @@ en:
         created_at: Created
         updated_at: Last Updated
         actions: Actions
-      actions:
-        cancel: Cancel
-        confirm: Are you sure you want to cancel this workflow execution?
+    destroy:
+      error: "Could not delete workflow %{workflow_name}"
+      success: "Workflow %{workflow_name} was successfully deleted"
     submissions:
       pipeline_selection:
         title: Workflow Selection

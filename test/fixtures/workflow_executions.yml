@@ -23,12 +23,12 @@ workflow_execution_invalid_metadata:
   workflow_engine_version: "my_workflow_engine_version_1"
   workflow_engine_parameters: { "key_b": "value_b" }
   workflow_url: "my_workflow_url"
-  run_id: "my_run_id_1"
+  run_id: "my_run_id_2"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
 
 irida_next_example:
   metadata:
-    { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' }
+    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
   workflow_params: { "-r": "dev" }
   workflow_type: "DSL2"
   workflow_type_version: "22.10.7"
@@ -41,7 +41,10 @@ irida_next_example:
 
 irida_next_example_prepared:
   metadata:
-    { "workflow_name": "irida-next-example", "workflow_version": "1.0dev" }
+    {
+      "workflow_name": "irida_next_example_prepared",
+      "workflow_version": "1.0dev",
+    }
   workflow_params:
     {
       "-r": "dev",
@@ -54,13 +57,17 @@ irida_next_example_prepared:
   workflow_engine: "nextflow"
   workflow_engine_version: ""
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  workflow_url: "https://github.com/phac-nml/irida_next_example_prepared"
+  run_id: "my_run_id_4"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   state: "prepared"
 
-irida_next_example_canceling:
+irida_next_example_submitted:
   metadata:
-    { "workflow_name": "irida-next-example", "workflow_version": "1.0dev" }
+    {
+      "workflow_name": "irida_next_example_submitted",
+      "workflow_version": "1.0dev",
+    }
   workflow_params:
     {
       "-r": "dev",
@@ -73,7 +80,165 @@ irida_next_example_canceling:
   workflow_engine: "nextflow"
   workflow_engine_version: ""
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  workflow_url: "https://github.com/phac-nml/irida_next_example_prepared"
+  run_id: "my_run_id_5"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  state: "submitted"
+
+irida_next_example_completed:
+  metadata:
+    {
+      "workflow_name": "irida_next_example_completed",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
+  run_id: "my_run_id_6"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  state: "completed"
+
+irida_next_example_error:
+  metadata:
+    {
+      "workflow_name": "irida_next_example_error",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_error"
+  run_id: "my_run_id_7"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  state: "error"
+
+irida_next_example_canceling:
+  metadata:
+    {
+      "workflow_name": "irida_next_example_canceling",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_canceling"
+  run_id: "my_run_id_8"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   state: "canceling"
-  run_id: "cancel123"
+
+irida_next_example_canceled:
+  metadata:
+    {
+      "workflow_name": "irida_next_example_canceled",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_canceled"
+  run_id: "my_run_id_9"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  state: "canceled"
+
+irida_next_example_running:
+  metadata:
+    {
+      "workflow_name": "irida_next_example_running",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_running"
+  run_id: "my_run_id_10"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  state: "running"
+
+irida_next_example_queued:
+  metadata:
+    {
+      "workflow_name": "irida_next_example_queued",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_queued"
+  run_id: "my_run_id_11"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  state: "queued"
+
+irida_next_example_new:
+  metadata:
+    { "workflow_name": "irida_next_example_new", "workflow_version": "1.0dev" }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_new"
+  run_id: "my_run_id_12"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  state: "new"
