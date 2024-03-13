@@ -19,10 +19,10 @@
         dark:text-slate-400
       "
     >
-    <tr>
-      <th
-        scope="col"
-        class="
+      <tr>
+        <th
+          scope="col"
+          class="
             px-6
             py-3
             whitespace-nowrap
@@ -33,54 +33,63 @@
             left-0
             z-10
           "
-      >
-        <%= render Ransack::SortComponent.new(
-          ransack_obj: @q,
-          label: t(".puid"),
-          url: sorting_url(@q, :puid),
-          field: :puid
-        ) %>
-      </th>
-      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-        <%= render Ransack::SortComponent.new(
-          ransack_obj: @q,
-          label: t(".sample"),
-          url: sorting_url(@q, :name),
-          field: :name
-        ) %>
-      </th>
-      <th
-        scope="col"
-        class="px-6 py-3 whitespace-nowrap text-left cursor-not-allowed"
-      >
-        <%= t(".project") %>
-      </th>
-      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-        <%= render Ransack::SortComponent.new(
-          ransack_obj: @q,
-          label: t(".created_at"),
-          url: sorting_url(@q, :created_at),
-          field: :created_at
-        ) %>
-      </th>
-      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-        <%= render Ransack::SortComponent.new(
-          ransack_obj: @q,
-          label: t(".updated_at"),
-          url: sorting_url(@q, :updated_at),
-          field: :updated_at
-        ) %>
-      </th>
-      <% @fields.each do |column| %>
-        <th scope="col" class="px-6 py-3 text-left whitespace-nowrap">
+        >
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".puid"),
+            url: sorting_url(@q, :puid),
+            field: :puid
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".sample"),
+            url: sorting_url(@q, :name),
+            field: :name
+          ) %>
+        </th>
+        <th
+          scope="col"
+          class="px-6 py-3 whitespace-nowrap text-left cursor-not-allowed"
+        >
+          <%= t(".project") %>
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".created_at"),
+            url: sorting_url(@q, :created_at),
+            field: :created_at
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".updated_at"),
+            url: sorting_url(@q, :updated_at),
+            field: :updated_at
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".files_updated_at"),
+            url: sorting_url(@q, :attachments_updated_at_nulls_last),
+            field: :attachments_updated_at_nulls_last
+          ) %>
+        </th>
+        <% @fields.each do |column| %>
+          <th scope="col" class="px-6 py-3 text-left whitespace-nowrap">
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
               label: column,
               url: sorting_url(@q, URI.encode_www_form_component("metadata_#{column}")),
               field: "metadata_#{column}"
             ) %>
-      <% end %>
-    </tr>
+          </th>
+        <% end %>
+      </tr>
     </thead>
     <tbody
       id="group-samples-table-body"
@@ -92,13 +101,23 @@
         dark:divide-slate-700
       "
     >
-    <% samples.each do |sample| %>
-      <tr
-        id="<%= dom_id(sample) %>"
-        class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
-      >
-        <td class="px-6 py-3 whitespace-nowrap left-0 sticky bg-white dark:bg-slate-800">
-          <%= link_to namespace_project_sample_path(
+      <% samples.each do |sample| %>
+        <tr
+          id="<%= dom_id(sample) %>"
+          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+        >
+          <td
+            class="
+              px-6
+              py-3
+              whitespace-nowrap
+              left-0
+              sticky
+              bg-white
+              dark:bg-slate-800
+            "
+          >
+            <%= link_to namespace_project_sample_path(
                         id: sample.id,
                         namespace_id: sample.project.namespace.parent.full_path,
                         project_id: sample.project.path
@@ -107,55 +126,62 @@
                         turbo: false
                       },
                       class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
-            <span class="font-semibold">
-              <%= highlight(
-                sample.puid, defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-              ) %>
-            </span>
-          <% end %>
-        </td>
-        <td class="px-6 py-3 whitespace-nowrap">
-          <%= link_to namespace_project_sample_path(
-                        id: sample.id,
-                        namespace_id: sample.project.namespace.parent.full_path,
-                        project_id: sample.project.path
-                      ),
-                      data: {
-                        turbo: false
-                      },
-                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
-            <span class="font-semibold">
-              <%= highlight(
-                sample.name, defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-              ) %>
-            </span>
-          <% end %>
-        </td>
-        <td class="px-6 py-3 whitespace-nowrap">
-          <%= viral_tooltip(title: project_path(sample.project)) do %>
-            <%= link_to sample.project.abbreviated_path,
-                        project_path(sample.project),
-                        data: {
-                          turbo: false
-                        },
-                        class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-          <% end %>
-        </td>
-        <td class="px-6 py-3 whitespace-nowrap">
-          <%= l(sample.created_at.localtime, format: :full_date) %>
-        </td>
-        <td class="px-6 py-3 whitespace-nowrap">
-          <%= viral_time_ago(original_time: sample.updated_at) %>
-        </td>
-        <% @fields.each do |column| %>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= sample.metadata[column] %>
+              <span class="font-semibold">
+                <%= highlight(
+                  sample.puid,
+                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+                ) %>
+              </span>
+            <% end %>
           </td>
-        <% end %>
-      </tr>
-    <% end %>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= link_to namespace_project_sample_path(
+                        id: sample.id,
+                        namespace_id: sample.project.namespace.parent.full_path,
+                        project_id: sample.project.path
+                      ),
+                      data: {
+                        turbo: false
+                      },
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+              <span class="font-semibold">
+                <%= highlight(
+                  sample.name,
+                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+                ) %>
+              </span>
+            <% end %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= viral_tooltip(title: project_path(sample.project)) do %>
+              <%= link_to sample.project.abbreviated_path,
+              project_path(sample.project),
+              data: {
+                turbo: false
+              },
+              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+            <% end %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= l(sample.created_at.localtime, format: :full_date) %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= viral_time_ago(original_time: sample.updated_at) %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <% if sample.attachments.with_deleted.count.positive? %>
+              <%= viral_time_ago(original_time: sample.attachments_updated_at) %>
+            <% end %>
+          </td>
+          <% @fields.each do |column| %>
+            <td class="px-6 py-3 whitespace-nowrap">
+              <%= sample.metadata[column] %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>
