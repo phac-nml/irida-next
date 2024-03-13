@@ -1938,6 +1938,41 @@ module Projects
       end
     end
 
+    test 'selecting samples while filtering' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+
+      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 1
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+
+      find('input[name="select"]').click
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 1
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '1'
+        assert_selector 'strong[data-selection-target="selected"]', text: '1'
+      end
+
+      find('input[data-action="filters#submit"]').send_keys([:control, 'a'], :space)
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+    end
+
     def retrieve_puids
       puids = []
       within first('table#samples-table tbody') do
