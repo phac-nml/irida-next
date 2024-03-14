@@ -77,7 +77,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.export_sample_data?
   end
 
-  test '# submit_workflow?' do
+  test '#submit_workflow?' do
     assert @policy.submit_workflow?
   end
 

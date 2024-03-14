@@ -148,7 +148,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def submit_workflow?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_submit_workflow?(user, record) == true
 
     details[:name] = record.name
