@@ -81,6 +81,11 @@ type Attachment implements Node {
     """
     keys: [String!] = null
   ): JSON!
+
+  """
+  Persistent Unique Identifier of the attachment. For example, `INXT_ATT_AAAAAAAAAAAA`.
+  """
+  puid: ID!
 }
 
 """
@@ -751,6 +756,16 @@ type Query {
     """
     last: Int
   ): ProjectConnection
+
+  """
+  Find a sample.
+  """
+  sample(
+    """
+    Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.
+    """
+    puid: ID!
+  ): Sample
 
   """
   Find samples.

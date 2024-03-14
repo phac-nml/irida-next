@@ -9,6 +9,8 @@ module Types
     field :byte_size, Integer, null: false, description: 'Attachment file size'
     field :created_at, String, null: false, description: 'Attachment creation date'
     field :filename, String, null: false, description: 'Attachment file name'
+    field :puid, ID, null: false,
+                     description: 'Persistent Unique Identifier of the attachment. For example, `INXT_ATT_AAAAAAAAAAAA`.'
 
     field :metadata,
           GraphQL::Types::JSON,
