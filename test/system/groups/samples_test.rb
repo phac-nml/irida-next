@@ -326,5 +326,42 @@ module Groups
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
     end
+
+    test 'filtering samples by list of  sample puids' do
+      visit group_samples_url(@group)
+      within 'tbody#group-samples-table-body' do
+        assert_selector 'tr', count: 20
+        assert_selector 'tr td', text: @sample1.puid
+        assert_selector 'tr td', text: @sample2.puid
+        assert_selector 'tr td', text: @sample9.puid
+      end
+
+      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
+      within 'dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        find("input[type='text']").send_keys "#{@sample1.puid}, #{@sample2.puid}"
+        assert_selector 'span.label', count: 2
+        assert_selector 'span.label', text: @sample1.puid
+        assert_selector 'span.label', text: @sample2.puid
+        click_button I18n.t(:'components.list_filter.apply')
+      end
+
+      within 'tbody#group-samples-table-body' do
+        assert_selector 'tr', count: 2
+        assert_selector 'tr td', text: @sample1.puid
+        assert_selector 'tr td', text: @sample2.puid
+        assert_no_selector 'tr td', text: @sample9.puid
+      end
+
+      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
+      within 'dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        click_button I18n.t(:'components.list_filter.clear')
+        click_button I18n.t(:'components.list_filter.apply')
+      end
+      within 'tbody#group-samples-table-body' do
+        assert_selector 'tr', count: 20
+      end
+    end
   end
 end
