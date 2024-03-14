@@ -11,7 +11,7 @@ Capybara.register_driver(:irida_next_cuprite) do |app|
     # See additional options for Dockerized environment in the respective section of this article
     browser_options: {},
     # Increase Chrome startup wait time (required for stable CI builds)
-    process_timeout: 45,
+    process_timeout: 60,
     # Page load timeout, default is 5
     timeout: 10,
     # Enable debugging capabilities
