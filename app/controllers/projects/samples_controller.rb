@@ -7,8 +7,9 @@ module Projects
 
     before_action :sample, only: %i[show edit update destroy view_history_version]
     before_action :current_page
+    before_action :set_search_params, only: %i[index destroy]
 
-    def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def index # rubocop:disable Metrics/AbcSize
       authorize! @project, to: :sample_listing?
 
       @q = load_samples.ransack(params[:q])
@@ -18,7 +19,6 @@ module Projects
           @has_samples = @q.result.count.positive?
         end
         format.turbo_stream do
-          @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
           @pagy, @samples = pagy_with_metadata_sort(@q.result)
           fields_for_namespace(
             namespace: @project.namespace,
@@ -166,6 +166,10 @@ module Projects
       end
 
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    end
+
+    def set_search_params
+      @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
     end
   end
 end
