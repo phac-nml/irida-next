@@ -11,6 +11,8 @@ module Types
     field :full_path, ID, null: false, description: 'Full path of the project.' # rubocop:disable GraphQL/ExtractType
     field :name, String, null: false, description: 'Name of the project.'
     field :path, String, null: false, description: 'Path of the project.'
+    field :puid, ID, null: false,
+                     description: 'Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.'
 
     field :samples,
           SampleType.connection_type,

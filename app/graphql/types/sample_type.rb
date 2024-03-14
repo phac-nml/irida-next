@@ -9,6 +9,8 @@ module Types
     field :description, String, null: true, description: 'Description of the sample.'
     field :name, String, null: false, description: 'Name of the sample.'
     field :project, ProjectType, null: false, description: 'Project the sample is on.'
+    field :puid, ID, null: false,
+                     description: 'Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAAAA`.'
 
     field :metadata,
           GraphQL::Types::JSON,
