@@ -568,6 +568,11 @@ type Project implements Node {
   path: String!
 
   """
+  Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.
+  """
+  puid: ID!
+
+  """
   Samples on the project
   """
   samples(
@@ -714,7 +719,12 @@ type Query {
     """
     Full path of the project. For example, `pathogen/surveillance/2023`.
     """
-    fullPath: ID!
+    fullPath: ID
+
+    """
+    Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.
+    """
+    puid: ID
   ): Project
 
   """
@@ -831,6 +841,11 @@ type Sample implements Node {
   Project the sample is on.
   """
   project: Project!
+
+  """
+  Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAAAA`.
+  """
+  puid: ID!
 }
 
 """

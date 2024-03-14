@@ -3,9 +3,22 @@
 require 'test_helper'
 
 class ProjectQueryTest < ActiveSupport::TestCase
-  PROJECT_QUERY = <<~GRAPHQL
+  PROJECT_QUERY_BY_FULL_PATH = <<~GRAPHQL
     query($projectPath: ID!) {
       project(fullPath: $projectPath) {
+        name
+        path
+        description
+        id
+        fullName
+        fullPath
+      }
+    }
+  GRAPHQL
+
+  PROJECT_QUERY_BY_PUID = <<~GRAPHQL
+    query($projectPuid: ID!) {
+      project(puid: $projectPuid) {
         name
         path
         description
@@ -20,11 +33,27 @@ class ProjectQueryTest < ActiveSupport::TestCase
     @user = users(:john_doe)
   end
 
-  test 'project query should work' do
+  test 'project query by full_path should work' do
     project = projects(:project1)
 
-    result = IridaSchema.execute(PROJECT_QUERY, context: { current_user: @user },
-                                                variables: { projectPath: project.full_path })
+    result = IridaSchema.execute(PROJECT_QUERY_BY_FULL_PATH, context: { current_user: @user },
+                                                             variables: { projectPath: project.full_path })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['project']
+
+    assert_not_empty data, 'project type should work'
+    assert_equal project.name, data['name']
+
+    assert_equal project.to_global_id.to_s, data['id'], 'id should be GlobalID'
+  end
+
+  test 'project query by puid should work' do
+    project = projects(:project1)
+
+    result = IridaSchema.execute(PROJECT_QUERY_BY_PUID, context: { current_user: @user },
+                                                        variables: { projectPuid: project.puid })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -39,8 +68,8 @@ class ProjectQueryTest < ActiveSupport::TestCase
   test 'project query should not return a result when unauthorized' do
     project = projects(:project1)
 
-    result = IridaSchema.execute(PROJECT_QUERY, context: { current_user: users(:jane_doe) },
-                                                variables: { projectPath: project.full_path })
+    result = IridaSchema.execute(PROJECT_QUERY_BY_FULL_PATH, context: { current_user: users(:jane_doe) },
+                                                             variables: { projectPath: project.full_path })
 
     assert_nil result['data']['project']
 
