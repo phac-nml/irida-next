@@ -1889,7 +1889,7 @@ module Projects
         assert_selector 'tr td', text: @sample2.puid
       end
       find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
-      within 'dialog' do
+      within 'div[data-controller="filter-list"] dialog' do
         assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
         find("input[type='text']").send_keys "#{@sample1.puid}, #{@sample2.puid}"
         assert_selector 'span.label', count: 2
@@ -1901,7 +1901,7 @@ module Projects
         assert_selector 'tr', count: 2
       end
       find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
-      within 'dialog' do
+      within 'div[data-controller="filter-list"] dialog' do
         assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
         click_button I18n.t(:'projects.samples.tagged_filter.clear')
         click_button I18n.t(:'projects.samples.tagged_filter.apply')

@@ -19,13 +19,13 @@ class SubmissionsTest < ApplicationSystemTestCase
     find("input[type='checkbox'][value='#{@sample2.id}']").click
 
     click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-    within 'dialog' do
+    within 'dialog[open]' do
       assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
       assert_button text: 'phac-nml/iridanextexample', count: 3
       first('button', text: 'phac-nml/iridanextexample').click
     end
 
-    within 'dialog.dialog--size-xl' do
+    within 'dialog[open].dialog--size-xl' do
       within 'div.sample-sheet' do
         within 'table' do
           assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
@@ -43,13 +43,13 @@ class SubmissionsTest < ApplicationSystemTestCase
     find("input[type='checkbox'][value='#{@sample2.id}']").click
 
     click_on I18n.t(:'groups.samples.index.workflows.button_sr')
-    within 'dialog' do
+    within 'dialog[open]' do
       assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_selector 'button', text: 'phac-nml/iridanextexample', count: 3
+      assert_button text: 'phac-nml/iridanextexample', count: 3
       first('button', text: 'phac-nml/iridanextexample').click
     end
 
-    within 'dialog.dialog--size-xl' do
+    within 'dialog[open].dialog--size-xl' do
       within 'div.sample-sheet' do
         within 'table' do
           assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
