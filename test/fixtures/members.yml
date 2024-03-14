@@ -439,3 +439,27 @@ group_fourteen_member_john_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fourteen, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
+
+group_fifteen_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_fifteen_member_joan_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>
+
+group_fifteen_member_james_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
+  access_level: <%= Member::AccessLevel::ANALYST %>
+
+group_fifteen_member_ryan_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
+  access_level: <%= Member::AccessLevel::GUEST %>

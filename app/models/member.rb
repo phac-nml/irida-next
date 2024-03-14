@@ -121,6 +121,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       can_modify?(user, object_namespace)
     end
 
+    def can_submit_workflow?(user, object_namespace)
+      effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
+    end
+
     def namespace_owners_include_user?(user, namespace)
       effective_access_level(namespace, user) == Member::AccessLevel::OWNER
     end

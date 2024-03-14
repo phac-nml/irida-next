@@ -249,3 +249,8 @@ project34:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project34_namespace, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 63.days.ago) %>
+
+project35:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project35_namespace, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 64.days.ago) %>

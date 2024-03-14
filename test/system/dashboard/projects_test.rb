@@ -18,7 +18,7 @@ module Dashboard
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
-      assert_selector 'tr', count: 16
+      assert_selector 'tr', count: 17
       click_on I18n.t(:'components.pagination.previous')
       assert_selector 'tr', count: 20
 
