@@ -13,7 +13,7 @@ class AddPuidToAttachment < ActiveRecord::Migration[7.1]
                  { 'type' => 'illumina_pe', 'direction' => 'forward' }.to_json).each do |att|
           puid = Irida::PersistentUniqueId.generate(att, time: att.created_at)
           execute <<-SQL.squish
-            UPDATE attachments SET puid = '#{puid}' WHERE id in ('#{att.id}', '#{att.associated_attachment.id}')
+            UPDATE attachments SET puid = '#{puid}' WHERE id in ('#{att.id}', '#{att.metadata['associated_attachment_id']}')
           SQL
         end
         Attachment
