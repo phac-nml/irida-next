@@ -8,7 +8,7 @@ module Projects
     before_action :sample, only: %i[show edit update destroy view_history_version]
     before_action :current_page
 
-    def index # rubocop:disable Metrics/AbcSize
+    def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! @project, to: :sample_listing?
 
       @q = load_samples.ransack(params[:q])
