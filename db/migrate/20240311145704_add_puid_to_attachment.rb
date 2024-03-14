@@ -12,14 +12,18 @@ class AddPuidToAttachment < ActiveRecord::Migration[7.1]
           .where('metadata @> ? OR metadata @> ?', { 'type' => 'pe', 'direction' => 'forward' }.to_json,
                  { 'type' => 'illumina_pe', 'direction' => 'forward' }.to_json).each do |att|
           puid = Irida::PersistentUniqueId.generate(att, time: att.created_at)
-          att.update!(puid:)
-          att.associated_attachment.update!(puid:)
+          execute <<-SQL.squish
+            UPDATE attachments SET puid = '#{puid}' WHERE id in ('#{att.id}', '#{att.associated_attachment.id}')
+          SQL
         end
         Attachment
           .with_deleted
           .where('NOT metadata @> ? AND NOT metadata @> ?', { 'type' => 'pe' }.to_json,
                  { 'type' => 'illumina_pe' }.to_json).each do |att|
-          att.update!(puid: Irida::PersistentUniqueId.generate(att, time: att.created_at))
+          puid = Irida::PersistentUniqueId.generate(att, time: att.created_at)
+          execute <<-SQL.squish
+            UPDATE attachments SET puid = '#{puid}' WHERE id = '#{att.id}'
+          SQL
         end
         change_column :attachments, :puid, :string, null: false
       end
