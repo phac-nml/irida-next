@@ -213,3 +213,28 @@ sample37:
   description: Sample with the same name.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project34, :uuid) %>
   puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 63.days.ago) %>
+
+sample38:
+  name: Project 35 Sample 1
+  description: Sample 1 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project35, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 64.days.ago) %>
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample39:
+  name: Project 35 Sample 2
+  description: Sample 2 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project35, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 65.days.ago) %>
+  created_at: <%= 2.weeks.ago %>
+  updated_at: <%= 2.days.ago %>
+
+sample40:
+  name: Project 35 Sample 3
+  description: Sample 3 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project35, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 66.days.ago) %>
+  created_at: <%= 2.weeks.ago %>
+  updated_at: <%= 2.days.ago %>

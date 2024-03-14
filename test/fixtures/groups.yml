@@ -297,3 +297,10 @@ group_fourteen:
   type: Group
   description: Group 14 description
   metadata_summary: {}
+
+group_fifteen:
+  name: Group 15
+  path: group-15
+  type: Group
+  description: Group 15 description
+  metadata_summary: {}

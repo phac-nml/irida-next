@@ -433,3 +433,13 @@ project34_namespace_route:
   name: Group 14 / Project 34
   path: group-14/project-34
   source: project34_namespace (Namespace)
+
+group_15_route:
+  name: Group 15
+  path: group-15
+  source: group_fifteen (Namespace)
+
+project35_namespace_route:
+  name: Group 15 / Project 35
+  path: group-15/project-35
+  source: project35_namespace (Namespace)
