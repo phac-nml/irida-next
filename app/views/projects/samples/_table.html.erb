@@ -157,7 +157,7 @@
               dark:bg-slate-900
             "
           >
-            <% if allowed_to?(:transfer_sample?, project) %>
+            <% if allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project) %>
               <%= check_box_tag "sample_ids[]",
               sample.id,
               nil,
