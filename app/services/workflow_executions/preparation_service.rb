@@ -73,10 +73,7 @@ module WorkflowExecutions
     end
 
     def generate_input_key(filename, prefix = '')
-      format('%<run_dir>s/%<prefix>s%<filename>s',
-        run_dir: @workflow_execution.blob_run_directory,
-        filename:, prefix:
-      )
+      format('%<run_dir>s/%<prefix>s%<filename>s', run_dir: @workflow_execution.blob_run_directory, filename:, prefix:)
     end
 
     def compose_blob_with_custom_key(blob, key)
