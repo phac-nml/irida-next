@@ -31,8 +31,9 @@ module DataExports
       ZipKit::Streamer.open(new_zip_file) do |zip| # rubocop:disable Metrics/BlockLength
         data_export.export_parameters['ids'].each do |sample_id|
           sample = Sample.find(sample_id)
-          project = Project.find(sample.project_id)
           next unless sample.attachments.count.positive?
+
+          project = Project.find(sample.project_id)
 
           update_sample_manifest(sample, project)
 
@@ -68,6 +69,7 @@ module DataExports
 
     def update_sample_manifest(sample, project)
       project_directory = ''
+      # Check if project directory already exists in manifest, else create it
       if @manifest['children'].any? { |h| h['name'] == project.puid }
         project_directory = @manifest['children'].detect { |proj| proj['name'] == project.puid }
       else
@@ -95,9 +97,9 @@ module DataExports
                                  'irida-next-type' => 'attachment',
                                  'children' => [] }
 
-        attachment_directory['children'] << create_attachment_file_manifest(attachment)
+        attachment_directory['children'] << create_attachment_manifest_file(attachment)
         if attachment.metadata.key?('associated_attachment_id')
-          attachment_directory['children'] << create_attachment_file_manifest(attachment.associated_attachment)
+          attachment_directory['children'] << create_attachment_manifest_file(attachment.associated_attachment)
         end
 
         attachment_directories << attachment_directory
@@ -105,7 +107,7 @@ module DataExports
       attachment_directories
     end
 
-    def create_attachment_file_manifest(attachment)
+    def create_attachment_manifest_file(attachment)
       attachment_manifest_file = { 'name' => attachment.file.filename,
                                    'type' => 'file',
                                    'metadata' => {
