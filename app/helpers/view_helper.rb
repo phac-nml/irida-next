@@ -21,6 +21,7 @@ module ViewHelper
     pageheader: 'Viral::PageHeaderComponent',
     pill: 'Viral::PillComponent',
     select: 'Viral::Form::SelectComponent',
+    select_group: 'Viral::Form::SelectGroupComponent',
     tabs: 'Viral::TabsComponent',
     text_input: 'Viral::Form::TextInputComponent',
     time_ago: 'Viral::TimeAgoComponent',

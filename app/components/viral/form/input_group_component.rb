@@ -3,7 +3,7 @@
 module Viral
   module Form
     # Viral form input with a prefix that can contain text or svg providing additional context to the input
-    class InputGroupComponent < Component
+    class InputGroupComponent < Viral::Component
       attr_reader :form, :name, :value, :pattern, :placeholder, :required
 
       renders_one :prefix
