@@ -25,7 +25,7 @@ module WorkflowExecutions
 
       within 'dialog[open]' do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        assert_selector 'button', text: 'phac-nml/iridanextexample', count: 3
+        assert_css 'button', text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
 
@@ -52,7 +52,7 @@ module WorkflowExecutions
 
       within 'dialog[open]' do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        assert_selector 'button', text: 'phac-nml/iridanextexample', count: 3
+        assert_css 'button', text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
 
@@ -82,7 +82,7 @@ module WorkflowExecutions
 
       within 'dialog[open]' do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        assert_selector 'button', text: 'phac-nml/iridanextexample', count: 3
+        assert_css 'button', text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
 
@@ -112,7 +112,7 @@ module WorkflowExecutions
 
       within 'dialog[open]' do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-        assert_selector 'button', text: 'phac-nml/iridanextexample', count: 3
+        assert_css 'button', text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
 
