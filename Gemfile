@@ -109,6 +109,9 @@ gem 'good_job', '~> 3.21'
 gem 'roo', '~> 2.10.0'
 gem 'roo-xls'
 
+# create zip file for data export
+gem 'zip_kit'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]

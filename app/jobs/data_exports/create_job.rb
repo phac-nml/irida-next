@@ -7,7 +7,6 @@ module DataExports
 
     def perform(data_export)
       @manifest = ''
-
       initialize_manifest(data_export.export_type)
 
       zip = create_sample_zip(data_export) if data_export.export_type == 'sample'
@@ -28,28 +27,40 @@ module DataExports
     end
 
     def create_sample_zip(data_export) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      new_zip_file = Tempfile.new
-      Zip::File.open(new_zip_file.path, create: true) do |zipfile|
+      new_zip_file = Tempfile.new(binmode: true)
+      ZipKit::Streamer.open(new_zip_file) do |zip|
         data_export.export_parameters['ids'].each do |sample_id|
           sample = Sample.find(sample_id)
           project = Project.find(sample.project_id)
+          next unless sample.attachments.count.positive
 
           update_sample_manifest(sample, project)
+
           sample.attachments.each do |attachment|
             if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
               next
             end
 
-            current_directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}"
+            directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}/#{attachment.file.filename}"
+            zip.write_file(directory) do |writer_for_file|
+              attachment.file.download { |chunk| writer_for_file << chunk }
+            end
 
-            zipfile.add(current_directory, ActiveStorage::Blob.service.path_for(attachment.file.key))
             next unless attachment.metadata.key?('associated_attachment_id')
 
-            zipfile.add(current_directory,
-                        ActiveStorage::Blob.service.path_for(attachment.associated_attachment.file.key))
+            paired_attachment = attachment.associated_attachment
+            directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}/#{paired_attachment.file.filename}"
+            zip.write_file(directory) do |writer_for_file|
+              paired_attachment.file.download { |chunk| writer_for_file << chunk }
+            end
           end
         end
-        zipfile.get_output_stream('manifest.json') { |f| f.write JSON.pretty_generate(JSON.parse(@manifest.to_json)) }
+        # Write manifest to file 'manifest.json' and add to zip
+        manifest_file = Tempfile.new
+        manifest_file.write(JSON.pretty_generate(JSON.parse(@manifest.to_json)))
+
+        zip.write_file('manifest.json') { |writer_for_file| IO.copy_stream(manifest_file.open, writer_for_file) }
+        manifest_file.close
       end
       new_zip_file
     end

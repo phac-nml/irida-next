@@ -538,6 +538,7 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.34)
     zeitwerk (2.6.12)
+    zip_kit (6.2.0)
 
 PLATFORMS
   arm64-darwin-22
@@ -596,6 +597,7 @@ DEPENDENCIES
   view_component (~> 3.9)
   web-console
   webmock
+  zip_kit
 
 RUBY VERSION
    ruby 3.2.2p53
