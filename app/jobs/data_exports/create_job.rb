@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+# module DataExports
 module DataExports
   # Queues the data export create job
-  class CreateJob < ApplicationJob
+  class CreateJob < ApplicationJob # rubocop:disable Method/ClassLength
     queue_as :default
 
     def perform(data_export)
@@ -122,13 +123,35 @@ module DataExports
     end
 
     def set_expiry
-      today = Date.current
-      if today.monday? || today.tuesday?
-        # Monday export will expire Thurs 12 AM
-        today + 4.days
-      else
-        today + 6.days
+      expiry = 3.business_days.from_now
+      # Because the Holidays gem does not have great filters for specific federal holidays, we have to filter
+      # with the BC, ON, and CAN holidays to get a two lists, observed and informal holidays. However the lists also
+      # contain many non-Federal holidays, so we need a hard-coded list of holidays, and filter through them to check
+      # for matches to add extra days to our expiry.
+      observed_holidays = ["New Year's Day", 'Good Friday', 'Victoria Day', 'Canada Day', 'Labour Day',
+                           'National Day for Truth and Reconciliation', 'Thanksgiving',
+                           'Remembrance Day', 'Christmas Day', 'Boxing Day']
+      informal_holidays = ['Easter Monday', 'Civic Holiday']
+
+      check_formal_holidays = Holidays.between(Date.current, expiry, %i[ca_bc ca_on ca], :observed)
+      check_informal_holidays = Holidays.between(Date.current, expiry, %i[ca_bc ca_on ca], :informal)
+      extra_days = 0
+
+      extra_days += add_holidays(check_formal_holidays, observed_holidays) if check_formal_holidays.count.positive?
+      extra_days += add_holidays(check_informal_holidays, informal_holidays) if check_informal_holidays.count.positive?
+
+      extra_days.business_days.after(expiry)
+    end
+  end
+
+  def add_holidays(days_to_check, holidays)
+    extra_days = 0
+    holidays.each do |holiday|
+      if days_to_check.any? { |h| h[:name] == holiday }
+        extra_days += 1
+        next
       end
     end
+    extra_days
   end
 end

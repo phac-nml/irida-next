@@ -109,8 +109,12 @@ gem 'good_job', '~> 3.21'
 gem 'roo', '~> 2.10.0'
 gem 'roo-xls'
 
-# create zip file for data export
+# create zip file for data exports
 gem 'zip_kit'
+
+# set expiry date for data exports
+gem 'business_time'
+gem 'holidays'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
