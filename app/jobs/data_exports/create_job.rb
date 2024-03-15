@@ -29,7 +29,7 @@ module DataExports
 
     def create_sample_zip(data_export) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       new_zip_file = Tempfile.new(binmode: true)
-      ZipKit::Streamer.open(new_zip_file) do |zip|
+      ZipKit::Streamer.open(new_zip_file) do |zip| # rubocop:disable Metrics/BlockLength
         data_export.export_parameters['ids'].each do |sample_id|
           sample = Sample.find(sample_id)
           project = Project.find(sample.project_id)
@@ -50,7 +50,7 @@ module DataExports
             next unless attachment.metadata.key?('associated_attachment_id')
 
             paired_attachment = attachment.associated_attachment
-            directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}/#{paired_attachment.file.filename}"
+            directory = "#{project.puid}/#{sample.puid}/#{paired_attachment.puid}/#{paired_attachment.file.filename}"
             zip.write_file(directory) do |writer_for_file|
               paired_attachment.file.download { |chunk| writer_for_file << chunk }
             end
@@ -62,17 +62,20 @@ module DataExports
 
         zip.write_file('manifest.json') { |writer_for_file| IO.copy_stream(manifest_file.open, writer_for_file) }
         manifest_file.close
+        manifest_file.unlink
       end
       new_zip_file
     end
 
-    def update_sample_manifest(sample, project) # rubocop:disable Metrics
-      unless @manifest['children'].any? { |h| h['name'] == project.puid }
-        @manifest['children'] << { 'name' => project.puid, 'type' => 'folder', 'irida-next-type' => 'project',
-                                   'irida-next-name' => project.namespace.name, 'children' => [] }
+    def update_sample_manifest(sample, project)
+      project_directory = ''
+      if @manifest['children'].any? { |h| h['name'] == project.puid }
+        project_directory = @manifest['children'].detect { |proj| proj['name'] == project.puid }
+      else
+        project_directory = { 'name' => project.puid, 'type' => 'folder', 'irida-next-type' => 'project',
+                              'irida-next-name' => project.namespace.name, 'children' => [] }
+        @manifest['children'] << project_directory
       end
-
-      project_directory = @manifest['children'].select { |proj| proj['name'] == project.puid }
 
       sample_directory = { 'name' => sample.puid,
                            'type' => 'folder',
@@ -80,7 +83,7 @@ module DataExports
                            'irida-next-name' => sample.name,
                            'children' => create_attachment_manifest_directories(sample) }
 
-      project_directory[0]['children'] << sample_directory
+      project_directory['children'] << sample_directory
     end
 
     def create_attachment_manifest_directories(sample)
@@ -125,7 +128,7 @@ module DataExports
     def set_expiry
       expiry = 3.business_days.from_now
       # Because the Holidays gem does not have great filters for specific federal holidays, we have to filter
-      # with the BC, ON, and CAN holidays to get a two lists, observed and informal holidays. However the lists also
+      # with the BC, ON, and CAN holidays to get two lists, observed and informal holidays. However the lists also
       # contain many non-Federal holidays, so we need a hard-coded list of holidays, and filter through them to check
       # for matches to add extra days to our expiry.
       observed_holidays = ["New Year's Day", 'Good Friday', 'Victoria Day', 'Canada Day', 'Labour Day',
