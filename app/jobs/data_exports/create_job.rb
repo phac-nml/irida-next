@@ -33,7 +33,7 @@ module DataExports
         data_export.export_parameters['ids'].each do |sample_id|
           sample = Sample.find(sample_id)
           project = Project.find(sample.project_id)
-          next unless sample.attachments.count.positive
+          next unless sample.attachments.count.positive?
 
           update_sample_manifest(sample, project)
 
@@ -135,23 +135,22 @@ module DataExports
 
       check_formal_holidays = Holidays.between(Date.current, expiry, %i[ca_bc ca_on ca], :observed)
       check_informal_holidays = Holidays.between(Date.current, expiry, %i[ca_bc ca_on ca], :informal)
-      extra_days = 0
 
+      extra_days = 0
       extra_days += add_holidays(check_formal_holidays, observed_holidays) if check_formal_holidays.count.positive?
       extra_days += add_holidays(check_informal_holidays, informal_holidays) if check_informal_holidays.count.positive?
-
       extra_days.business_days.after(expiry)
     end
-  end
 
-  def add_holidays(days_to_check, holidays)
-    extra_days = 0
-    holidays.each do |holiday|
-      if days_to_check.any? { |h| h[:name] == holiday }
-        extra_days += 1
-        next
+    def add_holidays(days_to_check, holidays)
+      extra_days = 0
+      holidays.each do |holiday|
+        if days_to_check.any? { |h| h[:name] == holiday }
+          extra_days += 1
+          next
+        end
       end
+      extra_days
     end
-    extra_days
   end
 end
