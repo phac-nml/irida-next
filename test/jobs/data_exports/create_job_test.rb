@@ -115,6 +115,7 @@ module DataExports
     end
 
     test 'test export expiry that includes holiday' do
+      assert_nil @data_export.expires_at
       # New Year's Day
       Timecop.travel(Date.new(2023, 12, 29)) do
         DataExports::CreateJob.perform_now(@data_export)
