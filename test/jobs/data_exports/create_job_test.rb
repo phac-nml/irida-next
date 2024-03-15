@@ -113,25 +113,55 @@ module DataExports
     end
 
     test 'test export expiry that includes holiday' do
-      # Canada Day on weekday
-      Timecop.travel(Date.new(2024, 6, 28)) do
+      # New Year's Day
+      Timecop.travel(Date.new(2023, 12, 29)) do
         DataExports::CreateJob.perform_now(@data_export)
-        assert_equal Date.new(2024, 7, 4), @data_export.expires_at.to_date
+        assert_equal Date.new(2024, 1, 4), @data_export.expires_at.to_date
       end
       # Good Friday and Easter Monday
       Timecop.travel(DateTime.new(2024, 3, 28)) do
         DataExports::CreateJob.perform_now(@data_export)
         assert_equal Date.new(2024, 4, 4), @data_export.expires_at.to_date
       end
-      # In lieu - Christmas and Boxing Day occuring on Sat and Sun, respectively
-      Timecop.travel(DateTime.new(2021, 12, 24)) do
+      # Victoria Day
+      Timecop.travel(Date.new(2022, 5, 19)) do
         DataExports::CreateJob.perform_now(@data_export)
-        assert_equal Date.new(2021, 12, 31), @data_export.expires_at.to_date
+        assert_equal Date.new(2022, 5, 25), @data_export.expires_at.to_date
+      end
+      # Canada Day
+      Timecop.travel(Date.new(2024, 6, 28)) do
+        DataExports::CreateJob.perform_now(@data_export)
+        assert_equal Date.new(2024, 7, 4), @data_export.expires_at.to_date
+      end
+      # Civic Day
+      Timecop.travel(Date.new(2019, 8, 2)) do
+        DataExports::CreateJob.perform_now(@data_export)
+        assert_equal Date.new(2019, 8, 8), @data_export.expires_at.to_date
+      end
+      # Labour Day
+      Timecop.travel(Date.new(2020, 9, 3)) do
+        DataExports::CreateJob.perform_now(@data_export)
+        assert_equal Date.new(2020, 9, 9), @data_export.expires_at.to_date
+      end
+      # National Day for Truth and Reconciliation
+      Timecop.travel(Date.new(2024, 9, 27)) do
+        DataExports::CreateJob.perform_now(@data_export)
+        assert_equal Date.new(2024, 10, 3), @data_export.expires_at.to_date
+      end
+      # Thanksgiving
+      Timecop.travel(Date.new(2022, 10, 7)) do
+        DataExports::CreateJob.perform_now(@data_export)
+        assert_equal Date.new(2022, 10, 13), @data_export.expires_at.to_date
       end
       # In lieu - Remembrance day on weekend
       Timecop.travel(DateTime.new(2023, 11, 9)) do
         DataExports::CreateJob.perform_now(@data_export)
         assert_equal Date.new(2023, 11, 15), @data_export.expires_at.to_date
+      end
+      # In lieu - Christmas and Boxing Day occuring on Sat and Sun, respectively
+      Timecop.travel(DateTime.new(2021, 12, 24)) do
+        DataExports::CreateJob.perform_now(@data_export)
+        assert_equal Date.new(2021, 12, 31), @data_export.expires_at.to_date
       end
     end
   end
