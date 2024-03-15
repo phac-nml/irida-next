@@ -25,6 +25,10 @@ module WorkflowExecutions
 
       within %(turbo-frame[id="samples_dialog"]) do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+
+        # The below line is currently commented out as it is finding 6 instances when there are only 3
+        # on the page. We need to dig further into why this is happening on the CI and not locally.
+
         # assert_button text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
@@ -52,6 +56,10 @@ module WorkflowExecutions
 
       within %(turbo-frame[id="samples_dialog"]) do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+
+        # The below line is currently commented out as it is finding 6 instances when there are only 3
+        # on the page. We need to dig further into why this is happening on the CI and not locally.
+
         # assert_button text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
@@ -82,6 +90,10 @@ module WorkflowExecutions
 
       within %(turbo-frame[id="samples_dialog"]) do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+
+        # The below line is currently commented out as it is finding 6 instances when there are only 3
+        # on the page. We need to dig further into why this is happening on the CI and not locally.
+
         # assert_button text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
@@ -112,6 +124,10 @@ module WorkflowExecutions
 
       within %(turbo-frame[id="samples_dialog"]) do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+
+        # The below line is currently commented out as it is finding 6 instances when there are only 3
+        # on the page. We need to dig further into why this is happening on the CI and not locally.
+
         # assert_button text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
