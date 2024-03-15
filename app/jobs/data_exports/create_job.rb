@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# module DataExports
 module DataExports
   # Queues the data export create job
   class CreateJob < ApplicationJob
