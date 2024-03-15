@@ -37,6 +37,8 @@ module DataExports
 
           project = sample.project
 
+          project = Project.find(sample.project_id)
+
           update_sample_manifest(sample, project)
 
           write_attachments(sample, project, zip)
