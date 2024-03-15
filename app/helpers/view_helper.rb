@@ -17,6 +17,7 @@ module ViewHelper
     flash: 'Viral::FlashComponent',
     help_text: 'Viral::Form::HelpTextComponent',
     icon: 'Viral::IconComponent',
+    input_group: 'Viral::Form::InputGroupComponent',
     pageheader: 'Viral::PageHeaderComponent',
     pill: 'Viral::PillComponent',
     select: 'Viral::Form::SelectComponent',

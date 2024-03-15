@@ -11,7 +11,12 @@ module NextflowHelper
       return viral_select(container:, name:, options: property['enum'], selected_value: property['default'])
     end
 
-    viral_text_input(container:, name:, required:, pattern: property['pattern'])
+    viral_input_group(form: container, name:, required:, pattern: property['pattern'],
+                      value: property['default']) do |input|
+      input.with_prefix do
+        name
+      end
+    end
   end
 
   def checkbox_input(fields, name, property)
