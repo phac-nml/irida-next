@@ -14,8 +14,8 @@ module DataExports
       assert_difference -> { ActiveStorage::Attachment.count } => +1 do
         DataExports::CreateJob.perform_now(@data_export)
       end
-      assert @data_export.status = 'ready'
 
+      assert_equal 'ready', @data_export.status
       assert @data_export.file.valid?
       assert_equal "#{@data_export.id}.zip", @data_export.file.filename.to_s
     end
@@ -73,9 +73,7 @@ module DataExports
          "#{project.puid}/#{sample_b.puid}/#{attachment_f.puid}/#{attachment_f.file.filename}",
          'manifest.json']
       DataExports::CreateJob.perform_now(data_export)
-      sleep 2
       export_file = ActiveStorage::Blob.service.path_for(data_export.file.key)
-      sleep 2
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
           assert expected_files_in_zip.include?(entry.to_s)
