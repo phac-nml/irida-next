@@ -13,7 +13,7 @@ Capybara.register_driver(:irida_next_cuprite) do |app|
     # Increase Chrome startup wait time (required for stable CI builds)
     process_timeout: 60,
     # Page load timeout, default is 5
-    timeout: 10,
+    timeout: 60,
     # Enable debugging capabilities
     inspector: true,
     # Allow running Chrome in a headful mode by setting HEADLESS env

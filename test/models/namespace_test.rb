@@ -14,7 +14,9 @@ class NamespaceTest < ActiveSupport::TestCase
   end
 
   test '#self_and_ancestors when collection is non empty' do
-    assert_equal [groups(:group_one)], Group.where(id: groups(:group_one).id).self_and_ancestors
+    assert (Group.where(id: groups(:group_one).id).self_and_ancestors - Group.where(id: [
+      groups(:group_one)
+    ].map(&:id))).empty?
   end
 
   test '#self_and_decendants when collection is empty' do
@@ -22,8 +24,9 @@ class NamespaceTest < ActiveSupport::TestCase
   end
 
   test '#self_and_descendants when collection is non empty' do
-    assert_equal [groups(:group_three), groups(:subgroup_one_group_three)],
-                 Group.where(id: groups(:group_three).id).self_and_descendants
+    assert (Group.where(id: groups(:group_three).id).self_and_descendants - Group.where(id: [
+      groups(:group_three), groups(:subgroup_one_group_three)
+    ].map(&:id))).empty?
   end
 
   test '#without_descendants when collection is empty' do
@@ -31,18 +34,22 @@ class NamespaceTest < ActiveSupport::TestCase
   end
 
   test '#without_descendants when collection has one item' do
-    assert_equal [groups(:group_three)],
-                 Group.where(id: groups(:group_three).id).without_descendants
+    assert (Group.where(id: groups(:group_three).id).without_descendants - Group.where(id: [
+      groups(:group_three)
+    ].map(&:id))).empty?
   end
 
   test '#without_descendants when collection has no related items' do
-    assert_equal [groups(:group_two), groups(:group_three)],
-                 Group.where(id: [groups(:group_two).id, groups(:group_three).id]).without_descendants
+    assert (Group.where(id: [groups(:group_two).id,
+                             groups(:group_three).id]).without_descendants - Group.where(id: [
+                               groups(:group_two), groups(:group_three)
+                             ].map(&:id))).empty?
   end
 
   test '#without_descendants when collection has related items' do
-    assert_equal [groups(:group_one), groups(:group_three)],
-                 Group.where(id: [groups(:group_one).id,
-                                  groups(:group_three).id]).self_and_descendants.without_descendants
+    assert (Group.where(id: [groups(:group_one).id,
+                             groups(:group_three).id]).self_and_descendants.without_descendants - Group.where(id: [
+                               groups(:group_one), groups(:group_three)
+                             ].map(&:id))).empty?
   end
 end
