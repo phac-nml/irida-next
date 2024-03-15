@@ -7,9 +7,8 @@ module DataExports
       @data_export = data_exports(:data_export_two)
     end
 
-    test 'creating export and updating data_export status and expiry' do
+    test 'creating export and updating data_export status' do
       assert @data_export.status = 'processing'
-      assert_nil @data_export.expires_at
       assert_not @data_export.file.valid?
 
       assert_difference -> { ActiveStorage::Attachment.count } => +1 do
@@ -87,6 +86,7 @@ module DataExports
     end
 
     test 'test export expiry that does not include holiday' do
+      assert_nil @data_export.expires_at
       # Monday -> Thursday
       Timecop.travel(DateTime.new(2024, 3, 11)) do
         DataExports::CreateJob.perform_now(@data_export)
