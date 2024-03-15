@@ -315,7 +315,7 @@ module Groups
       end
 
       # toggling metadata again causes sort to be reset
-      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table thead tr th', count: 6
 
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'

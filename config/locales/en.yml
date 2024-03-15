@@ -943,7 +943,6 @@ en:
           remove: Remove sample
         search:
           placeholder: Filter by ID or name
-          metadata: Metadata
       update:
         success: Sample was successfully updated.
       edit:
@@ -959,6 +958,8 @@ en:
       shared:
         errors:
           ok_button: OK
+        metadata_toggle:
+          label: Metadata
       transfers:
         dialog:
           title: Transfer Samples
