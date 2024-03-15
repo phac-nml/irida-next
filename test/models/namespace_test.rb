@@ -23,7 +23,7 @@ class NamespaceTest < ActiveSupport::TestCase
 
   test '#self_and_descendants when collection is non empty' do
     assert_equal [groups(:group_three), groups(:subgroup_one_group_three)],
-                 Group.where(id: groups(:group_three).id).self_and_descendants
+                 Group.where(id: groups(:group_three).id).self_and_descendants.sort
   end
 
   test '#without_descendants when collection is empty' do
@@ -37,12 +37,12 @@ class NamespaceTest < ActiveSupport::TestCase
 
   test '#without_descendants when collection has no related items' do
     assert_equal [groups(:group_two), groups(:group_three)],
-                 Group.where(id: [groups(:group_two).id, groups(:group_three).id]).without_descendants
+                 Group.where(id: [groups(:group_two).id, groups(:group_three).id]).without_descendants.sort
   end
 
   test '#without_descendants when collection has related items' do
     assert_equal [groups(:group_one), groups(:group_three)],
                  Group.where(id: [groups(:group_one).id,
-                                  groups(:group_three).id]).self_and_descendants.without_descendants
+                                  groups(:group_three).id]).self_and_descendants.without_descendants.sort
   end
 end
