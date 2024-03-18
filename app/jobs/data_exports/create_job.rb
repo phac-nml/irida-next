@@ -16,8 +16,6 @@ module DataExports
       data_export.expires_at = set_expiry
       data_export.status = 'ready'
       data_export.save
-
-      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification
     end
 
     def initialize_manifest(export_type)
