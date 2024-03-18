@@ -73,7 +73,7 @@ module DataExports
          "#{project.puid}/#{sample_b.puid}/#{attachment_f.puid}/#{attachment_f.file.filename}",
          'manifest.json']
       DataExports::CreateJob.perform_now(data_export)
-      sleep 10
+      data_export.run_callbacks(:commit)
       export_file = ActiveStorage::Blob.service.path_for(data_export.file.key)
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
