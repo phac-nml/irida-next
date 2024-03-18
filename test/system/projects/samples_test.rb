@@ -1911,7 +1911,7 @@ module Projects
       end
     end
 
-    test 'selecting all samples' do
+    test 'selecting / deselecting all samples' do
       visit namespace_project_samples_url(@namespace, @project)
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
@@ -1935,6 +1935,17 @@ module Projects
       within 'tfoot' do
         assert_selector 'strong[data-selection-target="total"]', text: '3'
         assert_selector 'strong[data-selection-target="selected"]', text: '2'
+      end
+
+      find('input[name="select"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      find('input[name="select"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
     end
 
