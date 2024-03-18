@@ -1126,7 +1126,7 @@ fr:
         email_body:
           start: Your export
           middle: is ready for download. You will have until
-          end: to download the export before it's deleted
+          end: to download the export before it's deleted.
         download_link:
           start: Please visit
           end: to download your export.
