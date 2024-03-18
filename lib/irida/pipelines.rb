@@ -20,6 +20,7 @@ module Irida
     # Registers the available pipelines. This method is called
     # by an initializer which runs when the server is started up
     def register_pipelines
+      puts "\n\nREGISTERING PIPELINES\n\n"
       data = read_json_config
 
       data.each do |entry|
