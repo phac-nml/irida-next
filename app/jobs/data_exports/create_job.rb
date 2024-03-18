@@ -143,7 +143,7 @@ module DataExports
       extra_days = 0
       extra_days += add_holidays(check_formal_holidays, observed_holidays) if check_formal_holidays.count.positive?
       extra_days += add_holidays(check_informal_holidays, informal_holidays) if check_informal_holidays.count.positive?
-      extra_days.business_days.after(expiry) if extra_days.positive?
+      expiry = extra_days.business_days.after(expiry) if extra_days.positive?
       expiry
     end
 
