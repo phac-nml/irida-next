@@ -239,7 +239,6 @@ module DataExports
       DataExports::CreateJob.perform_now(data_export)
       data_export.run_callbacks(:commit)
       export_file = ActiveStorage::Blob.service.path_for(data_export.file.key)
-      sleep 5
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
           assert expected_files_in_zip.include?(entry.to_s)
