@@ -63,7 +63,7 @@ module Projects
       def download
         authorize! @project, to: :read_sample?
 
-        send_data DataExport.last.file.download, filename: DataExport.last.file.filename.to_s
+        send_data @attachment.file.download, filename: @attachment.file.filename.to_s
       end
 
       private
