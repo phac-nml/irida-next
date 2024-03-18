@@ -30,6 +30,8 @@ module Irida
           @available_pipelines << Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
         end
       end
+      puts "Available pipelines count\n"
+      puts @available_pipelines.count
     end
 
     # read in the json pipeline config
