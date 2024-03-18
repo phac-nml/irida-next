@@ -116,14 +116,13 @@ module Projects
 
     def select
       authorize! @project, to: :sample_listing?
+      @samples = []
 
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
             @q = load_samples.ransack(params[:q])
             @samples = @q.result.select(:id)
-          else
-            @samples = []
           end
         end
       end
