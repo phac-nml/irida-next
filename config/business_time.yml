@@ -1,0 +1,9 @@
+business_time:
+  beginning_of_workday: 12:00 am
+  end_of_workday: 11:59 pm
+  work_week:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri

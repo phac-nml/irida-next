@@ -16,6 +16,8 @@ module DataExports
       data_export.expires_at = set_expiry
       data_export.status = 'ready'
       data_export.save
+
+      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification
     end
 
     def initialize_manifest(export_type)
@@ -143,7 +145,8 @@ module DataExports
       extra_days = 0
       extra_days += add_holidays(check_formal_holidays, observed_holidays) if check_formal_holidays.count.positive?
       extra_days += add_holidays(check_informal_holidays, informal_holidays) if check_informal_holidays.count.positive?
-      extra_days.business_days.after(expiry)
+      extra_days.business_days.after(expiry) if extra_days.positive?
+      expiry
     end
 
     def add_holidays(days_to_check, holidays)
