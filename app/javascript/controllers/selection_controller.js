@@ -74,7 +74,7 @@ export default class extends Controller {
 
     this.save(newStorageValue);
     this.#updateActionLinks(newStorageValue.length);
-    this.#updateSelectAllCB(newStorageValue.length);
+    this.#setSelectAllCheckboxValue(newStorageValue.length);
     this.#updatedCounts(newStorageValue.length);
   }
 
@@ -83,7 +83,7 @@ export default class extends Controller {
       row.checked = ids.indexOf(row.value) > -1;
     });
     this.#updateActionLinks(ids.length);
-    this.#updateSelectAllCB(ids.length);
+    this.#setSelectAllCheckboxValue(ids.length);
     this.#updatedCounts(ids.length);
   }
 
@@ -97,7 +97,7 @@ export default class extends Controller {
     });
   }
 
-  #updateSelectAllCB(total) {
+  #setSelectAllCheckboxValue(total) {
     this.selectAllTarget.checked = this.totalValue === total;
   }
 
