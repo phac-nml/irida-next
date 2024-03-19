@@ -2,6 +2,8 @@
 
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
+  before_action :data_export, only: %i[download destroy]
+
   def index
     @data_exports = DataExport.find_by(user: current_user)
   end
@@ -26,7 +28,7 @@ class DataExportsController < ApplicationController
 
     if @data_export.valid?
       flash[:success] = t('.success')
-      redirect_to data_exports
+      redirect_to data_exports_path
     else
       respond_to do |format|
         format.turbo_stream do
@@ -40,10 +42,10 @@ class DataExportsController < ApplicationController
     DataExports::DestroyService.new(@data_export, current_user).execute
     respond_to do |format|
       format.turbo_stream do
-        if @data_export.deleted?
-          render status: :ok, locals: { type: 'success', message: t('.success') }
-        else
+        if @data_export.persisted?
           render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
+        else
+          render status: :ok, locals: { type: 'success', message: t('.success') }
         end
       end
     end
@@ -52,6 +54,10 @@ class DataExportsController < ApplicationController
   private
 
   def data_export_params
-    params.require(:data_export).permit(:name, :export_type, :ids, export_parameters: { ids: [] })
+    params.require(:data_export).permit(:name, :export_type, :email_notification, export_parameters: { ids: [] })
+  end
+
+  def data_export
+    @data_export = DataExport.find(params[:id])
   end
 end
