@@ -3,16 +3,17 @@
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
   respond_to :turbo_stream
-  before_action :workflows, only: %i[index destroy]
   before_action :current_page
 
-  def index; end
+  def index
+    @pagy, @workflows = pagy(load_workflows)
+  end
 
   def create
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
 
     if @workflow_execution.persisted?
-      redirect_to workflow_executions_path
+      redirect_to workflow_executions_path(format: :html)
     else
       render turbo_stream: [], status: :unprocessable_entity
     end
@@ -30,6 +31,8 @@ class WorkflowExecutionsController < ApplicationController
     @workflow_execution = WorkflowExecution.find(params[:id])
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
 
+    @pagy, @workflows = pagy(load_workflows)
+
     if @workflow_execution.deleted?
       render status: :ok,
              locals: { type: 'success',
@@ -43,8 +46,8 @@ class WorkflowExecutionsController < ApplicationController
 
   private
 
-  def workflows
-    @workflows = WorkflowExecution.where(submitter: current_user)
+  def load_workflows
+    WorkflowExecution.where(submitter: current_user)
   end
 
   def workflow_execution_params
