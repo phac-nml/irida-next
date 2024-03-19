@@ -19,7 +19,7 @@
     td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
   </style>
   <![endif]-->
-  <title>Export ready for download</title>
+  <title><%= t(:'mailers.data_export_mailer.email_subject') %></title>
   <style>
     @media (max-width: 600px) {
       .sm-my-8 {
@@ -42,13 +42,13 @@
     <div class="sm-px-4" style="background-color: #f8fafc; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
       <table align="center" cellpadding="0" cellspacing="0" role="none">
         <tr>
-          <td style="width: 552px; max-width: 100%">
-            <div class="sm-my-8" style="margin-top: 48px; margin-bottom: 48px; text-align: center">
+          <td style="width: 552px; max-width: 100%;">
+            <div class="sm-my-8" style="margin-top: 48px; margin-bottom: 48px; text-align: center;">
               <a href="<%= root_url %>" class="whitespace-nowrap" style="text-decoration: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 36px; height: 36px; transform: rotate(12deg); color: #15803d;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 33px; height: 33px; transform: rotate(12deg); color: #15803d;">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
                 </svg>
-                <span style="font-size: 24px; color: #000; font-weight: 600">
+                <span style="font-size: 40px; color: #000; font-weight: 600;">
                   <%= t(:"general.name") %>
                 </span>
               </a>
@@ -57,39 +57,55 @@
               <tr>
                 <td class="sm-px-6" style="border-radius: 4px; background-color: #fff; padding: 48px; font-size: 16px; color: #334155; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05)">
                   <h1 style="margin: 0 0 24px; font-size: 24px; font-weight: 600; color: #000">
-                    Hello <%= @user.first_name%>,
+                    <%= t(:'mailers.data_export_mailer.export_ready.greeting') %> <%= @user.first_name %>,
                   </h1>
                   <p style="margin: 0; line-height: 24px">
-                    Your export <strong><%= @data_export.name || @data_export.id %></strong> is ready for download.
+                    <%= t(:'mailers.data_export_mailer.export_ready.ready_for_download.start') %>
+                    <strong><%= @data_export.name || @data_export.id %></strong>
+                    <%= t(:'mailers.data_export_mailer.export_ready.ready_for_download.end') %>
                     <br>
                     <br>
-                    To view your exports, click the button below:
+                    <%= t(:'mailers.data_export_mailer.export_ready.view_exports') %>
                   </p>
                   <div role="separator" style="line-height: 24px">&zwj;</div>
                   <div>
                     <a href="<%= root_url %>" style="display: inline-block; border-radius: 4px; background-color: #15803d; padding: 16px 24px; font-size: 16px; font-weight: 600; line-height: 1; color: #f8fafc; text-decoration: none">
                       <!--[if mso]>
-      <i style="mso-font-width: 150%; mso-text-raise: 30px" hidden>&emsp;</i>
-    <![endif]-->
+                        <i style="mso-font-width: 150%; mso-text-raise: 30px" hidden>&emsp;</i>
+                      <![endif]-->
                       <span style="mso-text-raise: 16px">
-                  IRIDA Next &rarr;
-                </span>
+                        <%= t(:"general.name") %> &rarr;
+                      </span>
                       <!--[if mso]>
-      <i hidden style="mso-font-width: 150%;">&emsp;&#8203;</i>
-    <![endif]-->
+                        <i hidden style="mso-font-width: 150%;">&emsp;&#8203;</i>
+                      <![endif]-->
                     </a>
+                    <div role="separator" style="line-height: 24px">&zwj;</div>
+                    <p style="margin: 0; line-height: 24px">
+                      <%= t(:'mailers.data_export_mailer.export_ready.copy_paste') %> <%= root_url %>
+                    </p>
                   </div>
-                  <div role="separator" style="background-color: #e2e8f0; height: 1px; line-height: 1px; margin: 32px 0">&zwj;</div>
+                  <div role="separator" style="background-color: #e2e8f0; height: 1px; line-height: 1px; margin: 28px 0">&zwj;</div>
                   <p style="margin: 0;">
-                    Please download the export before <strong><%= @data_export.expires_at.strftime("%A, %B %d, %Y") %></strong> as it will be deleted after this date.
+                    <%= t(:'mailers.data_export_mailer.export_ready.download_before.start') %>
+                    <strong><%= @data_export.expires_at.strftime("%A, %B %d, %Y") %></strong>
+                    <%= t(:'mailers.data_export_mailer.export_ready.download_before.end') %>
                     <br>
                     <br>
-                    Thanks, <br>IRIDA Next
+                    <%= t(:'mailers.data_export_mailer.export_ready.thanks') %>
+                    <br><%= t(:"general.name") %>
                   </p>
                 </td>
               </tr>
               <tr role="separator">
                 <td style="line-height: 48px">&zwj;</td>
+              </tr>
+              <tr>
+                <td style="padding-left: 24px; padding-right: 24px; text-align: center; font-size: 12px; color: #475569">
+                  <p style="margin: 0; font-style: italic">
+                    <%= t(:'mailers.data_export_mailer.export_ready.automated_message') %>
+                  </p>
+                </td>
               </tr>
             </table>
           </td>
