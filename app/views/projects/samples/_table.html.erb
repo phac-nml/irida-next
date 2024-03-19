@@ -25,35 +25,35 @@
       "
     >
       <tr>
-        <th
-          scope="col"
-          class="
-            px-6
-            py-3
-            whitespace-nowrap
-            text-left
-            bg-slate-50
-            dark:bg-slate-700
-            sticky
-            left-0
-            z-10
-          "
-        >
-          <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters", id: "select-all-form" }, class: "filters flex align-middle" do |f| %>
-            <input type="hidden" name="format" value="turbo_stream"/>
+        <% if allowed_to?(:transfer_sample?, project) %>
+          <th
+            scope="col"
+            class="
+              px-6
+              py-3
+              whitespace-nowrap
+              text-left
+              bg-slate-50
+              dark:bg-slate-700
+              sticky
+              left-0
+              z-10
+            "
+          >
+            <%= search_form_for @q, url: select_namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters", id: "select-all-form" }, class: "filters flex align-middle" do |f| %>
+              <input type="hidden" name="format" value="turbo_stream"/>
 
-            <% @search_params.each do |key, value| %>
-              <% if value.is_a?(Array) %>
-                <% value.each do |val| %>
-                  <input type="hidden" name="q[<%= key %>][]" value="<%= val %>">
+              <% @search_params.each do |key, value| %>
+                <% if value.is_a?(Array) %>
+                  <% value.each do |val| %>
+                    <input type="hidden" name="q[<%= key %>][]" value="<%= val %>">
+                  <% end %>
+                <% else %>
+                  <input type="hidden" name="q[<%= key %>]" value="<%= value %>">
                 <% end %>
-              <% else %>
-                <input type="hidden" name="q[<%= key %>]" value="<%= value %>">
               <% end %>
-            <% end %>
 
-            <% if allowed_to?(:transfer_sample?, project) %>
-              <label for="select-all" class="sr-only"><%= t(:'.selectAll') %></label>
+              <label for="select-all" class="sr-only"><%= t(:".selectAll") %></label>
               <input
                 type="checkbox"
                 id="select-all"
@@ -77,13 +77,28 @@
                 onchange="Turbo.navigator.submitForm(this.form)"
               />
             <% end %>
-            <%= render Ransack::SortComponent.new(
-              ransack_obj: @q,
-              label: t(".puid"),
-              url: sorting_url(@q, :puid),
-              field: :puid
-            ) %>
-          <% end %>
+          </th>
+        <% end %>
+        <th
+          scope="col"
+          class="
+            px-6
+            py-3
+            whitespace-nowrap
+            text-left
+            bg-slate-50
+            dark:bg-slate-700
+            sticky
+            left-0
+            z-10
+          "
+        >
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(".puid"),
+            url: sorting_url(@q, :puid),
+            field: :puid
+          ) %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
           <%= render Ransack::SortComponent.new(
@@ -146,18 +161,18 @@
           id="<%= sample.id %>"
           class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
         >
-          <td
-            class="
-              px-6
-              py-3
-              whitespace-nowrap
-              sticky
-              left-0
-              bg-slate-50
-              dark:bg-slate-900
-            "
-          >
-            <% if allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project) %>
+          <% if allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project) %>
+            <td
+              class="
+                px-6
+                py-3
+                whitespace-nowrap
+                sticky
+                left-0
+                bg-slate-50
+                dark:bg-slate-900
+              "
+            >
               <%= check_box_tag "sample_ids[]",
               sample.id,
               nil,
@@ -169,7 +184,19 @@
               },
               class:
                 "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
-            <% end %>
+            </td>
+          <% end %>
+          <td
+            class="
+              px-6
+              py-3
+              whitespace-nowrap
+              sticky
+              left-0
+              bg-slate-50
+              dark:bg-slate-900
+            "
+          >
             <%= link_to namespace_project_sample_path(id: sample.id),
             data: {
               turbo: false
