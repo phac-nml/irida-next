@@ -23,7 +23,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -45,7 +45,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -60,7 +60,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -75,7 +75,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -86,7 +86,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text 'Confirmation required'
     click_button 'Confirm'
 
-    assert_no_text workflow_execution.run_id
+    assert_no_text workflow_execution.id
   end
 
   test 'should delete an errored workflow' do
@@ -96,7 +96,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -107,7 +107,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text 'Confirmation required'
     click_button 'Confirm'
 
-    assert_no_text workflow_execution.run_id
+    assert_no_text workflow_execution.id
   end
 
   test 'should not delete a canceling workflow' do
@@ -117,7 +117,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -132,7 +132,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -143,7 +143,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text 'Confirmation required'
     click_button 'Confirm'
 
-    assert_no_text workflow_execution.run_id
+    assert_no_text workflow_execution.id
   end
 
   test 'should not delete a running workflow' do
@@ -153,7 +153,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -168,7 +168,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
@@ -183,7 +183,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('td', text: workflow_execution.run_id).ancestor('tr')
+    tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
       assert_selector 'td:nth-child(4)', text: workflow_execution.state
