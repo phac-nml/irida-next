@@ -29,7 +29,7 @@ module Viral
       pink: 'border border-pink-800 dark:border-pink-300',
       primary: 'border border-primary-800 dark:border-primary-400',
       transparent: 'border border-slate-500 dark:border-slate-400'
-    }
+    }.freeze
 
     def initialize(
       text: nil,
