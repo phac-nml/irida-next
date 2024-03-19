@@ -26,9 +26,9 @@ module DataExports
                   end
     end
 
-    def create_sample_zip(data_export) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def create_sample_zip(data_export)
       new_zip_file = Tempfile.new(binmode: true)
-      ZipKit::Streamer.open(new_zip_file) do |zip| # rubocop:disable Metrics/BlockLength
+      ZipKit::Streamer.open(new_zip_file) do |zip|
         data_export.export_parameters['ids'].each do |sample_id|
           sample = Sample.find(sample_id)
           next unless sample.attachments.count.positive?
@@ -37,32 +37,10 @@ module DataExports
 
           update_sample_manifest(sample, project)
 
-          sample.attachments.each do |attachment|
-            if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
-              next
-            end
-
-            directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}/#{attachment.file.filename}"
-            zip.write_file(directory) do |writer_for_file|
-              attachment.file.download { |chunk| writer_for_file << chunk }
-            end
-
-            next unless attachment.metadata.key?('associated_attachment_id')
-
-            paired_attachment = attachment.associated_attachment
-            directory = "#{project.puid}/#{sample.puid}/#{paired_attachment.puid}/#{paired_attachment.file.filename}"
-            zip.write_file(directory) do |writer_for_file|
-              paired_attachment.file.download { |chunk| writer_for_file << chunk }
-            end
-          end
+          write_attachments(sample, project, zip)
         end
         # Write manifest to file 'manifest.json' and add to zip
-        manifest_file = Tempfile.new
-        manifest_file.write(JSON.pretty_generate(JSON.parse(@manifest.to_json)))
-
-        zip.write_file('manifest.json') { |writer_for_file| IO.copy_stream(manifest_file.open, writer_for_file) }
-        manifest_file.close
-        manifest_file.unlink
+        write_manifest(zip)
       end
       new_zip_file
     end
@@ -118,6 +96,34 @@ module DataExports
       end
       attachment_manifest_file['metadata']['type'] = attachment.metadata['type'] if attachment.metadata.key?('type')
       attachment_manifest_file
+    end
+
+    def write_attachments(sample, project, zip)
+      sample.attachments.each do |attachment|
+        next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
+
+        write_attachment(project.puid, sample.puid, zip, attachment)
+
+        next unless attachment.metadata.key?('associated_attachment_id')
+
+        write_attachment(project.puid, sample.puid, zip, attachment.associated_attachment)
+      end
+    end
+
+    def write_attachment(project_puid, sample_puid, zip, attachment)
+      directory = "#{project_puid}/#{sample_puid}/#{attachment.puid}/#{attachment.file.filename}"
+      zip.write_file(directory) do |writer_for_file|
+        attachment.file.download { |chunk| writer_for_file << chunk }
+      end
+    end
+
+    def write_manifest(zip)
+      manifest_file = Tempfile.new
+      manifest_file.write(JSON.pretty_generate(JSON.parse(@manifest.to_json)))
+      zip.write_file('manifest.json') { |writer_for_file| IO.copy_stream(manifest_file.open, writer_for_file) }
+
+      manifest_file.close
+      manifest_file.unlink
     end
 
     def attach_zip(data_export, zip)
