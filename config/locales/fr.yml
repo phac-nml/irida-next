@@ -1117,19 +1117,19 @@ fr:
         created_at_asc: Oldest created
   mailers:
     data_export_mailer:
-      email_subject: Your export is ready for download on IRIDA Next
+      email_subject: "Your export is ready for download"
       export_ready:
-        greeting: Dear %{user},
-        sincerely: Sincerely,
-        irida_next: IRIDA Next
+        greeting: Hello
+        thanks: Thanks,
         automated_message: This email was sent from an automated system. Please do not reply to this email.
-        email_body:
+        ready_for_download:
           start: Your export
-          middle: is ready for download. You will have until
-          end: to download the export before it's deleted.
-        download_link:
-          start: Please visit
-          end: to download your export.
+          end: is ready for download.
+        view_exports: "To view your exports, click the button below:"
+        copy_paste: "Or copy and paste this link into your browser:"
+        download_before:
+          start: Please download the export before
+          end: as it will be deleted after this date.
   data_exports:
     create:
       success: Data export '%{name}' was successfully started.
