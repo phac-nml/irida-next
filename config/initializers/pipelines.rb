@@ -2,4 +2,4 @@
 
 require 'irida/pipelines'
 
-Irida::Pipelines.register_pipelines
+Irida::Pipelines.register_pipelines unless Irida::Pipelines.initialized
