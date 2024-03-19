@@ -5,33 +5,32 @@ export default class extends Controller {
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
   #storageKey = null;
 
-  static targets = ["rowSelection"];
+  static targets = ["rowSelection", "selectAll", "total", "selected"];
   static outlets = ["action-link"];
 
   static values = {
     storageKey: {
-      type: String
+      type: String,
     },
+    total: Number,
   };
 
   connect() {
     this.#storageKey =
-      this.storageKeyValue || `${location.protocol}//${location.host}${location.pathname}${location.search}`;
+      this.storageKeyValue ||
+      `${location.protocol}//${location.host}${location.pathname}${location.search}`;
 
     this.element.setAttribute("data-controller-connected", "true");
 
     const storageValue = this.#getStoredSamples();
 
     if (storageValue) {
-      this.rowSelectionTargets.map((row) => {
-        if (storageValue.indexOf(row.value) > -1) {
-          row.checked = true;
-        }
-      });
-      this.#updateActionLinks(storageValue.length);
+      this.#updateUI(storageValue);
     } else {
       this.save([]);
     }
+
+    this.#updatedCounts(storageValue.length);
   }
 
   actionLinkOutletConnected(outlet) {
@@ -56,6 +55,11 @@ export default class extends Controller {
     sessionStorage.setItem(this.#storageKey, JSON.stringify([...storageValue]));
   }
 
+  update(ids) {
+    this.save(ids);
+    this.#updateUI(ids);
+  }
+
   #addOrRemove(add, storageValue) {
     const newStorageValue = this.#getStoredSamples();
 
@@ -70,6 +74,17 @@ export default class extends Controller {
 
     this.save(newStorageValue);
     this.#updateActionLinks(newStorageValue.length);
+    this.#setSelectAllCheckboxValue(newStorageValue.length);
+    this.#updatedCounts(newStorageValue.length);
+  }
+
+  #updateUI(ids) {
+    this.rowSelectionTargets.map((row) => {
+      row.checked = ids.indexOf(row.value) > -1;
+    });
+    this.#updateActionLinks(ids.length);
+    this.#setSelectAllCheckboxValue(ids.length);
+    this.#updatedCounts(ids.length);
   }
 
   #getStoredSamples() {
@@ -80,5 +95,14 @@ export default class extends Controller {
     this.actionLinkOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
     });
+  }
+
+  #setSelectAllCheckboxValue(total) {
+    this.selectAllTarget.checked = this.totalValue === total;
+  }
+
+  #updatedCounts(selected) {
+    this.totalTarget.innerText = this.totalValue;
+    this.selectedTarget.innerText = selected;
   }
 }

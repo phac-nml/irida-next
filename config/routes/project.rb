@@ -27,6 +27,9 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :file_import, module: :metadata, only: %i[create new]
           end
         end
+        collection do
+          get :select
+        end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           member do
             get :download

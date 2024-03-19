@@ -7,6 +7,7 @@ module Projects
 
     before_action :sample, only: %i[show edit update destroy view_history_version]
     before_action :current_page
+    before_action :set_search_params, only: %i[index destroy]
 
     def index # rubocop:disable Metrics/AbcSize
       authorize! @project, to: :sample_listing?
@@ -113,6 +114,20 @@ module Projects
       end
     end
 
+    def select
+      authorize! @project, to: :sample_listing?
+      @samples = []
+
+      respond_to do |format|
+        format.turbo_stream do
+          if params[:select].present?
+            @q = load_samples.ransack(params[:q])
+            @samples = @q.result.select(:id)
+          end
+        end
+      end
+    end
+
     private
 
     def sample
@@ -150,6 +165,10 @@ module Projects
       end
 
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    end
+
+    def set_search_params
+      @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
     end
   end
 end
