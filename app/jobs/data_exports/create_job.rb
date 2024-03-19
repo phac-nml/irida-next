@@ -130,7 +130,6 @@ module DataExports
 
     def set_expiry
       expiry = 3.business_days.from_now
-      puts expiry
       # Because the Holidays gem does not have great filters for specific federal holidays, we have to filter
       # with the BC, ON, and CAN holidays to get two lists, observed and informal holidays. However the lists also
       # contain many non-Federal holidays, so we need a hard-coded list of holidays, and filter through them to check
