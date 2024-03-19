@@ -9,7 +9,7 @@ module Mutations
     argument :name, String, required: true, description: 'The name to give the sample.'
     argument :project_id, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
-             description: 'The Node ID of the project. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.'
+             description: 'The Node ID of the project. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.' # rubocop:disable Layout/LineLength
     argument :project_puid, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
              description: 'Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.'
