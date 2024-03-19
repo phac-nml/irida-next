@@ -31,14 +31,15 @@
         ) %>
       </span>
     <% end %>
-    <span><%= viral_pill(
-        text:
-          t(
-            :"projects.members.index.access_level.level_#{Member.effective_access_level(project.namespace, current_user)}"
-          ),
-        color: "transparent",
-        border: true
-      ) %></span>
+    <%= viral_pill(
+      text:
+        t(
+          :"projects.members.index.access_level.level_#{Member.effective_access_level(project.namespace, current_user)}"
+        ),
+      color: "transparent",
+      border: true,
+      classes: "ml-2"
+    ) %>
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 text-right whitespace-nowrap">
