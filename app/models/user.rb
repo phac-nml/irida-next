@@ -2,6 +2,8 @@
 
 # entity class for User
 class User < ApplicationRecord
+  include HasUserType
+
   has_logidze
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

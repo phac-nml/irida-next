@@ -225,6 +225,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_145629) do
     t.string "first_name"
     t.string "last_name"
     t.string "locale", default: "en"
+    t.integer "user_type", default: 0
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true, where: "(deleted_at IS NULL)"
