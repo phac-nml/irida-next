@@ -14,13 +14,13 @@ module Irida
     @pipeline_config_file = 'pipelines.json'
     @pipeline_schema_status_file = 'status.json'
     @available_pipelines = []
+    @initialized = false
 
     module_function
 
     # Registers the available pipelines. This method is called
     # by an initializer which runs when the server is started up
     def register_pipelines
-      puts "\n\nREGISTERING PIPELINES\n\n"
       data = read_json_config
 
       data.each do |entry|
@@ -30,8 +30,7 @@ module Irida
           @available_pipelines << Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
         end
       end
-      puts "Available pipelines count\n"
-      puts @available_pipelines.count
+      @initialized = true
     end
 
     # read in the json pipeline config
@@ -128,6 +127,10 @@ module Irida
 
     def available_pipelines
       @available_pipelines
+    end
+
+    def initialized
+      @initialized
     end
 
     def pipeline_config_dir=(dir)
