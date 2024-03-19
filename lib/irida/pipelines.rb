@@ -132,16 +132,17 @@ module Irida
       @available_pipelines
     end
 
-    def initialized
-      @initialized
-    end
-
     def pipeline_config_dir=(dir)
       @pipeline_config_dir = dir
     end
 
     def pipeline_schema_file_dir=(dir)
       @pipeline_schema_file_dir = dir
+    end
+
+    # If the pipelines have been initialized or not for the current process
+    def initialized
+      @initialized
     end
   end
 end

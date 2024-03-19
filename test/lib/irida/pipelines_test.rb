@@ -5,6 +5,11 @@ require 'webmock/minitest'
 
 class PipelinesTest < ActiveSupport::TestCase
   setup do
+    @pipeline_schema_file_dir = 'tmp/storage/pipelines'
+
+    Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines'
+    Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
+
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
       .to_return(status: 200, body: '', headers: { etag: '[W/"a1Ab"]' })
 
@@ -24,15 +29,8 @@ class PipelinesTest < ActiveSupport::TestCase
       .to_return(status: 200, body: '', headers: { etag:  '[W/"f1Fg"]' })
   end
 
-  setup do
-    @pipeline_schema_file_dir = 'tmp/storage/pipelines'
-
-    Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines'
-    Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
-  end
-
   teardown do
-    FileUtils.remove_dir(@pipeline_schema_file_dir)
+    FileUtils.remove_dir(@pipeline_schema_file_dir, true)
   end
 
   test 'registers pipelines' do
