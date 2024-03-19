@@ -13,7 +13,7 @@ module Irida
     @pipeline_schema_file_dir = 'private/pipelines'
     @pipeline_config_file = 'pipelines.json'
     @pipeline_schema_status_file = 'status.json'
-    @available_pipelines = []
+    @available_pipelines = {}
     @initialized = false
 
     module_function
@@ -25,9 +25,12 @@ module Irida
 
       data.each do |entry|
         entry['versions'].each do |version|
+          next if @available_pipelines.key?("#{entry['name']}_#{version['name']}")
+
           nextflow_schema_location = prepare_schema_download(entry, version, 'nextflow_schema')
           schema_input_location = prepare_schema_download(entry, version, 'schema_input')
-          @available_pipelines << Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
+          @available_pipelines["#{entry['name']}_#{version['name']}"] =
+            Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
         end
       end
       @initialized = true
@@ -122,7 +125,7 @@ module Irida
     end
 
     def find_pipeline_by(name, version)
-      @available_pipelines.detect { |pipeline| (pipeline.name == name) && (pipeline.version == version) }
+      @available_pipelines["#{name}_#{version}"]
     end
 
     def available_pipelines
