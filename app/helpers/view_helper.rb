@@ -19,6 +19,7 @@ module ViewHelper
     icon: 'Viral::IconComponent',
     input_group: 'Viral::Form::InputGroupComponent',
     pageheader: 'Viral::PageHeaderComponent',
+    prefixed_checkbox: 'Viral::Form::Prefixed::CheckboxComponent',
     pill: 'Viral::PillComponent',
     select: 'Viral::Form::SelectComponent',
     select_group: 'Viral::Form::SelectGroupComponent',

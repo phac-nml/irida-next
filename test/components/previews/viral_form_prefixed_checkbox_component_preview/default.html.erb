@@ -1,0 +1,7 @@
+<%= form_with do |form| %>
+  <%= viral_prefixed_checkbox(form: form, name: "prefixed", value: true, label: "Checkbox Label", checked: true) do |checkbox| %>
+    <%= checkbox.with_prefix do %>
+      <span class="font-mono">--prefix</span>
+    <% end %>
+  <% end %>
+<% end %>
