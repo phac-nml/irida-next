@@ -4,8 +4,8 @@ require 'test_helper'
 
 class DataExportMailerTest < ActionMailer::TestCase
   setup do
+    @data_export1 = data_exports(:data_export_one)
     @data_export2 = data_exports(:data_export_two)
-    @data_export3 = data_exports(:data_export_three)
     @data_export4 = data_exports(:data_export_four)
     @data_export5 = data_exports(:data_export_five)
   end
@@ -28,6 +28,7 @@ class DataExportMailerTest < ActionMailer::TestCase
   test 'export ready email without export name' do
     freeze_time
     email = DataExportMailer.export_ready(@data_export5)
+    assert_nil @data_export5.name
 
     assert_emails 1 do
       email.deliver_now
@@ -49,7 +50,7 @@ class DataExportMailerTest < ActionMailer::TestCase
 
   test 'no email delivery when email_notification is nil' do
     assert_emails 0 do
-      DataExports::CreateJob.perform_now(@data_export3)
+      DataExports::CreateJob.perform_now(@data_export1)
     end
   end
 end
