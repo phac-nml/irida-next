@@ -11,12 +11,36 @@ module Projects
     before_action :current_page
 
     def index
-      @bot_accounts = User.bots
+      @bot_accounts = User.bots_for_puid(@project.puid)
     end
 
-    def new; end
+    def new
+      authorize! @project, to: :create_bot_accounts?
 
-    def create; end
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
+    end
+
+    def create
+      @new_bot_account = Bots::CreateService.new(current_user, @project, bot_params).execute
+
+      if @new_bot_account.persisted?
+        respond_to do |format|
+          format.turbo_stream do
+            render status: :ok
+          end
+        end
+      else
+        respond_to do |format|
+          format.turbo_stream do
+            render status: :unprocessable_entity
+          end
+        end
+      end
+    end
 
     def destroy
       Bots::DestroyService.new(@bot_account, @project, current_user).execute
@@ -43,6 +67,12 @@ module Projects
       else
         'projects'
       end
+    end
+
+    private
+
+    def bot_params
+      params.require(:bot).permit(:bot_username, scopes: [])
     end
 
     protected
