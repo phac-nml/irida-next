@@ -8,8 +8,8 @@ module NextflowHelper
     return checkbox_input(container, name, property) if property['type'] == 'boolean'
 
     if property['enum'].present?
-      return viral_select_group(form: container, name:, options: property['enum'],
-                                selected_value: property['default']) do |select|
+      return viral_prefixed_select(form: container, name:, options: property['enum'],
+                                   selected_value: property['default']) do |select|
                select.with_prefix do
                  name
                end
