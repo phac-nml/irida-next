@@ -3,8 +3,8 @@
 module WorkflowExecutions
   # Service used to complete a WorkflowExecution
   class CompletionService < BaseService
-    def initialize(workflow_execution, user = nil, params = {})
-      super(user, params)
+    def initialize(workflow_execution, params = {})
+      super(workflow_execution.submitter, params)
 
       @workflow_execution = workflow_execution
       @storage_service = ActiveStorage::Blob.service

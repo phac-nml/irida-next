@@ -5,7 +5,6 @@ require 'active_storage_test_case'
 module WorkflowExecutions
   class CompletionServiceTest < ActiveStorageTestCase
     def setup
-      @user = users(:john_doe)
       @workflow_execution = workflow_executions(:irida_next_example_completed)
     end
 
@@ -23,7 +22,7 @@ module WorkflowExecutions
       # Test start
       assert 'completed', @workflow_execution.state
 
-      assert WorkflowExecutions::CompletionService.new(@workflow_execution, @user, {}).execute
+      assert WorkflowExecutions::CompletionService.new(@workflow_execution, {}).execute
 
       assert_equal 'my_run_id_6', @workflow_execution.run_id
       assert_equal 1, @workflow_execution.outputs.count
@@ -41,7 +40,7 @@ module WorkflowExecutions
 
       assert_not_equal 'completed', @workflow_execution.state
 
-      assert_not WorkflowExecutions::CompletionService.new(@workflow_execution, @user, {}).execute
+      assert_not WorkflowExecutions::CompletionService.new(@workflow_execution, {}).execute
 
       assert_not_equal 'completed', @workflow_execution.state
       assert_not_equal 'finalized', @workflow_execution.state
@@ -59,7 +58,7 @@ module WorkflowExecutions
       # Test start
       assert 'completed', @workflow_execution.state
 
-      assert WorkflowExecutions::CompletionService.new(@workflow_execution, @user, {}).execute
+      assert WorkflowExecutions::CompletionService.new(@workflow_execution, {}).execute
 
       assert_equal 'my_run_id_6', @workflow_execution.run_id
       # no files should be added to the run
