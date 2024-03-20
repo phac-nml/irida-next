@@ -11,14 +11,21 @@ module Bots
       @auth_object = auth_object
     end
 
-    def execute # rubocop:disable Metrics/MethodLength
-      # Authorize if current user is allowed to create bot account
+    def execute
       authorize! auth_object, to: :create_bot_accounts?
 
-      # Create user with bot account user_type
+      bot_user_account = create_bot_account
+
+      create_bot_user_account_pat(bot_user_account)
+    rescue Bots::CreateService::BotAccountCreateError => e
+      auth_object.errors.add(:base, e.message)
+      false
+    end
+
+    def create_bot_account
       user_params = {
         email: "#{params[:bot_username]}@iridanext.com",
-        user_type: 1,
+        user_type: 2,
         first_name: 'Project',
         last_name: 'Bot'
       }
@@ -26,15 +33,16 @@ module Bots
       bot_user_account = User.new(user_params)
       bot_user_account.save(validate: false)
 
-      # Create PAT for user with scope params
+      bot_user_account
+    end
+
+    def create_bot_user_account_pat(bot_user_account)
       personal_access_token_params = {
         name: params[:bot_username],
         expires_at: nil,
         scopes: params[:scopes]
       }
       PersonalAccessToken.create!(personal_access_token_params.merge(user: bot_user_account))
-    rescue Bots::CreateService::BotAccountCreateError => e
-      false
     end
   end
 end

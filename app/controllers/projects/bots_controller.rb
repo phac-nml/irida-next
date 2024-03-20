@@ -24,37 +24,45 @@ module Projects
       end
     end
 
-    def create
+    def create # rubocop:disable Metrics/MethodLength
       @new_bot_account = Bots::CreateService.new(current_user, @project, bot_params).execute
 
       if @new_bot_account.persisted?
         respond_to do |format|
           format.turbo_stream do
-            render status: :ok
+            render status: :ok, locals: {
+              type: 'success',
+              message: "Bot account '#{bot_params[:bot_username]}' was successfully added to the project"
+            }
           end
         end
       else
         respond_to do |format|
           format.turbo_stream do
-            render status: :unprocessable_entity
+            render status: :unprocessable_entity, locals: { type: 'alert',
+                                                            message: "There was an error adding bot account #{bot_params[:bot_username]} to the project" }
           end
         end
       end
     end
 
-    def destroy
+    def destroy # rubocop:disable Metrics/MethodLength
       Bots::DestroyService.new(@bot_account, @project, current_user).execute
 
       if @bot_account.deleted?
         respond_to do |format|
           format.turbo_stream do
-            render status: :ok
+            render status: :ok, locals: {
+              type: 'success',
+              message: "Bot account '#{@bot_account.email}' was successfully removed"
+            }
           end
         end
       else
         respond_to do |format|
           format.turbo_stream do
-            render status: :unprocessable_entity
+            render status: :unprocessable_entity, locals: { type: 'alert',
+                                                            message: "There was an error removing bot account #{bot_params[:bot_username]} from the project" }
           end
         end
       end
@@ -72,7 +80,7 @@ module Projects
     private
 
     def bot_params
-      params.require(:bot).permit(:bot_username, scopes: [])
+      params.require(:bot).permit(:id, :bot_username, scopes: [])
     end
 
     protected

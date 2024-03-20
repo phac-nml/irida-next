@@ -1,0 +1,9 @@
+<%= turbo_stream.update "new_bot_modal",
+                    partial: "bot_modal",
+                    locals: {
+                      open: false
+                    } %>
+
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type:, data: message) %>
+<% end %>
