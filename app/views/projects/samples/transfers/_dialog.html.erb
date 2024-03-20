@@ -1,8 +1,20 @@
-<%= viral_dialog(open: open) do |dialog| %>
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
       <%= form_for(:transfer, url: namespace_project_samples_transfer_path, method: :post) do |form| %>
+        <div
+          class="
+            mb-4
+            font-normal
+            text-gray-500
+            dark:text-gray-400
+            overflow-x-visible
+          "
+        >
+          <p class="mb-4"><%= t(".description") %></p>
+          <div data-controller="list-samples" data-list-samples-target="field"></div>
+        </div>
         <div
           data-controller="sessionstorage-amend-form"
           data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
