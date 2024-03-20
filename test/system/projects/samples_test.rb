@@ -237,6 +237,12 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        assert_text @sample1.name
+        assert_text @sample1.puid
+        assert_text @sample2.name
+        assert_text @sample2.puid
+        assert_text @sample3.name
+        assert_text @sample3.puid
         select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
