@@ -5,7 +5,7 @@ class DataExportsController < ApplicationController
   before_action :data_export, only: %i[download destroy]
 
   def index
-    @data_exports = DataExport.find_by(user: current_user)
+    @data_exports = DataExport.where(user: current_user)
   end
 
   def new
