@@ -1,0 +1,113 @@
+<%= render Viral::PageHeaderComponent.new(title: "Bot Accounts", subtitle: "Setup bot accounts to perform actions within the project that cannot be attributed to a single user") do |component| %>
+  <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
+  <%= component.with_buttons do %>
+
+      <%= link_to "Add New Bot Account",
+      new_namespace_project_bot_path(
+        @namespace.parent,
+        @namespace.project
+      ),
+       data: {
+        turbo_frame: "new_bot_modal",
+        turbo_stream: true
+      },
+      class: "button button--state-default button--size-default" %>
+
+  <% end %>
+<% end %>
+
+<div class="bg-white dark:bg-slate-800">
+  <%= turbo_frame_tag "new_bot_modal" %>
+  <table
+    id="bots-table"
+    class="
+      w-full
+      text-sm
+      text-left
+      rtl:text-right
+      text-slate-500
+      dark:text-slate-400
+    "  >
+    <thead
+      class="
+        text-xs
+        text-slate-700
+        uppercase
+        bg-slate-50
+        dark:bg-slate-700
+        dark:text-slate-400
+      "
+    >
+      <tr>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          Email
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          Name
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          API Scope
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          Created
+        </th>
+        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+          Actions
+        </th>
+      </tr>
+    </thead>
+    <tbody
+      class="
+        bg-white
+        divide-y
+        divide-slate-200
+        dark:bg-slate-800
+        dark:divide-slate-700
+      "
+    >
+      <% @bot_accounts.each do |bot_account| %>
+        <tr
+          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+        >
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= bot_account.email %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= "#{bot_account.first_name} #{bot_account.last_name}" %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= bot_account.created_at %>
+          </td>
+          <td class="px-6 py-3 whitespace-nowrap">
+            <%= viral_dropdown(icon: "ellipsis_vertical",
+                                     aria: { label: bot_account.email }) do |dropdown| %>
+              <%= dropdown.with_item(
+                label: "Remove",
+                url: namespace_project_bot_path(id: bot_account.namespace.id),
+                data: {
+                  turbo_method: :delete,
+                  turbo_confirm: "Are you sure you want to remove this bot account from the project?"
+                },
+                aria: {
+                  label: "Remove bot account"
+                }
+              ) %>
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
+  <% if @bot_accounts.length.zero? %>
+    <div class="empty_state_message">
+      <%= viral_empty(
+        title: "No Project Bots",
+        description: "There are no bot accounts associcated with this project",
+        icon_name: :users
+      ) %>
+    </div>
+  <% end %>
+</div>

@@ -154,6 +154,22 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def create_bot_accounts?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_modify?(user, record.namespace, false) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def destroy_bot_accounts?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_modify?(user, record.namespace, false) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(
