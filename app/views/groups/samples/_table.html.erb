@@ -32,9 +32,11 @@
               text-left
               bg-slate-50
               dark:bg-slate-700
-              sticky
               left-0
-              z-10
+              sticky
+              w-12
+              min-w-12
+              max-w-12
             "
           >
           </th>
@@ -48,9 +50,8 @@
             text-left
             bg-slate-50
             dark:bg-slate-700
+            left-12
             sticky
-            left-0
-            z-10
           "
         >
           <%= render Ransack::SortComponent.new(
@@ -131,10 +132,13 @@
                 px-6
                 py-3
                 whitespace-nowrap
-                left-0
-                sticky
                 bg-white
                 dark:bg-slate-800
+                left-0
+                sticky
+                w-12
+                min-w-12
+                max-w-12
               "
             >
               <%= check_box_tag "sample_ids[]",
@@ -155,10 +159,10 @@
               px-6
               py-3
               whitespace-nowrap
-              left-0
-              sticky
               bg-white
               dark:bg-slate-800
+              left-12
+              sticky
             "
           >
             <%= link_to namespace_project_sample_path(
