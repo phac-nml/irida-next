@@ -23,6 +23,7 @@ module WorkflowExecutions
       assert @workflow_execution.workflow_params.key? '--outdir'
       assert_match @workflow_execution.inputs.first.blob.key, @workflow_execution.workflow_params['--input']
       assert @workflow_execution.workflow_params['--outdir'].ends_with?('/')
+      assert @workflow_execution.blob_run_directory
 
       assert_equal 'prepared', @workflow_execution.state
     end
