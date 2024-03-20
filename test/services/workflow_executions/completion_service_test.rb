@@ -23,8 +23,7 @@ module WorkflowExecutions
       # Test start
       assert 'completed', @workflow_execution.state
 
-      conn = Faraday.new
-      assert WorkflowExecutions::CompletionService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::CompletionService.new(@workflow_execution, @user, {}).execute
 
       assert_equal 'my_run_id_6', @workflow_execution.run_id
       assert_equal 1, @workflow_execution.outputs.count
@@ -42,9 +41,7 @@ module WorkflowExecutions
 
       assert_not_equal 'completed', @workflow_execution.state
 
-      conn = Faraday.new
-
-      assert_not WorkflowExecutions::CompletionService.new(@workflow_execution, conn, @user, {}).execute
+      assert_not WorkflowExecutions::CompletionService.new(@workflow_execution, @user, {}).execute
 
       assert_not_equal 'completed', @workflow_execution.state
       assert_not_equal 'finalized', @workflow_execution.state
@@ -62,8 +59,7 @@ module WorkflowExecutions
       # Test start
       assert 'completed', @workflow_execution.state
 
-      conn = Faraday.new
-      assert WorkflowExecutions::CompletionService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::CompletionService.new(@workflow_execution, @user, {}).execute
 
       assert_equal 'my_run_id_6', @workflow_execution.run_id
       # no files should be added to the run

@@ -3,11 +3,10 @@
 module WorkflowExecutions
   # Service used to complete a WorkflowExecution
   class CompletionService < BaseService
-    def initialize(workflow_execution, wes_connection, user = nil, params = {})
+    def initialize(workflow_execution, user = nil, params = {})
       super(user, params)
 
       @workflow_execution = workflow_execution
-      @wes_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: wes_connection)
       @storage_service = ActiveStorage::Blob.service
       @file_blob_list = []
       @output_base_path = "#{@workflow_execution.blob_run_directory}/output/"
