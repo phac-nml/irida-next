@@ -3,11 +3,10 @@
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
   before_action :data_export, only: %i[download destroy]
+  before_action :data_exports, only: %i[index destroy]
   before_action :current_page
 
-  def index
-    @data_exports = DataExport.where(user: current_user)
-  end
+  def index; end
 
   def new
     render turbo_stream: turbo_stream.update('export_modal',
@@ -42,11 +41,15 @@ class DataExportsController < ApplicationController
   def destroy
     DataExports::DestroyService.new(@data_export, current_user).execute
     respond_to do |format|
-      format.turbo_stream do
-        if @data_export.persisted?
+      if @data_export.persisted?
+        format.turbo_stream do
           render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
-        else
-          render status: :ok, locals: { type: 'success', message: t('.success') }
+        end
+      else
+        format.turbo_stream do
+          render status: :ok,
+                 locals: { type: 'success',
+                           message: t('.success', name: @data_export.name || @data_export.id) }
         end
       end
     end
@@ -60,6 +63,10 @@ class DataExportsController < ApplicationController
 
   def data_export
     @data_export = DataExport.find(params[:id])
+  end
+
+  def data_exports
+    @data_exports = DataExport.where(user: current_user)
   end
 
   def current_page

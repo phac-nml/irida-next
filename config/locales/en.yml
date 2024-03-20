@@ -1209,7 +1209,17 @@ en:
       title: Data Exports
       table_header:
         name: Name
+        type: Type
         status: Status
         created_at: Created
         expires_at: Expires
         action: Action
+      actions:
+        dropdown: See dropdown actions for data export %{name}
+        download: Download
+        download_aria_label: Download data export %{name}
+        delete: Delete
+        delete_aria_label: Delete data export %{name}
+      delete_confirmation: Are you sure you would like to delete data export %{name}?
+    destroy:
+      success: Data export '%{name}' was successfully deleted.
