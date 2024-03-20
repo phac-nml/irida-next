@@ -4,6 +4,8 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["field"];
 
+  #td_classes = ["bg-slate-50", "dark:bg-slate-900", "left-0", "left-12", "sticky"];
+
   connect() {
     const table = document.getElementById("samples-table");
     const body = table.getElementsByTagName("tbody")[0];
@@ -19,8 +21,14 @@ export default class extends Controller {
 
         for (let cell of row.cells) {
           // copy sample id and name
-          if ([1,2].includes(cell.cellIndex)) {
-            newRow.append(cell.cloneNode(true));
+          if ([1, 2].includes(cell.cellIndex)) {
+            const clone = cell.cloneNode(true);
+            const link = clone.querySelector("a");
+            link.classList.remove("font-semibold");
+            const span = link.querySelector("span");
+            span.classList.remove("font-semibold");
+            clone.classList.remove(...this.#td_classes);
+            newRow.append(clone);
           }
         }
       }
