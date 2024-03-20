@@ -38,6 +38,12 @@
               label: t(:"projects.sidebar.settings"),
               selected: @current_page == t(:"projects.sidebar.settings").downcase
             ) %>
+            <%= render section.with_item(
+              url: project_bots_path(@project),
+              icon: "cog_6_tooth",
+              label: "Bot Accounts",
+              selected: @current_page == "bots"
+            ) %>
           <% end %>
         <% end %>
         <% layout.with_breadcrumb(context_crumbs: @context_crumbs) %>

@@ -1,0 +1,67 @@
+<%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>>
+  <%= dialog.with_header(title: "New Bot Account") %>
+  <%= dialog.with_section do %>
+    <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
+      <p class="dark:text-gray-400">
+        Adding a bot account to associate certain actions which can't be attributed to a human user
+      </p>
+    </div>
+
+   <%= form_for(:bots, url: namespace_project_bots_path, method: :post) do |form| %>
+      <div class="grid gap-4">
+        <div class="form-field">
+          <%= form.label :bot_email, "Name" %>
+          <%= form.text_field :basename,
+                          required: true,
+                          pattern: /^[[a-zA-Z0-9_\-\.]]*$/,
+                          title:
+                            t(
+                              :"projects.samples.attachments.concatenations.create.basename_help"
+                            ),
+                          value: "project_#{@project.puid}_bot_#{SecureRandom.hex(5)}",
+                          disabled: true,
+                          class: "form-control" %>
+
+        </div>
+
+        <div class="flex items-center">
+          <%= form.check_box :scope,
+                         {
+                           class:
+                             "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
+                         },
+                         true,
+                         false %>
+          <%= form.label :read_only,
+                     class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
+
+        </div>
+
+                <div class="flex items-center">
+          <%= form.check_box :scope,
+                         {
+                           class:
+                             "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
+                         },
+                         true,
+                         false %>
+          <%= form.label :read_and_write,
+                     class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
+        </div>
+
+      </div>
+        <div class="my-4">
+          <%= form.submit "Submit",
+                      class: "button button--size-default button--state-primary" %>
+          <button
+            type="button"
+            class="button button--size-default button--state-default"
+            data-action="click->viral--dialog#close"
+          >
+            <%= I18n.t("projects.group_links.new.button.cancel") %>
+          </button>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
