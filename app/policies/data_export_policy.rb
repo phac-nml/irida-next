@@ -5,4 +5,8 @@ class DataExportPolicy < ApplicationPolicy
   def destroy?
     true if record.user_id == user.id
   end
+
+  def download?
+    true if record.user_id == user.id
+  end
 end
