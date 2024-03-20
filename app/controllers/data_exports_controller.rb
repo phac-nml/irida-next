@@ -3,6 +3,7 @@
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
   before_action :data_export, only: %i[download destroy]
+  before_action :current_page
 
   def index
     @data_exports = DataExport.where(user: current_user)
@@ -59,5 +60,9 @@ class DataExportsController < ApplicationController
 
   def data_export
     @data_export = DataExport.find(params[:id])
+  end
+
+  def current_page
+    @current_page = 'data exports'
   end
 end

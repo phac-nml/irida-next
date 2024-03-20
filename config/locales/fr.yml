@@ -338,6 +338,7 @@ fr:
       groups: Groups
       projects: Projects
       workflows: Workflow Executions
+      data_exports: Data Exports
     navbar:
       collapse:
         aria_label: Collapse navigation menu
