@@ -20,7 +20,7 @@ module WorkflowExecutions
 
       output_file_paths = get_output_file_paths(run_output_data:)
 
-      output_file_paths.each do |file_path|
+      output_file_paths&.each do |file_path|
         download_and_make_blob(file_path:)
       end
 
@@ -48,6 +48,8 @@ module WorkflowExecutions
     end
 
     def get_output_file_paths(run_output_data:)
+      return nil unless run_output_data['files']['global']
+
       run_output_data['files']['global'].map { |entry| @output_base_path + entry['path'] }
     end
 
