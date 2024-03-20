@@ -52,8 +52,14 @@
                 color: :gray
               ) %>
             <% end %>
-          </td>
-          <td class="px-6 py-4">
+        </td>
+        <td class="px-6 py-4">
+            <%= data_export.export_type.capitalize %>
+        </td>
+        <td class="px-6 py-4">
+            <%= data_export.status.capitalize %>
+        </td>
+        <td class="px-6 py-4">
             <%= l(data_export.created_at.localtime, format: :full_date) %>
           </td>
           <td class="px-6 py-4">
@@ -107,6 +113,9 @@
           <% end %>
         </td>
       </tr>
+    <% end %>
+    <% else %>
+    nothing
     <% end %>
   </tbody>
 </table>
