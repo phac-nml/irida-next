@@ -35,9 +35,10 @@ module Dashboard
       @collapsed = params[:collapse] == 'true'
       @group = Group.find(params[:parent_id])
       @depth = params[:depth].to_i
+      @children = Group.none
       return if @collapsed
 
-      @sub_groups = @group.children
+      @children = @group.children
     end
 
     def authorized_groups
