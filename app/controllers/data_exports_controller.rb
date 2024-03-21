@@ -41,12 +41,12 @@ class DataExportsController < ApplicationController
   def destroy
     DataExports::DestroyService.new(@data_export, current_user).execute
     respond_to do |format|
-      if @data_export.persisted?
-        format.turbo_stream do
-          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
-        end
-      else
-        format.turbo_stream do
+      format.turbo_stream do
+        if @data_export.persisted?
+          render status: :unprocessable_entity,
+                 locals: { type: 'alert',
+                           message: t('.error', name: @data_export.name || @data_export.id) }
+        else
           render status: :ok,
                  locals: { type: 'success',
                            message: t('.success', name: @data_export.name || @data_export.id) }

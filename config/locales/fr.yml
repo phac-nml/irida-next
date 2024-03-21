@@ -1129,3 +1129,4 @@ fr:
       no_data_exports_message: You currently have no data exports.
     destroy:
       success: Data export '%{name}' was successfully deleted.
+      error: Data export '%{name} could not be deleted.'
