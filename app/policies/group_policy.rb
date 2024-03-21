@@ -139,8 +139,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     relation.with(
       user_groups: relation.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids
       .where(type: Group.sti_name),
-      linked_groups: NamespaceGroupLink.where(group: relation.where(id: user.members.joins(:namespace)
-      .where(namespace: { type: Group.sti_name }).not_expired.select(:namespace_id)).self_and_descendant_ids)
+      linked_groups: NamespaceGroupLink.where(Arel.sql('namespace_group_links.group_id in (select * from user_groups)'))
       .select(:namespace_id)
     ).where(
       Arel.sql(

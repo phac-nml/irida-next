@@ -13,6 +13,17 @@ module Viral
       assert_selector '.bg-blue-100.text-blue-800.text-xs.font-medium.rounded-full', text: 'This is blue'
     end
 
+    test 'with_border' do
+      render_preview(:with_border)
+      assert_selector 'span', count: 3
+      assert_selector '.bg-purple-100.text-purple-800.text-xs.font-medium.rounded-full.border.border-purple-800',
+                      text: 'This has much more text and is purple'
+      assert_selector '.bg-green-100.text-green-800.text-xs.font-medium.rounded-full.border.border-green-800',
+                      text: 'This is green'
+      assert_selector '.bg-blue-100.text-blue-800.text-xs.font-medium.rounded-full.border.border-blue-800',
+                      text: 'This is blue'
+    end
+
     test 'with_classes' do
       render_preview(:with_classes)
       assert_selector 'span', count: 4

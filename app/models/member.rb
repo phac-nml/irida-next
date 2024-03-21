@@ -45,7 +45,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       return AccessLevel::OWNER if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
       access_level = Member.for_namespace_and_ancestors(namespace).not_expired
-                           .where(user:).order(:access_level).last&.access_level
+                           .where(user:).order('access_level desc').select(:access_level).first&.access_level
 
       access_level = access_level_in_namespace_group_links(user, namespace) if include_group_links && access_level.nil?
 
@@ -134,18 +134,16 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def access_level_in_namespace_group_links(user, namespace)
-      namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
-                                                .where(group: user.groups.self_and_descendants).not_expired
+      effective_namespace_group_link = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
+                                                         .where(group: user.groups.self_and_descendants)
+                                                         .not_expired.order(:group_access_level).last
 
-      if namespace_group_links.count.positive?
-        maxlevel_namespace_group_link = namespace_group_links.order(:group_access_level).last
-        membership = Member.for_namespace_and_ancestors(maxlevel_namespace_group_link&.group).not_expired
-                     &.where(user:)&.order(:access_level)
-
-        return [maxlevel_namespace_group_link.group_access_level, membership.last.access_level].min if membership.any?
-
+      if effective_namespace_group_link.nil?
+        AccessLevel::NO_ACCESS
+      else
+        [effective_namespace_group_link.group_access_level,
+         Member.effective_access_level(effective_namespace_group_link&.group, user)].min
       end
-      Member::AccessLevel::NO_ACCESS
     end
   end
 

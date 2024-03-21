@@ -26,7 +26,24 @@
   <div class="flex flex-col namespace-text">
     <div class="namespace-text grow shrink">
       <div class="flex flex-wrap items-center mr-3 font-semibold title">
-        <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
+        <% if @namespace.type == "Group" %>
+          <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
+        <% else %>
+          <%= link_to @namespace.name,
+          project_path(@namespace.project),
+          data: {
+            turbo: false
+          } %>
+        <% end %>
+        <%= viral_pill(
+          text:
+            t(
+              :"groups.members.index.access_level.level_#{Member.effective_access_level(@namespace, Current.user)}"
+            ),
+          color: "transparent",
+          border: true,
+          classes: "ml-2"
+        ) %>
       </div>
       <div class="description">
         <p><%= @namespace.description %></p>
