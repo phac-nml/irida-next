@@ -1,13 +1,12 @@
 <%= render Viral::PageHeaderComponent.new(
-  title: @data_export.name || @data_export.id, id: @data_export.name.nil? || @data_export.id) do |component| %>
-  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
+  title: @data_export.name || @data_export.id, id: @data_export.name.nil? ? nil : @data_export.id) do |component| %>
   <%= component.with_buttons do %>
     <div class="flex flex-row">
       <% if @data_export.status == 'ready' %>
         <%= link_to(
           t("data_exports.show.download"),
           download_data_export_path(@data_export),
-          class: "button button--state-primary button--size-default mr-1"
+          class: "button button--state-primary button--size-default"
         ) %>
       <% else %>
         <%= link_to(
@@ -23,7 +22,7 @@
             turbo_method: :delete,
             turbo_confirm: t("data_exports.show.remove_button_confirmation", name: @data_export.id)
           },
-          class: "button button--state-default button--size-default mr-1"
+          class: "button button--state-default button--size-default mr-1 ml-2"
         ) %>
     </div>
   <% end %>
@@ -60,6 +59,7 @@
         } %>
       </li>
       <li class="mr-2">
+       <% if @data_export.status == 'ready' %>
         <%= link_to t(:"data_exports.show.tabs.manifest"),
         data_export_path(@data_export, tab: "manifest"),
         class:
@@ -72,7 +72,10 @@
           ),
         aria: {
           current: @tab == "manifest" ? "page" : "false"
-        } %>
+        }%>
+        <% else %>
+        hi
+        <%end%>
       </li>
     </ul>
   </div>
