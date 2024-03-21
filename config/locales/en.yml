@@ -1086,13 +1086,13 @@ en:
   workflow_executions:
     index:
       title: Workflow Executions
+      empty: There are no workflow executions.
       actions:
         cancel_button: Cancel
         cancel_confirm: Are you sure you want to cancel this workflow execution?
         delete_button: Delete
         delete_confirm: Are you sure you want to delete this workflow execution?
     table:
-      empty: There are no workflow executions.
       headers:
         id: ID
         job_id: Job ID
