@@ -16,8 +16,6 @@ module HasUserType
   ].freeze
 
   included do
-    enum user_type: USER_TYPES
-
     scope :bots, -> { where(user_type: BOT_USER_TYPES) }
     scope :without_bots, -> { where(user_type: USER_TYPES.keys - BOT_USER_TYPES) }
     scope :human_users, -> { where(user_type: %i[human]) }
