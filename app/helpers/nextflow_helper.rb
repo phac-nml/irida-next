@@ -16,8 +16,8 @@ module NextflowHelper
              end
     end
 
-    viral_input_group(form: container, name:, required:, pattern: property['pattern'],
-                      value: property['default']) do |input|
+    viral_prefixed_text_input(form: container, name:, required:, pattern: property['pattern'],
+                              value: property['default']) do |input|
       input.with_prefix do
         name
       end
