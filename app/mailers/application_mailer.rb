@@ -2,6 +2,7 @@
 
 # Application Mailer
 class ApplicationMailer < ActionMailer::Base
-  default from: 'from@example.com'
+  append_view_path Rails.root.join('app/views/mailers')
+  default from: email_address_with_name('irida_next@test.com', 'IRIDA Next')
   layout 'mailer'
 end

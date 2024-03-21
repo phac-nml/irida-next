@@ -19,6 +19,8 @@ module DataExports
       @data_export.status = 'processing'
 
       @data_export.save
+
+      DataExports::CreateJob.set(wait_until: 30.seconds.from_now).perform_later(@data_export) if @data_export.valid?
       @data_export
     rescue DataExports::CreateService::DataExportCreateError => e
       @data_export.errors.add(:base, e.message)
@@ -38,7 +40,6 @@ module DataExports
     # to export the chosen samples' data
     def validate_sample_export
       project_ids = []
-
       params['export_parameters']['ids'].each do |sample_id|
         sample = Sample.find_by(id: sample_id)
         raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_sample_id') if sample.nil?
