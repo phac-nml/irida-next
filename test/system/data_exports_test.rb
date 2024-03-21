@@ -12,6 +12,7 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'can view data exports' do
+    freeze_time
     visit data_exports_path
 
     within %(#data-exports-table-body) do
@@ -19,14 +20,19 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector 'tr:first-child td:first-child', text: @data_export3.name
       assert_selector 'tr:first-child td:nth-child(2)', text: @data_export3.export_type.capitalize
       assert_selector 'tr:first-child td:nth-child(3)', text: @data_export3.status.capitalize
+      assert find('tr:first-child td:nth-child(5)').text.blank?
 
       assert_selector 'tr:nth-child(2) td:first-child', text: @data_export4.name
       assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @data_export4.export_type.capitalize
       assert_selector 'tr:nth-child(2) td:nth-child(3)', text: @data_export4.status.capitalize
+      assert_selector 'tr:nth-child(2) td:nth-child(5)',
+                      text: I18n.l(@data_export4.expires_at.localtime, format: :full_date)
 
       assert_selector 'tr:nth-child(3) td:first-child', text: @data_export5.id
       assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @data_export5.export_type.capitalize
       assert_selector 'tr:nth-child(3) td:nth-child(3)', text: @data_export5.status.capitalize
+      assert_selector 'tr:nth-child(3) td:nth-child(5)',
+                      text: I18n.l(@data_export5.expires_at.localtime, format: :full_date)
     end
   end
 
