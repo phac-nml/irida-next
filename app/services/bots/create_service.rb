@@ -31,7 +31,8 @@ module Bots
       }
 
       bot_user_account = User.new(user_params)
-      bot_user_account.save(validate: false)
+      bot_user_account.skip_password_validation = true
+      bot_user_account.save!
 
       bot_user_account
     end
