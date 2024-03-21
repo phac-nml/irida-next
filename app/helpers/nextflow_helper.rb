@@ -4,6 +4,7 @@
 module NextflowHelper
   SCHEMA_PATH = 'test/fixtures/files/nextflow/'
 
+  # rubocop:disable Metrics/MethodLength
   def form_input(container, name, property, required)
     if property['type'] == 'boolean'
       return viral_prefixed_boolean(form: container, name:, value: property['default']) do |input|
@@ -29,6 +30,8 @@ module NextflowHelper
       end
     end
   end
+
+  # rubocop:enable Metrics/MethodLength
 
   def checkbox_input(fields, name, property)
     viral_checkbox(
