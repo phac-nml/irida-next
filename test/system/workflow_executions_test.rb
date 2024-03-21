@@ -16,6 +16,73 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table#workflow_executions tbody tr', count: 12
   end
 
+  test 'should sort a list of workflow executions' do
+    workflow_execution = workflow_executions(:irida_next_example)
+    workflow_execution1 = workflow_executions(:workflow_execution_valid)
+    workflow_execution2 = workflow_executions(:workflow_execution_invalid_metadata)
+    workflow_execution8 = workflow_executions(:irida_next_example_canceling)
+    workflow_execution9 = workflow_executions(:irida_next_example_canceled)
+    workflow_execution10 = workflow_executions(:irida_next_example_running)
+    workflow_execution12 = workflow_executions(:irida_next_example_new)
+
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    click_on I18n.t('workflow_executions.table.headers.job_id')
+    assert_selector 'table#workflow_executions thead th:nth-child(2) svg.icon-arrow_up'
+
+    within first('table#workflow_executions tbody') do
+      assert_selector 'tr', count: 12
+      assert_selector 'tr:first-child td:nth-child(2)', text: workflow_execution1.run_id
+      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: workflow_execution10.run_id
+      assert_selector 'tr:last-child td:nth-child(2)', text: workflow_execution.run_id
+    end
+
+    click_on I18n.t('workflow_executions.table.headers.job_id')
+    assert_selector 'table#workflow_executions thead th:nth-child(2) svg.icon-arrow_down'
+
+    within first('table#workflow_executions tbody') do
+      assert_selector 'tr', count: 12
+      assert_selector 'tr:first-child td:nth-child(2)', text: workflow_execution.run_id
+      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: workflow_execution9.run_id
+      assert_selector 'tr:last-child td:nth-child(2)', text: workflow_execution1.run_id
+    end
+
+    click_on I18n.t('workflow_executions.table.headers.name')
+    assert_selector 'table#workflow_executions thead th:nth-child(3) svg.icon-arrow_up'
+
+    within first('table#workflow_executions tbody') do
+      assert_selector 'tr', count: 12
+      assert_selector 'tr:first-child td:nth-child(3)', text: workflow_execution9.metadata['workflow_name']
+      assert_selector 'tr:nth-child(2) td:nth-child(3)', text: workflow_execution8.metadata['workflow_name']
+      assert_selector 'tr:last-child td:nth-child(3)', text: workflow_execution1.metadata['workflow_name']
+    end
+
+    click_on I18n.t('workflow_executions.table.headers.name')
+    assert_selector 'table#workflow_executions thead th:nth-child(3) svg.icon-arrow_down'
+
+    within first('table#workflow_executions tbody') do
+      assert_selector 'tr', count: 12
+      assert_selector 'tr:first-child td:nth-child(3)', text: workflow_execution1.metadata['workflow_name']
+      assert_selector 'tr:nth-child(2) td:nth-child(3)', text: workflow_execution2.metadata['workflow_name']
+      assert_selector 'tr:last-child td:nth-child(3)', text: workflow_execution9.metadata['workflow_name']
+    end
+
+    click_on I18n.t('workflow_executions.table.headers.created_at')
+    assert_selector 'table#workflow_executions thead th:nth-child(6) svg.icon-arrow_up'
+
+    within first('table#workflow_executions tbody') do
+      assert_selector 'tr', count: 12
+      assert_selector 'tr:first-child td:nth-child(6)',
+                      text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
+      assert_selector 'tr:nth-child(2) td:nth-child(6)',
+                      text: I18n.l(workflow_execution2.created_at.localtime, format: :full_date)
+      assert_selector 'tr:last-child td:nth-child(6)',
+                      text: I18n.l(workflow_execution12.created_at.localtime, format: :full_date)
+    end
+  end
+
   test 'should be able to cancel a workflow' do
     workflow_execution = workflow_executions(:irida_next_example_prepared)
 

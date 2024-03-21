@@ -34,8 +34,8 @@
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
               label: t(:".headers.job_id"),
-              url: sorting_url(@q, :job_id),
-              field: :job_id
+              url: sorting_url(@q, :run_id),
+              field: :run_id
             ) %>
           </th>
           <th scope="col" class="px-6 py-3">
