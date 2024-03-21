@@ -2,11 +2,15 @@
 
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
-  before_action :data_export, only: %i[download destroy]
+  before_action :data_export, only: %i[download destroy show]
   before_action :data_exports, only: %i[index destroy]
   before_action :current_page
 
   def index; end
+
+  def show
+    @tab = params[:tab]
+  end
 
   def new
     render turbo_stream: turbo_stream.update('export_modal',
