@@ -64,7 +64,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   test 'updateSampleMetadata mutation should work with valid params, puid, and api scope token' do
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_PUID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { samplePuid: @sample.id,
+                                 variables: { samplePuid: @sample.puid,
                                               metadata: { key1: 'value1' } })
 
     assert_nil result['errors'], 'should work and have no errors.'

@@ -61,7 +61,7 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(CREATE_SAMPLE_USING_PROJECT_PUID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { projectPuid: project.id,
+                                 variables: { projectPuid: project.puid,
                                               name: 'New Sample Two',
                                               description: 'New Sample Two Description' })
 

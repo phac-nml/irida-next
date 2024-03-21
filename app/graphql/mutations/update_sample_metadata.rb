@@ -21,7 +21,7 @@ module Mutations
       sample = if args[:sample_id]
                  IridaSchema.object_from_id(args[:sample_id], { expected_type: Sample })
                else
-                 Sample.find(args[:sample_puid])
+                 Sample.find_by(puid: args[:sample_puid])
                end
       metadata_changes = Samples::Metadata::UpdateService.new(sample.project, sample, current_user,
                                                               { 'metadata' => args[:metadata] }).execute

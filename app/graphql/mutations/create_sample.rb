@@ -22,7 +22,7 @@ module Mutations
       project = if args[:project_id]
                   IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
                 else
-                  Project.find(args[:project_puid])
+                  Project.find_by(puid: args[:project_puid])
                 end
       sample = Samples::CreateService.new(current_user, project,
                                           { name: args[:name], description: args[:description] }).execute

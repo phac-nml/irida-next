@@ -68,7 +68,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_PUID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file.signed_id],
-                                              samplePuid: sample.id })
+                                              samplePuid: sample.puid })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
