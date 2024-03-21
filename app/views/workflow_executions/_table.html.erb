@@ -24,10 +24,20 @@
         >
           <tr>
             <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.id") %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(:".headers.id"),
+                url: sorting_url(@q, :id),
+                field: :id
+              ) %>
             </th>
             <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.job_id") %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(:".headers.job_id"),
+                url: sorting_url(@q, :job_id),
+                field: :job_id
+              ) %>
             </th>
             <th scope="col" class="px-6 py-3">
               <%= t(:".headers.name") %>
@@ -39,10 +49,20 @@
               <%= t(:".headers.state") %>
             </th>
             <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.created_at") %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(:".headers.created_at"),
+                url: sorting_url(@q, :created_at),
+                field: :created_at
+              ) %>
             </th>
             <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.updated_at") %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(:".headers.updated_at"),
+                url: sorting_url(@q, :updated_at),
+                field: :updated_at
+              ) %>
             </th>
             <th scope="col" class="px-6 py-3">
               <%= t(:".headers.actions") %>

@@ -6,7 +6,9 @@ class WorkflowExecutionsController < ApplicationController
   before_action :current_page
 
   def index
-    @pagy, @workflows = pagy(load_workflows)
+    @q = load_workflows.ransack(params[:q])
+    set_default_sort
+    @pagy, @workflows = pagy(@q.result)
   end
 
   def create
@@ -45,6 +47,10 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   private
+
+  def set_default_sort
+    @q.sorts = 'updated_at desc' if @q.sorts.empty?
+  end
 
   def load_workflows
     WorkflowExecution.where(submitter: current_user)
