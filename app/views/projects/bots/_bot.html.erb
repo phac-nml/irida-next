@@ -1,0 +1,33 @@
+<tr
+  id="<%= dom_id(bot_account) %>"
+  class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+>
+  <td class="px-6 py-3 whitespace-nowrap">
+    <%= bot_account.email %>
+  </td>
+  <td class="px-6 py-3 whitespace-nowrap">
+    <%= "#{bot_account.first_name} #{bot_account.last_name}" %>
+  </td>
+  <td class="px-6 py-3 whitespace-nowrap">
+    <%= bot_account.personal_access_tokens.last.scopes.join(", ") %>
+  </td>
+  <td class="px-6 py-3 whitespace-nowrap">
+    <%= viral_time_ago(original_time: bot_account.created_at) %>
+  </td>
+  <td class="px-6 py-3 whitespace-nowrap">
+    <%= viral_dropdown(icon: "ellipsis_vertical",
+                              aria: { label: bot_account.email }) do |dropdown| %>
+      <%= dropdown.with_item(
+        label: "Remove",
+        url: namespace_project_bot_path(id: bot_account.namespace.id),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: "Are you sure you want to remove this bot account from the project?"
+        },
+        aria: {
+          label: "Remove bot account"
+        }
+      ) %>
+    <% end %>
+  </td>
+</tr>

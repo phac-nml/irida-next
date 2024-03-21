@@ -16,98 +16,39 @@
   <% end %>
 <% end %>
 
-<div class="bg-white dark:bg-slate-800">
-  <%= turbo_frame_tag "new_bot_modal" %>
-  <table
-    id="bots-table"
-    class="
-      w-full
-      text-sm
-      text-left
-      rtl:text-right
-      text-slate-500
-      dark:text-slate-400
-    "  >
-    <thead
-      class="
-        text-xs
-        text-slate-700
-        uppercase
-        bg-slate-50
-        dark:bg-slate-700
-        dark:text-slate-400
-      "
-    >
-      <tr>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          Email
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          Name
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          API Scope
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          Created
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          Actions
-        </th>
-      </tr>
-    </thead>
-    <tbody
-      class="
-        bg-white
-        divide-y
-        divide-slate-200
-        dark:bg-slate-800
-        dark:divide-slate-700
-      "
-    >
-      <% @bot_accounts.each do |bot_account| %>
-        <tr
-          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+ <div class="flex flex-col">
+    <%= turbo_frame_tag "new_bot_modal" %>
+    <%= turbo_frame_tag "bots", "data-turbo-temporary": true,
+                        src: namespace_project_bots_path(
+                                    format: :turbo_stream
+                                  ),
+                        loading: :lazy do %>
+      <table class="min-w-full table-fixed dark:divide-gray-600">
+        <tbody
+          class="
+            bg-white
+            divide-y
+            divide-gray-200
+            dark:bg-gray-800
+            dark:divide-gray-700
+          "
         >
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= bot_account.email %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= "#{bot_account.first_name} #{bot_account.last_name}" %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= bot_account.personal_access_tokens.last.scopes.join(", ") %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= viral_time_ago(original_time: bot_account.created_at) %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= viral_dropdown(icon: "ellipsis_vertical",
-                                     aria: { label: bot_account.email }) do |dropdown| %>
-              <%= dropdown.with_item(
-                label: "Remove",
-                url: namespace_project_bot_path(id: bot_account.namespace.id),
-                data: {
-                  turbo_method: :delete,
-                  turbo_confirm: "Are you sure you want to remove this bot account from the project?"
-                },
-                aria: {
-                  label: "Remove bot account"
-                }
-              ) %>
-            <% end %>
-          </td>
-        </tr>
-        <% end %>
-    </tbody>
-  </table>
-  <% if @bot_accounts.length.zero? %>
-    <div class="empty_state_message">
-      <%= viral_empty(
-        title: "No Project Bots",
-        description: "There are no bot accounts associcated with this project",
-        icon_name: :users
-      ) %>
-    </div>
-  <% end %>
-</div>
+          <% 10.times do %>
+            <tr>
+
+              <td class="p-4 animate-pulse">
+                <div class="flex-1 py-1 space-y-6">
+                  <div class="space-y-3">
+                    <div class="w-48 h-2 rounded bg-slate-200"></div>
+                    <div class="w-32 h-2 rounded bg-slate-200"></div>
+                  </div>
+                </div>
+              </td>
+
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+    <%= turbo_frame_tag "bots_pagination", "data-turbo-temporary": true %>
+  </div>

@@ -11,7 +11,12 @@ module Projects
     before_action :current_page
 
     def index
-      @bot_accounts = User.bots_for_puid(@project.puid)
+      respond_to do |format|
+        format.html
+        format.turbo_stream do
+          @pagy, @bot_accounts = pagy(load_project_bot_accounts)
+        end
+      end
     end
 
     def new
@@ -30,6 +35,8 @@ module Projects
       if @new_bot_account.persisted?
         respond_to do |format|
           format.turbo_stream do
+            @pagy, @bot_accounts = pagy(load_project_bot_accounts)
+
             render status: :ok, locals: {
               type: 'success',
               message: "Bot account '#{bot_params[:bot_username]}' was successfully added to the project"
@@ -52,6 +59,8 @@ module Projects
       if @bot_account.deleted?
         respond_to do |format|
           format.turbo_stream do
+            @pagy, @bot_accounts = pagy(load_project_bot_accounts)
+
             render status: :ok, locals: {
               type: 'success',
               message: "Bot account '#{@bot_account.email}' was successfully removed"
@@ -81,6 +90,10 @@ module Projects
 
     def bot_params
       params.require(:bot).permit(:id, :bot_username, scopes: [])
+    end
+
+    def load_project_bot_accounts
+      User.bots_for_puid(@project.puid)
     end
 
     protected
