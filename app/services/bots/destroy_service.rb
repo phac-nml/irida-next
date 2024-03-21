@@ -15,7 +15,7 @@ module Bots
     def execute
       authorize! auth_object, to: :destroy_bot_accounts?
 
-      unless bot_account.email.include? @auth_object.puid
+      unless bot_account.email.include? @auth_object.puid.downcase
         raise BotAccountDestroyError,
               'The bot account cannot be removed as it does not belong to this project'
       end

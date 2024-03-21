@@ -7,3 +7,7 @@
 <%= turbo_stream.append "flashes" do %>
   <%= viral_flash(type:, data: message) %>
 <% end %>
+
+<%= turbo_stream.update "bots", partial: "bot_listing" %>
+
+<%= turbo_stream.update "bots_pagination", partial: "pagination" %>
