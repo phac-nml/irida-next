@@ -40,11 +40,23 @@
       dark:focus:ring-primary-500
       dark:focus:border-primary-500
     "
-  ><div class="flex items-center">
-      <%= form.radio_button name, "true" %>
-      <%= form.label "#{name}_true", "True" %>
-      <%= form.radio_button name, "false" %>
-      <%= form.label "#{name}_false", "False" %>
+  ><div class="space-x-4">
+      <span>
+        <%= form.radio_button name,
+                          "true",
+                          checked: value,
+                          class:
+                            "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+        <%= form.label "#{name}_true", "True" %>
+      </span>
+      <span>
+        <%= form.radio_button name,
+                          "false",
+                          checked: !value,
+                          class:
+                            "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+        <%= form.label "#{name}_false", "False" %>
+      </span>
     </div>
   </div>
 </div>

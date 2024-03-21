@@ -5,7 +5,13 @@ module NextflowHelper
   SCHEMA_PATH = 'test/fixtures/files/nextflow/'
 
   def form_input(container, name, property, required)
-    return checkbox_input(container, name, property) if property['type'] == 'boolean'
+    if property['type'] == 'boolean'
+      return viral_prefixed_boolean(form: container, name:, value: property['default']) do |input|
+        input.with_prefix do
+          name
+        end
+      end
+    end
 
     if property['enum'].present?
       return viral_prefixed_select(form: container, name:, options: property['enum'],

@@ -5,15 +5,14 @@ module Viral
     module Prefixed
       # Render a truthy radio component
       class BooleanComponent < Viral::Component
-        attr_reader :form, :name, :value, :label
+        attr_reader :form, :name, :value
 
         renders_one :prefix
 
-        def initialize(form:, name:, value:, label:)
+        def initialize(form:, name:, value:)
           @form = form
           @name = name
           @value = value
-          @label = label
         end
       end
     end
