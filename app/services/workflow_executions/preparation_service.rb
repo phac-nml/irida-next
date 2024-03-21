@@ -17,7 +17,7 @@ module WorkflowExecutions
     def execute
       # confirm params/permissions
       # build workflow execution run directory
-      generate_run_dir
+      @workflow_execution.blob_run_directory = generate_run_directory
 
       # process each sample
       process_samples_workflow_executions
@@ -42,8 +42,8 @@ module WorkflowExecutions
 
     private
 
-    def generate_run_dir
-      @run_dir = ActiveStorage::Blob.generate_unique_secure_token
+    def generate_run_directory
+      ActiveStorage::Blob.generate_unique_secure_token
     end
 
     def parse_attachments_from_samplesheet(samplesheet)
@@ -73,7 +73,7 @@ module WorkflowExecutions
     end
 
     def generate_input_key(filename, prefix = '')
-      format('%<run_dir>s/%<prefix>s%<filename>s', run_dir: @run_dir, filename:, prefix:)
+      format('%<run_dir>s/%<prefix>s%<filename>s', run_dir: @workflow_execution.blob_run_directory, filename:, prefix:)
     end
 
     def compose_blob_with_custom_key(blob, key)

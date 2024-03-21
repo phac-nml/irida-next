@@ -107,6 +107,7 @@ irida_next_example_completed:
   run_id: "my_run_id_6"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   state: "completed"
+  blob_run_directory: "not a run dir"
 
 irida_next_example_error:
   metadata:
