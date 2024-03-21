@@ -9,6 +9,11 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     @data_export1 = data_exports(:data_export_one)
   end
 
+  test 'should view exports' do
+    get data_exports_path(@data_export1)
+    assert_response :success
+  end
+
   test 'should download export' do
     get download_data_export_path(@data_export1)
     assert_response :success
@@ -25,5 +30,22 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                format: :turbo_stream }
     post data_exports_path(params)
     assert_response :redirect
+  end
+
+  test 'should delete export' do
+    assert_difference('DataExport.count', -1) do
+      delete data_export_path(@data_export1),
+             as: :turbo_stream
+    end
+    assert_response :success
+  end
+
+  test 'should not delete export without valid authorization' do
+    sign_in users(:jane_doe)
+    assert_no_difference('DataExport.count') do
+      delete data_export_path(@data_export1),
+             as: :turbo_stream
+    end
+    assert_response :unauthorized
   end
 end

@@ -26,7 +26,27 @@ data_export_three:
   export_type: sample
   status: processing
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+
+data_export_four:
+  name: Data Export 4
+  export_type: sample
+  status: ready
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
   email_notification: true
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
+  expires_at: <%= Time.now + 3.days %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+
+data_export_five:
+  export_type: sample
+  status: ready
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  expires_at: <%= Time.now + 3.days %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
