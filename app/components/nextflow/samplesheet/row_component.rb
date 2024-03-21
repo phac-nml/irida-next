@@ -6,8 +6,9 @@ module Nextflow
     class RowComponent < Component
       attr_reader :sample, :files, :properties
 
-      def initialize(sample, properties)
+      def initialize(sample, index, properties)
         @sample = sample
+        @index = index
         @properties = properties
         @files = filter_files
         @file_index = 0 # Keeps track of which file input is currently being rendered
