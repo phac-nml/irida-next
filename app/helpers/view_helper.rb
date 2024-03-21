@@ -18,7 +18,7 @@ module ViewHelper
     help_text: 'Viral::Form::HelpTextComponent',
     icon: 'Viral::IconComponent',
     pageheader: 'Viral::PageHeaderComponent',
-    prefixed_checkbox: 'Viral::Form::Prefixed::CheckboxComponent',
+    prefixed_boolean: 'Viral::Form::Prefixed::BooleanComponent',
     prefixed_select: 'Viral::Form::Prefixed::SelectComponent',
     prefixed_text_input: 'Viral::Form::Prefixed::TextInputComponent',
     pill: 'Viral::PillComponent',

@@ -1,7 +1,0 @@
-<%= form_with url: '#' do |form| %>
-  <%= viral_prefixed_checkbox(form: form, name: "prefixed", value: true, label: "Checkbox Label", checked: true) do |checkbox| %>
-    <%= checkbox.with_prefix do %>
-      --prefix
-    <% end %>
-  <% end %>
-<% end %>
