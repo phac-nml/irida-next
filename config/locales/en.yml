@@ -1095,6 +1095,7 @@ en:
       empty: There are no workflow executions.
       headers:
         id: ID
+        job_id: Job ID
         name: Name
         version: Version
         state: State
