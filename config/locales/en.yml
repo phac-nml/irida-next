@@ -956,6 +956,7 @@ en:
       transfers:
         dialog:
           title: Transfer Samples
+          description: "The following files were selected to be transferred:"
           new_project_id: Project to transfer samples to
           submit_button: Submit
         create:
