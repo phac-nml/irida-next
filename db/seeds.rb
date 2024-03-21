@@ -176,7 +176,7 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
     workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
-    blob_run_directory: 'this should be a generated key'
+    blob_run_directory: 'this should be a generated key',
     state: 'finalized'
   )
 
