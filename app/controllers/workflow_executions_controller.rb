@@ -37,11 +37,12 @@ class WorkflowExecutionsController < ApplicationController
     nil unless @workflow_execution.persisted?
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize
     @workflow_execution = WorkflowExecution.find(params[:id])
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
 
-    @pagy, @workflows = pagy(load_workflows)
+    @q = load_workflows.ransack(params[:q])
+    @pagy, @workflows = pagy_with_metadata_sort(@q.result)
 
     if @workflow_execution.deleted?
       render status: :ok,

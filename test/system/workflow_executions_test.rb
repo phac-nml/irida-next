@@ -26,7 +26,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_selector 'input[type="submit"][value="Cancel"]', count: 1
       find('input[type="submit"][value="Cancel"]').click
     end
@@ -34,8 +34,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text 'Confirmation required'
     click_button 'Confirm'
 
-    assert_selector 'tbody tr td:nth-child(4)', text: 'canceling'
-    assert_no_selector 'tbody tr  td:nth-child(4) input[type="submit"][value="Cancel"]'
+    assert_selector 'tbody tr td:nth-child(5)', text: 'canceling'
+    assert_no_selector 'tbody tr  td:nth-child(5) input[type="submit"][value="Cancel"]'
   end
 
   test 'should not delete a prepared workflow' do
@@ -48,7 +48,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_no_selector 'input[type="submit"][value="Delete"]'
     end
   end
@@ -63,7 +63,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_no_selector 'input[type="submit"][value="Delete"]'
     end
   end
@@ -78,7 +78,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_selector 'input[type="submit"][value="Delete"]', count: 1
       find('input[type="submit"][value="Delete"]').click
     end
@@ -99,7 +99,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_selector 'input[type="submit"][value="Delete"]', count: 1
       find('input[type="submit"][value="Delete"]').click
     end
@@ -120,7 +120,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_no_selector 'input[type="submit"][value="Delete"]'
     end
   end
@@ -135,7 +135,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_selector 'input[type="submit"][value="Delete"]', count: 1
       find('input[type="submit"][value="Delete"]').click
     end
@@ -156,7 +156,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_no_selector 'input[type="submit"][value="Delete"]'
     end
   end
@@ -171,7 +171,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_no_selector 'input[type="submit"][value="Delete"]'
     end
   end
@@ -186,7 +186,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(4)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: workflow_execution.state
       assert_no_selector 'input[type="submit"][value="Delete"]'
     end
   end
