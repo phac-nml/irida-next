@@ -3,9 +3,24 @@
 require 'test_helper'
 
 class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
-  UPDATE_SAMPLE_METADATA_MUTATION = <<~GRAPHQL
+  UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION = <<~GRAPHQL
     mutation($sampleId: ID!, $metadata: JSON!) {
       updateSampleMetadata(input: { sampleId: $sampleId, metadata: $metadata }) {
+        sample {
+          id,
+          name,
+          description,
+          metadata
+        },
+        status,
+        errors
+      }
+    }
+  GRAPHQL
+
+  UPDATE_SAMPLE_METADATA_BY_SAMPLE_PUID_MUTATION = <<~GRAPHQL
+    mutation($samplePuid: ID!, $metadata: JSON!) {
+      updateSampleMetadata(input: { samplePuid: $samplePuid, metadata: $metadata }) {
         sample {
           id,
           name,
@@ -25,8 +40,8 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     @sample = samples(:sample1)
   end
 
-  test 'updateSampleMetadata mutation should work with valid params and api scope token' do
-    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_MUTATION,
+  test 'updateSampleMetadata mutation should work with valid params, global id, and api scope token' do
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { sampleId: @sample.to_global_id.to_s,
                                               metadata: { key1: 'value1' } })
@@ -46,8 +61,29 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal 'value1', data['sample']['metadata']['key1']
   end
 
+  test 'updateSampleMetadata mutation should work with valid params, puid, and api scope token' do
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_PUID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { samplePuid: @sample.puid,
+                                              metadata: { key1: 'value1' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+
+    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_not_empty data['status']
+    assert_not_empty data['status'][:added]
+    assert_equal 'key1', data['status'][:added].first
+    assert_not_empty data['sample']
+    assert_not_empty data['sample']['metadata']
+    assert_not_empty data['sample']['metadata']['key1']
+    assert_equal 'value1', data['sample']['metadata']['key1']
+  end
+
   test 'updateSampleMetadata mutation should error with empty metadata params and api scope token' do
-    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_MUTATION,
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { sampleId: @sample.to_global_id.to_s,
                                               metadata: {} })
@@ -67,7 +103,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   end
 
   test 'updateSampleMetadata mutation should not work with valid params and read api scope token' do
-    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_MUTATION,
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @read_api_scope_token },
                                  variables: { sampleId: @sample.to_global_id.to_s,
                                               metadata: { key1: 'value1' } })
@@ -83,7 +119,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     user = users(:jane_doe)
     api_scope_token = personal_access_tokens(:jane_doe_valid_pat)
 
-    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_MUTATION,
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: user, token: api_scope_token },
                                  variables: { sampleId: @sample.to_global_id.to_s,
                                               metadata: { key1: 'value1' } })

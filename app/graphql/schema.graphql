@@ -13,9 +13,14 @@ input AttachFilesToSampleInput {
   files: [String!]!
 
   """
-  The Node ID of the sample to be updated.
+  The Node ID of the sample to be updated. For example, `gid://irida/Sample/a84cd757-dedb-4c64-8b01-097020163077`
   """
-  sampleId: ID!
+  sampleId: ID
+
+  """
+  Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.
+  """
+  samplePuid: ID
 }
 
 """
@@ -193,9 +198,14 @@ input CreateSampleInput {
   name: String!
 
   """
-  The Node ID of the project to switch the sample will be created in.
+  The Node ID of the project. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.
   """
-  projectId: ID!
+  projectId: ID
+
+  """
+  Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.
+  """
+  projectPuid: ID
 }
 
 """
@@ -918,9 +928,14 @@ input UpdateSampleMetadataInput {
   metadata: JSON!
 
   """
-  The Node ID of the sample to be updated.
+  The Node ID of the sample to be updated. For example, `gid://irida/Sample/a84cd757-dedb-4c64-8b01-097020163077`
   """
-  sampleId: ID!
+  sampleId: ID
+
+  """
+  Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.
+  """
+  samplePuid: ID
 }
 
 """

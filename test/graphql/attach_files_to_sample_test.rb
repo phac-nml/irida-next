@@ -3,9 +3,21 @@
 require 'test_helper'
 
 class AttachFilesToSampleTest < ActiveSupport::TestCase
-  ATTACH_FILES_TO_SAMPLE_MUTATION = <<~GRAPHQL
+  ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION = <<~GRAPHQL
     mutation($files: [String!]!, $sampleId: ID!) {
       attachFilesToSample(input: { files: $files, sampleId: $sampleId,
+      })
+      {
+        sample{id},
+        status,
+        errors
+      }
+    }
+  GRAPHQL
+
+  ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_PUID_MUTATION = <<~GRAPHQL
+    mutation($files: [String!]!, $samplePuid: ID!) {
+      attachFilesToSample(input: { files: $files, samplePuid: $samplePuid,
       })
       {
         sample{id},
@@ -21,16 +33,42 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     @read_api_scope_token = personal_access_tokens(:jeff_doe_valid_read_pat)
   end
 
-  test 'attachFilesToSample mutation should work with valid params and api scope token' do
+  test 'attachFilesToSample mutation should work with valid params, global id, and api scope token' do
     sample = samples(:sampleJeff)
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
     assert_equal 0, sample.attachments.count
 
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file.signed_id],
                                               sampleId: sample.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['attachFilesToSample']
+
+    assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
+    expected_status = { blob_file.signed_id => :success }
+    assert_equal expected_status, data['status']
+    assert_not_empty data['sample']
+
+    assert_equal 1, sample.attachments.count
+
+    # check that filename matches
+    assert_equal 'afts.fastq', sample.attachments[0].filename.to_s
+  end
+
+  test 'attachFilesToSample mutation should work with valid params, puid, and api scope token' do
+    sample = samples(:sampleJeff)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+
+    assert_equal 0, sample.attachments.count
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_PUID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file.signed_id],
+                                              samplePuid: sample.puid })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -53,7 +91,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @read_api_scope_token },
                                  variables: { files: [blob_file.signed_id],
                                               sampleId: sample.to_global_id.to_s })
@@ -73,7 +111,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file.signed_id],
                                               sampleId: sample.to_global_id.to_s })
@@ -84,7 +122,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     expected_status = { blob_file.signed_id => :success }
     assert_equal expected_status, data['status']
 
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file.signed_id],
                                               sampleId: sample.to_global_id.to_s })
@@ -107,7 +145,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file_a.signed_id],
                                               sampleId: sample.to_global_id.to_s })
@@ -124,7 +162,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     assert_equal 'md5_a', sample.attachments[0].filename.to_s
 
     # Second file
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file_b.signed_id],
                                               sampleId: sample.to_global_id.to_s })
@@ -149,7 +187,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file_a.signed_id, blob_file_b.signed_id],
                                               sampleId: sample.to_global_id.to_s })
@@ -178,7 +216,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: ['NAN'],
                                               sampleId: sample.to_global_id.to_s })
@@ -197,7 +235,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
     assert_raises RuntimeError do
-      IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_MUTATION,
+      IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                           context: { current_user: @user, token: @api_scope_token },
                           variables: { files: [blob_file.signed_id],
                                        sampleId: 'this is not a valid sample id' })
