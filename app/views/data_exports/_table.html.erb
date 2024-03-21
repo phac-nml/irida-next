@@ -55,11 +55,21 @@
         </td>
         <td class="px-6 py-4">
             <%= data_export.export_type.capitalize %>
-        </td>
-        <td class="px-6 py-4">
-            <%= data_export.status.capitalize %>
-        </td>
-        <td class="px-6 py-4">
+          </td>
+          <td class="px-6 py-4">
+            <% if data_export.status == 'ready' %>
+              <%= viral_pill(
+                text: data_export.status.capitalize,
+                color: :green
+              ) %>
+            <% else %>
+              <%= viral_pill(
+                text: data_export.status.capitalize,
+                color: :gray
+              ) %>
+            <% end %>
+          </td>
+          <td class="px-6 py-4">
             <%= l(data_export.created_at.localtime, format: :full_date) %>
           </td>
           <td class="px-6 py-4">
@@ -112,10 +122,9 @@
             ) %>
           <% end %>
         </td>
-    </tr>
+      </tr>
     <% end %>
-
-</tbody>
+  </tbody>
 </table>
 <% else %>
 <div class="empty_state_message">
