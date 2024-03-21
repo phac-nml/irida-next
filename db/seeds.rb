@@ -228,6 +228,7 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     }
   ]
   users_and_sample_ids.each_with_index do |user_and_sample_id, index|
+    # export with status=processing and no attachment
     DataExport.create(
       user: user_and_sample_id[:user],
       name: index.even? ? "Seeded export #{index + 1}" : nil,
@@ -236,13 +237,16 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       export_type: 'sample',
       email_notification: index.even? && true
     )
-    params = { 'export_type' => 'sample',
-               'export_parameters' => {
-                 'ids' => [user_and_sample_id[:sample_id]]
-               },
-               'email_notification' => true,
-               'name' => index.even? ? nil : "Seeded export #{index + 1}" }
-    DataExports::CreateService.new(user_and_sample_id[:user], params).execute
+    # export with status=ready with zip attachment
+    data_export = DataExport.create(
+      user: user_and_sample_id[:user],
+      name: index.even? ?  nil : "Seeded export #{index + 1}",
+      export_parameters: { ids: [user_and_sample_id[:sample_id]] },
+      status: 'processing',
+      export_type: 'sample',
+      email_notification: index.even? || true
+    )
+    DataExports::CreateJob.perform_now(data_export)
   end
 end
 
