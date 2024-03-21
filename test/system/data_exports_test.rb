@@ -17,45 +17,38 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within %(#data-exports-table-body) do
       assert_selector 'tr', count: 3
-      assert_selector 'tr:first-child td:first-child', text: @data_export3.name
-      assert_selector 'tr:first-child td:nth-child(2)', text: @data_export3.export_type.capitalize
-      assert_selector 'tr:first-child td:nth-child(3)', text: @data_export3.status.capitalize
-      assert find('tr:first-child td:nth-child(5)').text.blank?
+      assert_selector 'tr:first-child td:first-child ', text: @data_export3.id
+      assert_selector 'tr:first-child td:nth-child(2)', text: @data_export3.name
+      assert_selector 'tr:first-child td:nth-child(3)', text: @data_export3.export_type.capitalize
+      assert_selector 'tr:first-child td:nth-child(4)', text: @data_export3.status.capitalize
+      assert find('tr:first-child td:nth-child(6)').text.blank?
 
-      assert_selector 'tr:nth-child(2) td:first-child', text: @data_export4.name
-      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @data_export4.export_type.capitalize
-      assert_selector 'tr:nth-child(2) td:nth-child(3)', text: @data_export4.status.capitalize
-      assert_selector 'tr:nth-child(2) td:nth-child(5)',
+      assert_selector 'tr:nth-child(2) td:first-child', text: @data_export4.id
+      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @data_export4.name
+      assert_selector 'tr:nth-child(2) td:nth-child(3)', text: @data_export4.export_type.capitalize
+      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: @data_export4.status.capitalize
+      assert_selector 'tr:nth-child(2) td:nth-child(6)',
                       text: I18n.l(@data_export4.expires_at.localtime, format: :full_date)
 
       assert_selector 'tr:nth-child(3) td:first-child', text: @data_export5.id
-      assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @data_export5.export_type.capitalize
-      assert_selector 'tr:nth-child(3) td:nth-child(3)', text: @data_export5.status.capitalize
-      assert_selector 'tr:nth-child(3) td:nth-child(5)',
+      assert find('tr:nth-child(3) td:nth-child(2)').text.blank?
+      assert_selector 'tr:nth-child(3) td:nth-child(3)', text: @data_export5.export_type.capitalize
+      assert_selector 'tr:nth-child(3) td:nth-child(4)', text: @data_export5.status.capitalize
+      assert_selector 'tr:nth-child(3) td:nth-child(6)',
                       text: I18n.l(@data_export5.expires_at.localtime, format: :full_date)
     end
   end
 
-  test 'data exports with status ready have name within anchor tag and download in action dropdown' do
+  test 'data exports with status ready will have download in action dropdown' do
     visit data_exports_path
 
     within %(#data-exports-table-body) do
-      within %(tr:first-child td:first-child) do
-        assert_text @data_export3.name
-        assert_no_selector 'a'
-      end
-
       within %(tr:first-child td:last-child) do
         first('button.Viral-Dropdown--icon').click
         within('div[data-viral--dropdown-target="menu"] ul') do
           assert_no_text I18n.t('data_exports.index.actions.download')
           assert_text I18n.t('data_exports.index.actions.delete')
         end
-      end
-
-      within %(tr:nth-child(3) td:first-child) do
-        assert_text @data_export5.id
-        assert_selector 'a', count: 1
       end
 
       within %(tr:nth-child(3) td:last-child) do

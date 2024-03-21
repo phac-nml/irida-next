@@ -2,6 +2,7 @@
 <table class="min-w-full table-fixed dark:divide-slate-600">
 <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
     <tr>
+    <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.id") %></th>
     <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.name") %></th>
     <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.type") %></th>
     <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.status") %></th>
@@ -26,18 +27,28 @@
         class="text-sm font-normal text-slate-500 dark:text-slate-400"
         >
         <td class="px-6 py-4">
-            <% if data_export.status == 'ready' %>
-                <%= link_to data_export.name || data_export.id,
-                download_data_export_path(data_export),
-                data: {
-                    turbo: false
-                },
-                class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-            <% else %>
-            <div class="text-sm font-normal text-slate-500 dark:text-slate-400">
-                <%= data_export.name || data_export.id %>
+          <% if data_export.status == 'ready' %>
+            <div class="text-slate-900 dark:text-slate-100 font-semibold">
+              <%= data_export.id %>
             </div>
+          <% else %>
+            <div class="text-sm font-normal text-slate-500 dark:text-slate-400">
+              <%= data_export.id %>
+            </div>
+          <% end %>
+        </td>
+        <td class="px-6 py-4">
+          <% unless data_export.name.nil? %>
+            <% if data_export.status == 'ready' %>
+              <div class="text-slate-900 dark:text-slate-100 font-semibold">
+                <%= data_export.name %>
+              </div>
+            <% else %>
+              <div class="text-sm font-normal text-slate-500 dark:text-slate-400">
+                <%= data_export.name %>
+              </div>
             <% end %>
+          <% end %>
         </td>
         <td class="px-6 py-4">
             <%= data_export.export_type.capitalize %>

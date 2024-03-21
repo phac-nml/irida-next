@@ -1208,6 +1208,7 @@ en:
     index:
       title: Data Exports
       table_header:
+        id: ID
         name: Name
         type: Type
         status: Status
