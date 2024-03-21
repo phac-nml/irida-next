@@ -42,20 +42,27 @@ class DataExportsController < ApplicationController
     end
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     DataExports::DestroyService.new(@data_export, current_user).execute
-    respond_to do |format|
-      format.turbo_stream do
-        if @data_export.persisted?
-          render status: :unprocessable_entity,
-                 locals: { type: 'alert',
-                           message: t('.error', name: @data_export.name || @data_export.id) }
-        else
+    if @data_export.persisted?
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
+        end
+      end
+    # Deleted from data exports listing page
+    elsif request.referer.exclude?('data_exports/')
+      respond_to do |format|
+        format.turbo_stream do
           render status: :ok,
                  locals: { type: 'success',
                            message: t('.success', name: @data_export.name || @data_export.id) }
         end
       end
+    # Deleted from individual data export page
+    else
+      flash[:success] = t('.success', name: @data_export.name || @data_export.id)
+      redirect_to data_exports_path
     end
   end
 
