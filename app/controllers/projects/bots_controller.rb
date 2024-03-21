@@ -93,23 +93,23 @@ module Projects
       @namespace = @project.namespace
     end
 
-    def current_page
-      @current_page = case action_name
-                      when 'show'
-                        'details'
-                      when 'new'
-                        'projects'
-                      when 'history'
-                        'history'
-                      when 'bots'
-                        'bots'
-                      else
-                        'settings'
-                      end
-    end
-
     def bot_account
       @bot_account ||= Namespaces::UserNamespace.find_by(id: params[:id]).owner
+    end
+
+    def context_crumbs
+      super
+      case action_name
+      when 'index'
+        @context_crumbs += [{
+          name: 'Bot Accounts',
+          path: namespace_project_bots_path
+        }]
+      end
+    end
+
+    def current_page
+      @current_page = 'bots'
     end
   end
 end

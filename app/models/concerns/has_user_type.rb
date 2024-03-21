@@ -22,7 +22,7 @@ module HasUserType
     scope :without_bots, -> { where(user_type: USER_TYPES.keys - BOT_USER_TYPES) }
     scope :human_users, -> { where(user_type: %i[human]) }
     scope :bots_for_puid, lambda { |puid = nil|
-                            where('email LIKE ?', "%#{puid}%")
+                            where('email LIKE ?', "%#{puid.downcase}%")
                           }
 
     validates :user_type, presence: true

@@ -14,7 +14,7 @@
           <%= form.text_field :bot_username,
                           required: true,
                           readonly: true,
-                          value: "project_#{@project.puid}_bot_#{SecureRandom.hex(5)}",
+                          value: "project_#{@project.puid.downcase}_bot_#{SecureRandom.hex(5)}",
                           class: "form-control" %>
 
         </div>

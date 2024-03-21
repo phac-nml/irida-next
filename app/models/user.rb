@@ -4,6 +4,8 @@
 class User < ApplicationRecord
   include HasUserType
 
+  attr_accessor :skip_password_validation
+
   has_logidze
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -112,5 +114,13 @@ class User < ApplicationRecord
     else
       build_namespace(name: build_namespace_name, path: build_namespace_path)
     end
+  end
+
+  protected
+
+  def password_required?
+    return false if skip_password_validation
+
+    super
   end
 end
