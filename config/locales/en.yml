@@ -330,6 +330,12 @@ en:
       previous_version: "Previous (Version %{version})"
       current_version: "Current (Version %{version})"
       keys_deleted: "Keys deleted:"
+    list_filter:
+      title: Filter by sample names or Id
+      clear: Remove all tags
+      description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
+      apply: Apply filter
+      remove_tag: Remove
   layouts:
     application:
       site_title: IRIDA Next
@@ -937,7 +943,6 @@ en:
           remove: Remove sample
         search:
           placeholder: Filter by ID or name
-          metadata: Metadata
       update:
         success: Sample was successfully updated.
       edit:
@@ -953,6 +958,8 @@ en:
       shared:
         errors:
           ok_button: OK
+        metadata_toggle:
+          label: Metadata
       transfers:
         dialog:
           title: Transfer Samples

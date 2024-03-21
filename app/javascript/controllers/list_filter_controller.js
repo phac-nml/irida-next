@@ -55,7 +55,9 @@ export default class extends Controller {
   }
 
   afterSubmit() {
-    this.selectionOutlet.clear();
+    if (this.hasSelectionOutlet) {
+      this.selectionOutlet.clear();
+    }
     this.#updateCount();
   }
 

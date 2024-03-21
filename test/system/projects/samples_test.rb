@@ -1117,24 +1117,24 @@ module Projects
 
     test 'should be able to toggle metadata' do
       visit namespace_project_samples_url(@namespace, @project)
-      assert_selector 'label', text: I18n.t('projects.samples.index.search.metadata'), count: 1
+      assert_selector 'label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label'), count: 1
       assert_selector 'table#samples-table thead tr th', count: 6
-      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table#samples-table thead tr th', count: 8
       within first('table#samples-table tbody tr:nth-child(3)') do
         assert_text @sample3.name
         assert_selector 'td:nth-child(6)', text: 'value1'
         assert_selector 'td:nth-child(7)', text: 'value2'
       end
-      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table#samples-table thead tr th', count: 6
     end
 
     test 'can sort samples by metadata column' do
       visit namespace_project_samples_url(@namespace, @project)
-      assert_selector 'label', text: I18n.t('projects.samples.index.search.metadata'), count: 1
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       assert_selector 'table#samples-table thead tr th', count: 6
-      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table#samples-table thead tr th', count: 8
 
       click_on 'metadatafield1'
@@ -1164,7 +1164,7 @@ module Projects
       end
 
       # toggling metadata again causes sort to be reset
-      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table#samples-table thead tr th', count: 6
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
@@ -1216,7 +1216,7 @@ module Projects
     test 'should import metadata via xlsx' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table#samples-table thead tr th', count: 8
 
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
@@ -1345,7 +1345,7 @@ module Projects
     test 'should partially import metadata with missing sample errors' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      find('label', text: I18n.t('projects.samples.index.search.metadata')).click
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table#samples-table thead tr th', count: 8
 
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
@@ -1888,23 +1888,23 @@ module Projects
         assert_selector 'tr td', text: @sample1.puid
         assert_selector 'tr td', text: @sample2.puid
       end
-      find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
-      within 'div[data-controller="filter-list"] dialog' do
-        assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
+      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
+      within 'dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
         find("input[type='text']").send_keys "#{@sample1.puid}, #{@sample2.puid}"
         assert_selector 'span.label', count: 2
         assert_selector 'span.label', text: @sample1.puid
         assert_selector 'span.label', text: @sample2.puid
-        click_button I18n.t(:'projects.samples.tagged_filter.apply')
+        click_button I18n.t(:'components.list_filter.apply')
       end
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 2
       end
-      find("button[aria-label=\"#{I18n.t(:'projects.samples.tagged_filter.title')}\"]").click
-      within 'div[data-controller="filter-list"] dialog' do
-        assert_selector 'h1', text: I18n.t(:'projects.samples.tagged_filter.title')
-        click_button I18n.t(:'projects.samples.tagged_filter.clear')
-        click_button I18n.t(:'projects.samples.tagged_filter.apply')
+      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
+      within 'dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        click_button I18n.t(:'components.list_filter.clear')
+        click_button I18n.t(:'components.list_filter.apply')
       end
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
