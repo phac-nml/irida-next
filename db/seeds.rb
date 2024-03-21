@@ -159,6 +159,12 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
     submitter: User.find_by(email: 'user1@email.com')
   )
 
+  SamplesWorkflowExecution.create(
+    samplesheet_params: { my_key1: 'my_value_1', my_key2: 'my_value_2' },
+    sample: Sample.first,
+    workflow_execution: workflow_execution
+  )
+
   workflow_execution_finalized = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example-finalized', workflow_version: '1.0dev' },
     workflow_params: { '-r': 'dev' },
@@ -171,22 +177,18 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
     blob_run_directory: 'this should be a generated key'
+    state: 'finalized'
   )
 
-  file_names = [
-    'iridanext.output.json.gz',
-    'summary.txt'
-  ]
-  file_names.each do |filename|
-    attachment = workflow_execution_finalized.outputs.build
-    attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open, filename:)
-    attachment.save!
-  end
+  filename = 'summary.txt'
+  attachment = workflow_execution_finalized.outputs.build
+  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open, filename:)
+  attachment.save!
 
   SamplesWorkflowExecution.create(
-    samplesheet_params: { my_key1: 'my_value_1', my_key2: 'my_value_2' },
+    samplesheet_params: { my_key1: 'my_value_2', my_key2: 'my_value_3' },
     sample: Sample.first,
-    workflow_execution: workflow_execution
+    workflow_execution: workflow_execution_finalized
   )
 end
 
