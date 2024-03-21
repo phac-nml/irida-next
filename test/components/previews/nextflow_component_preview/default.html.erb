@@ -1,11 +1,1 @@
-<%= render NextflowComponent.new(
-  workflow: ,
-  schema:
-    JSON.parse(
-      File.read(
-        Rails.root.join("test", "fixtures", "files", "nextflow", schema_file)
-      )
-    ),
-  url: "no_where",
-  samples:
-) %>
+<%= render NextflowComponent.new(workflow:, url: "no_where", samples:) %>

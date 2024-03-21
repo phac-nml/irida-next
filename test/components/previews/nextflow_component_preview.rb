@@ -3,20 +3,21 @@
 class NextflowComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
   def default(schema_file: 'nextflow_schema.json')
-    sample1 = Sample.find_by(id: 1)
-    sample2 = Sample.find_by(id: 2)
+    sample1 = Sample.first
+    sample2 = Sample.second
 
-    workflow = Struct.new(:name, :id, :description, :version, :metadata, :type, :type_version, :engine,
-                          :engine_version, :url, :execute_loc)
-    metadata = { workflow_name: 'irida-next-example', workflow_version: '1.0dev' }
-    flow = workflow.new('phac-nml/iridanextexample', 1, 'IRIDA Next Example Pipeline', '1.0.1', metadata,
-                        'NFL', 'DSL2', 'nextflow', '23.10.0',
-                        'https://github.com/phac-nml/iridanextexample', 'azure')
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }
+    workflow = Irida::Pipeline.new(entry, '1.0.1',
+                                   Rails.root.join('test/fixtures/files/nextflow/', schema_file),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
     render_with_template(locals: {
-                           schema_file:,
                            samples: [sample1, sample2],
-                           workflow: flow
+                           workflow:
                          })
   end
 
