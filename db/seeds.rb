@@ -192,6 +192,60 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
   )
 end
 
+def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  users_and_sample_ids = [
+    {
+      user: User.find_by(email: 'admin@email.com'),
+      sample_id: Sample.find_by(name: 'Bacillus anthracis/Outbreak 2022 Sample 10').id
+    },
+    {
+      user: User.find_by(email: 'user1@email.com'),
+      sample_id: Sample.find_by(name: 'Bartonella henselae/Outbreak 2022 Sample 10').id
+    },
+    {
+      user: User.find_by(email: 'user2@email.com'),
+      sample_id: Sample.find_by(name: 'Bordetella pertussis/Outbreak 2022 Sample 10').id
+    },
+    {
+      user: User.find_by(email: 'user3@email.com'),
+      sample_id: Sample.find_by(name: 'Borrelia burgdorferi/Outbreak 2022 Sample 10').id
+    },
+    {
+      user: User.find_by(email: 'user4@email.com'),
+      sample_id: Sample.find_by(name: 'Brucella abortus/Outbreak 2022 Sample 10').id
+    },
+    {
+      user: User.find_by(email: 'user5@email.com'),
+      sample_id: Sample.find_by(name: 'Campylobacter jejuni/Outbreak 2022 Sample 10').id
+    },
+    {
+      user: User.find_by(email: 'user6@email.com'),
+      sample_id: Sample.find_by(name: 'Yersinia pestis/Outbreak 2022 Sample 10').id
+    },
+    {
+      user: User.find_by(email: 'user7@email.com'),
+      sample_id: Sample.find_by(name: 'Vibrio cholerae/Outbreak 2023 Sample 10').id
+    }
+  ]
+  users_and_sample_ids.each_with_index do |user_and_sample_id, index|
+    DataExport.create(
+      user: user_and_sample_id[:user],
+      name: index.even? ? "Seeded export #{index + 1}" : nil,
+      export_parameters: { ids: [user_and_sample_id[:sample_id]] },
+      status: 'processing',
+      export_type: 'sample',
+      email_notification: index.even? && true
+    )
+    params = { 'export_type' => 'sample',
+               'export_parameters' => {
+                 'ids' => [user_and_sample_id[:sample_id]]
+               },
+               'email_notification' => true,
+               'name' => index.even? ? nil : "Seeded export #{index + 1}" }
+    DataExports::CreateService.new(user_and_sample_id[:user], params).execute
+  end
+end
+
 if Rails.env.development?
   current_year = Time.zone.now.year
 
@@ -692,4 +746,6 @@ if Rails.env.development?
   end
 
   seed_workflow_executions
+
+  seed_exports
 end
