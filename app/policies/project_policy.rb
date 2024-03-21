@@ -147,6 +147,13 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def submit_workflow?
+    return true if Member.can_submit_workflow?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(

@@ -73,6 +73,13 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   test '#clone_sample_into_project?' do
     assert @policy.clone_sample_into_project?
   end
+  test '#export_sample_data?' do
+    assert @policy.export_sample_data?
+  end
+
+  test '#submit_workflow?' do
+    assert @policy.submit_workflow?
+  end
 
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
