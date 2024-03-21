@@ -1107,3 +1107,25 @@ fr:
         namespace_name_desc: Name, descending
         updated_at_asc: Oldest updated
         created_at_asc: Oldest created
+  data_exports:
+    index:
+      title: Data Exports
+      table_header:
+        id: ID
+        name: Name
+        type: Type
+        status: Status
+        created_at: Created
+        expires_at: Expires
+        action: Action
+      actions:
+        dropdown: See dropdown actions for data export %{name}
+        download: Download
+        download_aria_label: Download data export %{name}
+        delete: Delete
+        delete_aria_label: Delete data export %{name}
+      delete_confirmation: Are you sure you would like to delete data export %{name}?
+      no_data_exports: No Data Exports
+      no_data_exports_message: You currently have no data exports.
+    destroy:
+      success: Data export '%{name}' was successfully deleted.
