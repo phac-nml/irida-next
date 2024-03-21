@@ -40,13 +40,29 @@
               ) %>
             </th>
             <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.name") %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(:".headers.name"),
+                url: sorting_url(@q, URI.encode_www_form_component("metadata_workflow_name")),
+                field: "metadata_workflow_name"
+              ) %>
             </th>
             <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.version") %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(:".headers.version"),
+                url:
+                  sorting_url(@q, URI.encode_www_form_component("metadata_workflow_version")),
+                field: "metadata_workflow_version"
+              ) %>
             </th>
             <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.state") %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(:".headers.state"),
+                url: sorting_url(@q, :state),
+                field: :state
+              ) %>
             </th>
             <th scope="col" class="px-6 py-3">
               <%= render Ransack::SortComponent.new(

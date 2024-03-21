@@ -2,13 +2,14 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
+  include Metadata
   respond_to :turbo_stream
   before_action :current_page
 
   def index
     @q = load_workflows.ransack(params[:q])
     set_default_sort
-    @pagy, @workflows = pagy(@q.result)
+    @pagy, @workflows = pagy_with_metadata_sort(@q.result)
   end
 
   def create
