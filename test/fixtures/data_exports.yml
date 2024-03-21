@@ -10,3 +10,23 @@ data_export_one:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+
+data_export_two:
+  name: Data Export 2
+  export_type: sample
+  status: processing
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>]}
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+
+data_export_three:
+  name: Data Export 3
+  export_type: sample
+  status: processing
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>

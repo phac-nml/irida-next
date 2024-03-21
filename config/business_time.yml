@@ -1,0 +1,14 @@
+business_time:
+# There's awkward timing with time zones and UTC if we set a standard 9-5 workday.
+# If someone sets up an export late on a Monday, this led to the start of the work days calculation
+# on the Tuesday AM, expiring on the Fri AM, meaning the export would not delete until Saturday.
+# Resulting in the export lasting over the 3 business days. This seemed like the simplest solution where
+# someone set up an export late Monday, it would expire late Thursday, and be deleted Friday AM.
+  beginning_of_workday: 12:00 am
+  end_of_workday: 11:59 pm
+  work_week:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri

@@ -19,6 +19,8 @@ module DataExports
       @data_export.status = 'processing'
 
       @data_export.save
+
+      DataExports::CreateJob.set(wait_until: 30.seconds.from_now).perform_later(@data_export) if @data_export.valid?
       @data_export
     rescue DataExports::CreateService::DataExportCreateError => e
       @data_export.errors.add(:base, e.message)
