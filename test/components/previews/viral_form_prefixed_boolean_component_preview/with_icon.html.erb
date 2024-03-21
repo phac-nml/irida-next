@@ -1,5 +1,5 @@
 <%= form_with url: '#' do |form| %>
-  <%= viral_prefixed_boolean(form: form, name: "prefixed", value: true, label: "Checkbox Label", checked: true) do |checkbox| %>
+  <%= viral_prefixed_boolean(form: form, name: "prefixed", value: true) do |checkbox| %>
     <%= checkbox.with_prefix do %>
       <%= viral_icon(name: :exclamation_circle, color: :warning, classes: "h-5 w-5") %>
     <% end %>
