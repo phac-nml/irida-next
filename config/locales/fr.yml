@@ -1124,7 +1124,7 @@ fr:
         download_aria_label: Download data export %{name}
         delete: Delete
         delete_aria_label: Delete data export %{name}
-      delete_confirmation: Are you sure you would like to delete data export %{name}?
+      delete_confirmation: Are you sure you would like to delete data export '%{name}'?
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
     destroy:
