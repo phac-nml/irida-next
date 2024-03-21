@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module BlobHelpers
+module BlobTestHelpers
   def make_and_upload_blob(filepath:, blob_run_directory:)
     output_json_file = File.new(filepath, 'r')
     output_json_file_blob = ActiveStorage::Blob.create_and_upload!(
