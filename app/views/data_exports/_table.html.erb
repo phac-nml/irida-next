@@ -1,124 +1,121 @@
 <% if @data_exports.count.positive? %>
-<table class="min-w-full table-fixed dark:divide-slate-600">
-<thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
-    <tr>
-    <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.id") %></th>
-    <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.name") %></th>
-    <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.type") %></th>
-    <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.status") %></th>
-    <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.created_at") %></th>
-    <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.expires_at") %></th>
-    <th scope="col" class="px-6 py-3 text-right"><%= t(:"data_exports.index.table_header.action") %></th>
-    </tr>
-</thead>
-<tbody
+  <table class="min-w-full table-fixed dark:divide-slate-600">
+    <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.id") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.name") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.type") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.status") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.created_at") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"data_exports.index.table_header.expires_at") %></th>
+        <th scope="col" class="px-6 py-3 text-right"><%= t(:"data_exports.index.table_header.action") %></th>
+      </tr>
+    </thead>
+    <tbody
     id="data-exports-table-body"
     class="
-    bg-white
-    divide-y
-    divide-slate-200
-    dark:bg-slate-800
-    dark:divide-slate-700
-    "
->
-    <% @data_exports.each do |data_export| %>
-    <tr
-        id="<%= dom_id(data_export) %>"
-        class="text-sm font-normal text-slate-500 dark:text-slate-400"
+      bg-white
+      divide-y
+      divide-slate-200
+      dark:bg-slate-800
+      dark:divide-slate-700
+    ">
+      <% @data_exports.each do |data_export| %>
+        <tr
+          id="<%= dom_id(data_export) %>"
+          class="text-sm font-normal text-slate-500 dark:text-slate-400"
         >
-        <td class="px-6 py-4">
-          <% if data_export.status == 'ready' %>
-            <div class="text-slate-900 dark:text-slate-100 font-semibold">
+          <td class="px-6 py-4">
+            <div class="text-slate-900 dark:text-slate-100 font-semibold hover:underline">
               <%= data_export.id %>
             </div>
-          <% else %>
-            <div class="text-sm font-normal text-slate-500 dark:text-slate-400">
-              <%= data_export.id %>
-            </div>
-          <% end %>
-        </td>
-        <td class="px-6 py-4">
-          <% unless data_export.name.nil? %>
-            <% if data_export.status == 'ready' %>
-              <div class="text-slate-900 dark:text-slate-100 font-semibold">
-                <%= data_export.name %>
-              </div>
-            <% else %>
-              <div class="text-sm font-normal text-slate-500 dark:text-slate-400">
+          </td>
+          <td class="px-6 py-4">
+            <% unless data_export.name.nil? %>
+              <div class="text-slate-900 dark:text-slate-100 font-semibold hover:underline">
                 <%= data_export.name %>
               </div>
             <% end %>
-          <% end %>
-        </td>
-        <td class="px-6 py-4">
+          </td>
+          <td class="px-6 py-4">
             <%= data_export.export_type.capitalize %>
-        </td>
-        <td class="px-6 py-4">
-            <%= data_export.status.capitalize %>
-        </td>
-        <td class="px-6 py-4">
-            <%= l(data_export.created_at.localtime, format: :full_date) %>
-        </td>
-        <td class="px-6 py-4">
-            <% unless data_export.expires_at.nil? %>
-            <%= l(data_export.expires_at.localtime, format: :full_date) %>
-            <% end %>
-        </td>
-        <td class="px-6 py-4 text-right">
-            <%= viral_dropdown(icon: "ellipsis_vertical",
-            aria: { label: t(:'data_exports.index.actions.dropdown', name: data_export.name || data_export.id) }) do |dropdown| %>
+          </td>
+          <td class="px-6 py-4">
             <% if data_export.status == 'ready' %>
+              <%= viral_pill(
+                text: data_export.status.capitalize,
+                color: :green
+              ) %>
+            <% else %>
+              <%= viral_pill(
+                text: data_export.status.capitalize,
+                color: :gray
+              ) %>
+            <% end %>
+          </td>
+          <td class="px-6 py-4">
+            <%= l(data_export.created_at.localtime, format: :full_date) %>
+          </td>
+          <td class="px-6 py-4">
+            <% unless data_export.expires_at.nil? %>
+              <%= l(data_export.expires_at.localtime, format: :full_date) %>
+            <% end %>
+          </td>
+          <td class="px-6 py-4 text-right">
+            <%= viral_dropdown(
+              icon: "ellipsis_vertical",
+              aria: { label: t(:'data_exports.index.actions.dropdown',
+              name: data_export.id) }) do |dropdown| %>
+              <% if data_export.status == 'ready' %>
                 <%= dropdown.with_item(
-                label: (t(:"data_exports.index.actions.download")),
-                url: download_data_export_path(data_export),
-                data: {
+                  label: (t(:"data_exports.index.actions.download")),
+                  url: download_data_export_path(data_export),
+                  data: {
                     turbo: false
-                },
-                aria: {
+                  },
+                  aria: {
                     label:
-                    (
+                      (
                         t(
                         :"data_exports.index.actions.download_aria_label",
                         name: data_export.name || data_export.id
                         )
-                    )
-                }
-                ) %>
-            <% end %>
-            <%= dropdown.with_item(
+                      )
+                  }) %>
+              <% end %>
+              <%= dropdown.with_item(
                 label: (t(:"data_exports.index.actions.delete")),
                 url: data_export_path(data_export),
                 data: {
-                    turbo_method: :delete,
-                    turbo_confirm:
-                    t(
-                        :"data_exports.index.delete_confirmation",
-                        name: data_export.name || data_export.id
-                    )
+                  turbo_method: :delete,
+                  turbo_confirm:
+                  t(
+                    :"data_exports.index.delete_confirmation",
+                    name: data_export.name || data_export.id
+                  )
                 },
                 aria: {
-                    label:
+                  label:
                     (
-                        t(
+                      t(
                         :"data_exports.index.actions.delete_aria_label",
                         name: data_export.name || data_export.id
-                        )
+                      )
                     )
                 }
-                ) %>
-    <% end %>
+            ) %>
+          <% end %>
         </td>
-    </tr>
+      </tr>
     <% end %>
-
-</tbody>
+  </tbody>
 </table>
 <% else %>
 <div class="empty_state_message">
-    <%= viral_empty(
+  <%= viral_empty(
     title: t(:"data_exports.index.no_data_exports"),
     description: t(:"data_exports.index.no_data_exports_message"),
     icon_name: :document_text
-    ) %>
+  ) %>
 </div>
 <% end %>
