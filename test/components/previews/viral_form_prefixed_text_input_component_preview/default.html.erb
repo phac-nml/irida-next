@@ -1,0 +1,7 @@
+<%= form_with url: '#' do |form| %>
+  <%= viral_prefixed_text_input(form: form, name: "prefixed") do |input| %>
+    <%= input.with_prefix do %>
+      --prefix
+    <% end %>
+  <% end %>
+<% end %>
