@@ -8,17 +8,19 @@
             "type": "rdbg",
             "name": "Debug rails",
             "request": "launch",
-            "script": "bin/rails s",
+            "rdbgPath": "bin/rdbg",
+            "script": "bin/rails",
+            "args": [
+                "s"
+            ],
             "useBundler": false,
             "command": "ruby",
-            "env": {
-                "OMNIAUTH_PROVIDERS": "developer,saml,azure_activedirectory_v2"
-            }
         },
         {
             "type": "rdbg",
             "name": "Debug current rails test file",
             "request": "launch",
+            "rdbgPath": "bin/rdbg",
             "script": "bin/rails test ${file}",
             "useBundler": false,
             "command": "ruby"
