@@ -27,6 +27,9 @@ module WorkflowExecutions
       output_samples_file_paths = get_output_samples_file_paths(run_output_data:)
       process_sample_file_paths(output_samples_file_paths:)
 
+      # per sample metadata
+      process_samples_metadata(run_output_data:)
+
       # attach blob lists to attachables
       attach_blobs_to_attachables
 
@@ -79,15 +82,20 @@ module WorkflowExecutions
           sample_file_blob_list.append(download_and_make_new_blob(blob_file_path:))
         end
 
-        samples_workflow_execution = \
-          @workflow_execution.samples_workflow_executions \
-                             .joins(:sample) \
-                             .where(sample: { puid: sample_file_paths_tuple[:sample_puid] }) \
-                             .first
+        samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(
+          puid: sample_file_paths_tuple[:sample_puid]
+        )
 
         @attachable_blobs_tuple_list.append({ attachable: samples_workflow_execution,
                                               blob_id_list: sample_file_blob_list })
       end
+    end
+
+    def get_samples_workflow_executions_by_sample_puid(puid:)
+      @workflow_execution.samples_workflow_executions \
+                         .joins(:sample) \
+                         .where(sample: { puid: }) \
+                         .first
     end
 
     def attach_blobs_to_attachables
@@ -99,5 +107,19 @@ module WorkflowExecutions
         ).execute
       end
     end
+
+    def process_samples_metadata(run_output_data:)
+      return nil unless run_output_data['metadata']['samples']
+
+      run_output_data['metadata']['samples']&.each do |sample_puid, sample_metadata|
+        samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(puid: sample_puid)
+        samples_workflow_execution.metadata = sample_metadata
+        samples_workflow_execution.save!
+      end
+    end
+
+    # def process_sample_metadata(output_samples_metadata:)
+
+    # end
   end
 end
