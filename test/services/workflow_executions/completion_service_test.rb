@@ -7,7 +7,7 @@ module WorkflowExecutions
     def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       # normal/
       # get a new secure token for each workflow execution
-      @workflow_execution_completed = workflow_executions(:irida_next_example_completed)
+      @workflow_execution_completed = workflow_executions(:irida_next_example_completed_a)
       blob_run_directory_a = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_completed.blob_run_directory = blob_run_directory_a
 
@@ -23,7 +23,7 @@ module WorkflowExecutions
 
       # no_files/
       # get a new secure token for each workflow execution
-      @workflow_execution_no_files = workflow_executions(:irida_next_example_completed2)
+      @workflow_execution_no_files = workflow_executions(:irida_next_example_completed_b)
       blob_run_directory_b = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_no_files.blob_run_directory = blob_run_directory_b
 
@@ -35,7 +35,7 @@ module WorkflowExecutions
 
       # normal2/
       # get a new secure token for each workflow execution
-      @workflow_execution_with_samples = workflow_executions(:irida_next_example_completed_with_samples)
+      @workflow_execution_with_samples = workflow_executions(:irida_next_example_completed_c)
       blob_run_directory_c = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_with_samples.blob_run_directory = blob_run_directory_c
 
@@ -77,7 +77,7 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
-      assert_equal 'my_run_id_6', workflow_execution.run_id
+      assert_equal 'my_run_id_a', workflow_execution.run_id
       assert_equal 1, workflow_execution.outputs.count
       # original file blob should not be the same as the output file blob, but contain the same file
       output_summary_file = workflow_execution.outputs[0]
@@ -106,7 +106,7 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
-      assert_equal 'my_run_id_6', workflow_execution.run_id
+      assert_equal 'my_run_id_b', workflow_execution.run_id
       # no files should be added to the run
       assert_equal 0, workflow_execution.outputs.count
 
@@ -120,7 +120,7 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
-      assert_equal 'my_run_id_with_samples', workflow_execution.run_id
+      assert_equal 'my_run_id_c', workflow_execution.run_id
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
       assert_equal 'sample1puid', workflow_execution.samples_workflow_executions[0].sample.puid
@@ -155,7 +155,7 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
-      assert_equal 'my_run_id_with_samples', workflow_execution.run_id
+      assert_equal 'my_run_id_c', workflow_execution.run_id
 
       metadata1 = { 'amr' => [{ 'end' => 5678, 'gene' => 'x', 'start' => 1234 },
                               { 'end' => 2, 'gene' => 'y', 'start' => 1 }],
