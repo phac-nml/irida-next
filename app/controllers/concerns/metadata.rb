@@ -4,11 +4,12 @@
 module Metadata
   extend ActiveSupport::Concern
 
-  def pagy_with_metadata_sort(result)
-    if !@q.sorts.empty? && Sample.ransackable_attributes.exclude?(@q.sorts.first.name)
+  def pagy_with_metadata_sort(result) # rubocop:disable Metrics/AbcSize
+    model = controller_name.classify.constantize
+    if !@q.sorts.empty? && model.ransackable_attributes.exclude?(@q.sorts.first.name)
       field = @q.sorts.first.name.gsub('metadata_', '')
       dir = @q.sorts.first.dir
-      result = result.order(Sample.metadata_sort(field, dir))
+      result = result.order(model.metadata_sort(field, dir))
     end
 
     pagy(result)

@@ -4,4 +4,9 @@
 
 <% if @workflow_execution.deleted? %>
   <%= turbo_stream.update "workflow_execution_table", partial: "table" %>
+  <% if @workflows.empty? %>
+    <%= turbo_stream.remove "workflow_execution_pagination" %>
+  <% else %>
+    <%= turbo_stream.update "workflow_execution_pagination", partial: "pagination" %>
+  <% end %>
 <% end %>

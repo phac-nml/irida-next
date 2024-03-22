@@ -2,17 +2,21 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
+  include Metadata
   respond_to :turbo_stream
-  before_action :workflows, only: %i[index destroy]
   before_action :current_page
 
-  def index; end
+  def index
+    @q = load_workflows.ransack(params[:q])
+    set_default_sort
+    @pagy, @workflows = pagy_with_metadata_sort(@q.result)
+  end
 
   def create
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
 
     if @workflow_execution.persisted?
-      redirect_to workflow_executions_path
+      redirect_to workflow_executions_path(format: :html)
     else
       render turbo_stream: [], status: :unprocessable_entity
     end
@@ -26,9 +30,12 @@ class WorkflowExecutionsController < ApplicationController
     nil unless @workflow_execution.persisted?
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize
     @workflow_execution = WorkflowExecution.find(params[:id])
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
+
+    @q = load_workflows.ransack(params[:q])
+    @pagy, @workflows = pagy_with_metadata_sort(@q.result)
 
     if @workflow_execution.deleted?
       render status: :ok,
@@ -43,8 +50,12 @@ class WorkflowExecutionsController < ApplicationController
 
   private
 
-  def workflows
-    @workflows = WorkflowExecution.where(submitter: current_user)
+  def set_default_sort
+    @q.sorts = 'updated_at desc' if @q.sorts.empty?
+  end
+
+  def load_workflows
+    WorkflowExecution.where(submitter: current_user)
   end
 
   def workflow_execution_params

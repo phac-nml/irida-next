@@ -1,57 +1,99 @@
-<% if @workflows.length > 0 %>
-  <div class="bg-white dark:bg-slate-800">
-    <div class="flex flex-col">
-      <table
-        id="workflow_executions"
+<div class="bg-white dark:bg-slate-800">
+  <div class="table-container flex flex-col">
+    <table
+      id="workflow_executions"
+      class="
+        w-full
+        text-sm
+        text-left
+        rtl:text-right
+        text-gray-500
+        dark:text-gray-400
+      "
+    >
+      <thead
         class="
-          w-full
-          text-sm
-          text-left
-          rtl:text-right
-          text-gray-500
+          text-xs
+          text-gray-700
+          uppercase
+          bg-gray-50
+          dark:bg-gray-700
           dark:text-gray-400
         "
       >
-        <thead
-          class="
-            text-xs
-            text-gray-700
-            uppercase
-            bg-gray-50
-            dark:bg-gray-700
-            dark:text-gray-400
-          "
-        >
-          <tr>
-            <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.id") %>
-            </th>
-            <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.name") %>
-            </th>
-            <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.version") %>
-            </th>
-            <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.state") %>
-            </th>
-            <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.created_at") %>
-            </th>
-            <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.updated_at") %>
-            </th>
-            <th scope="col" class="px-6 py-3">
-              <%= t(:".headers.actions") %>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= render partial: "workflow_execution", collection: @workflows %>
-        </tbody>
-      </table>
+        <tr>
+          <th scope="col" class="px-6 py-3">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(:".headers.id"),
+              url: sorting_url(@q, :id),
+              field: :id
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(:".headers.job_id"),
+              url: sorting_url(@q, :run_id),
+              field: :run_id
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(:".headers.name"),
+              url: sorting_url(@q, URI.encode_www_form_component("metadata_workflow_name")),
+              field: "metadata_workflow_name"
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(:".headers.version"),
+              url:
+                sorting_url(@q, URI.encode_www_form_component("metadata_workflow_version")),
+              field: "metadata_workflow_version"
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(:".headers.state"),
+              url: sorting_url(@q, :state),
+              field: :state
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(:".headers.created_at"),
+              url: sorting_url(@q, :created_at),
+              field: :created_at
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(:".headers.updated_at"),
+              url: sorting_url(@q, :updated_at),
+              field: :updated_at
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3">
+            <%= t(:".headers.actions") %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "workflow_execution", collection: @workflows %>
+      </tbody>
+    </table>
+    <div class="empty_state_message">
+      <%= viral_empty(
+        title: t(:".empty.title"),
+        description: t(:".empty.description"),
+        icon_name: :document_text
+      ) %>
     </div>
   </div>
-<% else %>
-  <%= viral_alert(type: :info, message: t(:".empty")) %>
-<% end %>
+</div>
