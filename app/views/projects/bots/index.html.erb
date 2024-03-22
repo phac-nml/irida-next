@@ -25,6 +25,8 @@
                       loading: :lazy do %>
    <%= render partial: "shared/loading/table" %>
   <% end %>
-  <%= turbo_frame_tag "bots_pagination", "data-turbo-temporary": true %>
+  <% unless @bot_accounts.empty? %>
+    <%= turbo_frame_tag "bots_pagination", "data-turbo-temporary": true %>
+  <% end %>
 </div>
 
