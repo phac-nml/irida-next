@@ -34,12 +34,14 @@ module Nextflow
       def render_cell_type(property, entry, sample, fields)
         return render_sample_cell(sample, fields) if property == 'sample'
 
-        if property.match(/fastq_(\d+)/) || entry['format'] == 'file-path'
+        if property.match(/fastq_\d+/)
           # Subtracting 1 of the result to get the index of the file in the array
-          index = (property.match(/fastq_(\d+)/)[1].to_i || 1) - 1
+          index = property.match(/fastq_(\d+)/)[1].to_i - 1
           return render_file_cell(property, entry,
                                   fields, index)
         end
+
+        return render_file_cell(property, entry, fields, 0) if entry['format'] == 'file-path'
 
         return render_dropdown_cell(property, entry, fields) if entry['enum'].present?
 
