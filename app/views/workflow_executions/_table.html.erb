@@ -1,5 +1,5 @@
 <div class="bg-white dark:bg-slate-800">
-  <div class="flex flex-col">
+  <div class="table-container flex flex-col">
     <table
       id="workflow_executions"
       class="
@@ -88,5 +88,12 @@
         <%= render partial: "workflow_execution", collection: @workflows %>
       </tbody>
     </table>
+    <div class="empty_state_message">
+      <%= viral_empty(
+        title: t(:".empty.title"),
+        description: t(:".empty.description"),
+        icon_name: :document_text
+      ) %>
+    </div>
   </div>
 </div>
