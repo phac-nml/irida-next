@@ -4,15 +4,34 @@
 module NextflowHelper
   SCHEMA_PATH = 'test/fixtures/files/nextflow/'
 
+  # rubocop:disable Metrics/MethodLength
   def form_input(container, name, property, required)
-    return checkbox_input(container, name, property) if property['type'] == 'boolean'
-
-    if property['enum'].present?
-      return viral_select(container:, name:, options: property['enum'], selected_value: property['default'])
+    if property['type'] == 'boolean'
+      return viral_prefixed_boolean(form: container, name:, value: property['default']) do |input|
+        input.with_prefix do
+          name
+        end
+      end
     end
 
-    viral_text_input(container:, name:, required:, pattern: property['pattern'])
+    if property['enum'].present?
+      return viral_prefixed_select(form: container, name:, options: property['enum'],
+                                   selected_value: property['default']) do |select|
+               select.with_prefix do
+                 name
+               end
+             end
+    end
+
+    viral_prefixed_text_input(form: container, name:, required:, pattern: property['pattern'],
+                              value: property['default']) do |input|
+      input.with_prefix do
+        name
+      end
+    end
   end
+
+  # rubocop:enable Metrics/MethodLength
 
   def checkbox_input(fields, name, property)
     viral_checkbox(

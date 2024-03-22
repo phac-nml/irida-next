@@ -1,0 +1,7 @@
+<%= form_with url: '#' do |form| %>
+  <%= viral_prefixed_boolean(form: form, name: "prefixed", value: true) do |checkbox| %>
+    <%= checkbox.with_prefix do %>
+      --prefix
+    <% end %>
+  <% end %>
+<% end %>
