@@ -7,10 +7,9 @@ class AddUserTypeToUsers < ActiveRecord::Migration[7.1]
 
     execute <<-SQL.squish
         UPDATE users SET user_type=0
-    SQL
 
-    User.reset_log_data
-    User.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
+        UPDATE "users" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
+    SQL
   end
 
   def down
