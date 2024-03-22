@@ -27,7 +27,7 @@
       <span class="sr-only"><%= t("components.flash.information_icon") %></span>
     </div>
   <% end %>
-  <div class="ml-3 text-sm font-normal break-all"><%= data %></div>
+  <div class="ml-3 text-sm font-normal break-words"><%= data %></div>
   <button type="button" data-action="viral--flash#dismiss" class="ml-auto -mx-1.5 -my-1.5 bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2 focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white dark:bg-slate-800 dark:hover:bg-slate-700" data-dismiss-target="#toast-success" aria-label="Close">
     <%= viral_icon(name: "x_mark", classes: "w-5 h-5") %>
     <span class="sr-only"><%= t(:"general.screen_reader.close") %></span>

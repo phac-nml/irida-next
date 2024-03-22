@@ -8,6 +8,9 @@
   <%= viral_flash(type:, data: message) %>
 <% end %>
 
-<%= turbo_stream.update "bots", partial: "bot_listing" %>
+<% if @new_bot_account.persisted? %>
 
-<%= turbo_stream.update "bots_pagination", partial: "pagination" %>
+  <%= turbo_stream.update "bots", partial: "bot_listing" %>
+
+  <%= turbo_stream.update "bots_pagination", partial: "pagination" %>
+<% end%>
