@@ -1,16 +1,16 @@
 <%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>>
-  <%= dialog.with_header(title: "New Bot Account") %>
+  <%= dialog.with_header(title: t("projects.bots.index.bot_listing.new_bot_modal.title")) %>
   <%= dialog.with_section do %>
     <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
       <p class="dark:text-gray-400">
-        Adding a bot account to associate certain actions which can't be attributed to a human user
+        <%= t("projects.bots.index.bot_listing.new_bot_modal.description") %>
       </p>
     </div>
 
    <%= form_for(:bot, url: namespace_project_bots_path, method: :post) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
-          <%= form.label :bot_username, "Username" %>
+          <%= form.label :bot_username, t('projects.bots.index.bot_listing.new_bot_modal.username') %>
           <%= form.text_field :bot_username,
                           required: true,
                           readonly: true,
@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-field">
-          <%= form.label :first_name, "First Name" %>
+          <%= form.label :first_name, t('projects.bots.index.bot_listing.new_bot_modal.first_name') %>
           <%= form.text_field :first_name,
                           required: true,
                           value: "Project",
@@ -29,7 +29,7 @@
         </div>
 
         <div class="form-field">
-          <%= form.label :last_name, "Last Name" %>
+          <%= form.label :last_name, t('projects.bots.index.bot_listing.new_bot_modal.last_name') %>
           <%= form.text_field :last_name,
                           required: true,
                           value: "Bot",
@@ -61,14 +61,14 @@
 
       </div>
         <div class="my-4">
-          <%= form.submit "Submit",
+          <%= form.submit t('projects.bots.index.bot_listing.new_bot_modal.submit'),
                       class: "button button--size-default button--state-primary" %>
           <button
             type="button"
             class="button button--size-default button--state-default"
             data-action="click->viral--dialog#close"
           >
-            <%= I18n.t("projects.group_links.new.button.cancel") %>
+            <%= t('projects.bots.index.bot_listing.new_bot_modal.cancel') %>
           </button>
         </div>
       </div>

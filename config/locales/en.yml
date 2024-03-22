@@ -741,6 +741,36 @@ en:
         project_modified: "Project attributes were modified by %{user}"
         project_restored: "Project was restored by %{user}"
         project_transferred: "Project was transferred by %{user}"
+    bots:
+      index:
+        title: Bot Accounts
+        subtitle: Setup bot accounts to perform actions within the project that cannot be attributed to a human user
+        add_new_bot: Add New Bot Account
+        bot:
+          remove: Remove
+          remove_confirmation: "Are you sure you want to remove this bot account from the project?"
+          remove_aria_label: Remove bot account
+        bot_listing:
+          email: Email
+          name: Name
+          api_scope: API Scope(s)
+          created: Created
+          actions: Actions
+          empty_state:
+            title: No bot accounts
+            description: There are no bot accounts attributed to this project
+          new_bot_modal:
+            title: New Bot Account
+            description: Adding a bot account to associate certain actions which can't be attributed to a human user
+            username: Username
+            first_name: First Name
+            last_name: Last Name
+            submit: Submit
+            cancel: Cancel
+      create:
+        success: "Bot account %{bot_username} was successfully added to the project"
+      destroy:
+        success: "Bot account  %{bot_username} was successfully removed from the project"
     new:
       title: Create project
       placeholder: Awesome project name
@@ -755,6 +785,7 @@ en:
       members: Members
       samples: Samples
       settings: Settings
+      bot_accounts: Bot Accounts
     update:
       success: "Project %{project_name} was successfully updated"
     transfer:
@@ -1149,6 +1180,15 @@ en:
       destroy:
         does_not_belong_to_attachable: This attachment does not belong to this sample.
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
+    bots:
+      create:
+        required:
+          username: Unable to create bot account as the bot username is required
+          first_name: Unable to create bot account as the bot first name is required
+          last_name: Unable to create bot account as the bot last name is required
+          scopes: 'Unable to create bot account as the bot API scope must be selected'
+      destroy:
+        not_associated: The bot account cannot be removed as it does not belong to this project
     data_exports:
       create:
         invalid_sample_id: A sample selected for export does not exist.

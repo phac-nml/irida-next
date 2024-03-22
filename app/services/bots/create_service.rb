@@ -35,26 +35,14 @@ module Bots
       @bot_user_account
     end
 
-    def validate_params # rubocop:disable Metrics/MethodLength
-      if params[:bot_username].blank?
-        raise BotAccountCreateError,
-              'Unable to create bot account as the bot username is required'
-      end
+    def validate_params # rubocop:disable Metrics/AbcSize
+      raise BotAccountCreateError, I18n.t('services.bots.create.required.username') if params[:bot_username].blank?
 
-      if params[:first_name].blank?
-        raise BotAccountCreateError,
-              'Unable to create bot account as the bot first name is required'
-      end
+      raise BotAccountCreateError, I18n.t('services.bots.create.required.first_name') if params[:first_name].blank?
 
-      if params[:last_name].blank?
-        raise BotAccountCreateError,
-              'Unable to create bot account as the bot last name is required'
-      end
+      raise BotAccountCreateError, I18n.t('services.bots.create.required.last_name') if params[:last_name].blank?
 
-      if params[:scopes].blank?
-        raise BotAccountCreateError,
-              'Unable to create bot account as the bot API scope must be selected'
-      end
+      raise BotAccountCreateError, I18n.t('services.bots.create.required.scopes') if params[:scopes].blank?
 
       true
     end

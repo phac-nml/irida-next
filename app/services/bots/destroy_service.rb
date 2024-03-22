@@ -17,7 +17,7 @@ module Bots
 
       unless bot_account.email.include? @auth_object.puid.downcase
         raise BotAccountDestroyError,
-              'The bot account cannot be removed as it does not belong to this project'
+              I18n.t('services.bots.destroy.not_associated')
       end
 
       bot_account.destroy!

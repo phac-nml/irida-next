@@ -40,8 +40,8 @@
             ) %>
             <%= render section.with_item(
               url: project_bots_path(@project),
-              icon: "cog_6_tooth",
-              label: "Bot Accounts",
+              icon: "bug_ant",
+              label: t(:"projects.sidebar.bot_accounts"),
               selected: @current_page == "bots"
             ) %>
           <% end %>

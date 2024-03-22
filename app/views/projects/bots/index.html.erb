@@ -1,8 +1,8 @@
-<%= render Viral::PageHeaderComponent.new(title: "Bot Accounts", subtitle: "Setup bot accounts to perform actions within the project that cannot be attributed to a single user") do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
 
-      <%= link_to "Add New Bot Account",
+      <%= link_to t('.add_new_bot'),
       new_namespace_project_bot_path(
         @namespace.parent,
         @namespace.project
