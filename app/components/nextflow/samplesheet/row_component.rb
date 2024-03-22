@@ -14,27 +14,22 @@ module Nextflow
         @file_index = 0 # Keeps track of which file input is currently being rendered
       end
 
-      def filter_files # rubocop:disable Metrics/AbcSize
+      def filter_files
         first = []
-        second = []
-
-        pattern = @properties['pattern'].to_s
+        pairs = []
 
         @sample.attachments.each do |attachment|
-          # Check that the file meets the requirements for the pipeline
-          next unless pattern.nil? || attachment.file.filename.to_s.match(/#{Regexp.new(pattern)}/)
-
           item = [attachment.file.filename.to_s, attachment.to_global_id]
           if attachment.metadata['associated_attachment_id'].nil?
             first << item
           elsif attachment.metadata['direction'].eql?('forward')
             first.unshift(item)
           else
-            second.unshift(item)
+            pairs.unshift(item)
           end
         end
 
-        [first, second]
+        [first, pairs]
       end
 
       def render_cell_type(property, entry, sample, fields)
@@ -52,9 +47,16 @@ module Nextflow
       end
 
       def render_file_cell(property, entry, fields)
+        pattern = if entry['anyOf']
+                    entry['anyOf'].pluck('pattern').join('|')
+                  else
+                    entry['pattern']
+                  end
+
+        files = @files[@file_index].select { |file| file.first[Regexp.new(pattern)] }
         cell = render(Samplesheet::DropdownCellComponent.new(
                         property,
-                        @files[@file_index],
+                        files,
                         fields,
                         entry['required'].present?
                       ))
