@@ -1,1 +1,73 @@
-attribute
+<table class="min-w-full table-fixed dark:divide-slate-600">
+  <tbody
+      id="data-exports-table-body"
+      class="
+      bg-white
+      divide-y
+      divide-slate-200
+      dark:bg-slate-800
+      dark:divide-slate-700
+      "
+  >
+    <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+      <td class="px-6 py-4">
+          ID
+      </td>
+      <td class="px-6 py-4">
+        <%= @data_export.id  %>
+      </td>
+    </tr>.
+    <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+      <td class="px-6 py-4">
+          Name
+      </td>
+      <td class="px-6 py-4">
+        <%= @data_export.name unless @data_export.name.nil?  %>
+      </td>
+    </tr>
+    <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+      <td class="px-6 py-4">
+          Type
+      </td>
+      <td class="px-6 py-4">
+        <%= @data_export.export_type.capitalize  %>
+      </td>
+    </tr>
+    <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+      <td class="px-6 py-4">
+          Status
+      </td>
+      <td class="px-6 py-4">
+        <% if @data_export.status == 'ready' %>
+          <%= viral_pill(
+            text: @data_export.status.capitalize,
+            color: :green
+          ) %>
+        <% else %>
+          <%= viral_pill(
+            text: @data_export.status.capitalize,
+            color: :gray
+          ) %>
+        <% end %>
+      </td>
+    </tr>
+    <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+      <td class="px-6 py-4">
+          Created
+      </td>
+      <td class="px-6 py-4">
+        <%= l(@data_export.created_at.localtime, format: :full_date) %>
+      </td>
+    </tr>
+    <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+      <td class="px-6 py-4">
+          Expires
+      </td>
+      <td class="px-6 py-4">
+        <% unless @data_export.expires_at.nil? %>
+          <%= l(@data_export.expires_at.localtime, format: :full_date) %>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>
