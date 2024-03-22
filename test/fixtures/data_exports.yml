@@ -25,7 +25,7 @@ data_export_three:
   name: Data Export 3
   export_type: sample
   status: processing
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
   email_notification: true
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
