@@ -2,6 +2,7 @@
 
 # entity class for Sample
 class WorkflowExecution < ApplicationRecord
+  include MetadataSortable
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
 
   has_logidze
@@ -85,19 +86,5 @@ class WorkflowExecution < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[]
-  end
-
-  def self.metadata_sort(field, dir)
-    metadata_field = Arel::Nodes::InfixOperation.new(
-      '->',
-      WorkflowExecution.arel_table[:metadata],
-      Arel::Nodes.build_quoted(URI.decode_www_form_component(field))
-    )
-
-    if dir.to_sym == :asc
-      metadata_field.asc
-    else
-      metadata_field.desc
-    end
   end
 end

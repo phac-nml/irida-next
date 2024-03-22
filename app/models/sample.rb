@@ -2,6 +2,8 @@
 
 # entity class for Sample
 class Sample < ApplicationRecord
+  include MetadataSortable
+
   include History
 
   has_logidze
@@ -35,20 +37,6 @@ class Sample < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[]
-  end
-
-  def self.metadata_sort(field, dir)
-    metadata_field = Arel::Nodes::InfixOperation.new(
-      '->',
-      Sample.arel_table[:metadata],
-      Arel::Nodes.build_quoted(URI.decode_www_form_component(field))
-    )
-
-    if dir.to_sym == :asc
-      metadata_field.asc
-    else
-      metadata_field.desc
-    end
   end
 
   def metadata_with_provenance
