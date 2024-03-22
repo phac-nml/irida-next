@@ -2,10 +2,11 @@
 
 module Groups
   # Controller actions for Samples within a Group
-  class SamplesController < ApplicationController
-    layout 'groups'
+  class SamplesController < Groups::ApplicationController
     include Metadata
-    before_action :group, :current_page, only: %i[index]
+
+    before_action :group, :current_page
+    before_action :set_search_params, only: %i[index]
 
     def index # rubocop:disable Metrics/AbcSize
       authorize! @group, to: :sample_listing?
@@ -18,6 +19,20 @@ module Groups
         format.turbo_stream do
           @pagy, @samples = pagy_with_metadata_sort(@q.result)
           fields_for_namespace(namespace: @group, show_fields: params[:q] && params[:q][:metadata].to_i == 1)
+        end
+      end
+    end
+
+    def select
+      authorize! @group, to: :sample_listing?
+      @selected_sample_ids = []
+
+      respond_to do |format|
+        format.turbo_stream do
+          if params[:select].present?
+            @q = authorized_samples.ransack(params[:q])
+            @selected_sample_ids = @q.result.select(:id).pluck(:id)
+          end
         end
       end
     end
@@ -56,6 +71,10 @@ module Groups
       end
 
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    end
+
+    def set_search_params
+      @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
     end
   end
 end
