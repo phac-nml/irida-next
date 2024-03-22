@@ -10,6 +10,9 @@ class DataExportsController < ApplicationController
 
   def show
     @tab = params[:tab]
+    return unless @data_export.status == 'ready'
+
+    @manifest = JSON.parse(@data_export.manifest)
   end
 
   def new
