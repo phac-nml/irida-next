@@ -367,7 +367,7 @@ module Groups
     test 'selecting / deselecting all samples' do
       visit group_samples_url(@group)
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 26
+        assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
@@ -376,7 +376,7 @@ module Groups
       end
       find('input[name="select"]').click
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 26
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
         assert_selector 'strong[data-selection-target="total"]', text: '26'
@@ -392,12 +392,12 @@ module Groups
 
       find('input[name="select"]').click
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 26
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 26
+        assert_selector 'input[name="sample_ids[]"]', count: 20
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       find('input[name="select"]').click
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 26
+        assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
     end
@@ -405,7 +405,7 @@ module Groups
     test 'selecting samples while filtering' do
       visit group_samples_url(@group)
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 26
+        assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
