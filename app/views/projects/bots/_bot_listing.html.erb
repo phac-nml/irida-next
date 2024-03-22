@@ -1,3 +1,5 @@
+<div class="bg-white dark:bg-slate-800">
+  <div class="table-container flex flex-col">
 <table
     id="bots-table"
     class="
@@ -54,3 +56,12 @@
     </tbody>
   </table>
 
+    <div class="empty_state_message">
+      <%= viral_empty(
+        title: "No bot accounts",
+        description: "There are no bot accounts attributed to this project",
+        icon_name: :document_text
+      ) %>
+    </div>
+  </div>
+</div>

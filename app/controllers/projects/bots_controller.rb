@@ -4,6 +4,8 @@ module Projects
   # Controller actions for Bots
   class BotsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include BreadcrumbNavigation
+    respond_to :turbo_stream
+
     layout :resolve_layout
     before_action :namespace, only: %i[index new create destroy]
     before_action :bot_account, only: %i[destroy]
@@ -11,12 +13,7 @@ module Projects
     before_action :current_page
 
     def index
-      respond_to do |format|
-        format.html
-        format.turbo_stream do
-          @pagy, @bot_accounts = pagy(load_project_bot_accounts)
-        end
-      end
+      @pagy, @bot_accounts = pagy(load_project_bot_accounts)
     end
 
     def new
