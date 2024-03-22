@@ -243,3 +243,26 @@ irida_next_example_new:
   run_id: "my_run_id_12"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   state: "new"
+
+
+<% (1..25).each do |n| %>
+workflow_execution<%= (n) %>:
+  metadata:
+    { "workflow_name": <%= "Workflow Execution #{n}" %>, "workflow_version": "1.0dev" }
+  workflow_params:
+    {
+      "-r": "dev",
+      "--input": "/blah/samplesheet.csv",
+      "--outdir": "/blah/output",
+    }
+  workflow_type: "DSL2"
+  workflow_type_version: "22.10.7"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: ""
+  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_new"
+  run_id: <%= "my_run_id_#{n}" %>
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
+  state: "new"
+<% end %>

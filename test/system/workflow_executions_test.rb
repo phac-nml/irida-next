@@ -16,6 +16,26 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table#workflow_executions tbody tr', count: 12
   end
 
+  test 'should display pages of workflow executions' do
+    login_as users(:jane_doe)
+
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    assert_selector 'table#workflow_executions tbody tr', count: 20
+
+    assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+    assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+    click_on I18n.t(:'components.pagination.next')
+    assert_selector 'table#workflow_executions tbody tr', count: 5
+
+    assert_selector 'a', text: I18n.t(:'components.pagination.previous')
+    assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+    click_on I18n.t(:'components.pagination.previous')
+    assert_selector 'table#workflow_executions tbody tr', count: 20
+  end
+
   test 'should sort a list of workflow executions' do
     workflow_execution = workflow_executions(:irida_next_example)
     workflow_execution1 = workflow_executions(:workflow_execution_valid)
