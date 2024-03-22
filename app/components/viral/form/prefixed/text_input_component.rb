@@ -9,8 +9,7 @@ module Viral
 
         renders_one :prefix
 
-        # rubocop:disable Metrics/ParameterLists
-        def initialize(form:, name:, placeholder: '', value: nil, pattern: nil, required: false)
+        def initialize(form:, name:, placeholder: '', value: nil, pattern: nil, required: false) # rubocop:disable Metrics/ParameterLists
           @form = form
           @name = name
           @pattern = pattern
@@ -18,8 +17,6 @@ module Viral
           @required = required
           @value = value
         end
-
-        # rubocop:enable Metrics/ParameterLists
       end
     end
   end
