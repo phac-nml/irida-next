@@ -11,7 +11,6 @@ module Nextflow
         @index = index
         @properties = properties
         @files = filter_files
-        @file_index = 0 # Keeps track of which file input is currently being rendered
       end
 
       def filter_files
@@ -35,7 +34,12 @@ module Nextflow
       def render_cell_type(property, entry, sample, fields)
         return render_sample_cell(sample, fields) if property == 'sample'
 
-        return render_file_cell(property, entry, fields) if property.match(/fastq_\d+/)
+        if property.match(/fastq_(\d+)/) || entry['format'] == 'file-path'
+          # Subtracting 1 of the result to get the index of the file in the array
+          index = (property.match(/fastq_(\d+)/)[1].to_i || 1) - 1
+          return render_file_cell(property, entry,
+                                  fields, index)
+        end
 
         return render_dropdown_cell(property, entry, fields) if entry['enum'].present?
 
@@ -46,22 +50,20 @@ module Nextflow
         render(Samplesheet::SampleCellComponent.new(sample:, fields:))
       end
 
-      def render_file_cell(property, entry, fields)
+      def render_file_cell(property, entry, fields, files_index)
         pattern = if entry['anyOf']
                     entry['anyOf'].pluck('pattern').join('|')
                   else
                     entry['pattern']
                   end
 
-        files = @files[@file_index].select { |file| file.first[Regexp.new(pattern)] }
-        cell = render(Samplesheet::DropdownCellComponent.new(
-                        property,
-                        files,
-                        fields,
-                        entry['required'].present?
-                      ))
-        @file_index = 1
-        cell
+        files = @files[files_index].select { |file| file.first[Regexp.new(pattern)] }
+        render(Samplesheet::DropdownCellComponent.new(
+                 property,
+                 files,
+                 fields,
+                 entry['required'].present?
+               ))
       end
 
       def render_dropdown_cell(property, entry, fields)
