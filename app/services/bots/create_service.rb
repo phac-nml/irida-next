@@ -25,7 +25,7 @@ module Bots
     def create_bot_account
       user_params = {
         email: "#{params[:bot_username]}@iridanext.com",
-        user_type: 2,
+        user_type: User.user_types[:project_bot],
         first_name: 'Project',
         last_name: 'Bot'
       }
