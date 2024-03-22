@@ -22,19 +22,19 @@
     >
       <tr>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          Email
+          <%= t('projects.bots.index.bot_listing.email') %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          Name
+          <%= t('projects.bots.index.bot_listing.name') %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          API Scope
+          <%= t('projects.bots.index.bot_listing.api_scope') %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          Created
+          <%= t('projects.bots.index.bot_listing.created') %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          Actions
+          <%= t('projects.bots.index.bot_listing.actions') %>
         </th>
       </tr>
     </thead>
@@ -58,9 +58,9 @@
 
     <div class="empty_state_message">
       <%= viral_empty(
-        title: "No bot accounts",
-        description: "There are no bot accounts attributed to this project",
-        icon_name: :document_text
+        title: t('projects.bots.index.bot_listing.empty_state.title'),
+        description: t('projects.bots.index.bot_listing.empty_state.description'),
+        icon_name: :bug_ant
       ) %>
     </div>
   </div>

@@ -18,14 +18,14 @@
     <%= viral_dropdown(icon: "ellipsis_vertical",
                               aria: { label: bot_account.email }) do |dropdown| %>
       <%= dropdown.with_item(
-        label: "Remove",
+        label: t('projects.bots.index.bot.remove'),
         url: namespace_project_bot_path(id: bot_account.namespace.id),
         data: {
           turbo_method: :delete,
-          turbo_confirm: "Are you sure you want to remove this bot account from the project?"
+          turbo_confirm: t('projects.bots.index.bot.remove_confirmation')
         },
         aria: {
-          label: "Remove bot account"
+          label: t('projects.bots.index.bot.remove_aria_label')
         }
       ) %>
     <% end %>

@@ -36,7 +36,7 @@ module Projects
 
             render status: :ok, locals: {
               type: 'success',
-              message: "Bot account '#{bot_params[:bot_username]}' was successfully added to the project"
+              message: t('.success', bot_username: bot_params[:bot_username])
             }
           end
         end
@@ -62,7 +62,7 @@ module Projects
 
             render status: :ok, locals: {
               type: 'success',
-              message: "Bot account '#{@bot_account.email}' was successfully removed"
+              message: t('.success', bot_username: @bot_account.email)
             }
           end
         end
