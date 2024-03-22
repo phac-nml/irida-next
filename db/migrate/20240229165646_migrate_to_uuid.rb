@@ -314,14 +314,16 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/Cla
     PersonalAccessToken.reset_log_data
     Sample.reset_log_data
 
-    Attachment.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
-    DataExport.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
-    User.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
-    Member.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
-    NamespaceGroupLink.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
-    Namespace.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at metadata_summary])
-    PersonalAccessToken.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at])
-    Sample.create_logidze_snapshot(timestamp: :created_at, except: %w[created_at updated_at metadata_provenance])
+    execute <<-SQL.squish
+      UPDATE "attachments" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
+      UPDATE "data_exports" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
+      UPDATE "users" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
+      UPDATE "members" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
+      UPDATE "namespace_group_links" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
+      UPDATE "namespaces" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at", "metadata_summary}')
+      UPDATE "personal_access_tokens" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
+      UPDATE "samples" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at", "metadata_provenance"}')
+    SQL
   end
 
   def down

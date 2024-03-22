@@ -2,7 +2,7 @@
 
 module Projects
   # Controller actions for Bots
-  class BotsController < Projects::ApplicationController
+  class BotsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include BreadcrumbNavigation
     layout :resolve_layout
     before_action :namespace, only: %i[index new create destroy]
@@ -46,8 +46,10 @@ module Projects
       else
         respond_to do |format|
           format.turbo_stream do
-            render status: :unprocessable_entity, locals: { type: 'alert',
-                                                            message: "There was an error adding bot account #{bot_params[:bot_username]} to the project" }
+            render status: :unprocessable_entity,
+                   locals:
+                   { type: 'alert',
+                     message: "There was an error adding bot account #{bot_params[:bot_username]} to the project" }
           end
         end
       end
@@ -70,8 +72,11 @@ module Projects
       else
         respond_to do |format|
           format.turbo_stream do
-            render status: :unprocessable_entity, locals: { type: 'alert',
-                                                            message: "There was an error removing bot account #{bot_params[:bot_username]} from the project" }
+            render status: :unprocessable_entity,
+                   locals: {
+                     type: 'alert',
+                     message: "There was an error removing bot account #{bot_params[:bot_username]} from the project"
+                   }
           end
         end
       end

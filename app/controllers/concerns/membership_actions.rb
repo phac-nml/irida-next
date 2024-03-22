@@ -116,11 +116,12 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     # Remove current user from available users as a user cannot add themselves
     available_users = User.human_users.where.not(id: Member.select(:user_id).where(namespace: @namespace))
                           .where.not(id: current_user.id)
-    available_bots = if @namespace.type == Group.sti_name
-                       User.bots_for_puid(@namespace.puid)
-                     else
+    available_bots = if @namespace.type == Namespaces::ProjectNamespace.sti_name
                        User.bots_for_puid(@namespace.project.puid)
+                     else
+                       User.none
                      end
+
     @available_users = available_users.or(available_bots)
   end
 

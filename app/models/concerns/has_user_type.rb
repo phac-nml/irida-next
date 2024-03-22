@@ -6,20 +6,20 @@ module HasUserType
 
   USER_TYPES = {
     human: 0,
-    group_bot: 1,
-    project_bot: 2
+    project_bot: 1
   }.with_indifferent_access.freeze
 
   BOT_USER_TYPES = %w[
-    group_bot
     project_bot
   ].freeze
 
   included do
+    enum user_type: USER_TYPES
+
     scope :bots, -> { where(user_type: BOT_USER_TYPES) }
     scope :without_bots, -> { where(user_type: USER_TYPES.keys - BOT_USER_TYPES) }
     scope :human_users, -> { where(user_type: %i[human]) }
-    scope :bots_for_puid, lambda { |puid = nil|
+    scope :bots_for_puid, lambda { |puid|
                             where('email LIKE ?', "%#{puid.downcase}%")
                           }
 
