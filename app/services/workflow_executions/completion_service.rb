@@ -117,9 +117,5 @@ module WorkflowExecutions
         samples_workflow_execution.save!
       end
     end
-
-    # def process_sample_metadata(output_samples_metadata:)
-
-    # end
   end
 end
