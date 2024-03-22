@@ -43,6 +43,9 @@ module DataExports
       sample_b = samples(:sampleB)
 
       project = projects(:projectA)
+      attachment_a = attachments(:attachmentA)
+      attachment_b = attachments(:attachmentB)
+      attachment_c = attachments(:attachmentC)
       attachment_fwd1 = attachments(:attachmentPEFWD1)
       attachment_rev1 = attachments(:attachmentPEREV1)
       attachment_fwd2 = attachments(:attachmentPEFWD2)
@@ -55,18 +58,19 @@ module DataExports
 
       data_export = data_exports(:data_export_three)
       expected_files_in_zip =
-        [
-          "#{project.puid}/#{sample_b.puid}/#{attachment_fwd1.puid}/#{attachment_fwd1.file.filename}",
-          "#{project.puid}/#{sample_b.puid}/#{attachment_rev1.puid}/#{attachment_rev1.file.filename}",
-          "#{project.puid}/#{sample_b.puid}/#{attachment_fwd2.puid}/#{attachment_fwd2.file.filename}",
-          "#{project.puid}/#{sample_b.puid}/#{attachment_rev2.puid}/#{attachment_rev2.file.filename}",
-          "#{project.puid}/#{sample_b.puid}/#{attachment_fwd3.puid}/#{attachment_fwd3.file.filename}",
-          "#{project.puid}/#{sample_b.puid}/#{attachment_rev3.puid}/#{attachment_rev3.file.filename}",
-          "#{project.puid}/#{sample_b.puid}/#{attachment_d.puid}/#{attachment_d.file.filename}",
-          "#{project.puid}/#{sample_b.puid}/#{attachment_e.puid}/#{attachment_e.file.filename}",
-          "#{project.puid}/#{sample_b.puid}/#{attachment_f.puid}/#{attachment_f.file.filename}",
-          'manifest.json'
-        ]
+        ["#{project.puid}/#{sample_a.puid}/#{attachment_a.puid}/#{attachment_a.file.filename}",
+         "#{project.puid}/#{sample_a.puid}/#{attachment_b.puid}/#{attachment_b.file.filename}",
+         "#{project.puid}/#{sample_a.puid}/#{attachment_c.puid}/#{attachment_c.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_fwd1.puid}/#{attachment_fwd1.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_rev1.puid}/#{attachment_rev1.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_fwd2.puid}/#{attachment_fwd2.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_rev2.puid}/#{attachment_rev2.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_fwd3.puid}/#{attachment_fwd3.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_rev3.puid}/#{attachment_rev3.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_d.puid}/#{attachment_d.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_e.puid}/#{attachment_e.file.filename}",
+         "#{project.puid}/#{sample_b.puid}/#{attachment_f.puid}/#{attachment_f.file.filename}",
+         'manifest.json']
       DataExports::CreateJob.perform_now(data_export)
       data_export.run_callbacks(:commit)
       export_file = ActiveStorage::Blob.service.path_for(data_export.file.key)
