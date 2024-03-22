@@ -10,11 +10,29 @@
    <%= form_for(:bot, url: namespace_project_bots_path, method: :post) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
-          <%= form.label :bot_username, "Name" %>
+          <%= form.label :bot_username, "Username" %>
           <%= form.text_field :bot_username,
                           required: true,
                           readonly: true,
                           value: "project_#{@project.puid.downcase}_bot_#{SecureRandom.hex(5)}",
+                          class: "form-control" %>
+
+        </div>
+
+        <div class="form-field">
+          <%= form.label :first_name, "First Name" %>
+          <%= form.text_field :first_name,
+                          required: true,
+                          value: "Project",
+                          class: "form-control" %>
+
+        </div>
+
+        <div class="form-field">
+          <%= form.label :last_name, "Last Name" %>
+          <%= form.text_field :last_name,
+                          required: true,
+                          value: "Bot",
                           class: "form-control" %>
 
         </div>

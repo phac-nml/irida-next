@@ -49,7 +49,7 @@ module Projects
             render status: :unprocessable_entity,
                    locals:
                    { type: 'alert',
-                     message: "There was an error adding bot account #{bot_params[:bot_username]} to the project" }
+                     message: @new_bot_account.errors.full_messages.first }
           end
         end
       end
@@ -75,7 +75,7 @@ module Projects
             render status: :unprocessable_entity,
                    locals: {
                      type: 'alert',
-                     message: "There was an error removing bot account #{bot_params[:bot_username]} from the project"
+                     message: @new_bot_account.errors.full_messages.first
                    }
           end
         end
@@ -94,7 +94,7 @@ module Projects
     private
 
     def bot_params
-      params.require(:bot).permit(:id, :bot_username, scopes: [])
+      params.require(:bot).permit(:id, :bot_username, :first_name, :last_name, scopes: [])
     end
 
     def load_project_bot_accounts
