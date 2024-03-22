@@ -363,5 +363,78 @@ module Groups
         assert_selector 'tr', count: 20
       end
     end
+
+    test 'selecting / deselecting all samples' do
+      visit group_samples_url(@group)
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 26
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+      find('input[name="select"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 26
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
+      within 'tbody' do
+        first('input[name="sample_ids[]"]').click
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '25'
+      end
+
+      find('input[name="select"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 26
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 26
+      end
+      find('input[name="select"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 26
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+    end
+
+    test 'selecting samples while filtering' do
+      visit group_samples_url(@group)
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 26
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+
+      fill_in I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.name
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 1
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+
+      find('input[name="select"]').click
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 1
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '1'
+        assert_selector 'strong[data-selection-target="selected"]', text: '1'
+      end
+
+      find('input[data-action="filters#submit"]').send_keys([:control, 'a'], :space)
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+    end
   end
 end
