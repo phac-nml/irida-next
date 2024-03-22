@@ -25,33 +25,23 @@
           id="<%= dom_id(data_export) %>"
           class="text-sm font-normal text-slate-500 dark:text-slate-400"
         >
-          <td class="px-6 py-4">
-            <div class="text-slate-900 dark:text-slate-100 font-semibold">
-              <%= data_export.id %>
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <% unless data_export.name.nil? %>
-              <div class="text-slate-900 dark:text-slate-100 font-semibold">
-                <%= data_export.name %>
-              </div>
-            <% end %>
-          </td>
-          <td class="px-6 py-4">
-            <%= data_export.export_type.capitalize %>
-          </td>
-          <td class="px-6 py-4">
-            <% if data_export.status == 'ready' %>
-              <%= viral_pill(
-                text: data_export.status.capitalize,
-                color: :green
-              ) %>
-            <% else %>
-              <%= viral_pill(
-                text: data_export.status.capitalize,
-                color: :gray
-              ) %>
-            <% end %>
+        <td class="px-6 py-4">
+            <%= link_to data_export.id,
+            data_export_path(data_export),
+            data: {
+                turbo: false
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+        </td>
+        <td class="px-6 py-4">
+          <% unless data_export.name.nil? %>
+            <%= link_to data_export.name,
+            data_export_path(data_export),
+            data: {
+                turbo: false
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+          <% end %>
         </td>
         <td class="px-6 py-4">
             <%= data_export.export_type.capitalize %>
