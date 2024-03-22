@@ -1,0 +1,28 @@
+{
+    "files": {
+        "global": [
+            {"path": "summary.txt"}
+        ],
+        "samples": {
+            "sample1puid": [
+                {"path": "analysis1.txt"},
+                {"path": "analysis2.txt"}
+            ],
+	        "sample2puid": [
+	    	    {"path": "analysis3.txt"}
+	        ]
+        }
+    },
+    "metadata": {
+        "samples": {
+            "sample1puid": {
+                "organism": "an organism",
+                "number": 1
+            },
+            "sample2puid": {
+                "organism": "a different organism",
+                "number": 2
+            }
+        }
+    }
+}

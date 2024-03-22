@@ -1,15 +1,25 @@
 # frozen_string_literal: true
 
 module BlobTestHelpers
-  def make_and_upload_blob(filepath:, blob_run_directory:)
+  def make_and_upload_blob(filepath:, blob_run_directory:, gzip: false) # rubocop:disable Metrics/MethodLength
     output_json_file = File.new(filepath, 'r')
-    output_json_file_blob = ActiveStorage::Blob.create_and_upload!(
-      io: output_json_file,
-      filename: File.basename(filepath)
-    )
-    output_json_file_input_key = generate_input_key(blob_run_directory, output_json_file_blob.filename, 'output/')
 
-    compose_blob_with_custom_key(output_json_file_blob, output_json_file_input_key)
+    Tempfile.open do |tempfile|
+      if gzip
+        tempfile.write(ActiveSupport::Gzip.compress(output_json_file.read).force_encoding('UTF-8'))
+        filepath = "#{filepath}.gz"
+      else
+        tempfile.write(output_json_file.read.force_encoding('UTF-8'))
+      end
+      tempfile.rewind
+      @output_json_file_blob = ActiveStorage::Blob.create_and_upload!(
+        io: tempfile,
+        filename: File.basename(filepath)
+      )
+    end
+
+    output_json_file_input_key = generate_input_key(blob_run_directory, @output_json_file_blob.filename, 'output/')
+    compose_blob_with_custom_key(@output_json_file_blob, output_json_file_input_key)
   end
 
   private

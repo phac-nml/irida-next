@@ -13,8 +13,9 @@ module WorkflowExecutions
 
       # create file blobs
       @normal_output_json_file_blob = make_and_upload_blob(
-        filepath: 'test/fixtures/files/blob_outputs/normal/iridanext.output.json.gz',
-        blob_run_directory: blob_run_directory_a
+        filepath: 'test/fixtures/files/blob_outputs/normal/iridanext.output.json',
+        blob_run_directory: blob_run_directory_a,
+        gzip: true
       )
       @normal_output_summary_file_blob = make_and_upload_blob(
         filepath: 'test/fixtures/files/blob_outputs/normal/summary.txt',
@@ -29,8 +30,9 @@ module WorkflowExecutions
 
       # create file blobs
       @no_files_output_json_file_blob = make_and_upload_blob(
-        filepath: 'test/fixtures/files/blob_outputs/no_files/iridanext.output.json.gz',
-        blob_run_directory: blob_run_directory_b
+        filepath: 'test/fixtures/files/blob_outputs/no_files/iridanext.output.json',
+        blob_run_directory: blob_run_directory_b,
+        gzip: true
       )
 
       # normal2/
@@ -41,8 +43,9 @@ module WorkflowExecutions
 
       # create file blobs
       @normal2_output_json_file_blob = make_and_upload_blob(
-        filepath: 'test/fixtures/files/blob_outputs/normal2/iridanext.output.json.gz',
-        blob_run_directory: blob_run_directory_c
+        filepath: 'test/fixtures/files/blob_outputs/normal2/iridanext.output.json',
+        blob_run_directory: blob_run_directory_c,
+        gzip: true
       )
       @normal2_output_summary_file_blob = make_and_upload_blob(
         filepath: 'test/fixtures/files/blob_outputs/normal2/summary.txt',
@@ -157,11 +160,9 @@ module WorkflowExecutions
 
       assert_equal 'my_run_id_c', workflow_execution.run_id
 
-      metadata1 = { 'amr' => [{ 'end' => 5678, 'gene' => 'x', 'start' => 1234 },
-                              { 'end' => 2, 'gene' => 'y', 'start' => 1 }],
+      metadata1 = { 'number' => 1,
                     'organism' => 'an organism' }
-      metadata2 = { 'amr' => [{ 'end' => 6789, 'gene' => 'x', 'start' => 2345 },
-                              { 'end' => 3, 'gene' => 'y', 'start' => 2 }],
+      metadata2 = { 'number' => 2,
                     'organism' => 'a different organism' }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
