@@ -7,18 +7,7 @@ module Projects
     include BotActions
 
     respond_to :turbo_stream
-    layout :resolve_layout
-
     before_action :current_page
-
-    def resolve_layout
-      case action_name
-      when 'new', 'create'
-        'application'
-      else
-        'projects'
-      end
-    end
 
     private
 
