@@ -49,23 +49,3 @@ data_export_five:
   expires_at: <%= 5.days.from_now %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
 
-data_export_four:
-  name: Data Export 4
-  export_type: sample
-  status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
-  email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  expires_at: <%= 3.days.from_now %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-
-data_export_five:
-  export_type: sample
-  status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
-  email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  expires_at: <%= 3.days.from_now %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
