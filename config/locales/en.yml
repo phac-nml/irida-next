@@ -1258,10 +1258,13 @@ en:
     destroy:
       success: Data export '%{name}' was successfully deleted.
       error: Data export '%{name}' could not be deleted.'
+    remove:
+      success: Data export '%{name}' was successfully deleted.
+      error: Data export '%{name}' could not be deleted.'
     show:
       download: Download
       remove_button: Remove
-      remove_button_confirmation: Are you sure you would like to delete data export %{name}?
+      remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
         attributes: Attributes
         manifest: Manifest

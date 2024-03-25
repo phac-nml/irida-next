@@ -32,7 +32,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
-  test 'should delete export' do
+  test 'should delete export through destroy action' do
     assert_difference('DataExport.count', -1) do
       delete data_export_path(@data_export1),
              as: :turbo_stream
@@ -46,6 +46,34 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
       delete data_export_path(@data_export1),
              as: :turbo_stream
     end
+    assert_response :unauthorized
+  end
+
+  test 'should redirect after success export delete through remove action' do
+    assert_difference('DataExport.count', -1) do
+      delete remove_data_export_path(@data_export1),
+             as: :turbo_stream
+    end
+    assert_response :redirect
+  end
+
+  test 'should not redirect or delete export through remove action without valid authorization' do
+    sign_in users(:jane_doe)
+    assert_no_difference('DataExport.count') do
+      delete remove_data_export_path(@data_export1),
+             as: :turbo_stream
+    end
+    assert_response :unauthorized
+  end
+
+  test 'should view data export page' do
+    get data_export_path(@data_export1)
+    assert_response :success
+  end
+
+  test 'should not view data export page without proper authorization' do
+    sign_in users(:jane_doe)
+    get data_export_path(@data_export1)
     assert_response :unauthorized
   end
 end

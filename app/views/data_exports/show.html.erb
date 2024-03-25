@@ -17,10 +17,10 @@
       <% end %>
         <%= link_to(
           t("data_exports.show.remove_button"),
-          data_export_path(@data_export),
+          remove_data_export_path(@data_export),
           data: {
             turbo_method: :delete,
-            turbo_confirm: t("data_exports.show.remove_button_confirmation", name: @data_export.id)
+            turbo_confirm: t("data_exports.show.remove_button_confirmation", name: @data_export.name || @data_export.id)
           },
           class: "button button--state-default button--size-default mr-1 ml-2"
         ) %>
