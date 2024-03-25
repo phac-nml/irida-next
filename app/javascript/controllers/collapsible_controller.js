@@ -5,7 +5,6 @@ export default class extends Controller {
 
   toggle() {
     const isCollapsed = this.itemTarget.classList.contains("hidden");
-    console.log(this.itemTarget)
     if (isCollapsed) {
       this.itemTarget.classList.remove("hidden");
       this.#updateIcon(false);
