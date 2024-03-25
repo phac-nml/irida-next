@@ -45,6 +45,19 @@ class DataExportsController < ApplicationController
     end
   end
 
+  def redirect_from
+    if params['puid'].include?('INXT_SAM')
+      sample = Sample.find_by(puid: params['puid'])
+      project = Project.find(sample.project_id)
+      namespace = project.namespace.parent
+      redirect_to namespace_project_sample_path(namespace, project, sample)
+    else
+      project = Project.find_by(puid: params['puid'])
+      namespace = project.namespace.parent
+      redirect_to namespace_project_path(namespace, project)
+    end
+  end
+
   def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     DataExports::DestroyService.new(@data_export, current_user).execute
     if @data_export.persisted?

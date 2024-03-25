@@ -1,455 +1,68 @@
-<style>
-:root {
-  --black: black;
-}
-
-
-ol {
-  list-style: none;
-}
-
-
-h1,
-h2,
-h3,
-h4 {
-  font-size: inherit;
-}
-
-.container {
-  max-width: 800px;
-  padding: 30px 10px;
-  margin: 0 auto;
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  grid-column-gap: 20px;
-  grid-template-columns: auto auto;
-}
-
-.rectangle {
-  position: relative;
-  padding: 20px;
-  width: 200px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-}
-
-
-/* LEVEL-1 STYLES
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.level-1 {
-  background: var(--level-1);
-}
-
-.level-1::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 2px;
-  background: var(--black);
-}
-
-
-/* LEVEL-2 STYLES
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.level-2-wrapper {
-  position: relative;
-  padding-left: 20px;
-  border-left: 2px solid var(--black);
-}
-
-.level-2-wrapper::before {
-  display: none;
-  content: "";
-  position: absolute;
-  top: -20px;
-  left: 10px;
-  width: 2px;
-  height: calc(100% + 40px);
-  background: var(--black);
-}
-
-.level-2-wrapper::after {
-  display: none;
-  content: "";
-  position: absolute;
-  left: 10px;
-  bottom: -20px;
-  width: calc(100% - 10px);
-  height: 2px;
-  background: var(--black);
-}
-
-.level-2-wrapper > li {
-  position: relative;
-  display: grid;
-  align-items: flex-start;
-  grid-column-gap: 20px;
-  grid-template-columns: auto auto;
-}
-
-.level-2-wrapper > li:last-child {
-  margin-top: 100px;
-  align-items: flex-end;
-}
-
-.level-2 {
-  background: var(--level-2);
-}
-
-.level-2::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 2px;
-  background: var(--black);
-}
-
-.level-2::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 2px;
-  background: var(--black);
-}
-
-
-/* LEVEL-3 STYLES
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.level-3-wrapper {
-  position: relative;
-  top: 34px;
-  padding-left: 20px;
-  border-left: 2px solid var(--black);
-}
-
-.level-3-wrapper::before {
-  display: none;
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 10px;
-  width: 2px;
-  height: 100%;
-  background: var(--black);
-}
-
-.level-3-wrapper::after {
-  display: none;
-  content: "";
-  position: absolute;
-  left: 10px;
-  bottom: 0px;
-  width: calc(100% - 10px);
-  height: 2px;
-  background: var(--black);
-}
-
-.level-3-wrapper > li {
-  display: grid;
-  grid-column-gap: 20px;
-  grid-template-columns: auto auto;
-}
-
-/* .level-3-wrapper > li:last-child {
-  margin-top: 80px;
-} */
-
-.level-2-wrapper > li:last-child .level-3-wrapper {
-  top: -34px;
-}
-
-.level-3 {
-  background: var(--level-3);
-}
-
-.level-3::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 2px;
-  background: var(--black);
-}
-
-.level-3::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 2px;
-  background: var(--black);
-}
-
-
-/* LEVEL-4 STYLES
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.level-4-wrapper {
-  position: relative;
-  top: 34px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 20px;
-  padding-left: 20px;
-}
-
-.level-4-wrapper::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 2px;
-  background: var(--black);
-  left: 10px;
-  height: 100%;
-}
-
-.level-3-wrapper > li:last-child .level-4-wrapper {
-  top: -34px;
-}
-
-.level-3-wrapper > li .level-4-wrapper::before {
-  top: auto;
-  bottom: 0;
-}
-
-.level-4 {
-  background: var(--level-4);
-}
-
-.level-4::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 2px;
-  background: var(--black);
-}
-
-
-/* MQ STYLES
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-
-  .rectangle {
-    width: 150px;
-  }
-
-  body {
-    font-size: 16px;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-size: revert;
-  }
-
-  .rectangle {
-    padding: 20px 10px;
-    width: auto;
-  }
-
-  .container {
-    display: block;
-  }
-
-  .level-1 {
-    margin-bottom: 20px;
-  }
-
-  .level-1::before,
-  .level-2::after,
-  .level-3::after {
-    display: none;
-  }
-
-  .level-2-wrapper::before,
-  .level-2-wrapper::after,
-  .level-3-wrapper::before,
-  .level-3-wrapper::after,
-  .level-2-wrapper > li,
-  .level-3-wrapper > li {
-    display: block;
-  }
-
-  .level-2-wrapper {
-    padding-left: 30px;
-    border-left: none;
-  }
-
-  .level-2-wrapper > li:last-child {
-    margin-top: 50px;
-  }
-
-  .level-2-wrapper > li:last-child .level-3-wrapper,
-  .level-3-wrapper > li:last-child .level-4-wrapper,
-  .level-3-wrapper,
-  .level-4-wrapper {
-    top: 0;
-  }
-
-  .level-3-wrapper {
-    padding: 20px 0 20px 30px;
-    border-left: none;
-  }
-
-  /* .level-3-wrapper > li:last-child {
-    margin-top: 50px;
-  } */
-
-  .level-4-wrapper {
-    padding: 20px 0 0 30px;
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .level-4-wrapper > li {
-    margin-bottom: 20px;
-  }
-
-
-/* FOOTER
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.page-footer {
-  position: fixed;
-  right: 0;
-  bottom: 20px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  padding: 5px;
-}
-
-.page-footer a {
-  margin-left: 4px;
-}
-</style>
-
-
- <div class="container">
-  <h1 class="level-1 rectangle border-2 border-blue-900 text-slate-900 dark:text-white"><%= @data_export.id %> <% if @data_export.name %> (<%= @data_export.name %>)<%end%></h1>
-    <ol class="level-2-wrapper">
-      <% @manifest['children'].each_with_index do |project, project_index| %>
-      <li>
-        <div data-controller="collapsible">
-          <h2 id="<%= "accordion-collapse-heading-#{project["name"]}" %>">
-            <button
-              type="button"
-              class="
-                flex
-                items-center
-                justify-between
-                w-full
-                p-5
-                font-medium
-                rtl:text-right
-                text-slate-500
-                border
-                border-slate-200
-                focus:ring-4
-                focus:ring-slate-200
-                dark:focus:ring-slate-800
-                dark:border-red-900
-                dark:text-slate-400
-                hover:bg-slate-100
-                dark:hover:bg-slate-800
-                gap-3
-              "
-              data-action="collapsible#toggle"
-              aria-expanded="true"
-              aria-controls="<%= "accordion-collapse-body-#{project["name"]}" %>"
-            >
-              <span><%= "#{project["name"]} (#{project["irida-next-name"]})" %></span>
-                <%= viral_icon(
-                  name: "chevron_down",
-                  classes: "mr-0 w-4 h-4 rotate-0",
-                  "data-collapsible-target": "icon"
-                ) %>
-              </button>
-            </h2>
-            <div
-              data-collapsible-target="item"
-              id="<%= "accordion-collapse-body-#{project["name"]}" %>"
-              class="hidden"
-              aria-labelledby="<%= "accordion-collapse-heading-#{project["name"]}" %>"
-            >
-              <ol class="level-3-wrapper">
-                <% project['children'].each do |sample| %>
-                <li>
-                   <div data-controller="collapsible">
-          <h4 id="<%= "accordion-collapse-heading-#{sample["name"]}" %>">
-            <button
-              type="button"
-              class="
-                flex
-                items-center
-                justify-between
-                w-full
-                p-5
-                font-medium
-                rtl:text-right
-                text-slate-500
-                border
-                border-slate-200
-                focus:ring-4
-                focus:ring-slate-200
-                dark:focus:ring-slate-800
-                dark:border-primary-600
-                dark:text-slate-400
-                hover:bg-slate-100
-                dark:hover:bg-slate-800
-                gap-3
-              "
-              data-action="collapsible#toggle"
-              aria-expanded="true"
-              aria-controls="<%= "accordion-collapse-body-#{sample["name"]}" %>"
-            >
-              <span><%= "#{sample["name"]} (#{sample["irida-next-name"]})" %></span>
-                <%= viral_icon(
-                  name: "chevron_down",
-                  classes: "mr-0 w-4 h-4 rotate-0",
-                  "data-collapsible-target": "icon"
-                ) %>
-              </button>
-            </h4>
-            <div
-              data-collapsible-target="item"
-              id="<%= "accordion-collapse-body-#{sample["name"]}" %>"
-              class="hidden"
-              aria-labelledby="<%= "accordion-collapse-heading-#{sample["name"]}" %>"
-            >
-
-                   <ol class="level-4-wrapper">
-                    <% sample['children'].each do |attachment| %>
-                    <% attachment['children'].each do |att| %>
-                    <li>
-                      <h4 class="level-4 rectangle border-2 border-indigo-600 text-slate-900 dark:text-white"><%= att['name'] %></h4>
-                    </li>
-                    <% end %>
-                    <% end %>
-                  </ol>
-                  </div>
-                  </div>
-                </li>
-                <% end %>
-              </ol>
-            </div>
+<ul class="space-y-4 list-inside list-none mt-2">
+  <% @manifest['children'].each do |project| %>
+   <li>
+      <div class="flex text-primary-800 dark:text-primary-400">
+      <%= viral_icon(name: "folder", classes: "w-5 h-5 m-0") %>
+      <span class="ml-2">
+        <%= link_to project["name"],
+          redirect_from_data_export_path(puid: project["name"]),
+          data: {
+              turbo: false
+          },
+          class: "hover:underline" %>
+      </span>
+      </div>
+      <% project["children"].each do |sample| %>
+      <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+         <li>
+          <div class="flex text-purple-800 dark:text-purple-300">
+          <%= viral_icon(name: "folder", classes: "w-5 h-5 m-0") %>
+            <span class="ml-2">
+              <%= link_to sample["name"],
+              redirect_from_data_export_path(puid: sample["name"]),
+              data: {
+                  turbo: false
+              },
+              class: "hover:underline" %>
+            </span>
           </div>
-        </li>
-    <% end %>
-  </ol>
-</div>
+          <% sample["children"].each do |attachments| %>
+            <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+              <li>
+                <div class="flex text-blue-800 dark:text-blue-300">
+                  <%= viral_icon(name: "folder", classes: "w-5 h-5 m-0") %>
+                  <span class="ml-2">
+                    <%= link_to attachments["name"],
+                      redirect_from_data_export_path(puid: sample["name"]),
+                      data: {
+                          turbo: false
+                      },
+                      class: "hover:underline" %>
+                  </span>
+                </div>
+                <% attachments["children"].each do |attachment| %>
+                <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                  <li>
+                    <div class="flex text-slate-900 dark:text-white">
+                      <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+                        <span class="ml-2">
+                          <%= link_to attachment["name"],
+                            redirect_from_data_export_path(puid: sample["name"]),
+                            data: {
+                                turbo: false
+                            },
+                            class: "hover:underline" %>
+                        </span>
+                      </div>
+                  </li>
+                </ul>
+                <% end %>
+              </li>
+            </ul>
+          <% end %>
+         </li>
+      </ul>
+      <% end %>
+   </li>
+   <% end %>
+</ul>

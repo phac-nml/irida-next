@@ -1,4 +1,8 @@
 <table class="min-w-full table-fixed dark:divide-slate-600">
+  <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+    <th scope="col" class="px-6 py-4 text-left"><%= t(:".attribute") %></th>
+    <th scope="col" class="px-6 py-4 text-left"><%= t(:".value") %></th>
+  </thead>
   <tbody
       id="data-exports-table-body"
       class="
@@ -9,9 +13,10 @@
       dark:divide-slate-700
       "
   >
+
     <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
       <td class="px-6 py-4">
-          ID
+          <%= t(:".id") %>
       </td>
       <td class="px-6 py-4">
         <%= @data_export.id  %>
@@ -19,7 +24,7 @@
     </tr>.
     <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
       <td class="px-6 py-4">
-          Name
+          <%= t(:".name") %>
       </td>
       <td class="px-6 py-4">
         <%= @data_export.name unless @data_export.name.nil?  %>
@@ -27,7 +32,7 @@
     </tr>
     <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
       <td class="px-6 py-4">
-          Type
+          <%= t(:".type") %>
       </td>
       <td class="px-6 py-4">
         <%= @data_export.export_type.capitalize  %>
@@ -35,7 +40,7 @@
     </tr>
     <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
       <td class="px-6 py-4">
-          Status
+          <%= t(:".status") %>
       </td>
       <td class="px-6 py-4">
         <% if @data_export.status == 'ready' %>
@@ -53,7 +58,7 @@
     </tr>
     <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
       <td class="px-6 py-4">
-          Created
+          <%= t(:".created_at") %>
       </td>
       <td class="px-6 py-4">
         <%= l(@data_export.created_at.localtime, format: :full_date) %>
@@ -61,7 +66,7 @@
     </tr>
     <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
       <td class="px-6 py-4">
-          Expires
+          <%= t(:".expires_at") %>
       </td>
       <td class="px-6 py-4">
         <% unless @data_export.expires_at.nil? %>
