@@ -2,13 +2,14 @@
 
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
-  before_action :data_export, only: %i[download destroy show]
+  before_action :data_export, only: %i[download destroy show remove]
   before_action :data_exports, only: %i[index destroy]
   before_action :current_page
 
   def index; end
 
   def show
+    authorize! @data_export, to: :read_export?
     @tab = params[:tab]
     return unless @data_export.status == 'ready'
 
@@ -58,7 +59,24 @@ class DataExportsController < ApplicationController
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # Delete from data_exports listing page
+  def destroy
+    DataExports::DestroyService.new(@data_export, current_user).execute
+    respond_to do |format|
+      format.turbo_stream do
+        if @data_export.persisted?
+          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
+        else
+          render status: :ok,
+                 locals: { type: 'success',
+                           message: t('.success', name: @data_export.name || @data_export.id) }
+        end
+      end
+    end
+  end
+
+  # Delete from individual data_export page
+  def remove
     DataExports::DestroyService.new(@data_export, current_user).execute
     if @data_export.persisted?
       respond_to do |format|
@@ -66,16 +84,6 @@ class DataExportsController < ApplicationController
           render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
         end
       end
-    # Deleted from data exports listing page
-    elsif request.referer.exclude?('data_exports/')
-      respond_to do |format|
-        format.turbo_stream do
-          render status: :ok,
-                 locals: { type: 'success',
-                           message: t('.success', name: @data_export.name || @data_export.id) }
-        end
-      end
-    # Deleted from individual data export page
     else
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
       redirect_to data_exports_path
