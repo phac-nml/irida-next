@@ -23,6 +23,12 @@
         url: workflow_executions_path,
         selected: @current_page == t(:"general.default_sidebar.workflows")
       ) %>
+      <%= render section.with_item(
+        icon: "arrow_up_on_square_stack",
+        label: t(:"general.default_sidebar.data_exports"),
+        url: data_exports_path,
+        selected: @current_page == t(:"general.default_sidebar.data_exports").downcase
+      ) %>
     <% end %>
     <% layout.with_body do %>
       <%= yield %>
