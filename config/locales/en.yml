@@ -1257,6 +1257,9 @@ en:
     destroy:
       success: Data export '%{name}' was successfully deleted.
       error: Data export '%{name}' could not be deleted.
+    remove:
+      success: Data export '%{name}' was successfully deleted.
+      error: Data export '%{name}' could not be deleted.
     preview:
       manifest_json: manifest.json
     remove:
