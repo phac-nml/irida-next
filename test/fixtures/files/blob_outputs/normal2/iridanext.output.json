@@ -4,22 +4,22 @@
             {"path": "summary.txt"}
         ],
         "samples": {
-            "sample1puid": [
+            "workflow_execution_completion_test_puid_1": [
                 {"path": "analysis1.txt"},
                 {"path": "analysis2.txt"}
             ],
-	        "sample2puid": [
+	        "workflow_execution_completion_test_puid_2": [
 	    	    {"path": "analysis3.txt"}
 	        ]
         }
     },
     "metadata": {
         "samples": {
-            "sample1puid": {
+            "workflow_execution_completion_test_puid_1": {
                 "organism": "an organism",
                 "number": 1
             },
-            "sample2puid": {
+            "workflow_execution_completion_test_puid_2": {
                 "organism": "a different organism",
                 "number": 2
             }

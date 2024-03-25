@@ -65,12 +65,12 @@ module WorkflowExecutions
       )
 
       # override puid's so we can use the ones in the prepared iridanext.output.json.gz
-      @sample1 = samples(:sample1)
-      @sample1.puid = 'sample1puid'
-      @sample1.save!
-      @sample2 = samples(:sample2)
-      @sample2.puid = 'sample2puid'
-      @sample2.save!
+      @sample41 = samples(:sample41)
+      # @sample1.puid = 'sample1puid'
+      # @sample1.save!
+      @sample42 = samples(:sample42)
+      # @sample2.puid = 'sample2puid'
+      # @sample2.save!
     end
 
     test 'finalize completed workflow_execution' do
@@ -126,8 +126,8 @@ module WorkflowExecutions
       assert_equal 'my_run_id_c', workflow_execution.run_id
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      assert_equal 'sample1puid', workflow_execution.samples_workflow_executions[0].sample.puid
-      assert_equal 'sample2puid', workflow_execution.samples_workflow_executions[1].sample.puid
+      assert_equal @sample41.puid, workflow_execution.samples_workflow_executions[0].sample.puid
+      assert_equal @sample42.puid, workflow_execution.samples_workflow_executions[1].sample.puid
 
       assert_equal 2, workflow_execution.samples_workflow_executions[0].outputs.count
       # file blobs can be in either order
@@ -157,6 +157,28 @@ module WorkflowExecutions
     end
 
     test 'sample metadata on samples_workflow_executions' do
+      workflow_execution = @workflow_execution_with_samples
+
+      # Test start
+      assert 'completed', workflow_execution.state
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal 'my_run_id_c', workflow_execution.run_id
+
+      metadata1 = { 'number' => 1,
+                    'organism' => 'an organism' }
+      metadata2 = { 'number' => 2,
+                    'organism' => 'a different organism' }
+
+      assert_equal 2, workflow_execution.samples_workflow_executions.count
+      assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
+      assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
+
+      assert_equal 'finalized', workflow_execution.state
+    end
+
+    test 'sample outputs metadata on samples_workflow_executions missing entry' do
       workflow_execution = @workflow_execution_with_samples
 
       # Test start

@@ -115,19 +115,19 @@ sample1_irida_next_example_new:
   }
 
 sample_irida_next_example_completed_a:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_c, :uuid) %>
   samplesheet_params: {
-    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample1, :uuid)}" %>,
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample41, :uuid)}" %>,
     "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
     "fastq_2": ""
   }
 
 sample2_irida_next_example_completed_b:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_c, :uuid) %>
   samplesheet_params: {
-    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample2, :uuid)}" %>,
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample42, :uuid)}" %>,
     "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment2, :uuid)}" %>,
     "fastq_2": ""
   }
