@@ -55,4 +55,8 @@ class Group < Namespace
   def self.sti_name
     'Group'
   end
+
+  def self.model_prefix
+    'GRP'
+  end
 end

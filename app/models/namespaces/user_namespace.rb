@@ -11,5 +11,9 @@ module Namespaces
     def self.sti_name
       'User'
     end
+
+    def self.model_prefix
+      'USR'
+    end
   end
 end

@@ -74,5 +74,9 @@ module Namespaces
       namespaces_to_update = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
       add_to_metadata_summary_count(namespaces_to_update, sample.metadata, true)
     end
+
+    def self.model_prefix
+      'PRJ'
+    end
   end
 end

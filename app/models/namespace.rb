@@ -5,6 +5,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_logidze
   acts_as_paranoid
 
+  include HasPuid
   include Routable
 
   MAX_ANCESTORS = 10
