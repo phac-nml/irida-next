@@ -160,9 +160,9 @@ h4 {
   grid-template-columns: auto auto;
 }
 
-.level-3-wrapper > li:last-child {
+/* .level-3-wrapper > li:last-child {
   margin-top: 80px;
-}
+} */
 
 .level-2-wrapper > li:last-child .level-3-wrapper {
   top: -34px;
@@ -308,9 +308,9 @@ h4 {
     border-left: none;
   }
 
-  .level-3-wrapper > li:last-child {
+  /* .level-3-wrapper > li:last-child {
     margin-top: 50px;
-  }
+  } */
 
   .level-4-wrapper {
     padding: 20px 0 0 30px;
@@ -338,30 +338,118 @@ h4 {
   margin-left: 4px;
 }
 </style>
+
+
  <div class="container">
   <h1 class="level-1 rectangle border-2 border-blue-900 text-slate-900 dark:text-white"><%= @data_export.id %> <% if @data_export.name %> (<%= @data_export.name %>)<%end%></h1>
-  <ol class="level-2-wrapper">
-    <% @manifest['children'].each do |project| %>
-    <li>
-      <h2 class="level-2 rectangle border-2 border-red-900 text-slate-900 dark:text-white"><%= project['name']%> (<%= project['irida-next-name'] %>)</h2>
-      <ol class="level-3-wrapper">
-        <% project['children'].each do |sample| %>
-        <li>
-          <h3 class="level-3 rectangle border-2 border-primary-600 text-slate-900 dark:text-white"><%= sample['name'] %> (<%= sample['irida-next-name'] %>) </h3>
-          <ol class="level-4-wrapper">
-            <% sample['children'].each do |attachment| %>
-            <% attachment['children'].each do |att| %>
-            <li>
-              <h4 class="level-4 rectangle border-2 border-indigo-600 text-slate-900 dark:text-white"><%= att['name'] %></h4>
-            </li>
-            <% end %>
-            <% end %>
-          </ol>
-        </li>
-        <% end %>
-      </ol>
-    </li>
-    <% end %>
+    <ol class="level-2-wrapper">
+      <% @manifest['children'].each_with_index do |project, project_index| %>
+      <li>
+        <div data-controller="collapsible">
+          <h2 id="<%= "accordion-collapse-heading-#{project["name"]}" %>">
+            <button
+              type="button"
+              class="
+                flex
+                items-center
+                justify-between
+                w-full
+                p-5
+                font-medium
+                rtl:text-right
+                text-slate-500
+                border
+                border-slate-200
+                focus:ring-4
+                focus:ring-slate-200
+                dark:focus:ring-slate-800
+                dark:border-red-900
+                dark:text-slate-400
+                hover:bg-slate-100
+                dark:hover:bg-slate-800
+                gap-3
+              "
+              data-action="collapsible#toggle"
+              aria-expanded="true"
+              aria-controls="<%= "accordion-collapse-body-#{project["name"]}" %>"
+            >
+              <span><%= "#{project["name"]} (#{project["irida-next-name"]})" %></span>
+                <%= viral_icon(
+                  name: "chevron_down",
+                  classes: "mr-0 w-4 h-4 rotate-0",
+                  "data-collapsible-target": "icon"
+                ) %>
+              </button>
+            </h2>
+            <div
+              data-collapsible-target="item"
+              id="<%= "accordion-collapse-body-#{project["name"]}" %>"
+              class="hidden"
+              aria-labelledby="<%= "accordion-collapse-heading-#{project["name"]}" %>"
+            >
+              <ol class="level-3-wrapper">
+                <% project['children'].each do |sample| %>
+                <li>
+                   <div data-controller="collapsible">
+          <h4 id="<%= "accordion-collapse-heading-#{sample["name"]}" %>">
+            <button
+              type="button"
+              class="
+                flex
+                items-center
+                justify-between
+                w-full
+                p-5
+                font-medium
+                rtl:text-right
+                text-slate-500
+                border
+                border-slate-200
+                focus:ring-4
+                focus:ring-slate-200
+                dark:focus:ring-slate-800
+                dark:border-primary-600
+                dark:text-slate-400
+                hover:bg-slate-100
+                dark:hover:bg-slate-800
+                gap-3
+              "
+              data-action="collapsible#toggle"
+              aria-expanded="true"
+              aria-controls="<%= "accordion-collapse-body-#{sample["name"]}" %>"
+            >
+              <span><%= "#{sample["name"]} (#{sample["irida-next-name"]})" %></span>
+                <%= viral_icon(
+                  name: "chevron_down",
+                  classes: "mr-0 w-4 h-4 rotate-0",
+                  "data-collapsible-target": "icon"
+                ) %>
+              </button>
+            </h4>
+            <div
+              data-collapsible-target="item"
+              id="<%= "accordion-collapse-body-#{sample["name"]}" %>"
+              class="hidden"
+              aria-labelledby="<%= "accordion-collapse-heading-#{sample["name"]}" %>"
+            >
 
+                   <ol class="level-4-wrapper">
+                    <% sample['children'].each do |attachment| %>
+                    <% attachment['children'].each do |att| %>
+                    <li>
+                      <h4 class="level-4 rectangle border-2 border-indigo-600 text-slate-900 dark:text-white"><%= att['name'] %></h4>
+                    </li>
+                    <% end %>
+                    <% end %>
+                  </ol>
+                  </div>
+                  </div>
+                </li>
+                <% end %>
+              </ol>
+            </div>
+          </div>
+        </li>
+    <% end %>
   </ol>
 </div>
