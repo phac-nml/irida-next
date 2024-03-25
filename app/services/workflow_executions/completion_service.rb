@@ -82,6 +82,7 @@ module WorkflowExecutions
           sample_file_blob_list.append(download_and_make_new_blob(blob_file_path:))
         end
 
+        # This assumes the sample puid matches, i.e. happy path
         samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(
           puid: sample_file_paths_tuple[:sample_puid]
         )
@@ -92,10 +93,7 @@ module WorkflowExecutions
     end
 
     def get_samples_workflow_executions_by_sample_puid(puid:)
-      @workflow_execution.samples_workflow_executions \
-                         .joins(:sample) \
-                         .where(sample: { puid: }) \
-                         .first
+      @workflow_execution.samples_workflow_executions.joins(:sample).find_by(sample: { puid: })
     end
 
     def attach_blobs_to_attachables
@@ -112,6 +110,7 @@ module WorkflowExecutions
       return nil unless run_output_data['metadata']['samples']
 
       run_output_data['metadata']['samples']&.each do |sample_puid, sample_metadata|
+        # This assumes the sample puid matches, i.e. happy path
         samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(puid: sample_puid)
         samples_workflow_execution.metadata = sample_metadata
         samples_workflow_execution.save!

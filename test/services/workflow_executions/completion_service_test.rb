@@ -64,13 +64,30 @@ module WorkflowExecutions
         blob_run_directory: blob_run_directory_c
       )
 
-      # override puid's so we can use the ones in the prepared iridanext.output.json.gz
+      # missing_entry/
+      # get a new secure token for each workflow execution
+      @workflow_execution_missing_entry = workflow_executions(:irida_next_example_completed_d)
+      blob_run_directory_d = ActiveStorage::Blob.generate_unique_secure_token
+      @workflow_execution_missing_entry.blob_run_directory = blob_run_directory_d
+
+      # create file blobs
+      @missing_entry_output_json_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/missing_entry/iridanext.output.json',
+        blob_run_directory: blob_run_directory_d,
+        gzip: true
+      )
+      @missing_entry_output_summary_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/missing_entry/summary.txt',
+        blob_run_directory: blob_run_directory_d
+      )
+      @missing_entry_output_analysis3_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/missing_entry/analysis3.txt',
+        blob_run_directory: blob_run_directory_d
+      )
+
+      # associated test samples
       @sample41 = samples(:sample41)
-      # @sample1.puid = 'sample1puid'
-      # @sample1.save!
       @sample42 = samples(:sample42)
-      # @sample2.puid = 'sample2puid'
-      # @sample2.save!
     end
 
     test 'finalize completed workflow_execution' do
@@ -179,23 +196,30 @@ module WorkflowExecutions
     end
 
     test 'sample outputs metadata on samples_workflow_executions missing entry' do
-      workflow_execution = @workflow_execution_with_samples
+      workflow_execution = @workflow_execution_missing_entry
 
       # Test start
       assert 'completed', workflow_execution.state
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
-      assert_equal 'my_run_id_c', workflow_execution.run_id
+      assert_equal 'my_run_id_d', workflow_execution.run_id
+
+      assert_equal 0, workflow_execution.samples_workflow_executions[0].outputs.count
+
+      assert_equal 1, workflow_execution.samples_workflow_executions[1].outputs.count
+      output3 = workflow_execution.samples_workflow_executions[1].outputs[0]
+      # original file blob should not be the same as the output file blob, but contain the same file
+      assert_not_equal @missing_entry_output_analysis3_file_blob.id, output3.id
+      assert_equal @missing_entry_output_analysis3_file_blob.filename, output3.filename
+      assert_equal @missing_entry_output_analysis3_file_blob.checksum, output3.file.checksum
 
       metadata1 = { 'number' => 1,
                     'organism' => 'an organism' }
-      metadata2 = { 'number' => 2,
-                    'organism' => 'a different organism' }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
       assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
-      assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
+      assert workflow_execution.samples_workflow_executions[1].metadata.empty?
 
       assert_equal 'finalized', workflow_execution.state
     end
