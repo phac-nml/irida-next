@@ -101,4 +101,91 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_text I18n.t('data_exports.index.no_data_exports')
     assert_text I18n.t('data_exports.index.no_data_exports_message')
   end
+
+  test 'can view individual data export from data exports page' do
+    freeze_time
+    visit data_exports_path
+
+    within %(#data-exports-table-body) do
+      within %(tr:nth-child(2) td:first-child) do
+        click_link @data_export4.id
+      end
+
+      assert_selector 'tr:first-child td:last-child', text: @data_export4.id
+      assert_selector 'tr:nth-child(2) td:last-child', text: @data_export4.name
+      assert_selector 'tr:nth-child(3) td:last-child', text: @data_export4.export_type.capitalize
+      assert_selector 'tr:nth-child(4) td:last-child', text: @data_export4.status.capitalize
+      assert_selector 'tr:nth-child(5) td:last-child',
+                      text: I18n.l(@data_export4.created_at.localtime, format: :full_date)
+      assert_selector 'tr:last-child td:last-child',
+                      text: I18n.l(@data_export4.expires_at.localtime, format: :full_date)
+    end
+  end
+
+  test 'name is blank on data export page if data_export.name is nil' do
+    visit data_export_path(@data_export3)
+
+    within %(#data-exports-table-body) do
+      assert_no_text 'tr:nth-child(2) td:last-child'
+    end
+  end
+
+  test 'expire is blank on data export page if data_export.status is processing' do
+    visit data_export_path(@data_export3)
+
+    within %(#data-exports-table-body) do
+      assert_no_text 'tr:last-child td:last-child'
+    end
+  end
+
+  test 'data export status pill colors' do
+    visit data_export_path(@data_export3)
+
+    within %(#data-exports-table-body) do
+      within %(tr:nth-child(4) td:last-child) do
+        assert_selector 'span.bg-gray-100.text-gray-800.text-xs.font-medium.rounded-full',
+                        text: @data_export3.status.capitalize
+      end
+    end
+
+    visit data_export_path(@data_export4)
+
+    within %(#data-exports-table-body) do
+      within %(tr:nth-child(4) td:last-child) do
+        assert_selector 'span.bg-green-100.text-green-800.text-xs.font-medium.rounded-full',
+                        text: @data_export4.status.capitalize
+      end
+    end
+  end
+
+  test 'disabled manifest tab and download button on exports that are processing' do
+    visit data_export_path(@data_export3)
+
+    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t(:'data_exports.show.download')
+    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t(:'data_exports.show.tabs.manifest')
+  end
+
+  test 'can remove export from export page' do
+    visit data_exports_path
+
+    within %(#data-exports-table-body) do
+      assert_selector 'tr', count: 3
+      assert_text @data_export3.id
+    end
+
+    visit data_export_path(@data_export3)
+
+    click_link I18n.t(:'data_exports.show.remove_button')
+
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
+
+    within %(#data-exports-table-body) do
+      assert_selector 'tr', count: 2
+      assert_no_text @data_export3.id
+    end
+  end
 end

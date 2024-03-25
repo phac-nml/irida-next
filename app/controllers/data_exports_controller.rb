@@ -11,7 +11,7 @@ class DataExportsController < ApplicationController
   def show
     authorize! @data_export, to: :read_export?
     @tab = params[:tab]
-    return unless @data_export.status == 'ready'
+    return if @data_export.manifest.empty?
 
     @manifest = JSON.parse(@data_export.manifest)
   end
