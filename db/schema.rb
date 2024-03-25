@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_20_201313) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_22_161330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -203,6 +203,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_20_201313) do
     t.uuid "workflow_execution_id"
     t.uuid "sample_id"
     t.datetime "attachments_updated_at"
+    t.jsonb "metadata", default: {}, null: false
     t.index ["created_at"], name: "index_samples_workflow_executions_on_created_at"
     t.index ["sample_id"], name: "index_samples_workflow_executions_on_sample_id"
     t.index ["workflow_execution_id"], name: "index_samples_workflow_executions_on_workflow_execution_id"

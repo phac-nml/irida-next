@@ -1,0 +1,28 @@
+{
+    "files": {
+        "global": [
+            {"path": "summary.txt"}
+        ],
+        "samples": {
+            "workflow_execution_completion_test_puid_1": [
+                {"path": "analysis1.txt"},
+                {"path": "analysis2.txt"}
+            ],
+	        "workflow_execution_completion_test_puid_2": [
+	    	    {"path": "analysis3.txt"}
+	        ]
+        }
+    },
+    "metadata": {
+        "samples": {
+            "workflow_execution_completion_test_puid_1": {
+                "organism": "an organism",
+                "number": 1
+            },
+            "workflow_execution_completion_test_puid_2": {
+                "organism": "a different organism",
+                "number": 2
+            }
+        }
+    }
+}

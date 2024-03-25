@@ -8,4 +8,5 @@ class SamplesWorkflowExecution < ApplicationRecord
   belongs_to :workflow_execution
   belongs_to :sample
   has_many_attached :inputs
+  has_many :outputs, dependent: :destroy, class_name: 'Attachment', as: :attachable
 end

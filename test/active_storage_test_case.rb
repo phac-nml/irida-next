@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'test_helpers/blob_helpers'
+require 'test_helpers/blob_test_helpers'
 
 class ActiveStorageTestCase < ActiveSupport::TestCase
-  include BlobHelpers
+  include BlobTestHelpers
 end

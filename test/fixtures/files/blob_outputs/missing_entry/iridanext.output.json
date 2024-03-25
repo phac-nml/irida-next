@@ -1,0 +1,20 @@
+{
+    "files": {
+        "global": [
+            {"path": "summary.txt"}
+        ],
+        "samples": {
+	        "workflow_execution_completion_test_puid_2": [
+	    	    {"path": "analysis3.txt"}
+	        ]
+        }
+    },
+    "metadata": {
+        "samples": {
+            "workflow_execution_completion_test_puid_1": {
+                "organism": "an organism",
+                "number": 1
+            }
+        }
+    }
+}
