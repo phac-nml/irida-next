@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     resources :data_exports, only: %i[index new create destroy show] do
       member do
         get :download
+        get :redirect_from
       end
     end
 
