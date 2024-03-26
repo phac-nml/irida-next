@@ -9,8 +9,17 @@ module Nextflow
       def initialize(sample, index, properties)
         @sample = sample
         @index = index
-        @properties = properties
+        @properties = format_properties(properties)
         @files = filter_files
+      end
+
+      def format_properties(properties)
+        properties.map do |name, entry|
+          if check_for_file(entry)
+            properties[name]['pattern'] = entry['pattern'] || entry['anyOf'].pluck('pattern').compact!.join('|')
+          end
+        end
+        properties
       end
 
       def filter_files
@@ -56,13 +65,11 @@ module Nextflow
       end
 
       def render_file_cell(property, entry, fields, files_index)
-        pattern = if entry['anyOf']
-                    entry['anyOf'].pluck('pattern').join('|')
-                  else
-                    entry['pattern']
-                  end
-
-        files = @files[files_index].select { |file| file.first[Regexp.new(pattern)] }
+        files = if entry['pattern']
+                  @files[files_index].select { |file| file.first[Regexp.new(entry['pattern'])] }
+                else
+                  @files[files_index]
+                end
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  files,

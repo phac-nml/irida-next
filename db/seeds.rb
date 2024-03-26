@@ -29,6 +29,12 @@ end.first(@attachments_per_sample)
   ).signed_id
 end
 
+# Select a reference file
+@reference_file = ActiveStorage::Blob.create_and_upload!(
+  io: Rails.root.join('db/files/reference/reference.fasta').open,
+  filename: 'reference.fasta'
+).signed_id
+
 def seed_project(project_params:, creator:, namespace:)
   project = Projects::CreateService.new(creator,
                                         {
@@ -96,8 +102,10 @@ end
 
 def seed_attachments(sample)
   Rails.logger.info "seeding... Sample: #{sample.name}, Attachments"
+  files = @sequencing_file_blobs.first(@attachments_per_sample)
+  files << @reference_file
   Attachments::CreateService.new(sample.project.creator, sample,
-                                 { files: @sequencing_file_blobs.first(@attachments_per_sample) }).execute
+                                 { files: }).execute
 end
 
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
