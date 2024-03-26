@@ -665,6 +665,7 @@ en:
         leave_success: "You have successfully left the group %{name}"
     samples:
       index:
+        create_export_button: Create Export
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         workflows:
@@ -1227,6 +1228,9 @@ en:
         updated_at_asc: Oldest updated
         created_at_asc: Oldest created
   data_exports:
+    create:
+      success: Data export '%{name}' was successfully started.
+      error: error
     index:
       title: Data Exports
       table_header:
@@ -1270,5 +1274,13 @@ en:
       remove_button: Remove
       remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
-        summary: Summary
-        preview: Preview
+        attributes: Attributes
+        manifest: Manifest
+    new_export_modal:
+      description: The parameters and samples for your new export
+      email_label: Receive an email notification when your export is ready to download?
+      id: ID
+      name: Name
+      name_label: Export Name (Optional)
+      submit_button: Submit
+      title: Data Export
