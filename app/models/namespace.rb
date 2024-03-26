@@ -241,9 +241,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     subtract_from_metadata_summary_count(parent.self_and_ancestors, metadata_summary, false)
   end
 
-  def self.model_prefix
-    'NMS'
-  end
+  def self.model_prefix; end
 
   private
 

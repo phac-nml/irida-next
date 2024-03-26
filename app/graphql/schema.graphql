@@ -351,6 +351,12 @@ type Group implements Node {
     """
     last: Int
   ): ProjectConnection
+
+  """
+  Persistent Unique Identifier of the namespace. For example for a project namespace,
+                                    `INXT_PRJ_AAAAAAAAAA`.
+  """
+  puid: ID!
 }
 
 """
@@ -506,6 +512,12 @@ type Namespace implements Node {
     """
     last: Int
   ): ProjectConnection
+
+  """
+  Persistent Unique Identifier of the namespace. For example for a project namespace,
+                                    `INXT_PRJ_AAAAAAAAAA`.
+  """
+  puid: ID!
 }
 
 """
@@ -669,7 +681,12 @@ type Query {
     """
     Full path of the group. For example, `pathogen/surveillance`.
     """
-    fullPath: ID!
+    fullPath: ID
+
+    """
+    Persistent Unique Identifer of the group. For example, `INXT_GRP_GGGGGGGGGG.`
+    """
+    puid: ID
   ): Group
 
   """
@@ -704,7 +721,13 @@ type Query {
     """
     Full path of the namespace. For example, `pathogen/surveillance`.
     """
-    fullPath: ID!
+    fullPath: ID
+
+    """
+    Persistent Unique Identifer of the namespace.
+                               For example a group namespace, `INXT_GRP_GGGGGGGGGG.`
+    """
+    puid: ID
   ): Namespace
 
   """
