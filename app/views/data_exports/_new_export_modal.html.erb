@@ -43,6 +43,9 @@
       <div>
         <%= form.submit t(".submit_button"),
           "data-action": "data-exports--create#submit",
+          data: {
+            turbo_frame: "_top"
+          },
           class: "button button--state-primary button--size-default" %>
       </div>
     <% end %>

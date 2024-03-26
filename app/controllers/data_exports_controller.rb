@@ -3,7 +3,7 @@
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
   before_action :data_export, only: %i[download destroy show remove]
-  before_action :data_exports, only: %i[index destroy create]
+  before_action :data_exports, only: %i[index destroy]
   before_action :current_page
 
   def index; end
@@ -39,7 +39,8 @@ class DataExportsController < ApplicationController
     else
       respond_to do |format|
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
+          render status: :unprocessable_entity,
+                 locals: { type: 'alert', message: @data_export.errors.full_messages.first }
         end
       end
     end
