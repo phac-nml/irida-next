@@ -9,12 +9,13 @@ module DataExports
     end
 
     def execute
+      puts 'before export'
       @data_export = DataExport.new(params)
-
+      puts 'before validate params'
       validate_params
-
+      puts 'before validate sample export'
       validate_sample_export if @data_export.export_type == 'sample'
-
+      puts 'afer validate sample export'
       @data_export.user = current_user
       @data_export.status = 'processing'
 
@@ -31,6 +32,10 @@ module DataExports
 
     # export_type and export_parameters[ids] are required for data_exports
     def validate_params
+      puts params
+      puts params.key?('export_type')
+      puts params.key?('export_parameters')
+      puts params['export_parameters'].key?('ids')
       unless params.key?('export_type') && params.key?('export_parameters') && params['export_parameters'].key?('ids')
         raise DataExportCreateError, I18n.t('services.data_exports.create.missing_required_parameters')
       end

@@ -3,7 +3,7 @@
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
   before_action :data_export, only: %i[download destroy show remove]
-  before_action :data_exports, only: %i[index destroy]
+  before_action :data_exports, only: %i[index destroy create]
   before_action :current_page
 
   def index; end
@@ -20,8 +20,7 @@ class DataExportsController < ApplicationController
     render turbo_stream: turbo_stream.update('export_modal',
                                              partial: 'new_export_modal',
                                              locals: {
-                                               open: true,
-                                               samples: params[:samples]
+                                               open: true
                                              }), status: :ok
   end
 
@@ -35,7 +34,7 @@ class DataExportsController < ApplicationController
     @data_export = DataExports::CreateService.new(current_user, data_export_params).execute
 
     if @data_export.valid?
-      flash[:success] = t('.success')
+      flash[:success] = t('.success', name: @data_export.name || @data_export.id)
       redirect_to data_exports_path
     else
       respond_to do |format|
@@ -93,7 +92,7 @@ class DataExportsController < ApplicationController
   private
 
   def data_export_params
-    params.require(:data_export).permit(:name, :export_type, :email_notification, export_parameters: { ids: [] })
+    params.require(:data_export).permit(:name, :export_type, :email_notification, export_parameters: [ids: []])
   end
 
   def data_export

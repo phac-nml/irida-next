@@ -1,4 +1,5 @@
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+
 <%= turbo_frame_tag "data_exports_table" do %>
     <%= render partial: "table" %>
 <% end %>
