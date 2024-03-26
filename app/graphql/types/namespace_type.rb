@@ -11,6 +11,9 @@ module Types
     field :full_path, ID, null: false, description: 'Full path of the namespace.' # rubocop:disable GraphQL/ExtractType
     field :name, String, null: false, description: 'Name of the namespace.'
     field :path, String, null: false, description: 'Path of the namespace.'
+    field :puid, ID, null: false,
+                     description: 'Persistent Unique Identifier of the namespace. For example for a project namespace,
+                                  `INXT_PRJ_AAAAAAAAAA`.'
 
     field :projects, ProjectType.connection_type,
           null: true,

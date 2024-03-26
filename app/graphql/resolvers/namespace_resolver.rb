@@ -4,16 +4,24 @@ module Resolvers
   # Namespace Resolver
   class NamespaceResolver < BaseResolver
     argument :full_path, GraphQL::Types::ID,
-             required: true,
+             required: false,
              description: 'Full path of the namespace. For example, `pathogen/surveillance`.'
+    argument :puid, GraphQL::Types::ID,
+             required: false,
+             description: 'Persistent Unique Identifer of the namespace.
+                           For example a group namespace, `INXT_GRP_GGGGGGGGGG.`'
 
     type Types::NamespaceType, null: true
 
-    def resolve(full_path:)
-      # Resolve Group or Namespaces::UserNamespace by full path
-      Namespace.joins(:route).find_by(route: { path: full_path },
-                                      type: [Group.sti_name,
-                                             Namespaces::UserNamespace.sti_name])
+    def resolve(args)
+      if args[:full_path]
+        # Resolve Group or Namespaces::UserNamespace by full path
+        Namespace.joins(:route).find_by(route: { path: args[:full_path] },
+                                        type: [Group.sti_name,
+                                               Namespaces::UserNamespace.sti_name])
+      else
+        Namespace.find_by(puid: args[:puid])
+      end
     end
   end
 end
