@@ -17,7 +17,7 @@ module Resolvers
       if args[:full_path]
         Namespaces::ProjectNamespace.find_by_full_path(args[:full_path])&.project # rubocop:disable Rails/DynamicFindBy
       else
-        Project.find_by(puid: args[:puid])
+        Namespaces::ProjectNamespace.find_by(puid: args[:puid])&.project
       end
     end
   end

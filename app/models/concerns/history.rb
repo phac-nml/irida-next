@@ -34,7 +34,6 @@ module History
     initial_version = merge_changes_to_initial_version(log_data, initial_version, version)
 
     responsible = responsible_user_for_version(current_version)
-    current_version = add_puid_to_current_version(current_version) if version == 1
 
     { version:, user: responsible,
       changes_from_prev_version: format_changes(current_version),
@@ -68,14 +67,6 @@ module History
     end
 
     User.find(current_version['m']['_r']).email
-  end
-
-  # Add puid to the first version (create)
-  def add_puid_to_current_version(current_version)
-    return current_version if self.class.name != 'Namespaces::ProjectNamespace'
-
-    current_version['c'].merge!(puid: project.puid) if project && !current_version['c'].key?('puid')
-    current_version
   end
 
   # Format keys in changes to format required and remove

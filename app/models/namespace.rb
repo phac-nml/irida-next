@@ -5,6 +5,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_logidze
   acts_as_paranoid
 
+  include HasPuid
   include Routable
 
   MAX_ANCESTORS = 10
@@ -239,6 +240,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     subtract_from_metadata_summary_count(parent.self_and_ancestors, metadata_summary, false)
   end
+
+  def self.model_prefix; end
 
   private
 

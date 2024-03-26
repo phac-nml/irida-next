@@ -5,93 +5,109 @@ john_doe_namespace:
   path: john.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 1.days.ago) %>
 
 jane_doe_namespace:
   name: jane.doe@localhost
   path: jane.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 2.days.ago) %>
 
 jean_doe_namespace:
   name: jean.doe@localhost
   path: jean.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jean_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 3.days.ago) %>
 
 james_doe_namespace:
   name: james.doe@localhost
   path: james.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 4.days.ago) %>
 
 david_doe_namespace:
   name: david.doe@localhost
   path: david.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 5.days.ago) %>
 
 jeff_doe_namespace:
   name: jeff.doe@localhost
   path: jeff.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 6.days.ago) %>
 
 private_ryan_namespace:
   name: private.ryan@localhost
   path: private.ryan_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 7.days.ago) %>
 
 joan_doe_namespace:
   name: joan.doe@localhost
   path: joan.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 8.days.ago) %>
 
 micha_doe_namespace:
   name: micha.doe@localhost
   path: micha.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 9.days.ago) %>
 
 ryan_doe_namespace:
   name: ryan.doe@localhost
   path: ryan.doe_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 10.days.ago) %>
 
 user_26_namespace:
   name: user.26@localhost
   path: user.26_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 11.days.ago) %>
 
 alph_abet_namespace:
   name: alph.abet@localhost
   path: alph.abet_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 12.days.ago) %>
 
 private_joan_namespace:
   name: private.joan@localhost
   path: private.joan_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 13.days.ago) %>
 
 private_micha_namespace:
   name: private.micha@localhost
   path: private.micha_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_micha, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 14.days.ago) %>
 
 user27_namespace:
   name: user.27@localhost
   path: user.27_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 15.days.ago) %>
 
 user28_namespace:
   name: user.28@localhost
   path: user.28_at_localhost
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user28, :uuid) %>
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: 16.days.ago) %>
