@@ -10,6 +10,7 @@ module Resolvers
              required: false,
              description: 'Persistent Unique Identifer of the namespace.
                            For example a group namespace, `INXT_GRP_GGGGGGGGGG.`'
+    validates required: { one_of: %i[full_path puid] }
 
     type Types::NamespaceType, null: true
 
@@ -20,7 +21,9 @@ module Resolvers
                                         type: [Group.sti_name,
                                                Namespaces::UserNamespace.sti_name])
       else
-        Namespace.find_by(puid: args[:puid])
+        # Resolve Group or Namespaces::UserNamespace by puid
+        Namespace.find_by(puid: args[:puid], type: [Group.sti_name,
+                                                    Namespaces::UserNamespace.sti_name])
       end
     end
   end
