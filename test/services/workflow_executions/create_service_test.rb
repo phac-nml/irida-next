@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
+require 'active_storage_test_case'
 require 'test_helper'
 require 'webmock/minitest'
 
 module WorkflowExecutions
-  class CreateServiceTest < ActiveSupport::TestCase
+  class CreateServiceTest < ActiveStorageTestCase
     def setup
       @user = users(:john_doe)
     end
@@ -88,6 +89,39 @@ module WorkflowExecutions
       end
 
       assert_equal 'completing', @workflow_execution2.reload.state
+    end
+
+    test 'test create workflow execution completion step' do
+      # prep test
+      @workflow_execution_completing = workflow_executions(:irida_next_example_completing_a)
+      blob_run_directory_a = ActiveStorage::Blob.generate_unique_secure_token
+      @workflow_execution_completing.blob_run_directory = blob_run_directory_a
+      @workflow_execution_completing.save!
+
+      # create file blobs
+      make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal/iridanext.output.json',
+        blob_run_directory: blob_run_directory_a,
+        gzip: true
+      )
+      make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal/summary.txt',
+        blob_run_directory: blob_run_directory_a
+      )
+
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/my_run_id_a/status')
+        .to_return(body: '{ "run_id": "create_run_1", "state": "COMPLETE" }',
+                   headers: { content_type:
+                           'application/json' })
+
+      # start test
+      assert_equal 'completing', @workflow_execution_completing.state
+
+      assert_performed_jobs 2, only: [WorkflowExecutionStatusJob, WorkflowExecutionCompletionJob] do
+        WorkflowExecutionStatusJob.perform_later(@workflow_execution_completing)
+      end
+
+      assert_equal 'completed', @workflow_execution_completing.reload.state
     end
 
     test 'test create new workflow execution with missing required workflow name' do
