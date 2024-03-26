@@ -71,6 +71,7 @@ def seed_namespace_group_links(user, namespace, group, group_access_level)
 end
 
 def fake_metadata
+  indsc_abbr = %w[SRR ERR DRR]
   {
     'WGS_id' => Faker::Number.number(digits: 10),
     'NCBI_ACCESSION' => "NM_#{Faker::Number.decimal(l_digits: 7, r_digits: 1)}",
@@ -81,7 +82,8 @@ def fake_metadata
     'onset' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today),
     'earliest_date' => Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today),
     'patient_sex' => Faker::Gender.binary_type,
-    'patient_age' => Faker::Number.between(from: 1, to: 100)
+    'patient_age' => Faker::Number.between(from: 1, to: 100),
+    'insdc_accession' => "#{indsc_abbr[rand(0..2)]}#{Faker::Number.number(digits: 8)}"
   }
 end
 
