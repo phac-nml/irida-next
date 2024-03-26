@@ -186,4 +186,12 @@ class GroupTest < ActiveSupport::TestCase
 
     assert_equal expected_metadata_summary, actual_metadata_summary
   end
+
+  test 'group has a puid' do
+    assert @group.has_attribute?(:puid)
+  end
+
+  test '#model_prefix' do
+    assert_equal 'GRP', Group.model_prefix
+  end
 end
