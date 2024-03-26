@@ -15,9 +15,11 @@ module Nextflow
 
       def format_properties(properties)
         properties.map do |name, entry|
-          if check_for_file(entry)
-            properties[name]['pattern'] = entry['pattern'] || entry['anyOf'].pluck('pattern').compact!.join('|')
-          end
+          next unless check_for_file(entry)
+
+          properties[name]['pattern'] = entry['pattern'] || entry['anyOf'].select do |e|
+            e.key?('format') && e['format'] == 'file-path'
+          end.pluck('pattern').join('|')
         end
         properties
       end
