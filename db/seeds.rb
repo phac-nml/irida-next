@@ -15,17 +15,19 @@ Faker::Config.locale = 'en-CA'
 #   Character.create(name: "Luke", movie: movies.first)
 
 # Limit the number of file attachments to add when seeding to reduce time.
-# default limit of 1 can be overriden with env variable 'SEED_ATTACHMENT_PER_SAMPLE'
-@attachments_per_sample = (ENV['SEED_ATTACHMENT_PER_SAMPLE'].presence || 1)
-@attachments_per_sample = @attachments_per_sample.to_i
-# default of unlimited files attached (-1) can be overridden with env variable 'SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'
-@maximum_total_sample_attachments = (ENV['SEED_MAXIMUM_TOTAL_SAMPLE_ATTACHMENTS'].presence || -1)
-@maximum_total_sample_attachments = @maximum_total_sample_attachments.to_i
-@total_sample_attachment_count = 0
+# default limit of 2 can be overriden with env variable 'SEED_ATTACHMENT_PER_SAMPLE'
+@attachments_per_sample = (ENV['SEED_ATTACHMENT_PER_SAMPLE'].presence || 2).to_i
 # Array of sample file names
-@sequencing_file_list = Rails.root.join('test/fixtures/files').entries.select do |f|
-  ((File.file?(File.join('test/fixtures/files/', f)) && f.to_s.end_with?('gz')) || f.to_s.end_with?('fastq'))
+@sequencing_file_list = Rails.root.join('db/files').entries.select do |f|
+  File.file?(File.join('db/files/', f))
 end.first(@attachments_per_sample)
+
+@sequencing_file_blobs = @sequencing_file_list.map do |file|
+  ActiveStorage::Blob.create_and_upload!(
+    io: Rails.root.join('db/files', file).open,
+    filename: file.to_s
+  ).signed_id
+end
 
 def seed_project(project_params:, creator:, namespace:)
   project = Projects::CreateService.new(creator,
@@ -77,7 +79,7 @@ def fake_metadata
   }
 end
 
-def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize
+def seed_samples(project, sample_count)
   1.upto(sample_count) do |i|
     sample = Samples::CreateService.new(
       project.creator, project,
@@ -88,28 +90,14 @@ def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize
     # Add metadata
     Samples::Metadata::UpdateService.new(project, sample, project.creator, { 'metadata' => fake_metadata }).execute
 
-    # exit if max total samples has been reached
-    next unless @maximum_total_sample_attachments == -1 ||
-                @total_sample_attachment_count < @maximum_total_sample_attachments
-
     seed_attachments(sample)
-    # if max total samples has been reached, log it
-    if @maximum_total_sample_attachments != -1 &&
-       @total_sample_attachment_count >= @maximum_total_sample_attachments
-      Rails.logger.info "Maximum uploaded sample limit of '#{@maximum_total_sample_attachments}' reached."
-    end
   end
 end
 
 def seed_attachments(sample)
-  (0..(@attachments_per_sample - 1)).each do |i| # file list is index'd at 0
-    Rails.logger.info "seeding... Sample: #{sample.name}, Attachments... #{i + 1}/#{@attachments_per_sample}"
-    f = @sequencing_file_list[i]
-    attachment = sample.attachments.build
-    attachment.file.attach(io: Rails.root.join('test/fixtures/files', f).open, filename: f.to_s)
-    attachment.save!
-    @total_sample_attachment_count += 1
-  end
+  Rails.logger.info "seeding... Sample: #{sample.name}, Attachments"
+  Attachments::CreateService.new(sample.project.creator, sample,
+                                 { files: @sequencing_file_blobs.first(@attachments_per_sample) }).execute
 end
 
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
