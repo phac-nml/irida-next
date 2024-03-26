@@ -50,42 +50,44 @@ module WorkflowExecutions
         state: 'new'
       }
 
-      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_1" }',
-                                                                                headers: { content_type:
-                                                                                           'application/json' })
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs')
+        .to_return(body: '{ "run_id": "create_run_1" }',
+                   headers: { content_type:
+                            'application/json' })
 
       stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/create_run_1/status')
         .to_return(body: '{ "run_id": "create_run_1", "state": "COMPLETE" }',
                    headers: { content_type:
                             'application/json' })
 
-      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
-      @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
-
-      assert_equal 'new', @workflow_execution.state
-      assert_equal 'new', @workflow_execution2.state
-
-      perform_enqueued_jobs do
-        WorkflowExecutionPreparationJob.perform_now(@workflow_execution)
+      # do not perform completion job as this tests scope does not contain blob storage files
+      assert_performed_jobs 3, except: WorkflowExecutionCompletionJob do
+        @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
       end
 
-      assert_equal 'completing', @workflow_execution.reload.state #todo, when last job is added, this needs to be completed
+      # don't perform the preparation job as we want to check that the workflow execution is new
+      assert_performed_jobs 0, except: WorkflowExecutionPreparationJob do
+        @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
+      end
+
+      assert_equal 'completing', @workflow_execution.reload.state
       assert_equal 'new', @workflow_execution2.reload.state
 
-      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_2" }',
-                                                                                headers: { content_type:
-                 'application/json' })
+      stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs')
+        .to_return(body: '{ "run_id": "create_run_2" }',
+                   headers: { content_type:
+                            'application/json' })
 
       stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/create_run_2/status')
         .to_return(body: '{ "run_id": "create_run_2", "state": "COMPLETE" }',
                    headers: { content_type:
                             'application/json' })
 
-      perform_enqueued_jobs do
+      perform_enqueued_jobs except: WorkflowExecutionCompletionJob do
         WorkflowExecutionPreparationJob.perform_now(@workflow_execution2)
       end
 
-      assert_equal 'completing', @workflow_execution2.reload.state #todo, when last job is added, this needs to be completed
+      assert_equal 'completing', @workflow_execution2.reload.state
     end
 
     test 'test create new workflow execution with missing required workflow name' do
