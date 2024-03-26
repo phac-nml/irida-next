@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module WorkflowExecutions
-  class CreateServiceTest < ActiveSupport::TestCase
+  class StatusServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
       @workflow_execution = workflow_executions(:irida_next_example_prepared)
