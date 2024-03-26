@@ -35,10 +35,6 @@ class WorkflowExecution < ApplicationRecord
     state == 'completed'
   end
 
-  def finalized?#todo delete
-    state == 'finalized'
-  end
-
   def error?
     state == 'error'
   end
