@@ -73,7 +73,7 @@ export default class extends Controller {
 
   #getNamesAndPUID(value) {
     return value
-      .split(",")
+      .split(/\r?\n|,/)
       .map((t) => t.trim())
       .filter(Boolean);
   }
