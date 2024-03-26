@@ -61,7 +61,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'can delete data exports' do
+  test 'can delete data exports on listing page' do
     visit data_exports_path
 
     within %(#data-exports-table-body) do
@@ -102,7 +102,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_text I18n.t('data_exports.index.no_data_exports_message')
   end
 
-  test 'can view individual data export from data exports page' do
+  test 'can navigate to individual data export page from data exports page' do
     freeze_time
     visit data_exports_path
 
@@ -139,6 +139,7 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'data export status pill colors' do
+    # processing
     visit data_export_path(@data_export3)
 
     within %(#data-exports-table-body) do
@@ -148,6 +149,7 @@ class DataExportsTest < ApplicationSystemTestCase
       end
     end
 
+    # ready
     visit data_export_path(@data_export4)
 
     within %(#data-exports-table-body) do
@@ -158,7 +160,14 @@ class DataExportsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'disabled manifest tab and download button on exports that are processing' do
+  test 'disabled state of manifest tab and download btn when status is processing' do
+    visit data_export_path(@data_export4)
+
+    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t(:'data_exports.show.download')
+    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t(:'data_exports.show.tabs.manifest')
+
     visit data_export_path(@data_export3)
 
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
