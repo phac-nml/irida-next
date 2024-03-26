@@ -45,7 +45,7 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'completed', @workflow_execution.state
+      assert_equal 'completing', @workflow_execution.state
     end
 
     test 'get status of workflow execution which has been canceled' do

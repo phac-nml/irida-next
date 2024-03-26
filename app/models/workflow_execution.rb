@@ -27,11 +27,15 @@ class WorkflowExecution < ApplicationRecord
     state == 'submitted'
   end
 
+  def completing?
+    state == 'completing'
+  end
+
   def completed?
     state == 'completed'
   end
 
-  def finalized?
+  def finalized?#todo delete
     state == 'finalized'
   end
 

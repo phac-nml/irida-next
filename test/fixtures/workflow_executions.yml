@@ -244,10 +244,10 @@ irida_next_example_new:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   state: "new"
 
-irida_next_example_completed_a:
+irida_next_example_completing_a:
   metadata:
     {
-      "workflow_name": "irida_next_example_completed",
+      "workflow_name": "irida_next_example_completing",
       "workflow_version": "1.0dev",
     }
   workflow_params:
@@ -265,13 +265,13 @@ irida_next_example_completed_a:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_a"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  state: "completed"
+  state: "completing"
   blob_run_directory: "not a run dir"
 
-irida_next_example_completed_b:
+irida_next_example_completing_b:
   metadata:
     {
-      "workflow_name": "irida_next_example_completed",
+      "workflow_name": "irida_next_example_completing",
       "workflow_version": "1.0dev",
     }
   workflow_params:
@@ -289,13 +289,13 @@ irida_next_example_completed_b:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_b"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  state: "completed"
+  state: "completing"
   blob_run_directory: "not a run dir"
 
-irida_next_example_completed_c:
+irida_next_example_completing_c:
   metadata:
     {
-      "workflow_name": "irida_next_example_completed",
+      "workflow_name": "irida_next_example_completing",
       "workflow_version": "1.0dev",
     }
   workflow_params:
@@ -313,13 +313,13 @@ irida_next_example_completed_c:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_c"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  state: "completed"
+  state: "completing"
   blob_run_directory: "not a run dir"
 
-irida_next_example_completed_d:
+irida_next_example_completing_d:
   metadata:
     {
-      "workflow_name": "irida_next_example_completed",
+      "workflow_name": "irida_next_example_completing",
       "workflow_version": "1.0dev",
     }
   workflow_params:
@@ -337,7 +337,7 @@ irida_next_example_completed_d:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_d"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  state: "completed"
+  state: "completing"
   blob_run_directory: "not a run dir"
 
 <% (1..25).each do |n| %>

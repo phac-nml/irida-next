@@ -59,9 +59,7 @@ module WorkflowExecutions
                    headers: { content_type:
                             'application/json' })
 
-      @workflow_execution = WorkflowExecutions::CreateService.new(
-        @user, workflow_params1
-      ).execute
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
       @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
 
       assert_equal 'new', @workflow_execution.state
@@ -71,7 +69,7 @@ module WorkflowExecutions
         WorkflowExecutionPreparationJob.perform_now(@workflow_execution)
       end
 
-      assert_equal 'completed', @workflow_execution.reload.state
+      assert_equal 'completing', @workflow_execution.reload.state #todo, when last job is added, this needs to be completed
       assert_equal 'new', @workflow_execution2.reload.state
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_2" }',
@@ -87,7 +85,7 @@ module WorkflowExecutions
         WorkflowExecutionPreparationJob.perform_now(@workflow_execution2)
       end
 
-      assert_equal 'completed', @workflow_execution2.reload.state
+      assert_equal 'completing', @workflow_execution2.reload.state #todo, when last job is added, this needs to be completed
     end
 
     test 'test create new workflow execution with missing required workflow name' do
