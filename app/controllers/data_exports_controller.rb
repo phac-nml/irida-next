@@ -44,7 +44,8 @@ class DataExportsController < ApplicationController
     else
       respond_to do |format|
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
+          render status: :unprocessable_entity,
+                 locals: { type: 'alert', message: @data_export.errors.full_messages.first }
         end
       end
     end
