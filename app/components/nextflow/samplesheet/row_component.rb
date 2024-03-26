@@ -41,9 +41,7 @@ module Nextflow
                                   fields, index)
         end
 
-        if entry['format'] == 'file-path' || (entry.key?('anyOf') && entry['anyOf'].any? do |e|
-          e['format'] == 'file-path'
-        end)
+        if check_for_file(entry)
           return render_file_cell(property, entry, fields,
                                   0)
         end
@@ -87,6 +85,12 @@ module Nextflow
                  property,
                  fields:
                ))
+      end
+
+      def check_for_file(entry)
+        entry['format'] == 'file-path' || (entry.key?('anyOf') && entry['anyOf'].any? do |e|
+          e['format'] == 'file-path'
+        end)
       end
     end
   end
