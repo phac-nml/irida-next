@@ -61,17 +61,18 @@ module WorkflowExecutions
                    headers: { content_type:
                             'application/json' })
 
-      # do not perform completion job as this tests scope does not contain blob storage files
-      assert_performed_jobs 3, except: WorkflowExecutionCompletionJob do
-        @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
+      @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
+
+      assert_equal 'new', @workflow_execution.state
+      assert_equal 'new', @workflow_execution2.state
+
+      perform_enqueued_jobs do
+        WorkflowExecutionPreparationJob.perform_now(@workflow_execution)
       end
 
-      # don't perform the preparation job as we want to check that the workflow execution is new
-      assert_performed_jobs 0, except: WorkflowExecutionPreparationJob do
-        @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
-      end
-
-      assert_equal 'completing', @workflow_execution.reload.state
+      assert_equal 'completing', @workflow_execution.reload.state #todo, when last job is added, this needs to be completed
       assert_equal 'new', @workflow_execution2.reload.state
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs')
@@ -88,7 +89,7 @@ module WorkflowExecutions
         WorkflowExecutionPreparationJob.perform_now(@workflow_execution2)
       end
 
-      assert_equal 'completing', @workflow_execution2.reload.state
+      assert_equal 'completing', @workflow_execution2.reload.state #todo, when last job is added, this needs to be completed
     end
 
     test 'test create workflow execution completion step' do
