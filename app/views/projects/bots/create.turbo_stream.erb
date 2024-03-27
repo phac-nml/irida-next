@@ -1,16 +1,30 @@
 <%= turbo_stream.update "new_bot_modal",
                     partial: "bot_modal",
                     locals: {
-                      open: false
+                      open: @new_bot_account[:bot_user_account].errors.any?,
+                      new_bot_account: @new_bot_account[:bot_user_account]
                     } %>
 
-<%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type:, data: message) %>
-<% end %>
+<%= turbo_stream.update "new_bot_account-error-alert", viral_alert(type:, message:) %>
 
-<% if @new_bot_account.persisted? %>
+<% if @new_bot_account[:bot_user_account].persisted? %>
+
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+
 
   <%= turbo_stream.update "bots", partial: "bot_listing" %>
 
   <%= turbo_stream.update "bots_pagination", partial: "pagination" %>
+
+<% if personal_access_token %>
+  <%= turbo_stream.replace "access-token-section",
+                       partial: "access_token_section",
+                       locals: {
+                         bot_account_name: @new_bot_account[:bot_user_account].email.rpartition('@').first,
+                         token: personal_access_token.token
+                       } %>
+<% end %>
+
 <% end%>

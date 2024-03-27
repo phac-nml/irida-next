@@ -1,41 +1,67 @@
 <%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>>
   <%= dialog.with_header(title: t("projects.bots.index.bot_listing.new_bot_modal.title")) %>
   <%= dialog.with_section do %>
+
     <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
       <p class="dark:text-gray-400">
         <%= t("projects.bots.index.bot_listing.new_bot_modal.description") %>
       </p>
     </div>
 
+    <div class="mb-4">
+      <%= turbo_frame_tag("new_bot_account-error-alert") %>
+    </div>
+
    <%= form_for(:bot, url: namespace_project_bots_path, method: :post) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
-          <%= form.label :bot_username, t('projects.bots.index.bot_listing.new_bot_modal.username') %>
-          <%= form.text_field :bot_username,
+          <%= form.label :token_name, "Token Name" %>
+          <%= form.text_field :token_name,
                           required: true,
-                          readonly: true,
-                          value: "project_#{@project.puid.downcase}_bot_#{SecureRandom.hex(5)}",
                           class: "form-control" %>
 
         </div>
+
 
         <div class="form-field">
-          <%= form.label :first_name, t('projects.bots.index.bot_listing.new_bot_modal.first_name') %>
-          <%= form.text_field :first_name,
-                          required: true,
-                          value: "Project",
-                          class: "form-control" %>
+          <%= form.label :access_level %>
+          <%= form.select :access_level,
+                      @access_levels,
+                      { prompt: "Select access levels" },
+                      selected: params[:access_level],
+                      required: true %>
 
+          <%= render "shared/form/field_errors",
+          errors: new_bot_account.errors.full_messages_for(:access_level) %>
         </div>
 
-        <div class="form-field">
-          <%= form.label :last_name, t('projects.bots.index.bot_listing.new_bot_modal.last_name') %>
-          <%= form.text_field :last_name,
-                          required: true,
-                          value: "Bot",
-                          class: "form-control" %>
-
+        <div class="form-field datepicker" data-controller="datepicker">
+          <%= form.label :expires_at %>
+          <div class="relative max-w-sm">
+            <div
+              class="
+                absolute
+                inset-y-0
+                left-0
+                flex
+                items-center
+                pl-3
+                pointer-events-none
+              "
+            >
+              <%= viral_icon(
+                name: :calendar_days,
+                classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+              ) %>
+            </div>
+            <%= form.text_field :expires_at,
+                            placeholder: I18n.t("date.formats.iso"),
+                            autocomplete: "off",
+                            "data-datepicker-target": "datePicker",
+                            "data-datepicker-dialog": "true" %>
+          </div>
         </div>
+
 
         <div class="form-field">
         <%= form.label :scopes %>

@@ -3,16 +3,22 @@
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
 >
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.email %>
-  </td>
-  <td class="px-6 py-3 whitespace-nowrap">
-    <%= "#{bot_account.first_name} #{bot_account.last_name}" %>
+    <%= bot_account.email.rpartition('@').first %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= bot_account.personal_access_tokens.last.scopes.join(", ") %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= viral_time_ago(original_time: bot_account.created_at) %>
+  </td>
+  <td class="px-6 py-3 whitespace-nowrap">
+    <%= t(
+          :"projects.bots.index.access_level.level_#{bot_account.members.last.access_level }"
+        )
+    %>
+  </td>
+  <td class="px-6 py-3 whitespace-nowrap">
+    <%= bot_account.personal_access_tokens.last.expires_at%>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= viral_dropdown(icon: "ellipsis_vertical",

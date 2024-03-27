@@ -751,10 +751,11 @@ en:
           remove_confirmation: "Are you sure you want to remove this bot account from the project?"
           remove_aria_label: Remove bot account
         bot_listing:
-          email: Email
           name: Name
           api_scope: API Scope(s)
           created: Created
+          expiration: Expiration
+          access_level: Access Level
           actions: Actions
           empty_state:
             title: No bot accounts
@@ -767,10 +768,21 @@ en:
             last_name: Last Name
             submit: Submit
             cancel: Cancel
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
+        access_token_section:
+          label: "New personal access token for %{bot_name}"
+          description: Make sure you save it - you won't be able to access it again.
+          aria_label: Personal access token, copy to clipboard
       create:
-        success: "Bot account %{bot_username} was successfully added to the project"
+        success: "Bot account was successfully added to the project"
       destroy:
-        success: "Bot account  %{bot_username} was successfully removed from the project"
+        success: "Bot account was successfully removed from the project"
     new:
       title: Create project
       placeholder: Awesome project name
@@ -1183,10 +1195,9 @@ en:
     bots:
       create:
         required:
-          username: Unable to create bot account as the bot username is required
-          first_name: Unable to create bot account as the bot first name is required
-          last_name: Unable to create bot account as the bot last name is required
-          scopes: 'Unable to create bot account as the bot API scope must be selected'
+          token_name: Unable to create bot account as the token name is required
+          scopes: Unable to create bot account as the bot API scope must be selected
+          access_level: Unable to create bot account as an access level must be selected
       destroy:
         not_associated: The bot account cannot be removed as it does not belong to this project
     data_exports:
