@@ -1,0 +1,11 @@
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type:, data: message) %>
+<% end %>
+
+<%= turbo_stream.update "bots", partial: "bot_listing" %>
+
+<% if @bot_accounts.empty? %>
+    <%= turbo_stream.remove "bots_pagination" %>
+  <% else %>
+    <%= turbo_stream.update "bots_pagination", partial: "pagination" %>
+  <% end %>
