@@ -6,6 +6,7 @@ module BotActions
 
   included do
     before_action proc { namespace }
+    before_action proc { access_levels }
     before_action proc { bot_account }, only: %i[destroy]
   end
 
@@ -15,6 +16,8 @@ module BotActions
 
   def new
     authorize! @namespace.project, to: :create_bot_accounts?
+
+    @new_bot_account = User.new(first_name: @namespace.type, last_name: 'Bot')
 
     respond_to do |format|
       format.turbo_stream do
@@ -26,14 +29,15 @@ module BotActions
   def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     @new_bot_account = Bots::CreateService.new(current_user, @namespace.project, bot_params).execute
 
-    if @new_bot_account.persisted?
+    if @new_bot_account[:bot_user_account].persisted?
       respond_to do |format|
         format.turbo_stream do
           @pagy, @bot_accounts = pagy(load_bot_accounts)
 
           render status: :ok, locals: {
             type: 'success',
-            message: t('.success', bot_username: bot_params[:bot_username])
+            message: t('.success'),
+            personal_access_token: @new_bot_account[:personal_access_token]
           }
         end
       end
@@ -59,7 +63,7 @@ module BotActions
 
           render status: :ok, locals: {
             type: 'success',
-            message: t('.success', bot_username: @bot_account.email)
+            message: t('.success')
           }
         end
       end
@@ -77,6 +81,10 @@ module BotActions
   end
 
   private
+
+  def access_levels
+    @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
+  end
 
   def bot_account
     @bot_account ||= Namespaces::UserNamespace.find_by(id: params[:id]).owner

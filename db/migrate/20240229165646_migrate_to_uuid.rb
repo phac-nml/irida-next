@@ -305,24 +305,15 @@ class MigrateToUuid < ActiveRecord::Migration[7.1] # rubocop:disable Metrics/Cla
     add_index :routes, :created_at
     add_index :samples, :created_at
 
-    Attachment.reset_log_data
-    DataExport.reset_log_data
-    User.reset_log_data
-    Member.reset_log_data
-    NamespaceGroupLink.reset_log_data
-    Namespace.reset_log_data
-    PersonalAccessToken.reset_log_data
-    Sample.reset_log_data
-
     execute <<-SQL.squish
-      UPDATE "attachments" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
-      UPDATE "data_exports" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
-      UPDATE "users" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
-      UPDATE "members" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
-      UPDATE "namespace_group_links" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
-      UPDATE "namespaces" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at", "metadata_summary}')
-      UPDATE "personal_access_tokens" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}')
-      UPDATE "samples" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at", "metadata_provenance"}')
+      UPDATE "attachments" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');
+      UPDATE "data_exports" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');
+      UPDATE "users" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');
+      UPDATE "members" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');
+      UPDATE "namespace_group_links" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');
+      UPDATE "namespaces" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at", "metadata_summary"}');
+      UPDATE "personal_access_tokens" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at"}');
+      UPDATE "samples" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"created_at", "updated_at", "metadata_provenance"}');
     SQL
   end
 
