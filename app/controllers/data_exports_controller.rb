@@ -10,10 +10,14 @@ class DataExportsController < ApplicationController
 
   def show
     authorize! @data_export, to: :read_export?
-    @tab = params[:tab]
-    return if @data_export.manifest.empty?
 
-    @manifest = JSON.parse(@data_export.manifest)
+    # Avoids manually navigating to an empty manifest page
+    if @data_export.manifest.empty?
+      @tab = 'attributes'
+    else
+      @tab = params[:tab]
+      @manifest = JSON.parse(@data_export.manifest)
+    end
   end
 
   def new
