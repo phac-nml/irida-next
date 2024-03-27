@@ -195,6 +195,59 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
     end
 
+    test 'metadata on samples_workflow_executions merged into underlying samples' do
+      workflow_execution = @workflow_execution_with_samples
+
+      old_metadata1 = { 'metadatafield1' => 'value1',
+                        'organism' => 'the organism' }
+      old_metadata2 = { 'metadatafield2' => 'value2',
+                        'organism' => 'some organism' }
+      new_metadata1 = { 'number' => 1,
+                        'metadatafield1' => 'value1',
+                        'organism' => 'an organism' }
+      new_metadata2 = { 'number' => 2,
+                        'metadatafield2' => 'value2',
+                        'organism' => 'a different organism' }
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_c', workflow_execution.run_id
+
+      assert_equal old_metadata1, @sample41.metadata
+      assert_equal old_metadata2, @sample42.metadata
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal new_metadata1, @sample41.reload.metadata
+      assert_equal new_metadata2, @sample42.reload.metadata
+
+      assert_equal 'completed', workflow_execution.state
+    end
+
+    test 'outputs on samples_workflow_executions added to samples attachments' do
+      workflow_execution = @workflow_execution_with_samples
+
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_c', workflow_execution.run_id
+
+      assert @sample41.attachments.empty?
+      assert @sample41.attachments.empty?
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal 2, @sample41.attachments.count
+      sample41_output_filenames = @sample41.attachments.map { |attachment| attachment.filename.to_s }
+      assert sample41_output_filenames.include?('analysis1.txt')
+      assert sample41_output_filenames.include?('analysis2.txt')
+
+      assert_equal 1, @sample42.attachments.count
+      assert_equal 'analysis3.txt', @sample42.attachments[0].filename.to_s
+
+      assert_equal 'completed', workflow_execution.state
+    end
+
     test 'sample outputs metadata on samples_workflow_executions missing entry' do
       workflow_execution = @workflow_execution_missing_entry
 
