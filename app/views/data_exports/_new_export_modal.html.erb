@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, classes: ["overflow-x-visible"]) do |dialog| %>
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%= form_for(:data_export, url: data_exports_path,
@@ -36,13 +36,13 @@
           </tbody>
         </table>
       </div>
-    </div>
+      </div>
 
 
-      <div data-data-exports--create-target="field"></div>
+<div data-data-exports--create-target="field"></div>
       <div>
         <%= form.submit t(".submit_button"),
-          "data-action": "data-exports--create#submit",
+        "data-action": "data-exports--create#submit",
           data: {
             turbo_frame: "_top"
           },

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["field", "nameInput", "sampleCount"];
+  static targets = ["field", "nameInput"];
 
   static values = {
     storageKeys: {
@@ -13,15 +13,14 @@ export default class extends Controller {
   connect() {
     let storageValues = []
     for (let sessionStorageKey in sessionStorage) {
-      if (sessionStorageKey.includes("/samples")
-        && sessionStorageKey.includes(`${location.protocol}//${location.host}`)
-        && !sessionStorageKey.includes("files")) {
+      // All current sample page sessionStorageKeys contain samples, and excludes any checked off attachments
+      if (sessionStorageKey.includes("/samples") && !sessionStorageKey.includes("files")) {
         storageValues = storageValues.concat(JSON.parse(sessionStorage.getItem(sessionStorageKey)))
         this.storageKeysValue.push(sessionStorageKey)
       }
     }
+
     if (storageValues.length > 0) {
-      this.sampleCountTarget.innerText = storageValues.length
       for (const storageValue of storageValues) {
         const element = document.createElement("input");
         element.type = "hidden";
@@ -30,14 +29,14 @@ export default class extends Controller {
         this.fieldTarget.appendChild(element);
       }
     }
-
   }
+  // Empty name entry becomes nil rather than empty string
   submit() {
     if (!this.nameInputTarget.value) {
       this.nameInputTarget.remove()
     }
-
   }
+
   clear() {
     this.storageKeysValue.forEach(this.clearKey)
   }
