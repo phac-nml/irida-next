@@ -13,6 +13,7 @@ module DataExports
 
       attach_zip(data_export, zip)
 
+      data_export.manifest = @manifest.to_json
       data_export.expires_at = ApplicationController.helpers.add_business_days(DateTime.current, 3)
       data_export.status = 'ready'
       data_export.save
