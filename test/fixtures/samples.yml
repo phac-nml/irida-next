@@ -242,15 +242,17 @@ sample40:
 sample41:
   name: WorkflowExecutions test sample 1
   description: Sample description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project35, :uuid) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project36, :uuid) %>
   puid: "workflow_execution_completion_test_puid_1"
+  metadata: { 'metadatafield1': 'value1', 'organism': 'the organism' }
   created_at: <%= 2.weeks.ago %>
   updated_at: <%= 2.days.ago %>
 
 sample42:
   name: WorkflowExecutions test sample 2
   description: Sample description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project35, :uuid) %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project36, :uuid) %>
   puid: "workflow_execution_completion_test_puid_2"
+  metadata: { 'metadatafield2': 'value2', 'organism': 'some organism' }
   created_at: <%= 2.weeks.ago %>
   updated_at: <%= 2.days.ago %>
