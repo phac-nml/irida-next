@@ -23,6 +23,26 @@ module Groups
       end
     end
 
+    def list_select_samples
+      @pagy, @samples = pagy(Sample.where(id: params[:sample_ids]), items: 10)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
+    end
+
+    def list_samples
+      @pagy, @samples = pagy(Sample, items: 10)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
+    end
+
     def select
       authorize! @group, to: :sample_listing?
       @selected_sample_ids = []

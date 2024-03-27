@@ -1,0 +1,17 @@
+<%= turbo_stream.append("list_samples") do %>
+  <% @samples.each do |sample| %>
+    <%= render "list_sample", sample: sample %>
+  <% end %>
+<% end %>
+
+<% if @pagy.next.present? %>
+  <%= turbo_stream.replace "list_samples_pagination" do %>
+    <%= turbo_frame_tag "list_samples_pagination",
+    src:
+      list_samples_namespace_project_samples_url(
+        page: @pagy.next,
+        format: :turbo_stream
+      ),
+    loading: :lazy %>
+  <% end %>
+<% end %>

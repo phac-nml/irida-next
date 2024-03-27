@@ -1,0 +1,5 @@
+<%= turbo_stream.append("list_samples") do %>
+  <% @samples.each do |sample| %>
+    <%= render "list_sample", sample: sample %>
+  <% end %>
+<% end %>

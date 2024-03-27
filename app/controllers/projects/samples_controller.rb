@@ -114,6 +114,26 @@ module Projects
       end
     end
 
+    def list_select_samples
+      @pagy, @samples = pagy(Sample.where(id: params[:sample_ids]).order(:name), items: 10)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
+    end
+
+    def list_samples
+      @pagy, @samples = pagy(Sample.all, items: 10)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
+    end
+
     def select
       authorize! @project, to: :sample_listing?
       @samples = []
