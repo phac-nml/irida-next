@@ -277,21 +277,15 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  if Rails.env.test?
-    # Setup providers so that we can mock and test them in our integration tests
-    config.omniauth :developer
-    config.omniauth :saml
-    config.omniauth :azure_activedirectory_v2
-  end
-  # expected format of OMNIAUTH_PROVIDERS = 'developer,saml,azure_activedirectory_v2'
-  if ENV['OMNIAUTH_PROVIDERS']
-    if ENV['OMNIAUTH_PROVIDERS'].include? 'developer'
+  # Configured in config/auth_config.yml
+  if Rails.configuration.auth_config['omniauth_providers']
+    if Rails.configuration.auth_config['omniauth_providers'].include? 'developer'
       config.omniauth :developer,
                       fields: %I[email first_name last_name],
                       uid_field: :email
     end
 
-    if ENV['OMNIAUTH_PROVIDERS'].include? 'saml'
+    if Rails.configuration.auth_config['omniauth_providers'].include? 'saml'
       saml_options = {
         attribute_statements: {
           name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
@@ -307,7 +301,7 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
       config.omniauth :saml, saml_options
     end
 
-    if ENV['OMNIAUTH_PROVIDERS'].include? 'azure_activedirectory_v2'
+    if Rails.configuration.auth_config['omniauth_providers'].include? 'azure_activedirectory_v2'
       # expected keys are: [:client_id, :client_secret, :tenant_id]
       config.omniauth :azure_activedirectory_v2, Rails.application.credentials.azure
     end

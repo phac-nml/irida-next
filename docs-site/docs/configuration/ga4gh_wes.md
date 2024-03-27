@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 id: ga4gh_wes
 title: Connecting to a GA4GH WES server
 ---

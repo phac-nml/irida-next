@@ -76,5 +76,8 @@ module Irida
         description: 'Permanently deletes samples that have been soft-deleted some time ago.'
       }
     }
+
+    # Omniauth Configuration
+    config.auth_config = config_for(Rails.root.join('config/authentication/auth_config.yml'))
   end
 end
