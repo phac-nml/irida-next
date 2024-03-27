@@ -12,9 +12,11 @@ Rails.application.routes.draw do
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[index new create]
     resources :workflow_executions, only: %i[index create]
-    resources :data_exports, only: %i[index new create destroy] do
+    resources :data_exports, only: %i[index new create destroy show] do
       member do
         get :download
+        get :redirect_from
+        delete :remove
       end
     end
 

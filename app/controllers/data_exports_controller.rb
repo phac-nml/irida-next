@@ -2,11 +2,23 @@
 
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
-  before_action :data_export, only: %i[download destroy]
+  before_action :data_export, only: %i[download destroy show remove]
   before_action :data_exports, only: %i[index destroy]
   before_action :current_page
 
   def index; end
+
+  def show
+    authorize! @data_export, to: :read_export?
+
+    # Avoids manually navigating to an empty manifest page
+    if @data_export.manifest.empty?
+      @tab = 'attributes'
+    else
+      @tab = params[:tab]
+      @manifest = JSON.parse(@data_export.manifest)
+    end
+  end
 
   def new
     render turbo_stream: turbo_stream.update('export_modal',
@@ -38,20 +50,47 @@ class DataExportsController < ApplicationController
     end
   end
 
+  def redirect_from
+    if params['puid'].include?('INXT_SAM')
+      sample = Sample.find_by(puid: params['puid'])
+      project = Project.find(sample.project_id)
+      namespace = project.namespace.parent
+      redirect_to namespace_project_sample_path(namespace, project, sample, tab: 'files')
+    else
+      project = Project.find_by(puid: params['puid'])
+      namespace = project.namespace.parent
+      redirect_to namespace_project_path(namespace, project)
+    end
+  end
+
+  # Delete from data_exports listing page
   def destroy
     DataExports::DestroyService.new(@data_export, current_user).execute
     respond_to do |format|
       format.turbo_stream do
         if @data_export.persisted?
-          render status: :unprocessable_entity,
-                 locals: { type: 'alert',
-                           message: t('.error', name: @data_export.name || @data_export.id) }
+          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
         else
           render status: :ok,
                  locals: { type: 'success',
                            message: t('.success', name: @data_export.name || @data_export.id) }
         end
       end
+    end
+  end
+
+  # Delete from individual data_export page
+  def remove
+    DataExports::DestroyService.new(@data_export, current_user).execute
+    if @data_export.persisted?
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
+        end
+      end
+    else
+      flash[:success] = t('.success', name: @data_export.name || @data_export.id)
+      redirect_to data_exports_path
     end
   end
 
