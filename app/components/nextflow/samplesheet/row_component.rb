@@ -40,6 +40,8 @@ module Nextflow
       def render_cell_type(property, entry, sample, fields)
         return render_sample_cell(sample, fields) if property == 'sample'
 
+        return render_metadata_cell(sample, entry) if entry['meta'].present?
+
         return render_file_cell(property, entry, fields) if property.match(/fastq_\d+/)
 
         return render_dropdown_cell(property, entry, fields) if entry['enum'].present?
@@ -49,6 +51,10 @@ module Nextflow
 
       def render_sample_cell(sample, fields)
         render(Samplesheet::SampleCellComponent.new(sample:, fields:))
+      end
+
+      def render_metadata_cell(sample, entry)
+        render(Samplesheet::MetadataCellComponent.new(sample:, entry:))
       end
 
       def render_file_cell(property, entry, fields)
