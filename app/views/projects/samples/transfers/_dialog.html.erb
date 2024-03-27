@@ -1,7 +1,13 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
-    <%= turbo_frame_tag "list_select_samples" %>
+    <div
+      data-controller="infinite-scroll"
+      data-action="scroll->infinite-scroll#scroll"
+      class="overflow-y-auto max-h-40 pb-4 mb-4"
+    >
+      <%= turbo_frame_tag "list_select_samples" %>
+    </div>
 
     <%= turbo_frame_tag "list_select_samples_pagination" do %>
       <%= form_with(url: list_select_samples_namespace_project_samples_path) do |form| %>
