@@ -3,7 +3,7 @@
                     values,
                     {
                       selected: values[0],
-                      include_blank: false
+                      include_blank: required ? false : "",
                     },
                     {
                       "data-action" => "change->nextflow--samplesheet#file_selected",

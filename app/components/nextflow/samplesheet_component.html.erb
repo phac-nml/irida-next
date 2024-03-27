@@ -25,7 +25,7 @@
     </thead>
     <tbody>
       <% samples.each_with_index do |sample, index| %>
-        <%= render Nextflow::Samplesheet::RowComponent.new(sample, index, properties) %>
+        <%= render Nextflow::Samplesheet::RowComponent.new(sample, index, properties, required_properties) %>
       <% end %>
     </tbody>
   </table>
