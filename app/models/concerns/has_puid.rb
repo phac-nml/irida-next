@@ -15,6 +15,8 @@ module HasPuid
   end
 
   def generate_puid
+    return unless puid.nil?
+
     self.puid = Irida::PersistentUniqueId.generate(self)
   end
 end
