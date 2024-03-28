@@ -15,7 +15,9 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
       assert_selector 'tbody tr', count: 3
       assert_selector 'tbody tr:first td:first', text: samples(:sample1).puid
       assert_selector 'tbody tr:first td > select', count: 3
-      assert_selector 'tbody tr:first td:last > select option[selected]', text: 'forward'
+      assert_selector 'tbody tr:first td:last > select'
+      assert_selector 'tbody tr:first td:last > select option', count: 3
+      assert_selector 'tbody tr:first td:last > select option:first', text: 'forward'
     end
   end
 
