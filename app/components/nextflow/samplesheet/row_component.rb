@@ -49,7 +49,7 @@ module Nextflow
         }
       end
 
-      def render_cell_type(property, entry, sample, fields)
+      def render_cell_type(property, entry, sample, fields) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         return render_sample_cell(sample, fields) if property == 'sample'
 
         if entry['is_fastq']
