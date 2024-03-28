@@ -46,7 +46,7 @@ module Integrations
                           workflow_url: '' }
           post(
             endpoint: 'runs',
-            data: base_params.merge(params)
+            data: base_params.merge(params).merge(workflow_type: 'NEXTFLOW', workflow_type_version: '21.04.0')
           )
         end
 

@@ -27,10 +27,12 @@ module Integrations
                             # Endpoint with path and version
                             api_server_url + Ga4ghWesApi::API_SERVER_ENDPOINT_PATH + V1::API_SERVER_ENDPOINT_VERSION
                           end
+          Rails.logger.info @api_endpoint
         end
 
-        def conn # rubocop:disable Metrics/MethodLength
-          headers = { 'Content-Type': 'application/json' }
+        def conn # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+          # headers = ENV['WES_MULTIPART'].blank? ? { 'Content-Type': 'application/json' } : {}
+          headers = {}
           extra_headers = Rails.application.credentials.dig(:ga4gh_wes, :headers)
           headers = headers.merge(extra_headers) unless extra_headers.nil?
 
@@ -40,7 +42,7 @@ module Integrations
           ) do |f|
             # proc so auth is evaluated on each request
             f.request :authorization, 'Bearer', -> { Rails.application.credentials.dig(:ga4gh_wes, :oauth_token) }
-            f.request :json # encode req bodies as JSON
+            f.request(ENV['WES_MULTIPART'].blank? ? :json : :multipart)
             f.request :url_encoded
             f.response :logger # logs request and responses
             f.response :json # decode response bodies as JSON
