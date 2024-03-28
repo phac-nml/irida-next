@@ -134,3 +134,10 @@ user28:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "28"
+
+user_bot_account:
+  email: <%= "project_#{Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: Time.parse("2008-06-21 13:30:00 UTC"))}_bot_A3d12Xc@localhost" %>
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: Project
+  last_name: "Bot"
+  user_type: "project_bot"

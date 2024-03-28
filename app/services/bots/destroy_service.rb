@@ -15,7 +15,7 @@ module Bots
     def execute
       authorize! auth_object, to: :destroy_bot_accounts?
 
-      unless bot_account.email.include? @auth_object.puid.downcase
+      unless bot_account.email.downcase.include? @auth_object.puid.downcase
         raise BotAccountDestroyError,
               I18n.t('services.bots.destroy.not_associated')
       end

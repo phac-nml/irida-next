@@ -111,3 +111,10 @@ user28_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user28, :uuid) %>
   puid: INXT_USR_AAAAAAAAAP
+
+user_bot_account_namespace:
+  name: "project_INXT_PRJ_AAAAAAAAAA_bot_A3d12Xc@localhost"
+  path: "project_INXT_PRJ_AAAAAAAAAA_bot_A3d12Xc_at_localhost"
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAQ
