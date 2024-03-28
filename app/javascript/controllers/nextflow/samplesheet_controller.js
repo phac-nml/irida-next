@@ -3,16 +3,16 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["select"];
 
-  connect() {
-    console.log(this.selectTargets);
-  }
-
   file_selected(event) {
+    // find the selected option from the event target select
+    const selectedOption = event.target.options[event.target.selectedIndex];
+    console.log(selectedOption.dataset.puid);
+
     const updateSelect =
       event.target === this.selectTargets[0]
         ? this.selectTargets[1]
         : this.selectTargets[0];
-        
+
     const index = [...event.target.options].findIndex((e) => e.selected);
     if (updateSelect.options.length > index) {
       updateSelect.options[index].selected = true;

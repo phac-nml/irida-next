@@ -11,7 +11,7 @@ module Nextflow
         @index = index
         @properties = format_properties(properties)
         @required_properties = required_properties
-        @files = filter_files
+        @files = filter_paired_files
       end
 
       def format_properties(properties)
@@ -26,22 +26,27 @@ module Nextflow
         properties
       end
 
-      def filter_files
-        first = []
-        pairs = []
+      def filter_paired_files # rubocop:disable Metrics/MethodLength
+        singles = []
+        pe_forward = []
+        pe_reverse = []
 
         @sample.attachments.each do |attachment|
-          item = [attachment.file.filename.to_s, attachment.to_global_id]
+          item = [attachment.file.filename.to_s, attachment.to_global_id, { 'data-puid': attachment.puid }]
           if attachment.metadata['associated_attachment_id'].nil?
-            first << item
+            singles << item
           elsif attachment.metadata['direction'].eql?('forward')
-            first.unshift(item)
+            pe_forward << item
           else
-            pairs.unshift(item)
+            pe_reverse << item
           end
         end
 
-        [first, pairs]
+        {
+          singles:,
+          pe_forward:,
+          pe_reverse:
+        }
       end
 
       def render_cell_type(property, entry, sample, fields)
@@ -50,13 +55,19 @@ module Nextflow
         if entry['is_fastq']
           # Subtracting 1 of the result to get the index of the file in the array
           index = property.match(/fastq_(\d+)/)[1].to_i - 1
-          return render_file_cell(property, entry,
-                                  fields, index, @required_properties.include?(property))
+          files = index.zero? ? @files[:pe_forward] : @files[:pe_reverse]
+          return render_file_cell(property, entry, fields, files,
+                                  @required_properties.include?(property))
         end
 
         if check_for_file(entry)
+          files = if entry['pattern']
+                    filter_files_by_pattern(@files[:singles], entry['pattern'])
+                  else
+                    @files[:singles]
+                  end
           return render_file_cell(property, entry, fields,
-                                  0)
+                                  files, @required_properties.include?(property))
         end
 
         return render_dropdown_cell(property, entry, fields) if entry['enum'].present?
@@ -64,21 +75,29 @@ module Nextflow
         render_input_cell(property, fields)
       end
 
+      def filter_files_by_pattern(files, pattern)
+        files[files_index].select { |file| file.first[Regexp.new(pattern)] }
+      end
+
       def render_sample_cell(sample, fields)
         render(Samplesheet::SampleCellComponent.new(sample:, fields:))
       end
 
-      def render_file_cell(property, entry, fields, files_index, is_required = false)
-        files = if entry['pattern']
-                  @files[files_index].select { |file| file.first[Regexp.new(entry['pattern'])] }
-                else
-                  @files[files_index]
-                end
+      def render_file_cell(property, entry, fields, files, is_required)
+        data = if entry['is_fastq']
+                 {
+                   'data-action' => 'change->nextflow--samplesheet#file_selected',
+                   'data-nextflow--samplesheet-target' => 'select'
+                 }
+               else
+                 {}
+               end
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  files,
                  fields,
-                 is_required
+                 is_required,
+                 data
                ))
       end
 
@@ -87,7 +106,7 @@ module Nextflow
                  property,
                  entry['enum'],
                  fields,
-                 entry['required'].present?
+                 @required_properties.include?(property)
                ))
       end
 
