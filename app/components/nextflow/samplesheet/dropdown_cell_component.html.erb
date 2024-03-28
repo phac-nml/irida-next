@@ -1,9 +1,9 @@
 <td>
   <%= fields.select name,
-                    values,
-                    { selected: values[0], include_blank: required ? false : "" },
-                    {
-                      :class =>
-                        "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    }.merge(data) %>
+                values,
+                { include_blank: required ? false : "" },
+                {
+                  class:
+                    "w-full bg-slate-50 border border-slate-100 text-slate-900 text-sm focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                }.merge(data) %>
 </td>
