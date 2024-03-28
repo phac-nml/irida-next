@@ -2,6 +2,7 @@
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <div
+      id="scrollable"
       data-controller="infinite-scroll"
       data-action="scroll->infinite-scroll#scroll"
       class="overflow-y-auto max-h-40 pb-4 mb-4"
@@ -17,8 +18,8 @@
           data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
           data-sessionstorage-amend-form-target="field"
           data-sessionstorage-amend-form-field-name-value="sample_ids[]"
+          data-sessionstorage-amend-form-infinite-scroll-outlet="#scrollable"
         ></div>
-        <%= form.submit t(".submit_button") %>
       <% end %>
     <% end %>
   <% end %>

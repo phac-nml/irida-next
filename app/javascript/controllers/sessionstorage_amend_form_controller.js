@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["field"];
+  static outlets = ["infinite-scroll"];
 
   static values = {
     fieldName: String,
@@ -12,6 +13,23 @@ export default class extends Controller {
   };
 
   connect() {
+    if (!this.hasInfiniteScrollOutlet) {
+      this.#createHiddenFormFields();
+
+      // if (this.hasInfiniteScrollOutlet) {
+      //   if(this.infiniteScrollOutlets.length > 0) {
+      //     this.infiniteScrollOutlet.submitForm();
+      //   }
+      // }
+    }
+  }
+
+  infiniteScrollOutletConnected(outlet) {
+    this.#createHiddenFormFields();
+    outlet.submitForm();
+  }
+
+  #createHiddenFormFields() {
     const storageValues = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue)
     );

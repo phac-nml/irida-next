@@ -866,8 +866,6 @@ en:
         success: "Project member %{user} successfully removed"
         leave_success: "You have successfully left the project %{name}"
     samples:
-      list_select_samples:
-        submit_button: Submit
       show:
         add_metadata: Add Metadata
         new_attachment_button: Upload Files
