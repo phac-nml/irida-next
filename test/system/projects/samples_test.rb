@@ -25,7 +25,7 @@ module Projects
       assert_text @sample1.name
       assert_text @sample2.name
 
-      assert_selector 'button.Viral-Dropdown--icon', count: 6
+      assert_selector 'button.Viral-Dropdown--icon', count: 7
     end
 
     test 'cannot access project samples' do
