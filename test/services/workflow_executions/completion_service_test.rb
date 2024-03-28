@@ -85,6 +85,35 @@ module WorkflowExecutions
         blob_run_directory: blob_run_directory_d
       )
 
+      # normal3/
+      # get a new secure token for each workflow execution
+      @workflow_execution_with_complex_metadata = workflow_executions(:irida_next_example_completing_e)
+      blob_run_directory_e = ActiveStorage::Blob.generate_unique_secure_token
+      @workflow_execution_with_complex_metadata.blob_run_directory = blob_run_directory_e
+
+      # create file blobs
+      @normal3_output_json_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/iridanext.output.json',
+        blob_run_directory: blob_run_directory_e,
+        gzip: true
+      )
+      @normal3_output_summary_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/summary.txt',
+        blob_run_directory: blob_run_directory_e
+      )
+      @normal3_output_analysis1_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/analysis1.txt',
+        blob_run_directory: blob_run_directory_e
+      )
+      @normal3_output_analysis2_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/analysis2.txt',
+        blob_run_directory: blob_run_directory_e
+      )
+      @normal3_output_analysis3_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/analysis3.txt',
+        blob_run_directory: blob_run_directory_e
+      )
+
       # associated test samples
       @sample41 = samples(:sample41)
       @sample42 = samples(:sample42)
@@ -227,7 +256,6 @@ module WorkflowExecutions
     test 'outputs on samples_workflow_executions added to samples attachments' do
       workflow_execution = @workflow_execution_with_samples
 
-      # Test start
       assert 'completing', workflow_execution.state
 
       assert_equal 'my_run_id_c', workflow_execution.run_id
@@ -244,6 +272,50 @@ module WorkflowExecutions
 
       assert_equal 1, @sample42.attachments.count
       assert_equal 'analysis3.txt', @sample42.attachments[0].filename.to_s
+
+      assert_equal 'completed', workflow_execution.state
+    end
+
+    test 'complex metadata on samples_workflow_executions' do
+      workflow_execution = @workflow_execution_with_complex_metadata
+
+      assert 'completing', workflow_execution.state
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal 'my_run_id_e', workflow_execution.run_id
+
+      metadata1 = {
+        'amr.0.end' => 5678,
+        'amr.0.gene' => 'x',
+        'amr.0.start' => 1234,
+        'amr.1.end' => 2,
+        'amr.1.gene' => 'y',
+        'amr.1.start' => 1,
+        'organism' => 'an organism'
+      }
+      metadata2 = {
+        'amr.0.end' => 6789,
+        'amr.0.gene' => 'x',
+        'amr.0.start' => 2345,
+        'amr.1.end' => 3,
+        'amr.1.gene' => 'y',
+        'amr.1.start' => 2,
+        'organism' => 'a different organism'
+      }
+
+      assert_equal 2, workflow_execution.samples_workflow_executions.count
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'workflow_execution_completion_test_puid_1'
+        swe1 = workflow_execution.samples_workflow_executions[0]
+        swe2 = workflow_execution.samples_workflow_executions[1]
+      else
+        swe2 = workflow_execution.samples_workflow_executions[0]
+        swe1 = workflow_execution.samples_workflow_executions[1]
+      end
+
+      assert_equal metadata1, swe1.metadata
+      assert_equal metadata2, swe2.metadata
 
       assert_equal 'completed', workflow_execution.state
     end

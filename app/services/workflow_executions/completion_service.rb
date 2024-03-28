@@ -4,6 +4,7 @@ module WorkflowExecutions
   # Service used to complete a WorkflowExecution
   class CompletionService < BaseService
     include BlobHelper
+    include MetadataHelper
 
     def initialize(workflow_execution, params = {})
       super(workflow_execution.submitter, params)
@@ -116,7 +117,7 @@ module WorkflowExecutions
       run_output_data['metadata']['samples']&.each do |sample_puid, sample_metadata|
         # This assumes the sample puid matches, i.e. happy path
         samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(puid: sample_puid)
-        samples_workflow_execution.metadata = sample_metadata
+        samples_workflow_execution.metadata = flatten(sample_metadata)
         samples_workflow_execution.save!
       end
     end
