@@ -74,6 +74,11 @@ module Irida
         class: 'SamplesCleanupJob', # job class as a String, must be an ActiveJob job
         kwargs: { days_old: 7 }, # number of days old a sample must be for deletion
         description: 'Permanently deletes samples that have been soft-deleted some time ago.'
+      },
+      data_exports_cleanup_task: {
+        cron: '0 3 * * *', # Daily, 3 AM
+        class: 'DataExports::CleanupJob', # job class as a String, must be an ActiveJob job
+        description: 'Permanently deletes expired data exports.'
       }
     }
   end
