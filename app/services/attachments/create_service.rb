@@ -96,14 +96,12 @@ module Attachments
       assign_metadata(pe, 'pe')
     end
 
-    def assign_metadata(paired_ends, type) # rubocop:disable Metrics/AbcSize
+    def assign_metadata(paired_ends, type)
       paired_ends.each do |_key, pe_attachments|
         next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
 
-        # update the PUID to be same for forward and reverse and then save so that we have the ids
-        pe_attachments['reverse'].puid = pe_attachments['forward'].puid
-        pe_attachments['forward'].save
-        pe_attachments['reverse'].save
+        # assign the PUID to be same for forward and reverse and then save so that we have the ids
+        assign_pe_attachments_puid(pe_attachments)
 
         fwd_metadata = {
           associated_attachment_id: pe_attachments['reverse'].id, type:, direction: 'forward'
@@ -117,6 +115,14 @@ module Attachments
 
         pe_attachments['reverse'].metadata = pe_attachments['reverse'].metadata.merge(rev_metadata)
       end
+    end
+
+    def assign_pe_attachments_puid(pe_attachments)
+      puid = Irida::PersistentUniqueId.generate(pe_attachments['forward'], time: Time.now) # rubocop:disable Rails/TimeZone
+      pe_attachments['forward'].puid = puid
+      pe_attachments['reverse'].puid = puid
+      pe_attachments['forward'].save
+      pe_attachments['reverse'].save
     end
   end
 end
