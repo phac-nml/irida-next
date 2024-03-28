@@ -9,11 +9,12 @@
   <% else %>
     <%= content %>
   <% end %>
+</ul>
 
+<div class="py-1 b-0">
   <% if dropdowns.present? %>
     <% dropdowns.each do |dropdown| %>
       <%= dropdown %>
     <% end %>
   <% end %>
-
-</ul>
+</div>

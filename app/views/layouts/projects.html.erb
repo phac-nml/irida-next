@@ -33,7 +33,7 @@
           <% end %>
           <% if allowed_to?(:update?, @project) %>
             <%= render section.with_dropdown(label: t(:"projects.sidebar.settings") , icon: "cog_6_tooth", caret: true, skidding: 200, distance: -45, dropdown_position: :right,
-                classes: "w-full px-4 dark:bg-slate-900 border-0 dark:border-b- px-4 bg-slate-50 transition-colors
+                classes: "w-full px-4 dark:bg-slate-900 border-0 px-4 bg-slate-50 transition-colors
                 ease-in-out
                 delay-75
                 rounded-sm

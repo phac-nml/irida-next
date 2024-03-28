@@ -18,7 +18,7 @@ module Viral
       left: 'chevron_left',
       right: 'chevron_right',
       top: 'chevron_up'
-    }
+    }.freeze
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(label: nil, tooltip: '', icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0,
