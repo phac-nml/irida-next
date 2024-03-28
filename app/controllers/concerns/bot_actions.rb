@@ -73,7 +73,7 @@ module BotActions
           render status: :unprocessable_entity,
                  locals: {
                    type: 'alert',
-                   message: @new_bot_account.errors.full_messages.first
+                   message: @bot_account.errors.full_messages.first
                  }
         end
       end
@@ -87,7 +87,7 @@ module BotActions
   end
 
   def bot_account
-    @bot_account ||= Namespaces::UserNamespace.find_by(id: params[:id]).owner
+    @bot_account = Namespaces::UserNamespace.find_by(id: params[:id]).owner
   end
 
   def load_bot_accounts

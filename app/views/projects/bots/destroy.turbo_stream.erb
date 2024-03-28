@@ -2,9 +2,11 @@
   <%= viral_flash(type:, data: message) %>
 <% end %>
 
-<%= turbo_stream.update "bots", partial: "bot_listing" %>
+<% if @bot_account.deleted? %>
+  <%= turbo_stream.update "bots", partial: "bot_listing" %>
+<% end %>
 
-<% if @bot_accounts.empty? %>
+<% if @bot_accounts.nil? || @bot_accounts.empty? %>
     <%= turbo_stream.remove "bots_pagination" %>
   <% else %>
     <%= turbo_stream.update "bots_pagination", partial: "pagination" %>
