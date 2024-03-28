@@ -11,7 +11,7 @@ module Bots
       @auth_object = auth_object
 
       user_params = {
-        email: "#{@auth_object.namespace.type.downcase}_#{@auth_object.puid.downcase}_bot_#{params[:token_name]}@iridanext.com", # rubocop:disable Layout/LineLength
+        email: "#{@auth_object.namespace.type.downcase}_#{@auth_object.puid.downcase}_bot_#{SecureRandom.hex(5)}@iridanext.com", # rubocop:disable Layout/LineLength
         user_type: User.user_types[:project_bot],
         first_name: @auth_object.namespace.type.downcase,
         last_name: 'Bot'

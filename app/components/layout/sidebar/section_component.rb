@@ -7,6 +7,7 @@ module Layout
       attr_reader :title
 
       renders_many :items, ItemComponent
+      renders_many :dropdowns, Viral::DropdownComponent
 
       def initialize(title: nil)
         @title = title

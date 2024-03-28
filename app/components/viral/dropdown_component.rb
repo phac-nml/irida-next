@@ -4,7 +4,8 @@ module Viral
   # Dropdown component
   class DropdownComponent < Viral::Component
     renders_many :items, Dropdown::ItemComponent
-    attr_reader :distance, :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger, :tooltip
+    attr_reader :distance, :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger, :tooltip,
+                :caret_icon
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -12,9 +13,16 @@ module Viral
       hover: 'hover'
     }.freeze
 
+    CARET_ICON_MAPPINGS = {
+      bottom: 'chevron_down',
+      left: 'chevron_left',
+      right: 'chevron_right',
+      top: 'chevron_up'
+    }
+
     # rubocop:disable Metrics/ParameterLists
     def initialize(label: nil, tooltip: '', icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0,
-                   distance: 10, dropdown_styles: '', **system_arguments)
+                   distance: 10, dropdown_position: :bottom, dropdown_styles: '', **system_arguments)
       @distance = distance
       @dropdown_styles = dropdown_styles
       @label = label
@@ -22,6 +30,7 @@ module Viral
       @caret = caret
       @skidding = skidding
       @trigger = TRIGGER_MAPPINGS[trigger]
+      @caret_icon = CARET_ICON_MAPPINGS[dropdown_position]
 
       @system_arguments = default_system_arguments(system_arguments)
       @system_arguments[:title] = tooltip if tooltip.present?

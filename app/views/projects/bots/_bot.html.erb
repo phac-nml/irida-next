@@ -5,6 +5,9 @@
   <td class="px-6 py-3 whitespace-nowrap">
     <%= bot_account.email.rpartition('@').first %>
   </td>
+    <td class="px-6 py-3 whitespace-nowrap">
+    <%= bot_account.personal_access_tokens.last.name%>
+  </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= bot_account.personal_access_tokens.last.scopes.join(", ") %>
   </td>

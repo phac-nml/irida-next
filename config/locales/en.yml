@@ -752,6 +752,7 @@ en:
           remove_aria_label: Remove bot account
         bot_listing:
           name: Name
+          token_name: Token Name
           api_scope: API Scope(s)
           created: Created
           expiration: Expiration
@@ -797,6 +798,7 @@ en:
       members: Members
       samples: Samples
       settings: Settings
+      general: General
       bot_accounts: Bot Accounts
     update:
       success: "Project %{project_name} was successfully updated"

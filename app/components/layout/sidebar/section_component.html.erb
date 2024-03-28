@@ -9,4 +9,11 @@
   <% else %>
     <%= content %>
   <% end %>
+
+  <% if dropdowns.present? %>
+    <% dropdowns.each do |dropdown| %>
+      <%= dropdown %>
+    <% end %>
+  <% end %>
+
 </ul>

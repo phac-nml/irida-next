@@ -32,19 +32,20 @@
             ) %>
           <% end %>
           <% if allowed_to?(:update?, @project) %>
-            <%= render section.with_item(
-              url: project_edit_path(@project),
-              icon: "cog_6_tooth",
-              label: t(:"projects.sidebar.settings"),
-              selected: @current_page == t(:"projects.sidebar.settings").downcase
-            ) %>
-            <%= render section.with_item(
-              url: project_bots_path(@project),
-              icon: "bug_ant",
-              label: t(:"projects.sidebar.bot_accounts"),
-              selected: @current_page == "bots"
-            ) %>
+            <%= render section.with_dropdown(label: t(:"projects.sidebar.settings") , icon: "cog_6_tooth", caret: true, skidding: 200, distance: -45, dropdown_position: :right,
+                classes: "w-full px-4 dark:bg-slate-900 border-0 dark:border-b- px-4 bg-slate-50 transition-colors
+                ease-in-out
+                delay-75
+                rounded-sm
+                hover:bg-slate-200
+                dark:text-slate-200
+                dark:hover:bg-slate-700") do |dropdown|
+             %>
+              <% dropdown.with_item(label: t(:"projects.sidebar.general"), url: project_edit_path(@project)) %>
+              <% dropdown.with_item(label: t(:"projects.sidebar.bot_accounts"), url: project_bots_path(@project)) %>
+            <% end %>
           <% end %>
+
         <% end %>
         <% layout.with_breadcrumb(context_crumbs: @context_crumbs) %>
         <% layout.with_body do %>
