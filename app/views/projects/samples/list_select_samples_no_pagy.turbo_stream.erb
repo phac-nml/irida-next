@@ -1,0 +1,21 @@
+<%= turbo_stream.append("list_select_samples_no_pagy") do %>
+  <% @samples.each do |sample| %>
+    <%= render "list_sample", sample: sample %>
+  <% end %>
+<% end %>
+
+<% if @next > 0 %>
+  <%= turbo_stream.replace "list_select_samples_no_pagy_pagination" do %>
+    <%= turbo_frame_tag "list_select_samples_no_pagy_pagination",
+    data: {
+      controller: "sessionstorage-amend-url",
+      sessionstorage_amend_url_storage_key_value: namespace_project_samples_url,
+      sessionstorage_amend_url_field_name_value: "sample_ids[]",
+      sessionstorage_amend_url_page_value: @page + 1,
+      sessionstorage_amend_url_redirect_value:
+        list_select_samples_no_pagy_namespace_project_samples_url(
+          format: :turbo_stream
+        )
+    } %>
+  <% end %>
+<% end %>

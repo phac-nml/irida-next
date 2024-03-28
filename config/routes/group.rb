@@ -19,7 +19,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     resources :group_links, only: %i[create destroy update index new]
     resources :samples, only: %i[index] do
       collection do
-        get :select, :list_samples
+        get :select, :list_samples, :list_select_samples_no_pagy
         post :list_select_samples
       end
     end

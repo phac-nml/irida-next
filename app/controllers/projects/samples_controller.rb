@@ -114,6 +114,18 @@ module Projects
       end
     end
 
+    def list_select_samples_no_pagy
+      @page = params[:page].to_i
+      @next = params[:next].to_i
+      @samples = Sample.where(id: params[:sample_ids])
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
+    end
+
     def list_select_samples
       @pagy, @samples = pagy(Sample.where(id: params[:sample_ids]).order(:name), items: 10)
 

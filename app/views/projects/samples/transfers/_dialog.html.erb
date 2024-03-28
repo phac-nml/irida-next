@@ -1,6 +1,23 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
+    <div class="overflow-y-auto max-h-40 pb-4 mb-4">
+      <%= turbo_frame_tag "list_select_samples_no_pagy",
+      data: {
+        controller: "sessionstorage-amend-url",
+        sessionstorage_amend_url_storage_key_value: namespace_project_samples_url,
+        sessionstorage_amend_url_field_name_value: "sample_ids[]",
+        sessionstorage_amend_url_page_value: 1,
+        sessionstorage_amend_url_redirect_value:
+          list_select_samples_no_pagy_namespace_project_samples_url(
+            format: :turbo_stream
+          )
+      } %>
+      <%= turbo_frame_tag "list_select_samples_no_pagy_pagination" %>
+    </div>
+  <% end %>
+
+  <%= dialog.with_section do %>
     <div
       id="scrollable"
       data-controller="infinite-scroll"
@@ -9,7 +26,6 @@
     >
       <%= turbo_frame_tag "list_select_samples" %>
     </div>
-
     <%= turbo_frame_tag "list_select_samples_pagination" do %>
       <%= form_with(url: list_select_samples_namespace_project_samples_path) do |form| %>
         <input type="hidden" name="format" value="turbo_stream"/>
