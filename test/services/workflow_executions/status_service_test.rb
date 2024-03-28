@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module WorkflowExecutions
-  class CreateServiceTest < ActiveSupport::TestCase
+  class StatusServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
       @workflow_execution = workflow_executions(:irida_next_example_prepared)
@@ -45,7 +45,7 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'completed', @workflow_execution.state
+      assert_equal 'completing', @workflow_execution.state
     end
 
     test 'get status of workflow execution which has been canceled' do

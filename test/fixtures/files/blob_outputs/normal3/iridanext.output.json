@@ -1,0 +1,34 @@
+{
+    "files": {
+        "global": [
+            {"path": "summary.txt"}
+        ],
+        "samples": {
+            "workflow_execution_completion_test_puid_1": [
+                {"path": "analysis1.txt"},
+                {"path": "analysis2.txt"}
+            ],
+	        "workflow_execution_completion_test_puid_2": [
+	    	    {"path": "analysis3.txt"}
+	        ]
+        }
+    },
+    "metadata": {
+        "samples": {
+            "workflow_execution_completion_test_puid_1": {
+                "organism": "an organism",
+                "amr": [
+                    {"gene": "x", "start": 1234, "end": 5678},
+                    {"gene": "y", "start": 1, "end": 2}
+                ]
+            },
+            "workflow_execution_completion_test_puid_2": {
+                "organism": "a different organism",
+                "amr": [
+                    {"gene": "x", "start": 2345, "end": 6789},
+                    {"gene": "y", "start": 2, "end": 3}
+                ]
+            }
+        }
+    }
+}

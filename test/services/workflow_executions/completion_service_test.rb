@@ -7,9 +7,9 @@ module WorkflowExecutions
     def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       # normal/
       # get a new secure token for each workflow execution
-      @workflow_execution_completed = workflow_executions(:irida_next_example_completed_a)
+      @workflow_execution_completing = workflow_executions(:irida_next_example_completing_a)
       blob_run_directory_a = ActiveStorage::Blob.generate_unique_secure_token
-      @workflow_execution_completed.blob_run_directory = blob_run_directory_a
+      @workflow_execution_completing.blob_run_directory = blob_run_directory_a
 
       # create file blobs
       @normal_output_json_file_blob = make_and_upload_blob(
@@ -24,7 +24,7 @@ module WorkflowExecutions
 
       # no_files/
       # get a new secure token for each workflow execution
-      @workflow_execution_no_files = workflow_executions(:irida_next_example_completed_b)
+      @workflow_execution_no_files = workflow_executions(:irida_next_example_completing_b)
       blob_run_directory_b = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_no_files.blob_run_directory = blob_run_directory_b
 
@@ -37,7 +37,7 @@ module WorkflowExecutions
 
       # normal2/
       # get a new secure token for each workflow execution
-      @workflow_execution_with_samples = workflow_executions(:irida_next_example_completed_c)
+      @workflow_execution_with_samples = workflow_executions(:irida_next_example_completing_c)
       blob_run_directory_c = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_with_samples.blob_run_directory = blob_run_directory_c
 
@@ -66,7 +66,7 @@ module WorkflowExecutions
 
       # missing_entry/
       # get a new secure token for each workflow execution
-      @workflow_execution_missing_entry = workflow_executions(:irida_next_example_completed_d)
+      @workflow_execution_missing_entry = workflow_executions(:irida_next_example_completing_d)
       blob_run_directory_d = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_missing_entry.blob_run_directory = blob_run_directory_d
 
@@ -85,15 +85,44 @@ module WorkflowExecutions
         blob_run_directory: blob_run_directory_d
       )
 
+      # normal3/
+      # get a new secure token for each workflow execution
+      @workflow_execution_with_complex_metadata = workflow_executions(:irida_next_example_completing_e)
+      blob_run_directory_e = ActiveStorage::Blob.generate_unique_secure_token
+      @workflow_execution_with_complex_metadata.blob_run_directory = blob_run_directory_e
+
+      # create file blobs
+      @normal3_output_json_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/iridanext.output.json',
+        blob_run_directory: blob_run_directory_e,
+        gzip: true
+      )
+      @normal3_output_summary_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/summary.txt',
+        blob_run_directory: blob_run_directory_e
+      )
+      @normal3_output_analysis1_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/analysis1.txt',
+        blob_run_directory: blob_run_directory_e
+      )
+      @normal3_output_analysis2_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/analysis2.txt',
+        blob_run_directory: blob_run_directory_e
+      )
+      @normal3_output_analysis3_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal3/analysis3.txt',
+        blob_run_directory: blob_run_directory_e
+      )
+
       # associated test samples
       @sample41 = samples(:sample41)
       @sample42 = samples(:sample42)
     end
 
-    test 'finalize completed workflow_execution' do
-      workflow_execution = @workflow_execution_completed
+    test 'complete completing workflow_execution' do
+      workflow_execution = @workflow_execution_completing
 
-      assert 'completed', workflow_execution.state
+      assert 'completing', workflow_execution.state
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
@@ -105,24 +134,24 @@ module WorkflowExecutions
       assert_equal @normal_output_summary_file_blob.filename, output_summary_file.filename
       assert_equal @normal_output_summary_file_blob.checksum, output_summary_file.file.checksum
 
-      assert_equal 'finalized', workflow_execution.state
+      assert_equal 'completed', workflow_execution.state
     end
 
     test 'finalize non complete workflow_execution' do
       workflow_execution = workflow_executions(:irida_next_example)
 
-      assert_not_equal 'completed', workflow_execution.state
+      assert_not_equal 'completing', workflow_execution.state
 
       assert_not WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
+      assert_not_equal 'completing', workflow_execution.state
       assert_not_equal 'completed', workflow_execution.state
-      assert_not_equal 'finalized', workflow_execution.state
     end
 
-    test 'finalize completed workflow_execution with no files' do
+    test 'complete completing workflow_execution with no files' do
       workflow_execution = @workflow_execution_no_files
 
-      assert 'completed', workflow_execution.state
+      assert 'completing', workflow_execution.state
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
@@ -130,13 +159,13 @@ module WorkflowExecutions
       # no files should be added to the run
       assert_equal 0, workflow_execution.outputs.count
 
-      assert_equal 'finalized', workflow_execution.state
+      assert_equal 'completed', workflow_execution.state
     end
 
     test 'sample outputs on samples_workflow_executions' do
       workflow_execution = @workflow_execution_with_samples
 
-      assert 'completed', workflow_execution.state
+      assert 'completing', workflow_execution.state
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
@@ -170,14 +199,14 @@ module WorkflowExecutions
       assert_equal @normal2_output_analysis3_file_blob.filename, output3.filename
       assert_equal @normal2_output_analysis3_file_blob.checksum, output3.file.checksum
 
-      assert_equal 'finalized', workflow_execution.state
+      assert_equal 'completed', workflow_execution.state
     end
 
     test 'sample metadata on samples_workflow_executions' do
       workflow_execution = @workflow_execution_with_samples
 
       # Test start
-      assert 'completed', workflow_execution.state
+      assert 'completing', workflow_execution.state
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
@@ -192,23 +221,128 @@ module WorkflowExecutions
       assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
       assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
 
-      assert_equal 'finalized', workflow_execution.state
+      assert_equal 'completed', workflow_execution.state
+    end
+
+    test 'metadata on samples_workflow_executions merged into underlying samples' do
+      workflow_execution = @workflow_execution_with_samples
+
+      old_metadata1 = { 'metadatafield1' => 'value1',
+                        'organism' => 'the organism' }
+      old_metadata2 = { 'metadatafield2' => 'value2',
+                        'organism' => 'some organism' }
+      new_metadata1 = { 'number' => 1,
+                        'metadatafield1' => 'value1',
+                        'organism' => 'an organism' }
+      new_metadata2 = { 'number' => 2,
+                        'metadatafield2' => 'value2',
+                        'organism' => 'a different organism' }
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_c', workflow_execution.run_id
+
+      assert_equal old_metadata1, @sample41.metadata
+      assert_equal old_metadata2, @sample42.metadata
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal new_metadata1, @sample41.reload.metadata
+      assert_equal new_metadata2, @sample42.reload.metadata
+
+      assert_equal 'completed', workflow_execution.state
+    end
+
+    test 'outputs on samples_workflow_executions added to samples attachments' do
+      workflow_execution = @workflow_execution_with_samples
+
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_c', workflow_execution.run_id
+
+      assert @sample41.attachments.empty?
+      assert @sample41.attachments.empty?
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal 2, @sample41.attachments.count
+      sample41_output_filenames = @sample41.attachments.map { |attachment| attachment.filename.to_s }
+      assert sample41_output_filenames.include?('analysis1.txt')
+      assert sample41_output_filenames.include?('analysis2.txt')
+
+      assert_equal 1, @sample42.attachments.count
+      assert_equal 'analysis3.txt', @sample42.attachments[0].filename.to_s
+
+      assert_equal 'completed', workflow_execution.state
+    end
+
+    test 'complex metadata on samples_workflow_executions' do
+      workflow_execution = @workflow_execution_with_complex_metadata
+
+      assert 'completing', workflow_execution.state
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal 'my_run_id_e', workflow_execution.run_id
+
+      metadata1 = {
+        'amr.0.end' => 5678,
+        'amr.0.gene' => 'x',
+        'amr.0.start' => 1234,
+        'amr.1.end' => 2,
+        'amr.1.gene' => 'y',
+        'amr.1.start' => 1,
+        'organism' => 'an organism'
+      }
+      metadata2 = {
+        'amr.0.end' => 6789,
+        'amr.0.gene' => 'x',
+        'amr.0.start' => 2345,
+        'amr.1.end' => 3,
+        'amr.1.gene' => 'y',
+        'amr.1.start' => 2,
+        'organism' => 'a different organism'
+      }
+
+      assert_equal 2, workflow_execution.samples_workflow_executions.count
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'workflow_execution_completion_test_puid_1'
+        swe1 = workflow_execution.samples_workflow_executions[0]
+        swe2 = workflow_execution.samples_workflow_executions[1]
+      else
+        swe2 = workflow_execution.samples_workflow_executions[0]
+        swe1 = workflow_execution.samples_workflow_executions[1]
+      end
+
+      assert_equal metadata1, swe1.metadata
+      assert_equal metadata2, swe2.metadata
+
+      assert_equal 'completed', workflow_execution.state
     end
 
     test 'sample outputs metadata on samples_workflow_executions missing entry' do
       workflow_execution = @workflow_execution_missing_entry
 
       # Test start
-      assert 'completed', workflow_execution.state
+      assert 'completing', workflow_execution.state
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
       assert_equal 'my_run_id_d', workflow_execution.run_id
 
-      assert_equal 0, workflow_execution.samples_workflow_executions[0].outputs.count
+      # samples_workflow_executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.name == 'WorkflowExecutions test sample 1'
+        swe1 = workflow_execution.samples_workflow_executions[0]
+        swe2 = workflow_execution.samples_workflow_executions[1]
+      else
+        swe2 = workflow_execution.samples_workflow_executions[0]
+        swe1 = workflow_execution.samples_workflow_executions[1]
+      end
 
-      assert_equal 1, workflow_execution.samples_workflow_executions[1].outputs.count
-      output3 = workflow_execution.samples_workflow_executions[1].outputs[0]
+      assert_equal 0, swe1.outputs.count
+
+      assert_equal 1, swe2.outputs.count
+      output3 = swe2.outputs[0]
       # original file blob should not be the same as the output file blob, but contain the same file
       assert_not_equal @missing_entry_output_analysis3_file_blob.id, output3.id
       assert_equal @missing_entry_output_analysis3_file_blob.filename, output3.filename
@@ -218,10 +352,10 @@ module WorkflowExecutions
                     'organism' => 'an organism' }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
-      assert workflow_execution.samples_workflow_executions[1].metadata.empty?
+      assert_equal metadata1, swe1.metadata
+      assert swe2.metadata.empty?
 
-      assert_equal 'finalized', workflow_execution.state
+      assert_equal 'completed', workflow_execution.state
     end
   end
 end
