@@ -43,6 +43,21 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'bot account create error' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+    project = projects(:project1)
+
+    post namespace_project_bots_path(namespace, project, format: :turbo_stream),
+         params: { bot: {
+           access_level: Member::AccessLevel::UPLOADER,
+           scopes: ['read_api']
+         } }
+
+    assert_response :unprocessable_entity
+  end
+
   test 'bot account destroy' do
     sign_in users(:john_doe)
 
