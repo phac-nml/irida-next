@@ -942,6 +942,7 @@ en:
         transfer_button: Transfer samples
         import_metadata_button: Import metadata
         clone_button: Clone samples
+        create_export_button: Create Export
         actions:
           button_add_aria_label: Add new sample button
           dropdown_aria_label: Dropdown options for sample %{sample_name}

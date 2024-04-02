@@ -1,6 +1,7 @@
 <%= turbo_frame_tag "samples_dialog" %>
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
+<%= turbo_frame_tag "export_modal" %>
 
 <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
@@ -13,6 +14,7 @@
           <span class="sr-only"><%= t(:".workflows.button_sr") %></span>
         <% end %>
       <% end %>
+
       <% if allowed_to?(:clone_sample?, @project) %>
         <%= link_to t("projects.samples.index.clone_button"),
         new_namespace_project_samples_clone_path,
@@ -33,6 +35,15 @@
         },
         class: "button button--size-default button--state-default action-link" %>
       <% end %>
+      <%= link_to t(".create_export_button"),
+          new_data_export_path,
+          data: {
+            turbo_frame: "export_modal",
+            turbo_stream: true,
+            controller: "action-link",
+            action_link_required_value: 1
+          },
+          class: "button button--size-default button--state-default action-link" %>
       <% if allowed_to?(:update_sample?, @project) %>
         <%= link_to t("projects.samples.index.import_metadata_button"),
         new_namespace_project_samples_file_import_path,

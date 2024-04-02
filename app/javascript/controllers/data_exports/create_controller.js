@@ -16,7 +16,7 @@ export default class extends Controller {
       sessionStorage.getItem(this.storageKeyValue)
     );
     if (storageValues) {
-      this.sampleCountTarget.innerHTML = `${this.sampleCountTarget.innerHTML} ${storageValues.length}`
+      this.sampleCountTarget.innerHTML += ` ${storageValues.length}`
       for (const storageValue of storageValues) {
         const element = document.createElement("input");
         element.type = "hidden";
