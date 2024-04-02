@@ -15,7 +15,7 @@ module BotActions
   end
 
   def new
-    authorize! @namespace.project, to: :create_bot_accounts?
+    authorize! @namespace, to: :create_bot_accounts?
 
     @new_bot_account = User.new(first_name: @namespace.type, last_name: 'Bot')
 
@@ -27,7 +27,7 @@ module BotActions
   end
 
   def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-    @new_bot_account = Bots::CreateService.new(current_user, @namespace.project, bot_params).execute
+    @new_bot_account = Bots::CreateService.new(current_user, @namespace, bot_params).execute
 
     if @new_bot_account[:bot_user_account].persisted?
       respond_to do |format|
@@ -54,7 +54,7 @@ module BotActions
   end
 
   def destroy # rubocop:disable Metrics/MethodLength
-    Bots::DestroyService.new(@bot_account, @namespace.project, current_user).execute
+    Bots::DestroyService.new(@bot_account, @namespace, current_user).execute
 
     if @bot_account.deleted?
       respond_to do |format|
@@ -91,6 +91,6 @@ module BotActions
   end
 
   def load_bot_accounts
-    User.bots_for_puid(@namespace.project.puid)
+    User.bots_for_puid(@namespace.puid)
   end
 end

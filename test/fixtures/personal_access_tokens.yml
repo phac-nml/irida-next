@@ -79,3 +79,14 @@ jeff_doe_valid_read_pat:
   expires_at: <%= 10.days.from_now.to_date %>
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "XX3wwK3sWCjn4xdCyZtH") %>
   last_used_at: nil
+
+user_bot_account_valid_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account, :uuid) %>
+  scopes:
+    - read_api
+    - api
+  name: Valid PAT
+  revoked: false
+  expires_at: <%= 10.days.from_now.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "DX3wwK3sWCjn4xdCyZtH") %>
+  last_used_at: nil

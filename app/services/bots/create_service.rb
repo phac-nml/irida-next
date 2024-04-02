@@ -4,16 +4,16 @@ module Bots
   # Service used to Create Bot Accounts
   class CreateService < BaseService
     BotAccountCreateError = Class.new(StandardError)
-    attr_accessor :auth_object, :bot_user_account
+    attr_accessor :namespace, :bot_user_account
 
-    def initialize(user = nil, auth_object = nil, params = {})
+    def initialize(user = nil, namespace = nil, params = {})
       super(user, params)
-      @auth_object = auth_object
+      @namespace = namespace
 
       user_params = {
-        email: "#{@auth_object.namespace.type.downcase}_#{@auth_object.puid.downcase}_bot_#{SecureRandom.hex(5)}@iridanext.com", # rubocop:disable Layout/LineLength
+        email: "#{namespace.type.downcase}_#{namespace.puid.downcase}_bot_#{SecureRandom.hex(5)}@iridanext.com",
         user_type: User.user_types[:project_bot],
-        first_name: @auth_object.namespace.type.downcase,
+        first_name: namespace.type.downcase,
         last_name: 'Bot'
       }
 
@@ -21,7 +21,7 @@ module Bots
     end
 
     def execute
-      authorize! auth_object, to: :create_bot_accounts?
+      authorize! namespace, to: :create_bot_accounts?
 
       validate_params
 
@@ -70,10 +70,10 @@ module Bots
     def add_bot_to_namespace_members(bot_user_account)
       member_params = {
         user: bot_user_account,
-        namespace: auth_object.namespace,
+        namespace:,
         access_level: params[:access_level]
       }
-      Members::CreateService.new(current_user, auth_object.namespace, member_params).execute
+      Members::CreateService.new(current_user, namespace, member_params).execute
     end
   end
 end

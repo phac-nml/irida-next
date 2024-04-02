@@ -4,18 +4,18 @@ module Bots
   # Service used to Delete Projects
   class DestroyService < BaseService
     BotAccountDestroyError = Class.new(StandardError)
-    attr_accessor :bot_account, :auth_object
+    attr_accessor :bot_account, :namespace
 
-    def initialize(bot_account, auth_object, user = nil)
+    def initialize(bot_account, namespace, user = nil)
       super(user)
       @bot_account = bot_account
-      @auth_object = auth_object
+      @namespace = namespace
     end
 
     def execute
-      authorize! auth_object, to: :destroy_bot_accounts?
+      authorize! namespace, to: :destroy_bot_accounts?
 
-      unless bot_account.email.downcase.include? @auth_object.puid.downcase
+      unless bot_account.email.downcase.include? @namespace.puid.downcase
         raise BotAccountDestroyError,
               I18n.t('services.bots.destroy.not_associated')
       end
