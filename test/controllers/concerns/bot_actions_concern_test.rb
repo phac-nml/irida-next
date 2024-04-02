@@ -61,7 +61,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
   test 'bot account destroy' do
     sign_in users(:john_doe)
 
-    bot_account = users(:user_bot_account)
+    bot_account = users(:user_bot_account0)
 
     namespace = groups(:group_one)
     project = projects(:project1)

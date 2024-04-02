@@ -7,7 +7,7 @@ module Bots
     def setup
       @user = users(:john_doe)
       @project = projects(:project1)
-      @bot_account = users(:user_bot_account)
+      @bot_account = users(:user_bot_account0)
     end
 
     test 'destroy bot account' do

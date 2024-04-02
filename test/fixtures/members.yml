@@ -99,7 +99,7 @@ project_one_member_ryan_doe:
   access_level: <%= Member::AccessLevel::GUEST %>
 
 project_one_member_user_bot_account:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account, :uuid) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::UPLOADER %>

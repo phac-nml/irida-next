@@ -85,7 +85,7 @@ module Projects
     test 'should successfully destroy a bot account' do
       sign_in users(:john_doe)
 
-      bot_account = users(:user_bot_account)
+      bot_account = users(:user_bot_account0)
 
       namespace = groups(:group_one)
       project = projects(:project1)
@@ -98,7 +98,7 @@ module Projects
     test 'should not destroy a bot account for a bot account that does not belong to the project' do
       sign_in users(:john_doe)
 
-      bot_account = users(:user_bot_account)
+      bot_account = users(:user_bot_account0)
 
       namespace = groups(:group_one)
       project = projects(:project2)
@@ -111,7 +111,7 @@ module Projects
     test 'should not destroy a bot account for a user with incorrect permissions' do
       sign_in users(:ryan_doe)
 
-      bot_account = users(:user_bot_account)
+      bot_account = users(:user_bot_account0)
 
       namespace = groups(:group_one)
       project = projects(:project1)
