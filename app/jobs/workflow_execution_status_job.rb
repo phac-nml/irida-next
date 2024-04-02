@@ -8,8 +8,12 @@ class WorkflowExecutionStatusJob < ApplicationJob
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute
 
-    return unless !workflow_execution.completed? && !workflow_execution.canceled? && !workflow_execution.error?
+    return unless !workflow_execution.canceled? && !workflow_execution.error?
 
-    WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+    if workflow_execution.completing?
+      WorkflowExecutionCompletionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+    else
+      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+    end
   end
 end

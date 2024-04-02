@@ -27,12 +27,12 @@ class WorkflowExecution < ApplicationRecord
     state == 'submitted'
   end
 
-  def completed?
-    state == 'completed'
+  def completing?
+    state == 'completing'
   end
 
-  def finalized?
-    state == 'finalized'
+  def completed?
+    state == 'completed'
   end
 
   def error?

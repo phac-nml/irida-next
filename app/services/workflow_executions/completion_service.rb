@@ -15,7 +15,7 @@ module WorkflowExecutions
     end
 
     def execute
-      return false unless @workflow_execution.completed?
+      return false unless @workflow_execution.completing?
 
       run_output_data = download_decompress_parse_gziped_json("#{@output_base_path}iridanext.output.json.gz")
 
@@ -33,7 +33,7 @@ module WorkflowExecutions
       # attach blob lists to attachables
       attach_blobs_to_attachables
 
-      @workflow_execution.state = 'finalized'
+      @workflow_execution.state = 'completed'
 
       @workflow_execution.save
 
