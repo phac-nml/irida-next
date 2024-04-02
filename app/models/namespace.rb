@@ -241,7 +241,9 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     subtract_from_metadata_summary_count(parent.self_and_ancestors, metadata_summary, false)
   end
 
-  def self.model_prefix; end
+  def self.model_prefix
+    raise NotImplementedError, 'The underlying class should implement this method to set the model prefix.'
+  end
 
   private
 

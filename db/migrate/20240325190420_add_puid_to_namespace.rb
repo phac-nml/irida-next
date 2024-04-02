@@ -2,14 +2,12 @@
 
 # Migration to add Persistent Unique Identifier column to Namespace model and remove from the Project model.
 class AddPuidToNamespace < ActiveRecord::Migration[7.1]
-  def change # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+  def change # rubocop:disable Metrics/MethodLength
     add_column :namespaces, :puid, :string
 
     reversible do |dir|
       dir.up do
         Namespace.with_deleted.where.not(type: 'Project').each do |namespace|
-          next unless namespace.type != Namespaces::ProjectNamespace.sti_name
-
           puid = Irida::PersistentUniqueId.generate(namespace, time: namespace.created_at)
 
           execute <<-SQL.squish
