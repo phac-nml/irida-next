@@ -1,0 +1,23 @@
+<%= turbo_stream.append("list_select_samples") do %>
+  <% @samples.each do |sample| %>
+    <%= render "list_sample", sample: sample %>
+  <% end %>
+<% end %>
+
+<% if @has_next %>
+  <%= turbo_stream.replace "list_select_samples_pagination" do %>
+    <%= turbo_frame_tag "list_select_samples_pagination" do %>
+      <%= form_with(url: list_namespace_project_samples_path) do |form| %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <div
+          data-controller="sessionstorage-amend-form"
+          data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
+          data-sessionstorage-amend-form-target="field"
+          data-sessionstorage-amend-form-field-name-value="sample_ids[]"
+          data-sessionstorage-amend-form-page-value=<%=@page%>
+          data-sessionstorage-amend-form-infinite-scroll-outlet="#scrollable"
+        ></div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

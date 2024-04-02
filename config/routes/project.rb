@@ -29,6 +29,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         end
         collection do
           get :select
+          post :list
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           member do
