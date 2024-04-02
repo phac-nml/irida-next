@@ -40,12 +40,4 @@ class ProjectTest < ActiveSupport::TestCase
       @project.destroy
     end
   end
-
-  test 'project has a puid' do
-    assert @project.has_attribute?(:puid)
-  end
-
-  test '#model_prefix' do
-    assert_equal 'PRJ', Project.model_prefix
-  end
 end

@@ -3,254 +3,203 @@
 project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 60.days.ago) %>
 
 project2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 59.days.ago) %>
 
 john_doe_project2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 58.days.ago) %>
 
 john_doe_project3:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project3_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 57.days.ago) %>
 
 john_doe_project4:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project4_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 56.days.ago) %>
 
 project4:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project4_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 55.days.ago) %>
 
 project5:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project5_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 54.days.ago) %>
 
 project6:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project6_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 53.days.ago) %>
 
 project7:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project7_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 52.days.ago) %>
 
 project8:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project8_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 51.days.ago) %>
 
 project9:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project9_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 50.days.ago) %>
 
 project10:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project10_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 49.days.ago) %>
 
 project11:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project11_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 48.days.ago) %>
 
 project12:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project12_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 47.days.ago) %>
 
 project13:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project13_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 46.days.ago) %>
 
 project14:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project14_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 45.days.ago) %>
 
 project15:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project15_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 44.days.ago) %>
 
 project16:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project16_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 43.days.ago) %>
 
 project17:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project17_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 42.days.ago) %>
 
 project18:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project18_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 41.days.ago) %>
 
 project19:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project19_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 40.days.ago) %>
 
 project20:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project20_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 39.days.ago) %>
 
 project21:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project21_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 38.days.ago) %>
 
 project22:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 37.days.ago) %>
 
 project23:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project23_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 36.days.ago) %>
 
 project24:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 35.days.ago) %>
 
 project25:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project25_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 34.days.ago) %>
 
 project26:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 33.days.ago) %>
 
 project32:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project32_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 32.days.ago) %>
 
 projectA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 31.days.ago) %>
 
 namespace_group_link_group_one_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one_project1_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 30.days.ago) %>
 
 namespace_group_link_group_three_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 29.days.ago) %>
 
 project28:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project28_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 28.days.ago) %>
 
 project29:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 27.days.ago) %>
 
 project30:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project30_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 26.days.ago) %>
 
 project31:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project31_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 25.days.ago) %>
 
 projectAlpha:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 24.days.ago) %>
 
 projectBravo:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 23.days.ago) %>
 
 projectCharlie:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 22.days.ago) %>
 
 projectAlpha1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 21.days.ago) %>
 
 projectDelta:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectDelta_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 20.days.ago) %>
 
 projectEcho:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEcho_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 19.days.ago) %>
 
 projectDeltaSubgroupA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectDeltaSubgroupA_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 18.days.ago) %>
 
 projectEchoSubgroupB:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEchoSubgroupB_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 17.days.ago) %>
 
 projectFoxtrotSubgroupA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_micha, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectFoxtrotSubgroupA_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 16.days.ago) %>
 
 project27:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:user27_project1_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 15.days.ago) %>
 
 projectHotel:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 14.days.ago) %>
 
 projectJeff:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 61.days.ago) %>
 
 project33:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 62.days.ago) %>
 
 project34:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project34_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 63.days.ago) %>
 
 project35:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project35_namespace, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Project, time: 64.days.ago) %>

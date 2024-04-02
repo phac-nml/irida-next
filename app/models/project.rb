@@ -4,8 +4,6 @@
 class Project < ApplicationRecord
   acts_as_paranoid
 
-  include HasPuid
-
   before_restore :restore_namespace
   after_destroy :destroy_namespace
 
@@ -24,15 +22,12 @@ class Project < ApplicationRecord
   delegate :abbreviated_path, to: :namespace
   delegate :full_name, to: :namespace
   delegate :parent, to: :namespace
+  delegate :puid, to: :namespace
 
   scope :include_route, -> { includes(namespace: [{ parent: :route }, :route]) }
 
   def to_param
     path
-  end
-
-  def self.model_prefix
-    'PRJ'
   end
 
   def self.ransackable_attributes(_auth_object = nil)

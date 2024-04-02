@@ -121,11 +121,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_145629) do
     t.jsonb "metadata_summary", default: {}
     t.uuid "owner_id"
     t.uuid "parent_id"
+    t.string "puid", null: false
     t.index ["created_at"], name: "index_namespaces_on_created_at"
     t.index ["deleted_at"], name: "index_namespaces_on_deleted_at"
     t.index ["metadata_summary"], name: "index_namespaces_on_metadata_summary", using: :gin
     t.index ["owner_id"], name: "index_namespaces_on_owner_id"
     t.index ["parent_id"], name: "index_namespaces_on_parent_id"
+    t.index ["puid"], name: "index_namespaces_on_puid", unique: true
   end
 
   create_table "personal_access_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -150,14 +152,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_145629) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.string "puid", null: false
     t.uuid "creator_id", null: false
     t.uuid "namespace_id", null: false
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["creator_id"], name: "index_projects_on_creator_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
     t.index ["namespace_id"], name: "index_projects_on_namespace_id"
-    t.index ["puid"], name: "index_projects_on_puid", unique: true
   end
 
   create_table "routes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

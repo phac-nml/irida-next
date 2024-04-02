@@ -135,4 +135,12 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal 10, @project_namespace.metadata_summary['metadatafield1']
     assert_equal 35, @project_namespace.metadata_summary['metadatafield2']
   end
+
+  test 'project has a puid' do
+    assert @project_namespace.has_attribute?(:puid)
+  end
+
+  test '#model_prefix' do
+    assert_equal 'PRJ', Namespaces::ProjectNamespace.model_prefix
+  end
 end

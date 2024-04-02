@@ -8,6 +8,7 @@ project1_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 10, "metadatafield2": 35 }
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 60.days.ago) %>
 
 project2_namespace:
   name: Project 2
@@ -17,6 +18,7 @@ project2_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 59.days.ago) %>
 
 john_doe_project2_namespace:
   name: Project 2
@@ -26,6 +28,7 @@ john_doe_project2_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 58.days.ago) %>
 
 john_doe_project3_namespace:
   name: Project 3
@@ -35,6 +38,7 @@ john_doe_project3_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 57.days.ago) %>
 
 project4_namespace:
   name: Project 4
@@ -44,6 +48,7 @@ project4_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 56.days.ago) %>
 
 project5_namespace:
   name: Project 5
@@ -53,6 +58,7 @@ project5_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 623, "metadatafield2": 71 }
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 54.days.ago) %>
 
 project6_namespace:
   name: Project 6
@@ -62,6 +68,7 @@ project6_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 53.days.ago) %>
 
 project7_namespace:
   name: Project 7
@@ -71,6 +78,7 @@ project7_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 52.days.ago) %>
 
 project8_namespace:
   name: Project 8
@@ -80,6 +88,7 @@ project8_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 51.days.ago) %>
 
 project9_namespace:
   name: Project 9
@@ -89,6 +98,7 @@ project9_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 50.days.ago) %>
 
 project10_namespace:
   name: Project 10
@@ -98,6 +108,7 @@ project10_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 49.days.ago) %>
 
 project11_namespace:
   name: Project 11
@@ -107,6 +118,7 @@ project11_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 48.days.ago) %>
 
 project12_namespace:
   name: Project 12
@@ -116,6 +128,7 @@ project12_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 47.days.ago) %>
 
 project13_namespace:
   name: Project 13
@@ -125,6 +138,8 @@ project13_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 46.days.ago) %>
+
 
 project14_namespace:
   name: Project 14
@@ -134,6 +149,7 @@ project14_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 45.days.ago) %>
 
 project15_namespace:
   name: Project 15
@@ -143,6 +159,7 @@ project15_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 44.days.ago) %>
 
 project16_namespace:
   name: Project 16
@@ -152,6 +169,7 @@ project16_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 43.days.ago) %>
 
 project17_namespace:
   name: Project 17
@@ -161,6 +179,7 @@ project17_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 42.days.ago) %>
 
 project18_namespace:
   name: Project 18
@@ -170,6 +189,7 @@ project18_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 41.days.ago) %>
 
 project19_namespace:
   name: Project 19
@@ -179,6 +199,7 @@ project19_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 40.days.ago) %>
 
 project20_namespace:
   name: Project 20
@@ -188,6 +209,7 @@ project20_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 39.days.ago) %>
 
 project21_namespace:
   name: Project 21
@@ -197,6 +219,7 @@ project21_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 38.days.ago) %>
 
 project22_namespace:
   name: Project 22
@@ -206,6 +229,7 @@ project22_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 37.days.ago) %>
 
 project23_namespace:
   name: Project 23
@@ -215,6 +239,7 @@ project23_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 36.days.ago) %>
 
 project24_namespace:
   name: Project 24
@@ -224,6 +249,7 @@ project24_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 35.days.ago) %>
 
 john_doe_project4_namespace:
   name: Project 4
@@ -233,6 +259,7 @@ john_doe_project4_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 56.days.ago) %>
 
 project25_namespace:
   name: Project 25
@@ -242,6 +269,7 @@ project25_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 34.days.ago) %>
 
 project26_namespace:
   name: Project 26
@@ -251,6 +279,7 @@ project26_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 33.days.ago) %>
 
 project32_namespace:
   name: Project 32
@@ -260,6 +289,7 @@ project32_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_eight, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 32.days.ago) %>
 
 projectA_namespace:
   name: Project A
@@ -269,6 +299,7 @@ projectA_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 31.days.ago) %>
 
 namespace_group_link_group_one_project1_namespace:
   name: Group One Project 1
@@ -278,6 +309,7 @@ namespace_group_link_group_one_project1_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 30.days.ago) %>
 
 namespace_group_link_group_three_project1_namespace:
   name: Group Three Project 1
@@ -287,6 +319,7 @@ namespace_group_link_group_three_project1_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 29.days.ago) %>
 
 project28_namespace:
   name: Project 28
@@ -296,6 +329,7 @@ project28_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 28.days.ago) %>
 
 project29_namespace:
   name: Project 29
@@ -305,6 +339,7 @@ project29_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 27.days.ago) %>
 
 project30_namespace:
   name: Project 30
@@ -314,6 +349,7 @@ project30_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_b, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 26.days.ago) %>
 
 project31_namespace:
   name: Project 31
@@ -323,6 +359,7 @@ project31_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a_a, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 25.days.ago) %>
 
 projectAlpha_namespace:
   name: Project Alpha
@@ -331,6 +368,7 @@ projectAlpha_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 24.days.ago) %>
 
 projectBravo_namespace:
   name: Project Bravo
@@ -339,6 +377,7 @@ projectBravo_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_bravo, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 23.days.ago) %>
 
 projectCharlie_namespace:
   name: Project Charlie
@@ -347,6 +386,7 @@ projectCharlie_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 22.days.ago) %>
 
 projectAlpha1_namespace:
   name: Project Alpha 1
@@ -356,6 +396,7 @@ projectAlpha1_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha_subgroup1, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 21.days.ago) %>
 
 projectDelta_namespace:
   name: Project Delta
@@ -364,6 +405,7 @@ projectDelta_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 20.days.ago) %>
 
 projectDeltaSubgroupA_namespace:
   name: Project Delta Subgroup A
@@ -372,6 +414,7 @@ projectDeltaSubgroupA_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta_subgroupA, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 18.days.ago) %>
 
 projectEcho_namespace:
   name: Project Echo
@@ -380,6 +423,7 @@ projectEcho_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 19.days.ago) %>
 
 projectEchoSubgroupB_namespace:
   name: Project Echo Subgroup B
@@ -388,6 +432,7 @@ projectEchoSubgroupB_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo_subgroupB, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 17.days.ago) %>
 
 projectFoxtrotSubgroupA_namespace:
   name: Project Foxtrot Subgroup A
@@ -396,6 +441,7 @@ projectFoxtrotSubgroupA_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot_subgroupA, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 16.days.ago) %>
 
 user27_project1_namespace:
   name: Personal Project 1
@@ -405,6 +451,7 @@ user27_project1_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:user27_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 15.days.ago) %>
 
 projectHotel_namespace:
   name: Project Hotel
@@ -413,6 +460,7 @@ projectHotel_namespace:
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 14.days.ago) %>
 
 project_jeff_namespace:
   name: Project Uncounted
@@ -422,6 +470,7 @@ project_jeff_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 61.days.ago) %>
 
 project33_namespace:
   name: Project 33
@@ -431,6 +480,7 @@ project33_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 62.days.ago) %>
 
 project34_namespace:
   name: Project 34
@@ -440,6 +490,7 @@ project34_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_fourteen, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 63.days.ago) %>
 
 project35_namespace:
   name: Project 35
@@ -449,3 +500,4 @@ project35_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: {}
+  puid: <%= Irida::PersistentUniqueId.generate(object_class: Namespaces::ProjectNamespace, time: 64.days.ago) %>
