@@ -17,13 +17,13 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
            params: {
              workflow_execution: {
                metadata: { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
-               workflow_params: { '-r': 'dev' },
+               workflow_params: { assembler: 'stub' },
                workflow_type: 'NFL',
                workflow_type_version: 'DSL2',
                tags: [],
                workflow_engine: 'nextflow',
                workflow_engine_version: '23.10.0',
-               workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+               workflow_engine_parameters: { '-r': 'dev' },
                workflow_url: 'https://github.com/phac-nml/iridanextexample',
                samples_workflow_executions_attributes: [
                  {

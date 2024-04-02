@@ -16,16 +16,15 @@ module WorkflowExecutions
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
         workflow_params:
         {
-          '-r': 'dev',
-          '--input': '/blah/samplesheet.csv',
-          '--outdir': '/blah/output'
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
-        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
         state: 'new'
@@ -36,16 +35,15 @@ module WorkflowExecutions
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
         workflow_params:
         {
-          '-r': 'dev',
-          '--input': '/blah/samplesheet.csv',
-          '--outdir': '/blah/output'
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
-        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew2',
         submitter_id: @user.id,
         state: 'new'
@@ -130,16 +128,15 @@ module WorkflowExecutions
           { workflow_version: '1.0.2' },
         workflow_params:
         {
-          '-r': 'dev',
-          '--input': '/blah/samplesheet.csv',
-          '--outdir': '/blah/output'
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
-        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
         state: 'new'
@@ -157,16 +154,15 @@ module WorkflowExecutions
           { workflow_name: 'phac-nml/iridanextexample' },
         workflow_params:
         {
-          '-r': 'dev',
-          '--input': '/blah/samplesheet.csv',
-          '--outdir': '/blah/output'
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
-        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
         state: 'new'
@@ -185,16 +181,15 @@ module WorkflowExecutions
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
         workflow_params:
         {
-          '-r': 'dev',
-          '--input': '/blah/samplesheet.csv',
-          '--outdir': '/blah/output'
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
-        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
         state: 'new'
@@ -228,16 +223,15 @@ module WorkflowExecutions
           { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
         workflow_params:
         {
-          '-r': 'dev',
-          '--input': '/blah/samplesheet.csv',
-          '--outdir': '/blah/output'
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
-        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
         state: 'new'
