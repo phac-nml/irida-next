@@ -30,7 +30,9 @@ module Bots
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @project.namespace, invalid_params).execute
 
-        assert result[:bot_user_account].errors.full_messages.include?('Unable to create bot account as the token name is required')
+        assert result[:bot_user_account].errors.full_messages.include?(
+          'Unable to create bot account as the token name is required'
+        )
       end
     end
 
@@ -43,7 +45,9 @@ module Bots
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @project.namespace, invalid_params).execute
 
-        assert result[:bot_user_account].errors.full_messages.include?('Unable to create bot account as the bot API scope must be selected')
+        assert result[:bot_user_account].errors.full_messages.include?(
+          'Unable to create bot account as the bot API scope must be selected'
+        )
       end
     end
 
@@ -56,7 +60,9 @@ module Bots
       assert_no_difference ['User.count', 'PersonalAccessToken.count', 'Member.count'] do
         result = Bots::CreateService.new(@user, @project.namespace, invalid_params).execute
 
-        assert result[:bot_user_account].errors.full_messages.include?('Unable to create bot account as an access level must be selected')
+        assert result[:bot_user_account].errors.full_messages.include?(
+          'Unable to create bot account as an access level must be selected'
+        )
       end
     end
 
