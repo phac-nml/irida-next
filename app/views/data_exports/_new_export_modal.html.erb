@@ -7,9 +7,6 @@
           action: 'turbo:submit-end->data-exports--create#clear'
         }, method: :post) do |form| %>
     <div class="mb-4 font-normal text-gray-500 dark:text-gray-400">
-      <p class="mb-4"><%= t(".description") %></p>
-
-
       <div class="form-field mb-4">
         <%= form.label :name, t(".name_label") %>
         <%= form.text_field :name, class: "form-control",
@@ -22,24 +19,13 @@
         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
         <%= form.check_box :email_notification, { checked: false }, true, false %>
       </div>
+      <div class="mb-4 text-sm font-medium text-slate-900 dark:text-white">
+        <p data-data-exports--create-target="sampleCount"><%= t(".sample_count") %></p>
+      </div>
+      <div>
         <%= form.hidden_field :export_type, value: 'sample' %>
-      <div data-controller="data-exports--listing">
-        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
-          <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
-            <tr>
-              <th class="px-6 py-4"><%= t(".id") %></th>
-              <th class="px-6 py-4"><%= t(".name") %></th>
-            </tr>
-          </thead>
-          <tbody data-data-exports--listing-target="tableBody">
-            <p data-data-exports--create-target="sampleCount"></p>
-          </tbody>
-        </table>
       </div>
-      </div>
-
-
-<div data-data-exports--create-target="field"></div>
+      <div data-data-exports--create-target="field"></div>
       <div>
         <%= form.submit t(".submit_button"),
         "data-action": "data-exports--create#submit",

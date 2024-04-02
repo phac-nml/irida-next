@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["field", "nameInput"];
+  static targets = ["field", "nameInput", "sampleCount"];
 
   static values = {
     storageKeys: {
@@ -21,6 +21,7 @@ export default class extends Controller {
     }
 
     if (storageValues.length > 0) {
+      this.sampleCountTarget.innerHTML = `${this.sampleCountTarget.innerHTML} ${storageValues.length}`
       for (const storageValue of storageValues) {
         const element = document.createElement("input");
         element.type = "hidden";
@@ -30,7 +31,7 @@ export default class extends Controller {
       }
     }
   }
-  // Empty name entry becomes nil rather than empty string
+  // Prevents an empty name input to be submitted as an empty string (we want nil)
   submit() {
     if (!this.nameInputTarget.value) {
       this.nameInputTarget.remove()

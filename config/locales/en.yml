@@ -1277,10 +1277,8 @@ en:
         attributes: Attributes
         manifest: Manifest
     new_export_modal:
-      description: The parameters and samples for your new export
       email_label: Receive an email notification when your export is ready to download?
-      id: ID
-      name: Name
-      name_label: Export Name (Optional)
+      name_label: "Export Name (Optional):"
+      sample_count: "Sample count:"
       submit_button: Submit
       title: Data Export
