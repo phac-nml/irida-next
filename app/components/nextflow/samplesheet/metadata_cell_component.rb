@@ -2,10 +2,12 @@
 
 module Nextflow
   module Samplesheet
+    # Component to render a cell with sample metadata into the sample sheet
     class MetadataCellComponent < ViewComponent::Base
-      attr_reader :metadata
+      attr_reader :form, :metadata
 
-      def initialize(sample:, entry:)
+      def initialize(form:, sample:, entry:)
+        @form = form
         @metadata = if entry['meta'].is_a?(Array)
                       entry['meta'].map { |meta| sample.metadata[meta].to_s }.join(', ')
                     else
