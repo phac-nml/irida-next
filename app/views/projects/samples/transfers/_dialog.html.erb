@@ -1,6 +1,29 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
+
+    <div
+      id="scrollable"
+      data-controller="infinite-scroll"
+      data-action="scroll->infinite-scroll#scroll"
+      class="overflow-y-auto max-h-40 mb-4"
+    >
+      <%= turbo_frame_tag "list_select_samples" %>
+    </div>
+    <%= turbo_frame_tag "list_select_samples_pagination" do %>
+      <%= form_with(url: list_namespace_project_samples_path) do |form| %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <div
+          data-controller="sessionstorage-amend-form"
+          data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
+          data-sessionstorage-amend-form-target="field"
+          data-sessionstorage-amend-form-field-name-value="sample_ids[]"
+          data-sessionstorage-amend-form-page-value="1"
+          data-sessionstorage-amend-form-infinite-scroll-outlet="#scrollable"
+        ></div>
+      <% end %>
+    <% end %>
+
     <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
       <%= form_for(:transfer, url: namespace_project_samples_transfer_path, method: :post) do |form| %>
         <div
