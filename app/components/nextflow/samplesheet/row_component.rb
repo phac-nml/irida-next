@@ -11,7 +11,7 @@ module Nextflow
         @index = index
         @properties = format_properties(properties)
         @required_properties = required_properties
-        @files = filter_paired_files
+        @files = sort_files
       end
 
       def format_properties(properties)
@@ -26,7 +26,7 @@ module Nextflow
         properties
       end
 
-      def filter_paired_files # rubocop:disable Metrics/MethodLength
+      def sort_files # rubocop:disable Metrics/MethodLength
         singles = []
         pe_forward = []
         pe_reverse = []
