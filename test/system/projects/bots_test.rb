@@ -86,6 +86,42 @@ module Projects
       assert_selector 'tr', count: 1 + header_row_count
     end
 
+    test 'can\'t create a new project bot account without selecting scopes' do
+      project = projects(:project2)
+      visit namespace_project_bots_path(@namespace, project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
+
+      assert_selector 'a', text: I18n.t(:'projects.bots.index.add_new_bot'), count: 1
+
+      assert_selector 'tr', count: 0
+
+      within('div.empty_state_message') do
+        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.title')
+        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.description')
+      end
+
+      click_link I18n.t(:'projects.bots.index.add_new_bot')
+
+      within('dialog') do
+        assert_selector 'h1', text: I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.title')
+        assert_selector 'p', text: I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.description')
+
+        fill_in 'Token Name', with: 'Uploader'
+        find('#bot_access_level').find('option',
+                                       text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+
+        assert_html5_inputs_valid
+
+        click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
+
+        within('#new_bot_account-error-alert') do
+          assert_text I18n.t(:'services.bots.create.required.scopes')
+        end
+      end
+    end
+
     test 'can delete a project bot account' do
       visit namespace_project_bots_path(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
