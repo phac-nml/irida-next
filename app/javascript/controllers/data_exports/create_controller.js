@@ -4,23 +4,18 @@ export default class extends Controller {
   static targets = ["field", "nameInput", "sampleCount"];
 
   static values = {
-    storageKeys: {
-      type: Array,
-      default: []
+    fieldName: String,
+    storageKey: {
+      type: String,
+      default: `${location.protocol}//${location.host}${location.pathname}${location.search}`
     },
   };
 
   connect() {
-    let storageValues = []
-    for (let sessionStorageKey in sessionStorage) {
-      // All current sample page sessionStorageKeys contain samples, and excludes any checked off attachments
-      if (sessionStorageKey.includes("/samples") && !sessionStorageKey.includes("files")) {
-        storageValues = storageValues.concat(JSON.parse(sessionStorage.getItem(sessionStorageKey)))
-        this.storageKeysValue.push(sessionStorageKey)
-      }
-    }
-
-    if (storageValues.length > 0) {
+    const storageValues = JSON.parse(
+      sessionStorage.getItem(this.storageKeyValue)
+    );
+    if (storageValues) {
       this.sampleCountTarget.innerHTML = `${this.sampleCountTarget.innerHTML} ${storageValues.length}`
       for (const storageValue of storageValues) {
         const element = document.createElement("input");
@@ -39,10 +34,6 @@ export default class extends Controller {
   }
 
   clear() {
-    this.storageKeysValue.forEach(this.clearKey)
-  }
-
-  clearKey(key) {
-    sessionStorage.removeItem(key);
+    sessionStorage.removeItem(this.storageKeyValue);
   }
 }
