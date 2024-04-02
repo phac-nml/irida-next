@@ -20,4 +20,6 @@
       <% end %>
     <% end %>
   <% end %>
+<% else %>
+  <%= turbo_stream.remove "list_select_samples_pagination" %>
 <% end %>

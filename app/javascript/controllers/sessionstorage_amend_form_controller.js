@@ -28,18 +28,19 @@ export default class extends Controller {
   }
 
   #createPageHiddenFormFields() {
+    const itemsPerPage = 10;
     const storageValues = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue),
     );
     if (storageValues) {
-      const start = (this.pageValue - 1) * 10;
-      const end = this.pageValue * 10;
+      const start = (this.pageValue - 1) * itemsPerPage;
+      const end = this.pageValue * itemsPerPage;
       const storageValuesPage = storageValues.slice(start, end);
       for (const storageValue of storageValuesPage) {
         this.fieldTarget.appendChild(this.#createHiddenInput(this.fieldNameValue, storageValue));
       }
       this.fieldTarget.appendChild(this.#createHiddenInput("page", this.pageValue));
-      this.fieldTarget.appendChild(this.#createHiddenInput("has_next", storageValuesPage.length===10));
+      this.fieldTarget.appendChild(this.#createHiddenInput("has_next", storageValuesPage.length===itemsPerPage));
     }
   }
 
