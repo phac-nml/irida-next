@@ -353,8 +353,8 @@ type Group implements Node {
   ): ProjectConnection
 
   """
-  Persistent Unique Identifier of the namespace. For example for a project namespace,
-                                    `INXT_PRJ_AAAAAAAAAA`.
+  Persistent Unique Identifier of the namespace. For example for a group,
+                                    `INXT_GRP_AAAAAAAAAA`.
   """
   puid: ID!
 }
@@ -514,8 +514,8 @@ type Namespace implements Node {
   ): ProjectConnection
 
   """
-  Persistent Unique Identifier of the namespace. For example for a project namespace,
-                                    `INXT_PRJ_AAAAAAAAAA`.
+  Persistent Unique Identifier of the namespace. For example for a group,
+                                    `INXT_GRP_AAAAAAAAAA`.
   """
   puid: ID!
 }
