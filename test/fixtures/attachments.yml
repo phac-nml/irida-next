@@ -47,7 +47,7 @@ attachmentPEREV1:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD1, :uuid) %>,
     }
   attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAG
+  puid: INXT_ATT_AAAAAAAAAF
 
 attachmentPEFWD2:
   metadata:
@@ -59,7 +59,7 @@ attachmentPEFWD2:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV2, :uuid) %>,
     }
   attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAH
+  puid: INXT_ATT_AAAAAAAAAG
 
 attachmentPEREV2:
   metadata:
@@ -71,7 +71,7 @@ attachmentPEREV2:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD2, :uuid) %>,
     }
   attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAI
+  puid: INXT_ATT_AAAAAAAAAG
 
 attachmentPEFWD3:
   metadata:
@@ -83,7 +83,7 @@ attachmentPEFWD3:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV3, :uuid) %>,
     }
   attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAJ
+  puid: INXT_ATT_AAAAAAAAAH
 
 attachmentPEREV3:
   metadata:
@@ -95,7 +95,7 @@ attachmentPEREV3:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD3, :uuid) %>,
     }
   attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAK
+  puid: INXT_ATT_AAAAAAAAAH
 
 attachmentPEFWD4:
   metadata:
@@ -106,7 +106,7 @@ attachmentPEFWD4:
       "compression": "none",
     }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAL
+  puid: INXT_ATT_AAAAAAAAAI
 
 attachmentPEREV4:
   metadata:
@@ -117,7 +117,7 @@ attachmentPEREV4:
       "compression": "none",
     }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAM
+  puid: INXT_ATT_AAAAAAAAAI
 
 attachmentPEFWD5:
   metadata:
@@ -128,7 +128,7 @@ attachmentPEFWD5:
       "compression": "none",
     }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAN
+  puid: INXT_ATT_AAAAAAAAAJ
 
 attachmentPEREV5:
   metadata:
@@ -139,32 +139,32 @@ attachmentPEREV5:
       "compression": "none",
     }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAO
+  puid: INXT_ATT_AAAAAAAAAJ
 
 attachmentD:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAAP
+  puid: INXT_ATT_AAAAAAAAAK
 
 attachmentE:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAAQ
+  puid: INXT_ATT_AAAAAAAAAL
 
 attachmentF:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
-  puid: INXT_ATT_AAAAAAAAAAR
+  puid: INXT_ATT_AAAAAAAAAM
 
 attachmentG:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAS
+  puid: INXT_ATT_AAAAAAAAAN
 
 attachmentH:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAT
+  puid: INXT_ATT_AAAAAAAAAO
 
 attachmentPEFWD6:
   metadata:
@@ -175,7 +175,7 @@ attachmentPEFWD6:
       "compression": "none",
     }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAU
+  puid: INXT_ATT_AAAAAAAAAP
 
 attachmentPEREV6:
   metadata:
@@ -186,7 +186,7 @@ attachmentPEREV6:
       "compression": "none",
     }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAV
+  puid: INXT_ATT_AAAAAAAAAP
 
 attachmentPEFWD7:
   metadata:
@@ -197,7 +197,7 @@ attachmentPEFWD7:
       "compression": "none",
     }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAW
+  puid: INXT_ATT_AAAAAAAAAQ
 
 attachmentPEREV7:
   metadata:
@@ -208,14 +208,14 @@ attachmentPEREV7:
       "compression": "none",
     }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAU
+  puid: INXT_ATT_AAAAAAAAAQ
 
 attachmentI:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAX
+  puid: INXT_ATT_AAAAAAAAAR
 
 attachmentJ:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleC (Sample)
-  puid: INXT_ATT_AAAAAAAAAAY
+  puid: INXT_ATT_AAAAAAAAAS
