@@ -5,6 +5,8 @@ module Namespaces
   class ProjectNamespace < Namespace
     include History
 
+    before_destroy :destroy_bots, prepend: true
+
     has_one :project, inverse_of: :namespace, foreign_key: :namespace_id, dependent: :destroy
     has_many :project_members, foreign_key: :namespace_id, inverse_of: :project_namespace,
                                class_name: 'Member', dependent: :destroy
@@ -32,6 +34,15 @@ module Namespaces
     end
 
     has_many :shared_with_groups, through: :shared_with_group_links, source: :group
+
+    has_many :bots,
+             class_name: 'User', dependent: nil do
+      def of_self
+        ns = proxy_association.owner
+
+        User.bots_for_namespace(ns)
+      end
+    end
 
     def self.sti_name
       'Project'
@@ -77,6 +88,10 @@ module Namespaces
 
     def self.model_prefix
       'PRJ'
+    end
+
+    def destroy_bots
+      bots.of_self.each(&:destroy)
     end
   end
 end

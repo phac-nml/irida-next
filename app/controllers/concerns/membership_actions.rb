@@ -117,7 +117,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     available_users = User.human_users.where.not(id: Member.select(:user_id).where(namespace: @namespace))
                           .where.not(id: current_user.id)
     available_bots = if @namespace.type == Namespaces::ProjectNamespace.sti_name
-                       User.bots_for_puid(@namespace.project.puid)
+                       @namespace.bots.of_self.where.not(id: Member.select(:user_id).where(namespace: @namespace))
                      else
                        User.none
                      end

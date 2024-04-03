@@ -19,9 +19,9 @@ module HasUserType
     scope :bots, -> { where(user_type: BOT_USER_TYPES) }
     scope :without_bots, -> { where(user_type: USER_TYPES.keys - BOT_USER_TYPES) }
     scope :human_users, -> { where(user_type: %i[human]) }
-    scope :bots_for_puid, lambda { |puid|
-                            where('email LIKE ?', "%#{puid.downcase}%")
-                          }
+    scope :bots_for_namespace, lambda { |namespace|
+                                 where('email LIKE ?', "%#{namespace.puid.downcase}%")
+                               }
 
     validates :user_type, presence: true
   end

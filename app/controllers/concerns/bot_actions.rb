@@ -92,6 +92,6 @@ module BotActions
   end
 
   def load_bot_accounts
-    User.bots_for_puid(@namespace.puid)
+    @namespace.bots.of_self
   end
 end
