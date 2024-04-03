@@ -37,7 +37,7 @@ module Projects
     end
 
     def current_page
-      @current_page = 'bots'
+      @current_page = 'bot accounts'
     end
   end
 end

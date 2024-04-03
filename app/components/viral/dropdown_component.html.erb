@@ -4,8 +4,14 @@
   data-viral--dropdown-skidding-value="<%= skidding %>"
   data-viral--dropdown-distance-value="<%= distance %>"
 >
-  <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
+  <%= render Viral::BaseComponent.new(tag: :button, classes: 'm-10', **system_arguments) do %>
     <div class="flex items-center w-full">
+      <% if selected %>
+        <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 rounded-lg bg-primary-600"></div>
+      <% else %>
+        <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 bg-transparent"></div>
+      <% end %>
+
       <% if icon_name.present? %>
         <%= viral_icon(
           name: icon_name,
