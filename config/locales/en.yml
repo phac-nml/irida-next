@@ -204,6 +204,7 @@ en:
           maintainer: Maintainer
           owner: Owner
         its_you: It's you
+        bot: Bot
         direct: Direct member
       group:
         one: Group
@@ -766,11 +767,13 @@ en:
           new_bot_modal:
             title: New Bot Account
             description: Adding a bot account to associate certain actions which can't be attributed to a human user
-            username: Username
-            first_name: First Name
-            last_name: Last Name
+            token_name: Token Name
+            access_level: Access Level
+            select_access_level: Select access level
+            expires_at: Expiry Date
             submit: Submit
             cancel: Cancel
+
         access_level:
           level_0: No Access
           level_10: Guest

@@ -14,7 +14,7 @@
       <% else %>
         <% if !member.user.human? %>
           <%= viral_pill(
-            text: "Bot",
+            text: t(:"activerecord.models.member.bot"),
             color: :transparent,
             border: true,
             classes: "ml-2"

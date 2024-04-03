@@ -30,7 +30,7 @@ module Projects
       case action_name
       when 'index'
         @context_crumbs += [{
-          name: 'Bot Accounts',
+          name: t('projects.bots.index.title'),
           path: namespace_project_bots_path
         }]
       end

@@ -15,7 +15,7 @@
    <%= form_for(:bot, url: namespace_project_bots_path, method: :post) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
-          <%= form.label :token_name, "Token Name" %>
+          <%= form.label :token_name, t("projects.bots.index.bot_listing.new_bot_modal.token_name") %>
           <%= form.text_field :token_name,
                           required: true,
                           value: !bot_params.nil? ? bot_params[:token_name] : "",
@@ -24,11 +24,11 @@
         </div>
 
         <div class="form-field">
-          <%= form.label :access_level %>
+          <%= form.label :access_level, t("projects.bots.index.bot_listing.new_bot_modal.access_level") %>
           <%= form.select :access_level,
                       @access_levels,
                       {
-                        prompt: "Select access levels",
+                        prompt: t("projects.bots.index.bot_listing.new_bot_modal.select_access_level"),
                         selected: !bot_params.nil? ? bot_params[:access_level] : nil
                       },
                       required: true %>
@@ -38,7 +38,7 @@
         </div>
 
         <div class="form-field datepicker" data-controller="datepicker">
-          <%= form.label :expires_at %>
+          <%= form.label :expires_at, t("projects.bots.index.bot_listing.new_bot_modal.expires_at") %>
           <div class="relative max-w-sm">
             <div
               class="
