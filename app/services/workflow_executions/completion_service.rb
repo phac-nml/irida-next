@@ -2,7 +2,7 @@
 
 module WorkflowExecutions
   # Service used to complete a WorkflowExecution
-  class CompletionService < BaseService
+  class CompletionService < BaseService # rubocop:disable Metrics/ClassLength
     include BlobHelper
     include MetadataHelper
 
@@ -126,7 +126,10 @@ module WorkflowExecutions
       @workflow_execution.samples_workflow_executions&.each do |swe|
         next if swe.metadata.nil?
 
-        params = { 'metadata' => swe.metadata }
+        params = {
+          'metadata' => swe.metadata,
+          'analysis_id' => @workflow_execution.id
+        }
         Samples::Metadata::UpdateService.new(
           swe.sample.project, swe.sample, current_user, params
         ).execute

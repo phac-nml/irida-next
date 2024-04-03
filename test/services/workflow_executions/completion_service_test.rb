@@ -247,8 +247,23 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
-      assert_equal new_metadata1, @sample41.reload.metadata
-      assert_equal new_metadata2, @sample42.reload.metadata
+      @sample41.reload
+      assert_equal new_metadata1, @sample41.metadata
+      # test provenance updated correctly
+      assert_equal workflow_execution.id, @sample41.reload.metadata_provenance['number']['id']
+      assert_equal 'analysis', @sample41.reload.metadata_provenance['number']['source']
+      assert_equal workflow_execution.id, @sample41.reload.metadata_provenance['organism']['id']
+      assert_equal 'analysis', @sample41.reload.metadata_provenance['organism']['source']
+      assert_nil @sample41.reload.metadata_provenance['metadatafield1']
+
+      @sample42.reload
+      assert_equal new_metadata2, @sample42.metadata
+      # test provenance updated correctly
+      assert_equal workflow_execution.id, @sample42.reload.metadata_provenance['number']['id']
+      assert_equal 'analysis', @sample42.reload.metadata_provenance['number']['source']
+      assert_equal workflow_execution.id, @sample42.reload.metadata_provenance['organism']['id']
+      assert_equal 'analysis', @sample42.reload.metadata_provenance['organism']['source']
+      assert_nil @sample42.reload.metadata_provenance['metadatafield2']
 
       assert_equal 'completed', workflow_execution.state
     end

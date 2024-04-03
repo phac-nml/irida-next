@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-# require 'metadata_helper'
 
 class MetadataHelperTest < ActionView::TestCase
   include MetadataHelper
