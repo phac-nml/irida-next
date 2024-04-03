@@ -27,7 +27,7 @@ export default class extends Controller {
   }
 
   #createPageHiddenFormFields() {
-    const itemsPerPage = 10;
+    const itemsPerPage = 100;
     const storageValues = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue)
     );
