@@ -4,7 +4,8 @@
 class WorkflowExecutionsController < ApplicationController
   include Metadata
   respond_to :turbo_stream
-  before_action :current_page
+  before_action :current_page, only: :index
+  before_action :workflow_execution, only: %i[cancel destroy]
 
   def index
     @q = load_workflows.ransack(params[:q])
@@ -23,19 +24,13 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def cancel
-    @workflow_execution = WorkflowExecution.find(params[:workflow_execution_id])
-
     @workflow_execution = WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
 
     nil unless @workflow_execution.persisted?
   end
 
-  def destroy # rubocop:disable Metrics/AbcSize
-    @workflow_execution = WorkflowExecution.find(params[:id])
+  def destroy
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
-
-    @q = load_workflows.ransack(params[:q])
-    @pagy, @workflows = pagy_with_metadata_sort(@q.result)
 
     if @workflow_execution.deleted?
       render status: :ok,
@@ -49,6 +44,10 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   private
+
+  def workflow_execution
+    @workflow_execution = WorkflowExecution.find(params[:id])
+  end
 
   def set_default_sort
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
