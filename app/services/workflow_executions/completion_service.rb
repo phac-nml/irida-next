@@ -2,8 +2,9 @@
 
 module WorkflowExecutions
   # Service used to complete a WorkflowExecution
-  class CompletionService < BaseService
+  class CompletionService < BaseService # rubocop:disable Metrics/ClassLength
     include BlobHelper
+    include MetadataHelper
 
     def initialize(workflow_execution, params = {})
       super(workflow_execution.submitter, params)
@@ -32,6 +33,10 @@ module WorkflowExecutions
 
       # attach blob lists to attachables
       attach_blobs_to_attachables
+
+      # put attachments and metadata onto samples
+      merge_metadata_onto_samples
+      put_output_attachments_onto_samples
 
       @workflow_execution.state = 'completed'
 
@@ -112,8 +117,34 @@ module WorkflowExecutions
       run_output_data['metadata']['samples']&.each do |sample_puid, sample_metadata|
         # This assumes the sample puid matches, i.e. happy path
         samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(puid: sample_puid)
-        samples_workflow_execution.metadata = sample_metadata
+        samples_workflow_execution.metadata = flatten(sample_metadata)
         samples_workflow_execution.save!
+      end
+    end
+
+    def merge_metadata_onto_samples
+      @workflow_execution.samples_workflow_executions&.each do |swe|
+        next if swe.metadata.nil?
+
+        params = {
+          'metadata' => swe.metadata,
+          'analysis_id' => @workflow_execution.id
+        }
+        Samples::Metadata::UpdateService.new(
+          swe.sample.project, swe.sample, current_user, params
+        ).execute
+      end
+    end
+
+    def put_output_attachments_onto_samples
+      @workflow_execution.samples_workflow_executions&.each do |swe|
+        next if swe.outputs.empty?
+
+        files = swe.outputs.map { |output| output.file.signed_id }
+        params = { files: }
+        Attachments::CreateService.new(
+          current_user, swe.sample, params
+        ).execute
       end
     end
   end
