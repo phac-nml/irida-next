@@ -49,7 +49,7 @@ module Nextflow
       def render_cell_type(property, entry, sample, fields) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         return render_sample_cell(sample, fields) if property == 'sample'
 
-        return render_metadata_cell(sample, entry, fields) if entry['meta'].present?
+        return render_metadata_cell(sample, property, entry, fields) if entry['meta'].present?
 
         if entry['is_fastq']
           # Subtracting 1 of the result to get the index of the file in the array
@@ -82,8 +82,8 @@ module Nextflow
         render(Samplesheet::SampleCellComponent.new(sample:, fields:))
       end
 
-      def render_metadata_cell(sample, entry, fields)
-        render(Samplesheet::MetadataCellComponent.new(sample:, entry:, form: fields))
+      def render_metadata_cell(sample, name, entry, fields)
+        render(Samplesheet::MetadataCellComponent.new(sample:, name:, entry:, form: fields))
       end
 
       def render_file_cell(property, entry, fields, files, is_required)
