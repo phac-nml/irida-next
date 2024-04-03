@@ -1,17 +1,21 @@
 {
     "files": {
         "global": [
-            {"path": "summary.txt"}
+            {
+                "path": "summary.txt"
+            }
         ],
         "samples": {
-	        "workflow_execution_completion_test_puid_2": [
-	    	    {"path": "analysis3.txt"}
-	        ]
+            "INXT_SAM_AAAAAAAABR": [
+                {
+                    "path": "analysis3.txt"
+                }
+            ]
         }
     },
     "metadata": {
         "samples": {
-            "workflow_execution_completion_test_puid_1": {
+            "INXT_SAM_AAAAAAAABQ": {
                 "organism": "an organism",
                 "number": 1
             }
