@@ -32,7 +32,7 @@
             ) %>
           <% end %>
           <% if allowed_to?(:update?, @project) %>
-            <%= render section.with_dropdown(label: t(:"projects.sidebar.settings") , icon: "cog_6_tooth", caret: true, skidding: 200, distance: -45, dropdown_position: :right, selected: (@current_page == t(:"projects.sidebar.settings").downcase) || (@current_page == t(:"projects.sidebar.bot_accounts").downcase), trigger: :hover,
+            <%= render section.with_dropdown(label: t(:"projects.sidebar.settings") , icon: "cog_6_tooth", caret: true, skidding: 200, distance: -45, dropdown_position: :right, selected: (@current_page == t(:"projects.sidebar.settings").downcase) || (@current_page == t(:"projects.sidebar.bot_accounts").downcase),
                 classes: "w-full text-slate-900 font-normal dark:bg-slate-900 border-0 px-2 bg-slate-50 transition-colors
                 ease-in-out
                 delay-75
