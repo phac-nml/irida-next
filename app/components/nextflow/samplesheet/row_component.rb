@@ -27,7 +27,9 @@ module Nextflow
       end
 
       def sort_files
-        singles, pe_forward, pe_reverse = [], [], []
+        singles = []
+        pe_forward = []
+        pe_reverse = []
 
         @sample.attachments.each do |attachment|
           item = [attachment.file.filename.to_s, attachment.to_global_id, { 'data-puid': attachment.puid }]
@@ -41,7 +43,7 @@ module Nextflow
           end
         end
 
-        { singles: singles, pe_forward: pe_forward, pe_reverse: pe_reverse }
+        { singles:, pe_forward:, pe_reverse: }
       end
 
       def render_cell_type(property, entry, sample, fields) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
