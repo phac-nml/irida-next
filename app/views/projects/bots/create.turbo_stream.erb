@@ -2,7 +2,8 @@
                     partial: "bot_modal",
                     locals: {
                       open: @new_bot_account[:bot_user_account].errors.any?,
-                      new_bot_account: @new_bot_account[:bot_user_account]
+                      new_bot_account: @new_bot_account[:bot_user_account],
+                      bot_params: defined?(bot_params) ? bot_params : nil
                     } %>
 
 <%= turbo_stream.update "new_bot_account-error-alert", viral_alert(type:, message:) %>

@@ -18,17 +18,19 @@
           <%= form.label :token_name, "Token Name" %>
           <%= form.text_field :token_name,
                           required: true,
+                          value: !bot_params.nil? ? bot_params[:token_name] : "",
                           class: "form-control" %>
 
         </div>
-
 
         <div class="form-field">
           <%= form.label :access_level %>
           <%= form.select :access_level,
                       @access_levels,
-                      { prompt: "Select access levels" },
-                      selected: params[:access_level],
+                      {
+                        prompt: "Select access levels",
+                        selected: !bot_params.nil? ? bot_params[:access_level] : nil
+                      },
                       required: true %>
 
           <%= render "shared/form/field_errors",
@@ -57,11 +59,11 @@
             <%= form.text_field :expires_at,
                             placeholder: I18n.t("date.formats.iso"),
                             autocomplete: "off",
+                            value: !bot_params.nil? ? bot_params[:expires_at] : "",
                             "data-datepicker-target": "datePicker",
                             "data-datepicker-dialog": "true" %>
           </div>
         </div>
-
 
         <div class="form-field">
         <%= form.label :scopes %>
