@@ -54,7 +54,6 @@ module Nextflow
 
         return render_metadata_cell(sample, entry, fields) if entry['meta'].present?
 
-        return render_file_cell(property, entry, fields) if property.match(/fastq_\d+/)
         if entry['is_fastq']
           # Subtracting 1 of the result to get the index of the file in the array
           index = property.match(/fastq_(\d+)/)[1].to_i - 1
