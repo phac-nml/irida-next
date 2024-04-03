@@ -26,27 +26,22 @@ module Nextflow
         properties
       end
 
-      def sort_files # rubocop:disable Metrics/MethodLength
-        singles = []
-        pe_forward = []
-        pe_reverse = []
+      def sort_files
+        singles, pe_forward, pe_reverse = [], [], []
 
         @sample.attachments.each do |attachment|
           item = [attachment.file.filename.to_s, attachment.to_global_id, { 'data-puid': attachment.puid }]
-          if attachment.metadata['associated_attachment_id'].nil?
+          case attachment.metadata['direction']
+          when nil
             singles << item
-          elsif attachment.metadata['direction'].eql?('forward')
+          when 'forward'
             pe_forward << item
           else
             pe_reverse << item
           end
         end
 
-        {
-          singles:,
-          pe_forward:,
-          pe_reverse:
-        }
+        { singles: singles, pe_forward: pe_forward, pe_reverse: pe_reverse }
       end
 
       def render_cell_type(property, entry, sample, fields) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
