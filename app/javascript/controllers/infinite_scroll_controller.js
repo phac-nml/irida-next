@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
 
   scroll() {
-    if((this.element.scrollHeight - this.element.scrollTop - this.element.clientHeight) < 1){
+    if(this.element.scrollHeight - this.element.scrollTop <= this.element.clientHeight + 1){
       this.submitForm();
     }
   }
