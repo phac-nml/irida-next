@@ -38,7 +38,7 @@ module Integrations
           handle_error e
         end
 
-        def post(endpoint:, params: nil, data: nil)
+        def post(endpoint:, data: nil)
           response = @conn.post(endpoint, data)
           response.body&.deep_symbolize_keys # return nil if body is nil
         rescue Faraday::Error => e

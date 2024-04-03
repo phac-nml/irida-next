@@ -97,7 +97,7 @@ module Integrations
             workflow_engine: 'nextflow',
             workflow_engine_version: '23.10.0',
             workflow_url: 'https://github.com/jb-adams/md5-nf',
-            workflow_params: { file_int: 3 }
+            workflow_params: { file_int: 3 }.to_json
           )
         end
       end

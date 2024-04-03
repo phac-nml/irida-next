@@ -252,7 +252,7 @@ class ClientTest < ActionDispatch::IntegrationTest
     expected_hash = { run_id: 'aa5cd004-1fb5-4cc9-84c5-63c0e4956588' }
     stubs = Faraday::Adapter::Test::Stubs.new(strict_mode: true)
     body = {
-      workflow_params: {file_int: 3},
+      workflow_params: {file_int: 3}.to_json,
       workflow_type: 'NFL',
       workflow_type_version: 'DSL2',
       tags: '',
@@ -284,7 +284,7 @@ class ClientTest < ActionDispatch::IntegrationTest
     expected_hash = { run_id: 'aa5cd004-1fb5-4cc9-84c5-63c0e4956588' }
     stubs = Faraday::Adapter::Test::Stubs.new(strict_mode: true)
     body = {
-      workflow_params: {file_int: 3},
+      workflow_params: {file_int: 3}.to_json,
       workflow_type: 'NFL',
       workflow_type_version: 'DSL2',
       tags: '',
@@ -312,7 +312,7 @@ class ClientTest < ActionDispatch::IntegrationTest
       workflow_engine: 'nextflow',
       workflow_engine_version: '23.10.0',
       workflow_url: 'https://github.com/jb-adams/md5-nf',
-      workflow_params: {file_int: 3}
+      workflow_params: {file_int: 3}.to_json
     )
 
     stubs.verify_stubbed_calls
