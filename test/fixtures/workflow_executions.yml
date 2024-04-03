@@ -335,16 +335,15 @@ irida_next_example_completing_e:
     }
   workflow_params:
     {
-      "-r": "dev",
-      "--input": "/blah/samplesheet.csv",
-      "--outdir": "/blah/output",
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
     }
   workflow_type: "NFL"
   workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
   workflow_engine_version: "23.10.0"
-  workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
+  workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_e"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
