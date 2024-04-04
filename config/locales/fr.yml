@@ -1137,12 +1137,12 @@ fr:
       type: Type
     destroy:
       success: Data export '%{name}' was successfully deleted.
-      error: Data export '%{name}' could not be deleted.'
+      error: Data export '%{name}' could not be deleted.
     preview:
       manifest_json: manifest.json
     remove:
       success: Data export '%{name}' was successfully deleted.
-      error: Data export '%{name}' could not be deleted.'
+      error: Data export '%{name}' could not be deleted.
     show:
       download: Download
       remove_button: Remove
