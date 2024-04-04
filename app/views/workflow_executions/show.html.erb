@@ -16,7 +16,7 @@
       <% if @workflow_execution.deletable? %>
         <%= link_to(
           t("workflow_executions.show.remove_button"),
-          workflow_execution_path(@workflow_execution),
+          workflow_execution_path(@workflow_execution, redirect: true),
           data: {
             turbo_method: :delete,
             turbo_confirm: t("workflow_executions.show.remove_button_confirmation")
@@ -28,7 +28,7 @@
   <% end %>
 <% end %>
 
-<%= viral_tabs(id: "tabs", label: "Tabs") do |tabs| %>
+<%= viral_tabs(id: "workflow-execution-tabs", label: "Tabs") do |tabs| %>
   <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "summary"), selected: @tab == "summary" || @tab == nil, controls: "workflow-execution-tabs") do %>
     <%= t(:"workflow_executions.show.tabs.summary") %>
   <% end %>

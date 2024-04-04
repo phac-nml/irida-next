@@ -5,8 +5,6 @@ class WorkflowExecutionsController < ApplicationController
   include BreadcrumbNavigation
   include Metadata
 
-  respond_to :turbo_stream
-
   before_action :current_page, only: :index
   before_action :workflow_execution, only: %i[show cancel destroy]
   before_action :set_default_tab, only: :show
@@ -43,24 +41,34 @@ class WorkflowExecutionsController < ApplicationController
     nil unless @workflow_execution.persisted?
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
 
-    if @workflow_execution.deleted?
-      render status: :ok,
-             locals: { type: 'success',
-                       message: t('.success', workflow_name: @workflow_execution.metadata['workflow_name']) }
+    if @workflow_execution.deleted? && params[:redirect]
+      flash[:success] = t('.success', workflow_name: @workflow_execution.metadata['workflow_name'])
+      redirect_to workflow_executions_path(format: :html)
     else
-      render status: :unprocessable_entity, locals: {
-        type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
-      }
+      respond_to do |format|
+        format.turbo_stream do
+          if @workflow_execution.deleted?
+            render status: :ok,
+                   locals: { type: 'success',
+                             message: t('.success', workflow_name: @workflow_execution.metadata['workflow_name']) }
+
+          else
+            render status: :unprocessable_entity, locals: {
+              type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
+            }
+          end
+        end
+      end
     end
   end
 
   private
 
   def workflow_execution
-    @workflow_execution = WorkflowExecution.find_by(id: params[:id], submitter: current_user)
+    @workflow_execution = WorkflowExecution.find_by!(id: params[:id], submitter: current_user)
   end
 
   def set_default_sort

@@ -33,7 +33,7 @@
           <th scope="col" class="px-6 py-3">
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
-              label: t(:".headers.job_id"),
+              label: t(:".headers.run_id"),
               url: sorting_url(@q, :run_id),
               field: :run_id
             ) %>
@@ -84,7 +84,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="workflow_executions-table-body">
         <%= render partial: "workflow_execution", collection: @workflows %>
       </tbody>
     </table>

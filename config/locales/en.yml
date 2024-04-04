@@ -1098,7 +1098,7 @@ en:
         description: There are no workflow executions associated with this submitter.
       headers:
         id: ID
-        job_id: Job ID
+        run_id: Run ID
         name: Name
         version: Version
         state: State

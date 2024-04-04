@@ -8,6 +8,7 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
     @sample1 = samples(:sample1)
     @attachment1 = attachments(:attachment1)
+    @workflow_execution = workflow_executions(:irida_next_example_completed)
   end
 
   test 'should create workflow execution with valid params' do
@@ -147,5 +148,15 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
     assert_response :unprocessable_entity
+  end
+
+  test 'should show the workflow' do
+    get workflow_execution_path(@workflow_execution)
+    assert_response :success
+  end
+
+  test 'should not show the workflow' do
+    get workflow_execution_path(workflow_executions(:irida_next_example_completing_e))
+    assert_response :not_found
   end
 end

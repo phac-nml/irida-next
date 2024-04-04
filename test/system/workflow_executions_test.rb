@@ -277,4 +277,36 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_no_link 'Delete'
     end
   end
+
+  test 'can view a workflow execution' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    visit workflow_execution_path(workflow_execution)
+
+    assert_text workflow_execution.id
+    assert_text workflow_execution.state
+    assert_text workflow_execution.metadata['workflow_name']
+    assert_text workflow_execution.metadata['workflow_version']
+
+    click_on I18n.t('workflow_executions.show.tabs.files')
+
+    assert_text 'Filename'
+  end
+
+  test 'can remove workflow execution from workflow execution page' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    visit workflow_execution_path(workflow_execution)
+
+    click_link I18n.t(:'workflow_executions.show.remove_button')
+
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
+
+    within %(#workflow_executions-table-body) do
+      assert_selector 'tr', count: 11
+      assert_no_text workflow_execution.id
+    end
+  end
 end
