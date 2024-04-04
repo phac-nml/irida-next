@@ -13,11 +13,10 @@ export default class extends Controller {
       type: String,
     },
     total: Number,
-    active: Boolean
   };
 
   connect() {
-    if (this.activeValue) {
+    if (this.hasSelectAllTarget) {
       this.#storageKey =
         this.storageKeyValue ||
         `${location.protocol}//${location.host}${location.pathname}${location.search}`;
