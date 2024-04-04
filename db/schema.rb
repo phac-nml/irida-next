@@ -261,6 +261,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_08_204851) do
     t.uuid "submitter_id", null: false
     t.datetime "attachments_updated_at"
     t.string "blob_run_directory"
+    t.boolean "email_notification", default: false, null: false
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
   end
