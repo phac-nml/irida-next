@@ -124,6 +124,9 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
       assert_equal 'error', @workflow_execution.state
+
+      assert @workflow_execution.email_notification
+      assert_enqueued_jobs 1
     end
   end
 end

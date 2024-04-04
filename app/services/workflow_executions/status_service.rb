@@ -27,6 +27,8 @@ module WorkflowExecutions
 
       @workflow_execution.save
 
+      PipelineMailer.error_email(@workflow_execution).deliver_later if @workflow_execution.email_notification
+
       @workflow_execution
     end
   end

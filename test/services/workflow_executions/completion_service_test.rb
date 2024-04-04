@@ -135,6 +135,9 @@ module WorkflowExecutions
       assert_equal @normal_output_summary_file_blob.checksum, output_summary_file.file.checksum
 
       assert_equal 'completed', workflow_execution.state
+
+      assert workflow_execution.email_notification
+      assert_enqueued_jobs 1
     end
 
     test 'finalize non complete workflow_execution' do

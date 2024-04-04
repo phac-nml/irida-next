@@ -2,13 +2,13 @@
 
 # Pipeline Mailer
 class PipelineMailer < ApplicationMailer
+  before_action { @workflow_execution = params[:workflow_execution] }
+
   def complete_email
-    @user = params[:user]
-    mail(to: @user.email, subject: 'Pipeline completed')
+    mail(to: @workflow_execution.submitter.email, subject: 'Pipeline completed')
   end
 
   def error_email
-    @user = params[:user]
-    mail(to: @user.email, subject: 'Pipeline errored')
+    mail(to: @workflow_execution.submitter.email, subject: 'Pipeline errored')
   end
 end
