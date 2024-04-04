@@ -67,4 +67,14 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     get data_export_path(@data_export1)
     assert_response :unauthorized
   end
+
+  test 'should redirect after clicking project link in preview tab' do
+    get redirect_from_data_export_path(@data_export1, puid: 'INXT_PRJ_AAAAAAAAAA')
+    assert_response :redirect
+  end
+
+  test 'should redirect after clicking sample link in preview tab' do
+    get redirect_from_data_export_path(@data_export1, puid: 'INXT_SAM_AAAAAAAAAA')
+    assert_response :redirect
+  end
 end
