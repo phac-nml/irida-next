@@ -10,7 +10,6 @@ module Projects
       def new
         authorize! @project, to: :transfer_sample?
 
-        @q = load_samples.ransack(params[:q])
         respond_to do |format|
           format.turbo_stream do
             render status: :ok
@@ -18,13 +17,11 @@ module Projects
         end
       end
 
-      def create # rubocop:disable Metrics/AbcSize
+      def create
         new_project_id = transfer_params[:new_project_id]
         sample_ids = transfer_params[:sample_ids]
         @transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
                                                                                                   sample_ids)
-        @q = load_samples.ransack(params[:q])
-        @pagy, @samples = pagy(@q.result)
 
         if @project.errors.empty?
           render status: :ok, locals: { type: :success, message: t('.success') }

@@ -1,0 +1,46 @@
+<%= render Viral::PageHeaderComponent.new(title: @workflow_execution.id, id: @workflow_execution.state) do |component| %>
+  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
+  <%= component.with_buttons do %>
+    <div class="flex flex-row">
+      <% if @workflow_execution.cancellable? %>
+        <%= link_to(
+          t("workflow_executions.show.cancel_button"),
+          workflow_execution_cancel_path(@workflow_execution),
+          data: {
+            turbo_method: :put,
+            turbo_confirm: t("workflow_executions.show.cancel_button_confirmation")
+          },
+          class: "button button--state-default button--size-default mr-1"
+        ) %>
+      <% end %>
+      <% if @workflow_execution.deletable? %>
+        <%= link_to(
+          t("workflow_executions.show.remove_button"),
+          workflow_execution_path(@workflow_execution),
+          data: {
+            turbo_method: :delete,
+            turbo_confirm: t("workflow_executions.show.remove_button_confirmation")
+          },
+          class: "button button--state-default button--size-default mr-1"
+        ) %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= viral_tabs(id: "tabs", label: "Tabs") do |tabs| %>
+  <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "summary"), selected: @tab == "summary" || @tab == nil, controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.summary") %>
+  <% end %>
+  <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "files"), selected: @tab == "files", controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.files") %>
+  <% end %>
+
+  <%= tabs.with_tab_content do %>
+    <% if @tab == 'summary' || @tab == nil %>
+      <%= render partial: "summary" %>
+    <% elsif @tab == 'files' %>
+      <%= render partial: "files" %>
+    <% end %>
+  <% end %>
+<% end %>

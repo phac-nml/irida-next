@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-resources :workflow_executions, only: %i[index create destroy] do
-  scope '-' do
-    put :cancel
-  end
+resources :workflow_executions, only: %i[index create show destroy] do
+  put :cancel
 
   scope module: :workflow_executions, as: :workflow_executions do
     collection do

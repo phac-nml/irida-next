@@ -2,15 +2,25 @@
 
 # Workflow executions controller
 class WorkflowExecutionsController < ApplicationController
+  include BreadcrumbNavigation
   include Metadata
+
   respond_to :turbo_stream
+
   before_action :current_page, only: :index
-  before_action :workflow_execution, only: %i[cancel destroy]
+  before_action :workflow_execution, only: %i[show cancel destroy]
+  before_action :set_default_tab, only: :show
+
+  TABS = %w[summary files].freeze
 
   def index
     @q = load_workflows.ransack(params[:q])
     set_default_sort
     @pagy, @workflows = pagy_with_metadata_sort(@q.result)
+  end
+
+  def show
+    @samples_worfklow_execution = @workflow_execution.samples_workflow_executions
   end
 
   def create
@@ -46,11 +56,21 @@ class WorkflowExecutionsController < ApplicationController
   private
 
   def workflow_execution
-    @workflow_execution = WorkflowExecution.find(params[:id])
+    @workflow_execution = WorkflowExecution.find_by(id: params[:id], submitter: current_user)
   end
 
   def set_default_sort
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
+  end
+
+  def set_default_tab
+    @tab = 'summary'
+
+    return if params[:tab].nil?
+
+    redirect_to @workflow_execution, tab: 'summary' unless TABS.include? params[:tab]
+
+    @tab = params[:tab]
   end
 
   def load_workflows
@@ -86,5 +106,20 @@ class WorkflowExecutionsController < ApplicationController
 
   def current_page
     @current_page = I18n.t(:'general.default_sidebar.workflows')
+  end
+
+  def context_crumbs
+    @context_crumbs =
+      [{
+        name: I18n.t('workflow_executions.index.title'),
+        path: workflow_executions_path
+      }]
+    return unless action_name == 'show' && !@workflow_execution.nil?
+
+    @context_crumbs +=
+      [{
+        name: @workflow_execution.id,
+        path: workflow_execution_path(@workflow_execution)
+      }]
   end
 end
