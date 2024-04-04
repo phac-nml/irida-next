@@ -40,27 +40,18 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should not delete export without valid authorization' do
-    sign_in users(:jane_doe)
-    assert_no_difference('DataExport.count') do
-      delete data_export_path(@data_export1),
-             as: :turbo_stream
-    end
-    assert_response :unauthorized
-  end
-
-  test 'should redirect after success export delete through remove action' do
+  test 'should delete export and redirect through destroy action if redirect param present' do
     assert_difference('DataExport.count', -1) do
-      delete remove_data_export_path(@data_export1),
+      delete data_export_path(@data_export1, redirect: true),
              as: :turbo_stream
     end
     assert_response :redirect
   end
 
-  test 'should not redirect or delete export through remove action without valid authorization' do
+  test 'should not delete export without valid authorization' do
     sign_in users(:jane_doe)
     assert_no_difference('DataExport.count') do
-      delete remove_data_export_path(@data_export1),
+      delete data_export_path(@data_export1),
              as: :turbo_stream
     end
     assert_response :unauthorized
