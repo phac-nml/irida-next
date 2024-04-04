@@ -1118,6 +1118,14 @@ en:
       workflow_version: Workflow Version
       created_at: Created
       updated_at: Last Updated
+    files:
+      table_header:
+        puid: ID
+        filename: Filename
+        format: Format
+        type: Type
+        size: Size
+        created_at: Created At
     destroy:
       error: "Could not delete workflow %{workflow_name}"
       success: "Workflow %{workflow_name} was successfully deleted"

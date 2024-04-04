@@ -20,7 +20,11 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def show
-    @samples_worfklow_execution = @workflow_execution.samples_workflow_executions
+    return unless @tab == 'files'
+
+    @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
+    @attachments = Attachment.where(attachable: @workflow_execution)
+                             .or(Attachment.where(attachable: @samples_worfklow_executions))
   end
 
   def create
