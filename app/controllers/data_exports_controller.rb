@@ -57,9 +57,8 @@ class DataExportsController < ApplicationController
       namespace = project.namespace.parent
       redirect_to namespace_project_sample_path(namespace, project, sample, tab: 'files')
     else
-      project = Project.find_by(puid: params['puid'])
-      namespace = project.namespace.parent
-      redirect_to namespace_project_path(namespace, project)
+      project = Namespace.find_by(puid: params['puid']).project
+      redirect_to namespace_project_path(project.parent, project)
     end
   end
 
