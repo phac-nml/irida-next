@@ -7,7 +7,7 @@ group_one:
   description: Group 1 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 633, "metadatafield2": 106 }
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 1.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAA
 
 subgroup1:
   name: Subgroup 1
@@ -16,7 +16,7 @@ subgroup1:
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 2.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAB
 
 <% (Namespace::MAX_ANCESTORS-1).times do |n| %>
 subgroup<%= (n+2) %>:
@@ -26,7 +26,7 @@ subgroup<%= (n+2) %>:
   description: <%= "Subgroup #{n+2} description" %>
   parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}", :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: (n+3).days.ago) %>
+  puid: <%= "INXT_GRP_AAAAAA#{((n/26).round+66).chr}AA#{((n%26)+65).chr}" %>
 <% end %>
 
 group_two:
@@ -35,7 +35,7 @@ group_two:
   type: Group
   description: Group 2 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 30.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAC
 
 group_three:
   name: Group 3
@@ -43,7 +43,7 @@ group_three:
   type: Group
   description: Group 3 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 31.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAD
 
 subgroup_one_group_three:
   name: Subgroup 1 Group 3
@@ -52,7 +52,7 @@ subgroup_one_group_three:
   description: Subgroup 1 Group 3
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 32.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAE
 
 david_doe_group_four:
   name: Group 4
@@ -60,7 +60,7 @@ david_doe_group_four:
   type: Group
   description: David's first group
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 33.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAF
 
 group_five:
   name: Group 5
@@ -68,7 +68,7 @@ group_five:
   type: Group
   description: Group 5 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 34.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAG
 
 subgroup_one_group_five:
   name: Subgroup 1 Group 5
@@ -77,7 +77,7 @@ subgroup_one_group_five:
   description: Subgroup 1 Group 5
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 35.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAH
 
 group_six:
   name: Group 6
@@ -85,7 +85,7 @@ group_six:
   type: Group
   description: Group 6 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 36.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAI
 
 subgroup_one_group_six:
   name: Group 6
@@ -94,7 +94,7 @@ subgroup_one_group_six:
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 37.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAJ
 
 group_seven:
   name: Group 7
@@ -102,7 +102,7 @@ group_seven:
   type: Group
   description: Group 7 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 38.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAK
 
 group_eight:
   name: Group 8
@@ -110,7 +110,7 @@ group_eight:
   type: Group
   description: Group 8 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 39.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAL
 
 <% [*("a".."z")].each_with_index do |letter, index| %>
 group_<%= letter %>:
@@ -121,7 +121,7 @@ group_<%= letter %>:
   created_at: <%= (index + 1).days.ago %>
   updated_at: <%= (index + 1).days.ago %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: (index+40).days.ago) %>
+  puid: <%= "INXT_GRP_AAAAAAABA#{letter.capitalize}" %>
 <% end %>
 
 namespace_group_link_group_one:
@@ -130,7 +130,7 @@ namespace_group_link_group_one:
   type: Group
   description: Group One description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 75.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAM
 
 namespace_group_link_group_two:
   name: Group Two
@@ -138,7 +138,7 @@ namespace_group_link_group_two:
   type: Group
   description: Group Two description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 76.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAN
 
 namespace_group_link_group_three:
   name: Group Three
@@ -146,7 +146,7 @@ namespace_group_link_group_three:
   type: Group
   description: Group Three description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 77.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAO
 
 group_nine:
   name: Group 9
@@ -154,7 +154,7 @@ group_nine:
   type: Group
   description: Group 9 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 78.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAP
 
 subgroup_one_group_nine:
   name: Subgroup 1 Group 9
@@ -163,7 +163,7 @@ subgroup_one_group_nine:
   description: Subgroup 1 Group 9 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 79.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAQ
 
 group_ten:
   name: Group 10
@@ -172,7 +172,7 @@ group_ten:
   description: Group 10 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 80.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAR
 
 group_alpha:
   name: Group Alpha
@@ -180,7 +180,7 @@ group_alpha:
   type: Group
   description: Group Alpha description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 81.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAS
 
 group_bravo:
   name: Group Bravo
@@ -188,7 +188,7 @@ group_bravo:
   type: Group
   description: Group bravo description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 82.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAT
 
 group_charlie:
   name: Group Charlie
@@ -196,7 +196,7 @@ group_charlie:
   type: Group
   description: Group Charlie description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 83.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAU
 
 group_alpha_subgroup1:
   name: Subgroup 1
@@ -204,7 +204,7 @@ group_alpha_subgroup1:
   type: Group
   description: Subgroup 1 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 84.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAV
 
 group_eleven:
   name: Group 11
@@ -212,7 +212,7 @@ group_eleven:
   type: Group
   description: Group 11 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 85.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAW
 
 group_twelve:
   name: Group 12
@@ -221,7 +221,7 @@ group_twelve:
   description: Group 12 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 3, "metadatafield2": 3 }
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 86.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAX
 
 subgroup_twelve_a:
   name: Subgroup 12 A
@@ -231,7 +231,7 @@ subgroup_twelve_a:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 87.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAY
 
 subgroup_twelve_b:
   name: Subgroup 12 B
@@ -241,7 +241,7 @@ subgroup_twelve_b:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 88.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAAZ
 
 subgroup_twelve_a_a:
   name: Subgroup 12 A A
@@ -251,7 +251,7 @@ subgroup_twelve_a_a:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 89.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAA2
 
 group_delta:
   name: Group Delta
@@ -259,7 +259,7 @@ group_delta:
   type: Group
   description: Group Delta description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 90.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAA3
 
 group_delta_subgroupA:
   name: Subgroup A
@@ -268,7 +268,7 @@ group_delta_subgroupA:
   description: Subgroup A description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 91.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAA4
 
 group_echo:
   name: Group Echo
@@ -276,7 +276,7 @@ group_echo:
   type: Group
   description: Group Echo description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 92.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAA5
 
 group_echo_subgroupB:
   name: Subgroup B
@@ -285,7 +285,7 @@ group_echo_subgroupB:
   description: Subgroup B description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 93.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAA6
 
 group_foxtrot:
   name: Group Foxtrot
@@ -293,7 +293,7 @@ group_foxtrot:
   type: Group
   description: Group Foxtrot description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 94.days.ago) %>
+  puid: INXT_GRP_AAAAAAAAA7
 
 group_foxtrot_subgroupA:
   name: Subgroup A
@@ -302,7 +302,7 @@ group_foxtrot_subgroupA:
   description: Subgroup A description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid) %>
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 95.days.ago) %>
+  puid: INXT_GRP_AAAAAAAABA
 
 group_golf:
   name: Group Golf
@@ -310,7 +310,7 @@ group_golf:
   type: Group
   description: Group Golf description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 96.days.ago) %>
+  puid: INXT_GRP_AAAAAAAABB
 
 group_hotel:
   name: Group Hotel
@@ -319,7 +319,7 @@ group_hotel:
   description: Group Hotel description
   metadata_summary: {}
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 97.days.ago) %>
+  puid: INXT_GRP_AAAAAAAABC
 
 group_thirteen:
   name: Group 13
@@ -327,7 +327,7 @@ group_thirteen:
   type: Group
   description: Group 13 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 98.days.ago) %>
+  puid: INXT_GRP_AAAAAAAABD
 
 group_fourteen:
   name: Group 14
@@ -335,7 +335,7 @@ group_fourteen:
   type: Group
   description: Group 14 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 99.days.ago) %>
+  puid: INXT_GRP_AAAAAAAABE
 
 group_fifteen:
   name: Group 15
@@ -343,4 +343,4 @@ group_fifteen:
   type: Group
   description: Group 15 description
   metadata_summary: {}
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Group, time: 100.days.ago) %>
+  puid: INXT_GRP_AAAAAAAABF

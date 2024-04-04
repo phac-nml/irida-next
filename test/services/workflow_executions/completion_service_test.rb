@@ -321,7 +321,7 @@ module WorkflowExecutions
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
       # samples workflow executions can be in either order
-      if workflow_execution.samples_workflow_executions[0].sample.puid == 'workflow_execution_completion_test_puid_1'
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
         swe1 = workflow_execution.samples_workflow_executions[0]
         swe2 = workflow_execution.samples_workflow_executions[1]
       else
