@@ -109,7 +109,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_export_path(@data_export2)
 
     within %(#data-export-listing) do
-      assert_no_text I18n.t('data_exports.attributes_table.name')
+      assert_no_text I18n.t('data_exports.summary.name')
     end
   end
 
@@ -118,7 +118,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within %(#data-export-listing) do
       assert_selector 'div:last-child dd',
-                      text: I18n.t('data_exports.attributes_table.once_ready')
+                      text: I18n.t('data_exports.summary.once_ready')
     end
   end
 

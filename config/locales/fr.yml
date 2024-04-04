@@ -1127,7 +1127,7 @@ fr:
       delete_confirmation: Are you sure you would like to delete data export '%{name}'?
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
-    attributes_table:
+    summary:
       created_at: Created
       expires_at: Expires
       id: ID

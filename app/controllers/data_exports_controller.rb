@@ -13,7 +13,7 @@ class DataExportsController < ApplicationController
 
     # Avoids manually navigating to an empty manifest page
     if @data_export.manifest.empty?
-      @tab = 'attributes'
+      @tab = 'summary'
     else
       @tab = params[:tab]
       @manifest = JSON.parse(@data_export.manifest)
