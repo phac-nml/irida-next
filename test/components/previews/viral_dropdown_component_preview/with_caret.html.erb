@@ -1,5 +1,17 @@
-<%= viral_dropdown(label: "Organism", aria: { label: "Organism dropdown list" }, caret: true) do |dropdown| %>
-  <% dropdown.with_item(label: "Aspergillus awamori", url: '#') %>
-  <% dropdown.with_item(label: "Bacillus cereus", url: '#') %>
-  <% dropdown.with_item(label: "Pseudomonas aeruginosa", url: '#') %>
-<% end %>
+<div>
+  <div class="py-4">
+    <%= viral_dropdown(label: "Organism", aria: { label: "Organism dropdown list" }, caret: true) do |dropdown| %>
+      <% dropdown.with_item(label: "Aspergillus awamori", url: '#') %>
+      <% dropdown.with_item(label: "Bacillus cereus", url: '#') %>
+      <% dropdown.with_item(label: "Pseudomonas aeruginosa", url: '#') %>
+    <% end %>
+  </div>
+
+  <div class="py-4">
+    <%= viral_dropdown(label: "Organism 2", aria: { label: "Organism 2 dropdown list" }, caret: true, skidding: 180, distance: -45, dropdown_position: :right, trigger: :hover) do |dropdown| %>
+      <% dropdown.with_item(label: "Aspergillus awamori", url: '#') %>
+      <% dropdown.with_item(label: "Bacillus cereus", url: '#') %>
+      <% dropdown.with_item(label: "Pseudomonas aeruginosa", url: '#') %>
+    <% end %>
+  <div>
+<div>

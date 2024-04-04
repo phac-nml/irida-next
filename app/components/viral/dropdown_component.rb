@@ -15,9 +15,7 @@ module Viral
 
     CARET_ICON_MAPPINGS = {
       bottom: 'chevron_down',
-      left: 'chevron_left',
-      right: 'chevron_right',
-      top: 'chevron_up'
+      right: 'chevron_right'
     }.freeze
 
     # rubocop:disable Metrics/ParameterLists
