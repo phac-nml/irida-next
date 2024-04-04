@@ -46,32 +46,35 @@ module Nextflow
         { singles:, pe_forward:, pe_reverse: }
       end
 
-      def render_cell_type(property, entry, sample, fields) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def render_cell_type(property, entry, sample, fields)
         return render_sample_cell(sample, fields) if property == 'sample'
 
         return render_metadata_cell(sample, property, entry, fields) if entry['meta'].present?
 
-        if entry['is_fastq']
-          # Subtracting 1 of the result to get the index of the file in the array
-          index = property.match(/fastq_(\d+)/)[1].to_i - 1
-          files = index.zero? ? @files[:pe_forward] : @files[:pe_reverse]
-          return render_file_cell(property, entry, fields, files,
-                                  @required_properties.include?(property))
-        end
+        return render_fastq_cell(property, entry, fields) if entry['is_fastq']
 
-        if check_for_file(entry)
-          files = if entry['pattern']
-                    filter_files_by_pattern(@files[:singles], entry['pattern'])
-                  else
-                    @files[:singles]
-                  end
-          return render_file_cell(property, entry, fields,
-                                  files, @required_properties.include?(property))
-        end
+        return render_other_file_cell(property, entry, fields) if check_for_file(entry)
 
         return render_dropdown_cell(property, entry, fields) if entry['enum'].present?
 
         render_input_cell(property, fields)
+      end
+
+      def render_fastq_cell(property, entry, fields)
+        index = property.match(/fastq_(\d+)/)[1].to_i - 1
+        files = index.zero? ? @files[:pe_forward] : @files[:pe_reverse]
+        render_file_cell(property, entry, fields, files,
+                         @required_properties.include?(property))
+      end
+
+      def render_other_file_cell(property, entry, fields)
+        files = if entry['pattern']
+                  filter_files_by_pattern(@files[:singles], entry['pattern'])
+                else
+                  @files[:singles]
+                end
+        render_file_cell(property, entry, fields,
+                         files, @required_properties.include?(property))
       end
 
       def filter_files_by_pattern(files, pattern)
