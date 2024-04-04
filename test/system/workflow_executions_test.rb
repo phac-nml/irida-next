@@ -49,7 +49,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    click_on I18n.t('workflow_executions.table.headers.job_id')
+    click_on I18n.t('workflow_executions.table.headers.run_id')
     assert_selector 'table#workflow_executions thead th:nth-child(2) svg.icon-arrow_up'
 
     within first('table#workflow_executions tbody') do
@@ -59,7 +59,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector 'tr:last-child td:nth-child(2)', text: workflow_execution.run_id
     end
 
-    click_on I18n.t('workflow_executions.table.headers.job_id')
+    click_on I18n.t('workflow_executions.table.headers.run_id')
     assert_selector 'table#workflow_executions thead th:nth-child(2) svg.icon-arrow_down'
 
     within first('table#workflow_executions tbody') do
