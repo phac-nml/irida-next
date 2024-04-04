@@ -71,7 +71,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_145629) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.uuid "user_id", null: false
-    t.jsonb "manifest", default: {}, null: false
     t.index ["created_at"], name: "index_data_exports_on_created_at"
     t.index ["user_id"], name: "index_data_exports_on_user_id"
   end
