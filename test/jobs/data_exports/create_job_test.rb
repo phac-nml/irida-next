@@ -37,6 +37,48 @@ module DataExports
         end
       end
       assert_not expected_files_in_zip.count.positive?
+      expected_manifest = {
+        'type' => 'Samples Export',
+        'date' => '2024-04-04',
+        'children' =>
+        [{
+          'name' => project.puid,
+          'type' => 'folder',
+          'irida-next-type' => 'project',
+          'irida-next-name' => 'Project 1',
+          'children' =>
+          [{
+            'name' => sample.puid,
+            'type' => 'folder',
+            'irida-next-type' => 'sample',
+            'irida-next-name' => 'Project 1 Sample 1',
+            'children' =>
+            [{
+              'name' => attachment1.puid,
+              'type' => 'folder',
+              'irida-next-type' => 'attachment',
+              'children' =>
+              [{
+                'name' => 'test_file.fastq',
+                'type' => 'file',
+                'metadata' => { 'format' => 'fastq' }
+              }]
+            },
+             {
+               'name' => attachment2.puid,
+               'type' => 'folder',
+               'irida-next-type' => 'attachment',
+               'children' => [{
+                 'name' => 'test_file_A.fastq',
+                 'type' => 'file',
+                 'metadata' => { 'format' => 'fastq' }
+               }]
+             }]
+          }]
+        }]
+      }
+
+      assert_equal expected_manifest.to_json, @data_export.manifest
     end
 
     test 'content of export including paired files' do
@@ -77,6 +119,132 @@ module DataExports
         end
       end
       assert_not expected_files_in_zip.count.positive?
+      expected_manifest = {
+        'type' => 'Samples Export',
+        'date' => '2024-04-04',
+        'children' =>
+        [{
+          'name' => project.puid,
+          'type' => 'folder',
+          'irida-next-type' => 'project',
+          'irida-next-name' => 'Project A',
+          'children' =>
+          [{
+            'name' => sample_b.puid,
+            'type' => 'folder',
+            'irida-next-type' => 'sample',
+            'irida-next-name' => 'Project A Sample B',
+            'children' =>
+            [{
+              'name' => attachment_fwd1.puid,
+              'type' => 'folder',
+              'irida-next-type' => 'attachment',
+              'children' =>
+              [{
+                'name' => 'test_file_fwd_1.fastq',
+                'type' => 'file',
+                'metadata' =>
+                {
+                  'format' => 'fastq',
+                  'direction' => 'forward',
+                  'type' => 'pe'
+                }
+              },
+               {
+                 'name' => 'test_file_rev_1.fastq',
+                 'type' => 'file',
+                 'metadata' =>
+                 {
+                   'format' => 'fastq',
+                   'direction' => 'reverse',
+                   'type' => 'pe'
+                 }
+               }]
+            },
+             {
+               'name' => attachment_rev2.puid,
+               'type' => 'folder',
+               'irida-next-type' => 'attachment',
+               'children' =>
+               [{
+                 'name' => 'test_file_fwd_2.fastq',
+                 'type' => 'file',
+                 'metadata' =>
+                 {
+                   'format' => 'fastq',
+                   'direction' => 'forward', 'type' => 'pe'
+                 }
+               },
+                {
+                  'name' => 'test_file_rev_2.fastq',
+                  'type' => 'file',
+                  'metadata' =>
+                 {
+                   'format' => 'fastq',
+                   'direction' => 'reverse',
+                   'type' => 'pe'
+                 }
+                }]
+             },
+             {
+               'name' => attachment_fwd3.puid,
+               'type' => 'folder',
+               'irida-next-type' => 'attachment',
+               'children' =>
+              [{
+                'name' => 'test_file_fwd_3.fastq',
+                'type' => 'file',
+                'metadata' =>
+                {
+                  'format' => 'fastq',
+                  'direction' => 'forward',
+                  'type' => 'pe'
+                }
+              },
+               { 'name' => 'test_file_rev_3.fastq',
+                 'type' => 'file',
+                 'metadata' =>
+                 {
+                   'format' => 'fastq',
+                   'direction' => 'reverse',
+                   'type' => 'pe'
+                 } }]
+             },
+             { 'name' => attachment_d.puid,
+               'type' => 'folder',
+               'irida-next-type' => 'attachment',
+               'children' =>
+              [{
+                'name' => 'test_file_D.fastq',
+                'type' => 'file',
+                'metadata' => { 'format' => 'fastq' }
+              }] },
+             {
+               'name' => attachment_e.puid,
+               'type' => 'folder',
+               'irida-next-type' => 'attachment',
+               'children' =>
+               [{
+                 'name' => 'test_file_2.fastq.gz',
+                 'type' => 'file',
+                 'metadata' => { 'format' => 'fastq' }
+               }]
+             },
+             {
+               'name' => attachment_f.puid,
+               'type' => 'folder',
+               'irida-next-type' => 'attachment',
+               'children' =>
+               [{
+                 'name' => 'test_file_14.fastq.gz',
+                 'type' => 'file',
+                 'metadata' => { 'format' => 'fastq' }
+               }]
+             }]
+          }]
+        }]
+      }.to_json
+      assert_equal expected_manifest, data_export.manifest
     end
   end
 end
