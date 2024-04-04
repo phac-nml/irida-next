@@ -3,7 +3,7 @@
 module Nextflow
   module Samplesheet
     # Component to render a row in the sample sheet
-    class RowComponent < Component
+    class RowComponent < Component # rubocop:disable Metrics/ClassLength
       attr_reader :sample, :files, :properties
 
       def initialize(sample, index, properties, required_properties)
