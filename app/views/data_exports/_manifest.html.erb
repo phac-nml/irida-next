@@ -2,7 +2,7 @@
   <% @manifest['children'].each do |project| %>
    <li>
       <div class="flex text-primary-800 dark:text-primary-400">
-        <%= viral_icon(name: "folder", classes: "w-5 h-5 m-0") %>
+        <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
         <span class="ml-2">
           <%= link_to project["name"],
             redirect_from_data_export_path(puid: project["name"]),
@@ -16,7 +16,7 @@
         <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
           <li>
             <div class="flex text-purple-800 dark:text-purple-300">
-              <%= viral_icon(name: "folder", classes: "w-5 h-5 m-0") %>
+              <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
               <span class="ml-2">
                 <%= link_to sample["name"],
                 redirect_from_data_export_path(puid: sample["name"]),
@@ -30,14 +30,9 @@
               <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                 <li>
                   <div class="flex text-blue-800 dark:text-blue-300">
-                    <%= viral_icon(name: "folder", classes: "w-5 h-5 m-0") %>
-                    <span class="ml-2">
-                      <%= link_to attachments["name"],
-                        redirect_from_data_export_path(puid: sample["name"]),
-                        data: {
-                            turbo: false
-                        },
-                        class: "hover:underline text-sm" %>
+                    <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                    <span class="ml-2 text-sm">
+                      <%= attachments["name"] %>
                     </span>
                   </div>
                   <% attachments["children"].each do |attachment| %>
@@ -45,13 +40,8 @@
                       <li>
                         <div class="flex text-slate-900 dark:text-white">
                           <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
-                            <span class="ml-2">
-                              <%= link_to attachment["name"],
-                                redirect_from_data_export_path(puid: sample["name"]),
-                                data: {
-                                    turbo: false
-                                },
-                                class: "hover:underline text-sm" %>
+                            <span class="ml-2 text-sm">
+                              <%= attachment["name"] %>
                             </span>
                           </div>
                       </li>

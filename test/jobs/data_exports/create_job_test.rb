@@ -109,16 +109,7 @@ module DataExports
           "#{project.puid}/#{sample_b.puid}/#{attachment_f.puid}/#{attachment_f.file.filename}",
           'manifest.json'
         ]
-      DataExports::CreateJob.perform_now(data_export)
-      data_export.run_callbacks(:commit)
-      export_file = ActiveStorage::Blob.service.path_for(data_export.file.key)
-      Zip::File.open(export_file) do |zip_file|
-        zip_file.each do |entry|
-          assert expected_files_in_zip.include?(entry.to_s)
-          expected_files_in_zip.delete(entry.to_s)
-        end
-      end
-      assert_not expected_files_in_zip.count.positive?
+
       expected_manifest = {
         'type' => 'Samples Export',
         'date' => '2024-04-04',
@@ -244,6 +235,17 @@ module DataExports
           }]
         }]
       }.to_json
+
+      DataExports::CreateJob.perform_now(data_export)
+      data_export.run_callbacks(:commit)
+      export_file = ActiveStorage::Blob.service.path_for(data_export.file.key)
+      Zip::File.open(export_file) do |zip_file|
+        zip_file.each do |entry|
+          assert expected_files_in_zip.include?(entry.to_s)
+          expected_files_in_zip.delete(entry.to_s)
+        end
+      end
+      assert_not expected_files_in_zip.count.positive?
       assert_equal expected_manifest, data_export.manifest
     end
   end
