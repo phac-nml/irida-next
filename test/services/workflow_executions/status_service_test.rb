@@ -130,7 +130,7 @@ module WorkflowExecutions
       assert_equal 'error', @workflow_execution.state
 
       assert @workflow_execution.email_notification
-      assert_enqueued_jobs 1
+      assert_enqueued_emails 1
       assert_enqueued_email_with PipelineMailer, :error_email, args: [@workflow_execution]
     end
   end

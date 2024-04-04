@@ -8,6 +8,8 @@ class WorkflowExecution < ApplicationRecord
   has_logidze
   acts_as_paranoid
 
+  after_save :send_email, if: :saved_change_to_state?
+
   belongs_to :submitter, class_name: 'User'
 
   has_many :samples_workflow_executions, dependent: :destroy
@@ -18,6 +20,16 @@ class WorkflowExecution < ApplicationRecord
   accepts_nested_attributes_for :samples_workflow_executions
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
+
+  def send_email
+    return unless email_notification
+
+    if completed?
+      PipelineMailer.complete_email(self).deliver_later
+    elsif error?
+      PipelineMailer.error_email(self).deliver_later
+    end
+  end
 
   def prepared?
     state == 'prepared'
