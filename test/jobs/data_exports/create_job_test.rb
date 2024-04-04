@@ -39,7 +39,7 @@ module DataExports
       assert_not expected_files_in_zip.count.positive?
       expected_manifest = {
         'type' => 'Samples Export',
-        'date' => '2024-04-04',
+        'date' => Date.current.strftime('%Y-%d-%m').to_s,
         'children' =>
         [{
           'name' => project.puid,
@@ -112,7 +112,7 @@ module DataExports
 
       expected_manifest = {
         'type' => 'Samples Export',
-        'date' => '2024-04-04',
+        'date' => Date.current.strftime('%Y-%d-%m').to_s,
         'children' =>
         [{
           'name' => project.puid,
