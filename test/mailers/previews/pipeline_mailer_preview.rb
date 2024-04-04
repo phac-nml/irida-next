@@ -4,11 +4,11 @@
 class PipelineMailerPreview < ActionMailer::Preview
   def complete_email
     workflow_execution = WorkflowExecution.where("metadata ->> 'workflow_name' = ?", 'irida-next-example').first
-    PipelineMailer.with(workflow_execution:).complete_email
+    PipelineMailer.complete_email(workflow_execution)
   end
 
   def error_email
     workflow_execution = WorkflowExecution.where("metadata ->> 'workflow_name' = ?", 'irida-next-example').first
-    PipelineMailer.with(workflow_execution:).error_email
+    PipelineMailer.error_email(workflow_execution)
   end
 end
