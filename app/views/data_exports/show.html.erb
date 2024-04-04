@@ -70,29 +70,29 @@
           current: (@tab == "attributes" || @tab == nil) ? "page" : "false"
         } %>
       </li>
-      <li class="mr-2">
-        <%= link_to t(:"data_exports.show.tabs.manifest"),
-        data_export_path(@data_export, tab: "manifest"),
-        class:
-          (
-            if @tab == "manifest" && @data_export.status == 'ready'
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            elsif @data_export.status == 'processing'
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
-        aria: {
-          current: @tab == "manifest" ? "page" : "false"
-        }%>
-      </li>
+      <% if @data_export.status == 'ready' %>
+        <li class="mr-2">
+          <%= link_to t(:"data_exports.show.tabs.manifest"),
+          data_export_path(@data_export, tab: "manifest"),
+          class:
+            (
+              if @tab == "manifest"
+                "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
+              else
+                "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
+              end
+            ),
+          aria: {
+            current: @tab == "manifest" ? "page" : "false"
+          }%>
+        </li>
+      <% end %>
     </ul>
   </div>
   <div class="flex flex-col" data-turbo-temporary>
     <%= turbo_frame_tag "data-export-listing", src: data_export_path(format: :turbo_stream, tab: @tab || 'attributes'), loading: :lazy do %>
       <% if @tab == "manifest" %>
-        <%= render partial: "shared/loading/history" %>
+        <%= render partial: "shared/loading/list" %>
       <% else %>
         <%= render partial: "shared/loading/table" %>
       <% end %>

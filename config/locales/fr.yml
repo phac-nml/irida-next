@@ -1128,14 +1128,13 @@ fr:
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
     attributes_table:
-      attribute: Attribute
       created_at: Created
       expires_at: Expires
       id: ID
       name: Name
+      once_ready: Available once export is ready
       status: Status
       type: Type
-      value: Value
     destroy:
       success: Data export '%{name}' was successfully deleted.
       error: Data export '%{name}' could not be deleted.'
