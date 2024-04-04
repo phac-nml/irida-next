@@ -1,6 +1,6 @@
 <%= turbo_stream.update "data-export-listing" do %>
-  <% if @tab == 'manifest' %>
-    <% render partial: "manifest" %>
+  <% if @tab == 'preview' %>
+    <% render partial: "preview" %>
   <% else %>
     <% render partial: "summary" %>
   <% end %>

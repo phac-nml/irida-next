@@ -1138,6 +1138,8 @@ fr:
     destroy:
       success: Data export '%{name}' was successfully deleted.
       error: Data export '%{name}' could not be deleted.'
+    preview:
+      manifest_json: manifest.json
     remove:
       success: Data export '%{name}' was successfully deleted.
       error: Data export '%{name}' could not be deleted.'
@@ -1147,4 +1149,4 @@ fr:
       remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
         attributes: Attributes
-        manifest: Manifest
+        preview: Preview

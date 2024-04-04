@@ -1,4 +1,12 @@
-<ul class="space-y-4 list-inside list-none mt-2">
+<ul class="space-y-3 list-inside list-none mt-3">
+  <li>
+    <div class="flex text-primary-800 dark:text-primary-400">
+      <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+      <span class="ml-2 text-sm">
+        <%= t('.manifest_json') %>
+      </span>
+    </div>
+  </li>
   <% @manifest['children'].each do |project| %>
    <li>
       <div class="flex text-primary-800 dark:text-primary-400">

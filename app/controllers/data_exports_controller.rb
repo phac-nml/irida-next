@@ -2,9 +2,12 @@
 
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
-  before_action :data_export, only: %i[download destroy show remove]
+  before_action :data_export, only: %i[download destroy show]
   before_action :data_exports, only: %i[index destroy]
   before_action :current_page
+  before_action :set_default_tab, only: :show
+
+  TABS = %w[summary preview].freeze
 
   def index; end
 
@@ -62,34 +65,24 @@ class DataExportsController < ApplicationController
     end
   end
 
-  # Delete from data_exports listing page
-  def destroy
+  def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     DataExports::DestroyService.new(@data_export, current_user).execute
-    respond_to do |format|
-      format.turbo_stream do
-        if @data_export.persisted?
-          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
-        else
-          render status: :ok,
-                 locals: { type: 'success',
-                           message: t('.success', name: @data_export.name || @data_export.id) }
-        end
-      end
-    end
-  end
-
-  # Delete from individual data_export page
-  def remove
-    DataExports::DestroyService.new(@data_export, current_user).execute
-    if @data_export.persisted?
-      respond_to do |format|
-        format.turbo_stream do
-          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
-        end
-      end
-    else
+    # Destroyed from data export show view
+    if !@data_export.persisted? && params[:redirect]
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
       redirect_to data_exports_path
+    # Destroyed from data exports listing index view
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          if @data_export.persisted?
+            render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
+          else
+            render status: :ok,
+                   locals: { type: 'success', message: t('.success', name: @data_export.name || @data_export.id) }
+          end
+        end
+      end
     end
   end
 
@@ -109,5 +102,15 @@ class DataExportsController < ApplicationController
 
   def current_page
     @current_page = 'data exports'
+  end
+
+  def set_default_tab
+    @tab = 'summary'
+
+    return if params[:tab].nil?
+
+    redirect_to @data_export, tab: 'summary' unless TABS.include? params[:tab]
+
+    @tab = params[:tab]
   end
 end

@@ -144,19 +144,19 @@ class DataExportsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'hidden manifest tab and download btn when status is processing' do
+  test 'hidden preview tab and download btn when status is processing' do
     visit data_export_path(@data_export1)
 
     assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                        text: I18n.t(:'data_exports.show.download')
     assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t(:'data_exports.show.tabs.manifest')
+                       text: I18n.t(:'data_exports.show.tabs.preview')
 
     visit data_export_path(@data_export2)
 
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t(:'data_exports.show.download')
-    assert_no_text I18n.t(:'data_exports.show.tabs.manifest')
+    assert_no_text I18n.t(:'data_exports.show.tabs.preview')
   end
 
   test 'can remove export from export page' do

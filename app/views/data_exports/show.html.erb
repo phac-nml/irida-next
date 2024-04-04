@@ -29,7 +29,7 @@
       <% end %>
         <%= link_to(
           t("data_exports.show.remove_button"),
-          remove_data_export_path(@data_export),
+          data_export_path(@data_export, redirect: true),
           data: {
             turbo_method: :delete,
             turbo_confirm: t("data_exports.show.remove_button_confirmation", name: @data_export.name || @data_export.id)
@@ -55,19 +55,27 @@
     "
   >
     <%= viral_tabs(id: "data-export-tabs", label: "Tabs") do |tabs| %>
-      <%= tabs.with_tab(url: data_export_path(@data_export, tab: "summary"), selected: @tab == "summary" || @tab == nil, controls: "data-export-tabs") do %>
+      <%= tabs.with_tab(
+        url: data_export_path(@data_export, tab: "summary"),
+        selected: @tab == "summary" || @tab == nil,
+        controls: "data-export-tabs") do %>
         <%= t(:"data_exports.show.tabs.summary")%>
       <% end %>
       <% if @data_export.status == 'ready' %>
-        <%= tabs.with_tab(url: data_export_path(@data_export, tab: "manifest"), selected: @tab == "manifest", controls: "data-export-tabs") do %>
-          <%= t(:"data_exports.show.tabs.manifest") %>
+        <%= tabs.with_tab(
+          url: data_export_path(@data_export, tab: "preview"),
+          selected: @tab == "preview",
+          controls: "data-export-tabs") do %>
+          <%= t(:"data_exports.show.tabs.preview") %>
         <% end %>
       <% end %>
     <% end %>
   </div>
   <div class="flex flex-col" data-turbo-temporary>
-    <%= turbo_frame_tag "data-export-listing", src: data_export_path(format: :turbo_stream, tab: @tab || 'summary'), loading: :lazy do %>
-      <% if @tab == "manifest" %>
+    <%= turbo_frame_tag "data-export-listing",
+      src: data_export_path(format: :turbo_stream, tab: @tab || 'summary'),
+      loading: :lazy do %>
+      <% if @tab == "preview" %>
         <%= render partial: "shared/loading/list" %>
       <% else %>
         <%= render partial: "shared/loading/table" %>
