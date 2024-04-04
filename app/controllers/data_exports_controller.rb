@@ -103,9 +103,9 @@ class DataExportsController < ApplicationController
   def set_default_tab
     @tab = 'summary'
 
-    return if params[:tab].nil? || @data_export.manifest.empty?
+    return if params[:tab].nil? || (params[:tab] == 'preview' && @data_export.manifest.empty?)
 
-    redirect_to @data_export, tab: 'summary' unless TABS.include? params[:tab]
+    redirect_to @data_export, tab: 'summary' unless TABS.include?(params[:tab])
 
     @tab = params[:tab]
   end
