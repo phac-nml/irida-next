@@ -38,6 +38,7 @@ irida_next_example:
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/iridanextexample"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  email_notification: true
 
 irida_next_example_prepared:
   metadata:

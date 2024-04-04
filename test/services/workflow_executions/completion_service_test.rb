@@ -150,6 +150,8 @@ module WorkflowExecutions
 
       assert_not_equal 'completing', workflow_execution.state
       assert_not_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'complete completing workflow_execution with no files' do
