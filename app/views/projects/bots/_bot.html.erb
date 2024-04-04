@@ -15,11 +15,13 @@
     <%= viral_time_ago(original_time: bot_account.created_at) %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <% if bot_account.members&.last %>
+    <% if bot_account.members.count.positive? %>
       <%= t(
-            :"projects.bots.index.access_level.level_#{bot_account.members.last&.access_level }"
+            :"projects.bots.index.access_level.level_#{bot_account.members.last.access_level }"
           )
       %>
+    <% else %>
+      ""
     <% end %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">

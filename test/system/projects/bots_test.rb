@@ -83,6 +83,13 @@ module Projects
         click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
       end
 
+      within('#access-token-section') do
+        bot_account_name = project.namespace.bots.of_self.last.email.rpartition('@').first
+        assert_selector 'h2', text: I18n.t('projects.bots.index.access_token_section.label', bot_name: bot_account_name)
+        assert_selector 'p', text: I18n.t('projects.bots.index.access_token_section.description')
+        assert_selector 'button', text: I18n.t('components.clipboard.copy')
+      end
+
       assert_selector 'tr', count: 1 + header_row_count
     end
 

@@ -19,13 +19,12 @@
 
   <%= turbo_stream.update "bots_pagination", partial: "pagination" %>
 
-<% if personal_access_token %>
+
   <%= turbo_stream.replace "access-token-section",
-                       partial: "access_token_section",
-                       locals: {
-                         bot_account_name: @new_bot_account[:bot_user_account].email.rpartition('@').first,
-                         token: personal_access_token.token
-                       } %>
-<% end %>
+                      partial: "access_token_section",
+                      locals: {
+                        bot_account_name: @new_bot_account[:bot_user_account].email.rpartition('@').first,
+                        token: personal_access_token.token
+                      } %>
 
 <% end%>
