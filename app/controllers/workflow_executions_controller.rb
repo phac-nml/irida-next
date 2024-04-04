@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Workflow executions controller
-class WorkflowExecutionsController < ApplicationController
+class WorkflowExecutionsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
   include Metadata
 
