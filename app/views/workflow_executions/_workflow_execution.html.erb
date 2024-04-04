@@ -3,7 +3,12 @@
   id="<%= dom_id(workflow_execution) %>"
 >
   <td class="px-6 py-4 whitespace-nowrap">
-    <%= workflow_execution.id %>
+    <%= link_to workflow_execution.id,
+    workflow_execution_path(workflow_execution),
+    data: {
+      turbo: false
+    },
+    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
     <%= workflow_execution.run_id %>
@@ -34,26 +39,28 @@
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
     <% if workflow_execution.cancellable? %>
-      <%= form_with method: :put, url: workflow_execution_cancel_path(workflow_execution) do |form| %>
-        <%= form.submit t(:"workflow_executions.index.actions.cancel_button"),
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    data: {
-                      turbo_confirm:
-                        t(:"workflow_executions.index.actions.cancel_confirm")
-                    } %>
-      <% end %>
+      <%= link_to(
+        t(:"workflow_executions.index.actions.cancel_button"),
+        cancel_workflow_execution_path(workflow_execution),
+        data: {
+          turbo_method: :put,
+          turbo_confirm: t(:"workflow_executions.index.actions.cancel_confirm")
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+      ) %>
     <% end %>
     <% if workflow_execution.deletable? %>
-      <%= form_with method: :delete, url: workflow_execution_path(workflow_execution) do |form| %>
-        <%= form.submit t(:"workflow_executions.index.actions.delete_button"),
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    data: {
-                      turbo_confirm:
-                        t(:"workflow_executions.index.actions.delete_confirm")
-                    } %>
-      <% end %>
+      <%= link_to(
+        t(:"workflow_executions.index.actions.delete_button"),
+        workflow_execution_path(workflow_execution),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: t(:"workflow_executions.index.actions.delete_confirm")
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+      ) %>
     <% end %>
   </td>
 </tr>

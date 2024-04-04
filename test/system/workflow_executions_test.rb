@@ -49,7 +49,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    click_on I18n.t('workflow_executions.table.headers.job_id')
+    click_on I18n.t('workflow_executions.table.headers.run_id')
     assert_selector 'table#workflow_executions thead th:nth-child(2) svg.icon-arrow_up'
 
     within first('table#workflow_executions tbody') do
@@ -59,7 +59,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector 'tr:last-child td:nth-child(2)', text: workflow_execution.run_id
     end
 
-    click_on I18n.t('workflow_executions.table.headers.job_id')
+    click_on I18n.t('workflow_executions.table.headers.run_id')
     assert_selector 'table#workflow_executions thead th:nth-child(2) svg.icon-arrow_down'
 
     within first('table#workflow_executions tbody') do
@@ -114,15 +114,15 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_selector 'input[type="submit"][value="Cancel"]', count: 1
-      find('input[type="submit"][value="Cancel"]').click
+      assert_link 'Cancel', count: 1
+      click_link 'Cancel'
     end
 
     assert_text 'Confirmation required'
     click_button 'Confirm'
 
     assert_selector 'tbody tr td:nth-child(5)', text: 'canceling'
-    assert_no_selector 'tbody tr  td:nth-child(5) input[type="submit"][value="Cancel"]'
+    assert_no_selector "tbody tr td:nth-child(5) a[text='Cancel']"
   end
 
   test 'should not delete a prepared workflow' do
@@ -136,7 +136,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -151,7 +151,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -166,8 +166,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_selector 'input[type="submit"][value="Delete"]', count: 1
-      find('input[type="submit"][value="Delete"]').click
+      assert_link 'Delete', count: 1
+      click_link 'Delete'
     end
 
     assert_text 'Confirmation required'
@@ -187,8 +187,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_selector 'input[type="submit"][value="Delete"]', count: 1
-      find('input[type="submit"][value="Delete"]').click
+      assert_link 'Delete', count: 1
+      click_link 'Delete'
     end
 
     assert_text 'Confirmation required'
@@ -208,7 +208,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -223,8 +223,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_selector 'input[type="submit"][value="Delete"]', count: 1
-      find('input[type="submit"][value="Delete"]').click
+      assert_link 'Delete', count: 1
+      click_link 'Delete'
     end
 
     assert_text 'Confirmation required'
@@ -244,7 +244,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -259,7 +259,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -274,7 +274,39 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
+    end
+  end
+
+  test 'can view a workflow execution' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    visit workflow_execution_path(workflow_execution)
+
+    assert_text workflow_execution.id
+    assert_text workflow_execution.state
+    assert_text workflow_execution.metadata['workflow_name']
+    assert_text workflow_execution.metadata['workflow_version']
+
+    click_on I18n.t('workflow_executions.show.tabs.files')
+
+    assert_text 'Filename'
+  end
+
+  test 'can remove workflow execution from workflow execution page' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    visit workflow_execution_path(workflow_execution)
+
+    click_link I18n.t(:'workflow_executions.show.remove_button')
+
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
+
+    within %(#workflow_executions-table-body) do
+      assert_selector 'tr', count: 11
+      assert_no_text workflow_execution.id
     end
   end
 end

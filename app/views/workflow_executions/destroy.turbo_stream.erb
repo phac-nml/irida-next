@@ -3,10 +3,8 @@
 <% end %>
 
 <% if @workflow_execution.deleted? %>
-  <%= turbo_stream.update "workflow_execution_table", partial: "table" %>
-  <% if @workflows.empty? %>
-    <%= turbo_stream.remove "workflow_execution_pagination" %>
-  <% else %>
-    <%= turbo_stream.update "workflow_execution_pagination", partial: "pagination" %>
+  <%= turbo_stream.replace "workflow_execution_table" do %>
+    <%= turbo_frame_tag "workflow_execution_table",
+    src: workflow_executions_path(format: :turbo_stream) %>
   <% end %>
 <% end %>

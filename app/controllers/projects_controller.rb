@@ -140,7 +140,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def context_crumbs
-    @context_crumbs = @project.nil? ? [] : route_to_context_crumbs(@project.namespace.route)
+    @context_crumbs = @project.nil? || !@project.persisted? ? [] : route_to_context_crumbs(@project.namespace.route)
 
     case action_name
     when 'update', 'edit'

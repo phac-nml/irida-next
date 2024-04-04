@@ -1098,13 +1098,35 @@ en:
         description: There are no workflow executions associated with this submitter.
       headers:
         id: ID
-        job_id: Job ID
+        run_id: Run ID
         name: Name
         version: Version
         state: State
         created_at: Created
         updated_at: Last Updated
         actions: Actions
+    show:
+      remove_button: Remove
+      remove_button_confirmation: Are you sure that you want to remove this workflow execution?
+      cancel_button: Cancel
+      cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
+      tabs:
+        summary: Summary
+        files: Files
+    summary:
+      run_id: Run ID
+      workflow_name: Workflow Name
+      workflow_version: Workflow Version
+      created_at: Created
+      updated_at: Last Updated
+    files:
+      table_header:
+        puid: ID
+        filename: Filename
+        format: Format
+        type: Type
+        size: Size
+        created_at: Created At
     destroy:
       error: "Could not delete workflow %{workflow_name}"
       success: "Workflow %{workflow_name} was successfully deleted"

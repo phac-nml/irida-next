@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   scope path: '-' do
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[index new create]
-    resources :workflow_executions, only: %i[index create]
+    draw :workflow_executions
     resources :data_exports, only: %i[index new create destroy] do
       member do
         get :download
@@ -28,7 +28,6 @@ Rails.application.routes.draw do
   draw :dashboard
   draw :user
   draw :project
-  draw :workflow_executions
 
   draw :development
 
