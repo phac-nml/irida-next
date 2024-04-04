@@ -114,15 +114,15 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_selector 'input[type="submit"][value="Cancel"]', count: 1
-      find('input[type="submit"][value="Cancel"]').click
+      assert_link 'Cancel', count: 1
+      click_link 'Cancel'
     end
 
     assert_text 'Confirmation required'
     click_button 'Confirm'
 
     assert_selector 'tbody tr td:nth-child(5)', text: 'canceling'
-    assert_no_selector 'tbody tr  td:nth-child(5) input[type="submit"][value="Cancel"]'
+    assert_no_selector "tbody tr td:nth-child(5) a[text='Cancel']"
   end
 
   test 'should not delete a prepared workflow' do
@@ -136,7 +136,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -151,7 +151,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -166,8 +166,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_selector 'input[type="submit"][value="Delete"]', count: 1
-      find('input[type="submit"][value="Delete"]').click
+      assert_link 'Delete', count: 1
+      click_link 'Delete'
     end
 
     assert_text 'Confirmation required'
@@ -187,8 +187,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_selector 'input[type="submit"][value="Delete"]', count: 1
-      find('input[type="submit"][value="Delete"]').click
+      assert_link 'Delete', count: 1
+      click_link 'Delete'
     end
 
     assert_text 'Confirmation required'
@@ -208,7 +208,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -223,8 +223,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_selector 'input[type="submit"][value="Delete"]', count: 1
-      find('input[type="submit"][value="Delete"]').click
+      assert_link 'Delete', count: 1
+      click_link 'Delete'
     end
 
     assert_text 'Confirmation required'
@@ -244,7 +244,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -259,7 +259,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 
@@ -274,7 +274,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within tr do
       assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_selector 'input[type="submit"][value="Delete"]'
+      assert_no_link 'Delete'
     end
   end
 end

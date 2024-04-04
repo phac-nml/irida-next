@@ -5,7 +5,7 @@
       <% if @workflow_execution.cancellable? %>
         <%= link_to(
           t("workflow_executions.show.cancel_button"),
-          workflow_execution_cancel_path(@workflow_execution),
+          cancel_workflow_execution_path(id: @workflow_execution.id),
           data: {
             turbo_method: :put,
             turbo_confirm: t("workflow_executions.show.cancel_button_confirmation")

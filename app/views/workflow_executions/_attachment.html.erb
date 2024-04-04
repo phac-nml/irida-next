@@ -37,7 +37,7 @@
           <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.file.filename,
-            rails_blob_path(attachment),
+            rails_blob_path(attachment.file),
             data: {
               turbo: false
             } %>
