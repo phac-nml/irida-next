@@ -25,9 +25,11 @@ module WorkflowExecutions
 
       @workflow_execution.state = 'error' if Integrations::Ga4ghWesApi::V1::States::ERROR_STATES.include?(state)
 
-      @workflow_execution.save
-
-      PipelineMailer.error_email(@workflow_execution).deliver_later if @workflow_execution.email_notification
+      @workflow_execution.save do
+        if @workflow_execution.email_notification && @workflow_execution.error?
+          PipelineMailer.error_email(@workflow_execution).deliver_later
+        end
+      end
 
       @workflow_execution
     end

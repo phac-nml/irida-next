@@ -42,9 +42,9 @@ module WorkflowExecutions
 
       @workflow_execution.state = 'completed'
 
-      @workflow_execution.save
-
-      PipelineMailer.complete_email(@workflow_execution).deliver_later if @workflow_execution.email_notification
+      @workflow_execution.save do
+        PipelineMailer.complete_email(@workflow_execution).deliver_later if @workflow_execution.email_notification
+      end
 
       @workflow_execution
     end
