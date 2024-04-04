@@ -52,7 +52,7 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
   test 'should cancel a workflow with valid params' do
     workflow_execution = workflow_executions(:irida_next_example_prepared)
 
-    put workflow_execution_cancel_path(workflow_execution, format: :turbo_stream)
+    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
     assert_response :success
     assert_equal 'canceling', workflow_execution.reload.state
   end
