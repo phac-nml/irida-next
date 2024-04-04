@@ -13,24 +13,27 @@ export default class extends Controller {
       type: String,
     },
     total: Number,
+    active: Boolean
   };
 
   connect() {
-    this.#storageKey =
-      this.storageKeyValue ||
-      `${location.protocol}//${location.host}${location.pathname}${location.search}`;
+    if (this.activeValue) {
+      this.#storageKey =
+        this.storageKeyValue ||
+        `${location.protocol}//${location.host}${location.pathname}${location.search}`;
 
-    this.element.setAttribute("data-controller-connected", "true");
+      this.element.setAttribute("data-controller-connected", "true");
 
-    const storageValue = this.#getStoredSamples();
+      const storageValue = this.#getStoredSamples();
 
-    if (storageValue) {
-      this.#updateUI(storageValue);
-    } else {
-      this.save([]);
+      if (storageValue) {
+        this.#updateUI(storageValue);
+      } else {
+        this.save([]);
+      }
+
+      this.#updatedCounts(storageValue.length);
     }
-
-    this.#updatedCounts(storageValue.length);
   }
 
   actionLinkOutletConnected(outlet) {
