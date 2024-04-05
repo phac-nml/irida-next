@@ -2,6 +2,8 @@
 
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController
+  include BreadcrumbNavigation
+
   before_action :data_export, only: %i[download destroy show]
   before_action :data_exports, only: %i[index destroy]
   before_action :current_page
@@ -108,5 +110,20 @@ class DataExportsController < ApplicationController
     redirect_to @data_export, tab: 'summary' unless TABS.include?(params[:tab])
 
     @tab = params[:tab]
+  end
+
+  def context_crumbs
+    @context_crumbs =
+      [{
+        name: I18n.t('data_exports.index.title'),
+        path: data_exports_path
+      }]
+    return unless action_name == 'show' && !@data_export.nil?
+
+    @context_crumbs +=
+      [{
+        name: @data_export.id,
+        path: data_export_path(@data_export)
+      }]
   end
 end
