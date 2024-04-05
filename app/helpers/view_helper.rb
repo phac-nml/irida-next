@@ -36,7 +36,13 @@ module ViewHelper
   end
 
   def viral_icon_source(name)
-    path = Rails.root.join('app', 'assets', 'icons', 'heroicons', "#{name}.svg")
+    path = if Rails.configuration.auth_config[name]
+             Rails.root.join(
+               'config', 'authentication', 'icons', Rails.configuration.auth_config[name]
+             ) # Auth Icon Overrides
+           else
+             Rails.root.join('app', 'assets', 'icons', 'heroicons', "#{name}.svg")
+           end
     file = File.read(path)
     doc = Nokogiri::HTML::DocumentFragment.parse(file)
     svg = doc.at_css 'svg'
