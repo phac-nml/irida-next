@@ -9,4 +9,8 @@ class DataExportPolicy < ApplicationPolicy
   def download?
     true if record.user_id == user.id
   end
+
+  def read_export?
+    true if record.user_id == user.id
+  end
 end

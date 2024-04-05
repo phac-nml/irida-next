@@ -1246,7 +1246,26 @@ en:
       delete_confirmation: Are you sure you would like to delete data export '%{name}'?
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
+    summary:
+      created_at: Created
+      expires_at: Expires
+      id: ID
+      name: Name
+      once_ready: Available once export is ready
+      status: Status
+      type: Type
     destroy:
       success: Data export '%{name}' was successfully deleted.
-      error: Data export '%{name}' could not be deleted.'
-
+      error: Data export '%{name}' could not be deleted.
+    preview:
+      manifest_json: manifest.json
+    remove:
+      success: Data export '%{name}' was successfully deleted.
+      error: Data export '%{name}' could not be deleted.
+    show:
+      download: Download
+      remove_button: Remove
+      remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
+      tabs:
+        summary: Summary
+        preview: Preview
