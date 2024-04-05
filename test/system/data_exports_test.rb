@@ -7,6 +7,9 @@ class DataExportsTest < ApplicationSystemTestCase
     @user = users(:john_doe)
     @data_export1 = data_exports(:data_export_one)
     @data_export2 = data_exports(:data_export_two)
+    @namespace = groups(:group_one)
+    @project = projects(:project1)
+    @sample1 = samples(:sample1)
     login_as @user
   end
 
@@ -144,13 +147,12 @@ class DataExportsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'hidden preview tab and download btn when status is processing' do
+  test 'hidden preview tab and disabled download btn when status is processing' do
     visit data_export_path(@data_export1)
 
     assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                        text: I18n.t(:'data_exports.show.download')
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t(:'data_exports.show.tabs.preview')
+    assert_text I18n.t(:'data_exports.show.tabs.preview')
 
     visit data_export_path(@data_export2)
 
@@ -178,138 +180,6 @@ class DataExportsTest < ApplicationSystemTestCase
     within %(#data-exports-table-body) do
       assert_selector 'tr', count: 1
       assert_no_text @data_export2.id
-    end
-  end
-
-  test 'member with access level >= analyst can see create export button' do
-    login_as users(:john_doe)
-
-    # project samples page
-    visit namespace_project_samples_url(@namespace, @project)
-    assert_selector 'a', text: I18n.t('projects.samples.index.create_export_button'), count: 1
-
-    # group samples page
-    visit group_samples_url(@namespace)
-    assert_selector 'a', text: I18n.t('projects.samples.index.create_export_button'), count: 1
-  end
-
-  test 'user with access level == guest cannot see create export button' do
-    login_as users(:ryan_doe)
-
-    # project samples page
-    visit namespace_project_samples_url(@namespace, @project)
-    assert_no_selector 'a', text: I18n.t('projects.samples.index.create_export_button')
-
-    # group samples page
-    visit group_samples_url(@namespace)
-    assert_no_selector 'a', text: I18n.t('projects.samples.index.create_export_button'), count: 1
-  end
-
-  test 'create export from project samples page' do
-    login_as users(:john_doe)
-
-    visit data_exports_path
-    within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 2
-      assert_no_text 'test data export'
-    end
-    # project samples page
-    visit namespace_project_samples_url(@namespace, @project)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
-
-    within %(#samples-table) do
-      find("input[type='checkbox'][value='#{@sample1.id}']").click
-    end
-
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
-
-    click_link I18n.t('projects.samples.index.create_export_button'), match: :first
-    within 'dialog[open].dialog--size-lg' do
-      assert_text I18n.t('data_exports.new_export_modal.name_label')
-      assert_text I18n.t('data_exports.new_export_modal.email_label')
-      assert_text "#{I18n.t('data_exports.new_export_modal.sample_count')} 1"
-
-      find('input#data_export_name').fill_in with: 'test data export'
-      find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_export_modal.submit_button')
-    end
-
-    within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 3
-      assert_text 'test data export'
-    end
-  end
-
-  test 'create export from group samples page' do
-    login_as users(:john_doe)
-
-    visit data_exports_path
-    within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 2
-      assert_no_text 'test data export'
-    end
-    # project samples page
-    visit group_samples_url(@namespace)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
-
-    within %(#samples-table) do
-      find("input[type='checkbox'][value='#{@sample1.id}']").click
-    end
-
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
-
-    click_link I18n.t('projects.samples.index.create_export_button'), match: :first
-    within 'dialog[open].dialog--size-lg' do
-      assert_text I18n.t('data_exports.new_export_modal.name_label')
-      assert_text I18n.t('data_exports.new_export_modal.email_label')
-      assert_text "#{I18n.t('data_exports.new_export_modal.sample_count')} 1"
-
-      find('input#data_export_name').fill_in with: 'test data export'
-      find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_export_modal.submit_button')
-    end
-
-    within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 3
-      assert_text 'test data export'
-    end
-  end
-
-  test 'checking samples on different page does not affect current page\'s export samples' do
-    login_as users(:john_doe)
-    subgroup12a = groups(:subgroup_twelve_a)
-    project29 = projects(:project29)
-    sample32 = samples(:sample32)
-
-    visit namespace_project_samples_url(subgroup12a, project29)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
-
-    within %(#samples-table) do
-      find("input[type='checkbox'][value='#{sample32.id}']").click
-    end
-
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
-
-    visit namespace_project_samples_url(@namespace, @project)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
-
-    within %(#samples-table) do
-      find("input[type='checkbox'][value='#{@sample1.id}']").click
-    end
-
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
-
-    click_link I18n.t('projects.samples.index.create_export_button'), match: :first
-    within 'dialog[open].dialog--size-lg' do
-      assert_text "#{I18n.t('data_exports.new_export_modal.sample_count')} 1"
     end
   end
 
@@ -442,6 +312,55 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
       assert_text "#{I18n.t('data_exports.new_export_modal.sample_count')} 1"
+    end
+  end
+
+  test 'zip file contents in preview tab for data export' do
+    attachment1 = attachments(:attachment1)
+    attachment2 = attachments(:attachment2)
+    visit data_export_path(@data_export1, tab: 'preview')
+
+    within %(#data-export-listing) do
+      assert_text @data_export1.file.filename.to_s
+      assert_text I18n.t('data_exports.preview.manifest_json')
+      assert_text @project.namespace.puid
+      assert_text @sample1.puid
+      assert_text attachment1.puid
+      assert_text attachment2.puid
+      assert_text attachment1.file.filename.to_s
+      assert_text attachment2.file.filename.to_s
+
+      assert_selector 'svg.Viral-Icon__Svg.icon-folder_open', count: 4
+      assert_selector 'svg.Viral-Icon__Svg.icon-document_text', count: 3
+    end
+  end
+
+  test 'clicking links in preview tab for data export' do
+    attachment1 = attachments(:attachment1)
+    attachment2 = attachments(:attachment2)
+    visit data_export_path(@data_export1, tab: 'preview')
+
+    within %(#data-export-listing) do
+      click_link @project.namespace.puid
+    end
+
+    assert_text @project.namespace.puid
+    assert_text @project.name
+
+    visit data_export_path(@data_export1, tab: 'preview')
+
+    within %(#data-export-listing) do
+      click_link @sample1.puid
+    end
+
+    assert_text @sample1.name
+    assert_text @sample1.puid
+    within %(#attachments-table-body) do
+      assert_selector 'tr', count: 2
+      assert_selector 'tr:first-child td:nth-child(2) ', text: attachment1.puid
+      assert_selector 'tr:first-child td:nth-child(3) ', text: attachment1.file.filename.to_s
+      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: attachment2.puid
+      assert_selector 'tr:nth-child(2) td:nth-child(3)', text: attachment2.file.filename.to_s
     end
   end
 end

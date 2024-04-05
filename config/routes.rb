@@ -16,7 +16,6 @@ Rails.application.routes.draw do
       member do
         get :download
         get :redirect_from
-        delete :remove
       end
     end
 

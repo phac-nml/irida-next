@@ -57,23 +57,6 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test 'should redirect after success export delete through remove action' do
-    assert_difference('DataExport.count', -1) do
-      delete remove_data_export_path(@data_export1),
-             as: :turbo_stream
-    end
-    assert_response :redirect
-  end
-
-  test 'should not redirect or delete export through remove action without valid authorization' do
-    sign_in users(:jane_doe)
-    assert_no_difference('DataExport.count') do
-      delete remove_data_export_path(@data_export1),
-             as: :turbo_stream
-    end
-    assert_response :unauthorized
-  end
-
   test 'should view data export page' do
     get data_export_path(@data_export1)
     assert_response :success
@@ -141,5 +124,15 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
            }
          }
     assert_response :unprocessable_entity
+  end
+
+  test 'should redirect from project PUID' do
+    get redirect_from_data_export_path(@data_export1, puid: 'INXT_PRJ_AAAAAAAAAA')
+    assert_response :redirect
+  end
+
+  test 'should redirect from sample PUID' do
+    get redirect_from_data_export_path(@data_export1, puid: 'INXT_SAM_AAAAAAAAAA')
+    assert_response :redirect
   end
 end

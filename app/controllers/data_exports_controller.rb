@@ -63,7 +63,6 @@ class DataExportsController < ApplicationController
     end
   end
 
-  # Delete from data_exports listing page
   def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     DataExports::DestroyService.new(@data_export, current_user).execute
     # Destroyed from data export show view

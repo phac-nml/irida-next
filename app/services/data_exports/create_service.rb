@@ -10,8 +10,11 @@ module DataExports
 
     def execute
       @data_export = DataExport.new(params)
+
       validate_params
+
       validate_sample_export if @data_export.export_type == 'sample'
+
       @data_export.user = current_user
       @data_export.status = 'processing'
 
