@@ -9,11 +9,12 @@ module Nextflow
       def initialize(form:, name:, sample:, entry:)
         @form = form
         @name = name
-        @metadata = if entry['meta'].is_a?(Array)
-                      sample.metadata[entry['meta'][0]].to_s
-                    else
-                      sample.metadata[entry['meta']].to_s
-                    end
+        @metadata = sample_metadata(entry, sample)
+      end
+
+      def sample_metadata(entry, sample)
+        key = entry['meta'].is_a?(Array) ? entry['meta'][0].to_s : entry['meta'].to_s
+        sample.metadata.key?(key) ? sample.metadata[key] : ''
       end
     end
   end
