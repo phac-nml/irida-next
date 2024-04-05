@@ -28,8 +28,8 @@ module WorkflowExecutions
                                                    params[:metadata][:workflow_version])
       workflow_schema = JSON.parse(workflow.schema_loc.read)
 
-      # remove blank values
-      sanitized_params = params[:workflow_params].compact_blank
+      # remove any nil values
+      sanitized_params = params[:workflow_params].compact
 
       workflow_schema['definitions'].each do |_item, definition|
         definition['properties'].each do |name, property|

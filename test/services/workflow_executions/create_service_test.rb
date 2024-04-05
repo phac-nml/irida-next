@@ -283,7 +283,8 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
-      assert_not @workflow_execution.workflow_params.key?('assembler')
+      assert_equal '', @workflow_execution.workflow_params['assembler']
+      assert_equal 'assembly', @workflow_execution.workflow_params['project_name']
       assert_equal 0, @workflow_execution.workflow_params['random_seed']
       assert_enqueued_jobs 1
     end
