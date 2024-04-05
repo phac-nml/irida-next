@@ -11,7 +11,7 @@ module Users
 
       if @user.persisted?
         sign_in_and_redirect @user, event: :authentication # this will throw if @user is not activated
-        set_flash_message(:notice, :success, kind: OmniAuth::Utils.camelize(action_name))
+        set_flash_message(:notice, :success, kind: Rails.configuration.auth_config["#{action_name}_text"])
       else
         # Removing extra and credentials as it can overflow some session stores
         session['devise.omniauth_data'] = request.env['omniauth.auth'].except(:extra, :credentials)
@@ -25,7 +25,7 @@ module Users
 
     def failure
       if @user.respond_to?(:errors) && @user.errors.present? && @user.errors.full_messages.present?
-        set_flash_message :alert, :failure, kind: OmniAuth::Utils.camelize(action_name),
+        set_flash_message :alert, :failure, kind: Rails.configuration.auth_config["#{action_name}_text"],
                                             reason: @user.errors.full_messages.to_sentence
       end
       redirect_to new_user_session_path
