@@ -1231,7 +1231,7 @@ en:
   data_exports:
     create:
       success: Data export '%{name}' was successfully started.
-      error: error
+      error: An error has occured with creating the data export.
     index:
       title: Data Exports
       table_header:

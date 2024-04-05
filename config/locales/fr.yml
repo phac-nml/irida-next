@@ -1111,6 +1111,9 @@ fr:
         updated_at_asc: Oldest updated
         created_at_asc: Oldest created
   data_exports:
+    create:
+      success: Data export '%{name}' was successfully started.
+      error: An error has occured with creating the data export.
     index:
       title: Data Exports
       table_header:
