@@ -1,5 +1,5 @@
 development:
-  # omniauth_providers:
+  omniauth_providers: []
   # developer_text:
   # developer_icon:
   # saml_text:
@@ -17,7 +17,7 @@ test:
   # azure_activedirectory_v2_icon:
 
 production:
-  # omniauth_providers:
+  omniauth_providers: []
   # saml_text:
   # saml_icon:
   # azure_activedirectory_v2_text:
