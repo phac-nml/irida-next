@@ -26,25 +26,27 @@ module WorkflowExecutions
     end
 
     def sanitize_workflow_params # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
-      return unless params.key?('metadata') && params['metadata'].key?('workflow_name') && params.key?('metadata')
+      return unless params.key?(:metadata) &&
+                    params[:metadata].key?(:workflow_name) &&
+                    params[:metadata].key?(:workflow_version)
 
-      workflow = Irida::Pipelines.find_pipeline_by(params['metadata']['workflow_name'],
-                                                   params['metadata']['workflow_version'])
+      workflow = Irida::Pipelines.find_pipeline_by(params[:metadata][:workflow_name],
+                                                   params[:metadata][:workflow_version])
       workflow_schema = JSON.parse(workflow.schema_loc.read)
 
       # remove blank values
-      params['workflow_params'].compact_blank!
+      params[:workflow_params].compact_blank!
 
       workflow_schema['definitions'].each do |_item, definition|
         definition['properties'].each do |name, property|
           formatted_name = format_name_as_arg(name)
-          next unless params['workflow_params'].key?(formatted_name)
+          next unless params[:workflow_params].key?(formatted_name.to_sym)
 
           case property['type']
           when 'integer'
-            params['workflow_params'][formatted_name] = params['workflow_params'][formatted_name].to_i
+            params[:workflow_params][formatted_name.to_sym] = params[:workflow_params][formatted_name.to_sym].to_i
           when 'number'
-            params['workflow_params'][formatted_name] = params['workflow_params'][formatted_name].to_f
+            params[:workflow_params][formatted_name.to_sym] = params[:workflow_params][formatted_name.to_sym].to_f
           end
         end
       end

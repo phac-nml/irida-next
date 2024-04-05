@@ -16,13 +16,13 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
       post workflow_executions_path(format: :turbo_stream),
            params: {
              workflow_execution: {
-               metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0.2' },
+               metadata: { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
                workflow_params: { '-r': 'dev' },
-               workflow_type: 'DSL2',
-               workflow_type_version: '22.10.7',
+               workflow_type: 'NFL',
+               workflow_type_version: 'DSL2',
                tags: [],
                workflow_engine: 'nextflow',
-               workflow_engine_version: '',
+               workflow_engine_version: '23.10.0',
                workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
                workflow_url: 'https://github.com/phac-nml/iridanextexample',
                samples_workflow_executions_attributes: [

@@ -20,11 +20,11 @@ module WorkflowExecutions
           '--input': '/blah/samplesheet.csv',
           '--outdir': '/blah/output'
         },
-        workflow_type: 'DSL2',
-        workflow_type_version: '22.10.7',
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
-        workflow_engine_version: '',
+        workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
@@ -40,11 +40,11 @@ module WorkflowExecutions
           '--input': '/blah/samplesheet.csv',
           '--outdir': '/blah/output'
         },
-        workflow_type: 'DSL2',
-        workflow_type_version: '22.10.7',
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
-        workflow_engine_version: '',
+        workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew2',
         submitter_id: @user.id,
@@ -134,11 +134,11 @@ module WorkflowExecutions
           '--input': '/blah/samplesheet.csv',
           '--outdir': '/blah/output'
         },
-        workflow_type: 'DSL2',
-        workflow_type_version: '22.10.7',
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
-        workflow_engine_version: '',
+        workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
@@ -161,11 +161,11 @@ module WorkflowExecutions
           '--input': '/blah/samplesheet.csv',
           '--outdir': '/blah/output'
         },
-        workflow_type: 'DSL2',
-        workflow_type_version: '22.10.7',
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
-        workflow_engine_version: '',
+        workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
@@ -189,11 +189,11 @@ module WorkflowExecutions
           '--input': '/blah/samplesheet.csv',
           '--outdir': '/blah/output'
         },
-        workflow_type: 'DSL2',
-        workflow_type_version: '22.10.7',
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
-        workflow_engine_version: '',
+        workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
@@ -232,11 +232,11 @@ module WorkflowExecutions
           '--input': '/blah/samplesheet.csv',
           '--outdir': '/blah/output'
         },
-        workflow_type: 'DSL2',
-        workflow_type_version: '22.10.7',
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
         tags: [],
         workflow_engine: 'nextflow',
-        workflow_engine_version: '',
+        workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
@@ -263,6 +263,35 @@ module WorkflowExecutions
       end
 
       assert_equal 'error', @workflow_execution.reload.state
+    end
+
+    test 'test create new workflow execution sanitizes params' do
+      workflow_params = {
+        metadata:
+          { workflow_name: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        workflow_params:
+        {
+          '--assembler': '',
+          '--project_name': 'assembly',
+          '--random_seed': '0'
+        },
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
+        tags: [],
+        workflow_engine: 'nextflow',
+        workflow_engine_version: '23.10.0',
+        workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+        workflow_url: 'https://github.com/phac-nml/iridanextexample',
+        submitter_id: @user.id,
+        state: 'new'
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert_not @workflow_execution.workflow_params.key?('--assembler')
+      assert_equal 0, @workflow_execution.workflow_params['--random_seed']
+      assert_enqueued_jobs 1
     end
   end
 end
