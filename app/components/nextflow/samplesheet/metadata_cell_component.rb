@@ -10,7 +10,7 @@ module Nextflow
         @form = form
         @name = name
         @metadata = if entry['meta'].is_a?(Array)
-                      entry['meta'].map { |meta| sample.metadata[meta].to_s }.join(', ')
+                      sample.metadata[entry['meta'][0]].to_s
                     else
                       sample.metadata[entry['meta']].to_s
                     end
