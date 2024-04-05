@@ -15,9 +15,12 @@
   <% end %>
 
 
-  <%= turbo_stream.update "bots", partial: "bot_listing" %>
 
-  <%= turbo_stream.update "bots_pagination", partial: "pagination" %>
+  <%= turbo_frame_tag "bots", "data-turbo-temporary": true,
+                      src: namespace_project_bots_path(
+                                  format: :turbo_stream
+                                )
+                                %>
 
 
   <%= turbo_stream.replace "access-token-section",

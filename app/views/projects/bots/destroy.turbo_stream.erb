@@ -3,11 +3,13 @@
 <% end %>
 
 <% if @bot_account.deleted? %>
-  <%= turbo_stream.update "bots", partial: "bot_listing" %>
+  <%= turbo_frame_tag "bots", "data-turbo-temporary": true,
+                      src: namespace_project_bots_path(
+                                  format: :turbo_stream
+                                )
+                                %>
+
+   <%= turbo_stream.update "access-token-section" %>
 <% end %>
 
-<% if @bot_accounts.nil? || @bot_accounts.empty? %>
-    <%= turbo_stream.remove "bots_pagination" %>
-  <% else %>
-    <%= turbo_stream.update "bots_pagination", partial: "pagination" %>
-  <% end %>
+

@@ -18,6 +18,9 @@
 
 <div class="flex flex-col">
   <%= turbo_frame_tag "new_bot_modal" %>
+  <div class="mb-4">
+    <%= turbo_frame_tag "access-token-section" %>
+  </div>
   <%= turbo_frame_tag "bots", "data-turbo-temporary": true,
                       src: namespace_project_bots_path(
                                   format: :turbo_stream

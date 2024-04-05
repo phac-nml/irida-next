@@ -26,29 +26,24 @@ module BotActions
     end
   end
 
-  def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+  def create # rubocop:disable Metrics/MethodLength
     @new_bot_account = Bots::CreateService.new(current_user, @namespace, bot_params).execute
 
-    if @new_bot_account[:bot_user_account].persisted?
-      respond_to do |format|
-        format.turbo_stream do
-          @pagy, @bot_accounts = pagy(load_bot_accounts)
-
+    respond_to do |format|
+      format.turbo_stream do
+        if @new_bot_account[:bot_user_account].persisted?
           render status: :ok, locals: {
             type: 'success',
             message: t('.success'),
             personal_access_token: @new_bot_account[:personal_access_token]
           }
-        end
-      end
-    else
-      respond_to do |format|
-        format.turbo_stream do
+        else
           render status: :unprocessable_entity,
                  locals:
-                 { type: 'alert',
-                   message: @new_bot_account[:bot_user_account].errors.full_messages.first,
-                   bot_params: }
+                { type: 'alert',
+                  message: @new_bot_account[:bot_user_account].errors.full_messages.first,
+                  bot_params: }
+
         end
       end
     end
@@ -57,20 +52,14 @@ module BotActions
   def destroy # rubocop:disable Metrics/MethodLength
     Bots::DestroyService.new(@bot_account, @namespace, current_user).execute
 
-    if @bot_account.deleted?
-      respond_to do |format|
-        format.turbo_stream do
-          @pagy, @bot_accounts = pagy(load_bot_accounts)
-
+    respond_to do |format|
+      format.turbo_stream do
+        if @bot_account.deleted?
           render status: :ok, locals: {
             type: 'success',
             message: t('.success')
           }
-        end
-      end
-    else
-      respond_to do |format|
-        format.turbo_stream do
+        else
           render status: :unprocessable_entity,
                  locals: {
                    type: 'alert',
