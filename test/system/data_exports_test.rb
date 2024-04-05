@@ -411,7 +411,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'checking samples on different page does not affect current page\'s export samples' do
+  test 'checking off samples on different page does not affect current page\'s export samples' do
     login_as users(:john_doe)
     subgroup12a = groups(:subgroup_twelve_a)
     project29 = projects(:project29)
