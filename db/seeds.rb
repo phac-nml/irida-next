@@ -145,11 +145,11 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
   workflow_execution_basic = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
     workflow_params: { '-r': 'dev' },
-    workflow_type: 'DSL2',
-    workflow_type_version: '22.10.7',
+    workflow_type: 'NFL',
+    workflow_type_version: 'DSL2',
     tags: [],
     workflow_engine: 'nextflow',
-    workflow_engine_version: '',
+    workflow_engine_version: '23.10.0',
     workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com')
@@ -164,11 +164,11 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
   workflow_execution_completed = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example-completed', workflow_version: '1.0dev' },
     workflow_params: { '-r': 'dev' },
-    workflow_type: 'DSL2',
-    workflow_type_version: '22.10.7',
+    workflow_type: 'NFL',
+    workflow_type_version: 'DSL2',
     tags: [],
     workflow_engine: 'nextflow',
-    workflow_engine_version: '',
+    workflow_engine_version: '23.10.0',
     workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
@@ -376,11 +376,11 @@ if Rails.env.development?
   # {
   #   metadata: WorkflowMetadata Required
   #   workflow_params: Hash
-  #   workflow_type: String
-  #   workflow_type_version: String
+  #   workflow_type: "NFL"
+  #   workflow_type_version: "DSL2"
   #   tags: [String]
-  #   workflow_engine: String
-  #   workflow_engine_version: String
+  #   workflow_engine: "nextflow"
+  #   workflow_engine_version: "23.10.0"
   #   workflow_engine_parameters: Hash
   #   workflow_url: String
   #   run_id: String
@@ -391,11 +391,11 @@ if Rails.env.development?
   #   {
   #     metadata: generic_workflow_metadata_objects[0],
   #     workflow_params: generic_workflow_execution_params_hashes[0],
-  #     workflow_type: 'my_workflow_type_1',
-  #     workflow_type_version: 'my_workflow_version_1',
+  #     workflow_type: "NFL"
+  #     workflow_type_version: "DSL2"
   #     tags: %w[my_tag_1 my_tag_2],
-  #     workflow_engine: 'my_workflow_engine_1',
-  #     workflow_engine_version: 'my_workflow_engine_version_1',
+  #     workflow_engine: "nextflow"
+  #     workflow_engine_version: "23.10.0"
   #     workflow_engine_parameters: generic_workflow_execution_params_hashes[1],
   #     workflow_url: 'my_workflow_url',
   #     run_id: 'my_run_id',
@@ -404,11 +404,11 @@ if Rails.env.development?
   #   {
   #     metadata: generic_workflow_metadata_objects[1],
   #     workflow_params: generic_workflow_execution_params_hashes[2],
-  #     workflow_type: 'my_workflow_type_2',
-  #     workflow_type_version: 'my_workflow_version_2',
+  #     workflow_type: "NFL"
+  #     workflow_type_version: "DSL2"
   #     tags: %w[my_tag_3 my_tag_4],
-  #     workflow_engine: 'my_workflow_engine_2',
-  #     workflow_engine_version: 'my_workflow_engine_version_2',
+  #     workflow_engine: "nextflow"
+  #     workflow_engine_version: "23.10.0"
   #     workflow_engine_parameters: generic_workflow_execution_params_hashes[3],
   #     workflow_url: 'my_workflow_url_2',
   #     run_id: 'my_run_id_2',
@@ -420,11 +420,11 @@ if Rails.env.development?
   #   WorkflowExecution.create(
   #     metadata: workflow_execution_params[:metadata],
   #     workflow_params: workflow_execution_params[:workflow_params],
-  #     workflow_type: workflow_execution_params[:workflow_type],
-  #     workflow_type_version: workflow_execution_params[:workflow_type_version],
+  #     workflow_type: "NFL"
+  #     workflow_type_version: "DSL2"
   #     tags: workflow_execution_params[:tags],
-  #     workflow_engine: workflow_execution_params[:workflow_engine],
-  #     workflow_engine_version: workflow_execution_params[:workflow_engine_version],
+  #     workflow_engine: "nextflow"
+  #     workflow_engine_version: "23.10.0"
   #     workflow_engine_parameters: workflow_execution_params[:workflow_engine_parameters],
   #     workflow_url: workflow_execution_params[:workflow_url],
   #     run_id: workflow_execution_params[:run_id],
@@ -436,11 +436,11 @@ if Rails.env.development?
   # WorkflowExecution.create(
   #   metadata: generic_workflow_metadata_objects[0],
   #   workflow_params: generic_workflow_execution_params_hashes[0],
-  #   workflow_type: 'my_workflow_type_1',
-  #   workflow_type_version: 'my_workflow_version_1',
+  #   workflow_type: "NFL"
+  #   workflow_type_version: "DSL2"
   #   tags: %w[my_tag_1 my_tag_2],
-  #   workflow_engine: 'my_workflow_engine_1',
-  #   workflow_engine_version: 'my_workflow_engine_version_1',
+  #   workflow_engine: "nextflow"
+  #   workflow_engine_version: "23.10.0"
   #   workflow_engine_parameters: generic_workflow_execution_params_hashes[1],
   #   workflow_url: 'my_workflow_url',
   #   run_id: 'my_run_id',

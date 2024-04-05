@@ -3,11 +3,11 @@
 workflow_execution_valid:
   metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
   workflow_params: { "key_a": "value_a" }
-  workflow_type: "my_workflow_type_1"
-  workflow_type_version: "my_workflow_type_version_1"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: ["tag1", "tag2"]
-  workflow_engine: "my_workflow_engine_1"
-  workflow_engine_version: "my_workflow_engine_version_1"
+  workflow_engine: "nextflow"
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "key_b": "value_b" }
   workflow_url: "my_workflow_url"
   run_id: "my_run_id_1"
@@ -16,11 +16,11 @@ workflow_execution_valid:
 workflow_execution_invalid_metadata:
   metadata: { "workflow_name": "wn1", "missing a param here": "invalid" }
   workflow_params: { "key_a": "value_a" }
-  workflow_type: "my_workflow_type_1"
-  workflow_type_version: "my_workflow_type_version_1"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: ["tag1", "tag2"]
-  workflow_engine: "my_workflow_engine_1"
-  workflow_engine_version: "my_workflow_engine_version_1"
+  workflow_engine: "nextflow"
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "key_b": "value_b" }
   workflow_url: "my_workflow_url"
   run_id: "my_run_id_2"
@@ -30,11 +30,11 @@ irida_next_example:
   metadata:
     { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
   workflow_params: { "-r": "dev" }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/iridanextexample"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
@@ -51,11 +51,11 @@ irida_next_example_prepared:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_prepared"
   run_id: "my_run_id_4"
@@ -74,11 +74,11 @@ irida_next_example_submitted:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_prepared"
   run_id: "my_run_id_5"
@@ -97,11 +97,11 @@ irida_next_example_completed:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_6"
@@ -121,11 +121,11 @@ irida_next_example_error:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_error"
   run_id: "my_run_id_7"
@@ -144,11 +144,11 @@ irida_next_example_canceling:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_canceling"
   run_id: "my_run_id_8"
@@ -167,11 +167,11 @@ irida_next_example_canceled:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_canceled"
   run_id: "my_run_id_9"
@@ -190,11 +190,11 @@ irida_next_example_running:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_running"
   run_id: "my_run_id_10"
@@ -213,11 +213,11 @@ irida_next_example_queued:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_queued"
   run_id: "my_run_id_11"
@@ -233,11 +233,11 @@ irida_next_example_new:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_new"
   run_id: "my_run_id_12"
@@ -256,11 +256,11 @@ irida_next_example_completing_a:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_a"
@@ -280,11 +280,11 @@ irida_next_example_completing_b:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_b"
@@ -304,11 +304,11 @@ irida_next_example_completing_c:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_c"
@@ -328,11 +328,11 @@ irida_next_example_completing_d:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_d"
@@ -352,11 +352,11 @@ irida_next_example_completing_e:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_e"
@@ -374,11 +374,11 @@ workflow_execution<%= (n) %>:
       "--input": "/blah/samplesheet.csv",
       "--outdir": "/blah/output",
     }
-  workflow_type: "DSL2"
-  workflow_type_version: "22.10.7"
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
   tags: []
   workflow_engine: "nextflow"
-  workflow_engine_version: ""
+  workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "engine": "nextflow", "execute_loc": "azure" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_new"
   run_id: <%= "my_run_id_#{n}" %>

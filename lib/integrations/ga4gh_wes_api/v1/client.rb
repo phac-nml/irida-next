@@ -43,8 +43,7 @@ module Integrations
                           workflow_engine: '',
                           workflow_engine_version: '',
                           workflow_engine_parameters: '',
-                          workflow_url: '',
-                          workflow_attachment: '' }
+                          workflow_url: '' }
           post(
             endpoint: 'runs',
             data: base_params.merge(params)
@@ -93,8 +92,10 @@ module Integrations
         # Runs a md5 hash check. The method is used for testing connection with server api
         def run_test_nextflow_md5_job
           run_workflow(
-            workflow_type: 'NEXTFLOW',
-            workflow_type_version: '21.04.0',
+            workflow_type: 'NFL',
+            workflow_type_version: 'DSL2',
+            workflow_engine: 'nextflow',
+            workflow_engine_version: '23.10.0',
             workflow_url: 'https://github.com/jb-adams/md5-nf',
             workflow_params: { file_int: 3 }
           )
