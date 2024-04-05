@@ -748,7 +748,7 @@ en:
       index:
         title: Bot Accounts
         subtitle: Setup bot accounts to perform actions within the project that cannot be attributed to a human user
-        add_new_bot: New Bot Account
+        add_new_bot: New bot account
         bot:
           remove: Remove
           remove_confirmation: "Are you sure you want to remove this bot account from the project?"
