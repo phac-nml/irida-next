@@ -77,7 +77,7 @@ module DataExports
           }]
         }]
       }
-      puts expected_manifest.to_json
+
       assert_equal expected_manifest.to_json, @data_export.manifest
     end
 
