@@ -118,7 +118,7 @@ class DataExportsController < ApplicationController
         name: I18n.t('data_exports.index.title'),
         path: data_exports_path
       }]
-    return unless action_name == 'show' && !@data_export.nil?
+    return unless action_name == 'show'
 
     @context_crumbs +=
       [{
