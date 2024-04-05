@@ -260,7 +260,7 @@ class ClientTest < ActionDispatch::IntegrationTest
       workflow_engine_version: '23.10.0',
       workflow_engine_parameters: '',
       workflow_url: 'https://github.com/jb-adams/md5-nf'
-    }.to_json
+    }
     stubs.post('/runs', body) do
       [
         200,
@@ -292,7 +292,7 @@ class ClientTest < ActionDispatch::IntegrationTest
       workflow_engine_version: '23.10.0',
       workflow_engine_parameters: '',
       workflow_url: 'https://github.com/jb-adams/md5-nf'
-    }.to_json
+    }
     stubs.post('/runs', body) do
       [
         200,
