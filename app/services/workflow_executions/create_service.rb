@@ -3,8 +3,6 @@
 module WorkflowExecutions
   # Service used to Create a new WorkflowExecution
   class CreateService < BaseService
-    include NextflowHelper
-
     def initialize(user = nil, params = {})
       super(user, params)
     end
@@ -35,10 +33,8 @@ module WorkflowExecutions
 
       workflow_schema['definitions'].each do |_item, definition|
         definition['properties'].each do |name, property|
-          formatted_name = format_name_as_arg(name)
-          if sanitized_params.key?(formatted_name.to_sym)
-            sanitized_params[formatted_name.to_sym] = sanitize_workflow_param(property,
-                                                                              sanitized_params[formatted_name.to_sym])
+          if sanitized_params.key?(name.to_sym)
+            sanitized_params[name.to_sym] = sanitize_workflow_param(property, sanitized_params[name.to_sym])
           end
         end
       end
