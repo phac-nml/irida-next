@@ -266,9 +266,9 @@ module WorkflowExecutions
             workflow_version: '1.0.2' },
         workflow_params:
         {
-          '--assembler': '',
-          '--project_name': 'assembly',
-          '--random_seed': '0'
+          assembler: '',
+          project_name: 'assembly',
+          random_seed: '0'
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
@@ -283,8 +283,8 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
-      assert_not @workflow_execution.workflow_params.key?('--assembler')
-      assert_equal 0, @workflow_execution.workflow_params['--random_seed']
+      assert_not @workflow_execution.workflow_params.key?('assembler')
+      assert_equal 0, @workflow_execution.workflow_params['random_seed']
       assert_enqueued_jobs 1
     end
   end
