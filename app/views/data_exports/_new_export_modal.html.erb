@@ -17,7 +17,22 @@
       <div class="flex mb-4 items-center h-5">
         <%= form.label :email_notification, t(".email_label"),
         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
-        <%= form.check_box :email_notification, { checked: false }, true, false %>
+        <%= form.check_box :email_notification, { checked: false,
+        class:
+          "w-4
+          h-4
+          mr-2.5
+          text-primary-600
+          bg-slate-100
+          border-slate-300
+          rounded
+          focus:ring-primary-500
+          dark:focus:ring-primary-600
+          dark:ring-offset-slate-800
+          focus:ring-2
+          dark:bg-slate-700
+          dark:border-slate-600"
+        }, true, false %>
       </div>
       <div class="mb-4 text-sm font-medium text-slate-900 dark:text-white">
         <p data-data-exports--create-target="sampleCount"><%= t(".sample_count") %></p>
