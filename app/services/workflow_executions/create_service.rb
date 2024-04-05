@@ -25,7 +25,9 @@ module WorkflowExecutions
       @workflow_execution
     end
 
-    def sanitize_workflow_params # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def sanitize_workflow_params # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
+      return unless params.key?('metadata') && params['metadata'].key?('workflow_name') && params.key?('metadata')
+
       workflow = Irida::Pipelines.find_pipeline_by(params['metadata']['workflow_name'],
                                                    params['metadata']['workflow_version'])
       workflow_schema = JSON.parse(workflow.schema_loc.read)
