@@ -66,7 +66,7 @@
                   </p>
                   <div role="separator" style="line-height: 24px">&zwj;</div>
                   <div>
-                    <a href="<%= root_url %>" style="display: inline-block; border-radius: 4px; background-color: #15803d; padding: 16px 24px; font-size: 16px; font-weight: 600; line-height: 1; color: #f8fafc; text-decoration: none">
+                    <a href="<%= data_export_url(@data_export) %>" style="display: inline-block; border-radius: 4px; background-color: #15803d; padding: 16px 24px; font-size: 16px; font-weight: 600; line-height: 1; color: #f8fafc; text-decoration: none">
                       <!--[if mso]>
                         <i style="mso-font-width: 150%; mso-text-raise: 30px" hidden>&emsp;</i>
                       <![endif]-->
@@ -80,15 +80,15 @@
                     <div role="separator" style="line-height: 24px">&zwj;</div>
                     <p style="margin: 0; line-height: 24px">
                       <%= t(:'mailers.data_export_mailer.export_ready.copy_paste') %>
-                      <a href="<%= root_url %>">
-                        <%= root_url %>
+                      <a href="<%= data_export_url(@data_export) %>">
+                        <%= data_export_url(@data_export) %>
                       </a>
                     </p>
                   </div>
                   <div role="separator" style="background-color: #e2e8f0; height: 1px; line-height: 1px; margin: 28px 0">&zwj;</div>
                   <p style="margin: 0;">
                     <%= t(:'mailers.data_export_mailer.export_ready.download_before.start') %>
-                    <strong><%= @data_export.expires_at.strftime("%A, %B %d, %Y") %></strong>
+                      <strong><%= @data_export.expires_at.strftime("%A, %B %d, %Y") %></strong>
                     <%= t(:'mailers.data_export_mailer.export_ready.download_before.end') %>
                     <br>
                     <br>

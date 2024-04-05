@@ -4,8 +4,8 @@ require 'test_helper'
 
 class DataExportMailerTest < ActionMailer::TestCase
   setup do
-    @data_export1 = data_exports(:data_export_one)
     @data_export2 = data_exports(:data_export_two)
+    @data_export3 = data_exports(:data_export_three)
     @data_export4 = data_exports(:data_export_four)
     @data_export5 = data_exports(:data_export_five)
   end
@@ -21,8 +21,9 @@ class DataExportMailerTest < ActionMailer::TestCase
     assert_equal I18n.t('mailers.data_export_mailer.email_subject'), email.subject
     assert_match "#{I18n.t('mailers.data_export_mailer.export_ready.greeting')} #{@data_export4.user.first_name}",
                  email.body.to_s
-    assert_no_match @data_export4.id, email.body.to_s
+    # assert_no_match @data_export4.id, email.body.to_s
     assert_match @data_export4.expires_at.strftime('%A, %B %d, %Y'), email.body.to_s
+    assert_match Rails.application.routes.url_helpers.data_export_url(@data_export4), email.body.to_s
   end
 
   test 'export ready email without export name' do
@@ -40,6 +41,7 @@ class DataExportMailerTest < ActionMailer::TestCase
                  email.body.to_s
     assert_match @data_export5.id, email.body.to_s
     assert_match @data_export5.expires_at.strftime('%A, %B %d, %Y'), email.body.to_s
+    assert_match Rails.application.routes.url_helpers.data_export_url(@data_export5), email.body.to_s
   end
 
   test 'email delivery when email_notification is true' do
@@ -50,7 +52,7 @@ class DataExportMailerTest < ActionMailer::TestCase
 
   test 'no email delivery when email_notification is nil' do
     assert_emails 0 do
-      DataExports::CreateJob.perform_now(@data_export1)
+      DataExports::CreateJob.perform_now(@data_export3)
     end
   end
 end
