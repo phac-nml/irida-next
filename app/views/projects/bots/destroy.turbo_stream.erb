@@ -3,13 +3,11 @@
 <% end %>
 
 <% if @bot_account.deleted? %>
-  <%= turbo_frame_tag "bots", "data-turbo-temporary": true,
-                      src: namespace_project_bots_path(
-                                  format: :turbo_stream
-                                )
-                                %>
+  <%= turbo_stream.replace "bots" do %>
+    <%= turbo_frame_tag "bots",
+    "data-turbo-temporary": true,
+    src: namespace_project_bots_path(format: :turbo_stream) %>
+  <% end %>
 
-   <%= turbo_stream.update "access-token-section" %>
+  <%= turbo_stream.update "access-token-section" %>
 <% end %>
-
-

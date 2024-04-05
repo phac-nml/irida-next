@@ -16,12 +16,13 @@
 
 
 
-  <%= turbo_frame_tag "bots", "data-turbo-temporary": true,
-                      src: namespace_project_bots_path(
-                                  format: :turbo_stream
-                                )
-                                %>
-
+  <%= turbo_stream.replace "bots" do %>
+    <%= turbo_frame_tag "bots", "data-turbo-temporary": true,
+                        src: namespace_project_bots_path(
+                                    format: :turbo_stream
+                                  )
+                                  %>
+  <% end %>
 
   <%= turbo_stream.replace "access-token-section",
                       partial: "access_token_section",
