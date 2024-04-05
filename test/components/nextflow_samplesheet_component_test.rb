@@ -35,4 +35,19 @@ class NextflowSamplesheetComponentTest < ViewComponentTestCase
       assert_selector 'tbody tr:first td > select', count: 3
     end
   end
+
+  test 'with metadata' do
+    render_inline Nextflow::SamplesheetComponent.new(
+      samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
+      schema: JSON.parse(File.read('test/fixtures/files/nextflow/samplesheet_schema_meta.json'))
+    )
+
+    assert_selector '.sample-sheet table' do
+      assert_selector 'thead th', count: 2
+      assert_selector 'thead th:last', text: 'insdc_accession'
+      assert_selector 'tbody tr', count: 3
+      assert_selector 'tbody tr:first td:first', text: samples(:sample1).puid
+      assert_selector 'tbody tr:first td:last', text: 'ERR86724108'
+    end
+  end
 end

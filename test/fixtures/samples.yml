@@ -8,6 +8,7 @@ sample1:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
+  metadata: { 'insdc_accession': 'ERR86724108' }
 
 sample2:
   name: Project 1 Sample 2
@@ -16,6 +17,7 @@ sample2:
   puid: INXT_SAM_AAAAAAAAAB
   created_at: <%= 2.weeks.ago %>
   updated_at: <%= 2.days.ago %>
+  metadata: { 'insdc_accession': 'ERR31551163' }
 
 <% (3..22).each do |n| %>
 sample<%= (n) %>:
