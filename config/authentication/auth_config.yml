@@ -16,7 +16,7 @@ test:
   # azure_activedirectory_v2_text:
   # azure_activedirectory_v2_icon:
 
-# production:
+production:
   # omniauth_providers:
   # saml_text:
   # saml_icon:
