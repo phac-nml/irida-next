@@ -1286,7 +1286,6 @@ en:
         ready: ready
       email_label: Receive an email notification when your export is ready to download?
       name_label: "Export Name (Optional):"
-      sample_count: "Sample count:"
       submit_button: Submit
       title: Data Export
 
