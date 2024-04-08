@@ -506,7 +506,6 @@ project37_namespace:
   path: project-37
   description: Project 37 description
   type: Project
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   metadata_summary: { }
   puid: INXT_PRJ_AAAAAAACBC

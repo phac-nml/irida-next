@@ -7,8 +7,8 @@ module WorkflowExecutions
     setup do
       @sample38 = samples(:sample38)
       @sample39 = samples(:sample39)
-      @project = projects(:project35)
-      @namespace = groups(:group_fifteen)
+      @project = projects(:project37)
+      @namespace = groups(:group_one)
     end
 
     test 'should display a pipeline selection modal for project samples as owner' do
