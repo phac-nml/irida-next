@@ -79,7 +79,7 @@ module DataExports
     end
 
     test 'create data export with valid workflow execution export params' do
-      valid_params = { 'export_type' => 'workflow_execution',
+      valid_params = { 'export_type' => 'analysis',
                        'export_parameters' => { 'ids' => [@workflow_execution.id] } }
 
       assert_difference -> { DataExport.count } => 1 do
@@ -88,7 +88,7 @@ module DataExports
     end
 
     test 'cannot create data export with invalid workflow execution id' do
-      invalid_params = { 'export_type' => 'workflow_execution',
+      invalid_params = { 'export_type' => 'analysis',
                          'export_parameters' => { 'ids' => [99_999_999_999_999] } }
 
       assert_no_difference ['DataExport.count'] do
@@ -97,7 +97,7 @@ module DataExports
     end
 
     test 'valid authorization to create workflow execution export' do
-      valid_params = { 'export_type' => 'workflow_execution',
+      valid_params = { 'export_type' => 'analysis',
                        'export_parameters' => { 'ids' => [@workflow_execution.id] } }
 
       assert_authorized_to(:export_workflow_execution_data?, @workflow_execution, with: WorkflowExecutionPolicy,
@@ -107,7 +107,7 @@ module DataExports
     end
 
     test 'data export with valid parameters but unauthorized for workflow execution export' do
-      valid_params = { 'export_type' => 'workflow_execution',
+      valid_params = { 'export_type' => 'analysis',
                        'export_parameters' => { 'ids' => [@workflow_execution.id] } }
       user = users(:steve_doe)
 

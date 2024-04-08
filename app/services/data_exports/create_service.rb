@@ -41,8 +41,8 @@ module DataExports
     def validate_export_ids
       if @data_export.export_type == 'sample'
         validate_sample_ids
-      elsif @data_export.export_type == 'workflow_execution'
-        validate_workflow_execution_ids
+      else
+        validate_analysis_id
       end
     end
 
@@ -64,15 +64,13 @@ module DataExports
       end
     end
 
-    def validate_workflow_execution_ids
-      params['export_parameters']['ids'].each do |workflow_execution_id|
-        workflow_execution = WorkflowExecution.find_by(id: workflow_execution_id)
-        if workflow_execution.nil?
-          raise DataExportCreateError,
-                I18n.t('services.data_exports.create.invalid_workflow_execution_id')
-        end
-        authorize! workflow_execution, to: :export_workflow_execution_data?
+    def validate_analysis_id
+      workflow_execution = WorkflowExecution.find_by(id: params['export_parameters']['ids'][0])
+      if workflow_execution.nil?
+        raise DataExportCreateError,
+              I18n.t('services.data_exports.create.invalid_workflow_execution_id')
       end
+      authorize! workflow_execution, to: :export_workflow_execution_data?
     end
   end
 end

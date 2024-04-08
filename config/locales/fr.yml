@@ -70,7 +70,6 @@ fr:
         update_namespace_with_group_link?: You are not authorized to update group %{name} links with other groups on this server.
       data_export:
         destroy?: You are not authorized to remove this data export on this server.
-        export_workflow_execution_data?: You are not authorized to export the workflow execution %{id} on this server.
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.
