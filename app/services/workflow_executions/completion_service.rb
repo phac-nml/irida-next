@@ -44,10 +44,6 @@ module WorkflowExecutions
 
       @workflow_execution.save
 
-      # @workflow_execution.save do
-      #   PipelineMailer.complete_email(@workflow_execution).deliver_later if @workflow_execution.email_notification
-      # end
-
       @workflow_execution
     end
 
