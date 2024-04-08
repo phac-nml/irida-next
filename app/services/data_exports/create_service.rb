@@ -13,7 +13,7 @@ module DataExports
 
       validate_params
 
-      validate_export_ids
+      @data_export.export_type == 'sample' ? validate_sample_ids : validate_analysis_id
 
       @data_export.user = current_user
       @data_export.status = 'processing'
@@ -36,14 +36,6 @@ module DataExports
       end
 
       @data_export.name = nil if params.key?('name') && params['name'].empty?
-    end
-
-    def validate_export_ids
-      if @data_export.export_type == 'sample'
-        validate_sample_ids
-      else
-        validate_analysis_id
-      end
     end
 
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
