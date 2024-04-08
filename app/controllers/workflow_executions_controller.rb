@@ -38,7 +38,12 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   def cancel
     @workflow_execution = WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
 
+    return nil if @workflow_execution == false
+
+    # nil unless @workflow_execution && @workflow_execution.persisted?
+
     nil unless @workflow_execution.persisted?
+    # nil unless @workflow_execution.persisted?
   end
 
   def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength

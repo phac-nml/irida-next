@@ -67,6 +67,10 @@ class WorkflowExecution < ApplicationRecord
     %w[completed error canceled].include?(state)
   end
 
+  def sent_to_ga4gh?
+    %w[prepared new].exclude?(state)
+  end
+
   def as_wes_params
     {
       workflow_params:,
