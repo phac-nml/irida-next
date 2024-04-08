@@ -41,8 +41,8 @@ module DataExports
     def validate_export_ids
       if @data_export.export_type == 'sample'
         validate_sample_ids
-      elsif @data_export.export_type == 'workflow_execution'
-        validate_workflow_execution_ids
+      else
+        validate_analysis_id
       end
     end
 
