@@ -38,14 +38,6 @@ module DataExports
       @data_export.name = nil if params.key?('name') && params['name'].empty?
     end
 
-    def validate_export_ids
-      if @data_export.export_type == 'sample'
-        validate_sample_ids
-      else
-        validate_analysis_id
-      end
-    end
-
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
     # to export the chosen samples' data
     def validate_sample_ids
