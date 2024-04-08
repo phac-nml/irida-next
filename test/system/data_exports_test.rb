@@ -10,6 +10,7 @@ class DataExportsTest < ApplicationSystemTestCase
     @namespace = groups(:group_one)
     @project = projects(:project1)
     @sample1 = samples(:sample1)
+    @sample2 = samples(:sample2)
     login_as @user
   end
 
@@ -231,7 +232,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       assert_text I18n.t('data_exports.new_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_export_dialog.email_label')
-      assert_text "#{I18n.t('data_exports.new_export_dialog.sample_count')} 1"
+      assert_text '1 sample'
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
@@ -259,6 +260,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
+      find("input[type='checkbox'][value='#{@sample2.id}']").click
     end
 
     assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
@@ -268,7 +270,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       assert_text I18n.t('data_exports.new_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_export_dialog.email_label')
-      assert_text "#{I18n.t('data_exports.new_export_dialog.sample_count')} 1"
+      assert_text '2 samples'
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
@@ -311,7 +313,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_text "#{I18n.t('data_exports.new_export_dialog.sample_count')} 1"
+      assert_text '1 sample'
     end
   end
 
