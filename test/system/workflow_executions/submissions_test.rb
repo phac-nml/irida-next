@@ -5,8 +5,8 @@ require 'application_system_test_case'
 module WorkflowExecutions
   class SubmissionsTest < ApplicationSystemTestCase
     setup do
-      @sample38 = samples(:sample38)
-      @sample39 = samples(:sample39)
+      @sample43 = samples(:sample43)
+      @sample44 = samples(:sample44)
       @project = projects(:project37)
       @namespace = groups(:group_one)
     end
@@ -17,8 +17,8 @@ module WorkflowExecutions
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
       within 'table' do
-        find("input[type='checkbox'][value='#{@sample38.id}']").click
-        find("input[type='checkbox'][value='#{@sample39.id}']").click
+        find("input[type='checkbox'][value='#{@sample43.id}']").click
+        find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
@@ -33,8 +33,8 @@ module WorkflowExecutions
         within 'div.sample-sheet' do
           within 'table' do
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample38.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample39.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
       end
@@ -46,8 +46,8 @@ module WorkflowExecutions
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
       within 'table' do
-        find("input[type='checkbox'][value='#{@sample38.id}']").click
-        find("input[type='checkbox'][value='#{@sample39.id}']").click
+        find("input[type='checkbox'][value='#{@sample43.id}']").click
+        find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
@@ -62,8 +62,8 @@ module WorkflowExecutions
         within 'div.sample-sheet' do
           within 'table' do
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample38.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample39.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
       end
@@ -75,8 +75,8 @@ module WorkflowExecutions
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
       within 'table' do
-        find("input[type='checkbox'][value='#{@sample38.id}']").click
-        find("input[type='checkbox'][value='#{@sample39.id}']").click
+        find("input[type='checkbox'][value='#{@sample43.id}']").click
+        find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
@@ -91,8 +91,8 @@ module WorkflowExecutions
         within 'div.sample-sheet' do
           within 'table' do
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample38.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample39.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
       end
@@ -112,8 +112,8 @@ module WorkflowExecutions
       visit group_samples_url(@namespace)
 
       within 'table' do
-        find("input[type='checkbox'][value='#{@sample38.id}']").click
-        find("input[type='checkbox'][value='#{@sample39.id}']").click
+        find("input[type='checkbox'][value='#{@sample43.id}']").click
+        find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
       click_on I18n.t(:'groups.samples.index.workflows.button_sr')
@@ -128,8 +128,8 @@ module WorkflowExecutions
         within 'div.sample-sheet' do
           within 'table' do
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample38.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample39.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
       end
@@ -141,8 +141,8 @@ module WorkflowExecutions
       visit group_samples_url(@namespace)
 
       within 'table' do
-        find("input[type='checkbox'][value='#{@sample38.id}']").click
-        find("input[type='checkbox'][value='#{@sample39.id}']").click
+        find("input[type='checkbox'][value='#{@sample43.id}']").click
+        find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
       click_on I18n.t(:'groups.samples.index.workflows.button_sr')
@@ -157,8 +157,8 @@ module WorkflowExecutions
         within 'div.sample-sheet' do
           within 'table' do
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample38.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample39.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
       end
@@ -170,8 +170,8 @@ module WorkflowExecutions
       visit group_samples_url(@namespace)
 
       within 'table' do
-        find("input[type='checkbox'][value='#{@sample38.id}']").click
-        find("input[type='checkbox'][value='#{@sample39.id}']").click
+        find("input[type='checkbox'][value='#{@sample43.id}']").click
+        find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
       click_on I18n.t(:'groups.samples.index.workflows.button_sr')
@@ -186,8 +186,8 @@ module WorkflowExecutions
         within 'div.sample-sheet' do
           within 'table' do
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample38.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample39.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
       end
