@@ -1278,8 +1278,15 @@ en:
         summary: Summary
         preview: Preview
     new_export_dialog:
+      description:
+        start: This export will contain COUNT_PLACEHOLDER . After submission, you will be redirected to the export page. While the export status is
+        middle: "the contents of the export will be added to a downloadable zip file. Once the export status is"
+        end: ", the zip file will be available for download. You will have 3 business days to download the export file before it's deleted."
+        processing: processing
+        ready: ready
       email_label: Receive an email notification when your export is ready to download?
       name_label: "Export Name (Optional):"
       sample_count: "Sample count:"
       submit_button: Submit
       title: Data Export
+
