@@ -52,8 +52,8 @@
               <% end %>
             <% end %>
 
-            <% if allowed_to?(:transfer_sample?, project) %>
-              <label for="select-all" class="sr-only"><%= t(:'.selectAll') %></label>
+            <% if allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project) %>
+              <label for="select-all" class="sr-only"><%= t(:".selectAll") %></label>
               <input
                 type="checkbox"
                 id="select-all"
@@ -243,25 +243,21 @@
         </tr>
       <% end %>
     </tbody>
-    <%- if allowed_to?(:transfer_sample?, project) %>
-    <tfoot>
-      <tr>
-        <td colspan="100%">
-          <div
+    <% if allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project) %>
+      <tfoot>
+        <tr>
+          <td
             class="
+              px-6
+              py-3
+              whitespace-nowrap
               sticky
-              bottom-0
-              right-0
-              items-center
-              w-full
-              p-4
-              bg-white
-              border-t
-              border-gray-200
-              dark:bg-gray-800
-              dark:border-gray-700
+              left-0
+              bg-slate-50
+              dark:bg-slate-900
             "
           >
+
             <span>
               <%= t(".counts.samples") %>:
               <strong data-selection-target="total">0</strong>
@@ -270,10 +266,9 @@
               <%= t(".counts.selected") %>:
               <strong data-selection-target="selected">0</strong>
             </span>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
+          </td>
+        </tr>
+      </tfoot>
     <% end %>
   </table>
 </div>
