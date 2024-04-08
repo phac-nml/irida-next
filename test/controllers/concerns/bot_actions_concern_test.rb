@@ -70,4 +70,15 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test 'bot account destroy error' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+    project = projects(:project2)
+
+    delete namespace_project_bot_path(namespace, project, id: 0, format: :turbo_stream)
+
+    assert_response :not_found
+  end
 end

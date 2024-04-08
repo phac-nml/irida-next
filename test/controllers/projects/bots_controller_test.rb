@@ -120,5 +120,16 @@ module Projects
 
       assert_response :unauthorized
     end
+
+    test 'response should be not found when trying to destroy a bot account with a non-existent id' do
+      sign_in users(:john_doe)
+
+      namespace = groups(:group_one)
+      project = projects(:project2)
+
+      delete namespace_project_bot_path(namespace, project, id: 0, format: :turbo_stream)
+
+      assert_response :not_found
+    end
   end
 end

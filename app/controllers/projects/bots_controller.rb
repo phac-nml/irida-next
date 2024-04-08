@@ -24,7 +24,7 @@ module Projects
     end
 
     def bot_account
-      @bot_account = User.find_by(id: params[:id])
+      @bot_account = User.bots.find_by(id: params[:id]) || not_found
     end
 
     def context_crumbs
