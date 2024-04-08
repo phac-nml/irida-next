@@ -210,4 +210,4 @@ project36:
 
 project37:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project4_namespace, :uuid) %>
