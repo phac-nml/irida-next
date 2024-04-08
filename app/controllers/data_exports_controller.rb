@@ -22,8 +22,8 @@ class DataExportsController < ApplicationController
   end
 
   def new
-    render turbo_stream: turbo_stream.update('export_modal',
-                                             partial: 'new_export_modal',
+    render turbo_stream: turbo_stream.update('samples_dialog',
+                                             partial: 'new_export_dialog',
                                              locals: {
                                                open: true
                                              }), status: :ok

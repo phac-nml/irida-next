@@ -229,13 +229,13 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_text I18n.t('data_exports.new_export_modal.name_label')
-      assert_text I18n.t('data_exports.new_export_modal.email_label')
-      assert_text "#{I18n.t('data_exports.new_export_modal.sample_count')} 1"
+      assert_text I18n.t('data_exports.new_export_dialog.name_label')
+      assert_text I18n.t('data_exports.new_export_dialog.email_label')
+      assert_text "#{I18n.t('data_exports.new_export_dialog.sample_count')} 1"
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_export_modal.submit_button')
+      click_button I18n.t('data_exports.new_export_dialog.submit_button')
     end
 
     within %(#data-export-listing) do
@@ -266,13 +266,13 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_text I18n.t('data_exports.new_export_modal.name_label')
-      assert_text I18n.t('data_exports.new_export_modal.email_label')
-      assert_text "#{I18n.t('data_exports.new_export_modal.sample_count')} 1"
+      assert_text I18n.t('data_exports.new_export_dialog.name_label')
+      assert_text I18n.t('data_exports.new_export_dialog.email_label')
+      assert_text "#{I18n.t('data_exports.new_export_dialog.sample_count')} 1"
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_export_modal.submit_button')
+      click_button I18n.t('data_exports.new_export_dialog.submit_button')
     end
 
     within %(#data-export-listing) do
@@ -311,7 +311,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_text "#{I18n.t('data_exports.new_export_modal.sample_count')} 1"
+      assert_text "#{I18n.t('data_exports.new_export_dialog.sample_count')} 1"
     end
   end
 

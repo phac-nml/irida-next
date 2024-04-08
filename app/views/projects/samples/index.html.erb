@@ -1,7 +1,6 @@
 <%= turbo_frame_tag "samples_dialog" %>
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
-<%= turbo_frame_tag "export_modal" %>
 
 <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
@@ -39,7 +38,6 @@
         <%= link_to t(".create_export_button"),
             new_data_export_path,
             data: {
-              turbo_frame: "export_modal",
               turbo_stream: true,
               controller: "action-link",
               action_link_required_value: 1
