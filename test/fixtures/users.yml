@@ -141,4 +141,5 @@ user_bot_account<%= (n) %>:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Project
   last_name: Bot <%= n %>
+  user_type: <%= User.user_types[:project_bot] %>
 <% end %>

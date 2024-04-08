@@ -1157,8 +1157,6 @@ en:
           token_name: Unable to create bot account as the token name is required
           scopes: Unable to create bot account as the bot API scope must be selected
           access_level: Unable to create bot account as an access level must be selected
-      destroy:
-        not_associated: The bot account cannot be removed as it does not belong to this project
     data_exports:
       create:
         invalid_sample_id: A sample selected for export does not exist.

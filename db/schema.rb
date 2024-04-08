@@ -95,8 +95,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_08_204851) do
   end
 
   create_table "namespace_bots", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "namespace_id", null: false
+    t.uuid "user_id", null: false
+    t.uuid "namespace_id", null: false
     t.datetime "deleted_at"
     t.jsonb "log_data"
     t.datetime "created_at", null: false

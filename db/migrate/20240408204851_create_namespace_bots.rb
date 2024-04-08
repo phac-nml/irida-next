@@ -4,8 +4,8 @@
 class CreateNamespaceBots < ActiveRecord::Migration[7.1]
   def change # rubocop:disable Metrics/MethodLength
     create_table :namespace_bots do |t|
-      t.bigint :user_id, null: false
-      t.bigint :namespace_id, null: false
+      t.uuid :user_id, null: false
+      t.uuid :namespace_id, null: false
       t.datetime :deleted_at
       t.jsonb :log_data
       t.timestamps
