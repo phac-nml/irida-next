@@ -5,58 +5,68 @@ john_doe:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: John
   last_name: Doe
+  user_type: "human"
 
 jane_doe:
   email: jane.doe@localhost
   first_name: Jane
   last_name: Doe
+  user_type: "human"
 
 jean_doe:
   email: jean.doe@localhost
   first_name: Jean
   last_name: Doe
+  user_type: "human"
 
 james_doe:
   email: james.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: James
   last_name: Doe
+  user_type: "human"
 
 joan_doe:
   email: joan.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Joan
   last_name: Doe
+  user_type: "human"
 
 steve_doe:
   email: steve.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Steve
   last_name: Doe
+  user_type: "human"
 
 michelle_doe:
   email: michelle.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Michelle
   last_name: Doe
+  user_type: "human"
 
 micha_doe:
   email: micha.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Micha
   last_name: Doe
+  user_type: "human"
 
 ryan_doe:
   email: ryan.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Ryan
   last_name: Doe
+  user_type: "human"
 
 david_doe:
   email: david.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: David
   last_name: Doe
+  user_type: "human"
 
 jeff_doe:
   email: jeff.doe@localhost
@@ -65,12 +75,14 @@ jeff_doe:
   last_name: Doe
   provider: developer
   uid: jeff.doe@localhost
+  user_type: "human"
 
 alph_abet:
   email: alph.abet@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Alph
   last_name: Abet
+  user_type: "human"
 
 <% 25.times do |n| %>
 user<%= (n) %>:
@@ -78,6 +90,7 @@ user<%= (n) %>:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: <%= n %>
+  user_type: "human"
 <% end %>
 
 user25:
@@ -85,6 +98,7 @@ user25:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "25"
+  user_type: "human"
 
 # Do not link this user to anything
 user_no_access:
@@ -92,48 +106,56 @@ user_no_access:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "No Access"
+  user_type: "human"
 
 user_no_access:
   email: <%= "user_no_access@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "No Access"
+  user_type: "human"
 
 private_ryan:
   email: <%= "private.ryan@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Ryan
+  user_type: "human"
 
 user26:
   email: <%= "user26@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "26"
+  user_type: "human"
 
 private_joan:
   email: <%= "private.joan@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Joan
+  user_type: "human"
 
 private_micha:
   email: <%= "private.micha@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Micha
+  user_type: "human"
 
 user27:
   email: <%= "user27@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "27"
+  user_type: "human"
 
 user28:
   email: <%= "user28@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "28"
+  user_type: "human"
 
 
 <% 21.times do |n| %>

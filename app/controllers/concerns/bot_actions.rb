@@ -76,10 +76,6 @@ module BotActions
     @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
   end
 
-  def bot_account
-    @bot_account = Namespaces::UserNamespace.find_by(id: params[:id]).owner
-  end
-
   def load_bot_accounts
     @namespace.bots.of_self
   end

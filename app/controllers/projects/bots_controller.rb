@@ -23,6 +23,10 @@ module Projects
       @namespace = @project.namespace
     end
 
+    def bot_account
+      @bot_account = User.find_by(id: params[:id])
+    end
+
     def context_crumbs
       super
       case action_name

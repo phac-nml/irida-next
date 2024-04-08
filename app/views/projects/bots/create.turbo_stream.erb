@@ -14,21 +14,19 @@
     <%= viral_flash(type:, data: message) %>
   <% end %>
 
-
-
   <%= turbo_stream.replace "bots" do %>
-    <%= turbo_frame_tag "bots", "data-turbo-temporary": true,
-                        src: namespace_project_bots_path(
-                                    format: :turbo_stream
-                                  )
-                                  %>
+    <%= turbo_frame_tag "bots", src: namespace_project_bots_path(format: :turbo_stream) %>
   <% end %>
 
   <%= turbo_stream.replace "access-token-section",
-                      partial: "access_token_section",
-                      locals: {
-                        bot_account_name: @new_bot_account[:bot_user_account].email.rpartition('@').first,
-                        token: personal_access_token.token
-                      } %>
+                       partial: "access_token_section",
+                       locals: {
+                         bot_account_name:
+                           @new_bot_account[:bot_user_account]
+                             .email
+                             .rpartition("@")
+                             .first,
+                         token: personal_access_token.token
+                       } %>
 
-<% end%>
+<% end %>

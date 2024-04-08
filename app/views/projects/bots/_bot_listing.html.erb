@@ -9,7 +9,8 @@
         rtl:text-right
         text-slate-500
         dark:text-slate-400
-      "  >
+      "
+    >
       <thead
         class="
           text-xs
@@ -22,25 +23,25 @@
       >
         <tr>
           <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t('projects.bots.index.bot_listing.name') %>
+            <%= t("projects.bots.index.bot_listing.name") %>
           </th>
           <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t('projects.bots.index.bot_listing.token_name') %>
+            <%= t("projects.bots.index.bot_listing.token_name") %>
           </th>
           <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t('projects.bots.index.bot_listing.api_scope') %>
+            <%= t("projects.bots.index.bot_listing.api_scope") %>
           </th>
           <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t('projects.bots.index.bot_listing.created') %>
+            <%= t("projects.bots.index.bot_listing.created") %>
           </th>
           <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t('projects.bots.index.bot_listing.access_level') %>
+            <%= t("projects.bots.index.bot_listing.access_level") %>
           </th>
           <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t('projects.bots.index.bot_listing.expiration') %>
+            <%= t("projects.bots.index.bot_listing.expiration") %>
           </th>
           <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t('projects.bots.index.bot_listing.actions') %>
+            <%= t("projects.bots.index.bot_listing.actions") %>
           </th>
         </tr>
       </thead>
@@ -54,20 +55,21 @@
         "
       >
         <% @bot_accounts.each do |bot_account| %>
-          <%= render partial: "bot",
-            locals: {
-              bot_account: bot_account
-            } %>
-          <% end %>
+          <%= render partial: "bot", locals: { bot_account: bot_account } %>
+        <% end %>
       </tbody>
     </table>
 
-    <div class="empty_state_message">
-      <%= viral_empty(
-        title: t('projects.bots.index.bot_listing.empty_state.title'),
-        description: t('projects.bots.index.bot_listing.empty_state.description'),
-        icon_name: :bug_ant
-      ) %>
-    </div>
+    <% if @bot_accounts.empty? %>
+      <div class="empty_state_message">
+        <%= viral_empty(
+          title: t("projects.bots.index.bot_listing.empty_state.title"),
+          description: t("projects.bots.index.bot_listing.empty_state.description"),
+          icon_name: :bug_ant
+        ) %>
+      </div>
+    <% else %>
+      <%= turbo_frame_tag "bots_pagination" %>
+    <% end %>
   </div>
 </div>
