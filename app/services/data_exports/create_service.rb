@@ -34,6 +34,8 @@ module DataExports
       unless params.key?('export_type') && params.key?('export_parameters') && params['export_parameters'].key?('ids')
         raise DataExportCreateError, I18n.t('services.data_exports.create.missing_required_parameters')
       end
+
+      @data_export.name = nil if params.key?('name') && params['name'].empty?
     end
 
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization

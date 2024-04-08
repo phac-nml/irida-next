@@ -3,7 +3,6 @@
   <%= dialog.with_section do %>
     <%= form_for(:data_export, url: data_exports_path,
         data: {
-          controller: "data-exports--create",
           turbo: false
         }, method: :post) do |form| %>
     <div
@@ -49,7 +48,7 @@
         <%= form.submit t(".submit_button"),
           data: {
             turbo_frame: "_top",
-            action: "click->sessionstorage-amend-form#clear click->data-exports--create#clearEmptyNameInput"
+            action: "click->sessionstorage-amend-form#clear"
           },
           class: "button button--state-primary button--size-default" %>
       </div>
