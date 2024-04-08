@@ -98,6 +98,8 @@ en:
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
         unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
         update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
+        create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
+        destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
@@ -1149,6 +1151,14 @@ en:
       destroy:
         does_not_belong_to_attachable: This attachment does not belong to this sample.
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
+    bots:
+      create:
+        required:
+          token_name: Unable to create bot account as the token name is required
+          scopes: Unable to create bot account as the bot API scope must be selected
+          access_level: Unable to create bot account as an access level must be selected
+      destroy:
+        not_associated: The bot account cannot be removed as it does not belong to this project
     data_exports:
       create:
         invalid_sample_id: A sample selected for export does not exist.

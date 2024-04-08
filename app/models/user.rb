@@ -2,6 +2,10 @@
 
 # entity class for User
 class User < ApplicationRecord
+  include HasUserType
+
+  attr_accessor :skip_password_validation
+
   has_logidze
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -35,6 +39,8 @@ class User < ApplicationRecord
   before_save :ensure_namespace
 
   delegate :full_path, to: :namespace
+
+  attribute :user_type, :integer, default: -> { User.user_types[:human] }
 
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
@@ -104,11 +110,19 @@ class User < ApplicationRecord
   end
 
   def ensure_namespace
+    return unless user_type == User.user_types[:human]
+
     if namespace
       namespace.path = build_namespace_path
       namespace.name = build_namespace_name
     else
       build_namespace(name: build_namespace_name, path: build_namespace_path)
     end
+  end
+
+  def password_required?
+    return false if skip_password_validation
+
+    super
   end
 end

@@ -10,6 +10,9 @@ module Namespaces
                                class_name: 'Member', dependent: :destroy
     has_many :users, through: :project_members
 
+    has_many :bots, foreign_key: :namespace_id, inverse_of: :namespace,
+                    class_name: 'NamespaceBot', dependent: :destroy
+
     has_many :shared_with_group_links, # rubocop:disable Rails/InverseOf
              lambda {
                where(namespace_type: Namespaces::ProjectNamespace.sti_name)
