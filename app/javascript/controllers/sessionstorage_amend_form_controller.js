@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["field"];
+  static targets = ["field", "count"];
 
   static values = {
     fieldName: String,
@@ -25,6 +25,10 @@ export default class extends Controller {
         element.value = storageValue;
         this.fieldTarget.appendChild(element);
       }
+    }
+    // Adds the selection count
+    if (this.hasCountTarget) {
+      this.countTarget.innerText = `${this.countTarget.id} ${storageValues.length}`
     }
   }
 

@@ -40,7 +40,8 @@ class DataExportsController < ApplicationController
 
     if @data_export.valid?
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
-      redirect_to data_exports_path
+
+      redirect_to data_export_path(@data_export)
     else
       respond_to do |format|
         format.turbo_stream do

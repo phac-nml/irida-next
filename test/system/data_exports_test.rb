@@ -238,9 +238,9 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('data_exports.new_export_modal.submit_button')
     end
 
-    within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 3
-      assert_text 'test data export'
+    within %(#data-export-listing) do
+      assert_selector 'dl', count: 1
+      assert_selector 'div:nth-child(2) dd', text: 'test data export'
     end
   end
 
@@ -275,9 +275,9 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('data_exports.new_export_modal.submit_button')
     end
 
-    within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 3
-      assert_text 'test data export'
+    within %(#data-export-listing) do
+      assert_selector 'dl', count: 1
+      assert_selector 'div:nth-child(2) dd', text: 'test data export'
     end
   end
 
