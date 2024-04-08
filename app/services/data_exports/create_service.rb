@@ -13,7 +13,7 @@ module DataExports
 
       validate_params
 
-      validate_export
+      validate_export_ids
 
       @data_export.user = current_user
       @data_export.status = 'processing'
@@ -38,25 +38,39 @@ module DataExports
       @data_export.name = nil if params.key?('name') && params['name'].empty?
     end
 
+    def validate_export_ids
+      if @data_export.export_type == 'sample'
+        validate_sample_ids
+      elsif @data_export.export_type == 'workflow_execution'
+        validate_workflow_execution_ids
+      end
+    end
+
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
     # to export the chosen samples' data
-    def validate_export
-      if @data_export.type == 'sample'
-        project_ids = []
+    def validate_sample_ids
+      project_ids = []
 
-        params['export_parameters']['ids'].each do |sample_id|
-          sample = Sample.find_by(id: sample_id)
-          raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_sample_id') if sample.nil?
+      params['export_parameters']['ids'].each do |sample_id|
+        sample = Sample.find_by(id: sample_id)
+        raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_sample_id') if sample.nil?
 
-          project_id = sample.project_id
-          project_ids << project_id unless project_ids.include?(project_id)
+        project_id = sample.project_id
+        project_ids << project_id unless project_ids.include?(project_id)
+      end
+
+      project_ids.each do |project_id|
+        authorize! Project.find(project_id), to: :export_sample_data?
+      end
+    end
+
+    def validate_workflow_execution_ids
+      params['export_parameters']['ids'].each do |workflow_execution_id|
+        workflow_execution = WorkflowExecution.find_by(id: workflow_execution_id)
+        if workflow_execution.nil?
+          raise DataExportCreateError,
+                I18n.t('services.data_exports.create.invalid_workflow_execution_id')
         end
-
-        project_ids.each do |project_id|
-          authorize! Project.find(project_id), to: :export_sample_data?
-        end
-      elsif @data_export.type == 'workflow_execution'
-        workflow_execution = WorkflowExecution.find(params['export_parameters']['ids'][0])
         authorize! workflow_execution, to: :export_workflow_execution_data?
       end
     end

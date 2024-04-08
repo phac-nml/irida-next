@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 # Policy for workflow execution authorization
-class DataExportPolicy < ApplicationPolicy
+class WorkflowExecutionPolicy < ApplicationPolicy
   def export_workflow_execution_data?
-    true if record.submitter.id == user.id
-  end
+    return true if record.submitter.id == user.id
 
+    details[:id] = record.id
+    false
+  end
 end
