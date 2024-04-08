@@ -28,12 +28,12 @@
                 style="font-size: 16px; color: #334155; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05)"
               >
                 <h1 class="mt-0 mx-0 mb-6 font-semibold text-black" style="font-size: 24px;">
-                  <%= t(:".greeting", name: @workflow_execution.submitter.first_name) %>
+                  <%= t(:".greeting", name: @workflow_execution.submitter.first_name) %>&#44;
                 </h1>
                 <p class="m-0" style="line-height: 24px">
-                  <%= t(:".error_message.start") %>
+                  <%= t(:".body.start") %>
                   <strong><%= @workflow_execution.id %></strong>
-                  <%= t(:".error_message.end") %>
+                  <%= t(:".body.end") %>
                   <br>
                   <br>
                   <%= t(:".view_details") %>
