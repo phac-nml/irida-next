@@ -9,7 +9,7 @@ module DataExports
       @manifest = ''
       initialize_manifest(data_export.export_type)
 
-      zip = create_sample_zip(data_export) if data_export.export_type == 'sample'
+      zip = data_export.export_type == 'sample' ? create_sample_zip(data_export) : create_analysis_zip(data_export)
 
       attach_zip(data_export, zip)
 
@@ -41,8 +41,26 @@ module DataExports
 
           update_sample_manifest(sample, project)
 
-          write_attachments(sample, project, zip)
+          write_sample_attachments(sample, project, zip)
         end
+        # Write manifest to file 'manifest.json' and add to zip
+        write_manifest(zip)
+      end
+      new_zip_file
+    end
+
+    def create_analysis_zip(data_export)
+      new_zip_file = Tempfile.new(binmode: true)
+      ZipKit::Streamer.open(new_zip_file) do |zip|
+        workflow_execution = WorkflowExecution.find(data_export.export_parameters['ids'][0])
+        write_workflow_execution_outputs(workflow_execution)
+
+        sample_workflow_executions = SamplesWorkflowExecution.where(workflow_execution_id: workflow_execution.id)
+        sample_workflow_executions.each do |swe|
+          write_sample_workflow_execution_outputs(swe, zip) if swe.outputs.count.positive?
+        end
+
+        update_analysis_manifest(workflow_execution, sample_workflow_executions)
         # Write manifest to file 'manifest.json' and add to zip
         write_manifest(zip)
       end
@@ -67,6 +85,12 @@ module DataExports
                            'children' => create_attachment_manifest_directories(sample) }
 
       project_directory['children'] << sample_directory
+    end
+
+    def update_analysis_manifest(workflow_execution, sample_workflow_executions)
+      add_workflow_execution_outputs_to_manifest(workflow_execution)
+
+      add_sample_workflow_executions_to_manifest(sample_workflow_executions)
     end
 
     def create_attachment_manifest_directories(sample)
@@ -96,16 +120,58 @@ module DataExports
       attachment_manifest_file
     end
 
-    def write_attachments(sample, project, zip)
+    def write_sample_attachments(sample, project, zip)
       sample.attachments.each do |attachment|
         write_attachment(project.puid, sample.puid, zip, attachment)
       end
     end
 
-    def write_attachment(project_puid, sample_puid, zip, attachment)
-      directory = "#{project_puid}/#{sample_puid}/#{attachment.puid}/#{attachment.file.filename}"
+    def write_attachment(directory, zip, attachment)
       zip.write_file(directory) do |writer_for_file|
         attachment.file.download { |chunk| writer_for_file << chunk }
+      end
+    end
+
+    def write_workflow_execution_outputs(workflow_execution, zip)
+      workflow_execution.outputs.each do |output|
+        write_attachment(output.file.filename.to_s, zip, output)
+      end
+    end
+
+    def write_sample_workflow_execution_outputs(swe, zip)
+      sample = Sample.find(swe.sample_id)
+      swe.outputs.each do |output|
+        directory = "#{sample.puid}/#{output.puid}"
+        write_attachment(directory, zip, output)
+      end
+    end
+
+    def add_workflow_execution_outputs_to_manifest(workflow_execution)
+      workflow_execution.outputs.each do |workflow_execution_output|
+        @manifest['children'] << { 'name' => workflow_execution_output.file.filename.to_s, 'type' => 'file' }
+      end
+    end
+
+    def add_sample_workflow_executions_to_manifest(sample_workflow_executions)
+      sample_workflow_executions.each do |sample_workflow_execution|
+        sample_directory = ''
+        sample = Sample.find_by(sample_workflow_execution.sample_id)
+        if @manifest['children'].any? { |h| h['name'] == sample.puid }
+          sample_directory = @manifest['children'].detect { |s| s['name'] == sample.puid }
+        else
+          sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
+                               'irida-next-name' => sample.name, 'children' => [] }
+          @manifest['children'] << sample_directory
+        end
+
+        add_sample_workflow_execution_output_to_manifest(sample_directory, sample_workflow_execution)
+      end
+    end
+
+    def add_sample_workflow_execution_output_to_manifest(directory, sample_workflow_execution)
+      sample_workflow_execution.outputs.each do |sample_workflow_execution_output|
+        directory['children'] << { 'name' => sample_workflow_execution_output.file.filename.to_s,
+                                   'type' => 'file' }
       end
     end
 
