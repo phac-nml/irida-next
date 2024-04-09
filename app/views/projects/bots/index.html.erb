@@ -1,0 +1,26 @@
+<%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
+  <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
+  <%= component.with_buttons do %>
+    <%= link_to t(".add_new_bot"),
+    new_namespace_project_bot_path(@namespace.parent, @namespace.project),
+    data: {
+      turbo_frame: "new_bot_modal",
+      turbo_stream: true
+    },
+    class: "button button--state-primary button--size-default" %>
+  <% end %>
+<% end %>
+
+<div class="flex flex-col">
+  <%= turbo_frame_tag "new_bot_modal" %>
+  <div class="mb-4">
+    <%= turbo_frame_tag "access-token-section" %>
+  </div>
+  <%= turbo_frame_tag "bots",
+                      src: namespace_project_bots_path(
+                                  format: :turbo_stream
+                                ),
+                      loading: :lazy do %>
+    <%= render partial: "shared/loading/table" %>
+  <% end %>
+</div>
