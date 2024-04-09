@@ -60,7 +60,7 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def cancellable?
-    %w[running queued prepared new].include?(state)
+    %w[submitted running queued prepared new].include?(state)
   end
 
   def deletable?
