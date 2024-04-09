@@ -16,23 +16,21 @@ export default class extends Controller {
   };
 
   connect() {
-    if (this.hasSelectAllTarget) {
-      this.#storageKey =
-        this.storageKeyValue ||
-        `${location.protocol}//${location.host}${location.pathname}${location.search}`;
+    this.#storageKey =
+      this.storageKeyValue ||
+      `${location.protocol}//${location.host}${location.pathname}${location.search}`;
 
-      this.element.setAttribute("data-controller-connected", "true");
+    this.element.setAttribute("data-controller-connected", "true");
 
-      const storageValue = this.#getStoredSamples();
+    const storageValue = this.#getStoredSamples();
 
-      if (storageValue) {
-        this.#updateUI(storageValue);
-      } else {
-        this.save([]);
-      }
-
-      this.#updatedCounts(storageValue.length);
+    if (storageValue) {
+      this.#updateUI(storageValue);
+    } else {
+      this.save([]);
     }
+
+    this.#updatedCounts(storageValue.length);
   }
 
   actionLinkOutletConnected(outlet) {
@@ -100,11 +98,15 @@ export default class extends Controller {
   }
 
   #setSelectAllCheckboxValue(total) {
-    this.selectAllTarget.checked = this.totalValue === total;
+    if (this.hasSelectAllTarget) {
+      this.selectAllTarget.checked = this.totalValue === total;
+    }
   }
 
   #updatedCounts(selected) {
-    this.totalTarget.innerText = this.totalValue;
-    this.selectedTarget.innerText = selected;
+    if (this.hasTotalTarget && this.hasSelectedTarget) {
+      this.totalTarget.innerText = this.totalValue;
+      this.selectedTarget.innerText = selected;
+    }
   }
 }
