@@ -1,15 +1,16 @@
 <div class="sample-sheet">
   <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><%= t(".label") %></label>
-  <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
-    <thead
-      class="
+  <div class="overflow-x-auto border border-slate-200">
+    <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+      <thead
+        class="
         text-xs
         text-slate-700
         bg-slate-50
         dark:bg-slate-700
         dark:text-slate-400
       "
-    >
+      >
       <tr>
         <% properties.keys.each do |header| %>
           <th class="px-6 py-3 font-semibold tracking-wider">
@@ -22,8 +23,8 @@
           </th>
         <% end %>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       <% samples.each_with_index do |sample, index| %>
         <%= render Nextflow::Samplesheet::RowComponent.new(
           sample,
@@ -32,6 +33,7 @@
           required_properties
         ) %>
       <% end %>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>

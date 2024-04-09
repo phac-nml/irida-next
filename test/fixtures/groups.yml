@@ -344,3 +344,12 @@ group_fifteen:
   description: Group 15 description
   metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABF
+
+group_sixteen:
+  name: Group 16
+  path: group-16
+  type: Group
+  description: Group 16 description
+  metadata_summary: { }
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAABG
