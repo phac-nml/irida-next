@@ -743,6 +743,11 @@ en:
         project_modified: "Project attributes were modified by %{user}"
         project_restored: "Project was restored by %{user}"
         project_transferred: "Project was transferred by %{user}"
+    bots:
+      create:
+        success: "Bot account was successfully added to the project"
+      destroy:
+        success: "Bot account was successfully removed from the project"
     new:
       title: Create project
       placeholder: Awesome project name
