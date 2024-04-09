@@ -53,9 +53,9 @@ module DataExports
       new_zip_file = Tempfile.new(binmode: true)
       ZipKit::Streamer.open(new_zip_file) do |zip|
         workflow_execution = WorkflowExecution.find(data_export.export_parameters['ids'][0])
-        write_workflow_execution_outputs(workflow_execution)
+        write_workflow_execution_outputs(workflow_execution, zip)
 
-        sample_workflow_executions = SamplesWorkflowExecution.where(workflow_execution_id: workflow_execution.id)
+        sample_workflow_executions = workflow_execution.samples_workflow_executions
         sample_workflow_executions.each do |swe|
           write_sample_workflow_execution_outputs(swe, zip) if swe.outputs.count.positive?
         end
@@ -141,7 +141,7 @@ module DataExports
     def write_sample_workflow_execution_outputs(swe, zip)
       sample = Sample.find(swe.sample_id)
       swe.outputs.each do |output|
-        directory = "#{sample.puid}/#{output.puid}"
+        directory = "#{sample.puid}/#{output.file.filename}"
         write_attachment(directory, zip, output)
       end
     end
@@ -154,25 +154,21 @@ module DataExports
 
     def add_sample_workflow_executions_to_manifest(sample_workflow_executions)
       sample_workflow_executions.each do |sample_workflow_execution|
-        sample_directory = ''
-        sample = Sample.find_by(sample_workflow_execution.sample_id)
-        if @manifest['children'].any? { |h| h['name'] == sample.puid }
-          sample_directory = @manifest['children'].detect { |s| s['name'] == sample.puid }
-        else
-          sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
-                               'irida-next-name' => sample.name, 'children' => [] }
-          @manifest['children'] << sample_directory
-        end
+        next unless sample_workflow_execution.outputs.count.positive?
 
-        add_sample_workflow_execution_output_to_manifest(sample_directory, sample_workflow_execution)
+        sample = Sample.find(sample_workflow_execution.sample_id)
+        sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
+                             'irida-next-name' => sample.name, 'children' => [] }
+        @manifest['children'] << sample_directory
+        sample_workflow_execution.outputs.each do |swe_output|
+          add_sample_workflow_execution_output_to_manifest(sample_directory, swe_output)
+        end
       end
     end
 
-    def add_sample_workflow_execution_output_to_manifest(directory, sample_workflow_execution)
-      sample_workflow_execution.outputs.each do |sample_workflow_execution_output|
-        directory['children'] << { 'name' => sample_workflow_execution_output.file.filename.to_s,
-                                   'type' => 'file' }
-      end
+    def add_sample_workflow_execution_output_to_manifest(directory, swe_output)
+      output_directory = { 'name' => swe_output.file.filename.to_s, 'type' => 'file' }
+      directory['children'] << output_directory
     end
 
     def write_manifest(zip)
