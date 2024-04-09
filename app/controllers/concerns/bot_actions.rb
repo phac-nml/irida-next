@@ -72,6 +72,10 @@ module BotActions
 
   private
 
+  def bot_account
+    @bot_account = @namespace.namespace_bots.find_by(id: params[:id]) || not_found
+  end
+
   def access_levels
     @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
   end

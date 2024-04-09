@@ -23,10 +23,6 @@ module Projects
       @namespace = @project.namespace
     end
 
-    def bot_account
-      @bot_account = NamespaceBot.find_by(id: params[:id], namespace: @namespace) || not_found
-    end
-
     def context_crumbs
       super
       case action_name
