@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_28_145629) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_08_204851) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -92,6 +92,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_145629) do
     t.index ["expires_at"], name: "index_members_on_expires_at"
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
     t.index ["user_id"], name: "index_members_on_user_id"
+  end
+
+  create_table "namespace_bots", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "namespace_id", null: false
+    t.datetime "deleted_at"
+    t.jsonb "log_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_namespace_bots_on_deleted_at"
+    t.index ["user_id", "namespace_id"], name: "index_bot_user_with_namespace", unique: true
   end
 
   create_table "namespace_group_links", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -225,6 +236,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_145629) do
     t.string "first_name"
     t.string "last_name"
     t.string "locale", default: "en"
+    t.integer "user_type", default: 0
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true, where: "(deleted_at IS NULL)"
@@ -662,5 +674,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_145629) do
   SQL
   create_trigger :logidze_on_data_exports, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_data_exports BEFORE INSERT OR UPDATE ON public.data_exports FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_namespace_bots, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_namespace_bots BEFORE INSERT OR UPDATE ON public.namespace_bots FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end

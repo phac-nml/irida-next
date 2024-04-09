@@ -2,6 +2,10 @@
 
 # entity class for User
 class User < ApplicationRecord
+  include HasUserType
+
+  attr_accessor :skip_password_validation
+
   has_logidze
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -23,6 +27,7 @@ class User < ApplicationRecord
 
   has_many :personal_access_tokens, dependent: :destroy
   has_many :data_exports, dependent: :destroy
+  has_many :namespace_bots, class_name: 'NamespaceBot', dependent: :destroy
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -104,11 +109,19 @@ class User < ApplicationRecord
   end
 
   def ensure_namespace
+    return unless human?
+
     if namespace
       namespace.path = build_namespace_path
       namespace.name = build_namespace_name
     else
       build_namespace(name: build_namespace_name, path: build_namespace_path)
     end
+  end
+
+  def password_required?
+    return false if skip_password_validation
+
+    super
   end
 end

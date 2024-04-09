@@ -52,9 +52,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       access_level.nil? ? AccessLevel::NO_ACCESS : access_level
     end
 
-    def can_modify?(user, object_namespace)
+    def can_modify?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
       Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user)
+        effective_access_level(object_namespace, user, include_group_links)
       )
     end
 
