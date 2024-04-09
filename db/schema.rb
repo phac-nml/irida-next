@@ -94,7 +94,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_08_204851) do
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
-  create_table "namespace_bots", force: :cascade do |t|
+  create_table "namespace_bots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "namespace_id", null: false
     t.datetime "deleted_at"
