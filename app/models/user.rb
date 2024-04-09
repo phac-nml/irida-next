@@ -109,7 +109,7 @@ class User < ApplicationRecord
   end
 
   def ensure_namespace
-    return unless User.user_types[user_type] == User.user_types[:human]
+    return unless human?
 
     if namespace
       namespace.path = build_namespace_path
