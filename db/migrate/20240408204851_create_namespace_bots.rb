@@ -3,7 +3,7 @@
 # Migration to add Namespace Bots join table
 class CreateNamespaceBots < ActiveRecord::Migration[7.1]
   def change # rubocop:disable Metrics/MethodLength
-    create_table :namespace_bots, id: :uuid do |t|
+    create_table :namespace_bots do |t|
       t.uuid :user_id, null: false
       t.uuid :namespace_id, null: false
       t.datetime :deleted_at
