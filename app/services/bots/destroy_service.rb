@@ -3,18 +3,17 @@
 module Bots
   # Service used to Delete Projects
   class DestroyService < BaseService
-    attr_accessor :bot_account, :namespace
+    attr_accessor :namespace_bot
 
-    def initialize(bot_account, namespace, user = nil)
+    def initialize(namespace_bot, user = nil)
       super(user)
-      @bot_account = bot_account
-      @namespace = namespace
+      @namespace_bot = namespace_bot
     end
 
     def execute
-      authorize! namespace, to: :destroy_bot_accounts?
+      authorize! namespace_bot.namespace, to: :destroy_bot_accounts?
 
-      bot_account.destroy!
+      namespace_bot.destroy!
     end
   end
 end

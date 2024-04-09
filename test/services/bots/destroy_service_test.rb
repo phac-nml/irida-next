@@ -7,12 +7,15 @@ module Bots
     def setup
       @user = users(:john_doe)
       @project = projects(:project1)
-      @bot_account = users(:user_bot_account0)
+      @namespace_bot = namespace_bots(:project1_bot)
     end
 
     test 'destroy bot account' do
-      assert_difference -> { User.count } => -1, -> { PersonalAccessToken.count } => -1, -> { Member.count } => -1 do
-        Bots::DestroyService.new(@bot_account, @project.namespace, @user).execute
+      assert_difference -> { NamespaceBot.count } => -1,
+                        -> { User.count } => -1,
+                        -> { PersonalAccessToken.count } => -1,
+                        -> { Member.count } => -1 do
+        Bots::DestroyService.new(@namespace_bot, @user).execute
       end
     end
 
@@ -20,7 +23,7 @@ module Bots
       assert_authorized_to(:destroy_bot_accounts?, @project.namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
-        Bots::DestroyService.new(@bot_account, @project.namespace, @user).execute
+        Bots::DestroyService.new(@namespace_bot, @user).execute
       end
     end
 
@@ -28,7 +31,7 @@ module Bots
       user = users(:micha_doe)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Bots::DestroyService.new(@bot_account, @project.namespace, user).execute
+        Bots::DestroyService.new(@namespace_bot, user).execute
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy

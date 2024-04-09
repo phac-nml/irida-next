@@ -41,8 +41,6 @@ class User < ApplicationRecord
 
   delegate :full_path, to: :namespace
 
-  attribute :user_type, :integer, default: -> { User.user_types[:human] }
-
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
     user.email = auth.info.email
@@ -111,7 +109,7 @@ class User < ApplicationRecord
   end
 
   def ensure_namespace
-    return unless user_type == User.user_types[:human]
+    return unless User.user_types[user_type] == User.user_types[:human]
 
     if namespace
       namespace.path = build_namespace_path

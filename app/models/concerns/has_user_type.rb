@@ -14,6 +14,7 @@ module HasUserType
   ].freeze
 
   included do
+    attribute :user_type, :integer, default: -> { user_types[:human] }
     enum user_type: USER_TYPES
 
     scope :bots, -> { where(user_type: BOT_USER_TYPES) }

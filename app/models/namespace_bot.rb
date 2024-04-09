@@ -13,7 +13,7 @@ class NamespaceBot < ApplicationRecord
   validate :validate_bot_user_type
 
   def validate_bot_user_type
-    return unless user.user_type == User.user_types[:human]
+    return unless User.user_types[user.user_type] == User.user_types[:human]
 
     errors.add(:base, 'Human user cannot be set as a bot user for a namespace')
   end
