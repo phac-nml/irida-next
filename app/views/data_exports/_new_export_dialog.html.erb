@@ -10,21 +10,30 @@
       data-sessionstorage-amend-form-target="field"
       data-sessionstorage-amend-form-field-name-value="data_export[export_parameters[ids]][]"
     />
-    <div class="mb-4 font-normal text-gray-500 dark:text-gray-400">
-      <p data-controller="data-export" data-data-export-target="count" class="mb-4">
-        <%= t(".description.start") %>
-        <%= viral_pill(
-          text: t(".description.processing"),
-          color: :gray
-        ) %>
-        <%= t(".description.middle") %>
-          <%= viral_pill(
-          text: t(".description.ready"),
-          color: :green
-        ) %>
-        <%= t(".description.end") %>
-      </p>
-      <div class="form-field mb-4">
+    <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
+      <span
+        data-controller="data-export"
+        data-data-export-target="summary"
+        data-data-export-singular-value="<%= t(".summary.start.singular") %>"
+        data-data-export-plural-value="<%= t(".summary.start.plural") %>"
+        class="mb-4">
+        <%= t(".summary.start.zero") %>
+      </span>
+      <%= viral_pill(
+        text: t(".summary.processing"),
+        color: :gray
+      ) %>
+      <span>
+      <%= t(".summary.middle") %>
+      </span>
+      <%= viral_pill(
+        text: t(".summary.ready"),
+        color: :green
+      ) %>
+      <span>
+        <%= t(".summary.end") %>
+      </span>
+      <div class="form-field mb-4 mt-2">
         <%= form.label :name, t(".name_label") %>
         <%= form.text_field :name, class: "form-control" %>
       </div>

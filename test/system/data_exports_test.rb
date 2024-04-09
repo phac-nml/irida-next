@@ -232,7 +232,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       assert_text I18n.t('data_exports.new_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_export_dialog.email_label')
-      assert_text I18n.t('data_exports.new_export_dialog.description.start').gsub! 'COUNT_PLACEHOLDER', '1 sample'
+      assert_text I18n.t('data_exports.new_export_dialog.summary.start.singular')
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
@@ -270,7 +270,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       assert_text I18n.t('data_exports.new_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_export_dialog.email_label')
-      assert_text I18n.t('data_exports.new_export_dialog.description.start').gsub! 'COUNT_PLACEHOLDER', '2 samples'
+      assert_text I18n.t('data_exports.new_export_dialog.summary.start.plural').gsub! 'COUNT_PLACEHOLDER', '2'
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
@@ -313,7 +313,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_text I18n.t('data_exports.new_export_dialog.description.start').gsub! 'COUNT_PLACEHOLDER', '1 sample'
+      assert_text I18n.t('data_exports.new_export_dialog.summary.start.singular')
     end
   end
 
