@@ -22,11 +22,10 @@ class DataExportsController < ApplicationController
   end
 
   def new
-    render turbo_stream: turbo_stream.update('export_modal',
-                                             partial: 'new_export_modal',
+    render turbo_stream: turbo_stream.update('samples_dialog',
+                                             partial: 'new_export_dialog',
                                              locals: {
-                                               open: true,
-                                               samples: params[:samples]
+                                               open: true
                                              }), status: :ok
   end
 
@@ -40,12 +39,14 @@ class DataExportsController < ApplicationController
     @data_export = DataExports::CreateService.new(current_user, data_export_params).execute
 
     if @data_export.valid?
-      flash[:success] = t('.success')
-      redirect_to data_exports_path
+      flash[:success] = t('.success', name: @data_export.name || @data_export.id)
+
+      redirect_to data_export_path(@data_export)
     else
       respond_to do |format|
         format.turbo_stream do
-          render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
+          render status: :unprocessable_entity,
+                 locals: { type: 'alert', message: @data_export.errors.full_messages.first }
         end
       end
     end
@@ -87,7 +88,7 @@ class DataExportsController < ApplicationController
   private
 
   def data_export_params
-    params.require(:data_export).permit(:name, :export_type, :email_notification, export_parameters: { ids: [] })
+    params.require(:data_export).permit(:name, :export_type, :email_notification, export_parameters: [ids: []])
   end
 
   def data_export

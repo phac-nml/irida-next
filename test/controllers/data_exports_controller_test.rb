@@ -68,12 +68,70 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test 'should redirect after clicking project link in preview tab' do
+  test 'should view new export modal' do
+    get new_data_export_path
+    assert_response :success
+  end
+
+  test 'should create new export with only necessary params' do
+    post data_exports_path, params: {
+      data_export: {
+        export_type: 'sample',
+        export_parameters: { ids: [@sample1.id] }
+      }
+    }
+    assert_response :redirect
+  end
+
+  test 'should create new export with additional params' do
+    post data_exports_path, params: {
+      data_export: {
+        export_type: 'sample',
+        export_parameters: { ids: [@sample1.id] },
+        email_notification: true,
+        name: 'export name'
+      }
+    }
+    assert_response :redirect
+  end
+
+  test 'should not create new export without export_type param' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_parameters: { ids: [@sample1.id] }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new export without export_parameters param' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'sample'
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new export without export_parameters["ids"] param' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'sample',
+             export_parameters: { invalid_ids: ['not valid id'] }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should redirect from project PUID' do
     get redirect_from_data_export_path(@data_export1, puid: 'INXT_PRJ_AAAAAAAAAA')
     assert_response :redirect
   end
 
-  test 'should redirect after clicking sample link in preview tab' do
+  test 'should redirect from sample PUID' do
     get redirect_from_data_export_path(@data_export1, puid: 'INXT_SAM_AAAAAAAAAA')
     assert_response :redirect
   end

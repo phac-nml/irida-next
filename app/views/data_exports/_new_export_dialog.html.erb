@@ -1,0 +1,73 @@
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
+  <%= dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_section do %>
+    <%= form_for(:data_export, url: data_exports_path,
+        data: {
+          turbo: false
+        }, method: :post) do |form| %>
+    <div
+      data-controller="sessionstorage-amend-form"
+      data-sessionstorage-amend-form-target="field"
+      data-sessionstorage-amend-form-field-name-value="data_export[export_parameters[ids]][]"
+    />
+    <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
+      <span
+        data-controller="data-export"
+        data-data-export-target="summary"
+        data-data-export-singular-value="<%= t(".summary.start.singular") %>"
+        data-data-export-plural-value="<%= t(".summary.start.plural") %>"
+        class="mb-4">
+        <%= t(".summary.start.zero") %>
+      </span>
+      <%= viral_pill(
+        text: t(".summary.processing"),
+        color: :gray
+      ) %>
+      <span>
+      <%= t(".summary.middle") %>
+      </span>
+      <%= viral_pill(
+        text: t(".summary.ready"),
+        color: :green
+      ) %>
+      <span>
+        <%= t(".summary.end") %>
+      </span>
+      <div class="form-field mb-4 mt-2">
+        <%= form.label :name, t(".name_label") %>
+        <%= form.text_field :name, class: "form-control" %>
+      </div>
+      <div class="flex mb-4 items-center h-5">
+        <%= form.check_box :email_notification, { checked: false,
+        class:
+          "w-4
+          h-4
+          mr-2.5
+          text-primary-600
+          bg-slate-100
+          border-slate-300
+          rounded
+          focus:ring-primary-500
+          dark:focus:ring-primary-600
+          dark:ring-offset-slate-800
+          focus:ring-2
+          dark:bg-slate-700
+          dark:border-slate-600"
+        }, true, false %>
+        <%= form.label :email_notification, t(".email_label"),
+        class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+      </div>
+      <div>
+        <%= form.hidden_field :export_type, value: 'sample' %>
+      </div>
+      <div>
+        <%= form.submit t(".submit_button"),
+          data: {
+            turbo_frame: "_top",
+            action: "click->sessionstorage-amend-form#clear"
+          },
+          class: "button button--state-primary button--size-default" %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

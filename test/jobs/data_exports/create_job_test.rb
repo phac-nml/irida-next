@@ -234,7 +234,7 @@ module DataExports
              }]
           }]
         }]
-      }.to_json
+      }
 
       DataExports::CreateJob.perform_now(data_export)
       data_export.run_callbacks(:commit)
@@ -246,7 +246,7 @@ module DataExports
         end
       end
       assert_not expected_files_in_zip.count.positive?
-      assert_equal expected_manifest, data_export.manifest
+      assert_equal expected_manifest.to_json, data_export.manifest
     end
   end
 end

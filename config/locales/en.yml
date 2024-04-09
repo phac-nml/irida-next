@@ -667,6 +667,7 @@ en:
         leave_success: "You have successfully left the group %{name}"
     samples:
       index:
+        create_export_button: Create Export
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         workflows:
@@ -943,6 +944,7 @@ en:
         transfer_button: Transfer samples
         import_metadata_button: Import metadata
         clone_button: Clone samples
+        create_export_button: Create Export
         actions:
           button_add_aria_label: Add new sample button
           dropdown_aria_label: Dropdown options for sample %{sample_name}
@@ -1235,6 +1237,9 @@ en:
         updated_at_asc: Oldest updated
         created_at_asc: Oldest created
   data_exports:
+    create:
+      success: Data export '%{name}' was successfully started.
+      error: An error has occured with creating the data export.
     index:
       title: Data Exports
       table_header:
@@ -1265,6 +1270,9 @@ en:
     destroy:
       success: Data export '%{name}' was successfully deleted.
       error: Data export '%{name}' could not be deleted.
+    remove:
+      success: Data export '%{name}' was successfully deleted.
+      error: Data export '%{name}' could not be deleted.
     preview:
       manifest_json: manifest.json
     remove:
@@ -1277,3 +1285,18 @@ en:
       tabs:
         summary: Summary
         preview: Preview
+    new_export_dialog:
+      email_label: Receive an email notification when your export is ready to download?
+      name_label: "Export Name (Optional):"
+      submit_button: Submit
+      summary:
+        start:
+          zero: This export will contain no samples. After submission, you will be redirected to the export page. While the export status is
+          singular: This export will contain 1 sample. After submission, you will be redirected to the export page. While the export status is
+          plural: This export will contain COUNT_PLACEHOLDER samples. After submission, you will be redirected to the export page. While the export status is
+        middle: "the contents of the export will be added to a downloadable zip file. Once the export status is"
+        end: ", the zip file will be available for download. You will have 3 business days to download the export file before it's deleted."
+        processing: processing
+        ready: ready
+      title: Data Export
+
