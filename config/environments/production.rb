@@ -43,9 +43,6 @@ Rails.application.configure do
   config.active_storage.service = ENV.fetch('RAILS_STORAGE_SERVICE', 'local').to_sym
   config.active_storage.urls_expire_in = 15.minutes
 
-  config.action_mailer.default_url_options = { host: ENV.fetch('RAILS_HOST', 'example.com'),
-                                               protocol: ENV.fetch('RAILS_PROTOCOL', 'http') }
-
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = "wss://example.com/cable"
@@ -68,11 +65,24 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "irida_production"
 
+  config.action_mailer.default_url_options = { host: ENV.fetch('RAILS_HOST', 'example.com'),
+                                               protocol: ENV.fetch('RAILS_PROTOCOL', 'http') }
+
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
+
+  unless Rails.application.credentials.action_mailer.nil?
+    unless Rails.application.credentials.action_mailer.default_from.nil?
+      config.action_mailer.default_options = { from: Rails.application.credentials.action_mailer.default_from }
+    end
+    unless Rails.application.credentials.action_mailer.smtp_settings.nil?
+      config.action_mailer.delivery_method = :smtp
+      config.action_mailer.smtp_settings = Rails.application.credentials.action_mailer.smtp_settings
+    end
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
