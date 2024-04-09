@@ -30,7 +30,11 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  if !Rails.application.credentials.action_mailer.nil? && !Rails.application.credentials.action_mailer.default_from.nil?
+    config.mailer_sender = Rails.application.credentials.action_mailer.default_from
+  else
+    config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  end
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
