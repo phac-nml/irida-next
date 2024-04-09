@@ -12,7 +12,7 @@ module Members
       @member = Member.new(params.merge(created_by: current_user, namespace:))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! @namespace, to: :create_member? unless namespace.parent.nil? && namespace.owner == current_user
 
       if member.namespace.owner != current_user &&
@@ -24,11 +24,28 @@ module Members
                                         namespace_type: namespace.class.model_name.human)
       end
 
-      member.save
+      member.save do
+        send_emails
+      end
+
       member
     rescue Members::CreateService::MemberCreateError => e
       member.errors.add(:base, e.message)
       member
+    end
+
+    private
+
+    def send_emails
+      return unless member.access_level_previously_changed?
+
+      access = member.access_level > member.access_level_previously_was ? 'granted' : 'revoked'
+      MemberMailer.access_inform_user_email(member, access).deliver_later
+      managers = Member.for_namespace_and_ancestors(member.namespace).not_expired
+                       .where(access_level: Member::AccessLevel.manageable)
+      managers.each do |manager|
+        MemberMailer.access_inform_manager_email(member, manager, access).deliver_later
+      end
     end
   end
 end

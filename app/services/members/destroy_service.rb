@@ -12,7 +12,7 @@ module Members
       @namespace = namespace
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       if current_user != member.user
         authorize! @namespace, to: :destroy_member?
 
@@ -25,10 +25,26 @@ module Members
         end
       end
 
-      member.destroy
+      member.destroy do
+        send_emails
+      end
     rescue Members::DestroyService::MemberDestroyError => e
       member.errors.add(:base, e.message)
       false
+    end
+
+    private
+
+    def send_emails
+      return unless member.access_level_previously_changed?
+
+      access = member.access_level > member.access_level_previously_was ? 'granted' : 'revoked'
+      MemberMailer.access_inform_user_email(member, access).deliver_later
+      managers = Member.for_namespace_and_ancestors(member.namespace).not_expired
+                       .where(access_level: Member::AccessLevel.manageable)
+      managers.each do |manager|
+        MemberMailer.access_inform_manager_email(member, manager, access).deliver_later
+      end
     end
   end
 end
