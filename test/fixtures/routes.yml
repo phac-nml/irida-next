@@ -445,6 +445,6 @@ project35_namespace_route:
   source: project35_namespace (Namespace)
 
 project37_namespace_route:
-  name: Group 1 / Project 37
-  path: group-1/project-37
+  name: Group 16 / Project 37
+  path: group-16/project-37
   source: project37_namespace (Namespace)
