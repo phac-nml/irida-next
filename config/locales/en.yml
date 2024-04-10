@@ -1216,8 +1216,8 @@ en:
     personal_access_tokens:
       create:
         required:
-          token_name: Unable to create bot account as the token name is required
-          scopes: Unable to create bot account as the bot API scope must be selected
+          token_name: Unable to generate personal access token as the name is required
+          scopes: Unable to generate personal access token as the API scope must be selected
     namespaces:
       share:
         invalid_namespace_type: Only a group or project namespace can be shared with a group.
