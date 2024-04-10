@@ -11,7 +11,7 @@
       lg:text-4xl
       dark:text-white
     "
-  ><%= schema["title"] %></h1>
+  ><%= @workflow.name %></h1>
   <p
     class="
       mb-4
@@ -22,7 +22,7 @@
       dark:text-slate-400
     "
   >
-    <%= schema["description"] %>
+    <%= @workflow.description %>
   </p>
   <%= form_with url: url, data: { turbo_frame: "_top" } do |form| %>
     <input type="hidden" name="format" value="turbo_stream"/>
@@ -42,32 +42,28 @@
         <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
         <%= metadata.hidden_field :workflow_version, value: @workflow.version %>
       <% end %>
-    <% end %>
 
-    <% schema["definitions"].each do |item, definition| %>
-      <%- if show_section?(definition["properties"]) %>
-        <h2 class="text-lg font-extrabold dark:text-white">
-          <%= definition["title"] %>
-        </h2>
-        <p class="mb-2 font-normal text-slate-500 dark:text-slate-400">
-          <%= definition["description"] %>
-        </p>
-        <div class="grid grid-cols-1 gap-4 mb-8">
-          <%= fields_for "workflow_execution[workflow_params]" do |fields| %>
-            <% definition["properties"].each do |name, property| %>
+      <%= workflow.fields_for "workflow_params" do |fields| %>
+        <% @workflow.workflow_params.each do |item, definition| %>
+          <h2 class="text-lg font-extrabold dark:text-white">
+            <%= definition["title"] %>
+          </h2>
+          <p class="mb-2 font-normal text-slate-500 dark:text-slate-400">
+            <%= definition["description"] %>
+          </p>
+          <div class="grid grid-cols-1 gap-4 mb-8">
+            <% definition[:properties].each do |name, property| %>
               <% formatted_name = format_name_as_arg(name) %>
-              <% if name == "outdir" || name == "email" %>
-                <!-- Don't do anything, skip these fields -->
-              <% elsif item == "input_output_options" && property["format"] == "file-path" %>
+              <% if item == "input_output_options" && property["format"] == "file-path" %>
                 <%= render Nextflow::SamplesheetComponent.new(
-                  schema: JSON.parse(@workflow.schema_input_loc.read),
+                  schema: property['schema'],
                   samples: @samples
                 ) %>
-              <% elsif !property["hidden"] %>
+              <% else %>
                 <div>
                   <%= fields.label formatted_name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
                     <%= property["description"] %>
-                    <% if definition["required"].present? && definition["required"].include?(name) %>
+                    <% if property["required"] %>
                       <%= viral_pill(text: t(:"components.nextflow.required"), color: :blue) %>
                     <% end %>
                   <% end %>
@@ -75,7 +71,7 @@
                     fields,
                     formatted_name,
                     property,
-                    definition["required"].present? && definition["required"].include?(name)
+                    property["required"]
                   ) %>
                   <% if property['help_text'].present? %>
                     <%= viral_help_text do %>
@@ -85,10 +81,11 @@
                 </div>
               <% end %>
             <% end %>
-          <% end %>
-        </div>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
+
     <button type="submit" class="button button--state-primary button--size-default">
       <%= t(:"workflow_executions.submissions.create.submit") %>
     </button>

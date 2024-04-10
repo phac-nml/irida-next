@@ -6,11 +6,11 @@ class NextflowComponentTest < ViewComponentTestCase
   test 'default' do
     workflow = Irida::Pipeline.new(
       {
-        name: 'irida-next-example',
-        description: 'This is a test workflow',
-        url: 'https://nf-co.re/testpipeline'
+        'name' => 'phac-nml/iridanextexample',
+        'description' => 'This is a test workflow',
+        'url' => 'https://nf-co.re/testpipeline'
       },
-      '2.0.0',
+      { 'name' => '2.0.0' },
       Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
       Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json')
     )
@@ -22,7 +22,7 @@ class NextflowComponentTest < ViewComponentTestCase
     )
 
     assert_selector 'form' do
-      assert_selector 'h1', text: 'phac-nml/iridanextexample pipeline parameters', count: 1
+      assert_selector 'h1', text: 'phac-nml/iridanextexample', count: 1
       assert_selector 'tbody tr', count: 3
       assert_no_selector 'input[type=text]'
     end

@@ -8,12 +8,7 @@ class NextflowComponent < Component
 
   def initialize(url:, samples:, workflow:)
     @samples = samples
-    @schema = JSON.parse(workflow.schema_loc.read)
     @url = url
     @workflow = workflow
-  end
-
-  def show_section?(properties)
-    properties.values.any? { |property| !property.key?('hidden') }
   end
 end
