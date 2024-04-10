@@ -4,35 +4,36 @@
     <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
       <thead
         class="
-        text-xs
-        text-slate-700
-        bg-slate-50
-        dark:bg-slate-700
-        dark:text-slate-400
-      "
+          text-xs
+          text-slate-700
+          bg-slate-50
+          dark:bg-slate-700
+          dark:text-slate-400
+        "
       >
-      <tr>
-        <% properties.keys.each do |header| %>
-          <th class="px-6 py-3 font-semibold tracking-wider">
-            <div class="flex items-center space-x-2">
-              <span class="uppercase"><%= header %></span>
-              <% if required_properties.include? header %>
-                <%= viral_pill(text: t(".required"), color: :red, border: :red) %>
-              <% end %>
-            </div>
-          </th>
-        <% end %>
-      </tr>
+        <tr>
+          <% properties.keys.each do |header| %>
+            <th class="px-6 py-3 font-semibold tracking-wider">
+              <div class="flex items-center space-x-2">
+                <span class="uppercase"><%= header %>
+                  <%= properties[header]["meta"] %></span>
+                <% if required_properties.include? header %>
+                  <%= viral_pill(text: t(".required"), color: :red, border: :red) %>
+                <% end %>
+              </div>
+            </th>
+          <% end %>
+        </tr>
       </thead>
       <tbody>
-      <% samples.each_with_index do |sample, index| %>
-        <%= render Nextflow::Samplesheet::RowComponent.new(
-          sample,
-          index,
-          properties,
-          required_properties
-        ) %>
-      <% end %>
+        <% samples.each_with_index do |sample, index| %>
+          <%= render Nextflow::Samplesheet::RowComponent.new(
+            sample,
+            index,
+            properties,
+            required_properties
+          ) %>
+        <% end %>
       </tbody>
     </table>
   </div>
