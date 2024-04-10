@@ -45,7 +45,8 @@ module Members
     def send_emails
       return unless member.access_level_previously_changed?
 
-      access = member.access_level > member.access_level_previously_was ? 'granted' : 'revoked'
+      # access = member.access_level > member.access_level_previously_was ? 'granted' : 'revoked'
+      access = 'changed'
       MemberMailer.access_inform_user_email(member, access).deliver_later
       managers = Member.for_namespace_and_ancestors(member.namespace).not_expired
                        .where(access_level: Member::AccessLevel.manageable)
