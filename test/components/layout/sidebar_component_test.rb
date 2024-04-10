@@ -59,5 +59,39 @@ module Layout
         end
       end
     end
+
+    test 'should render the sidebar with no header, items, and multi level menu with items' do
+      render_inline Layout::SidebarComponent.new(label: 'Project 1',
+                                                 icon_name: 'rectangle_stack') do |sidebar|
+        sidebar.with_section do |section|
+          section.with_item(label: 'Details', url: '/', icon: 'clipboard_document')
+          section.with_item(label: 'Members', url: '/-/members', icon: 'users')
+          section.with_item(label: 'Samples', url: '/-/samples', icon: 'beaker')
+          section.with_item(label: 'History', url: '/-/history', icon: 'list_bullet')
+          section.with_multi_level_menu(title: 'Settings') do |mlm|
+            mlm.with_menu_item(
+              url: '/-/edit',
+              label: 'General'
+            )
+          end
+        end
+      end
+      assert_selector 'aside' do
+        assert_no_text 'My Sidebar'
+        assert_selector '.Layout-Sidebar__Section' do
+          assert_selector '.Layout-Sidebar__Item', count: 4
+          assert_selector 'a[href="/"]'
+          assert_selector 'a[href="/-/members"]'
+          assert_selector 'a[href="/-/samples"]'
+          assert_selector 'a[href="/-/history"]'
+          assert_button text: 'Settings'
+
+          assert_selector '#multi-level-menu-Settings.hidden' do
+            assert_selector '.Layout-Sidebar-MultiLevelMenu__Item', count: 1
+            assert_selector 'a[href="/-/edit"]', count: 1
+          end
+        end
+      end
+    end
   end
 end
