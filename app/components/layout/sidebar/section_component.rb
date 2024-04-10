@@ -6,6 +6,7 @@ module Layout
     class SectionComponent < Component
       attr_reader :title
 
+      renders_many :multi_level_menus, MultiLevelMenuComponent
       renders_many :items, ItemComponent
 
       def initialize(title: nil)
