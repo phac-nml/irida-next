@@ -38,8 +38,8 @@ module Members
 
       access = 'revoked'
       MemberMailer.access_inform_user_email(member, access).deliver_later
-      managers = Member.for_namespace_and_ancestors(member.namespace).not_expired
-                       .where(access_level: Member::AccessLevel.manageable)
+      managers = User.where(id: Member.for_namespace_and_ancestors(member.namespace).not_expired
+      .where(access_level: Member::AccessLevel.manageable).select(:user_id)).distinct
       managers.each do |manager|
         MemberMailer.access_inform_manager_email(member, manager, access).deliver_later
       end

@@ -26,6 +26,6 @@ class MemberMailer < ApplicationMailer
                 t(:'.access_changed_subject', first_name: member.user.first_name, last_name: member.user.last_name,
                                               type: member.namespace.type, id: member.namespace.id)
               end
-    mail(to: manager.user.email, subject:)
+    mail(to: manager.email, subject:)
   end
 end
