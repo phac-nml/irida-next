@@ -36,13 +36,13 @@ module Members
     def send_emails # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       return unless member.deleted?
 
-      linked_memberships = Member.for_namespace_and_ancestors(member.namespace.parent).not_expired
-                                 .where(user: member.user)
-      same_access_linked_memberships = linked_memberships.and(Member.where(access_level: member.access_level))
+      inherited_memberships = Member.for_namespace_and_ancestors(member.namespace.parent).not_expired
+                                    .where(user: member.user)
+      same_access_inherited_memberships = linked_memberships.and(Member.where(access_level: member.access_level))
 
-      return unless same_access_linked_memberships.empty?
+      return unless same_access_inherited_memberships.empty?
 
-      access = if linked_memberships.empty?
+      access = if inherited_memberships.empty?
                  'revoked'
                else
                  'changed'
