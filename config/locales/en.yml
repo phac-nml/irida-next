@@ -1213,6 +1213,11 @@ en:
           missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
           sample_not_found: "Sample '%{sample_name}' is not found within this project"
           sample_metadata_fields_not_updated: "Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated."
+    personal_access_tokens:
+      create:
+        required:
+          token_name: Unable to create bot account as the token name is required
+          scopes: Unable to create bot account as the bot API scope must be selected
     namespaces:
       share:
         invalid_namespace_type: Only a group or project namespace can be shared with a group.
