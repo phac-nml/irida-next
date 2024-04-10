@@ -2,7 +2,7 @@
 
 module Layout
   module Sidebar
-    # Sidebar item component
+    # Sidebar multi level menu item component
     class MultiLevelMenuComponent < Component
       attr_reader :title
 
