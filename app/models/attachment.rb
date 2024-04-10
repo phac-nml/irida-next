@@ -45,6 +45,8 @@ class Attachment < ApplicationRecord
   private
 
   def assign_metadata
+    return if metadata.key? 'format'
+
     case filename.to_s
     # Assigns fasta to metadata format and assembly to type for following file types:
     # .fasta, .fasta.gz, .fna, .fna.gz, .fa, .fa.gz
