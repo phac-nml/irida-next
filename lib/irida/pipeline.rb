@@ -24,7 +24,7 @@ module Irida
       @schema_input_loc = schema_input_loc
     end
 
-    def workflow_params # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    def workflow_params
       nextflow_schema = JSON.parse(schema_loc.read)
       workflow_params = {}
 
@@ -33,23 +33,34 @@ module Irida
 
         workflow_params[key] = { title: definition['title'], description: definition['description'], properties: {} }
 
-        definition['properties'].each do |name, property|
-          next unless !property['hidden'] && IGNORED_PARAMS.exclude?(name)
-
-          workflow_params[key][:properties][name] = property.clone
-          workflow_params[key][:properties][name]['required'] =
-            definition['required'].present? && definition['required'].include?(name)
-
-          next unless key == 'input_output_options' && name == 'input'
-
-          workflow_params[key][:properties][name]['schema'] = schema_input_loc
-        end
+        workflow_params[key][:properties] = process_section(key, definition['properties'], definition['required'])
       end
 
       workflow_params
     end
 
     private
+
+    def process_section(key, properties, required)
+      processed_section = {}
+
+      properties.each do |name, property|
+        next unless !property['hidden'] && IGNORED_PARAMS.exclude?(name)
+
+        processed_section[name] = process_property(key, name, property, required.present? && required.include?(name))
+      end
+
+      processed_section
+    end
+
+    def process_property(key, name, property, required)
+      processed_property = property.clone
+      processed_property['required'] = required
+
+      processed_property['schema'] = schema_input_loc if key == 'input_output_options' && name == 'input'
+
+      processed_property
+    end
 
     def show_section?(properties)
       properties.values.any? { |property| !property.key?('hidden') }
