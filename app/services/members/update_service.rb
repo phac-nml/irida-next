@@ -42,13 +42,15 @@ module Members
 
     private
 
-    def send_emails
+    def send_emails # rubocop:disable Metrics/AbcSize
       return unless member.access_level_previously_changed?
 
       access = 'changed'
       MemberMailer.access_inform_user_email(member, access).deliver_later
-      managers = User.where(id: Member.for_namespace_and_ancestors(member.namespace).not_expired
-                       .where(access_level: Member::AccessLevel.manageable).select(:user_id)).distinct
+      manager_memberships = Member.for_namespace_and_ancestors(member.namespace).not_expired
+                                  .where(access_level: Member::AccessLevel.manageable)
+      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: member.user.id))
+                     .distinct
       managers.each do |manager|
         MemberMailer.access_inform_manager_email(member, manager, access).deliver_later
       end

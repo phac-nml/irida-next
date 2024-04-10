@@ -34,13 +34,26 @@ module Members
 
     private
 
-    def send_emails
+    def send_emails # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       return unless member.previously_new_record?
 
-      access = 'granted'
+      linked_memberships = Member.for_namespace_and_ancestors(member.namespace.parent).not_expired
+                                 .where(user: member.user)
+      same_access_linked_memberships = linked_memberships.and(Member.where(access_level: member.access_level))
+
+      return unless same_access_linked_memberships.empty?
+
+      access = if linked_memberships.empty?
+                 'granted'
+               else
+                 'changed'
+               end
+
       MemberMailer.access_inform_user_email(member, access).deliver_later
-      managers = User.where(id: Member.for_namespace_and_ancestors(member.namespace).not_expired
-                       .where(access_level: Member::AccessLevel.manageable).select(:user_id)).distinct
+      manager_memberships = Member.for_namespace_and_ancestors(member.namespace).not_expired
+                                  .where(access_level: Member::AccessLevel.manageable)
+      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: member.user.id))
+                     .distinct
       managers.each do |manager|
         MemberMailer.access_inform_manager_email(member, manager, access).deliver_later
       end
