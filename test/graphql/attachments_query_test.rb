@@ -4,18 +4,16 @@ require 'test_helper'
 
 class AttachmentsQueryTest < ActiveSupport::TestCase
   ATTACHMENTS_QUERY = <<~GRAPHQL
-    query($first: Int) {
-      samples(first: $first) {
-        nodes {
-          id
-          attachments {
-            edges {
-              node {
-                id,
-                metadata,
-                filename,
-                byteSize
-              }
+    query($puid: ID!) {
+      sample(puid: $puid) {
+        id
+        attachments {
+          edges {
+            node {
+              id,
+              metadata,
+              filename,
+              byteSize
             }
           }
         }
@@ -24,17 +22,15 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
   GRAPHQL
 
   ATTACHMENTS_URL_QUERY = <<~GRAPHQL
-    query($first: Int) {
-      samples(first: $first) {
-        nodes {
-          id
-          attachments {
-            edges {
-              node {
-                id,
-                filename,
-                attachmentUrl
-              }
+    query($puid: ID!) {
+      sample(puid: $puid) {
+        id
+        attachments {
+          edges {
+            node {
+              id,
+              filename,
+              attachmentUrl
             }
           }
         }
@@ -43,18 +39,16 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
   GRAPHQL
 
   ATTACHMENTS_METADATA_QUERY = <<~GRAPHQL
-    query($first: Int) {
-      samples(first: $first) {
-        nodes {
-          id
-          attachments {
-            edges {
-              node {
-                id,
-                metadata(
-                  keys: ["format"]
-                )
-              }
+    query($puid: ID!) {
+      sample(puid: $puid) {
+        id
+        attachments {
+          edges {
+            node {
+              id,
+              metadata(
+                keys: ["format"]
+              )
             }
           }
         }
@@ -63,16 +57,14 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
   GRAPHQL
 
   ATTACHMENTS_PAIRED_QUERY = <<~GRAPHQL
-    query($first: Int, $samp_id: ID!) {
-      node(id: $samp_id) {
-        ... on Sample{
-          id
-          attachments(first: $first) {
-            edges {
-              node {
-                id,
-                metadata
-              }
+    query($first: Int, $samp_puid: ID!) {
+      sample(puid: $samp_puid) {
+        id
+        attachments(first: $first) {
+          edges {
+            node {
+              id,
+              metadata
             }
           }
         }
@@ -89,20 +81,18 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
   test 'attachment query should work' do
     result = IridaSchema.execute(ATTACHMENTS_QUERY, context: { current_user: @user },
-                                                    variables: { first: 1 })
+                                                    variables: { puid: @sample.puid })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['samples']
+    data = result['data']['sample']
 
-    assert_not_empty data, 'samples type should work'
-    assert_not_empty data['nodes']
-    assert_equal 1, data['nodes'].count
+    assert_not_empty data, 'sample type should work'
 
-    assert_not_empty data['nodes'][0]['attachments']
-    assert_not_empty data['nodes'][0]['attachments']['edges']
+    assert_not_empty data['attachments']
+    assert_not_empty data['attachments']['edges']
 
-    attachments = data['nodes'][0]['attachments']['edges']
+    attachments = data['attachments']['edges']
     assert_equal 2, attachments.count
 
     assert_equal 'test_file.fastq', attachments[0]['node']['filename']
@@ -119,7 +109,7 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
   test 'attachment url query should work' do
     result = IridaSchema.execute(ATTACHMENTS_URL_QUERY, context: { current_user: @user },
-                                                        variables: { first: 1 })
+                                                        variables: { puid: @sample.puid })
 
     # get blob storage file urls
     file1 = @sample.attachments[0].file
@@ -129,7 +119,7 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    attachments = result['data']['samples']['nodes'][0]['attachments']['edges']
+    attachments = result['data']['sample']['attachments']['edges']
     assert_equal 2, attachments.count
 
     assert_equal file_url1, attachments[0]['node']['attachmentUrl']
@@ -138,11 +128,11 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
   test 'attachment metadata delimit query should work' do
     result = IridaSchema.execute(ATTACHMENTS_METADATA_QUERY, context: { current_user: @user },
-                                                             variables: { first: 1 })
+                                                             variables: { puid: @sample.puid })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    attachments = result['data']['samples']['nodes'][0]['attachments']['edges']
+    attachments = result['data']['sample']['attachments']['edges']
     metadata1 = attachments[0]['node']['metadata']
     metadata2 = attachments[1]['node']['metadata']
 
@@ -157,13 +147,13 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     result = IridaSchema.execute(
       ATTACHMENTS_PAIRED_QUERY,
       context: { current_user: @user_paired },
-      variables: { first: 2, samp_id: @sample_paired.to_global_id.to_s }
+      variables: { first: 2, samp_puid: @sample_paired.puid }
     )
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    attachment1 = result['data']['node']['attachments']['edges'][0]
-    attachment2 = result['data']['node']['attachments']['edges'][1]
+    attachment1 = result['data']['sample']['attachments']['edges'][0]
+    attachment2 = result['data']['sample']['attachments']['edges'][1]
     metadata1 = attachment1['node']['metadata']
     metadata2 = attachment2['node']['metadata']
 
