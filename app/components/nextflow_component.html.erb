@@ -56,7 +56,7 @@
               <% formatted_name = format_name_as_arg(name) %>
               <% if item == "input_output_options" && property["format"] == "file-path" %>
                 <%= render Nextflow::SamplesheetComponent.new(
-                  schema: JSON.parse(property['schema'].read),
+                  schema: property['schema'],
                   samples: @samples
                 ) %>
               <% else %>

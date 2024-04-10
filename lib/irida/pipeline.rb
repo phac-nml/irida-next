@@ -57,9 +57,13 @@ module Irida
       processed_property = property.clone
       processed_property['required'] = required
 
-      processed_property['schema'] = schema_input_loc if key == 'input_output_options' && name == 'input'
+      processed_property['schema'] = process_samplesheet_schema if key == 'input_output_options' && name == 'input'
 
       processed_property
+    end
+
+    def process_samplesheet_schema
+      JSON.parse(schema_input_loc.read)
     end
 
     def show_section?(properties)
