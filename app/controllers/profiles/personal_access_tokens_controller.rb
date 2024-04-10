@@ -12,11 +12,11 @@ module Profiles
     end
 
     def create
-      authorize! @user
-      @personal_access_token = PersonalAccessToken.new(personal_access_token_params.merge(user: current_user))
+      @personal_access_token = PersonalAccessTokens::CreateService.new(current_user,
+                                                                       personal_access_token_params).execute
 
       respond_to do |format|
-        if @personal_access_token.save
+        if @personal_access_token.persisted?
           format.turbo_stream do
             render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
                              new_personal_access_token: @personal_access_token }
