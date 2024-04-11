@@ -57,6 +57,10 @@ module DataExports
     end
 
     def validate_analysis_id
+      unless params['export_parameters']['ids'].count == 1
+        raise DataExportCreateError,
+              I18n.t('services.data_exports.create.invalid_workflow_execution_id_count')
+      end
       workflow_execution = WorkflowExecution.find_by(id: params['export_parameters']['ids'][0])
       if workflow_execution.nil?
         raise DataExportCreateError,

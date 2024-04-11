@@ -1172,6 +1172,7 @@ en:
       create:
         invalid_sample_id: A sample selected for export does not exist.
         invalid_workflow_execution_id: A workflow execution selected for export does not exist.
+        invalid_workflow_execution_id_count: An analysis export may only contain one workflow execution.
         missing_required_parameters: A parameter required to create a valid Data Export is missing.
     members:
       create:
