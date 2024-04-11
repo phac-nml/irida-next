@@ -824,6 +824,8 @@ en:
       members: Members
       samples: Samples
       settings: Settings
+      general: General
+      bot_accounts: Bot Accounts
     update:
       success: "Project %{project_name} was successfully updated"
     transfer:
