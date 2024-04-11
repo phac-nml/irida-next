@@ -86,7 +86,7 @@ module Layout
           assert_selector 'a[href="/-/history"]'
           assert_button text: 'Settings'
 
-          assert_selector '#multi-level-menu-Settings.hidden' do
+          assert_selector '#multi-level-menu_settings.hidden' do
             assert_selector '.Layout-Sidebar-MultiLevelMenu__Item', count: 1
             assert_selector 'a[href="/-/edit"]', count: 1
           end
