@@ -66,7 +66,8 @@ module Bots
         scopes: params[:scopes]
       }
 
-      PersonalAccessToken.create!(personal_access_token_params.merge(user: bot_user_account))
+      PersonalAccessTokens::CreateService.new(current_user, personal_access_token_params, namespace,
+                                              bot_user_account).execute
     end
 
     def add_bot_to_namespace_members(bot_user_account)
