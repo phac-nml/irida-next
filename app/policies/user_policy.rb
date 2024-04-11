@@ -3,27 +3,27 @@
 # Policy for profiles authorization
 class UserPolicy < ApplicationPolicy
   def create?
-    return true if record == user
+    true if record == user
   end
 
   def destroy?
-    return true if record == user
+    true if record == user
   end
 
   def edit?
-    return true if record == user
+    true if record == user
   end
 
   def index?
-    return true if record == user
+    true if record == user
   end
 
   def new?
-    return true if record == user
+    true if record == user
   end
 
   def revoke?
-    return true if record == user
+    true if record == user
   end
 
   def read?
@@ -34,11 +34,15 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    return true if record == user
+    true if record == user
   end
 
   def edit_password?
     # Passwords on OmniAuth Users is not allowed
     update? && user.provider.nil?
+  end
+
+  def generate_bot_personal_access_token?
+    true if record == user
   end
 end

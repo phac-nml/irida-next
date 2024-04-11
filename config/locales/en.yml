@@ -749,6 +749,8 @@ en:
         success: "Bot account was successfully added to the project"
       destroy:
         success: "Bot account was successfully removed from the project"
+      generate_personal_access_token:
+        success: "Personal access token successfully generated for bot account"
     new:
       title: Create project
       placeholder: Awesome project name
@@ -1211,6 +1213,11 @@ en:
           missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
           sample_not_found: "Sample '%{sample_name}' is not found within this project"
           sample_metadata_fields_not_updated: "Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated."
+    personal_access_tokens:
+      create:
+        required:
+          token_name: Unable to generate personal access token as the name is required
+          scopes: Unable to generate personal access token as the API scope must be selected
     namespaces:
       share:
         invalid_namespace_type: Only a group or project namespace can be shared with a group.
