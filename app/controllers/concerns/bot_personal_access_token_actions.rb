@@ -29,7 +29,7 @@ module BotPersonalAccessTokenActions
         if @personal_access_token.persisted?
           render status: :ok, locals: {
             type: 'success',
-            message: 'Successfully generated new personal access token for bot',
+            message: t('.success'),
             personal_access_token: @personal_access_token
           }
         else
