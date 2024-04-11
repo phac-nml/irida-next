@@ -19,7 +19,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :validate_namespace
   validate :higher_access_level_than_group
 
+  around_save :send_grant_access_email, if: :new_record?
   before_destroy :last_namespace_owner_member
+  after_destroy :send_revoke_access_email
 
   delegate :project, to: :project_namespace
 
@@ -185,6 +187,30 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                I18n.t('activerecord.errors.models.member.destroy.last_member',
                       namespace_type: namespace.class.model_name.human))
     throw :abort
+  end
+
+  def send_revoke_access_email
+    return if Member.can_view?(user, namespace, false) # TODO: change to true
+
+    send_email('revoked')
+  end
+
+  def send_grant_access_email
+    return if Member.can_view?(user, namespace, false) # TODO: change to true
+
+    yield
+    send_email('granted')
+  end
+
+  def send_email(access_type)
+    MemberMailer.access_inform_user_email(self, access_type).deliver_later
+    manager_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
+                                .where(access_level: Member::AccessLevel.manageable)
+    managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id))
+                   .distinct
+    managers.each do |manager|
+      MemberMailer.access_inform_manager_email(self, manager, access_type).deliver_later
+    end
   end
 
   # Method to update descendant membership access levels so they aren't less than the parent group
