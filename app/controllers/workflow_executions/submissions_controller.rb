@@ -11,14 +11,14 @@ module WorkflowExecutions
     before_action :allowed_to_update_samples, only: %i[create]
 
     def pipeline_selection
-      @project_id = params[:project_id]
+      @namespace_id = params[:namespace_id]
       render status: :ok
     end
 
     def create
-      project = Project.find(params[:project_id])
+      @namespace_id = params[:namespace_id]
       fields_for_namespace(
-        namespace: project.namespace,
+        namespace: Namespace.find_by(id: @namespace_id),
         show_fields: true
       )
       render status: :ok

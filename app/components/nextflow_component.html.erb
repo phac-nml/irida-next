@@ -56,7 +56,8 @@
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <%= render Nextflow::SamplesheetComponent.new(
                   schema: property[:schema],
-                  samples: @samples,
+                  samples:,
+                  namespace_id:,
                   fields: metadata_fields
                 ) %>
               <% else %>

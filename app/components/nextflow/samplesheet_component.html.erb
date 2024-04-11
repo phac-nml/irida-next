@@ -17,6 +17,7 @@
               <th>
                 <%= form_with url: "/foobar" do |f| %>
                   <%= f.hidden_field :format, value: "turbo_stream" %>
+                  <%= f.hidden_field :namespace_id, value: namespace_id %>
                   <%= f.select :field,
                            metadata_fields,
                            { selected: properties[header]["meta"] },
