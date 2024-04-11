@@ -434,7 +434,7 @@ module Projects
       assert_text @sample1.name
       assert_text @sample2.name
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.name
@@ -548,7 +548,7 @@ module Projects
         assert_text @sample1.name
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
@@ -572,7 +572,7 @@ module Projects
         assert_text @sample1.puid
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
@@ -604,7 +604,7 @@ module Projects
         assert_text @sample3.name
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
@@ -629,7 +629,7 @@ module Projects
         assert_text @sample3.puid
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
@@ -1960,7 +1960,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 1
@@ -1977,10 +1977,11 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
-      find('input[data-action="filters#submit"]').send_keys([:control, 'a'], :space)
-      within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '3'
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ''
+
+      within '#project_samples_list' do
+        assert_selector 'tfoot strong[data-selection-target="total"]', text: '3'
+        assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
       end
     end
 
