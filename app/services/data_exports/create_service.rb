@@ -13,7 +13,7 @@ module DataExports
 
       validate_params
 
-      validate_sample_export if @data_export.export_type == 'sample'
+      @data_export.export_type == 'sample' ? validate_sample_ids : validate_analysis_id
 
       @data_export.user = current_user
       @data_export.status = 'processing'
@@ -40,7 +40,7 @@ module DataExports
 
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
     # to export the chosen samples' data
-    def validate_sample_export
+    def validate_sample_ids
       project_ids = []
 
       params['export_parameters']['ids'].each do |sample_id|
@@ -54,6 +54,19 @@ module DataExports
       project_ids.each do |project_id|
         authorize! Project.find(project_id), to: :export_sample_data?
       end
+    end
+
+    def validate_analysis_id
+      unless params['export_parameters']['ids'].count == 1
+        raise DataExportCreateError,
+              I18n.t('services.data_exports.create.invalid_workflow_execution_id_count')
+      end
+      workflow_execution = WorkflowExecution.find_by(id: params['export_parameters']['ids'][0])
+      if workflow_execution.nil?
+        raise DataExportCreateError,
+              I18n.t('services.data_exports.create.invalid_workflow_execution_id')
+      end
+      authorize! workflow_execution, to: :export_workflow_execution_data?
     end
   end
 end
