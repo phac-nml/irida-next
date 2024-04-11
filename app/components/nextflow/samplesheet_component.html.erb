@@ -13,15 +13,22 @@
       >
         <tr>
           <% properties.keys.each do |header| %>
+            <% if properties[header].key? 'meta' %>
+              <th>
+                <%= form_with url: "#" do |f| %>
+                  <%= f.select :field, metadata_fields, { selected: properties[header]["meta"] }, { class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" } %>
+                <% end %>
+              </th>
+            <% else %>
             <th class="px-6 py-3 font-semibold tracking-wider">
               <div class="flex items-center space-x-2">
-                <span class="uppercase"><%= header %>
-                  <%= properties[header]["meta"] %></span>
+                <span class="uppercase"><%= header %></span>
                 <% if required_properties.include? header %>
                   <%= viral_pill(text: t(".required"), color: :red, border: :red) %>
                 <% end %>
               </div>
             </th>
+            <% end %>
           <% end %>
         </tr>
       </thead>

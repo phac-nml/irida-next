@@ -3,12 +3,14 @@
 module Nextflow
   # Render the contents of a Nextflow samplesheet to a table
   class SamplesheetComponent < Component
-    attr_reader :properties, :samples, :required_properties
+    attr_reader :properties, :samples, :required_properties, :metadata_fields
 
     FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
 
     def initialize(schema:, samples:)
+    def initialize(schema:, samples:, fields:)
       @samples = samples
+      @metadata_fields = fields
       @required_properties = schema['items']['required']
       extract_properties(schema)
     end
