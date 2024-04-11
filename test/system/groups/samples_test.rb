@@ -457,7 +457,7 @@ module Groups
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ''
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
 
       within '#group_samples_list' do
         assert_selector 'tfoot strong[data-selection-target="total"]', text: '26'
