@@ -1,0 +1,6 @@
+<% @samples.each_with_index do |sample, index| %>
+  <%= turbo_stream.update "metadata-#{@header}-#{dom_id(sample)}" do %>
+    <input type="hidden" autocomplete="off" name="<%= @name_format.sub! "INDEX", index.to_s %>[<%= @header %>]" value="<%= sample.metadata[@field] %>">
+    <%= sample.metadata[@field] %>
+  <% end %>
+<% end %>
