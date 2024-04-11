@@ -3,6 +3,7 @@
 module WorkflowExecutions
   # Workflow submission controller
   class SubmissionsController < ApplicationController
+    include Metadata
     respond_to :turbo_stream
     before_action :workflows
     before_action :samples, only: %i[create]
@@ -10,10 +11,16 @@ module WorkflowExecutions
     before_action :allowed_to_update_samples, only: %i[create]
 
     def pipeline_selection
+      @project_id = params[:project_id]
       render status: :ok
     end
 
     def create
+      project = Project.find(params[:project_id])
+      fields_for_namespace(
+        namespace: project.namespace,
+        show_fields: true
+      )
       render status: :ok
     end
 
