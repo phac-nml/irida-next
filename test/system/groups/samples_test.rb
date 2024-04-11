@@ -180,14 +180,17 @@ module Groups
       assert_text @sample1.name
       assert_no_text @sample2.name
 
+      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       click_on I18n.t('groups.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      click_on I18n.t('groups.samples.table.sample')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
       within '#group_samples_list' do
-        assert_selector 'tbody tr:nth-last-child(2) td:first-child', text: @sample25.puid
-        assert_selector 'tbody tr:nth-last-child(2) td:nth-child(2)', text: @sample25.name
-        assert_selector 'tbody tr:first-child td:first-child', text: @sample1.puid
-        assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample1.name
+        assert_selector 'tbody tr:nth-child(2) td:first-child', text: @sample25.puid
+        assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample25.name
+        assert_selector 'tbody tr:last-child td:first-child', text: @sample1.puid
+        assert_selector 'tbody tr:last-child td:nth-child(2)', text: @sample1.name
       end
     end
 
@@ -315,23 +318,23 @@ module Groups
       assert_selector 'table thead tr th', count: 8
 
       click_on 'metadatafield1'
-
       assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
-      within first('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample30.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample30.name
-        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+
+      within '#group_samples_list' do
+        assert_selector 'tbody tr:first-child td:first-child', text: @sample30.puid
+        assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
+        assert_selector 'tbody tr:nth-child(2) td:first-child', text: @sample2.puid
+        assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
 
       click_on 'metadatafield2'
-
       assert_selector 'table thead th:nth-child(8) svg.icon-arrow_up'
-      within first('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample30.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample30.name
-        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+
+      within '#group_samples_list' do
+        assert_selector 'tbody tr:first-child td:first-child', text: @sample30.puid
+        assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
+        assert_selector 'tbody tr:nth-child(2) td:first-child', text: @sample2.puid
+        assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
 
       # toggling metadata again causes sort to be reset
