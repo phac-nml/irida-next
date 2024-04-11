@@ -92,13 +92,19 @@ module Groups
     test 'can search the list of samples by name' do
       visit group_samples_url(@group)
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 20
-      assert_text @sample1.name
-      assert_text @sample2.name
+      within '#group_samples_list' do
+        assert_selector 'table tbody tr', count: 20
+        assert_text @sample1.name
+        assert_text @sample2.name
+      end
 
-      fill_in I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 13
+      within '#group_samples_list' do
+        assert_selector 'tfoot strong[data-selection-target="total"]', text: '13'
+        assert_selector 'table tbody tr', count: 13
+      end
+
       assert_text @sample1.name
       assert_no_text @sample2.name
     end
@@ -156,50 +162,66 @@ module Groups
     test 'can filter by name and then sort the list of samples' do
       visit group_samples_url(@group)
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 20
-      within first('table tbody#group-samples-table-body tr td') do
-        assert_text @sample1.puid
+      within '#group_samples_list' do
+        assert_selector 'table tbody tr', count: 20
+        within first('table tbody tr td') do
+          assert_text @sample1.puid
+        end
       end
 
-      fill_in I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 13
+      within('#group_samples_list') do
+        assert_selector 'tfoot strong[data-selection-target="total"]', text: '13'
+        assert_selector 'table tbody tr', count: 13
+      end
+
       assert_text @sample1.name
       assert_no_text @sample2.name
 
+      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       click_on I18n.t('groups.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 13
-      within first('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) td:first-child', text: @sample25.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample25.name
+      within '#group_samples_list' do
+        assert_selector 'tbody tr:first-child td:first-child', text: @sample1.puid
+        assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      end
+
+      click_on I18n.t('groups.samples.table.sample')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+
+      within '#group_samples_list' do
+        assert_selector 'tbody tr:last-child td:first-child', text: @sample1.puid
+        assert_selector 'tbody tr:last-child td:nth-child(2)', text: @sample1.name
       end
     end
 
     test 'can filter by puid and then sort the list of samples' do
       visit group_samples_url(@group)
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 20
-      within first('table tbody#group-samples-table-body tr td') do
-        assert_text @sample1.puid
+      within '#group_samples_list' do
+        assert_selector 'table tbody tr', count: 20
+        within first('table tbody tr td') do
+          assert_text @sample1.puid
+        end
       end
 
-      fill_in I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 1
-      assert_text @sample1.name
-      assert_no_text @sample2.name
+      within '#group_samples_list' do
+        assert_selector 'table tbody tr', count: 1
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+      end
 
       click_on I18n.t('groups.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 1
-      within first('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
+      within '#group_samples_list' do
+        assert_selector 'table tbody tr', count: 1
+        assert_selector 'table tbody tr:first-child td:first-child', text: @sample1.puid
+        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
       end
     end
 
@@ -229,12 +251,14 @@ module Groups
         assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
       end
 
-      fill_in I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 13
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample9.name
+      within '#group_samples_list' do
+        assert_selector 'table tbody tr', count: 13
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample9.name
+      end
     end
 
     test 'can sort and then filter the list of samples by puid' do
@@ -263,12 +287,14 @@ module Groups
         assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
       end
 
-      fill_in I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_selector 'table tbody#group-samples-table-body tr', count: 1
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample9.name
+      within '#group_samples_list' do
+        assert_selector 'table tbody tr', count: 1
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample9.name
+      end
     end
 
     test 'should be able to toggle metadata' do
@@ -295,23 +321,23 @@ module Groups
       assert_selector 'table thead tr th', count: 8
 
       click_on 'metadatafield1'
-
       assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
-      within first('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample30.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample30.name
-        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+
+      within '#group_samples_list' do
+        assert_selector 'tbody tr:first-child td:first-child', text: @sample30.puid
+        assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
+        assert_selector 'tbody tr:nth-child(2) td:first-child', text: @sample2.puid
+        assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
 
       click_on 'metadatafield2'
-
       assert_selector 'table thead th:nth-child(8) svg.icon-arrow_up'
-      within first('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @sample30.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample30.name
-        assert_selector 'tr:nth-child(2) td:first-child', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
+
+      within '#group_samples_list' do
+        assert_selector 'tbody tr:first-child td:first-child', text: @sample30.puid
+        assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
+        assert_selector 'tbody tr:nth-child(2) td:first-child', text: @sample2.puid
+        assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
 
       # toggling metadata again causes sort to be reset
@@ -413,7 +439,12 @@ module Groups
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
 
-      fill_in I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.name
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.name
+
+      within '#group_samples_list' do
+        assert_selector 'strong[data-selection-target="total"]', text: '1'
+        assert_selector 'table tbody tr', count: 1
+      end
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 1
@@ -430,10 +461,12 @@ module Groups
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
-      find('input[data-action="filters#submit"]').send_keys([:control, 'a'], :space)
-      within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
+
+      within '#group_samples_list' do
+        assert_selector 'tfoot strong[data-selection-target="total"]', text: '26'
+        assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
+        assert_selector 'table tbody tr', count: 20
       end
     end
   end

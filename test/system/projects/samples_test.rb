@@ -434,7 +434,7 @@ module Projects
       assert_text @sample1.name
       assert_text @sample2.name
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.name
@@ -548,7 +548,7 @@ module Projects
         assert_text @sample1.name
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
@@ -572,7 +572,7 @@ module Projects
         assert_text @sample1.puid
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
@@ -597,14 +597,18 @@ module Projects
       end
 
       click_on I18n.t('projects.samples.table.sample')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       click_on I18n.t('projects.samples.table.sample')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
-      assert_selector 'table#samples-table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
-        assert_text @sample3.name
+      within '#project_samples_list' do
+        assert_selector 'table#samples-table tbody tr', count: 3
+        within first('tbody tr td:nth-child(2)') do
+          assert_text @sample3.name
+        end
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
@@ -629,7 +633,7 @@ module Projects
         assert_text @sample3.puid
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
@@ -1223,14 +1227,17 @@ module Projects
 
       within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
-        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        find('#file_import_sample_id_column', wait: 2).find(:xpath, 'option[2]').select_option
         click_on I18n.t('projects.samples.metadata.file_imports.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.metadata.file_imports.success.description')
         click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
       end
-      assert_selector 'table#samples-table thead tr th', count: 8
+
+      within '#project_samples_list' do
+        assert_selector 'table thead tr th', count: 9
+      end
     end
 
     test 'should not import metadata via invalid file type' do
@@ -1358,7 +1365,7 @@ module Projects
         assert_text I18n.t('projects.samples.metadata.file_imports.errors.description')
         click_on I18n.t('projects.samples.metadata.file_imports.errors.ok_button')
       end
-      assert_selector 'table#samples-table thead tr th', count: 8
+      assert_selector 'table#samples-table thead tr th', count: 9
     end
 
     test 'should not import metadata with analysis values' do
@@ -1960,7 +1967,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
 
-      fill_in I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 1
@@ -1977,7 +1984,8 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
-      find('input[data-action="filters#submit"]').send_keys([:control, 'a'], :space)
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
+
       within 'tfoot' do
         assert_selector 'strong[data-selection-target="total"]', text: '3'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
