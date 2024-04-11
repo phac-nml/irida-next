@@ -68,8 +68,14 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test 'should view new export modal' do
-    get new_data_export_path
+  test 'should view new export modal with export_type sample' do
+    get new_data_export_path(export_type: 'sample')
+    assert_response :success
+  end
+
+  test 'should view new export modal with export_type analysis' do
+    workflow_execution = workflow_executions(:workflow_execution_valid)
+    get new_data_export_path(export_type: 'analysis', workflow_execution_id: workflow_execution.id)
     assert_response :success
   end
 

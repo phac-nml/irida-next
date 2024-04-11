@@ -15,7 +15,7 @@
       <% end %>
       <% if allowed_to?(:export_sample_data?, @group) %>
        <%= link_to t(".create_export_button"),
-          new_data_export_path,
+          new_data_export_path(export_type: 'sample'),
           data: {
             turbo_stream: true,
             controller: "action-link",

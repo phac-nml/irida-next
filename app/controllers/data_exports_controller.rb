@@ -22,11 +22,20 @@ class DataExportsController < ApplicationController
   end
 
   def new
-    render turbo_stream: turbo_stream.update('samples_dialog',
-                                             partial: 'new_export_dialog',
-                                             locals: {
-                                               open: true
-                                             }), status: :ok
+    if params[:export_type] == 'sample'
+      render turbo_stream: turbo_stream.update('samples_dialog',
+                                               partial: 'new_export_dialog',
+                                               locals: {
+                                                 open: true, export_type: 'sample'
+                                               }), status: :ok
+    else
+      render turbo_stream: turbo_stream.update('export_dialog',
+                                               partial: 'new_export_dialog',
+                                               locals: {
+                                                 open: true, export_type: 'analysis',
+                                                 workflow_execution_id: params[:workflow_execution_id]
+                                               }), status: :ok
+    end
   end
 
   def download

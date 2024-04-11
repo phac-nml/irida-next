@@ -5,20 +5,30 @@
         data: {
           turbo: false
         }, method: :post) do |form| %>
+    <% if export_type == 'sample' %>
     <div
       data-controller="sessionstorage-amend-form"
       data-sessionstorage-amend-form-target="field"
       data-sessionstorage-amend-form-field-name-value="data_export[export_parameters[ids]][]"
     />
+    <% else %>
+      <input type="hidden" name="data_export[export_parameters[ids]][]" value="<%= workflow_execution_id %>">
+    <% end %>
     <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
+    <% if export_type == 'sample' %>
       <span
         data-controller="data-export"
         data-data-export-target="summary"
-        data-data-export-singular-value="<%= t(".summary.start.singular") %>"
-        data-data-export-plural-value="<%= t(".summary.start.plural") %>"
+        data-data-export-singular-value="<%= t(".summary.sample.start.singular") %>"
+        data-data-export-plural-value="<%= t(".summary.sample.start.plural") %>"
         class="mb-4">
-        <%= t(".summary.start.zero") %>
+        <%= t(".summary.sample.start.zero") %>
       </span>
+    <% else %>
+      <span>
+        <%= t(".summary.analysis.start", id: workflow_execution_id) %>
+      </span>
+    <% end %>
       <%= viral_pill(
         text: t(".summary.processing"),
         color: :gray
@@ -58,7 +68,11 @@
         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
       <div>
-        <%= form.hidden_field :export_type, value: 'sample' %>
+        <% if @export_type == 'sample' %>
+          <%= form.hidden_field :export_type, value: 'sample' %>
+        <% else %>
+          <%= form.hidden_field :export_type, value: 'analysis' %>
+        <% end %>
       </div>
       <div>
         <%= form.submit t(".submit_button"),

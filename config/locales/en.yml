@@ -1218,6 +1218,7 @@ en:
         updated_at: Last Updated
         actions: Actions
     show:
+      create_export_button: Create Export
       remove_button: Remove
       remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       cancel_button: Cancel
@@ -1428,10 +1429,13 @@ en:
       name_label: "Export Name (Optional):"
       submit_button: Submit
       summary:
-        start:
-          zero: This export will contain no samples. After submission, you will be redirected to the export page. While the export status is
-          singular: This export will contain 1 sample. After submission, you will be redirected to the export page. While the export status is
-          plural: This export will contain COUNT_PLACEHOLDER samples. After submission, you will be redirected to the export page. While the export status is
+        sample:
+          start:
+            zero: This export will contain no samples. After submission, you will be redirected to the export page. While the export status is
+            singular: This export will contain 1 sample. After submission, you will be redirected to the export page. While the export status is
+            plural: This export will contain COUNT_PLACEHOLDER samples. After submission, you will be redirected to the export page. While the export status is
+        analysis:
+          start: This export will contain the contents of workflow execution '%{id}'. After submission, you will be redirected to the export page. While the export is
         middle: "the contents of the export will be added to a downloadable zip file. Once the export status is"
         end: ", the zip file will be available for download. You will have 3 business days to download the export file before it's deleted."
         processing: processing
