@@ -1,0 +1,5 @@
+<%= render Layout::Sidebar::MultiLevelMenuComponent.new(title: "Settings", icon: "cog_6_tooth") do |multi_level_menu| %>
+  <% multi_level_menu.with_menu_item(url: "#", label: "Link 1") %>
+  <% multi_level_menu.with_menu_item(url: "#", label: "Link 2") %>
+  <% multi_level_menu.with_menu_item(url: "#", label: "Link 3") %>
+<% end %>
