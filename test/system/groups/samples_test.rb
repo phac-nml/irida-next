@@ -183,12 +183,16 @@ module Groups
       assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       click_on I18n.t('groups.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+
+      within '#group_samples_list' do
+        assert_selector 'tbody tr:first-child td:first-child', text: @sample1.puid
+        assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      end
+
       click_on I18n.t('groups.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
       within '#group_samples_list' do
-        assert_selector 'tbody tr:nth-child(2) td:first-child', text: @sample25.puid
-        assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample25.name
         assert_selector 'tbody tr:last-child td:first-child', text: @sample1.puid
         assert_selector 'tbody tr:last-child td:nth-child(2)', text: @sample1.name
       end
