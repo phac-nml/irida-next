@@ -98,11 +98,15 @@ export default class extends Controller {
   }
 
   #setSelectAllCheckboxValue(total) {
-    this.selectAllTarget.checked = this.totalValue === total;
+    if (this.hasSelectAllTarget) {
+      this.selectAllTarget.checked = this.totalValue === total;
+    }
   }
 
   #updatedCounts(selected) {
-    this.totalTarget.innerText = this.totalValue;
-    this.selectedTarget.innerText = selected;
+    if (this.hasTotalTarget && this.hasSelectedTarget) {
+      this.totalTarget.innerText = this.totalValue;
+      this.selectedTarget.innerText = selected;
+    }
   }
 }
