@@ -24,7 +24,8 @@ module Members
                                         namespace_type: namespace.class.model_name.human)
       end
 
-      send_emails if member.save
+      had_access = Member.can_view?(member.user, member.namespace, false) # TODO: change to true
+      send_emails(had_access) if member.save
 
       member
     rescue Members::CreateService::MemberCreateError => e
@@ -34,19 +35,13 @@ module Members
 
     private
 
-    def send_emails # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def send_emails(had_access) # rubocop:disable Metrics/AbcSize
       return unless member.previously_new_record?
 
-      inherited_memberships = Member.for_namespace_and_ancestors(member.namespace.parent).not_expired
-                                    .where(user: member.user)
-      same_access_inherited_memberships = inherited_memberships.and(Member.where(access_level: member.access_level))
-
-      return unless same_access_inherited_memberships.empty?
-
-      access = if inherited_memberships.empty?
-                 'granted'
-               else
+      access = if had_access
                  'changed'
+               else
+                 'granted'
                end
 
       MemberMailer.access_inform_user_email(member, access).deliver_later

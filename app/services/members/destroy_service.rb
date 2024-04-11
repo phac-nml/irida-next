@@ -33,19 +33,15 @@ module Members
 
     private
 
-    def send_emails # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def send_emails # rubocop:disable Metrics/AbcSize
       return unless member.deleted?
 
-      inherited_memberships = Member.for_namespace_and_ancestors(member.namespace.parent).not_expired
-                                    .where(user: member.user)
-      same_access_inherited_memberships = inherited_memberships.and(Member.where(access_level: member.access_level))
+      has_access = Member.can_view?(member.user, member.namespace, false) # TODO: change to true
 
-      return unless same_access_inherited_memberships.empty?
-
-      access = if inherited_memberships.empty?
-                 'revoked'
-               else
+      access = if has_access
                  'changed'
+               else
+                 'revoked'
                end
 
       MemberMailer.access_inform_user_email(member, access).deliver_later
