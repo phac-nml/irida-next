@@ -18,11 +18,15 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       get :edit
       post :transfer
       resources :members, only: %i[create destroy index new update]
+
       resources :bots, only: %i[create destroy index new] do
-        member do
-          post :generate_personal_access_token
+        scope module: :bots, as: :bot do
+          member do
+            resources :personal_access_tokens, only: %i[index new create]
+          end
         end
       end
+
       resources :group_links, only: %i[create destroy update index new]
       resources :samples do
         scope module: :samples, as: :samples do

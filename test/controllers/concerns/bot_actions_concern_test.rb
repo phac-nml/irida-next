@@ -81,28 +81,4 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
   end
-
-  test 'generate new personal access token for bot account' do
-    sign_in users(:john_doe)
-
-    namespace_bot = namespace_bots(:project1_bot)
-
-    namespace = groups(:group_one)
-    project = projects(:project1)
-
-    assert_equal 1, namespace_bot.user.personal_access_tokens.count
-
-    post generate_personal_access_token_namespace_project_bot_path(namespace, project, id: namespace_bot.id,
-                                                                                       format: :turbo_stream),
-         params: { bot: {
-           token_name: 'newtesttoken',
-           access_level: Member::AccessLevel::UPLOADER,
-           scopes: ['read_api']
-         } }
-
-    assert_equal 2,
-                 namespace_bot.user.personal_access_tokens.count
-
-    assert_response :success
-  end
 end
