@@ -10,10 +10,14 @@ module BotPersonalAccessTokenActions
   end
 
   def index
+    authorize! @namespace, to: :view_bot_personal_access_tokens?
+
     @personal_access_tokens = @bot_account.user.personal_access_tokens
   end
 
   def new
+    authorize! @namespace, to: :generate_bot_personal_access_token?
+
     respond_to do |format|
       format.turbo_stream do
         render status: :ok
@@ -36,8 +40,7 @@ module BotPersonalAccessTokenActions
           render status: :unprocessable_entity,
                  locals:
                 { type: 'alert',
-                  message: @personal_access_token.errors.full_messages.first,
-                  bot_params: }
+                  message: @personal_access_token.errors.full_messages.first }
 
         end
       end
