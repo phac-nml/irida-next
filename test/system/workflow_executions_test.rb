@@ -121,6 +121,13 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text 'Confirmation required'
     click_button 'Confirm'
 
+    within %(div[data-controller='viral--flash']) do
+      assert_text I18n.t(
+        :'workflow_executions.cancel.success',
+        workflow_name: workflow_execution.metadata['workflow_name']
+      )
+    end
+
     assert_selector 'tbody tr td:nth-child(5)', text: 'canceling'
     assert_no_selector "tbody tr td:nth-child(5) a[text='Cancel']"
   end
@@ -172,6 +179,13 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_text 'Confirmation required'
     click_button 'Confirm'
+
+    within %(div[data-controller='viral--flash']) do
+      assert_text I18n.t(
+        :'workflow_executions.destroy.success',
+        workflow_name: workflow_execution.metadata['workflow_name']
+      )
+    end
 
     assert_no_text workflow_execution.id
   end

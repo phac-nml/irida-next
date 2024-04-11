@@ -49,12 +49,22 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @sample1, created_workflow_execution.samples_workflow_executions.first.sample
   end
 
-  test 'should cancel a workflow with valid params' do
+  test 'should cancel a new workflow with valid params' do
+    workflow_execution = workflow_executions(:irida_next_example_new)
+
+    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    assert_response :success
+    # A new workflow goes directly to the canceled state as ga4gh does not know it exists
+    assert_equal 'canceled', workflow_execution.reload.state
+  end
+
+  test 'should cancel a prepared workflow with valid params' do
     workflow_execution = workflow_executions(:irida_next_example_prepared)
 
     put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
     assert_response :success
-    assert_equal 'canceling', workflow_execution.reload.state
+    # A prepared workflow goes directly to the canceled state as ga4gh does not know it exists
+    assert_equal 'canceled', workflow_execution.reload.state
   end
 
   test 'should not delete a prepared workflow' do
@@ -67,6 +77,16 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test 'should cancel a submitted workflow with valid params' do
+    workflow_execution = workflow_executions(:irida_next_example_submitted)
+    assert workflow_execution.submitted?
+
+    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    assert_response :success
+    # A submitted workflow goes to the canceling state as ga4gh must be sent a cancel request
+    assert_equal 'canceling', workflow_execution.reload.state
+  end
+
   test 'should not delete a submitted workflow' do
     workflow_execution = workflow_executions(:irida_next_example_submitted)
     assert workflow_execution.submitted?
@@ -75,6 +95,16 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
     assert_response :unprocessable_entity
+  end
+
+  test 'should not cancel a completed workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+    assert workflow_execution.completed?
+
+    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    assert_response :unprocessable_entity
+
+    assert workflow_execution.completed?
   end
 
   test 'should delete a completed workflow' do
@@ -127,6 +157,16 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test 'should cancel a running workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_running)
+    assert workflow_execution.running?
+
+    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    assert_response :success
+    # A running workflow goes to the canceling state as ga4gh must be sent a cancel request
+    assert_equal 'canceling', workflow_execution.reload.state
+  end
+
   test 'should not delete a queued workflow' do
     workflow_execution = workflow_executions(:irida_next_example_queued)
     assert workflow_execution.queued?
@@ -135,6 +175,16 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
     assert_response :unprocessable_entity
+  end
+
+  test 'should cancel a queued workflow' do
+    workflow_execution = workflow_executions(:irida_next_example_queued)
+    assert workflow_execution.queued?
+
+    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    assert_response :success
+    # A queued workflow goes to the canceling state as ga4gh must be sent a cancel request
+    assert_equal 'canceling', workflow_execution.reload.state
   end
 
   test 'should not delete a new workflow' do

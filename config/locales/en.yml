@@ -1138,6 +1138,9 @@ en:
         type: Type
         size: Size
         created_at: Created At
+    cancel:
+      error: "Could not cancel workflow %{workflow_name}"
+      success: "Workflow %{workflow_name} was successfully canceled"
     destroy:
       error: "Could not delete workflow %{workflow_name}"
       success: "Workflow %{workflow_name} was successfully deleted"

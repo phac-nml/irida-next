@@ -60,11 +60,15 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def cancellable?
-    %w[running queued prepared new].include?(state)
+    %w[submitted running queued prepared new].include?(state)
   end
 
   def deletable?
     %w[completed error canceled].include?(state)
+  end
+
+  def sent_to_ga4gh?
+    %w[prepared new].exclude?(state)
   end
 
   def as_wes_params

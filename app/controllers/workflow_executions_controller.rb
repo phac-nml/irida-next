@@ -36,9 +36,22 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   end
 
   def cancel
-    @workflow_execution = WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
+    WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
 
-    nil unless @workflow_execution.persisted?
+    respond_to do |format|
+      format.turbo_stream do
+        if @workflow_execution.canceled? || @workflow_execution.canceling?
+          render status: :ok,
+                 locals: { type: 'success',
+                           message: t('.success', workflow_name: @workflow_execution.metadata['workflow_name']) }
+
+        else
+          render status: :unprocessable_entity, locals: {
+            type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
+          }
+        end
+      end
+    end
   end
 
   def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
