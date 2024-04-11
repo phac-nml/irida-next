@@ -37,13 +37,9 @@ module Members
       return unless member.deleted?
 
       has_access = Member.can_view?(member.user, member.namespace, false) # TODO: change to true
+      return if has_access
 
-      access = if has_access
-                 'changed'
-               else
-                 'revoked'
-               end
-
+      access = 'revoked'
       MemberMailer.access_inform_user_email(member, access).deliver_later
       manager_memberships = Member.for_namespace_and_ancestors(member.namespace).not_expired
                                   .where(access_level: Member::AccessLevel.manageable)

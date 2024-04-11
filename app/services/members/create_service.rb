@@ -37,13 +37,9 @@ module Members
 
     def send_emails(had_access) # rubocop:disable Metrics/AbcSize
       return unless member.previously_new_record?
+      return if had_access
 
-      access = if had_access
-                 'changed'
-               else
-                 'granted'
-               end
-
+      access = 'granted'
       MemberMailer.access_inform_user_email(member, access).deliver_later
       manager_memberships = Member.for_namespace_and_ancestors(member.namespace).not_expired
                                   .where(access_level: Member::AccessLevel.manageable)
