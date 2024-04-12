@@ -15,9 +15,8 @@ module Nextflow
       end
 
       def format_properties(properties)
-        properties.map do |name, entry|
-          entry['is_fastq'] = name.match(/fastq_\d+/)
-          next unless check_for_file(entry)
+        properties.map do |_name, entry|
+          next unless entry['fastq_cell'] || entry['file_cell']
 
           entry['pattern'] = entry['pattern'] || entry['anyOf'].select do |e|
             e.key?('format') && e['format'] == 'file-path'
@@ -47,17 +46,20 @@ module Nextflow
       end
 
       def render_cell_type(property, entry, sample, fields)
-        return render_sample_cell(sample, fields) if property == 'sample'
-
-        return render_metadata_cell(sample, property, entry, fields) if entry['meta'].present?
-
-        return render_fastq_cell(property, entry, fields) if entry['is_fastq']
-
-        return render_other_file_cell(property, entry, fields) if check_for_file(entry)
-
-        return render_dropdown_cell(property, entry, fields) if entry['enum'].present?
-
-        render_input_cell(property, fields)
+        case entry['cell_type']
+        when 'sample_cell'
+          render_sample_cell(sample, fields)
+        when 'fastq_cell'
+          render_fastq_cell(property, entry, fields)
+        when 'file_cell'
+          render_other_file_cell(property, entry, fields)
+        when 'metadata_cell'
+          render_metadata_cell(sample, property, entry, fields)
+        when 'dropdown_cell'
+          render_dropdown_cell(property, entry, fields)
+        when 'input_cell'
+          render_input_cell(property, fields)
+        end
       end
 
       def render_fastq_cell(property, entry, fields)
@@ -89,8 +91,8 @@ module Nextflow
         render(Samplesheet::MetadataCellComponent.new(sample:, name:, entry:, form: fields))
       end
 
-      def render_file_cell(property, entry, fields, files, is_required)
-        data = if entry['is_fastq']
+      def render_file_cell(property, entry, fields, files, is_required) # rubocop:disable Metrics/MethodLength
+        data = if entry['cell_type'] == 'fastq_cell'
                  {
                    'data-action' => 'change->nextflow--samplesheet#file_selected',
                    'data-nextflow--samplesheet-target' => 'select'
@@ -101,6 +103,7 @@ module Nextflow
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  files,
+                 entry['autopopulate'] ? files[0] : nil,
                  fields,
                  is_required,
                  data
@@ -111,6 +114,7 @@ module Nextflow
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  entry['enum'],
+                 nil,
                  fields,
                  @required_properties.include?(property)
                ))
@@ -121,12 +125,6 @@ module Nextflow
                  property,
                  fields:
                ))
-      end
-
-      def check_for_file(entry)
-        entry['is_fastq'] || entry['format'] == 'file-path' || (entry.key?('anyOf') && entry['anyOf'].any? do |e|
-          e['format'] == 'file-path'
-        end)
       end
     end
   end

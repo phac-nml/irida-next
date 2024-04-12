@@ -46,24 +46,24 @@
       <%= workflow.fields_for "workflow_params" do |fields| %>
         <% @workflow.workflow_params.each do |item, definition| %>
           <h2 class="text-lg font-extrabold dark:text-white">
-            <%= definition["title"] %>
+            <%= definition[:title] %>
           </h2>
           <p class="mb-2 font-normal text-slate-500 dark:text-slate-400">
-            <%= definition["description"] %>
+            <%= definition[:description] %>
           </p>
           <div class="grid grid-cols-1 gap-4 mb-8">
             <% definition[:properties].each do |name, property| %>
               <% formatted_name = format_name_as_arg(name) %>
-              <% if item == "input_output_options" && property["format"] == "file-path" %>
+              <% if item == :input_output_options && property[:format] == "file-path" %>
                 <%= render Nextflow::SamplesheetComponent.new(
-                  schema: property['schema'],
+                  schema: property[:schema],
                   samples: @samples
                 ) %>
               <% else %>
                 <div>
                   <%= fields.label formatted_name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
-                    <%= property["description"] %>
-                    <% if property["required"] %>
+                    <%= property[:description] %>
+                    <% if property[:required] %>
                       <%= viral_pill(text: t(:"components.nextflow.required"), color: :blue) %>
                     <% end %>
                   <% end %>
@@ -71,11 +71,11 @@
                     fields,
                     formatted_name,
                     property,
-                    property["required"]
+                    property[:required]
                   ) %>
-                  <% if property['help_text'].present? %>
+                  <% if property[:help_text].present? %>
                     <%= viral_help_text do %>
-                      <%= property["help_text"] %>
+                      <%= property[:help_text] %>
                     <% end %>
                   <% end %>
                 </div>
