@@ -8,10 +8,12 @@ export default class extends Controller {
       // Find the first select selectedIndex
       const selectedOption =
         this.selectTargets[0].options[this.selectTargets[0].selectedIndex];
-      this.#updateMatchingSelect(
-        this.selectTargets[1],
-        selectedOption.dataset.puid,
-      );
+      if (selectedOption) {
+        this.#updateMatchingSelect(
+          this.selectTargets[1],
+          selectedOption.dataset.puid,
+        );
+      }
     }
   }
 
