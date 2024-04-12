@@ -58,7 +58,7 @@ module Irida
     end
 
     def process_property(key, name, property, required)
-      processed_property = property.clone.symbolize_keys
+      processed_property = property.clone.deep_symbolize_keys
       processed_property[:required] = required
 
       processed_property[:schema] = process_samplesheet_schema if key == :input_output_options && name == :input
