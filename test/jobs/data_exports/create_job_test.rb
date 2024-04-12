@@ -284,8 +284,8 @@ module DataExports
         'children' =>
         [
           {
-            'name': 'summary.txt',
-            'type': 'file'
+            'name' => 'summary.txt',
+            'type' => 'file'
           },
           {
             'name' => sample.puid,
