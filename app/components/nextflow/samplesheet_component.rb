@@ -5,6 +5,8 @@ module Nextflow
   class SamplesheetComponent < Component
     attr_reader :properties, :samples, :required_properties, :metadata_fields, :namespace_id
 
+    FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
+
     def initialize(schema:, samples:, fields:, namespace_id:)
       @samples = samples
       @namespace_id = namespace_id
