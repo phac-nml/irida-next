@@ -61,12 +61,12 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
   test 'project bot account destroy' do
     sign_in users(:john_doe)
 
-    namespace_bot = namespace_bots(:project1_bot)
+    namespace_bot = namespace_bots(:project1_bot0)
 
     namespace = groups(:group_one)
     project = projects(:project1)
 
-    delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
+    delete namespace_project_bot_path(namespace, project, id: namespace_bot.user.id, format: :turbo_stream)
 
     assert_response :success
   end

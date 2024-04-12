@@ -5,7 +5,7 @@ require 'test_helper'
 class NamespaceBotTest < ActiveSupport::TestCase
   def setup
     @user = users(:john_doe)
-    @user_project_bot = users(:user_bot_account1)
+    @user_project_bot = users(:user_bot_account21)
     @project = projects(:project1)
     @namespace = @project.namespace
   end
@@ -22,7 +22,7 @@ class NamespaceBotTest < ActiveSupport::TestCase
   end
 
   test 'destroying a namespace bot should destroy the underlying bot user' do
-    namespace_bot = namespace_bots(:project1_bot)
+    namespace_bot = namespace_bots(:project1_bot0)
 
     assert_difference(
       -> { NamespaceBot.count } => -1,

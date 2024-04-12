@@ -15,7 +15,7 @@ module PersonalAccessTokens
         scopes: %w[read_api api]
       }
 
-      namespace_bot = namespace_bots(:project1_bot)
+      namespace_bot = namespace_bots(:project1_bot0)
 
       assert_difference -> { PersonalAccessToken.count } => 1 do
         PersonalAccessTokens::CreateService.new(@user, valid_params, @project.namespace, namespace_bot.user).execute
@@ -27,7 +27,7 @@ module PersonalAccessTokens
         scopes: %w[read_api api]
       }
 
-      namespace_bot = namespace_bots(:project1_bot)
+      namespace_bot = namespace_bots(:project1_bot0)
 
       assert_difference -> { PersonalAccessToken.count } => 0 do
         PersonalAccessTokens::CreateService.new(@user, valid_params, @project.namespace, namespace_bot.user).execute
@@ -39,7 +39,7 @@ module PersonalAccessTokens
         name: 'Uploader'
       }
 
-      namespace_bot = namespace_bots(:project1_bot)
+      namespace_bot = namespace_bots(:project1_bot0)
 
       assert_difference -> { PersonalAccessToken.count } => 0 do
         PersonalAccessTokens::CreateService.new(@user, valid_params, @project.namespace, namespace_bot.user).execute
