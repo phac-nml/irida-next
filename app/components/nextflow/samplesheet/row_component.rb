@@ -91,7 +91,7 @@ module Nextflow
         render(Samplesheet::MetadataCellComponent.new(sample:, name:, entry:, form: fields))
       end
 
-      def render_file_cell(property, entry, fields, files, is_required)
+      def render_file_cell(property, entry, fields, files, is_required) # rubocop:disable Metrics/MethodLength
         data = if entry['cell_type'] == 'fastq_cell'
                  {
                    'data-action' => 'change->nextflow--samplesheet#file_selected',
@@ -103,6 +103,7 @@ module Nextflow
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  files,
+                 entry['autopopulate'] ? files[0] : nil,
                  fields,
                  is_required,
                  data
@@ -113,6 +114,7 @@ module Nextflow
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  entry['enum'],
+                 nil,
                  fields,
                  @required_properties.include?(property)
                ))

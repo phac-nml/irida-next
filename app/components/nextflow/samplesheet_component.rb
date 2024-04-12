@@ -5,6 +5,8 @@ module Nextflow
   class SamplesheetComponent < Component
     attr_reader :properties, :samples, :required_properties
 
+    FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
+
     def initialize(schema:, samples:)
       @samples = samples
       @required_properties = schema['items']['required']
@@ -15,11 +17,12 @@ module Nextflow
 
     def extract_properties(schema)
       @properties = schema['items']['properties']
-      @required_file_inputs = []
       @properties.each do |property, entry|
         @properties[property]['required'] = schema['items']['required'].include?(property)
         @properties[property]['cell_type'] = identify_cell_type(property, entry)
       end
+
+      identify_autopopulated_file_properties
     end
 
     def identify_cell_type(property, entry)
@@ -40,6 +43,19 @@ module Nextflow
       entry['format'] == 'file-path' || (entry.key?('anyOf') && entry['anyOf'].any? do |e|
         e['format'] == 'file-path'
       end)
+    end
+
+    def identify_autopopulated_file_properties
+      file_properties = @properties.select { |_property, entry| FILE_CELL_TYPES.include?(entry['cell_type']) }
+
+      required_file_properties = file_properties.select { |_property, entry| entry['required'] }
+
+      file_properties.each_key do |property|
+        next unless required_file_properties.key?(property) ||
+                    (required_file_properties.empty? && property == 'fastq_1')
+
+        @properties[property]['autopopulate'] = true
+      end
     end
   end
 end
