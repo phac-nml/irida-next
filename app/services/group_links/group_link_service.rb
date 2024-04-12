@@ -13,7 +13,7 @@ module GroupLinks
       @namespace_group_link = NamespaceGroupLink.new(params.merge(namespace:))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       unless [Group.sti_name, Namespaces::ProjectNamespace.sti_name].include?(namespace.type)
         raise NamespaceGroupLinkError, I18n.t('services.groups.share.invalid_namespace_type')
       end
@@ -22,9 +22,19 @@ module GroupLinks
 
       group = Group.find_by(id: group_id)
 
-      if group.nil?
-        raise NamespaceGroupLinkError, I18n.t('services.groups.share.group_not_found',
-                                              group_id:)
+      raise NamespaceGroupLinkError, I18n.t('services.groups.share.group_not_found', group_id:) if group.nil?
+
+      # TODO: move to callback
+      manager_memberships = Member.where(namespace_id: group_id).not_expired
+                                  .where(access_level: Member::AccessLevel.manageable)
+      managers = User.where(id: manager_memberships.select(:user_id)).distinct
+      manager_emails = managers.pluck(:email)
+      memberships = Member.where(namespace_id: group_id).not_expired
+
+      memberships.each do |member|
+        next if Member.can_view?(member.user, namespace, false) # TODO: change to true
+
+        MemberMailer.access_email(member, manager_emails, 'granted', namespace).deliver_later
       end
 
       namespace_group_link.save
