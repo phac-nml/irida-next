@@ -7,7 +7,7 @@ module NextflowHelper
     if property[:type] == 'boolean'
       return viral_prefixed_boolean(form: container, name:, value: property[:default]) do |input|
         input.with_prefix do
-          name
+          format_name_as_arg(name)
         end
       end
     end
@@ -16,7 +16,7 @@ module NextflowHelper
       return viral_prefixed_select(form: container, name:, options: property[:enum],
                                    selected_value: property[:default]) do |select|
                select.with_prefix do
-                 name
+                 format_name_as_arg(name)
                end
              end
     end
@@ -24,7 +24,7 @@ module NextflowHelper
     viral_prefixed_text_input(form: container, name:, required:, pattern: property[:pattern],
                               value: property[:default]) do |input|
       input.with_prefix do
-        name
+        format_name_as_arg(name)
       end
     end
   end

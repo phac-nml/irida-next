@@ -149,13 +149,13 @@ end
 def seed_workflow_executions # rubocop:disable Metrics/MethodLength
   workflow_execution_basic = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
-    workflow_params: { '-r': 'dev' },
+    workflow_params: { assembler: 'stub' },
     workflow_type: 'NFL',
     workflow_type_version: 'DSL2',
     tags: [],
     workflow_engine: 'nextflow',
     workflow_engine_version: '23.10.0',
-    workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+    workflow_engine_parameters: { '-r': 'dev' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com')
   )
@@ -168,13 +168,13 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
 
   workflow_execution_completed = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example-completed', workflow_version: '1.0dev' },
-    workflow_params: { '-r': 'dev' },
+    workflow_params: { assembler: 'stub' },
     workflow_type: 'NFL',
     workflow_type_version: 'DSL2',
     tags: [],
     workflow_engine: 'nextflow',
     workflow_engine_version: '23.10.0',
-    workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
+    workflow_engine_parameters: { '-r': 'dev' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
     blob_run_directory: 'this should be a generated key',

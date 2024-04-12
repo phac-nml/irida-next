@@ -29,8 +29,8 @@ module WorkflowExecutions
 
       @workflow_execution.workflow_params = @workflow_execution.workflow_params.merge(
         {
-          '--input': blob_key_to_service_path(samplesheet_key),
-          '--outdir': blob_key_to_service_path(generate_input_key('output'), directory: true)
+          input: blob_key_to_service_path(samplesheet_key),
+          outdir: blob_key_to_service_path(generate_input_key('output'), directory: true)
         }
       )
 
