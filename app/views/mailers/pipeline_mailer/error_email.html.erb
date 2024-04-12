@@ -1,93 +1,98 @@
-<div
-  role="article"
-  aria-roledescription="email"
-  aria-label="Confirm your email address"
-  lang="en"
+<table
+  style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background-color:#f8fafc;"
 >
-  <div
-    style="background-color: #f8fafc; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
-  >
-    <table align="center" cellpadding="0" cellspacing="0" role="none">
-      <tr>
-        <td class="w-full" style="width: 552px;">
-          <div class="text-center my-12">
-            <a
-              href="<%= root_url %>"
-              class="whitespace-nowrap"
-              style="text-decoration: none;"
-            >
-              <span class="font-semibold text-black text-5xl">
-                <%= t(:"general.name") %>
-              </span>
-            </a>
-          </div>
-          <table class="w-full" cellpadding="0" cellspacing="0" role="none">
+  <tbody>
+    <tr>
+      <td align="center" style="padding-top:48px;padding-bottom:48px;">
+        <a href="<%= root_url %>" style="text-decoration:none;">
+          <span style="font-size:40px;color:#000;font-weight:600;">
+            <%= t(:"general.name") %>
+          </span>
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <table
+          style="width:602px;border-collapse:collapse;border:0;border-spacing:0;text-align:left;background:#ffffff;"
+        >
+          <tbody>
             <tr>
-              <td
-                class="py-12 px-6 rounded bg-white"
-                style="font-size: 16px; color: #334155; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05)"
-              >
-                <h1 class="mt-0 mx-0 mb-6 font-semibold text-black" style="font-size: 24px;">
+              <td style="padding:24px;">
+                <h1 style="font-size:24px;color:#000;font-weight:600;">
                   <%= t(:".greeting", name: @workflow_execution.submitter.first_name) %>&#44;
                 </h1>
-                <p class="m-0" style="line-height: 24px">
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px;">
+                <p style="color:#334155;line-height:24px;">
                   <%= t(:".body.start") %>
                   <strong><%= @workflow_execution.id %></strong>
                   <%= t(:".body.end") %>
-                  <br>
-                  <br>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px;">
+                <p style="color:#334155;line-height:24px;">
                   <%= t(:".view_details") %>
                 </p>
-                <div role="separator" style="line-height: 24px">&zwj;</div>
-                <div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px;">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td style="background-color:#15803d" width="140px"><a
+                          href="<%= workflow_execution_url(@workflow_execution) %>"
+                          style="display:inline-block;color:#fff;background-color:#15803d;width:125px;border:1px solid #15803d;padding:15px 10px;text-align:center;vertical-align:middle;text-decoration:none;"
+                        ><%= t(:"general.name") %>&nbsp; &rarr;</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px;">
+                <p style="color:#334155;line-height:24px;">
+                  <%= t(:".copy_paste") %>
                   <a
                     href="<%= workflow_execution_url(@workflow_execution) %>"
-                    class="
-                      inline-block
-                      rounded
-                      py-4
-                      px-6
-                      font-semibold
-                      leading-none
-                    "
-                    style="background-color: #15803d; font-size: 16px; color: #f8fafc; text-decoration: none"
+                    style="text-decoration:underline;"
                   >
-                    <span style="mso-text-raise: 16px">
-                      <%= t(:"general.name") %>
-                      &rarr;
-                    </span>
+                    <%= workflow_execution_url(@workflow_execution) %>
                   </a>
-                  <div role="separator" style="line-height: 24px">&zwj;</div>
-                  <p class="m-0" style="line-height: 24px">
-                    <%= t(:".copy_paste") %>
-                    <a href="<%= workflow_execution_url(@workflow_execution) %>">
-                      <%= workflow_execution_url(@workflow_execution) %>
-                    </a>
-                  </p>
-                </div>
-                <div
-                  role="separator"
-                  style="background-color: #e2e8f0; height: 1px; line-height: 1px; margin: 28px 0"
-                >&zwj;</div>
-                <p class="m-0">
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px 24px;">
+                <div style="border-bottom:1px solid #e2e8f0;">&nbsp;</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:24px;">
+                <p style="color:#334155;line-height:24px;">
                   <%= t(:".thanks") %>
                   <br><%= t(:"general.name") %>
                 </p>
               </td>
             </tr>
-            <tr role="separator">
-              <td style="line-height: 48px">&zwj;</td>
-            </tr>
-            <tr>
-              <td class="px-6 mb-5 text-center" style="font-size: 12px; color: #475569">
-                <p class="m-0 italic">
-                  <%= t(:".automated_message") %>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td
+        align="center"
+        style="padding-left:24px;padding-top:48px;padding-bottom:48px;"
+      >
+        <span style="font-style:italic;font-size:12px;color:#475569">
+          <%= t(:".automated_message") %>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
