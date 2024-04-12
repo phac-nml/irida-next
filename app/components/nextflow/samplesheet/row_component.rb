@@ -49,11 +49,11 @@ module Nextflow
       def render_cell_type(property, entry, sample, fields)
         return render_sample_cell(sample, fields) if property == 'sample'
 
-        return render_metadata_cell(sample, property, entry, fields) if entry['meta'].present?
-
         return render_fastq_cell(property, entry, fields) if entry['is_fastq']
 
         return render_other_file_cell(property, entry, fields) if check_for_file(entry)
+
+        return render_metadata_cell(sample, property, entry, fields) if entry['meta'].present?
 
         return render_dropdown_cell(property, entry, fields) if entry['enum'].present?
 

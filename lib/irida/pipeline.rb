@@ -31,6 +31,8 @@ module Irida
       nextflow_schema['definitions'].each do |key, definition|
         next unless show_section?(definition['properties'])
 
+        key = key.to_sym
+
         workflow_params[key] = { title: definition['title'], description: definition['description'], properties: {} }
 
         workflow_params[key][:properties] = process_section(key, definition['properties'], definition['required'])
@@ -47,6 +49,8 @@ module Irida
       properties.each do |name, property|
         next unless !property['hidden'] && IGNORED_PARAMS.exclude?(name)
 
+        name = name.to_sym
+
         processed_section[name] = process_property(key, name, property, required.present? && required.include?(name))
       end
 
@@ -54,10 +58,10 @@ module Irida
     end
 
     def process_property(key, name, property, required)
-      processed_property = property.clone
-      processed_property['required'] = required
+      processed_property = property.clone.symbolize_keys
+      processed_property[:required] = required
 
-      processed_property['schema'] = process_samplesheet_schema if key == 'input_output_options' && name == 'input'
+      processed_property[:schema] = process_samplesheet_schema if key == :input_output_options && name == :input
 
       processed_property
     end
