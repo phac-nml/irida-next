@@ -282,23 +282,26 @@ module DataExports
         'type' => 'Analysis Export',
         'date' => Date.current.strftime('%Y-%m-%d'),
         'children' =>
-        [{
-          'name': 'summary.txt',
-          'type': 'file'
-        },
+        [
           {
-          'name' => sample.puid,
-          'type' => 'folder',
-          'irida-next-type' => 'sample',
-          'irida-next-name' => sample.name,
-          'children' =>
-          [{
-            'name' => attachment1.file.filename.to_s,
-            'type' => 'file'
-          }]
-        }]
+            'name': 'summary.txt',
+            'type': 'file'
+          },
+          {
+            'name' => sample.puid,
+            'type' => 'folder',
+            'irida-next-type' => 'sample',
+            'irida-next-name' => sample.name,
+            'children' =>
+            [
+              {
+                'name' => attachment1.file.filename.to_s,
+                'type' => 'file'
+              }
+            ]
+          }
+        ]
       }
-
       assert_equal expected_manifest.to_json, @data_export6.manifest
       assert_equal 'ready', @data_export6.status
     end
