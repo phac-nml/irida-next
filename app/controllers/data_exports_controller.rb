@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Controller actions for Data Exports
-class DataExportsController < ApplicationController
+class DataExportsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
 
   before_action :data_export, only: %i[download destroy show]
