@@ -4,6 +4,10 @@ id: ga4gh_wes_sapporo_setup
 title: GA4GH WES Sapporo Setup
 ---
 
+## Prerequisites
+
+You will need to have [Docker](https://docs.docker.com/get-docker/) installed for managing Sapporo
+
 ## How to set up a Sapporo GA4GH WES instance for development
 
 Note: This should only be used for development purposes, use a production WSGI server for production environments.
