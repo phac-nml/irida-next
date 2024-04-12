@@ -258,7 +258,8 @@ module DataExports
 
       filename = 'summary.txt'
       we_attachment = workflow_execution.outputs.build
-      we_attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open, filename:)
+      we_attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open,
+                                filename:)
       we_attachment.save!
 
       filename = 'test_file.fastq'
@@ -268,7 +269,7 @@ module DataExports
 
       expected_files_in_zip = ["#{sample.puid}/#{attachment1.file.filename}",
                                'manifest.json',
-                              'summary.txt']
+                               'summary.txt']
       DataExports::CreateJob.perform_now(@data_export6)
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
       Zip::File.open(export_file) do |zip_file|
