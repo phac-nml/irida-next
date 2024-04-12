@@ -273,7 +273,6 @@ module DataExports
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
-          puts entry.to_s
           assert expected_files_in_zip.include?(entry.to_s)
           expected_files_in_zip.delete(entry.to_s)
         end

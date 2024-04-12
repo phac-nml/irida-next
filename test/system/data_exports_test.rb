@@ -7,6 +7,7 @@ class DataExportsTest < ApplicationSystemTestCase
     @user = users(:john_doe)
     @data_export1 = data_exports(:data_export_one)
     @data_export2 = data_exports(:data_export_two)
+    @data_export6 = data_exports(:data_export_six)
     @namespace = groups(:group_one)
     @project = projects(:project1)
     @sample1 = samples(:sample1)
@@ -19,7 +20,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 2
+      assert_selector 'tr', count: 3
       assert_selector 'tr:first-child td:first-child ', text: @data_export1.id
       assert_selector 'tr:first-child td:nth-child(2)', text: @data_export1.name
       assert_selector 'tr:first-child td:nth-child(3)', text: @data_export1.export_type.capitalize
@@ -32,6 +33,12 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector 'tr:nth-child(2) td:nth-child(3)', text: @data_export2.export_type.capitalize
       assert_selector 'tr:nth-child(2) td:nth-child(4)', text: @data_export2.status.capitalize
       assert find('tr:nth-child(2) td:nth-child(6)').text.blank?
+
+      assert_selector 'tr:nth-child(3) td:first-child', text: @data_export6.id
+      assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @data_export6.name
+      assert_selector 'tr:nth-child(3) td:nth-child(3)', text: @data_export6.export_type.capitalize
+      assert_selector 'tr:nth-child(3) td:nth-child(4)', text: @data_export6.status.capitalize
+      assert find('tr:nth-child(3) td:nth-child(6)').text.blank?
     end
   end
 
@@ -59,6 +66,17 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'can delete data exports on listing page' do
     visit data_exports_path
+
+    within %(#data-exports-table-body) do
+      assert_selector 'tr', count: 3
+      first('button.Viral-Dropdown--icon').click
+      within('div[data-viral--dropdown-target="menu"] ul') do
+        click_link I18n.t('data_exports.index.actions.delete'), match: :first
+      end
+    end
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
 
     within %(#data-exports-table-body) do
       assert_selector 'tr', count: 2
@@ -166,7 +184,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 2
+      assert_selector 'tr', count: 3
       assert_text @data_export2.id
     end
 
@@ -179,7 +197,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 1
+      assert_selector 'tr', count: 2
       assert_no_text @data_export2.id
     end
   end
@@ -213,7 +231,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_exports_path
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 2
+      assert_selector 'tr', count: 3
       assert_no_text 'test data export'
     end
     # project samples page
@@ -250,7 +268,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_exports_path
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 2
+      assert_selector 'tr', count: 3
       assert_no_text 'test data export'
     end
     # project samples page
