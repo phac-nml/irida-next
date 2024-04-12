@@ -21,7 +21,8 @@ module WorkflowExecutions
       @workflow_execution.state = 'canceling'
       @workflow_execution.save
 
-      WorkflowExecutionCancelationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+      WorkflowExecutionCancelationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution,
+                                                                                         current_user)
 
       @workflow_execution
     end
