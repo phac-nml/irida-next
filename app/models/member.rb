@@ -203,14 +203,12 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def send_email(access_type)
-    MemberMailer.access_inform_user_email(self, access_type).deliver_later
     manager_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
                                 .where(access_level: Member::AccessLevel.manageable)
-    managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id))
-                   .distinct
-    managers.each do |manager|
-      MemberMailer.access_inform_manager_email(self, manager, access_type).deliver_later
-    end
+    managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
+    manager_emails = managers.pluck(:email)
+
+    MemberMailer.access_email(self, manager_emails, access_type).deliver_later
   end
 
   # Method to update descendant membership access levels so they aren't less than the parent group
