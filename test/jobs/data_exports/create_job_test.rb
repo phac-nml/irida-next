@@ -4,23 +4,24 @@ require 'test_helper'
 module DataExports
   class CreateJobTest < ActiveJob::TestCase
     def setup
-      @data_export = data_exports(:data_export_two)
+      @data_export2 = data_exports(:data_export_two)
+      @data_export6 = data_exports(:data_export_six)
     end
 
     test 'creating export and updating data_export status' do
-      assert @data_export.status = 'processing'
-      assert_not @data_export.file.valid?
+      assert @data_export2.status = 'processing'
+      assert_not @data_export2.file.valid?
 
       assert_difference -> { ActiveStorage::Attachment.count } => +1 do
-        DataExports::CreateJob.perform_now(@data_export)
+        DataExports::CreateJob.perform_now(@data_export2)
       end
 
-      assert_equal 'ready', @data_export.status
-      assert @data_export.file.valid?
-      assert_equal "#{@data_export.id}.zip", @data_export.file.filename.to_s
+      assert_equal 'ready', @data_export2.status
+      assert @data_export2.file.valid?
+      assert_equal "#{@data_export2.id}.zip", @data_export2.file.filename.to_s
     end
 
-    test 'content of export' do
+    test 'content of sample export' do
       sample = samples(:sample1)
       project = projects(:project1)
       attachment1 = attachments(:attachment1)
@@ -28,8 +29,8 @@ module DataExports
       expected_files_in_zip = ["#{project.puid}/#{sample.puid}/#{attachment1.puid}/#{attachment1.file.filename}",
                                "#{project.puid}/#{sample.puid}/#{attachment2.puid}/#{attachment2.file.filename}",
                                'manifest.json']
-      DataExports::CreateJob.perform_now(@data_export)
-      export_file = ActiveStorage::Blob.service.path_for(@data_export.file.key)
+      DataExports::CreateJob.perform_now(@data_export2)
+      export_file = ActiveStorage::Blob.service.path_for(@data_export2.file.key)
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
           assert expected_files_in_zip.include?(entry.to_s)
@@ -78,10 +79,10 @@ module DataExports
         }]
       }
 
-      assert_equal expected_manifest.to_json, @data_export.manifest
+      assert_equal expected_manifest.to_json, @data_export2.manifest
     end
 
-    test 'content of export including paired files' do
+    test 'content of sample export including paired files' do
       sample_b = samples(:sampleB)
 
       project = projects(:projectA)
@@ -247,6 +248,60 @@ module DataExports
       end
       assert_not expected_files_in_zip.count.positive?
       assert_equal expected_manifest.to_json, data_export.manifest
+    end
+
+    test 'content of analysis export' do
+      workflow_execution = workflow_executions(:irida_next_example_completed)
+      samples_workflow_execution = samples_workflow_executions(:sample1_irida_next_example_completed)
+      sample = samples(:sample1)
+      attachment1 = attachments(:attachment1)
+
+      filename = 'summary.txt'
+      we_attachment = workflow_execution.outputs.build
+      we_attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open, filename:)
+      we_attachment.save!
+
+      filename = 'test_file.fastq'
+      swe_attachment = samples_workflow_execution.outputs.build
+      swe_attachment.file.attach(io: Rails.root.join('test/fixtures/files', filename).open, filename:)
+      swe_attachment.save!
+
+      expected_files_in_zip = ["#{sample.puid}/#{attachment1.file.filename}",
+                               'manifest.json',
+                              'summary.txt']
+      DataExports::CreateJob.perform_now(@data_export6)
+      export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
+      Zip::File.open(export_file) do |zip_file|
+        zip_file.each do |entry|
+          puts entry.to_s
+          assert expected_files_in_zip.include?(entry.to_s)
+          expected_files_in_zip.delete(entry.to_s)
+        end
+      end
+      assert_not expected_files_in_zip.count.positive?
+      expected_manifest = {
+        'type' => 'Analysis Export',
+        'date' => Date.current.strftime('%Y-%m-%d'),
+        'children' =>
+        [{
+          'name': 'summary.txt',
+          'type': 'file'
+        },
+          {
+          'name' => sample.puid,
+          'type' => 'folder',
+          'irida-next-type' => 'sample',
+          'irida-next-name' => sample.name,
+          'children' =>
+          [{
+            'name' => attachment1.file.filename.to_s,
+            'type' => 'file'
+          }]
+        }]
+      }
+
+      assert_equal expected_manifest.to_json, @data_export6.manifest
+      assert_equal 'ready', @data_export6.status
     end
   end
 end

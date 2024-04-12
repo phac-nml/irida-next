@@ -48,3 +48,13 @@ data_export_five:
   updated_at: <%= 1.day.ago %>
   expires_at: <%= 5.days.from_now %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+
+data_export_six:
+  name: Data Export 6
+  export_type: analysis
+  status: processing
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed, :uuid) %>]}
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
