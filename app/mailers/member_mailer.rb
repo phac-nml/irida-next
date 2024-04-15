@@ -14,6 +14,6 @@ class MemberMailer < ApplicationMailer
                                               type: namespace.type,
                                               id: namespace.id)
               end
-    mail(to: member.user.email, cc: manager_emails, subject:) # TODO: change cc to bcc
+    mail(to: member.user.email, bcc: manager_emails, subject:)
   end
 end
