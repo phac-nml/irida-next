@@ -219,3 +219,13 @@ attachmentJ:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleC (Sample)
   puid: INXT_ATT_AAAAAAAAAS
+
+attachmentK:
+  metadata: { "compression": "gzip", "format": "unknown" }
+  attachable: irida_next_example_completed_with_output (WorkflowExecution)
+  puid: INXT_ATT_AAAAAAAAAS
+
+attachmentL:
+  metadata: {"type": "assembly", "format": "fasta", "compression": "gzip"}
+  attachable: sample45_irida_next_example_completed_with_output (SamplesWorkflowExecution)
+  puid: INXT_ATT_AAAAAAAAAT

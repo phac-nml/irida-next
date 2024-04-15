@@ -261,7 +261,7 @@ sample43:
   name: Sample 43
   description: Sample 43 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project37, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 1.week.ago) %>
+  puid: INXT_SAM_AAAAAAAABS
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
@@ -271,7 +271,7 @@ sample44:
   name: Sample 44
   description: Sample 44 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project37, :uuid) %>
-  puid: <%= Irida::PersistentUniqueId.generate(object_class: Sample, time: 2.week.ago) %>
+  puid: INXT_SAM_AAAAAAAABT
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
@@ -286,3 +286,13 @@ sample45:
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
 
+
+
+sample46:
+  name: Sample 46
+  description: Sample 46 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project37, :uuid) %>
+  puid: INXT_SAM_AAAAAAAABU
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>

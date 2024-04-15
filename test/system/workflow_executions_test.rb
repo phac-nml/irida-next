@@ -319,7 +319,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     within %(#workflow_executions-table-body) do
-      assert_selector 'tr', count: 11
+      assert_selector 'tr', count: 12
       assert_no_text workflow_execution.id
     end
   end

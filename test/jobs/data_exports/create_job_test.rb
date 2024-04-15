@@ -251,25 +251,13 @@ module DataExports
     end
 
     test 'content of analysis export' do
-      workflow_execution = workflow_executions(:irida_next_example_completed)
-      samples_workflow_execution = samples_workflow_executions(:sample1_irida_next_example_completed)
-      sample = samples(:sample1)
-      attachment1 = attachments(:attachment1)
+      workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
+      samples_workflow_execution = samples_workflow_executions(:sample45_irida_next_example_completed_with_output)
+      sample = samples(:sample45)
 
-      filename = 'summary.txt'
-      we_attachment = workflow_execution.outputs.build
-      we_attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open,
-                                filename:)
-      we_attachment.save!
-
-      filename = 'test_file.fastq'
-      swe_attachment = samples_workflow_execution.outputs.build
-      swe_attachment.file.attach(io: Rails.root.join('test/fixtures/files', filename).open, filename:)
-      swe_attachment.save!
-
-      expected_files_in_zip = ["#{sample.puid}/#{attachment1.file.filename}",
+      expected_files_in_zip = ["#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
                                'manifest.json',
-                               'summary.txt']
+                               workflow_execution.outputs[0].filename.to_s]
       DataExports::CreateJob.perform_now(@data_export6)
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
       Zip::File.open(export_file) do |zip_file|
@@ -285,7 +273,7 @@ module DataExports
         'children' =>
         [
           {
-            'name' => 'summary.txt',
+            'name' => workflow_execution.outputs[0].filename.to_s,
             'type' => 'file'
           },
           {
@@ -296,7 +284,7 @@ module DataExports
             'children' =>
             [
               {
-                'name' => attachment1.file.filename.to_s,
+                'name' => samples_workflow_execution.outputs[0].filename.to_s,
                 'type' => 'file'
               }
             ]

@@ -132,3 +132,13 @@ data_export_1_test_export:
   name: file
   record: data_export_one (DataExport)
   blob: data_export_1_test_export_blob
+
+workflow_execution_completed_output:
+  name: file
+  record: attachmentK (Attachment)
+  blob: workflow_execution_completed_output_blob
+
+samples_workflow_execution_completed_output:
+  name: file
+  record: attachmentL (Attachment)
+  blob: samples_workflow_execution_completed_output_blob
