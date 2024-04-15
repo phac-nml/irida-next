@@ -20,10 +20,35 @@ class NamespaceGroupLink < ApplicationRecord
               in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
             }
 
+  after_destroy :send_revoke_access_email
+  after_save :send_grant_access_email, if: :previously_new_record?
+
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }
+
+  def send_revoke_access_email
+    send_email('revoked')
+  end
+
+  def send_grant_access_email
+    send_email('granted')
+  end
+
+  def send_email(access_type)
+    manager_memberships = Member.where(namespace: group,
+                                       access_level: Member::AccessLevel.manageable).not_expired
+    managers = User.where(id: manager_memberships.select(:user_id)).distinct
+    manager_emails = managers.pluck(:email)
+    memberships = Member.where(namespace: group).not_expired
+
+    memberships.each do |member|
+      next if Member.can_view?(member.user, namespace, false) # TODO: change to true
+
+      MemberMailer.access_email(member, manager_emails, access_type, namespace).deliver_later
+    end
+  end
 
   private
 
