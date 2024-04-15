@@ -39,6 +39,18 @@
               selected: @current_page == t(:"groups.sidebar.settings").downcase
             ) %>
           <% end %>
+
+          <%= render section.with_multi_level_menu(title: t(:"groups.sidebar.settings"), icon: "cog_6_tooth") do |multi_level_menu| %>
+            <% if allowed_to?(:update?, @group) %>
+              <% multi_level_menu.with_menu_item(
+                url: edit_group_path(@group),
+                label: t(:"groups.sidebar.general")
+              ) %>
+            <% end %>
+            <% multi_level_menu.with_menu_item(
+              url: group_bots_path(@group),
+              label: t(:"groups.sidebar.bot_accounts")
+            ) %>
         <% end %>
         <%= layout.with_breadcrumb(context_crumbs: @context_crumbs) %>
         <% layout.with_body do %>
