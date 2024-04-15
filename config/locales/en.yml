@@ -1318,7 +1318,7 @@ en:
     data_export_mailer:
       email_subject: "Your export is ready for download"
       export_ready:
-        greeting: Hello
+        greeting: Hello %{name},
         thanks: Thanks,
         automated_message: This email was sent from an automated system. Please do not reply to this email.
         ready_for_download:
