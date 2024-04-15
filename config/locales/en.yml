@@ -1316,7 +1316,7 @@ en:
         created_at_asc: Oldest created
   mailers:
     data_export_mailer:
-      email_subject: "Your export is ready for download"
+      email_subject: "Export Ready - %{name}"
       export_ready:
         greeting: Hello %{name},
         thanks: Thanks,

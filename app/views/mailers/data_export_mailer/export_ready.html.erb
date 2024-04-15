@@ -18,14 +18,14 @@
         >
           <tbody>
             <tr>
-              <td style="padding: 24px 24px 0 24px;">
+              <td style="padding:24px;">
                 <h1 style="font-size:24px;color:#000;font-weight:600;">
                   <%= t("mailers.data_export_mailer.export_ready.greeting", name: @data_export.user.first_name) %>
                 </h1>
               </td>
             </tr>
             <tr>
-              <td style="padding: 0 24px;">
+              <td style="padding:12px 24px;">
                 <p style="color:#334155;line-height:24px;">
                   <%= t("mailers.data_export_mailer.export_ready.ready_for_download.start") %>
                   <strong><%= @data_export.name || @data_export.id %></strong>
@@ -34,14 +34,14 @@
               </td>
             </tr>
             <tr>
-              <td style="padding: 0 24px;">
+              <td style="padding:12px 24px;">
                 <p style="color:#334155;line-height:24px;">
                   <%= t("mailers.data_export_mailer.export_ready.view_exports") %>
                 </p>
               </td>
             </tr>
             <tr>
-              <td style="padding: 0 24px;">
+              <td style="padding:12px 24px;">
                 <table>
                   <tbody>
                     <tr>
@@ -55,7 +55,7 @@
               </td>
             </tr>
             <tr>
-              <td style="padding: 0 24px;">
+              <td style="padding:12px 24px;">
                 <p style="color:#334155;line-height:24px;">
                   <%= t("mailers.data_export_mailer.export_ready.copy_paste") %>
                   <a
@@ -68,12 +68,12 @@
               </td>
             </tr>
             <tr>
-              <td style="padding: 0 24px;">
+              <td style="padding:12px 24px;">
                 <div style="border-bottom:1px solid #e2e8f0;">&nbsp;</div>
               </td>
             </tr>
             <tr>
-              <td style="padding: 0 24px;">
+              <td style="padding:24px;">
                 <p style="color:#334155;line-height:24px;">
                   <%= t("mailers.data_export_mailer.export_ready.download_before.start") %>
                   <strong><%= @data_export.expires_at.strftime("%A, %B %d, %Y") %></strong>
@@ -82,7 +82,7 @@
               </td>
             </tr>
             <tr>
-              <td style="padding: 0 24px;">
+              <td style="padding:24px;">
                 <p style="color:#334155;line-height:24px;">
                   <%= t("mailers.data_export_mailer.export_ready.thanks") %>
                   <br><%= t(:"general.name") %>
