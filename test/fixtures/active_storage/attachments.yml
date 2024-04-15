@@ -135,10 +135,10 @@ data_export_1_test_export:
 
 workflow_execution_completed_output:
   name: file
-  record: attachmentK (Attachment)
+  record: workflow_execution_completed_output_attachment (Attachment)
   blob: workflow_execution_completed_output_blob
 
 samples_workflow_execution_completed_output:
   name: file
-  record: attachmentL (Attachment)
+  record: samples_workflow_execution_completed_output_attachment (Attachment)
   blob: samples_workflow_execution_completed_output_blob

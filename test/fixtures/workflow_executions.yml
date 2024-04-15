@@ -370,7 +370,7 @@ irida_next_example_completed_with_output:
   workflow_engine: "nextflow"
   workflow_engine_version: "23.10.0"
   workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
+  workflow_url: "https://github.com/phac-nml/irida_next_example_completed_with_output"
   run_id: "my_run_id_13"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   state: "completed"
