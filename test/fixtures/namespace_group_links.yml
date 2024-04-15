@@ -95,3 +95,9 @@ namespace_group_link16:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectFoxtrotSubgroupA_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Project"
+
+namespace_group_link17:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:user29_project1_namespace, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Project"

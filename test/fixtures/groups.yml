@@ -353,3 +353,12 @@ group_sixteen:
   metadata_summary: { }
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABG
+
+user30_group_one:
+  name: User 30 Group 1
+  path: user-30-group-1
+  type: Group
+  description: Group 1 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAAABH
