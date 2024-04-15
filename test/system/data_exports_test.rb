@@ -415,6 +415,14 @@ class DataExportsTest < ApplicationSystemTestCase
                        text: I18n.t('projects.samples.index.create_export_button')
   end
 
+  test 'data export type analysis on summary tab' do
+    visit data_export_path(@data_export6, tab: 'summary')
+
+    within %(#data-export-listing) do
+      assert_selector 'div:nth-child(3) dd', text: @data_export6.export_type.capitalize
+    end
+  end
+
   test 'zip file contents in preview tab for workflow execution data export' do
     we_output = attachments(:workflow_execution_completed_output_attachment)
     swe_output = attachments(:samples_workflow_execution_completed_output_attachment)
