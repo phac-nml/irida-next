@@ -111,3 +111,17 @@ user28_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user28, :uuid) %>
   puid: INXT_USR_AAAAAAAAAP
+
+user29_namespace:
+  name: user.29@localhost
+  path: user.29_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user29, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAQ
+
+user30_namespace:
+  name: user.30@localhost
+  path: user.30_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAR

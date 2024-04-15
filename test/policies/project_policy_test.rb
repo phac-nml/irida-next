@@ -279,4 +279,19 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert scoped_projects_names.include?(namespaces_project_namespaces(:user27_project1_namespace).name)
     assert_not scoped_projects_names.include?(namespaces_project_namespaces(:projectFoxtrotSubgroupA_namespace).name)
   end
+
+  test 'Correct access level through group linked to project can submit workflow' do
+    # User has analyst access to project through a namespace group link
+
+    user = users(:user30)
+    project = projects(:user29_project1)
+
+    policy = ProjectPolicy.new(project, user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation)
+
+    assert_equal 1, scoped_projects.count
+
+    assert_equal true, policy.submit_workflow?
+  end
 end

@@ -98,6 +98,37 @@ module WorkflowExecutions
       end
     end
 
+    test 'should display a pipeline selection modal for project samples as analyst through namespace group link' do
+      login_as users(:user30)
+
+      namespace = namespaces_user_namespaces(:user29_namespace)
+      project = projects(:user29_project1)
+      sample = samples(:sample45)
+
+      visit namespace_project_samples_url(namespace_id: namespace.path, project_id: project.path)
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample.id}']").click
+      end
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        within 'div.sample-sheet' do
+          within 'table' do
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 1
+            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: sample.puid, count: 1
+          end
+        end
+      end
+    end
+
     test 'should not display a launch pipeline button for project samples as guest' do
       login_as users(:ryan_doe)
 

@@ -453,3 +453,24 @@ group_16_route:
   name: Group 16
   path: group-16
   source: group_sixteen (Namespace)
+
+user_29_namespace_route:
+  name: user.29@localhost
+  path: user.29_at_localhost
+  source: user29_namespace (Namespace)
+
+user_30_namespace_route:
+  name: user.30@localhost
+  path: user.30_at_localhost
+  source: user30_namespace (Namespace)
+
+user29_project1_namespace_route:
+  name: user.29@localhost / Project 1
+  path: user.29_at_localhost/project-1
+  source: user29_project1_namespace (Namespace)
+
+
+user30_group_one_route:
+  name: User 30 Group 1
+  path: user-30-group-1
+  source: user30_group_one (Namespace)

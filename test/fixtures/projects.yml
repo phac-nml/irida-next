@@ -211,3 +211,7 @@ project36:
 project37:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user21, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project37_namespace, :uuid) %>
+
+user29_project1:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:user29, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:user29_project1_namespace, :uuid) %>

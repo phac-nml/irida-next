@@ -507,5 +507,14 @@ project37_namespace:
   description: Project 37 description
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
-  metadata_summary: { }
+  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAACBC
+
+user29_project1_namespace:
+  name: User 29 Project 1
+  path: project-1
+  description: Project 1 description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:user29_namespace, :uuid) %>
+  metadata_summary: {}
+  puid: INXT_PRJ_AAAAAAACBD
