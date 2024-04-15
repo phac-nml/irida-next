@@ -6,13 +6,13 @@ module Bots
     BotAccountCreateError = Class.new(StandardError)
     attr_accessor :namespace, :bot_user_account
 
-    def initialize(user = nil, namespace = nil, params = {})
+    def initialize(user = nil, namespace = nil, bot_type = nil, params = {}) # rubocop:disable Metrics/ParameterLists
       super(user, params)
       @namespace = namespace
 
       user_params = {
         email: "#{namespace.type.downcase}_#{namespace.puid.downcase}_bot_#{SecureRandom.hex(5)}@iridanext.com",
-        user_type: User.user_types[:project_bot],
+        user_type: bot_type,
         first_name: namespace.type.downcase,
         last_name: 'Bot'
       }

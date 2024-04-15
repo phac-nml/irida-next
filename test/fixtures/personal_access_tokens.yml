@@ -92,3 +92,17 @@ user_bot_account<%= (n) %>_valid_pat:
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "DX3wwK3sWCjn#{n}xdCyZtH") %>
   last_used_at: nil
 <% end %>
+
+
+<% 21.times do |n| %>
+user_group_bot_account<%= (n) %>_valid_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:"user_group_bot_account#{n}", :uuid) %>
+  scopes:
+    - read_api
+    - api
+  name: Valid PAT<%= (n) %>
+  revoked: false
+  expires_at: <%= 10.days.from_now.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "AX3wwK3sWCjn#{n}xdCyZtH") %>
+  last_used_at: nil
+<% end %>

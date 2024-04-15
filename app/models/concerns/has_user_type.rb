@@ -6,11 +6,13 @@ module HasUserType
 
   USER_TYPES = {
     human: 0,
-    project_bot: 1
+    project_bot: 1,
+    group_bot: 2
   }.with_indifferent_access.freeze
 
   BOT_USER_TYPES = %w[
     project_bot
+    group_bot
   ].freeze
 
   included do

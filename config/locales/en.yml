@@ -70,6 +70,8 @@ en:
         unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
         update_namespace_with_group_link?: You are not authorized to update group %{name} links with other groups on this server.
         submit_workflow?: You are not authorized to submit workflows for samples within group %{name} on this server.
+        create_bot_accounts?: You are not authorized to create bot accounts for group %{name} on this server.
+        destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.
@@ -502,6 +504,13 @@ en:
         group_modified: "Group attributes were modified by %{user}"
         group_restored: "Group was restored by %{user}"
         group_transferred: "Group was transferred by %{user}"
+    bots:
+      index:
+        title: Bot Accounts
+      create:
+        success: "Bot account was successfully added to the group"
+      destroy:
+        success: "Bot account was successfully removed from the group"
     destroy:
       success: "Group %{group_name} was deleted"
       error: "Could not delete %{group_name}"
