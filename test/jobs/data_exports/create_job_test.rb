@@ -291,7 +291,7 @@ module DataExports
           }
         ]
       }
-      puts expected_manifest.to_json
+
       assert_equal expected_manifest.to_json, @data_export6.manifest
       assert_equal 'ready', @data_export6.status
     end

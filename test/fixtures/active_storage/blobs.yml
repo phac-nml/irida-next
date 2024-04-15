@@ -83,4 +83,4 @@ workflow_execution_completed_output_blob: <%= ActiveStorage::FixtureSet.blob fil
 
 samples_workflow_execution_completed_output_blob: <%= ActiveStorage::FixtureSet.blob filename: "INXT_SAM_AAAAAAAABV.assembly.fa.gz", service_name: "test" %>
 
-data_export_6_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_6.zip", service_name: "test" %>
+data_export_7_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_7.zip", service_name: "test" %>
