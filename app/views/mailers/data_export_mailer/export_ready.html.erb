@@ -27,9 +27,8 @@
             <tr>
               <td style="padding:12px 24px;">
                 <p style="color:#334155;line-height:24px;">
-                  <%= t("mailers.data_export_mailer.export_ready.ready_for_download.start") %>
-                  <strong><%= @data_export.name || @data_export.id %></strong>
-                  <%= t("mailers.data_export_mailer.export_ready.ready_for_download.end") %>
+                  <%= t("mailers.data_export_mailer.export_ready.ready_for_download_html",
+                  name: @data_export.name || @data_export.id) %>
                 </p>
               </td>
             </tr>
@@ -47,7 +46,16 @@
                     <tr>
                       <td style="background-color:#15803d" width="140px"><a
                           href="<%= data_export_url(@data_export) %>"
-                          style="display:inline-block;color:#fff;background-color:#15803d;width:125px;border:1px solid #15803d;padding:15px 10px;text-align:center;vertical-align:middle;text-decoration:none;"
+                          style="
+                          display:inline-block;
+                          color:#fff;
+                          background-color:#15803d;
+                          width:125px;
+                          border:1px solid #15803d;
+                          padding:15px 10px;
+                          text-align:center;
+                          vertical-align:middle;
+                          text-decoration:none;"
                         ><%= t(:"general.name") %>&nbsp; &rarr;</a></td>
                     </tr>
                   </tbody>
@@ -75,9 +83,8 @@
             <tr>
               <td style="padding:24px;">
                 <p style="color:#334155;line-height:24px;">
-                  <%= t("mailers.data_export_mailer.export_ready.download_before.start") %>
-                  <strong><%= @data_export.expires_at.strftime("%A, %B %d, %Y") %></strong>
-                  <%= t("mailers.data_export_mailer.export_ready.download_before.end") %>
+                  <%= t("mailers.data_export_mailer.export_ready.download_before_html",
+                  date: @data_export.expires_at.strftime("%A, %B %d, %Y")) %>
                 </p>
               </td>
             </tr>

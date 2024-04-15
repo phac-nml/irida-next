@@ -1122,14 +1122,10 @@ fr:
         greeting: Hello %{name},
         thanks: Thanks,
         automated_message: This email was sent from an automated system. Please do not reply to this email.
-        ready_for_download:
-          start: Your export
-          end: is ready for download.
+        ready_for_download_html: "Your export <b>%{name}</b> is ready for download."
         view_exports: "To view and download the export, click the button below:"
         copy_paste: "Or copy and paste this link into your browser:"
-        download_before:
-          start: Please download the export before
-          end: as it will be deleted after this date.
+        download_before_html: "Please download the export before %{date} as it will be deleted after this date."
   data_exports:
     create:
       success: Data export '%{name}' was successfully started.
