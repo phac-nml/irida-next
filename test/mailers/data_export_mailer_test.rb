@@ -18,10 +18,12 @@ class DataExportMailerTest < ActionMailer::TestCase
     end
 
     assert_equal [@data_export4.user.email], email.to
-    assert_equal I18n.t('mailers.data_export_mailer.email_subject'), email.subject
-    assert_match "#{I18n.t('mailers.data_export_mailer.export_ready.greeting')} #{@data_export4.user.first_name}",
+    assert_equal I18n.t('mailers.data_export_mailer.email_subject', name: @data_export4.name), email.subject
+    assert_match I18n.t('mailers.data_export_mailer.export_ready.greeting', name: @data_export4.user.first_name),
                  email.body.to_s
-    # assert_no_match @data_export4.id, email.body.to_s
+
+    #  In link url
+    assert_match @data_export4.id, email.body.to_s, count: 1
     assert_match @data_export4.expires_at.strftime('%A, %B %d, %Y'), email.body.to_s
     assert_match Rails.application.routes.url_helpers.data_export_url(@data_export4), email.body.to_s
   end
@@ -36,10 +38,10 @@ class DataExportMailerTest < ActionMailer::TestCase
     end
 
     assert_equal [@data_export5.user.email], email.to
-    assert_equal I18n.t('mailers.data_export_mailer.email_subject'), email.subject
-    assert_match "#{I18n.t('mailers.data_export_mailer.export_ready.greeting')} #{@data_export5.user.first_name}",
+    assert_equal I18n.t('mailers.data_export_mailer.email_subject', name: @data_export5.id), email.subject
+    assert_match I18n.t('mailers.data_export_mailer.export_ready.greeting', name: @data_export5.user.first_name),
                  email.body.to_s
-    assert_match @data_export5.id, email.body.to_s
+    assert_match @data_export5.id, email.body.to_s, count: 2
     assert_match @data_export5.expires_at.strftime('%A, %B %d, %Y'), email.body.to_s
     assert_match Rails.application.routes.url_helpers.data_export_url(@data_export5), email.body.to_s
   end
