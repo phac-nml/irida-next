@@ -8,7 +8,8 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
 
     render_with_template(locals: {
                            schema_file:,
-                           samples: [sample1, sample2]
+                           samples: [sample1, sample2],
+                           fields: %w[insdc_accession country metadata_3]
                          })
   end
 

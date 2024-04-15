@@ -16,6 +16,12 @@
         "unique": true,
         "errorMessage": "Sample name must be provided and cannot contain spaces"
       },
+      "country": {
+        "type": "string",
+        "meta": [
+          "country"
+        ]
+      },
       "insdc_accession": {
         "type": "string",
         "pattern": "^(SRR|ERR|DRR)\\S+$",

@@ -13,8 +13,8 @@ module Nextflow
         @metadata = metadata_value(sample, entry)
       end
 
-      def metadata_value(sample, entry)
-        sample.metadata.key?(entry['meta']) ? sample.metadata[entry['meta']] : ''
+      def metadata_value(sample, _entry)
+        sample.metadata.key?(name) ? sample.metadata[name] : ''
       end
     end
   end
