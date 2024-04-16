@@ -20,7 +20,7 @@
             <tr>
               <td style="padding:24px;">
                 <h1 style="font-size:24px;color:#000;font-weight:600;">
-                  <%= t("mailers.data_export_mailer.export_ready.greeting", name: @data_export.user.first_name) %>
+                  <%= t("mailers.greeting", name: @data_export.user.first_name) %>
                 </h1>
               </td>
             </tr>
@@ -65,7 +65,7 @@
             <tr>
               <td style="padding:12px 24px;">
                 <p style="color:#334155;line-height:24px;">
-                  <%= t("mailers.data_export_mailer.export_ready.copy_paste") %>
+                  <%= t("mailers.copy_paste") %>
                   <a
                     href="<%= data_export_url(@data_export) %>"
                     style="text-decoration:underline;"
@@ -91,7 +91,7 @@
             <tr>
               <td style="padding:24px;">
                 <p style="color:#334155;line-height:24px;">
-                  <%= t("mailers.data_export_mailer.export_ready.thanks") %>
+                  <%= t("mailers.thanks") %>
                   <br><%= t(:"general.name") %>
                 </p>
               </td>
@@ -106,7 +106,7 @@
         style="padding-left:24px;padding-top:48px;padding-bottom:48px;"
       >
         <span style="font-style:italic;font-size:12px;color:#475569">
-          <%= t("mailers.data_export_mailer.export_ready.automated_message") %>
+          <%= t("mailers.automated_message") %>
         </span>
       </td>
     </tr>
