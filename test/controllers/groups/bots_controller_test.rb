@@ -21,7 +21,6 @@ module Groups
 
       namespace = groups(:group_one)
 
-
       get group_bots_path(namespace, format: :turbo_stream)
 
       assert_response :success
@@ -31,7 +30,6 @@ module Groups
       sign_in users(:john_doe)
 
       namespace = groups(:group_one)
-
 
       get new_group_bot_path(namespace, format: :turbo_stream)
 
@@ -43,7 +41,6 @@ module Groups
 
       namespace = groups(:group_one)
 
-
       get new_group_bot_path(namespace, format: :turbo_stream)
 
       assert_response :unauthorized
@@ -53,7 +50,6 @@ module Groups
       sign_in users(:john_doe)
 
       namespace = groups(:group_one)
-
 
       post group_bots_path(namespace, format: :turbo_stream),
            params: { bot: {
@@ -69,7 +65,6 @@ module Groups
       sign_in users(:ryan_doe)
 
       namespace = groups(:group_one)
-
 
       post group_bots_path(namespace, format: :turbo_stream),
            params: { bot: {
@@ -87,7 +82,6 @@ module Groups
       namespace_bot = namespace_bots(:group1_bot)
 
       namespace = groups(:group_one)
-
 
       delete group_bot_path(namespace, id: namespace_bot.id, format: :turbo_stream)
 
@@ -127,6 +121,5 @@ module Groups
 
       assert_response :not_found
     end
-
   end
 end

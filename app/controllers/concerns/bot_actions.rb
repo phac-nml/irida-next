@@ -7,7 +7,7 @@ module BotActions
   included do
     before_action proc { namespace }
     before_action proc { access_levels }
-    before_action proc { bot_account }, only: %i[destroy generate_personal_access_token]
+    before_action proc { bot_account }, only: %i[destroy]
     before_action proc { bot_type }, only: %i[create]
   end
 
