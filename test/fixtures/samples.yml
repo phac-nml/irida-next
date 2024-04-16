@@ -281,7 +281,7 @@ sample45:
   name: Sample 45
   description: Sample 45 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:user29_project1, :uuid) %>
-  puid: INXT_SAM_AAAAAAAABS
+  puid: INXT_SAM_AAAAAAAABU
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
@@ -292,7 +292,7 @@ sample46:
   name: Sample 46
   description: Sample 46 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project37, :uuid) %>
-  puid: INXT_SAM_AAAAAAAABU
+  puid: INXT_SAM_AAAAAAAABV
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>

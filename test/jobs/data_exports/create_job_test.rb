@@ -252,8 +252,8 @@ module DataExports
 
     test 'content of analysis export' do
       workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
-      samples_workflow_execution = samples_workflow_executions(:sample45_irida_next_example_completed_with_output)
-      sample = samples(:sample45)
+      samples_workflow_execution = samples_workflow_executions(:sample46_irida_next_example_completed_with_output)
+      sample = samples(:sample46)
 
       expected_files_in_zip = ["#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
                                'manifest.json',
