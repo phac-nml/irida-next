@@ -46,6 +46,8 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
       assert_equal 'completing', @workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'get status of workflow execution which has been canceled' do
@@ -85,6 +87,8 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::StatusService.new(@workflow_execution, conn, @user, {}).execute
 
       assert_equal 'canceled', @workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'get status of workflow execution which has errored' do

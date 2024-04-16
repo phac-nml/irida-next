@@ -2,8 +2,6 @@
 
 # Pipeline Mailer
 class PipelineMailer < ApplicationMailer
-  include Roadie::Rails::Automatic
-
   def complete_email(workflow_execution)
     @workflow_execution = workflow_execution
     mail(to: @workflow_execution.submitter.email,
