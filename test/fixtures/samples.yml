@@ -286,8 +286,6 @@ sample45:
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
 
-
-
 sample46:
   name: Sample 46
   description: Sample 46 description.

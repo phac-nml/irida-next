@@ -457,7 +457,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'zip file contents in preview tab for workflow execution data export' do
     we_output = attachments(:workflow_execution_completed_output_attachment)
     swe_output = attachments(:samples_workflow_execution_completed_output_attachment)
-    sample45 = samples(:sample45)
+    sample46 = samples(:sample46)
     visit data_export_path(@data_export7, tab: 'preview')
 
     within %(#data-export-listing) do
@@ -466,7 +466,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       assert_text we_output.file.filename.to_s
       assert_text swe_output.file.filename.to_s
-      assert_text sample45.puid
+      assert_text sample46.puid
 
       assert_selector 'svg.Viral-Icon__Svg.icon-folder_open', count: 1
       assert_selector 'svg.Viral-Icon__Svg.icon-document_text', count: 3
