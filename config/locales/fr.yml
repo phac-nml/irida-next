@@ -1019,11 +1019,61 @@ fr:
           submit_button: Add
           value: Value
   workflow_executions:
+    index:
+      title: Workflow Executions
+      actions:
+        cancel_button: Cancel
+        cancel_confirm: Are you sure you want to cancel this workflow execution?
+        delete_button: Delete
+        delete_confirm: Are you sure you want to delete this workflow execution?
+    table:
+      empty:
+        title: No workflow executions.
+        description: There are no workflow executions associated with this submitter.
+      headers:
+        id: ID
+        run_id: Run ID
+        name: Name
+        version: Version
+        state: State
+        created_at: Created
+        updated_at: Last Updated
+        actions: Actions
+    show:
+      create_export_button: Create Export
+      remove_button: Remove
+      remove_button_confirmation: Are you sure that you want to remove this workflow execution?
+      cancel_button: Cancel
+      cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
+      tabs:
+        summary: Summary
+        files: Files
+    summary:
+      run_id: Run ID
+      workflow_name: Workflow Name
+      workflow_version: Workflow Version
+      created_at: Created
+      updated_at: Last Updated
+    files:
+      table_header:
+        puid: ID
+        filename: Filename
+        format: Format
+        type: Type
+        size: Size
+        created_at: Created At
+    cancel:
+      error: "Could not cancel workflow %{workflow_name}"
+      success: "Workflow %{workflow_name} was successfully canceled"
+    destroy:
+      error: "Could not delete workflow %{workflow_name}"
+      success: "Workflow %{workflow_name} was successfully deleted"
     submissions:
       pipeline_selection:
         title: Workflow Selection
       create:
-        title: '%{workflow} Parameters'
+        title: "%{workflow} parameters"
+        submit: Submit
   services:
     attachments:
       concatenation:
@@ -1186,12 +1236,11 @@ fr:
       name_label: "Export Name (Optional):"
       submit_button: Submit
       summary:
-        start:
-          zero: This export will contain no samples. After submission, you will be redirected to the export page. While the export status is
-          singular: This export will contain 1 sample. After submission, you will be redirected to the export page. While the export status is
-          plural: This export will contain COUNT_PLACEHOLDER samples. After submission, you will be redirected to the export page. While the export status is
-        middle: "the contents of the export will be added to a downloadable zip file. Once the export status is"
-        end: ", the zip file will be available for download. You will have 3 business days to download the export file before it's deleted."
+        sample:
+          zero: This export will contain no samples. After submission, you will be redirected to the export page. While the export status is <span class="bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">%{processing}</span> the contents of the export will be added to a downloadable zip file. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">%{ready}</span>, the zip file will be available for download. You will have 3 business days to download the export file before it's deleted.
+          singular: This export will contain 1 sample. After submission, you will be redirected to the export page. While the export status is <span class="bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">%{processing}</span> the contents of the export will be added to a downloadable zip file. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">%{ready}</span>, the zip file will be available for download. You will have 3 business days to download the export file before it's deleted.
+          plural: This export will contain COUNT_PLACEHOLDER samples. After submission, you will be redirected to the export page. While the export status is <span class="bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">%{processing}</span> the contents of the export will be added to a downloadable zip file. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">%{ready}</span>, the zip file will be available for download. You will have 3 business days to download the export file before it's deleted.
+        analysis_html: This export will contain the contents of workflow execution <strong class="text-slate-900 dark:text-white">%{id}</strong>. After submission, you will be redirected to the export page. While the export is <span class="bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">%{processing}</span> the contents of the export will be added to a downloadable zip file. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">%{ready}</span>, the zip file will be available for download. You will have 3 business days to download the export file before it's deleted.
         processing: processing
         ready: ready
       title: Data Export
