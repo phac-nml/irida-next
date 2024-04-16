@@ -6,7 +6,30 @@ title: GA4GH WES Sapporo Setup
 
 ## Prerequisites
 
-You will need to have [Docker](https://docs.docker.com/get-docker/) installed for managing Sapporo
+You will need to have [Docker Compose plugin](https://docs.docker.com/compose/install/linux/) installed for managing Sapporo
+
+```bash
+# Instructions for installing Docker Compose plugin on Ubuntu
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
+# Verify installation
+docker compose version
+# expected result
+> Docker Compose version vN.N.N
+```
+
+You will need to add yourself to the docker group to be able to run docker commands
+
+```bash
+# create the docker group if it does not exist
+sudo groupadd docker
+# add yourself to the docker group
+sudo usermod -aG docker $USER
+# reboot, log out/log in, or run the following command
+newgrp docker
+# If you still have issues with running docker, you may need to change the permissions of the docker socket using the following command
+sudo chmod 666 /var/run/docker.sock
+```
 
 ## How to set up a Sapporo GA4GH WES instance for development
 
@@ -14,7 +37,7 @@ Note: This should only be used for development purposes, use a production WSGI s
 
 ### Configure IRIDA Next
 
-Set active storage service to `:local` in `config/environments/development.rb`
+Check that your active storage service is set to `:local` in `config/environments/development.rb`. This is the default configuration.
 
 ```ruby
 config.active_storage.service = :local
@@ -33,9 +56,13 @@ ga4gh_wes:
 
 ### Setup Sapporo (WES implementation)
 
-Download and run the [PHAC-NML Sapporo](https://github.com/phac-nml/sapporo-service) fork in dev docker mode
+Download and run the [PHAC-NML Sapporo](https://github.com/phac-nml/sapporo-service) fork in dev docker mode.
+
+Note: If your docker group permissions are setup correctly you should not have to use `sudo` when running any of these commands.
 
 ```bash
+# Go to wherever you store your git repos
+cd ~/path/to/git/repos
 # Clone and checkout the irida-next branch
 git clone git@github.com:phac-nml/sapporo-service.git
 cd sapporo-service
