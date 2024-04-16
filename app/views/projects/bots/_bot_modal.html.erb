@@ -1,5 +1,7 @@
 <%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>>
-  <%= dialog.with_header(title: t("projects.bots.index.bot_listing.new_bot_modal.title")) %>
+  <%= dialog.with_header(
+    title: t("projects.bots.index.bot_listing.new_bot_modal.title")
+  ) %>
   <%= dialog.with_section do %>
 
     <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
@@ -12,10 +14,11 @@
       <%= turbo_frame_tag("new_bot_account-error-alert") %>
     </div>
 
-   <%= form_for(:bot, url: namespace_project_bots_path, method: :post) do |form| %>
+    <%= form_for(:bot, url: namespace_project_bots_path, method: :post) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
-          <%= form.label :token_name, t("projects.bots.index.bot_listing.new_bot_modal.token_name") %>
+          <%= form.label :token_name,
+                     t("projects.bots.index.bot_listing.new_bot_modal.token_name") %>
           <%= form.text_field :token_name,
                           required: true,
                           value: !bot_params.nil? ? bot_params[:token_name] : "",
@@ -24,11 +27,15 @@
         </div>
 
         <div class="form-field">
-          <%= form.label :access_level, t("projects.bots.index.bot_listing.new_bot_modal.access_level") %>
+          <%= form.label :access_level,
+                     t("projects.bots.index.bot_listing.new_bot_modal.access_level") %>
           <%= form.select :access_level,
                       @access_levels,
                       {
-                        prompt: t("projects.bots.index.bot_listing.new_bot_modal.select_access_level"),
+                        prompt:
+                          t(
+                            "projects.bots.index.bot_listing.new_bot_modal.select_access_level"
+                          ),
                         selected: !bot_params.nil? ? bot_params[:access_level] : nil
                       },
                       required: true %>
@@ -37,7 +44,8 @@
         </div>
 
         <div class="form-field datepicker" data-controller="datepicker">
-          <%= form.label :expires_at, t("projects.bots.index.bot_listing.new_bot_modal.expires_at") %>
+          <%= form.label :expires_at,
+                     t("projects.bots.index.bot_listing.new_bot_modal.expires_at") %>
           <div class="relative max-w-sm">
             <div
               class="
@@ -65,40 +73,72 @@
         </div>
 
         <div class="form-field">
-        <%= form.label :scopes %>
-        <% Irida::Auth.all_available_scopes.each do |scope| %>
-          <div class="flex">
-            <div class="flex items-center h-5">
-              <%= check_box_tag "bot[scopes][]",
-              scope,
-              id: "bot_scopes_#{scope}" %>
+          <%= form.label :scopes %>
+          <% Irida::Auth.all_available_scopes.each do |scope| %>
+            <div class="flex">
+              <div class="flex items-center h-5">
+                <%= check_box_tag "bot[scopes][]", scope, id: "bot_scopes_#{scope}" %>
+              </div>
+              <div class="ml-2 text-sm">
+                <%= label_tag "bot_scopes_#{scope}",
+                scope,
+                class: "font-medium text-slate-900 dark:text-slate-300" %>
+                <p
+                  id="<%= "bot_scopes_#{scope}_help-text" %>"
+                  class="
+                    text-xs
+                    font-normal
+                    text-slate-500
+                    dark:text-slate-300
+                  "
+                ><%= t("auth.scopes.#{scope}") %></p>
+              </div>
             </div>
-            <div class="ml-2 text-sm">
-              <%= label_tag "bot_scopes_#{scope}",
-              scope,
-              class: "font-medium text-slate-900 dark:text-slate-300" %>
-              <p
-                id="<%= "bot_scopes_#{scope}_help-text" %>"
-                class="text-xs font-normal text-slate-500 dark:text-slate-300"
-              ><%= t("auth.scopes.#{scope}") %></p>
-            </div>
-          </div>
-        <% end %>
+          <% end %>
         </div>
 
       </div>
-        <div class="my-4">
-          <%= form.submit t('projects.bots.index.bot_listing.new_bot_modal.submit'),
-                      class: "button button--size-default button--state-primary" %>
-          <button
-            type="button"
-            class="button button--size-default button--state-default"
-            data-action="click->viral--dialog#close"
-          >
-            <%= t('projects.bots.index.bot_listing.new_bot_modal.cancel') %>
-          </button>
-        </div>
+      <div class="my-4">
+        <%= form.submit t("projects.bots.index.bot_listing.new_bot_modal.submit"),
+                    class:
+                      "
+                      focus:outline-none
+                      text-sm
+                      text-white
+                      bg-primary-700
+                      hover:bg-primary-800
+                      focus:ring-0
+                      rounded-md
+                      p-2
+                      dark:text-white
+                      dark:bg-primary-600
+                      dark:hover:bg-primary-700
+                      cursor-pointer
+                      " %>
+        <button
+          type="button"
+          class="
+            focus:outline-none
+            text-sm
+            text-slate-900
+            border
+            border-slate-200
+            bg-white
+            hover:bg-slate-100
+            hover:text-slate-950
+            focus:ring-0
+            rounded-md
+            p-2
+            dark:text-white
+            dark:bg-slate-600
+            dark:hover:bg-slate-700
+          "
+          data-action="click->viral--dialog#close"
+        >
+          <%= t("projects.bots.index.bot_listing.new_bot_modal.cancel") %>
+        </button>
       </div>
+
     <% end %>
   <% end %>
 <% end %>

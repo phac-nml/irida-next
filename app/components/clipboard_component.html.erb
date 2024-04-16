@@ -56,7 +56,22 @@
     data-action="
         click->clipboard#copyToClipboard
       "
-    class="button button--size-sm button--state-primary p-2"
+    class="
+      focus:outline-none
+      text-sm
+      text-white
+      bg-primary-700
+      hover:bg-primary-800
+      focus:ring-4
+      focus:ring-primary-300
+      rounded-md
+      py-2
+      px-4
+      dark:text-white
+      dark:bg-primary-600
+      dark:hover:bg-primary-700
+      dark:focus:ring-primary-800
+    "
   >
     <span data-clipboard-target="initial"><%= t("components.clipboard.copy") %></span>
     <span data-clipboard-target="copied" class="flex items-center hidden"><%= viral_icon(name: "check", classes: "w-5 h-5") %>
