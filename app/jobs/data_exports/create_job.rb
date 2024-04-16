@@ -2,7 +2,7 @@
 
 module DataExports
   # Queues the data export create job
-  class CreateJob < ApplicationJob # rubocop:disable Method/ClassLength
+  class CreateJob < ApplicationJob
     queue_as :default
 
     def perform(data_export)
@@ -30,11 +30,12 @@ module DataExports
     def create_sample_zip(data_export)
       new_zip_file = Tempfile.new(binmode: true)
       ZipKit::Streamer.open(new_zip_file) do |zip|
-        data_export.export_parameters['ids'].each do |sample_id|
-          sample = Sample.find(sample_id)
+        samples = Sample.includes(attachments: { file_attachment: :blob })
+                        .where(id: data_export.export_parameters['ids'])
+        samples.each do |sample|
           next unless sample.attachments.count.positive?
 
-          project = Project.find(sample.project_id)
+          project = sample.project
 
           update_sample_manifest(sample, project)
 
@@ -101,13 +102,7 @@ module DataExports
 
     def write_attachments(sample, project, zip)
       sample.attachments.each do |attachment|
-        next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
-
         write_attachment(project.puid, sample.puid, zip, attachment)
-
-        next unless attachment.metadata.key?('associated_attachment_id')
-
-        write_attachment(project.puid, sample.puid, zip, attachment.associated_attachment)
       end
     end
 
