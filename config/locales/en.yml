@@ -1260,9 +1260,7 @@ en:
     complete_email:
       subject: Pipeline Completed - %{id}
       greeting: Hello %{name}
-      body:
-        start: Your pipeline
-        end: has completed successfully.
+      body_html: Your pipeline <strong>%{id}</strong> has completed successfully.
       view_details: "To view the pipeline summary, click the button below:"
       copy_paste: "Or copy and paste this link into your browser:"
       thanks: Thanks,
@@ -1270,9 +1268,7 @@ en:
     error_email:
       subject: Pipeline Errored - %{id}
       greeting: Hello %{name}
-      body:
-        start: Your pipeline
-        end: has errors that need to be addressed.
+      body_html: Your pipeline <strong>%{id}</strong> has errors that need to be addressed.
       view_details: "To view the pipeline summary, click the button below:"
       copy_paste: "Or copy and paste this link into your browser:"
       thanks: Thanks,

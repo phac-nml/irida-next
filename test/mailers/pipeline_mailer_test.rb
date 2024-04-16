@@ -8,8 +8,7 @@ class PipelineMailerTest < ActionMailer::TestCase
     email = PipelineMailer.complete_email(workflow_execution)
     assert_equal [workflow_execution.submitter.email], email.to
     assert_equal I18n.t(:'pipeline_mailer.complete_email.subject', id: workflow_execution.id), email.subject
-    assert_match(/#{I18n.t(:'pipeline_mailer.complete_email.body.start')}/, email.body.to_s)
-    assert_match(/#{I18n.t(:'pipeline_mailer.complete_email.body.end')}/, email.body.to_s)
+    assert_match(/#{I18n.t(:'pipeline_mailer.complete_email.body_html', id: workflow_execution.id)}/, email.body.to_s)
   end
 
   def test_error_email
@@ -17,7 +16,6 @@ class PipelineMailerTest < ActionMailer::TestCase
     email = PipelineMailer.error_email(workflow_execution)
     assert_equal [workflow_execution.submitter.email], email.to
     assert_equal I18n.t(:'pipeline_mailer.error_email.subject', id: workflow_execution.id), email.subject
-    assert_match(/#{I18n.t(:'pipeline_mailer.error_email.body.start')}/, email.body.to_s)
-    assert_match(/#{I18n.t(:'pipeline_mailer.error_email.body.end')}/, email.body.to_s)
+    assert_match(/#{I18n.t(:'pipeline_mailer.error_email.body_html', id: workflow_execution.id)}/, email.body.to_s)
   end
 end

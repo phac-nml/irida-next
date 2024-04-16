@@ -27,9 +27,7 @@
             <tr>
               <td style="padding:12px 24px;">
                 <p style="color:#334155;line-height:24px;">
-                  <%= t(:".body.start") %>
-                  <strong><%= @workflow_execution.id %></strong>
-                  <%= t(:".body.end") %>
+                  <%= t(:".body_html", id: @workflow_execution.id) %>
                 </p>
               </td>
             </tr>
