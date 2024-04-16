@@ -6,7 +6,8 @@ project1_bot<%= (n) %>:
   user_id: <%= ActiveRecord::FixtureSet.identify("user_bot_account#{n}".to_sym, :uuid) %>
 <% end %>
 
-group1_bot:
+<% 21.times do |n| %>
+group1_bot<%= (n) %>:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid) %>
-
+  user_id: <%= ActiveRecord::FixtureSet.identify("user_group_bot_account#{n}".to_sym, :uuid) %>
+<% end %>

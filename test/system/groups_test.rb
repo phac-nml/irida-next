@@ -134,7 +134,8 @@ class GroupsTest < ApplicationSystemTestCase
     group_description = 'Edited group description'
     visit group_url(groups(:group_one))
 
-    click_link I18n.t('groups.sidebar.settings')
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     within all('form[action="/group-1"]')[0] do
       fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
@@ -163,7 +164,8 @@ class GroupsTest < ApplicationSystemTestCase
     group1 = groups(:group_one)
     visit group_url(group1)
 
-    click_link I18n.t('groups.sidebar.settings')
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     within all('form[action="/group-1"]')[1] do
       fill_in I18n.t('activerecord.attributes.group.path'), with: 'group-1-edited'
@@ -177,7 +179,9 @@ class GroupsTest < ApplicationSystemTestCase
   test 'show error when editing a group with a short name' do
     group1 = groups(:group_one)
     visit group_url(group1)
-    click_link I18n.t('groups.sidebar.settings')
+
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     within all('form[action="/group-1"]')[0] do
       fill_in I18n.t('activerecord.attributes.group.name'), with: 'a'
@@ -200,7 +204,9 @@ class GroupsTest < ApplicationSystemTestCase
     group1 = groups(:group_one)
     group2 = groups(:group_two)
     visit group_url(group1)
-    click_link I18n.t('groups.sidebar.settings')
+
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     within all('form[action="/group-1"]')[0] do
       fill_in I18n.t('activerecord.attributes.group.name'), with: group2.name
@@ -222,7 +228,9 @@ class GroupsTest < ApplicationSystemTestCase
   test 'show error when editing a group with a long description' do
     group1 = groups(:group_one)
     visit group_url(group1)
-    click_link I18n.t('groups.sidebar.settings')
+
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     within all('form[action="/group-1"]')[0] do
       fill_in I18n.t('activerecord.attributes.group.description'), with: 'a' * 256
@@ -244,7 +252,9 @@ class GroupsTest < ApplicationSystemTestCase
   test 'show error when editing a group with a same path' do
     group1 = groups(:group_one)
     visit group_url(group1)
-    click_link I18n.t('groups.sidebar.settings')
+
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     group2 = groups(:group_two)
 
@@ -269,7 +279,8 @@ class GroupsTest < ApplicationSystemTestCase
     group2 = groups(:group_two)
     visit group_url(group2)
 
-    click_link I18n.t('groups.sidebar.settings')
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     assert_selector 'a', text: I18n.t('groups.edit.advanced.delete.submit'), count: 1
     click_link I18n.t('groups.edit.advanced.delete.submit')
@@ -287,7 +298,9 @@ class GroupsTest < ApplicationSystemTestCase
     group3 = groups(:group_three)
     visit group_url(group1)
 
-    click_link I18n.t('groups.sidebar.settings')
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
+
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
 
     within %(form[action="/group-1/transfer"]) do
@@ -309,7 +322,8 @@ class GroupsTest < ApplicationSystemTestCase
 
     visit group_url(groups(:group_one))
 
-    click_link I18n.t('groups.sidebar.settings')
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     assert_selector 'h3', text: I18n.t('groups.edit.advanced.transfer.title'), count: 0
   end
@@ -318,7 +332,9 @@ class GroupsTest < ApplicationSystemTestCase
     group = groups(:group_one)
     visit group_url(group)
 
-    click_link I18n.t('groups.sidebar.settings')
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
+
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
 
     within %(form[action="/group-1/transfer"]) do
@@ -345,7 +361,8 @@ class GroupsTest < ApplicationSystemTestCase
     login_as users(:joan_doe)
     visit group_url(groups(:group_one))
 
-    click_link I18n.t('groups.sidebar.settings')
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
 
     assert_selector 'a', text: I18n.t('groups.edit.advanced.delete.submit'), count: 0
   end

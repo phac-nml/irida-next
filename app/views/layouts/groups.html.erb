@@ -31,15 +31,6 @@
               selected: @current_page == t(:"groups.sidebar.history").downcase
             ) %>
           <% end %>
-          <% if allowed_to?(:update?, @group) %>
-            <%= render section.with_item(
-              url: edit_group_path(@group),
-              icon: "cog_6_tooth",
-              label: t(:"groups.sidebar.settings"),
-              selected: @current_page == t(:"groups.sidebar.settings").downcase
-            ) %>
-          <% end %>
-
           <%= render section.with_multi_level_menu(title: t(:"groups.sidebar.settings"), icon: "cog_6_tooth") do |multi_level_menu| %>
             <% if allowed_to?(:update?, @group) %>
               <% multi_level_menu.with_menu_item(
@@ -51,6 +42,7 @@
               url: group_bots_path(@group),
               label: t(:"groups.sidebar.bot_accounts")
             ) %>
+          <% end %>
         <% end %>
         <%= layout.with_breadcrumb(context_crumbs: @context_crumbs) %>
         <% layout.with_body do %>

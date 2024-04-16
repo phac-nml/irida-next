@@ -13,7 +13,7 @@ module Groups
     end
 
     test 'can see a table listing of group bot accounts' do
-      visit groups_bots_path(@namespace)
+      visit group_bots_path(@namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
@@ -34,7 +34,7 @@ module Groups
     end
 
     test 'can see an empty state for table listing of group bot accounts' do
-      visit groups_bots_path(@namespace)
+      visit group_bots_path(groups(:group_two))
 
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
@@ -51,7 +51,8 @@ module Groups
     end
 
     test 'can create a new group bot account' do
-      visit groups_bots_path(@namespace)
+      namespace = groups(:group_two)
+      visit group_bots_path(namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
@@ -81,7 +82,8 @@ module Groups
       end
 
       within('#access-token-section') do
-        bot_account_name = @namespace.bots.last.email.rpartition('@').first
+        bot_account_name = namespace.bots.last.email.rpartition('@').first
+
         assert_selector 'h2', text: I18n.t('groups.bots.index.access_token_section.label', bot_name: bot_account_name)
         assert_selector 'p', text: I18n.t('groups.bots.index.access_token_section.description')
         assert_selector 'button', text: I18n.t('components.clipboard.copy')
@@ -91,7 +93,7 @@ module Groups
     end
 
     test 'can\'t create a new group bot account without selecting scopes' do
-      visit groups_bots_path(@namespace)
+      visit group_bots_path(groups(:group_two))
 
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
@@ -126,7 +128,7 @@ module Groups
     end
 
     test 'can delete a group bot account' do
-      visit groups_bots_path(@namespace)
+      visit group_bots_path(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 

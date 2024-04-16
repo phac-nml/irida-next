@@ -79,7 +79,7 @@ module Groups
     test 'should successfully destroy a bot account' do
       sign_in users(:john_doe)
 
-      namespace_bot = namespace_bots(:group1_bot)
+      namespace_bot = namespace_bots(:group1_bot0)
 
       namespace = groups(:group_one)
 
@@ -91,11 +91,11 @@ module Groups
     test 'should not destroy a bot account for a bot account that does not belong to the project' do
       sign_in users(:john_doe)
 
-      namespace_bot = namespace_bots(:group1_bot)
+      namespace_bot = namespace_bots(:group1_bot0)
 
       namespace = groups(:group_two)
 
-      delete group_bot_path(namespace, id: namespace_bot.id, format: :turbo_stream)
+      delete group_bot_path(namespace, id: namespace_bot.user.id, format: :turbo_stream)
 
       assert_response :not_found
     end
@@ -103,7 +103,7 @@ module Groups
     test 'should not destroy a bot account for a user with incorrect permissions' do
       sign_in users(:ryan_doe)
 
-      namespace_bot = namespace_bots(:group1_bot)
+      namespace_bot = namespace_bots(:group1_bot0)
 
       namespace = groups(:group_one)
 

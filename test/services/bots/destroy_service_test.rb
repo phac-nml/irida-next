@@ -9,7 +9,7 @@ module Bots
       @project = projects(:project1)
       @group = groups(:group_one)
       @project_bot = namespace_bots(:project1_bot0)
-      @group_bot = namespace_bots(:group1_bot)
+      @group_bot = namespace_bots(:group1_bot0)
     end
 
     test 'destroy project bot account' do

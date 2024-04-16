@@ -31,7 +31,7 @@
                               aria: { label: bot_account.email }) do |dropdown| %>
       <%= dropdown.with_item(
         label: t("groups.bots.index.bot.remove"),
-        url: namespace_project_bot_path(id: bot_account.id),
+        url: group_bot_path(id: bot_account.id),
         data: {
           turbo_method: :delete,
           turbo_confirm: t("groups.bots.index.bot.remove_confirmation")

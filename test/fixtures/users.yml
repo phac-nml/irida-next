@@ -156,9 +156,9 @@ user30:
   first_name: User
   last_name: "30"
 
-<% 21.times do |n| %>
+<% 22.times do |n| %>
 user_group_bot_account<%= (n) %>:
-  email: <%= "group_INXT_GRP_AAAAAAAAAA_bot_A3d#{n}Xc@localhost".downcase %>
+  email: <%= "group_INXT_GRP_AAAAAAAAAA_bot_A5d#{n}Xc@localhost".downcase %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Group
   last_name: Bot <%= n %>
