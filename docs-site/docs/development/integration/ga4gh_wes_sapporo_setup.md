@@ -16,6 +16,7 @@ sudo apt-get install docker-compose-plugin
 docker compose version
 # expected result
 > Docker Compose version vN.N.N
+# You should have version v2.26.1 or newer
 ```
 
 You will need to add yourself to the docker group to be able to run docker commands
