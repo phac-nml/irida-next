@@ -12,7 +12,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
 
     assert_response :success
-    assert_equal 4, group.group_members.count
+    assert_equal 5, group.group_members.count
   end
 
   test 'group members index invalid route get' do
@@ -29,7 +29,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get new_group_member_path(group, format: :turbo_stream)
 
     assert_response :success
-    assert_equal 4, group.group_members.count
+    assert_equal 5, group.group_members.count
   end
 
   test 'group members new invalid route get' do
@@ -52,7 +52,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                                  access_level: Member::AccessLevel::OWNER }, format: :turbo_stream }
 
     assert_response :success
-    assert_equal 5, group.group_members.count
+    assert_equal 6, group.group_members.count
   end
 
   test 'group members create invalid post data' do
@@ -78,7 +78,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     delete group_member_path(group, group_member, format: :turbo_stream)
 
     assert_response :ok
-    assert_equal 3, group.group_members.count
+    assert_equal 4, group.group_members.count
   end
 
   test 'group members destroy invalid route delete' do

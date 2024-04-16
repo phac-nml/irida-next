@@ -190,7 +190,7 @@ module Bots
       assert_equal :create_bot_accounts?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.group.create_bot_accounts?',
-                          name: @project.name),
+                          name: @group.name),
                    exception.result.message
     end
   end
