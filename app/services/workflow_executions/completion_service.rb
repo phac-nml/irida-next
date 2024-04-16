@@ -35,8 +35,10 @@ module WorkflowExecutions
       attach_blobs_to_attachables
 
       # put attachments and metadata onto samples
-      merge_metadata_onto_samples
-      put_output_attachments_onto_samples
+      if @workflow_execution.update_samples?
+        merge_metadata_onto_samples
+        put_output_attachments_onto_samples
+      end
 
       @workflow_execution.state = 'completed'
 
