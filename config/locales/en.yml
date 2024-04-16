@@ -751,8 +751,9 @@ en:
         success: "Bot account was successfully added to the project"
       destroy:
         success: "Bot account was successfully removed from the project"
-      generate_personal_access_token:
-        success: "Personal access token successfully generated for bot account"
+      personal_access_tokens:
+        create:
+          success: Successfully generated new personal access token for bot
     new:
       title: Create project
       placeholder: Awesome project name

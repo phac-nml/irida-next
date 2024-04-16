@@ -7,7 +7,7 @@ module BotActions
   included do
     before_action proc { namespace }
     before_action proc { access_levels }
-    before_action proc { bot_account }, only: %i[destroy generate_personal_access_token]
+    before_action proc { bot_account }, only: %i[destroy]
   end
 
   def index
@@ -70,33 +70,7 @@ module BotActions
     end
   end
 
-  def generate_personal_access_token
-    @personal_access_token = PersonalAccessTokens::CreateService.new(current_user, personal_access_token_params,
-                                                                     @namespace, @bot_account.user).execute
-
-    respond_to do |format|
-      format.turbo_stream do
-        if @personal_access_token.persisted?
-          render locals: { personal_access_token: @personal_access_token, type: 'success',
-                           message: t('.success') }
-        else
-          render status: :unprocessable_entity,
-                 locals: { type: 'alert',
-                           message: @personal_access_token.errors.full_messages.first }
-        end
-      end
-    end
-  end
-
   private
-
-  def personal_access_token_params
-    {
-      name: bot_params[:token_name],
-      expires_at: bot_params[:expires_at],
-      scopes: bot_params[:scopes]
-    }
-  end
 
   def bot_account
     @bot_account = @namespace.namespace_bots.find_by(id: params[:id]) || not_found
