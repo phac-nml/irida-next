@@ -8,7 +8,7 @@ module Bots
       @user = users(:john_doe)
       @project = projects(:project1)
       @group = groups(:group_one)
-      @project_bot = namespace_bots(:project1_bot)
+      @project_bot = namespace_bots(:project1_bot0)
       @group_bot = namespace_bots(:group1_bot)
     end
 
