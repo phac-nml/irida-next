@@ -5,7 +5,7 @@ require 'test_helper'
 class BotActionsConcernTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  test 'bot accounts index' do
+  test 'project bot accounts index' do
     sign_in users(:john_doe)
 
     namespace = groups(:group_one)
@@ -16,7 +16,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'new bot account' do
+  test 'new project bot account' do
     sign_in users(:john_doe)
 
     namespace = groups(:group_one)
@@ -27,7 +27,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'bot account create' do
+  test 'project bot account create' do
     sign_in users(:john_doe)
 
     namespace = groups(:group_one)
@@ -43,7 +43,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'bot account create error' do
+  test 'project bot account create error' do
     sign_in users(:john_doe)
 
     namespace = groups(:group_one)
@@ -58,7 +58,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test 'bot account destroy' do
+  test 'project bot account destroy' do
     sign_in users(:john_doe)
 
     namespace_bot = namespace_bots(:project1_bot)
@@ -71,13 +71,84 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'bot account destroy error' do
+  test 'project bot account destroy error' do
     sign_in users(:john_doe)
 
     namespace = groups(:group_one)
     project = projects(:project2)
 
     delete namespace_project_bot_path(namespace, project, id: 0, format: :turbo_stream)
+
+    assert_response :not_found
+  end
+
+  test 'group bot accounts index' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+
+    get group_bots_path(namespace, format: :turbo_stream)
+
+    assert_response :success
+  end
+
+  test 'new group bot account' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+
+    get new_group_bot_path(namespace, format: :turbo_stream)
+
+    assert_response :success
+  end
+
+  test 'group bot account create' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+
+    post group_bots_path(namespace, format: :turbo_stream),
+         params: { bot: {
+           token_name: 'newtesttoken',
+           access_level: Member::AccessLevel::UPLOADER,
+           scopes: ['read_api']
+         } }
+
+    assert_response :success
+  end
+
+  test 'group bot account create error' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+
+    post group_bots_path(namespace, format: :turbo_stream),
+         params: { bot: {
+           access_level: Member::AccessLevel::UPLOADER,
+           scopes: ['read_api']
+         } }
+
+    assert_response :unprocessable_entity
+  end
+
+  test 'group bot account destroy' do
+    sign_in users(:john_doe)
+
+    namespace_bot = namespace_bots(:group1_bot)
+
+    namespace = groups(:group_one)
+
+    delete group_bot_path(namespace, id: namespace_bot.id, format: :turbo_stream)
+
+    assert_response :success
+  end
+
+  test 'group bot account destroy error' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+
+    delete group_bot_path(namespace, id: 0, format: :turbo_stream)
 
     assert_response :not_found
   end

@@ -5,15 +5,15 @@ module Bots
   class DestroyService < BaseService
     attr_accessor :namespace_bot
 
-    def initialize(namespace_bot, user = nil)
-      super(user)
+    def initialize(namespace_bot = nil, user = nil, params = {})
+      super(user, params)
       @namespace_bot = namespace_bot
     end
 
     def execute
       authorize! namespace_bot.namespace, to: :destroy_bot_accounts?
 
-      namespace_bot.destroy!
+      namespace_bot.destroy
     end
   end
 end

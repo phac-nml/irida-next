@@ -8,6 +8,7 @@ module BotActions
     before_action proc { namespace }
     before_action proc { access_levels }
     before_action proc { bot_account }, only: %i[destroy]
+    before_action proc { bot_type }, only: %i[create]
   end
 
   def index
@@ -27,7 +28,7 @@ module BotActions
   end
 
   def create # rubocop:disable Metrics/MethodLength
-    @new_bot_account = Bots::CreateService.new(current_user, @namespace, bot_params).execute
+    @new_bot_account = Bots::CreateService.new(current_user, @namespace, @bot_type, bot_params).execute
 
     respond_to do |format|
       format.turbo_stream do

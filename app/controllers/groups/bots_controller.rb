@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Projects
+module Groups
   # Controller actions for Bots
-  class BotsController < Projects::ApplicationController
+  class BotsController < Groups::ApplicationController
     include BreadcrumbNavigation
     include BotActions
 
@@ -18,9 +18,8 @@ module Projects
     protected
 
     def namespace
-      path = [params[:namespace_id], params[:project_id]].join('/')
-      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
-      @namespace = @project.namespace
+      @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
+      @namespace = @group
     end
 
     def context_crumbs
@@ -28,8 +27,8 @@ module Projects
       case action_name
       when 'index'
         @context_crumbs += [{
-          name: t('projects.bots.index.title'),
-          path: namespace_project_bots_path
+          name: t('groups.bots.index.title'),
+          path: group_bots_path
         }]
       end
     end
@@ -39,7 +38,7 @@ module Projects
     end
 
     def bot_type
-      @bot_type = User.user_types[:project_bot]
+      @bot_type = User.user_types[:group_bot]
     end
   end
 end
