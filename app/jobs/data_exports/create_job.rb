@@ -129,7 +129,11 @@ module DataExports
     def create_analysis_zip(data_export)
       new_zip_file = Tempfile.new(binmode: true)
       ZipKit::Streamer.open(new_zip_file) do |zip|
-        workflow_execution = WorkflowExecution.find(data_export.export_parameters['ids'][0])
+        workflow_execution = WorkflowExecution.includes(
+          outputs: { file_attachment: :blob }, samples_workflow_executions: [:sample,
+                                                                             { outputs: { file_attachment: :blob } }]
+        ).find(data_export.export_parameters['ids'][0])
+
         write_workflow_execution_outputs(workflow_execution, zip)
 
         sample_workflow_executions = workflow_execution.samples_workflow_executions
@@ -157,9 +161,8 @@ module DataExports
     end
 
     def write_sample_workflow_execution_outputs(swe, zip)
-      sample = Sample.find(swe.sample_id)
       swe.outputs.each do |output|
-        directory = "#{sample.puid}/#{output.file.filename}"
+        directory = "#{swe.sample.puid}/#{output.file.filename}"
         write_attachment(directory, zip, output)
       end
     end
@@ -174,7 +177,7 @@ module DataExports
       sample_workflow_executions.each do |sample_workflow_execution|
         next unless sample_workflow_execution.outputs.count.positive?
 
-        sample = Sample.find(sample_workflow_execution.sample_id)
+        sample = sample_workflow_execution.sample
         sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
                              'irida-next-name' => sample.name, 'children' => [] }
         @manifest['children'] << sample_directory
