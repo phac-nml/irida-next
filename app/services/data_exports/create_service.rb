@@ -41,7 +41,7 @@ module DataExports
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
     # to export the chosen samples' data
     def validate_sample_ids
-      samples = Sample.where(id: params['export_parameters']['ids'])
+      samples = Sample.where(id: params['export_parameters']['ids']).select(:id, :project_id)
       unless samples.count == params['export_parameters']['ids'].count
         raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_sample_id')
       end

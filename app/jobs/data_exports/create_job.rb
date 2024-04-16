@@ -30,7 +30,7 @@ module DataExports
     def create_sample_zip(data_export)
       new_zip_file = Tempfile.new(binmode: true)
       ZipKit::Streamer.open(new_zip_file) do |zip|
-        samples = Sample.includes(attachments: { file_attachment: :blob })
+        samples = Sample.includes(:project, attachments: { file_attachment: :blob })
                         .where(id: data_export.export_parameters['ids'])
         samples.each do |sample|
           next unless sample.attachments.count.positive?
