@@ -15,30 +15,16 @@
         <span
           data-controller="data-export"
           data-data-export-target="summary"
-          data-data-export-singular-value="<%= t(".summary.sample.start.singular") %>"
-          data-data-export-plural-value="<%= t(".summary.sample.start.plural") %>"
+          data-data-export-singular-value="<%= t(".summary.sample.singular", processing: t(".summary.processing"), ready: t(".summary.ready")) %>"
+          data-data-export-plural-value="<%= t(".summary.sample.plural", processing: t(".summary.processing"), ready: t(".summary.ready")) %>"
           class="mb-4">
-          <%= t(".summary.sample.start.zero") %>
+          <%= t(".summary.sample.zero", processing: t(".summary.processing"), ready: t(".summary.ready")) %>
         </span>
       <% else %>
         <span>
-          <%= t(".summary.analysis.start", id: workflow_execution_id) %>
+          <%= t(".summary.analysis_html", id: workflow_execution_id, processing: t(".summary.processing"), ready: t(".summary.ready")) %>
         </span>
       <% end %>
-      <%= viral_pill(
-        text: t(".summary.processing"),
-        color: :gray
-      ) %>
-      <span>
-        <%= t(".summary.middle") %>
-      </span>
-      <%= viral_pill(
-        text: t(".summary.ready"),
-        color: :green
-      ) %>
-      <span>
-        <%= t(".summary.end") %>
-      </span>
       <div class="form-field mb-4 mt-2">
         <%= form.label :name, t(".name_label") %>
         <%= form.text_field :name, class: "form-control" %>
