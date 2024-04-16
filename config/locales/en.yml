@@ -1256,6 +1256,23 @@ en:
         namespace_name_desc: Name, descending
         updated_at_asc: Oldest updated
         created_at_asc: Oldest created
+  pipeline_mailer:
+    complete_email:
+      subject: Pipeline Completed - %{id}
+      greeting: Hello %{name}
+      body_html: Your pipeline <strong>%{id}</strong> has completed successfully.
+      view_details: "To view the pipeline summary, click the button below:"
+      copy_paste: "Or copy and paste this link into your browser:"
+      thanks: Thanks,
+      automated_message: This email was sent from an automated system. Please do not reply to this email.
+    error_email:
+      subject: Pipeline Errored - %{id}
+      greeting: Hello %{name}
+      body_html: Your pipeline <strong>%{id}</strong> has errors that need to be addressed.
+      view_details: "To view the pipeline summary, click the button below:"
+      copy_paste: "Or copy and paste this link into your browser:"
+      thanks: Thanks,
+      automated_message: This email was sent from an automated system. Please do not reply to this email.
   data_exports:
     create:
       success: Data export '%{name}' was successfully started.

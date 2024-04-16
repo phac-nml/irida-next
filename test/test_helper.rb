@@ -43,5 +43,6 @@ module ActiveSupport
     include ActionPolicy::TestHelper
     include ArrayHelpers
     include ActiveJob::TestHelper
+    include ActionMailer::TestHelper
   end
 end

@@ -135,6 +135,10 @@ module WorkflowExecutions
       assert_equal @normal_output_summary_file_blob.checksum, output_summary_file.file.checksum
 
       assert_equal 'completed', workflow_execution.state
+
+      assert workflow_execution.email_notification
+      assert_enqueued_emails 1
+      assert_enqueued_email_with PipelineMailer, :complete_email, args: [workflow_execution]
     end
 
     test 'finalize non complete workflow_execution' do
@@ -146,6 +150,8 @@ module WorkflowExecutions
 
       assert_not_equal 'completing', workflow_execution.state
       assert_not_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'complete completing workflow_execution with no files' do

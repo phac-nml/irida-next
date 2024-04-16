@@ -38,6 +38,7 @@ irida_next_example:
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/iridanextexample"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  email_notification: true
 
 irida_next_example_prepared:
   metadata:
@@ -60,6 +61,7 @@ irida_next_example_prepared:
   run_id: "my_run_id_4"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   state: "prepared"
+  email_notification: true
 
 irida_next_example_submitted:
   metadata:
@@ -257,6 +259,7 @@ irida_next_example_completing_a:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
+  email_notification: true
 
 irida_next_example_completing_b:
   metadata:
