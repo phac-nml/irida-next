@@ -8,5 +8,6 @@ module Integrations
     ForbiddenError = Class.new(APIExceptionError)
     NotFoundError = Class.new(APIExceptionError)
     ApiError = Class.new(APIExceptionError)
+    ServerError = Class.new(APIExceptionError)
   end
 end

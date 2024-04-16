@@ -45,14 +45,18 @@ module Integrations
           handle_error e
         end
 
-        def handle_error(err) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        def handle_error(err) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
           Rails.logger.debug do
-            "DEBUG: Handling error for ga4gh_wes_api\n" \
-              "status: #{err.response[:status]}\n" \
-              "headers: #{err.response[:headers]}\n" \
-              "body: #{err.response[:body]}\n" \
-              "urlpath: #{err.response[:request][:url_path]}"
+            output = "DEBUG: Handling error #{err.class.name} for ga4gh_wes_api\n"
+            if err.response
+              output += "status: #{err.response[:status]}\n" \
+                        "headers: #{err.response[:headers]}\n" \
+                        "body: #{err.response[:body]}\n" \
+                        "urlpath: #{err.response[:request][:url_path]}"
+            end
+            output
           end
+
           case err # These are all the error responses defined by Ga4ghW Wes Api v1
           when Faraday::BadRequestError # 400
             raise BadRequestError, err.message
@@ -64,6 +68,8 @@ module Integrations
             raise NotFoundError, err.message
           when Faraday::ServerError # 500
             raise ApiError, err.message
+          when Faraday::ConnectionFailed # end of file error when server is not responsive
+            raise ServerError, err.message
           end
         end
       end
