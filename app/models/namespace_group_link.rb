@@ -44,7 +44,7 @@ class NamespaceGroupLink < ApplicationRecord
     memberships = Member.where(namespace: group).not_expired
 
     memberships.each do |member|
-      next if Member.can_view?(member.user, namespace, false) # TODO: change to true
+      next if Member.can_view?(member.user, namespace, true)
 
       MemberMailer.access_email(member, manager_emails, access_type, namespace).deliver_later
     end
