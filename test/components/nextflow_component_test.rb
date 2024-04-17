@@ -19,7 +19,7 @@ class NextflowComponentTest < ViewComponentTestCase
       workflow:,
       samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
       url: 'https://nf-co.re/testpipeline',
-      namespace_id: namespaces(:namespace1).id,
+      namespace_id: 'SDSDDFDSFDS',
       fields: %w[metadata_1 metadata_2 metadata_3]
     )
 
