@@ -7,7 +7,7 @@
       <p class="dark:text-gray-400">
         <%= t(
           "projects.bots.index.bot_listing.personal_access_token_modal.description",
-          bot_account: @bot_account.user.email.rpartition("@").first
+          bot_account: @bot_account.user.username
         ) %>
       </p>
     </div>
@@ -89,19 +89,19 @@
                     ),
                     class:
                       "
-                                      focus:outline-none
-                                      text-sm
-                                      text-white
-                                      bg-primary-700
-                                      hover:bg-primary-800
-                                      focus:ring-0
-                                      rounded-md
-                                      p-2
-                                      dark:text-white
-                                      dark:bg-primary-600
-                                      dark:hover:bg-primary-700
-                                      cursor-pointer
-                                      " %>
+                                              focus:outline-none
+                                              text-sm
+                                              text-white
+                                              bg-primary-700
+                                              hover:bg-primary-800
+                                              focus:ring-0
+                                              rounded-md
+                                              p-2
+                                              dark:text-white
+                                              dark:bg-primary-600
+                                              dark:hover:bg-primary-700
+                                              cursor-pointer
+                                              " %>
         <button
           type="button"
           class="

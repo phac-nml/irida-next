@@ -5,7 +5,7 @@
                       personal_access_token: @personal_access_token
                     } %>
 
-<%= turbo_stream.update "new_personal-access-token-error-alert",
+<%= turbo_stream.update "personal-access-token-error-alert",
                     viral_alert(type:, message:) %>
 <% if @personal_access_token.persisted? %>
   <%= turbo_stream.append "flashes" do %>
@@ -21,8 +21,7 @@
   <%= turbo_stream.replace "access-token-section",
                        partial: "projects/bots/access_token_section",
                        locals: {
-                         bot_account_name:
-                           @bot_account.user.email.rpartition("@").first,
+                         bot_account_name: @bot_account.username,
                          token: personal_access_token.token
                        } %>
 <% end %>

@@ -11,6 +11,8 @@
       dark:border-slate-700
       sm:p-6
       dark:bg-slate-800
+      max-h-96
+      overflow-auto
     "
   >
     <h2
@@ -23,8 +25,10 @@
         mb-2
       "
     >
-      Active personal access tokens for bot
-      <%= @bot_account.user.email %>
+      <%= t(
+        "projects.bots.index.personal_access_tokens_listing.available_tokens",
+        bot_account: @bot_account.user.username
+      ) %>
     </h2>
 
     <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">

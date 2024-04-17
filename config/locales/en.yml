@@ -840,6 +840,10 @@ en:
             expires_at: Expiration Date (optional)
             submit: Submit
             cancel: Cancel
+        personal_access_tokens_listing:
+          available_tokens: Personal access tokens for %{bot_account}
+          personal_access_token:
+            never: Never
         access_level:
           level_0: No Access
           level_10: Guest

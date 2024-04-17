@@ -59,6 +59,6 @@ module BotPersonalAccessTokenActions
   end
 
   def personal_access_tokens
-    @personal_access_tokens = @bot_account.user.personal_access_tokens.active
+    @personal_access_tokens = @bot_account.user.personal_access_tokens
   end
 end

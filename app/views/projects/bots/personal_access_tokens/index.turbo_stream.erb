@@ -1,6 +1,5 @@
 <%= turbo_stream.update "access-token-section",
                     partial: "personal_access_tokens_listing",
                     locals: {
-                      bot_account_name:
-                        @bot_account.user.email.rpartition("@").first
+                      bot_account_name: @bot_account.user.username
                     } %>

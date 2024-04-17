@@ -128,4 +128,5 @@ class User < ApplicationRecord
 
     super
   end
+
 end
