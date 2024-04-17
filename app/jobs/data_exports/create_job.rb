@@ -30,10 +30,10 @@ module DataExports
     def create_sample_zip(data_export)
       new_zip_file = Tempfile.new(binmode: true)
       ZipKit::Streamer.open(new_zip_file) do |zip|
-        samples = Sample.includes(:project, attachments: { file_attachment: :blob })
+        samples = Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
                         .where(id: data_export.export_parameters['ids'])
         samples.each do |sample|
-          next unless sample.attachments.count.positive?
+          next if sample.attachments.empty?
 
           project = sample.project
 
@@ -68,23 +68,17 @@ module DataExports
     end
 
     def create_attachment_manifest_directories(sample)
-      attachment_directories = []
+      attachment_directories = {}
       sample.attachments.each do |attachment|
-        next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
-
-        attachment_directory = { 'name' => attachment.puid,
-                                 'type' => 'folder',
-                                 'irida-next-type' => 'attachment',
-                                 'children' => [] }
-
-        attachment_directory['children'] << create_attachment_manifest_file(attachment)
-        if attachment.metadata.key?('associated_attachment_id')
-          attachment_directory['children'] << create_attachment_manifest_file(attachment.associated_attachment)
+        unless attachment_directories.key?(attachment.puid)
+          attachment_directories[attachment.puid] = { 'name' => attachment.puid,
+                                                      'type' => 'folder',
+                                                      'irida-next-type' => 'attachment',
+                                                      'children' => [] }
         end
-
-        attachment_directories << attachment_directory
+        attachment_directories[attachment.puid]['children'] << create_attachment_manifest_file(attachment)
       end
-      attachment_directories
+      attachment_directories.values
     end
 
     def create_attachment_manifest_file(attachment)
