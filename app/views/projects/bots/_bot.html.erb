@@ -29,9 +29,21 @@
     ) %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
-      <%= viral_dropdown(icon: "ellipsis_vertical",
-                                aria: { label: bot_account.user.email }) do |dropdown| %>
+    <%= viral_dropdown(icon: "ellipsis_vertical",
+                              aria: { label: bot_account.email }) do |dropdown| %>
+      <% if allowed_to?(:generate_bot_personal_access_token?, @namespace) %>
+        <%= dropdown.with_item(
+          label: "Generate new token",
+          url: new_namespace_project_bot_personal_access_token_path(id: bot_account.id),
+          data: {
+            turbo_stream: true
+          },
+          aria: {
+            label: "Generate a new key for bot id"
+          }
+        ) %>
+      <% end %>
+      <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
         <%= dropdown.with_item(
           label: t("projects.bots.index.bot.remove"),
           url: namespace_project_bot_path(id: bot_account),
