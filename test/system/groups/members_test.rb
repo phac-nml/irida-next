@@ -250,5 +250,60 @@ module Groups
         assert_selector 'input.datepicker-input', count: 0
       end
     end
+
+    test 'can add a group bot to a group' do
+      login_as users(:user30)
+
+      namespace_bot = namespace_bots(:group1_bot0)
+      namespace = groups(:user30_group_one)
+      members_count = members.select { |member| member.namespace == namespace }.count
+
+      visit group_members_url(namespace)
+      user_to_add = namespace_bot.user
+
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 1
+
+      click_link I18n.t(:'groups.members.index.add')
+
+      within('dialog') do
+        assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
+        find('#member_user_id').find('option', text: user_to_add.email).select_option
+        find('#member_access_level').find('option',
+                                          text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+
+        click_button I18n.t(:'groups.members.new.add_member_to_group')
+      end
+
+      assert_text I18n.t(:'groups.members.create.success', user: user_to_add.email)
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+      assert_selector 'tr', count: (members_count + 1) + header_row_count
+      assert_not_nil find(:table_row, { 'Username' => user_to_add.email })
+    end
+
+    test 'cannot add a project bot to a group' do
+      login_as users(:user30)
+
+      namespace_bot = namespace_bots(:project1_bot0)
+      namespace = groups(:user30_group_one)
+
+      visit group_members_url(namespace)
+      user_to_add = namespace_bot.user
+
+      assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
+
+      assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 1
+
+      click_link I18n.t(:'groups.members.index.add')
+
+      within('dialog') do
+        assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
+
+        within('#member_user_id') do
+          assert_no_selector "option[value='#{user_to_add.email}']"
+        end
+      end
+    end
   end
 end
