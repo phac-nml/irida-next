@@ -8,15 +8,14 @@ module WorkflowExecutions
     before_action :workflows
     before_action :samples, only: %i[create]
     before_action :workflow, only: %i[create]
+    before_action :namespace_id, only: %i[create pipeline_selection]
     before_action :allowed_to_update_samples, only: %i[create]
 
     def pipeline_selection
-      @namespace_id = params[:namespace_id]
       render status: :ok
     end
 
     def create
-      @namespace_id = params[:namespace_id]
       fields_for_namespace(
         namespace: Namespace.find_by(id: @namespace_id),
         show_fields: true
@@ -40,6 +39,10 @@ module WorkflowExecutions
     def samples
       sample_ids = params[:sample_ids]
       @samples = Sample.includes(attachments: { file_attachment: :blob }).where(id: sample_ids)
+    end
+
+    def namespace_id
+      @namespace_id = params[:namespace_id]
     end
 
     def allowed_to_update_samples
