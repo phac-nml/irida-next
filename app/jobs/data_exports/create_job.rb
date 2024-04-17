@@ -17,6 +17,8 @@ module DataExports
       data_export.expires_at = ApplicationController.helpers.add_business_days(DateTime.current, 3)
       data_export.status = 'ready'
       data_export.save
+
+      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification
     end
 
     def initialize_manifest(export_type)
@@ -36,6 +38,8 @@ module DataExports
           next if sample.attachments.empty?
 
           project = sample.project
+
+          project = Project.find(sample.project_id)
 
           update_sample_manifest(sample, project)
 

@@ -1,96 +1,23 @@
-<table
-  style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background-color:#f8fafc;"
->
-  <tbody>
-    <tr>
-      <td align="center" style="padding-top:48px;padding-bottom:48px;">
-        <a href="<%= root_url %>" style="text-decoration:none;">
-          <span style="font-size:40px;color:#000;font-weight:600;">
-            <%= t(:"general.name") %>
-          </span>
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <table
-          style="width:602px;border-collapse:collapse;border:0;border-spacing:0;text-align:left;background:#ffffff;"
-        >
-          <tbody>
-            <tr>
-              <td style="padding:24px;">
-                <h1 style="font-size:24px;color:#000;font-weight:600;">
-                  <%= t(:".greeting", name: @workflow_execution.submitter.first_name) %>&#44;
-                </h1>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:12px 24px;">
-                <p style="color:#334155;line-height:24px;">
-                  <%= t(:".body_html", id: @workflow_execution.id) %>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:12px 24px;">
-                <p style="color:#334155;line-height:24px;">
-                  <%= t(:".view_details") %>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:12px 24px;">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td style="background-color:#15803d" width="140px"><a
-                          href="<%= workflow_execution_url(@workflow_execution) %>"
-                          style="display:inline-block;color:#fff;background-color:#15803d;width:125px;border:1px solid #15803d;padding:15px 10px;text-align:center;vertical-align:middle;text-decoration:none;"
-                        ><%= t(:"general.name") %>&nbsp; &rarr;</a></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:12px 24px;">
-                <p style="color:#334155;line-height:24px;">
-                  <%= t(:".copy_paste") %>
-                  <a
-                    href="<%= workflow_execution_url(@workflow_execution) %>"
-                    style="text-decoration:underline;"
-                  >
-                    <%= workflow_execution_url(@workflow_execution) %>
-                  </a>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:12px 24px;">
-                <div style="border-bottom:1px solid #e2e8f0;">&nbsp;</div>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:24px;">
-                <p style="color:#334155;line-height:24px;">
-                  <%= t(:".thanks") %>
-                  <br><%= t(:"general.name") %>
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td
-        align="center"
-        style="padding-left:24px;padding-top:48px;padding-bottom:48px;"
-      >
-        <span style="font-style:italic;font-size:12px;color:#475569">
-          <%= t(:".automated_message") %>
-        </span>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<%= render partial: "mailers/email_template", locals: {
+  name: @workflow_execution.submitter.first_name,
+  url: workflow_execution_url(@workflow_execution)
+  } %>
+
+
+<%= yield :header_and_greeting  %>
+<tr>
+  <td style="padding:12px 24px;">
+    <p style="color:#334155;line-height:24px;">
+      <%= t(:"mailers.pipeline_mailer.complete_email.body_html", id: @workflow_execution.id) %>
+    </p>
+  </td>
+</tr>
+<tr>
+  <td style="padding:12px 24px;">
+    <p style="color:#334155;line-height:24px;">
+      <%= t(:"mailers.pipeline_mailer.view_details") %>
+    </p>
+  </td>
+</tr>
+<%= yield :button_and_link  %>
+<%= yield :sendoff_and_automated_message  %>
