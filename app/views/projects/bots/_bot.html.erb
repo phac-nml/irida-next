@@ -3,7 +3,7 @@
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
 >
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.email.rpartition("@").first %>
+    <%= bot_account.username.upcase %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= bot_account.personal_access_tokens.last.name %>

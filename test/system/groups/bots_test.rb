@@ -82,7 +82,7 @@ module Groups
       end
 
       within('#access-token-section') do
-        bot_account_name = namespace.bots.last.email.rpartition('@').first
+        bot_account_name = namespace.bots.last.username
 
         assert_selector 'h2', text: I18n.t('groups.bots.index.access_token_section.label', bot_name: bot_account_name)
         assert_selector 'p', text: I18n.t('groups.bots.index.access_token_section.description')
