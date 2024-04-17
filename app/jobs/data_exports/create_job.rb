@@ -2,7 +2,7 @@
 
 module DataExports
   # Queues the data export create job
-  class CreateJob < ApplicationJob
+  class CreateJob < ApplicationJob # rubocop:disable Metrics/ClassLength
     queue_as :default
 
     def perform(data_export)
@@ -136,12 +136,12 @@ module DataExports
 
         write_workflow_execution_outputs(workflow_execution, zip)
 
-        sample_workflow_executions = workflow_execution.samples_workflow_executions
-        sample_workflow_executions.each do |swe|
-          write_sample_workflow_execution_outputs(swe, zip) if swe.outputs.count.positive?
+        samples_workflow_executions = workflow_execution.samples_workflow_executions
+        samples_workflow_executions.each do |swe|
+          write_samples_workflow_execution_outputs(swe, zip) unless swe.outputs.empty?
         end
 
-        update_analysis_manifest(workflow_execution, sample_workflow_executions)
+        update_analysis_manifest(workflow_execution, samples_workflow_executions)
         # Write manifest to file 'manifest.json' and add to zip
         write_manifest(zip)
       end
@@ -151,7 +151,7 @@ module DataExports
     def update_analysis_manifest(workflow_execution, sample_workflow_executions)
       add_workflow_execution_outputs_to_manifest(workflow_execution)
 
-      add_sample_workflow_executions_to_manifest(sample_workflow_executions)
+      add_samples_workflow_executions_to_manifest(sample_workflow_executions)
     end
 
     def write_workflow_execution_outputs(workflow_execution, zip)
@@ -160,7 +160,7 @@ module DataExports
       end
     end
 
-    def write_sample_workflow_execution_outputs(swe, zip)
+    def write_samples_workflow_execution_outputs(swe, zip)
       swe.outputs.each do |output|
         directory = "#{swe.sample.puid}/#{output.file.filename}"
         write_attachment(directory, zip, output)
@@ -173,21 +173,21 @@ module DataExports
       end
     end
 
-    def add_sample_workflow_executions_to_manifest(sample_workflow_executions)
+    def add_samples_workflow_executions_to_manifest(sample_workflow_executions)
       sample_workflow_executions.each do |sample_workflow_execution|
-        next unless sample_workflow_execution.outputs.count.positive?
+        next if sample_workflow_execution.outputs.empty?
 
         sample = sample_workflow_execution.sample
         sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
                              'irida-next-name' => sample.name, 'children' => [] }
         @manifest['children'] << sample_directory
         sample_workflow_execution.outputs.each do |swe_output|
-          add_sample_workflow_execution_output_to_manifest(sample_directory, swe_output)
+          add_samples_workflow_execution_output_to_manifest(sample_directory, swe_output)
         end
       end
     end
 
-    def add_sample_workflow_execution_output_to_manifest(directory, swe_output)
+    def add_samples_workflow_execution_output_to_manifest(directory, swe_output)
       output_directory = { 'name' => swe_output.file.filename.to_s, 'type' => 'file' }
       directory['children'] << output_directory
     end
