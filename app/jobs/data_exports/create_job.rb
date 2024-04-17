@@ -18,7 +18,7 @@ module DataExports
       data_export.status = 'ready'
       data_export.save
 
-      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification
+      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification?
     end
 
     def initialize_manifest(export_type)
@@ -38,8 +38,6 @@ module DataExports
           next if sample.attachments.empty?
 
           project = sample.project
-
-          project = Project.find(sample.project_id)
 
           update_sample_manifest(sample, project)
 
