@@ -36,15 +36,16 @@ class NamespaceGroupLink < ApplicationRecord
     send_email('granted')
   end
 
-  def send_email(access_type)
-    manager_memberships = Member.where(namespace: group,
-                                       access_level: Member::AccessLevel.manageable).not_expired
+  def send_email(access_type) # rubocop:disable Metrics/AbcSize
+    manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
+                                .where(access_level: Member::AccessLevel.manageable)
     managers = User.where(id: manager_memberships.select(:user_id)).distinct
     manager_emails = managers.pluck(:email)
     memberships = Member.where(namespace: group).not_expired
 
     memberships.each do |member|
-      next if Member.can_view?(member.user, namespace, true)
+      next if access_type == 'granted' && !Member.can_view?(member.user, namespace, true)
+      next if access_type == 'revoked' && Member.can_view?(member.user, namespace, true)
 
       MemberMailer.access_email(member, manager_emails, access_type, namespace).deliver_later
     end
