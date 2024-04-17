@@ -4,7 +4,7 @@
 class WorkflowExecutionSubmissionJob < ApplicationJob
   queue_as :default
 
-  # When server is reachable, continually retry
+  # When server is unreachable, continually retry
   retry_on Integrations::ApiExceptions::ConnectionError, wait: :exponentially_longer, attempts: Float::INFINITY
 
   def perform(workflow_execution)

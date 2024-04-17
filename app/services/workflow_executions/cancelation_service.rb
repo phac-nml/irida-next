@@ -12,7 +12,6 @@ module WorkflowExecutions
     def execute
       return false unless @workflow_execution.canceling?
 
-      # throws exception if failed
       @wes_client.cancel_run(@workflow_execution.run_id)
 
       # mark workflow execution as canceled
