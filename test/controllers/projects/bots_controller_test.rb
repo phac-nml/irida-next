@@ -85,12 +85,12 @@ module Projects
     test 'should successfully destroy a bot account' do
       sign_in users(:john_doe)
 
-      namespace_bot = namespace_bots(:project1_bot)
+      namespace_bot = namespace_bots(:project1_bot0)
 
       namespace = groups(:group_one)
       project = projects(:project1)
 
-      delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
+      delete namespace_project_bot_path(namespace, project, id: namespace_bot.user.id, format: :turbo_stream)
 
       assert_response :success
     end
@@ -98,12 +98,12 @@ module Projects
     test 'should not destroy a bot account for a bot account that does not belong to the project' do
       sign_in users(:john_doe)
 
-      namespace_bot = namespace_bots(:project1_bot)
+      namespace_bot = namespace_bots(:project1_bot0)
 
       namespace = groups(:group_one)
       project = projects(:project2)
 
-      delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
+      delete namespace_project_bot_path(namespace, project, id: namespace_bot.user.id, format: :turbo_stream)
 
       assert_response :not_found
     end
@@ -111,12 +111,12 @@ module Projects
     test 'should not destroy a bot account for a user with incorrect permissions' do
       sign_in users(:ryan_doe)
 
-      namespace_bot = namespace_bots(:project1_bot)
+      namespace_bot = namespace_bots(:project1_bot0)
 
       namespace = groups(:group_one)
       project = projects(:project1)
 
-      delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
+      delete namespace_project_bot_path(namespace, project, id: namespace_bot.user.id, format: :turbo_stream)
 
       assert_response :unauthorized
     end

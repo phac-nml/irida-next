@@ -135,7 +135,7 @@ user28:
   first_name: User
   last_name: "28"
 
-<% 21.times do |n| %>
+<% 22.times do |n| %>
 user_bot_account<%= (n) %>:
   email: <%= "project_INXT_PRJ_AAAAAAAAAA_bot_A3d#{n}Xc@localhost".downcase %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>

@@ -80,7 +80,7 @@ jeff_doe_valid_read_pat:
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "XX3wwK3sWCjn4xdCyZtH") %>
   last_used_at: nil
 
-<% 21.times do |n| %>
+<% 22.times do |n| %>
 user_bot_account<%= (n) %>_valid_pat:
   user_id: <%= ActiveRecord::FixtureSet.identify(:"user_bot_account#{n}", :uuid) %>
   scopes:

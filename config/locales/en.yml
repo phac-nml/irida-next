@@ -208,6 +208,7 @@ en:
           maintainer: Maintainer
           owner: Owner
         its_you: It's you
+        bot: Bot
         direct: Direct member
       group:
         one: Group
@@ -756,6 +757,52 @@ en:
         project_restored: "Project was restored by %{user}"
         project_transferred: "Project was transferred by %{user}"
     bots:
+      index:
+        title: Bot Accounts
+        subtitle: Setup bot accounts to perform actions within the project that cannot be attributed to a human user
+        add_new_bot: New bot account
+        bot:
+          remove: Remove
+          remove_confirmation: "Are you sure you want to remove this bot account from the project?"
+          remove_aria_label: Remove bot account
+        bot_listing:
+          name: Name
+          token_name: Token Name
+          api_scope: API Scope(s)
+          created: Created
+          expiration: Expiration
+          access_level: Access Level
+          actions: Actions
+          empty_state:
+            title: No bot accounts
+            description: There are no bot accounts attributed to this project
+          new_bot_modal:
+            title: New Bot Account
+            description: Adding a bot account to associate certain actions which can't be attributed to a human user
+            token_name: Token Name
+            access_level: Access Level
+            select_access_level: Select access level
+            expires_at: Expiration Date (optional)
+            submit: Submit
+            cancel: Cancel
+          generate_new_token_modal:
+            title: New Access Token
+            description: Generate a new access token for the bot account
+            token_name: Token Name
+            expires_at: Expiration Date (optional)
+            submit: Submit
+            cancel: Cancel
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
+        access_token_section:
+          label: "New personal access token for %{bot_name}"
+          description: Make sure you save it - you won't be able to access it again.
+          aria_label: Personal access token, copy to clipboard
       create:
         success: "Bot account was successfully added to the project"
       destroy:
@@ -777,6 +824,8 @@ en:
       members: Members
       samples: Samples
       settings: Settings
+      general: General
+      bot_accounts: Bot Accounts
     update:
       success: "Project %{project_name} was successfully updated"
     transfer:
