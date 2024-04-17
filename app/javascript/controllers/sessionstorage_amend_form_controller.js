@@ -18,18 +18,11 @@ export default class extends Controller {
     );
 
     if (storageValues) {
-      const chunked = _.chunk(storageValues, 100);
-      const div = document.createElement("div");
-
-      // iterate over each chunk and add the id's as hidden inputs to div. After each chunk, use a timeout to allow other code to run
-      chunked.forEach((chunk) => {
-        setTimeout(() => {
-          chunk.forEach((value) => {
-            div.appendChild(this.#createHiddenInput(value));
-          });
-        }, 100);
+      const fragment = document.createDocumentFragment();
+      storageValues.forEach((value) => {
+        fragment.appendChild(this.#createHiddenInput(value));
       });
-      this.fieldTarget.appendChild(div);
+      this.fieldTarget.appendChild(fragment);
     }
   }
 
