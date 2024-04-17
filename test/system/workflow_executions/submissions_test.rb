@@ -37,6 +37,8 @@ module WorkflowExecutions
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
+
+        assert_text I18n.t(:'components.nextflow.update_samples')
       end
     end
 
@@ -66,6 +68,8 @@ module WorkflowExecutions
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
+
+        assert_text I18n.t(:'components.nextflow.update_samples')
       end
     end
 
@@ -95,6 +99,8 @@ module WorkflowExecutions
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
+
+        assert_no_text I18n.t(:'components.nextflow.update_samples')
       end
     end
 
@@ -126,6 +132,8 @@ module WorkflowExecutions
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: sample.puid, count: 1
           end
         end
+
+        assert_no_text I18n.t(:'components.nextflow.update_samples')
       end
     end
 
@@ -163,6 +171,8 @@ module WorkflowExecutions
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
+
+        assert_text I18n.t(:'components.nextflow.update_samples')
       end
     end
 
@@ -192,6 +202,8 @@ module WorkflowExecutions
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
+
+        assert_text I18n.t(:'components.nextflow.update_samples')
       end
     end
 
@@ -221,6 +233,8 @@ module WorkflowExecutions
             assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
           end
         end
+
+        assert_no_text I18n.t(:'components.nextflow.update_samples')
       end
     end
 

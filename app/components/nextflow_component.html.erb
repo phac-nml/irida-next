@@ -79,6 +79,7 @@
         <% end %>
       <% end %>
 
+      <%- if @allowed_to_update_samples %>
       <div class="flex mb-4 items-center h-5">
         <%= workflow.check_box :update_samples,
                            {
@@ -104,6 +105,7 @@
                        t(:"components.nextflow.update_samples"),
                        class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
+      <%- end %>
     <% end %>
 
     <button type="submit" class="button button--state-primary button--size-default">

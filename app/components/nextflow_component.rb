@@ -6,9 +6,10 @@ class NextflowComponent < Component
 
   attr_reader :schema, :url, :workflow
 
-  def initialize(url:, samples:, workflow:)
+  def initialize(url:, samples:, workflow:, allowed_to_update_samples: true)
     @samples = samples
     @url = url
     @workflow = workflow
+    @allowed_to_update_samples = allowed_to_update_samples
   end
 end

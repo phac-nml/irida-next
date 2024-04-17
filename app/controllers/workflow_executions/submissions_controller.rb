@@ -7,6 +7,7 @@ module WorkflowExecutions
     before_action :workflows
     before_action :samples, only: %i[create]
     before_action :workflow, only: %i[create]
+    before_action :allowed_to_update_samples, only: %i[create]
 
     def pipeline_selection
       render status: :ok
@@ -32,6 +33,20 @@ module WorkflowExecutions
     def samples
       sample_ids = params[:sample_ids]
       @samples = Sample.includes(attachments: { file_attachment: :blob }).where(id: sample_ids)
+    end
+
+    def allowed_to_update_samples
+      @allowed_to_update_samples = true
+      projects = Project.where(id: Sample.where(id: params[:sample_ids]).select(:project_id))
+
+      projects.each do |project|
+        @allowed_to_update_samples = allowed_to?(
+          :update_sample?,
+          project
+        )
+
+        break unless @allowed_to_update_samples
+      end
     end
   end
 end
