@@ -121,7 +121,8 @@ module DataExports
 
     def write_sample_attachments(sample, project, zip)
       sample.attachments.each do |attachment|
-        write_attachment(project.puid, sample.puid, zip, attachment)
+        directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}/#{attachment.file.filename}"
+        write_attachment(directory, zip, attachment)
       end
     end
 
