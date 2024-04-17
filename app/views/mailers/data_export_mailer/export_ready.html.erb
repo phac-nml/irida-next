@@ -4,6 +4,8 @@
   } %>
 
 <%= yield :header_and_greeting  %>
+<tr>
+  <td style="padding:12px 24px;">
     <p style="color:#334155;line-height:24px;">
       <%= t("mailers.data_export_mailer.export_ready.ready_for_download_html",
       name: @data_export.name || @data_export.id) %>
@@ -15,7 +17,8 @@
     <p style="color:#334155;line-height:24px;">
       <%= t("mailers.data_export_mailer.export_ready.view_exports") %>
     </p>
-
+  </td>
+</tr>
 <%= yield :button_and_link  %>
 
 <tr>

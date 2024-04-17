@@ -5,6 +5,8 @@
 
 
 <%= yield :header_and_greeting  %>
+<tr>
+  <td style="padding:12px 24px;">
     <p style="color:#334155;line-height:24px;">
       <%= t(:"mailers.pipeline_mailer.error_email.body_html", id: @workflow_execution.id) %>
     </p>
@@ -15,5 +17,7 @@
     <p style="color:#334155;line-height:24px;">
       <%= t(:"mailers.pipeline_mailer.view_details") %>
     </p>
+  </td>
+</tr>
 <%= yield :button_and_link  %>
 <%= yield :sendoff_and_automated_message  %>
