@@ -12,10 +12,10 @@ module Bots
 
       current_count = @namespace.namespace_bots.count
       user_params = {
-        email: "#{namespace.puid}_BOT_#{'%03d' % (current_count + 1)}@iridanext.com",
+        email: "#{namespace.puid}_BOT_#{format('%03d', (current_count + 1))}@iridanext.com",
         user_type: bot_type,
         first_name: namespace.puid,
-        last_name: "BOT #{'%03d' % (current_count + 1)}"
+        last_name: "BOT #{format('%03d', (current_count + 1))}"
       }
 
       @bot_user_account = User.new(user_params)
