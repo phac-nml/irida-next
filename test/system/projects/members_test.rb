@@ -379,8 +379,9 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('#member_user_id').find('option', text: user_to_add.email).select_option
-        find('#member_access_level').find('option',
-                                          text: I18n.t('activerecord.models.member.access_level.uploader')).select_option
+        find('#member_access_level')
+          .find('option',
+                text: I18n.t('activerecord.models.member.access_level.uploader')).select_option
 
         click_button I18n.t(:'projects.members.new.add_member_to_project')
       end
