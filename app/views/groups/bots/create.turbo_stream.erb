@@ -17,10 +17,7 @@
                        partial: "access_token_section",
                        locals: {
                          bot_account_name:
-                           @new_bot_account[:bot_user_account]
-                             .email
-                             .rpartition("@")
-                             .first,
+                           @new_bot_account[:bot_user_account].username,
                          token: personal_access_token.token
                        } %>
 <% end %>
