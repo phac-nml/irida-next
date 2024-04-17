@@ -55,6 +55,8 @@ Rails.application.configure do
     port: 1025
   }
 
+  config.action_mailer.default_options = { from: 'from@example.com' }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
