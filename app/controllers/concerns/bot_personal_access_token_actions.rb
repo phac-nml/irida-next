@@ -7,12 +7,17 @@ module BotPersonalAccessTokenActions
   included do
     before_action proc { namespace }
     before_action proc { bot_account }
+    before_action proc { personal_access_tokens }, only: %i[index]
   end
 
   def index
     authorize! @namespace, to: :view_bot_personal_access_tokens?
 
-    @personal_access_tokens = @bot_account.user.personal_access_tokens
+    respond_to do |format|
+      format.turbo_stream do
+        render status: :ok
+      end
+    end
   end
 
   def new
@@ -51,5 +56,9 @@ module BotPersonalAccessTokenActions
 
   def bot_account
     @bot_account = @namespace.namespace_bots.find_by(id: params[:id]) || not_found
+  end
+
+  def personal_access_tokens
+    @personal_access_tokens = @bot_account.user.personal_access_tokens.active
   end
 end
