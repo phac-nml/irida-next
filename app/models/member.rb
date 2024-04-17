@@ -196,7 +196,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def send_grant_access_email
-    return if Member.can_view?(user, namespace, true)
+    return unless Member.can_view?(user, namespace, true)
 
     send_email('granted')
   end

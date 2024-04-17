@@ -17,6 +17,15 @@ module Members
       assert_difference -> { Member.count } => -1 do
         Members::DestroyService.new(@group_member, @group, @user).execute
       end
+
+      manager_memberships = Member.for_namespace_and_ancestors(@group).not_expired
+                                  .where(access_level: Member::AccessLevel.manageable)
+      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @group_member.user.id))
+                     .distinct
+      manager_emails = managers.pluck(:email)
+      assert_enqueued_emails 1
+      assert_enqueued_email_with MemberMailer, :access_email,
+                                 args: [@group_member, manager_emails, 'revoked', @group]
     end
 
     test 'remove themselves as a group member' do
@@ -24,6 +33,15 @@ module Members
       assert_difference -> { Member.count } => -1 do
         Members::DestroyService.new(@group_member, @group, user).execute
       end
+
+      manager_memberships = Member.for_namespace_and_ancestors(@group).not_expired
+                                  .where(access_level: Member::AccessLevel.manageable)
+      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @group_member.user.id))
+                     .distinct
+      manager_emails = managers.pluck(:email)
+      assert_enqueued_emails 1
+      assert_enqueued_email_with MemberMailer, :access_email,
+                                 args: [@group_member, manager_emails, 'revoked', @group]
     end
 
     test 'remove group member when user does not have direct or inherited membership' do
@@ -37,6 +55,7 @@ module Members
       assert_equal :destroy_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.group.destroy_member?', name: @group.name), exception.result.message
+      assert_no_enqueued_emails
     end
 
     test 'remove group member with OWNER role when the current user only has the Maintainer role' do
@@ -48,12 +67,22 @@ module Members
       end
 
       assert group_member.errors.full_messages.include?(I18n.t('services.members.destroy.role_not_allowed'))
+      assert_no_enqueued_emails
     end
 
     test 'remove project member with correct permissions' do
       assert_difference -> { Member.count } => -1 do
         Members::DestroyService.new(@project_member, @project_namespace, @user).execute
       end
+
+      manager_memberships = Member.for_namespace_and_ancestors(@project_namespace).not_expired
+                                  .where(access_level: Member::AccessLevel.manageable)
+      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @project_member.user.id))
+                     .distinct
+      manager_emails = managers.pluck(:email)
+      assert_enqueued_emails 1
+      assert_enqueued_email_with MemberMailer, :access_email,
+                                 args: [@project_member, manager_emails, 'revoked', @project_namespace]
     end
 
     test 'remove project member with incorrect permissions' do
@@ -65,6 +94,7 @@ module Members
         error_message.include?(I18n.t('services.members.destroy.cannot_remove_self',
                                       namespace_type: @project.namespace.type))
       end
+      assert_no_enqueued_emails
     end
 
     test 'remove project member with OWNER role when the current user only has the Maintainer role' do
@@ -78,6 +108,7 @@ module Members
       end
 
       assert project_member.errors.full_messages.include?(I18n.t('services.members.destroy.role_not_allowed'))
+      assert_no_enqueued_emails
     end
 
     test 'remove project member when user does not have direct or inherited membership' do
@@ -93,6 +124,7 @@ module Members
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.destroy_member?',
                           name: @project_namespace.name),
                    exception.result.message
+      assert_no_enqueued_emails
     end
   end
 end
