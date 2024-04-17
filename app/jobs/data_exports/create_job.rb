@@ -2,7 +2,7 @@
 
 module DataExports
   # Queues the data export create job
-  class CreateJob < ApplicationJob # rubocop:disable Method/ClassLength
+  class CreateJob < ApplicationJob
     queue_as :default
 
     def perform(data_export)
@@ -30,11 +30,12 @@ module DataExports
     def create_sample_zip(data_export)
       new_zip_file = Tempfile.new(binmode: true)
       ZipKit::Streamer.open(new_zip_file) do |zip|
-        data_export.export_parameters['ids'].each do |sample_id|
-          sample = Sample.find(sample_id)
-          next unless sample.attachments.count.positive?
+        samples = Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
+                        .where(id: data_export.export_parameters['ids'])
+        samples.each do |sample|
+          next if sample.attachments.empty?
 
-          project = Project.find(sample.project_id)
+          project = sample.project
 
           update_sample_manifest(sample, project)
 
@@ -67,23 +68,17 @@ module DataExports
     end
 
     def create_attachment_manifest_directories(sample)
-      attachment_directories = []
+      attachment_directories = {}
       sample.attachments.each do |attachment|
-        next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
-
-        attachment_directory = { 'name' => attachment.puid,
-                                 'type' => 'folder',
-                                 'irida-next-type' => 'attachment',
-                                 'children' => [] }
-
-        attachment_directory['children'] << create_attachment_manifest_file(attachment)
-        if attachment.metadata.key?('associated_attachment_id')
-          attachment_directory['children'] << create_attachment_manifest_file(attachment.associated_attachment)
+        unless attachment_directories.key?(attachment.puid)
+          attachment_directories[attachment.puid] = { 'name' => attachment.puid,
+                                                      'type' => 'folder',
+                                                      'irida-next-type' => 'attachment',
+                                                      'children' => [] }
         end
-
-        attachment_directories << attachment_directory
+        attachment_directories[attachment.puid]['children'] << create_attachment_manifest_file(attachment)
       end
-      attachment_directories
+      attachment_directories.values
     end
 
     def create_attachment_manifest_file(attachment)
@@ -101,13 +96,7 @@ module DataExports
 
     def write_attachments(sample, project, zip)
       sample.attachments.each do |attachment|
-        next if attachment.metadata.key?('associated_attachment_id') && attachment.metadata['direction'] == 'reverse'
-
         write_attachment(project.puid, sample.puid, zip, attachment)
-
-        next unless attachment.metadata.key?('associated_attachment_id')
-
-        write_attachment(project.puid, sample.puid, zip, attachment.associated_attachment)
       end
     end
 
