@@ -99,7 +99,7 @@ class User < ApplicationRecord
   end
 
   def username
-    email.rpartition("@").first
+    email.rpartition('@').first
   end
 
   private
