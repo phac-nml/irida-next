@@ -306,6 +306,7 @@ irida_next_example_completing_c:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
+  update_samples: true
 
 irida_next_example_completing_d:
   metadata:
@@ -352,6 +353,30 @@ irida_next_example_completing_e:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
+
+irida_next_example_completing_f:
+  metadata:
+    {
+      "workflow_name": "irida_next_example_completing",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_type: "NFL"
+  workflow_type_version: "DSL2"
+  tags: []
+  workflow_engine: "nextflow"
+  workflow_engine_version: "23.10.0"
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
+  run_id: "my_run_id_f"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  state: "completing"
+  blob_run_directory: "not a run dir"
+  update_samples: false
 
 irida_next_example_completed_with_output:
   metadata:
