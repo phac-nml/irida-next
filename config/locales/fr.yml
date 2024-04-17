@@ -1116,10 +1116,11 @@ fr:
         updated_at_asc: Oldest updated
         created_at_asc: Oldest created
   mailers:
-    automated_message: This email was sent from an automated system. Please do not reply to this email.
-    copy_paste: "Or copy and paste this link into your browser:"
-    greeting: Hello %{name},
-    thanks: Thanks,
+    email_template:
+      automated_message: This email was sent from an automated system. Please do not reply to this email.
+      copy_paste: "Or copy and paste this link into your browser:"
+      greeting: Hello %{name},
+      thanks: Thanks,
     data_export_mailer:
       email_subject: "Export Ready - %{name}"
       export_ready:
