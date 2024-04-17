@@ -135,62 +135,38 @@ module DataExports
                                                                              { outputs: { file_attachment: :blob } }]
         ).find(data_export.export_parameters['ids'][0])
 
-        write_workflow_execution_outputs(workflow_execution, zip)
+        write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
 
         samples_workflow_executions = workflow_execution.samples_workflow_executions
         samples_workflow_executions.each do |swe|
-          write_samples_workflow_execution_outputs(swe, zip) unless swe.outputs.empty?
+          write_samples_workflow_execution_outputs_and_manifest(swe, zip) unless swe.outputs.empty?
         end
-
-        update_analysis_manifest(workflow_execution, samples_workflow_executions)
         # Write manifest to file 'manifest.json' and add to zip
         write_manifest(zip)
       end
       new_zip_file
     end
 
-    def update_analysis_manifest(workflow_execution, sample_workflow_executions)
-      add_workflow_execution_outputs_to_manifest(workflow_execution)
-
-      add_samples_workflow_executions_to_manifest(sample_workflow_executions)
-    end
-
-    def write_workflow_execution_outputs(workflow_execution, zip)
+    def write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
       workflow_execution.outputs.each do |output|
         write_attachment(output.file.filename.to_s, zip, output)
+
+        @manifest['children'] << { 'name' => output.file.filename.to_s, 'type' => 'file' }
       end
     end
 
-    def write_samples_workflow_execution_outputs(swe, zip)
+    def write_samples_workflow_execution_outputs_and_manifest(swe, zip)
+      sample = swe.sample
+      sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
+                           'irida-next-name' => sample.name, 'children' => [] }
       swe.outputs.each do |output|
-        directory = "#{swe.sample.puid}/#{output.file.filename}"
+        directory = "#{sample.puid}/#{output.file.filename}"
         write_attachment(directory, zip, output)
+
+        sample_directory['children'] << { 'name' => output.file.filename.to_s, 'type' => 'file' }
       end
-    end
 
-    def add_workflow_execution_outputs_to_manifest(workflow_execution)
-      workflow_execution.outputs.each do |workflow_execution_output|
-        @manifest['children'] << { 'name' => workflow_execution_output.file.filename.to_s, 'type' => 'file' }
-      end
-    end
-
-    def add_samples_workflow_executions_to_manifest(sample_workflow_executions)
-      sample_workflow_executions.each do |sample_workflow_execution|
-        next if sample_workflow_execution.outputs.empty?
-
-        sample = sample_workflow_execution.sample
-        sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
-                             'irida-next-name' => sample.name, 'children' => [] }
-        @manifest['children'] << sample_directory
-        sample_workflow_execution.outputs.each do |swe_output|
-          add_samples_workflow_execution_output_to_manifest(sample_directory, swe_output)
-        end
-      end
-    end
-
-    def add_samples_workflow_execution_output_to_manifest(directory, swe_output)
-      output_directory = { 'name' => swe_output.file.filename.to_s, 'type' => 'file' }
-      directory['children'] << output_directory
+      @manifest['children'] << sample_directory
     end
   end
 end
