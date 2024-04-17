@@ -69,7 +69,7 @@ module Integrations
           when Faraday::ServerError # 500
             raise ApiError, err.message
           when Faraday::ConnectionFailed # end of file error when server is not responsive
-            raise ServerError, err.message
+            raise ConnectionError, err.message
           end
         end
       end
