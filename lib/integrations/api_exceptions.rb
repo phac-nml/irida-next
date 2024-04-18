@@ -10,44 +10,44 @@ module Integrations
     class APIExceptionError < StandardError
       attr_reader :http_error_code
 
-      def initialize(http_error_code)
-        super
+      def initialize(msg, http_error_code)
         @http_error_code = http_error_code
+        super(msg)
       end
     end
 
     # HTTP 400
     class BadRequestError < APIExceptionError
-      def initialize
-        super(400)
+      def initialize(msg)
+        super(msg, 400)
       end
     end
 
     # HTTP 401
     class UnauthorizedError < APIExceptionError
-      def initialize
-        super(401)
+      def initialize(msg)
+        super(msg, 401)
       end
     end
 
     # HTTP 403
     class ForbiddenError < APIExceptionError
-      def initialize
-        super(403)
+      def initialize(msg)
+        super(msg, 403)
       end
     end
 
     # HTTP 404
     class NotFoundError < APIExceptionError
-      def initialize
-        super(404)
+      def initialize(msg)
+        super(msg, 404)
       end
     end
 
     # HTTP 500
     class ApiError < APIExceptionError
-      def initialize
-        super(500)
+      def initialize(msg)
+        super(msg, 500)
       end
     end
   end

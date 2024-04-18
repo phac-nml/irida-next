@@ -13,11 +13,11 @@ class WorkflowExecutionCancelationJob < ApplicationJob
 
     # Errors 401 and 403 can mean that the run was actually completed
     # So we check the run status to check if it's completed or an actual error
-    if [401, 403].contains? exception.http_error_code
+    if [401, 403].include? exception.http_error_code
       # get actual status from wes client
       wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
       wes_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: wes_connection)
-      status = wes_client.get_run_status(@workflow_execution.run_id)
+      status = wes_client.get_run_status(workflow_execution.run_id)
 
       if status[:state] == 'COMPLETE'
         workflow_execution.state = 'canceled'
