@@ -143,14 +143,21 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def create_bot_accounts?
-    return true if Member.can_modify?(user, record, false) == true
+    return true if Member.can_modify?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
   def destroy_bot_accounts?
-    return true if Member.can_modify?(user, record, false) == true
+    return true if Member.can_modify?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def view_bot_accounts?
+    return true if Member.can_modify?(user, record) == true
 
     details[:name] = record.name
     false

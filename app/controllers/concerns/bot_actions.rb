@@ -12,6 +12,8 @@ module BotActions
   end
 
   def index
+    authorize! @namespace, to: :view_bot_accounts?
+
     @pagy, @bot_accounts = pagy(load_bot_accounts)
   end
 
