@@ -25,7 +25,7 @@
     <%= @workflow.description %>
   </p>
   <%= form_with url: url, data: { turbo_frame: "_top" } do |form| %>
-    <input type="hidden" name="format" value="turbo_stream"/>
+    <input id="submission_turbo" type="hidden" name="format" value="turbo_stream"/>
 
     <%= fields_for :workflow_execution do |workflow| %>
       <%= workflow.hidden_field :workflow_type, value: @workflow.type %>
@@ -56,7 +56,9 @@
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <%= render Nextflow::SamplesheetComponent.new(
                   schema: property[:schema],
-                  samples: @samples
+                  samples:,
+                  namespace_id:,
+                  fields: metadata_fields
                 ) %>
               <% else %>
                 <div>

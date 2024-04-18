@@ -3,12 +3,14 @@
 module Nextflow
   # Render the contents of a Nextflow samplesheet to a table
   class SamplesheetComponent < Component
-    attr_reader :properties, :samples, :required_properties
+    attr_reader :properties, :samples, :required_properties, :metadata_fields, :namespace_id
 
     FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
 
-    def initialize(schema:, samples:)
+    def initialize(schema:, samples:, fields:, namespace_id:)
       @samples = samples
+      @namespace_id = namespace_id
+      @metadata_fields = fields
       @required_properties = schema['items']['required']
       extract_properties(schema)
     end
@@ -56,6 +58,12 @@ module Nextflow
 
         @properties[property]['autopopulate'] = true
       end
+    end
+
+    def metadata_fields_for_field(field)
+      options = @metadata_fields.include?(field) ? @metadata_fields : @metadata_fields.unshift(field)
+      label = t('.default', label: field)
+      options.map { |f| [f.eql?(field) ? label : f, f] }
     end
   end
 end

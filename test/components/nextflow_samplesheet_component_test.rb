@@ -1,55 +1,54 @@
 # frozen_string_literal: true
 
-require 'view_component_test_case'
+require 'application_system_test_case'
 
-class NextflowSamplesheetComponentTest < ViewComponentTestCase
+class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   test 'default' do
-    render_inline Nextflow::SamplesheetComponent.new(
-      samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
-      schema: JSON.parse(File.read('test/fixtures/files/nextflow/samplesheet_schema.json'))
-    )
+    sample1 = samples(:sample43)
+    sample2 = samples(:sample44)
+    visit("/rails/view_components/nextflow_samplesheet_component/default?sample_ids[]=#{sample1.id}&sample_ids[]=#{sample2.id}") # rubocop:disable Layout/LineLength
 
     assert_selector '.sample-sheet table' do
       assert_selector 'thead th', count: 4
-      assert_selector 'thead th:last', text: 'strandedness'
-      assert_selector 'tbody tr', count: 3
-      assert_selector 'tbody tr:first td:first', text: samples(:sample1).puid
-      assert_selector 'tbody tr:first td > select', count: 3
-      assert_selector 'tbody tr:first td:last > select'
-      assert_selector 'tbody tr:first td:last > select option', count: 3
-      assert_selector 'tbody tr:first td:last > select option:first', text: 'forward'
+      assert_selector 'thead th:last-of-type', text: 'STRANDEDNESS'
+      assert_selector 'tbody tr', count: 2
+      assert_selector 'tbody tr:first-of-type td:first-of-type', text: sample1.puid
+      assert_selector 'tbody tr:first-of-type td > select', count: 3
+      assert_selector 'tbody tr:first-of-type td:last-of-type > select'
+      assert_selector 'tbody tr:first-of-type td:last-of-type > select option', count: 3
+      assert_selector 'tbody tr:first-of-type td:last-of-type > select option:first-of-type', text: 'forward'
     end
   end
 
   test 'with reference files' do
-    render_inline Nextflow::SamplesheetComponent.new(
-      samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
-      schema: JSON.parse(File.read('test/fixtures/files/nextflow/samplesheet_schema_snvphyl.json'))
-    )
+    sample1 = samples(:sample43)
+    sample2 = samples(:sample44)
+    visit("/rails/view_components/nextflow_samplesheet_component/default?schema_file=samplesheet_schema_snvphyl.json&sample_ids[]=#{sample1.id}&sample_ids[]=#{sample2.id}") # rubocop:disable Layout/LineLength
 
     assert_selector '.sample-sheet table' do
       assert_selector 'thead th', count: 4
-      assert_selector 'thead th:last', text: 'reference_assembly'
-      assert_selector 'tbody tr', count: 3
-      assert_selector 'tbody tr:first td:first', text: samples(:sample1).puid
-      assert_selector 'tbody tr:first td > select', count: 3
+      assert_selector 'thead th:last-of-type', text: 'REFERENCE_ASSEMBLY'
+      assert_selector 'tbody tr', count: 2
+      assert_selector 'tbody tr:first-of-type td:first-of-type', text: sample1.puid
+      assert_selector 'tbody tr:first-of-type td > select', count: 3
+      assert_selector 'tbody tr:first-of-type td:last-of-type > select option', count: 1
     end
   end
 
   test 'with metadata' do
-    render_inline Nextflow::SamplesheetComponent.new(
-      samples: [samples(:sample43), samples(:sample44)],
-      schema: JSON.parse(File.read('test/fixtures/files/nextflow/samplesheet_schema_meta.json'))
-    )
+    sample1 = samples(:sample43)
+    sample2 = samples(:sample44)
+    visit("/rails/view_components/nextflow_samplesheet_component/default?schema_file=samplesheet_schema_meta.json&sample_ids[]=#{sample1.id}&sample_ids[]=#{sample2.id}") # rubocop:disable Layout/LineLength
 
-    assert_selector '.sample-sheet table' do
-      assert_selector 'thead th', count: 2
-      assert_selector 'thead th:last', text: 'insdc_accession'
-      assert_selector 'tbody tr', count: 2
-      assert_selector 'tbody tr:first td:first', text: samples(:sample43).puid
-      assert_selector 'tbody tr:first td:last', text: 'ERR86724108'
-      assert_selector 'tbody tr:last td:first', text: samples(:sample44).puid
-      assert_selector 'tbody tr:last td:last', text: 'ERR31551163'
+    assert_selector '.sample-sheet table' do |table|
+      table.assert_selector 'thead th', count: 3
+      table.assert_selector 'thead th:last-of-type select', count: 1
+      table.assert_selector 'thead th:last-of-type select', text: 'insdc_accession'
+      table.assert_selector 'tbody tr', count: 2
+      table.assert_selector 'tbody tr:first-of-type td:first-of-type', text: sample1.puid
+      table.assert_selector 'tbody tr:first-of-type', text: 'ERR86724108'
+      table.assert_selector 'tbody tr:last-of-type td:first-of-type', text: sample2.puid
+      table.assert_selector 'tbody tr:last-of-type', text: 'ERR31551163'
     end
   end
 end

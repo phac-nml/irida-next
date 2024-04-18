@@ -2,13 +2,13 @@
 
 class NextflowSamplesheetComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
-  def default(schema_file: 'samplesheet_schema.json')
-    sample1 = Sample.first
-    sample2 = Sample.second
+  def default(schema_file: 'samplesheet_schema.json', sample_ids: [Sample.first.id, Sample.second.id])
+    samples = Sample.where(id: sample_ids)
 
     render_with_template(locals: {
                            schema_file:,
-                           samples: [sample1, sample2]
+                           samples:,
+                           fields: %w[insdc_accession country metadata_3]
                          })
   end
 

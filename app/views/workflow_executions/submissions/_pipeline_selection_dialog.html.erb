@@ -9,6 +9,7 @@
           <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true } do |form| %>
             <%= form.hidden_field :workflow_name, value: workflow.name %>
             <%= form.hidden_field :workflow_version, value: workflow.version %>
+            <%= form.hidden_field :namespace_id, value: @namespace_id %>
             <div
               data-controller="sessionstorage-amend-form"
               data-sessionstorage-amend-form-target="field"

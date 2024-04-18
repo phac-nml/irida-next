@@ -12,6 +12,12 @@ resources :workflow_executions, only: %i[index create show destroy] do
           get :pipeline_selection, as: :pipeline_selection
         end
       end
+
+      resources :metadata, only: [] do
+        collection do
+          post :fields
+        end
+      end
     end
   end
 end

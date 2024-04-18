@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import _ from "lodash";
 
 export default class extends Controller {
   static targets = ["field"];
@@ -13,22 +14,28 @@ export default class extends Controller {
 
   connect() {
     const storageValues = JSON.parse(
-      sessionStorage.getItem(this.storageKeyValue)
+      sessionStorage.getItem(this.storageKeyValue),
     );
 
     if (storageValues) {
-      for (const storageValue of storageValues) {
-        const element = document.createElement("input");
-        element.type = "hidden";
-        element.id = this.fieldNameValue;
-        element.name = this.fieldNameValue;
-        element.value = storageValue;
-        this.fieldTarget.appendChild(element);
-      }
+      const fragment = document.createDocumentFragment();
+      storageValues.forEach((value) => {
+        fragment.appendChild(this.#createHiddenInput(value));
+      });
+      this.fieldTarget.appendChild(fragment);
     }
   }
 
   clear() {
     sessionStorage.removeItem(this.storageKeyValue);
+  }
+
+  #createHiddenInput(value) {
+    const element = document.createElement("input");
+    element.type = "hidden";
+    element.id = this.fieldNameValue;
+    element.name = this.fieldNameValue;
+    element.value = value;
+    return element;
   }
 }

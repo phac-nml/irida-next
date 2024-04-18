@@ -3,10 +3,12 @@
 module WorkflowExecutions
   # Workflow submission controller
   class SubmissionsController < ApplicationController
+    include Metadata
     respond_to :turbo_stream
     before_action :workflows
     before_action :samples, only: %i[create]
     before_action :workflow, only: %i[create]
+    before_action :namespace_id, only: %i[create pipeline_selection]
     before_action :allowed_to_update_samples, only: %i[create]
 
     def pipeline_selection
@@ -14,6 +16,10 @@ module WorkflowExecutions
     end
 
     def create
+      fields_for_namespace(
+        namespace: Namespace.find_by(id: @namespace_id),
+        show_fields: true
+      )
       render status: :ok
     end
 
@@ -33,6 +39,10 @@ module WorkflowExecutions
     def samples
       sample_ids = params[:sample_ids]
       @samples = Sample.includes(attachments: { file_attachment: :blob }).where(id: sample_ids)
+    end
+
+    def namespace_id
+      @namespace_id = params[:namespace_id]
     end
 
     def allowed_to_update_samples

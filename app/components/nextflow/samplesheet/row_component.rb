@@ -54,7 +54,7 @@ module Nextflow
         when 'file_cell'
           render_other_file_cell(property, entry, fields)
         when 'metadata_cell'
-          render_metadata_cell(sample, property, entry, fields)
+          render_metadata_cell(sample, property, fields)
         when 'dropdown_cell'
           render_dropdown_cell(property, entry, fields)
         when 'input_cell'
@@ -87,8 +87,8 @@ module Nextflow
         render(Samplesheet::SampleCellComponent.new(sample:, fields:))
       end
 
-      def render_metadata_cell(sample, name, entry, fields)
-        render(Samplesheet::MetadataCellComponent.new(sample:, name:, entry:, form: fields))
+      def render_metadata_cell(sample, name, fields)
+        render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields))
       end
 
       def render_file_cell(property, entry, fields, files, is_required) # rubocop:disable Metrics/MethodLength

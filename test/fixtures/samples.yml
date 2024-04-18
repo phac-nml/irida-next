@@ -265,7 +265,7 @@ sample43:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
-  metadata: { 'insdc_accession': 'ERR86724108' }
+  metadata: { 'insdc_accession': 'ERR86724108', country: "Canada" }
 
 sample44:
   name: Sample 44
@@ -275,7 +275,7 @@ sample44:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
-  metadata: { 'insdc_accession': 'ERR31551163' }
+  metadata: { 'insdc_accession': 'ERR31551163', country: "Moldova" }
 
 sample45:
   name: Sample 45
