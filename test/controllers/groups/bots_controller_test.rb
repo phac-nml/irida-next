@@ -23,7 +23,7 @@ module Groups
 
       get group_bots_path(namespace, format: :turbo_stream)
 
-      assert_response :success
+      assert_response :unauthorized
     end
 
     test 'should successfully get the new bot account modal' do
