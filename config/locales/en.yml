@@ -869,6 +869,9 @@ en:
       personal_access_tokens:
         create:
           success: Successfully generated new personal access token for bot
+        revoke:
+          success: "Successfully revoked personal access token %{pat_name}"
+          error: "There was an error revoking personal access token %{pat_name}"
     new:
       title: Create project
       placeholder: Awesome project name

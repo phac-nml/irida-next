@@ -61,10 +61,11 @@ module BotPersonalAccessTokenActions
         if @personal_access_token.revoke!
           render status: :ok, locals: {
             personal_access_token: @personal_access_token, type: 'success',
-            message: "Successfully removed personal access token #{@personal_access_token.name}"
+            message: t('.success', pat_name: @personal_access_token.name)
           }
         else
-          render status: :unprocessable_entity
+          render status: :unprocessable_entity, locals: { type: 'alert',
+                                                          message: @personal_access_token.errors.full_messages.first }
         end
       end
     end
