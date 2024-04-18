@@ -112,13 +112,19 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
   end
 
-  def available_users
+  def available_users # rubocop:disable Metrics/AbcSize
     # Remove current user from available users as a user cannot add themselves
     available_users = User.human_users.where.not(id: Member.select(:user_id).where(namespace: @namespace))
                           .where.not(id: current_user.id)
 
-    available_bots =  if [Namespaces::ProjectNamespace.sti_name].include?(@namespace.type)
-                        @namespace.bots.where.not(id: Member.select(:user_id).where(namespace: @namespace))
+    available_bots =  if @namespace.type == Namespaces::ProjectNamespace.sti_name
+                        @namespace.bots.where.not(id: Member.select(:user_id).where(namespace: @namespace)).or(
+                          User.bots.where(user_type: User.user_types[:group_bot])
+                              .where.not(id: Member.select(:user_id).where(namespace: @namespace))
+                        )
+                      elsif @namespace.type == Group.sti_name
+                        User.bots.where(user_type: User.user_types[:group_bot])
+                            .where.not(id: Member.select(:user_id).where(namespace: @namespace))
                       else
                         User.none
                       end

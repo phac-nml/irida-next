@@ -17,7 +17,7 @@
   <td class="px-6 py-3 whitespace-nowrap">
     <% if bot_account.members.count.positive? %>
       <%= t(
-        :"projects.bots.index.access_level.level_#{bot_account.members.last.access_level}"
+        :"groups.bots.index.access_level.level_#{bot_account.members.last.access_level}"
       ) %>
     <% end %>
   </td>
@@ -31,14 +31,14 @@
       <%= viral_dropdown(icon: "ellipsis_vertical",
                                 aria: { label: bot_account.email }) do |dropdown| %>
         <%= dropdown.with_item(
-          label: t("projects.bots.index.bot.remove"),
-          url: namespace_project_bot_path(id: bot_account.id),
+          label: t("groups.bots.index.bot.remove"),
+          url: group_bot_path(id: bot_account.id),
           data: {
             turbo_method: :delete,
-            turbo_confirm: t("projects.bots.index.bot.remove_confirmation")
+            turbo_confirm: t("groups.bots.index.bot.remove_confirmation")
           },
           aria: {
-            label: t("projects.bots.index.bot.remove_aria_label")
+            label: t("groups.bots.index.bot.remove_aria_label")
           }
         ) %>
       <% end %>

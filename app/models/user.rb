@@ -98,6 +98,10 @@ class User < ApplicationRecord
     full_path
   end
 
+  def username
+    email.rpartition('@').first
+  end
+
   private
 
   def build_namespace_name

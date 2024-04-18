@@ -25,7 +25,7 @@ module Projects
 
       get namespace_project_bots_path(namespace, project, format: :turbo_stream)
 
-      assert_response :success
+      assert_response :unauthorized
     end
 
     test 'should successfully get the new bot account modal' do

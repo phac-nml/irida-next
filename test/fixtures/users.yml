@@ -137,10 +137,10 @@ user28:
 
 <% 22.times do |n| %>
 user_bot_account<%= (n) %>:
-  email: <%= "project_INXT_PRJ_AAAAAAAAAA_bot_A3d#{n}Xc@localhost".downcase %>
+  email: <%= "inxt_prj_aaaaaaaaaa_bot_#{format('%03d', (n + 1))}@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Project
-  last_name: Bot <%= n %>
+  last_name: "Bot #{format('%03d', (n + 1))}"
   user_type: <%= User.user_types[:project_bot] %>
 <% end %>
 
@@ -156,11 +156,11 @@ user30:
   first_name: User
   last_name: "30"
 
-<% 21.times do |n| %>
+<% 22.times do |n| %>
 user_group_bot_account<%= (n) %>:
-  email: <%= "group_INXT_GRP_AAAAAAAAAA_bot_A3d#{n}Xc@localhost".downcase %>
+  email: <%= "inxt_grp_aaaaaaaaaa_bot#{format('%03d', (n + 1))}@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Group
-  last_name: Bot <%= n %>
+  last_name: "Bot #{format('%03d', (n + 1))}"
   user_type: <%= User.user_types[:group_bot] %>
 <% end %>

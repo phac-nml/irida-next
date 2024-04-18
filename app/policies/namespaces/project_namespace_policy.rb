@@ -69,7 +69,7 @@ module Namespaces
 
     def create_bot_accounts?
       return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if Member.can_modify?(user, record, false) == true
+      return true if Member.can_modify?(user, record) == true
 
       details[:name] = record.name
       false
@@ -77,7 +77,15 @@ module Namespaces
 
     def destroy_bot_accounts?
       return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if Member.can_modify?(user, record, false) == true
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def view_bot_accounts?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
 
       details[:name] = record.name
       false
@@ -85,7 +93,7 @@ module Namespaces
 
     def view_bot_personal_access_tokens?
       return true if record.parent.user_namespace? && record.parent.owner == user
-      return true if Member.can_view?(user, record) == true
+      return true if Member.can_modify?(user, record) == true
 
       details[:name] = record.name
       false

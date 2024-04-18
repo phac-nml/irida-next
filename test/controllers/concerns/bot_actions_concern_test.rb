@@ -134,7 +134,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
   test 'group bot account destroy' do
     sign_in users(:john_doe)
 
-    namespace_bot = namespace_bots(:group1_bot)
+    namespace_bot = namespace_bots(:group1_bot0)
 
     namespace = groups(:group_one)
 
