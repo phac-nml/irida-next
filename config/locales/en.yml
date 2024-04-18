@@ -1368,6 +1368,15 @@ en:
         ready_for_download_html: "Your export <strong>%{name}</strong> is ready for download."
         view_exports: "To view and download the export, click the button below:"
         download_before_html: "Please download the export before <strong>%{date}</strong> as it will be deleted after this date."
+    member_mailer:
+      access_granted_email:
+        subject: User %{first_name} %{last_name} has been granted access to %{type} %{name}
+        body_html: User %{first_name} %{last_name} has been <strong>granted</strong> access to %{type} %{name}
+        view_details: "To view the %{type}, click the button below:"
+      access_revoked_email:
+        subject: User %{first_name} %{last_name} has been revoked access from %{type} %{name}
+        body_html: User %{first_name} %{last_name} has been <strong>revoked</strong> access from %{type} %{name}
+        view_details: "To view the %{type}, click the button below:"
     pipeline_mailer:
       complete_email:
         subject: Pipeline Completed - %{id}

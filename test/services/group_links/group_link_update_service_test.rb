@@ -36,7 +36,7 @@ module GroupLinks
         GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { expires_at: expiration_date }).execute
       end
-      assert_no_enqueued_emails # QUESTION: email when group links expire? expiring memberships?
+      assert_no_enqueued_emails
     end
 
     test 'update project to group share expiration' do

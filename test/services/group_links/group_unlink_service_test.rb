@@ -34,7 +34,7 @@ module GroupLinks
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
 
-      assert_enqueued_emails 6
+      assert_enqueued_emails 7
     end
 
     test 'unshare group b with group a with invalid permissions' do
@@ -77,7 +77,7 @@ module GroupLinks
       assert_difference -> { NamespaceGroupLink.count } => -1 do
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
-      assert_no_enqueued_emails
+      assert_enqueued_emails 1
     end
 
     test 'share project with group then unshare' do
@@ -96,7 +96,7 @@ module GroupLinks
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
 
-      assert_enqueued_emails 6
+      assert_enqueued_emails 7
     end
 
     test 'unshare project with group with invalid permissions' do
@@ -124,7 +124,7 @@ module GroupLinks
                            context: { user: @user }) do
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
-      assert_no_enqueued_emails
+      assert_enqueued_emails 1
     end
   end
 end

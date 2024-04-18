@@ -1,0 +1,41 @@
+<%= render partial: "mailers/email_template",
+locals: {
+  name: @member.user.first_name.capitalize,
+  url:
+    (
+      if @namespace.type == "Group"
+        group_url(@namespace)
+      else
+        project_url(@namespace.project)
+      end
+    )
+} %>
+
+<%= yield :header_and_greeting %>
+
+<tr>
+  <td style="padding:12px 24px;">
+    <p style="color:#334155;line-height:24px;">
+      <%= t(
+        :"mailers.member_mailer.access_granted_email.body_html",
+        first_name: @member.user.first_name.capitalize,
+        last_name: @member.user.last_name.capitalize,
+        type: @namespace.type,
+        name: @namespace.name
+      ) %>
+    </p>
+  </td>
+</tr>
+<tr>
+  <td style="padding:12px 24px;">
+    <p style="color:#334155;line-height:24px;">
+      <%= t(
+        :"mailers.member_mailer.access_granted_email.view_details",
+        type: @namespace.type
+      ) %>
+    </p>
+  </td>
+</tr>
+
+<%= yield :button_and_link %>
+<%= yield :sendoff_and_automated_message %>

@@ -24,8 +24,8 @@ module Members
                      .distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@group_member, manager_emails, 'revoked', @group]
+      assert_enqueued_email_with MemberMailer, :access_revoked_email,
+                                 args: [@group_member, manager_emails, @group]
     end
 
     test 'remove themselves as a group member' do
@@ -40,8 +40,8 @@ module Members
                      .distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@group_member, manager_emails, 'revoked', @group]
+      assert_enqueued_email_with MemberMailer, :access_revoked_email,
+                                 args: [@group_member, manager_emails, @group]
     end
 
     test 'remove group member when user does not have direct or inherited membership' do
@@ -81,8 +81,8 @@ module Members
                      .distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@project_member, manager_emails, 'revoked', @project_namespace]
+      assert_enqueued_email_with MemberMailer, :access_revoked_email,
+                                 args: [@project_member, manager_emails, @project_namespace]
     end
 
     test 'remove project member with incorrect permissions' do

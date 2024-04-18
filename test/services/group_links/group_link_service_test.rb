@@ -24,8 +24,10 @@ module GroupLinks
       manager_emails = managers.pluck(:email)
       memberships = Member.where(namespace: group).not_expired
       memberships.each do |member|
-        assert_enqueued_email_with MemberMailer, :access_email,
-                                   args: [member, manager_emails, 'granted', namespace]
+        next unless Member.can_view?(member.user, namespace, true)
+
+        assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                   args: [member, manager_emails, namespace]
       end
     end
 
@@ -90,8 +92,10 @@ module GroupLinks
       manager_emails = managers.pluck(:email)
       memberships = Member.where(namespace: group).not_expired
       memberships.each do |member|
-        assert_enqueued_email_with MemberMailer, :access_email,
-                                   args: [member, manager_emails, 'granted', namespace]
+        next unless Member.can_view?(member.user, namespace, true)
+
+        assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                   args: [member, manager_emails, namespace]
       end
     end
 
@@ -127,8 +131,10 @@ module GroupLinks
       manager_emails = managers.pluck(:email)
       memberships = Member.where(namespace: group).not_expired
       memberships.each do |member|
-        assert_enqueued_email_with MemberMailer, :access_email,
-                                   args: [member, manager_emails, 'granted', namespace]
+        next unless Member.can_view?(member.user, namespace, true)
+
+        assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                   args: [member, manager_emails, namespace]
       end
     end
 
@@ -181,8 +187,10 @@ module GroupLinks
       manager_emails = managers.pluck(:email)
       memberships = Member.where(namespace: group).not_expired
       memberships.each do |member|
-        assert_enqueued_email_with MemberMailer, :access_email,
-                                   args: [member, manager_emails, 'granted', namespace]
+        next unless Member.can_view?(member.user, namespace, true)
+
+        assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                   args: [member, manager_emails, namespace]
       end
     end
 

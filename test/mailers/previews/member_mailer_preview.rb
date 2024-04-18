@@ -2,14 +2,24 @@
 
 # Preview all emails at http://localhost:3000/rails/mailers/member_mailer
 class MemberMailerPreview < ActionMailer::Preview
-  def granted_access_email
+  def access_granted_to_group_email
     setup
-    MemberMailer.access_email(@member, @manager_emails, 'granted', @namespace)
+    MemberMailer.access_granted_email(@member, @manager_emails, @namespace)
   end
 
-  def revoked_access_email
+  def access_granted_to_project_email
     setup
-    MemberMailer.access_email(@member, @manager_emails, 'revoked', @namespace)
+    MemberMailer.access_granted_email(@member, @manager_emails, @namespace)
+  end
+
+  def access_revoked_from_group_email
+    setup
+    MemberMailer.access_revoked_email(@member, @manager_emails, @namespace)
+  end
+
+  def access_revoked_from_project_email
+    setup
+    MemberMailer.access_revoked_email(@member, @manager_emails, @namespace)
   end
 
   private

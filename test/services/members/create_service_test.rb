@@ -26,8 +26,8 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@new_member, manager_emails, 'granted', @group]
+      assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                 args: [@new_member, manager_emails, @group]
     end
 
     test 'create project member with valid params' do
@@ -44,8 +44,8 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@new_member, manager_emails, 'granted', @project_namespace]
+      assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                 args: [@new_member, manager_emails, @project_namespace]
     end
 
     test 'create group member with invalid params' do
@@ -101,8 +101,8 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: new_user.id)).distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@new_member, manager_emails, 'granted', group]
+      assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                 args: [@new_member, manager_emails, group]
     end
 
     test 'create group member with valid params when member of a parent group with MAINTAINER role' do
@@ -121,8 +121,8 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: new_user.id)).distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@new_member, manager_emails, 'granted', group]
+      assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                 args: [@new_member, manager_emails, group]
     end
 
     test 'create group member with valid params when member of a parent group with MAINTAINER role and group member
@@ -189,8 +189,8 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@new_member, manager_emails, 'granted', group]
+      assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                 args: [@new_member, manager_emails, group]
     end
 
     test 'valid authorization to create project member' do
@@ -209,8 +209,8 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
       manager_emails = managers.pluck(:email)
       assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_email,
-                                 args: [@new_member, manager_emails, 'granted', @project_namespace]
+      assert_enqueued_email_with MemberMailer, :access_granted_email,
+                                 args: [@new_member, manager_emails, @project_namespace]
     end
 
     test 'create group member logged using logidze' do

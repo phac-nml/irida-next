@@ -20,35 +20,37 @@ class NamespaceGroupLink < ApplicationRecord
               in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
             }
 
-  after_destroy :send_revoke_access_email
-  after_save :send_grant_access_email, if: :previously_new_record?
+  after_destroy :send_access_revoked_email
+  after_save :send_access_granted_email, if: :previously_new_record?
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }
 
-  def send_revoke_access_email
-    send_email('revoked')
+  def send_access_revoked_email
+    memberships = Member.where(namespace: group).not_expired
+    memberships.each do |member|
+      next if Member.can_view?(member.user, namespace, true)
+
+      MemberMailer.access_revoked_email(member, manager_emails, namespace).deliver_later
+    end
   end
 
-  def send_grant_access_email
-    send_email('granted')
+  def send_access_granted_email
+    memberships = Member.where(namespace: group).not_expired
+    memberships.each do |member|
+      next unless Member.can_view?(member.user, namespace, true)
+
+      MemberMailer.access_granted_email(member, manager_emails, namespace).deliver_later
+    end
   end
 
-  def send_email(access_type) # rubocop:disable Metrics/AbcSize
+  def manager_emails
     manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
                                 .where(access_level: Member::AccessLevel.manageable)
     managers = User.where(id: manager_memberships.select(:user_id)).distinct
-    manager_emails = managers.pluck(:email)
-    memberships = Member.where(namespace: group).not_expired
-
-    memberships.each do |member|
-      next if access_type == 'granted' && !Member.can_view?(member.user, namespace, true)
-      next if access_type == 'revoked' && Member.can_view?(member.user, namespace, true)
-
-      MemberMailer.access_email(member, manager_emails, access_type, namespace).deliver_later
-    end
+    managers.pluck(:email)
   end
 
   private
