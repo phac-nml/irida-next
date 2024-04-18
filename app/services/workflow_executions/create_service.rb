@@ -48,6 +48,8 @@ module WorkflowExecutions
         value.to_i
       when 'number'
         value.to_f
+      when 'boolean'
+        ActiveModel::Type::Boolean.new.cast(value)
       else
         value
       end
