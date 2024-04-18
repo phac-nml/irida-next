@@ -31,11 +31,8 @@
                     <!-- empty holder for hidden inputs for sample_ids[] -->
                   </div>
                   <%= f.select :field,
-                           metadata_fields_for_field(header),
-                           {
-                             selected: properties[header]["meta"],
-                             include_blank: !required_properties.include?(header)
-                           },
+                               options_for_select(metadata_fields_for_field(header), header),
+                               { include_blank: !required_properties.include?(header) },
                            {
                              id: "field-#{header}",
                              "aria-label": header,
