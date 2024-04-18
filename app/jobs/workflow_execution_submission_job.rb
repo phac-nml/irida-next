@@ -8,7 +8,7 @@ class WorkflowExecutionSubmissionJob < ApplicationJob
   retry_on Integrations::ApiExceptions::ConnectionError, wait: :exponentially_longer, attempts: Float::INFINITY
 
   # Puts workflow execution into error state and records the error code
-  retry_on Integrations::ApiExceptions::APIExceptionError, wait: :exponentially_longer, attempts: 5 do |job, exception|
+  retry_on Integrations::ApiExceptions::APIExceptionError, attempts: 3 do |job, exception|
     workflow_execution = job.arguments[0]
     workflow_execution.state = 'error'
     workflow_execution.error_code = exception.http_error_code
