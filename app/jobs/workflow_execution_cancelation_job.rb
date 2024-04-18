@@ -7,19 +7,25 @@ class WorkflowExecutionCancelationJob < ApplicationJob
   # When server is unreachable, continually retry
   retry_on Integrations::ApiExceptions::ConnectionError, wait: :exponentially_longer, attempts: Float::INFINITY
 
-  # 401
-  rescue_from Integrations::ApiExceptions::UnauthorizedError do |job, exception|
-    handle_completed_run_errors(job, exception)
-  end
-
-  # 403
-  rescue_from Integrations::ApiExceptions::ForbiddenError do |job, exception|
-    handle_completed_run_errors(job, exception)
-  end
-
   # Puts workflow execution into error state and records the error code
   retry_on Integrations::ApiExceptions::APIExceptionError, wait: :exponentially_longer, attempts: 5 do |job, exception|
     workflow_execution = job.arguments[0]
+
+    # Errors 401 and 403 can mean that the run was actually completed
+    # So we check the run status to check if it's completed or an actual error
+    if [401, 403].contains? exception.http_error_code
+      # get actual status from wes client
+      wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
+      wes_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: wes_connection)
+      status = wes_client.get_run_status(@workflow_execution.run_id)
+
+      if status[:state] == 'COMPLETE'
+        workflow_execution.state = 'canceled'
+        workflow_execution.save
+        return
+      end
+    end
+
     workflow_execution.state = 'error'
     workflow_execution.error_code = exception.http_error_code
     workflow_execution.save
@@ -28,17 +34,5 @@ class WorkflowExecutionCancelationJob < ApplicationJob
   def perform(workflow_execution, user)
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     WorkflowExecutions::CancelationService.new(workflow_execution, wes_connection, user).execute
-  end
-
-  private
-
-  def handle_completed_run_errors(job, exception)
-    # check status
-    #
-    # on completed, exit and set to canceled
-    # workflow execution should not continue to completion steps
-    #
-    # otherwise, set error
-    puts job.http_error_code
   end
 end
