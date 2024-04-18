@@ -59,5 +59,9 @@ module Nextflow
         @properties[property]['autopopulate'] = true
       end
     end
+
+    def metadata_fields_for_field(field)
+      @metadata_fields.include?(field) ? @metadata_fields : @metadata_fields.unshift(field)
+    end
   end
 end
