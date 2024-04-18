@@ -2,14 +2,14 @@
 
 module DataExports
   # Queues the data export create job
-  class CreateJob < ApplicationJob
+  class CreateJob < ApplicationJob # rubocop:disable Metrics/ClassLength
     queue_as :default
 
     def perform(data_export)
       @manifest = ''
       initialize_manifest(data_export.export_type)
 
-      zip = create_sample_zip(data_export) if data_export.export_type == 'sample'
+      zip = data_export.export_type == 'sample' ? create_sample_zip(data_export) : create_analysis_zip(data_export)
 
       attach_zip(data_export, zip)
 
@@ -21,6 +21,7 @@ module DataExports
       DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification?
     end
 
+    # Functions used by both sample and analysis exports-------------------------------------------------
     def initialize_manifest(export_type)
       @manifest = if export_type == 'sample'
                     { 'type' => 'Samples Export', 'date' => Date.current, 'children' => [] }
@@ -29,6 +30,28 @@ module DataExports
                   end
     end
 
+    def write_attachment(directory, zip, attachment)
+      zip.write_file(directory) do |writer_for_file|
+        attachment.file.download { |chunk| writer_for_file << chunk }
+      end
+    end
+
+    def write_manifest(zip)
+      manifest_file = Tempfile.new
+      manifest_file.write(JSON.pretty_generate(JSON.parse(@manifest.to_json)))
+      zip.write_file('manifest.json') { |writer_for_file| IO.copy_stream(manifest_file.open, writer_for_file) }
+
+      manifest_file.close
+      manifest_file.unlink
+    end
+
+    def attach_zip(data_export, zip)
+      data_export.file.attach(io: zip.open, filename: "#{data_export.id}.zip")
+      zip.close
+      zip.unlink
+    end
+
+    # Sample export specific functions------------------------------------------------------------------
     def create_sample_zip(data_export)
       new_zip_file = Tempfile.new(binmode: true)
       ZipKit::Streamer.open(new_zip_file) do |zip|
@@ -41,7 +64,7 @@ module DataExports
 
           update_sample_manifest(sample, project)
 
-          write_attachments(sample, project, zip)
+          write_sample_attachments(sample, project, zip)
         end
         # Write manifest to file 'manifest.json' and add to zip
         write_manifest(zip)
@@ -96,32 +119,54 @@ module DataExports
       attachment_manifest_file
     end
 
-    def write_attachments(sample, project, zip)
+    def write_sample_attachments(sample, project, zip)
       sample.attachments.each do |attachment|
-        write_attachment(project.puid, sample.puid, zip, attachment)
+        directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}/#{attachment.file.filename}"
+        write_attachment(directory, zip, attachment)
       end
     end
 
-    def write_attachment(project_puid, sample_puid, zip, attachment)
-      directory = "#{project_puid}/#{sample_puid}/#{attachment.puid}/#{attachment.file.filename}"
-      zip.write_file(directory) do |writer_for_file|
-        attachment.file.download { |chunk| writer_for_file << chunk }
+    # Analysis export specific functions---------------------------------------------------------------------
+    def create_analysis_zip(data_export)
+      new_zip_file = Tempfile.new(binmode: true)
+      ZipKit::Streamer.open(new_zip_file) do |zip|
+        workflow_execution = WorkflowExecution.includes(
+          outputs: { file_attachment: :blob }, samples_workflow_executions: [:sample,
+                                                                             { outputs: { file_attachment: :blob } }]
+        ).find(data_export.export_parameters['ids'][0])
+
+        write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
+
+        samples_workflow_executions = workflow_execution.samples_workflow_executions
+        samples_workflow_executions.each do |swe|
+          write_samples_workflow_execution_outputs_and_manifest(swe, zip) unless swe.outputs.empty?
+        end
+        # Write manifest to file 'manifest.json' and add to zip
+        write_manifest(zip)
+      end
+      new_zip_file
+    end
+
+    def write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
+      workflow_execution.outputs.each do |output|
+        write_attachment(output.file.filename.to_s, zip, output)
+
+        @manifest['children'] << { 'name' => output.file.filename.to_s, 'type' => 'file' }
       end
     end
 
-    def write_manifest(zip)
-      manifest_file = Tempfile.new
-      manifest_file.write(JSON.pretty_generate(JSON.parse(@manifest.to_json)))
-      zip.write_file('manifest.json') { |writer_for_file| IO.copy_stream(manifest_file.open, writer_for_file) }
+    def write_samples_workflow_execution_outputs_and_manifest(swe, zip)
+      sample = swe.sample
+      sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
+                           'irida-next-name' => sample.name, 'children' => [] }
+      swe.outputs.each do |output|
+        directory = "#{sample.puid}/#{output.file.filename}"
+        write_attachment(directory, zip, output)
 
-      manifest_file.close
-      manifest_file.unlink
-    end
+        sample_directory['children'] << { 'name' => output.file.filename.to_s, 'type' => 'file' }
+      end
 
-    def attach_zip(data_export, zip)
-      data_export.file.attach(io: zip.open, filename: "#{data_export.id}.zip")
-      zip.close
-      zip.unlink
+      @manifest['children'] << sample_directory
     end
   end
 end

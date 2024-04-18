@@ -167,3 +167,12 @@ sample42_irida_next_example_completing_e:
     "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment2, :uuid)}" %>,
     "fastq_2": ""
   }
+
+sample46_irida_next_example_completed_with_output:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample46, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>
+  samplesheet_params: {
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample46, :uuid)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:samples_workflow_execution_completed_output, :uuid)}" %>,
+    "fastq_2": ""
+  }
