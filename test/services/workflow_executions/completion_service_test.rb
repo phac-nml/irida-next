@@ -64,6 +64,35 @@ module WorkflowExecutions
         blob_run_directory: blob_run_directory_c
       )
 
+      # normal2/ without update_samples
+      # get a new secure token for each workflow execution
+      @workflow_execution_with_samples_without_update_samples = workflow_executions(:irida_next_example_completing_f)
+      blob_run_directory_f = ActiveStorage::Blob.generate_unique_secure_token
+      @workflow_execution_with_samples_without_update_samples.blob_run_directory = blob_run_directory_f
+
+      # create file blobs
+      @normal2_output_json_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/iridanext.output.json',
+        blob_run_directory: blob_run_directory_f,
+        gzip: true
+      )
+      @normal2_output_summary_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/summary.txt',
+        blob_run_directory: blob_run_directory_f
+      )
+      @normal2_output_analysis1_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/analysis1.txt',
+        blob_run_directory: blob_run_directory_f
+      )
+      @normal2_output_analysis2_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/analysis2.txt',
+        blob_run_directory: blob_run_directory_f
+      )
+      @normal2_output_analysis3_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/analysis3.txt',
+        blob_run_directory: blob_run_directory_f
+      )
+
       # missing_entry/
       # get a new secure token for each workflow execution
       @workflow_execution_missing_entry = workflow_executions(:irida_next_example_completing_d)
@@ -230,7 +259,7 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
     end
 
-    test 'metadata on samples_workflow_executions merged into underlying samples' do
+    test 'metadata on samples_workflow_executions merged into underlying samples when update_samples' do
       workflow_execution = @workflow_execution_with_samples
 
       old_metadata1 = { 'metadatafield1' => 'value1',
@@ -274,7 +303,39 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
     end
 
-    test 'outputs on samples_workflow_executions added to samples attachments' do
+    test 'metadata on samples_workflow_executions are not merged into underlying samples when not update_samples' do
+      workflow_execution = @workflow_execution_with_samples_without_update_samples
+
+      old_metadata1 = { 'metadatafield1' => 'value1',
+                        'organism' => 'the organism' }
+      old_metadata2 = { 'metadatafield2' => 'value2',
+                        'organism' => 'some organism' }
+      new_metadata1 = { 'number' => 1,
+                        'metadatafield1' => 'value1',
+                        'organism' => 'an organism' }
+      new_metadata2 = { 'number' => 2,
+                        'metadatafield2' => 'value2',
+                        'organism' => 'a different organism' }
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_f', workflow_execution.run_id
+
+      assert_equal old_metadata1, @sample41.metadata
+      assert_equal old_metadata2, @sample42.metadata
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      @sample41.reload
+      assert_not_equal new_metadata1, @sample41.metadata
+
+      @sample42.reload
+      assert_not_equal new_metadata2, @sample42.metadata
+
+      assert_equal 'completed', workflow_execution.state
+    end
+
+    test 'outputs on samples_workflow_executions added to samples attachments when update_samples' do
       workflow_execution = @workflow_execution_with_samples
 
       assert 'completing', workflow_execution.state
@@ -293,6 +354,25 @@ module WorkflowExecutions
 
       assert_equal 1, @sample42.attachments.count
       assert_equal 'analysis3.txt', @sample42.attachments[0].filename.to_s
+
+      assert_equal 'completed', workflow_execution.state
+    end
+
+    test 'outputs on samples_workflow_executions not added to samples attachments when not update_samples' do
+      workflow_execution = @workflow_execution_with_samples_without_update_samples
+
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_f', workflow_execution.run_id
+
+      assert @sample41.attachments.empty?
+      assert @sample41.attachments.empty?
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal 0, @sample41.attachments.count
+
+      assert_equal 0, @sample42.attachments.count
 
       assert_equal 'completed', workflow_execution.state
     end

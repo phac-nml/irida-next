@@ -168,6 +168,24 @@ sample42_irida_next_example_completing_e:
     "fastq_2": ""
   }
 
+sample41_irida_next_example_completing_f:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_f, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAABQ,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample42_irida_next_example_completing_f:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_f, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAABR,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment2, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
 sample46_irida_next_example_completed_with_output:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample46, :uuid) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>

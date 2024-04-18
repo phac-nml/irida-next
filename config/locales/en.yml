@@ -325,6 +325,7 @@ en:
       information_icon: Information icon
     nextflow:
       required: Required
+      update_samples: Update samples with analysis results
     history:
       latest: Latest
       created_by: "%{type} created by %{user}"
