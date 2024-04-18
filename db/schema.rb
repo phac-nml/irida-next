@@ -278,6 +278,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_25_163945) do
     t.jsonb "tags", default: {}, null: false
     t.integer "state", default: 0, null: false
     t.integer "error_code"
+    t.jsonb "tags", default: {}, null: false
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["state"], name: "index_workflow_executions_on_state"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
