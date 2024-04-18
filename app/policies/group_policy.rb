@@ -163,6 +163,13 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def view_bot_personal_access_tokens?
+    return true if Member.can_modify?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
   def generate_bot_personal_access_token?
     return true if Member.can_modify?(user, record) == true
 

@@ -10,6 +10,8 @@ module BotPersonalAccessTokenActions
   end
 
   def index
+    authorize! @namespace, to: :view_bot_personal_access_tokens?
+
     @personal_access_tokens = @bot_account.user.personal_access_tokens
   end
 
