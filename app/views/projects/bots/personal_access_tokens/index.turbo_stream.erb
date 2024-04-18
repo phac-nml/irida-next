@@ -1,5 +1,6 @@
-<%= turbo_stream.update "access-token-section",
-                    partial: "personal_access_tokens_listing",
+<%= turbo_stream.update "bot_modal",
+                    partial: "personal_access_token_listing_modal",
                     locals: {
-                      bot_account_name: @bot_account.user.username
+                      open: true,
+                      bot_accounts: @bot_accounts
                     } %>

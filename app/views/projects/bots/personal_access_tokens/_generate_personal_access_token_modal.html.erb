@@ -1,12 +1,15 @@
 <%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>>
   <%= dialog.with_header(
-    title: t("projects.bots.index.bot_listing.personal_access_token_modal.title")
+    title:
+      t(
+        "projects.bots.index.bot_listing.generate_personal_access_token_modal.title"
+      )
   ) %>
   <%= dialog.with_section do %>
     <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
       <p class="dark:text-gray-400">
         <%= t(
-          "projects.bots.index.bot_listing.personal_access_token_modal.description",
+          "projects.bots.index.bot_listing.generate_personal_access_token_modal.description",
           bot_account: @bot_account.user.username
         ) %>
       </p>
@@ -20,7 +23,9 @@
       <div class="grid gap-4">
         <div class="form-field">
           <%= form.label :name,
-                     t("projects.bots.index.bot_listing.personal_access_token_modal.name") %>
+                     t(
+                       "projects.bots.index.bot_listing.generate_personal_access_token_modal.name"
+                     ) %>
           <%= form.text_field :name, required: true, class: "form-control" %>
 
         </div>
@@ -28,7 +33,7 @@
         <div class="form-field datepicker" data-controller="datepicker">
           <%= form.label :expires_at,
                      t(
-                       "projects.bots.index.bot_listing.personal_access_token_modal.expires_at"
+                       "projects.bots.index.bot_listing.generate_personal_access_token_modal.expires_at"
                      ) %>
           <div class="relative max-w-sm">
             <div
@@ -85,23 +90,23 @@
       </div>
       <div class="mt-4">
         <%= form.submit t(
-                      "projects.bots.index.bot_listing.personal_access_token_modal.submit"
+                      "projects.bots.index.bot_listing.generate_personal_access_token_modal.submit"
                     ),
                     class:
                       "
-                                              focus:outline-none
-                                              text-sm
-                                              text-white
-                                              bg-primary-700
-                                              hover:bg-primary-800
-                                              focus:ring-0
-                                              rounded-md
-                                              p-2
-                                              dark:text-white
-                                              dark:bg-primary-600
-                                              dark:hover:bg-primary-700
-                                              cursor-pointer
-                                              " %>
+                                                      focus:outline-none
+                                                      text-sm
+                                                      text-white
+                                                      bg-primary-700
+                                                      hover:bg-primary-800
+                                                      focus:ring-0
+                                                      rounded-md
+                                                      p-2
+                                                      dark:text-white
+                                                      dark:bg-primary-600
+                                                      dark:hover:bg-primary-700
+                                                      cursor-pointer
+                                                      " %>
         <button
           type="button"
           class="
@@ -122,7 +127,7 @@
           "
           data-action="click->viral--dialog#close"
         >
-          <%= t("projects.bots.index.bot_listing.personal_access_token_modal.cancel") %>
+          <%= t("projects.bots.index.bot_listing.generate_personal_access_token_modal.cancel") %>
         </button>
       </div>
     <% end %>

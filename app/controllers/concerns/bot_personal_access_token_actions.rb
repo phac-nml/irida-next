@@ -8,6 +8,7 @@ module BotPersonalAccessTokenActions
     before_action proc { namespace }
     before_action proc { bot_account }
     before_action proc { personal_access_tokens }, only: %i[index]
+    before_action proc { personal_access_token }, only: %i[revoke]
   end
 
   def index
@@ -52,13 +53,34 @@ module BotPersonalAccessTokenActions
     end
   end
 
+  def revoke
+    authorize! @namespace, to: :revoke_bot_personal_access_token?
+
+    respond_to do |format|
+      format.turbo_stream do
+        if @personal_access_token.revoke!
+          render status: :ok, locals: {
+            personal_access_token: @personal_access_token, type: 'success',
+            message: "Successfully removed personal access token #{@personal_access_token.name}"
+          }
+        else
+          render status: :unprocessable_entity
+        end
+      end
+    end
+  end
+
   private
 
   def bot_account
-    @bot_account = @namespace.namespace_bots.find_by(id: params[:id]) || not_found
+    @bot_account = @namespace.namespace_bots.find_by(id: params[:bot_id]) || not_found
   end
 
   def personal_access_tokens
-    @personal_access_tokens = @bot_account.user.personal_access_tokens
+    @personal_access_tokens = @bot_account.user.personal_access_tokens.active
+  end
+
+  def personal_access_token
+    @personal_access_token = @bot_account.user.personal_access_tokens.find_by(id: params[:id]) || not_found
   end
 end

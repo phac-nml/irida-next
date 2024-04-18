@@ -1,5 +1,5 @@
 <%= turbo_stream.update "bot_modal",
-                    partial: "personal_access_token_modal",
+                    partial: "generate_personal_access_token_modal",
                     locals: {
                       open: @personal_access_token.errors.any?,
                       personal_access_token: @personal_access_token
