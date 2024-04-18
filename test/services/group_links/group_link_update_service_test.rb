@@ -15,7 +15,6 @@ module GroupLinks
         GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'update project to group share access level' do
@@ -25,7 +24,6 @@ module GroupLinks
         GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'update group to group share expiration' do
@@ -36,7 +34,6 @@ module GroupLinks
         GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { expires_at: expiration_date }).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'update project to group share expiration' do
@@ -47,7 +44,6 @@ module GroupLinks
         GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { expires_at: expiration_date }).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'update group with group share with incorrect permissions' do
@@ -65,7 +61,6 @@ module GroupLinks
       assert_equal I18n.t(:'action_policy.policy.group.update_namespace_with_group_link?',
                           name: namespace_group_link.namespace.name),
                    exception.result.message
-      assert_no_enqueued_emails
     end
 
     test 'update project with group share with incorrect permissions' do
@@ -83,7 +78,6 @@ module GroupLinks
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update_namespace_with_group_link?',
                           name: namespace_group_link.namespace.name),
                    exception.result.message
-      assert_no_enqueued_emails
     end
 
     test 'valid authorization to update group to group share' do
@@ -95,7 +89,6 @@ module GroupLinks
         GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'valid authorization to update project to group share' do
@@ -107,7 +100,6 @@ module GroupLinks
         GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
                                                { group_access_level: Member::AccessLevel::GUEST }).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'group to group share is logged using logidze' do

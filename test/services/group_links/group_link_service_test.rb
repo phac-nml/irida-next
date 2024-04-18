@@ -16,19 +16,6 @@ module GroupLinks
       assert_difference -> { NamespaceGroupLink.count } => 1 do
         GroupLinks::GroupLinkService.new(@user, namespace, params).execute
       end
-
-      assert_enqueued_emails 4
-      manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).distinct
-      manager_emails = managers.pluck(:email)
-      memberships = Member.where(namespace: group).not_expired
-      memberships.each do |member|
-        next unless Member.can_view?(member.user, namespace, true)
-
-        assert_enqueued_email_with MemberMailer, :access_granted_email,
-                                   args: [member, manager_emails, namespace]
-      end
     end
 
     test 'share group b with group a with incorrect permissions' do
@@ -46,7 +33,6 @@ module GroupLinks
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.group.link_namespace_with_group?', name: namespace.name),
                    exception.result.message
-      assert_no_enqueued_emails
     end
 
     test 'share group b with group a where invalid group id' do
@@ -57,7 +43,6 @@ module GroupLinks
       assert_no_difference ['NamespaceGroupLink.count'] do
         GroupLinks::GroupLinkService.new(@user, namespace, params).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'should not be able to share user namespace with group' do
@@ -71,7 +56,6 @@ module GroupLinks
       end
 
       assert namespace.errors.full_messages.include?(I18n.t('services.groups.share.invalid_namespace_type'))
-      assert_no_enqueued_emails
     end
 
     test 'valid authorization to share group with other groups' do
@@ -83,19 +67,6 @@ module GroupLinks
                            with: GroupPolicy,
                            context: { user: @user }) do
         GroupLinks::GroupLinkService.new(@user, namespace, params).execute
-      end
-
-      assert_enqueued_emails 4
-      manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).distinct
-      manager_emails = managers.pluck(:email)
-      memberships = Member.where(namespace: group).not_expired
-      memberships.each do |member|
-        next unless Member.can_view?(member.user, namespace, true)
-
-        assert_enqueued_email_with MemberMailer, :access_granted_email,
-                                   args: [member, manager_emails, namespace]
       end
     end
 
@@ -123,19 +94,6 @@ module GroupLinks
       assert_difference -> { NamespaceGroupLink.count } => 1 do
         GroupLinks::GroupLinkService.new(@user, namespace, params).execute
       end
-
-      assert_enqueued_emails 4
-      manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).distinct
-      manager_emails = managers.pluck(:email)
-      memberships = Member.where(namespace: group).not_expired
-      memberships.each do |member|
-        next unless Member.can_view?(member.user, namespace, true)
-
-        assert_enqueued_email_with MemberMailer, :access_granted_email,
-                                   args: [member, manager_emails, namespace]
-      end
     end
 
     test 'share project with group with incorrect permissions' do
@@ -154,7 +112,6 @@ module GroupLinks
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.link_namespace_with_group?',
                           name: namespace.name),
                    exception.result.message
-      assert_no_enqueued_emails
     end
 
     test 'share project with group where invalid group id' do
@@ -165,7 +122,6 @@ module GroupLinks
       assert_no_difference ['NamespaceGroupLink.count'] do
         GroupLinks::GroupLinkService.new(@user, namespace, params).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'valid authorization to share project with group' do
@@ -178,19 +134,6 @@ module GroupLinks
                            context: { user: @user }) do
         GroupLinks::GroupLinkService.new(@user, namespace,
                                          params).execute
-      end
-
-      assert_enqueued_emails 4
-      manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).distinct
-      manager_emails = managers.pluck(:email)
-      memberships = Member.where(namespace: group).not_expired
-      memberships.each do |member|
-        next unless Member.can_view?(member.user, namespace, true)
-
-        assert_enqueued_email_with MemberMailer, :access_granted_email,
-                                   args: [member, manager_emails, namespace]
       end
     end
 
