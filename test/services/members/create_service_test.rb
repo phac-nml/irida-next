@@ -25,8 +25,10 @@ module Members
                                   .where(access_level: Member::AccessLevel.manageable)
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_granted_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, @group]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
                                  args: [@new_member, manager_emails, @group]
     end
 
@@ -43,8 +45,10 @@ module Members
                                   .where(access_level: Member::AccessLevel.manageable)
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_granted_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, @project_namespace]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
                                  args: [@new_member, manager_emails, @project_namespace]
     end
 
@@ -100,8 +104,10 @@ module Members
                                   .where(access_level: Member::AccessLevel.manageable)
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: new_user.id)).distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_granted_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, group]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
                                  args: [@new_member, manager_emails, group]
     end
 
@@ -120,8 +126,10 @@ module Members
                                   .where(access_level: Member::AccessLevel.manageable)
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: new_user.id)).distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_granted_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, group]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
                                  args: [@new_member, manager_emails, group]
     end
 
@@ -188,8 +196,10 @@ module Members
                                   .where(access_level: Member::AccessLevel.manageable)
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_granted_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, group]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
                                  args: [@new_member, manager_emails, group]
     end
 
@@ -208,8 +218,10 @@ module Members
                                   .where(access_level: Member::AccessLevel.manageable)
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: user.id)).distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_granted_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, @project_namespace]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
                                  args: [@new_member, manager_emails, @project_namespace]
     end
 

@@ -6,7 +6,7 @@ locals: {
       if @namespace.type == "Group"
         group_url(@namespace)
       else
-        project_url(@namespace.project)
+        namespace_project_url(@namespace.parent, @namespace.project)
       end
     )
 } %>
@@ -17,9 +17,7 @@ locals: {
   <td style="padding:12px 24px;">
     <p style="color:#334155;line-height:24px;">
       <%= t(
-        :"mailers.member_mailer.access_revoked_email.body_html",
-        first_name: @member.user.first_name.capitalize,
-        last_name: @member.user.last_name.capitalize,
+        :"mailers.member_mailer.access_granted_user_email.body_html",
         type: @namespace.type,
         name: @namespace.name
       ) %>
@@ -30,8 +28,9 @@ locals: {
   <td style="padding:12px 24px;">
     <p style="color:#334155;line-height:24px;">
       <%= t(
-        :"mailers.member_mailer.access_revoked_email.view_details",
-        type: @namespace.type
+        :"mailers.member_mailer.access_granted_user_email.view_details",
+        type: @namespace.type,
+        name: @namespace.name
       ) %>
     </p>
   </td>

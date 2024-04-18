@@ -23,8 +23,10 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @group_member.user.id))
                      .distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_revoked_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
+                                 args: [@group_member, @group]
+      assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
                                  args: [@group_member, manager_emails, @group]
     end
 
@@ -39,8 +41,10 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @group_member.user.id))
                      .distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_revoked_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
+                                 args: [@group_member, @group]
+      assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
                                  args: [@group_member, manager_emails, @group]
     end
 
@@ -80,8 +84,10 @@ module Members
       managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @project_member.user.id))
                      .distinct
       manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 1
-      assert_enqueued_email_with MemberMailer, :access_revoked_email,
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
+                                 args: [@project_member, @project_namespace]
+      assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
                                  args: [@project_member, manager_emails, @project_namespace]
     end
 

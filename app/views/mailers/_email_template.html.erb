@@ -27,7 +27,7 @@
             <tr>
               <td style="padding:24px;">
                 <h1 style="font-size:24px;color:#000;font-weight:600;">
-                  <%= t(".greeting", name:) %>
+                  <%= defined?(name) ? t(".greeting_with_name", name:) : t(".greeting") %>
                 </h1>
               </td>
             </tr>
@@ -70,14 +70,14 @@
                 </p>
               </td>
             </tr>
+<% end %>
+
+<% content_for :sendoff_and_automated_message do %>
             <tr>
               <td style="padding:12px 24px;">
                 <div style="border-bottom:1px solid #e2e8f0;">&nbsp;</div>
               </td>
             </tr>
-<% end %>
-
-<% content_for :sendoff_and_automated_message do %>
             <tr>
               <td style="padding:24px;">
                 <p style="color:#334155;line-height:24px;">

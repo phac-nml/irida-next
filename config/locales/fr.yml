@@ -1169,7 +1169,8 @@ fr:
     email_template:
       automated_message: This email was sent from an automated system. Please do not reply to this email.
       copy_paste: "Or copy and paste this link into your browser:"
-      greeting: Hello %{name},
+      greeting: Hello,
+      greeting_with_name: Hello %{name},
       thanks: Thanks,
     data_export_mailer:
       email_subject: "Export Ready - %{name}"
@@ -1177,6 +1178,22 @@ fr:
         ready_for_download_html: "Your export <strong>%{name}</strong> is ready for download."
         view_exports: "To view and download the export, click the button below:"
         download_before_html: "Please download the export before <strong>%{date}</strong> as it will be deleted after this date."
+    member_mailer:
+      access_granted_user_email:
+        subject: You have been granted access to %{type} '%{name}'
+        body_html: You have been <strong>granted</strong> access to %{type} '%{name}'
+        view_details: "To view %{type} '%{name}', click the button below:"
+      access_revoked_user_email:
+        subject: You have been revoked access from %{type} '%{name}'
+        body_html: You have been <strong>revoked</strong> access from %{type} '%{name}'
+      access_granted_manager_email:
+        subject: User '%{first_name} %{last_name}' has been granted access to %{type} '%{name}'
+        body_html: User '%{first_name} %{last_name}' has been <strong>granted</strong> access to %{type} '%{name}''
+        view_details: "To view all the members of %{type} '%{name}', click the button below:"
+      access_revoked_manager_email:
+        subject: User '%{first_name} %{last_name}' has been revoked access from %{type} '%{name}'
+        body_html: User '%{first_name} %{last_name}' has been <strong>revoked</strong> access from %{type} '%{name}''
+        view_details: "To view all the members of %{type} '%{name}', click the button below:"
     pipeline_mailer:
       complete_email:
         subject: Pipeline Completed - %{id}
