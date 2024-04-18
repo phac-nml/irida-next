@@ -12,7 +12,7 @@ class WorkflowExecutionSubmissionJob < ApplicationJob
     workflow_execution = job.arguments[0]
     workflow_execution.state = 'error'
     workflow_execution.error_code = exception.http_error_code
-    workflow_execution.save!
+    workflow_execution.save
   end
 
   def perform(workflow_execution)
