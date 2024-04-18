@@ -3,36 +3,36 @@
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
 >
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.username.upcase %>
+    <%= bot_account.user.username.upcase %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.personal_access_tokens.last.name %>
+    <%= bot_account.user.personal_access_tokens.last.name %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.personal_access_tokens.last.scopes.join(", ") %>
+    <%= bot_account.user.personal_access_tokens.last.scopes.join(", ") %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= viral_time_ago(original_time: bot_account.created_at) %>
+    <%= viral_time_ago(original_time: bot_account.user.created_at) %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <% if bot_account.members.count.positive? %>
+    <% if bot_account.user.members.count.positive? %>
       <%= t(
-        :"groups.bots.index.access_level.level_#{bot_account.members.last.access_level}"
+        :"groups.bots.index.access_level.level_#{bot_account.user.members.last.access_level}"
       ) %>
     <% end %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.personal_access_tokens.last.expires_at&.strftime(
+    <%= bot_account.user.personal_access_tokens.last.expires_at&.strftime(
       I18n.t("time.formats.full_date")
     ) %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
       <%= viral_dropdown(icon: "ellipsis_vertical",
-                                aria: { label: bot_account.email }) do |dropdown| %>
+                                aria: { label: bot_account.user.email }) do |dropdown| %>
         <%= dropdown.with_item(
           label: t("groups.bots.index.bot.remove"),
-          url: group_bot_path(id: bot_account.id),
+          url: group_bot_path(id: bot_account),
           data: {
             turbo_method: :delete,
             turbo_confirm: t("groups.bots.index.bot.remove_confirmation")
