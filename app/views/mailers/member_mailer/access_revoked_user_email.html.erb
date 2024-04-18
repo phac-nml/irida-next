@@ -1,14 +1,7 @@
 <%= render partial: "mailers/email_template",
 locals: {
   name: @member.user.first_name.capitalize,
-  url:
-    (
-      if @namespace.type == "Group"
-        group_url(@namespace)
-      else
-        namespace_project_members_url(@namespace.parent, @namespace.project)
-      end
-    )
+  url: nil
 } %>
 
 <%= yield :header_and_greeting %>
