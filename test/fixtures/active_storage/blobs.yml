@@ -5,8 +5,10 @@ attachment2_file_test_file_A_fastq_blob: <%= ActiveStorage::FixtureSet.blob file
 test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
 
 testsample_illumina_pe_forward_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_L001_R1_001.fastq", service_name: "test" %>
-
 testsample_illumina_pe_reverse_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_L001_R2_001.fastq", service_name: "test" %>
+
+testsample_illumina_without_lane_pe_forward_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_R1_001.fastq", service_name: "test" %>
+testsample_illumina_without_lane_pe_reverse_blob: <%= ActiveStorage::FixtureSet.blob filename: "TestSample_S1_R2_001.fastq", service_name: "test" %>
 
 attachmentA_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test" %>
 

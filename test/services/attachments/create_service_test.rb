@@ -11,6 +11,10 @@ module Attachments
       @fastq_se_blob = active_storage_blobs(:test_file_fastq_blob)
       @testsample_illumina_pe_fwd_blob = active_storage_blobs(:testsample_illumina_pe_forward_blob)
       @testsample_illumina_pe_rev_blob = active_storage_blobs(:testsample_illumina_pe_reverse_blob)
+      @testsample_illumina_without_lane_pe_fwd_blob =
+        active_storage_blobs(:testsample_illumina_without_lane_pe_forward_blob)
+      @testsample_illumina_without_lane_pe_rev_blob =
+        active_storage_blobs(:testsample_illumina_without_lane_pe_reverse_blob)
     end
 
     test 'create attachments with valid params' do
@@ -26,29 +30,46 @@ module Attachments
     end
 
     test 'create attachments with valid illumina paired end forward and reverse fastq files' do
-      valid_params = { files: [@testsample_illumina_pe_fwd_blob, @testsample_illumina_pe_rev_blob] }
+      valid_params = { files: [@testsample_illumina_pe_fwd_blob,
+                               @testsample_illumina_pe_rev_blob,
+                               @testsample_illumina_without_lane_pe_fwd_blob,
+                               @testsample_illumina_without_lane_pe_rev_blob] }
 
       assert_nil @sample.attachments_updated_at
 
-      assert_difference -> { Attachment.count } => 2 do
+      assert_difference -> { Attachment.count } => 4 do
         Attachments::CreateService.new(@user, @sample, valid_params).execute
       end
 
-      created_attachments = Attachment.last(2)
+      created_attachments = @sample.attachments.last(4)
 
-      assert created_attachments.first.metadata.key?('type')
-      assert created_attachments.first.metadata['type'] == 'illumina_pe'
-      assert created_attachments.first.metadata.key?('direction')
-      assert created_attachments.first.metadata['direction'] == 'forward'
-      assert created_attachments.first.metadata.key?('associated_attachment_id')
-      assert created_attachments.first.metadata['associated_attachment_id'] == created_attachments.last.id
+      assert created_attachments[0].metadata.key?('type')
+      assert created_attachments[0].metadata['type'] == 'illumina_pe'
+      assert created_attachments[0].metadata.key?('direction')
+      assert created_attachments[0].metadata['direction'] == 'forward'
+      assert created_attachments[0].metadata.key?('associated_attachment_id')
+      assert created_attachments[0].metadata['associated_attachment_id'] == created_attachments[1].id
 
-      assert created_attachments.last.metadata.key?('type')
-      assert created_attachments.last.metadata['type'] == 'illumina_pe'
-      assert created_attachments.last.metadata.key?('direction')
-      assert created_attachments.last.metadata['direction'] == 'reverse'
-      assert created_attachments.last.metadata.key?('associated_attachment_id')
-      assert created_attachments.last.metadata['associated_attachment_id'] == created_attachments.first.id
+      assert created_attachments[1].metadata.key?('type')
+      assert created_attachments[1].metadata['type'] == 'illumina_pe'
+      assert created_attachments[1].metadata.key?('direction')
+      assert created_attachments[1].metadata['direction'] == 'reverse'
+      assert created_attachments[1].metadata.key?('associated_attachment_id')
+      assert created_attachments[1].metadata['associated_attachment_id'] == created_attachments[0].id
+
+      assert created_attachments[2].metadata.key?('type')
+      assert created_attachments[2].metadata['type'] == 'illumina_pe'
+      assert created_attachments[2].metadata.key?('direction')
+      assert created_attachments[2].metadata['direction'] == 'forward'
+      assert created_attachments[2].metadata.key?('associated_attachment_id')
+      assert created_attachments[2].metadata['associated_attachment_id'] == created_attachments[3].id
+
+      assert created_attachments[3].metadata.key?('type')
+      assert created_attachments[3].metadata['type'] == 'illumina_pe'
+      assert created_attachments[3].metadata.key?('direction')
+      assert created_attachments[3].metadata['direction'] == 'reverse'
+      assert created_attachments[3].metadata.key?('associated_attachment_id')
+      assert created_attachments[3].metadata['associated_attachment_id'] == created_attachments[2].id
 
       assert_not_nil @sample.attachments_updated_at
     end

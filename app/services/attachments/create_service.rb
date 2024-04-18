@@ -48,7 +48,7 @@ module Attachments
       # identify illumina pe attachments based on illumina fastq filename convention
       # https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/NamingConvention_FASTQ-files-swBS.htm
       attachments.each do |att|
-        unless /^(?<sample_name>.+_[^_]+_L[0-9]{3})_R(?<region>[1-2])_(?<set_number>[0-9]{3})\./ =~ att.filename.to_s
+        unless /^(?<sample_name>.+_[^_]+(_L[0-9]{3})?)_R(?<region>[1-2])_(?<set_number>[0-9]{3})\./ =~ att.filename.to_s
           next
         end
 
