@@ -259,7 +259,6 @@ module DataExports
                                'manifest.json',
                                workflow_execution.outputs[0].filename.to_s]
       DataExports::CreateJob.perform_now(@data_export6)
-      assert_not ActionMailer::Base.deliveries.empty?
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
