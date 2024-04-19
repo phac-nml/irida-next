@@ -302,13 +302,13 @@ class GroupsTest < ApplicationSystemTestCase
     click_link I18n.t('groups.sidebar.general')
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
-    sleep(1)
-
-    within %(form[action="/group-1/transfer"]) do
-      assert_selector 'input[type=submit]:disabled'
-      find('#new_namespace_id').find("option[value='#{group3.id}']").select_option
-      assert_selector 'input[type=submit]:not(:disabled)'
-      click_on I18n.t('groups.edit.advanced.transfer.submit')
+    within %(div[data-controller="transfer"][data-controller-connected="true"]) do
+      within %(form[action="/group-1/transfer"]) do
+        assert_selector 'input[type=submit]:disabled'
+        find('#new_namespace_id').find("option[value='#{group3.id}']").select_option
+        assert_selector 'input[type=submit]:not(:disabled)'
+        click_on I18n.t('groups.edit.advanced.transfer.submit')
+      end
     end
 
     within('#turbo-confirm') do
