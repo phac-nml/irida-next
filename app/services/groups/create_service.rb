@@ -16,7 +16,7 @@ module Groups
       group.save
 
       if group.parent.nil? && group.persisted?
-        Members::CreateService.new(current_user, group, {
+        Members::CreateService.new(current_user, group, false, {
                                      user: current_user,
                                      access_level: Member::AccessLevel::OWNER
                                    }).execute

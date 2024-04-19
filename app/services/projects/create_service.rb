@@ -37,7 +37,7 @@ module Projects
                     Member.user_has_namespace_maintainer_access?(current_user,
                                                                  namespace)
 
-      Members::CreateService.new(current_user, project.namespace, {
+      Members::CreateService.new(current_user, project.namespace, false, {
                                    user: current_user,
                                    access_level: Member::AccessLevel::OWNER
                                  }).execute

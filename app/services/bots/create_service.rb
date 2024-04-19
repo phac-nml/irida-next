@@ -85,7 +85,7 @@ module Bots
         namespace:,
         access_level: params[:access_level]
       }
-      Members::CreateService.new(current_user, namespace, member_params).execute
+      Members::CreateService.new(current_user, namespace, false, member_params).execute
     end
   end
 end

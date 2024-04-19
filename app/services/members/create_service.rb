@@ -6,9 +6,10 @@ module Members
     MemberCreateError = Class.new(StandardError)
     attr_accessor :namespace, :member
 
-    def initialize(user = nil, namespace = nil, params = {})
+    def initialize(user = nil, namespace = nil, email_notification = nil, params = {}) # rubocop:disable Metrics/ParameterLists
       super(user, params)
       @namespace = namespace
+      @email_notification = email_notification
       @member = Member.new(params.merge(created_by: current_user, namespace:))
     end
 
@@ -25,7 +26,7 @@ module Members
       end
 
       had_access = Member.can_view?(member.user, namespace, true) if member.valid?
-      send_emails(had_access) if member.save
+      send_emails(had_access) if member.save && @email_notification
       member
     rescue Members::CreateService::MemberCreateError => e
       member.errors.add(:base, e.message)
