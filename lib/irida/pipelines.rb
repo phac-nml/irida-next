@@ -14,6 +14,7 @@ module Irida
     @pipeline_config_file = 'pipelines.json'
     @pipeline_schema_status_file = 'status.json'
     @available_pipelines = {}
+    @automatable_pipelines = {}
     @initialized = false
 
     module_function
@@ -29,8 +30,10 @@ module Irida
 
           nextflow_schema_location = prepare_schema_download(entry, version, 'nextflow_schema')
           schema_input_location = prepare_schema_download(entry, version, 'schema_input')
-          @available_pipelines["#{entry['name']}_#{version['name']}"] =
-            Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
+
+          pipeline = Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
+          @available_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
+          @automatable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline if version['automatable']
         end
       end
       @initialized = true
@@ -138,6 +141,10 @@ module Irida
 
     def pipeline_schema_file_dir=(dir)
       @pipeline_schema_file_dir = dir
+    end
+
+    def automatable_pipelines
+      @automatable_pipelines
     end
 
     # If the pipelines have been initialized or not for the current process
