@@ -142,3 +142,8 @@ samples_workflow_execution_completed_output:
   name: file
   record: samples_workflow_execution_completed_output_attachment (Attachment)
   blob: samples_workflow_execution_completed_output_blob
+
+data_export_7_test_export:
+  name: file
+  record: data_export_seven (DataExport)
+  blob: data_export_7_test_export_blob

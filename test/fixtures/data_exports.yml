@@ -58,3 +58,15 @@ data_export_six:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+
+data_export_seven:
+  name: Data Export 7
+  export_type: analysis
+  status: ready
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>]}
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  expires_at: <%= 5.days.from_now %>
+  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABV","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 44","children":[{"name":"INXT_SAM_AAAAAAAABV.assembly.fa.gz","type":"file"}]}]}'

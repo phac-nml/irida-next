@@ -11,61 +11,102 @@
             </span>
           </div>
         </li>
-        <% @manifest['children'].each do |project| %>
-          <li>
-            <div class="flex text-primary-800 dark:text-primary-400">
-              <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
-              <span class="ml-2">
-                <%= link_to project["name"],
-                  redirect_from_data_export_path(puid: project["name"]),
-                  data: {
-                      turbo: false
-                  },
-                  class: "hover:underline text-sm" %>
-              </span>
-            </div>
-            <% project["children"].each do |sample| %>
-              <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
-                <li>
-                  <div class="flex text-purple-800 dark:text-purple-300">
-                    <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
-                    <span class="ml-2">
-                      <%= link_to sample["name"],
-                      redirect_from_data_export_path(puid: sample["name"]),
+        <% if @data_export.export_type == 'sample' %>
+          <% @manifest['children'].each do |project| %>
+            <li>
+              <div class="flex text-primary-800 dark:text-primary-400">
+                <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                <span class="ml-2">
+                  <%= link_to project["name"],
+                    redirect_from_data_export_path(puid: project["name"]),
+                    data: {
+                        turbo: false
+                    },
+                    class: "hover:underline text-sm" %>
+                </span>
+              </div>
+              <% project["children"].each do |sample| %>
+                <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                  <li>
+                    <div class="flex text-purple-800 dark:text-purple-300">
+                      <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                      <span class="ml-2">
+                        <%= link_to sample["name"],
+                        redirect_from_data_export_path(puid: sample["name"]),
+                        data: {
+                            turbo: false
+                        },
+                        class: "hover:underline text-sm" %>
+                      </span>
+                    </div>
+                    <% sample["children"].each do |attachments| %>
+                      <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                        <li>
+                          <div class="flex text-blue-800 dark:text-blue-300">
+                            <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                            <span class="ml-2 text-sm">
+                              <%= attachments["name"] %>
+                            </span>
+                          </div>
+                          <% attachments["children"].each do |attachment| %>
+                            <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                              <li>
+                                <div class="flex text-slate-900 dark:text-white">
+                                  <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+                                  <span class="ml-2 text-sm">
+                                    <%= attachment["name"] %>
+                                  </span>
+                                </div>
+                              </li>
+                            </ul>
+                          <% end %>
+                        </li>
+                      </ul>
+                    <% end %>
+                  </li>
+                </ul>
+              <% end %>
+            </li>
+          <% end %>
+        <% else %>
+          <% @manifest['children'].each do |top_level_directory| %>
+            <% if top_level_directory['type'] == 'file' %>
+              <li>
+                <div class="flex text-primary-800 dark:text-primary-400">
+                  <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+                  <span class="ml-2 text-sm">
+                    <%= top_level_directory["name"] %>
+                  </span>
+                </div>
+              </li>
+            <% else %>
+              <li>
+                <div class="flex text-primary-800 dark:text-primary-400">
+                  <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
+                  <span class="ml-2">
+                    <%= link_to top_level_directory["name"],
+                      redirect_from_data_export_path(puid: top_level_directory["name"]),
                       data: {
                           turbo: false
                       },
                       class: "hover:underline text-sm" %>
-                    </span>
-                  </div>
-                  <% sample["children"].each do |attachments| %>
-                    <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
-                      <li>
-                        <div class="flex text-blue-800 dark:text-blue-300">
-                          <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
-                          <span class="ml-2 text-sm">
-                            <%= attachments["name"] %>
-                          </span>
-                        </div>
-                        <% attachments["children"].each do |attachment| %>
-                          <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
-                            <li>
-                              <div class="flex text-slate-900 dark:text-white">
-                                <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
-                                <span class="ml-2 text-sm">
-                                  <%= attachment["name"] %>
-                                </span>
-                              </div>
-                            </li>
-                          </ul>
-                        <% end %>
-                      </li>
-                    </ul>
-                  <% end %>
-                </li>
-              </ul>
+                  </span>
+                </div>
+                <% top_level_directory["children"].each do |attachment| %>
+                  <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                    <li>
+                      <div class="flex text-slate-900 dark:text-white">
+                        <%= viral_icon(name: "document_text", classes: "w-5 h-5 m-0") %>
+                        <span class="ml-2 text-sm">
+                          <%= attachment["name"] %>
+                        </span>
+                      </div>
+                    </li>
+                  </ul>
+                <% end %>
+              </li>
             <% end %>
-          </li>
+          <% end %>
         <% end %>
       </ul>
     <% end %>

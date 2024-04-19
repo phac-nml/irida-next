@@ -36,13 +36,13 @@
       <% end %>
       <% if allowed_to?(:export_sample_data?, @project) %>
         <%= link_to t(".create_export_button"),
-        new_data_export_path,
-        data: {
-          turbo_stream: true,
-          controller: "action-link",
-          action_link_required_value: 1
-        },
-        class: "button button--size-default button--state-default action-link" %>
+            new_data_export_path(export_type: 'sample'),
+            data: {
+              turbo_stream: true,
+              controller: "action-link",
+              action_link_required_value: 1
+            },
+            class: "button button--size-default button--state-default action-link" %>
       <% end %>
       <% if allowed_to?(:update_sample?, @project) %>
         <%= link_to t("projects.samples.index.import_metadata_button"),

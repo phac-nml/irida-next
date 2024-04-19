@@ -37,7 +37,7 @@ module DataExports
           expected_files_in_zip.delete(entry.to_s)
         end
       end
-      assert_not expected_files_in_zip.count.positive?
+      assert expected_files_in_zip.empty?
       expected_manifest = {
         'type' => 'Samples Export',
         'date' => Date.current.strftime('%Y-%m-%d'),
@@ -246,7 +246,7 @@ module DataExports
           expected_files_in_zip.delete(entry.to_s)
         end
       end
-      assert_not expected_files_in_zip.count.positive?
+      assert expected_files_in_zip.empty?
       assert_equal expected_manifest.to_json, data_export.manifest
     end
 
@@ -266,7 +266,7 @@ module DataExports
           expected_files_in_zip.delete(entry.to_s)
         end
       end
-      assert_not expected_files_in_zip.count.positive?
+      assert expected_files_in_zip.empty?
       expected_manifest = {
         'type' => 'Analysis Export',
         'date' => Date.current.strftime('%Y-%m-%d'),
@@ -291,6 +291,7 @@ module DataExports
           }
         ]
       }
+
       assert_equal expected_manifest.to_json, @data_export6.manifest
       assert_equal 'ready', @data_export6.status
     end

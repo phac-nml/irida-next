@@ -5,34 +5,26 @@
         data: {
           turbo: false
         }, method: :post) do |form| %>
-    <div
-      data-controller="sessionstorage-amend-form"
-      data-sessionstorage-amend-form-target="field"
-      data-sessionstorage-amend-form-field-name-value="data_export[export_parameters[ids]][]"
-    />
     <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
-      <span
-        data-controller="data-export"
-        data-data-export-target="summary"
-        data-data-export-singular-value="<%= t(".summary.start.singular") %>"
-        data-data-export-plural-value="<%= t(".summary.start.plural") %>"
-        class="mb-4">
-        <%= t(".summary.start.zero") %>
-      </span>
-      <%= viral_pill(
-        text: t(".summary.processing"),
-        color: :gray
-      ) %>
-      <span>
-      <%= t(".summary.middle") %>
-      </span>
-      <%= viral_pill(
-        text: t(".summary.ready"),
-        color: :green
-      ) %>
-      <span>
-        <%= t(".summary.end") %>
-      </span>
+      <% if export_type == 'sample' %>
+        <div
+          data-controller="sessionstorage-amend-form"
+          data-sessionstorage-amend-form-target="field"
+          data-sessionstorage-amend-form-field-name-value="data_export[export_parameters[ids]][]"
+        />
+        <p
+          data-controller="data-export"
+          data-data-export-target="summary"
+          data-data-export-singular-value="<%= t(".summary.sample.singular", processing: t(".summary.processing"), ready: t(".summary.ready")) %>"
+          data-data-export-plural-value="<%= t(".summary.sample.plural", processing: t(".summary.processing"), ready: t(".summary.ready")) %>"
+          class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+          <%= t(".summary.sample.zero", processing: t(".summary.processing"), ready: t(".summary.ready")) %>
+        </p>
+      <% else %>
+        <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+          <%= t(".summary.analysis_html", id: workflow_execution_id, processing: t(".summary.processing"), ready: t(".summary.ready")) %>
+        </p>
+      <% end %>
       <div class="form-field mb-4 mt-2">
         <%= form.label :name, t(".name_label") %>
         <%= form.text_field :name, class: "form-control" %>
@@ -58,8 +50,11 @@
         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
       <div>
-        <%= form.hidden_field :export_type, value: 'sample' %>
+        <%= form.hidden_field :export_type, value: export_type %>
       </div>
+      <% if export_type == 'analysis' %>
+        <input type="hidden" name="data_export[export_parameters[ids]][]" value="<%= workflow_execution_id %>">
+      <% end %>
       <div>
         <%= form.submit t(".submit_button"),
           data: {
