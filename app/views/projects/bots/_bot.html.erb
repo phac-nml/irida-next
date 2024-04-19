@@ -35,7 +35,7 @@
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= viral_dropdown(icon: "ellipsis_vertical",
-                              aria: { label: bot_account.email }) do |dropdown| %>
+                              aria: { label: bot_account.user.email }) do |dropdown| %>
       <% if allowed_to?(:generate_bot_personal_access_token?, @namespace) %>
         <%= dropdown.with_item(
           label: t("projects.bots.index.bot.generate_new_token"),
@@ -54,7 +54,7 @@
       <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
         <%= dropdown.with_item(
           label: t("projects.bots.index.bot.remove"),
-          url: namespace_project_bot_path(id: bot_account),
+          url: namespace_project_bot_path(id: bot_account.id),
           data: {
             turbo_method: :delete,
             turbo_confirm: t("projects.bots.index.bot.remove_confirmation")

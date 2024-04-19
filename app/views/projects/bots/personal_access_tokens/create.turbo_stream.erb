@@ -12,10 +12,10 @@
     <%= viral_flash(type:, data: message) %>
   <% end %>
 
-  <%= turbo_stream.replace dom_id(@bot_account.user),
+  <%= turbo_stream.replace dom_id(@bot_account),
                        partial: "projects/bots/bot",
                        locals: {
-                         bot_account: @bot_account.user
+                         bot_account: @bot_account
                        } %>
 
   <%= turbo_stream.replace "access-token-section",
