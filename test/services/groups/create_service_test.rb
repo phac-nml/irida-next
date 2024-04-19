@@ -9,11 +9,17 @@ module Groups
     end
 
     test 'create group with valid params' do
+      new_group = nil
       valid_params = { name: 'group1', path: 'group1', parent_id: nil }
 
       assert_difference -> { Group.count } => 1, -> { Member.count } => 1 do
-        Groups::CreateService.new(@user, valid_params).execute
+        new_group = Groups::CreateService.new(@user, valid_params).execute
       end
+
+      new_member = Member.where(namespace: new_group).first
+      assert_enqueued_emails 1
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [new_member, new_group]
     end
 
     test 'create group with invalid params' do

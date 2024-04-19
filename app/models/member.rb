@@ -204,6 +204,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return if had_access
 
     MemberMailer.access_granted_user_email(self, namespace).deliver_later
+
+    return if manager_emails.empty?
+
     MemberMailer.access_granted_manager_email(self, manager_emails, namespace).deliver_later
   end
 
