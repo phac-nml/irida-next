@@ -519,7 +519,7 @@ en:
           remove_confirmation: "Are you sure you want to remove this bot account from the group?"
           remove_aria_label: Remove bot account
         bot_listing:
-          name: Name
+          username: Username
           token_name: Token Name
           api_scope: API Scope(s)
           created: Created
@@ -807,7 +807,7 @@ en:
           remove_confirmation: "Are you sure you want to remove this bot account from the project?"
           remove_aria_label: Remove bot account
         bot_listing:
-          name: Name
+          username: Username
           token_name: Token Name
           api_scope: API Scope(s)
           created: Created
