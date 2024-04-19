@@ -808,10 +808,10 @@ en:
           remove_aria_label: Remove bot account
           generate_new_token: Generate new token
           generate_new_token_aria_label: Generate a new personal access token for bot account
+          never: Never
         bot_listing:
           username: Username
-          token_name: Token Name
-          api_scope: API Scope(s)
+          active_tokens: Active Tokens
           created: Created
           expiration: Expiration
           access_level: Access Level

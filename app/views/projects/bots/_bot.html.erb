@@ -1,9 +1,13 @@
+<% bot_account_membership = bot_account.membership %>
 <tr
   id="<%= dom_id(bot_account) %>"
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
 >
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= link_to bot_account.user.email,
+    <%= bot_account.user.email %>
+  </td>
+  <td class="px-6 py-3 whitespace-nowrap">
+    <%= link_to bot_account.user.personal_access_tokens.active.count,
     namespace_project_bot_personal_access_tokens_path(bot_id: bot_account.id),
     data: {
       turbo_stream: true
@@ -11,27 +15,21 @@
     class: "font-semibold text-slate-800 dark:text-slate-300 hover:underline" %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens&.last&.name %>
-  </td>
-  <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens&.last&.scopes&.join(", ") %>
-  </td>
-  <td class="px-6 py-3 whitespace-nowrap">
     <%= viral_time_ago(original_time: bot_account.user.created_at) %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <% unless bot_account.user.personal_access_tokens.count.positive? %>
-      <% if bot_account.membership.nil? %>
-        <%= t(
-          :"projects.bots.index.access_level.level_#{bot_account.membership.access_level}"
-        ) %>
-      <% end %>
+    <% unless bot_account_membership.nil? %>
+      <%= t(
+        :"projects.bots.index.access_level.level_#{bot_account_membership.access_level}"
+      ) %>
     <% end %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens&.last&.expires_at&.strftime(
-      I18n.t("time.formats.full_date")
-    ) %>
+    <% if !bot_account_membership&.expires_at.nil? %>
+      <%= bot_account_membership.expires_at.strftime(I18n.t("time.formats.full_date")) %>
+    <% else %>
+      <%= t("projects.bots.index.bot.never") %>
+    <% end %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= viral_dropdown(icon: "ellipsis_vertical",
