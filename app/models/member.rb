@@ -19,9 +19,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :validate_namespace
   validate :higher_access_level_than_group
 
+  around_save :send_access_granted_emails, if: :new_record?
   before_destroy :last_namespace_owner_member
   after_destroy :send_access_revoked_emails
-  after_save :send_access_granted_emails, if: :previously_new_record?
 
   delegate :project, to: :project_namespace
 
@@ -197,7 +197,11 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def send_access_granted_emails
-    return unless Member.can_view?(user, namespace, true)
+    had_access = Member.can_view?(user, namespace, true)
+
+    yield
+
+    return if had_access
 
     MemberMailer.access_granted_user_email(self, namespace).deliver_later
     MemberMailer.access_granted_manager_email(self, manager_emails, namespace).deliver_later

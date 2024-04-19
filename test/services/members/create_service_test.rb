@@ -97,18 +97,9 @@ module Members
       group = groups(:subgroup_one_group_three)
 
       assert_difference -> { Member.count } => 1 do
-        @new_member = Members::CreateService.new(user, group, valid_params).execute
+        Members::CreateService.new(user, group, valid_params).execute
       end
-
-      manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: new_user.id)).distinct
-      manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 2
-      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
-                                 args: [@new_member, group]
-      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                 args: [@new_member, manager_emails, group]
+      assert_no_enqueued_emails
     end
 
     test 'create group member with valid params when member of a parent group with MAINTAINER role' do
@@ -119,18 +110,9 @@ module Members
       group = groups(:subgroup_one_group_three)
 
       assert_difference -> { Member.count } => 1 do
-        @new_member = Members::CreateService.new(user, group, valid_params).execute
+        Members::CreateService.new(user, group, valid_params).execute
       end
-
-      manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: new_user.id)).distinct
-      manager_emails = managers.pluck(:email)
-      assert_enqueued_emails 2
-      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
-                                 args: [@new_member, group]
-      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                 args: [@new_member, manager_emails, group]
+      assert_no_enqueued_emails
     end
 
     test 'create group member with valid params when member of a parent group with MAINTAINER role and group member
