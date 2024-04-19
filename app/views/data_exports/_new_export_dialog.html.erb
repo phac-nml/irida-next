@@ -12,18 +12,18 @@
           data-sessionstorage-amend-form-target="field"
           data-sessionstorage-amend-form-field-name-value="data_export[export_parameters[ids]][]"
         />
-        <span
+        <p
           data-controller="data-export"
           data-data-export-target="summary"
           data-data-export-singular-value="<%= t(".summary.sample.singular", processing: t(".summary.processing"), ready: t(".summary.ready")) %>"
           data-data-export-plural-value="<%= t(".summary.sample.plural", processing: t(".summary.processing"), ready: t(".summary.ready")) %>"
-          class="mb-4">
+          class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
           <%= t(".summary.sample.zero", processing: t(".summary.processing"), ready: t(".summary.ready")) %>
-        </span>
+        </p>
       <% else %>
-        <span>
+        <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
           <%= t(".summary.analysis_html", id: workflow_execution_id, processing: t(".summary.processing"), ready: t(".summary.ready")) %>
-        </span>
+        </p>
       <% end %>
       <div class="form-field mb-4 mt-2">
         <%= form.label :name, t(".name_label") %>
