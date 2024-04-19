@@ -5,7 +5,7 @@ class WorkflowExecutionStatusJob < ApplicationJob
   queue_as :default
 
   # When server is unreachable, continually retry
-  retry_on Integrations::ApiExceptions::ConnectionError, wait: :exponentially_longer, attempts: Float::INFINITY
+  retry_on Integrations::ApiExceptions::ConnectionError, wait: :polynomially_longer, attempts: Float::INFINITY
 
   # Puts workflow execution into error state and records the error code
   retry_on Integrations::ApiExceptions::APIExceptionError, attempts: 3 do |job, exception|
