@@ -48,15 +48,15 @@ module Attachments
       # identify illumina pe attachments based on illumina fastq filename convention
       # https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/NamingConvention_FASTQ-files-swBS.htm
       attachments.each do |att|
-        unless /^(?<sample_name>.+_[^_]+_L[0-9]{3})_R(?<region>[1-2])_(?<set_number>[0-9]{3})\./ =~ att.filename.to_s
+        unless /^(?<sample_name>.+_[^_]+(?:_L[0-9]{3})?)_R(?<region>[1-2])_(?<set>[0-9]{3})\./ =~ att.filename.to_s
           next
         end
 
         case region
         when '1'
-          illumina_pe["#{sample_name}_#{set_number}"]['forward'] = att
+          illumina_pe["#{sample_name}_#{set}"]['forward'] = att
         when '2'
-          illumina_pe["#{sample_name}_#{set_number}"]['reverse'] = att
+          illumina_pe["#{sample_name}_#{set}"]['reverse'] = att
         end
       end
 
