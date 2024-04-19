@@ -25,6 +25,7 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
                workflow_engine_version: '23.10.0',
                workflow_engine_parameters: { '-r': 'dev' },
                workflow_url: 'https://github.com/phac-nml/iridanextexample',
+               email_notification: true,
                samples_workflow_executions_attributes: [
                  {
                    sample_id: @sample1.id,
@@ -47,6 +48,7 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, created_workflow_execution.samples_workflow_executions.count
     assert_equal @sample1, created_workflow_execution.samples_workflow_executions.first.sample
+    assert_equal true, created_workflow_execution.email_notification
   end
 
   test 'should cancel a new workflow with valid params' do
