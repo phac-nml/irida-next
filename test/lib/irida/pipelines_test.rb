@@ -47,4 +47,14 @@ class PipelinesTest < ActiveSupport::TestCase
     workflow = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0')
     assert_not_nil workflow
   end
+
+  test 'automatable pipelines' do
+    Irida::Pipelines.register_pipelines
+
+    assert_not Irida::Pipelines.automatable_pipelines.empty?
+
+    assert Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.2']
+    assert_not Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.1']
+    assert_not Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.0']
+  end
 end

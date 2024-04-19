@@ -9,12 +9,10 @@
         "automatable": true
       },
       {
-        "name": "1.0.1",
-        "automatable": false
+        "name": "1.0.1"
       },
       {
-        "name": "1.0.0",
-        "automatable": false
+        "name": "1.0.0"
       }
     ]
   }
