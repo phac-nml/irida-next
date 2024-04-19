@@ -3,7 +3,7 @@
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
 >
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.username.upcase %>
+    <%= bot_account.user.email %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= bot_account.user.personal_access_tokens.last.name %>
@@ -15,9 +15,9 @@
     <%= viral_time_ago(original_time: bot_account.user.created_at) %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <% if bot_account.user.members.count.positive? %>
+    <% unless bot_account.membership.nil? %>
       <%= t(
-        :"projects.bots.index.access_level.level_#{bot_account.user.members.last.access_level}"
+        :"projects.bots.index.access_level.level_#{bot_account.membership.access_level}"
       ) %>
     <% end %>
   </td>
