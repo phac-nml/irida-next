@@ -207,17 +207,27 @@ module WorkflowExecutions
       assert_equal 'my_run_id_c', workflow_execution.run_id
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      assert_equal @sample41.puid, workflow_execution.samples_workflow_executions[0].sample.puid
-      assert_equal @sample42.puid, workflow_execution.samples_workflow_executions[1].sample.puid
+
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
+        swe1 = workflow_execution.samples_workflow_executions[0]
+        swe2 = workflow_execution.samples_workflow_executions[1]
+      else
+        swe2 = workflow_execution.samples_workflow_executions[0]
+        swe1 = workflow_execution.samples_workflow_executions[1]
+      end
+
+      assert_equal @sample41.puid, swe1.sample.puid
+      assert_equal @sample42.puid, swe2.sample.puid
 
       assert_equal 2, workflow_execution.samples_workflow_executions[0].outputs.count
       # file blobs can be in either order
-      if workflow_execution.samples_workflow_executions[0].outputs[0].filename == @normal2_output_analysis1_file_blob.filename # rubocop:disable Layout/LineLength
-        output1 = workflow_execution.samples_workflow_executions[0].outputs[0]
-        output2 = workflow_execution.samples_workflow_executions[0].outputs[1]
+      if swe1.outputs[0].filename == @normal2_output_analysis1_file_blob.filename
+        output1 = swe1.outputs[0]
+        output2 = swe1.outputs[1]
       else
-        output2 = workflow_execution.samples_workflow_executions[0].outputs[0]
-        output1 = workflow_execution.samples_workflow_executions[0].outputs[1]
+        output2 = swe1.outputs[0]
+        output1 = swe1.outputs[1]
       end
       # original file blob should not be the same as the output file blob, but contain the same file
       assert_not_equal @normal2_output_analysis1_file_blob.id, output1.id
@@ -253,8 +263,17 @@ module WorkflowExecutions
                     'organism' => 'a different organism' }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
-      assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
+        swe1 = workflow_execution.samples_workflow_executions[0]
+        swe2 = workflow_execution.samples_workflow_executions[1]
+      else
+        swe2 = workflow_execution.samples_workflow_executions[0]
+        swe1 = workflow_execution.samples_workflow_executions[1]
+      end
+
+      assert_equal metadata1, swe1.metadata
+      assert_equal metadata2, swe2.metadata
 
       assert_equal 'completed', workflow_execution.state
     end
