@@ -20,4 +20,8 @@ export default class extends Controller {
       this.confirmButtonTarget.setAttribute("disabled", "disabled");
     }
   }
+
+  connect() {
+    this.element.setAttribute("data-controller-connected", "true");
+  }
 }
