@@ -70,11 +70,11 @@
                 id: "personal_access_token_scopes_#{scope}" %>
               </div>
               <div class="ml-2 text-sm">
-                <%= label_tag "bot_scopes_#{scope}",
+                <%= label_tag "personal_access_token_scopes_#{scope}",
                 scope,
                 class: "font-medium text-slate-900 dark:text-slate-300" %>
                 <p
-                  id="<%= "bot_scopes_#{scope}_help-text" %>"
+                  id="<%= "personal_access_token_scopes_#{scope}_help-text" %>"
                   class="
                     text-xs
                     font-normal
@@ -94,19 +94,19 @@
                     ),
                     class:
                       "
-                                                      focus:outline-none
-                                                      text-sm
-                                                      text-white
-                                                      bg-primary-700
-                                                      hover:bg-primary-800
-                                                      focus:ring-0
-                                                      rounded-md
-                                                      p-2
-                                                      dark:text-white
-                                                      dark:bg-primary-600
-                                                      dark:hover:bg-primary-700
-                                                      cursor-pointer
-                                                      " %>
+                                                              focus:outline-none
+                                                              text-sm
+                                                              text-white
+                                                              bg-primary-700
+                                                              hover:bg-primary-800
+                                                              focus:ring-0
+                                                              rounded-md
+                                                              p-2
+                                                              dark:text-white
+                                                              dark:bg-primary-600
+                                                              dark:hover:bg-primary-700
+                                                              cursor-pointer
+                                                              " %>
         <button
           type="button"
           class="

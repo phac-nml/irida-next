@@ -148,5 +148,134 @@ module Projects
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
     end
+
+    test 'can view personal access tokens for bot account' do
+      namespace_bot = namespace_bots(:project1_bot0)
+
+      visit namespace_project_bots_path(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
+
+      table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
+
+      within table_row do
+        click_link namespace_bot.user.personal_access_tokens.count.to_s
+      end
+
+      within('dialog') do
+        assert_selector 'h1', text: I18n.t('projects.bots.index.personal_access_tokens_listing_modal.title')
+        assert_selector 'p',
+                        text: I18n.t(
+                          'projects.bots.index.personal_access_tokens_listing_modal.description',
+                          bot_account: namespace_bot.user.username
+                        )
+
+        within('table') do
+          assert_selector 'tr', count: 2
+          token = namespace_bot.user.personal_access_tokens.first
+
+          table_row = find(:table_row, { 'Token name' => token.name })
+
+          within table_row do
+            assert_equal 'Valid PAT0', token.name
+            assert_equal 'read_api, api', token.scopes.join(', ')
+
+            assert_equal Time.zone.now.strftime(
+              I18n.t('time.formats.full_date')
+            ), token.created_at.strftime(
+              I18n.t('time.formats.full_date')
+            )
+
+            assert_equal 10.days.from_now.to_date.strftime(
+              I18n.t('time.formats.full_date')
+            ), token.expires_at.strftime(
+              I18n.t('time.formats.full_date')
+            )
+          end
+        end
+      end
+    end
+
+    test 'can generate a new personal access token for bot account' do
+      namespace_bot = namespace_bots(:project1_bot0)
+
+      visit namespace_project_bots_path(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
+
+      table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
+
+      within table_row do
+        first('button.Viral-Dropdown--icon').click
+        click_link 'Generate new token'
+      end
+
+      within('dialog') do
+        assert_text I18n.t(
+          'projects.bots.index.bot_listing.generate_personal_access_token_modal.title'
+        )
+
+        assert_text I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.description',
+                           bot_account: namespace_bot.user.username)
+
+        fill_in 'Token name', with: 'Newest token'
+
+        all('input[type=checkbox]').each(&:click)
+
+        click_button I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.submit')
+      end
+
+      within('#access-token-section') do
+        bot_account_name = namespace_bot.user.username
+        assert_selector 'h2', text: I18n.t('projects.bots.index.access_token_section.label', bot_name: bot_account_name)
+        assert_selector 'p', text: I18n.t('projects.bots.index.access_token_section.description')
+        assert_selector 'button', text: I18n.t('components.clipboard.copy')
+      end
+    end
+
+    test 'can revoke a personal access token' do
+      namespace_bot = namespace_bots(:project1_bot0)
+      token = nil
+
+      visit namespace_project_bots_path(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
+
+      table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
+
+      within table_row do
+        click_link namespace_bot.user.personal_access_tokens.count.to_s
+      end
+
+      within('dialog') do
+        assert_selector 'h1', text: I18n.t('projects.bots.index.personal_access_tokens_listing_modal.title')
+        assert_selector 'p',
+                        text: I18n.t(
+                          'projects.bots.index.personal_access_tokens_listing_modal.description',
+                          bot_account: namespace_bot.user.username
+                        )
+
+        within('table') do
+          assert_selector 'tr', count: 2
+          token = namespace_bot.user.personal_access_tokens.first
+
+          table_row = find(:table_row, { 'Token name' => token.name })
+
+          within table_row do
+            click_link 'Revoke'
+          end
+        end
+      end
+
+      within('#turbo-confirm[open]') do
+        click_button 'Confirm'
+      end
+
+      within('dialog') do
+        within('#personal-access-token-alert') do
+          assert_text I18n.t('projects.bots.personal_access_tokens.revoke.success', pat_name: token.name)
+        end
+      end
+    end
   end
 end
