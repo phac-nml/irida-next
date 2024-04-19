@@ -11,7 +11,9 @@
     "editor.semanticHighlighting.enabled": true
   },
   "editor.formatOnSave": true,
-  "rubyLsp.rubyVersionManager": "asdf",
+  "rubyLsp.rubyVersionManager": {
+    "identifier": "asdf"
+  },
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "editor.rulers": [

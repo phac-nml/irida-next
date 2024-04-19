@@ -37,7 +37,7 @@ module DataExports
           expected_files_in_zip.delete(entry.to_s)
         end
       end
-      assert_not expected_files_in_zip.count.positive?
+      assert expected_files_in_zip.empty?
       expected_manifest = {
         'type' => 'Samples Export',
         'date' => Date.current.strftime('%Y-%m-%d'),
@@ -246,7 +246,7 @@ module DataExports
           expected_files_in_zip.delete(entry.to_s)
         end
       end
-      assert_not expected_files_in_zip.count.positive?
+      assert expected_files_in_zip.empty?
       assert_equal expected_manifest.to_json, data_export.manifest
     end
 
@@ -258,7 +258,9 @@ module DataExports
       expected_files_in_zip = ["#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
                                'manifest.json',
                                workflow_execution.outputs[0].filename.to_s]
-      DataExports::CreateJob.perform_now(@data_export6)
+      assert_difference -> { ActionMailer::Base.deliveries.count } => 1 do
+        DataExports::CreateJob.perform_now(@data_export6)
+      end
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
@@ -266,7 +268,7 @@ module DataExports
           expected_files_in_zip.delete(entry.to_s)
         end
       end
-      assert_not expected_files_in_zip.count.positive?
+      assert expected_files_in_zip.empty?
       expected_manifest = {
         'type' => 'Analysis Export',
         'date' => Date.current.strftime('%Y-%m-%d'),
