@@ -82,32 +82,57 @@
       <% end %>
 
       <%- if @allowed_to_update_samples %>
+        <div class="flex mb-4 items-center h-5">
+          <%= workflow.check_box :update_samples,
+                             {
+                               checked: false,
+                               class:
+                                 "w-4
+                                  h-4
+                                  mr-2.5
+                                  text-primary-600
+                                  bg-slate-100
+                                  border-slate-300
+                                  rounded
+                                  focus:ring-primary-500
+                                  dark:focus:ring-primary-600
+                                  dark:ring-offset-slate-800
+                                  focus:ring-2
+                                  dark:bg-slate-700
+                                  dark:border-slate-600"
+                             },
+                             true,
+                             false %>
+          <%= workflow.label :update_samples,
+                         t(:"components.nextflow.update_samples"),
+                         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+        </div>
+      <%- end %>
       <div class="flex mb-4 items-center h-5">
-        <%= workflow.check_box :update_samples,
+        <%= workflow.check_box :email_notification,
                            {
                              checked: false,
                              class:
                                "w-4
-                          h-4
-                          mr-2.5
-                          text-primary-600
-                          bg-slate-100
-                          border-slate-300
-                          rounded
-                          focus:ring-primary-500
-                          dark:focus:ring-primary-600
-                          dark:ring-offset-slate-800
-                          focus:ring-2
-                          dark:bg-slate-700
-                          dark:border-slate-600"
+                                h-4
+                                mr-2.5
+                                text-primary-600
+                                bg-slate-100
+                                border-slate-300
+                                rounded
+                                focus:ring-primary-500
+                                dark:focus:ring-primary-600
+                                dark:ring-offset-slate-800
+                                focus:ring-2
+                                dark:bg-slate-700
+                                dark:border-slate-600"
                            },
                            true,
                            false %>
-        <%= workflow.label :update_samples,
-                       t(:"components.nextflow.update_samples"),
+        <%= workflow.label :email_notification,
+                       t(:"components.nextflow.email_notification"),
                        class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
-      <%- end %>
     <% end %>
 
     <button type="submit" class="button button--state-primary button--size-default">
