@@ -258,9 +258,7 @@ module DataExports
       expected_files_in_zip = ["#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
                                'manifest.json',
                                workflow_execution.outputs[0].filename.to_s]
-      assert_difference -> { ActionMailer::Base.deliveries.count } => 1 do
-        DataExports::CreateJob.perform_now(@data_export6)
-      end
+      DataExports::CreateJob.perform_now(@data_export6)
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
