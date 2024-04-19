@@ -14,7 +14,9 @@ module WorkflowExecutions
       @workflow_execution.submitter = current_user
       @workflow_execution.state = 'new'
 
-      @workflow_execution.workflow_params = sanitized_workflow_params if @workflow_execution.valid?
+      if @workflow_execution.valid? && params.key?(:workflow_params)
+        @workflow_execution.workflow_params = sanitized_workflow_params
+      end
 
       if @workflow_execution.save
         WorkflowExecutionPreparationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
