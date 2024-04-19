@@ -5,13 +5,16 @@
     "description": "IRIDA Next Example Pipeline",
     "versions": [
       {
-        "name": "1.0.2"
+        "name": "1.0.2",
+        "automatable": true
       },
       {
-        "name": "1.0.1"
+        "name": "1.0.1",
+        "automatable": false
       },
       {
-        "name": "1.0.0"
+        "name": "1.0.0",
+        "automatable": false
       }
     ]
   }

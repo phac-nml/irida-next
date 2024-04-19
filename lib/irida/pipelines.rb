@@ -140,6 +140,10 @@ module Irida
       @pipeline_schema_file_dir = dir
     end
 
+    def automatable_pipelines
+      available_pipelines.select { |_name, pipeline| pipeline.automatable }
+    end
+
     # If the pipelines have been initialized or not for the current process
     def initialized
       @initialized
