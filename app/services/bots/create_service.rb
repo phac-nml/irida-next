@@ -11,8 +11,11 @@ module Bots
       @namespace = namespace
 
       current_count = @namespace.namespace_bots.count
+
+      bot_text = params.key?(:is_automation_bot) ? 'automation_bot' : "bot_#{format('%03d', (current_count + 1))}"
+
       user_params = {
-        email: "#{namespace.puid}_bot_#{format('%03d', (current_count + 1))}@iridanext.com",
+        email: "#{namespace.puid}_#{bot_text}@iridanext.com",
         user_type: bot_type,
         first_name: namespace.puid,
         last_name: "Bot #{format('%03d', (current_count + 1))}"
