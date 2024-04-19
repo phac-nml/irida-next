@@ -26,7 +26,7 @@ module HasUserType
     enum user_type: USER_TYPES
 
     scope :bots, -> { where(user_type: BOT_USER_TYPES) }
-    scope :without_automation_bots, -> { where(user_type: BOT_USER_TYPES - AUTOMATION_BOT_USER_TYPES) }
+    scope :without_automation_bots, -> { where(user_type: USER_TYPES.keys - AUTOMATION_BOT_USER_TYPES) }
     scope :without_bots, -> { where(user_type: USER_TYPES.keys - BOT_USER_TYPES) }
     scope :human_users, -> { where(user_type: %i[human]) }
 
