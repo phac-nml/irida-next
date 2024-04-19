@@ -50,6 +50,6 @@ module BotPersonalAccessTokenActions
   private
 
   def bot_account
-    @bot_account = @namespace.namespace_bots.find_by(user_id: params[:id]) || not_found
+    @bot_account = @namespace.namespace_bots.find_by(id: params[:id]) || not_found
   end
 end

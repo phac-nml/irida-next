@@ -83,7 +83,7 @@ module Groups
 
       namespace = groups(:group_one)
 
-      delete group_bot_path(namespace, id: namespace_bot.user.id, format: :turbo_stream)
+      delete group_bot_path(namespace, id: namespace_bot.id, format: :turbo_stream)
 
       assert_response :success
     end
@@ -95,7 +95,7 @@ module Groups
 
       namespace = groups(:group_two)
 
-      delete group_bot_path(namespace, id: namespace_bot.user.id, format: :turbo_stream)
+      delete group_bot_path(namespace, id: namespace_bot.id, format: :turbo_stream)
 
       assert_response :not_found
     end
@@ -107,7 +107,7 @@ module Groups
 
       namespace = groups(:group_one)
 
-      delete group_bot_path(namespace, id: namespace_bot.user.id, format: :turbo_stream)
+      delete group_bot_path(namespace, id: namespace_bot.id, format: :turbo_stream)
 
       assert_response :unauthorized
     end

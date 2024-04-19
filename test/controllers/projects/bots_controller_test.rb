@@ -90,7 +90,7 @@ module Projects
       namespace = groups(:group_one)
       project = projects(:project1)
 
-      delete namespace_project_bot_path(namespace, project, id: namespace_bot.user.id, format: :turbo_stream)
+      delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
 
       assert_response :success
     end
@@ -103,7 +103,7 @@ module Projects
       namespace = groups(:group_one)
       project = projects(:project2)
 
-      delete namespace_project_bot_path(namespace, project, id: namespace_bot.user.id, format: :turbo_stream)
+      delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
 
       assert_response :not_found
     end
@@ -116,7 +116,7 @@ module Projects
       namespace = groups(:group_one)
       project = projects(:project1)
 
-      delete namespace_project_bot_path(namespace, project, id: namespace_bot.user.id, format: :turbo_stream)
+      delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
 
       assert_response :unauthorized
     end

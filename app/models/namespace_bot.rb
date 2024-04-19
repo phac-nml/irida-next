@@ -17,4 +17,8 @@ class NamespaceBot < ApplicationRecord
 
     errors.add(:base, 'Human user cannot be set as a bot user for a namespace')
   end
+
+  def membership
+    user.members.find_by(namespace:)
+  end
 end

@@ -76,7 +76,7 @@ module BotActions
   private
 
   def bot_account
-    @bot_account = @namespace.namespace_bots.find_by(user_id: params[:id]) || not_found
+    @bot_account = @namespace.namespace_bots.find_by(id: params[:id]) || not_found
   end
 
   def access_levels
@@ -84,6 +84,6 @@ module BotActions
   end
 
   def load_bot_accounts
-    @namespace.bots
+    @namespace.namespace_bots.includes(:user)
   end
 end
