@@ -326,6 +326,7 @@ en:
     nextflow:
       required: Required
       update_samples: Update samples with analysis results
+      email_notification: Receive an email notification when your analysis has completed?
     history:
       latest: Latest
       created_by: "%{type} created by %{user}"
@@ -1437,4 +1438,3 @@ en:
         processing: processing
         ready: ready
       title: Data Export
-

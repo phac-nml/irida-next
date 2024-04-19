@@ -39,6 +39,7 @@ module WorkflowExecutions
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
       end
     end
 
@@ -70,6 +71,7 @@ module WorkflowExecutions
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
       end
     end
 
@@ -101,6 +103,7 @@ module WorkflowExecutions
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
       end
     end
 
@@ -134,6 +137,7 @@ module WorkflowExecutions
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
       end
     end
 
@@ -173,6 +177,7 @@ module WorkflowExecutions
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
       end
     end
 
@@ -204,6 +209,7 @@ module WorkflowExecutions
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
       end
     end
 
@@ -235,6 +241,7 @@ module WorkflowExecutions
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
       end
     end
 
