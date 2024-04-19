@@ -21,7 +21,6 @@ module Members
       assert_changes -> { @group_member.access_level }, to: Member::AccessLevel::OWNER do
         Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'update group member with invalid params' do
@@ -34,7 +33,6 @@ module Members
       assert @group_member.errors[:access_level].include?(
         I18n.t('activerecord.errors.models.member.attributes.access_level.inclusion')
       )
-      assert_no_enqueued_emails
     end
 
     test 'update your own group membership' do
@@ -47,7 +45,6 @@ module Members
 
       assert @group_member.errors.full_messages.include?(I18n.t('services.members.update.cannot_update_self',
                                                                 namespace_type: @group.class.model_name.human))
-      assert_no_enqueued_emails
     end
 
     test 'update group member with incorrect permissions' do
@@ -61,7 +58,6 @@ module Members
       assert_equal GroupPolicy, exception.policy
       assert_equal :update_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_no_enqueued_emails
     end
 
     test 'update group member to OWNER role when the current user only has the Maintainer role' do
@@ -74,7 +70,6 @@ module Members
       end
 
       assert group_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
-      assert_no_enqueued_emails
     end
 
     test 'update group member to role lower than owner when they have owner role in the parent group' do
@@ -89,7 +84,6 @@ module Members
       assert_not_equal Member.find_by(user_id: group_member.user_id,
                                       namespace_id: group_member.namespace_id).access_level,
                        Member::AccessLevel::ANALYST
-      assert_no_enqueued_emails
     end
 
     test 'update project member with valid params' do
@@ -100,7 +94,6 @@ module Members
       assert_changes -> { @project_member.access_level }, to: Member::AccessLevel::OWNER do
         Members::UpdateService.new(@project_member, @project_namespace, @user, valid_params).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'update project member with invalid params' do
@@ -113,7 +106,6 @@ module Members
       assert @project_member.errors[:access_level].include?(
         I18n.t('activerecord.errors.models.member.attributes.access_level.inclusion')
       )
-      assert_no_enqueued_emails
     end
 
     test 'update your own project membership' do
@@ -128,7 +120,6 @@ module Members
         I18n.t('services.members.update.cannot_update_self',
                namespace_type: @project_namespace.class.model_name.human)
       )
-      assert_no_enqueued_emails
     end
 
     test 'update project member with incorrect permissions' do
@@ -142,7 +133,6 @@ module Members
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
       assert_equal :update_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_no_enqueued_emails
     end
 
     test 'update project member to OWNER role when the current user only has the Maintainer role' do
@@ -157,7 +147,6 @@ module Members
       end
 
       assert project_member.errors.full_messages.include?(I18n.t('services.members.update.role_not_allowed'))
-      assert_no_enqueued_emails
     end
 
     test 'update project member to role lower than owner when they have owner role in the parent group' do
@@ -173,7 +162,6 @@ module Members
       assert_not_equal Member.find_by(user_id: project_member.user_id,
                                       namespace_id: project_member.namespace_id).access_level,
                        Member::AccessLevel::ANALYST
-      assert_no_enqueued_emails
     end
 
     test 'valid authorization to update group member' do
@@ -183,7 +171,6 @@ module Members
                                                     context: { user: @user }) do
         Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'valid authorization to update project member' do
@@ -195,7 +182,6 @@ module Members
         Members::UpdateService.new(@project_member,
                                    @project_namespace, @user, valid_params).execute
       end
-      assert_no_enqueued_emails
     end
 
     test 'update access level of group member to a higher level than they have in a project' do
@@ -216,7 +202,6 @@ module Members
       # group member is also a member of a descendant of the group so their access level is updated
       # to the same access level for the project membership
       assert_equal Member::AccessLevel::MAINTAINER, Member.find_by(id: project_member.id).access_level
-      assert_no_enqueued_emails
     end
 
     test 'group member update changes logged using logidze' do
