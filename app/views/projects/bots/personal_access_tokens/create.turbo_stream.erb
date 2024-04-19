@@ -21,7 +21,7 @@
   <%= turbo_stream.replace "access-token-section",
                        partial: "projects/bots/access_token_section",
                        locals: {
-                         bot_account_name: @bot_account.user.username,
+                         bot_account_name: @bot_account.user.email,
                          token: personal_access_token.token
                        } %>
 <% end %>
