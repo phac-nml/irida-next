@@ -71,7 +71,7 @@ module BotActions
         end
       end
     end
-  end \
+  end
 
   private
 
