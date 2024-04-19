@@ -84,7 +84,7 @@ module Projects
       end
 
       within('#access-token-section') do
-        bot_account_name = project.namespace.bots.last.username
+        bot_account_name = project.namespace.bots.last.email
         assert_selector 'h2', text: I18n.t('projects.bots.index.access_token_section.label', bot_name: bot_account_name)
         assert_selector 'p', text: I18n.t('projects.bots.index.access_token_section.description')
         assert_selector 'button', text: I18n.t('components.clipboard.copy')
@@ -167,7 +167,7 @@ module Projects
         assert_selector 'p',
                         text: I18n.t(
                           'projects.bots.index.personal_access_tokens_listing_modal.description',
-                          bot_account: namespace_bot.user.username
+                          bot_account: namespace_bot.user.email
                         )
 
         within('table') do
@@ -216,7 +216,7 @@ module Projects
         )
 
         assert_text I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.description',
-                           bot_account: namespace_bot.user.username)
+                           bot_account: namespace_bot.user.email)
 
         fill_in 'Token name', with: 'Newest token'
 
@@ -226,7 +226,7 @@ module Projects
       end
 
       within('#access-token-section') do
-        bot_account_name = namespace_bot.user.username
+        bot_account_name = namespace_bot.user.email
         assert_selector 'h2', text: I18n.t('projects.bots.index.access_token_section.label', bot_name: bot_account_name)
         assert_selector 'p', text: I18n.t('projects.bots.index.access_token_section.description')
         assert_selector 'button', text: I18n.t('components.clipboard.copy')
@@ -252,7 +252,7 @@ module Projects
         assert_selector 'p',
                         text: I18n.t(
                           'projects.bots.index.personal_access_tokens_listing_modal.description',
-                          bot_account: namespace_bot.user.username
+                          bot_account: namespace_bot.user.email
                         )
 
         within('table') do
