@@ -825,14 +825,14 @@ en:
             token_name: Token Name
             access_level: Access Level
             select_access_level: Select access level
-            expires_at: Expiration Date (optional)
+            expires_at: Token Expiration Date (optional)
             submit: Submit
             cancel: Cancel
           generate_personal_access_token_modal:
             title: New Personal Access Token
             description: "Generating a new personal access token for %{bot_account}"
             name: Token name
-            expires_at: Expiration Date (optional)
+            expires_at: Token Expiration Date (optional)
             submit: Submit
             cancel: Cancel
           generate_new_token_modal:
