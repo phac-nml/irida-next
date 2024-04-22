@@ -1,66 +1,67 @@
 <div class="bg-white dark:bg-slate-800">
   <div class="table-container flex flex-col">
-    <table
-      id="bots-table"
-      class="
-        w-full
-        text-sm
-        text-left
-        rtl:text-right
-        text-slate-500
-        dark:text-slate-400
-      "
-    >
-      <thead
+    <% if @bot_accounts.count.positive? %>
+      <table
+        id="bots-table"
         class="
-          text-xs
-          text-slate-700
-          uppercase
-          bg-slate-50
-          dark:bg-slate-700
+          w-full
+          text-sm
+          text-left
+          rtl:text-right
+          text-slate-500
           dark:text-slate-400
         "
       >
-        <tr>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t("projects.bots.index.bot_listing.username") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t("projects.bots.index.bot_listing.token_name") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t("projects.bots.index.bot_listing.api_scope") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t("projects.bots.index.bot_listing.created") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t("projects.bots.index.bot_listing.access_level") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t("projects.bots.index.bot_listing.expiration") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t("projects.bots.index.bot_listing.actions") %>
-          </th>
-        </tr>
-      </thead>
-      <tbody
-        class="
-          bg-white
-          divide-y
-          divide-slate-200
-          dark:bg-slate-800
-          dark:divide-slate-700
-        "
-      >
-        <% @bot_accounts.each do |bot_account| %>
-          <%= render partial: "bot", locals: { bot_account: bot_account } %>
-        <% end %>
-      </tbody>
-    </table>
-
-    <% if @bot_accounts.empty? %>
+        <thead
+          class="
+            text-xs
+            text-slate-700
+            uppercase
+            bg-slate-50
+            dark:bg-slate-700
+            dark:text-slate-400
+          "
+        >
+          <tr>
+            <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+              <%= t("projects.bots.index.bot_listing.username") %>
+            </th>
+            <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+              <%= t("projects.bots.index.bot_listing.token_name") %>
+            </th>
+            <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+              <%= t("projects.bots.index.bot_listing.api_scope") %>
+            </th>
+            <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+              <%= t("projects.bots.index.bot_listing.created") %>
+            </th>
+            <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+              <%= t("projects.bots.index.bot_listing.access_level") %>
+            </th>
+            <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+              <%= t("projects.bots.index.bot_listing.expiration") %>
+            </th>
+            <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+              <%= t("projects.bots.index.bot_listing.actions") %>
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="
+            bg-white
+            divide-y
+            divide-slate-200
+            dark:bg-slate-800
+            dark:divide-slate-700
+          "
+        >
+          <% @bot_accounts.each do |bot_account| %>
+            <%= render partial: "bot", locals: { bot_account: bot_account } %>
+          <% end %>
+        </tbody>
+      </table>
+      <%= turbo_frame_tag "bots_pagination" %>
+    <% else %>
       <div class="empty_state_message">
         <%= viral_empty(
           title: t("projects.bots.index.bot_listing.empty_state.title"),
@@ -68,8 +69,6 @@
           icon_name: :bug_ant
         ) %>
       </div>
-    <% else %>
-      <%= turbo_frame_tag "bots_pagination" %>
     <% end %>
   </div>
 </div>
