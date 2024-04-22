@@ -15,5 +15,15 @@
         "name": "1.0.0"
       }
     ]
+  },
+  {
+    "url": "https://github.com/phac-nml/fetchdatairidanext",
+    "name": "phac-nml/fetchdatairidanext",
+    "description": "fetchdatairidanext",
+    "versions": [
+      {
+        "name": "1.1.0"
+      }
+    ]
   }
 ]
