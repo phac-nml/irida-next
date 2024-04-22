@@ -218,7 +218,7 @@ module Projects
         assert_text I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.description',
                            bot_account: namespace_bot.user.email)
 
-        fill_in 'Token name', with: 'Newest token'
+        fill_in 'Token Name', with: 'Newest token'
 
         all('input[type=checkbox]').each(&:click)
 
