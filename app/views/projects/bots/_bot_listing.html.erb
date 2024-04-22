@@ -60,7 +60,9 @@
           <% end %>
         </tbody>
       </table>
-      <%= turbo_frame_tag "bots_pagination" %>
+      <%= turbo_frame_tag "bots_pagination" do %>
+        <%= render partial: "pagination" %>
+      <% end %>
     <% else %>
       <div class="empty_state_message">
         <%= viral_empty(
