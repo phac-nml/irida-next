@@ -1,25 +1,41 @@
 import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="workflow-selection"
+function preventEscapeListener(event) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+}
+
 export default class extends Controller {
   static targets = ["workflow", "workflowName", "workflowVersion", "form"];
 
   #escapeListener = null;
 
+  connect() {
+    document.addEventListener("turbo:submit-end", preventEscapeListener);
+  }
+
   disconnect() {
-    document.removeEventListener("keydown", this.#escapeListener);
+    this.removeEscapeListener();
+  }
+
+  removeEscapeListener() {
+    document.removeEventListener("keydown", preventEscapeListener, true);
+  }
+
+  preventClosingDialog() {
+    document.querySelector(".dialog--close").classList.add("hidden");
+    this.#escapeListener = document.addEventListener(
+      "keydown",
+      preventEscapeListener,
+      true,
+    );
   }
 
   selectWorkflow({ params }) {
-    document.querySelector(".dialog--close").classList.add("hidden");
-
-    // Add  an event listener for escape key and capture it
-    this.#escapeListener = document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    });
+    this.preventClosingDialog();
 
     for (const workflow of this.workflowTargets) {
       if (
