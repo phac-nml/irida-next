@@ -47,8 +47,7 @@ module Projects
       params = {
         token_name: 'automation bot',
         scopes: %w[read_api api],
-        access_level: Member::AccessLevel::MAINTAINER,
-        is_automation_bot: true
+        access_level: Member::AccessLevel::MAINTAINER
       }
 
       ::Bots::CreateService.new(current_user, project.namespace, User.user_types[:project_automation_bot],

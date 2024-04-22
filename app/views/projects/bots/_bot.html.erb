@@ -6,23 +6,25 @@
     <%= bot_account.user.email %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens.last.name %>
+    <%= bot_account.user.personal_access_tokens&.last&.name %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens.last.scopes.join(", ") %>
+    <%= bot_account.user.personal_access_tokens&.last&.scopes&.join(", ") %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= viral_time_ago(original_time: bot_account.user.created_at) %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <% unless bot_account.membership.nil? %>
-      <%= t(
-        :"projects.bots.index.access_level.level_#{bot_account.membership.access_level}"
-      ) %>
+    <% unless bot_account.user.personal_access_tokens.count.positive? %>
+      <% if bot_account.membership.nil? %>
+        <%= t(
+          :"projects.bots.index.access_level.level_#{bot_account.membership.access_level}"
+        ) %>
+      <% end %>
     <% end %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens.last.expires_at&.strftime(
+    <%= bot_account.user.personal_access_tokens&.last&.expires_at&.strftime(
       I18n.t("time.formats.full_date")
     ) %>
   </td>
