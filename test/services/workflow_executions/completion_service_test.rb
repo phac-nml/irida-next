@@ -207,28 +207,40 @@ module WorkflowExecutions
       assert_equal 'my_run_id_c', workflow_execution.run_id
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      assert_equal @sample41.puid, workflow_execution.samples_workflow_executions[0].sample.puid
-      assert_equal @sample42.puid, workflow_execution.samples_workflow_executions[1].sample.puid
 
-      assert_equal 2, workflow_execution.samples_workflow_executions[0].outputs.count
-      # file blobs can be in either order
-      if workflow_execution.samples_workflow_executions[0].outputs[0].filename == @normal2_output_analysis1_file_blob.filename # rubocop:disable Layout/LineLength
-        output1 = workflow_execution.samples_workflow_executions[0].outputs[0]
-        output2 = workflow_execution.samples_workflow_executions[0].outputs[1]
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
+        swe1 = workflow_execution.samples_workflow_executions[0]
+        swe2 = workflow_execution.samples_workflow_executions[1]
       else
-        output2 = workflow_execution.samples_workflow_executions[0].outputs[0]
-        output1 = workflow_execution.samples_workflow_executions[0].outputs[1]
+        swe2 = workflow_execution.samples_workflow_executions[0]
+        swe1 = workflow_execution.samples_workflow_executions[1]
       end
-      # original file blob should not be the same as the output file blob, but contain the same file
-      assert_not_equal @normal2_output_analysis1_file_blob.id, output1.id
-      assert_equal @normal2_output_analysis1_file_blob.filename, output1.filename
-      assert_equal @normal2_output_analysis1_file_blob.checksum, output1.file.checksum
-      assert_not_equal @normal2_output_analysis2_file_blob.id, output2.id
-      assert_equal @normal2_output_analysis2_file_blob.filename, output2.filename
-      assert_equal @normal2_output_analysis2_file_blob.checksum, output2.file.checksum
 
-      assert_equal 1, workflow_execution.samples_workflow_executions[1].outputs.count
-      output3 = workflow_execution.samples_workflow_executions[1].outputs[0]
+      assert_equal @sample41.puid, swe1.sample.puid
+      assert_equal @sample42.puid, swe2.sample.puid
+
+      assert_equal 2, swe1.outputs.count
+      # file blobs can be in either order
+      # original file blob should not be the same as the output file blob, but contain the same file
+      if swe1.outputs[0].filename == @normal2_output_analysis1_file_blob.filename
+        assert_not_equal @normal2_output_analysis1_file_blob.id, swe1.outputs[0].id
+        assert_equal @normal2_output_analysis1_file_blob.filename, swe1.outputs[0].filename
+        assert_equal @normal2_output_analysis1_file_blob.checksum, swe1.outputs[0].file.checksum
+        assert_not_equal @normal2_output_analysis2_file_blob.id, swe1.outputs[1].id
+        assert_equal @normal2_output_analysis2_file_blob.filename, swe1.outputs[1].filename
+        assert_equal @normal2_output_analysis2_file_blob.checksum, swe1.outputs[1].file.checksum
+      else
+        assert_not_equal @normal2_output_analysis1_file_blob.id, swe1.outputs[1].id
+        assert_equal @normal2_output_analysis1_file_blob.filename, swe1.outputs[1].filename
+        assert_equal @normal2_output_analysis1_file_blob.checksum, swe1.outputs[1].file.checksum
+        assert_not_equal @normal2_output_analysis2_file_blob.id, swe1.outputs[0].id
+        assert_equal @normal2_output_analysis2_file_blob.filename, swe1.outputs[0].filename
+        assert_equal @normal2_output_analysis2_file_blob.checksum, swe1.outputs[0].file.checksum
+      end
+
+      assert_equal 1, swe2.outputs.count
+      output3 = swe2.outputs[0]
       # original file blob should not be the same as the output file blob, but contain the same file
       assert_not_equal @normal2_output_analysis3_file_blob.id, output3.id
       assert_equal @normal2_output_analysis3_file_blob.filename, output3.filename
@@ -253,8 +265,14 @@ module WorkflowExecutions
                     'organism' => 'a different organism' }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
-      assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
+        assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
+        assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
+      else
+        assert_equal metadata1, workflow_execution.samples_workflow_executions[1].metadata
+        assert_equal metadata2, workflow_execution.samples_workflow_executions[0].metadata
+      end
 
       assert_equal 'completed', workflow_execution.state
     end
