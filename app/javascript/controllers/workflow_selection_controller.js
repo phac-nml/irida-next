@@ -4,7 +4,23 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["workflow", "workflowName", "workflowVersion", "form"];
 
+  #escapeListener = null;
+
+  disconnect() {
+    document.removeEventListener("keydown", this.#escapeListener);
+  }
+
   selectWorkflow({ params }) {
+    document.querySelector(".dialog--close").classList.add("hidden");
+
+    // Add  an event listener for escape key and capture it
+    this.#escapeListener = document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+
     for (const workflow of this.workflowTargets) {
       if (
         params.workflowname !==
