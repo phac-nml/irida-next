@@ -14,6 +14,7 @@ export default class extends Controller {
       ) {
         workflow.classList.add("hidden");
       } else {
+        workflow.disabled = true;
         workflow.querySelector(".ws-default").classList.add("hidden");
         workflow.querySelector(".ws-loading").classList.remove("hidden");
 
