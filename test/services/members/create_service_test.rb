@@ -53,7 +53,9 @@ module Members
       assert_enqueued_email_with MemberMailer, :access_granted_user_email,
                                  args: [@new_member, @project_namespace]
       assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                 args: [@new_member, manager_emails(@new_member, @project_namespace), @project_namespace]
+                                 args: [@new_member,
+                                        manager_emails(@new_member, @project_namespace),
+                                        @project_namespace]
     end
 
     test 'create group member with invalid params' do

@@ -74,7 +74,9 @@ module Members
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
                                  args: [@project_member, @project_namespace]
       assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                 args: [@project_member, manager_emails(@project_member, @project_namespace), @project_namespace]
+                                 args: [@project_member,
+                                        manager_emails(@project_member, @project_namespace),
+                                        @project_namespace]
     end
 
     test 'remove project member with incorrect permissions' do
