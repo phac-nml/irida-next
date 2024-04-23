@@ -44,7 +44,7 @@
       <div class="flex items-center space-x-2">
         <span class="uppercase"><%= header %></span>
         <% if @required %>
-          <%= viral_pill(text: t(".required"), color: :red, border: :red) %>
+          <span class="text-red-600">(<%= t(".required") %>)</span>
         <% end %>
       </div>
     </div>
