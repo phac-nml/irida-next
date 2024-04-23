@@ -14,7 +14,7 @@ class MemberMailerPreview < ActionMailer::Preview
 
   def access_revoked_from_group_user_email
     setup_group
-    MemberMailer.access_revoked_user_mail(@member, @namespace)
+    MemberMailer.access_revoked_user_email(@member, @namespace)
   end
 
   def access_revoked_from_project_user_email
