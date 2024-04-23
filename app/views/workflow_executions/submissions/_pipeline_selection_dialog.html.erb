@@ -4,16 +4,14 @@
   ) %>
   <%= dialog.with_section(data: { controller: "workflow-selection" }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
-      <input
-        type="hidden"
-        name="workflow_name"
-        data-workflow-selection-target="workflowName"
-      >
-      <input
-        type="hidden"
-        name="workflow_version"
-        data-workflow-selection-target="workflowVersion"
-      >
+      <%= form.hidden_field :workflow_name,
+                        data: {
+                          "workflow-selection-target": "workflowName"
+                        } %>
+      <%= form.hidden_field :workflow_version,
+                        data: {
+                          "workflow-selection-target": "workflowVersion"
+                        } %>
       <%= form.hidden_field :namespace_id, value: @namespace_id %>
       <div
         data-controller="sessionstorage-amend-form"
