@@ -32,11 +32,13 @@ module TrackActivity
     activity_trackable = activity_trackable(activity, Project)
 
     {
-      created_at: activity.created_at,
+      created_at: activity.created_at.strftime(
+        I18n.t('time.formats.abbreviated')
+      ),
       description: I18n.t("activity.#{activity.key}",
                           user: activity_creator(activity), name: activity_trackable.name,
-                          new_project_name: activity.parameters['new_project_name'],
-                          transferred_samples_ids: activity.parameters['transferred_samples_ids'])
+                          new_project_name: activity.parameters[:new_project_name],
+                          transferred_samples_ids: activity.parameters[:transferred_samples_ids])
     }
   end
 
@@ -44,7 +46,9 @@ module TrackActivity
     activity_trackable = activity_trackable(activity, Sample)
 
     {
-      created_at: activity.created_at,
+      created_at: activity.created_at.strftime(
+        I18n.t('time.formats.abbreviated')
+      ),
       description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
                                                       sample_name: activity_trackable.name)
     }
@@ -54,7 +58,9 @@ module TrackActivity
     activity_trackable = activity_trackable(activity, Member)
 
     {
-      created_at: activity.created_at,
+      created_at: activity.created_at.strftime(
+        I18n.t('time.formats.abbreviated')
+      ),
       description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
                                                       namespace_type: activity_trackable.namespace.type.downcase,
                                                       name: activity_trackable.namespace.name,
@@ -66,7 +72,9 @@ module TrackActivity
     activity_trackable = activity_trackable(activity, NamespaceGroupLink)
 
     {
-      created_at: activity.created_at,
+      created_at: activity.created_at.strftime(
+        I18n.t('time.formats.abbreviated')
+      ),
       description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
                                                       namespace_type: activity_trackable.namespace.type.downcase,
                                                       name: activity_trackable.namespace.name,
