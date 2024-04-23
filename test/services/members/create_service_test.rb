@@ -18,7 +18,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       assert_difference -> { Member.count } => 1 do
-        @new_member = Members::CreateService.new(@user, @group, true, valid_params).execute
+        @new_member = Members::CreateService.new(@user, @group, valid_params, true).execute
       end
 
       manager_memberships = Member.for_namespace_and_ancestors(@group).not_expired
@@ -38,7 +38,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       assert_difference -> { Member.count } => 1 do
-        @new_member = Members::CreateService.new(@user, @group, false, valid_params).execute
+        @new_member = Members::CreateService.new(@user, @group, valid_params).execute
       end
       assert_no_enqueued_emails
     end
@@ -49,7 +49,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       assert_difference -> { Member.count } => 1 do
-        @new_member = Members::CreateService.new(@user, @project_namespace, true, valid_params).execute
+        @new_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
       end
 
       manager_memberships = Member.for_namespace_and_ancestors(@project_namespace).not_expired
@@ -68,7 +68,7 @@ module Members
                          access_level: Member::AccessLevel::OWNER }
 
       assert_no_difference('Member.count') do
-        Members::CreateService.new(@user, @group, true, invalid_params).execute
+        Members::CreateService.new(@user, @group, invalid_params, true).execute
       end
       assert_no_enqueued_emails
     end
@@ -78,7 +78,7 @@ module Members
                          access_level: nil }
 
       assert_no_difference('Member.count') do
-        Members::CreateService.new(@user, @project_namespace, true, invalid_params).execute
+        Members::CreateService.new(@user, @project_namespace, invalid_params, true).execute
       end
       assert_no_enqueued_emails
     end
@@ -89,7 +89,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Members::CreateService.new(user, @group, true, valid_params).execute
+        Members::CreateService.new(user, @group, valid_params, true).execute
       end
 
       assert_equal GroupPolicy, exception.policy
@@ -108,7 +108,7 @@ module Members
       group = groups(:subgroup_one_group_three)
 
       assert_difference -> { Member.count } => 1 do
-        Members::CreateService.new(user, group, true, valid_params).execute
+        Members::CreateService.new(user, group, valid_params, true).execute
       end
       assert_no_enqueued_emails
     end
@@ -121,7 +121,7 @@ module Members
       group = groups(:subgroup_one_group_three)
 
       assert_difference -> { Member.count } => 1 do
-        Members::CreateService.new(user, group, true, valid_params).execute
+        Members::CreateService.new(user, group,  valid_params, true).execute
       end
       assert_no_enqueued_emails
     end
@@ -134,7 +134,7 @@ module Members
       group = groups(:subgroup_one_group_three)
 
       assert_no_difference ['Member.count'] do
-        Members::CreateService.new(user, group, true, valid_params).execute
+        Members::CreateService.new(user, group, valid_params, true).execute
       end
       assert_no_enqueued_emails
     end
@@ -149,7 +149,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       assert_no_difference ['Member.count'] do
-        Members::CreateService.new(user, project_namespace, true, valid_params).execute
+        Members::CreateService.new(user, project_namespace, valid_params, true).execute
       end
       assert_no_enqueued_emails
     end
@@ -163,7 +163,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Members::CreateService.new(user, project_namespace, true, valid_params).execute
+        Members::CreateService.new(user, project_namespace, valid_params, true).execute
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
@@ -182,7 +182,7 @@ module Members
       assert_authorized_to(:create_member?, group,
                            with: GroupPolicy,
                            context: { user: @user }) do
-        @new_member = Members::CreateService.new(@user, group, true, valid_params).execute
+        @new_member = Members::CreateService.new(@user, group, valid_params, true).execute
       end
 
       manager_memberships = Member.for_namespace_and_ancestors(group).not_expired
@@ -204,7 +204,7 @@ module Members
       assert_authorized_to(:create_member?, @project_namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
-        @new_member = Members::CreateService.new(@user, @project_namespace, true, valid_params).execute
+        @new_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
       end
 
       manager_memberships = Member.for_namespace_and_ancestors(@project_namespace).not_expired
@@ -223,7 +223,7 @@ module Members
       valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
-      group_member = Members::CreateService.new(@user, @group, true, valid_params).execute
+      group_member = Members::CreateService.new(@user, @group, valid_params, true).execute
 
       group_member.create_logidze_snapshot!
 
@@ -238,7 +238,7 @@ module Members
       valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
-      project_member = Members::CreateService.new(@user, @project_namespace, true, valid_params).execute
+      project_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
 
       project_member.create_logidze_snapshot!
 

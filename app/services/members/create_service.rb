@@ -6,7 +6,7 @@ module Members
     MemberCreateError = Class.new(StandardError)
     attr_accessor :namespace, :member
 
-    def initialize(user = nil, namespace = nil, email_notification = nil, params = {}) # rubocop:disable Metrics/ParameterLists
+    def initialize(user = nil, namespace = nil, params = {}, email_notification = false) # rubocop:disable Metrics/ParameterLists, Style/OptionalBooleanParameter
       super(user, params)
       @namespace = namespace
       @email_notification = email_notification
