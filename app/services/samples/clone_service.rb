@@ -45,8 +45,8 @@ module Samples
       clone = sample.dup
       clone.project_id = @new_project.id
       clone.project.namespace.update_metadata_summary_by_sample_addition(sample) if clone.valid?
-      clone_attachments(sample, clone) if clone.valid?
       clone.save!
+      clone_attachments(sample, clone) if clone.valid?
       clone.id
     rescue ActiveRecord::RecordInvalid
       @project.errors.add(:sample, I18n.t('services.samples.clone.sample_exists', sample_name: sample.name,
