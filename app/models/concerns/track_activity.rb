@@ -6,7 +6,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   included do
     include PublicActivity::Model
-    tracked owner: proc { |controller, _model| controller&.current_user || nil }
+    tracked owner: Current.user
   end
 
   def human_readable_activity(public_activities) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
