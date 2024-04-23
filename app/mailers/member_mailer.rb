@@ -37,6 +37,7 @@ class MemberMailer < ApplicationMailer
     subject = t(:'mailers.member_mailer.access_revoked_manager_email.subject',
                 first_name: @member.user.first_name.capitalize,
                 last_name: @member.user.last_name.capitalize,
+                email: @member.user.email,
                 type: @namespace.type,
                 name: @namespace.name)
     mail(bcc: manager_emails, subject:)

@@ -1375,15 +1375,15 @@ en:
         body_html: You have been <strong>granted</strong> access to %{type} '%{name}'
         view_details: "To view %{type} '%{name}', click the button below:"
       access_revoked_user_email:
-        subject: You have been revoked access from %{type} '%{name}'
-        body_html: You have been <strong>revoked</strong> access from %{type} '%{name}'
+        subject: Your access to %{type} '%{name}' has been revoked
+        body_html: Your access to %{type} '%{name}' has been <strong>revoked</strong>
       access_granted_manager_email:
         subject: User '%{first_name} %{last_name}' has been granted access to %{type} '%{name}'
         body_html: User '%{first_name} %{last_name}' (%{email}) has been <strong>granted</strong> access to %{type} '%{name}'
         view_details: "To view all the members of %{type} '%{name}', click the button below:"
       access_revoked_manager_email:
-        subject: User '%{first_name} %{last_name}' has been revoked access from %{type} '%{name}'
-        body_html: User '%{first_name} %{last_name}' (%{email}) has been <strong>revoked</strong> access from %{type} '%{name}'
+        subject: "%{type} '%{name}' access has been revoked for User '%{first_name} %{last_name}' (%{email})"
+        body_html: "%{type} '%{name}' access has been <strong>revoked</strong> for User '%{first_name} %{last_name}' (%{email})"
         view_details: "To view all the members of %{type} '%{name}', click the button below:"
     pipeline_mailer:
       complete_email:

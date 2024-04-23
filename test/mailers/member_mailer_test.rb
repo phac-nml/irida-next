@@ -56,6 +56,7 @@ class MemberMailerTest < ActionMailer::TestCase
     assert_equal I18n.t(:'mailers.member_mailer.access_revoked_manager_email.subject',
                         first_name: @member.user.first_name.capitalize,
                         last_name: @member.user.last_name.capitalize,
+                        email: @member.user.email,
                         type: @namespace.type,
                         name: @namespace.name), email.subject
     assert_match(/#{Regexp.escape(I18n.t(:'mailers.member_mailer.access_revoked_manager_email.body_html',
