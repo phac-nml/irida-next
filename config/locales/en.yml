@@ -1378,7 +1378,7 @@ en:
         subject: Your access to %{type} '%{name}' has been revoked
         body_html: Your access to %{type} '%{name}' has been <strong>revoked</strong>
       access_granted_manager_email:
-        subject: User '%{first_name} %{last_name}' has been granted access to %{type} '%{name}'
+        subject: User '%{first_name} %{last_name}' (%{email}) has been granted access to %{type} '%{name}'
         body_html: User '%{first_name} %{last_name}' (%{email}) has been <strong>granted</strong> access to %{type} '%{name}'
         view_details: "To view all the members of %{type} '%{name}', click the button below:"
       access_revoked_manager_email:
