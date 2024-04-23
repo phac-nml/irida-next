@@ -21,7 +21,7 @@ module Attachments
       @attachments
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity
+    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
       authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
@@ -35,6 +35,8 @@ module Attachments
       identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.count > 1
 
       @attachments.each(&:save)
+
+      @attachable.create_activity key: 'sample.attachment.create', owner: current_user, trackable_id: @attachable.id
 
       @attachments
     end
