@@ -6,31 +6,41 @@ require 'test_helper'
 class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_submitted)
-  end
 
-  test 'retry on no connection' do
-    mock = Minitest::Mock.new
-    def mock.conn
-      Faraday.new do |builder|
-        builder.adapter :test do |stub|
-          stub.get('/runs/my_run_id_5/status') do |_env|
-            [
-              401,
-              { 'Content-Type': 'text/plain' },
-              'aaaaaaaaaaaaaaaaa'
-            ]
-          end
-
-          stub.get('/boom') do
-            raise Faraday::ConnectionFailed
-          end
-        end
+    # Mutable stubs, allowing adding/changing stubbed endpoints mid test
+    @stubs = Faraday::Adapter::Test::Stubs.new do |stub|
+      stub.get('/service-info') do |_env|
+        [
+          200,
+          { 'Content-Type': 'text/plain' },
+          'stubbed text'
+        ]
       end
     end
 
-    # stubs.get('/asdf') { |_env| [200, {}, 'qwerty'] }
+    # test adapter for Faraday with above stubs
+    @test_conn = Faraday.new do |builder|
+      builder.adapter :test, @stubs
+    end
 
-    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock do
+    # Client to mock api connections
+    @mock_client = Minitest::Mock.new
+    @mock_client.expect(:conn, @test_conn)
+  end
+
+  def teardown
+    # reset connections after each test to clear cache
+    Faraday.default_connection = nil
+  end
+
+  test 'proof of concept test' do
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, @mock_client do
+      @stubs.get('/asdf') { |_env| [200, {}, 'qwerty'] }
+
+      @stubs.get('/boom') do
+        raise Faraday::ConnectionFailed
+      end
+
       perform_enqueued_jobs do
         WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
       end
