@@ -21,7 +21,7 @@ module Attachments
       @attachments
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
+    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
       authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
@@ -36,7 +36,9 @@ module Attachments
 
       @attachments.each(&:save)
 
-      @attachable.create_activity key: 'sample.attachment.create', owner: current_user, trackable_id: @attachable.id
+      if @attachable.instance_of?(Sample)
+        @attachable.create_activity key: 'sample.attachment.create', owner: current_user, trackable_id: @attachable.id
+      end
 
       @attachments
     end
