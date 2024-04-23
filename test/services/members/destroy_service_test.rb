@@ -4,6 +4,7 @@ require 'test_helper'
 
 module Members
   class DestroyServiceTest < ActiveSupport::TestCase
+    include MailerHelper
     def setup
       @user = users(:john_doe)
       @project = projects(:john_doe_project2)
@@ -18,16 +19,11 @@ module Members
         Members::DestroyService.new(@group_member, @group, @user).execute
       end
 
-      manager_memberships = Member.for_namespace_and_ancestors(@group).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @group_member.user.id))
-                     .distinct
-      manager_emails = managers.pluck(:email)
       assert_enqueued_emails 2
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
                                  args: [@group_member, @group]
       assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                 args: [@group_member, manager_emails, @group]
+                                 args: [@group_member, manager_emails(@group_member, @group), @group]
     end
 
     test 'remove themselves as a group member' do
@@ -36,16 +32,11 @@ module Members
         Members::DestroyService.new(@group_member, @group, user).execute
       end
 
-      manager_memberships = Member.for_namespace_and_ancestors(@group).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @group_member.user.id))
-                     .distinct
-      manager_emails = managers.pluck(:email)
       assert_enqueued_emails 2
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
                                  args: [@group_member, @group]
       assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                 args: [@group_member, manager_emails, @group]
+                                 args: [@group_member, manager_emails(@group_member, @group), @group]
     end
 
     test 'remove group member when user does not have direct or inherited membership' do
@@ -79,16 +70,11 @@ module Members
         Members::DestroyService.new(@project_member, @project_namespace, @user).execute
       end
 
-      manager_memberships = Member.for_namespace_and_ancestors(@project_namespace).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @project_member.user.id))
-                     .distinct
-      manager_emails = managers.pluck(:email)
       assert_enqueued_emails 2
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
                                  args: [@project_member, @project_namespace]
       assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                 args: [@project_member, manager_emails, @project_namespace]
+                                 args: [@project_member, manager_emails(@project_member, @project_namespace), @project_namespace]
     end
 
     test 'remove project member with incorrect permissions' do

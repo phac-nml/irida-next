@@ -3,6 +3,7 @@
 module Members
   # Service used to Create Members
   class CreateService < BaseService
+    include MailerHelper
     MemberCreateError = Class.new(StandardError)
     attr_accessor :namespace, :member
 
@@ -37,16 +38,10 @@ module Members
 
     def send_emails
       MemberMailer.access_granted_user_email(member, namespace).deliver_later
+      manager_emails = manager_emails(member, namespace)
       return if manager_emails.empty?
 
       MemberMailer.access_granted_manager_email(member, manager_emails, namespace).deliver_later
-    end
-
-    def manager_emails
-      manager_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
-                                  .where(access_level: Member::AccessLevel.manageable)
-      managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: member.user.id)).distinct
-      managers.pluck(:email)
     end
   end
 end
