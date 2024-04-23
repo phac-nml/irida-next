@@ -29,6 +29,9 @@ module Attachments
       end
 
       @attachment.destroy
+
+      @attachable.create_activity key: 'sample.attachment.destroy', owner: current_user, trackable_id: @attachable.id
+
       destroyed_attachments.append(@attachment)
       destroyed_attachments
     rescue Attachments::DestroyService::AttachmentsDestroyError => e

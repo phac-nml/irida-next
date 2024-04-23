@@ -9,15 +9,13 @@ module TrackActivity
     tracked owner: proc { |controller, _model| controller&.current_user || nil }
   end
 
-  def human_readable_activity(public_activities) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def human_readable_activity(public_activities)
     activities = []
     public_activities.each do |activity|
       if activity.trackable_type == 'Namespace' && activity.key.include?('namespaces_project_namespace')
         activities << project_activity(activity)
       elsif activity.trackable_type == 'Sample'
         activities << sample_activity(activity)
-      elsif activity.trackable_type == 'Attachment'
-        activities << attachment_activity(activity)
       elsif activity.trackable_type == 'Member'
         activities << member_activity(activity)
       elsif activity.trackable_type == 'NamespaceGroupLink'
@@ -49,16 +47,6 @@ module TrackActivity
       created_at: activity.created_at,
       description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
                                                       sample_name: activity_trackable.name)
-    }
-  end
-
-  def attachment_activity(activity)
-    activity_trackable = activity_trackable(activity, Attachment)
-
-    {
-      created_at: activity.created_at,
-      description: I18n.t("activity.#{activity.key}", user: activity_creator(activity),
-                                                      sample_name: activity_trackable.attachable.name)
     }
   end
 

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 # Migration responsible for creating a table with activities
-class CreateActivities < ActiveRecord::Migration[5.0]
+class CreateActivities < ActiveRecord::Migration[6.1]
   def self.up
-    create_table :activities do |t|
-      t.belongs_to :trackable, polymorphic: true
-      t.belongs_to :owner, polymorphic: true
+    create_table :activities, id: :uuid do |t|
+      t.belongs_to :trackable, type: :uuid, polymorphic: true
+      t.belongs_to :owner, type: :uuid, polymorphic: true
       t.string :key
-      t.jsonb :parameters
-      t.belongs_to :recipient, polymorphic: true
+      t.text :parameters
+      t.belongs_to :recipient, type: :uuid, polymorphic: true
 
       t.timestamps
     end
