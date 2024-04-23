@@ -2,9 +2,11 @@
 
 module Nextflow
   module Samplesheet
+    # Renders a column in the sample sheet table
     class ColumnComponent < Component
       attr_reader :namespace_id, :header, :property, :samples
 
+      # rubocop:disable Metrics/ParameterLists
       def initialize(namespace_id:, header:, property:, samples:, metadata_fields:, required:)
         @namespace_id = namespace_id
         @header = header
@@ -13,6 +15,8 @@ module Nextflow
         @metadata_fields = metadata_fields
         @required = required
       end
+
+      # rubocop:enable Metrics/ParameterLists
 
       def render_cell_type(property, entry, sample, fields)
         case entry['cell_type']
