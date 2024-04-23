@@ -25,8 +25,8 @@ module Members
                                         namespace_type: namespace.class.model_name.human)
       end
 
-      had_access = Member.can_view?(member.user, namespace, true) if member.valid?
-      send_emails(had_access) if member.save && @email_notification
+      has_previous_access = Member.can_view?(member.user, namespace, true) if member.valid?
+      send_emails if member.save && @email_notification && !has_previous_access
       member
     rescue Members::CreateService::MemberCreateError => e
       member.errors.add(:base, e.message)
@@ -35,9 +35,7 @@ module Members
 
     private
 
-    def send_emails(had_access)
-      return if had_access
-
+    def send_emails
       MemberMailer.access_granted_user_email(member, namespace).deliver_later
       return if manager_emails.empty?
 
