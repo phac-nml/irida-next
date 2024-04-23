@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="workflow-selection"
 function preventEscapeListener(event) {
   if (event.key === "Escape") {
     event.preventDefault();
@@ -8,6 +7,7 @@ function preventEscapeListener(event) {
   }
 }
 
+// Connects to data-controller="workflow-selection"
 export default class extends Controller {
   static targets = ["workflow", "workflowName", "workflowVersion", "form"];
 
