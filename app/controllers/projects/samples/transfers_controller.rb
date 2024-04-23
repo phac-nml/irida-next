@@ -17,7 +17,7 @@ module Projects
         end
       end
 
-      def create
+      def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         new_project_id = transfer_params[:new_project_id]
         sample_ids = transfer_params[:sample_ids]
         @transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
@@ -28,17 +28,18 @@ module Projects
                                          {
                                            project_name: @project.name,
                                            new_project_name: Project.find(new_project_id).namespace.name,
-                                           transferred_samples_ids: transferred_samples_ids.join
+                                           transferred_samples_ids: @transferred_samples_ids.join
                                          }
 
-        if transferred_samples_ids.length == sample_ids.length
-          render status: :ok, locals: { sample_ids:, type: :success, message: t('.success'), errors: [] }
+        if @project.errors.empty?
+          render status: :ok, locals: { type: :success, message: t('.success') }
         elsif @project.errors.include?(:samples)
           render_sample_errors
         else
           errors = @project.errors.full_messages_for(:base)
           render status: :unprocessable_entity,
-                 locals: { type: :alert, message: t('.no_samples_transferred_error'), errors: }
+                 locals: { type: :alert, message: t('.no_samples_transferred_error'),
+                           errors: }
         end
       end
 
