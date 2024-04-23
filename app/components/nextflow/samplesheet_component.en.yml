@@ -1,5 +1,2 @@
 en:
   label: Samples
-  required: Required
-  dropdown_prompt: Select an option
-  default: "%{label} (default)"

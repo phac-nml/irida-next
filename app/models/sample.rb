@@ -53,4 +53,30 @@ class Sample < ApplicationRecord
     end
     sample_metadata
   end
+
+  def sorted_files
+    return {} if attachments.empty?
+
+    @sorted_files || sort_files
+  end
+
+  def sort_files
+    singles = []
+    pe_forward = []
+    pe_reverse = []
+
+    attachments.each do |attachment|
+      item = [attachment.file.filename.to_s, attachment.to_global_id, { 'data-puid': attachment.puid }]
+      case attachment.metadata['direction']
+      when nil
+        singles << item
+      when 'forward'
+        pe_forward << item
+      else
+        pe_reverse << item
+      end
+    end
+
+    { singles:, pe_forward:, pe_reverse: }
+  end
 end
