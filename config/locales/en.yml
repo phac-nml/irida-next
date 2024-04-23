@@ -223,6 +223,7 @@ en:
       create: "%{user} created group %{name}"
       destroy: "%{user} removed group %{name}"
       update: "%{user} updated group %{name}"
+      transfer: "%{user} transferred group %{name} to group %{new_namespace}"
     namespaces_project_namespace:
       create: "%{user} created project %{name}"
       destroy: "%{user} removed project %{name}"

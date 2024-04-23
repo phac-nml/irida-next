@@ -40,7 +40,9 @@ module Attachments
 
       @attachments.each(&:save)
 
-      @attachable.create_activity key: 'sample.attachment.create', owner: current_user, trackable_id: @attachable.id
+      if @attachable.instance_of?(Sample)
+        @attachable.create_activity key: 'sample.attachment.create', owner: current_user, trackable_id: @attachable.id
+      end
 
       if Irida::Pipelines.instance.available_pipelines.any? &&
          @attachable.instance_of?(Sample) &&
