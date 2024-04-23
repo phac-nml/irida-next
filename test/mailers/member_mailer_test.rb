@@ -42,11 +42,12 @@ class MemberMailerTest < ActionMailer::TestCase
                         last_name: @member.user.last_name.capitalize,
                         type: @namespace.type,
                         name: @namespace.name), email.subject
-    assert_match(/#{I18n.t(:'mailers.member_mailer.access_granted_manager_email.body_html',
-                           first_name: @member.user.first_name.capitalize,
-                           last_name: @member.user.last_name.capitalize,
-                           type: @namespace.type,
-                           name: @namespace.name)}/, email.body.to_s)
+    assert_match(/#{Regexp.escape(I18n.t(:'mailers.member_mailer.access_granted_manager_email.body_html',
+                                         first_name: @member.user.first_name.capitalize,
+                                         last_name: @member.user.last_name.capitalize,
+                                         email: @member.user.email,
+                                         type: @namespace.type,
+                                         name: @namespace.name))}/, email.body.to_s)
   end
 
   def test_access_revoked_manager_email # rubocop:disable Metrics/AbcSize
@@ -57,10 +58,11 @@ class MemberMailerTest < ActionMailer::TestCase
                         last_name: @member.user.last_name.capitalize,
                         type: @namespace.type,
                         name: @namespace.name), email.subject
-    assert_match(/#{I18n.t(:'mailers.member_mailer.access_revoked_manager_email.body_html',
-                           first_name: @member.user.first_name.capitalize,
-                           last_name: @member.user.last_name.capitalize,
-                           type: @namespace.type,
-                           name: @namespace.name)}/, email.body.to_s)
+    assert_match(/#{Regexp.escape(I18n.t(:'mailers.member_mailer.access_revoked_manager_email.body_html',
+                                         first_name: @member.user.first_name.capitalize,
+                                         last_name: @member.user.last_name.capitalize,
+                                         email: @member.user.email,
+                                         type: @namespace.type,
+                                         name: @namespace.name))}/, email.body.to_s)
   end
 end

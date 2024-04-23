@@ -19,6 +19,7 @@ locals: {
         :"mailers.member_mailer.access_granted_manager_email.body_html",
         first_name: @member.user.first_name.capitalize,
         last_name: @member.user.last_name.capitalize,
+        email: @member.user.email,
         type: @namespace.type,
         name: @namespace.name
       ) %>
