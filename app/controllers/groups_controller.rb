@@ -77,8 +77,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
     respond_to do |format|
       if Groups::TransferService.new(@group, current_user).execute(new_namespace)
-        @group.create_activity key: 'group.transfer', owner: current_user,
-                               parameters: {name: @group.name, old_namespace: @group.parent, new_namespace:}
         flash[:success] = t('.success')
         format.turbo_stream { redirect_to edit_group_path(@group) }
       else
