@@ -17,15 +17,13 @@ module WorkflowExecutions
 
       state = run_status[:state]
       @workflow_execution.state = if state == 'RUNNING'
-                                    'running'
+                                    :running
                                   elsif state == 'COMPLETE'
-                                    'completing'
+                                    :completed
                                   end
-      if Integrations::Ga4ghWesApi::V1::States::CANCELATION_STATES.include?(state)
-        @workflow_execution.state = 'canceled'
-      end
+      @workflow_execution.state = :canceled if Integrations::Ga4ghWesApi::V1::States::CANCELATION_STATES.include?(state)
 
-      @workflow_execution.state = 'error' if Integrations::Ga4ghWesApi::V1::States::ERROR_STATES.include?(state)
+      @workflow_execution.state = :error if Integrations::Ga4ghWesApi::V1::States::ERROR_STATES.include?(state)
 
       @workflow_execution.save
 

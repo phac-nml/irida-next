@@ -17,7 +17,7 @@ module WorkflowExecutions
       @workflow_execution.run_id = run[:run_id]
 
       # mark workflow execution as submitted
-      @workflow_execution.state = 'submitted'
+      @workflow_execution.state = :submitted
 
       @workflow_execution.save
 

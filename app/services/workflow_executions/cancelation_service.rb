@@ -16,7 +16,7 @@ module WorkflowExecutions
       @wes_client.cancel_run(@workflow_execution.run_id)
 
       # mark workflow execution as canceled
-      @workflow_execution.state = 'canceled'
+      @workflow_execution.state = :canceled
 
       @workflow_execution.save
     end

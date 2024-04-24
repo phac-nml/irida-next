@@ -40,7 +40,7 @@ module WorkflowExecutions
         put_output_attachments_onto_samples
       end
 
-      @workflow_execution.state = 'completed'
+      @workflow_execution.state = :completed
 
       @workflow_execution.save
 

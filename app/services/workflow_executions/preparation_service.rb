@@ -35,7 +35,7 @@ module WorkflowExecutions
       )
 
       # mark workflow execution as prepared
-      @workflow_execution.state = 'prepared'
+      @workflow_execution.state = :prepared
 
       @workflow_execution.save
     end

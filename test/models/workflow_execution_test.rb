@@ -56,10 +56,6 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     @workflow_execution_valid.state = 'canceled'
     assert_not @workflow_execution_valid.canceling?
     assert @workflow_execution_valid.canceled?
-
-    @workflow_execution_valid.state = 'queued'
-    assert_not @workflow_execution_valid.canceled?
-    assert @workflow_execution_valid.queued?
   end
 
   test 'state with type enum using int assignment' do
@@ -97,9 +93,5 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     @workflow_execution_valid.state = 8
     assert_not @workflow_execution_valid.canceling?
     assert @workflow_execution_valid.canceled?
-
-    @workflow_execution_valid.state = 9
-    assert_not @workflow_execution_valid.canceled?
-    assert @workflow_execution_valid.queued?
   end
 end

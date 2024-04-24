@@ -5,6 +5,20 @@ class WorkflowExecution < ApplicationRecord
   include MetadataSortable
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
 
+  # new is a keyword that cannot be used with enums, so we'll change new to initial and in the translation,
+  # translate initial back to new
+  WORKFLOW_EXECUTION_STATES = {
+    initial: 0,
+    prepared: 1,
+    submitted: 2,
+    running: 3,
+    completing: 4,
+    completed: 5,
+    error: 6,
+    canceling: 7,
+    canceled: 8
+  }.with_indifferent_access.freeze
+
   has_logidze
   acts_as_paranoid
 
@@ -21,20 +35,7 @@ class WorkflowExecution < ApplicationRecord
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
 
-  # new is a keyword that cannot be used with enums, so we'll change new to initial and in the translation,
-  # translate initial back to new
-  enum state: {
-    initial: 0,
-    prepared: 1,
-    submitted: 2,
-    running: 3,
-    completing: 4,
-    completed: 5,
-    error: 6,
-    canceling: 7,
-    canceled: 8,
-    queued: 9
-  }
+  enum state: WORKFLOW_EXECUTION_STATES
 
   def send_email
     return unless email_notification

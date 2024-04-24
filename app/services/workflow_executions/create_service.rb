@@ -12,7 +12,7 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecution.new(params)
       @workflow_execution.submitter = current_user
-      @workflow_execution.state = 'initial'
+      @workflow_execution.state = :initial
 
       @workflow_execution.tags = { createdBy: current_user.email }
 

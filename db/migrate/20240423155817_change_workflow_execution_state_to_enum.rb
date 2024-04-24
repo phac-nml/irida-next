@@ -15,8 +15,7 @@ class ChangeWorkflowExecutionStateToEnum < ActiveRecord::Migration[7.1]
       completed: 5,
       error: 6,
       canceling: 7,
-      canceled: 8,
-      queued: 9
+      canceled: 8
     }
 
     execute <<-SQL.squish
@@ -29,7 +28,6 @@ class ChangeWorkflowExecutionStateToEnum < ActiveRecord::Migration[7.1]
       UPDATE workflow_executions SET state = #{enum_values[:error]} WHERE old_state = 'error';
       UPDATE workflow_executions SET state = #{enum_values[:canceling]} WHERE old_state = 'canceling';
       UPDATE workflow_executions SET state = #{enum_values[:canceled]} WHERE old_state = 'canceled';
-      UPDATE workflow_executions SET state = #{enum_values[:queued]} WHERE old_state = 'queued';
     SQL
 
     add_index :workflow_executions, :state
