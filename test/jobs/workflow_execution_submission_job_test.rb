@@ -90,7 +90,7 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
   end
 
   test 'api exception error then a success' do
-    mock_client = connection_builder(stubs: @stubs, connection_count: 3)
+    mock_client = connection_builder(stubs: @stubs, connection_count: 2)
 
     Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
       endpoint = '/runs'
