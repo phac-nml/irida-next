@@ -13,7 +13,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:project1_bot0)
 
-    get namespace_project_bot_personal_access_tokens_path(namespace, project, id: namespace_bot.id,
+    get namespace_project_bot_personal_access_tokens_path(namespace, project, bot_id: namespace_bot.id,
                                                                               format: :turbo_stream)
 
     assert_response :success
@@ -27,7 +27,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:project1_bot0)
 
-    get namespace_project_bot_personal_access_tokens_path(namespace, project, id: namespace_bot.id,
+    get namespace_project_bot_personal_access_tokens_path(namespace, project, bot_id: namespace_bot.id,
                                                                               format: :turbo_stream)
 
     assert_response :unauthorized
@@ -41,7 +41,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:project1_bot0)
 
-    get new_namespace_project_bot_personal_access_token_path(namespace, project, id: namespace_bot.id,
+    get new_namespace_project_bot_personal_access_token_path(namespace, project, bot_id: namespace_bot.id,
                                                                                  format: :turbo_stream)
 
     assert_response :success
@@ -55,7 +55,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:project1_bot0)
 
-    get new_namespace_project_bot_personal_access_token_path(namespace, project, id: namespace_bot.id,
+    get new_namespace_project_bot_personal_access_token_path(namespace, project, bot_id: namespace_bot.id,
                                                                                  format: :turbo_stream)
 
     assert_response :unauthorized
@@ -69,7 +69,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:project1_bot0)
 
-    post namespace_project_bot_personal_access_tokens_path(namespace, project, id: namespace_bot.id,
+    post namespace_project_bot_personal_access_tokens_path(namespace, project, bot_id: namespace_bot.id,
                                                                                format: :turbo_stream),
          params: { personal_access_token: {
            name: 'Newest Token', scopes: %w[read_api api]
@@ -86,7 +86,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:project1_bot0)
 
-    post namespace_project_bot_personal_access_tokens_path(namespace, project, id: namespace_bot.id,
+    post namespace_project_bot_personal_access_tokens_path(namespace, project, bot_id: namespace_bot.id,
                                                                                format: :turbo_stream),
          params: { personal_access_token: {
            name: 'Newest Token', scopes: %w[read_api api]
@@ -103,7 +103,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:project1_bot0)
 
-    post namespace_project_bot_personal_access_tokens_path(namespace, project, id: namespace_bot.id,
+    post namespace_project_bot_personal_access_tokens_path(namespace, project, bot_id: namespace_bot.id,
                                                                                format: :turbo_stream),
          params: { personal_access_token: {
            scopes: %w[read_api api]
@@ -120,7 +120,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:project1_bot0)
 
-    post namespace_project_bot_personal_access_tokens_path(namespace, project, id: namespace_bot.id,
+    post namespace_project_bot_personal_access_tokens_path(namespace, project, bot_id: namespace_bot.id,
                                                                                format: :turbo_stream),
          params: { personal_access_token: {
            name: 'Newest Token'

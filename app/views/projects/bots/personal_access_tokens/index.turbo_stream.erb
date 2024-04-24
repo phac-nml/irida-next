@@ -1,0 +1,6 @@
+<%= turbo_stream.update "bot_modal",
+                    partial: "personal_access_token_listing_modal",
+                    locals: {
+                      open: true,
+                      bot_accounts: @bot_accounts
+                    } %>

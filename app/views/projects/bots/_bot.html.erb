@@ -1,3 +1,4 @@
+<% bot_account_membership = bot_account.membership %>
 <tr
   id="<%= dom_id(bot_account) %>"
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
@@ -6,35 +7,56 @@
     <%= bot_account.user.email %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens&.last&.name %>
-  </td>
-  <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens&.last&.scopes&.join(", ") %>
+    <% if bot_account.user.personal_access_tokens.active.count.positive? %>
+      <%= link_to bot_account.user.personal_access_tokens.active.count,
+      namespace_project_bot_personal_access_tokens_path(bot_id: bot_account.id),
+      data: {
+        turbo_stream: true
+      },
+      class: "font-semibold text-slate-800 dark:text-slate-300 hover:underline" %>
+    <% else %>
+      0
+    <% end %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
     <%= viral_time_ago(original_time: bot_account.user.created_at) %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <% unless bot_account.user.personal_access_tokens.count.positive? %>
-      <% if bot_account.membership.nil? %>
-        <%= t(
-          :"projects.bots.index.access_level.level_#{bot_account.membership.access_level}"
-        ) %>
-      <% end %>
+    <% unless bot_account_membership.nil? %>
+      <%= t(
+        :"projects.bots.index.access_level.level_#{bot_account_membership.access_level}"
+      ) %>
     <% end %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= bot_account.user.personal_access_tokens&.last&.expires_at&.strftime(
-      I18n.t("time.formats.full_date")
-    ) %>
+    <% if !bot_account_membership&.expires_at.nil? %>
+      <%= bot_account_membership.expires_at.strftime(I18n.t("time.formats.full_date")) %>
+    <% else %>
+      <%= t("projects.bots.index.bot.never") %>
+    <% end %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
-      <%= viral_dropdown(icon: "ellipsis_vertical",
-                                aria: { label: bot_account.user.email }) do |dropdown| %>
+    <%= viral_dropdown(icon: "ellipsis_vertical",
+                              aria: { label: bot_account.user.email }) do |dropdown| %>
+      <% if allowed_to?(:generate_bot_personal_access_token?, @namespace) && !bot_account.user.automation_bot? %>
+        <%= dropdown.with_item(
+          label: t("projects.bots.index.bot.generate_new_token"),
+          url:
+            new_namespace_project_bot_personal_access_token_path(
+              bot_id: bot_account.id
+            ),
+          data: {
+            turbo_stream: true
+          },
+          aria: {
+            label: t("projects.bots.index.bot.generate_new_token_aria_label")
+          }
+        ) %>
+      <% end %>
+      <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
         <%= dropdown.with_item(
           label: t("projects.bots.index.bot.remove"),
-          url: namespace_project_bot_path(id: bot_account),
+          url: namespace_project_bot_path(id: bot_account.id),
           data: {
             turbo_method: :delete,
             turbo_confirm: t("projects.bots.index.bot.remove_confirmation")
