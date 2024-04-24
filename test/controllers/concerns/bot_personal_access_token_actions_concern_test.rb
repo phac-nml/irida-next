@@ -5,7 +5,7 @@ require 'test_helper'
 class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  test 'projectbot personal access tokens index' do
+  test 'project bot personal access tokens index' do
     sign_in users(:john_doe)
 
     namespace = groups(:group_one)
