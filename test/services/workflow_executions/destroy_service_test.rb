@@ -104,7 +104,7 @@ module WorkflowExecutions
 
     test 'should not destroy a new workflow execution' do
       workflow_execution = workflow_executions(:irida_next_example_new)
-      assert workflow_execution.new?
+      assert workflow_execution.initial?
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do

@@ -193,7 +193,7 @@ irida_next_example_new:
   workflow_url: "https://github.com/phac-nml/irida_next_example_new"
   run_id: "my_run_id_12"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  state: "new"
+  state: "initial"
 
 irida_next_example_completing_a:
   <<: *DEFAULTS
@@ -345,6 +345,6 @@ workflow_execution<%= (n) %>:
   workflow_url: "https://github.com/phac-nml/irida_next_example_new"
   run_id: <%= "my_run_id_#{n}" %>
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  state: "new"
+  state: "initial"
 <% end %>
 

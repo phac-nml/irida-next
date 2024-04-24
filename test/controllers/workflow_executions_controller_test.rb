@@ -190,7 +190,7 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should not delete a new workflow' do
     workflow_execution = workflow_executions(:irida_next_example_new)
-    assert workflow_execution.new?
+    assert workflow_execution.initial?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
