@@ -4,6 +4,7 @@ export default class extends Controller {
   // # indicates private attribute or method
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
   #storageKey = null;
+  #total = 0;
 
   static targets = ["rowSelection", "selectAll", "total", "selected"];
   static outlets = ["action-link"];
@@ -26,6 +27,7 @@ export default class extends Controller {
 
     if (storageValue) {
       this.#updateUI(storageValue);
+      this.#total = storageValue.length;
     } else {
       this.save([]);
     }
@@ -53,11 +55,16 @@ export default class extends Controller {
 
   save(storageValue) {
     sessionStorage.setItem(this.#storageKey, JSON.stringify([...storageValue]));
+    this.#total = storageValue.length;
   }
 
   update(ids) {
     this.save(ids);
     this.#updateUI(ids);
+  }
+
+  getTotal() {
+    return this.#total;
   }
 
   #addOrRemove(add, storageValue) {

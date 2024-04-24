@@ -2,7 +2,7 @@
   <%= dialog.with_header(
     title: t(:"workflow_executions.submissions.pipeline_selection.title")
   ) %>
-  <%= dialog.with_section(data: { controller: "workflow-selection" }) do %>
+  <%= dialog.with_section(data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table" }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
       <%= form.hidden_field :workflow_name,
                         data: {
@@ -41,7 +41,7 @@
                     </span>
                     <%= viral_pill(text: workflow.version, color: :primary) %>
                   </span>
-                  <span class=" text-sm font-normal truncate text-slate-500 dark:text-slate-400 ">
+                  <span class="ws-loading-text text-sm font-normal truncate text-slate-500 dark:text-slate-400 ">
                     <%= t(:"workflow_executions.submissions.pipeline_selection.loading") %>
                   </span>
                 </span>

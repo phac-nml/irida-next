@@ -1264,7 +1264,7 @@ en:
     submissions:
       pipeline_selection:
         title: Workflow Selection
-        loading: Workflow submission is being generated, this can take a litte bit of time.
+        loading: Preparing workflow arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
       create:
         title: "%{workflow} parameters"
         submit: Submit

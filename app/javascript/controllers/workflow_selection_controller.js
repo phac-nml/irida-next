@@ -10,8 +10,7 @@ function preventEscapeListener(event) {
 // Connects to data-controller="workflow-selection"
 export default class extends Controller {
   static targets = ["workflow", "workflowName", "workflowVersion", "form"];
-
-  #escapeListener = null;
+  static outlets = ["selection"];
 
   connect() {
     document.addEventListener("turbo:submit-end", preventEscapeListener);
@@ -27,11 +26,7 @@ export default class extends Controller {
 
   preventClosingDialog() {
     document.querySelector(".dialog--close").classList.add("hidden");
-    this.#escapeListener = document.addEventListener(
-      "keydown",
-      preventEscapeListener,
-      true,
-    );
+    document.addEventListener("keydown", preventEscapeListener, true);
   }
 
   selectWorkflow({ params }) {
@@ -52,6 +47,13 @@ export default class extends Controller {
 
         this.workflowNameTarget.value = params.workflowname;
         this.workflowVersionTarget.value = params.workflowversion;
+
+        // Update the text inside ws_loading
+        const wsLoading = workflow.querySelector(".ws-loading-text");
+        wsLoading.textContent = wsLoading.textContent.replace(
+          "COUNT_PLACEHOLDER",
+          this.selectionOutlet.getTotal(),
+        );
       }
     }
 
