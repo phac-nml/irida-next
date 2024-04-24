@@ -2,7 +2,16 @@
 
   <label class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
 
-  <div class="samplesheet-table flex border dark:border-slate-600 border border-slate-100">
+  <div
+    class="
+      samplesheet-table
+      flex
+      border
+      dark:border-slate-600
+      border
+      border-slate-100
+    "
+  >
     <% properties.each do |header, property| %>
       <%= render Nextflow::Samplesheet::ColumnComponent.new(
         namespace_id:,
