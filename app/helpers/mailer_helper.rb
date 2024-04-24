@@ -3,8 +3,8 @@
 # Helper for sending email notifications
 module MailerHelper
   def user_emails(namespace)
-    # user_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
-    user_memberships = Member.where(namespace:).not_expired
+    user_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
+                             .where.not(access_level: Member::AccessLevel.manageable)
     users = User.where(id: user_memberships.select(:user_id)).distinct
     users.pluck(:email)
   end

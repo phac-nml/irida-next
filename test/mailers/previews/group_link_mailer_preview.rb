@@ -23,8 +23,8 @@ class GroupLinkMailerPreview < ActionMailer::Preview
   end
 
   def access_revoked_from_project_user_email
-    setup_user_emails
     setup_project
+    setup_user_emails
     GroupLinkMailer.access_revoked_user_email(@user_emails, @group, @namespace)
   end
 
