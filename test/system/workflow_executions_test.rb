@@ -262,21 +262,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'should not delete a queued workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_queued)
-
-    visit workflow_executions_path
-
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
-
-    tr = find('td', text: workflow_execution.id).ancestor('tr')
-
-    within tr do
-      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link 'Delete'
-    end
-  end
-
   test 'should not delete a new workflow' do
     workflow_execution = workflow_executions(:irida_next_example_new)
 

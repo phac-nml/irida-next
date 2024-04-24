@@ -19,7 +19,7 @@ module WorkflowExecutions
       @workflow_execution.state = if state == 'RUNNING'
                                     :running
                                   elsif state == 'COMPLETE'
-                                    :completed
+                                    :completing
                                   end
       @workflow_execution.state = :canceled if Integrations::Ga4ghWesApi::V1::States::CANCELATION_STATES.include?(state)
 

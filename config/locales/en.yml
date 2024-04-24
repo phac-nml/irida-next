@@ -1278,7 +1278,6 @@ en:
       error: Error
       canceling: Canceling
       canceled: Canceled
-      queued: Queued
   services:
     attachments:
       concatenation:

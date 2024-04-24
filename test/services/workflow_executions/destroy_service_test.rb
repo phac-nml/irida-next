@@ -92,16 +92,6 @@ module WorkflowExecutions
       end
     end
 
-    test 'should not destroy a queued workflow execution' do
-      workflow_execution = workflow_executions(:irida_next_example_queued)
-      assert workflow_execution.queued?
-
-      assert_no_difference -> { WorkflowExecution.count },
-                           -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
-      end
-    end
-
     test 'should not destroy a new workflow execution' do
       workflow_execution = workflow_executions(:irida_next_example_new)
       assert workflow_execution.initial?
