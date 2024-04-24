@@ -10,7 +10,7 @@ module Bots
       super(user, params)
       @namespace = namespace
 
-      current_count = @namespace.namespace_bots.count
+      current_count = @namespace.namespace_bots.with_deleted.count
 
       user_params = {
         user_type: bot_type,

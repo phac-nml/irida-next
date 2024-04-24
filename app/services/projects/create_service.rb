@@ -44,14 +44,24 @@ module Projects
     end
 
     def create_automation_bot
-      params = {
-        token_name: 'automation bot',
-        scopes: %w[read_api api],
+      user_params = {
+        email: "#{project.namespace.puid}_automation_bot@iridanext.com",
+        user_type: User.user_types[:project_automation_bot],
+        first_name: project.namespace.puid,
+        last_name: 'Automation Bot'
+      }
+
+      automation_bot_account = User.new(user_params)
+      automation_bot_account.skip_password_validation = true
+      automation_bot_account.save
+
+      member_params = {
+        user: automation_bot_account,
+        namespace: project.namespace,
         access_level: Member::AccessLevel::MAINTAINER
       }
 
-      ::Bots::CreateService.new(current_user, project.namespace, User.user_types[:project_automation_bot],
-                                params).execute
+      Members::CreateService.new(current_user, project.namespace, member_params).execute
     end
   end
 end

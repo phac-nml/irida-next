@@ -84,8 +84,6 @@ module BotActions
   end
 
   def load_bot_accounts
-    @namespace.namespace_bots.includes(:user).where(
-      user: { user_type: User.without_automation_bots.select(:user_type) }
-    )
+    @namespace.namespace_bots.includes(:user)
   end
 end
