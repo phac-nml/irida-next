@@ -14,6 +14,7 @@ module Groups
       assert_difference -> { Group.count } => 1, -> { Member.count } => 1 do
         Groups::CreateService.new(@user, valid_params).execute
       end
+      assert_no_enqueued_emails
     end
 
     test 'create group with invalid params' do

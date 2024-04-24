@@ -3,6 +3,7 @@
 module Members
   # Service used to Delete Members
   class DestroyService < BaseService
+    include MailerHelper
     MemberDestroyError = Class.new(StandardError)
     attr_accessor :member, :namespace
 
@@ -25,10 +26,19 @@ module Members
         end
       end
 
-      member.destroy
+      send_emails if member.destroy
     rescue Members::DestroyService::MemberDestroyError => e
       member.errors.add(:base, e.message)
       false
+    end
+
+    private
+
+    def send_emails
+      return if Member.can_view?(member.user, namespace, true)
+
+      MemberMailer.access_revoked_user_email(member, namespace).deliver_later
+      MemberMailer.access_revoked_manager_email(member, manager_emails(member, namespace), namespace).deliver_later
     end
   end
 end

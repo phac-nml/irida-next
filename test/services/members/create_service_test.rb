@@ -3,12 +3,14 @@
 require 'test_helper'
 
 module Members
-  class CreateServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
+  class CreateServiceTest < ActiveSupport::TestCase
+    include MailerHelper
     def setup
       @user = users(:john_doe)
       @project = projects(:john_doe_project2)
       @project_namespace = @project.namespace
       @group = groups(:group_one)
+      @new_member
     end
 
     test 'create group member with valid params' do
@@ -17,8 +19,25 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       assert_difference -> { Member.count } => 1 do
-        Members::CreateService.new(@user, @group, valid_params).execute
+        @new_member = Members::CreateService.new(@user, @group, valid_params, true).execute
       end
+
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, @group]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
+                                 args: [@new_member, manager_emails(@new_member, @group), @group]
+    end
+
+    test 'create group member with no email notification' do
+      user = users(:steve_doe)
+      valid_params = { user:,
+                       access_level: Member::AccessLevel::OWNER }
+
+      assert_difference -> { Member.count } => 1 do
+        @new_member = Members::CreateService.new(@user, @group, valid_params).execute
+      end
+      assert_no_enqueued_emails
     end
 
     test 'create project member with valid params' do
@@ -27,8 +46,16 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       assert_difference -> { Member.count } => 1 do
-        Members::CreateService.new(@user, @project_namespace, valid_params).execute
+        @new_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
       end
+
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, @project_namespace]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
+                                 args: [@new_member,
+                                        manager_emails(@new_member, @project_namespace),
+                                        @project_namespace]
     end
 
     test 'create group member with invalid params' do
@@ -36,8 +63,9 @@ module Members
                          access_level: Member::AccessLevel::OWNER }
 
       assert_no_difference('Member.count') do
-        Members::CreateService.new(@user, @group, invalid_params).execute
+        Members::CreateService.new(@user, @group, invalid_params, true).execute
       end
+      assert_no_enqueued_emails
     end
 
     test 'create project member with invalid params' do
@@ -45,8 +73,9 @@ module Members
                          access_level: nil }
 
       assert_no_difference('Member.count') do
-        Members::CreateService.new(@user, @project_namespace, invalid_params).execute
+        Members::CreateService.new(@user, @project_namespace, invalid_params, true).execute
       end
+      assert_no_enqueued_emails
     end
 
     test 'create group member with valid params but no permissions in namespace' do
@@ -55,7 +84,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Members::CreateService.new(user, @group, valid_params).execute
+        Members::CreateService.new(user, @group, valid_params, true).execute
       end
 
       assert_equal GroupPolicy, exception.policy
@@ -63,28 +92,33 @@ module Members
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.group.create_member?', name: @group.name),
                    exception.result.message
+      assert_no_enqueued_emails
     end
 
     test 'create group member with valid params when member of a parent group with the OWNER role' do
       user = users(:michelle_doe)
-      valid_params = { user: users(:ryan_doe),
+      new_user = users(:ryan_doe)
+      valid_params = { user: new_user,
                        access_level: Member::AccessLevel::OWNER }
       group = groups(:subgroup_one_group_three)
 
       assert_difference -> { Member.count } => 1 do
-        Members::CreateService.new(user, group, valid_params).execute
+        Members::CreateService.new(user, group, valid_params, true).execute
       end
+      assert_no_enqueued_emails
     end
 
     test 'create group member with valid params when member of a parent group with MAINTAINER role' do
       user = users(:micha_doe)
-      valid_params = { user: users(:ryan_doe),
+      new_user = users(:ryan_doe)
+      valid_params = { user: new_user,
                        access_level: Member::AccessLevel::MAINTAINER }
       group = groups(:subgroup_one_group_three)
 
       assert_difference -> { Member.count } => 1 do
-        Members::CreateService.new(user, group, valid_params).execute
+        Members::CreateService.new(user, group,  valid_params, true).execute
       end
+      assert_no_enqueued_emails
     end
 
     test 'create group member with valid params when member of a parent group with MAINTAINER role and group member
@@ -95,8 +129,9 @@ module Members
       group = groups(:subgroup_one_group_three)
 
       assert_no_difference ['Member.count'] do
-        Members::CreateService.new(user, group, valid_params).execute
+        Members::CreateService.new(user, group, valid_params, true).execute
       end
+      assert_no_enqueued_emails
     end
 
     test 'create project member with valid params when member of a parent group with MAINTAINER role and project member
@@ -109,8 +144,9 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       assert_no_difference ['Member.count'] do
-        Members::CreateService.new(user, project_namespace, valid_params).execute
+        Members::CreateService.new(user, project_namespace, valid_params, true).execute
       end
+      assert_no_enqueued_emails
     end
 
     test 'create project member with valid params but no permissions in namespace' do
@@ -122,7 +158,7 @@ module Members
                        access_level: Member::AccessLevel::OWNER }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Members::CreateService.new(user, project_namespace, valid_params).execute
+        Members::CreateService.new(user, project_namespace, valid_params, true).execute
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
@@ -130,6 +166,7 @@ module Members
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.create_member?', name: project.name),
                    exception.result.message
+      assert_no_enqueued_emails
     end
 
     test 'valid authorization to create group member' do
@@ -140,8 +177,14 @@ module Members
       assert_authorized_to(:create_member?, group,
                            with: GroupPolicy,
                            context: { user: @user }) do
-        Members::CreateService.new(@user, group, valid_params).execute
+        @new_member = Members::CreateService.new(@user, group, valid_params, true).execute
       end
+
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, group]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
+                                 args: [@new_member, manager_emails(@new_member, group), group]
     end
 
     test 'valid authorization to create project member' do
@@ -152,8 +195,16 @@ module Members
       assert_authorized_to(:create_member?, @project_namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @user }) do
-        Members::CreateService.new(@user, @project_namespace, valid_params).execute
+        @new_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
       end
+
+      assert_enqueued_emails 2
+      assert_enqueued_email_with MemberMailer, :access_granted_user_email,
+                                 args: [@new_member, @project_namespace]
+      assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
+                                 args: [@new_member,
+                                        manager_emails(@new_member, @project_namespace),
+                                        @project_namespace]
     end
 
     test 'create group member logged using logidze' do
@@ -161,7 +212,7 @@ module Members
       valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
-      group_member = Members::CreateService.new(@user, @group, valid_params).execute
+      group_member = Members::CreateService.new(@user, @group, valid_params, true).execute
 
       group_member.create_logidze_snapshot!
 
@@ -176,7 +227,7 @@ module Members
       valid_params = { user:,
                        access_level: Member::AccessLevel::OWNER }
 
-      project_member = Members::CreateService.new(@user, @project_namespace, valid_params).execute
+      project_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
 
       project_member.create_logidze_snapshot!
 

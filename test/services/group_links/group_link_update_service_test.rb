@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module GroupLinks
-  class GroupLinkUpdateServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
+  class GroupLinkUpdateServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
     end

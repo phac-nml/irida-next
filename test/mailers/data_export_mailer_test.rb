@@ -20,7 +20,7 @@ class DataExportMailerTest < ActionMailer::TestCase
 
     assert_equal [@data_export4.user.email], email.to
     assert_equal I18n.t('mailers.data_export_mailer.email_subject', name: @data_export4.name), email.subject
-    assert_match I18n.t('mailers.email_template.greeting', name: @data_export4.user.first_name),
+    assert_match I18n.t('mailers.email_template.greeting_with_name', name: @data_export4.user.first_name),
                  email.body.to_s
 
     #  In link url
@@ -40,7 +40,7 @@ class DataExportMailerTest < ActionMailer::TestCase
 
     assert_equal [@data_export5.user.email], email.to
     assert_equal I18n.t('mailers.data_export_mailer.email_subject', name: @data_export5.id), email.subject
-    assert_match I18n.t('mailers.email_template.greeting', name: @data_export5.user.first_name),
+    assert_match I18n.t('mailers.email_template.greeting_with_name', name: @data_export5.user.first_name),
                  email.body.to_s
     assert_match @data_export5.id, email.body.to_s, count: 2
     assert_match @data_export5.expires_at.strftime('%A, %B %d, %Y'), email.body.to_s

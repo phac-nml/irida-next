@@ -35,7 +35,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   end
 
   def create # rubocop:disable Metrics/MethodLength
-    @new_member = Members::CreateService.new(current_user, @namespace, member_params).execute
+    @new_member = Members::CreateService.new(current_user, @namespace, member_params, true).execute
 
     if @new_member.persisted?
       respond_to do |format|

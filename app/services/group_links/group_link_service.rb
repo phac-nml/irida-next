@@ -22,10 +22,7 @@ module GroupLinks
 
       group = Group.find_by(id: group_id)
 
-      if group.nil?
-        raise NamespaceGroupLinkError, I18n.t('services.groups.share.group_not_found',
-                                              group_id:)
-      end
+      raise NamespaceGroupLinkError, I18n.t('services.groups.share.group_not_found', group_id:) if group.nil?
 
       namespace_group_link.save
 
