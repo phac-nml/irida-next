@@ -37,7 +37,7 @@ module Nextflow
 
       def render_fastq_cell(sample, property, entry, fields, index)
         direction = property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
-        files = sample.sorted_files[direction]
+        files = sample.sorted_files[direction] || []
         data = {
           'data-action' => 'change->nextflow--samplesheet#file_selected',
           'data-nextflow--samplesheet-target' => "select#{direction.to_s.sub!('pe_', '').capitalize}",
@@ -45,14 +45,14 @@ module Nextflow
           'data-index' => index
         }
         render_file_cell(property, entry, fields, files,
-                         @required, data, files.first[1])
+                         @required, data, files.nil? ? nil : files.first)
       end
 
       def render_other_file_cell(sample, property, entry, fields)
         files = if entry['pattern']
                   filter_files_by_pattern(sample.sorted_files[:singles], entry['pattern'])
                 else
-                  sample.sorted_files[:singles]
+                  sample.sorted_files[:singles] || []
                 end
         render_file_cell(property, entry, fields,
                          files, @required, {}, nil)
@@ -72,10 +72,16 @@ module Nextflow
 
       # rubocop:disable Metrics/ParameterLists
       def render_file_cell(property, entry, fields, files, is_required, data, selected)
+        selected_item = if selected.present?
+                          selected
+                        else
+                          entry['autopopulate'] && files.present? ? files[0] : nil
+                        end
+
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  files,
-                 selected || entry['autopopulate'] ? files[0] : nil,
+                 selected_item,
                  fields,
                  is_required,
                  data

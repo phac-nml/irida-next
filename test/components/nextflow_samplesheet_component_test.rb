@@ -8,15 +8,14 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     sample2 = samples(:sample44)
     visit("/rails/view_components/nextflow_samplesheet_component/default?sample_ids[]=#{sample1.id}&sample_ids[]=#{sample2.id}") # rubocop:disable Layout/LineLength
 
-    assert_selector '.sample-sheet table' do
-      assert_selector 'thead th', count: 4
-      assert_selector 'thead th:last-of-type', text: 'STRANDEDNESS'
-      assert_selector 'tbody tr', count: 2
-      assert_selector 'tbody tr:first-of-type td:first-of-type', text: sample1.puid
-      assert_selector 'tbody tr:first-of-type td > select', count: 3
-      assert_selector 'tbody tr:first-of-type td:last-of-type > select'
-      assert_selector 'tbody tr:first-of-type td:last-of-type > select option', count: 3
-      assert_selector 'tbody tr:first-of-type td:last-of-type > select option:first-of-type', text: 'forward'
+    assert_selector '.samplesheet-table' do |table|
+      table.assert_selector '.table-header', count: 4
+      table.assert_selector '.table-column:last-child .table-header', text: 'STRANDEDNESS (REQUIRED)'
+      table.assert_selector '.table-column:first-child .table-td', count: 2
+      table.assert_selector '.table-column:first-child .table-td:first-child', text: sample1.puid
+      table.assert_selector '.table-column:last-child .table-td:first-child select option', count: 3
+      table.assert_selector '.table-column:last-child .table-td:first-child select option:first-of-type',
+                            text: 'forward'
     end
   end
 
@@ -25,13 +24,12 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     sample2 = samples(:sample44)
     visit("/rails/view_components/nextflow_samplesheet_component/default?schema_file=samplesheet_schema_snvphyl.json&sample_ids[]=#{sample1.id}&sample_ids[]=#{sample2.id}") # rubocop:disable Layout/LineLength
 
-    assert_selector '.sample-sheet table' do
-      assert_selector 'thead th', count: 4
-      assert_selector 'thead th:last-of-type', text: 'REFERENCE_ASSEMBLY'
-      assert_selector 'tbody tr', count: 2
-      assert_selector 'tbody tr:first-of-type td:first-of-type', text: sample1.puid
-      assert_selector 'tbody tr:first-of-type td > select', count: 3
-      assert_selector 'tbody tr:first-of-type td:last-of-type > select option', count: 1
+    assert_selector '.samplesheet-table' do |table|
+      table.assert_selector '.table-header', count: 4
+      table.assert_selector '.table-column:last-child .table-header', text: 'REFERENCE_ASSEMBLY'
+      table.assert_selector '.table-column:first-child .table-td', count: 2
+      table.assert_selector '.table-column:first-child .table-td:first-child', text: sample1.puid
+      table.assert_selector '.table-column:last-child .table-td:first-child select option', count: 1
     end
   end
 
@@ -40,15 +38,15 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     sample2 = samples(:sample44)
     visit("/rails/view_components/nextflow_samplesheet_component/default?schema_file=samplesheet_schema_meta.json&sample_ids[]=#{sample1.id}&sample_ids[]=#{sample2.id}") # rubocop:disable Layout/LineLength
 
-    assert_selector '.sample-sheet table' do |table|
-      table.assert_selector 'thead th', count: 3
-      table.assert_selector 'thead th:last-of-type select', count: 1
-      table.assert_selector 'thead th:last-of-type select', text: 'insdc_accession'
-      table.assert_selector 'tbody tr', count: 2
-      table.assert_selector 'tbody tr:first-of-type td:first-of-type', text: sample1.puid
-      table.assert_selector 'tbody tr:first-of-type', text: 'ERR86724108'
-      table.assert_selector 'tbody tr:last-of-type td:first-of-type', text: sample2.puid
-      table.assert_selector 'tbody tr:last-of-type', text: 'ERR31551163'
+    assert_selector '.samplesheet-table' do |table|
+      table.assert_selector '.table-header', count: 3
+      table.assert_selector '.table-column:last-child .table-header select', count: 1
+      table.assert_selector '.table-column:last-child .table-header select', text: 'insdc_accession'
+      table.assert_selector '.table-column:first-child .table-td', count: 2
+      table.assert_selector '.table-column:first-child .table-td:first-child', text: sample1.puid
+      table.assert_selector '.table-column:last-child .table-td:first-child', text: 'ERR86724108'
+      table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: sample2.puid
+      table.assert_selector '.table-column:last-child .table-td:last-child', text: 'ERR31551163'
     end
   end
 end
