@@ -11,7 +11,7 @@
   "
 >
   <% if property["cell_type"] == "metadata_cell" %>
-    <div>
+    <div class="dark:border-slate-600 border border-slate-100">
       <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
         <%= f.hidden_field :format, value: "turbo_stream", id: "field_#{header}_turbo" %>
         <%= f.hidden_field :namespace_id, value: namespace_id, id: "namespace_#{header}" %>
@@ -34,17 +34,26 @@
                    id: "field-#{header}",
                    "aria-label": header,
                    class:
-                     "cursor-pointer bg-slate-50 border-0 text-slate-900 text-sm focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                     "w-full focus:ring-primary-500 focus:border-primary-500  p-2.5 dark:bg-inherit bg-inherit border-none dark:border-none dark:placeholder-slate-400 text-inherit text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 font-semibold tracking-wider uppercase",
                    onchange: "Turbo.navigator.submitForm(this.form)"
                  } %>
       <% end %>
     </div>
   <% else %>
-    <div class="px-6 py-3 font-semibold tracking-wider">
-      <div class="flex items-center space-x-2">
-        <span class="uppercase"><%= header %></span>
+    <div
+      class="
+        p-2.5
+        font-semibold
+        tracking-wider
+        dark:border-slate-600
+        border
+        border-slate-100
+      "
+    >
+      <div class="flex items-center space-x-2 uppercase">
+        <%= header %>
         <% if @required %>
-          <span class="text-red-600">(<%= t(".required") %>)</span>
+          <span class="text-red-600 ml-1">(<%= t(".required") %>)</span>
         <% end %>
       </div>
     </div>
@@ -58,7 +67,7 @@
             <%= s.hidden_field :sample_id, value: sample.id %>
           <% end %>
           <%= s.fields_for "samplesheet_params" do |fields| %>
-            <%= render_cell_type(header, property, sample, fields) %>
+            <%= render_cell_type(header, property, sample, fields, index) %>
           <% end %>
         <% end %>
       </div>

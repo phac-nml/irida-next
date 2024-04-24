@@ -18,12 +18,12 @@ module Nextflow
 
       # rubocop:enable Metrics/ParameterLists
 
-      def render_cell_type(property, entry, sample, fields)
+      def render_cell_type(property, entry, sample, fields, index)
         case entry['cell_type']
         when 'sample_cell'
           render_sample_cell(sample, fields)
         when 'fastq_cell'
-          render_fastq_cell(sample, property, entry, fields)
+          render_fastq_cell(sample, property, entry, fields, index)
         when 'file_cell'
           render_other_file_cell(sample, property, entry, fields)
         when 'metadata_cell'
@@ -35,11 +35,11 @@ module Nextflow
         end
       end
 
-      def render_fastq_cell(sample, property, entry, fields)
-        index = property.match(/fastq_(\d+)/)[1].to_i - 1
-        files = index.zero? ? sample.sorted_files[:pe_forward] : sample.sorted_files[:pe_reverse]
+      def render_fastq_cell(sample, property, entry, fields, index)
+        dir_index = property.match(/fastq_(\d+)/)[1].to_i - 1
+        files = dir_index.zero? ? sample.sorted_files[:pe_forward] : sample.sorted_files[:pe_reverse]
         render_file_cell(property, entry, fields, files,
-                         @required)
+                         @required, index)
       end
 
       def render_other_file_cell(sample, property, entry, fields)
@@ -64,11 +64,12 @@ module Nextflow
         render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields))
       end
 
-      def render_file_cell(property, entry, fields, files, is_required) # rubocop:disable Metrics/MethodLength
+      def render_file_cell(property, entry, fields, files, is_required, index = nil)
         data = if entry['cell_type'] == 'fastq_cell'
                  {
                    'data-action' => 'change->nextflow--samplesheet#file_selected',
-                   'data-nextflow--samplesheet-target' => 'select'
+                   'data-nextflow--samplesheet-target' => 'select',
+                   'data-index' => index
                  }
                else
                  {}
