@@ -1264,6 +1264,7 @@ en:
     submissions:
       pipeline_selection:
         title: Workflow Selection
+        loading: Preparing workflow arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
       create:
         title: "%{workflow} parameters"
         submit: Submit
