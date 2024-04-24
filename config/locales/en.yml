@@ -537,16 +537,25 @@ en:
             token_name: Token Name
             access_level: Access Level
             select_access_level: Select access level
-            expires_at: Expiration Date (optional)
+            expires_at: Token Expiration Date (optional)
             submit: Submit
             cancel: Cancel
           generate_personal_access_token_modal:
             title: New Personal Access Token
             description: "Generating a new personal access token for %{bot_account}"
-            name: Token name
-            expires_at: Expiration Date (optional)
+            name: Token Name
+            expires_at: Token Expiration Date (optional)
             submit: Submit
             cancel: Cancel
+        personal_access_tokens_listing_modal:
+          title: Personal access tokens
+          description: Viewing a list of active personal access tokens for %{bot_account}
+          available_tokens: Personal access tokens for %{bot_account}
+          actions : Actions
+          personal_access_token:
+            never: Never
+            revoke: Revoke
+            revoke_confirmation: "Are you sure you want to revoke this personal access token?"
         access_level:
           level_0: No Access
           level_10: Guest
@@ -558,15 +567,6 @@ en:
           label: "New personal access token for %{bot_name}"
           description: Make sure you save it - you won't be able to access it again.
           aria_label: Personal access token, copy to clipboard
-        personal_access_tokens_listing_modal:
-          title: Personal access tokens
-          description: Viewing a list of active personal access tokens for %{bot_account}
-          available_tokens: Personal access tokens for %{bot_account}
-          actions : Actions
-          personal_access_token:
-            never: Never
-            revoke: Revoke
-            revoke_confirmation: "Are you sure you want to revoke this personal access token?"
       create:
         success: "Bot account was successfully added to the group"
       destroy:

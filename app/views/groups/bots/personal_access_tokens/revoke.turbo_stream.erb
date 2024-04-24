@@ -1,3 +1,9 @@
 <%= turbo_stream.update "personal-access-token-alert", viral_alert(type:, message:) %>
 
 <%= turbo_stream.remove dom_id(personal_access_token) %>
+
+<%= turbo_stream.replace dom_id(@bot_account),
+                     partial: "groups/bots/bot",
+                     locals: {
+                       bot_account: @bot_account
+                     } %>

@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody id="access-tokens-table-body">
-        <% @personal_access_tokens.each do |personal_access_token| %>
+        <% personal_access_tokens.each do |personal_access_token| %>
           <%= render partial: "personal_access_token",
           locals: {
             personal_access_token: personal_access_token

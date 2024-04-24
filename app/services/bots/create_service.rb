@@ -71,7 +71,8 @@ module Bots
     def create_bot_user_account_pat(bot_user_account)
       personal_access_token_params = {
         name: params[:token_name],
-        scopes: params[:scopes]
+        scopes: params[:scopes],
+        expires_at: params[:expires_at]
       }
 
       PersonalAccessTokens::CreateService.new(current_user, personal_access_token_params, namespace,
@@ -82,8 +83,7 @@ module Bots
       member_params = {
         user: bot_user_account,
         namespace:,
-        access_level: params[:access_level],
-        expires_at: params[:expires_at]
+        access_level: params[:access_level]
       }
       Members::CreateService.new(current_user, namespace, member_params).execute
     end

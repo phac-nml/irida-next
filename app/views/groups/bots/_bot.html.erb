@@ -7,12 +7,16 @@
     <%= bot_account.user.email %>
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
-    <%= link_to bot_account.user.personal_access_tokens.active.count,
-    group_bot_personal_access_tokens_path(bot_id: bot_account.id),
-    data: {
-      turbo_stream: true
-    },
-    class: "font-semibold text-slate-800 dark:text-slate-300 hover:underline" %>
+    <% if bot_account.user.personal_access_tokens.active.count.positive? %>
+      <%= link_to bot_account.user.personal_access_tokens.active.count,
+      group_bot_personal_access_tokens_path(bot_id: bot_account.id),
+      data: {
+        turbo_stream: true
+      },
+      class: "font-semibold text-slate-800 dark:text-slate-300 hover:underline" %>
+    <% else %>
+      0
+    <% end %>
   </td>
 
   <td class="px-6 py-3 whitespace-nowrap">
