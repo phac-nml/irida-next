@@ -21,13 +21,6 @@
                        value:
                          "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
                        id: "format_#{header}" %>
-        <div
-          data-controller="sessionstorage-amend-form"
-          data-sessionstorage-amend-form-target="field"
-          data-sessionstorage-amend-form-field-name-value="sample_ids[]"
-        >
-          <!-- empty holder for hidden inputs for sample_ids[] -->
-        </div>
         <%= f.select :field,
                  options_for_select(metadata_fields_for_field(header), header),
                  { include_blank: !@required },
