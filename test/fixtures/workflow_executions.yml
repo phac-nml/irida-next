@@ -162,24 +162,6 @@ irida_next_example_running:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   state: "running"
 
-irida_next_example_queued:
-  <<: *DEFAULTS
-  metadata:
-    {
-      "workflow_name": "irida_next_example_queued",
-      "workflow_version": "1.0dev",
-    }
-  workflow_params:
-    {
-      "input": "/blah/samplesheet.csv",
-      "outdir": "/blah/output",
-    }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_queued"
-  run_id: "my_run_id_11"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  state: "queued"
-
 irida_next_example_new:
   <<: *DEFAULTS
   metadata:
