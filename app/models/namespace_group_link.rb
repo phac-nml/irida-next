@@ -2,6 +2,7 @@
 
 # entity class for NamespaceGroupLink
 class NamespaceGroupLink < ApplicationRecord
+  include MailerHelper
   has_logidze
   acts_as_paranoid
 
@@ -20,10 +21,23 @@ class NamespaceGroupLink < ApplicationRecord
               in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
             }
 
+  after_destroy :send_access_revoked_emails
+  after_save :send_access_granted_emails, if: :previously_new_record?
+
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }
+
+  def send_access_revoked_emails
+    GroupLinkMailer.access_revoked_user_email(user_emails(group), group, namespace).deliver_later
+    GroupLinkMailer.access_revoked_manager_email(manager_emails(group), group, namespace).deliver_later
+  end
+
+  def send_access_granted_emails
+    GroupLinkMailer.access_granted_user_email(user_emails(group), group, namespace).deliver_later
+    GroupLinkMailer.access_granted_manager_email(manager_emails(group), group, namespace).deliver_later
+  end
 
   private
 
