@@ -21,6 +21,9 @@
                        value:
                          "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
                        id: "format_#{header}" %>
+        <% samples.each do |sample| %>
+          <%= f.hidden_field :sample_ids, value: sample.id, multiple: true %>
+        <% end %>
         <%= f.select :field,
                  options_for_select(metadata_fields_for_field(header), header),
                  { include_blank: !@required },
