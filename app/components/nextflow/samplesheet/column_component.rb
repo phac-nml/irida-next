@@ -70,6 +70,7 @@ module Nextflow
         render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields))
       end
 
+      # rubocop:disable Metrics/ParameterLists
       def render_file_cell(property, entry, fields, files, is_required, data)
         render(Samplesheet::DropdownCellComponent.new(
                  property,
@@ -80,6 +81,8 @@ module Nextflow
                  data
                ))
       end
+
+      # rubocop:enable Metrics/ParameterLists
 
       def render_dropdown_cell(property, entry, fields)
         render(Samplesheet::DropdownCellComponent.new(
