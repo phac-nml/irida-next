@@ -38,7 +38,7 @@ module Members
       return if Member.can_view?(member.user, namespace, true)
 
       MemberMailer.access_revoked_user_email(member, namespace).deliver_later
-      MemberMailer.access_revoked_manager_email(member, manager_emails(member, namespace), namespace).deliver_later
+      MemberMailer.access_revoked_manager_email(member, manager_emails(namespace, member), namespace).deliver_later
     end
   end
 end

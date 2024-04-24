@@ -38,7 +38,7 @@ module Members
 
     def send_emails
       MemberMailer.access_granted_user_email(member, namespace).deliver_later
-      manager_emails = manager_emails(member, namespace)
+      manager_emails = manager_emails(namespace, member)
       return if manager_emails.empty?
 
       MemberMailer.access_granted_manager_email(member, manager_emails, namespace).deliver_later

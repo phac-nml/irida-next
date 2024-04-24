@@ -23,7 +23,7 @@ module Members
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
                                  args: [@group_member, @group]
       assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                 args: [@group_member, manager_emails(@group_member, @group), @group]
+                                 args: [@group_member, manager_emails(@group, @group_member), @group]
     end
 
     test 'remove themselves as a group member' do
@@ -36,7 +36,7 @@ module Members
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email,
                                  args: [@group_member, @group]
       assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                 args: [@group_member, manager_emails(@group_member, @group), @group]
+                                 args: [@group_member, manager_emails(@group, @group_member), @group]
     end
 
     test 'remove group member when user does not have direct or inherited membership' do
@@ -75,7 +75,7 @@ module Members
                                  args: [@project_member, @project_namespace]
       assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
                                  args: [@project_member,
-                                        manager_emails(@project_member, @project_namespace),
+                                        manager_emails(@project_namespace, @project_member),
                                         @project_namespace]
     end
 
