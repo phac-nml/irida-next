@@ -30,12 +30,10 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        within 'div.sample-sheet' do
-          within 'table' do
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
-          end
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 2
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
+          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
@@ -62,12 +60,10 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        within 'div.sample-sheet' do
-          within 'table' do
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
-          end
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 2
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
+          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
@@ -94,12 +90,10 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        within 'div.sample-sheet' do
-          within 'table' do
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
-          end
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 2
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
+          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
@@ -129,11 +123,9 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        within 'div.sample-sheet' do
-          within 'table' do
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: sample.puid, count: 1
-          end
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 1
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: sample.puid, count: 1
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
@@ -168,12 +160,10 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        within 'div.sample-sheet' do
-          within 'table' do
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
-          end
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 2
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
+          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
@@ -200,12 +190,10 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        within 'div.sample-sheet' do
-          within 'table' do
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
-          end
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 2
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
+          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
@@ -232,12 +220,10 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        within 'div.sample-sheet' do
-          within 'table' do
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', count: 2
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample43.puid, count: 1
-            assert_selector 'tr[data-controller="nextflow--samplesheet"]', text: @sample44.puid, count: 1
-          end
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 2
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
+          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
