@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_16_194657) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_22_160144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -248,7 +248,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_16_194657) do
     t.jsonb "workflow_params", default: {}, null: false
     t.string "workflow_type"
     t.string "workflow_type_version"
-    t.string "tags", array: true
     t.string "workflow_engine"
     t.string "workflow_engine_version"
     t.jsonb "workflow_engine_parameters", default: {}, null: false
@@ -263,6 +262,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_16_194657) do
     t.string "blob_run_directory"
     t.boolean "email_notification", default: false, null: false
     t.boolean "update_samples", default: false, null: false
+    t.jsonb "tags", default: {}, null: false
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
   end

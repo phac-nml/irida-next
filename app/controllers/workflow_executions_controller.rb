@@ -115,8 +115,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
       :workflow_url,
       :update_samples,
       :email_notification,
-      { tags: [],
-        metadata: {},
+      { metadata: {},
         workflow_params: {},
         workflow_engine_parameters: {},
         samples_workflow_executions_attributes: samples_workflow_execution_params_attributes }

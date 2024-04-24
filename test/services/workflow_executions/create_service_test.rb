@@ -21,7 +21,6 @@ module WorkflowExecutions
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
-        tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
@@ -40,7 +39,6 @@ module WorkflowExecutions
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
-        tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
@@ -133,7 +131,6 @@ module WorkflowExecutions
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
-        tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
@@ -159,7 +156,6 @@ module WorkflowExecutions
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
-        tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
@@ -186,7 +182,6 @@ module WorkflowExecutions
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
-        tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
@@ -228,7 +223,6 @@ module WorkflowExecutions
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
-        tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
@@ -272,7 +266,6 @@ module WorkflowExecutions
         },
         workflow_type: 'NFL',
         workflow_type_version: 'DSL2',
-        tags: [],
         workflow_engine: 'nextflow',
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
@@ -286,6 +279,8 @@ module WorkflowExecutions
       assert_equal '', @workflow_execution.workflow_params['assembler']
       assert_equal 'assembly', @workflow_execution.workflow_params['project_name']
       assert_equal 0, @workflow_execution.workflow_params['random_seed']
+      expected_tags = { 'createdBy' => @user.email }
+      assert_equal expected_tags, @workflow_execution.tags
       assert_enqueued_jobs 1
     end
   end

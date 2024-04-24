@@ -88,7 +88,7 @@ class WorkflowExecution < ApplicationRecord
       workflow_params: workflow_params.to_json,
       workflow_type:,
       workflow_type_version:,
-      tags: { createdBy: "#{submitter.first_name} #{submitter.last_name}" }.to_json,
+      tags: tags.to_json,
       workflow_engine:,
       workflow_engine_version:,
       workflow_engine_parameters: workflow_engine_parameters.to_json,
