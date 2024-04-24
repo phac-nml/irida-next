@@ -1,45 +1,37 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["select"];
+  static targets = ["selectForward", "selectReverse"];
 
-  file_selected(event) {
-    console.log(event.target);
+  connect() {
+    this.selectForwardTargets.forEach((select, index) => {
+      const selectedOption = select.options[select.selectedIndex];
+      this.#updateMatchingSelect(
+        this.selectReverseTargets[index],
+        selectedOption.dataset.puid,
+      );
+    });
   }
 
-  // connect() {
-  //   if (this.hasSelectTarget) {
-  //     // Find the first select selectedIndex
-  //     const selectedOption =
-  //       this.selectTargets[0].options[this.selectTargets[0].selectedIndex];
-  //     if (selectedOption) {
-  //       this.#updateMatchingSelect(
-  //         this.selectTargets[1],
-  //         selectedOption.dataset.puid,
-  //       );
-  //     }
-  //   }
-  // }
+  file_selected(event) {
+    // find the selected option from the event target select
+    const { index, direction } = event.target.dataset;
+    const { puid } = event.target.options[event.target.selectedIndex].dataset;
+    const selectToUpdate =
+      direction === "pe_forward"
+        ? this.selectReverseTargets[index]
+        : this.selectForwardTargets[index];
 
-  // file_selected(event) {
-  //   // find the selected option from the event target select
-  //   const selectedOption = event.target.options[event.target.selectedIndex];
+    this.#updateMatchingSelect(selectToUpdate, puid);
+  }
 
-  //   const updateSelect =
-  //     event.target === this.selectTargets[0]
-  //       ? this.selectTargets[1]
-  //       : this.selectTargets[0];
+  #updateMatchingSelect(updateSelect, puid) {
+    const index = [...updateSelect.options].findIndex(
+      (options) => options.dataset.puid === puid,
+    );
 
-  //   this.#updateMatchingSelect(updateSelect, selectedOption.dataset.puid);
-  // }
-
-  // #updateMatchingSelect(updateSelect, puid) {
-  //   const index = [...updateSelect.options].findIndex(
-  //     (options) => options.dataset.puid === puid,
-  //   );
-
-  //   if (index > -1) {
-  //     updateSelect.options[index].selected = true;
-  //   }
-  // }
+    if (index > -1) {
+      updateSelect.options[index].selected = true;
+    }
+  }
 }

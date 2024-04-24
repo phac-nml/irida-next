@@ -36,10 +36,16 @@ module Nextflow
       end
 
       def render_fastq_cell(sample, property, entry, fields, index)
-        dir_index = property.match(/fastq_(\d+)/)[1].to_i - 1
-        files = dir_index.zero? ? sample.sorted_files[:pe_forward] : sample.sorted_files[:pe_reverse]
+        direction = property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
+        files = sample.sorted_files[direction]
+        data = {
+          'data-action' => 'change->nextflow--samplesheet#file_selected',
+          'data-nextflow--samplesheet-target' => "select#{direction.to_s.sub!('pe_', '').capitalize}",
+          'data-direction' => direction.to_s,
+          'data-index' => index
+        }
         render_file_cell(property, entry, fields, files,
-                         @required, index)
+                         @required, data)
       end
 
       def render_other_file_cell(sample, property, entry, fields)
@@ -49,7 +55,7 @@ module Nextflow
                   sample.sorted_files[:singles]
                 end
         render_file_cell(property, entry, fields,
-                         files, @required)
+                         files, @required, {})
       end
 
       def filter_files_by_pattern(files, pattern)
@@ -64,16 +70,7 @@ module Nextflow
         render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields))
       end
 
-      def render_file_cell(property, entry, fields, files, is_required, index = nil)
-        data = if entry['cell_type'] == 'fastq_cell'
-                 {
-                   'data-action' => 'change->nextflow--samplesheet#file_selected',
-                   'data-nextflow--samplesheet-target' => 'select',
-                   'data-index' => index
-                 }
-               else
-                 {}
-               end
+      def render_file_cell(property, entry, fields, files, is_required, data)
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  files,
