@@ -45,7 +45,7 @@ module Nextflow
           'data-index' => index
         }
         render_file_cell(property, entry, fields, files,
-                         @required, data)
+                         @required, data, files.first[1])
       end
 
       def render_other_file_cell(sample, property, entry, fields)
@@ -55,7 +55,7 @@ module Nextflow
                   sample.sorted_files[:singles]
                 end
         render_file_cell(property, entry, fields,
-                         files, @required, {})
+                         files, @required, {}, nil)
       end
 
       def filter_files_by_pattern(files, pattern)
@@ -71,11 +71,11 @@ module Nextflow
       end
 
       # rubocop:disable Metrics/ParameterLists
-      def render_file_cell(property, entry, fields, files, is_required, data)
+      def render_file_cell(property, entry, fields, files, is_required, data, selected)
         render(Samplesheet::DropdownCellComponent.new(
                  property,
                  files,
-                 entry['autopopulate'] ? files[0] : nil,
+                 selected || entry['autopopulate'] ? files[0] : nil,
                  fields,
                  is_required,
                  data

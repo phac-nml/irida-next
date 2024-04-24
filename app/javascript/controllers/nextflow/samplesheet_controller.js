@@ -3,16 +3,6 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["selectForward", "selectReverse"];
 
-  connect() {
-    this.selectForwardTargets.forEach((select, index) => {
-      const selectedOption = select.options[select.selectedIndex];
-      this.#updateMatchingSelect(
-        this.selectReverseTargets[index],
-        selectedOption.dataset.puid,
-      );
-    });
-  }
-
   file_selected(event) {
     // find the selected option from the event target select
     const { index, direction } = event.target.dataset;
