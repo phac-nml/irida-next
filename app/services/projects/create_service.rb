@@ -30,6 +30,8 @@ module Projects
 
       project.save
 
+      create_automation_bot if project.persisted?
+
       return unless !Member.namespace_owners_include_user?(current_user,
                                                            namespace) &&
                     Member.user_has_namespace_maintainer_access?(current_user,
@@ -39,6 +41,17 @@ module Projects
                                    user: current_user,
                                    access_level: Member::AccessLevel::OWNER
                                  }).execute
+    end
+
+    def create_automation_bot
+      params = {
+        token_name: 'automation bot',
+        scopes: %w[read_api api],
+        access_level: Member::AccessLevel::MAINTAINER
+      }
+
+      ::Bots::CreateService.new(current_user, project.namespace, User.user_types[:project_automation_bot],
+                                params).execute
     end
   end
 end

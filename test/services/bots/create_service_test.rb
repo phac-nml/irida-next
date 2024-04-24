@@ -9,6 +9,7 @@ module Bots
       @group = groups(:group_one)
       @project = projects(:project1)
       @project_bot_type = User.user_types[:project_bot]
+      @project_automation_bot_type = User.user_types[:project_automation_bot]
       @group_bot_type = User.user_types[:group_bot]
     end
 
@@ -192,6 +193,16 @@ module Bots
       assert_equal I18n.t(:'action_policy.policy.group.create_bot_accounts?',
                           name: @group.name),
                    exception.result.message
+    end
+
+    test 'project automation bot should not have any personal access tokens' do
+      valid_params = {
+        access_level: Member::AccessLevel::UPLOADER
+      }
+
+      assert_difference -> { User.count } => 1, -> { PersonalAccessToken.count } => 0, -> { Member.count } => 1 do
+        Bots::CreateService.new(@user, @project.namespace, @project_automation_bot_type, valid_params).execute
+      end
     end
   end
 end

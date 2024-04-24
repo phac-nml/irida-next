@@ -11,14 +11,20 @@ module Bots
       @namespace = namespace
 
       current_count = @namespace.namespace_bots.count
+
       user_params = {
-        email: "#{namespace.puid}_bot_#{format('%03d', (current_count + 1))}@iridanext.com",
         user_type: bot_type,
         first_name: namespace.puid,
         last_name: "Bot #{format('%03d', (current_count + 1))}"
       }
 
       @bot_user_account = User.new(user_params)
+
+      @is_automation_bot = @bot_user_account.automation_bot?
+
+      bot_text = @is_automation_bot ? 'automation_bot' : "bot_#{format('%03d', (current_count + 1))}"
+
+      @bot_user_account.email = "#{namespace.puid}_#{bot_text}@iridanext.com"
     end
 
     def execute
@@ -28,7 +34,7 @@ module Bots
 
       bot_user_account = create_bot_account
 
-      personal_access_token = create_bot_user_account_pat(bot_user_account)
+      personal_access_token = create_bot_user_account_pat(bot_user_account) unless @is_automation_bot
 
       member = add_bot_to_namespace_members(bot_user_account)
 
@@ -39,9 +45,11 @@ module Bots
     end
 
     def validate_params
-      raise BotAccountCreateError, I18n.t('services.bots.create.required.token_name') if params[:token_name].blank?
+      unless @is_automation_bot
+        raise BotAccountCreateError, I18n.t('services.bots.create.required.token_name') if params[:token_name].blank?
 
-      raise BotAccountCreateError, I18n.t('services.bots.create.required.scopes') if params[:scopes].blank?
+        raise BotAccountCreateError, I18n.t('services.bots.create.required.scopes') if params[:scopes].blank?
+      end
 
       if params[:access_level].blank?
         raise BotAccountCreateError,

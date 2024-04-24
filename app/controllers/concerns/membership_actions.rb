@@ -112,23 +112,28 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
   end
 
-  def available_users # rubocop:disable Metrics/AbcSize
+  def available_users
     # Remove current user from available users as a user cannot add themselves
     available_users = User.human_users.where.not(id: Member.select(:user_id).where(namespace: @namespace))
                           .where.not(id: current_user.id)
 
-    available_bots =  if @namespace.type == Namespaces::ProjectNamespace.sti_name
-                        @namespace.bots.where.not(id: Member.select(:user_id).where(namespace: @namespace)).or(
-                          User.bots.where(user_type: User.user_types[:group_bot])
-                              .where.not(id: Member.select(:user_id).where(namespace: @namespace))
-                        )
-                      elsif @namespace.type == Group.sti_name
-                        User.bots.where(user_type: User.user_types[:group_bot])
-                            .where.not(id: Member.select(:user_id).where(namespace: @namespace))
-                      else
-                        User.none
-                      end
     @available_users = available_users + available_bots
+  end
+
+  def available_bots # rubocop:disable Metrics/AbcSize
+    if @namespace.type == Namespaces::ProjectNamespace.sti_name
+      @namespace.bots.without_automation_bots.where.not(
+        id: Member.select(:user_id).where(namespace: @namespace)
+      ).or(
+        User.bots.without_automation_bots.where(user_type: User.user_types[:group_bot])
+            .where.not(id: Member.select(:user_id).where(namespace: @namespace))
+      )
+    elsif @namespace.type == Group.sti_name
+      User.bots.without_automation_bots.where(user_type: User.user_types[:group_bot])
+          .where.not(id: Member.select(:user_id).where(namespace: @namespace))
+    else
+      User.none
+    end
   end
 
   def load_members
