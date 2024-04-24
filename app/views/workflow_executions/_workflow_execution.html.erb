@@ -29,11 +29,7 @@
     <%= workflow_execution.metadata["workflow_version"] %>
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
-    <% unless workflow_execution["state"].nil? %>
-      <%= t(:"workflow_executions.state.#{workflow_execution["state"]}") %>
-    <% else %>
-      <%= t(:"workflow_executions.state.initial") %>
-    <% end %>
+    <%= t(:"workflow_executions.state.#{workflow_execution["state"]}") %>
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
     <%= l(workflow_execution["created_at"].localtime, format: :full_date) %>

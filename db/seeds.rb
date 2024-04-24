@@ -157,7 +157,8 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
     workflow_engine_version: '23.10.0',
     workflow_engine_parameters: { '-r': 'dev' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
-    submitter: User.find_by(email: 'user1@email.com')
+    submitter: User.find_by(email: 'user1@email.com'),
+    state: :initial
   )
 
   SamplesWorkflowExecution.create(
@@ -178,7 +179,7 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
     blob_run_directory: 'this should be a generated key',
-    state: 'completed'
+    state: :completed
   )
 
   filename = 'summary.txt'
