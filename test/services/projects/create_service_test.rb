@@ -14,7 +14,7 @@ module Projects
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
 
       # The user is already a member of a parent group so they are not added as a direct member to this project
-      assert_difference -> { Project.count } => 1, -> { Member.count } => 1 do
+      assert_difference -> { Project.count } => 1, -> { Member.count } => 1, -> { NamespaceBot.count } => 0 do
         Projects::CreateService.new(@user, valid_params).execute
       end
     end
@@ -48,7 +48,7 @@ module Projects
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_group_namespace.id } }
 
       # The user is already a member of a parent group so they are not added as a direct member to this project
-      assert_difference -> { Project.count } => 1, -> { Member.count } => 1 do
+      assert_difference -> { Project.count } => 1, -> { Member.count } => 1, -> { NamespaceBot.count } => 0 do
         Projects::CreateService.new(@user, valid_params).execute
       end
     end
@@ -66,7 +66,7 @@ module Projects
       user = users(:michelle_doe)
 
       # The user is already a member of a parent group so they are not added as a direct member to this project
-      assert_difference -> { Project.count } => 1, -> { Member.count } => 1 do
+      assert_difference -> { Project.count } => 1, -> { Member.count } => 1, -> { NamespaceBot.count } => 0 do
         Projects::CreateService.new(user, valid_params).execute
       end
     end
@@ -76,7 +76,7 @@ module Projects
                                                parent_id: groups(:subgroup_one_group_three).id } }
       user = users(:micha_doe)
 
-      assert_difference -> { Project.count } => 1, -> { Member.count } => 2 do
+      assert_difference -> { Project.count } => 1, -> { Member.count } => 2, -> { NamespaceBot.count } => 0 do
         Projects::CreateService.new(user, valid_params).execute
       end
     end
