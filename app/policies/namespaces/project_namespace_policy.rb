@@ -2,7 +2,7 @@
 
 module Namespaces
   # Policy for authorization under project_namespace
-  class ProjectNamespacePolicy < NamespacePolicy
+  class ProjectNamespacePolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     def update?
       return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_modify?(user, record) == true
