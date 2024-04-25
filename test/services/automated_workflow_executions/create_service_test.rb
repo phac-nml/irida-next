@@ -37,7 +37,7 @@ module AutomatedWorkflowExecutions
         @new_awe = AutomatedWorkflowExecutions::CreateService.new(@user, invalid_params).execute
       end
 
-      assert_includes @new_awe.errors[:metadata], 'root is missing required keys: workflow_name, workflow_version'
+      assert_includes @new_awe.errors[:metadata], 'root is missing required keys: workflow_version'
     end
 
     test 'create automated workflow execution with valid params but unauthorized namespace' do

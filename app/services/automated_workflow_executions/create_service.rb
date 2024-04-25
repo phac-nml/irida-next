@@ -14,6 +14,8 @@ module AutomatedWorkflowExecutions
       authorize! namespace, to: :create_automated_workflow_executions? if namespace.present?
 
       @automated_workflow_execution.save
+
+      @automated_workflow_execution
     end
   end
 end
