@@ -10,7 +10,7 @@ class WorkflowExecutionStatusJob < ApplicationJob
   # Puts workflow execution into error state and records the error code
   retry_on Integrations::ApiExceptions::APIExceptionError, attempts: 3 do |job, exception|
     workflow_execution = job.arguments[0]
-    workflow_execution.state = 'error'
+    workflow_execution.state = :error
     workflow_execution.error_code = exception.http_error_code
     workflow_execution.save
   end

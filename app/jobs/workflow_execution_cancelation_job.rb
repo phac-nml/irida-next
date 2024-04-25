@@ -20,13 +20,13 @@ class WorkflowExecutionCancelationJob < ApplicationJob
       status = wes_client.get_run_status(workflow_execution.run_id)
 
       if status[:state] == 'COMPLETE'
-        workflow_execution.state = 'canceled'
+        workflow_execution.state = :canceled
         workflow_execution.save
         return
       end
     end
 
-    workflow_execution.state = 'error'
+    workflow_execution.state = :error
     workflow_execution.error_code = exception.http_error_code
     workflow_execution.save
   end
