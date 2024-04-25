@@ -68,7 +68,7 @@ module WorkflowExecutions
           samplesheet_params[key] = copy_attachment_to_run_dir(attachment, sample_workflow_execution)
         end
 
-        @samplesheet_rows << samplesheet_params
+        @samplesheet_rows << @samplesheet_headers.map { |header| samplesheet_params[header] }
       end
     end
 
@@ -124,7 +124,7 @@ module WorkflowExecutions
           csv << @samplesheet_headers
 
           @samplesheet_rows.each do |samplesheet_row|
-            csv << samplesheet_row.values
+            csv << samplesheet_row
           end
         end
       end

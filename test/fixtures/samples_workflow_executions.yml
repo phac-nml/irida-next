@@ -29,8 +29,8 @@ sample1_irida_next_example:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example, :uuid) %>
   samplesheet_params: {
     "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
+    "fastq_2": "",
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
   }
 
 sample1_irida_next_example_prepared:
