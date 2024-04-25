@@ -22,7 +22,10 @@
                          "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
                        id: "format_#{header}" %>
         <% samples.each do |sample| %>
-          <%= f.hidden_field :sample_ids, value: sample.id, id: "sample-#{sample.id}-#{header}", multiple: true %>
+          <%= f.hidden_field :sample_ids,
+                         value: sample.id,
+                         id: "sample-#{sample.id}-#{header}",
+                         multiple: true %>
         <% end %>
         <%= f.select :field,
                  options_for_select(metadata_fields_for_field(header), header),
@@ -31,7 +34,7 @@
                    id: "field-#{header}",
                    "aria-label": header,
                    class:
-                     "w-full focus:ring-primary-500 focus:border-primary-500  p-2.5 dark:bg-inherit bg-inherit border-none dark:border-none dark:placeholder-slate-400 text-inherit text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 font-semibold tracking-wider uppercase",
+                     "bg-slate-50 text-slate-900 text-sm border-none focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 font-semibold tracking-wider uppercase",
                    onchange: "Turbo.navigator.submitForm(this.form)"
                  } %>
       <% end %>
@@ -51,7 +54,7 @@
       <div class="flex items-center space-x-2 uppercase">
         <%= header %>
         <% if @required %>
-          <span class="text-red-600 ml-1">(<%= t(".required") %>)</span>
+          <span class="text-red-600 dark:text-red-300 ml-1">(<%= t(".required") %>)</span>
         <% end %>
       </div>
     </div>
