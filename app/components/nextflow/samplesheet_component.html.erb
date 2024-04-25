@@ -9,6 +9,8 @@
       border
       dark:border-slate-600
       border-slate-100
+      max-h-72
+      overflow-y-auto
     "
   >
     <% properties.each do |header, property| %>
@@ -22,4 +24,8 @@
       ) %>
     <% end %>
   </div>
+
+  <template data-nextflow--samplesheet-target="loading">
+    <div class="p-4 font-bold">Loading ...</div>
+  </template>
 </div>
