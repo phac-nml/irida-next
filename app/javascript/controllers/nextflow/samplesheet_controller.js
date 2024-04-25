@@ -27,10 +27,6 @@ export default class extends Controller {
     this.#updateMatchingSelect(selectToUpdate, puid);
   }
 
-  update_metadata_field(event) {
-    console.log(event);
-  }
-
   #updateMatchingSelect(updateSelect, puid) {
     const index = [...updateSelect.options].findIndex(
       (options) => options.dataset.puid === puid,
