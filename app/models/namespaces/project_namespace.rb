@@ -16,7 +16,6 @@ module Namespaces
 
     has_many :bots, through: :namespace_bots, source: :user
 
-
     has_many :shared_with_group_links, # rubocop:disable Rails/InverseOf
              lambda {
                where(namespace_type: Namespaces::ProjectNamespace.sti_name)
