@@ -261,8 +261,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_23_155817) do
     t.string "blob_run_directory"
     t.boolean "email_notification", default: false, null: false
     t.boolean "update_samples", default: false, null: false
-    t.integer "state"
     t.jsonb "tags", default: {}, null: false
+    t.integer "state", default: 0, null: false
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["state"], name: "index_workflow_executions_on_state"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"

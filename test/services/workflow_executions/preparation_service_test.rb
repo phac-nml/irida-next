@@ -10,7 +10,7 @@ module WorkflowExecutions
     end
 
     test 'prepare workflow_execution with valid params' do
-      assert_nil @workflow_execution.state
+      assert @workflow_execution.initial?
 
       assert_difference -> { ActiveStorage::Attachment.count } => 2 do
         WorkflowExecutions::PreparationService.new(@workflow_execution, @user, {}).execute

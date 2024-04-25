@@ -157,8 +157,7 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength
     workflow_engine_version: '23.10.0',
     workflow_engine_parameters: { '-r': 'dev' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
-    submitter: User.find_by(email: 'user1@email.com'),
-    state: :initial
+    submitter: User.find_by(email: 'user1@email.com')
   )
 
   SamplesWorkflowExecution.create(

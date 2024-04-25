@@ -4,7 +4,7 @@
 class ChangeWorkflowExecutionStateToEnum < ActiveRecord::Migration[7.1]
   def up # rubocop:disable Metrics/MethodLength
     rename_column :workflow_executions, :state, :old_state
-    add_column :workflow_executions, :state, :integer
+    add_column :workflow_executions, :state, :integer, null: false, default: 0
 
     enum_values = {
       initial: 0,
