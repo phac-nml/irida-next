@@ -5,6 +5,8 @@ class NamespaceBot < ApplicationRecord
   has_logidze
   acts_as_paranoid
 
+  after_destroy :remove_membership_from_namespace
+
   belongs_to :user, class_name: 'User'
   belongs_to :namespace, class_name: 'Namespace'
 
@@ -20,5 +22,9 @@ class NamespaceBot < ApplicationRecord
 
   def membership
     user.members.find_by(namespace:)
+  end
+
+  def remove_membership_from_namespace
+    membership&.destroy
   end
 end
