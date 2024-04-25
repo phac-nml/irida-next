@@ -4,8 +4,10 @@ require 'test_helper'
 
 class AutomatedWorkflowExecutionTest < ActiveSupport::TestCase
   def setup
-    @valid_automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
-    @invalid_metadata_automated_workflow_execution = automated_workflow_executions(:invalid_metadata_automated_workflow_execution)
+    @valid_automated_workflow_execution =
+      automated_workflow_executions(:valid_automated_workflow_execution)
+    @invalid_metadata_automated_workflow_execution =
+      automated_workflow_executions(:invalid_metadata_automated_workflow_execution)
   end
 
   test 'valid automated workflow execution' do

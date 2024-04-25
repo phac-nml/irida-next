@@ -39,7 +39,7 @@ module Namespaces
     has_many :shared_with_groups, through: :shared_with_group_links, source: :group
 
     has_many :automated_workflow_executions, foreign_key: :namespace_id, inverse_of: :project_namespace,
-                                             class_name: 'AutomatedWorfklowExecution', dependent: :destroy
+                                             class_name: 'AutomatedWorkflowExecution', dependent: :destroy
 
     def self.sti_name
       'Project'
