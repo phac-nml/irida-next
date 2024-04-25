@@ -5,6 +5,20 @@ class WorkflowExecution < ApplicationRecord
   include MetadataSortable
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
 
+  # new is a keyword that cannot be used with enums, so we'll change new to initial and in the translation,
+  # translate initial back to new
+  WORKFLOW_EXECUTION_STATES = {
+    initial: 0,
+    prepared: 1,
+    submitted: 2,
+    running: 3,
+    completing: 4,
+    completed: 5,
+    error: 6,
+    canceling: 7,
+    canceled: 8
+  }.with_indifferent_access.freeze
+
   has_logidze
   acts_as_paranoid
 
@@ -21,6 +35,8 @@ class WorkflowExecution < ApplicationRecord
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
 
+  enum state: WORKFLOW_EXECUTION_STATES
+
   def send_email
     return unless email_notification
 
@@ -31,48 +47,8 @@ class WorkflowExecution < ApplicationRecord
     end
   end
 
-  def prepared?
-    state == 'prepared'
-  end
-
-  def submitted?
-    state == 'submitted'
-  end
-
-  def completing?
-    state == 'completing'
-  end
-
-  def completed?
-    state == 'completed'
-  end
-
-  def error?
-    state == 'error'
-  end
-
-  def canceling?
-    state == 'canceling'
-  end
-
-  def canceled?
-    state == 'canceled'
-  end
-
-  def running?
-    state == 'running'
-  end
-
-  def queued?
-    state == 'queued'
-  end
-
-  def new?
-    state == 'new'
-  end
-
   def cancellable?
-    %w[submitted running queued prepared new].include?(state)
+    %w[submitted running prepared initial].include?(state)
   end
 
   def deletable?
@@ -80,7 +56,7 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def sent_to_ga4gh?
-    %w[prepared new].exclude?(state)
+    %w[prepared initial].exclude?(state)
   end
 
   def as_wes_params

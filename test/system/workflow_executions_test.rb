@@ -13,7 +13,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector 'table#workflow_executions tbody tr', count: 13
+    assert_selector 'table#workflow_executions tbody tr', count: 12
   end
 
   test 'should display pages of workflow executions' do
@@ -53,7 +53,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table#workflow_executions thead th:nth-child(2) svg.icon-arrow_up'
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 12
       assert_selector 'tr:first-child td:nth-child(2)', text: workflow_execution1.run_id
       assert_selector 'tr:nth-child(2) td:nth-child(2)', text: workflow_execution10.run_id
       assert_selector 'tr:last-child td:nth-child(2)', text: workflow_execution.run_id
@@ -63,7 +63,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table#workflow_executions thead th:nth-child(2) svg.icon-arrow_down'
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 12
       assert_selector 'tr:first-child td:nth-child(2)', text: workflow_execution.run_id
       assert_selector 'tr:nth-child(2) td:nth-child(2)', text: workflow_execution9.run_id
       assert_selector 'tr:last-child td:nth-child(2)', text: workflow_execution1.run_id
@@ -73,7 +73,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table#workflow_executions thead th:nth-child(3) svg.icon-arrow_up'
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 12
       assert_selector 'tr:first-child td:nth-child(3)', text: workflow_execution9.metadata['workflow_name']
       assert_selector 'tr:nth-child(2) td:nth-child(3)', text: workflow_execution8.metadata['workflow_name']
       assert_selector 'tr:last-child td:nth-child(3)', text: workflow_execution1.metadata['workflow_name']
@@ -83,7 +83,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table#workflow_executions thead th:nth-child(3) svg.icon-arrow_down'
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 12
       assert_selector 'tr:first-child td:nth-child(3)', text: workflow_execution1.metadata['workflow_name']
       assert_selector 'tr:nth-child(2) td:nth-child(3)', text: workflow_execution2.metadata['workflow_name']
       assert_selector 'tr:last-child td:nth-child(3)', text: workflow_execution9.metadata['workflow_name']
@@ -93,7 +93,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table#workflow_executions thead th:nth-child(6) svg.icon-arrow_up'
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 12
       assert_selector 'tr:first-child td:nth-child(6)',
                       text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
       assert_selector 'tr:nth-child(2) td:nth-child(6)',
@@ -113,7 +113,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_link 'Cancel', count: 1
       click_link 'Cancel'
     end
@@ -128,7 +128,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       )
     end
 
-    assert_selector 'tbody tr td:nth-child(5)', text: 'canceling'
+    assert_selector 'tbody tr td:nth-child(5)', text: 'Canceling'
     assert_no_selector "tbody tr td:nth-child(5) a[text='Cancel']"
   end
 
@@ -142,7 +142,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_no_link 'Delete'
     end
   end
@@ -157,7 +157,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_no_link 'Delete'
     end
   end
@@ -172,7 +172,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_link 'Delete', count: 1
       click_link 'Delete'
     end
@@ -200,7 +200,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_link 'Delete', count: 1
       click_link 'Delete'
     end
@@ -221,7 +221,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_no_link 'Delete'
     end
   end
@@ -236,7 +236,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_link 'Delete', count: 1
       click_link 'Delete'
     end
@@ -257,22 +257,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
-      assert_no_link 'Delete'
-    end
-  end
-
-  test 'should not delete a queued workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_queued)
-
-    visit workflow_executions_path
-
-    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
-
-    tr = find('td', text: workflow_execution.id).ancestor('tr')
-
-    within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_no_link 'Delete'
     end
   end
@@ -287,7 +272,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(5)', text: workflow_execution.state
+      assert_selector 'td:nth-child(5)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_no_link 'Delete'
     end
   end
@@ -298,7 +283,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     visit workflow_execution_path(workflow_execution)
 
     assert_text workflow_execution.id
-    assert_text workflow_execution.state
+    assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     assert_text workflow_execution.metadata['workflow_name']
     assert_text workflow_execution.metadata['workflow_version']
 
@@ -319,7 +304,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     within %(#workflow_executions-table-body) do
-      assert_selector 'tr', count: 12
+      assert_selector 'tr', count: 11
       assert_no_text workflow_execution.id
     end
   end

@@ -1074,6 +1074,16 @@ fr:
       create:
         title: "%{workflow} parameters"
         submit: Submit
+    state:
+      initial: New
+      prepared: Prepared
+      submitted: Submitted
+      running: Running
+      completing: Completing
+      completed: Completed
+      error: Error
+      canceling: Canceling
+      canceled: Canceled
   services:
     attachments:
       concatenation:
