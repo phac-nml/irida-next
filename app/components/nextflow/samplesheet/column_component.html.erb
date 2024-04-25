@@ -11,7 +11,7 @@
   "
 >
   <% if property["cell_type"] == "metadata_cell" %>
-    <div class="table-header dark:border-slate-600 border border-slate-100">
+    <div class="table-header dark:border-slate-600 border border-slate-100 sticky top-0 dark:bg-slate-700 bg-slate-50  z-10">
       <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
         <%= f.hidden_field :format, value: "turbo_stream", id: "field_#{header}_turbo" %>
         <%= f.hidden_field :namespace_id, value: namespace_id, id: "namespace_#{header}" %>
@@ -47,7 +47,8 @@
         tracking-wider
         dark:border-slate-600
         border
-        border-slate-100
+        border-slate-100 sticky top-0
+        dark:bg-slate-700 bg-slate-50 z-10
       "
     >
       <div class="flex items-center space-x-2 uppercase">
