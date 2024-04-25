@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_25_141711) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_25_163945) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_25_141711) do
     t.boolean "update_samples", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "log_data"
     t.index ["created_by_id"], name: "index_automated_workflow_executions_on_created_by_id"
     t.index ["namespace_id"], name: "index_automated_workflow_executions_on_namespace_id"
   end
@@ -695,5 +696,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_25_141711) do
   SQL
   create_trigger :logidze_on_namespace_bots, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_namespace_bots BEFORE INSERT OR UPDATE ON public.namespace_bots FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_automated_workflow_executions, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_automated_workflow_executions BEFORE INSERT OR UPDATE ON public.automated_workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end

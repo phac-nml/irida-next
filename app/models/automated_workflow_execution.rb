@@ -4,6 +4,8 @@
 class AutomatedWorkflowExecution < ApplicationRecord
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
 
+  has_logidze
+
   belongs_to :namespace
   belongs_to :created_by, class_name: 'User'
 
