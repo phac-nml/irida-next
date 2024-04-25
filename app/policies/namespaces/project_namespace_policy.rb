@@ -130,5 +130,13 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def update_automated_workflow_execution?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
   end
 end
