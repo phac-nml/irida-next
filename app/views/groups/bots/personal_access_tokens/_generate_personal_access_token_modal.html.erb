@@ -1,0 +1,135 @@
+<%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>>
+  <%= dialog.with_header(
+    title:
+      t(
+        "groups.bots.index.bot_listing.generate_personal_access_token_modal.title"
+      )
+  ) %>
+  <%= dialog.with_section do %>
+    <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
+      <p class="dark:text-gray-400">
+        <%= t(
+          "groups.bots.index.bot_listing.generate_personal_access_token_modal.description",
+          bot_account: @bot_account.user.email
+        ) %>
+      </p>
+    </div>
+
+    <div class="mb-4">
+      <%= turbo_frame_tag("personal-access-token-error-alert") %>
+    </div>
+
+    <%= form_for(:personal_access_token, url: group_bot_personal_access_tokens_path, method: :post) do |form| %>
+      <div class="grid gap-4">
+        <div class="form-field">
+          <%= form.label :name,
+                     t(
+                       "groups.bots.index.bot_listing.generate_personal_access_token_modal.name"
+                     ) %>
+          <%= form.text_field :name, required: true, class: "form-control" %>
+
+        </div>
+
+        <div class="form-field datepicker" data-controller="datepicker">
+          <%= form.label :expires_at,
+                     t(
+                       "groups.bots.index.bot_listing.generate_personal_access_token_modal.expires_at"
+                     ) %>
+          <div class="relative max-w-sm">
+            <div
+              class="
+                absolute
+                inset-y-0
+                left-0
+                flex
+                items-center
+                pl-3
+                pointer-events-none
+              "
+            >
+              <%= viral_icon(
+                name: :calendar_days,
+                classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+              ) %>
+            </div>
+            <%= form.text_field :expires_at,
+                            placeholder: I18n.t("date.formats.iso"),
+                            autocomplete: "off",
+                            "data-datepicker-target": "datePicker",
+                            "data-datepicker-dialog": "true" %>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <%= form.label :scopes %>
+          <% Irida::Auth.all_available_scopes.each do |scope| %>
+            <div class="flex">
+              <div class="flex items-center h-5">
+                <%= check_box_tag "personal_access_token[scopes][]",
+                scope,
+                id: "personal_access_token_scopes_#{scope}" %>
+              </div>
+              <div class="ml-2 text-sm">
+                <%= label_tag "personal_access_token_scopes_#{scope}",
+                scope,
+                class: "font-medium text-slate-900 dark:text-slate-300" %>
+                <p
+                  id="<%= "personal_access_token_scopes_#{scope}_help-text" %>"
+                  class="
+                    text-xs
+                    font-normal
+                    text-slate-500
+                    dark:text-slate-300
+                  "
+                ><%= t("auth.scopes.#{scope}") %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+      </div>
+      <div class="mt-4">
+        <%= form.submit t(
+                      "groups.bots.index.bot_listing.generate_personal_access_token_modal.submit"
+                    ),
+                    class:
+                      "
+                          focus:outline-none
+                          text-sm
+                          text-white
+                          bg-primary-700
+                          hover:bg-primary-800
+                          focus:ring-0
+                          rounded-md
+                          p-2
+                          dark:text-white
+                          dark:bg-primary-600
+                          dark:hover:bg-primary-700
+                          cursor-pointer
+                          " %>
+        <button
+          type="button"
+          class="
+            focus:outline-none
+            text-sm
+            text-slate-900
+            border
+            border-slate-200
+            bg-white
+            hover:bg-slate-100
+            hover:text-slate-950
+            focus:ring-0
+            rounded-md
+            p-2
+            dark:text-white
+            dark:bg-slate-600
+            dark:hover:bg-slate-700
+          "
+          data-action="click->viral--dialog#close"
+        >
+          <%= t("groups.bots.index.bot_listing.generate_personal_access_token_modal.cancel") %>
+        </button>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

@@ -518,10 +518,12 @@ en:
           remove: Remove
           remove_confirmation: "Are you sure you want to remove this bot account from the group?"
           remove_aria_label: Remove bot account
+          generate_new_token: Generate new token
+          generate_new_token_aria_label: Generate a new personal access token for bot account
+          never: Never
         bot_listing:
           username: Username
-          token_name: Token Name
-          api_scope: API Scope(s)
+          active_tokens: Active Tokens
           created: Created
           expiration: Expiration
           access_level: Access Level
@@ -535,9 +537,25 @@ en:
             token_name: Token Name
             access_level: Access Level
             select_access_level: Select access level
-            expires_at: Expiration Date (optional)
+            expires_at: Token Expiration Date (optional)
             submit: Submit
             cancel: Cancel
+          generate_personal_access_token_modal:
+            title: New Personal Access Token
+            description: "Generating a new personal access token for %{bot_account}"
+            name: Token Name
+            expires_at: Token Expiration Date (optional)
+            submit: Submit
+            cancel: Cancel
+        personal_access_tokens_listing_modal:
+          title: Personal access tokens
+          description: Viewing a list of active personal access tokens for %{bot_account}
+          available_tokens: Personal access tokens for %{bot_account}
+          actions : Actions
+          personal_access_token:
+            never: Never
+            revoke: Revoke
+            revoke_confirmation: "Are you sure you want to revoke this personal access token?"
         access_level:
           level_0: No Access
           level_10: Guest
@@ -553,6 +571,12 @@ en:
         success: "Bot account was successfully added to the group"
       destroy:
         success: "Bot account was successfully removed from the group"
+      personal_access_tokens:
+        create:
+          success: Successfully generated new personal access token for bot
+        revoke:
+          success: "Successfully revoked personal access token %{pat_name}"
+          error: "There was an error revoking personal access token %{pat_name}"
     destroy:
       success: "Group %{group_name} was deleted"
       error: "Could not delete %{group_name}"

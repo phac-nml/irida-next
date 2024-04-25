@@ -1,12 +1,12 @@
 <%= viral_dialog(open: open, size: :extra_large) do |dialog| %>
   <%= dialog.with_header(
-    title: t("projects.bots.index.personal_access_tokens_listing_modal.title")
+    title: t("groups.bots.index.personal_access_tokens_listing_modal.title")
   ) %>
   <%= dialog.with_section do %>
     <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
       <p class="dark:text-gray-400">
         <%= t(
-          "projects.bots.index.personal_access_tokens_listing_modal.description",
+          "groups.bots.index.personal_access_tokens_listing_modal.description",
           bot_account: @bot_account.user.email
         ) %>
       </p>
@@ -24,7 +24,7 @@
           <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.created_at") %></th>
           <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.last_used_at") %></th>
           <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.expires_at") %></th>
-          <th scope="col" class="px-6 py-3"><%= t("projects.bots.index.personal_access_tokens_listing_modal.actions") %></th>
+          <th scope="col" class="px-6 py-3"><%= t("groups.bots.index.personal_access_tokens_listing_modal.actions") %></th>
         </tr>
       </thead>
       <tbody id="access-tokens-table-body">
