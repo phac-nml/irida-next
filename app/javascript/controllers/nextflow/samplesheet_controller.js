@@ -1,32 +1,30 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["select"];
+  static targets = ["selectForward", "selectReverse", "table", "loading", "submit"];
 
   connect() {
-    if (this.hasSelectTarget) {
-      // Find the first select selectedIndex
-      const selectedOption =
-        this.selectTargets[0].options[this.selectTargets[0].selectedIndex];
-      if (selectedOption) {
-        this.#updateMatchingSelect(
-          this.selectTargets[1],
-          selectedOption.dataset.puid,
-        );
-      }
-    }
+    this.element.addEventListener("turbo:submit-start", (event) => {
+      this.submitTarget.disabled = true;
+      this.tableTarget.appendChild(this.loadingTarget.content.cloneNode(true));
+    });
+
+    this.element.addEventListener("turbo:submit-end", (event) => {
+      this.submitTarget.disabled = false;
+      this.tableTarget.removeChild(this.tableTarget.lastElementChild);
+    });
   }
 
   file_selected(event) {
     // find the selected option from the event target select
-    const selectedOption = event.target.options[event.target.selectedIndex];
+    const { index, direction } = event.target.dataset;
+    const { puid } = event.target.options[event.target.selectedIndex].dataset;
+    const selectToUpdate =
+      direction === "pe_forward"
+        ? this.selectReverseTargets[index]
+        : this.selectForwardTargets[index];
 
-    const updateSelect =
-      event.target === this.selectTargets[0]
-        ? this.selectTargets[1]
-        : this.selectTargets[0];
-
-    this.#updateMatchingSelect(updateSelect, selectedOption.dataset.puid);
+    this.#updateMatchingSelect(selectToUpdate, puid);
   }
 
   #updateMatchingSelect(updateSelect, puid) {

@@ -1,6 +1,14 @@
-<% @samples.each_with_index do |sample, index| %>
-  <%= turbo_stream.update "metadata-#{@header}-#{dom_id(sample)}" do %>
-    <input type="hidden" autocomplete="off" name="<%= @name_format.sub! "INDEX", index.to_s %>[<%= @header %>]" value="<%= sample.metadata[@field] %>">
-    <%= sample.metadata[@field] %>
+<%= turbo_stream.update "metadata-#{@header}-column" do %>
+  <% @samples.each_with_index do |sample, index| %>
+    <div class="dark:border-slate-600 border border-slate-100">
+      <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{index}][samplesheet_params]" do |form| %>
+        <%= render Nextflow::Samplesheet::MetadataCellComponent.new(
+          form:,
+          name: @header,
+          sample:,
+          field: @field
+        ) %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>

@@ -6,14 +6,14 @@ module Nextflow
     class MetadataCellComponent < ViewComponent::Base
       attr_reader :form, :metadata, :name, :sample
 
-      def initialize(form:, name:, sample:)
+      def initialize(form:, name:, sample:, field: nil)
         @form = form
         @name = name
         @sample = sample
-        @metadata = metadata_value
+        @metadata = metadata_value(field || name)
       end
 
-      def metadata_value
+      def metadata_value(name)
         sample.metadata.key?(name) ? sample.metadata[name] : ''
       end
     end

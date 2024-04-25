@@ -59,11 +59,5 @@ module Nextflow
         @properties[property]['autopopulate'] = true
       end
     end
-
-    def metadata_fields_for_field(field)
-      options = @metadata_fields.include?(field) ? @metadata_fields : @metadata_fields.unshift(field)
-      label = t('.default', label: field)
-      options.map { |f| [f.eql?(field) ? label : f, f] }
-    end
   end
 end

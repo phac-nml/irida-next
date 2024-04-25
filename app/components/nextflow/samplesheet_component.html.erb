@@ -1,70 +1,54 @@
 <div class="sample-sheet">
+
   <label class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
-  <div class="overflow-x-auto border border-slate-200">
-    <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
-      <thead
+
+  <div
+    data-nextflow--samplesheet-target="table"
+    class="
+      samplesheet-table
+      flex
+      border
+      dark:border-slate-600
+      border-slate-100
+      max-h-72
+      overflow-y-auto
+      relative
+    "
+  >
+    <% properties.each do |header, property| %>
+      <%= render Nextflow::Samplesheet::ColumnComponent.new(
+        namespace_id:,
+        header:,
+        property:,
+        samples: @samples,
+        metadata_fields:,
+        required: required_properties.include?(header)
+      ) %>
+    <% end %>
+    <template data-nextflow--samplesheet-target="loading">
+      <div
+        role="status"
         class="
-          text-xs
-          text-slate-700
-          bg-slate-50
-          dark:bg-slate-700
-          dark:text-slate-400
+          absolute
+          h-full
+          w-full
+          text-black
+          dark:text-white
+          backdrop-blur-sm
+          flex
+          items-center
+          justify-center
+          z-20
         "
       >
-        <tr>
-          <% properties.keys.each do |header| %>
-            <% if properties[header]["cell_type"] == "metadata_cell" %>
-              <th>
-                <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
-                  <%= f.hidden_field :format, value: "turbo_stream", id: "field_#{header}_turbo" %>
-                  <%= f.hidden_field :namespace_id, value: namespace_id, id: "namespace_#{header}" %>
-                  <%= f.hidden_field :header, value: header, id: "header_#{header}" %>
-                  <%= f.hidden_field :name_format,
-                                 value:
-                                   "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
-                                 id: "format_#{header}" %>
-                  <div
-                    data-controller="sessionstorage-amend-form"
-                    data-sessionstorage-amend-form-target="field"
-                    data-sessionstorage-amend-form-field-name-value="sample_ids[]"
-                  >
-                    <!-- empty holder for hidden inputs for sample_ids[] -->
-                  </div>
-                  <%= f.select :field,
-                               options_for_select(metadata_fields_for_field(header), header),
-                               { include_blank: !required_properties.include?(header) },
-                           {
-                             id: "field-#{header}",
-                             "aria-label": header,
-                             class:
-                               "cursor-pointer bg-slate-50 border-0 text-slate-900 text-sm focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                             onchange: "Turbo.navigator.submitForm(this.form)"
-                           } %>
-                <% end %>
-              </th>
-            <% else %>
-              <th class="px-6 py-3 font-semibold tracking-wider">
-                <div class="flex items-center space-x-2">
-                  <span class="uppercase"><%= header %></span>
-                  <% if required_properties.include? header %>
-                    <%= viral_pill(text: t(".required"), color: :red, border: :red) %>
-                  <% end %>
-                </div>
-              </th>
-            <% end %>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% samples.each_with_index do |sample, index| %>
-          <%= render Nextflow::Samplesheet::RowComponent.new(
-            sample,
-            index,
-            properties,
-            required_properties
-          ) %>
-        <% end %>
-      </tbody>
-    </table>
+        <span class="flex items-center p-4 space-x-4">
+          <span class="flex-shrink-0">
+            <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500 h-5 w-5") %>
+          </span>
+          <span class="font-bold"><%= t(".loading") %></span>
+        </span>
+      </div>
+    </template>
   </div>
+
 </div>
