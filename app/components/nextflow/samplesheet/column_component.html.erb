@@ -57,7 +57,7 @@
     </div>
   <% end %>
 
-  <div id=<%= "metadata-#{header}-column" %>>
+  <div id="<%= "metadata-#{header}-column" %>">
     <% samples.each_with_index do |sample, index| %>
       <div class="table-td dark:border-slate-600 border border-slate-100">
         <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{index}]" do |s| %>
