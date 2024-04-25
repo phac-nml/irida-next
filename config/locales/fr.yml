@@ -1179,9 +1179,9 @@ fr:
     email_template:
       automated_message: This email was sent from an automated system. Please do not reply to this email.
       copy_paste: "Or copy and paste this link into your browser:"
-      greeting: Hello,
+      greeting: Bonjour,
       greeting_with_name: Bonjour %{name},
-      thanks: Thanks,
+      thanks: Merci,
     data_export_mailer:
       email_subject: "Exportation Prêt - %{name}"
       export_ready:
@@ -1206,10 +1206,10 @@ fr:
         view_details: "To view all the members of %{type} '%{name}', click the button below:"
     pipeline_mailer:
       complete_email:
-        subject: Pipeline Completed - %{id}
+        subject: Pipeline Complété - %{id}
         body_html: Your pipeline <strong>%{id}</strong> has completed successfully.
       error_email:
-        subject: Pipeline Errored - %{id}
+        subject: Pipeline Erroné - %{id}
         body_html: Your pipeline <strong>%{id}</strong> has errors that need to be addressed.
       view_details: "To view the pipeline summary, click the button below:"
   data_exports:

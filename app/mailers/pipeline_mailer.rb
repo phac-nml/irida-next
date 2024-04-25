@@ -4,13 +4,19 @@
 class PipelineMailer < ApplicationMailer
   def complete_email(workflow_execution)
     @workflow_execution = workflow_execution
-    mail(to: @workflow_execution.submitter.email,
-         subject: t(:'mailers.pipeline_mailer.complete_email.subject', id: @workflow_execution.id))
+    submitter = @workflow_execution.submitter
+    I18n.with_locale(submitter.locale) do
+      mail(to: submitter.email,
+           subject: t(:'mailers.pipeline_mailer.complete_email.subject', id: @workflow_execution.id))
+    end
   end
 
   def error_email(workflow_execution)
     @workflow_execution = workflow_execution
-    mail(to: @workflow_execution.submitter.email,
-         subject: t(:'mailers.pipeline_mailer.error_email.subject', id: @workflow_execution.id))
+    submitter = @workflow_execution.submitter
+    I18n.with_locale(submitter.locale) do
+      mail(to: submitter.email,
+           subject: t(:'mailers.pipeline_mailer.error_email.subject', id: @workflow_execution.id))
+    end
   end
 end
