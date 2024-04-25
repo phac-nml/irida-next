@@ -8,6 +8,7 @@ module Namespaces
     has_one :project, inverse_of: :namespace, foreign_key: :namespace_id, dependent: :destroy
     has_many :project_members, foreign_key: :namespace_id, inverse_of: :project_namespace,
                                class_name: 'Member', dependent: :destroy
+
     has_many :users, through: :project_members
 
     has_many :namespace_bots, foreign_key: :namespace_id, inverse_of: :namespace,
@@ -85,6 +86,10 @@ module Namespaces
 
     def self.model_prefix
       'PRJ'
+    end
+
+    def automation_bot
+      users.find_by(user_type: User.user_types[:project_automation_bot])
     end
   end
 end
