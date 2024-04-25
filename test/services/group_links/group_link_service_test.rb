@@ -4,7 +4,6 @@ require 'test_helper'
 
 module GroupLinks
   class GroupLinkServiceTest < ActiveSupport::TestCase
-    include MailerHelper
     def setup
       @user = users(:john_doe)
     end
@@ -20,9 +19,9 @@ module GroupLinks
 
       assert_enqueued_emails 2
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [user_emails(group), group, namespace]
+                                 args: [Member.user_emails(group), group, namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [manager_emails(group), group, namespace]
+                                 args: [Member.manager_emails(group), group, namespace]
     end
 
     test 'share group b with group a with incorrect permissions' do
@@ -81,9 +80,9 @@ module GroupLinks
 
       assert_enqueued_emails 2
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [user_emails(group), group, namespace]
+                                 args: [Member.user_emails(group), group, namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [manager_emails(group), group, namespace]
+                                 args: [Member.manager_emails(group), group, namespace]
     end
 
     test 'group a shared with group b is logged using logidze' do
@@ -113,9 +112,9 @@ module GroupLinks
 
       assert_enqueued_emails 2
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [user_emails(group), group, namespace]
+                                 args: [Member.user_emails(group), group, namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [manager_emails(group), group, namespace]
+                                 args: [Member.manager_emails(group), group, namespace]
     end
 
     test 'share project with group with incorrect permissions' do
@@ -162,9 +161,9 @@ module GroupLinks
 
       assert_enqueued_emails 2
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [user_emails(group), group, namespace]
+                                 args: [Member.user_emails(group), group, namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [manager_emails(group), group, namespace]
+                                 args: [Member.manager_emails(group), group, namespace]
     end
 
     test 'project shared with group is logged using logidze' do

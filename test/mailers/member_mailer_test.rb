@@ -3,11 +3,10 @@
 require 'test_helper'
 
 class MemberMailerTest < ActionMailer::TestCase
-  include MailerHelper
   def setup
     @member = members(:group_one_member_john_doe)
     @namespace = @member.namespace
-    @manager_emails = manager_emails(@namespace, @member)
+    @manager_emails = Member.manager_emails(@namespace, @member)
   end
 
   def test_access_granted_user_email

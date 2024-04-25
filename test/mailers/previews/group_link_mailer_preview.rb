@@ -2,8 +2,6 @@
 
 # Preview all emails at http://localhost:3000/rails/mailers/group_link_mailer
 class GroupLinkMailerPreview < ActionMailer::Preview
-  include MailerHelper
-
   def access_granted_to_group_user_email
     setup_group
     setup_user_emails
@@ -65,10 +63,10 @@ class GroupLinkMailerPreview < ActionMailer::Preview
   end
 
   def setup_user_emails
-    @user_emails = user_emails(@namespace)
+    @user_emails = Member.user_emails(@namespace)
   end
 
   def setup_manager_emails
-    @manager_emails = manager_emails(@namespace)
+    @manager_emails = Member.manager_emails(@namespace)
   end
 end

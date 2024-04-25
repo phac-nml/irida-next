@@ -2,8 +2,6 @@
 
 # Preview all emails at http://localhost:3000/rails/mailers/member_mailer
 class MemberMailerPreview < ActionMailer::Preview
-  include MailerHelper
-
   def access_granted_to_group_user_email
     setup_group
     MemberMailer.access_granted_user_email(@member, @namespace)
@@ -58,6 +56,6 @@ class MemberMailerPreview < ActionMailer::Preview
 
   def setup
     @member = Member.first
-    @manager_emails = manager_emails(@namespace, @member)
+    @manager_emails = Member.manager_emails(@namespace, @member)
   end
 end

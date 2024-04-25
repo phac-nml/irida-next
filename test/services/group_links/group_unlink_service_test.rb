@@ -4,7 +4,6 @@ require 'test_helper'
 
 module GroupLinks
   class GroupUnlinkServiceTest < ActiveSupport::TestCase
-    include MailerHelper
     def setup
       @user = users(:john_doe)
     end
@@ -18,11 +17,11 @@ module GroupLinks
 
       assert_enqueued_emails 2
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [user_emails(namespace_group_link.group),
+                                 args: [Member.user_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [manager_emails(namespace_group_link.group),
+                                 args: [Member.manager_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
     end
@@ -43,19 +42,19 @@ module GroupLinks
 
       assert_enqueued_emails 4
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [user_emails(namespace_group_link.group),
+                                 args: [Member.user_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [manager_emails(namespace_group_link.group),
+                                 args: [Member.manager_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [user_emails(namespace_group_link.group),
+                                 args: [Member.user_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [manager_emails(namespace_group_link.group),
+                                 args: [Member.manager_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
     end
@@ -94,11 +93,11 @@ module GroupLinks
 
       assert_enqueued_emails 2
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [user_emails(namespace_group_link.group),
+                                 args: [Member.user_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [manager_emails(namespace_group_link.group),
+                                 args: [Member.manager_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
     end
@@ -112,11 +111,11 @@ module GroupLinks
 
       assert_enqueued_emails 2
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [user_emails(namespace_group_link.group),
+                                 args: [Member.user_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [manager_emails(namespace_group_link.group),
+                                 args: [Member.manager_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
     end
@@ -137,19 +136,19 @@ module GroupLinks
 
       assert_enqueued_emails 4
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [user_emails(namespace_group_link.group),
+                                 args: [Member.user_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [manager_emails(namespace_group_link.group),
+                                 args: [Member.manager_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [user_emails(namespace_group_link.group),
+                                 args: [Member.user_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [manager_emails(namespace_group_link.group),
+                                 args: [Member.manager_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
     end
@@ -182,11 +181,11 @@ module GroupLinks
 
       assert_enqueued_emails 2
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [user_emails(namespace_group_link.group),
+                                 args: [Member.user_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [manager_emails(namespace_group_link.group),
+                                 args: [Member.manager_emails(namespace_group_link.group),
                                         namespace_group_link.group,
                                         namespace_group_link.namespace]
     end

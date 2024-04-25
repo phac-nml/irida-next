@@ -4,7 +4,6 @@ require 'test_helper'
 
 module Members
   class CreateServiceTest < ActiveSupport::TestCase
-    include MailerHelper
     def setup
       @user = users(:john_doe)
       @project = projects(:john_doe_project2)
@@ -26,7 +25,7 @@ module Members
       assert_enqueued_email_with MemberMailer, :access_granted_user_email,
                                  args: [@new_member, @group]
       assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                 args: [@new_member, manager_emails(@group, @new_member), @group]
+                                 args: [@new_member, Member.manager_emails(@group, @new_member), @group]
     end
 
     test 'create group member with no email notification' do
@@ -54,7 +53,7 @@ module Members
                                  args: [@new_member, @project_namespace]
       assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
                                  args: [@new_member,
-                                        manager_emails(@project_namespace, @new_member),
+                                        Member.manager_emails(@project_namespace, @new_member),
                                         @project_namespace]
     end
 
@@ -184,7 +183,7 @@ module Members
       assert_enqueued_email_with MemberMailer, :access_granted_user_email,
                                  args: [@new_member, group]
       assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                 args: [@new_member, manager_emails(group, @new_member), group]
+                                 args: [@new_member, Member.manager_emails(group, @new_member), group]
     end
 
     test 'valid authorization to create project member' do
@@ -203,7 +202,7 @@ module Members
                                  args: [@new_member, @project_namespace]
       assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
                                  args: [@new_member,
-                                        manager_emails(@project_namespace, @new_member),
+                                        Member.manager_emails(@project_namespace, @new_member),
                                         @project_namespace]
     end
 
