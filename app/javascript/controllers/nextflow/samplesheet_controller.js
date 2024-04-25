@@ -1,20 +1,17 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["selectForward", "selectReverse", "loading", "submit"];
+  static targets = ["selectForward", "selectReverse", "table", "loading", "submit"];
 
   connect() {
-    let select;
     this.element.addEventListener("turbo:submit-start", (event) => {
       this.submitTarget.disabled = true;
-      select = event.target.querySelector("select");
-      select.disabled = true;
-      event.target.closest(".table-column").querySelector(".table-col").replaceChildren(this.loadingTarget.content.cloneNode(true));
+      this.tableTarget.appendChild(this.loadingTarget.content.cloneNode(true));
     });
 
     this.element.addEventListener("turbo:submit-end", (event) => {
       this.submitTarget.disabled = false;
-      select.disabled = false;
+      this.tableTarget.removeChild(this.tableTarget.lastElementChild);
     });
   }
 
