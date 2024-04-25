@@ -21,7 +21,7 @@ class PipelineMailerTest < ActionMailer::TestCase
                  email.body.to_s)
   end
 
-  def test_french_complete_email
+  def test_complete_email_in_french
     locale = :fr
     workflow_execution = workflow_executions(:irida_next_example_completed)
     workflow_execution.submitter.locale = locale
@@ -33,7 +33,7 @@ class PipelineMailerTest < ActionMailer::TestCase
                            id: workflow_execution.id, locale:)}/, email.body.to_s)
   end
 
-  def test_french_error_email
+  def test_error_email_in_french
     locale = :fr
     workflow_execution = workflow_executions(:irida_next_example_error)
     workflow_execution.submitter.locale = locale

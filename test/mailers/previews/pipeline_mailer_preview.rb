@@ -7,8 +7,20 @@ class PipelineMailerPreview < ActionMailer::Preview
     PipelineMailer.complete_email(workflow_execution)
   end
 
+  def complete_email_in_french
+    workflow_execution = WorkflowExecution.first
+    workflow_execution.submitter.locale = :fr
+    PipelineMailer.complete_email(workflow_execution)
+  end
+
   def error_email
     workflow_execution = WorkflowExecution.first
+    PipelineMailer.error_email(workflow_execution)
+  end
+
+  def error_email_in_french
+    workflow_execution = WorkflowExecution.first
+    workflow_execution.submitter.locale = :fr
     PipelineMailer.error_email(workflow_execution)
   end
 end
