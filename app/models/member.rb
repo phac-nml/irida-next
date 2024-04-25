@@ -29,7 +29,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
 
-  class << self
+  class << self # rubocop:disable Metrics/ClassLength
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
