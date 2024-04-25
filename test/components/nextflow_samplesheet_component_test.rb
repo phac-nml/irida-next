@@ -10,11 +10,11 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
 
     assert_selector '.samplesheet-table' do |table|
       table.assert_selector '.table-header', count: 4
-      table.assert_selector '.table-column:last-child .table-header', text: 'STRANDEDNESS (REQUIRED)'
-      table.assert_selector '.table-column:first-child .table-td', count: 2
-      table.assert_selector '.table-column:first-child .table-td:first-child', text: sample1.puid
-      table.assert_selector '.table-column:last-child .table-td:first-child select option', count: 3
-      table.assert_selector '.table-column:last-child .table-td:first-child select option:first-of-type',
+      table.assert_selector '.table-column:last-of-type .table-header', text: 'STRANDEDNESS (REQUIRED)'
+      table.assert_selector '.table-column:first-of-type .table-td', count: 2
+      table.assert_selector '.table-column:first-of-type .table-td:first-of-type', text: sample1.puid
+      table.assert_selector '.table-column:last-of-type .table-td:first-of-type select option', count: 3
+      table.assert_selector '.table-column:last-of-type .table-td:first-of-type select option:first-of-type',
                             text: 'forward'
     end
   end
@@ -26,10 +26,10 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
 
     assert_selector '.samplesheet-table' do |table|
       table.assert_selector '.table-header', count: 4
-      table.assert_selector '.table-column:last-child .table-header', text: 'REFERENCE_ASSEMBLY'
-      table.assert_selector '.table-column:first-child .table-td', count: 2
-      table.assert_selector '.table-column:first-child .table-td:first-child', text: sample1.puid
-      table.assert_selector '.table-column:last-child .table-td:first-child select option', count: 1
+      table.assert_selector '.table-column:last-of-type .table-header', text: 'REFERENCE_ASSEMBLY'
+      table.assert_selector '.table-column:first-of-type .table-td', count: 2
+      table.assert_selector '.table-column:first-of-type .table-td:first-of-type', text: sample1.puid
+      table.assert_selector '.table-column:last-of-type .table-td:first-of-type select option', count: 1
     end
   end
 
@@ -40,13 +40,13 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
 
     assert_selector '.samplesheet-table' do |table|
       table.assert_selector '.table-header', count: 3
-      table.assert_selector '.table-column:last-child .table-header select', count: 1
-      table.assert_selector '.table-column:last-child .table-header select', text: 'insdc_accession'
-      table.assert_selector '.table-column:first-child .table-td', count: 2
-      table.assert_selector '.table-column:first-child .table-td:first-child', text: sample1.puid
-      table.assert_selector '.table-column:last-child .table-td:first-child', text: 'ERR86724108'
-      table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: sample2.puid
-      table.assert_selector '.table-column:last-child .table-td:last-child', text: 'ERR31551163'
+      table.assert_selector '.table-column:last-of-type .table-header select', count: 1
+      table.assert_selector '.table-column:last-of-type .table-header select', text: 'insdc_accession'
+      table.assert_selector '.table-column:first-of-type .table-td', count: 2
+      table.assert_selector '.table-column:first-of-type .table-td:first-of-type', text: sample1.puid
+      table.assert_selector '.table-column:last-of-type .table-td:first-of-type', text: 'ERR86724108'
+      table.assert_selector '.table-column:first-of-type .table-td:nth-child(2)', text: sample2.puid
+      table.assert_selector '.table-column:last-of-type .table-td:last-of-type', text: 'ERR31551163'
     end
   end
 end

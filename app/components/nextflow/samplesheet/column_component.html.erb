@@ -22,7 +22,7 @@
                          "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
                        id: "format_#{header}" %>
         <% samples.each do |sample| %>
-          <%= f.hidden_field :sample_ids, value: sample.id, id: "sample-#{sample.id}", multiple: true %>
+          <%= f.hidden_field :sample_ids, value: sample.id, id: "sample-#{sample.id}-#{header}", multiple: true %>
         <% end %>
         <%= f.select :field,
                  options_for_select(metadata_fields_for_field(header), header),
@@ -57,7 +57,7 @@
     </div>
   <% end %>
 
-  <div id="<%= "metadata-#{header}-column" %>" class="table-col">
+  <div id="<%= "metadata-#{header}-column" %>">
     <% samples.each_with_index do |sample, index| %>
       <div class="table-td dark:border-slate-600 border border-slate-100">
         <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{index}]" do |s| %>
