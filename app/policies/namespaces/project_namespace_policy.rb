@@ -2,7 +2,7 @@
 
 module Namespaces
   # Policy for authorization under project_namespace
-  class ProjectNamespacePolicy < NamespacePolicy
+  class ProjectNamespacePolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     def update?
       return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_modify?(user, record) == true
@@ -108,6 +108,30 @@ module Namespaces
     end
 
     def revoke_bot_personal_access_token?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def create_automated_workflow_executions?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def destroy_automated_workflow_executions?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def update_automated_workflow_executions?
       return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_modify?(user, record) == true
 
