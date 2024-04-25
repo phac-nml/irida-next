@@ -9,8 +9,9 @@ module AutomatedWorkflowExecutions
 
     def execute
       @automated_workflow_execution = AutomatedWorkflowExecution.new(params.merge(created_by: current_user))
+      namespace = @automated_workflow_execution.namespace
 
-      authorize! @automated_workflow_execution.namespace, to: :create_automated_workflow_execution?
+      authorize! namespace, to: :create_automated_workflow_executions? if namespace.present?
 
       @automated_workflow_execution.save
     end

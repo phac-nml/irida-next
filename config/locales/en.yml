@@ -102,6 +102,9 @@ en:
         update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
+        create_automated_workflow_executions?: You are not authorized to create automated workflow executions for project %{name} on this server.
+        update_automated_workflow_executions?: You are not authorized to update automated workflow executions for project %{name} on this server.
+        destroy_automated_workflow_executions?: You are not authorized to destroy automated workflow executions for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace

@@ -11,7 +11,7 @@ module AutomatedWorkflowExecutions
     end
 
     def execute
-      authorize! @automated_workflow_execution.namespace, to: :update_automated_workflow_execution?
+      authorize! @automated_workflow_execution.namespace, to: :update_automated_workflow_executions?
 
       @automated_workflow_execution.update(params)
     end

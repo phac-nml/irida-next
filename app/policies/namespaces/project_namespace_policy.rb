@@ -115,7 +115,7 @@ module Namespaces
       false
     end
 
-    def create_automated_workflow_execution?
+    def create_automated_workflow_executions?
       return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_modify?(user, record) == true
 
@@ -123,7 +123,7 @@ module Namespaces
       false
     end
 
-    def destroy_automated_workflow_execution?
+    def destroy_automated_workflow_executions?
       return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_modify?(user, record) == true
 
@@ -131,7 +131,7 @@ module Namespaces
       false
     end
 
-    def update_automated_workflow_execution?
+    def update_automated_workflow_executions?
       return true if record.parent.user_namespace? && record.parent.owner == user
       return true if Member.can_modify?(user, record) == true
 
