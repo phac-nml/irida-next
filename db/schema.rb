@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_23_155817) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_25_141711) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -58,6 +58,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_23_155817) do
     t.index ["created_at"], name: "index_attachments_on_created_at"
     t.index ["metadata"], name: "index_attachments_on_metadata", using: :gin
     t.index ["puid"], name: "index_attachments_on_puid"
+  end
+
+  create_table "automated_workflow_executions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "namespace_id", null: false
+    t.uuid "created_by_id", null: false
+    t.jsonb "metadata", default: {"workflow_name"=>"", "workflow_version"=>""}, null: false
+    t.jsonb "workflow_params", default: {}, null: false
+    t.boolean "email_notification", default: true, null: false
+    t.boolean "update_samples", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_automated_workflow_executions_on_created_by_id"
+    t.index ["namespace_id"], name: "index_automated_workflow_executions_on_namespace_id"
   end
 
   create_table "data_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -270,6 +283,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_23_155817) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "automated_workflow_executions", "namespaces"
+  add_foreign_key "automated_workflow_executions", "users", column: "created_by_id"
   add_foreign_key "data_exports", "users"
   add_foreign_key "members", "namespaces"
   add_foreign_key "members", "users"

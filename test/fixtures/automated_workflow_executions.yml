@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+valid_automated_workflow_execution:
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: { "assembler": "stub" }
+  email_notification: true
+  update_samples: false
+
+invalid_metadata_automated_workflow_execution:
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "missing a param here": "invalid" }
+  workflow_params: { "assembler": "stub" }
+  email_notification: true
+  update_samples: false
