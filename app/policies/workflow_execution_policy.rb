@@ -10,7 +10,6 @@ class WorkflowExecutionPolicy < ApplicationPolicy
   end
 
   def index?
-    return true if record.submitter.automation_bot? == true
     return true if Member.can_view?(user, record.namespace) == true
 
     details[:id] = record.id
@@ -19,6 +18,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
   def destroy?
     return true if record.submitter.id == user.id
+    return true if Member.can_modify?(user, record.namespace) == true
 
     details[:id] = record.id
     false
@@ -34,7 +34,6 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
   def show?
     return true if record.submitter.id == user.id
-    return true if record.submitter.automation_bot? == true
     return true if Member.can_view?(user, record.namespace) == true
 
     details[:id] = record.id
@@ -52,6 +51,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
   def cancel?
     return true if record.submitter.id == user.id
     return true if record.submitter.automation_bot? == true
+    return true if Member.can_modify?(user, record.namespace) == true
 
     details[:id] = record.id
     false
@@ -71,7 +71,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def updated_automated_workflow_executions?
+  def update_automated_workflow_executions?
     return true if Member.can_modify?(user, record.namespace) == true
 
     details[:id] = record.id
