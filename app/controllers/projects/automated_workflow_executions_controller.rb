@@ -6,8 +6,9 @@ module Projects
     include BreadcrumbNavigation
 
     before_action :current_page
-    before_action :automated_workflows, only: %i[new edit]
+    before_action :automated_workflows, only: %i[index]
     before_action :automated_workflow, only: %i[edit update destroy show]
+    before_action :available_automated_workflows, only: %i[new edit]
 
     def index; end
 
@@ -18,9 +19,8 @@ module Projects
     def edit; end
 
     def create
-      automated_workflow_execution_params.merge(namespace: @namespace)
       @automated_workflow_execution = AutomatedWorkflowExecutions::CreateService.new(
-        current_user, automated_workflow_execution_params
+        current_user, automated_workflow_execution_params.merge(namespace:)
       ).execute
 
       respond_to do |format|
@@ -36,7 +36,8 @@ module Projects
 
     def update
       automated_workflow_updated = AutomatedWorkflowExecutions::UpdateService.new(@automated_workflow,
-                                                                                  current_user).execute
+                                                                                  current_user,
+                                                                                  automated_workflow_execution_params).execute
 
       respond_to do |format|
         format.turbo_stream do
@@ -54,7 +55,7 @@ module Projects
 
       respond_to do |format|
         format.turbo_stream do
-          if @automated_workflow.deleted?
+          if @automated_workflow.destroyed?
             render status: :ok
           else
             render status: :unprocessable_entity
@@ -67,16 +68,8 @@ module Projects
 
     def automated_workflow_execution_params
       params.require(:automated_workflow_execution).permit(
-        :workflow_params, :email_notification, :updated_samples, metadata: { workflow_name: '', workflow_version: '' }
+        :email_notification, :updated_samples, metadata: {}, workflow_params: {}
       )
-    end
-
-    def automated_workflow
-      @automated_workflow = AutomatedWorkflowExecution.find_by(id: params[:id]) || not_found
-    end
-
-    def automated_workflows
-      @automated_workflows = Irida::Pipelines.automatable_pipelines
     end
 
     protected
@@ -87,13 +80,25 @@ module Projects
       @namespace = @project.namespace
     end
 
+    def automated_workflow
+      @automated_workflow = AutomatedWorkflowExecution.find_by(id: params[:id]) || not_found
+    end
+
+    def automated_workflows
+      @automated_workflows = AutomatedWorkflowExecution.find_by(namespace_id: namespace.id) || not_found
+    end
+
+    def available_automated_workflows
+      @available_automated_workflows = Irida::Pipelines.automatable_pipelines
+    end
+
     def context_crumbs
       super
       case action_name
       when 'index'
         @context_crumbs += [{
           name: 'Automated workflows',
-          path: '#'
+          path: namespace_project_automated_workflow_executions_path
         }]
       end
     end

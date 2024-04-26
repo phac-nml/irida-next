@@ -27,7 +27,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         end
       end
 
-      resources :automated_workflow_executions, only: %i[index new create destroy edit update]
+      resources :automated_workflow_executions, only: %i[index show new create destroy edit update]
 
       resources :group_links, only: %i[create destroy update index new]
       resources :samples do
