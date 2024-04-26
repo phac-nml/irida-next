@@ -19,16 +19,17 @@ class WorkflowExecutionStatusJob < ApplicationJob
     workflow_execution
   end
 
-  def perform(workflow_execution) # rubocop:disable Metrics/AbcSize
+  def perform(workflow_execution)
     # User signaled to cancel
     return if workflow_execution.canceling? || workflow_execution.canceled?
 
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute
 
-    if workflow_execution.canceled? || workflow_execution.error?
+    case workflow_execution.state
+    when :canceled, :error
       WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
-    elsif workflow_execution.completing?
+    when :completing
       WorkflowExecutionCompletionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
     else
       WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
