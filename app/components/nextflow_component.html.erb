@@ -28,6 +28,7 @@
     <input id="submission_turbo" type="hidden" name="format" value="turbo_stream" />
 
     <%= fields_for :workflow_execution do |workflow| %>
+      <%= workflow.hidden_field :namespace_id, value: @namespace_id %>
       <%= workflow.hidden_field :workflow_type, value: @workflow.type %>
       <%= workflow.hidden_field :workflow_type_version, value: @workflow.type_version %>
       <%= workflow.hidden_field :workflow_engine, value: @workflow.engine %>
@@ -41,7 +42,6 @@
       <%= workflow.fields_for "metadata" do |metadata| %>
         <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
         <%= metadata.hidden_field :workflow_version, value: @workflow.version %>
-        <%= metadata.hidden_field :namespace_id, value: @namespace_id %>
       <% end %>
 
       <%= workflow.fields_for "workflow_params" do |fields| %>

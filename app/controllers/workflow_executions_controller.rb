@@ -108,6 +108,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
 
   def workflow_execution_params_attributes
     [
+      :namespace_id,
       :workflow_type,
       :workflow_type_version,
       :workflow_engine,
