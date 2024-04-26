@@ -206,7 +206,7 @@ module Attachments
       assert_nil @sample.attachments_updated_at
     end
 
-    test 'queues AutomatedWorkflowExecutions::LaunchJob when uploading pair end data to a Sample whose Project has AutomatedWorkflowExections configured' do
+    test 'queues AutomatedWorkflowExecutions::LaunchJob when uploading pair end data to a Sample whose Project has AutomatedWorkflowExections configured' do # rubocop:disable Layout/LineLength
       sample = samples(:sampleA)
       params = { files: [@testsample_illumina_pe_fwd_blob, @testsample_illumina_pe_rev_blob] }
 
@@ -217,7 +217,7 @@ module Attachments
       assert_enqueued_with(job: AutomatedWorkflowExecutions::LaunchJob)
     end
 
-    test 'doesn\'t queue a AutomatedWorkflowExecutions::LaunchJob when uploading single end data to a Sample whose Project has AutomatedWorkflowExections configured' do
+    test 'doesn\'t queue a AutomatedWorkflowExecutions::LaunchJob when uploading single end data to a Sample whose Project has AutomatedWorkflowExections configured' do # rubocop:disable Layout/LineLength
       sample = samples(:sampleA)
       params = { files: [@testsample_illumina_pe_fwd_blob] }
 
