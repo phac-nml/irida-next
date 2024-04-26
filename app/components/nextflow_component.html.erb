@@ -68,7 +68,7 @@
                   <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
                     <%= property[:description] %>
                     <% if property[:required] %>
-                      <%= viral_pill(text: t(:"components.nextflow.required"), color: :blue) %>
+                      <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
                     <% end %>
                   <% end %>
                   <%= form_input(fields, name, property, property[:required]) %>
