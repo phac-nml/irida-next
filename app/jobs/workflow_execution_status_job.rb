@@ -4,11 +4,26 @@
 class WorkflowExecutionStatusJob < ApplicationJob
   queue_as :default
 
+  # When server is unreachable, continually retry
+  retry_on Integrations::ApiExceptions::ConnectionError, wait: :polynomially_longer, attempts: Float::INFINITY
+
+  # Puts workflow execution into error state and records the error code
+  retry_on Integrations::ApiExceptions::APIExceptionError, wait: :polynomially_longer, attempts: 3 do |job, exception|
+    workflow_execution = job.arguments[0]
+    workflow_execution.state = :error
+    workflow_execution.http_error_code = exception.http_error_code
+    workflow_execution.save
+  end
+
   def perform(workflow_execution)
+    # User signaled to cancel
+    return if workflow_execution.canceling? || workflow_execution.canceled?
+
     wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
     workflow_execution = WorkflowExecutions::StatusService.new(workflow_execution, wes_connection).execute
 
-    return if workflow_execution.canceling? || workflow_execution.canceled? || workflow_execution.error?
+    # ga4gh has cancelled/error state
+    return if workflow_execution.canceled? || workflow_execution.error?
 
     if workflow_execution.completing?
       WorkflowExecutionCompletionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
