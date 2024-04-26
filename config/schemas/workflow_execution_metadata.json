@@ -5,9 +5,6 @@
       "workflow_name": { "type": "string" },
       "workflow_version": {
         "type": "string"
-      },
-      "namespace_id": {
-        "type": "string"
       }
     },
     "required": ["workflow_name", "workflow_version"]
