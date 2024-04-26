@@ -25,7 +25,7 @@ class Sample < ApplicationRecord
   has_many :workflow_executions, through: :samples_workflow_executions
 
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
-  validates :name, uniqueness: { scope: %i[project_id] }
+  validates :name, uniqueness: { scope: :project_id }
 
   def self.model_prefix
     'SAM'
