@@ -249,7 +249,7 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     end
   end
 
-  test 'as_wes_params to_json params' do
+  test 'as_wes_params' do
     @workflow_execution_valid['tags']['test_key'] = 'test_value'
     as_wes_params = @workflow_execution_valid.as_wes_params
     assert_equal @workflow_execution_valid['workflow_params'].to_json, as_wes_params[:workflow_params]
@@ -257,5 +257,10 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
                  as_wes_params[:workflow_engine_parameters]
     assert_equal @workflow_execution_valid['tags'].to_json,
                  as_wes_params[:tags]
+    assert_equal @workflow_execution_valid['workflow_type'], as_wes_params[:workflow_type]
+    assert_equal @workflow_execution_valid['workflow_type_version'], as_wes_params[:workflow_type_version]
+    assert_equal @workflow_execution_valid['workflow_engine'], as_wes_params[:workflow_engine]
+    assert_equal @workflow_execution_valid['workflow_engine_version'], as_wes_params[:workflow_engine_version]
+    assert_equal @workflow_execution_valid['workflow_url'], as_wes_params[:workflow_url]
   end
 end
