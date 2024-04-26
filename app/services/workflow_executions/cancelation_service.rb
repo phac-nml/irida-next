@@ -18,6 +18,10 @@ module WorkflowExecutions
       @workflow_execution.state = :canceled
 
       @workflow_execution.save
+
+      WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+
+      @workflow_execution
     end
   end
 end

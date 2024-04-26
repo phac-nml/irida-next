@@ -17,6 +17,9 @@ module WorkflowExecutions
       unless @workflow_execution.sent_to_ga4gh?
         @workflow_execution.state = :canceled
         @workflow_execution.save
+
+        WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+
         return @workflow_execution
       end
 
