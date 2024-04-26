@@ -104,6 +104,12 @@ project_one_member_user_bot_account:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::UPLOADER %>
 
+project1_member_project_automation_bot:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>
+
 project_two_member_john_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
@@ -505,3 +511,9 @@ group_one_member_user_bot_account:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   access_level: <%= Member::AccessLevel::UPLOADER %>
+
+projectA_member_project_automation_bot:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:projectA_automation_bot, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>

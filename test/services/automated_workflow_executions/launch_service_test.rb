@@ -6,7 +6,7 @@ module AutomatedWorkflowExecutions
   class LaunchServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:jeff_doe)
-      @automated_workflow_execution = automated_workflow_executions(:projectA_automated_workflow_execution)
+      @automated_workflow_execution = automated_workflow_executions(:projectA_automated_workflow_execution_one)
       @sample = samples(:sampleB)
       @automation_bot = users(:projectA_automation_bot)
       @pe_attachment_pair = { 'forward' => attachments(:attachmentPEFWD1), 'reverse' => attachments(:attachmentPEREV1) }
@@ -16,6 +16,14 @@ module AutomatedWorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => 1 do
         AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample, @pe_attachment_pair,
                                                        @automation_bot).execute
+      end
+    end
+
+    test 'doesn\'t create workflow execution with invalid project bot' do
+      skip 'enable this test once WorkflowExecutions::CreateService has been updated to perform authorization'
+      assert_no_difference -> { WorkflowExecution.count } do
+        AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample, @pe_attachment_pair,
+                                                       users(:project1_automation_bot)).execute
       end
     end
   end
