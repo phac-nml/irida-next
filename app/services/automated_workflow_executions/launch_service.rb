@@ -16,7 +16,7 @@ module AutomatedWorkflowExecutions
     end
 
     def execute
-      return false if @worklow.nil?
+      return false if @workflow.nil?
 
       WorkflowExecutions::CreateService.new(@current_user, workflow_execution_params).execute
     end
