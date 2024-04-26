@@ -25,7 +25,7 @@
     <%= @workflow.description %>
   </p>
   <%= form_with url: url, data: { turbo_frame: "_top" } do |form| %>
-    <input id="submission_turbo" type="hidden" name="format" value="turbo_stream"/>
+    <input id="submission_turbo" type="hidden" name="format" value="turbo_stream" />
 
     <%= fields_for :workflow_execution do |workflow| %>
       <%= workflow.hidden_field :workflow_type, value: @workflow.type %>
@@ -85,54 +85,54 @@
       <%- if @allowed_to_update_samples %>
         <div class="flex mb-4 items-center h-5">
           <%= workflow.check_box :update_samples,
-                             {
-                               checked: false,
-                               class:
-                                 "w-4
-                                                                          h-4
-                                                                          mr-2.5
-                                                                          text-primary-600
-                                                                          bg-slate-100
-                                                                          border-slate-300
-                                                                          rounded
-                                                                          focus:ring-primary-500
-                                                                          dark:focus:ring-primary-600
-                                                                          dark:ring-offset-slate-800
-                                                                          focus:ring-2
-                                                                          dark:bg-slate-700
-                                                                          dark:border-slate-600"
-                             },
-                             true,
-                             false %>
+                                 {
+                                   checked: false,
+                                   class:
+                                     "w-4
+                                      h-4
+                                      mr-2.5
+                                      text-primary-600
+                                      bg-slate-100
+                                      border-slate-300
+                                      rounded
+                                      focus:ring-primary-500
+                                      dark:focus:ring-primary-600
+                                      dark:ring-offset-slate-800
+                                      focus:ring-2
+                                      dark:bg-slate-700
+                                      dark:border-slate-600"
+                                 },
+                                 true,
+                                 false %>
           <%= workflow.label :update_samples,
-                         t(:"components.nextflow.update_samples"),
-                         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                             t(:"components.nextflow.update_samples"),
+                             class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
         </div>
       <%- end %>
       <div class="flex mb-4 items-center h-5">
         <%= workflow.check_box :email_notification,
-                           {
-                             checked: false,
-                             class:
-                               "w-4
-                                                                h-4
-                                                                mr-2.5
-                                                                text-primary-600
-                                                                bg-slate-100
-                                                                border-slate-300
-                                                                rounded
-                                                                focus:ring-primary-500
-                                                                dark:focus:ring-primary-600
-                                                                dark:ring-offset-slate-800
-                                                                focus:ring-2
-                                                                dark:bg-slate-700
-                                                                dark:border-slate-600"
-                           },
-                           true,
-                           false %>
+                               {
+                                 checked: false,
+                                 class:
+                                   "w-4
+                                    h-4
+                                    mr-2.5
+                                    text-primary-600
+                                    bg-slate-100
+                                    border-slate-300
+                                    rounded
+                                    focus:ring-primary-500
+                                    dark:focus:ring-primary-600
+                                    dark:ring-offset-slate-800
+                                    focus:ring-2
+                                    dark:bg-slate-700
+                                    dark:border-slate-600"
+                               },
+                               true,
+                               false %>
         <%= workflow.label :email_notification,
-                       t(:"components.nextflow.email_notification"),
-                       class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                           t(:"components.nextflow.email_notification"),
+                           class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
     <% end %>
 
