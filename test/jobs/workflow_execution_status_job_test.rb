@@ -95,7 +95,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     assert_performed_jobs 3
     @workflow_execution.reload
     assert @workflow_execution.error?
-    assert @workflow_execution.error_code == 400
+    assert @workflow_execution.http_error_code == 400
   end
 
   test 'api exception error then a success' do
