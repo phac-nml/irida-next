@@ -148,7 +148,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def user_emails(namespace)
       user_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
-                               .where.not(access_level: Member::AccessLevel.manageable)
       users = User.human_users.where(id: user_memberships.select(:user_id)).distinct
       users.pluck(:email)
     end

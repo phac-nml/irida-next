@@ -21,7 +21,7 @@ module GroupLinks
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
                                  args: [Member.user_emails(group), group, namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(group), group, namespace]
+                                 args: [Member.manager_emails(namespace), group, namespace]
     end
 
     test 'share group b with group a with incorrect permissions' do
@@ -82,7 +82,7 @@ module GroupLinks
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
                                  args: [Member.user_emails(group), group, namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(group), group, namespace]
+                                 args: [Member.manager_emails(namespace), group, namespace]
     end
 
     test 'group a shared with group b is logged using logidze' do
@@ -114,7 +114,7 @@ module GroupLinks
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
                                  args: [Member.user_emails(group), group, namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(group), group, namespace]
+                                 args: [Member.manager_emails(namespace), group, namespace]
     end
 
     test 'share project with group with incorrect permissions' do
@@ -163,7 +163,7 @@ module GroupLinks
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
                                  args: [Member.user_emails(group), group, namespace]
       assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(group), group, namespace]
+                                 args: [Member.manager_emails(namespace), group, namespace]
     end
 
     test 'project shared with group is logged using logidze' do

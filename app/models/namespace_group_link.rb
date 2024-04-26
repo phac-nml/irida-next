@@ -30,12 +30,12 @@ class NamespaceGroupLink < ApplicationRecord
 
   def send_access_revoked_emails
     GroupLinkMailer.access_revoked_user_email(Member.user_emails(group), group, namespace).deliver_later
-    GroupLinkMailer.access_revoked_manager_email(Member.manager_emails(group), group, namespace).deliver_later
+    GroupLinkMailer.access_revoked_manager_email(Member.manager_emails(namespace), group, namespace).deliver_later
   end
 
   def send_access_granted_emails
     GroupLinkMailer.access_granted_user_email(Member.user_emails(group), group, namespace).deliver_later
-    GroupLinkMailer.access_granted_manager_email(Member.manager_emails(group), group, namespace).deliver_later
+    GroupLinkMailer.access_granted_manager_email(Member.manager_emails(namespace), group, namespace).deliver_later
   end
 
   private
