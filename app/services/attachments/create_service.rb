@@ -3,13 +3,14 @@
 module Attachments
   # Service used to Create Attachments
   class CreateService < BaseService
-    attr_accessor :attachable, :attachments
+    attr_accessor :attachable, :attachments, :pe_attachments
 
     def initialize(user = nil, attachable = nil, params = {})
       super(user, params)
 
       @attachable = attachable
       @attachments = []
+      @pe_attachments = []
 
       return unless params.key?(:files)
 
@@ -21,7 +22,7 @@ module Attachments
       @attachments
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity
+    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
       authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
@@ -35,6 +36,10 @@ module Attachments
       identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.count > 1
 
       @attachments.each(&:save)
+
+      if @attachable.instance_of?(Sample) && @attachable.project.namespace.automated_workflow_executions.present?
+        launch_automated_workflow_executions(@pe_attachments&.last)
+      end
 
       @attachments
     end
@@ -96,8 +101,8 @@ module Attachments
       assign_metadata(pe, 'pe')
     end
 
-    def assign_metadata(paired_ends, type)
-      paired_ends.each do |_key, pe_attachments|
+    def assign_metadata(paired_ends, type) # rubocop:disable Metrics/AbcSize
+      paired_ends.each do |key, pe_attachments|
         next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
 
         # assign the PUID to be same for forward and reverse and then save so that we have the ids
@@ -114,6 +119,8 @@ module Attachments
         }
 
         pe_attachments['reverse'].metadata = pe_attachments['reverse'].metadata.merge(rev_metadata)
+
+        @pe_attachments << paired_ends[key]
       end
     end
 
@@ -123,6 +130,14 @@ module Attachments
       pe_attachments['reverse'].puid = puid
       pe_attachments['forward'].save
       pe_attachments['reverse'].save
+    end
+
+    def launch_automated_workflow_executions(pe_attachment_pair)
+      unless pe_attachment_pair.present? && pe_attachment_pair.key?('forward') && pe_attachment_pair.key?('reverse')
+        return
+      end
+
+      AutomatedWorkflowExecutions::LaunchJob.perform_later(@attachable, pe_attachment_pair)
     end
   end
 end

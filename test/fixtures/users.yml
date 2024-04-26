@@ -164,3 +164,17 @@ user_group_bot_account<%= (n) %>:
   last_name: "Bot #{format('%03d', (n + 1))}"
   user_type: <%= User.user_types[:group_bot] %>
 <% end %>
+
+project1_automation_bot:
+  email: <%= "inxt_prj_aaaaaaaaaa_automation_bot@localhost" %>
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: INXT_PRJ_AAAAAAAAAA
+  last_name: Automation Bot
+  user_type: <%= User.user_types[:project_automation_bot] %>
+
+projectA_automation_bot:
+  email: <%= "inxt_prj_aaaaaaaaa5_automation_bot@localhost" %>
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: INXT_PRJ_AAAAAAAAA5
+  last_name: Automation Bot
+  user_type: <%= User.user_types[:project_automation_bot] %>
