@@ -5,58 +5,68 @@ john_doe:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: John
   last_name: Doe
+  locale: en
 
 jane_doe:
   email: jane.doe@localhost
   first_name: Jane
   last_name: Doe
+  locale: en
 
 jean_doe:
   email: jean.doe@localhost
   first_name: Jean
   last_name: Doe
+  locale: en
 
 james_doe:
   email: james.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: James
   last_name: Doe
+  locale: en
 
 joan_doe:
   email: joan.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Joan
   last_name: Doe
+  locale: en
 
 steve_doe:
   email: steve.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Steve
   last_name: Doe
+  locale: en
 
 michelle_doe:
   email: michelle.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Michelle
   last_name: Doe
+  locale: en
 
 micha_doe:
   email: micha.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Micha
   last_name: Doe
+  locale: en
 
 ryan_doe:
   email: ryan.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Ryan
   last_name: Doe
+  locale: en
 
 david_doe:
   email: david.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: David
   last_name: Doe
+  locale: en
 
 jeff_doe:
   email: jeff.doe@localhost
@@ -65,12 +75,14 @@ jeff_doe:
   last_name: Doe
   provider: developer
   uid: jeff.doe@localhost
+  locale: en
 
 alph_abet:
   email: alph.abet@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Alph
   last_name: Abet
+  locale: en
 
 <% 25.times do |n| %>
 user<%= (n) %>:
@@ -78,6 +90,7 @@ user<%= (n) %>:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: <%= n %>
+  locale: en
 <% end %>
 
 user25:
@@ -85,6 +98,7 @@ user25:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "25"
+  locale: en
 
 # Do not link this user to anything
 user_no_access:
@@ -92,48 +106,56 @@ user_no_access:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "No Access"
+  locale: en
 
 user_no_access:
   email: <%= "user_no_access@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "No Access"
+  locale: en
 
 private_ryan:
   email: <%= "private.ryan@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Ryan
+  locale: en
 
 user26:
   email: <%= "user26@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "26"
+  locale: en
 
 private_joan:
   email: <%= "private.joan@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Joan
+  locale: en
 
 private_micha:
   email: <%= "private.micha@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Micha
+  locale: en
 
 user27:
   email: <%= "user27@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "27"
+  locale: en
 
 user28:
   email: <%= "user28@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "28"
+  locale: en
 
 <% 22.times do |n| %>
 user_bot_account<%= (n) %>:
@@ -142,6 +164,7 @@ user_bot_account<%= (n) %>:
   first_name: Project
   last_name: "Bot #{format('%03d', (n + 1))}"
   user_type: <%= User.user_types[:project_bot] %>
+  locale: en
 <% end %>
 
 user29:
@@ -149,12 +172,14 @@ user29:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "29"
+  locale: en
 
 user30:
   email: <%= "user30@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "30"
+  locale: en
 
 <% 22.times do |n| %>
 user_group_bot_account<%= (n) %>:
@@ -163,6 +188,7 @@ user_group_bot_account<%= (n) %>:
   first_name: Group
   last_name: "Bot #{format('%03d', (n + 1))}"
   user_type: <%= User.user_types[:group_bot] %>
+  locale: en
 <% end %>
 
 project1_automation_bot:

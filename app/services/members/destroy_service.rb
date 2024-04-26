@@ -37,8 +37,13 @@ module Members
       return if Member.can_view?(member.user, namespace, true)
 
       MemberMailer.access_revoked_user_email(member, namespace).deliver_later
-      MemberMailer.access_revoked_manager_email(member, Member.manager_emails(namespace, member),
-                                                namespace).deliver_later
+
+      I18n.available_locales.each do |locale|
+        manager_emails = Member.manager_emails(namespace, locale, member)
+        next if manager_emails.empty?
+
+        MemberMailer.access_revoked_manager_email(member, manager_emails, namespace, locale).deliver_later
+      end
     end
   end
 end

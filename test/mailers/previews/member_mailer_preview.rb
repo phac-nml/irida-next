@@ -24,22 +24,22 @@ class MemberMailerPreview < ActionMailer::Preview
 
   def access_granted_to_group_manager_email
     setup_group
-    MemberMailer.access_granted_manager_email(@member, @manager_emails, @namespace)
+    MemberMailer.access_granted_manager_email(@member, @manager_emails, @namespace, params[:locale])
   end
 
   def access_granted_to_project_manager_email
     setup_project
-    MemberMailer.access_granted_manager_email(@member, @manager_emails, @namespace)
+    MemberMailer.access_granted_manager_email(@member, @manager_emails, @namespace, params[:locale])
   end
 
   def access_revoked_from_group_manager_email
     setup_group
-    MemberMailer.access_revoked_manager_email(@member, @manager_emails, @namespace)
+    MemberMailer.access_revoked_manager_email(@member, @manager_emails, @namespace, params[:locale])
   end
 
   def access_revoked_from_project_manager_email
     setup_project
-    MemberMailer.access_revoked_manager_email(@member, @manager_emails, @namespace)
+    MemberMailer.access_revoked_manager_email(@member, @manager_emails, @namespace, params[:locale])
   end
 
   private
@@ -56,6 +56,7 @@ class MemberMailerPreview < ActionMailer::Preview
 
   def setup
     @member = Member.first
+    @member.user.locale = params[:locale]
     @manager_emails = Member.manager_emails(@namespace, @member)
   end
 end
