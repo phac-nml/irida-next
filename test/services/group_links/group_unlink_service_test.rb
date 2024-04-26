@@ -14,6 +14,16 @@ module GroupLinks
       assert_difference -> { NamespaceGroupLink.count } => -1 do
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
+
+      assert_enqueued_emails 2
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                 args: [Member.user_emails(namespace_group_link.group),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                 args: [Member.manager_emails(namespace_group_link.namespace),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
     end
 
     test 'share group b with group a then unshare' do
@@ -29,6 +39,24 @@ module GroupLinks
       assert_difference -> { NamespaceGroupLink.count } => -1 do
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
+
+      assert_enqueued_emails 4
+      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                 args: [Member.user_emails(namespace_group_link.group),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                 args: [Member.manager_emails(namespace_group_link.namespace),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                 args: [Member.user_emails(namespace_group_link.group),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                 args: [Member.manager_emails(namespace_group_link.namespace),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
     end
 
     test 'unshare group b with group a with invalid permissions' do
@@ -45,11 +73,13 @@ module GroupLinks
       assert_equal I18n.t(:'action_policy.policy.group.unlink_namespace_with_group?',
                           name: namespace_group_link.namespace.name),
                    exception.result.message
+      assert_no_enqueued_emails
     end
 
     test 'unshare groub b with group a when no link exists' do
       namespace_group_link = nil
       assert_not GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
+      assert_no_enqueued_emails
     end
 
     test 'valid authorization to unshare group' do
@@ -60,6 +90,16 @@ module GroupLinks
                            context: { user: @user }) do
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
+
+      assert_enqueued_emails 2
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                 args: [Member.user_emails(namespace_group_link.group),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                 args: [Member.manager_emails(namespace_group_link.namespace),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
     end
 
     test 'unshare project with group' do
@@ -68,6 +108,16 @@ module GroupLinks
       assert_difference -> { NamespaceGroupLink.count } => -1 do
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
+
+      assert_enqueued_emails 2
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                 args: [Member.user_emails(namespace_group_link.group),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                 args: [Member.manager_emails(namespace_group_link.namespace),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
     end
 
     test 'share project with group then unshare' do
@@ -83,6 +133,24 @@ module GroupLinks
       assert_difference -> { NamespaceGroupLink.count } => -1 do
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
+
+      assert_enqueued_emails 4
+      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                 args: [Member.user_emails(namespace_group_link.group),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                 args: [Member.manager_emails(namespace_group_link.namespace),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                 args: [Member.user_emails(namespace_group_link.group),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                 args: [Member.manager_emails(namespace_group_link.namespace),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
     end
 
     test 'unshare project with group with invalid permissions' do
@@ -99,6 +167,7 @@ module GroupLinks
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.unlink_namespace_with_group?',
                           name: namespace_group_link.namespace.name),
                    exception.result.message
+      assert_no_enqueued_emails
     end
 
     test 'valid authorization to unshare project' do
@@ -109,6 +178,16 @@ module GroupLinks
                            context: { user: @user }) do
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
+
+      assert_enqueued_emails 2
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                 args: [Member.user_emails(namespace_group_link.group),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                 args: [Member.manager_emails(namespace_group_link.namespace),
+                                        namespace_group_link.group,
+                                        namespace_group_link.namespace]
     end
   end
 end

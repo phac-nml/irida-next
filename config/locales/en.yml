@@ -1421,6 +1421,21 @@ en:
         ready_for_download_html: "Your export <strong>%{name}</strong> is ready for download."
         view_exports: "To view and download the export, click the button below:"
         download_before_html: "Please download the export before <strong>%{date}</strong> as it will be deleted after this date."
+    group_link_mailer:
+      access_granted_user_email:
+        subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
+        body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
+        view_details: "To view %{namespace_type} '%{namespace_name}', click the button below:"
+      access_revoked_user_email:
+        subject: "%{namespace_type} '%{namespace_name}' access has been revoked for Group '%{group_name}'"
+        body_html: "%{namespace_type} '%{namespace_name}' access has been <strong>revoked</strong> for Group '%{group_name}'"
+      access_granted_manager_email:
+        subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
+        body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
+        view_details: "To view all the members of %{namespace_type} '%{namespace_name}', click the button below:"
+      access_revoked_manager_email:
+        subject: "%{namespace_type} '%{namespace_name}' access has been revoked for Group '%{group_name}'"
+        body_html: "%{namespace_type} '%{namespace_name}' access has been <strong>revoked</strong> for Group '%{group_name}'"
     member_mailer:
       access_granted_user_email:
         subject: You have been granted access to %{type} '%{name}'

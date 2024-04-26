@@ -56,9 +56,6 @@ class MemberMailerPreview < ActionMailer::Preview
 
   def setup
     @member = Member.first
-    manager_memberships = Member.for_namespace_and_ancestors(@namespace).not_expired
-                                .where(access_level: Member::AccessLevel.manageable)
-    managers = User.where(id: manager_memberships.select(:user_id)).and(User.where.not(id: @member.user.id)).distinct
-    @manager_emails = managers.pluck(:email)
+    @manager_emails = Member.manager_emails(@namespace, @member)
   end
 end

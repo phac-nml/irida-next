@@ -29,7 +29,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
 
-  class << self
+  class << self # rubocop:disable Metrics/ClassLength
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -144,6 +144,24 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
         [effective_namespace_group_link.group_access_level,
          Member.effective_access_level(effective_namespace_group_link&.group, user)].min
       end
+    end
+
+    def user_emails(namespace)
+      user_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
+      users = User.human_users.where(id: user_memberships.select(:user_id)).distinct
+      users.pluck(:email)
+    end
+
+    def manager_emails(namespace, member = nil)
+      manager_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
+                                  .where(access_level: Member::AccessLevel.manageable)
+      managers = if member
+                   User.human_users.where(id: manager_memberships.select(:user_id))
+                       .and(User.where.not(id: member.user.id)).distinct
+                 else
+                   User.human_users.where(id: manager_memberships.select(:user_id)).distinct
+                 end
+      managers.pluck(:email)
     end
   end
 
