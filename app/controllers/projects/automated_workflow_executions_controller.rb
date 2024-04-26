@@ -35,13 +35,13 @@ module Projects
     end
 
     def update
-      automated_workflow_updated = AutomatedWorkflowExecutions::UpdateService.new(@automated_workflow,
-                                                                                  current_user,
-                                                                                  automated_workflow_execution_params).execute
+      updated = AutomatedWorkflowExecutions::UpdateService.new(@automated_workflow,
+                                                               current_user,
+                                                               automated_workflow_execution_params).execute
 
       respond_to do |format|
         format.turbo_stream do
-          if automated_workflow_updated
+          if updated
             render status: :ok
           else
             render status: :unprocessable_entity
