@@ -20,7 +20,7 @@ module AutomatedWorkflowExecutions
 
     private
 
-    def workflow_execution_params
+    def workflow_execution_params # rubocop:disable Metrics/MethodLength
       {
         metadata: @automated_workflow_execution.metadata,
         workflow_params: @automated_workflow_execution.workflow_params,

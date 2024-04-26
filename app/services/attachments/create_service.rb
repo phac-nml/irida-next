@@ -22,7 +22,7 @@ module Attachments
       @attachments
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity
+    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
       authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
@@ -99,7 +99,7 @@ module Attachments
       assign_metadata(pe, 'pe')
     end
 
-    def assign_metadata(paired_ends, type)
+    def assign_metadata(paired_ends, type) # rubocop:disable Metrics/AbcSize
       paired_ends.each do |key, pe_attachments|
         next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
 
@@ -135,7 +135,7 @@ module Attachments
         return
       end
 
-      return unless @attachable.project.namespace.automated_workflow_executions.present?
+      return if @attachable.project.namespace.automated_workflow_executions.blank?
 
       @attachable.project.namespace.automated_workflow_executions.each do |awe|
         AutomatedWorkflowExecutions::LaunchService.new(awe, @attachable, pe_attachment_pair,
