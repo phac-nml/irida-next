@@ -19,6 +19,17 @@ module AutomatedWorkflowExecutions
       end
     end
 
+    test 'returns false if workflow is not valid' do
+      assert_no_difference -> { WorkflowExecution.count } do
+        ret_val = AutomatedWorkflowExecutions::LaunchService.new(
+          automated_workflow_executions(:projectA_invalid_automated_workflow_execution), @sample, @pe_attachment_pair,
+          @automation_bot
+        ).execute
+
+        assert ret_val == false
+      end
+    end
+
     test 'doesn\'t create workflow execution with invalid project bot' do
       skip 'enable this test once WorkflowExecutions::CreateService has been updated to perform authorization'
       assert_no_difference -> { WorkflowExecution.count } do

@@ -37,7 +37,9 @@ module Attachments
 
       @attachments.each(&:save)
 
-      launch_automated_workflow_executions(@pe_attachments&.last) if @attachable.instance_of?(Sample)
+      if @attachable.instance_of?(Sample) && @attachable.project.namespace.automated_workflow_executions.present?
+        launch_automated_workflow_executions(@pe_attachments&.last)
+      end
 
       @attachments
     end
@@ -134,8 +136,6 @@ module Attachments
       unless pe_attachment_pair.present? && pe_attachment_pair.key?('forward') && pe_attachment_pair.key?('reverse')
         return
       end
-
-      return if @attachable.project.namespace.automated_workflow_executions.blank?
 
       AutomatedWorkflowExecutions::LaunchJob.perform_later(@attachable, pe_attachment_pair)
     end
