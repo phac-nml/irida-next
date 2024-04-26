@@ -2,7 +2,7 @@
 
 require 'faker'
 
-Faker::Config.locale = 'en-CA'
+Faker::Config.locale = 'en'
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
