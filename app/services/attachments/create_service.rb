@@ -3,13 +3,14 @@
 module Attachments
   # Service used to Create Attachments
   class CreateService < BaseService
-    attr_accessor :attachable, :attachments
+    attr_accessor :attachable, :attachments, :pe_attachments
 
     def initialize(user = nil, attachable = nil, params = {})
       super(user, params)
 
       @attachable = attachable
       @attachments = []
+      @pe_attachments = []
 
       return unless params.key?(:files)
 
@@ -35,6 +36,8 @@ module Attachments
       identify_paired_end_files(unidentified_fastq_attachments) if unidentified_fastq_attachments.count > 1
 
       @attachments.each(&:save)
+
+      launch_automated_workflow_executions(@pe_attachments&.last) if @attachable.instance_of?(Sample)
 
       @attachments
     end
@@ -97,7 +100,7 @@ module Attachments
     end
 
     def assign_metadata(paired_ends, type)
-      paired_ends.each do |_key, pe_attachments|
+      paired_ends.each do |key, pe_attachments|
         next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
 
         # assign the PUID to be same for forward and reverse and then save so that we have the ids
@@ -114,6 +117,8 @@ module Attachments
         }
 
         pe_attachments['reverse'].metadata = pe_attachments['reverse'].metadata.merge(rev_metadata)
+
+        @pe_attachments << paired_ends[key]
       end
     end
 
@@ -123,6 +128,19 @@ module Attachments
       pe_attachments['reverse'].puid = puid
       pe_attachments['forward'].save
       pe_attachments['reverse'].save
+    end
+
+    def launch_automated_workflow_executions(pe_attachment_pair)
+      unless pe_attachment_pair.present? && pe_attachment_pair.key?('forward') && pe_attachment_pair.key?('reverse')
+        return
+      end
+
+      return unless @attachable.project.namespace.automated_workflow_executions.present?
+
+      @attachable.project.namespace.automated_workflow_executions.each do |awe|
+        AutomatedWorkflowExecutions::LaunchService.new(awe, @attachable, pe_attachment_pair,
+                                                       @attachable.project.namespace.automation_bot).execute
+      end
     end
   end
 end
