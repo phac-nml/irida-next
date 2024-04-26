@@ -137,10 +137,7 @@ module Attachments
 
       return if @attachable.project.namespace.automated_workflow_executions.blank?
 
-      @attachable.project.namespace.automated_workflow_executions.each do |awe|
-        AutomatedWorkflowExecutions::LaunchService.new(awe, @attachable, pe_attachment_pair,
-                                                       @attachable.project.namespace.automation_bot).execute
-      end
+      AutomatedWorkflowExecutions::LaunchJob.perform_later(@attachable, pe_attachment_pair)
     end
   end
 end

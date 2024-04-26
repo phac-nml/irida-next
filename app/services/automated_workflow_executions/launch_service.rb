@@ -37,8 +37,8 @@ module AutomatedWorkflowExecutions
             sample_id: @sample.id,
             samplesheet_params: {
               sample: @sample.puid,
-              fastq_1: @pe_attachment_pair['forward'].to_global_id,
-              fastq_2: @pe_attachment_pair['reverse'].to_global_id
+              fastq_1: @pe_attachment_pair['forward'].to_global_id, # rubocop:disable Naming/VariableNumber
+              fastq_2: @pe_attachment_pair['reverse'].to_global_id # rubocop:disable Naming/VariableNumber
             }
           }
         ]
