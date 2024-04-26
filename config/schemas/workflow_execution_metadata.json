@@ -3,7 +3,12 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "properties": {
       "workflow_name": { "type": "string" },
-      "workflow_version": { "type": "string" }
+      "workflow_version": {
+        "type": "string"
+      },
+      "namespace_id": {
+        "type": "string"
+      }
     },
     "required": ["workflow_name", "workflow_version"]
   }

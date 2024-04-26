@@ -41,6 +41,7 @@
       <%= workflow.fields_for "metadata" do |metadata| %>
         <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
         <%= metadata.hidden_field :workflow_version, value: @workflow.version %>
+        <%= metadata.hidden_field :namespace_id, value: @namespace_id %>
       <% end %>
 
       <%= workflow.fields_for "workflow_params" do |fields| %>
@@ -88,18 +89,18 @@
                                checked: false,
                                class:
                                  "w-4
-                                  h-4
-                                  mr-2.5
-                                  text-primary-600
-                                  bg-slate-100
-                                  border-slate-300
-                                  rounded
-                                  focus:ring-primary-500
-                                  dark:focus:ring-primary-600
-                                  dark:ring-offset-slate-800
-                                  focus:ring-2
-                                  dark:bg-slate-700
-                                  dark:border-slate-600"
+                                                                          h-4
+                                                                          mr-2.5
+                                                                          text-primary-600
+                                                                          bg-slate-100
+                                                                          border-slate-300
+                                                                          rounded
+                                                                          focus:ring-primary-500
+                                                                          dark:focus:ring-primary-600
+                                                                          dark:ring-offset-slate-800
+                                                                          focus:ring-2
+                                                                          dark:bg-slate-700
+                                                                          dark:border-slate-600"
                              },
                              true,
                              false %>
@@ -114,18 +115,18 @@
                              checked: false,
                              class:
                                "w-4
-                                h-4
-                                mr-2.5
-                                text-primary-600
-                                bg-slate-100
-                                border-slate-300
-                                rounded
-                                focus:ring-primary-500
-                                dark:focus:ring-primary-600
-                                dark:ring-offset-slate-800
-                                focus:ring-2
-                                dark:bg-slate-700
-                                dark:border-slate-600"
+                                                                h-4
+                                                                mr-2.5
+                                                                text-primary-600
+                                                                bg-slate-100
+                                                                border-slate-300
+                                                                rounded
+                                                                focus:ring-primary-500
+                                                                dark:focus:ring-primary-600
+                                                                dark:ring-offset-slate-800
+                                                                focus:ring-2
+                                                                dark:bg-slate-700
+                                                                dark:border-slate-600"
                            },
                            true,
                            false %>
@@ -135,7 +136,11 @@
       </div>
     <% end %>
 
-    <button type="submit" class="button button--state-primary button--size-default" data-nextflow--samplesheet-target="submit">
+    <button
+      type="submit"
+      class="button button--state-primary button--size-default"
+      data-nextflow--samplesheet-target="submit"
+    >
       <%= t(:"workflow_executions.submissions.create.submit") %>
     </button>
   <% end %>
