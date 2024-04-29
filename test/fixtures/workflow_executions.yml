@@ -203,7 +203,7 @@ irida_next_example_completing_a:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_a"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
   email_notification: true
@@ -224,7 +224,7 @@ irida_next_example_completing_b:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_b"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
 
@@ -244,7 +244,7 @@ irida_next_example_completing_c:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_c"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
   update_samples: true
@@ -265,7 +265,7 @@ irida_next_example_completing_d:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_d"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
 
@@ -285,7 +285,7 @@ irida_next_example_completing_e:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_e"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
 
@@ -305,7 +305,7 @@ irida_next_example_completing_f:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
   run_id: "my_run_id_f"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
   update_samples: false
@@ -326,7 +326,7 @@ irida_next_example_completed_with_output:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed_with_output"
   run_id: "my_run_id_13"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completed"
   blob_run_directory: "not a run dir"
 
@@ -344,7 +344,7 @@ workflow_execution<%= (n) %>:
   workflow_url: "https://github.com/phac-nml/irida_next_example_new"
   run_id: <%= "my_run_id_#{n}" %>
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid) %>
   state: "initial"
 <% end %>
 
