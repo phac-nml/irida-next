@@ -8,6 +8,11 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     @workflow_execution_invalid_metadata = workflow_executions(:workflow_execution_invalid_metadata)
   end
 
+  test 'workflow execution has a namespace_id' do
+    assert_not_nil @workflow_execution_valid.namespace_id
+    assert_equal projects(:project1).namespace.id, @workflow_execution_valid.namespace_id
+  end
+
   test 'valid workflow execution' do
     assert @workflow_execution_valid.valid?
   end
