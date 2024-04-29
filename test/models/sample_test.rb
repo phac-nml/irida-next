@@ -105,4 +105,14 @@ class SampleTest < ActiveSupport::TestCase
   test 'sample has an attachments_updated_at attribute' do
     assert @sample.has_attribute?(:attachments_updated_at)
   end
+
+  test 'sort_files for pe' do
+    sample_b = samples(:sampleB)
+
+    files = sample_b.sort_files
+
+    assert_equal 3, files[:singles].count
+    assert_equal 3, files[:pe_forward].count
+    assert_equal 3, files[:pe_reverse].count
+  end
 end

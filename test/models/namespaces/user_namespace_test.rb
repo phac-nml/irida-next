@@ -70,4 +70,8 @@ class UserNamespaceTest < ActiveSupport::TestCase
   test '#abbreviated_path' do
     assert_equal 'john.doe_at_localhost', @user_namespace.abbreviated_path
   end
+
+  test 'model_prefix' do
+    assert_equal 'USR', Namespaces::UserNamespace.model_prefix
+  end
 end

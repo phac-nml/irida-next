@@ -56,7 +56,6 @@ class NamespaceBotTest < ActiveSupport::TestCase
     assert namespace_bot.membership
     assert_equal membership, namespace_bot.membership
 
-
     namespace_bot.remove_membership_from_namespace
     assert_nil namespace_bot.reload.membership
   end
