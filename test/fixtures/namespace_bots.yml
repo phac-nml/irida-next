@@ -11,3 +11,7 @@ group1_bot<%= (n) %>:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   user_id: <%= ActiveRecord::FixtureSet.identify("user_group_bot_account#{n}".to_sym, :uuid) %>
 <% end %>
+
+invalid_user_bot:
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>

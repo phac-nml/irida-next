@@ -40,4 +40,23 @@ class ProjectTest < ActiveSupport::TestCase
       @project.destroy
     end
   end
+
+  test 'restore_namespace' do
+    project_namespace = namespaces_project_namespaces(:project1_namespace)
+
+    @project.destroy
+    assert @project.deleted?
+
+    @project.send(:restore_namespace)
+    assert_not @project.reload.deleted?
+  end
+
+  test 'destroy_namespace' do
+    project_namespace = namespaces_project_namespaces(:project1_namespace)
+
+    assert_not project_namespace.deleted?
+    @project.send(:destroy_namespace)
+
+    assert project_namespace.reload.deleted?
+  end
 end

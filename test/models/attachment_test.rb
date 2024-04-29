@@ -138,4 +138,18 @@ class AttachmentTest < ActiveSupport::TestCase
     @attachment1.destroy
     assert_not_nil @attachment1.deleted_at
   end
+
+  test 'fastq?' do
+    unknown_attachment = attachments(:workflow_execution_completed_output_attachment)
+    assert @attachment1.fastq?
+    assert_not unknown_attachment.fastq?
+  end
+
+  test 'associated_attachment' do
+    attachment_fwd = attachments(:attachmentPEFWD1)
+    attachment_rev = attachments(:attachmentPEREV1)
+
+    assert_equal attachment_rev, attachment_fwd.associated_attachment
+    assert_nil @attachment1.associated_attachment
+  end
 end
