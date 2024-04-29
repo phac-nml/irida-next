@@ -15,15 +15,5 @@
         "name": "1.0.0"
       }
     ]
-  },
-  {
-    "url": "https://github.com/phac-nml/fetchdatairidanext",
-    "name": "phac-nml/fetchdatairidanext",
-    "description": "Fetch Data IRIDA Next",
-    "versions": [
-      {
-        "name": "1.0.0"
-      }
-    ]
   }
 ]
