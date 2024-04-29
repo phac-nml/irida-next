@@ -313,5 +313,37 @@ module WorkflowExecutions
       assert_equal expected_tags, @workflow_execution.tags
       assert_enqueued_jobs 1
     end
+
+    test 'create workflow execution with incorrect permissions' do
+      user = users(:jane_doe)
+
+      workflow_params = {
+        namespace_id: @project.namespace.id,
+        metadata:
+          { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+        workflow_params:
+        {
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
+        },
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
+        workflow_engine: 'nextflow',
+        workflow_engine_version: '23.10.0',
+        workflow_engine_parameters: { '-r': 'dev' },
+        workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
+        submitter_id: user.id
+      }
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        WorkflowExecutions::CreateService.new(user, workflow_params).execute
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :submit_workflow?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.submit_workflow?', name: @project.name),
+                   exception.result.message
+    end
   end
 end
