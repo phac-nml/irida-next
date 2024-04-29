@@ -146,7 +146,7 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
   end
 end
 
-def seed_workflow_executions # rubocop:disable Metrics/MethodLength
+def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   workflow_execution_basic = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
     namespace_id: Sample.first.project.namespace.id,
