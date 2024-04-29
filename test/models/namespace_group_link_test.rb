@@ -85,4 +85,48 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     assert shared_with_group_links.count == namespace_group_links.count
     assert_same_unique_elements(namespace_group_links, shared_with_group_links)
   end
+
+  test 'set_namespace_type' do
+    namespace_group_link = NamespaceGroupLink.new
+    namespace = namespaces_project_namespaces(:project20_namespace)
+
+    assert_nil namespace_group_link.namespace
+    assert_nil namespace_group_link.namespace_type
+
+    namespace_group_link.send(:set_namespace_type)
+    assert_nil namespace_group_link.namespace_type
+
+    namespace_group_link.namespace = namespace
+    namespace_group_link.send(:set_namespace_type)
+
+    assert_equal namespace.type, namespace_group_link.namespace_type
+  end
+
+  test 'send_access_revoked_emails' do
+    group_group_link = namespace_group_links(:namespace_group_link5)
+
+    group_group_link.send_access_revoked_emails do
+      assert_enqueued_emails 2
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                 args: [Member.user_emails(group_group_link.group), group_group_link.group,
+                                        group_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                 args: [Member.manager_emails(group_group_link.namespace), group_group_link.group,
+                                        group_group_link.namespace]
+    end
+  end
+
+  test 'send_access_granted_emails' do
+    group_group_link = namespace_group_links(:namespace_group_link5)
+
+    group_group_link.send_access_granted_emails do
+      assert_enqueued_emails 2
+      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                 args: [Member.user_emails(group_group_link.group), group_group_link.group,
+                                        group_group_link.namespace]
+      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                 args: [Member.manager_emails(group_group_link.namespace), group_group_link.group,
+                                        group_group_link.namespace]
+    end
+  end
 end
