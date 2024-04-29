@@ -1,0 +1,46 @@
+<tr
+  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+  id="<%= dom_id(automated_workflow_execution) %>"
+>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= automated_workflow_execution.id %>
+  </td>
+  <td
+    class="
+      px-6
+      py-4
+      font-medium
+      text-gray-900
+      whitespace-nowrap
+      dark:text-white
+    "
+  >
+    <%= automated_workflow_execution.metadata["workflow_name"] %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= automated_workflow_execution.metadata["workflow_version"] %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= l(automated_workflow_execution["created_at"].localtime, format: :full_date) %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= viral_time_ago(original_time: automated_workflow_execution["updated_at"]) %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= link_to(
+      t(:"projects.automated_workflow_executions.actions.delete_button"),
+      namespace_project_automated_workflow_execution_path(
+        @project.parent,
+        @project,
+        automated_workflow_execution
+      ),
+      data: {
+        turbo_method: :delete,
+        turbo_confirm:
+          t(:"projects.automated_workflow_executions.actions.delete_confirm")
+      },
+      class:
+        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+    ) %>
+  </td>
+</tr>

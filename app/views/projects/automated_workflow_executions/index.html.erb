@@ -1,0 +1,28 @@
+<%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
+  <%= component.with_icon(name: :rocket_launch, classes: "h-14 w-14 text-primary-700") %>
+  <%= component.with_buttons do %>
+    <%= link_to t(".add_new_automated_workflow_execution"),
+    new_namespace_project_automated_workflow_execution_path(
+      @project.parent,
+      @project
+    ),
+    data: {
+      turbo_frame: "automated_workflow_execution_modal",
+      turbo_stream: true
+    },
+    class:
+      "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 focus:outline-none text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
+  <% end %>
+<% end %>
+
+<div class="flex flex-col">
+  <%= turbo_frame_tag "automated_workflow_execution_modal" %>
+  <%= turbo_frame_tag "automated_workflow_executions_table",
+                      src: namespace_project_automated_workflow_executions_path(
+                                  format: :turbo_stream
+                                ),
+                      loading: :lazy do %>
+    <%= render partial: "shared/loading/table" %>
+  <% end %>
+  <%= turbo_frame_tag "automated_workflow_execution_pagination" %>
+</div>

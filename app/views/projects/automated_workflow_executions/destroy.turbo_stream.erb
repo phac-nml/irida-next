@@ -1,0 +1,10 @@
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type:, data: message) %>
+<% end %>
+
+<% if @automated_workflow_execution.destroyed? %>
+  <%= turbo_stream.replace "automated_workflow_executions_table" do %>
+    <%= turbo_frame_tag "automated_workflow_executions_table",
+    src: namespace_project_automated_workflow_executions_path(format: :turbo_stream) %>
+  <% end %>
+<% end %>
