@@ -278,10 +278,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
     t.string "blob_run_directory"
     t.boolean "email_notification", default: false, null: false
     t.boolean "update_samples", default: false, null: false
+    t.integer "http_error_code"
     t.jsonb "tags", default: {}, null: false
     t.integer "state", default: 0, null: false
-    t.string "name"
-    t.integer "http_error_code"
     t.uuid "namespace_id"
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["namespace_id"], name: "index_workflow_executions_on_namespace_id"

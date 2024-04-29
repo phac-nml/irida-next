@@ -25,6 +25,7 @@ class WorkflowExecution < ApplicationRecord
   after_save :send_email, if: :saved_change_to_state?
 
   belongs_to :submitter, class_name: 'User'
+  belongs_to :namespace
 
   has_many :samples_workflow_executions, dependent: :destroy
   has_many :samples, through: :samples_workflow_executions
