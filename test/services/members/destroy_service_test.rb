@@ -18,7 +18,7 @@ module Members
         Members::DestroyService.new(@group_member, @group, @user).execute
       end
 
-      assert_enqueued_emails 2
+      assert_enqueued_emails 3
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email, args: [@group_member, @group]
       I18n.available_locales.each do |locale|
         manager_emails = Member.manager_emails(@group, locale, @group_member)
@@ -35,7 +35,7 @@ module Members
         Members::DestroyService.new(@group_member, @group, user).execute
       end
 
-      assert_enqueued_emails 2
+      assert_enqueued_emails 3
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email, args: [@group_member, @group]
       I18n.available_locales.each do |locale|
         manager_emails = Member.manager_emails(@group, locale, @group_member)
@@ -77,7 +77,7 @@ module Members
         Members::DestroyService.new(@project_member, @project_namespace, @user).execute
       end
 
-      assert_enqueued_emails 2
+      assert_enqueued_emails 3
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email, args: [@project_member, @project_namespace]
       I18n.available_locales.each do |locale|
         manager_emails = Member.manager_emails(@project_namespace, locale, @project_member)

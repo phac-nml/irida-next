@@ -146,14 +146,13 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
-    def user_emails(namespace)
+    def user_emails(namespace, locale)
       user_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
-      users = User.human_users.where(id: user_memberships.select(:user_id)).distinct
+      users = User.human_users.where(id: user_memberships.select(:user_id), locale:).distinct
       users.pluck(:email)
     end
 
-    # TODO: Remove default value
-    def manager_emails(namespace, locale = :en, member = nil)
+    def manager_emails(namespace, locale, member = nil)
       manager_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
                                   .where(access_level: Member::AccessLevel.manageable)
       managers = if member

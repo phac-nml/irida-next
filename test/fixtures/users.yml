@@ -24,14 +24,14 @@ james_doe:
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: James
   last_name: Doe
-  locale: en
+  locale: fr
 
 joan_doe:
   email: joan.doe@localhost
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Joan
   last_name: Doe
-  locale: en
+  locale: fr
 
 steve_doe:
   email: steve.doe@localhost

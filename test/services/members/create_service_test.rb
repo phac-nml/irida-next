@@ -21,7 +21,7 @@ module Members
         @new_member = Members::CreateService.new(@user, @group, valid_params, true).execute
       end
 
-      assert_enqueued_emails 2
+      assert_enqueued_emails 3
       assert_enqueued_email_with MemberMailer, :access_granted_user_email, args: [@new_member, @group]
       I18n.available_locales.each do |locale|
         manager_emails = Member.manager_emails(@group, locale, @new_member)
@@ -52,7 +52,7 @@ module Members
         @new_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
       end
 
-      assert_enqueued_emails 2
+      assert_enqueued_emails 3
       assert_enqueued_email_with MemberMailer, :access_granted_user_email, args: [@new_member, @project_namespace]
       I18n.available_locales.each do |locale|
         manager_emails = Member.manager_emails(@project_namespace, locale, @new_member)
@@ -185,7 +185,7 @@ module Members
         @new_member = Members::CreateService.new(@user, group, valid_params, true).execute
       end
 
-      assert_enqueued_emails 2
+      assert_enqueued_emails 3
       assert_enqueued_email_with MemberMailer, :access_granted_user_email, args: [@new_member, group]
       I18n.available_locales.each do |locale|
         manager_emails = Member.manager_emails(group, locale, @new_member)
@@ -207,7 +207,7 @@ module Members
         @new_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
       end
 
-      assert_enqueued_emails 2
+      assert_enqueued_emails 3
       assert_enqueued_email_with MemberMailer, :access_granted_user_email, args: [@new_member, @project_namespace]
       I18n.available_locales.each do |locale|
         manager_emails = Member.manager_emails(@project_namespace, locale, @new_member)

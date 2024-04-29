@@ -17,11 +17,20 @@ module GroupLinks
         GroupLinks::GroupLinkService.new(@user, namespace, params).execute
       end
 
-      assert_enqueued_emails 2
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [Member.user_emails(group), group, namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(namespace), group, namespace]
+      assert_enqueued_emails 3
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                     args: [user_emails, group, namespace, locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                   args: [manager_emails, group, namespace, locale]
+      end
     end
 
     test 'share group b with group a with incorrect permissions' do
@@ -78,11 +87,20 @@ module GroupLinks
         GroupLinks::GroupLinkService.new(@user, namespace, params).execute
       end
 
-      assert_enqueued_emails 2
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [Member.user_emails(group), group, namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(namespace), group, namespace]
+      assert_enqueued_emails 3
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                     args: [user_emails, group, namespace, locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                   args: [manager_emails, group, namespace, locale]
+      end
     end
 
     test 'group a shared with group b is logged using logidze' do
@@ -110,11 +128,20 @@ module GroupLinks
         GroupLinks::GroupLinkService.new(@user, namespace, params).execute
       end
 
-      assert_enqueued_emails 2
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [Member.user_emails(group), group, namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(namespace), group, namespace]
+      assert_enqueued_emails 4
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                     args: [user_emails, group, namespace, locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                   args: [manager_emails, group, namespace, locale]
+      end
     end
 
     test 'share project with group with incorrect permissions' do
@@ -159,11 +186,20 @@ module GroupLinks
                                          params).execute
       end
 
-      assert_enqueued_emails 2
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [Member.user_emails(group), group, namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(namespace), group, namespace]
+      assert_enqueued_emails 4
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                     args: [user_emails, group, namespace, locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                   args: [manager_emails, group, namespace, locale]
+      end
     end
 
     test 'project shared with group is logged using logidze' do
