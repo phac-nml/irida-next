@@ -121,6 +121,15 @@ en:
         update?: You are not authorized to update user %{name} on this server.
       workflow_execution:
         export_workflow_execution_data?: "You are not authorized to export the workflow execution %{id} on this server."
+        index?: "You are not authorized to view workflow executions for %{namespace_type} %{name}"
+        destroy?: "You are not authorized to destroy workflow executions for %{namespace_type} %{name}"
+        read?: "You are not authorized to view workflow execution %{id}"
+        create?: "You are not authorized to submit workflow executions for %{namespace_type} %{name}"
+        cancel?: "You are not authorized to cancel workflow executions for %{namespace_type} %{name}"
+        create_automated_workflow_executions?: "You are not authorized to create automated workflow executions for %{namespace_type} %{name}"
+        destroy_automated_workflow_executions?: "You are not authorized to destroy automated workflow executions for %{namespace_type} %{name}"
+        update_automated_workflow_executions?: "You are not authorized to update automated workflow executions for %{namespace_type} %{name}"
+        view_automated_workflow_executions?: "You are not authorized to view automated workflow executions for %{namespace_type} %{name}"
     unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:
