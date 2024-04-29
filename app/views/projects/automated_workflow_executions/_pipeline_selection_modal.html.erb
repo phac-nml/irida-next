@@ -4,7 +4,7 @@
     <ul>
       <% available_automated_workflows.each do |key, workflow| %>
         <li>
-          <%= link_to new_namespace_project_automated_workflow_execution_path(@project.parent, @project, workflow_name: workflow.name, workflow_version: workflow.version), data: { turbo_stream: true } do %>
+          <%= link_to new_namespace_project_automated_workflow_execution_path(@project.parent, @project, workflow_name: workflow.name, workflow_version: workflow.version), class: "group w-full", data: { turbo_stream: true } do %>
             <span
               class="
                 ws-default
