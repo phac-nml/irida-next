@@ -75,7 +75,7 @@ class SampleTest < ActiveSupport::TestCase
     end
   end
 
-  test 'metadata_with_provenance' do
+  test 'metadata_with_provenance for user source' do
     sample = samples(:sample32)
     user = users(:john_doe)
     expected_metadata_with_provenance = [{
@@ -89,6 +89,24 @@ class SampleTest < ActiveSupport::TestCase
       value: 'value2',
       source: user.email,
       source_type: 'user',
+      last_updated: DateTime.new(2000, 1, 1)
+    }]
+    assert_equal(expected_metadata_with_provenance, sample.metadata_with_provenance)
+  end
+
+  test 'metadata_with_provenance for analysis source' do
+    sample = samples(:sample30)
+    expected_metadata_with_provenance = [{
+      key: 'metadatafield1',
+      value: 'value1',
+      source: "#{I18n.t('models.sample.analysis')} 1",
+      source_type: 'analysis',
+      last_updated: DateTime.new(2000, 1, 1)
+    }, {
+      key: 'metadatafield2',
+      value: 'value2',
+      source: "#{I18n.t('models.sample.analysis')} 1",
+      source_type: 'analysis',
       last_updated: DateTime.new(2000, 1, 1)
     }]
     assert_equal(expected_metadata_with_provenance, sample.metadata_with_provenance)
@@ -114,5 +132,23 @@ class SampleTest < ActiveSupport::TestCase
     assert_equal 3, files[:singles].count
     assert_equal 3, files[:pe_forward].count
     assert_equal 3, files[:pe_reverse].count
+  end
+
+  test 'sorted_files with files including pe' do
+    sample_b = samples(:sampleB)
+
+    files = sample_b.sorted_files
+
+    assert_equal 3, files[:singles].count
+    assert_equal 3, files[:pe_forward].count
+    assert_equal 3, files[:pe_reverse].count
+  end
+
+  test 'sorted_files with no attachments' do
+    sample2 = samples(:sample2)
+
+    files = sample2.sorted_files
+
+    assert files.empty?
   end
 end
