@@ -5,7 +5,6 @@ module Projects
   class AutomatedWorkflowExecutionsController < Projects::ApplicationController
     include BreadcrumbNavigation
 
-    before_action :current_page
     before_action :automated_workflow_executions, only: %i[index]
     before_action :automated_workflow_execution, only: %i[edit update destroy show]
     before_action :available_automated_workflows, only: %i[new edit]
@@ -119,10 +118,6 @@ module Projects
           path: namespace_project_automated_workflow_executions_path
         }]
       end
-    end
-
-    def current_page
-      @current_page = 'automated workflows'
     end
   end
 end
