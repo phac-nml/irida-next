@@ -11,18 +11,18 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
   end
 
   test '#read?' do
-    # assert @policy.read?
+    assert @policy.read?
   end
 
   test '#create?' do
-    # assert @policy.create?
+    assert @policy.create?
   end
 
   test '#cancel?' do
-    # assert @policy.cancel?
+    assert @policy.cancel?
   end
 
   test '#destroy?' do
-    #  assert @policy.destroy?
+    assert @policy.destroy?
   end
 end
