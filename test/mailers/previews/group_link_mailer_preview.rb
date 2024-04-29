@@ -4,50 +4,50 @@
 class GroupLinkMailerPreview < ActionMailer::Preview
   def access_granted_to_group_user_email
     setup_group
-    setup_user_emails
-    GroupLinkMailer.access_granted_user_email(@user_emails, @group, @namespace)
+    setup_user_emails(params[:locale])
+    GroupLinkMailer.access_granted_user_email(@user_emails, @group, @namespace, params[:locale])
   end
 
   def access_granted_to_project_user_email
     setup_project
-    setup_user_emails
-    GroupLinkMailer.access_granted_user_email(@user_emails, @group, @namespace)
+    setup_user_emails(params[:locale])
+    GroupLinkMailer.access_granted_user_email(@user_emails, @group, @namespace, params[:locale])
   end
 
   def access_revoked_from_group_user_email
     setup_group
-    setup_user_emails
-    GroupLinkMailer.access_revoked_user_email(@user_emails, @group, @namespace)
+    setup_user_emails(params[:locale])
+    GroupLinkMailer.access_revoked_user_email(@user_emails, @group, @namespace, params[:locale])
   end
 
   def access_revoked_from_project_user_email
     setup_project
-    setup_user_emails
-    GroupLinkMailer.access_revoked_user_email(@user_emails, @group, @namespace)
+    setup_user_emails(params[:locale])
+    GroupLinkMailer.access_revoked_user_email(@user_emails, @group, @namespace, params[:locale])
   end
 
   def access_granted_to_group_manager_email
     setup_group
-    setup_manager_emails
-    GroupLinkMailer.access_granted_manager_email(@manager_emails, @group, @namespace)
+    setup_manager_emails(params[:locale])
+    GroupLinkMailer.access_granted_manager_email(@manager_emails, @group, @namespace, params[:locale])
   end
 
   def access_granted_to_project_manager_email
     setup_project
-    setup_manager_emails
-    GroupLinkMailer.access_granted_manager_email(@manager_emails, @group, @namespace)
+    setup_manager_emails(params[:locale])
+    GroupLinkMailer.access_granted_manager_email(@manager_emails, @group, @namespace, params[:locale])
   end
 
   def access_revoked_from_group_manager_email
     setup_group
-    setup_manager_emails
-    GroupLinkMailer.access_revoked_manager_email(@manager_emails, @group, @namespace)
+    setup_manager_emails(params[:locale])
+    GroupLinkMailer.access_revoked_manager_email(@manager_emails, @group, @namespace, params[:locale])
   end
 
   def access_revoked_from_project_manager_email
     setup_project
-    setup_manager_emails
-    GroupLinkMailer.access_revoked_manager_email(@manager_emails, @group, @namespace)
+    setup_manager_emails(params[:locale])
+    GroupLinkMailer.access_revoked_manager_email(@manager_emails, @group, @namespace, params[:locale])
   end
 
   private
@@ -62,11 +62,11 @@ class GroupLinkMailerPreview < ActionMailer::Preview
     @namespace = Project.first.namespace
   end
 
-  def setup_user_emails
-    @user_emails = Member.user_emails(@namespace)
+  def setup_user_emails(locale)
+    @user_emails = Member.user_emails(@namespace, locale)
   end
 
-  def setup_manager_emails
-    @manager_emails = Member.manager_emails(@namespace)
+  def setup_manager_emails(locale)
+    @manager_emails = Member.manager_emails(@namespace, locale)
   end
 end
