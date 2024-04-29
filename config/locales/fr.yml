@@ -639,6 +639,8 @@ fr:
       index:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
+        workflows:
+          button_sr: Launch workflow
         search:
           placeholder: Filter by ID or name
           metadata: Metadata
