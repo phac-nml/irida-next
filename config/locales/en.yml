@@ -843,9 +843,16 @@ en:
           created_at: Created
           updated_at: Updated
           actions: Actions
+      create:
+        error: "Could not create an automated workflow execution for %{workflow_name}"
+        success: "Automated workflow execution for %{workflow_name} was successfully created"
       destroy:
         error: "Could not delete automated workflow execution for %{workflow_name}"
         success: "Automated workflow execution for %{workflow_name} was successfully deleted"
+      pipeline_selection_modal:
+        title: Workflow Selection
+      new_automated_workflow_execution_modal:
+        title: "%{workflow} parameters"
     bots:
       index:
         title: Bot Accounts

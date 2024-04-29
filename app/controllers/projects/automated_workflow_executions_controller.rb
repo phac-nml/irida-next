@@ -14,11 +14,15 @@ module Projects
 
     def show; end
 
-    def new; end
+    def new
+      @workflow = if params[:workflow_name].present? && params[:workflow_version].present?
+                    Irida::Pipelines.find_pipeline_by(params[:workflow_name], params[:workflow_version])
+                  end
+    end
 
     def edit; end
 
-    def create
+    def create # rubocop:disable Metrics/MethodLength
       @automated_workflow_execution = AutomatedWorkflowExecutions::CreateService.new(
         current_user, automated_workflow_execution_params.merge(namespace:)
       ).execute
@@ -26,9 +30,16 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if @automated_workflow_execution.persisted?
-            render status: :ok
+            render status: :ok,
+                   locals: { type: 'success',
+                             message: t('.success',
+                                        workflow_name: @automated_workflow_execution.metadata['workflow_name']) }
           else
-            render status: :unprocessable_entity
+            render status: :unprocessable_entity,
+                   locals: {
+                     type: 'alert', message: t('.error',
+                                               workflow_name: @automated_workflow_execution.metadata['workflow_name'])
+                   }
           end
         end
       end
@@ -74,7 +85,7 @@ module Projects
     private
 
     def automated_workflow_execution_params
-      params.require(:automated_workflow_execution).permit(
+      params.require(:workflow_execution).permit(
         :email_notification, :update_samples, metadata: {}, workflow_params: {}
       )
     end
