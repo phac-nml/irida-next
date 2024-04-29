@@ -42,8 +42,6 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test 'restore_namespace' do
-    project_namespace = namespaces_project_namespaces(:project1_namespace)
-
     @project.destroy
     assert @project.deleted?
 
