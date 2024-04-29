@@ -40,4 +40,31 @@ class UserTest < ActiveSupport::TestCase
       @user.destroy
     end
   end
+
+  test 'username' do
+    assert_equal 'john.doe', @user.username
+  end
+
+  test 'to_param' do
+    assert_equal 'john.doe_at_localhost', @user.to_param
+  end
+
+  test 'ensure_namespace with valid user with namespace' do
+    assert_equal 'john.doe@localhost', @user.send(:ensure_namespace)
+  end
+
+  test 'ensure_namespace with bot' do
+    bot_user = users(:project1_automation_bot)
+    assert_no_changes -> { bot_user.namespace } do
+      bot_user.send(:ensure_namespace)
+    end
+  end
+
+  test 'ensure_namespace with new user with no namespace' do
+    user = User.new(email: 'new_user@email.com')
+    user.send(:ensure_namespace)
+
+    assert_equal 'new_user_at_email.com', user.namespace.path
+    assert_equal 'new_user@email.com', user.namespace.name
+  end
 end
