@@ -81,6 +81,22 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert @policy.submit_workflow?
   end
 
+  test '#create_automated_workflow_executions?' do
+    assert @policy.create_automated_workflow_executions?
+  end
+
+  test '#destroy_automated_workflow_executions?' do
+    assert @policy.destroy_automated_workflow_executions?
+  end
+
+  test '#update_automated_workflow_executions?' do
+    assert @policy.update_automated_workflow_executions?
+  end
+
+  test '#view_automated_workflow_executions?' do
+    assert @policy.view_automated_workflow_executions?
+  end
+
   test 'scope' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
     # John Doe has access to 33 projects. 32 through his namespace

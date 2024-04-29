@@ -9,14 +9,6 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def index?
-    return true if Member.can_view?(user, record.namespace) == true
-
-    details[:name] = record.namespace.name
-    details[:namespace_type] = record.namespace.type
-    false
-  end
-
   def destroy?
     return true if record.submitter.id == user.id
     return true if Member.can_modify?(user, record.namespace) == true
@@ -35,7 +27,6 @@ class WorkflowExecutionPolicy < ApplicationPolicy
   end
 
   def create?
-    return true if record.submitter.automation_bot? == true
     return true if Member.can_submit_workflow?(user, record.namespace)
 
     details[:name] = record.namespace.name
@@ -43,42 +34,9 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def cancel? # rubocop:disable Metrics/AbcSize
+  def cancel?
     return true if record.submitter.id == user.id
-    return true if record.submitter.automation_bot? == true
     return true if Member.can_modify?(user, record.namespace) == true
-
-    details[:name] = record.namespace.name
-    details[:namespace_type] = record.namespace.type
-    false
-  end
-
-  def create_automated_workflow_executions?
-    return true if Member.can_modify?(user, record.namespace) == true
-
-    details[:name] = record.namespace.name
-    details[:namespace_type] = record.namespace.type
-    false
-  end
-
-  def destroy_automated_workflow_executions?
-    return true if Member.can_modify?(user, record.namespace) == true
-
-    details[:name] = record.namespace.name
-    details[:namespace_type] = record.namespace.type
-    false
-  end
-
-  def update_automated_workflow_executions?
-    return true if Member.can_modify?(user, record.namespace) == true
-
-    details[:name] = record.namespace.name
-    details[:namespace_type] = record.namespace.type
-    false
-  end
-
-  def view_automated_workflow_executions?
-    return true if Member.can_view?(user, record.namespace) == true
 
     details[:name] = record.namespace.name
     details[:namespace_type] = record.namespace.type

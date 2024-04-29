@@ -91,6 +91,10 @@ en:
         clone_sample_into_project?: You are not authorized to clone samples to project %{name} on this server.
         export_sample_data?: You are not authorized to export samples from project %{name} on this server.
         submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
+        create_automated_workflow_executions?: "You are not authorized to create automated workflow executions for project %{name}"
+        destroy_automated_workflow_executions?: "You are not authorized to destroy automated workflow executions for project %{name}"
+        update_automated_workflow_executions?: "You are not authorized to update automated workflow executions for project %{name}"
+        view_automated_workflow_executions?: "You are not authorized to view automated workflow executions for project %{name}"
       namespaces/project_namespace:
         update?: You are not authorized to update the namespace for project %{name} on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
@@ -102,9 +106,6 @@ en:
         update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
-        create_automated_workflow_executions?: You are not authorized to create automated workflow executions for project %{name} on this server.
-        update_automated_workflow_executions?: You are not authorized to update automated workflow executions for project %{name} on this server.
-        destroy_automated_workflow_executions?: You are not authorized to destroy automated workflow executions for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
@@ -126,10 +127,6 @@ en:
         read?: "You are not authorized to view workflow execution %{id}"
         create?: "You are not authorized to submit workflow executions for %{namespace_type} %{name}"
         cancel?: "You are not authorized to cancel workflow executions for %{namespace_type} %{name}"
-        create_automated_workflow_executions?: "You are not authorized to create automated workflow executions for %{namespace_type} %{name}"
-        destroy_automated_workflow_executions?: "You are not authorized to destroy automated workflow executions for %{namespace_type} %{name}"
-        update_automated_workflow_executions?: "You are not authorized to update automated workflow executions for %{namespace_type} %{name}"
-        view_automated_workflow_executions?: "You are not authorized to view automated workflow executions for %{namespace_type} %{name}"
     unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:

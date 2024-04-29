@@ -154,6 +154,34 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def create_automated_workflow_executions?
+    return true if Member.can_modify?(user, record.namespace) == true
+
+    details[:name] = record.namespace.name
+    false
+  end
+
+  def destroy_automated_workflow_executions?
+    return true if Member.can_modify?(user, record.namespace) == true
+
+    details[:name] = record.namespace.name
+    false
+  end
+
+  def update_automated_workflow_executions?
+    return true if Member.can_modify?(user, record.namespace) == true
+
+    details[:name] = record.namespace.name
+    false
+  end
+
+  def view_automated_workflow_executions?
+    return true if Member.can_view?(user, record.namespace) == true
+
+    details[:name] = record.namespace.name
+    false
+  end
+
   scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(

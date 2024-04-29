@@ -9,7 +9,9 @@ module WorkflowExecutions
     end
 
     def execute
-      return unless @workflow_execution.submitter == current_user && @workflow_execution.deletable?
+      return unless @workflow_execution.deletable?
+
+      authorize! @workflow_execution, to: :destroy?
 
       @workflow_execution.destroy
     end

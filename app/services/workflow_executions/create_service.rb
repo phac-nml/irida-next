@@ -7,10 +7,13 @@ module WorkflowExecutions
       super(user, params)
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       return false if params.empty?
 
       @workflow_execution = WorkflowExecution.new(params)
+
+      authorize! @workflow_execution.namespace, to: :submit_workflow?
+
       @workflow_execution.submitter = current_user
 
       @workflow_execution.tags = { createdBy: current_user.email }
