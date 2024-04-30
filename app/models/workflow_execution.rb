@@ -84,9 +84,8 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def validate_namespace
-    # Only Groups and Projects should have members
     return if %w[Group Project].include?(namespace.type)
 
-    errors.add(namespace.type, 'namespace cannot have members')
+    errors.add(:base, 'workflow executions can only belong to a Project or Group namespace')
   end
 end
