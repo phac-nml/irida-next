@@ -35,6 +35,7 @@ module AutomatedWorkflowExecutions
         workflow_url: @workflow.url,
         email_notification: @automated_workflow_execution.email_notification?,
         update_samples: @automated_workflow_execution.update_samples?,
+        namespace_id: @automated_workflow_execution.namespace.id,
         samples_workflow_executions_attributes: [
           {
             sample_id: @sample.id,
