@@ -39,13 +39,27 @@ class WorkflowExecution < ApplicationRecord
 
   enum state: WORKFLOW_EXECUTION_STATES
 
-  def send_email
+  def send_email # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return unless email_notification
 
-    if completed?
-      PipelineMailer.complete_email(self).deliver_later
-    elsif error?
-      PipelineMailer.error_email(self).deliver_later
+    if submitter.human?
+      if completed?
+        PipelineMailer.complete_email(self).deliver_later
+      elsif error?
+        PipelineMailer.error_email(self).deliver_later
+      end
+    else
+      namespace = Sample.where(id: sample_ids).first.project.namespace
+      I18n.available_locales.each do |locale|
+        manager_emails = Member.manager_emails(namespace, locale)
+        unless manager_emails.empty?
+          if completed?
+            PipelineMailer.complete_email(self, manager_emails, locale).deliver_later
+          elsif error?
+            PipelineMailer.error_email(self, manager_emails, locale).deliver_later
+          end
+        end
+      end
     end
   end
 
