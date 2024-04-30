@@ -17,8 +17,9 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   test 'workflow execution with an invalid namespace_id' do
     assert_not @workflow_execution_invalid_namespace.valid?
     assert_not_nil @workflow_execution_invalid_namespace.errors[:namespace]
-    assert @workflow_execution_invalid_namespace.errors[:base]
-                                                .include?('workflow executions can only belong to a Project or Group namespace')
+    assert @workflow_execution_invalid_namespace
+      .errors[:base]
+      .include?('workflow executions can only belong to a Project or Group namespace')
   end
 
   test 'valid workflow execution' do
