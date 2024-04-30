@@ -824,6 +824,35 @@ en:
         project_modified: "Project attributes were modified by %{user}"
         project_restored: "Project was restored by %{user}"
         project_transferred: "Project was transferred by %{user}"
+    automated_workflow_executions:
+      index:
+        title: Automated Workflow Executions
+        subtitle: Setup automated workflow executions to launch when pair end data is uploaded to the project
+        add_new_automated_workflow_execution: New automated workflow execution
+      actions:
+        delete_button: Delete
+        delete_confirm: Are you sure that you want to delete this automated workflow execution?
+      table:
+        empty:
+          title: No automated workflow executions
+          description: No automated workflow executions have been configured for this project
+        headers:
+          id: ID
+          name: Name
+          version: Version
+          created_at: Created
+          updated_at: Updated
+          actions: Actions
+      create:
+        error: "Could not create an automated workflow execution for %{workflow_name}"
+        success: "Automated workflow execution for %{workflow_name} was successfully created"
+      destroy:
+        error: "Could not delete automated workflow execution for %{workflow_name}"
+        success: "Automated workflow execution for %{workflow_name} was successfully deleted"
+      pipeline_selection_modal:
+        title: Workflow Selection
+      new_automated_workflow_execution_modal:
+        title: "%{workflow} parameters"
     bots:
       index:
         title: Bot Accounts
@@ -908,6 +937,7 @@ en:
       settings: Settings
       general: General
       bot_accounts: Bot Accounts
+      automated_workflow_executions: Automated Workflow Executions
     update:
       success: "Project %{project_name} was successfully updated"
     transfer:

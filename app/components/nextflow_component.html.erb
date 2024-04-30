@@ -55,12 +55,14 @@
           <div class="grid grid-cols-1 gap-4 mb-8">
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
-                <%= render Nextflow::SamplesheetComponent.new(
-                  schema: property[:schema],
-                  samples:,
-                  namespace_id:,
-                  fields: metadata_fields
-                ) %>
+                <% unless @samples.empty? %>
+                  <%= render Nextflow::SamplesheetComponent.new(
+                    schema: property[:schema],
+                    samples:,
+                    namespace_id:,
+                    fields: metadata_fields
+                  ) %>
+                <% end %>
               <% else %>
                 <div>
                   <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>

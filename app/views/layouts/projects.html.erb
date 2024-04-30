@@ -42,6 +42,10 @@
                 url: project_bots_path(@project),
                 label: t(:"projects.sidebar.bot_accounts")
               ) %>
+              <% multi_level_menu.with_menu_item(
+                url: project_automated_workflow_executions_path(@project),
+                label: t(:"projects.sidebar.automated_workflow_executions")
+              ) %>
             <% end %>
           <% end %>
         <% end %>
