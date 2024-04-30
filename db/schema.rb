@@ -105,7 +105,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
     t.index ["deleted_at"], name: "index_members_on_deleted_at"
     t.index ["expires_at"], name: "index_members_on_expires_at"
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
-    t.index ["user_id", "namespace_id"], name: "index_member_user_with_namespace", unique: true, where: "(deleted_at IS NULL)"
+    t.index ["user_id", "namespace_id"], name: "index_member_user_with_namespace", unique: true
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
@@ -132,7 +132,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
     t.uuid "namespace_id", null: false
     t.index ["created_at"], name: "index_namespace_group_links_on_created_at"
     t.index ["deleted_at"], name: "index_namespace_group_links_on_deleted_at"
-    t.index ["group_id", "namespace_id"], name: "index_namespace_group_link_user_with_namespace", unique: true, where: "(deleted_at IS NULL)"
+    t.index ["group_id", "namespace_id"], name: "index_namespace_group_link_user_with_namespace", unique: true
     t.index ["group_id"], name: "index_namespace_group_links_on_group_id"
     t.index ["namespace_id"], name: "index_namespace_group_links_on_namespace_id"
   end
@@ -219,7 +219,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
     t.index ["deleted_at"], name: "index_samples_on_deleted_at"
     t.index ["metadata"], name: "index_samples_on_metadata", using: :gin
     t.index ["metadata_provenance"], name: "index_samples_on_metadata_provenance", using: :gin
-    t.index ["name", "project_id"], name: "index_sample_name_with_project", unique: true, where: "(deleted_at IS NULL)"
+    t.index ["name", "project_id"], name: "index_sample_name_with_project", unique: true
     t.index ["project_id"], name: "index_samples_on_project_id"
     t.index ["puid"], name: "index_samples_on_puid", unique: true
   end
@@ -282,6 +282,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
     t.jsonb "tags", default: {}, null: false
     t.integer "state", default: 0, null: false
     t.uuid "namespace_id"
+    t.string "name"
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["namespace_id"], name: "index_workflow_executions_on_namespace_id"
     t.index ["state"], name: "index_workflow_executions_on_state"
