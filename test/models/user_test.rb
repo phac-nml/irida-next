@@ -55,14 +55,16 @@ class UserTest < ActiveSupport::TestCase
 
   test 'ensure_namespace with bot' do
     bot_user = users(:project1_automation_bot)
+    assert_nil bot_user.namespace
     assert_no_changes -> { bot_user.namespace } do
-      bot_user.send(:ensure_namespace)
+      bot_user.save
     end
   end
 
   test 'ensure_namespace with new user with no namespace' do
     user = User.new(email: 'new_user@email.com')
-    user.send(:ensure_namespace)
+    assert_nil user.namespace
+    user.save
 
     assert_equal 'new_user_at_email.com', user.namespace.path
     assert_equal 'new_user@email.com', user.namespace.name

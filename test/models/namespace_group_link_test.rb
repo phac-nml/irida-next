@@ -93,11 +93,11 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     assert_nil namespace_group_link.namespace
     assert_nil namespace_group_link.namespace_type
 
-    namespace_group_link.send(:set_namespace_type)
+    namespace_group_link.save
     assert_nil namespace_group_link.namespace_type
 
     namespace_group_link.namespace = namespace
-    namespace_group_link.send(:set_namespace_type)
+    namespace_group_link.save
 
     assert_equal namespace.type, namespace_group_link.namespace_type
   end

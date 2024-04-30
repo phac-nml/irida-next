@@ -40,4 +40,9 @@ class RouteTest < ActiveSupport::TestCase
     @subgroup8_route.update(name: 'New Subgroup 8')
     assert_not_equal old_subgroup9_route_name, @subgroup9_route.reload.name
   end
+
+  test 'split_path_parts' do
+    split_paths = routes(:subgroup1_route).split_path_parts
+    assert_equal ['group-1', 'group-1/subgroup-1'], split_paths
+  end
 end
