@@ -35,6 +35,7 @@ class WorkflowExecution < ApplicationRecord
   accepts_nested_attributes_for :samples_workflow_executions
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
+  validate :validate_namespace
 
   enum state: WORKFLOW_EXECUTION_STATES
 
@@ -80,5 +81,12 @@ class WorkflowExecution < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[]
+  end
+
+  def validate_namespace
+    # Only Groups and Projects should have members
+    return if %w[Group Project].include?(namespace.type)
+
+    errors.add(namespace.type, 'namespace cannot have members')
   end
 end
