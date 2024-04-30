@@ -172,7 +172,7 @@ module WorkflowExecutions
 
       assert @workflow_execution.email_notification
       assert_enqueued_emails 1
-      assert_enqueued_email_with PipelineMailer, :error_email, args: [@workflow_execution]
+      assert_enqueued_email_with PipelineMailer, :error_user_email, args: [@workflow_execution]
     end
   end
 end

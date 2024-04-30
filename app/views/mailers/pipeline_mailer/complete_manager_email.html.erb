@@ -1,14 +1,17 @@
-<%= render partial: "mailers/email_template", locals: {
+<%= render partial: "mailers/email_template",
+locals: {
   name: @workflow_execution.submitter.first_name,
   url: workflow_execution_url(@workflow_execution)
-  } %>
+} %>
 
-
-<%= yield :header_and_greeting  %>
+<%= yield :header_and_greeting %>
 <tr>
   <td style="padding:12px 24px;">
     <p style="color:#334155;line-height:24px;">
-      <%= t(:"mailers.pipeline_mailer.complete_email.body_html", id: @workflow_execution.id) %>
+      <%= t(
+        :"mailers.pipeline_mailer.complete_manager_email.body_html",
+        id: @workflow_execution.id
+      ) %>
     </p>
   </td>
 </tr>
@@ -19,5 +22,5 @@
     </p>
   </td>
 </tr>
-<%= yield :button_and_link  %>
-<%= yield :sendoff_and_automated_message  %>
+<%= yield :button_and_link %>
+<%= yield :sendoff_and_automated_message %>

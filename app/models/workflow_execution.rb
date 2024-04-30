@@ -39,27 +39,13 @@ class WorkflowExecution < ApplicationRecord
 
   enum state: WORKFLOW_EXECUTION_STATES
 
-  def send_email # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def send_email
     return unless email_notification
 
     if submitter.human?
-      if completed?
-        PipelineMailer.complete_email(self).deliver_later
-      elsif error?
-        PipelineMailer.error_email(self).deliver_later
-      end
+      send_user_emails
     else
-      namespace = Sample.where(id: sample_ids).first.project.namespace
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(namespace, locale)
-        unless manager_emails.empty?
-          if completed?
-            PipelineMailer.complete_email(self, manager_emails, locale).deliver_later
-          elsif error?
-            PipelineMailer.error_email(self, manager_emails, locale).deliver_later
-          end
-        end
-      end
+      send_manager_emails
     end
   end
 
@@ -100,5 +86,29 @@ class WorkflowExecution < ApplicationRecord
     return if %w[Group Project].include?(namespace.type)
 
     errors.add(:base, 'workflow executions can only belong to a Project or Group namespace')
+  end
+
+  private
+
+  def send_user_emails
+    if completed?
+      PipelineMailer.complete_user_email(self).deliver_later
+    elsif error?
+      PipelineMailer.error_user_email(self).deliver_later
+    end
+  end
+
+  def send_manager_emails
+    namespace = Sample.where(id: sample_ids).first.project.namespace
+    I18n.available_locales.each do |locale|
+      manager_emails = Member.manager_emails(namespace, locale)
+      unless manager_emails.empty?
+        if completed?
+          PipelineMailer.complete_manager_email(self, manager_emails, locale).deliver_later
+        elsif error?
+          PipelineMailer.error_manager_email(self, manager_emails, locale).deliver_later
+        end
+      end
+    end
   end
 end
