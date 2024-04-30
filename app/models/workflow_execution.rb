@@ -25,6 +25,7 @@ class WorkflowExecution < ApplicationRecord
   after_save :send_email, if: :saved_change_to_state?
 
   belongs_to :submitter, class_name: 'User'
+  belongs_to :namespace
 
   has_many :samples_workflow_executions, dependent: :destroy
   has_many :samples, through: :samples_workflow_executions
@@ -34,6 +35,7 @@ class WorkflowExecution < ApplicationRecord
   accepts_nested_attributes_for :samples_workflow_executions
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
+  validate :validate_namespace
 
   enum state: WORKFLOW_EXECUTION_STATES
 
@@ -61,6 +63,7 @@ class WorkflowExecution < ApplicationRecord
 
   def as_wes_params
     {
+      namespace_id:,
       workflow_params: workflow_params.to_json,
       workflow_type:,
       workflow_type_version:,
@@ -78,5 +81,11 @@ class WorkflowExecution < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[]
+  end
+
+  def validate_namespace
+    return if %w[Group Project].include?(namespace.type)
+
+    errors.add(:base, 'workflow executions can only belong to a Project or Group namespace')
   end
 end

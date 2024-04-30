@@ -25,6 +25,7 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
                workflow_engine_parameters: { '-r': 'dev' },
                workflow_url: 'https://github.com/phac-nml/iridanextexample',
                email_notification: true,
+               namespace_id: projects(:project1).namespace.id,
                samples_workflow_executions_attributes: [
                  {
                    sample_id: @sample1.id,

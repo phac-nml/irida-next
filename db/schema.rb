@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_26_144141) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -281,7 +281,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_144141) do
     t.integer "http_error_code"
     t.jsonb "tags", default: {}, null: false
     t.integer "state", default: 0, null: false
+    t.uuid "namespace_id"
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
+    t.index ["namespace_id"], name: "index_workflow_executions_on_namespace_id"
     t.index ["state"], name: "index_workflow_executions_on_state"
     t.index ["submitter_id"], name: "index_workflow_executions_on_submitter_id"
   end
@@ -302,6 +304,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_144141) do
   add_foreign_key "samples", "projects"
   add_foreign_key "samples_workflow_executions", "samples"
   add_foreign_key "samples_workflow_executions", "workflow_executions"
+  add_foreign_key "workflow_executions", "namespaces"
   add_foreign_key "workflow_executions", "users", column: "submitter_id"
   create_function :logidze_capture_exception, sql_definition: <<-'SQL'
       CREATE OR REPLACE FUNCTION public.logidze_capture_exception(error_data jsonb)

@@ -6,6 +6,20 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   def setup
     @workflow_execution_valid = workflow_executions(:workflow_execution_valid)
     @workflow_execution_invalid_metadata = workflow_executions(:workflow_execution_invalid_metadata)
+    @workflow_execution_invalid_namespace = workflow_executions(:workflow_execution_invalid_namespace)
+  end
+
+  test 'workflow execution has a namespace_id' do
+    assert_not_nil @workflow_execution_valid.namespace_id
+    assert_equal projects(:project1).namespace.id, @workflow_execution_valid.namespace_id
+  end
+
+  test 'workflow execution with an invalid namespace_id' do
+    assert_not @workflow_execution_invalid_namespace.valid?
+    assert_not_nil @workflow_execution_invalid_namespace.errors[:namespace]
+    assert @workflow_execution_invalid_namespace
+      .errors[:base]
+      .include?('workflow executions can only belong to a Project or Group namespace')
   end
 
   test 'valid workflow execution' do
