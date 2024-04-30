@@ -835,7 +835,7 @@ en:
       table:
         empty:
           title: No automated workflow executions
-          description: There are no automated workflow executions configured for this project
+          description: No automated workflow executions have been configured for this project
         headers:
           id: ID
           name: Name
