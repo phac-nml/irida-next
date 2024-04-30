@@ -15,15 +15,27 @@ module GroupLinks
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
 
-      assert_enqueued_emails 2
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [Member.user_emails(namespace_group_link.group),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [Member.manager_emails(namespace_group_link.namespace),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
+      assert_enqueued_emails 3
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(namespace_group_link.group, locale)
+
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                     args: [user_emails,
+                                            namespace_group_link.group,
+                                            namespace_group_link.namespace,
+                                            locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                   args: [manager_emails,
+                                          namespace_group_link.group,
+                                          namespace_group_link.namespace,
+                                          locale]
+      end
     end
 
     test 'share group b with group a then unshare' do
@@ -40,23 +52,37 @@ module GroupLinks
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
 
-      assert_enqueued_emails 4
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [Member.user_emails(namespace_group_link.group),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(namespace_group_link.namespace),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [Member.user_emails(namespace_group_link.group),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [Member.manager_emails(namespace_group_link.namespace),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
+      assert_enqueued_emails 6
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(namespace_group_link.group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                     args: [user_emails,
+                                            namespace_group_link.group,
+                                            namespace_group_link.namespace,
+                                            locale]
+          assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                     args: [user_emails,
+                                            namespace_group_link.group,
+                                            namespace_group_link.namespace,
+                                            locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                   args: [manager_emails,
+                                          namespace_group_link.group,
+                                          namespace_group_link.namespace,
+                                          locale]
+
+        assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                   args: [manager_emails,
+                                          namespace_group_link.group,
+                                          namespace_group_link.namespace,
+                                          locale]
+      end
     end
 
     test 'unshare group b with group a with invalid permissions' do
@@ -91,15 +117,26 @@ module GroupLinks
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
 
-      assert_enqueued_emails 2
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [Member.user_emails(namespace_group_link.group),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [Member.manager_emails(namespace_group_link.namespace),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
+      assert_enqueued_emails 3
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(namespace_group_link.group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                     args: [user_emails,
+                                            namespace_group_link.group,
+                                            namespace_group_link.namespace,
+                                            locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                   args: [manager_emails,
+                                          namespace_group_link.group,
+                                          namespace_group_link.namespace,
+                                          locale]
+      end
     end
 
     test 'unshare project with group' do
@@ -109,15 +146,26 @@ module GroupLinks
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
 
-      assert_enqueued_emails 2
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [Member.user_emails(namespace_group_link.group),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [Member.manager_emails(namespace_group_link.namespace),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
+      assert_enqueued_emails 4
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(namespace_group_link.group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                     args: [user_emails,
+                                            namespace_group_link.group,
+                                            namespace_group_link.namespace,
+                                            locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                   args: [manager_emails,
+                                          namespace_group_link.group,
+                                          namespace_group_link.namespace,
+                                          locale]
+      end
     end
 
     test 'share project with group then unshare' do
@@ -134,23 +182,37 @@ module GroupLinks
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
 
-      assert_enqueued_emails 4
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
-                                 args: [Member.user_emails(namespace_group_link.group),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
-                                 args: [Member.manager_emails(namespace_group_link.namespace),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [Member.user_emails(namespace_group_link.group),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [Member.manager_emails(namespace_group_link.namespace),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
+      assert_enqueued_emails 8
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(namespace_group_link.group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                     args: [user_emails,
+                                            namespace_group_link.group,
+                                            namespace_group_link.namespace,
+                                            locale]
+          assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                     args: [user_emails,
+                                            namespace_group_link.group,
+                                            namespace_group_link.namespace,
+                                            locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                   args: [manager_emails,
+                                          namespace_group_link.group,
+                                          namespace_group_link.namespace,
+                                          locale]
+
+        assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                   args: [manager_emails,
+                                          namespace_group_link.group,
+                                          namespace_group_link.namespace,
+                                          locale]
+      end
     end
 
     test 'unshare project with group with invalid permissions' do
@@ -179,15 +241,26 @@ module GroupLinks
         GroupLinks::GroupUnlinkService.new(@user, namespace_group_link).execute
       end
 
-      assert_enqueued_emails 2
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
-                                 args: [Member.user_emails(namespace_group_link.group),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
-      assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
-                                 args: [Member.manager_emails(namespace_group_link.namespace),
-                                        namespace_group_link.group,
-                                        namespace_group_link.namespace]
+      assert_enqueued_emails 4
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(namespace_group_link.group, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                     args: [user_emails,
+                                            namespace_group_link.group,
+                                            namespace_group_link.namespace,
+                                            locale]
+        end
+
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                   args: [manager_emails,
+                                          namespace_group_link.group,
+                                          namespace_group_link.namespace,
+                                          locale]
+      end
     end
   end
 end

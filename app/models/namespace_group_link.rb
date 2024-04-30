@@ -29,13 +29,31 @@ class NamespaceGroupLink < ApplicationRecord
                                       }
 
   def send_access_revoked_emails
-    GroupLinkMailer.access_revoked_user_email(Member.user_emails(group), group, namespace).deliver_later
-    GroupLinkMailer.access_revoked_manager_email(Member.manager_emails(namespace), group, namespace).deliver_later
+    I18n.available_locales.each do |locale|
+      user_emails = Member.user_emails(group, locale)
+      unless user_emails.empty?
+        GroupLinkMailer.access_revoked_user_email(user_emails, group, namespace, locale).deliver_later
+      end
+
+      manager_emails = Member.manager_emails(namespace, locale)
+      next if manager_emails.empty?
+
+      GroupLinkMailer.access_revoked_manager_email(manager_emails, group, namespace, locale).deliver_later
+    end
   end
 
   def send_access_granted_emails
-    GroupLinkMailer.access_granted_user_email(Member.user_emails(group), group, namespace).deliver_later
-    GroupLinkMailer.access_granted_manager_email(Member.manager_emails(namespace), group, namespace).deliver_later
+    I18n.available_locales.each do |locale|
+      user_emails = Member.user_emails(group, locale)
+      unless user_emails.empty?
+        GroupLinkMailer.access_granted_user_email(user_emails, group, namespace, locale).deliver_later
+      end
+
+      manager_emails = Member.manager_emails(namespace, locale)
+      next if manager_emails.empty?
+
+      GroupLinkMailer.access_granted_manager_email(manager_emails, group, namespace, locale).deliver_later
+    end
   end
 
   private

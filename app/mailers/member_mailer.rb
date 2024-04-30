@@ -8,7 +8,9 @@ class MemberMailer < ApplicationMailer
     subject = t(:'mailers.member_mailer.access_granted_user_email.subject',
                 type: @namespace.type,
                 name: @namespace.name)
-    mail(to: @member.user.email, subject:)
+    I18n.with_locale(@member.user.locale) do
+      mail(to: @member.user.email, subject:)
+    end
   end
 
   def access_revoked_user_email(member, namespace)
@@ -17,10 +19,12 @@ class MemberMailer < ApplicationMailer
     subject = t(:'mailers.member_mailer.access_revoked_user_email.subject',
                 type: @namespace.type,
                 name: @namespace.name)
-    mail(to: @member.user.email, subject:)
+    I18n.with_locale(@member.user.locale) do
+      mail(to: @member.user.email, subject:)
+    end
   end
 
-  def access_granted_manager_email(member, manager_emails, namespace)
+  def access_granted_manager_email(member, manager_emails, namespace, locale)
     @member = member
     @namespace = namespace
     subject = t(:'mailers.member_mailer.access_granted_manager_email.subject',
@@ -29,10 +33,12 @@ class MemberMailer < ApplicationMailer
                 email: @member.user.email,
                 type: @namespace.type,
                 name: @namespace.name)
-    mail(bcc: manager_emails, subject:)
+    I18n.with_locale(locale) do
+      mail(bcc: manager_emails, subject:)
+    end
   end
 
-  def access_revoked_manager_email(member, manager_emails, namespace)
+  def access_revoked_manager_email(member, manager_emails, namespace, locale)
     @member = member
     @namespace = namespace
     subject = t(:'mailers.member_mailer.access_revoked_manager_email.subject',
@@ -41,6 +47,8 @@ class MemberMailer < ApplicationMailer
                 email: @member.user.email,
                 type: @namespace.type,
                 name: @namespace.name)
-    mail(bcc: manager_emails, subject:)
+    I18n.with_locale(locale) do
+      mail(bcc: manager_emails, subject:)
+    end
   end
 end

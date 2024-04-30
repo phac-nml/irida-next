@@ -22,7 +22,7 @@ class PipelineMailerTest < ActionMailer::TestCase
   end
 
   def test_localized_complete_email
-    I18n.available_locales do |locale|
+    I18n.available_locales.each do |locale|
       workflow_execution = workflow_executions(:irida_next_example_completed)
       workflow_execution.submitter.locale = locale
       email = PipelineMailer.complete_email(workflow_execution)
@@ -35,7 +35,7 @@ class PipelineMailerTest < ActionMailer::TestCase
   end
 
   def test_localized_error_email
-    I18n.available_locales do |locale|
+    I18n.available_locales.each do |locale|
       workflow_execution = workflow_executions(:irida_next_example_error)
       workflow_execution.submitter.locale = locale
       email = PipelineMailer.error_email(workflow_execution)

@@ -318,6 +318,8 @@ fr:
       information_icon: Information icon
     nextflow:
       required: Required
+      update_samples: Update samples with analysis results
+      email_notification: Receive an email notification when your analysis has completed?
     history:
       latest: Latest
       created_by: "%{type} created by %{user}"
@@ -639,6 +641,8 @@ fr:
       index:
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
+        workflows:
+          button_sr: Launch workflow
         search:
           placeholder: Filter by ID or name
           metadata: Metadata
