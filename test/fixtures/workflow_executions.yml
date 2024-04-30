@@ -110,6 +110,27 @@ irida_next_example_completed:
   blob_run_directory: "not a run dir"
   cleaned: true
 
+irida_next_example_completed_unclean:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "irida_next_example_completed_unclean",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_completed_unclean"
+  run_id: "my_run_id_6a"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "completed"
+  blob_run_directory: "not a run dir"
+  cleaned: false
+
 irida_next_example_error:
   <<: *DEFAULTS
   metadata:
@@ -129,6 +150,26 @@ irida_next_example_error:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "error"
   cleaned: true
+
+irida_next_example_error_unclean:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "irida_next_example_error_unclean",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_error_unclean"
+  run_id: "my_run_id_7a"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "error"
+  cleaned: false
 
 irida_next_example_canceling:
   <<: *DEFAULTS
@@ -169,6 +210,26 @@ irida_next_example_canceled:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceled"
   cleaned: true
+
+irida_next_example_canceled_unclean:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "irida_next_example_canceled_unclean",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_canceled_unclean"
+  run_id: "my_run_id_9a"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "canceled"
+  cleaned: false
 
 irida_next_example_running:
   <<: *DEFAULTS
