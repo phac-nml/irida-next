@@ -146,5 +146,12 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def submit_workflow?
+      return true if Member.can_submit_workflow?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
   end
 end
