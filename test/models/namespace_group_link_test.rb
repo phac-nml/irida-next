@@ -105,8 +105,8 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
   test 'send_access_revoked_emails' do
     group_group_link = namespace_group_links(:namespace_group_link5)
 
-    group_group_link.send_access_revoked_emails do
-      assert_enqueued_emails 2
+    assert_enqueued_emails 2 do
+      group_group_link.send_access_revoked_emails
       assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
                                  args: [Member.user_emails(group_group_link.group), group_group_link.group,
                                         group_group_link.namespace]
@@ -119,8 +119,8 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
   test 'send_access_granted_emails' do
     group_group_link = namespace_group_links(:namespace_group_link5)
 
-    group_group_link.send_access_granted_emails do
-      assert_enqueued_emails 2
+    assert_enqueued_emails 2 do
+      group_group_link.send_access_granted_emails
       assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
                                  args: [Member.user_emails(group_group_link.group), group_group_link.group,
                                         group_group_link.namespace]
