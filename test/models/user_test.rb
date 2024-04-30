@@ -78,4 +78,35 @@ class UserTest < ActiveSupport::TestCase
 
     assert_not password_required
   end
+
+  test 'update password' do
+    params = { password: 'new_password', password_confirmation: 'new_password',
+               current_password: 'password1' }
+
+    assert @user.update_password_with_password(params)
+  end
+
+  test 'unable to update password with wrong password_confirmation' do
+    params = { password: 'new_password', password_confirmation: 'invalid_confirmation',
+               current_password: 'password1' }
+
+    assert_not @user.update_password_with_password(params)
+    assert_equal "Password confirmation doesn't match Password", @user.errors.full_messages.first
+  end
+
+  test 'unable to update password with blank password' do
+    params = { password: ' ', password_confirmation: ' ',
+               current_password: 'password1' }
+
+    assert_not @user.update_password_with_password(params)
+    assert_equal "Password can't be blank", @user.errors.full_messages.first
+  end
+
+  test 'unable to update password with wrong password' do
+    params = { password: 'new_password', password_confirmation: 'new_password',
+               current_password: 'wrong_password' }
+
+    assert_not @user.update_password_with_password(params)
+    assert_equal 'Current password is invalid', @user.errors.full_messages.first
+  end
 end
