@@ -8,6 +8,7 @@ module WorkflowExecutions
   class CreateServiceTest < ActiveStorageTestCase
     def setup
       @user = users(:john_doe)
+      @project = projects(:project1)
     end
 
     test 'test create new workflow execution' do
@@ -26,7 +27,7 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
-        namespace_id: @user.namespace.id
+        namespace_id: @project.namespace.id
       }
 
       workflow_params2 = {
@@ -44,7 +45,7 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew2',
         submitter_id: @user.id,
-        namespace_id: @user.namespace.id
+        namespace_id: @project.namespace.id
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs')
@@ -135,7 +136,8 @@ module WorkflowExecutions
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
-        submitter_id: @user.id
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
@@ -159,7 +161,8 @@ module WorkflowExecutions
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
-        submitter_id: @user.id
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
@@ -185,7 +188,7 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
-        namespace_id: @user.namespace.id
+        namespace_id: @project.namespace.id
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_4" }',
@@ -226,7 +229,7 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
-        namespace_id: @user.namespace.id
+        namespace_id: @project.namespace.id
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_5" }',
@@ -269,7 +272,7 @@ module WorkflowExecutions
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
         workflow_url: 'https://github.com/phac-nml/iridanextexample',
         submitter_id: @user.id,
-        namespace_id: @user.namespace.id
+        namespace_id: @project.namespace.id
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
