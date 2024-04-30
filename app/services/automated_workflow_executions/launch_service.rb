@@ -18,6 +18,8 @@ module AutomatedWorkflowExecutions
     def execute
       return false if @workflow.nil?
 
+      authorize! @automated_workflow_execution.namespace, to: :submit_workflow?
+
       WorkflowExecutions::CreateService.new(@current_user, workflow_execution_params).execute
     end
 

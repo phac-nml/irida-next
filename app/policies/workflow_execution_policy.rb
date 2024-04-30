@@ -9,9 +9,12 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def destroy?
+  def destroy? # rubocop:disable Metrics/AbcSize
     return true if record.submitter.id == user.id
-    return true if Member.can_modify?(user, record.namespace) == true
+    if record.namespace.type == Namespaces::ProjectNamespace.sti_name &&
+       record.submitter.id == record.namespace.automation_bot.id
+      return true
+    end
 
     details[:name] = record.namespace.name
     details[:namespace_type] = record.namespace.type
@@ -34,9 +37,12 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def cancel?
+  def cancel? # rubocop:disable Metrics/AbcSize
     return true if record.submitter.id == user.id
-    return true if Member.can_modify?(user, record.namespace) == true
+    if record.namespace.type == Namespaces::ProjectNamespace.sti_name &&
+       record.submitter.id == record.namespace.automation_bot.id
+      return true
+    end
 
     details[:name] = record.namespace.name
     details[:namespace_type] = record.namespace.type
