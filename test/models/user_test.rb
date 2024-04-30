@@ -67,4 +67,13 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'new_user_at_email.com', user.namespace.path
     assert_equal 'new_user@email.com', user.namespace.name
   end
+
+  test 'skipping password_required?' do
+    new_user = User.new
+    new_user.skip_password_validation = true
+
+    password_required = new_user.send(:password_required?)
+
+    assert_not password_required
+  end
 end
