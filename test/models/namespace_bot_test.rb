@@ -58,5 +58,6 @@ class NamespaceBotTest < ActiveSupport::TestCase
 
     namespace_bot.remove_membership_from_namespace
     assert_nil namespace_bot.reload.membership
+    assert membership.reload.deleted?
   end
 end

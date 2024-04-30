@@ -214,7 +214,9 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
 
     assert_no_changes -> { @project_namespace.reload.metadata_summary } do
       assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
-        project29.update_metadata_summary_by_sample_transfer([sample32.id], @project_namespace.project.id)
+        assert_no_changes -> { project29.reload.metadata_summary } do
+          project29.update_metadata_summary_by_sample_transfer([sample32.id], @project_namespace.project.id)
+        end
       end
     end
   end
