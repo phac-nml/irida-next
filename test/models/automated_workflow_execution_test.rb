@@ -29,7 +29,7 @@ class AutomatedWorkflowExecutionTest < ActiveSupport::TestCase
 
     new_automated_we = AutomatedWorkflowExecution.new(namespace: namespaces_user_namespaces(:john_doe_namespace))
     new_automated_we.send(:validate_namespace_type)
-    puts new_automated_we.errors.full_messages.first
+
     assert new_automated_we.errors.full_messages.any?
   end
 end
