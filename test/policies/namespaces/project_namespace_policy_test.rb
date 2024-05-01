@@ -57,5 +57,9 @@ module Namespaces
     test '#view_automated_workflow_executions?' do
       assert @policy.view_automated_workflow_executions?
     end
+
+    test '#view_workflow_executions?' do
+      assert @policy.view_automated_workflow_executions?
+    end
   end
 end

@@ -19,6 +19,38 @@ module Projects
 
       assert_response :success
     end
+
+    test 'should not show a listing of workflow executions for the project' do
+      sign_in users(:micha_doe)
+      namespace = groups(:group_one)
+      project = projects(:project1)
+
+      get namespace_project_workflow_executions_path(namespace, project, format: :turbo_stream)
+
+      assert_response :unauthorized
+    end
+
+    test 'should show workflow execution' do
+      workflow_execution = workflow_executions(:irida_next_example_completed)
+      namespace = groups(:group_one)
+      project = projects(:project1)
+
+      get namespace_project_workflow_execution_path(namespace, project, workflow_execution, format: :turbo_stream)
+
+      assert_response :success
+    end
+
+    test 'should not show workflow execution for user with incorrect permissions' do
+      sign_in users(:micha_doe)
+      workflow_execution = workflow_executions(:irida_next_example_completed)
+      namespace = groups(:group_one)
+      project = projects(:project1)
+
+      get namespace_project_workflow_execution_path(namespace, project, workflow_execution, format: :turbo_stream)
+
+      assert_response :not_found
+    end
+
     test 'should cancel a new workflow with valid params' do
       workflow_execution = workflow_executions(:irida_next_example_new)
 
