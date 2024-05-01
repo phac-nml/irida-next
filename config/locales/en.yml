@@ -839,7 +839,8 @@ en:
         headers:
           id: ID
           name: Name
-          version: Version
+          workflow_name: Workflow Name
+          workflow_version: Workflow Version
           created_at: Created
           updated_at: Updated
           actions: Actions
@@ -1284,7 +1285,8 @@ en:
         id: ID
         run_id: Run ID
         name: Name
-        version: Version
+        workflow_name: Workflow Name
+        workflow_version: Workflow Version
         state: State
         created_at: Created
         updated_at: Last Updated

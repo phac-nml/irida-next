@@ -2,7 +2,7 @@
   class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
   id="<%= dom_id(workflow_execution) %>"
 >
-  <td class="px-6 py-4 whitespace-nowrap">
+  <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white dark:bg-gray-800 z-10">
     <%= link_to workflow_execution.id,
     workflow_execution_path(workflow_execution),
     data: {
@@ -12,6 +12,18 @@
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
     <%= workflow_execution.run_id %>
+  </td>
+  <td
+    class="
+      px-6
+      py-4
+      font-medium
+      text-gray-900
+      whitespace-nowrap
+      dark:text-white
+    "
+  >
+    <%= workflow_execution["name"] %>
   </td>
   <td
     class="
@@ -37,7 +49,7 @@
   <td class="px-6 py-4 whitespace-nowrap">
     <%= viral_time_ago(original_time: workflow_execution["updated_at"]) %>
   </td>
-  <td class="px-6 py-4 whitespace-nowrap">
+  <td class="px-6 py-4 whitespace-nowrap sticky right-0 bg-white dark:bg-gray-800 z-10">
     <% if workflow_execution.cancellable? %>
       <%= link_to(
         t(:"workflow_executions.index.actions.cancel_button"),
