@@ -667,6 +667,9 @@ en:
         actions:
           member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
           unlink_aria_label: "Unlink namespace from group %{member} button"
+        empty_state:
+          title: No groups
+          description: There are no groups that have been delegated access to this group
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
@@ -971,6 +974,9 @@ en:
         actions:
           member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
           unlink_aria_label: "Unlink namespace from group %{member} button"
+        empty_state:
+          title: No groups
+          description: There are no groups that have been delegated access to this project
       create:
         success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group

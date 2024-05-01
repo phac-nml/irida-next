@@ -1,28 +1,52 @@
-<table class="min-w-full table-fixed dark:divide-gray-600">
-  <thead class="text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-    <tr>
-      <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.group") %></th>
-      <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.source") %></th>
-      <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.access_granted") %></th>
-      <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.access_level") %></th>
-      <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.expiration") %></th>
-      <th scope="col" class="px-6 py-3 text-right"><%= t(:"projects.group_links.index.table_header.action") %></th>
-    </tr>
-  </thead>
-  <tbody
+<div class="table-container overflow-x-auto" data-turbo-temporary>
+  <table
     class="
-      bg-white
-      divide-y
-      divide-gray-200
-      dark:bg-gray-800
-      dark:divide-gray-700
+      w-full
+      text-sm
+      text-left
+      rtl:text-right
+      text-slate-500
+      dark:text-slate-400
+      dark:divide-gray-600
+      whitespace-nowrap
     "
   >
-    <% @namespace_group_links.each do |namespace_group_link| %>
-      <%= render partial: "namespace_group_link",
-      locals: {
-        namespace_group_link: namespace_group_link
-      } %>
-    <% end %>
-  </tbody>
-</table>
+    <thead
+      class="
+        text-xs
+        text-slate-700
+        uppercase
+        bg-slate-50
+        dark:bg-slate-700
+        dark:text-slate-400
+      "
+    >
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.group") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.source") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.access_granted") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.access_level") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:"projects.group_links.index.table_header.expiration") %></th>
+        <th scope="col" class="px-6 py-3 text-right"><%= t(:"projects.group_links.index.table_header.action") %></th>
+      </tr>
+    </thead>
+    <tbody
+      class="
+        bg-white
+        divide-y
+        divide-slate-200
+        dark:bg-slate-800
+        dark:divide-slate-700
+      "
+    >
+      <%= render partial: "namespace_group_link", collection: @namespace_group_links %>
+    </tbody>
+  </table>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: t(:"projects.group_links.index.empty_state.title"),
+      description: t(:"projects.group_links.index.empty_state.description"),
+      icon_name: :document_text
+    ) %>
+  </div>
+</div>
