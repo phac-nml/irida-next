@@ -32,6 +32,7 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
     end
 
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs 1
     assert @workflow_execution.reload.canceled?
   end
@@ -59,6 +60,7 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionCancelationJob)
     end
 
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs 6
     assert @workflow_execution.reload.canceled?
   end
@@ -84,6 +86,7 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionCancelationJob)
     end
 
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs 3
     @workflow_execution.reload
     assert @workflow_execution.error?
@@ -109,6 +112,7 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionCancelationJob)
     end
 
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs 2
     assert @workflow_execution.reload.canceled?
   end
