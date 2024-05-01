@@ -1,13 +1,11 @@
 <section class="mt-4">
-  <% if @workflow.nil? || @workflow.workflow_params.nil? %>
-    <%= viral_alert(message: t(:"workflow_executions.show.params.empty"), type: :info) %>
-  <% else %>
-    <% @workflow.workflow_params.each do |item, definition| %>
+
+  <% @workflow.workflow_params.each do |item, definition| %>
       <% definition[:properties].each do |name, property| %>
         <% unless %[input].include? name.to_s %>
           <div class="mb-4">
             <p class="mb-1 text-sm font-medium text-slate-900 dark:text-white"><%= property[:description] %></p>
-            <div class="flex mb-2">
+            <div class="flex mb-2 <%= name %>-param">
               <span
                 class="
                   font-mono
@@ -32,7 +30,6 @@
               <input
                 type="text"
                 disabled
-                id="website-admin"
                 class="
                   rounded-none
                   rounded-e-lg
@@ -62,5 +59,4 @@
         <% end %>
       <% end %>
     <% end %>
-  <% end %>
 </section>

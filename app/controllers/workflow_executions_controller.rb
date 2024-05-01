@@ -26,6 +26,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
       @attachments = Attachment.where(attachable: @workflow_execution)
                                .or(Attachment.where(attachable: @samples_worfklow_executions))
     elsif @tab == 'params'
+      puts Irida::Pipelines.available_pipelines
       @workflow = Irida::Pipelines.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                     @workflow_execution.metadata['workflow_version'])
     end

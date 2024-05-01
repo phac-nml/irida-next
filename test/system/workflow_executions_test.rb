@@ -300,7 +300,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view a workflow execution' do
-    workflow_execution = workflow_executions(:irida_next_example_completed)
+    workflow_execution = workflow_executions(:workflow_execution_existing)
 
     visit workflow_execution_path(workflow_execution)
 
@@ -314,7 +314,15 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text 'Filename'
 
     click_on I18n.t('workflow_executions.show.tabs.params')
-    assert_text I18n.t(:'workflow_executions.show.params.empty')
+
+    assert_selector 'div.project_name-param > span', text: '--project_name'
+    assert_selector 'div.project_name-param > input[value="assembly"]'
+
+    assert_selector 'div.assembler-param > span', text: '--assembler'
+    assert_selector 'div.assembler-param > input[value="stub"]'
+
+    assert_selector 'div.random_seed-param > span', text: '--random_seed'
+    assert_selector 'div.random_seed-param > input[value="1"]'
   end
 
   test 'can remove workflow execution from workflow execution page' do
