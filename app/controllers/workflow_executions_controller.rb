@@ -18,9 +18,9 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   end
 
   def show
-    return unless @tab == 'files'
-
     authorize! @workflow_execution, to: :read?
+
+    return unless @tab == 'files'
 
     @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
     @attachments = Attachment.where(attachable: @workflow_execution)
