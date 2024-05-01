@@ -284,5 +284,34 @@ module WorkflowExecutions
       assert_equal expected_tags, @workflow_execution.tags
       assert_enqueued_jobs 1
     end
+
+    test 'test create new workflow execution with workflow name' do
+      test_name = 'test_workflow'
+      workflow_params = {
+        metadata:
+          { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+        workflow_params:
+          {
+            input: '/blah/samplesheet.csv',
+            outdir: '/blah/output'
+          },
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
+        workflow_engine: 'nextflow',
+        workflow_engine_version: '23.10.0',
+        workflow_engine_parameters: { '-r': 'dev' },
+        workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        name: test_name
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert_equal test_name, @workflow_execution.name
+      expected_tags = { 'createdBy' => @user.email }
+      assert_equal expected_tags, @workflow_execution.tags
+      assert_enqueued_jobs 1
+    end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_01_131412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -70,6 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
+    t.string "name"
     t.index ["created_by_id"], name: "index_automated_workflow_executions_on_created_by_id"
     t.index ["namespace_id"], name: "index_automated_workflow_executions_on_namespace_id"
   end
@@ -281,6 +282,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_26_160617) do
     t.integer "http_error_code"
     t.jsonb "tags", default: {}, null: false
     t.integer "state", default: 0, null: false
+    t.string "name"
     t.uuid "namespace_id"
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["namespace_id"], name: "index_workflow_executions_on_namespace_id"

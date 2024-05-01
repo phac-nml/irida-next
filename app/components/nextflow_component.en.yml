@@ -1,0 +1,4 @@
+en:
+  name:
+    label: Name (Optional)
+    helper: A custom name will make it easier to search for this in the future.

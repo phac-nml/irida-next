@@ -63,7 +63,6 @@ class WorkflowExecution < ApplicationRecord
 
   def as_wes_params
     {
-      namespace_id:,
       workflow_params: workflow_params.to_json,
       workflow_type:,
       workflow_type_version:,
@@ -76,7 +75,7 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[id run_id state created_at updated_at]
+    %w[id name run_id state created_at updated_at]
   end
 
   def self.ransackable_associations(_auth_object = nil)

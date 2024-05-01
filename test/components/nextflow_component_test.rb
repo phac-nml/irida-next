@@ -26,7 +26,7 @@ class NextflowComponentTest < ViewComponentTestCase
     assert_selector 'form' do
       assert_selector 'h1', text: 'phac-nml/iridanextexample', count: 1
       assert_selector '.samplesheet-table .table-column:first-child .table-td', count: 3
-      assert_no_selector 'input[type=text]'
+      assert_selector 'input[type=text][name="workflow_execution[name]"]'
     end
   end
 end

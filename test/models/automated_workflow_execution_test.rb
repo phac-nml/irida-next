@@ -12,6 +12,7 @@ class AutomatedWorkflowExecutionTest < ActiveSupport::TestCase
 
   test 'valid automated workflow execution' do
     assert @valid_automated_workflow_execution.valid?
+    assert_not_nil @valid_automated_workflow_execution.name
   end
 
   test 'invalid metadata' do
