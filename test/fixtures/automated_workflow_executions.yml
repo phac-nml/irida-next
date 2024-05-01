@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 valid_automated_workflow_execution:
+  name: "Valid Automated Workflow Execution"
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }

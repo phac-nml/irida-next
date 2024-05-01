@@ -23,7 +23,9 @@ module Projects
     test 'can create a automated workflow execution for a project' do
       project = projects(:project2)
 
+      workflow_name = 'Test Workflow'
       valid_params = { workflow_execution: {
+        name: workflow_name,
         metadata: { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
         workflow_params: { assembler: 'stub' },
         email_notification: true,
@@ -39,6 +41,7 @@ module Projects
 
       automated_workflow = project.namespace.automated_workflow_executions.first
 
+      assert_equal workflow_name, automated_workflow.name
       assert_equal true, automated_workflow.update_samples
       assert_equal true, automated_workflow.email_notification
       assert_equal valid_params[:workflow_execution][:metadata],
