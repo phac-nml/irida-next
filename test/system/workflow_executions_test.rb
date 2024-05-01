@@ -312,6 +312,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     click_on I18n.t('workflow_executions.show.tabs.files')
 
     assert_text 'Filename'
+
+    click_on I18n.t('workflow_executions.show.tabs.params')
+    assert_text I18n.t(:'workflow_executions.show.params.empty')
   end
 
   test 'can remove workflow execution from workflow execution page' do

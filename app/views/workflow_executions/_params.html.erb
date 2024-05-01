@@ -1,10 +1,15 @@
-<section class="mt-4">
-  <% @workflow.workflow_params.each do |item, definition| %>
-    <% definition[:properties].each do |name, property| %>
-      <% unless %[input].include? name.to_s %>
-        <div class="mb-4">
-          <p class="mb-1 text-sm font-medium text-slate-900 dark:text-white"><%= property[:description] %></p>
-          <div class="flex mb-2">
+<% if @workflow.nil? || @workflow.workflow_pararms.nil? %>
+  <section>
+    <%= viral_alert(message: t(:'workflow_executions.show.params.empty'), type: :info) %>
+  </section>
+<% else %>
+  <section class="mt-4">
+    <% @workflow.workflow_params.each do |item, definition| %>
+      <% definition[:properties].each do |name, property| %>
+        <% unless %[input].include? name.to_s %>
+          <div class="mb-4">
+            <p class="mb-1 text-sm font-medium text-slate-900 dark:text-white"><%= property[:description] %></p>
+            <div class="flex mb-2">
             <span
               class="
                 font-mono
@@ -26,11 +31,11 @@
             >
               --<%= name %>
             </span>
-            <input
-              type="text"
-              disabled
-              id="website-admin"
-              class="
+              <input
+                type="text"
+                disabled
+                id="website-admin"
+                class="
                 rounded-none
                 rounded-e-lg
                 bg-slate-50
@@ -52,11 +57,12 @@
                 dark:focus:ring-primary-500
                 dark:focus:border-primary-500
               "
-              value="<%= @workflow_execution.workflow_params[name.to_s] %>"
-            >
+                value="<%= @workflow_execution.workflow_params[name.to_s] %>"
+              >
+            </div>
           </div>
-        </div>
+        <% end %>
       <% end %>
     <% end %>
-  <% end %>
-</section>
+  </section>
+<% end %>
