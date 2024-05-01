@@ -1306,6 +1306,7 @@ en:
       cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
       tabs:
         summary: Summary
+        params: Parameters
         files: Files
     summary:
       run_id: Run ID
