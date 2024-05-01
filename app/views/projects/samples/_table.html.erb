@@ -218,24 +218,26 @@
           <% if allowed_to?(:update_sample?, project) %>
             <td class="px-6 py-3 whitespace-nowrap">
               <div class="flex items-center justify-end">
-                <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.samples.index.actions.dropdown_aria_label', sample_name: sample.name) }) do |dropdown| %>
-                  <%= dropdown.with_item(
-                    label: t(:"projects.samples.index.edit_button"),
-                    url: edit_namespace_project_sample_path(id: sample.id),
+                <%= link_to(
+                  t(:"projects.samples.index.edit_button"),
+                  edit_namespace_project_sample_path(id: sample.id),
+                  data: {
+                    turbo: false
+                  },
+                  class:
+                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+                ) %>
+                <% if allowed_to?(:destroy_sample?, @project) %>
+                  <%= link_to(
+                    t(:"projects.samples.index.remove_button"),
+                    namespace_project_sample_path(id: sample.id),
                     data: {
-                      turbo: false
-                    }
+                      turbo_method: :delete,
+                      turbo_confirm: t(:"projects.samples.index.remove_button_confirmation")
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
                   ) %>
-                  <% if allowed_to?(:destroy_sample?, @project) %>
-                    <%= dropdown.with_item(
-                      label: t(:"projects.samples.index.remove_button"),
-                      url: namespace_project_sample_path(id: sample.id),
-                      data: {
-                        turbo_method: :delete,
-                        turbo_confirm: t(:"projects.samples.index.remove_button_confirmation")
-                      }
-                    ) %>
-                  <% end %>
                 <% end %>
               </div>
             </td>

@@ -24,8 +24,6 @@ module Projects
       assert_selector 'table#samples-table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
-
-      assert_selector 'button.Viral-Dropdown--icon', count: 6
     end
 
     test 'cannot access project samples' do
@@ -208,7 +206,6 @@ module Projects
       table_row = find(:table_row, { 'Sample' => @sample1.name })
 
       within table_row do
-        first('button.Viral-Dropdown--icon').click
         click_link 'Remove'
       end
 
@@ -405,10 +402,10 @@ module Projects
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
       assert_selector 'table#samples-table tbody tr', count: 3
-      assert_selector 'table#samples-table tr button.Viral-Dropdown--icon', text: '', count: 3
-      first('table#samples-table tr button.Viral-Dropdown--icon').click
-      assert_selector 'a', text: 'Edit', count: 1
-      assert_selector 'a', text: 'Remove', count: 0
+      within first('tbody tr') do
+        assert_selector 'a', text: 'Edit', count: 1
+        assert_selector 'a', text: 'Remove', count: 0
+      end
       assert_text @sample1.name
       assert_text @sample2.name
     end
@@ -422,7 +419,8 @@ module Projects
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 0
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
       assert_selector 'table#samples-table tbody tr', count: 3
-      assert_selector 'table#samples-table tr button.Viral-Dropdown--icon', text: '', count: 0
+      assert_selector 'a', text: 'Edit', count: 0
+      assert_selector 'a', text: 'Remove', count: 0
       assert_text @sample1.name
       assert_text @sample2.name
     end
@@ -972,7 +970,7 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_text I18n.t('projects.samples.show.table_header.key')
+        assert_text I18n.t('projects.samples.show.table_header.key').upcase
         assert_selector 'table#metadata-table tbody tr', count: 2
         assert_text 'metadatafield1'
         assert_text 'value1'
@@ -989,8 +987,9 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text 'metadatafield1'
         assert_text 'value1'
-        first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        within('tbody tr:first-child td:last-child') do
+          click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        end
       end
 
       within %(turbo-frame[id="sample_modal"]) do
@@ -1015,8 +1014,9 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text 'metadatafield1'
         assert_text 'value1'
-        first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        within('tbody tr:first-child td:last-child') do
+          click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        end
       end
 
       within %(turbo-frame[id="sample_modal"]) do
@@ -1041,8 +1041,9 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text 'metadatafield1'
         assert_text 'value1'
-        first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        within('tbody tr:first-child td:last-child') do
+          click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        end
       end
 
       within %(turbo-frame[id="sample_modal"]) do
@@ -1069,8 +1070,9 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text 'metadatafield1'
         assert_text 'metadatafield2'
-        first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        within('tbody tr:first-child td:last-child') do
+          click_on I18n.t('projects.samples.show.metadata.actions.dropdown.update')
+        end
       end
 
       within %(turbo-frame[id="sample_modal"]) do
@@ -1091,8 +1093,7 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
       within %(turbo-frame[id="table-listing"]) do
-        assert_no_text I18n.t('projects.samples.show.table_header.action')
-        assert_no_selector 'button.Viral-Dropdown--icon'
+        assert_no_text I18n.t('projects.samples.show.table_header.action').upcase
         assert_text 'metadatafield1'
         assert_text 'value1'
         assert_text 'metadatafield2'
@@ -1112,8 +1113,7 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text 'metadatafield1'
         assert_text "#{I18n.t('models.sample.analysis')} 1"
-        first('button.Viral-Dropdown--icon').click
-        within('div[data-viral--dropdown-target="menu"] ul') do
+        within('tbody tr:first-child td:last-child') do
           assert_no_text I18n.t('projects.samples.show.metadata.actions.dropdown.update')
         end
       end
@@ -1273,7 +1273,7 @@ module Projects
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
       within %(turbo-frame[id="table-listing"]) do
-        assert_text I18n.t('projects.samples.show.table_header.key')
+        assert_text I18n.t('projects.samples.show.table_header.key').upcase
         assert_selector 'table#metadata-table tbody tr', count: 3
         within first('tbody tr td:nth-child(2)') do
           assert_text 'metadatafield1'
@@ -1304,7 +1304,7 @@ module Projects
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
       within %(turbo-frame[id="table-listing"]) do
-        assert_text I18n.t('projects.samples.show.table_header.key')
+        assert_text I18n.t('projects.samples.show.table_header.key').upcase
         assert_selector 'table#metadata-table tbody tr', count: 2
         assert_no_text 'metadatafield1'
       end
@@ -1656,7 +1656,7 @@ module Projects
       end
     end
 
-    test 'delete metadata key added by user by dropdown action' do
+    test 'delete metadata key added by user' do
       visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
@@ -1664,8 +1664,9 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text 'metadatafield1'
         assert_text 'value1'
-        first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+        within('tbody tr:first-child td:last-child') do
+          click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+        end
       end
 
       within('#turbo-confirm[open]') do
@@ -1680,7 +1681,7 @@ module Projects
       end
     end
 
-    test 'delete metadata key added by anaylsis by dropdown action' do
+    test 'delete metadata key added by anaylsis' do
       @subgroup12aa = groups(:subgroup_twelve_a_a)
       @project31 = projects(:project31)
       @sample34 = samples(:sample34)
@@ -1692,8 +1693,9 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text 'metadatafield1'
         assert_text 'value1'
-        first('button.Viral-Dropdown--icon').click
-        click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+        within('tbody tr:first-child td:last-child') do
+          click_on I18n.t('projects.samples.show.metadata.actions.dropdown.delete')
+        end
       end
 
       within('#turbo-confirm[open]') do
@@ -1782,8 +1784,7 @@ module Projects
         assert_text 'metadatafield2'
         assert_text 'value2'
         assert_no_selector 'input[type="checkbox"]'
-        assert_no_text I18n.t('projects.samples.show.table_header.action')
-        assert_no_selector 'button.Viral-Dropdown--icon'
+        assert_no_text I18n.t('projects.samples.show.table_header.action').upcase
       end
 
       assert_no_selector I18n.t('projects.samples.show.delete_metadata_button')
