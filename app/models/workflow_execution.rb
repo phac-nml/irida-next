@@ -99,7 +99,6 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def send_manager_emails
-    namespace = Sample.where(id: sample_ids).first.project.namespace
     I18n.available_locales.each do |locale|
       manager_emails = Member.manager_emails(namespace, locale)
       unless manager_emails.empty?

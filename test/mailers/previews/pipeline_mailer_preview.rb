@@ -10,8 +10,7 @@ class PipelineMailerPreview < ActionMailer::Preview
 
   def complete_manager_email
     workflow_execution = WorkflowExecution.first
-    namespace = Sample.where(id: workflow_execution.sample_ids).first.project.namespace
-    manager_emails = Member.manager_emails(namespace)
+    manager_emails = Member.manager_emails(workflow_execution.namespace, params[:locale])
     PipelineMailer.complete_manager_email(workflow_execution, manager_emails, params[:locale])
   end
 
@@ -23,8 +22,7 @@ class PipelineMailerPreview < ActionMailer::Preview
 
   def error_manager_email
     workflow_execution = WorkflowExecution.first
-    namespace = Sample.where(id: workflow_execution.sample_ids).first.project.namespace
-    manager_emails = Member.manager_emails(namespace)
+    manager_emails = Member.manager_emails(workflow_execution.namespace, params[:locale])
     PipelineMailer.error_manager_email(workflow_execution, manager_emails, params[:locale])
   end
 end

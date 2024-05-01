@@ -16,11 +16,10 @@ class PipelineMailerTest < ActionMailer::TestCase
     end
   end
 
-  def test_localized_complete_manager_email # rubocop:disable Metrics/AbcSize
+  def test_localized_complete_manager_email
     I18n.available_locales.each do |locale|
       workflow_execution = workflow_executions(:irida_next_example_completed)
-      namespace = Sample.where(id: workflow_execution.sample_ids).first.project.namespace
-      manager_emails = Member.manager_emails(namespace)
+      manager_emails = Member.manager_emails(workflow_execution.namespace, locale)
       email = PipelineMailer.complete_manager_email(workflow_execution, manager_emails, locale)
       assert_equal manager_emails, email.bcc
       assert_equal I18n.t(:'mailers.pipeline_mailer.complete_manager_email.subject', id: workflow_execution.id,
@@ -43,11 +42,10 @@ class PipelineMailerTest < ActionMailer::TestCase
     end
   end
 
-  def test_localized_error_manager_email # rubocop:disable Metrics/AbcSize
+  def test_localized_error_manager_email
     I18n.available_locales.each do |locale|
       workflow_execution = workflow_executions(:irida_next_example_error)
-      namespace = Sample.where(id: workflow_execution.sample_ids).first.project.namespace
-      manager_emails = Member.manager_emails(namespace)
+      manager_emails = Member.manager_emails(workflow_execution.namespace, locale)
       email = PipelineMailer.error_manager_email(workflow_execution, manager_emails, locale)
       assert_equal manager_emails, email.bcc
       assert_equal I18n.t(:'mailers.pipeline_mailer.error_manager_email.subject', id: workflow_execution.id, locale:),
