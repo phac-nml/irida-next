@@ -188,4 +188,15 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
     get workflow_execution_path(workflow_executions(:irida_next_example_completing_e))
     assert_response :not_found
   end
+
+  test 'should not cancel a cancelable workflow with incorrect permissions' do
+    sign_in users(:jane_doe)
+    workflow_execution = workflow_executions(:irida_next_example_running)
+    assert workflow_execution.running?
+
+    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    assert_response :not_found
+
+    assert_equal 'running', workflow_execution.reload.state
+  end
 end

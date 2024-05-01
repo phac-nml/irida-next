@@ -133,7 +133,15 @@ module Projects
       assert_response :success
     end
 
-    test 'can get the edit page to create a automated workflow execution for a project' do
+    test 'cannot access the new page to create a automated workflow execution with incorrect permissions' do
+      sign_in users(:ryan_doe)
+
+      get new_namespace_project_automated_workflow_execution_path(@namespace, @project, format: :turbo_stream)
+
+      assert_response :unauthorized
+    end
+
+    test 'can get the edit page to update a automated workflow execution for a project' do
       sign_in users(:john_doe)
 
       automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
@@ -143,7 +151,17 @@ module Projects
       assert_response :success
     end
 
-    test 'can get the show page to create a automated workflow execution for a project' do
+    test 'cannot access the edit page to update a automated workflow execution with incorrect permissions' do
+      sign_in users(:ryan_doe)
+
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+
+      get edit_namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution)
+
+      assert_response :unauthorized
+    end
+
+    test 'can get the show page for a automated workflow execution for a project' do
       sign_in users(:john_doe)
 
       automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
@@ -151,6 +169,16 @@ module Projects
       get namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution)
 
       assert_response :success
+    end
+
+    test 'cannot access the show page for a automated workflow execution with incorrect permissions' do
+      sign_in users(:ryan_doe)
+
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+
+      get namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution)
+
+      assert_response :unauthorized
     end
   end
 end

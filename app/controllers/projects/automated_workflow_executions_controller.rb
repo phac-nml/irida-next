@@ -2,24 +2,33 @@
 
 module Projects
   # Controller actions for Automated Workflow Executions
-  class AutomatedWorkflowExecutionsController < Projects::ApplicationController
+  class AutomatedWorkflowExecutionsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include BreadcrumbNavigation
 
+    before_action :namespace
     before_action :automated_workflow_executions, only: %i[index]
     before_action :automated_workflow_execution, only: %i[edit update destroy show]
     before_action :available_automated_workflows, only: %i[new edit]
 
-    def index; end
+    def index
+      authorize! @namespace, to: :view_automated_workflow_executions?
+    end
 
-    def show; end
+    def show
+      authorize! @namespace, to: :view_automated_workflow_executions?
+    end
 
     def new
+      authorize! @namespace, to: :create_automated_workflow_executions?
+
       @workflow = if params[:workflow_name].present? && params[:workflow_version].present?
                     Irida::Pipelines.find_pipeline_by(params[:workflow_name], params[:workflow_version])
                   end
     end
 
-    def edit; end
+    def edit
+      authorize! @namespace, to: :update_automated_workflow_executions?
+    end
 
     def create # rubocop:disable Metrics/MethodLength
       @automated_workflow_execution = AutomatedWorkflowExecutions::CreateService.new(
