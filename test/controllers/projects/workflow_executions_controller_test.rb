@@ -35,7 +35,7 @@ module Projects
       namespace = groups(:group_one)
       project = projects(:project1)
 
-      get namespace_project_workflow_execution_path(namespace, project, workflow_execution, format: :turbo_stream)
+      get namespace_project_workflow_execution_path(namespace, project, workflow_execution)
 
       assert_response :success
     end
@@ -46,9 +46,9 @@ module Projects
       namespace = groups(:group_one)
       project = projects(:project1)
 
-      get namespace_project_workflow_execution_path(namespace, project, workflow_execution, format: :turbo_stream)
+      get namespace_project_workflow_execution_path(namespace, project, workflow_execution)
 
-      assert_response :not_found
+      assert_response :unauthorized
     end
 
     test 'should cancel a new workflow with valid params' do

@@ -76,7 +76,7 @@
       z-10
     "
   >
-    <% if workflow_execution.cancellable? %>
+    <% if workflow_execution.cancellable? && allowed_to?(:cancel?, workflow_execution) %>
       <%= link_to(
         t(:"workflow_executions.index.actions.cancel_button"),
         cancel_namespace_project_workflow_execution_path(
@@ -92,7 +92,7 @@
           "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
       ) %>
     <% end %>
-    <% if workflow_execution.deletable? %>
+    <% if workflow_execution.deletable? && allowed_to?(:destroy?, workflow_execution) %>
       <%= link_to(
         t(:"workflow_executions.index.actions.delete_button"),
         namespace_project_workflow_execution_path(
