@@ -11,6 +11,8 @@ module Projects
     before_action :workflow_execution, only: %i[show cancel destroy]
     before_action :set_default_tab, only: :show
 
+    TABS = %w[summary params files].freeze
+
     def index
       authorize! @namespace, to: :view_workflow_executions?
 
@@ -22,11 +24,14 @@ module Projects
     def show
       authorize! @namespace, to: :view_workflow_executions?
 
-      return unless @tab == 'files'
-
-      @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
-      @attachments = Attachment.where(attachable: @workflow_execution)
-                               .or(Attachment.where(attachable: @samples_worfklow_executions))
+      if @tab == 'files'
+        @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
+        @attachments = Attachment.where(attachable: @workflow_execution)
+                                 .or(Attachment.where(attachable: @samples_worfklow_executions))
+      elsif @tab == 'params'
+        @workflow = Irida::Pipelines.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+                                                      @workflow_execution.metadata['workflow_version'])
+      end
     end
 
     def cancel

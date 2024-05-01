@@ -1,0 +1,80 @@
+<%= turbo_frame_tag "export_dialog" %>
+
+<%= render Viral::PageHeaderComponent.new(title: @workflow_execution.id, id: t("workflow_executions.state.#{@workflow_execution.state}")) do |component| %>
+  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
+  <%= component.with_buttons do %>
+    <div class="flex flex-row">
+      <% if @workflow_execution.completed? %>
+        <%= link_to t("projects.workflow_executions.show.create_export_button"),
+        new_data_export_path(
+          export_type: "analysis",
+          workflow_execution_id: @workflow_execution.id
+        ),
+        data: {
+          turbo_stream: true
+        },
+        class: "button button--size-default button--state-default mr-2" %>
+      <% else %>
+        <%= link_to t("projects.workflow_executions.show.create_export_button"),
+        new_data_export_path(
+          export_type: "analysis",
+          workflow_execution_id: @workflow_execution.id
+        ),
+        data: {
+          turbo_stream: true
+        },
+        class:
+          "button button--size-default button--state-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300" %>
+      <% end %>
+      <% if @workflow_execution.cancellable? %>
+        <%= link_to(
+          t("projects.workflow_executions.show.cancel_button"),
+          cancel_namespace_project_workflow_execution_path(@workflow_execution.id),
+          data: {
+            turbo_method: :put,
+            turbo_confirm:
+              t("projects.workflow_executions.show.cancel_button_confirmation")
+          },
+          class: "button button--state-default button--size-default mr-1"
+        ) %>
+      <% end %>
+      <% if @workflow_execution.deletable? %>
+        <%= link_to(
+          t("projects.workflow_executions.show.remove_button"),
+          namespace_project_workflow_execution_path(
+            @workflow_execution,
+            redirect: true
+          ),
+          data: {
+            turbo_method: :delete,
+            turbo_confirm:
+              t("projects.workflow_executions.show.remove_button_confirmation")
+          },
+          class: "button button--state-default button--size-default mr-1"
+        ) %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= viral_tabs(id: "workflow-execution-tabs", label: "Tabs") do |tabs| %>
+  <%= tabs.with_tab(url: namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution, tab: "summary"), selected: @tab == "summary" || @tab == nil, controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.summary") %>
+  <% end %>
+  <%= tabs.with_tab(url: namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution, tab: "params"), selected: @tab == "params", controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.params") %>
+  <% end %>
+  <%= tabs.with_tab(url: namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution, tab: "files"), selected: @tab == "files", controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.files") %>
+  <% end %>
+
+  <%= tabs.with_tab_content do %>
+    <% if @tab == 'summary' || @tab == nil %>
+      <%= render partial: "summary" %>
+    <% elsif @tab == "params" %>
+      <%= render partial: "params" %>
+    <% elsif @tab == 'files' %>
+      <%= render partial: "files" %>
+    <% end %>
+  <% end %>
+<% end %>

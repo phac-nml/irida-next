@@ -1,0 +1,21 @@
+<div class="flex flex-col">
+  <table id="files-table table-fixed min-w-full">
+    <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:".table_header.puid") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:".table_header.filename") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:".table_header.format") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:".table_header.type") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:".table_header.size") %></th>
+        <th scope="col" class="px-6 py-3 text-left"><%= t(:".table_header.created_at") %></th>
+      </tr>
+    </thead>
+    <tbody id="attachments-table-body">
+      <% @attachments.each do |attachment| %>
+        <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
+          <%= render partial: "attachment", locals: { attachment: attachment } %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
