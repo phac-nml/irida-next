@@ -1,5 +1,5 @@
 <section class="mt-4">
-  <% if @workflow.nil? || @workflow.workflow_pararms.nil? %>
+  <% if @workflow.nil? || @workflow.workflow_params.nil? %>
     <%= viral_alert(message: t(:"workflow_executions.show.params.empty"), type: :info) %>
   <% else %>
     <% @workflow.workflow_params.each do |item, definition| %>
