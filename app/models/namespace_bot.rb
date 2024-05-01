@@ -25,6 +25,6 @@ class NamespaceBot < ApplicationRecord
   end
 
   def remove_membership_from_namespace
-    membership&.destroy
+    user.members.find_by(namespace:)&.destroy
   end
 end

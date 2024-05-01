@@ -85,4 +85,66 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     assert shared_with_group_links.count == namespace_group_links.count
     assert_same_unique_elements(namespace_group_links, shared_with_group_links)
   end
+
+  test 'set_namespace_type' do
+    namespace_group_link = NamespaceGroupLink.new
+    namespace = namespaces_project_namespaces(:project20_namespace)
+
+    assert_nil namespace_group_link.namespace
+    assert_nil namespace_group_link.namespace_type
+
+    namespace_group_link.save
+    assert_nil namespace_group_link.namespace_type
+
+    namespace_group_link.namespace = namespace
+    namespace_group_link.save
+
+    assert_equal namespace.type, namespace_group_link.namespace_type
+  end
+
+  test 'send_access_revoked_emails' do
+    group_group_link = namespace_group_links(:namespace_group_link5)
+
+    assert_enqueued_emails 3 do
+      group_group_link.send_access_revoked_emails
+
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(group_group_link.group, locale)
+        manager_emails = Member.manager_emails(group_group_link.namespace, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
+                                     args: [user_emails, group_group_link.group,
+                                            group_group_link.namespace, locale]
+        end
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
+                                   args: [manager_emails, group_group_link.group,
+                                          group_group_link.namespace, locale]
+      end
+    end
+  end
+
+  test 'send_access_granted_emails' do
+    group_group_link = namespace_group_links(:namespace_group_link5)
+
+    assert_enqueued_emails 3 do
+      group_group_link.send_access_granted_emails
+
+      I18n.available_locales.each do |locale|
+        user_emails = Member.user_emails(group_group_link.group, locale)
+        manager_emails = Member.manager_emails(group_group_link.namespace, locale)
+        unless user_emails.empty?
+          assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
+                                     args: [user_emails, group_group_link.group,
+                                            group_group_link.namespace, locale]
+        end
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
+                                   args: [manager_emails, group_group_link.group,
+                                          group_group_link.namespace, locale]
+      end
+    end
+  end
 end
