@@ -1,11 +1,28 @@
-<div class="table-container grid gap-4 py-8">
+<div class="table-container overflow-x-auto">
   <table
-    class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4"
+    class="
+      w-full
+      text-sm
+      text-left
+      rtl:text-right
+      text-slate-500
+      dark:text-slate-400
+      whitespace-nowrap
+    "
     data-controller="selection"
     data-selection-action-link-outlet=".action-link"
     data-selection-storage-key-value="files-<%=@sample.id%>"
   >
-    <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+    <thead
+      class="
+        text-xs
+        text-slate-700
+        uppercase
+        bg-slate-50
+        dark:bg-slate-900
+        dark:text-slate-400
+      "
+    >
       <tr>
         <% if allowed_to?(:update_sample?, @project) %>
           <th aria-hidden="true" class="px-6 py-3"></th>

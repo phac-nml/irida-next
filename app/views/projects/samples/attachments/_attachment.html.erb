@@ -105,28 +105,27 @@
 
   <td class="px-6 py-4">
     <% if allowed_to?(:destroy_attachment?, @sample) %>
-      <%= button_to(
+      <%= link_to(
         t(".delete"),
         namespace_project_sample_attachment_path(
           sample_id: @sample.id,
           id: attachment.id
         ),
-        method: "delete",
-        form: {
-          data: {
-            action: "turbo:submit-end->selection#remove",
-            "selection-id-param":
-              (
-                if attachment.associated_attachment
-                  [attachment.id, attachment.associated_attachment.id]
-                else
-                  attachment.id
-                end
-              ),
-            "turbo-confirm": t(".delete_confirm")
-          }
+        data: {
+          turbo_method: :delete,
+          action: "turbo:submit-end->selection#remove",
+          "selection-id-param":
+            (
+              if attachment.associated_attachment
+                [attachment.id, attachment.associated_attachment.id]
+              else
+                attachment.id
+              end
+            ),
+          turbo_confirm: t(".delete_confirm")
         },
-        class: "button button--state-destructive button--size-default"
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
       ) %>
     <% end %>
   </td>
