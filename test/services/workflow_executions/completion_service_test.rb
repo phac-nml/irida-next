@@ -195,6 +195,8 @@ module WorkflowExecutions
       assert_equal 0, workflow_execution.outputs.count
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'sample outputs on samples_workflow_executions' do
@@ -247,6 +249,8 @@ module WorkflowExecutions
       assert_equal @normal2_output_analysis3_file_blob.checksum, output3.file.checksum
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'sample metadata on samples_workflow_executions' do
@@ -275,6 +279,8 @@ module WorkflowExecutions
       end
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'metadata on samples_workflow_executions merged into underlying samples when update_samples' do
@@ -319,6 +325,8 @@ module WorkflowExecutions
       assert_nil @sample42.reload.metadata_provenance['metadatafield2']
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'metadata on samples_workflow_executions are not merged into underlying samples when not update_samples' do
@@ -351,6 +359,54 @@ module WorkflowExecutions
       assert_not_equal new_metadata2, @sample42.metadata
 
       assert_equal 'completed', workflow_execution.state
+
+      assert workflow_execution.email_notification
+      assert_enqueued_emails 1
+      assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution]
+    end
+
+    test 'metadata on automated samples_workflow_executions are not merged into underlying samples when not
+    update_samples' do
+      workflow_execution = @workflow_execution_with_samples_without_update_samples
+      workflow_execution.submitter = users(:projectA_automation_bot)
+
+      old_metadata1 = { 'metadatafield1' => 'value1',
+                        'organism' => 'the organism' }
+      old_metadata2 = { 'metadatafield2' => 'value2',
+                        'organism' => 'some organism' }
+      new_metadata1 = { 'number' => 1,
+                        'metadatafield1' => 'value1',
+                        'organism' => 'an organism' }
+      new_metadata2 = { 'number' => 2,
+                        'metadatafield2' => 'value2',
+                        'organism' => 'a different organism' }
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_f', workflow_execution.run_id
+
+      assert_equal old_metadata1, @sample41.metadata
+      assert_equal old_metadata2, @sample42.metadata
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      @sample41.reload
+      assert_not_equal new_metadata1, @sample41.metadata
+
+      @sample42.reload
+      assert_not_equal new_metadata2, @sample42.metadata
+
+      assert_equal 'completed', workflow_execution.state
+
+      assert workflow_execution.email_notification
+      assert_enqueued_emails 2
+      I18n.available_locales.each do |locale|
+        manager_emails = Member.manager_emails(workflow_execution.namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with PipelineMailer, :complete_manager_email,
+                                   args: [workflow_execution, manager_emails, locale]
+      end
     end
 
     test 'outputs on samples_workflow_executions added to samples attachments when update_samples' do
@@ -374,6 +430,8 @@ module WorkflowExecutions
       assert_equal 'analysis3.txt', @sample42.attachments[0].filename.to_s
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'outputs on samples_workflow_executions not added to samples attachments when not update_samples' do
@@ -393,6 +451,10 @@ module WorkflowExecutions
       assert_equal 0, @sample42.attachments.count
 
       assert_equal 'completed', workflow_execution.state
+
+      assert workflow_execution.email_notification
+      assert_enqueued_emails 1
+      assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution]
     end
 
     test 'complex metadata on samples_workflow_executions' do
@@ -437,6 +499,8 @@ module WorkflowExecutions
       assert_equal metadata2, swe2.metadata
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
 
     test 'sample outputs metadata on samples_workflow_executions missing entry' do
@@ -475,6 +539,8 @@ module WorkflowExecutions
       assert swe2.metadata.empty?
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
     end
   end
 end
