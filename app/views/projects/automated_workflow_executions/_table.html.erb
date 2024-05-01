@@ -1,8 +1,7 @@
-<div class="bg-white dark:bg-slate-800">
-  <div class="table-container flex flex-col">
-    <table
-      id="automated_workflow_executions"
-      class="
+<div class="table-container data-turbo-temporary">
+  <table
+    id="automated_workflow_executions"
+    class="
         w-full
         text-sm
         text-left
@@ -10,9 +9,9 @@
         text-slate-500
         dark:text-slate-400
       "
-    >
-      <thead
-        class="
+  >
+    <thead
+      class="
           text-xs
           text-slate-700
           uppercase
@@ -20,47 +19,46 @@
           dark:bg-slate-700
           dark:text-slate-400
         "
-      >
-        <tr>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t(:".headers.id") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t(:".headers.name") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t(:".headers.workflow_name") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t(:".headers.workflow_version") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t(:".headers.created_at") %>
-          </th>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-            <%= t(:".headers.actions") %>
-          </th>
-        </tr>
-      </thead>
-      <tbody
-        class="
+    >
+    <tr>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <%= t(:".headers.id") %>
+      </th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <%= t(:".headers.name") %>
+      </th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <%= t(:".headers.workflow_name") %>
+      </th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <%= t(:".headers.workflow_version") %>
+      </th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <%= t(:".headers.created_at") %>
+      </th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <%= t(:".headers.actions") %>
+      </th>
+    </tr>
+    </thead>
+    <tbody
+      class="
           bg-white
           divide-y
           divide-slate-200
           dark:bg-slate-800
           dark:divide-slate-700
         "
-      >
-        <%= render partial: "automated_workflow_execution",
-        collection: @automated_workflow_executions %>
-      </tbody>
-    </table>
-    <div class="empty_state_message">
-      <%= viral_empty(
-        title: t(:".empty.title"),
-        description: t(:".empty.description"),
-        icon_name: :document_text
-      ) %>
-    </div>
+    >
+    <%= render partial: "automated_workflow_execution",
+               collection: @automated_workflow_executions %>
+    </tbody>
+  </table>
+  <div class="empty_state_message">
+    <%= viral_empty(
+          title: t(:".empty.title"),
+          description: t(:".empty.description"),
+          icon_name: :document_text
+        ) %>
   </div>
 </div>
