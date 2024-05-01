@@ -1,0 +1,87 @@
+<tr
+  id="<%= dom_id(data_export) %>"
+  class="text-sm font-normal text-slate-500 dark:text-slate-400"
+>
+  <td class="px-6 py-3">
+    <%= link_to data_export.id,
+    data_export_path(data_export),
+    data: {
+      turbo: false
+    },
+    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+  </td>
+  <td class="px-6 py-3">
+    <% unless data_export.name.nil? %>
+      <%= link_to data_export.name,
+      data_export_path(data_export),
+      data: {
+        turbo: false
+      },
+      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+    <% end %>
+  </td>
+  <td class="px-6 py-3">
+    <%= data_export.export_type.capitalize %>
+  </td>
+  <td class="px-6 py-3">
+    <% if data_export.status == 'ready' %>
+      <%= viral_pill(text: data_export.status.capitalize, color: :green) %>
+    <% else %>
+      <%= viral_pill(text: data_export.status.capitalize, color: :gray) %>
+    <% end %>
+  </td>
+  <td class="px-6 py-3">
+    <%= l(data_export.created_at.localtime, format: :full_date) %>
+  </td>
+  <td class="px-6 py-3">
+    <% unless data_export.expires_at.nil? %>
+      <%= l(data_export.expires_at.localtime, format: :full_date) %>
+    <% end %>
+  </td>
+  <td class="px-6 py-3 text-right">
+    <%= viral_dropdown(
+              icon: "ellipsis_vertical",
+              aria: { label: t(:'data_exports.index.actions.dropdown',
+              name: data_export.id) }) do |dropdown| %>
+      <% if data_export.status == 'ready' %>
+        <%= dropdown.with_item(
+          label: (t(:"data_exports.index.actions.download")),
+          url: download_data_export_path(data_export),
+          data: {
+            turbo: false
+          },
+          aria: {
+            label:
+              (
+                t(
+                  :"data_exports.index.actions.download_aria_label",
+                  name: data_export.name || data_export.id
+                )
+              )
+          }
+        ) %>
+      <% end %>
+      <%= dropdown.with_item(
+        label: (t(:"data_exports.index.actions.delete")),
+        url: data_export_path(data_export),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm:
+            t(
+              :"data_exports.index.delete_confirmation",
+              name: data_export.name || data_export.id
+            )
+        },
+        aria: {
+          label:
+            (
+              t(
+                :"data_exports.index.actions.delete_aria_label",
+                name: data_export.name || data_export.id
+              )
+            )
+        }
+      ) %>
+    <% end %>
+  </td>
+</tr>
