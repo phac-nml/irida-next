@@ -101,7 +101,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   end
 
   def load_workflows
-    WorkflowExecution.where(submitter: current_user)
+    authorized_scope(WorkflowExecution, type: :relation, as: :user, scope_options: { user: current_user })
   end
 
   def workflow_execution_params
