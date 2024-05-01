@@ -15,7 +15,17 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, user).execute
+        exception = assert_raises(ActionPolicy::Unauthorized) do
+          WorkflowExecutions::DestroyService.new(workflow_execution, user).execute
+        end
+
+        assert_equal WorkflowExecutionPolicy, exception.policy
+        assert_equal :destroy?, exception.rule
+        assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+        assert_equal I18n.t(:'action_policy.policy.workflow_execution.destroy?',
+                            namespace_type: workflow_execution.namespace.type,
+                            name: workflow_execution.namespace.name),
+                     exception.result.message
       end
     end
 

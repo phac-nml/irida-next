@@ -41,5 +41,21 @@ module Namespaces
     test '#update_namespace_with_group_link?' do
       assert @policy.update_namespace_with_group_link?
     end
+
+    test '#create_automated_workflow_executions?' do
+      assert @policy.create_automated_workflow_executions?
+    end
+
+    test '#destroy_automated_workflow_executions?' do
+      assert @policy.destroy_automated_workflow_executions?
+    end
+
+    test '#update_automated_workflow_executions?' do
+      assert @policy.update_automated_workflow_executions?
+    end
+
+    test '#view_automated_workflow_executions?' do
+      assert @policy.view_automated_workflow_executions?
+    end
   end
 end

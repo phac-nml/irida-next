@@ -11,6 +11,8 @@ module WorkflowExecutions
     def execute
       return false unless @workflow_execution.cancellable?
 
+      authorize! @workflow_execution, to: :cancel?
+
       # Early exit if workflow execution has not been submitted to ga4gh wes yet
       unless @workflow_execution.sent_to_ga4gh?
         @workflow_execution.state = :canceled

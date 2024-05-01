@@ -138,5 +138,20 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def view_automated_workflow_executions?
+      return true if record.parent.user_namespace? && record.parent.owner == user
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
+
+    def submit_workflow?
+      return true if Member.can_submit_workflow?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
   end
 end
