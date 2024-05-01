@@ -21,7 +21,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector 'table#workflow_executions tbody tr', count: 14
+    assert_selector 'table#workflow_executions tbody tr', count: 17
   end
 
   test 'should display pages of workflow executions' do
