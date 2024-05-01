@@ -39,49 +39,44 @@
     <% end %>
   </td>
   <td class="px-6 py-3 text-right">
-    <%= viral_dropdown(
-              icon: "ellipsis_vertical",
-              aria: { label: t(:'data_exports.index.actions.dropdown',
-              name: data_export.id) }) do |dropdown| %>
-      <% if data_export.status == 'ready' %>
-        <%= dropdown.with_item(
-          label: (t(:"data_exports.index.actions.download")),
-          url: download_data_export_path(data_export),
-          data: {
-            turbo: false
-          },
-          aria: {
-            label:
-              (
-                t(
-                  :"data_exports.index.actions.download_aria_label",
-                  name: data_export.name || data_export.id
-                )
-              )
-          }
-        ) %>
-      <% end %>
-      <%= dropdown.with_item(
-        label: (t(:"data_exports.index.actions.delete")),
-        url: data_export_path(data_export),
+    <% if data_export.status == 'ready' %>
+      <%= link_to(
+        t(:"data_exports.index.actions.download"),
+        download_data_export_path(data_export),
         data: {
-          turbo_method: :delete,
-          turbo_confirm:
-            t(
-              :"data_exports.index.delete_confirmation",
-              name: data_export.name || data_export.id
-            )
+          turbo: false
         },
         aria: {
           label:
             (
               t(
-                :"data_exports.index.actions.delete_aria_label",
+                :"data_exports.index.actions.download_aria_label",
                 name: data_export.name || data_export.id
               )
             )
         }
       ) %>
     <% end %>
+    <%= link_to(
+      t(:"data_exports.index.actions.delete"),
+      data_export_path(data_export),
+      data: {
+        turbo_method: :delete,
+        turbo_confirm:
+          t(
+            :"data_exports.index.delete_confirmation",
+            name: data_export.name || data_export.id
+          )
+      },
+      aria: {
+        label:
+          (
+            t(
+              :"data_exports.index.actions.delete_aria_label",
+              name: data_export.name || data_export.id
+            )
+          )
+      }
+    ) %>
   </td>
 </tr>
