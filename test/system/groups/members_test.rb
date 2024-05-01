@@ -115,7 +115,6 @@ module Groups
       table_row = find(:table_row, { 'Username' => group_member.user.email })
 
       within table_row do
-        first('button.Viral-Dropdown--icon').click
         click_link I18n.t(:'groups.members.index.remove')
       end
 
@@ -134,7 +133,6 @@ module Groups
       table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
-        first('button.Viral-Dropdown--icon').click
         click_link I18n.t(:'groups.members.index.leave_group')
       end
 
