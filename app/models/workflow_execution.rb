@@ -63,7 +63,6 @@ class WorkflowExecution < ApplicationRecord
 
   def as_wes_params
     {
-      name:,
       namespace_id:,
       workflow_params: workflow_params.to_json,
       workflow_type:,
