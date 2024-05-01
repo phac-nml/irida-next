@@ -95,36 +95,35 @@
   </td>
   <td class="px-6 py-4 text-right">
     <% if allowed_to?(:unlink_namespace_with_group?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-      <%= viral_dropdown(icon: "ellipsis_vertical", aria: { label: t(:'projects.group_links.index.actions.member_dropdown_aria_label', member: namespace_group_link.group.name) }) do |dropdown| %>
-        <%= dropdown.with_item(
-          label: (t(:"projects.group_links.index.unlink")),
-          url:
-            namespace_project_group_link_path(
-              @namespace.parent,
-              @namespace.project,
-              namespace_group_link
+      <%= link_to(
+        t(:"projects.group_links.index.unlink"),
+        namespace_project_group_link_path(
+          @namespace.parent,
+          @namespace.project,
+          namespace_group_link
+        ),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm:
+            t(
+              :"projects.group_links.index.unlink_confirmation",
+              namespace_name: namespace_group_link.namespace.human_name,
+              group_name: namespace_group_link.group.human_name
             ),
-          data: {
-            turbo_method: :delete,
-            turbo_confirm:
+          turbo_stream: true
+        },
+        aria: {
+          label:
+            (
               t(
-                :"projects.group_links.index.unlink_confirmation",
-                namespace_name: namespace_group_link.namespace.human_name,
-                group_name: namespace_group_link.group.human_name
-              ),
-            turbo_stream: true
-          },
-          aria: {
-            label:
-              (
-                t(
-                  :"projects.group_links.index.actions.unlink_aria_label",
-                  member: namespace_group_link.group.name
-                )
+                :"projects.group_links.index.actions.unlink_aria_label",
+                member: namespace_group_link.group.name
               )
-          }
-        ) %>
-      <% end %>
+            )
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+      ) %>
     <% end %>
   </td>
 </tr>
