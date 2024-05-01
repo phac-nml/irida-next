@@ -29,6 +29,12 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
 
       resources :automated_workflow_executions, only: %i[index show new create destroy edit update]
 
+      resources :workflow_executions, only: %i[index destroy show] do
+        member do
+          put :cancel
+        end
+      end
+
       resources :group_links, only: %i[create destroy update index new]
       resources :samples do
         scope module: :samples, as: :samples do

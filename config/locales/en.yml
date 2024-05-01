@@ -1276,6 +1276,15 @@ en:
         description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
         apply: Apply filter
         remove_tag: Remove
+    workflow_executions:
+      cancel:
+        error: "Could not cancel workflow %{workflow_name}"
+        success: "Workflow %{workflow_name} was successfully canceled"
+      destroy:
+        error: "Could not delete workflow %{workflow_name}"
+        success: "Workflow %{workflow_name} was successfully deleted"
+      index:
+        title: Workflow Executions
   workflow_executions:
     index:
       title: Workflow Executions
