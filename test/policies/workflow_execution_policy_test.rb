@@ -12,6 +12,12 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
 
   test '#read?' do
     assert @policy.read?
+
+    user = users(:project1_automation_bot)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.read?
   end
 
   test '#create?' do
@@ -20,10 +26,22 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
 
   test '#cancel?' do
     assert @policy.cancel?
+
+    user = users(:project1_automation_bot)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.cancel?
   end
 
   test '#destroy?' do
     assert @policy.destroy?
+
+    user = users(:project1_automation_bot)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.destroy?
   end
 
   test 'namespace scope' do
