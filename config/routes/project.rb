@@ -29,7 +29,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
 
       resources :automated_workflow_executions, only: %i[index show new create destroy edit update]
 
-      resources :workflow_executions, only: %i[index destroy] do
+      resources :workflow_executions, only: %i[index destroy show] do
         member do
           put :cancel
         end
