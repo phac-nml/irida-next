@@ -77,7 +77,7 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[id run_id state created_at updated_at]
+    %w[id name run_id state created_at updated_at]
   end
 
   def self.ransackable_associations(_auth_object = nil)

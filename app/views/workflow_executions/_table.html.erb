@@ -41,8 +41,8 @@
         <%= render Ransack::SortComponent.new(
           ransack_obj: @q,
           label: t(:".headers.name"),
-          url: sorting_url(@q, URI.encode_www_form_component("metadata_name")),
-          field: "metadata_workflow_name"
+          url: sorting_url(@q, URI.encode_www_form_component("name")),
+          field: "name"
         ) %>
       </th>
       <th scope="col" class="px-6 py-3">
