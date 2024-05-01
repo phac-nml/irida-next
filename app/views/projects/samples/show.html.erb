@@ -20,7 +20,7 @@
             turbo_method: :delete,
             turbo_confirm: t("projects.samples.show.remove_button_confirmation")
           },
-          class: "button button--state-default button--size-default mr-1"
+          class: "button button--state-default button--size-default"
         ) %>
       <% end %>
     </div>
@@ -147,6 +147,8 @@
     <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files'), loading: :lazy do %>
       <% if @tab == "history" %>
         <%= render partial: "shared/loading/history" %>
+      <% elsif @tab == "params" %>
+        <%= render partial: "shared/loading/params" %>
       <% else %>
         <%= render partial: "shared/loading/table" %>
       <% end %>

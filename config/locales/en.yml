@@ -1306,7 +1306,10 @@ en:
       cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
       tabs:
         summary: Summary
+        params: Parameters
         files: Files
+      params:
+        empty: This pipeline has no parameters.
     summary:
       run_id: Run ID
       workflow_name: Workflow Name

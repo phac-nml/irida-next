@@ -9,7 +9,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   before_action :workflow_execution, only: %i[show cancel destroy]
   before_action :set_default_tab, only: :show
 
-  TABS = %w[summary files].freeze
+  TABS = %w[summary params files].freeze
 
   def index
     @q = load_workflows.ransack(params[:q])
@@ -20,11 +20,15 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
   def show
     authorize! @workflow_execution, to: :read?
 
-    return unless @tab == 'files'
+    if @tab == 'files'
 
-    @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
-    @attachments = Attachment.where(attachable: @workflow_execution)
-                             .or(Attachment.where(attachable: @samples_worfklow_executions))
+      @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
+      @attachments = Attachment.where(attachable: @workflow_execution)
+                               .or(Attachment.where(attachable: @samples_worfklow_executions))
+    elsif @tab == 'params'
+      @workflow = Irida::Pipelines.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+                                                    @workflow_execution.metadata['workflow_version'])
+    end
   end
 
   def create

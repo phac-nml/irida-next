@@ -21,7 +21,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector 'table#workflow_executions tbody tr', count: 13
+    assert_selector 'table#workflow_executions tbody tr', count: 14
   end
 
   test 'should display pages of workflow executions' do
@@ -50,7 +50,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     workflow_execution2 = workflow_executions(:workflow_execution_invalid_metadata)
     workflow_execution8 = workflow_executions(:irida_next_example_canceling)
     workflow_execution9 = workflow_executions(:irida_next_example_canceled)
-    workflow_execution10 = workflow_executions(:irida_next_example_running)
+    workflow_execution10 = workflow_executions(:workflow_execution_existing)
     workflow_execution12 = workflow_executions(:irida_next_example_new)
 
     visit workflow_executions_path
@@ -61,7 +61,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 14
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
       assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution10.run_id
       assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
@@ -71,7 +71,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 14
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
       assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution9.run_id
       assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
@@ -81,7 +81,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 14
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution9.metadata['workflow_name']
       assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
@@ -94,7 +94,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 14
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution1.metadata['workflow_name']
       assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
@@ -107,7 +107,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@created_at_col}) svg.icon-arrow_up"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 13
+      assert_selector 'tr', count: 14
       assert_selector "tr:first-child td:nth-child(#{@created_at_col})",
                       text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
       assert_selector "tr:nth-child(2) td:nth-child(#{@created_at_col})",
@@ -300,7 +300,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view a workflow execution' do
-    workflow_execution = workflow_executions(:irida_next_example_completed)
+    workflow_execution = workflow_executions(:workflow_execution_existing)
 
     visit workflow_execution_path(workflow_execution)
 
@@ -312,6 +312,17 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     click_on I18n.t('workflow_executions.show.tabs.files')
 
     assert_text 'Filename'
+
+    click_on I18n.t('workflow_executions.show.tabs.params')
+
+    assert_selector 'div.project_name-param > span', text: '--project_name'
+    assert_selector 'div.project_name-param > input[value="assembly"]'
+
+    assert_selector 'div.assembler-param > span', text: '--assembler'
+    assert_selector 'div.assembler-param > input[value="stub"]'
+
+    assert_selector 'div.random_seed-param > span', text: '--random_seed'
+    assert_selector 'div.random_seed-param > input[value="1"]'
   end
 
   test 'can remove workflow execution from workflow execution page' do
@@ -326,7 +337,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     within %(#workflow_executions-table-body) do
-      assert_selector 'tr', count: 12
+      assert_selector 'tr', count: 13
       assert_no_text workflow_execution.id
     end
   end
