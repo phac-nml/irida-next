@@ -21,7 +21,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username')
+      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username').upcase
 
       assert_selector 'tr', count: 20 + header_row_count
 
@@ -47,7 +47,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username')
+      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username').upcase
 
       assert_selector 'tr', count: members_count + header_row_count
 
@@ -170,7 +170,7 @@ module Projects
 
       click_on I18n.t(:'components.pagination.next')
 
-      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username')
+      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username').upcase
 
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
@@ -309,7 +309,7 @@ module Projects
 
       click_link I18n.t(:'projects.members.index.tabs.groups')
 
-      assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group')
+      assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group').upcase
 
       assert_selector 'tr', count: 4 + header_row_count
 

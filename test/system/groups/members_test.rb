@@ -20,7 +20,7 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username')
+      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username').upcase
 
       assert_selector 'tr', count: 20 + header_row_count
 
@@ -43,7 +43,7 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username')
+      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username').upcase
 
       assert_selector 'tr', count: @members_count + header_row_count
 
@@ -206,7 +206,7 @@ module Groups
 
       click_link I18n.t(:'groups.members.index.tabs.groups')
 
-      assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group')
+      assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group').upcase
 
       assert_selector 'tr', count: 4 + header_row_count
 

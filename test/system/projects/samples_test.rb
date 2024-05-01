@@ -118,9 +118,9 @@ module Projects
 
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
 
       within('#attachments-table-body') do
+        assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
         click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
       end
 
@@ -160,7 +160,7 @@ module Projects
       within('#table-listing') do
         assert_text 'TestSample_S1_L001_R1_001.fastq'
         assert_text 'TestSample_S1_L001_R2_001.fastq'
-        assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
+        assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
       end
 
       # Destroy paired files
@@ -184,7 +184,7 @@ module Projects
 
     test 'should destroy Sample from sample show page' do
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      assert_selector 'a', text: I18n.t('projects.samples.index.remove_button'), count: 1
+      assert_link text: I18n.t('projects.samples.index.remove_button'), count: 1
       click_link I18n.t(:'projects.samples.index.remove_button')
 
       within('#turbo-confirm[open]') do
