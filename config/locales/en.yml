@@ -1335,6 +1335,16 @@ en:
           type: Type
           size: Size
           created_at: Created At
+      state:
+        initial: New
+        prepared: Prepared
+        submitted: Submitted
+        running: Running
+        completing: Completing
+        completed: Completed
+        error: Error
+        canceling: Canceling
+        canceled: Canceled
   workflow_executions:
     index:
       title: Workflow Executions

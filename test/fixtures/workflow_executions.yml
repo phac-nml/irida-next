@@ -349,11 +349,11 @@ automated_workflow_execution:
       "workflow_name": "automated_workflow_execution",
       "workflow_version": "1.0dev",
     }
-  workflow_params:
-    {
-      "input": "/blah/samplesheet.csv",
-      "outdir": "/blah/output",
-    }
+  workflow_params: {
+    "assembler": "stub",
+    "project_name": "assembly",
+    "random_seed": "1",
+  }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed_with_output"
   run_id: "my_run_id_13"
@@ -393,10 +393,6 @@ workflow_execution_existing:
   run_id: "my_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-
-
-
-
 
 automated_example_prepared:
   <<: *DEFAULTS
@@ -548,3 +544,17 @@ automated_example_new:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "initial"
+
+automated_workflow_execution_existing:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "project_name": "assembly",
+    "random_seed": "1",
+  }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>

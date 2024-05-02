@@ -186,7 +186,6 @@ sample46_irida_next_example_completed_with_output:
     "fastq_2": ""
   }
 
-
 sample1_automated_example_submitted:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_submitted, :uuid) %>

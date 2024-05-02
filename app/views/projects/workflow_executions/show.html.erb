@@ -32,7 +32,11 @@
       <% if @workflow_execution.cancellable? && allowed_to?(:cancel?, @workflow_execution) %>
         <%= link_to(
           t("projects.workflow_executions.show.cancel_button"),
-          cancel_namespace_project_workflow_execution_path(@workflow_execution.id),
+          cancel_namespace_project_workflow_execution_path(
+            @namespace.parent,
+            @namespace.project,
+            @workflow_execution.id
+          ),
           data: {
             turbo_method: :put,
             turbo_confirm:
@@ -45,6 +49,8 @@
         <%= link_to(
           t("projects.workflow_executions.show.remove_button"),
           namespace_project_workflow_execution_path(
+            @namespace.parent,
+            @namespace.project,
             @workflow_execution,
             redirect: true
           ),
