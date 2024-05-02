@@ -113,4 +113,56 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
 
     assert_equal 'You are not authorized to perform this action', error_message
   end
+
+  test 'createSample mutation should not work with unauthorized project and valid api scope token' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+
+    result = IridaSchema.execute(CREATE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: users(:jane_doe),
+                                            token: personal_access_tokens(:jane_doe_valid_pat) },
+                                 variables: { projectId: project.to_global_id.to_s,
+                                              name: sample1.name,
+                                              description: sample1.description })
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal I18n.t(:'action_policy.policy.project.create_sample?', name: project.name), error_message
+  end
+
+  test 'createSample mutation should not work with invalid project puid and valid api scope token' do
+    sample1 = samples(:sample1)
+
+    result = IridaSchema.execute(CREATE_SAMPLE_USING_PROJECT_PUID_MUTATION,
+                                 context: { current_user: @user,
+                                            token: @api_scope_token },
+                                 variables: { projectPuid: 'INVALID_PUID',
+                                              name: sample1.name,
+                                              description: sample1.description })
+
+    assert_not_nil result['data']['createSample']['errors'], 'shouldn\'t work and have errors.'
+
+    errors = result['data']['createSample']['errors']
+
+    assert_equal 'Project not found by provided ID or PUID', errors[0]
+  end
+
+  test 'createSample mutation should not work with invalid project id and valid api scope token' do
+    sample1 = samples(:sample1)
+
+    result = IridaSchema.execute(CREATE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user,
+                                            token: @api_scope_token },
+                                 variables: { projectId: 'gid://irida/Project/not-a-valid-uuid',
+                                              name: sample1.name,
+                                              description: sample1.description })
+
+    assert_not_nil result['data']['createSample']['errors'], 'shouldn\'t work and have errors.'
+
+    errors = result['data']['createSample']['errors']
+
+    assert_equal 'Project not found by provided ID or PUID', errors[0]
+  end
 end
