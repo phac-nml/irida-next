@@ -22,83 +22,85 @@ module Projects
     test 'should display a list of workflow executions' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       assert_selector 'table#workflow_executions tbody tr', count: 10
     end
 
-    # test 'should sort a list of workflow executions' do
-    #   workflow_execution = workflow_executions(:irida_next_example)
-    #   workflow_execution1 = workflow_executions(:workflow_execution_valid)
-    #   workflow_execution2 = workflow_executions(:workflow_execution_invalid_metadata)
-    #   workflow_execution8 = workflow_executions(:irida_next_example_canceling)
-    #   workflow_execution9 = workflow_executions(:irida_next_example_canceled)
-    #   workflow_execution10 = workflow_executions(:workflow_execution_existing)
-    #   workflow_execution12 = workflow_executions(:irida_next_example_new)
+    test 'should sort a list of workflow executions' do
+      workflow_execution1 = workflow_executions(:automated_workflow_execution)
+      workflow_execution2 = workflow_executions(:automated_example_canceling)
+      workflow_execution3 = workflow_executions(:automated_example_canceled)
+      workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
+      workflow_execution5 = workflow_executions(:automated_example_prepared)
+      workflow_execution6 = workflow_executions(:automated_example_running)
 
-    #   visit workflow_executions_path
+      visit namespace_project_workflow_executions_path(@namespace, @project)
 
-    #   assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
-    #   click_on I18n.t('workflow_executions.table.headers.run_id')
-    #   assert_selector "table#workflow_executions thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
+      click_on I18n.t('projects.workflow_executions.table.headers.run_id')
+      assert_selector "table#workflow_executions thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
-    #   within first('table#workflow_executions tbody') do
-    #     assert_selector 'tr', count: 14
-    #     assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-    #     assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution10.run_id
-    #     assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
-    #   end
+      within first('table#workflow_executions tbody') do
+        assert_selector 'tr', count: 10
+        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
+        assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution6.run_id
+        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
+      end
 
-    #   click_on I18n.t('workflow_executions.table.headers.run_id')
-    #   assert_selector "table#workflow_executions thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
+      click_on I18n.t('workflow_executions.table.headers.run_id')
+      assert_selector "table#workflow_executions thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
-    #   within first('table#workflow_executions tbody') do
-    #     assert_selector 'tr', count: 14
-    #     assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
-    #     assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution9.run_id
-    #     assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-    #   end
+      within first('table#workflow_executions tbody') do
+        assert_selector 'tr', count: 10
+        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
+        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution2.run_id
+        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
+      end
 
-    #   click_on I18n.t('workflow_executions.table.headers.workflow_name')
-    #   assert_selector "table#workflow_executions thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
+      click_on I18n.t('workflow_executions.table.headers.workflow_name')
+      assert_selector "table#workflow_executions thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
-    #   within first('table#workflow_executions tbody') do
-    #     assert_selector 'tr', count: 14
-    #     assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-    #                     text: workflow_execution9.metadata['workflow_name']
-    #     assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-    #                     text: workflow_execution8.metadata['workflow_name']
-    #     assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-    #                     text: workflow_execution1.metadata['workflow_name']
-    #   end
+      within first('table#workflow_executions tbody') do
+        assert_selector 'tr', count: 10
+        assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
+                        text: workflow_execution3.metadata['workflow_name']
+        assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
+                        text: workflow_execution2.metadata['workflow_name']
+        assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
+                        text: workflow_execution4.metadata['workflow_name']
+      end
 
-    #   click_on I18n.t('workflow_executions.table.headers.workflow_name')
-    #   assert_selector "table#workflow_executions thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
+      click_on I18n.t('workflow_executions.table.headers.workflow_name')
+      assert_selector "table#workflow_executions thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
-    #   within first('table#workflow_executions tbody') do
-    #     assert_selector 'tr', count: 14
-    #     assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-    #                     text: workflow_execution1.metadata['workflow_name']
-    #     assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-    #                     text: workflow_execution2.metadata['workflow_name']
-    #     assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-    #                     text: workflow_execution9.metadata['workflow_name']
-    #   end
+      within first('table#workflow_executions tbody') do
+        assert_selector 'tr', count: 10
+        assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
+                        text: workflow_execution4.metadata['workflow_name']
+        assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
+                        text: workflow_execution1.metadata['workflow_name']
+        assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
+                        text: workflow_execution3.metadata['workflow_name']
+      end
 
-    #   click_on I18n.t('workflow_executions.table.headers.created_at')
-    #   assert_selector "table#workflow_executions thead th:nth-child(#{@created_at_col}) svg.icon-arrow_up"
+      click_on I18n.t('workflow_executions.table.headers.created_at')
+      assert_selector "table#workflow_executions thead th:nth-child(#{@created_at_col}) svg.icon-arrow_up"
 
-    #   within first('table#workflow_executions tbody') do
-    #     assert_selector 'tr', count: 14
-    #     assert_selector "tr:first-child td:nth-child(#{@created_at_col})",
-    #                     text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
-    #     assert_selector "tr:nth-child(2) td:nth-child(#{@created_at_col})",
-    #                     text: I18n.l(workflow_execution2.created_at.localtime, format: :full_date)
-    #     assert_selector "tr:last-child td:nth-child(#{@created_at_col})",
-    #                     text: I18n.l(workflow_execution12.created_at.localtime, format: :full_date)
-    #   end
-    # end
+      within first('table#workflow_executions tbody') do
+        assert_selector 'tr', count: 10
+        pause
+        assert_selector "tr:first-child td:nth-child(#{@created_at_col})",
+                        text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
+        assert_selector "tr:nth-child(2) td:nth-child(#{@created_at_col})",
+                        text: I18n.l(workflow_execution5.created_at.localtime, format: :full_date)
+        assert_selector "tr:last-child td:nth-child(#{@created_at_col})",
+                        text: I18n.l(workflow_execution4.created_at.localtime, format: :full_date)
+      end
+    end
 
     test 'should be able to cancel a workflow' do
       workflow_execution = workflow_executions(:automated_example_prepared)
