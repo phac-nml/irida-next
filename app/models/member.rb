@@ -163,7 +163,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                  end
       manager_emails = managers.pluck(:email)
 
-      if namespace.parent.user_namespace? && (namespace.parent.owner.locale == locale.to_s)
+      if namespace.parent&.user_namespace? && (namespace.parent&.owner&.locale == locale.to_s)
         manager_emails << namespace.parent.owner.email
       end
 
