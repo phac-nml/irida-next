@@ -1,21 +1,19 @@
-<%= viral_dropdown(icon: "ellipsis_vertical",
-                                     aria: { label: t(:'groups.members.index.actions.member_dropdown_aria_label',
-                                     member: member.user.email) }) do |dropdown| %>
-  <%= dropdown.with_item(
-    label: (t(:"groups.members.index.remove")),
-    url: group_member_path(@namespace, member),
-    data: {
-      turbo_method: :delete,
-      turbo_confirm: (t(:"groups.members.index.remove_confirmation"))
-    },
-    aria: {
-      label:
-        (
-          t(
-            :"groups.members.index.actions.link_remove_aria_label",
-            member: member.user.email
-          )
+<%= link_to(
+  t(:"groups.members.index.remove"),
+  group_member_path(@namespace, member),
+  data: {
+    turbo_method: :delete,
+    turbo_confirm: (t(:"groups.members.index.remove_confirmation"))
+  },
+  aria: {
+    label:
+      (
+        t(
+          :"groups.members.index.actions.link_remove_aria_label",
+          member: member.user.email
         )
-    }
-  ) %>
-<% end %>
+      )
+  },
+  class:
+    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+) %>

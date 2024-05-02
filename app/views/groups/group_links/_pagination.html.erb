@@ -1,7 +1,9 @@
-<%= render PaginationComponent.new(
-  info: pagy_info(@pagy),
-  prev_url:
-    (@pagy.prev ? group_group_links_url(@namespace, page: @pagy.prev) : nil),
-  next_url:
-    (@pagy.next ? group_group_links_url(@namespace, page: @pagy.next) : nil)
-) %>
+<% if @pagy.count.positive? %>
+  <%= render PaginationComponent.new(
+    info: pagy_info(@pagy),
+    prev_url:
+      (@pagy.prev ? group_group_links_url(@namespace, page: @pagy.prev) : nil),
+    next_url:
+      (@pagy.next ? group_group_links_url(@namespace, page: @pagy.next) : nil)
+  ) %>
+<% end %>

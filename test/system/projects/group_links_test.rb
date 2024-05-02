@@ -52,7 +52,6 @@ module Projects
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
-        first('button.Viral-Dropdown--icon').click
         click_link I18n.t(:'projects.group_links.index.unlink')
       end
 
@@ -78,7 +77,6 @@ module Projects
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
-        first('button.Viral-Dropdown--icon').click
         click_link I18n.t(:'projects.group_links.index.unlink')
       end
 
@@ -106,7 +104,6 @@ module Projects
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
-        first('button.Viral-Dropdown--icon').click
         click_link I18n.t(:'projects.group_links.index.unlink')
       end
 

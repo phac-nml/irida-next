@@ -16,8 +16,28 @@
       <%= turbo_frame_tag("personal-access-token-alert") %>
     </div>
 
-    <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
-      <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+    <table
+      class="
+        w-full
+        text-sm
+        text-left
+        rtl:text-right
+        text-slate-500
+        dark:text-slate-400
+        dark:divide-slate-600
+        whitespace-nowrap
+      "
+    >
+      <thead
+        class="
+          text-xs
+          text-slate-700
+          uppercase
+          bg-slate-50
+          dark:bg-slate-700
+          dark:text-slate-400
+        "
+      >
         <tr>
           <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.name") %></th>
           <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.scopes") %></th>
@@ -27,15 +47,18 @@
           <th scope="col" class="px-6 py-3"><%= t("groups.bots.index.personal_access_tokens_listing_modal.actions") %></th>
         </tr>
       </thead>
-      <tbody id="access-tokens-table-body">
-        <% personal_access_tokens.each do |personal_access_token| %>
-          <%= render partial: "personal_access_token",
-          locals: {
-            personal_access_token: personal_access_token
-          } %>
-        <% end %>
+      <tbody
+        id="access-tokens-table-body"
+        class="
+          bg-white
+          divide-y
+          divide-slate-200
+          dark:bg-slate-800
+          dark:divide-slate-700
+        "
+      >
+        <%= render partial: "personal_access_token", collection: @personal_access_tokens %>
       </tbody>
     </table>
-
   <% end %>
 <% end %>

@@ -1,11 +1,28 @@
-<div class="table-container grid gap-4 py-8">
+<div class="table-container relative overflow-x-auto" data-turbo-temporary>
   <table
-    class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4"
+    class="
+      w-full
+      text-sm
+      text-left
+      rtl:text-right
+      text-slate-500
+      dark:text-slate-400
+      whitespace-nowrap
+    "
     data-controller="selection"
     data-selection-action-link-outlet=".action-link"
     id="metadata-table"
   >
-    <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+    <thead
+      class="
+        text-xs
+        text-slate-700
+        uppercase
+        bg-slate-50
+        dark:bg-slate-900
+        dark:text-slate-400
+      "
+    >
       <tr>
         <% if allowed_to?(:update_sample?, @project) %>
           <th aria-hidden="true" class="px-6 py-3"></th>
@@ -15,13 +32,16 @@
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.source") %></th>
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.last_updated") %></th>
         <% if allowed_to?(:update_sample?, @project) %>
-          <th scope="col" class="px-6 py-3 text-right"><%= t("projects.samples.show.table_header.action") %></th>
+          <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
         <% end %>
       </tr>
     </thead>
     <tbody id="metadata-table-body">
       <% sample_metadata.each do |metadata| %>
-        <tr id="<%= metadata[:key] %>_field" class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+        <tr
+          id="<%= metadata[:key] %>_field"
+          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+        >
           <% if allowed_to?(:update_sample?, @project) %>
             <td class="px-6 py-4">
               <%= check_box_tag "metadata_keys[]",
@@ -42,33 +62,40 @@
           <td class="px-6 py-4"><%= metadata[:source] %></td>
           <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_updated]) %></td>
           <% if allowed_to?(:update_sample?, @project) %>
-            <td class="px-6 py-4">
-              <div class="flex items-center justify-end">
-                <%= viral_dropdown(icon: "ellipsis_vertical",
-                aria:
-                  { label: t(:'projects.samples.show.metadata.actions.metadata_dropdown_aria_label',
-                  key: metadata[:key])}) do |dropdown| %>
-                  <% unless metadata[:source_type] == 'analysis' %>
-                    <%= dropdown.with_item(
-                      label: t(:'projects.samples.show.metadata.actions.dropdown.update'),
-                      url: edit_namespace_project_sample_metadata_path(
-                        sample_id: @sample.id,
-                        key: metadata[:key],
-                        value: metadata[:value])
-                    ) %>
-                  <% end %>
-                  <%= dropdown.with_item(
-                      label: t(:'projects.samples.show.metadata.actions.dropdown.delete'),
-                      url: namespace_project_sample_metadata_path(
-                        sample_id: @sample.id,
-                        sample: {metadata: {metadata[:key] => ''}}),
-                        data: {
-                          turbo_method: :delete,
-                          turbo_confirm: t(:'projects.samples.show.metadata.actions.delete_confirm', deleted_key: metadata[:key])
-                        },
-                    ) %>
-                <% end %>
-              </div>
+            <td class="px-6 py-4 space-x-2">
+              <% unless metadata[:source_type] == 'analysis' %>
+                <%= link_to(
+                  t(:"projects.samples.show.metadata.actions.dropdown.update"),
+                  edit_namespace_project_sample_metadata_path(
+                    sample_id: @sample.id,
+                    key: metadata[:key],
+                    value: metadata[:value]
+                  ),
+                  class:
+                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+                ) %>
+              <% end %>
+              <%= link_to(
+                t(:"projects.samples.show.metadata.actions.dropdown.delete"),
+                namespace_project_sample_metadata_path(
+                  sample_id: @sample.id,
+                  sample: {
+                    metadata: {
+                      metadata[:key] => ""
+                    }
+                  }
+                ),
+                data: {
+                  turbo_method: :delete,
+                  turbo_confirm:
+                    t(
+                      :"projects.samples.show.metadata.actions.delete_confirm",
+                      deleted_key: metadata[:key]
+                    )
+                },
+                class:
+                  "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+              ) %>
             </td>
           <% end %>
         </tr>

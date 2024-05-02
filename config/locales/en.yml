@@ -674,6 +674,9 @@ en:
         actions:
           member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
           unlink_aria_label: "Unlink namespace from group %{member} button"
+        empty_state:
+          title: No groups
+          description: There are no groups that have been delegated access to this group
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
@@ -705,7 +708,7 @@ en:
         success: "Group member %{user} added successfully"
       index:
         add: Add New Member
-        remove: Remove member
+        remove: Remove
         leave_group: Leave group
         invite_group: Invite Group
         remove_confirmation: Are you sure you want to remove this member from the group?
@@ -723,10 +726,9 @@ en:
         aria_labels:
           expires_at: Group member expiration
         actions:
-          button_add_aria_label: Add new group member button
-          link_remove_aria_label: "Remove group member %{member} button"
+          button_add_aria_label: Add new group member link
+          link_remove_aria_label: "Remove group member %{member} link"
           link_leave_group_aria_label: "Leave group button"
-          member_dropdown_aria_label: "Dropdown options for group member %{member}"
         inherited_from: "Inherited from"
         shared_inherited: Shared inherited
         shared_direct: Shared direct
@@ -978,6 +980,9 @@ en:
         actions:
           member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
           unlink_aria_label: "Unlink namespace from group %{member} button"
+        empty_state:
+          title: No groups
+          description: There are no groups that have been delegated access to this project
       create:
         success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group
@@ -1009,7 +1014,7 @@ en:
         success: "Project member %{user} added successfully"
       index:
         add: Add New Member
-        remove: Remove member
+        remove: Remove
         leave_project: Leave project
         invite_group: Invite group
         remove_confirmation: Are you sure you want to remove this member from the project?
@@ -1028,9 +1033,8 @@ en:
           expires_at: Project member expiration
         actions:
           button_add_aria_label: Add new project member button
-          link_remove_aria_label: "Remove project member %{member} button"
-          link_leave_project_aria_label: "Leave project button"
-          member_dropdown_aria_label: "Dropdown options for project member %{member}"
+          link_remove_aria_label: "Remove project member %{member} link"
+          link_leave_project_aria_label: "Leave project link"
         inherited_from: "Inherited from"
         shared_inherited: Shared inherited
         shared_direct: Shared direct
