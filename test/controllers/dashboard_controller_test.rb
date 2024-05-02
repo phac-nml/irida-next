@@ -9,6 +9,7 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     get root_url
-    assert_response :success
+    assert_response :redirect
+    assert_redirected_to projects_path
   end
 end
