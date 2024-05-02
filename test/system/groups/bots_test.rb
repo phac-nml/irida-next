@@ -133,8 +133,9 @@ module Groups
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
       within('table') do
-        first('button.Viral-Dropdown--icon').click
-        click_link 'Remove'
+        within('table tbody tr:first-child td:last-child') do
+          click_link 'Remove'
+        end
       end
 
       within('#turbo-confirm[open]') do
@@ -204,7 +205,6 @@ module Groups
       table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
 
       within table_row do
-        first('button.Viral-Dropdown--icon').click
         click_link 'Generate new token'
       end
 

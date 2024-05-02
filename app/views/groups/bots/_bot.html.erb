@@ -38,33 +38,34 @@
   </td>
   <td class="px-6 py-3 whitespace-nowrap">
 
-    <%= viral_dropdown(icon: "ellipsis_vertical",
-                                aria: { label: bot_account.user.email }) do |dropdown| %>
-      <% if allowed_to?(:generate_bot_personal_access_token?, @namespace) %>
-        <%= dropdown.with_item(
-          label: t("groups.bots.index.bot.generate_new_token"),
-          url: new_group_bot_personal_access_token_path(bot_id: bot_account.id),
-          data: {
-            turbo_stream: true
-          },
-          aria: {
-            label: t("groups.bots.index.bot.generate_new_token_aria_label")
-          }
-        ) %>
-      <% end %>
-      <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
-        <%= dropdown.with_item(
-          label: t("groups.bots.index.bot.remove"),
-          url: group_bot_path(id: bot_account.id),
-          data: {
-            turbo_method: :delete,
-            turbo_confirm: t("groups.bots.index.bot.remove_confirmation")
-          },
-          aria: {
-            label: t("groups.bots.index.bot.remove_aria_label")
-          }
-        ) %>
-      <% end %>
+    <% if allowed_to?(:generate_bot_personal_access_token?, @namespace) %>
+      <%= link_to(
+        t("groups.bots.index.bot.generate_new_token"),
+        new_group_bot_personal_access_token_path(bot_id: bot_account.id),
+        data: {
+          turbo_stream: true
+        },
+        aria: {
+          label: t("groups.bots.index.bot.generate_new_token_aria_label")
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+      ) %>
+    <% end %>
+    <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
+      <%= link_to(
+        t("groups.bots.index.bot.remove"),
+        group_bot_path(id: bot_account.id),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: t("groups.bots.index.bot.remove_confirmation")
+        },
+        aria: {
+          label: t("groups.bots.index.bot.remove_aria_label")
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+      ) %>
     <% end %>
   </td>
 </tr>
