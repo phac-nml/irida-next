@@ -22,7 +22,7 @@ module Mutations
       project = if args[:project_id]
                   IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
                 else
-                  Namespaces::ProjectNamespace.find_by(puid: args[:project_puid])&.project
+                  Namespaces::ProjectNamespace.find_by!(puid: args[:project_puid]).project
                 end
       sample = Samples::CreateService.new(current_user, project,
                                           { name: args[:name], description: args[:description] }).execute
@@ -37,6 +37,11 @@ module Mutations
           errors: sample.errors.full_messages
         }
       end
+    rescue ActiveRecord::RecordNotFound
+      {
+        sample: nil,
+        errors: ['Project not found by provided ID or PUID']
+      }
     end
 
     def ready?(**_args)

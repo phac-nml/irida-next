@@ -8,11 +8,11 @@ module Samples
     def initialize(user = nil, project = nil, params = {})
       super(user, params)
       @project = project
-      @sample = Sample.new(params.merge(project_id: project.id))
+      @sample = Sample.new(params.merge(project_id: project&.id))
     end
 
     def execute
-      authorize! @project, to: :create_sample?
+      authorize! @project, to: :create_sample? unless @project.nil?
 
       sample.save
       sample
