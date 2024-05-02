@@ -181,8 +181,7 @@ module Projects
       end
 
       assert_text I18n.t(:'projects.members.destroy.leave_success', name: project.name)
-      # Redirected to dashboard
-      assert_text 'HELLO: Stranger Danger'
+      assert_text I18n.t(:'dashboard.projects.index.title')
     end
 
     test 'can remove themselves as a member from the project' do
