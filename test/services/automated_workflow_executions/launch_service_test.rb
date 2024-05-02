@@ -37,5 +37,20 @@ module AutomatedWorkflowExecutions
                                                        users(:project1_automation_bot)).execute
       end
     end
+
+    test 'sets the name in the created workflow execution to samples puid if automated workflow execution doesn\'t have a name' do # rubocop:disable Layout/LineLength
+      workflow_execution = AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample,
+                                                                          @pe_attachment_pair,
+                                                                          @automation_bot).execute
+      assert_equal @sample.puid, workflow_execution.name
+    end
+
+    test 'sets the name in the created workflow execution to automated workflow execution name plus samples puid if automated workflow execution has a name' do # rubocop:disable Layout/LineLength
+      @automated_workflow_execution.name = 'Prefix'
+      workflow_execution = AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample,
+                                                                          @pe_attachment_pair,
+                                                                          @automation_bot).execute
+      assert_equal "Prefix #{@sample.puid}", workflow_execution.name
+    end
   end
 end

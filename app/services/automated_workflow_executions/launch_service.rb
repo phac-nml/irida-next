@@ -27,6 +27,7 @@ module AutomatedWorkflowExecutions
 
     def workflow_execution_params # rubocop:disable Metrics/MethodLength
       {
+        name:,
         metadata: @automated_workflow_execution.metadata,
         workflow_params: @automated_workflow_execution.workflow_params,
         workflow_type: @workflow.type,
@@ -49,6 +50,14 @@ module AutomatedWorkflowExecutions
           }
         ]
       }.with_indifferent_access
+    end
+
+    def name
+      if @automated_workflow_execution.name.blank?
+        @sample.puid
+      else
+        [@automated_workflow_execution.name, @sample.puid].join(' ')
+      end
     end
   end
 end
