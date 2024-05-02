@@ -394,3 +394,157 @@ workflow_execution_existing:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
 
+
+
+
+
+automated_example_prepared:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "automated_example_prepared",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/automated_example_prepared"
+  run_id: "my_run_id_4"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "prepared"
+  email_notification: true
+
+automated_example_submitted:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "automated_example_submitted",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/automated_example_submitted"
+  run_id: "my_run_id_5"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "submitted"
+
+automated_example_completed:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "automated_example_completed",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/automated_example_completed"
+  run_id: "my_run_id_6"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "completed"
+  blob_run_directory: "not a run dir"
+
+automated_example_error:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "automated_example_error",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/automated_example_error"
+  run_id: "my_run_id_7"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "error"
+
+automated_example_canceling:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "automated_example_canceling",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/automated_example_canceling"
+  run_id: "my_run_id_8"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "canceling"
+
+automated_example_canceled:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "automated_example_canceled",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/automated_example_canceled"
+  run_id: "my_run_id_9"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "canceled"
+
+automated_example_running:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "automated_example_running",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/automated_example_running"
+  run_id: "my_run_id_10"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "running"
+
+automated_example_new:
+  <<: *DEFAULTS
+  metadata:
+    { "workflow_name": "automated_example_new", "workflow_version": "1.0dev" }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/automated_example_new"
+  run_id: "my_run_id_12"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "initial"

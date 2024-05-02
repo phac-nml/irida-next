@@ -50,7 +50,7 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     scoped_automated_workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :automated,
                                                                                   scope_options: { project: })
 
-    assert_equal 1, scoped_automated_workflow_executions.count
+    assert_equal 9, scoped_automated_workflow_executions.count
   end
 
   test 'user scope' do

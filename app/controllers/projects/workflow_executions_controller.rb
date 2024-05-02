@@ -2,7 +2,7 @@
 
 module Projects
   # Workflow executions controller for projects
-  class WorkflowExecutionsController < ApplicationController
+  class WorkflowExecutionsController < Projects::ApplicationController
     include BreadcrumbNavigation
     include Metadata
     include WorkflowExecutionActions
@@ -12,8 +12,6 @@ module Projects
     private
 
     def namespace
-      path = [params[:namespace_id], params[:project_id]].join('/')
-      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
       @namespace = @project.namespace
     end
 
@@ -30,7 +28,8 @@ module Projects
     end
 
     def context_crumbs
-      @context_crumbs =
+      super
+      @context_crumbs +=
         [{
           name: I18n.t('projects.workflow_executions.index.title'),
           path: namespace_project_workflow_executions_path
