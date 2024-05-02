@@ -18,11 +18,11 @@ module Projects
     end
 
     def workflow_execution
-      @workflow_execution = WorkflowExecution.find_by!(id: params[:id], namespace: @project.namespace)
+      @workflow_execution = WorkflowExecution.find_by!(id: params[:id], submitter: @project.namespace.automation_bot)
     end
 
     def load_workflows
-      authorized_scope(WorkflowExecution, type: :relation, as: :namespace, scope_options: { project: @project })
+      authorized_scope(WorkflowExecution, type: :relation, as: :automated, scope_options: { project: @project })
     end
 
     def current_page

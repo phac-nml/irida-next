@@ -133,6 +133,12 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       effective_access_level(namespace, user, include_group_links) == Member::AccessLevel::MAINTAINER
     end
 
+    def can_create_export?(user, object_namespace)
+      Member::AccessLevel.manageable.include?(
+        effective_access_level(object_namespace, user)
+      )
+    end
+
     def access_level_in_namespace_group_links(user, namespace)
       effective_namespace_group_link = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
                                                          .where(group: user.groups.self_and_descendants)
