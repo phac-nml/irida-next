@@ -1,4 +1,7 @@
-<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t(".title"),
+  subtitle: t(".subtitle")
+) %>
 <%= turbo_frame_tag "workflow_execution_table",
                         src: namespace_project_workflow_executions_path(format: :turbo_stream, page: params[:page]),
                         loading: :lazy do %>
