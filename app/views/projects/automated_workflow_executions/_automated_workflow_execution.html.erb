@@ -35,7 +35,7 @@
   <td class="px-6 py-4 whitespace-nowrap">
     <%= l(automated_workflow_execution["created_at"].localtime, format: :full_date) %>
   </td>
-  <td class="px-6 py-4 whitespace-nowrap">
+  <td class="px-6 py-4 space-x-2 whitespace-nowrap">
     <%= link_to(
       t(:"projects.automated_workflow_executions.actions.delete_button"),
       namespace_project_automated_workflow_execution_path(
@@ -51,5 +51,17 @@
       class:
         "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
     ) %>
+    <%= link_to t(:'projects.automated_workflow_executions.actions.edit_button'),
+                edit_namespace_project_automated_workflow_execution_path(
+                  @project.parent,
+                  @project,
+                  automated_workflow_execution
+                ),
+                data: {
+                  turbo_stream: true
+                },
+                class:
+                  "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
+
   </td>
 </tr>

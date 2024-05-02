@@ -6,7 +6,7 @@ module Projects
     include BreadcrumbNavigation
 
     before_action :namespace
-    before_action :automated_workflow_executions, only: %i[index]
+    before_action :automated_workflow_executions, only: %i[index update]
     before_action :automated_workflow_execution, only: %i[edit update destroy show]
     before_action :available_automated_workflows, only: %i[new edit]
 
@@ -28,6 +28,13 @@ module Projects
 
     def edit
       authorize! @namespace, to: :update_automated_workflow_executions?
+      @workflow = Irida::Pipelines.find_pipeline_by(@automated_workflow_execution.metadata['workflow_name'],
+                                                    @automated_workflow_execution.metadata['workflow_version'])
+      render turbo_stream: turbo_stream.update('automated_workflow_execution_modal',
+                                               partial: 'edit_dialog',
+                                               locals: {
+                                                 open: true
+                                               }), status: :ok
     end
 
     def create # rubocop:disable Metrics/MethodLength
