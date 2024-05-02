@@ -3,6 +3,6 @@
 # Controller actions for Dashboard page
 class DashboardController < ApplicationController
   def index
-    @name = 'Stranger Danger'
+    redirect_to projects_path
   end
 end
