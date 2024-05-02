@@ -70,6 +70,13 @@ ryan_doe_namespace:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAJ
 
+user_25_namespace:
+  name: user.25@localhost
+  path: user.25_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:user25, :uuid) %>
+  puid: INXT_USR_AAAAAAAAZK
+
 user_26_namespace:
   name: user.26@localhost
   path: user.26_at_localhost
