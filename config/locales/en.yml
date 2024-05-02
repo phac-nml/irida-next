@@ -866,7 +866,6 @@ en:
         title: "%{workflow} parameters"
       edit_dialog:
         title: "Editing Automated Workflow Execution: %{workflow_name}"
-        submit: Save changes
     bots:
       index:
         title: Bot Accounts
