@@ -10,6 +10,6 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
 
     get root_url
     assert_response :redirect
-    assert_redirected_to projects_path
+    assert_redirected_to dashboard_projects_path
   end
 end
