@@ -118,7 +118,9 @@ module Projects
     end
 
     def automated_workflow_executions
-      @automated_workflow_executions = AutomatedWorkflowExecution.where(namespace_id: namespace.id).order(updated_at: :desc)
+      @automated_workflow_executions = AutomatedWorkflowExecution
+                                       .where(namespace_id: namespace.id)
+                                       .order(updated_at: :desc)
     end
 
     def available_automated_workflows
