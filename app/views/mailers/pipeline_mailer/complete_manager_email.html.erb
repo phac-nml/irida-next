@@ -1,6 +1,11 @@
 <%= render partial: "mailers/email_template",
 locals: {
-  url: workflow_execution_url(@workflow_execution)
+  url:
+    namespace_project_workflow_execution_url(
+      @workflow_execution.namespace.parent,
+      @workflow_execution.namespace.project,
+      @workflow_execution
+    )
 } %>
 
 <%= yield :header_and_greeting %>
