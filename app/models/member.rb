@@ -152,7 +152,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       users.pluck(:email)
     end
 
-    def manager_emails(namespace, locale, member = nil)
+    def manager_emails(namespace, locale, member = nil) # rubocop:disable Metrics/AbcSize
       manager_memberships = Member.for_namespace_and_ancestors(namespace).not_expired
                                   .where(access_level: Member::AccessLevel.manageable)
       managers = if member
@@ -161,7 +161,13 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                  else
                    User.human_users.where(id: manager_memberships.select(:user_id), locale:).distinct
                  end
-      managers.pluck(:email)
+      manager_emails = managers.pluck(:email)
+
+      if namespace.parent.user_namespace? && (namespace.parent.owner.locale == locale.to_s)
+        manager_emails << namespace.parent.owner.email
+      end
+
+      manager_emails
     end
   end
 
