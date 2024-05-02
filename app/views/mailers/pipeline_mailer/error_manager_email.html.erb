@@ -1,6 +1,5 @@
 <%= render partial: "mailers/email_template",
 locals: {
-  name: @workflow_execution.submitter.first_name,
   url: workflow_execution_url(@workflow_execution)
 } %>
 
