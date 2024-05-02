@@ -44,6 +44,14 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     assert policy.destroy?
   end
 
+  test 'namespace scope' do
+    project = projects(:project1)
+    scoped_namespace_workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :namespace,
+                                                                                  scope_options: { project: })
+
+    assert_equal 16, scoped_namespace_workflow_executions.count
+  end
+
   test 'automated scope' do
     project = projects(:project1)
 
@@ -57,6 +65,6 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     scoped_user_workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :user,
                                                                              scope_options: { user: @user })
 
-    assert_equal 14, scoped_user_workflow_executions.count
+    assert_equal 17, scoped_user_workflow_executions.count
   end
 end
