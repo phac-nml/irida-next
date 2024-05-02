@@ -944,6 +944,7 @@ en:
       history: History
       members: Members
       samples: Samples
+      workflow_executions: Workflow Executions
       settings: Settings
       general: General
       bot_accounts: Bot Accounts

@@ -92,7 +92,7 @@ module Projects
 
       within first('table#workflow_executions tbody') do
         assert_selector 'tr', count: 10
-        pause
+
         assert_selector "tr:first-child td:nth-child(#{@created_at_col})",
                         text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
         assert_selector "tr:nth-child(2) td:nth-child(#{@created_at_col})",
