@@ -2,7 +2,9 @@
   class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
   id="<%= dom_id(automated_workflow_execution) %>"
 >
-  <td class="px-6 py-4 whitespace-nowrap">
+  <td class="px-6 py-4 whitespace-nowrap sticky left-0
+          bg-white
+          dark:bg-slate-800">
     <%= automated_workflow_execution.id %>
   </td>
   <td
@@ -35,7 +37,12 @@
   <td class="px-6 py-4 whitespace-nowrap">
     <%= l(automated_workflow_execution["created_at"].localtime, format: :full_date) %>
   </td>
-  <td class="px-6 py-4 space-x-2 whitespace-nowrap">
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= render UpdatedComponent.new(updated_at: automated_workflow_execution["updated_at"].localtime) %>
+  </td>
+  <td class="px-6 py-4 space-x-2 whitespace-nowrap sticky right-0
+          bg-white
+          dark:bg-slate-800">
     <%= link_to(
       t(:"projects.automated_workflow_executions.actions.delete_button"),
       namespace_project_automated_workflow_execution_path(

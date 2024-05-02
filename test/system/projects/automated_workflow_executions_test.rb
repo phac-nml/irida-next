@@ -91,5 +91,8 @@ module Projects
       assert_text I18n.t(:'projects.automated_workflow_executions.destroy.success',
                          workflow_name: 'phac-nml/iridanextexample')
     end
+
+    test 'can edit an automated workflow execution for a project' do
+    end
   end
 end
