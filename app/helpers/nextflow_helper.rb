@@ -4,7 +4,7 @@
 module NextflowHelper
   # rubocop:disable Metrics/MethodLength
   def form_input(container, name, property, required, instance)
-    value = instance.present? ? instance['workflow_params'][name.to_s] || property[:default] : property[:default]
+    value = instance.present? ? instance['workflow_params'][name.to_s] : property[:default]
 
     if property[:type] == 'boolean'
       return viral_prefixed_boolean(form: container, name:, value:) do |input|
