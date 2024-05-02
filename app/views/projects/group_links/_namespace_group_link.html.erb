@@ -93,7 +93,7 @@
       <%= namespace_group_link.expires_at %>
     <% end %>
   </td>
-  <td class="px-6 py-4 text-right">
+  <td class="px-6 py-4 space-x-2">
     <% if allowed_to?(:unlink_namespace_with_group?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
       <%= link_to(
         t(:"projects.group_links.index.unlink"),

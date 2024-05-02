@@ -38,7 +38,7 @@
       <%= l(data_export.expires_at.localtime, format: :full_date) %>
     <% end %>
   </td>
-  <td class="px-6 py-3 text-right">
+  <td class="px-6 py-3 space-x-2">
     <% if data_export.status == 'ready' %>
       <%= link_to(
         t(:"data_exports.index.actions.download"),
