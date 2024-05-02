@@ -39,7 +39,8 @@ module AutomatedWorkflowExecutions
     end
 
     test 'sets the name in the created workflow execution to samples puid if automated workflow execution doesn\'t have a name' do # rubocop:disable Layout/LineLength
-      workflow_execution = AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample, @pe_attachment_pair,
+      workflow_execution = AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample,
+                                                                          @pe_attachment_pair,
                                                                           @automation_bot).execute
       assert_equal @sample.puid, workflow_execution.name
     end
