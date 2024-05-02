@@ -19,41 +19,43 @@
     <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
     <%= turbo_frame_tag("personal-access-tokens") do %>
-      <table
-        class="
-          w-full
-          text-sm
-          text-left
-          rtl:text-right
-          text-slate-500
-          dark:text-slate-400
-          dark:divide-slate-600
-          whitespace-nowrap
-        "
-      >
-        <thead
+      <div class="relative overflow-x-auto">
+        <table
           class="
-            text-xs
-            text-slate-700
-            uppercase
-            bg-slate-50
-            dark:bg-slate-700
+            w-full
+            text-sm
+            text-left
+            rtl:text-right
+            text-slate-500
             dark:text-slate-400
+            dark:divide-slate-600
+            whitespace-nowrap
           "
         >
-          <tr>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.name") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.scopes") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.created_at") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.last_used_at") %></th>
-            <th scope="col" class="px-6 py-3"><%= t(".expires_at") %></th>
-            <th scope="col" class="px-6 py-3">Action</th>
-          </tr>
-        </thead>
-        <tbody id="access-tokens-table-body">
-          <%= render partial: "personal_access_token", collection: @active_access_tokens %>
-        </tbody>
-      </table>
+          <thead
+            class="
+              text-xs
+              text-slate-700
+              uppercase
+              bg-slate-50
+              dark:bg-slate-700
+              dark:text-slate-400
+            "
+          >
+            <tr>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.name") %></th>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.scopes") %></th>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.created_at") %></th>
+              <th scope="col" class="px-6 py-3"><%= t("activerecord.attributes.personal_access_token.last_used_at") %></th>
+              <th scope="col" class="px-6 py-3"><%= t(".expires_at") %></th>
+              <th scope="col" class="px-6 py-3">Action</th>
+            </tr>
+          </thead>
+          <tbody id="access-tokens-table-body">
+            <%= render partial: "personal_access_token", collection: @active_access_tokens %>
+          </tbody>
+        </table>
+      </div>
     <% end %>
   <% end %>
 </div>
