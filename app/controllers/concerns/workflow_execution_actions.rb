@@ -38,7 +38,7 @@ module WorkflowExecutionActions
 
     if @workflow_execution.deleted? && params[:redirect]
       flash[:success] = t('.success', workflow_name: @workflow_execution.metadata['workflow_name'])
-      redirect_to workflow_executions_path(format: :html)
+      redirect_to redirect_path
     else
       respond_to do |format|
         format.turbo_stream do
@@ -91,5 +91,11 @@ module WorkflowExecutionActions
 
   def set_default_sort
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
+  end
+
+  protected
+
+  def redirect_path
+    raise NotImplementedError
   end
 end

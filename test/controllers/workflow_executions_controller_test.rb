@@ -199,4 +199,14 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 'running', workflow_execution.reload.state
   end
+
+  test 'redirect to global workflow executions page when workflow execution is deleted' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    delete workflow_execution_path(workflow_execution, redirect: true,
+                                                       format: :turbo_stream)
+    assert_response :redirect
+
+    assert_redirected_to workflow_executions_path(format: :html)
+  end
 end

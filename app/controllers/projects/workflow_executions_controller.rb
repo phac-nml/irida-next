@@ -42,5 +42,11 @@ module Projects
           path: namespace_project_workflow_execution_path(@workflow_execution)
         }]
     end
+
+    protected
+
+    def redirect_path
+      namespace_project_workflow_executions_path(format: :html)
+    end
   end
 end

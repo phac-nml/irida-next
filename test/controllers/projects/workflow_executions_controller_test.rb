@@ -184,5 +184,15 @@ module Projects
       end
       assert_response :unprocessable_entity
     end
+
+    test 'redirect to project workflow executions page when workflow execution is deleted' do
+      workflow_execution = workflow_executions(:automated_example_canceled)
+
+      delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, redirect: true,
+                                                                                                 format: :turbo_stream)
+      assert_response :redirect
+
+      assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project, format: :html)
+    end
   end
 end

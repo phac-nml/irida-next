@@ -332,7 +332,7 @@ module Projects
       end
 
       within %(#workflow_executions-table-body) do
-        assert_selector 'tr', count: 14
+        assert_selector 'tr', count: 9
         assert_no_text workflow_execution.id
       end
     end

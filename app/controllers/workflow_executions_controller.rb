@@ -74,4 +74,8 @@ class WorkflowExecutionsController < ApplicationController
         path: workflow_execution_path(@workflow_execution)
       }]
   end
+
+  def redirect_path
+    workflow_executions_path(format: :html)
+  end
 end
