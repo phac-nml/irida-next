@@ -92,7 +92,7 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text token_to_revoke.name
 
     within %(tr[id=personal_access_token_#{token_to_revoke.id}]) do
-      click_button I18n.t(:'profiles.personal_access_tokens.personal_access_token.revoke_button')
+      click_link I18n.t(:'profiles.personal_access_tokens.personal_access_token.revoke_button')
     end
 
     within('#turbo-confirm[open]') do
