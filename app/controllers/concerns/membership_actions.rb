@@ -55,7 +55,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     Members::DestroyService.new(@member, @namespace, current_user).execute
 
     if @member.deleted?
