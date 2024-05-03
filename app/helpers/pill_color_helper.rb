@@ -6,7 +6,7 @@ module PillColorHelper
     format: {
       fasta: 'blue',
       fastq: 'green',
-      unknown: 'gray'
+      unknown: 'slate'
     },
     type: {
       assembly: 'pink',
