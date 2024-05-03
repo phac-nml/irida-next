@@ -50,7 +50,7 @@ module Nextflow
 
       def render_other_file_cell(sample, property, entry, fields)
         files = if entry['pattern']
-                  filter_files_by_pattern(sample.sorted_files[:singles], entry['pattern'])
+                  filter_files_by_pattern(sample.sorted_files[:singles] || [], entry['pattern'])
                 else
                   sample.sorted_files[:singles] || []
                 end
