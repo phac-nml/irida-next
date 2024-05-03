@@ -144,18 +144,9 @@
       <% samples.each do |sample| %>
         <tr
           id="<%= sample.id %>"
-          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700 "
+          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
         >
-          <td
-            class="
-              px-6
-              py-3
-              sticky
-              left-0
-              bg-slate-50
-              dark:bg-slate-900
-            "
-          >
+          <td class=" px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 ">
             <% if allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project) %>
               <%= check_box_tag "sample_ids[]",
               sample.id,
