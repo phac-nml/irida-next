@@ -21,13 +21,13 @@
     <% end %>
   </td>
   <td class="px-6 py-3">
-    <%= data_export.export_type.capitalize %>
+    <%= t(:"data_exports.types.#{data_export.export_type}") %>
   </td>
   <td class="px-6 py-3">
     <% if data_export.status == 'ready' %>
-      <%= viral_pill(text: data_export.status.capitalize, color: :green) %>
+      <%= viral_pill(text: t(:"data_exports.status.#{data_export.status}"), color: :green) %>
     <% else %>
-      <%= viral_pill(text: data_export.status.capitalize, color: :slate) %>
+      <%= viral_pill(text: t(:"data_exports.status.#{data_export.status}"), color: :slate) %>
     <% end %>
   </td>
   <td class="px-6 py-3">

@@ -27,7 +27,7 @@
   <%= turbo_frame_tag "new_member_modal" %>
   <%= turbo_frame_tag "member-update-alert" %>
 
-  <%= viral_tabs(id: "members-tabs", label: "Group members tabs") do |tabs| %>
+  <%= viral_tabs(id: "members-tabs", label: t(:"groups.members.index.tabs.aria_label")) do |tabs| %>
     <%= tabs.with_tab(url: group_members_path(), selected: @tab != "invited_groups", controls: "members-tabs") do %>
       <%= t(:"groups.members.index.tabs.members") %>
     <% end %>

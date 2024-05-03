@@ -42,7 +42,7 @@
 
       <% invalid = personal_access_token.errors.include?(:scopes) %>
       <div class="form-field <%= 'invalid' if invalid %>">
-        <%= f.label :scopes %>
+        <%= f.label :scopes, t("auth.scopes.label") %>
         <% Irida::Auth.all_available_scopes.each do |scope| %>
           <div class="flex">
             <div class="flex items-center h-5">

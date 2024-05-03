@@ -3,21 +3,22 @@
   <% invalidfn = user.errors.include?(:first_name) %>
   <% invalidln = user.errors.include?(:last_name) %>
   <div class="form-field <%= 'invalid' if invalidemail %>">
-    <%= f.label :email %>
+    <%= f.label :email, t(:"profiles.show.email_address") %>
     <%= f.email_field :email, required: true, autocomplete: "email" %>
   </div>
   <br/>
   <div class="form-field <%= 'invalid' if invalidfn %>">
-    <%= f.label :first_name %>
+    <%= f.label :first_name, t(:"profiles.show.first_name") %>
     <%= f.text_field :first_name, required: true, autocomplete: "given-name" %>
   </div>
   <br/>
   <div class="form-field <%= 'invalid' if invalidln %>">
-    <%= f.label :last_name %>
+    <%= f.label :last_name, t(:"profiles.show.last_name") %>
     <%= f.text_field :last_name, required: true, autocomplete: "family-name" %>
   </div>
   <br/>
   <div class="my-2">
-    <%= f.submit t(:"profiles.show.email.submit"), class: "button button--state-primary button--size-default" %>
+    <%= f.submit t(:"profiles.show.email.submit"),
+             class: "button button--state-primary button--size-default" %>
   </div>
 <% end %>

@@ -21,7 +21,7 @@
             icon: "command_line",
             label: t(:"general.default_sidebar.workflows"),
             url: workflow_executions_path,
-            selected: @current_page == t(:"general.default_sidebar.workflows")
+            selected: @current_page == t(:"general.default_sidebar.workflows").downcase
           ) %>
           <%= render section.with_item(
             icon: "arrow_up_on_square_stack",
