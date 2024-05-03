@@ -1,23 +1,17 @@
 <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |f| %>
-    <div class="grid grid-cols-1 gap-4">
-        <div class="flex items-center">
-            <%= f.radio_button :locale, 'en',
-                checked: (@user.locale == 'en'),
-                class: 'w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600',
-                onchange: "this.form.submit()" %>
-            <%= f.label t(:'.en'),
-                for: 'user_locale_en',
-                class: 'ml-2 text-sm font-medium text-gray-900 dark:text-gray-300' %>
-        </div>
-        <div class="flex items-center">
-            <%= f.radio_button :locale,
-                'fr',
-                checked: (@user.locale == 'fr'),
-                class: 'w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600',
-                onchange: "this.form.submit()" %>
-            <%= f.label t(:'.fr'),
-                for: 'user_locale_fr',
-                class: 'ml-2 text-sm font-medium text-gray-900 dark:text-gray-300' %>
-        </div>
-    </div>
+  <div class="grid grid-cols-1 gap-4">
+    <%- I18n.available_locales.each do |locale| %>
+      <div class="flex items-center">
+        <%= f.radio_button :locale,
+                       locale,
+                       checked: (@user.locale.to_sym == locale),
+                       class:
+                         "w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600",
+                       onchange: "this.form.submit()" %>
+        <%= f.label t(:".#{locale}"),
+                for: "user_locale_#{locale}",
+                class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" %>
+      </div>
+    <%- end %>
+  </div>
 <% end %>

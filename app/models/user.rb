@@ -31,6 +31,7 @@ class User < ApplicationRecord
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :locale, inclusion: I18n.available_locales.map(&:to_s)
 
   # Groups
   has_many :members, inverse_of: :user, dependent: :destroy
