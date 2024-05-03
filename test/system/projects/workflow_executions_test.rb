@@ -11,11 +11,11 @@ module Projects
       @project = projects(:project1)
 
       @id_col = '1'
-      @run_id_col = '2'
-      @name_col = '3'
-      @workflow_name_col = '4'
-      @workflow_version_col = '5'
-      @state_col = '6'
+      @name_col = '2'
+      @state_col = '3'
+      @run_id_col = '4'
+      @workflow_name_col = '5'
+      @workflow_version_col = '6'
       @created_at_col = '7'
     end
 
@@ -34,7 +34,6 @@ module Projects
       workflow_execution3 = workflow_executions(:automated_example_canceled)
       workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
       workflow_execution5 = workflow_executions(:automated_example_prepared)
-      workflow_execution6 = workflow_executions(:automated_example_running)
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
@@ -47,7 +46,7 @@ module Projects
       within first('table#workflow_executions tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
-        assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution6.run_id
+        assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
       end
 
@@ -113,7 +112,7 @@ module Projects
       tr = find('td', text: workflow_execution.id).ancestor('tr')
 
       within tr do
-        assert_selector 'td:nth-child(6)',
+        assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
         assert_link 'Cancel', count: 1
         click_link 'Cancel'
