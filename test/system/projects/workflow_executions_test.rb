@@ -305,7 +305,7 @@ module Projects
 
       click_on I18n.t('projects.workflow_executions.show.tabs.files')
 
-      assert_text 'Filename'
+      assert_text 'FILENAME'
 
       click_on I18n.t('projects.workflow_executions.show.tabs.params')
 

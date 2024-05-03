@@ -8,6 +8,7 @@
       rtl:text-right
       text-slate-500
       dark:text-slate-400
+      whitespace-nowrap
     "
     data-controller="selection"
     data-selection-total-value="<%= @pagy.count %>"
@@ -29,7 +30,6 @@
           class="
             px-6
             py-3
-            whitespace-nowrap
             text-left
             bg-slate-50
             dark:bg-slate-700
@@ -149,17 +149,7 @@
           id="<%= sample.id %>"
           class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
         >
-          <td
-            class="
-              px-6
-              py-3
-              whitespace-nowrap
-              left-0
-              sticky
-              bg-white
-              dark:bg-slate-800
-            "
-          >
+          <td class="px-6 py-3 left-0 sticky bg-slate-50 dark:bg-slate-800">
             <% if allowed_to?(:submit_workflow?, @group) %>
               <%= check_box_tag "sample_ids[]",
               sample.id,
@@ -241,32 +231,43 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="100%">
-          <div
-            class="
-              sticky
-              bottom-0
-              right-0
-              items-center
-              w-full
-              p-4
-              bg-white
-              border-t
-              border-gray-200
-              dark:bg-gray-800
-              dark:border-gray-700
-            "
-          >
-            <span>
-              <%= t(".counts.samples") %>:
-              <strong data-selection-target="total">0</strong>
-            </span>
-            <span>
-              <%= t(".counts.selected") %>:
-              <strong data-selection-target="selected">0</strong>
-            </span>
-          </div>
+        <td
+          class="
+            px-6
+            py-3
+            sticky
+            left-0
+            bg-slate-50
+            dark:bg-slate-900
+            border-t
+            dark:border-slate-700
+            border-slate-200
+            z-10
+          "
+          colspan="3"
+        >
+
+          <span>
+            <%= t(".counts.samples") %>:
+            <strong data-selection-target="total">0</strong>
+          </span>
+          <span>
+            <%= t(".counts.selected") %>:
+            <strong data-selection-target="selected">0</strong>
+          </span>
         </td>
+        <td
+          colspan="100%"
+          class="
+            px-6
+            py-3
+            bg-slate-50
+            dark:bg-slate-900
+            broder-t
+            dark:border-slate-700
+            border-slate-200
+          "
+        ></td>
       </tr>
     </tfoot>
   </table>

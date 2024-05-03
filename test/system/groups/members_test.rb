@@ -223,8 +223,13 @@ module Groups
       visit group_members_url(@namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
-      find("#group-member-#{group_member.id}-expiration").click.set(expiry_date)
-                                                         .native.send_keys(:return)
+
+      within 'div.overflow-x-auto' do |div|
+        # scroll to the end of the div
+        div.execute_script('this.scrollLeft = this.scrollWidth')
+        find("#group-member-#{group_member.id}-expiration").click.set(expiry_date)
+                                                           .native.send_keys(:return)
+      end
 
       within %(turbo-frame[id="member-update-alert"]) do
         assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)

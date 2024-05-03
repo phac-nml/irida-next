@@ -1,14 +1,15 @@
 <% member_source = membership_source(@namespace, member) %>
 <tr
   id="<%= dom_id(member) %>"
-  class="text-sm font-normal text-gray-500 dark:text-gray-400"
+  class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
 >
-  <td class="px-6 py-4">
-    <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= member.user.email %>
+  <td class="px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900">
+    <div class="text-slate-900 dark:text-slate-100 font-semibold"><%= member.user.email %>
       <% if current_user == member.user %>
         <%= viral_pill(
           text: t(:"activerecord.models.member.its_you"),
           color: :green,
+          border: :green,
           classes: "ml-2"
         ) %>
       <% else %>
@@ -16,7 +17,7 @@
           <%= viral_pill(
             text: t(:"activerecord.models.member.bot"),
             color: :transparent,
-            border: true,
+            border: :true,
             classes: "ml-2"
           ) %>
         <% end %>
@@ -110,7 +111,7 @@
     <% end %>
   </td>
   <% if (current_user == member.user || allowed_to?(:destroy_member?, @namespace)) && !member_source.key?(:inherited_namespace_path) %>
-    <td class="px-4 py-3">
+    <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
       <% if current_user == member.user %>
         <%= render partial: "groups/members/current_user_is_member", locals: { member: } %>
       <% else %>

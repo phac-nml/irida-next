@@ -8,6 +8,7 @@
       rtl:text-right
       text-slate-500
       dark:text-slate-400
+      whitespace-nowrap
     "
     data-controller="selection"
     data-selection-total-value="<%= @pagy.count %>"
@@ -30,7 +31,6 @@
           class="
             px-6
             py-3
-            whitespace-nowrap
             text-left
             bg-slate-50
             dark:bg-slate-700
@@ -85,7 +85,7 @@
             ) %>
           <% end %>
         </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <th scope="col" class="px-6 py-3">
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,
             label: t(".sample"),
@@ -93,7 +93,7 @@
             field: :name
           ) %>
         </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <th scope="col" class="px-6 py-3">
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,
             label: t(".created_at"),
@@ -101,7 +101,7 @@
             field: :created_at
           ) %>
         </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <th scope="col" class="px-6 py-3">
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,
             label: t(".updated_at"),
@@ -109,7 +109,7 @@
             field: :updated_at
           ) %>
         </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <th scope="col" class="px-6 py-3">
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,
             label: t(".files_updated_at"),
@@ -118,7 +118,7 @@
           ) %>
         </th>
         <% @fields.each do |column| %>
-          <th scope="col" class="px-6 py-3 text-left whitespace-nowrap">
+          <th scope="col" class="px-6 py-3">
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
               label: column,
@@ -128,7 +128,7 @@
           </th>
         <% end %>
         <% if allowed_to?(:update_sample?, project) %>
-          <th scope="col" class="px-6 py-3 whitespace-nowrap"><%= t(".action") %></th>
+          <th scope="col" class="px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0"><%= t(".action") %></th>
         <% end %>
       </tr>
     </thead>
@@ -146,17 +146,7 @@
           id="<%= sample.id %>"
           class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
         >
-          <td
-            class="
-              px-6
-              py-3
-              whitespace-nowrap
-              sticky
-              left-0
-              bg-slate-50
-              dark:bg-slate-900
-            "
-          >
+          <td class=" px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 ">
             <% if allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project) %>
               <%= check_box_tag "sample_ids[]",
               sample.id,
@@ -184,7 +174,7 @@
               </span>
             <% end %>
           </td>
-          <td class="px-6 py-3 whitespace-nowrap">
+          <td class="px-6 py-3">
             <%= link_to namespace_project_sample_path(id: sample.id),
             data: {
               turbo: false
@@ -199,24 +189,24 @@
               </span>
             <% end %>
           </td>
-          <td class="px-6 py-3 whitespace-nowrap">
+          <td class="px-6 py-3">
             <%= l(sample.created_at.localtime, format: :full_date) %>
           </td>
-          <td class="px-6 py-3 whitespace-nowrap">
+          <td class="px-6 py-3">
             <%= viral_time_ago(original_time: sample.updated_at) %>
           </td>
-          <td class="px-6 py-3 whitespace-nowrap">
+          <td class="px-6 py-3">
             <% if sample.attachments_updated_at.present? %>
               <%= viral_time_ago(original_time: sample.attachments_updated_at) %>
             <% end %>
           </td>
           <% @fields.each do |column| %>
-            <td class="px-6 py-3 whitespace-nowrap">
+            <td class="px-6 py-3">
               <%= sample.metadata[column] %>
             </td>
           <% end %>
           <% if allowed_to?(:update_sample?, project) %>
-            <td class="px-6 py-3 whitespace-nowrap">
+            <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
               <%= link_to(
                 t(:"projects.samples.index.edit_button"),
                 edit_namespace_project_sample_path(id: sample.id),
@@ -250,7 +240,6 @@
             class="
               px-6
               py-3
-              whitespace-nowrap
               sticky
               left-0
               bg-slate-50
@@ -258,8 +247,9 @@
               border-t
               dark:border-slate-700
               border-slate-200
+              z-10
             "
-            colspan="100%"
+            colspan="3"
           >
 
             <span>
@@ -271,6 +261,18 @@
               <strong data-selection-target="selected">0</strong>
             </span>
           </td>
+          <td
+            colspan="100%"
+            class="
+              px-6
+              py-3
+              bg-slate-50
+              dark:bg-slate-900
+              broder-t
+              dark:border-slate-700
+              border-slate-200
+            "
+          ></td>
         </tr>
       </tfoot>
     <% end %>
