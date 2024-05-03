@@ -64,5 +64,16 @@ module Profiles
                                                        format: :turbo_stream)
       assert_response :not_found
     end
+
+    test 'should not revoke personal access token which doesn\'t exist' do
+      sign_in users(:john_doe)
+
+      assert_no_difference -> { users(:john_doe).personal_access_tokens.active.count } do
+        delete revoke_profile_personal_access_token_path(id: 'not-a-read-id',
+                                                         format: :turbo_stream)
+      end
+
+      assert_response :not_found
+    end
   end
 end
