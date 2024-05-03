@@ -1,12 +1,4 @@
-<div
-  class="
-    justify-between
-    w-full
-    mb-4
-    page-header
-    sm:flex
-  "
->
+<div class=" justify-between w-full mb-4 page-header sm:flex ">
   <div class="flex items-start">
     <% if icon.present? %>
       <span class="mr-2"><%= icon %></span>
@@ -15,11 +7,29 @@
     <div>
       <% if @id %>
         <div class="flex items-center">
-          <h1 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white inline"><%= title %></h1>
-          <%= viral_pill(text: @id, color: :primary, classes: "ml-2") %>
+          <h1
+            class="
+              text-2xl
+              font-medium
+              leading-tight
+              text-slate-900
+              dark:text-white
+              inline
+            "
+          ><%= title %></h1>
+          <%= viral_pill(text: id, color: id_color, classes: "ml-2") %>
         </div>
       <% else %>
-       <h1 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white inline"><%= title %></h1>
+        <h1
+          class="
+            text-2xl
+            font-medium
+            leading-tight
+            text-slate-900
+            dark:text-white
+            inline
+          "
+        ><%= title %></h1>
       <% end %>
       <% if subtitle != nil %>
         <p class="text-slate-500 dark:text-slate-400"><%= subtitle %></p>
