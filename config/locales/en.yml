@@ -841,6 +841,7 @@ en:
       actions:
         delete_button: Delete
         delete_confirm: Are you sure that you want to delete this automated workflow execution?
+        edit_button: Edit
       table:
         empty:
           title: No automated workflow executions
@@ -863,6 +864,8 @@ en:
         title: Workflow Selection
       new_automated_workflow_execution_modal:
         title: "%{workflow} parameters"
+      edit_dialog:
+        title: "Editing Automated Workflow Execution: %{workflow_name}"
     bots:
       index:
         title: Bot Accounts
@@ -1350,6 +1353,7 @@ en:
       create:
         title: "%{workflow} parameters"
         submit: Submit
+        update: Update
     state:
       initial: New
       prepared: Prepared

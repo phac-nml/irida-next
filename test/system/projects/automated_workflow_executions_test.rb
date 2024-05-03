@@ -91,5 +91,26 @@ module Projects
       assert_text I18n.t(:'projects.automated_workflow_executions.destroy.success',
                          workflow_name: 'phac-nml/iridanextexample')
     end
+
+    test 'can edit an automated workflow execution for a project' do
+      visit namespace_project_automated_workflow_executions_path(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
+
+      within(first('table tbody tr')) do
+        click_link I18n.t(:'projects.automated_workflow_executions.actions.edit_button')
+      end
+
+      within('dialog[open].dialog--size-xl') do
+        # update input[name="workflow_execution[name]"] with the value 'Updated Name'
+        fill_in 'workflow_execution[name]', with: 'Updated Name'
+        click_button I18n.t(:'workflow_executions.submissions.create.update')
+      end
+
+      # check the first item in the table for the new name
+      within(first('table tbody tr')) do
+        assert_text 'Updated Name'
+      end
+    end
   end
 end

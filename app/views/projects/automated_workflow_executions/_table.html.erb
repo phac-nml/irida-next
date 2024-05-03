@@ -23,7 +23,9 @@
         "
     >
     <tr>
-      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left sticky left-0
+          bg-slate-50
+          dark:bg-slate-700">
         <%= t(:".headers.id") %>
       </th>
       <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
@@ -39,6 +41,11 @@
         <%= t(:".headers.created_at") %>
       </th>
       <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+        <%= t(:".headers.updated_at") %>
+      </th>
+      <th scope="col" class="px-6 py-3 whitespace-nowrap text-left sticky right-0
+          bg-slate-50
+          dark:bg-slate-70">
         <%= t(:".headers.actions") %>
       </th>
     </tr>

@@ -3,9 +3,11 @@
 # Helper to render a Nextflow pipeline form
 module NextflowHelper
   # rubocop:disable Metrics/MethodLength
-  def form_input(container, name, property, required)
+  def form_input(container, name, property, required, instance)
+    value = instance.present? ? instance['workflow_params'][name.to_s] : property[:default]
+
     if property[:type] == 'boolean'
-      return viral_prefixed_boolean(form: container, name:, value: property[:default]) do |input|
+      return viral_prefixed_boolean(form: container, name:, value:) do |input|
         input.with_prefix do
           format_name_as_arg(name)
         end
@@ -14,7 +16,7 @@ module NextflowHelper
 
     if property[:enum].present?
       return viral_prefixed_select(form: container, name:, options: property[:enum],
-                                   selected_value: property[:default]) do |select|
+                                   selected_value: value) do |select|
                select.with_prefix do
                  format_name_as_arg(name)
                end
@@ -22,7 +24,7 @@ module NextflowHelper
     end
 
     viral_prefixed_text_input(form: container, name:, required:, pattern: property[:pattern],
-                              value: property[:default]) do |input|
+                              value:) do |input|
       input.with_prefix do
         format_name_as_arg(name)
       end

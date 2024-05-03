@@ -24,7 +24,7 @@
   >
     <%= @workflow.description %>
   </p>
-  <%= form_with url: url, data: { turbo_frame: "_top" } do |form| %>
+  <%= form_with url: url, method: (instance.nil? ? :post : :patch), data: { turbo_frame: "_top" } do |form| %>
     <input id="submission_turbo" type="hidden" name="format" value="turbo_stream" />
 
     <%= fields_for :workflow_execution do |workflow| %>
@@ -33,7 +33,7 @@
           <%= t(".name.label") %>
         <% end %>
         <p id="helper-text-explanation" class="mt-1 mb-2 text-sm text-slate-500 dark:text-slate-400"><%= t(".name.helper") %></p>
-        <%= workflow.text_field :name, class: "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <%= workflow.text_field :name, value: instance.present? ? instance.name : nil, class: "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </section>
 
       <%= workflow.hidden_field :namespace_id, value: @namespace_id %>
@@ -79,7 +79,7 @@
                       <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
                     <% end %>
                   <% end %>
-                  <%= form_input(fields, name, property, property[:required]) %>
+                  <%= form_input(fields, name, property, property[:required], instance) %>
                   <% if property[:help_text].present? %>
                     <%= viral_help_text do %>
                       <%= property[:help_text] %>
@@ -95,10 +95,10 @@
       <%- if @allowed_to_update_samples %>
         <div class="flex mb-4 items-center h-5">
           <%= workflow.check_box :update_samples,
-                             {
-                               checked: false,
-                               class:
-                                 "w-4
+                                 {
+                                   checked: instance.present? && instance["update_samples"],
+                                   class:
+                                     "w-4
                                             h-4
                                             mr-2.5
                                             text-primary-600
@@ -111,9 +111,9 @@
                                             focus:ring-2
                                             dark:bg-slate-700
                                             dark:border-slate-600"
-                             },
-                             true,
-                             false %>
+                                 },
+                                 true,
+                                 false %>
           <%= workflow.label :update_samples,
                              t(:"components.nextflow.update_samples"),
                              class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
@@ -121,10 +121,10 @@
       <%- end %>
       <div class="flex mb-4 items-center h-5">
         <%= workflow.check_box :email_notification,
-                           {
-                             checked: false,
-                             class:
-                               "w-4
+                               {
+                                 checked: instance.present? && instance["email_notification"],
+                                 class:
+                                   "w-4
                                         h-4
                                         mr-2.5
                                         text-primary-600
@@ -137,9 +137,9 @@
                                         focus:ring-2
                                         dark:bg-slate-700
                                         dark:border-slate-600"
-                           },
-                           true,
-                           false %>
+                               },
+                               true,
+                               false %>
         <%= workflow.label :email_notification,
                            t(:"components.nextflow.email_notification"),
                            class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
@@ -150,8 +150,13 @@
       type="submit"
       class="button button--state-primary button--size-default"
       data-nextflow--samplesheet-target="submit"
+      data-action="click->viral--dialog#close"
     >
-      <%= t(:"workflow_executions.submissions.create.submit") %>
+      <% if instance.nil? %>
+        <%= t(:"workflow_executions.submissions.create.submit") %>
+      <% else %>
+        <%= t(:"workflow_executions.submissions.create.update") %>
+      <% end %>
     </button>
   <% end %>
 </div>
