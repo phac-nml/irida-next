@@ -1,15 +1,15 @@
 <table
   data-controller="selection"
-  class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+  class="w-full text-sm text-left text-slate-500 dark:text-slate-400"
 >
   <thead
     class="
       text-xs
-      text-gray-700
+      text-slate-700
       uppercase
-      bg-gray-50
-      dark:bg-gray-700
-      dark:text-gray-400
+      bg-slate-50
+      dark:bg-slate-700
+      dark:text-slate-400
     "
   >
     <tr>
@@ -21,7 +21,7 @@
   </thead>
   <tbody>
     <% (0...3).each do |index| %>
-      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+    <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
         <td class="w-4 p-4">
           <div class="flex items-center">
             <input
@@ -35,16 +35,16 @@
                 w-4
                 h-4
                 text-blue-600
-                bg-gray-100
-                border-gray-300
+                bg-slate-100
+                border-slate-300
                 rounded
                 focus:ring-blue-500
                 dark:focus:ring-blue-600
-                dark:ring-offset-gray-800
-                dark:focus:ring-offset-gray-800
+                dark:ring-offset-slate-800
+                dark:focus:ring-offset-slate-800
                 focus:ring-2
-                dark:bg-gray-700
-                dark:border-gray-600
+                dark:bg-slate-700
+                dark:border-slate-600
               "
             >
             <label for="row<%=index%>" class="sr-only">checkbox</label>
@@ -56,7 +56,7 @@
             px-6
             py-4
             font-medium
-            text-gray-900
+            text-slate-900
             whitespace-nowrap
             dark:text-white
           "

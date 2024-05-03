@@ -7,7 +7,7 @@ module Viral
 
     COLORS = {
       blue: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      gray: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+      slate: 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300',
       red: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
       green: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
       yellow: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
@@ -20,7 +20,7 @@ module Viral
 
     BORDER_COLORS = {
       blue: 'border border-blue-800 dark:border-blue-300',
-      gray: 'border border-gray-800 dark:border-gray-300',
+      slate: 'border border-slate-800 dark:border-slate-300',
       red: 'border border-red-800 dark:border-red-300',
       green: 'border border-green-800 dark:border-green-300',
       yellow: 'border border-yellow-800 dark:border-yellow-300',

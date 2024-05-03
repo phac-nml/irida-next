@@ -4,11 +4,11 @@
     <div class="flex">
       <div class="flex items-center h-5"><input id="system-theme" type="radio" value="system" name="color-theme"
                                                 data-colour-mode-target="system" data-action="change->colour-mode#toggleTheme"
-                                                class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                class="w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600">
       </div>
       <div class="ml-2 text-sm">
-        <label for="system-theme" class="font-medium text-gray-900 dark:text-gray-300"><%= t(:'.system_theme') %></label>
-        <p id="helper-radio-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
+        <label for="system-theme" class="font-medium text-slate-900 dark:text-slate-300"><%= t(:'.system_theme') %></label>
+        <p id="helper-radio-text" class="text-xs font-normal text-slate-500 dark:text-slate-300">
           <%= t(:'.system_desc') %>
         </p>
       </div>
@@ -16,14 +16,14 @@
     <div class="flex items-center">
       <input id="dark-theme" type="radio" value="dark" name="color-theme"
              data-colour-mode-target="dark" data-action="change->colour-mode#toggleTheme"
-             class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-      <label for="dark-theme" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"><%= t(:'.dark_theme') %></label>
+             class="w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600">
+      <label for="dark-theme" class="ml-2 text-sm font-medium text-slate-900 dark:text-slate-300"><%= t(:'.dark_theme') %></label>
     </div>
     <div class="flex items-center">
       <input id="light-theme" type="radio" value="light" name="color-theme"
              data-colour-mode-target="light" data-action="change->colour-mode#toggleTheme"
-             class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-      <label for="light-theme" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"><%= t(:'.light_theme') %></label>
+             class="w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600">
+      <label for="light-theme" class="ml-2 text-sm font-medium text-slate-900 dark:text-slate-300"><%= t(:'.light_theme') %></label>
     </div>
   </div>
   <% end %>
