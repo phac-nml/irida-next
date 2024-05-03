@@ -35,7 +35,7 @@
             url: project_workflow_executions_path(@project),
             icon: "command_line",
             label: t(:"projects.sidebar.workflow_executions"),
-            selected: @current_page == t(:"projects.sidebar.workflow_executions")
+            selected: @current_page == t(:"projects.sidebar.workflow_executions").downcase
           ) %>
           <% if allowed_to?(:update?, @project) %>
             <%= render section.with_multi_level_menu(title: t(:"projects.sidebar.settings"), icon: "cog_6_tooth") do |multi_level_menu| %>
