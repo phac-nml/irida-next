@@ -34,5 +34,10 @@ module Irida
       base32_string << Base32.encode32(time.day, 1)
       base32_string << Base32.encode32(Integer(time.seconds_since_midnight * 1024), 6)
     end
+
+    def valid_puid?(puid, object_class = nil)
+      re = /#{app_prefix}_#{object_class.model_prefix}_([A-Z]|[2-7]){10}/
+      re.match?(puid)
+    end
   end
 end
