@@ -1508,12 +1508,18 @@ en:
         body_html: "%{type} '%{name}' access has been <strong>revoked</strong> for User '%{first_name} %{last_name}' (%{email})"
         view_details: "To view all the members of %{type} '%{name}', click the button below:"
     pipeline_mailer:
-      complete_email:
+      complete_user_email:
         subject: Pipeline Completed - %{id}
         body_html: Your pipeline <strong>%{id}</strong> has completed successfully.
-      error_email:
+      complete_manager_email:
+        subject: Pipeline Completed - %{id}
+        body_html: Pipeline <strong>%{id}</strong> has completed successfully.
+      error_user_email:
         subject: Pipeline Errored - %{id}
-        body_html: Your pipeline <strong>%{id}</strong> has errors that need to be addressed.
+        body_html: Your pipeline <strong>%{id}</strong> did not complete successfully due to errors.
+      error_manager_email:
+        subject: Pipeline Errored - %{id}
+        body_html: Pipeline <strong>%{id}</strong> did not complete successfully due to errors.
       view_details: "To view the pipeline summary, click the button below:"
   data_exports:
     create:

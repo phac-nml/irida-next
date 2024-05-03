@@ -45,7 +45,6 @@ irida_next_example:
   workflow_url: "https://github.com/phac-nml/iridanextexample"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-
   email_notification: true
 
 irida_next_example_prepared:
@@ -321,6 +320,7 @@ irida_next_example_completing_f:
   state: "completing"
   blob_run_directory: "not a run dir"
   update_samples: false
+  email_notification: true
 
 irida_next_example_completed_with_output:
   <<: *DEFAULTS

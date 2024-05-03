@@ -202,13 +202,13 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     workflow_execution_example.state = :completed
     assert_enqueued_emails 1 do
       workflow_execution_example.send_email
-      assert_enqueued_email_with PipelineMailer, :complete_email, args: [workflow_execution_example]
+      assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution_example]
     end
 
     workflow_execution_example.state = :error
     assert_enqueued_emails 1 do
       workflow_execution_example.send_email
-      assert_enqueued_email_with PipelineMailer, :complete_email, args: [workflow_execution_example]
+      assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution_example]
     end
 
     workflow_execution_example.state = :submitted
