@@ -14,29 +14,29 @@
       <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.id %></dd>
     </div>
     <% unless @data_export.name.nil? %>
-    <div class="flex flex-col py-3">
-      <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".name") %></dt>
-      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.name %></dd>
-    </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".name") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.name %></dd>
+      </div>
     <% end %>
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".type") %></dt>
-      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.export_type.capitalize %></dd>
+      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= t(:"data_exports.types.#{@data_export.export_type}") %></dd>
     </div>
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".status") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
         <% if @data_export.status == 'ready' %>
-            <%= viral_pill(
-              text: @data_export.status.capitalize,
-              color: :green
-            ) %>
-          <% else %>
-            <%= viral_pill(
-              text: @data_export.status.capitalize,
-              color: :slate
-            ) %>
-          <% end %>
+          <%= viral_pill(
+            text: t(:"data_exports.status.#{@data_export.status}"),
+            color: :green
+          ) %>
+        <% else %>
+          <%= viral_pill(
+            text: t(:"data_exports.status.#{@data_export.status}"),
+            color: :slate
+          ) %>
+        <% end %>
       </dd>
     </div>
     <div class="flex flex-col py-3">

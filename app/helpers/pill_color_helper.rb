@@ -23,7 +23,7 @@ module PillColorHelper
   def find_pill_color_for_state(state)
     pill_color = :blue
     if %w[initial prepared].include?(state)
-      pill_color = :gray
+      pill_color = :slate
     elsif %w[canceling canceled].include?(state)
       pill_color = :yellow
     elsif state == 'error'

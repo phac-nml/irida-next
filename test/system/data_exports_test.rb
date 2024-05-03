@@ -25,27 +25,31 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector 'tr', count: 4
       assert_selector 'tr:first-child td:first-child ', text: @data_export1.id
       assert_selector 'tr:first-child td:nth-child(2)', text: @data_export1.name
-      assert_selector 'tr:first-child td:nth-child(3)', text: @data_export1.export_type.capitalize
-      assert_selector 'tr:first-child td:nth-child(4)', text: @data_export1.status.capitalize
+      pause
+      assert_selector 'tr:first-child td:nth-child(3)', text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
+      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
       assert_selector 'tr:first-child td:nth-child(6)',
                       text: I18n.l(@data_export1.expires_at.localtime, format: :full_date)
 
       assert_selector 'tr:nth-child(2) td:first-child', text: @data_export2.id
       assert find('tr:nth-child(2) td:nth-child(2)').text.blank?
-      assert_selector 'tr:nth-child(2) td:nth-child(3)', text: @data_export2.export_type.capitalize
-      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: @data_export2.status.capitalize
+      assert_selector 'tr:nth-child(2) td:nth-child(3)',
+                      text: I18n.t(:"data_exports.types.#{@data_export2.export_type}")
+      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export2.status}")
       assert find('tr:nth-child(2) td:nth-child(6)').text.blank?
 
       assert_selector 'tr:nth-child(3) td:first-child', text: @data_export6.id
       assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @data_export6.name
-      assert_selector 'tr:nth-child(3) td:nth-child(3)', text: @data_export6.export_type.capitalize
-      assert_selector 'tr:nth-child(3) td:nth-child(4)', text: @data_export6.status.capitalize
+      assert_selector 'tr:nth-child(3) td:nth-child(3)',
+                      text: I18n.t(:"data_exports.types.#{@data_export6.export_type}")
+      assert_selector 'tr:nth-child(3) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export6.status}")
       assert find('tr:nth-child(3) td:nth-child(6)').text.blank?
 
       assert_selector 'tr:nth-child(4) td:first-child', text: @data_export7.id
       assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @data_export7.name
-      assert_selector 'tr:nth-child(4) td:nth-child(3)', text: @data_export7.export_type.capitalize
-      assert_selector 'tr:nth-child(4) td:nth-child(4)', text: @data_export7.status.capitalize
+      assert_selector 'tr:nth-child(4) td:nth-child(3)',
+                      text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
+      assert_selector 'tr:nth-child(4) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export7.status}")
       assert_selector 'tr:nth-child(4) td:nth-child(6)',
                       text: I18n.l(@data_export7.expires_at.localtime, format: :full_date)
     end
@@ -119,8 +123,8 @@ class DataExportsTest < ApplicationSystemTestCase
     within %(#data-export-listing) do
       assert_selector 'div:first-child dd', text: @data_export1.id
       assert_selector 'div:nth-child(2) dd', text: @data_export1.name
-      assert_selector 'div:nth-child(3) dd', text: @data_export1.export_type.capitalize
-      assert_selector 'div:nth-child(4) dd', text: @data_export1.status.capitalize
+      assert_selector 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
+      assert_selector 'div:nth-child(4) dd', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
       assert_selector 'div:nth-child(5) dd',
                       text: I18n.l(@data_export1.created_at.localtime, format: :full_date)
       assert_selector 'div:last-child dd',
@@ -152,7 +156,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within %(#data-export-listing) do
       within %(div:nth-child(3) dd) do
         assert_selector 'span.bg-slate-100.text-slate-800.text-xs.font-medium.rounded-full',
-                        text: @data_export2.status.capitalize
+                        text: I18n.t(:"data_exports.status.#{@data_export2.status}")
       end
     end
 
@@ -162,7 +166,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within %(#data-export-listing) do
       within %(div:nth-child(4) dd) do
         assert_selector 'span.bg-green-100.text-green-800.text-xs.font-medium.rounded-full',
-                        text: @data_export1.status.capitalize
+                        text: I18n.t(:"data_exports.status.#{@data_export1.status}")
       end
     end
   end
@@ -441,8 +445,8 @@ class DataExportsTest < ApplicationSystemTestCase
     within %(#data-export-listing) do
       assert_selector 'div:first-child dd', text: @data_export7.id
       assert_selector 'div:nth-child(2) dd', text: @data_export7.name
-      assert_selector 'div:nth-child(3) dd', text: @data_export7.export_type.capitalize
-      assert_selector 'div:nth-child(4) dd', text: @data_export7.status.capitalize
+      assert_selector 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
+      assert_selector 'div:nth-child(4) dd', text: I18n.t(:"data_exports.status.#{@data_export7.status}")
       assert_selector 'div:nth-child(5) dd',
                       text: I18n.l(@data_export7.created_at.localtime, format: :full_date)
       assert_selector 'div:last-child dd',

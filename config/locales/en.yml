@@ -1646,3 +1646,9 @@ en:
         processing: processing
         ready: ready
       title: Data Export
+    types:
+      sample: SAMPLE
+      analysis: ANALYSIS
+    status:
+      processing: PROCESSING
+      ready: READY
