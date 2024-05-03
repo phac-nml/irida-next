@@ -6,8 +6,8 @@
       )
   ) %>
   <%= dialog.with_section do %>
-    <div class="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">
-      <p class="dark:text-gray-400">
+    <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+      <p class="dark:text-slate-400">
         <%= t(
           "groups.bots.index.bot_listing.generate_personal_access_token_modal.description",
           bot_account: @bot_account.user.email
@@ -49,7 +49,7 @@
             >
               <%= viral_icon(
                 name: :calendar_days,
-                classes: "w-5 h-5 text-gray-500 dark:text-gray-400"
+                classes: "w-5 h-5 text-slate-500 dark:text-slate-400"
               ) %>
             </div>
             <%= form.text_field :expires_at,
