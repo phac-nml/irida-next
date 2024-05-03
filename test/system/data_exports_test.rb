@@ -151,7 +151,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within %(#data-export-listing) do
       within %(div:nth-child(3) dd) do
-        assert_selector 'span.bg-gray-100.text-gray-800.text-xs.font-medium.rounded-full',
+        assert_selector 'span.bg-slate-100.text-slate-800.text-xs.font-medium.rounded-full',
                         text: @data_export2.status.capitalize
       end
     end

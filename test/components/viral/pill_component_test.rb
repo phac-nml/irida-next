@@ -27,7 +27,7 @@ module Viral
     test 'with_classes' do
       render_preview(:with_classes)
       assert_selector 'span', count: 4
-      assert_selector '.bg-gray-100.text-gray-800.underline', text: 'This is gray and underlined'
+      assert_selector '.bg-slate-100.text-slate-800.underline', text: 'This is slate and underlined'
       assert_selector '.bg-yellow-100.text-yellow-800.line-through', text: 'This is yellow and striked through'
       assert_selector '.bg-indigo-100.text-indigo-800.overline', text: 'This is indigo and overlined'
       assert_selector '.bg-pink-100.text-pink-800.underline.decoration-wavy.decoration-black',
