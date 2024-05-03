@@ -1141,6 +1141,10 @@ module Projects
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table#samples-table thead tr th', count: 8
 
+      within 'div.overflow-x-auto' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
+      end
+
       click_on 'metadatafield1'
 
       assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
