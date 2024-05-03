@@ -19,4 +19,18 @@ module PillColorHelper
 
     ATTACHMENT_COLORS[label_type.to_sym][attachment.metadata[label_type].to_sym]
   end
+
+  def find_pill_color_for_state(state)
+    pill_color = :blue
+    if %w[initial prepared].include?(state)
+      pill_color = :gray
+    elsif %w[canceling canceled].include?(state)
+      pill_color = :yellow
+    elsif state == 'error'
+      pill_color = :red
+    elsif state == 'completed'
+      pill_color = :green
+    end
+    pill_color
+  end
 end

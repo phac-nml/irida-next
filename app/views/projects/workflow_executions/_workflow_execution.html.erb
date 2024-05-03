@@ -9,8 +9,8 @@
       whitespace-nowrap
       sticky
       left-0
-      bg-white
-      dark:bg-gray-800
+      bg-slate-50
+      dark:bg-slate-900
       z-10
     "
   >
@@ -25,9 +25,7 @@
     },
     class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
   </td>
-  <td class="px-6 py-4 whitespace-nowrap">
-    <%= workflow_execution.run_id %>
-  </td>
+
   <td
     class="
       px-6
@@ -39,6 +37,16 @@
     "
   >
     <%= workflow_execution["name"] %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= viral_pill(
+      text: t(:"workflow_executions.state.#{workflow_execution["state"]}"),
+      color: find_pill_color_for_state(workflow_execution["state"]),
+      border: true
+    ) %>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <%= workflow_execution.run_id %>
   </td>
   <td
     class="
@@ -54,9 +62,6 @@
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
     <%= workflow_execution.metadata["workflow_version"] %>
-  </td>
-  <td class="px-6 py-4 whitespace-nowrap">
-    <%= t(:"workflow_executions.state.#{workflow_execution["state"]}") %>
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
     <%= l(workflow_execution["created_at"].localtime, format: :full_date) %>

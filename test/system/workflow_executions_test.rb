@@ -8,11 +8,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     login_as @user
 
     @id_col = '1'
-    @run_id_col = '2'
-    @name_col = '3'
-    @workflow_name_col = '4'
-    @workflow_version_col = '5'
-    @state_col = '6'
+    @name_col = '2'
+    @state_col = '3'
+    @run_id_col = '4'
+    @workflow_name_col = '5'
+    @workflow_version_col = '6'
     @created_at_col = '7'
   end
 
@@ -127,7 +127,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(6)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+      assert_selector "td:nth-child(#{@state_col})",
+                      text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_link 'Cancel', count: 1
       click_link 'Cancel'
     end
