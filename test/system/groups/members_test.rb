@@ -225,7 +225,8 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       within 'div.overflow-x-auto' do |div|
-        div.scroll_to div.find('table thead th:nth-last-child(2)')
+        # scroll to the end of the div
+        div.execute_script('this.scrollLeft = this.scrollWidth')
         find("#group-member-#{group_member.id}-expiration").click.set(expiry_date)
                                                            .native.send_keys(:return)
       end
