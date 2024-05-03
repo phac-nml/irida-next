@@ -91,7 +91,7 @@ module Samples
         validate_file_rows
       end
 
-      def perform_file_import # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def perform_file_import
         response = {}
         parse_settings = @headers.zip(@headers).to_h
 
@@ -99,29 +99,36 @@ module Samples
           next unless index.positive?
 
           sample_id = metadata[@sample_id_column]
-          sample = Sample.find_by(name: sample_id, project_id: @project.id)
 
           metadata.delete(@sample_id_column)
           metadata.compact! if @ignore_empty_values
-          begin
-            metadata_changes = UpdateService.new(@project, sample, current_user, { 'metadata' => metadata }).execute
-            not_updated_metadata_changes = metadata_changes[:not_updated]
-            if not_updated_metadata_changes.empty?
-              response[sample_id] = metadata_changes
-            else
-              @project.errors.add(:sample,
-                                  I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                                         sample_name: sample_id,
-                                         metadata_fields: not_updated_metadata_changes.join(', ')))
-            end
-          rescue StandardError
-            @project.errors.add(:sample,
-                                I18n.t('services.samples.metadata.import_file.sample_not_found',
-                                       sample_name: sample_id))
-            next
-          end
+
+          metadata_changes = process_sample_metadata_row(sample_id, metadata)
+          response[sample_id] = metadata_changes if metadata_changes
+        rescue ActiveRecord::RecordNotFound
+          @project.errors.add(:sample,
+                              I18n.t('services.samples.metadata.import_file.sample_not_found',
+                                     sample_name: sample_id))
         end
         response
+      end
+
+      def process_sample_metadata_row(sample_id, metadata)
+        sample = if Irida::PersistentUniqueId.valid_puid?(sample_id, Sample)
+                   Sample.find_by!(puid: sample_id, project_id: @project.id)
+                 else
+                   Sample.find_by!(name: sample_id, project_id: @project.id)
+                 end
+
+        metadata_changes = UpdateService.new(@project, sample, current_user, { 'metadata' => metadata }).execute
+        not_updated_metadata_changes = metadata_changes[:not_updated]
+        return metadata_changes if not_updated_metadata_changes.empty?
+
+        @project.errors.add(:sample,
+                            I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+                                   sample_name: sample_id,
+                                   metadata_fields: not_updated_metadata_changes.join(', ')))
+        nil
       end
     end
   end

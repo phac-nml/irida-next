@@ -43,7 +43,7 @@ module Samples
                      I18n.t('services.samples.metadata.import_file.empty_file'))
       end
 
-      test 'import sample metadata via csv file' do
+      test 'import sample metadata via csv file using sample names' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
         params = { file: @csv, sample_id_column: 'sample_name' }
@@ -52,6 +52,23 @@ module Samples
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [] },
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
+                     @sample2.reload.metadata)
+      end
+
+      test 'import sample metadata via csv file using sample puids' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { file: File.new('test/fixtures/files/metadata/valid_with_puid.csv', 'r'),
+                   sample_id_column: 'sample_puid' }
+        response = Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                            params).execute
+        assert_equal({ @sample1.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [] },
+                       @sample2.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [] } }, response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
