@@ -36,7 +36,16 @@
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
       </tr>
     </thead>
-    <tbody id="attachments-table-body">
+    <tbody
+      id="attachments-table-body"
+      class="
+        bg-white
+        divide-y
+        divide-slate-200
+        dark:bg-slate-800
+        dark:divide-slate-700
+      "
+    >
       <% attachments.each do |attachment| %>
         <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
           <%= render partial: "projects/samples/attachments/attachment",
