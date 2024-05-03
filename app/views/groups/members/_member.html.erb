@@ -9,6 +9,7 @@
         <%= viral_pill(
           text: t(:"activerecord.models.member.its_you"),
           color: :green,
+          border: :green,
           classes: "ml-2"
         ) %>
       <% else %>
@@ -16,7 +17,7 @@
           <%= viral_pill(
             text: t(:"activerecord.models.member.bot"),
             color: :transparent,
-            border: true,
+            border: :true,
             classes: "ml-2"
           ) %>
         <% end %>
