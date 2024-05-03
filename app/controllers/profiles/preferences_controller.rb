@@ -18,11 +18,11 @@ module Profiles
         # Locale is called now rather than from the around_action in app_controller because we need the locale
         # change prior to the success flash so that the flash contains the correct translation
         updated = @user.update(update_params)
-        locale = current_user.try(:locale) || I18n.default_locale
-        I18n.locale = locale
         if updated
-          flash[:success] = t('.success')
-          format.html { redirect_to profile_preferences_path }
+          I18n.with_locale(current_user.locale) do
+            flash[:success] = t('.success')
+            format.html { redirect_to profile_preferences_path }
+          end
         else
           format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
         end

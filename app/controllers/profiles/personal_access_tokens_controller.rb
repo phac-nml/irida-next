@@ -34,12 +34,9 @@ module Profiles
       authorize! @user
       @personal_access_token = current_user.personal_access_tokens.find(params[:id])
 
-      if @personal_access_token.revoke!
-        respond_to do |format|
-          format.turbo_stream
-        end
-      else
-        format.turbo_stream { render 'shared/error/not_found' }
+      @personal_access_token.revoke!
+      respond_to do |format|
+        format.turbo_stream
       end
     end
 
