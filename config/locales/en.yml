@@ -312,6 +312,7 @@ en:
         other: "%{count} years ago"
   auth:
     scopes:
+      label: Scopes
       api: Grants complete read/write access to the API.
       read_api: Grants read access to the API.
   components:
@@ -433,6 +434,9 @@ en:
         pending: "Pending confirmation of %{email}"
         submit: Update profile settings
       missing: This field has not been provided by the Authentication Provider.
+      email_address: Email Address
+      first_name: First Name
+      last_name: Last Name
     update:
       success: Profile updated successfully
     passwords:
@@ -480,6 +484,7 @@ en:
         expires_at: Expires
         subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
         title: Personal Access Tokens
+        action: Action
       personal_access_token:
         never: Never
         revoke_button: Revoke
@@ -621,6 +626,7 @@ en:
           submit: Delete group
           confirm: Are you sure you want to delete this group?
         path:
+          label: Path
           title: Change group URL
           description: Changing a group's URL can have unintended side effects.
           submit: Change group URL
@@ -742,6 +748,7 @@ en:
         tabs:
           members: Members
           groups: Groups
+          aria_label: Group member tabs
       update:
         success: "Group member %{user_email} updated successfully"
       new:
@@ -795,6 +802,7 @@ en:
           submit: Delete project
           confirm: Are you sure you want to delete this project?
         path:
+          label: Path
           title: Change project URL
           submit: Change project URL
           description: Changing a project's URL can have unintended side effects.
@@ -942,6 +950,7 @@ en:
       help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
       submit: Create project
       cancel: Cancel
+      name: Name
     sidebar:
       details: Details
       history: History
@@ -1052,6 +1061,7 @@ en:
         tabs:
           members: Members
           groups: Groups
+          aria_label: Project members tabs
       update:
         success: "Project member %{user_email} updated successfully"
       new:
@@ -1223,6 +1233,7 @@ en:
             sample_id_column: Sample ID Column
             select_sample_id_column: Select a Sample ID Column
             submit_button: Import Metadata
+            ignore_empty_values: Ignore empty values
           errors:
             description: "The sample metadata import completed with the following errors:"
             ok_button: OK
@@ -1652,3 +1663,7 @@ en:
     status:
       processing: PROCESSING
       ready: READY
+  shared:
+    alert:
+      list:
+        danger: Danger

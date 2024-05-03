@@ -25,7 +25,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector 'tr', count: 4
       assert_selector 'tr:first-child td:first-child ', text: @data_export1.id
       assert_selector 'tr:first-child td:nth-child(2)', text: @data_export1.name
-      pause
+
       assert_selector 'tr:first-child td:nth-child(3)', text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
       assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
       assert_selector 'tr:first-child td:nth-child(6)',
