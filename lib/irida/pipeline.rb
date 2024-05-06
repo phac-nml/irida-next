@@ -81,7 +81,7 @@ module Irida
       version_overrides = entry['versions'].select do |version|
         version['name'] == @version
       end.first['parameter_overrides'] || {}
-      overrides.merge(version_overrides)
+      overrides.deep_merge(version_overrides)
     end
   end
 end
