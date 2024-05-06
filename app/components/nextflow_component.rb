@@ -18,4 +18,12 @@ class NextflowComponent < Component
   end
 
   # rubocop:enable Metrics/ParameterLists
+
+  def text_for_description(description)
+    if description.instance_of?(String)
+      description
+    else
+      description[I18n.locale]
+    end
+  end
 end
