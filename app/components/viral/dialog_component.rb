@@ -16,10 +16,10 @@ module Viral
 
     SIZE_DEFAULT = :default
     SIZE_MAPPINGS = {
-      small: 'dialog--size-sm',
-      default: 'dialog--size-md',
-      large: 'dialog--size-lg',
-      extra_large: 'dialog--size-xl'
+      small: 'max-w-md',
+      default: 'max-w-xl',
+      large: 'max-w-3xl',
+      extra_large: 'max-w-7xl'
     }.freeze
 
     renders_one :trigger

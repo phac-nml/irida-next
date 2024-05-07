@@ -233,26 +233,6 @@ body {
 
   /* VIRAL DIALOG */
 
-  .dialog--size {
-    @apply relative w-full max-h-full;
-  }
-
-  .dialog--size-sm {
-    @apply max-w-md;
-  }
-
-  .dialog--size-md {
-    @apply max-w-xl;
-  }
-
-  .dialog--size-lg {
-    @apply max-w-3xl;
-  }
-
-  .dialog--size-xl {
-    @apply max-w-7xl;
-  }
-
   .dialog--header {
     @apply flex items-start justify-between p-5 border-b rounded-t dark:border-slate-600;
   }
