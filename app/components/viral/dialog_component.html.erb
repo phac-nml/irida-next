@@ -7,7 +7,23 @@
     <%= trigger %>
   <% end %>
   <div style="height: 0px">
-    <%= render Viral::BaseComponent.new(tag: :dialog, id: :dialog, classes: [dialog_size], **system_arguments) do %>
+    <dialog
+      id="dialog"
+      class="
+        relative
+        transform
+        overvlow-hidden
+        rounded-lg
+        bg-white
+        text-left
+        shadow-xl
+        transition-all
+        backdrop:bg-slate-900/10
+        backdrop:backdrop-blur-sm
+        <%= @dialog_size %>
+      "
+    >
+
       <% if header.present? %>
         <%= header %>
       <% end %>
@@ -33,6 +49,6 @@
           <% end %>
         </div>
       <% end %>
-    <% end %>
+    </dialog>
   </div>
 <% end %>
