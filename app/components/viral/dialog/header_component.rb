@@ -9,8 +9,6 @@ module Viral
       def initialize(title:, closable: true)
         @title = title
         @closable = closable
-        @system_arguments = {}
-        @system_arguments[:classes] = class_names(@system_arguments[:classes], 'dialog--header')
       end
     end
   end

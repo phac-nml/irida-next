@@ -233,24 +233,12 @@ body {
 
   /* VIRAL DIALOG */
 
-  .dialog--header {
+  /* .dialog--header {
     @apply flex items-start justify-between p-5 border-b rounded-t dark:border-slate-600;
-  }
-
-  .dialog--title {
-    @apply text-xl font-semibold text-slate-900 dark:text-white;
-  }
-
-  .dialog--close {
-    @apply text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-slate-600 dark:hover:text-white focus:outline-none focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700;
-  }
+  } */
 
   .dialog--section {
     @apply p-5;
-  }
-
-  .dialog--footer {
-    @apply flex items-center p-5 space-x-2 border-t rounded-b border-slate-200 dark:border-slate-600;
   }
 
   .avatar {

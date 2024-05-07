@@ -6,11 +6,13 @@
   <% if trigger.present? %>
     <%= trigger %>
   <% end %>
-  <div style="height: 0px">
+  <div class="w-0 h-0">
     <dialog
       id="dialog"
       class="
         w-full
+        flex
+        flex-col
         relative
         transform
         overvlow-hidden
@@ -24,22 +26,33 @@
         <%= @dialog_size %>
       "
     >
-
       <% if header.present? %>
         <%= header %>
       <% end %>
 
-      <% if sections.present? %>
-        <% sections.each_with_index do |section, index| %>
-          <%= section %>
-          <% if sections.length - 1 != index %>
-            <hr class="h-px my-4 bg-slate-200 border-0 dark:bg-slate-600"/>
+      <div class="flex-auto overflow-y-auto">
+        <% if sections.present? %>
+          <% sections.each_with_index do |section, index| %>
+            <%= section %>
+            <% if sections.length - 1 != index %>
+              <hr class="h-px my-4 bg-slate-200 border-0 dark:bg-slate-600"/>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
+      </div>
 
       <% if render_footer? %>
-        <div class="dialog--footer">
+        <div
+          class="
+            flex
+            flex-shrink-0
+            flex-wrap
+            items-center
+            justify-start
+            p-4
+            space-x-2
+          "
+        >
           <% if primary_action? %>
             <%= primary_action %>
           <% end %>

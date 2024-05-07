@@ -2,7 +2,7 @@
   data-controller="list-filter"
   data-list-filter-selection-outlet="#samples-table"
 >
-  <%= viral_dialog(closable: false) do |dialog| %>
+  <%= viral_dialog(closable: false, open: false) do |dialog| %>
     <%= dialog.with_trigger do %>
       <%= viral_button(data: { action: "click->viral--dialog#open" }, aria: { label: t(:'components.list_filter.title') }, title: t(:'components.list_filter.title'), classes: "relative") do %>
         <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
