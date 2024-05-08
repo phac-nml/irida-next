@@ -189,7 +189,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     tr = find('td', text: workflow_execution.id).ancestor('tr')
 
     within tr do
-      assert_selector 'td:nth-child(6)', text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+      assert_selector "td:nth-child(#{@state_col})",
+                      text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_no_link 'Delete'
     end
   end
