@@ -8,9 +8,14 @@ class NextflowComponentTest < ViewComponentTestCase
       {
         'name' => 'phac-nml/iridanextexample',
         'description' => 'This is a test workflow',
-        'url' => 'https://nf-co.re/testpipeline'
+        'url' => 'https://nf-co.re/testpipeline',
+        'versions' => [
+          {
+            name: '1.0.2'
+          }
+        ]
       },
-      { 'name' => '2.0.0' },
+      { 'name' => '1.0.2' },
       Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
       Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json')
     )
