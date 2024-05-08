@@ -3,7 +3,7 @@
 module BlobTestHelpers
   include BlobHelper
 
-  def make_and_upload_blob(filepath:, blob_run_directory:, gzip: false) # rubocop:disable Metrics/MethodLength
+  def make_and_upload_blob(filepath:, blob_run_directory:, gzip: false, prefix: 'output/') # rubocop:disable Metrics/MethodLength
     output_json_file = File.new(filepath, 'r')
 
     Tempfile.open do |tempfile|
@@ -23,7 +23,7 @@ module BlobTestHelpers
     output_json_file_input_key = generate_input_key(
       run_dir: blob_run_directory,
       filename: @output_json_file_blob.filename,
-      prefix: 'output/'
+      prefix:
     )
     compose_blob_with_custom_key(@output_json_file_blob, output_json_file_input_key)
   end
