@@ -438,6 +438,7 @@ automated_workflow_execution:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "completed"
   blob_run_directory: "not a run dir"
+  cleaned: true
 
 <% (1..25).each do |n| %>
 workflow_execution<%= (n) %>:
@@ -491,6 +492,7 @@ automated_example_prepared:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "prepared"
   email_notification: true
+  cleaned: false
 
 automated_example_submitted:
   <<: *DEFAULTS
@@ -510,6 +512,7 @@ automated_example_submitted:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "submitted"
+  cleaned: false
 
 automated_example_completed:
   <<: *DEFAULTS
@@ -530,6 +533,7 @@ automated_example_completed:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "completed"
   blob_run_directory: "not a run dir"
+  cleaned: true
 
 automated_example_error:
   <<: *DEFAULTS
@@ -549,6 +553,7 @@ automated_example_error:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "error"
+  cleaned: true
 
 automated_example_canceling:
   <<: *DEFAULTS
@@ -568,6 +573,7 @@ automated_example_canceling:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceling"
+  cleaned: false
 
 automated_example_canceled:
   <<: *DEFAULTS
@@ -587,6 +593,7 @@ automated_example_canceled:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceled"
+  cleaned: true
 
 automated_example_running:
   <<: *DEFAULTS
@@ -606,6 +613,7 @@ automated_example_running:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "running"
+  cleaned: false
 
 automated_example_new:
   <<: *DEFAULTS
@@ -622,6 +630,7 @@ automated_example_new:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "initial"
+  cleaned: false
 
 automated_workflow_execution_existing:
   <<: *DEFAULTS
@@ -636,3 +645,4 @@ automated_workflow_execution_existing:
   run_id: "my_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  cleaned: false
