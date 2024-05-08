@@ -9,11 +9,11 @@ module WorkflowExecutions
     end
 
     def execute
-      # return if @workflow_execution.cleaned? #TODO: uncomment when code flow is merged in
+      return if @workflow_execution.cleaned?
 
       ActiveStorage::Blob.service.delete_prefixed(@workflow_execution.blob_run_directory)
 
-      # @workflow_execution.cleaned = true #TODO: uncomment when code flow is merged in
+      @workflow_execution.cleaned = true
 
       @workflow_execution.save
 

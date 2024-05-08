@@ -35,7 +35,7 @@ module WorkflowExecutions
     end
 
     test 'clean all workflow execution run directory files' do
-      # assert_not @workflow_execution.cleaned?
+      assert_not @workflow_execution.cleaned?
 
       key = @workflow_execution.blob_run_directory
 
@@ -55,7 +55,7 @@ module WorkflowExecutions
       assert_raises(ActiveStorage::FileNotFoundError) { @input_file_blob.download }
       assert_raises(ActiveStorage::FileNotFoundError) { @samplesheet_file_blob.download }
 
-      # assert @workflow_execution.cleaned?
+      assert @workflow_execution.cleaned?
     end
   end
 end
