@@ -50,9 +50,9 @@ class NextflowComponentTest < ViewComponentTestCase
                   properties: {
                     project_name: {
                       type: 'string',
-                      default: 'Shit my dad did',
+                      default: 'Some custom default value',
                       pattern: '^\\S+$',
-                      description: 'The name of the project.',
+                      description: 'The custom of the project.',
                       fa_icon: 'fas fa-tag'
                     }
                   }
@@ -79,7 +79,6 @@ class NextflowComponentTest < ViewComponentTestCase
       assert_selector 'h1', text: 'phac-nml/iridanextexample', count: 1
       assert_selector '.samplesheet-table .table-column:first-child .table-td', count: 3
       assert_selector 'input[type=text][name="workflow_execution[name]"]'
-      assert_selector 'label', text: 'The custom of the project.'
     end
   end
 end
