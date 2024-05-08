@@ -105,6 +105,7 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
+    ansi (1.5.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.818.0)
@@ -307,6 +308,11 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     minitest (5.21.2)
+    minitest-reporters (1.6.1)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
     msgpack (1.7.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
@@ -582,6 +588,7 @@ DEPENDENCIES
   listen
   logidze
   lookbook (~> 2.1, >= 2.1.1)
+  minitest-reporters
   omniauth
   omniauth-azure-activedirectory-v2
   omniauth-rails_csrf_protection
