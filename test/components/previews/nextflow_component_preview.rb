@@ -5,13 +5,7 @@ class NextflowComponentPreview < ViewComponent::Preview
   def default(schema_file: 'nextflow_schema.json')
     sample1 = Sample.first
     sample2 = Sample.second
-
-    entry = {
-      name: 'phac-nml/iridanextexample',
-      description: 'IRIDA Next Example Pipeline',
-      url: 'https://github.com/phac-nml/iridanextexample'
-    }
-    workflow = Irida::Pipeline.new(entry, '1.0.1',
+    workflow = Irida::Pipeline.new(entry, '1.0.2',
                                    Rails.root.join('test/fixtures/files/nextflow/', schema_file),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
@@ -22,6 +16,17 @@ class NextflowComponentPreview < ViewComponent::Preview
   end
 
   private
+
+  def entry
+    {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample',
+      versions: [
+        { name: '1.0.2', automatable: true }
+      ]
+    }
+  end
 
   def schema_file_options
     Rails.root.join('test/fixtures/files/nextflow').entries.select do |f|
