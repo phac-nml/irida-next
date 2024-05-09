@@ -233,10 +233,6 @@ body {
 
   /* VIRAL DIALOG */
 
-  dialog::backdrop {
-    @apply bg-slate-400/30 dark:bg-slate-900/40 backdrop-blur-sm;
-  }
-
   .dialog--size {
     @apply relative w-full max-h-full;
   }
