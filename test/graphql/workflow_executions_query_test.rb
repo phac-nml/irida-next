@@ -175,18 +175,21 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
   end
 
   test 'workflow executions nodes query for samples should work' do
-    workflow_execution_id = IridaSchema.execute(
+    prelim_query = IridaSchema.execute(
       WORKFLOW_EXECUTIONS_QUERY,
       context: { current_user: @user },
       variables: { first: 1 }
-    )['data']['workflowExecutions']['nodes'][0]['id']
+    )['data']
+
+    workflow_execution_id = prelim_query['workflowExecutions']['nodes'][0]['id']
+    sample_id = prelim_query['workflowExecutions']['nodes'][0]['samples']['edges'][0]['node']['id']
 
     result = IridaSchema.execute(WORKFLOW_EXECUTIONS_NODE_QUERY, context: { current_user: @user },
                                                                  variables: { workflow_execution_id: })
 
     data = result['data']['node']
 
-    assert_not_empty data['samples']['nodes'], 'workflow execution samples resolver should work'
-    assert_equal 'gid://irida/Sample/21002189', data['samples']['nodes'][0]['id'], 'sample id should match'
+    assert_not_empty data['samples']['edges'], 'workflow execution samples resolver should work'
+    assert_equal sample_id, data['samples']['edges'][0]['node']['id'], 'sample id should match'
   end
 end
