@@ -1,6 +1,6 @@
 <span
   data-controller="viral--dialog"
-  data-viral--dialog-open-value="<%= open%>"
+  data-viral--dialog-open-value="<%= open %>"
 >
 
   <% if trigger.present? %>
@@ -22,6 +22,7 @@
         backdrop:bg-slate-400/30
         backdrop:dark:bg-slate-900/40
         backdrop:backdrop-blur-sm
+        <%= size %>
       "
     >
       <% if header.present? %>

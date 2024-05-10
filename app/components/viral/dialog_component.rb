@@ -3,7 +3,7 @@
 module Viral
   # A component for displaying a dialog.
   class DialogComponent < Viral::Component
-    attr_reader :open, :closable, :dialog_size, :title
+    attr_reader :open, :closable, :size, :title
 
     renders_one :header, lambda { |title:|
       Viral::Dialog::HeaderComponent.new(title:, closable: @closable)
@@ -16,10 +16,10 @@ module Viral
 
     SIZE_DEFAULT = :default
     SIZE_MAPPINGS = {
-      small: 'dialog--size-sm',
-      default: 'dialog--size-md',
-      large: 'dialog--size-lg',
-      extra_large: 'dialog--size-xl'
+      small: 'max-w-md',
+      default: 'md-w-xl',
+      large: 'max-w-3xl',
+      extra_large: 'max-w-7xl'
     }.freeze
 
     renders_one :trigger
@@ -28,7 +28,7 @@ module Viral
       @title = title
       @open = open
       @closable = closable
-      @dialog_size = SIZE_MAPPINGS[size]
+      @size = SIZE_MAPPINGS[size]
       @system_arguments = system_arguments
 
       return if closable
