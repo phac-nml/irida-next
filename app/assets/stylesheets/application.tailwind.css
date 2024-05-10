@@ -233,18 +233,6 @@ body {
 
   /* VIRAL DIALOG */
 
-  .dialog--header {
-    @apply flex items-start justify-between p-5 border-b rounded-t dark:border-slate-600;
-  }
-
-  .dialog--title {
-    @apply text-xl font-semibold text-slate-900 dark:text-white;
-  }
-
-  .dialog--section {
-    @apply p-5;
-  }
-
   .dialog--footer {
     @apply flex items-center p-5 space-x-2 border-t rounded-b border-slate-200 dark:border-slate-600;
   }

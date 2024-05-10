@@ -7,7 +7,7 @@ module Viral
       def initialize(**system_arguments)
         @system_arguments = system_arguments
         @system_arguments[:classes] = class_names(@system_arguments[:classes],
-                                                  'dialog--section')
+                                                  'p-5')
       end
     end
   end
