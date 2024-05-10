@@ -39,7 +39,18 @@
       <% end %>
 
       <% if render_footer? %>
-        <div class="dialog--footer">
+        <div
+          class="
+            flex
+            items-center
+            p-5
+            space-x-2
+            border-t
+            rounded-b
+            border-slate-200
+            dark:border-slate-600
+          "
+        >
           <% if primary_action? %>
             <%= primary_action %>
           <% end %>
