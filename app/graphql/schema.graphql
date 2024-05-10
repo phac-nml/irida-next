@@ -2880,14 +2880,34 @@ A workflow execution
 """
 type WorkflowExecution implements Node {
   """
+  WorkflowExecution blob run directory
+  """
+  blobRunDirectory: String
+
+  """
+  WorkflowExecution http error code
+  """
+  httpErrorCode: Int
+
+  """
   ID of the object.
   """
   id: ID!
 
   """
-  WorkflowExecution metadata
+  Metadata for the sample
   """
-  metadata: [String!]
+  metadata(
+    """
+    Optional array of keys to limit metadata result to.
+    """
+    keys: [String!] = null
+  ): JSON!
+
+  """
+  WorkflowExecution name
+  """
+  name: String
 
   """
   WorkflowExecution run id
@@ -2937,7 +2957,7 @@ type WorkflowExecution implements Node {
   """
   WorkflowExecution tags
   """
-  tags: [String!]
+  tags: JSON
 
   """
   WorkflowExecution workflow engine
@@ -2947,7 +2967,7 @@ type WorkflowExecution implements Node {
   """
   WorkflowExecution workflow engine parameters
   """
-  workflowEngineParameters: [String!]
+  workflowEngineParameters: JSON
 
   """
   WorkflowExecution workflow engine version
@@ -2957,7 +2977,7 @@ type WorkflowExecution implements Node {
   """
   WorkflowExecution params
   """
-  workflowParams: [String!]
+  workflowParams: JSON
 
   """
   WorkflowExecution type
