@@ -10,6 +10,7 @@
     <dialog
       id="dialog"
       class="
+        relative
         w-full
         max-w-2xl
         max-h-[calc(100vh-4rem)]
@@ -29,14 +30,16 @@
         <%= header %>
       <% end %>
 
-      <% if sections.present? %>
-        <% sections.each_with_index do |section, index| %>
-          <%= section %>
-          <% if sections.length - 1 != index %>
-            <hr class="h-px my-4 bg-slate-200 border-0 dark:bg-slate-600"/>
+      <div class="max-h-[calc(100vh-200px)] overflow-auto">
+        <% if sections.present? %>
+          <% sections.each_with_index do |section, index| %>
+            <%= section %>
+            <% if sections.length - 1 != index %>
+              <hr class="h-px my-4 bg-slate-200 border-0 dark:bg-slate-600"/>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
+      </div>
 
       <% if render_footer? %>
         <div
