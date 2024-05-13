@@ -28,14 +28,31 @@ module Viral
       @title = title
       @open = open
       @closable = closable
-      @size = SIZE_MAPPINGS[size]
       @system_arguments = system_arguments
+      @system_arguments[:classes] = classes(size:)
 
       return if closable
 
       @system_arguments[:data] = {
         action: 'keydown.esc->viral--dialog#handleEsc'
       }
+    end
+
+    def classes(size:)
+      "
+        relative
+        max-w-xl
+        p-0
+        bg-white
+        rounded-lg
+        drop-shadow-md
+        dark:bg-slate-800
+        focus:outline-none
+        backdrop:bg-slate-400/30
+        backdrop:dark:bg-slate-900/40
+        backdrop:backdrop-blur-sm
+        #{SIZE_MAPPINGS[size]}
+      "
     end
 
     def render_footer?
