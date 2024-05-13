@@ -101,6 +101,7 @@ module Dashboard
       end
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
 
+      sleep 1
       assert_selector 'tr', count: 12
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
