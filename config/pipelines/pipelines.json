@@ -1,5 +1,15 @@
 [
   {
+    "url": "https://github.com/phac-nml/mikrokondo",
+    "name": "phac-nml/mikrokondo",
+    "description": "MikroKondo",
+    "versions": [
+      {
+        "name": "0.1.2"
+      }
+    ]
+  },
+  {
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
