@@ -21,7 +21,6 @@ export default class extends Controller {
   }
 
   handleEsc(event) {
-    console.log(event);
     event.preventDefault();
   }
 }
