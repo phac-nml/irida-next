@@ -25,7 +25,7 @@ module System
 
     test 'small' do
       visit('rails/view_components/viral_dialog_component/small')
-      within('span[data-controller-connected="true"] dialog.max-w-md') do
+      within('span[data-controller-connected="true"] dialog.dialog--size-sm') do
         assert_accessible
         assert_text 'This is the small dialog'
       end
@@ -33,7 +33,7 @@ module System
 
     test 'large' do
       visit('rails/view_components/viral_dialog_component/large')
-      within('span[data-controller-connected="true"] dialog.max-w-3xl') do
+      within('span[data-controller-connected="true"] dialog.dialog--size-lg') do
         assert_accessible
         assert_text 'This is the large dialog'
       end
@@ -41,7 +41,7 @@ module System
 
     test 'extra large' do
       visit('rails/view_components/viral_dialog_component/extra_large')
-      within('span[data-controller-connected="true"] dialog.max-w-7xl') do
+      within('span[data-controller-connected="true"] dialog.dialog--size-xl') do
         assert_accessible
         assert_text 'This is the extra large dialog'
       end
