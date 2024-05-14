@@ -7,7 +7,7 @@ module System
     test 'clipboard component' do
       visit('/rails/view_components/clipboard_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
-        find('button', text: 'Copy to clipboard').click
+        click_button 'Copy to clipboard'
         assert_no_text 'Copy to clipboard'
         assert_text 'Copied!'
       end

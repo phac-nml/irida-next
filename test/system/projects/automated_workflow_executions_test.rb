@@ -107,10 +107,9 @@ module Projects
         click_button I18n.t(:'workflow_executions.submissions.create.update')
       end
 
+      assert_no_selector('dialog[open]')
       # check the first item in the table for the new name
-      within(first('table tbody tr')) do
-        assert_text 'Updated Name'
-      end
+      assert_text 'Updated Name'
     end
   end
 end

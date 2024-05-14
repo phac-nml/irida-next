@@ -172,6 +172,7 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
 
       within('#group_samples_list') do
+        refute_selector 'tfoot strong[data-selection-target="total"]', text: '26'
         assert_selector 'tfoot strong[data-selection-target="total"]', text: '13'
         assert_selector 'table tbody tr', count: 13
       end
