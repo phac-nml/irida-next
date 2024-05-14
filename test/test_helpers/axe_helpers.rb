@@ -97,7 +97,6 @@ module AxeHelpers
 
   def visit(path, **attributes)
     super
-    assert_selector '[data-zz-js-loaded-value="true"]'
 
     assert_accessible
   end

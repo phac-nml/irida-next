@@ -6,7 +6,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= capybara_lockstep if defined?(Capybara::Lockstep) %>
     <style>
       body {
           overflow: auto;
@@ -15,10 +15,7 @@
       }
     </style>
   </head>
-  <body
-    class="bg-slate-50 dark:bg-slate-900"
-    <%== %{data-controller='zz-js'} if Rails.env.test? %>
-  >
+  <body class="bg-slate-50 dark:bg-slate-900">
     <div class="grid h-screen place-items-center">
       <section
         class="

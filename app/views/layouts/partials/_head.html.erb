@@ -6,4 +6,5 @@
   <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <%= render "shared/dark_mode_check" %>
+  <%= capybara_lockstep if defined?(Capybara::Lockstep) %>
 </head>

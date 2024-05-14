@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
   <%= render "layouts/partials/head" %>
-  <body
-    class="bg-white dark:bg-slate-900"
-    <%== %{data-controller='zz-js'} if Rails.env.test? %>
-  >
+  <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user) do |layout| %>
       <% layout.with_sidebar(label: turbo_frame_tag("sidebar_group_name"){ @group.name }, icon_name: "squares_2x2") do |navigation| %>
         <%= navigation.with_section do |section| %>
