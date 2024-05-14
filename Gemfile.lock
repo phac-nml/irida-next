@@ -13,6 +13,13 @@ GIT
       net-http-persistent (~> 4.0)
       nokogiri (~> 1, >= 1.10.8)
 
+GIT
+  remote: https://github.com/test-prof/test-prof.git
+  revision: 5bcef7f711133929e60dc0b9a063baa8d1ff7337
+  branch: fix/minitest-sampling
+  specs:
+    test-prof (1.3.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -22,50 +29,51 @@ GEM
       action_policy (>= 0.5.0)
       graphql (>= 1.9.3)
       ruby-next-core (>= 0.10.0)
-    actioncable (7.1.1)
-      actionpack (= 7.1.1)
-      activesupport (= 7.1.1)
+    actioncable (7.1.3.2)
+      actionpack (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
       zeitwerk (~> 2.6)
-    actionmailbox (7.1.1)
-      actionpack (= 7.1.1)
-      activejob (= 7.1.1)
-      activerecord (= 7.1.1)
-      activestorage (= 7.1.1)
-      activesupport (= 7.1.1)
+    actionmailbox (7.1.3.2)
+      actionpack (= 7.1.3.2)
+      activejob (= 7.1.3.2)
+      activerecord (= 7.1.3.2)
+      activestorage (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       mail (>= 2.7.1)
       net-imap
       net-pop
       net-smtp
-    actionmailer (7.1.1)
-      actionpack (= 7.1.1)
-      actionview (= 7.1.1)
-      activejob (= 7.1.1)
-      activesupport (= 7.1.1)
+    actionmailer (7.1.3.2)
+      actionpack (= 7.1.3.2)
+      actionview (= 7.1.3.2)
+      activejob (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       mail (~> 2.5, >= 2.5.4)
       net-imap
       net-pop
       net-smtp
       rails-dom-testing (~> 2.2)
-    actionpack (7.1.1)
-      actionview (= 7.1.1)
-      activesupport (= 7.1.1)
+    actionpack (7.1.3.2)
+      actionview (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       nokogiri (>= 1.8.5)
+      racc
       rack (>= 2.2.4)
       rack-session (>= 1.0.1)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    actiontext (7.1.1)
-      actionpack (= 7.1.1)
-      activerecord (= 7.1.1)
-      activestorage (= 7.1.1)
-      activesupport (= 7.1.1)
+    actiontext (7.1.3.2)
+      actionpack (= 7.1.3.2)
+      activerecord (= 7.1.3.2)
+      activestorage (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       globalid (>= 0.6.0)
       nokogiri (>= 1.8.5)
-    actionview (7.1.1)
-      activesupport (= 7.1.1)
+    actionview (7.1.3.2)
+      activesupport (= 7.1.3.2)
       builder (~> 3.1)
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
@@ -75,25 +83,25 @@ GEM
       activemodel (>= 5.2.0)
       activestorage (>= 5.2.0)
       activesupport (>= 5.2.0)
-    activejob (7.1.1)
-      activesupport (= 7.1.1)
+    activejob (7.1.3.2)
+      activesupport (= 7.1.3.2)
       globalid (>= 0.3.6)
-    activemodel (7.1.1)
-      activesupport (= 7.1.1)
-    activerecord (7.1.1)
-      activemodel (= 7.1.1)
-      activesupport (= 7.1.1)
+    activemodel (7.1.3.2)
+      activesupport (= 7.1.3.2)
+    activerecord (7.1.3.2)
+      activemodel (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       timeout (>= 0.4.0)
     activerecord_json_validator (2.1.5)
       activerecord (>= 4.2.0, < 8)
       json_schemer (~> 0.2.18)
-    activestorage (7.1.1)
-      actionpack (= 7.1.1)
-      activejob (= 7.1.1)
-      activerecord (= 7.1.1)
-      activesupport (= 7.1.1)
+    activestorage (7.1.3.2)
+      actionpack (= 7.1.3.2)
+      activejob (= 7.1.3.2)
+      activerecord (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       marcel (~> 1.0)
-    activesupport (7.1.1)
+    activesupport (7.1.3.2)
       base64
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
@@ -125,7 +133,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.1.1)
     bcrypt (3.1.19)
-    bigdecimal (3.1.6)
+    bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -152,7 +160,7 @@ GEM
     cuprite (0.15)
       capybara (~> 3.0)
       ferrum (~> 0.14.0)
-    date (3.3.3)
+    date (3.3.4)
     debug (1.8.0)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
@@ -166,8 +174,7 @@ GEM
     digest-crc (0.6.5)
       rake (>= 12.0.0, < 14.0.0)
     docile (1.4.0)
-    drb (2.2.0)
-      ruby2_keywords
+    drb (2.2.1)
     ecma-re-validator (0.4.0)
       regexp_parser (~> 2.2)
     erb-formatter (0.4.3)
@@ -254,14 +261,14 @@ GEM
     htmlbeautifier (1.4.2)
     htmlentities (4.3.4)
     httpclient (2.8.3)
-    i18n (1.14.1)
+    i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.2.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
     io-console (0.7.2)
-    irb (1.11.1)
-      rdoc
+    irb (1.13.1)
+      rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
@@ -302,12 +309,12 @@ GEM
       net-imap
       net-pop
       net-smtp
-    marcel (1.0.2)
+    marcel (1.0.4)
     matrix (0.4.2)
     memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
-    minitest (5.21.2)
+    minitest (5.22.3)
     minitest-reporters (1.6.1)
       ansi
       builder
@@ -320,16 +327,16 @@ GEM
     mutex_m (0.2.0)
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
-    net-imap (0.4.3)
+    net-imap (0.4.11)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.1)
+    net-protocol (0.2.2)
       timeout
-    net-smtp (0.4.0)
+    net-smtp (0.5.0)
       net-protocol
-    nio4r (2.5.9)
+    nio4r (2.7.3)
     nokogiri (1.16.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.4-x86_64-darwin)
@@ -386,20 +393,20 @@ GEM
     rackup (1.0.0)
       rack (< 3)
       webrick
-    rails (7.1.1)
-      actioncable (= 7.1.1)
-      actionmailbox (= 7.1.1)
-      actionmailer (= 7.1.1)
-      actionpack (= 7.1.1)
-      actiontext (= 7.1.1)
-      actionview (= 7.1.1)
-      activejob (= 7.1.1)
-      activemodel (= 7.1.1)
-      activerecord (= 7.1.1)
-      activestorage (= 7.1.1)
-      activesupport (= 7.1.1)
+    rails (7.1.3.2)
+      actioncable (= 7.1.3.2)
+      actionmailbox (= 7.1.3.2)
+      actionmailer (= 7.1.3.2)
+      actionpack (= 7.1.3.2)
+      actiontext (= 7.1.3.2)
+      actionview (= 7.1.3.2)
+      activejob (= 7.1.3.2)
+      activemodel (= 7.1.3.2)
+      activerecord (= 7.1.3.2)
+      activestorage (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       bundler (>= 1.15.0)
-      railties (= 7.1.1)
+      railties (= 7.1.3.2)
     rails-dom-testing (2.2.0)
       activesupport (>= 5.0.0)
       minitest
@@ -407,16 +414,16 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
-    railties (7.1.1)
-      actionpack (= 7.1.1)
-      activesupport (= 7.1.1)
+    railties (7.1.3.2)
+      actionpack (= 7.1.3.2)
+      activesupport (= 7.1.3.2)
       irb
       rackup (>= 1.0.0)
       rake (>= 12.2)
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
-    rake (13.1.0)
+    rake (13.2.1)
     ransack (4.1.1)
       activerecord (>= 6.1.5)
       activesupport (>= 6.1.5)
@@ -424,11 +431,11 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rdoc (6.6.2)
+    rdoc (6.6.3.1)
       psych (>= 4.0.0)
     redcarpet (3.6.0)
     regexp_parser (2.9.0)
-    reline (0.4.2)
+    reline (0.5.5)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -500,6 +507,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    stackprof (0.2.26)
     stimulus-rails (1.2.2)
       railties (>= 6.0.0)
     stringio (3.1.0)
@@ -511,7 +519,7 @@ GEM
       railties (>= 6.0.0)
     tailwindcss-rails (2.3.0-x86_64-linux)
       railties (>= 6.0.0)
-    thor (1.3.0)
+    thor (1.3.1)
     timecop (0.9.8)
     timeout (0.4.1)
     trailblazer-option (0.1.2)
@@ -527,6 +535,7 @@ GEM
     unf_ext (0.0.9.1)
     unicode-display_width (2.4.2)
     uri_template (0.7.0)
+    vernier (1.0.0)
     version_gem (1.1.3)
     view_component (3.9.0)
       activesupport (>= 5.2.0, < 8.0)
@@ -550,7 +559,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.34)
-    zeitwerk (2.6.12)
+    zeitwerk (2.6.13)
     zip_kit (6.2.0)
 
 PLATFORMS
@@ -606,11 +615,14 @@ DEPENDENCIES
   rubocop-rails
   simplecov
   sprockets-rails
+  stackprof
   stimulus-rails
   tailwindcss-rails (~> 2.0)
+  test-prof!
   timecop
   turbo-rails
   tzinfo-data
+  vernier
   view_component (~> 3.9)
   web-console
   webmock

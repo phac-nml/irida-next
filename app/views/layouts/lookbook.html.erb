@@ -6,8 +6,14 @@
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body class="bg-white dark:bg-slate-900">
-  <div class="p-6 max-w-7xl max-auto Viral-Preview" style="height: 100%; overflow-y: scroll">
+  <body
+    class="bg-white dark:bg-slate-900"
+    <%== %{data-controller='zz-js'} if Rails.env.test? %>
+  >
+    <div
+      class="p-6 max-w-7xl max-auto Viral-Preview"
+      style="height: 100%; overflow-y: scroll"
+    >
       <%= yield %>
     </div>
   </body>

@@ -6,6 +6,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
     <style>
       body {
           overflow: auto;
@@ -14,7 +15,10 @@
       }
     </style>
   </head>
-  <body class="bg-slate-50 dark:bg-slate-900">
+  <body
+    class="bg-slate-50 dark:bg-slate-900"
+    <%== %{data-controller='zz-js'} if Rails.env.test? %>
+  >
     <div class="grid h-screen place-items-center">
       <section
         class="

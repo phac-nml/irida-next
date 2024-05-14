@@ -21,6 +21,8 @@ require 'rails/test_help'
 require 'action_policy/test_helper'
 require 'test_helpers/array_helpers'
 
+require 'test_prof/recipes/minitest/sample'
+
 Minitest::Reporters.use! [Minitest::Reporters::ProgressReporter.new(color: true)]
 
 module ActiveSupport

@@ -120,6 +120,10 @@ gem 'holidays'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw], require: false
+
+  gem 'stackprof', require: false
+  gem 'test-prof', github: 'test-prof/test-prof', branch: 'fix/minitest-sampling'
+  gem 'vernier', require: false
 end
 
 group :development do

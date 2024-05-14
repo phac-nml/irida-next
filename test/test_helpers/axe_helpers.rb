@@ -97,8 +97,7 @@ module AxeHelpers
 
   def visit(path, **attributes)
     super
-
-    page.driver.wait_for_network_idle
+    assert_selector '[data-zz-js-loaded-value="true"]'
 
     assert_accessible
   end

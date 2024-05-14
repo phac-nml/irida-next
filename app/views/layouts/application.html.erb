@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html class="light" lang="<%= locale %>">
   <%= render "layouts/partials/head" %>
-  <body class="bg-white dark:bg-slate-900">
+  <body
+    class="bg-white dark:bg-slate-900"
+    <%== %{data-controller='zz-js'} if Rails.env.test? %>
+  >
     <%= render LayoutComponent.new(user: current_user, fixed: false) do |layout| %>
       <% layout.with_sidebar(label: t(:"general.default_sidebar.title"), icon_name: "inbox_stack") do |navigation| %>
         <%= navigation.with_section do |section| %>
