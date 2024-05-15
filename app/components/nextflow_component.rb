@@ -20,6 +20,8 @@ class NextflowComponent < Component
   # rubocop:enable Metrics/ParameterLists
 
   def text_for_description(description)
+    return '' if description.nil?
+
     if description.instance_of?(String)
       description
     else
