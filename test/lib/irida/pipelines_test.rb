@@ -65,10 +65,11 @@ class PipelinesTest < ActiveSupport::TestCase
     Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
 
     workflow1 = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2')
-    assert_equal workflow1.workflow_params[:input_output_options][:properties][:project_name][:default],
-                 'DEFAULT PROJECT NAME'
+    assert_equal 'DEFAULT PROJECT NAME',
+                 workflow1.workflow_params[:input_output_options][:properties][:project_name][:default]
+
     workflow2 = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1')
-    assert_equal workflow2.workflow_params[:input_output_options][:properties][:project_name][:default],
-                 'UNIQUE PROJECT NAME'
+    assert_equal 'UNIQUE PROJECT NAME',
+                 workflow2.workflow_params[:input_output_options][:properties][:project_name][:default]
   end
 end
