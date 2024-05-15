@@ -63,15 +63,12 @@ class PipelinesTest < ActiveSupport::TestCase
 
     Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines_with_overrides'
     Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
-    workflow = Irida::Pipelines.find_pipeline_by('phac-nml/mikrokondo', '0.1.2')
 
-    assert workflow.workflow_params[:databases_and_pre_computed_files][:properties][:kraken2_db].key?(:enum)
-
-    kraken2_db_enum = workflow.workflow_params[:databases_and_pre_computed_files][:properties][:kraken2_db][:enum]
-    assert_equal 2, kraken2_db_enum.length
-    assert_equal 'DBNAME', kraken2_db_enum[0][0]
-    assert_equal 'PATH_TO_DB', kraken2_db_enum[0][1]
-    assert_equal 'ANOTHER_DB', kraken2_db_enum[1][0]
-    assert_equal 'ANOTHER_PATH', kraken2_db_enum[1][1]
+    workflow1 = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2')
+    assert_equal workflow1.workflow_params[:input_output_options][:properties][:project_name][:default],
+                 'DEFAULT PROJECT NAME'
+    workflow2 = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1')
+    assert_equal workflow2.workflow_params[:input_output_options][:properties][:project_name][:default],
+                 'UNIQUE PROJECT NAME'
   end
 end
