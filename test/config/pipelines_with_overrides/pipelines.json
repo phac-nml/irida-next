@@ -1,0 +1,51 @@
+[
+  {
+    "url": "https://github.com/phac-nml/mikrokondo",
+    "name": "phac-nml/mikrokondo",
+    "description": "Mikrokondo pipeline",
+    "parameter_overrides": {
+      "definitions": {
+        "databases_and_pre_computed_files": {
+          "properties": {
+            "kraken2_db": {
+              "type": "string",
+              "description": "Kraken2 database",
+              "enum": [
+                [
+                  "DBNAME",
+                  "PATH_TO_DB"
+                ],
+                [
+                  "ANOTHER_DB",
+                  "ANOTHER_PATH"
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "versions": [
+      {
+        "name": "0.1.2"
+      }
+    ]
+  },
+  {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "IRIDA Next Example Pipeline",
+    "versions": [
+      {
+        "name": "1.0.2",
+        "automatable": true
+      },
+      {
+        "name": "1.0.1"
+      },
+      {
+        "name": "1.0.0"
+      }
+    ]
+  }
+]

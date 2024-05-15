@@ -57,4 +57,21 @@ class PipelinesTest < ActiveSupport::TestCase
     assert_not Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.1']
     assert_not Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.0']
   end
+
+  test 'pipelines with overrides' do
+    @pipeline_schema_file_dir = 'tmp/storage/pipelines'
+
+    Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines_with_overrides'
+    Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
+    workflow = Irida::Pipelines.find_pipeline_by('phac-nml/mikrokondo', '0.1.2')
+
+    assert workflow.workflow_params[:databases_and_pre_computed_files][:properties][:kraken2_db].key?(:enum)
+
+    kraken2_db_enum = workflow.workflow_params[:databases_and_pre_computed_files][:properties][:kraken2_db][:enum]
+    assert_equal 2, kraken2_db_enum.length
+    assert_equal 'DBNAME', kraken2_db_enum[0][0]
+    assert_equal 'PATH_TO_DB', kraken2_db_enum[0][1]
+    assert_equal 'ANOTHER_DB', kraken2_db_enum[1][0]
+    assert_equal 'ANOTHER_PATH', kraken2_db_enum[1][1]
+  end
 end
