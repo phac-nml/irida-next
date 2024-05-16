@@ -22,28 +22,28 @@ class PipelinesOverrides < ActiveSupport::TestCase
     @pipeline_schema_file_dir = 'tmp/storage/pipelines'
 
     # Read in schema file to json
-    json_content = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
+    body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
 
     Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines_with_overrides'
     Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.2/nextflow_schema.json')
-      .to_return(status: 200, body: json_content, headers: { etag: '[W/"a1Ab"]' })
+      .to_return(status: 200, body:, headers: { etag: '[W/"a1Ab"]' })
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.2/assets/schema_input.json')
-      .to_return(status: 200, body: json_content, headers: { etag: '[W/"b1Bc"]' })
+      .to_return(status: 200, body:, headers: { etag: '[W/"b1Bc"]' })
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.1/nextflow_schema.json')
-      .to_return(status: 200, body: json_content, headers: { etag: '[W/"c1Cd"]' })
+      .to_return(status: 200, body:, headers: { etag: '[W/"c1Cd"]' })
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.1/assets/schema_input.json')
-      .to_return(status: 200, body: json_content, headers: { etag: '[W/"d1De"]' })
+      .to_return(status: 200, body:, headers: { etag: '[W/"d1De"]' })
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.0/nextflow_schema.json')
-      .to_return(status: 200, body: json_content, headers: { etag: '[W/"e1Ef"]' })
+      .to_return(status: 200, body:, headers: { etag: '[W/"e1Ef"]' })
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.0/assets/schema_input.json')
-      .to_return(status: 200, body: json_content, headers: { etag: '[W/"f1Fg"]' })
+      .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
   end
 
   teardown do
