@@ -646,3 +646,20 @@ automated_workflow_execution_existing:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   cleaned: false
+
+irida_next_example_end_to_end:
+  <<: *DEFAULTS
+  metadata:
+    { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_end_to_end"
+  run_id: "my_run_id_end_to_end"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "initial"
+  cleaned: false

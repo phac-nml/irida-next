@@ -84,3 +84,6 @@ workflow_execution_completed_output_blob: <%= ActiveStorage::FixtureSet.blob fil
 samples_workflow_execution_completed_output_blob: <%= ActiveStorage::FixtureSet.blob filename: "INXT_SAM_AAAAAAAABV.assembly.fa.gz", service_name: "test" %>
 
 data_export_7_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_7.zip", service_name: "test" %>
+
+attachmentEndToEndFWD_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_end_to_end_fwd.fastq", service_name: "test" %>
+attachmentEndToEndREV_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_end_to_end_rev.fastq", service_name: "test" %>

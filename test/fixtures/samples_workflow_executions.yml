@@ -248,3 +248,12 @@ sample1_automated_example_new:
     "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
     "fastq_2": ""
   }
+
+end_to_end_example:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleEndToEnd, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_end_to_end, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAB,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentEndToEndFWD, :uuid)}" %>,
+    "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentEndToEndREV, :uuid)}" %>
+  }
