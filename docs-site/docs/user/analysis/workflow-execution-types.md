@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
-id: user-vs-automated-workflow-executions
-title: Export Types
+id: workflow-execution-types
+title: Workflow Execution Types
 ---
 
 <!-- Talk about differences between user and automated WE -->
