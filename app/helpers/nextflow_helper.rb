@@ -2,7 +2,7 @@
 
 # Helper to render a Nextflow pipeline form
 module NextflowHelper
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def form_input(container, name, property, required, instance)
     value = instance.present? ? instance['workflow_params'][name.to_s] : property[:default]
 
@@ -34,7 +34,7 @@ module NextflowHelper
     end
   end
 
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   def checkbox_input(fields, name, property)
     viral_checkbox(
