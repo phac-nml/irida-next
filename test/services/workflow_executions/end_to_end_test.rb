@@ -20,7 +20,7 @@ module WorkflowExecutions
         WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
       end
 
-      assert_equal 'prepared', @workflow_execution.reload.state
+      assert_equal 'submitted', @workflow_execution.reload.state
     end
   end
 end
