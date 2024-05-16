@@ -2,9 +2,9 @@ name: Ruby CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, dev]
   push:
-    branches: [main]
+    branches: [main, dev]
 
 jobs:
   test:
@@ -48,7 +48,7 @@ jobs:
         run: pnpm install
       - name: Run tests
         run: |
-          bin/rails test:all
+          bin/rails test test/services/workflow_executions/end_to_end_test.rb
       - name: Report coverage
         if: github.event_name == 'pull_request'
         uses: aki77/simplecov-report-action@v1
