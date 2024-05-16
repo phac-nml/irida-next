@@ -7,11 +7,14 @@ module NextflowHelper
     value = instance.present? ? instance['workflow_params'][name.to_s] : property[:default]
 
     if property[:type] == 'boolean'
-      return viral_prefixed_boolean(form: container, name:, value:) do |input|
-        input.with_prefix do
-          format_name_as_arg(name)
-        end
-      end
+      return viral_prefixed_boolean(
+        form: container, name:,
+        value: ActiveModel::Type::Boolean.new.cast(value)
+      ) do |input|
+               input.with_prefix do
+                 format_name_as_arg(name)
+               end
+             end
     end
 
     if property[:enum].present?
