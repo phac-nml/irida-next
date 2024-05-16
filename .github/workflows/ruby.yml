@@ -58,9 +58,9 @@ jobs:
           run: |
             IRIDA_NEXT_PATH=${GITHUB_WORKSPACE} MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml up -d --build
             IRIDA_NEXT_PATH=${GITHUB_WORKSPACE} MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml exec app bash -c "sapporo"
-        wait-on:
-          http://localhost:1122/service-info
-        working-directory: sapporo
+          wait-on:
+            http://localhost:1122/service-info
+          working-directory: sapporo
       - name: Run tests
         run: |
           bin/rails test test/services/workflow_executions/end_to_end_test.rb
