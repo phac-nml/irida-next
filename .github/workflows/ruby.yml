@@ -46,6 +46,17 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
+      - name: Download Sapporo
+        uses: actions/checkout@v3
+        with:
+          repository: phac-nml/sapporo-service
+          ref: irida-next-chown
+          path: ./sapporo
+      - name: Build and Run Sapporo
+        run: |
+          cd sapporo
+          IRIDA_NEXT_PATH=../ MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml up -d --build
+          IRIDA_NEXT_PATH=../ MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml exec app bash -c "sapporo"
       - name: Run tests
         run: |
           bin/rails test test/services/workflow_executions/end_to_end_test.rb
