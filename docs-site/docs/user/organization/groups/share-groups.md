@@ -1,6 +1,6 @@
 ---
-sidebar_position: 3
-id: share_groups
+sidebar_position: 4
+id: share-groups
 title: Share Groups
 ---
 

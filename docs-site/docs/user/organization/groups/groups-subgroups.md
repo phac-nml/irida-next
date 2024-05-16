@@ -1,6 +1,6 @@
 ---
 id: subgroups
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Subgroups
@@ -36,5 +36,5 @@ To create a subgroup:
 1. On the top bar, select **Main menu > Groups** and find and select the parent group to add a subgroup to.
 2. On the parent group's overview page, in the upper-right corner, select **New subgroup**.
 3. Select **Create group**.
-4. Fill in the fields. View a list of [reserved names](../../project/reserved_names).
+4. Fill in the fields. View a list of [reserved names](../../project/projects/reserved-names).
 5. Select **Create group**.

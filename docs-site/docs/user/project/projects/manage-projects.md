@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-id: manage_projects
+id: manage-projects
 title: Manage Projects
 ---
 
@@ -21,7 +21,7 @@ To create a project under your user namespace:
 
 1. On the left sidebar, at the top, select (**+**) and **Create new project**, or if on the **Projects** view select **New project**
 2. Enter the project details:
-   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved_names)
+   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved-names)
    - The **Project URL** is automatically set to your user namespace. You may change it if you would like the project to be under a different namespace. Note that projects can only live under a **user** or **group namespace**.
    - In the **Path** field, enter the path to your project. To change the path first enter the project name, then change the path.
    - In the **Description** field, enter a description. This field is optional.
@@ -37,7 +37,7 @@ Prerequisite:
 
 1. From within a group, select **New project**
 2. Enter the project details:
-   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved_names)
+   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved-names)
    - The **Project URL** is automatically set to the current group namespace. You may change it if you would like the project to be under a different namespace. Note that projects can only live under a **user** or **group namespace**.
    - In the **Path** field, enter the path to your project. To change the path first enter the project name, then change the path.
    - In the **Description** field, enter a description. This field is optional.
@@ -54,7 +54,7 @@ To edit the project details:
 1. Select the project that you want to edit and then on the left sidebar, select **Settings**
 2. To update the **Name** or **Description**:
 
-   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved_names)
+   - In the **Project name** field, enter the name of the project. [See the limitations for project names.](reserved-names)
    - In the **Description** field, enter a description. This field is optional.
 
 3. Select **Update project**

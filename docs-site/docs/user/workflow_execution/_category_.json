@@ -1,0 +1,9 @@
+{
+  "label": "Analyze your data",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "slug": "/analysis",
+    "description": "Run workflow executions to analyze your data."
+  }
+}
