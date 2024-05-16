@@ -60,6 +60,7 @@ jobs:
             IRIDA_NEXT_PATH=${GITHUB_WORKSPACE} MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml exec app bash -c "sapporo"
           wait-on:
             http://localhost:1122/service-info
+          wait-for: 10m
           working-directory: sapporo
       - name: Run tests
         run: |
