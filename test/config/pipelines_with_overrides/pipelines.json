@@ -16,11 +16,11 @@
     },
     "versions": [
       {
-        "name": "1.0.2",
+        "name": "2.0.2",
         "automatable": true
       },
       {
-        "name": "1.0.1",
+        "name": "2.0.1",
         "parameter_overrides": {
           "definitions": {
             "input_output_options": {
@@ -34,7 +34,7 @@
         }
       },
       {
-        "name": "1.0.0"
+        "name": "2.0.0"
       }
     ]
   }
