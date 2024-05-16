@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'active_storage_test_case'
+# require 'active_storage_test_case'
 require 'test_helper'
-require 'webmock/minitest'
+# require 'webmock/minitest'
 
 module WorkflowExecutions
-  class EndToEndest < ActiveStorageTestCase
+  class EndToEndest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
       @project = projects(:project1)
@@ -16,7 +16,7 @@ module WorkflowExecutions
 
       assert_equal 'initial', @workflow_execution.reload.state
 
-      assert_performed_jobs 1, except: WorkflowExecutionSubmissionJob do
+      assert_performed_jobs 2, except: WorkflowExecutionStatusJob do
         WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
       end
 
