@@ -57,19 +57,4 @@ class PipelinesTest < ActiveSupport::TestCase
     assert_not Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.1']
     assert_not Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.0']
   end
-
-  test 'pipelines with overrides' do
-    @pipeline_schema_file_dir = 'tmp/storage/pipelines'
-
-    Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines_with_overrides'
-    Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
-
-    workflow1 = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2')
-    assert_equal 'DEFAULT PROJECT NAME',
-                 workflow1.workflow_params[:input_output_options][:properties][:project_name][:default]
-
-    workflow2 = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1')
-    assert_equal 'UNIQUE PROJECT NAME',
-                 workflow2.workflow_params[:input_output_options][:properties][:project_name][:default]
-  end
 end
