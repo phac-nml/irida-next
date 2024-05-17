@@ -67,7 +67,7 @@ module Irida
     def prepare_schema_download(entry, version, type)
       filename = "#{type}.json"
       uri = URI.parse(entry['url'])
-      pipeline_schema_files_path = "#{@pipeline_schema_file_dir}/#{uri.path}/#{version['name']}"
+      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir,uri.path,version['name'])
 
       schema_file_url = if type == 'nextflow_schema'
                           "https://raw.githubusercontent.com#{uri.path}/#{version['name']}/#{filename}"
@@ -76,7 +76,7 @@ module Irida
                         end
 
       schema_location =
-        Rails.root.join("#{pipeline_schema_files_path}/#{filename}")
+        Rails.root.join(pipeline_schema_files_path,filename)
 
       write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
 
@@ -86,7 +86,7 @@ module Irida
     # Create directory if it doesn't exist and write the schema file unless the resource etag matches
     # the currently stored resource etag
     def write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
-      dir = Rails.root.join("#{pipeline_schema_files_path}/#{filename}").dirname
+      dir = Rails.root.join(pipeline_schema_files_path,filename).dirname
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
       return if resource_etag_exists(schema_file_url, pipeline_schema_files_path, type)
@@ -99,7 +99,7 @@ module Irida
     # local stored file, otherwise we just write the new etag to the status.json
     # file
     def resource_etag_exists(resource_url, status_file_location, etag_type)
-      status_file_location = Rails.root.join("#{status_file_location}/#{@pipeline_schema_status_file}")
+      status_file_location = Rails.root.join(status_file_location,@pipeline_schema_status_file)
       # File currently at pipeline url
       current_file_etag = resource_etag(resource_url)
       existing_etag = false
