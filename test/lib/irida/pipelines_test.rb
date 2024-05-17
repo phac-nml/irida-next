@@ -3,29 +3,12 @@
 require 'test_helper'
 require 'webmock/minitest'
 
-module Irida
-  module Pipelines
-    module_function
-
-    def pipeline_config_dir=(new_value)
-      @pipeline_config_dir = new_value
-    end
-
-    def pipeline_schema_file_dir=(new_value)
-      @pipeline_schema_file_dir = new_value
-    end
-  end
-end
-
 class PipelinesTest < ActiveSupport::TestCase
   setup do
     @pipeline_schema_file_dir = 'tmp/storage/pipelines'
 
     # Read in schema file to json
     body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
-
-    Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines'
-    Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
       .to_return(status: 200, body:, headers: { etag: '[W/"a1Ab"]' })
@@ -44,6 +27,9 @@ class PipelinesTest < ActiveSupport::TestCase
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.0/assets/schema_input.json')
       .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
+
+    @pipelines = Irida::Pipelines.new(pipeline_config_dir: 'test/config/pipelines',
+                                      pipeline_schema_file_dir: @pipeline_schema_file_dir)
   end
 
   teardown do
@@ -51,27 +37,23 @@ class PipelinesTest < ActiveSupport::TestCase
   end
 
   test 'registers pipelines' do
-    Irida::Pipelines.register_pipelines
+    assert_not @pipelines.available_pipelines.empty?
 
-    assert_not Irida::Pipelines.available_pipelines.empty?
-
-    workflow = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2')
     assert_not_nil workflow
 
-    workflow = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1')
     assert_not_nil workflow
 
-    workflow = Irida::Pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0')
     assert_not_nil workflow
   end
 
   test 'automatable pipelines' do
-    Irida::Pipelines.register_pipelines
+    assert_not @pipelines.automatable_pipelines.empty?
 
-    assert_not Irida::Pipelines.automatable_pipelines.empty?
-
-    assert Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.2']
-    assert_not Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.1']
-    assert_not Irida::Pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.0']
+    assert @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.2']
+    assert_not @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.1']
+    assert_not @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.0']
   end
 end

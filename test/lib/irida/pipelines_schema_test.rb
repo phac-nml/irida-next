@@ -3,29 +3,12 @@
 require 'test_helper'
 require 'webmock/minitest'
 
-module Irida
-  module Pipelines
-    module_function
-
-    def pipeline_config_dir=(new_value)
-      @pipeline_config_dir = new_value
-    end
-
-    def pipeline_schema_file_dir=(new_value)
-      @pipeline_schema_file_dir = new_value
-    end
-  end
-end
-
 class PipelinesSchemaTest < ActiveSupport::TestCase
   setup do
     @pipeline_schema_file_dir = 'tmp/storage/pipelines'
 
     # Read in schema file to json
     body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
-
-    Irida::Pipelines.pipeline_config_dir = 'test/config/pipelines_with_bad_schema'
-    Irida::Pipelines.pipeline_schema_file_dir = @pipeline_schema_file_dir
 
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
       .to_return(status: 200, body:, headers: { etag: '[W/"a1Ab"]' })
@@ -52,7 +35,8 @@ class PipelinesSchemaTest < ActiveSupport::TestCase
 
   test 'pipelines with bad schema' do
     assert_raises Irida::Pipelines::PipelinesJsonFormatException do
-      Irida::Pipelines.register_pipelines
+      Irida::Pipelines.new(pipeline_config_dir: 'test/config/pipelines_with_bad_schema',
+                           pipeline_schema_file_dir: @pipeline_schema_file_dir)
     end
   end
 end

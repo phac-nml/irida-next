@@ -26,14 +26,14 @@ module WorkflowExecutions
     private
 
     def workflows
-      @workflows = Irida::Pipelines.available_pipelines
+      @workflows = Irida::Pipelines.instance.available_pipelines
     end
 
     def workflow
       workflow_name = params[:workflow_name]
       workflow_version = params[:workflow_version]
 
-      @workflow = Irida::Pipelines.find_pipeline_by(workflow_name, workflow_version)
+      @workflow = Irida::Pipelines.instance.find_pipeline_by(workflow_name, workflow_version)
     end
 
     def samples

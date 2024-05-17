@@ -28,7 +28,7 @@ module WorkflowExecutionActions
       @attachments = Attachment.where(attachable: @workflow_execution)
                                .or(Attachment.where(attachable: @samples_worfklow_executions))
     elsif @tab == 'params'
-      @workflow = Irida::Pipelines.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+      @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                     @workflow_execution.metadata['workflow_version'])
     end
   end

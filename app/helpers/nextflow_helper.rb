@@ -55,7 +55,15 @@ module NextflowHelper
     if value.instance_of?(String)
       value
     else
-      value[I18n.locale.to_s]
+      value[I18n.locale.to_s] || value[I18n.locale]
+    end
+  end
+
+  def formatted_workflow_param(property, original_value)
+    if !property.key?(:enum) || property[:enum].include?(original_value)
+      original_value
+    else
+      property[:enum].select { |(_label, value)| value == original_value }[0][0]
     end
   end
 end

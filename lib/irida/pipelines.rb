@@ -7,20 +7,29 @@ require 'net/http'
 require 'irida/pipeline'
 
 module Irida
-  # Module that reads a workflow config file and registers the available pipelines
-  module Pipelines
+  # Class that reads a workflow config file and registers the available pipelines
+  class Pipelines
     PipelinesJsonFormatException = Class.new StandardError
     PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
 
-    @pipeline_config_dir = 'config/pipelines'
-    @pipeline_schema_file_dir = 'private/pipelines'
-    @pipeline_config_file = 'pipelines.json'
-    @pipeline_schema_status_file = 'status.json'
-    @available_pipelines = {}
-    @automatable_pipelines = {}
-    @initialized = false
+    class_attribute :instance
 
-    module_function
+    attr_reader :available_pipelines, :automatable_pipelines
+
+    def initialize(**params)
+      @pipeline_config_dir =
+        params.key?(:pipeline_config_dir) ? params[:pipeline_config_dir] : 'config/pipelines'
+      @pipeline_schema_file_dir =
+        params.key?(:pipeline_schema_file_dir) ? params[:pipeline_schema_file_dir] : 'private/pipelines'
+      @pipeline_config_file =
+        params.key?(:pipeline_config_file) ? params[:pipeline_config_file] : 'pipelines.json'
+      @pipeline_schema_status_file =
+        params.key?(:pipeline_schema_status_file) ? params[:pipeline_schema_status_file] : 'status.json'
+      @available_pipelines = {}
+      @automatable_pipelines = {}
+
+      register_pipelines
+    end
 
     # Registers the available pipelines. This method is called
     # by an initializer which runs when the server is started up
@@ -39,7 +48,6 @@ module Irida
           @automatable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline if version['automatable']
         end
       end
-      @initialized = true
     end
 
     # read in the json pipeline config
@@ -59,7 +67,7 @@ module Irida
     def prepare_schema_download(entry, version, type)
       filename = "#{type}.json"
       uri = URI.parse(entry['url'])
-      pipeline_schema_files_path = "#{@pipeline_schema_file_dir}/#{uri.path}/#{version['name']}"
+      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path, version['name'])
 
       schema_file_url = if type == 'nextflow_schema'
                           "https://raw.githubusercontent.com#{uri.path}/#{version['name']}/#{filename}"
@@ -68,7 +76,7 @@ module Irida
                         end
 
       schema_location =
-        Rails.root.join("#{pipeline_schema_files_path}/#{filename}")
+        Rails.root.join(pipeline_schema_files_path, filename)
 
       write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
 
@@ -78,7 +86,7 @@ module Irida
     # Create directory if it doesn't exist and write the schema file unless the resource etag matches
     # the currently stored resource etag
     def write_schema_file(schema_file_url, schema_location, pipeline_schema_files_path, filename, type)
-      dir = Rails.root.join("#{pipeline_schema_files_path}/#{filename}").dirname
+      dir = Rails.root.join(pipeline_schema_files_path, filename).dirname
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
       return if resource_etag_exists(schema_file_url, pipeline_schema_files_path, type)
@@ -91,7 +99,7 @@ module Irida
     # local stored file, otherwise we just write the new etag to the status.json
     # file
     def resource_etag_exists(resource_url, status_file_location, etag_type)
-      status_file_location = Rails.root.join("#{status_file_location}/#{@pipeline_schema_status_file}")
+      status_file_location = Rails.root.join(status_file_location, @pipeline_schema_status_file)
       # File currently at pipeline url
       current_file_etag = resource_etag(resource_url)
       existing_etag = false
@@ -138,27 +146,6 @@ module Irida
 
     def find_pipeline_by(name, version)
       @available_pipelines["#{name}_#{version}"]
-    end
-
-    def available_pipelines
-      @available_pipelines
-    end
-
-    def pipeline_config_dir=(dir)
-      @pipeline_config_dir = dir
-    end
-
-    def pipeline_schema_file_dir=(dir)
-      @pipeline_schema_file_dir = dir
-    end
-
-    def automatable_pipelines
-      @automatable_pipelines
-    end
-
-    # If the pipelines have been initialized or not for the current process
-    def initialized
-      @initialized
     end
   end
 end
