@@ -26,15 +26,12 @@ module WorkflowExecutions
 
     private
 
-    # jobs that are retried must be run one at a time with a short delay to prevent stack errors
-    # This functions the same as `perform_enqueued_jobs(only: MyJob, except: MyJob)` but one at a time
-    def perform_enqueued_jobs_sequentially(delay_seconds: 1, only_class: nil, except_class: nil) # rubocop:disable Metrics/AbcSize
-      # Allows while to continue only if class passes filters
-      # only_class allows only that class to be run, breaking when next job is not of that class
-      # except_class allows any class but that to be run, breaking when next job is of that class
+    # Jobs that are retried must be run one at a time with a short delay to prevent stack errors
+    # Allows use of only/except to exit early like perform_enqueued_jobs does
+    def perform_enqueued_jobs_sequentially(delay_seconds: 1, only: nil, except: nil) # rubocop:disable Metrics/AbcSize
       class_filter = lambda { |job_class|
-        return (only_class.nil? || job_class == only_class.name) &&
-               (except_class.nil? || job_class != except_class.name)
+        return (only.nil? || job_class == only.name) &&
+               (except.nil? || job_class != except.name)
       }
 
       while enqueued_jobs.count >= 1 && class_filter.call(enqueued_jobs.first['job_class'])
