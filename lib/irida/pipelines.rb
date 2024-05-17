@@ -7,20 +7,24 @@ require 'net/http'
 require 'irida/pipeline'
 
 module Irida
-  # Module that reads a workflow config file and registers the available pipelines
-  module Pipelines
+  # Class that reads a workflow config file and registers the available pipelines
+  class Pipelines
     PipelinesJsonFormatException = Class.new StandardError
     PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
 
-    @pipeline_config_dir = 'config/pipelines'
-    @pipeline_schema_file_dir = 'private/pipelines'
-    @pipeline_config_file = 'pipelines.json'
-    @pipeline_schema_status_file = 'status.json'
-    @available_pipelines = {}
-    @automatable_pipelines = {}
-    @initialized = false
+    class_attribute :instance
 
-    module_function
+
+    def initialize(**params)
+      @pipeline_config_dir = params.key?(:pipeline_config_dir) ? params[:pipeline_config_dir] : 'config/pipelines'
+      @pipeline_schema_file_dir = params.key?(:pipeline_schema_file_dir) ? params[:pipeline_schema_file_dir] : 'private/pipelines'
+      @pipeline_config_file = params.key?(:pipeline_config_file) ? params[:pipeline_config_file] : 'pipelines.json'
+      @pipeline_schema_status_file = params.key?(:pipeline_schema_status_file) ? params[:pipeline_schema_status_file] : 'status.json'
+      @available_pipelines = {}
+      @automatable_pipelines = {}
+
+      register_pipelines
+    end
 
     # Registers the available pipelines. This method is called
     # by an initializer which runs when the server is started up

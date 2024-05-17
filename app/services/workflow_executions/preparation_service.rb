@@ -131,7 +131,7 @@ module WorkflowExecutions
     end
 
     def samplesheet_headers
-      workflow = Irida::Pipelines.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+      workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                    @workflow_execution.metadata['workflow_version'])
       sample_sheet = JSON.parse(workflow.schema_input_loc.read)
       sample_sheet['items']['properties'].keys

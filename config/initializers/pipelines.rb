@@ -2,4 +2,6 @@
 
 require 'irida/pipelines'
 
-Irida::Pipelines.register_pipelines unless Irida::Pipelines.initialized
+Rails.application.config.to_prepare do
+  Irida::Pipelines.instance = Irida::Pipelines.new if Irida::Pipelines.instance.nil?
+end
