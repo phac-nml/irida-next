@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_01_131412) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_17_134556) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -65,8 +65,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_131412) do
     t.uuid "created_by_id", null: false
     t.jsonb "metadata", default: {"workflow_name"=>"", "workflow_version"=>""}, null: false
     t.jsonb "workflow_params", default: {}, null: false
-    t.boolean "email_notification", default: true, null: false
-    t.boolean "update_samples", default: true, null: false
+    t.boolean "email_notification", default: false, null: false
+    t.boolean "update_samples", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
