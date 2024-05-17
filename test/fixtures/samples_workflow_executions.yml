@@ -254,7 +254,7 @@ end_to_end_example:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_end_to_end, :uuid) %>
   metadata: {}
   samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAB,
+    "sample": INXT_SAM_AAAAAAAABW,
     "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentEndToEndFWD, :uuid)}" %>,
     "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentEndToEndREV, :uuid)}" %>
   }
