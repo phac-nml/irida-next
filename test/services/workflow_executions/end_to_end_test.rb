@@ -12,11 +12,16 @@ module WorkflowExecutions
 
     test 'test end to end sapporo integration' do
       assert_equal 'initial', @workflow_execution.state
+      assert_not @workflow_execution.cleaned?
 
       WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 5, except_class: WorkflowExecutionCleanupJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 5)
+
+      # TODO: add some except_class/only_class filters and test various steps of the workflow execution lifespan
+      # perform_enqueued_jobs_sequentially(delay_seconds: 5, except_class: WorkflowExecutionCleanupJob)
+
       assert_equal 'completed', @workflow_execution.reload.state
-      # TODO: cleanup step
+      assert @workflow_execution.cleaned?
     end
 
     private
