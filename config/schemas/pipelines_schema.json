@@ -16,7 +16,7 @@
             "type": "string"
           },
           {
-            "type": "object"
+            "$ref": "#/$defs/translations"
           }
         ]
       },
@@ -52,11 +52,48 @@
     ]
   },
   "$defs": {
+    "translations": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
     "overrides": {
       "type": "object",
       "properties": {
         "definitions": {
-          "type": "object"
+          "type": "object",
+          "patternProperties": {
+            "^.*$": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "$ref": "#/$defs/translations"
+                    }
+                  ]
+                },
+                "description": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "$ref": "#/$defs/translations"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
         }
       }
     }
