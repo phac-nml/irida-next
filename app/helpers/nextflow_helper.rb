@@ -55,7 +55,7 @@ module NextflowHelper
     if value.instance_of?(String)
       value
     else
-      value[I18n.locale.to_s]
+      value[I18n.locale.to_s] || value[I18n.locale]
     end
   end
 end

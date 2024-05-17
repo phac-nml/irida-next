@@ -4,7 +4,7 @@
       <% definition[:properties].each do |name, property| %>
         <% unless %[input].include? name.to_s %>
           <div class="mb-4">
-            <p class="mb-1 text-sm font-medium text-slate-900 dark:text-white"><%= property[:description] %></p>
+            <p class="mb-1 text-sm font-medium text-slate-900 dark:text-white"><%= text_for(property[:description]) %></p>
             <div class="flex mb-2 <%= name %>-param">
               <span
                 class="
