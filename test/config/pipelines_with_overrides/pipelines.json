@@ -1,0 +1,41 @@
+[
+  {
+    "url": "https://github.com/phac-nml/iridanextexample",
+    "name": "phac-nml/iridanextexample",
+    "description": "IRIDA Next Example Pipeline",
+    "overrides": {
+      "definitions": {
+        "input_output_options": {
+          "properties": {
+            "project_name": {
+              "default": "DEFAULT PROJECT NAME"
+            }
+          }
+        }
+      }
+    },
+    "versions": [
+      {
+        "name": "2.0.2",
+        "automatable": true
+      },
+      {
+        "name": "2.0.1",
+        "overrides": {
+          "definitions": {
+            "input_output_options": {
+              "properties": {
+                "project_name": {
+                  "default": "UNIQUE PROJECT NAME"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "2.0.0"
+      }
+    ]
+  }
+]

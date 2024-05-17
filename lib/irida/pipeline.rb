@@ -21,13 +21,16 @@ module Irida
       @schema_loc = schema_loc
       @schema_input_loc = schema_input_loc
       @automatable = version['automatable'] || false
+      @overrides = overrides_for_entry(entry)
     end
 
     def workflow_params
       nextflow_schema = JSON.parse(schema_loc.read)
       workflow_params = {}
 
-      nextflow_schema['definitions'].each do |key, definition|
+      definitions = nextflow_schema['definitions'].deep_merge(@overrides['definitions'] || {})
+
+      definitions.each do |key, definition|
         next unless show_section?(definition['properties'])
 
         key = key.to_sym
@@ -71,6 +74,19 @@ module Irida
 
     def show_section?(properties)
       properties.values.any? { |property| !property.key?('hidden') }
+    end
+
+    def overrides_for_entry(entry)
+      return {} if entry['versions'].nil?
+
+      overrides = entry['overrides'] || {}
+      version_overrides = entry['versions'].find do |version|
+        version['name'] == @version
+      end || {}
+      overrides
+        .deep_merge(
+          version_overrides.key?('overrides') ? version_overrides['overrides'] : {}
+        )
     end
   end
 end
