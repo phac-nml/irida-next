@@ -10,7 +10,6 @@ jobs:
   test:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    options: --user root
 
     services:
       postgres:
@@ -67,8 +66,8 @@ jobs:
             http://localhost:1122/service-info
           wait-for: 2m
           working-directory: sapporo
-      # - name: Update permissions
-      #   run: chmod -R 777 ${GITHUB_WORKSPACE}
+      - name: Update permissions
+        run: sudo chmod -R 777 ${GITHUB_WORKSPACE}
       - name: Run tests
         run: |
           bin/rails test test/services/workflow_executions/end_to_end_test.rb
