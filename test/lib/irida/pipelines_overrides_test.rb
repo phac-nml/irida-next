@@ -34,7 +34,8 @@ class PipelinesOverrides < ActiveSupport::TestCase
   end
 
   test 'pipelines with overrides' do
-    pipelines = Irida::Pipelines.new(pipeline_config_dir: 'test/config/pipelines_with_overrides', pipeline_schema_file_dir: @pipeline_schema_file_dir)
+    pipelines = Irida::Pipelines.new(pipeline_config_dir: 'test/config/pipelines_with_overrides',
+                                     pipeline_schema_file_dir: @pipeline_schema_file_dir)
 
     workflow1 = pipelines.find_pipeline_by('phac-nml/iridanextexample', '2.0.2')
     assert_equal 'DEFAULT PROJECT NAME',
