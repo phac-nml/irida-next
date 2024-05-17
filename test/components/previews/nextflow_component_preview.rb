@@ -21,7 +21,7 @@ class NextflowComponentPreview < ViewComponent::Preview
                          })
   end
 
-  def with_overrides
+  def with_overrides # rubocop:disable Metrics/MethodLength
     entry = {
       url: 'https://github.com/phac-nml/mikrokondo',
       name: 'phac-nml/mikrokondo',
