@@ -52,7 +52,7 @@
                   dark:focus:ring-primary-500
                   dark:focus:border-primary-500
                 "
-                value="<%= @workflow_execution.workflow_params[name.to_s] %>"
+                value="<%= formatted_workflow_param(property, @workflow_execution.workflow_params[name.to_s]) %>"
               >
             </div>
           </div>
