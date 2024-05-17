@@ -89,6 +89,61 @@
                       "$ref": "#/$defs/translations"
                     }
                   ]
+                },
+                "properties": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^.*$": {
+                      "type": "object",
+                      "properties": {
+                        "description": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "$ref": "#/$defs/translations"
+                            }
+                          ]
+                        },
+                        "help_text": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "$ref": "#/$defs/translations"
+                            }
+                          ]
+                        },
+                        "hidden": {
+                          "type": "boolean"
+                        },
+                        "enum": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "minItems": 2,
+                                "maxItems": 2
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 }
               }
             }
