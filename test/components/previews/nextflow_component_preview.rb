@@ -21,6 +21,64 @@ class NextflowComponentPreview < ViewComponent::Preview
                          })
   end
 
+  def with_overrides
+    entry = {
+      url: 'https://github.com/phac-nml/mikrokondo',
+      name: 'phac-nml/mikrokondo',
+      description: {
+        en: 'Mikrokondo pipeline',
+        fr: 'Pipeline Mikrokondo'
+      },
+      overrides: {
+        definitions: {
+          databases_and_pre_computed_files: {
+            title: {
+              en: 'Databases and Pre-Computed Files',
+              fr: 'Bases de données et fichiers pré-calculés'
+            },
+            description: {
+              en: 'The location of databases used by mikrokondo',
+              fr: "L'emplacement des bases de données utilisées par mikrokondo"
+            },
+            properties: {
+              kraken2_db: {
+                type: 'string',
+                description: {
+                  en: 'Kraken2 database',
+                  fr: 'Base de données Kraken2'
+                },
+                enum: [
+                  %w[
+                    DBNAME
+                    PATH_TO_DB
+                  ],
+                  %w[
+                    ANOTHER_DB
+                    ANOTHER_PATH
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      },
+      versions: [
+        {
+          name: '0.2.0',
+          automatable: true
+        }
+      ]
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new(entry, '0.2.0',
+                                   Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    render_with_template(locals: {
+                           workflow:
+                         })
+  end
+
   # @param schema_file select :schema_file_options
   def with_values(schema_file: 'mikrokondo/nextflow_schema.json')
     entry = {

@@ -30,6 +30,77 @@ class NextflowComponentTest < ViewComponentTestCase
     end
   end
 
+  test 'with overrides' do
+    entry = {
+      url: 'https://github.com/phac-nml/mikrokondo',
+      name: 'phac-nml/mikrokondo',
+      description: {
+        en: 'Mikrokondo pipeline',
+        fr: 'Pipeline Mikrokondo'
+      },
+      overrides: {
+        definitions: {
+          databases_and_pre_computed_files: {
+            title: {
+              en: 'Databases and Pre-Computed Files',
+              fr: 'Bases de données et fichiers pré-calculés'
+            },
+            description: {
+              en: 'The location of databases used by mikrokondo',
+              fr: "L'emplacement des bases de données utilisées par mikrokondo"
+            },
+            properties: {
+              kraken2_db: {
+                type: 'string',
+                description: {
+                  en: 'Kraken2 database',
+                  fr: 'Base de données Kraken2'
+                },
+                enum: [
+                  %w[
+                    DBNAME
+                    PATH_TO_DB
+                  ],
+                  %w[
+                    ANOTHER_DB
+                    ANOTHER_PATH
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      },
+      versions: [
+        {
+          name: '0.2.0',
+          automatable: true
+        }
+      ]
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new(entry, '0.2.0',
+                                   Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+    I18n.with_locale :fr do
+      render_inline NextflowComponent.new(
+        workflow:,
+        samples: [],
+        url: 'https://github.com/phac-nml/mikrokondo',
+        namespace_id: 'SDSDDFDSFDS',
+        fields: []
+      )
+
+      assert_selector 'form' do
+        assert_selector 'h1', text: 'phac-nml/mikrokondo', count: 1
+        assert_text 'Bases de données et fichiers pré-calculés'
+        assert_text "L'emplacement des bases de données utilisées par mikrokondo"
+        assert_selector 'select[name="workflow_execution[workflow_params][kraken2_db]"] option[value="PATH_TO_DB"]',
+                        text: 'DBNAME'
+      end
+    end
+  end
+
   test 'with values' do
     instance = AutomatedWorkflowExecution.new(created_by: users(:john_doe),
                                               name: 'Test Instance',
