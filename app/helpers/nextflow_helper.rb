@@ -48,4 +48,14 @@ module NextflowHelper
   def format_name_as_arg(name)
     name.length > 1 ? "--#{name}" : "-#{name}"
   end
+
+  def text_for(value)
+    return '' if value.nil?
+
+    if value.instance_of?(String)
+      value
+    else
+      value[I18n.locale.to_s]
+    end
+  end
 end

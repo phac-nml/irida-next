@@ -3,7 +3,7 @@
     "url": "https://github.com/phac-nml/iridanextexample",
     "name": "phac-nml/iridanextexample",
     "description": "IRIDA Next Example Pipeline",
-    "parameter_overrides": {
+    "overrides": {
       "definitions": {
         "input_output_options": {
           "properties": {
@@ -21,7 +21,7 @@
       },
       {
         "name": "2.0.1",
-        "parameter_overrides": {
+        "overrides": {
           "definitions": {
             "input_output_options": {
               "properties": {

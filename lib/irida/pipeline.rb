@@ -79,13 +79,13 @@ module Irida
     def overrides_for_entry(entry)
       return {} if entry['versions'].nil?
 
-      overrides = entry['parameter_overrides'] || {}
+      overrides = entry['overrides'] || {}
       version_overrides = entry['versions'].find do |version|
         version['name'] == @version
       end || {}
       overrides
         .deep_merge(
-          version_overrides.key?('parameter_overrides') ? version_overrides['parameter_overrides'] : {}
+          version_overrides.key?('overrides') ? version_overrides['overrides'] : {}
         )
     end
   end
