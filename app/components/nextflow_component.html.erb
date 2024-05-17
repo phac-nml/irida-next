@@ -25,15 +25,21 @@
     <%= text_for(@workflow.description) %>
   </p>
   <%= form_with url: url, method: (instance.nil? ? :post : :patch), data: { turbo_frame: "_top" } do |form| %>
-    <input id="submission_turbo" type="hidden" name="format" value="turbo_stream" />
+    <input id="submission_turbo" type="hidden" name="format" value="turbo_stream"/>
 
     <%= fields_for :workflow_execution do |workflow| %>
       <section class="mb-4">
         <%= workflow.label :name, class: "block text-sm font-medium text-slate-900 dark:text-white" do %>
           <%= t(".name.label") %>
         <% end %>
-        <p id="helper-text-explanation" class="mt-1 mb-2 text-sm text-slate-500 dark:text-slate-400"><%= t(".name.helper") %></p>
-        <%= workflow.text_field :name, value: instance.present? ? instance.name : nil, class: "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+        <p
+          id="helper-text-explanation"
+          class="mt-1 mb-2 text-sm text-slate-500 dark:text-slate-400"
+        ><%= t(".name.helper") %></p>
+        <%= workflow.text_field :name,
+                            value: instance.present? ? instance.name : nil,
+                            class:
+                              "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       </section>
 
       <%= workflow.hidden_field :namespace_id, value: @namespace_id %>
@@ -95,54 +101,51 @@
       <%- if @allowed_to_update_samples %>
         <div class="flex mb-4 items-center h-5">
           <%= workflow.check_box :update_samples,
-                                 {
-                                   checked: instance.present? && instance["update_samples"],
-                                   class:
-                                     "w-4
-                                            h-4
-                                            mr-2.5
-                                            text-primary-600
-                                            bg-slate-100
-                                            border-slate-300
-                                            rounded
-                                            focus:ring-primary-500
-                                            dark:focus:ring-primary-600
-                                            dark:ring-offset-slate-800
-                                            focus:ring-2
-                                            dark:bg-slate-700
-                                            dark:border-slate-600"
-                                 },
-                                 true,
-                                 false %>
+                             {
+                               checked: instance.present? && instance["update_samples"],
+                               class:
+                                 "w-4
+                                                      h-4
+                                                      mr-2.5
+                                                      text-primary-600
+                                                      bg-slate-100
+                                                      border-slate-300
+                                                      rounded
+                                                      focus:ring-primary-500
+                                                      dark:focus:ring-primary-600
+                                                      dark:ring-offset-slate-800
+                                                      focus:ring-2
+                                                      dark:bg-slate-700
+                                                      dark:border-slate-600"
+                             } %>
           <%= workflow.label :update_samples,
-                             t(:"components.nextflow.update_samples"),
-                             class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                         t(:"components.nextflow.update_samples"),
+                         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
         </div>
       <%- end %>
       <div class="flex mb-4 items-center h-5">
         <%= workflow.check_box :email_notification,
-                               {
-                                 checked: instance.present? && instance["email_notification"],
-                                 class:
-                                   "w-4
-                                        h-4
-                                        mr-2.5
-                                        text-primary-600
-                                        bg-slate-100
-                                        border-slate-300
-                                        rounded
-                                        focus:ring-primary-500
-                                        dark:focus:ring-primary-600
-                                        dark:ring-offset-slate-800
-                                        focus:ring-2
-                                        dark:bg-slate-700
-                                        dark:border-slate-600"
-                               },
-                               true,
-                               false %>
+                           {
+                             checked:
+                               instance.present? && instance["email_notification"],
+                             class:
+                               "w-4
+                                                h-4
+                                                mr-2.5
+                                                text-primary-600
+                                                bg-slate-100
+                                                border-slate-300
+                                                rounded
+                                                focus:ring-primary-500
+                                                dark:focus:ring-primary-600
+                                                dark:ring-offset-slate-800
+                                                focus:ring-2
+                                                dark:bg-slate-700
+                                                dark:border-slate-600"
+                           } %>
         <%= workflow.label :email_notification,
-                           t(:"components.nextflow.email_notification"),
-                           class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                       t(:"components.nextflow.email_notification"),
+                       class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
     <% end %>
 
