@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "overrides": {
+        "$ref": "#/$defs/overrides"
+      },
+      "versions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "automatable": {
+              "type": "boolean"
+            },
+            "overrides": {
+              "$ref": "#/$defs/overrides"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      }
+    },
+    "required": [
+      "url",
+      "name",
+      "description",
+      "versions"
+    ]
+  },
+  "$defs": {
+    "overrides": {
+      "type": "object",
+      "properties": {
+        "definitions": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

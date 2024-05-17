@@ -9,6 +9,9 @@ require 'irida/pipeline'
 module Irida
   # Module that reads a workflow config file and registers the available pipelines
   module Pipelines
+    PipelinesJsonFormatException = Class.new StandardError
+    PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
+
     @pipeline_config_dir = 'config/pipelines'
     @pipeline_schema_file_dir = 'private/pipelines'
     @pipeline_config_file = 'pipelines.json'
@@ -42,7 +45,13 @@ module Irida
     # read in the json pipeline config
     def read_json_config
       path = File.basename(@pipeline_config_file)
-      JSON.parse(Rails.root.join(@pipeline_config_dir, path).read)
+      data = JSON.parse(Rails.root.join(@pipeline_config_dir, path).read)
+
+      errors = JSONSchemer.schema(PIPELINES_JSON_SCHEMA.read).validate(data).to_a
+
+      raise PipelinesJsonFormatException, "Exception parsing #{path}: #{errors}" unless errors.empty?
+
+      data
     end
 
     # Sets up the file names, paths, and urls to be used
