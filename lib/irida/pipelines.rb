@@ -14,12 +14,17 @@ module Irida
 
     class_attribute :instance
 
+    attr_reader :available_pipelines, :automatable_pipelines
 
     def initialize(**params)
-      @pipeline_config_dir = params.key?(:pipeline_config_dir) ? params[:pipeline_config_dir] : 'config/pipelines'
-      @pipeline_schema_file_dir = params.key?(:pipeline_schema_file_dir) ? params[:pipeline_schema_file_dir] : 'private/pipelines'
-      @pipeline_config_file = params.key?(:pipeline_config_file) ? params[:pipeline_config_file] : 'pipelines.json'
-      @pipeline_schema_status_file = params.key?(:pipeline_schema_status_file) ? params[:pipeline_schema_status_file] : 'status.json'
+      @pipeline_config_dir =
+        params.key?(:pipeline_config_dir) ? params[:pipeline_config_dir] : 'config/pipelines'
+      @pipeline_schema_file_dir =
+        params.key?(:pipeline_schema_file_dir) ? params[:pipeline_schema_file_dir] : 'private/pipelines'
+      @pipeline_config_file =
+        params.key?(:pipeline_config_file) ? params[:pipeline_config_file] : 'pipelines.json'
+      @pipeline_schema_status_file =
+        params.key?(:pipeline_schema_status_file) ? params[:pipeline_schema_status_file] : 'status.json'
       @available_pipelines = {}
       @automatable_pipelines = {}
 
@@ -43,7 +48,6 @@ module Irida
           @automatable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline if version['automatable']
         end
       end
-      @initialized = true
     end
 
     # read in the json pipeline config
@@ -142,27 +146,6 @@ module Irida
 
     def find_pipeline_by(name, version)
       @available_pipelines["#{name}_#{version}"]
-    end
-
-    def available_pipelines
-      @available_pipelines
-    end
-
-    def pipeline_config_dir=(dir)
-      @pipeline_config_dir = dir
-    end
-
-    def pipeline_schema_file_dir=(dir)
-      @pipeline_schema_file_dir = dir
-    end
-
-    def automatable_pipelines
-      @automatable_pipelines
-    end
-
-    # If the pipelines have been initialized or not for the current process
-    def initialized
-      @initialized
     end
   end
 end
