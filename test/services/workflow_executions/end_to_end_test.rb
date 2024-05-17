@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-# require 'active_storage_test_case'
 require 'test_helper'
-# require 'webmock/minitest'
 
 module WorkflowExecutions
-  class EndToEndest < ActiveSupport::TestCase
+  class EndToEndTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
       @project = projects(:project1)
@@ -16,11 +14,21 @@ module WorkflowExecutions
 
       assert_equal 'initial', @workflow_execution.reload.state
 
-      assert_performed_jobs 2, except: WorkflowExecutionStatusJob do
-        WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
-      end
+      WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
+      perform_enqueued_jobs_with_delay(5, except_class: WorkflowExecutionCleanupJob)
+      assert_equal 'completed', @workflow_execution.reload.state
+      # TODO: cleanup step
+    end
 
-      assert_equal 'submitted', @workflow_execution.reload.state
+    def perform_enqueued_jobs_with_delay(delay_seconds, except_class:)
+      while enqueued_jobs.count >= 1 && enqueued_jobs.first['job_class'] != except_class.name
+        # run a single queued job
+        currently_queued_job = enqueued_jobs.first
+        puts "RUNNING: #{currently_queued_job['job_class']}"
+        perform_enqueued_jobs(only: ->(job) { job['job_id'] == currently_queued_job['job_id'] })
+        # wait for sapporo before continuing, prevents heap error when jobs run immediately
+        sleep(delay_seconds)
+      end
     end
   end
 end

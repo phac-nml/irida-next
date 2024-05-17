@@ -649,16 +649,14 @@ automated_workflow_execution_existing:
 
 irida_next_example_end_to_end:
   <<: *DEFAULTS
-  metadata:
-    { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
-  workflow_params:
-    {
-      "input": "/blah/samplesheet.csv",
-      "outdir": "/blah/output",
-    }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_end_to_end"
-  run_id: "my_run_id_end_to_end"
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "initial"
