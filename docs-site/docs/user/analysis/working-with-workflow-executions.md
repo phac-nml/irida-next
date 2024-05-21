@@ -1,10 +1,10 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 id: working-with-workflow-executions
 title: Working with Workflow Executions
 ---
 
-<!-- Include the following headers with explanations and/or descriptions:
+<!-- TODO: Include the following headers with explanations and/or descriptions:
 - States of Workflow Executions
 - User Workflow Executions
   - Navigating to the user workflow executions page

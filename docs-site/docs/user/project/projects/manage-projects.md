@@ -74,6 +74,9 @@ To update the URL of the project:
 
 3. Select **Change project URL**
 
+## View Project History
+<!-- TODO: Add steps to view project history -->
+
 ## Transfer Project
 
 Prerequisites:

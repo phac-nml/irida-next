@@ -41,7 +41,7 @@ The following table lists group permissions available for each role:
 | Edit Group Member            |       |          |         | ✓(1)       | ✓     |
 | Remove Group Member          |       |          |         | ✓(1)       | ✓     |
 | View Group Members           | ✓     |          | ✓       | ✓          | ✓     |
-<!-- Add uploader actions -->
+<!-- TODO: Add uploader actions -->
 1. A user with the **Maintainer** role can only modify members upto and including their role
 
 ## Subgroup permissions
@@ -65,6 +65,6 @@ When you add a member to a subgroup where they are also a member of one of the p
 | Edit Samples          |       |         | ✓          | ✓     |
 | Delete Samples        |       |         |            | ✓     |
 | Transfer Samples      |       |         | ✓(2)       | ✓     |
-<!-- Add metadata, files, history, bot account permissions to project members permissions table -->
+<!-- TODO: Add metadata, files, history, bot account permissions to project members permissions table -->
 1. A user with the **Maintainer** role can only modify members upto and including their role
 2. A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project
