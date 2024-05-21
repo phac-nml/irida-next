@@ -49,6 +49,7 @@ Prerequisites:
 7. Select **Concatenate**
 
 ## Download Sample files
+<!-- TODO: Add steps to download sample files -->
 
 ## Delete Sample files
 
