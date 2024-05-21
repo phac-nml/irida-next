@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+# Migration to create job batches
 class CreateGoodJobBatches < ActiveRecord::Migration[7.1]
-  def change
+  def change # rubocop:disable Metrics
     reversible do |dir|
       dir.up do
         # Ensure this incremental update migration is idempotent
@@ -28,8 +29,8 @@ class CreateGoodJobBatches < ActiveRecord::Migration[7.1]
       t.uuid :batch_id
       t.uuid :batch_callback_id
 
-      t.index :batch_id, where: "batch_id IS NOT NULL"
-      t.index :batch_callback_id, where: "batch_callback_id IS NOT NULL"
+      t.index :batch_id, where: 'batch_id IS NOT NULL'
+      t.index :batch_callback_id, where: 'batch_callback_id IS NOT NULL'
     end
   end
 end

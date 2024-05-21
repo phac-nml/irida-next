@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Migration to remmove active job id index
 class RemoveGoodJobActiveIdIndex < ActiveRecord::Migration[7.1]
   disable_ddl_transaction!
 
