@@ -30,7 +30,7 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     assert_not @workflow_execution_invalid_metadata.valid?
     assert_not_nil @workflow_execution_invalid_metadata.errors[:metadata]
     assert_equal(
-      ['Metadata root is missing required keys: workflow_version'],
+      ['Metadata object at root is missing required properties: workflow_version'],
       @workflow_execution_invalid_metadata.errors.full_messages
     )
   end

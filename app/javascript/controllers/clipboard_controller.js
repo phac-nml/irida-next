@@ -10,24 +10,14 @@ export default class extends Controller {
   }
 
   copyToClipboard() {
-    navigator.permissions
-      .query({ name: "clipboard-write" })
-      .then((result) => {
-        navigator.clipboard.writeText(this.itemValue);
-      })
-      .catch(() => {
-        this.inputTarget.select();
-        // NOTE: This is deprecated but works in older browsers
-        document.execCommand("copy");
-      })
-      .finally(() => {
-        this.initialTarget.classList.add("hidden");
-        this.copiedTarget.classList.remove("hidden");
-        setTimeout(() => {
-          this.initialTarget.classList.remove("hidden");
-          this.copiedTarget.classList.add("hidden");
-        }, 2000);
-      });
+    navigator.clipboard.writeText(this.itemValue);
+
+    this.initialTarget.classList.add("hidden");
+    this.copiedTarget.classList.remove("hidden");
+    setTimeout(() => {
+      this.initialTarget.classList.remove("hidden");
+      this.copiedTarget.classList.add("hidden");
+    }, 2000);
   }
 
   toggleVisibility() {

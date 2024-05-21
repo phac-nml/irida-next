@@ -142,7 +142,9 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
-      assert @workflow_execution.errors.full_messages.include?('Metadata root is missing required keys: workflow_name')
+      assert @workflow_execution.errors.full_messages.include?(
+        'Metadata object at root is missing required properties: workflow_name'
+      )
       assert_enqueued_jobs 0
     end
 
@@ -168,7 +170,7 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
       assert @workflow_execution.errors.full_messages
-                                .include?('Metadata root is missing required keys: workflow_version')
+                                .include?('Metadata object at root is missing required properties: workflow_version')
       assert_enqueued_jobs 0
     end
 

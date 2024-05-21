@@ -15,7 +15,7 @@ class AttachmentTest < ActiveSupport::TestCase
   test 'invalid when no file attached' do
     invalid_attachment = @sample.attachments.build
     assert_not invalid_attachment.valid?
-    assert invalid_attachment.errors.added?(:file, :blank)
+    assert invalid_attachment.errors.added?(:file, :blank, validator_type: :attached)
   end
 
   test 'invalid when file checksum matches another Attachment associated with the Attachable' do

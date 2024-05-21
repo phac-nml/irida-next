@@ -6,7 +6,7 @@
     <%= link_to data_export.id,
     data_export_path(data_export),
     data: {
-      turbo: false
+      turbo: false,
     },
     class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
   </td>
@@ -15,7 +15,7 @@
       <%= link_to data_export.name,
       data_export_path(data_export),
       data: {
-        turbo: false
+        turbo: false,
       },
       class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
     <% end %>
@@ -44,19 +44,19 @@
         t(:"data_exports.index.actions.download"),
         download_data_export_path(data_export),
         data: {
-          turbo: false
+          turbo: false,
         },
         aria: {
           label:
             (
               t(
                 :"data_exports.index.actions.download_aria_label",
-                name: data_export.name || data_export.id
+                name: data_export.name || data_export.id,
               )
-            )
+            ),
         },
         class:
-          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
       ) %>
     <% end %>
     <%= link_to(
@@ -67,20 +67,20 @@
         turbo_confirm:
           t(
             :"data_exports.index.delete_confirmation",
-            name: data_export.name || data_export.id
-          )
+            name: data_export.name || data_export.id,
+          ),
       },
       aria: {
         label:
           (
             t(
               :"data_exports.index.actions.delete_aria_label",
-              name: data_export.name || data_export.id
+              name: data_export.name || data_export.id,
             )
-          )
+          ),
       },
       class:
-        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
     ) %>
   </td>
 </tr>

@@ -50,7 +50,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     if @data_export.valid?
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
 
-      redirect_to data_export_path(@data_export)
+      redirect_to data_export_path(@data_export, format: :html)
     else
       respond_to do |format|
         format.turbo_stream do
@@ -97,7 +97,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   private
 
   def data_export_params
-    params.require(:data_export).permit(:name, :export_type, :email_notification, export_parameters: [ids: []])
+    params.require(:data_export).permit(:name, :export_type, :email_notification, export_parameters: { ids: [] })
   end
 
   def data_export

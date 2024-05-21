@@ -298,7 +298,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_export_dialog.summary.sample.plural',
+        I18n.t('data_exports.new_export_dialog.summary.sample.plural_html',
                processing: I18n.t('data_exports.new_export_dialog.summary.processing'),
                ready: I18n.t('data_exports.new_export_dialog.summary.ready'))
       ).gsub! 'COUNT_PLACEHOLDER', '2'
