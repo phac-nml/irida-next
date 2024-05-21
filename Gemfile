@@ -3,10 +3,10 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.2'
+ruby '3.3.1'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.1.1'
+gem 'rails', '~> 7.1.3'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -42,7 +42,7 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'bootsnap', require: false
 
 # Use devise for auth
-gem 'devise', '~> 4.9.2'
+gem 'devise', '~> 4.9.4'
 
 # Use OmniAuth auth
 gem 'omniauth'
@@ -59,8 +59,8 @@ gem 'faraday-net_http_persistent', '~> 2.0'
 # gem "sassc-rails"
 
 # Tailwind CSS [https://tailwindcss.com]
-gem 'tailwindcss-rails', '~> 2.0'
-gem 'view_component', '~> 3.9'
+gem 'tailwindcss-rails', '~> 2.6'
+gem 'view_component', '~> 3.12'
 
 # Pagy
 gem 'pagy', '~> 6.1' # omit patch digit
@@ -95,7 +95,7 @@ gem 'fx'
 gem 'paranoia'
 
 # Validate json schema's
-gem 'activerecord_json_validator', '~> 2.1.0'
+gem 'activerecord_json_validator', '~> 3.0.0'
 
 # ActiveStorage
 gem 'active_storage_validations'
@@ -135,7 +135,7 @@ group :development do
   # gem "spring"
 
   # erb-formatter
-  gem 'erb-formatter', '~> 0.4.3', require: false
+  gem 'erb-formatter', '~> 0.7.2', require: false
 
   # LookBook
   gem 'actioncable'

@@ -43,7 +43,7 @@ module Integrations
             f.request :authorization, 'Bearer', -> { Rails.application.credentials.dig(:ga4gh_wes, :oauth_token) }
             f.request :multipart
             f.request :url_encoded
-            f.response :logger # logs request and responses
+            f.response :logger, Rails.logger # logs request and responses
             f.response :json # decode response bodies as JSON
             f.response :raise_error, include_request: true
             f.adapter :net_http_persistent, pool_size: 5 do |http|

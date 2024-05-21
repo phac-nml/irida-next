@@ -25,7 +25,7 @@ module AutomatedWorkflowExecutions
       end
 
       assert_includes @automated_workflow_execution.errors[:metadata],
-                      'root is missing required keys: workflow_name, workflow_version'
+                      'object at root is missing required properties: workflow_name, workflow_version'
     end
 
     test 'update automated workflow execution with incorrect permissions' do
