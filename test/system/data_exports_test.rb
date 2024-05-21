@@ -256,7 +256,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_export_dialog.summary.sample.singular_html',
+        I18n.t('data_exports.new_export_dialog.summary.sample.singular',
                processing: I18n.t('data_exports.new_export_dialog.summary.processing'),
                ready: I18n.t('data_exports.new_export_dialog.summary.ready'))
       )
@@ -345,7 +345,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_export_dialog.summary.sample.singular_html',
+        I18n.t('data_exports.new_export_dialog.summary.sample.singular',
                processing: I18n.t('data_exports.new_export_dialog.summary.processing'),
                ready: I18n.t('data_exports.new_export_dialog.summary.ready'))
       )
