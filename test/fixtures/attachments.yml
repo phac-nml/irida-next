@@ -240,7 +240,7 @@ attachmentEndToEndFWD:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentEndToEndREV, :uuid) %>,
     }
   attachable: sampleEndToEnd (Sample)
-  puid: INXT_ATT_AAAAAAAAAF
+  puid: INXT_ATT_ABAAAAAAAA
 
 attachmentEndToEndREV:
   metadata:
@@ -252,4 +252,4 @@ attachmentEndToEndREV:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentEndToEndFWD, :uuid) %>,
     }
   attachable: sampleEndToEnd (Sample)
-  puid: INXT_ATT_AAAAAAAAAF
+  puid: INXT_ATT_ABAAAAAAAB

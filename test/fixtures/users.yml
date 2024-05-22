@@ -204,3 +204,10 @@ projectA_automation_bot:
   first_name: INXT_PRJ_AAAAAAAAA5
   last_name: Automation Bot
   user_type: <%= User.user_types[:project_automation_bot] %>
+
+project_end_to_end_user:
+  email: <%= "project_end_to_end_user@localhost" %>
+  encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  first_name: project
+  last_name: "end to end user"
+  locale: en

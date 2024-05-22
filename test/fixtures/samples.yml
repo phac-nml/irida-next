@@ -298,8 +298,8 @@ sample46:
 sampleEndToEnd:
   name: Sample EndToEnd
   description: Sample EndToEnd description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
-  puid: INXT_SAM_AAAAAAAABW
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project_end_to_end, :uuid) %>
+  puid: INXT_SAM_ABAAAAAAAA
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
