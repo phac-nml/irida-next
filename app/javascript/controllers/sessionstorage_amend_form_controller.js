@@ -8,7 +8,7 @@ export default class extends Controller {
     fieldName: String,
     storageKey: {
       type: String,
-      default: location.protocol + "//" + location.host + location.pathname,
+      default: `${location.protocol}//${location.host}${location.pathname}`,
     },
   };
 
@@ -33,7 +33,6 @@ export default class extends Controller {
   #createHiddenInput(value) {
     const element = document.createElement("input");
     element.type = "hidden";
-    element.id = this.fieldNameValue;
     element.name = this.fieldNameValue;
     element.value = value;
     return element;

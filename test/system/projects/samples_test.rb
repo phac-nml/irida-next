@@ -1901,7 +1901,7 @@ module Projects
         assert_selector 'tr td', text: @sample2.puid
       end
       click_button I18n.t(:'components.list_filter.title')
-      within 'dialog' do
+      within '#list-filter-dialog' do
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
         fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.puid}, #{@sample2.puid}"
         assert_selector 'span.label', count: 2
@@ -1913,7 +1913,7 @@ module Projects
         assert_selector 'tr', count: 2
       end
       click_button I18n.t(:'components.list_filter.title')
-      within 'dialog' do
+      within '#list-filter-dialog' do
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
         click_button I18n.t(:'components.list_filter.clear')
         click_button I18n.t(:'components.list_filter.apply')

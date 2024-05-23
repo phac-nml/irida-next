@@ -298,13 +298,13 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_export_dialog.summary.sample.plural_html',
+        I18n.t('data_exports.new_export_dialog.summary.sample.plural',
                processing: I18n.t('data_exports.new_export_dialog.summary.processing'),
                ready: I18n.t('data_exports.new_export_dialog.summary.ready'))
       ).gsub! 'COUNT_PLACEHOLDER', '2'
 
-      find('input#data_export_name').fill_in with: 'test data export'
-      find("input[type='checkbox'][id='data_export_email_notification']").click
+      fill_in I18n.t('data_exports.new_export_dialog.name_label'), with: 'test data export'
+      check I18n.t('data_exports.new_export_dialog.email_label')
       click_button I18n.t('data_exports.new_export_dialog.submit_button')
     end
 

@@ -3,7 +3,7 @@
 module Viral
   # A component for displaying a dialog.
   class DialogComponent < Viral::Component
-    attr_reader :open, :closable, :dialog_size, :title
+    attr_reader :id, :open, :closable, :dialog_size, :title
 
     renders_one :header, lambda { |title:|
       Viral::Dialog::HeaderComponent.new(title:, closable: @closable)
@@ -24,7 +24,8 @@ module Viral
 
     renders_one :trigger
 
-    def initialize(title: '', size: SIZE_DEFAULT, open: false, closable: true, **system_arguments)
+    def initialize(id: 'dialog', title: '', size: SIZE_DEFAULT, open: false, closable: true, **system_arguments) # rubocop:disable Metrics/ParameterLists
+      @id = id
       @title = title
       @open = open
       @closable = closable

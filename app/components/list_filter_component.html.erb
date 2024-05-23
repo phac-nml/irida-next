@@ -2,28 +2,15 @@
   data-controller="list-filter"
   data-list-filter-selection-outlet="#samples-table"
 >
-  <%= viral_dialog(closable: false) do |dialog| %>
+  <%= viral_dialog(id: 'list-filter-dialog', closable: false) do |dialog| %>
     <%= dialog.with_trigger do %>
       <%= viral_button(data: { action: "click->viral--dialog#open" }, aria: { label: t(:'components.list_filter.title') }, title: t(:'components.list_filter.title'), classes: "relative") do %>
         <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
         <div
           data-list-filter-target="count"
           class="
-            hidden
-            absolute
-            items-center
-            justify-center
-            w-6
-            h-6
-            text-xs
-            font-bold
-            text-white
-            bg-red-500
-            border-2
-            border-white
-            rounded-full
-            -top-2
-            -end-2
+            hidden absolute items-center justify-center w-6 h-6 text-xs font-bold text-white
+            bg-red-500 border-2 border-white rounded-full -top-2 -end-2
             dark:border-slate-900
           "
         >8</div>
@@ -39,16 +26,8 @@
           <button
             type="button"
             class="
-              inline-flex
-              items-center
-              p-1
-              text-sm
-              text-slate-400
-              bg-transparent
-              rounded-full
-              hover:bg-blue-200
-              hover:text-blue-900
-              dark:hover:bg-blue-600
+              inline-flex items-center p-1 text-sm text-slate-400 bg-transparent rounded-full
+              hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-600
               dark:hover:text-blue-300
             "
             data-action="click->list-filter#remove"
@@ -66,26 +45,11 @@
 
         <div
           class="
-            relative
-            flex
-            flex-wrap
-            font-mono
-            bg-slate-50
-            border
-            border-slate-300
-            text-slate-900
-            text-sm
-            rounded-lg
-            focus-within:ring-primary-500
-            focus-within:border-primary-500
-            w-full
-            p-2.5
-            dark:bg-slate-700
-            dark:border-slate-600
-            dark:placeholder-slate-400
-            dark:text-white
-            dark:focus-within:ring-primary-500
-            dark:focus-within:border-primary-500k
+            relative flex flex-wrap font-mono bg-slate-50 border border-slate-300
+            text-slate-900 text-sm rounded-lg focus-within:ring-primary-500
+            focus-within:border-primary-500 w-full p-2.5 dark:bg-slate-700
+            dark:border-slate-600 dark:placeholder-slate-400 dark:text-white
+            dark:focus-within:ring-primary-500 dark:focus-within:border-primary-500k
           "
           data-list-filter-target="tags"
           data-action="click->list-filter#focus"
@@ -94,11 +58,7 @@
             type="text"
             name="filter-text"
             class="
-              focus:outline-none
-              focus:ring-0
-              border-none
-              bg-transparent
-              grow
+              focus:outline-none focus:ring-0 border-none bg-transparent grow
             "
             autofocus
             aria-label="<%= t(:'components.list_filter.description') %>"
@@ -111,26 +71,10 @@
           <button
             type="button"
             class="
-              absolute
-              inline-flex
-              items-center
-              justify-center
-              w-6
-              h-6
-              text-xs
-              font-bold
-              text-slate-600
-              bg-slate-100
-              border-3
-              border-slate-10
-              rounded-full
-              bottom-2
-              end-2
-              dark:text-slate-300
-              dark:border-slate-900
-              dark:bg-slate-600
-              dark:hover:bg-slate-500
-              hover:bg-slate-300
+              absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold
+              text-slate-600 bg-slate-100 border-3 border-slate-10 rounded-full bottom-2 end-2
+              dark:text-slate-300 dark:border-slate-900 dark:bg-slate-600
+              dark:hover:bg-slate-500 hover:bg-slate-300
             "
             data-action="click->list-filter#clear"
             aria-label="<%= t(:'components.list_filter.clear') %>"
@@ -144,7 +88,7 @@
 
     <% end %>
     <%= dialog.with_primary_action(
-      "data-action": "list-filter#afterSubmit filters#submit viral--dialog#close"
+      "data-action": "list-filter#afterSubmit filters#submit viral--dialog#close",
     ) { t(:"components.list_filter.apply") } %>
   <% end %>
 </div>
