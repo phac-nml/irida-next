@@ -64,7 +64,7 @@ module System
       within('dialog') do
         assert_accessible
         assert_text 'This is a dialog with a trigger'
-        find('button[aria-label="Close dialog"]').click
+        click_button 'Close dialog'
       end
       assert_selector 'dialog', count: 0
     end

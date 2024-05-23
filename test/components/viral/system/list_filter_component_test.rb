@@ -10,10 +10,10 @@ module System
     test 'default' do
       visit('rails/view_components/list_filter_component/default')
       within 'span[data-controller-connected="true"]' do
-        find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
+        click_button I18n.t(:'components.list_filter.title')
         within 'dialog' do
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-          find("input[type='text']").send_keys "#{puid1}, #{puid2}"
+          fill_in I18n.t(:'components.list_filter.description'), with: "#{puid1}, #{puid2}"
           assert_selector 'span.label', count: 2
           assert_selector 'span.label', text: puid1
           assert_selector 'span.label', text: puid2
@@ -21,7 +21,7 @@ module System
         end
         assert_selector 'div[data-list-filter-target="count"]', text: '2'
 
-        find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
+        click_button I18n.t(:'components.list_filter.title')
         within 'dialog' do
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
           click_button I18n.t(:'components.list_filter.clear')
