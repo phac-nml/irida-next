@@ -4,8 +4,6 @@ require 'test_helper'
 
 class IntegrationSapporo < ActiveSupport::TestCase
   def setup
-    # @user = users(:john_doe)
-    # @project = projects(:project1)
     @workflow_execution = workflow_executions(:irida_next_example_end_to_end)
   end
 
@@ -14,11 +12,20 @@ class IntegrationSapporo < ActiveSupport::TestCase
     assert_not @workflow_execution.cleaned?
 
     WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
-    perform_enqueued_jobs_sequentially(delay_seconds: 5)
 
-    # TODO: add some except_class/only_class filters and test various steps of the workflow execution lifespan
-    # perform_enqueued_jobs_sequentially(delay_seconds: 5, except_class: WorkflowExecutionCleanupJob)
+    perform_enqueued_jobs_sequentially(except: WorkflowExecutionSubmissionJob)
+    assert_equal 'prepared', @workflow_execution.reload.state
 
+    perform_enqueued_jobs_sequentially(except: WorkflowExecutionStatusJob)
+    assert_equal 'submitted', @workflow_execution.reload.state
+
+    perform_enqueued_jobs_sequentially(delay_seconds: 10, except: WorkflowExecutionCompletionJob)
+    assert_equal 'completing', @workflow_execution.reload.state
+
+    perform_enqueued_jobs_sequentially(except: WorkflowExecutionCleanupJob)
+    assert_equal 'completed', @workflow_execution.reload.state
+
+    perform_enqueued_jobs_sequentially
     assert_equal 'completed', @workflow_execution.reload.state
     assert @workflow_execution.cleaned?
   end
@@ -41,4 +48,3 @@ class IntegrationSapporo < ActiveSupport::TestCase
     end
   end
 end
-
