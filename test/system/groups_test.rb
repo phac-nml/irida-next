@@ -299,7 +299,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     within('#turbo-confirm') do
       assert_text I18n.t('components.confirmation.title')
-      find('input[type=text]').fill_in with: group1.path
+      fill_in I18n.t('components.confirmation.confirm_label'), with: group1.path
       click_on I18n.t('components.confirmation.confirm')
     end
 
