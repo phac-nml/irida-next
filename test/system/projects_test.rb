@@ -92,17 +92,15 @@ class ProjectsTest < ApplicationSystemTestCase
     fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
     click_on I18n.t(:'projects.edit.general.submit')
     assert_text I18n.t('projects.update.success', project_name:)
-    within %(turbo-frame[id="project_name_and_description_form"]) do
-      assert_selector "input#project_namespace_attributes_name[value='#{project_name}']", count: 1
-      assert_selector 'textarea#project_namespace_attributes_description',
-                      text: project_description, count: 1
-    end
 
-    within %(turbo-frame[id="sidebar_project_name"]) do
+    assert_field I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
+    assert_field I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
+
+    within '#sidebar_project_name' do
       assert_text project_name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text project_name
     end
   end
@@ -144,9 +142,9 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_selector 'a', text: I18n.t(:'projects.edit.advanced.destroy.submit'), count: 1
     click_link I18n.t(:'projects.edit.advanced.destroy.submit')
 
-    within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
-    end
+    assert_text I18n.t('projects.edit.advanced.destroy.confirm')
+    assert_button I18n.t('components.confirmation.confirm')
+    click_button I18n.t('components.confirmation.confirm')
 
     assert_text I18n.t(:'projects.destroy.success', project_name: project.name)
   end
@@ -155,16 +153,14 @@ class ProjectsTest < ApplicationSystemTestCase
     project = projects(:project1)
     visit project_edit_path(project)
 
-    within all('form[action="/group-1/project-1"]')[1] do
-      fill_in 'project_namespace_attributes_path', with: 'project-1-edited'
-      click_on I18n.t(:'projects.edit.advanced.path.submit')
-    end
+    fill_in 'Path', with: 'project-1-edited'
+    click_on I18n.t(:'projects.edit.advanced.path.submit')
 
-    within %(turbo-frame[id="sidebar_project_name"]) do
+    within '#sidebar' do
       assert_text project.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text project.name
     end
 
@@ -176,16 +172,14 @@ class ProjectsTest < ApplicationSystemTestCase
     project = projects(:project1)
     visit project_edit_path(project)
 
-    within all('form[action="/group-1/project-1"]')[1] do
-      fill_in 'project_namespace_attributes_path', with: 'project-2'
-      click_on I18n.t(:'projects.edit.advanced.path.submit')
-    end
+    fill_in 'Path', with: 'project-2'
+    click_on I18n.t(:'projects.edit.advanced.path.submit')
 
-    within %(turbo-frame[id="sidebar_project_name"]) do
+    within '#sidebar' do
       assert_text project.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text project.name
     end
 
@@ -198,16 +192,14 @@ class ProjectsTest < ApplicationSystemTestCase
     project = projects(:project1)
     visit project_edit_path(project)
 
-    within all('form[action="/group-1/project-1"]')[0] do
-      fill_in 'Name', with: project_name
-      click_on I18n.t('projects.edit.general.submit')
-    end
+    fill_in 'Name', with: project_name
+    click_on I18n.t('projects.edit.general.submit')
 
-    within %(turbo-frame[id="sidebar_project_name"]) do
+    within '#sidebar' do
       assert_text project.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text project.name
     end
 
@@ -220,16 +212,14 @@ class ProjectsTest < ApplicationSystemTestCase
     project2 = projects(:project2)
     visit project_edit_path(project1)
 
-    within all('form[action="/group-1/project-1"]')[0] do
-      fill_in 'Name', with: project2.name
-      click_on I18n.t('projects.edit.general.submit')
-    end
+    fill_in 'Name', with: project2.name
+    click_on I18n.t('projects.edit.general.submit')
 
-    within %(turbo-frame[id="sidebar_project_name"]) do
+    within '#sidebar' do
       assert_text project1.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text project1.name
     end
 
@@ -242,16 +232,14 @@ class ProjectsTest < ApplicationSystemTestCase
     project = projects(:project1)
     visit project_edit_path(project)
 
-    within all('form[action="/group-1/project-1"]')[0] do
-      fill_in 'Description', with: project_description
-      click_on I18n.t('projects.edit.general.submit')
-    end
+    fill_in 'Description', with: project_description
+    click_on I18n.t('projects.edit.general.submit')
 
-    within %(turbo-frame[id="sidebar_project_name"]) do
+    within '#sidebar' do
       assert_text project.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text project.name
     end
 

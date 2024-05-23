@@ -17,12 +17,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t('activerecord.attributes.group.name'), with: 'New group'
-
-      assert_selector %(input[data-slugify-target="path"]) do |input|
-        assert_equal 'new-group', input['value']
-      end
-
-      fill_in 'Description', with: 'New group description'
+      fill_in I18n.t('activerecord.attributes.group.name'), with: 'New group description'
       click_on I18n.t('groups.create.submit')
     end
 
@@ -85,7 +80,7 @@ class GroupsTest < ApplicationSystemTestCase
 
   test 'can create a sub-group' do
     visit group_url(groups(:group_one))
-    assert_selector 'a', text: I18n.t('groups.show.create_subgroup_button'), count: 1
+    assert_link text: I18n.t('groups.show.create_subgroup_button'), count: 1
     click_link I18n.t('groups.show.create_subgroup_button')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
@@ -100,7 +95,7 @@ class GroupsTest < ApplicationSystemTestCase
 
   test 'show error when creating a sub-group with a same name' do
     visit group_url(groups(:group_one))
-    assert_selector 'a', text: I18n.t('groups.show.create_subgroup_button'), count: 1
+    assert_link text: I18n.t('groups.show.create_subgroup_button'), count: 1
     click_link I18n.t('groups.show.create_subgroup_button')
 
     subgroup1 = groups(:subgroup1)
@@ -115,7 +110,7 @@ class GroupsTest < ApplicationSystemTestCase
 
   test 'show error when creating a sub-group with a same path' do
     visit group_url(groups(:group_one))
-    assert_selector 'a', text: I18n.t('groups.show.create_subgroup_button'), count: 1
+    assert_link text: I18n.t('groups.show.create_subgroup_button'), count: 1
     click_link I18n.t('groups.show.create_subgroup_button')
 
     subgroup1 = groups(:subgroup1)
@@ -139,23 +134,22 @@ class GroupsTest < ApplicationSystemTestCase
 
     within all('form[action="/group-1"]')[0] do
       fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
-      fill_in 'Description', with: group_description
+      fill_in I18n.t('activerecord.attributes.group.description'), with: group_description
       click_on I18n.t('groups.edit.details.submit')
     end
 
     assert_text I18n.t('groups.update.success', group_name:)
 
     within %(turbo-frame[id="group_name_and_description_form"]) do
-      assert_selector "input#group_name[value='#{group_name}']", count: 1
-      assert_selector 'textarea#group_description',
-                      text: group_description, count: 1
+      assert_field I18n.t('activerecord.attributes.group.name'), with: group_name
+      assert_field I18n.t('activerecord.attributes.group.description'), with: group_description
     end
 
-    within %(turbo-frame[id="sidebar_group_name"]) do
+    within '#sidebar' do
       assert_text group_name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text group_name
     end
   end
@@ -167,10 +161,8 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t('groups.sidebar.settings')
     click_link I18n.t('groups.sidebar.general')
 
-    within all('form[action="/group-1"]')[1] do
-      fill_in I18n.t('activerecord.attributes.group.path'), with: 'group-1-edited'
-      click_on I18n.t('groups.edit.advanced.path.submit')
-    end
+    fill_in I18n.t('activerecord.attributes.group.path'), with: 'group-1-edited'
+    click_on I18n.t('groups.edit.advanced.path.submit')
 
     assert_text I18n.t('groups.update.success', group_name: group1.name)
     assert_current_path '/-/groups/group-1-edited/-/edit'
@@ -183,16 +175,14 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t('groups.sidebar.settings')
     click_link I18n.t('groups.sidebar.general')
 
-    within all('form[action="/group-1"]')[0] do
-      fill_in I18n.t('activerecord.attributes.group.name'), with: 'a'
-      click_on I18n.t('groups.edit.details.submit')
-    end
+    fill_in I18n.t('activerecord.attributes.group.name'), with: 'a'
+    click_on I18n.t('groups.edit.details.submit')
 
-    within %(turbo-frame[id="sidebar_group_name"]) do
+    within '#sidebar' do
       assert_text group1.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text group1.name
     end
 
@@ -208,16 +198,14 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t('groups.sidebar.settings')
     click_link I18n.t('groups.sidebar.general')
 
-    within all('form[action="/group-1"]')[0] do
-      fill_in I18n.t('activerecord.attributes.group.name'), with: group2.name
-      click_on I18n.t('groups.edit.details.submit')
-    end
+    fill_in I18n.t('activerecord.attributes.group.name'), with: group2.name
+    click_on I18n.t('groups.edit.details.submit')
 
-    within %(turbo-frame[id="sidebar_group_name"]) do
+    within '#sidebar' do
       assert_text group1.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text group1.name
     end
 
@@ -232,16 +220,14 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t('groups.sidebar.settings')
     click_link I18n.t('groups.sidebar.general')
 
-    within all('form[action="/group-1"]')[0] do
-      fill_in I18n.t('activerecord.attributes.group.description'), with: 'a' * 256
-      click_on I18n.t('groups.edit.details.submit')
-    end
+    fill_in I18n.t('activerecord.attributes.group.description'), with: 'a' * 256
+    click_on I18n.t('groups.edit.details.submit')
 
-    within %(turbo-frame[id="sidebar_group_name"]) do
+    within '#sidebar' do
       assert_text group1.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text group1.name
     end
 
@@ -258,16 +244,14 @@ class GroupsTest < ApplicationSystemTestCase
 
     group2 = groups(:group_two)
 
-    within all('form[action="/group-1"]')[1] do
-      fill_in I18n.t('activerecord.attributes.group.path'), with: group2.path
-      click_on I18n.t('groups.edit.advanced.path.submit')
-    end
+    fill_in I18n.t('activerecord.attributes.group.path'), with: group2.path
+    click_on I18n.t('groups.edit.advanced.path.submit')
 
-    within %(turbo-frame[id="sidebar_group_name"]) do
+    within '#sidebar' do
       assert_text group1.name
     end
 
-    within %(turbo-frame[id="breadcrumb"]) do
+    within '#breadcrumb' do
       assert_text group1.name
     end
 
@@ -282,12 +266,14 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t('groups.sidebar.settings')
     click_link I18n.t('groups.sidebar.general')
 
+    assert_selector 'h2', text: I18n.t('groups.sidebar.general')
+
     assert_selector 'a', text: I18n.t('groups.edit.advanced.delete.submit'), count: 1
     click_link I18n.t('groups.edit.advanced.delete.submit')
 
-    within('#turbo-confirm[open]') do
-      click_button I18n.t('components.confirmation.confirm')
-    end
+    assert_text I18n.t('groups.edit.advanced.delete.confirm')
+    assert_button I18n.t('components.confirmation.confirm')
+    click_button I18n.t('components.confirmation.confirm')
 
     assert_selector 'h1', text: I18n.t('dashboard.groups.index.title')
     assert_no_text groups(:group_two).name
