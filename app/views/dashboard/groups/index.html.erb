@@ -9,15 +9,8 @@
 <div class="bg-white dark:bg-slate-800">
   <div
     class="
-      flex
-      text-sm
-      font-medium
-      text-center
-      border-b
-      text-slate-500
-      border-slate-200
-      dark:text-slate-400
-      dark:border-slate-700
+      flex text-sm font-medium text-center border-b text-slate-500 border-slate-200
+      dark:text-slate-400 dark:border-slate-700
     "
   >
     <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
@@ -26,8 +19,7 @@
   </div>
   <div class="flex flex-col" data-turbo-temporary>
     <%= turbo_frame_tag "groups_tree",
-    src: dashboard_groups_url(format: :turbo_stream, **request.query_parameters),
-    loading: :lazy do %>
+    src: dashboard_groups_url(format: :turbo_stream, **request.query_parameters) do %>
       <%= render partial: "shared/loading/table" %>
     <% end %>
     <%= turbo_frame_tag "groups_pagination" %>
