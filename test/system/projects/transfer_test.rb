@@ -21,7 +21,7 @@ module Projects
 
       within('#turbo-confirm') do
         assert_text I18n.t(:'components.confirmation.title')
-        find('input[type=text]').fill_in with: @project.name
+        fill_in I18n.t('components.confirmation.confirm_label'), with: @project.name
         click_on I18n.t(:'components.confirmation.confirm')
       end
 
@@ -42,7 +42,7 @@ module Projects
 
       within('#turbo-confirm') do
         assert_text I18n.t(:'components.confirmation.title')
-        find('input[type=text]').fill_in with: @project.name
+        fill_in I18n.t('components.confirmation.confirm_label'), with: @project.name
         click_on I18n.t(:'components.confirmation.confirm')
       end
 

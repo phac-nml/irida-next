@@ -10,7 +10,7 @@ module System
 
       assert_text message
       assert_selector '.text-green-500.bg-green-100'
-      find('[data-action="viral--flash#dismiss"]').click
+      click_button 'Close'
       assert_no_text message
     end
   end

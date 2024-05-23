@@ -329,6 +329,7 @@ en:
       title: Confirmation required
       cancel: Cancel
       confirm: Confirm
+      confirm_label: Confirmation value
     flash:
       success_icon: Check icon
       error_icon: X icon

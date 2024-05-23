@@ -14,14 +14,14 @@
         <% end %>
       <% end %>
       <% if allowed_to?(:export_sample_data?, @group) %>
-       <%= link_to t(".create_export_button"),
-          new_data_export_path(export_type: 'sample'),
-          data: {
-            turbo_stream: true,
-            controller: "action-link",
-            action_link_required_value: 1
-          },
-          class: "button button--size-default button--state-default action-link" %>
+        <%= link_to t(".create_export_button"),
+        new_data_export_path(export_type: "sample"),
+        data: {
+          turbo_stream: true,
+          controller: "action-link",
+          action_link_required_value: 1,
+        },
+        class: "button button--size-default button--state-default action-link" %>
       <% end %>
     </div>
   <% end %>
@@ -41,13 +41,7 @@
       <div class="relative lg:w-72">
         <div
           class="
-            absolute
-            inset-y-0
-            left-0
-            flex
-            items-center
-            pl-3
-            pointer-events-none
+            absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
           "
         >
           <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
@@ -59,15 +53,16 @@
                          "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                        placeholder: t(".search.placeholder") %>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 
   <div class="bg-white dark:bg-slate-800">
     <div class="flex flex-col">
       <div class="overflow-x-auto">
         <%= turbo_frame_tag "group_samples_list",
-        src: group_samples_path(@group, format: :turbo_stream, page: params[:page]),
-        loading: :lazy %>
+                            src: group_samples_path(@group, format: :turbo_stream, page: params[:page]) do %>
+          <%= render partial: "shared/loading/table" %>
+        <% end %>
         <%= turbo_frame_tag "group_samples_pagination" %>
       </div>
     </div>

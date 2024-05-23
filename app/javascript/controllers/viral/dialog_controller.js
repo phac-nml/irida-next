@@ -1,9 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static targets = ['dialog'];
+
   static values = { open: Boolean };
+
   connect() {
-    this.dialog = document.getElementById("dialog");
     if (this.openValue) this.open();
     this.element.setAttribute("data-controller-connected", "true");
   }
@@ -13,11 +15,11 @@ export default class extends Controller {
   }
 
   open() {
-    this.dialog.showModal();
+    this.dialogTarget.showModal();
   }
 
   close() {
-    this.dialog.close();
+    this.dialogTarget.close();
   }
 
   handleEsc(event) {

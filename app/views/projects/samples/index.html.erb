@@ -20,7 +20,7 @@
         data: {
           turbo_stream: true,
           controller: "action-link",
-          action_link_required_value: 1
+          action_link_required_value: 1,
         },
         class: "button button--size-default button--state-default action-link" %>
       <% end %>
@@ -30,25 +30,25 @@
         data: {
           turbo_stream: true,
           controller: "action-link",
-          action_link_required_value: 1
+          action_link_required_value: 1,
         },
         class: "button button--size-default button--state-default action-link" %>
       <% end %>
       <% if allowed_to?(:export_sample_data?, @project) %>
         <%= link_to t(".create_export_button"),
-            new_data_export_path(export_type: 'sample'),
-            data: {
-              turbo_stream: true,
-              controller: "action-link",
-              action_link_required_value: 1
-            },
-            class: "button button--size-default button--state-default action-link" %>
+        new_data_export_path(export_type: "sample"),
+        data: {
+          turbo_stream: true,
+          controller: "action-link",
+          action_link_required_value: 1,
+        },
+        class: "button button--size-default button--state-default action-link" %>
       <% end %>
       <% if allowed_to?(:update_sample?, @project) %>
         <%= link_to t("projects.samples.index.import_metadata_button"),
         new_namespace_project_samples_file_import_path,
         data: {
-          turbo_stream: true
+          turbo_stream: true,
         },
         class: "button button--size-default button--state-default" %>
       <% end %>
@@ -75,13 +75,7 @@
           <div class="relative lg:w-72">
             <div
               class="
-                absolute
-                inset-y-0
-                left-0
-                flex
-                items-center
-                pl-3
-                pointer-events-none
+                absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
               "
             >
               <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
@@ -99,8 +93,7 @@
     <% end %>
   </div>
   <%= turbo_frame_tag "project_samples_list",
-                        src: project_samples_path(@project, format: :turbo_stream, **request.query_parameters),
-                        loading: :lazy do %>
+                      src: project_samples_path(@project, format: :turbo_stream, **request.query_parameters) do %>
     <%= render partial: "shared/loading/table" %>
   <% end %>
   <%= turbo_frame_tag "project_samples_pagination" %>

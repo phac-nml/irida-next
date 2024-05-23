@@ -1,6 +1,18 @@
 # frozen_string_literal: true
 
 require 'simplecov'
+
+module SimpleCov
+  class SourceFile
+    # override this function to silence warnings for erb files which report lines incorrectly
+    def coverage_exceeding_source_warn
+      return if filename.ends_with? '.erb'
+
+      warn "Warning: coverage data provided by Coverage [#{coverage_data['lines'].size}] exceeds number of lines in #{filename} [#{src.size}]" # rubocop:disable Layout/LineLength
+    end
+  end
+end
+
 SimpleCov.start 'rails' do
   add_group 'Graphql', 'app/graphql'
   add_group 'View Components', 'app/components'

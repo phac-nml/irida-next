@@ -5,28 +5,28 @@ require 'application_system_test_case'
 class ConfirmationComponentTest < ApplicationSystemTestCase
   test 'basic confirmation component' do
     visit('/rails/view_components/confirmation_component/default')
-    find('button', text: 'Confirmation').click
+    click_button 'Confirmation'
     assert_text 'Confirmation required'
     assert_text 'Custom modal text here!'
-    find('button', text: 'Cancel').click
+    click_button 'Cancel'
     assert_no_selector 'dialog'
   end
 
   test 'confirmation component with custom content' do
     visit('/rails/view_components/confirmation_component/custom_content')
-    find('button', text: 'Confirmation').click
+    click_button 'Confirmation'
     assert_text 'Confirmation required'
     assert_selector 'div.border-blue-300.bg-blue-50'
-    find('button', text: 'Cancel').click
+    click_button 'Cancel'
     assert_no_selector 'dialog'
   end
 
   test 'confirmation component with custom value' do
     visit('/rails/view_components/confirmation_component/with_confirm_value')
-    find('button', text: 'Delete project').click
+    click_button 'Delete project'
     assert_selector 'button.button--state-destructive:disabled'
     assert_text 'Confirmation required'
-    find('input').set 'Project X'
+    find('input').set 'Project X' # TODO: update this to use fill_in
     assert_selector 'button.button--state-destructive'
   end
 end
