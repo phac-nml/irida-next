@@ -32,11 +32,13 @@ module Viral
       @dialog_size = SIZE_MAPPINGS[size]
       @system_arguments = system_arguments
 
+      @system_arguments[:data] = { 'viral--dialog-target' => 'dialog' }
+
       return if closable
 
-      @system_arguments[:data] = {
-        action: 'keydown.esc->viral--dialog#handleEsc'
-      }
+      @system_arguments[:data].merge!({
+                                        action: 'keydown.esc->viral--dialog#handleEsc'
+                                      })
     end
 
     def render_footer?
