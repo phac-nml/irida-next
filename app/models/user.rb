@@ -27,7 +27,6 @@ class User < ApplicationRecord
 
   has_many :personal_access_tokens, dependent: :destroy
   has_many :data_exports, dependent: :destroy
-  has_many :namespace_bots, class_name: 'NamespaceBot', dependent: :destroy
 
   validates :first_name, presence: true
   validates :last_name, presence: true

@@ -31,11 +31,17 @@ module AutomatedWorkflowExecutions
     end
 
     test 'doesn\'t create workflow execution with invalid project bot' do
-      skip 'enable this test once WorkflowExecutions::CreateService has been updated to perform authorization'
-      assert_no_difference -> { WorkflowExecution.count } do
+      exception = assert_raises(ActionPolicy::Unauthorized) do
         AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample, @pe_attachment_pair,
                                                        users(:project1_automation_bot)).execute
       end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :submit_workflow?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.submit_workflow?',
+                          name: @sample.project.name, namespace_type: @sample.project.namespace.type),
+                   exception.result.message
     end
 
     test 'sets the name in the created workflow execution to samples puid if automated workflow execution doesn\'t have a name' do # rubocop:disable Layout/LineLength
