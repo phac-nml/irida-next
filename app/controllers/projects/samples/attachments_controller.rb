@@ -60,12 +60,6 @@ module Projects
         end
       end
 
-      def download
-        authorize! @project, to: :read_sample?
-
-        send_data @attachment.file.download, filename: @attachment.file.filename.to_s
-      end
-
       private
 
       def attachment_params

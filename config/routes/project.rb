@@ -48,9 +48,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           get :select
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
-          member do
-            get :download
-          end
           scope module: :attachments, as: :attachments do
             collection do
               resource :concatenation, only: %i[create new]

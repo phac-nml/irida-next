@@ -113,19 +113,6 @@ module Projects
                  as: :turbo_stream
         end
       end
-
-      test 'user with access can download the attachment' do
-        get download_namespace_project_sample_attachment_url(@namespace, @project, @sample1, @attachment1)
-
-        assert_response :success
-      end
-
-      test 'user without access cannot download the attachment' do
-        sign_in users(:user_no_access)
-        get download_namespace_project_sample_attachment_url(@namespace, @project, @sample1, @attachment1)
-
-        assert_response :unauthorized
-      end
     end
   end
 end

@@ -33,26 +33,22 @@
           <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.file.filename,
-            download_namespace_project_sample_attachment_path(
-              sample_id: @sample.id,
-              id: attachment.id
-            ),
+            rails_blob_path(attachment.file),
             data: {
               turbo: false
-            } %>
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
         </div>
         <div class="flex items-center">
           <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.associated_attachment.file.filename,
-            download_namespace_project_sample_attachment_path(
-              sample_id: @sample.id,
-              id: attachment.metadata["associated_attachment_id"]
-            ),
+            rails_blob_path(attachment.associated_attachment.file),
             data: {
               turbo: false
-            } %>
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
         </div>
       </div>
@@ -64,13 +60,11 @@
           <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.file.filename,
-            download_namespace_project_sample_attachment_path(
-              sample_id: @sample.id,
-              id: attachment.id
-            ),
+            rails_blob_path(attachment.file),
             data: {
               turbo: false
-            } %>
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
         </div>
       </div>
