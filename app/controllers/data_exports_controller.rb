@@ -38,12 +38,6 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     end
   end
 
-  def download
-    authorize! @data_export, to: :download?
-
-    send_data @data_export.file.download, filename: @data_export.file.filename.to_s
-  end
-
   def create
     @data_export = DataExports::CreateService.new(current_user, data_export_params).execute
 

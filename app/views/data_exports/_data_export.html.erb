@@ -39,10 +39,10 @@
     <% end %>
   </td>
   <td class="px-6 py-3 space-x-2">
-    <% if data_export.status == 'ready' %>
+    <% if data_export.status == 'ready' && allowed_to?(:download?, data_export) %>
       <%= link_to(
         t(:"data_exports.index.actions.download"),
-        download_data_export_path(data_export),
+        rails_blob_path(data_export.file),
         data: {
           turbo: false,
         },

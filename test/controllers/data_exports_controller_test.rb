@@ -14,17 +14,6 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should download export' do
-    get download_data_export_path(@data_export1)
-    assert_response :success
-  end
-
-  test 'should not download export without authorization' do
-    sign_in users(:jane_doe)
-    get download_data_export_path(@data_export1)
-    assert_response :unauthorized
-  end
-
   test 'should create new export with viable params' do
     params = { 'data_export' => { 'export_type' => 'sample', 'export_parameters' => { 'ids' => [@sample1.id] } },
                format: :turbo_stream }

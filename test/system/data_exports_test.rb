@@ -180,7 +180,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_export_path(@data_export2)
 
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t(:'data_exports.show.download')
     assert_no_text I18n.t(:'data_exports.show.tabs.preview')
   end
