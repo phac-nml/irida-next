@@ -13,12 +13,16 @@ module Bots
     end
 
     test 'destroy project bot account' do
+      assert_not NamespaceBot.only_deleted.include?(@project_bot)
+
       assert_difference -> { NamespaceBot.count } => -1,
-                        -> { User.count } => 0,
-                        -> { PersonalAccessToken.count } => 0,
+                        -> { User.count } => -1,
+                        -> { PersonalAccessToken.count } => -1,
                         -> { Member.count } => -1 do
         Bots::DestroyService.new(@project_bot, @user).execute
       end
+
+      assert NamespaceBot.only_deleted.include?(@project_bot)
     end
 
     test 'valid authorization to destroy project bot account' do
@@ -45,12 +49,16 @@ module Bots
     end
 
     test 'destroy group bot account' do
+      assert_not NamespaceBot.only_deleted.include?(@group_bot)
+
       assert_difference -> { NamespaceBot.count } => -1,
-                        -> { User.count } => 0,
-                        -> { PersonalAccessToken.count } => 0,
+                        -> { User.count } => -1,
+                        -> { PersonalAccessToken.count } => -1,
                         -> { Member.count } => -1 do
         Bots::DestroyService.new(@group_bot, @user).execute
       end
+
+      assert NamespaceBot.only_deleted.include?(@group_bot)
     end
 
     test 'valid authorization to destroy group bot account' do

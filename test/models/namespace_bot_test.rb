@@ -24,14 +24,18 @@ class NamespaceBotTest < ActiveSupport::TestCase
   test 'destroying a namespace bot should destroy the underlying bot user' do
     namespace_bot = namespace_bots(:project1_bot0)
 
+    assert_not NamespaceBot.only_deleted.include?(namespace_bot)
+
     assert_difference(
       -> { NamespaceBot.count } => -1,
-      -> { User.count } => 0,
-      -> { PersonalAccessToken.count } => 0,
+      -> { User.count } => -1,
+      -> { PersonalAccessToken.count } => -1,
       -> { Member.count } => -1
     ) do
       namespace_bot.destroy
     end
+
+    assert NamespaceBot.only_deleted.include?(namespace_bot)
   end
 
   test 'validate_bot_user_type' do
@@ -46,18 +50,5 @@ class NamespaceBotTest < ActiveSupport::TestCase
 
     invalid_user_bot.validate_bot_user_type
     assert invalid_user_bot.errors.full_messages.any?
-  end
-
-  test 'remove_membership_from_namespace' do
-    namespace_bot = namespace_bots(:project1_bot0)
-    membership = namespace_bot.user.members.find_by(namespace: namespace_bot.namespace)
-
-    assert_not_nil membership
-    assert namespace_bot.membership
-    assert_equal membership, namespace_bot.membership
-
-    namespace_bot.remove_membership_from_namespace
-    assert_nil namespace_bot.reload.membership
-    assert membership.reload.deleted?
   end
 end
