@@ -2,31 +2,29 @@
   title: @data_export.name || @data_export.id, id: @data_export.name.nil? ? nil : @data_export.id) do |component| %>
   <%= component.with_buttons do %>
     <div class="flex flex-row">
-      <% if allowed_to?(:download?, @data_export) %>
-        <% if @data_export.status == 'ready' %>
-          <%= link_to(
-            t("data_exports.show.download"),
-            rails_blob_path(@data_export.file),
-            class: "button button--state-primary button--size-default"
-          ) %>
-        <% else %>
-          <button
-              class="
-              button
-              button--size-default
-              button--state-default
-              pointer-events-none
-              cursor-not-allowed
-              bg-slate-100
-              text-slate-600
-              dark:bg-slate-600
-              dark:text-slate-300
-              border-slate-100
-              dark:border-slate-600
-            "
-            ><%= t("data_exports.show.download")%>
-            </button>
-        <% end %>
+      <% if @data_export.status == 'ready' %>
+        <%= link_to(
+          t("data_exports.show.download"),
+          rails_blob_path(@data_export.file),
+          class: "button button--state-primary button--size-default"
+        ) %>
+      <% else %>
+        <button
+            class="
+            button
+            button--size-default
+            button--state-default
+            pointer-events-none
+            cursor-not-allowed
+            bg-slate-100
+            text-slate-600
+            dark:bg-slate-600
+            dark:text-slate-300
+            border-slate-100
+            dark:border-slate-600
+          "
+          ><%= t("data_exports.show.download")%>
+          </button>
       <% end %>
         <%= link_to(
           t("data_exports.show.remove_button"),
