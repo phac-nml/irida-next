@@ -6,6 +6,8 @@ require 'tempfile'
 module WorkflowExecutions
   # Service used to Prepare a WorkflowExecution
   class PreparationService < BaseService
+    include BlobHelper
+
     def initialize(workflow_execution, user = nil, params = {})
       super(user, params)
       @workflow_execution = workflow_execution
@@ -14,7 +16,7 @@ module WorkflowExecutions
       @storage_service = ActiveStorage::Blob.service
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/MethodLength
       # confirm params/permissions
       # build workflow execution run directory
       @workflow_execution.blob_run_directory = generate_run_directory
@@ -23,14 +25,22 @@ module WorkflowExecutions
       process_samples_workflow_executions
 
       # persist samplesheet in run dir
-      samplesheet_key = generate_input_key('samplesheet.csv')
+      samplesheet_key = generate_input_key(
+        run_dir: @workflow_execution.blob_run_directory,
+        filename: 'samplesheet.csv',
+        prefix: ''
+      )
       @workflow_execution.inputs.attach(io: samplesheet_file, key: samplesheet_key,
                                         filename: 'samplesheet.csv')
 
       @workflow_execution.workflow_params = @workflow_execution.workflow_params.merge(
         {
           input: blob_key_to_service_path(samplesheet_key),
-          outdir: blob_key_to_service_path(generate_input_key('output'), directory: true)
+          outdir: blob_key_to_service_path(generate_input_key(
+                                             run_dir: @workflow_execution.blob_run_directory,
+                                             filename: 'output',
+                                             prefix: ''
+                                           ), directory: true)
         }
       )
 
@@ -41,10 +51,6 @@ module WorkflowExecutions
     end
 
     private
-
-    def generate_run_directory
-      ActiveStorage::Blob.generate_unique_secure_token
-    end
 
     def parse_attachments_from_samplesheet(samplesheet)
       attachments = {}
@@ -72,27 +78,14 @@ module WorkflowExecutions
       end
     end
 
-    def generate_input_key(filename, prefix = '')
-      format('%<run_dir>s/%<prefix>s%<filename>s', run_dir: @workflow_execution.blob_run_directory, filename:, prefix:)
-    end
-
-    def compose_blob_with_custom_key(blob, key)
-      ActiveStorage::Blob.new(
-        key:,
-        filename: blob.filename,
-        byte_size: blob.byte_size,
-        checksum: blob.checksum,
-        content_type: blob.content_type
-      ).tap do |copied_blob|
-        copied_blob.compose([blob.key])
-        copied_blob.save!
-      end
-    end
-
     def copy_attachment_to_run_dir(attachment, attachable)
-      key = generate_input_key(attachment.filename, format('input/%<attachable_type>s_%<attachable_id>s/',
-                                                           attachable_type: attachment.attachable_type,
-                                                           attachable_id: attachment.attachable_id))
+      key = generate_input_key(
+        run_dir: @workflow_execution.blob_run_directory,
+        filename: attachment.filename,
+        prefix: format('input/%<attachable_type>s_%<attachable_id>s/',
+                       attachable_type: attachment.attachable_type,
+                       attachable_id: attachment.attachable_id)
+      )
 
       blob = compose_blob_with_custom_key(attachment.file, key)
 

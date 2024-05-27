@@ -284,6 +284,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_23_185248) do
     t.integer "state", default: 0, null: false
     t.string "name"
     t.uuid "namespace_id"
+    t.boolean "cleaned", default: false, null: false
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["namespace_id"], name: "index_workflow_executions_on_namespace_id"
     t.index ["state"], name: "index_workflow_executions_on_state"

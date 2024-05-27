@@ -2,6 +2,27 @@
 
 # Blob service helper to handle interactions with blobs
 module BlobHelper
+  def generate_run_directory
+    ActiveStorage::Blob.generate_unique_secure_token
+  end
+
+  def generate_input_key(run_dir:, filename:, prefix:)
+    format('%<run_dir>s/%<prefix>s%<filename>s', run_dir:, filename:, prefix:)
+  end
+
+  def compose_blob_with_custom_key(blob, key)
+    ActiveStorage::Blob.new(
+      key:,
+      filename: blob.filename,
+      byte_size: blob.byte_size,
+      checksum: blob.checksum,
+      content_type: blob.content_type
+    ).tap do |copied_blob|
+      copied_blob.compose([blob.key])
+      copied_blob.save!
+    end
+  end
+
   def download_decompress_parse_gziped_json(blob_file_path)
     JSON.parse(
       ActiveSupport::Gzip.decompress(
