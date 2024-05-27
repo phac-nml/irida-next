@@ -29,7 +29,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
 
-  class << self # rubocop:disable Metrics/ClassLength
+  class << self
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -119,6 +119,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def can_update_namespace_with_group_link?(user, object_namespace)
       can_modify?(user, object_namespace)
+    end
+
+    def can_view_workflows?(user, object_namespace)
+      effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
     end
 
     def can_submit_workflow?(user, object_namespace)
