@@ -1,6 +1,6 @@
 ---
 id: manage
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Manage Groups
@@ -24,7 +24,7 @@ To create a group:
   * Select **Main menu > Groups > View all groups**, and on the right, select **New group**.
   * To the left of the search box, select the plus sign and then **New group**.
 2. Select **Create group**.
-3. Enter a name for the group in **Group name**. For a list of words that cannot be used as group names, see [reserved names](../../project/reserved_names).
+3. Enter a name for the group in **Group name**. For a list of words that cannot be used as group names, see [reserved names](../../project/projects/reserved-names).
 4. Enter a path for the group in **Group URL**, which is used for the [namespace](../namespaces).
 
 ## Remove a group

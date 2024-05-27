@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-id: share_projects
+id: share-projects
 title: Share Projects
 ---
 

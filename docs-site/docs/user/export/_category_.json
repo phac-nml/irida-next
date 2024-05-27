@@ -1,0 +1,9 @@
+{
+  "label": "Export your data",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "slug": "/export",
+    "description": "Export your data from IRIDA Next."
+  }
+}

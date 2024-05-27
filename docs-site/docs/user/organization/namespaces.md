@@ -31,4 +31,4 @@ To determine whether you're viewing a group or personal namespace, you can view 
 
 ## Naming limitations for namespaces
 
-When choosing a name for your namespace, keep in mind the [character limitations](../project/reserved_names#limitations-on-projects-and-groups) and [reserved group names](../project/reserved_names#reserved-group-names).
+When choosing a name for your namespace, keep in mind the [character limitations](../project/projects/reserved-names#limitations-on-projects-and-groups),  [reserved group names](../organization/groups/reserved-names) and [reserved project names](../project/projects/reserved-names).

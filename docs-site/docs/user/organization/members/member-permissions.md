@@ -30,18 +30,18 @@ Any user can remove themselves from a group, unless they are the last Owner of t
 
 The following table lists group permissions available for each role:
 
-| Action                       | Guest | Analyst | Maintainer | Owner |
-| :--------------------------- | :---- | :------ | :--------- | :---- |
-| Create Group and Subgroups   |       |         | ✓          | ✓     |
-| Edit Group and Subgroups     |       |         | ✓          | ✓     |
-| Delete Group and Subgroups   |       |         |            | ✓     |
-| View Group and Subgroups     | ✓     | ✓       | ✓          | ✓     |
-| Transfer Group and Subgroups |       |         |            | ✓     |
-| Add Group Member             |       |         | ✓(1)       | ✓     |
-| Edit Group Member            |       |         | ✓(1)       | ✓     |
-| Remove Group Member          |       |         | ✓(1)       | ✓     |
-| View Group Members           | ✓     | ✓       | ✓          | ✓     |
-
+| Action                       | Guest | Uploader | Analyst | Maintainer | Owner |
+| :--------------------------- | :---- | :------- | :------ | :--------- | :---- |
+| Create Group and Subgroups   |       |          |         | ✓          | ✓     |
+| Edit Group and Subgroups     |       |          |         | ✓          | ✓     |
+| Delete Group and Subgroups   |       |          |         |            | ✓     |
+| View Group and Subgroups     | ✓     |          | ✓       | ✓          | ✓     |
+| Transfer Group and Subgroups |       |          |         |            | ✓     |
+| Add Group Member             |       |          |         | ✓(1)       | ✓     |
+| Edit Group Member            |       |          |         | ✓(1)       | ✓     |
+| Remove Group Member          |       |          |         | ✓(1)       | ✓     |
+| View Group Members           | ✓     |          | ✓       | ✓          | ✓     |
+<!-- TODO: Add uploader actions -->
 1. A user with the **Maintainer** role can only modify members upto and including their role
 
 ## Subgroup permissions
@@ -65,6 +65,6 @@ When you add a member to a subgroup where they are also a member of one of the p
 | Edit Samples          |       |         | ✓          | ✓     |
 | Delete Samples        |       |         |            | ✓     |
 | Transfer Samples      |       |         | ✓(2)       | ✓     |
-
+<!-- TODO: Add metadata, files, history, bot account permissions to project members permissions table -->
 1. A user with the **Maintainer** role can only modify members upto and including their role
 2. A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project
