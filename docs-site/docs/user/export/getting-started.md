@@ -4,4 +4,4 @@ id: getting-started
 title: Getting Started
 ---
 
-<!-- TODO: Requirements to export data -->
+In IRIDA Next, you can export multiple sample or analysis files at once by creating an export.
