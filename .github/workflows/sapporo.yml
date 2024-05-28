@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: phac-nml/sapporo-service
-          ref: irida-next-chown
+          ref: irida-next
           path: ./sapporo
       - name: Build Sapporo
         run: |
