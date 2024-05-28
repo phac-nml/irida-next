@@ -7,6 +7,7 @@ module Types
     description 'A workflow execution'
 
     field :blob_run_directory, String, null: true, description: 'WorkflowExecution blob run directory'
+    field :cleaned, Boolean, null: false, description: 'WorkflowExecution cleaned status'
     field :http_error_code, Integer, null: true, description: 'WorkflowExecution http error code'
     field :metadata,
           GraphQL::Types::JSON,

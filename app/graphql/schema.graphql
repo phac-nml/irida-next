@@ -2885,6 +2885,11 @@ type WorkflowExecution implements Node {
   blobRunDirectory: String
 
   """
+  WorkflowExecution cleaned status
+  """
+  cleaned: Boolean!
+
+  """
   WorkflowExecution http error code
   """
   httpErrorCode: Int
