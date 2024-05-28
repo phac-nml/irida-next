@@ -205,8 +205,8 @@ projectA_automation_bot:
   last_name: Automation Bot
   user_type: <%= User.user_types[:project_automation_bot] %>
 
-project_end_to_end_user:
-  email: <%= "project_end_to_end_user@localhost" %>
+janitor_doe:
+  email: <%= "janitor_doe@localhost" %>
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: project
   last_name: "end to end user"

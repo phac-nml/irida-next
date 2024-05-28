@@ -657,7 +657,7 @@ irida_next_example_end_to_end:
   }
   workflow_engine_parameters: { "-r": "1.0.2" }
   workflow_url: "https://github.com/phac-nml/iridanextexample"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project_end_to_end_user, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_end_to_end_namespace, :uuid) %>
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   state: "initial"
   cleaned: false

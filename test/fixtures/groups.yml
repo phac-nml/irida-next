@@ -363,11 +363,11 @@ user30_group_one:
   metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABH
 
-group_end_to_end:
+janitor_doe_group:
   name: Group EndToEnd
   path: group-end_to_end
   type: Group
   description: Group 1 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:project_end_to_end_user, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   metadata_summary: {}
   puid: INXT_GRP_ABAAAAAAAA

@@ -216,6 +216,6 @@ user29_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user29, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:user29_project1_namespace, :uuid) %>
 
-project_end_to_end:
-  creator_id: <%= ActiveRecord::FixtureSet.identify(:project_end_to_end_user, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_end_to_end_namespace, :uuid) %>
+project_janitor_end_to_end:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
