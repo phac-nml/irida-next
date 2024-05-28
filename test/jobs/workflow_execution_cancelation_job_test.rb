@@ -57,7 +57,7 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
@@ -83,7 +83,7 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
@@ -109,7 +109,7 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)

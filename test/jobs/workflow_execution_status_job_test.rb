@@ -62,7 +62,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
@@ -91,7 +91,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
@@ -120,7 +120,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)

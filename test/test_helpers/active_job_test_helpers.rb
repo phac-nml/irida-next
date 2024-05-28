@@ -3,18 +3,34 @@
 require 'minitest/mock'
 
 module ActiveJobTestHelpers
-  # jobs that are retried must be run one at a time to prevent stack errors
-  # This functions the same as `perform_enqueued_jobs(only: MyJob)` but one at a time
-  def perform_enqueued_jobs_one_at_a_time(only_class:)
-    while enqueued_jobs.count >= 1 && enqueued_jobs.first['job_class'] == only_class.name
-      # run a single queued job
-      currently_queued_job = enqueued_jobs.first
+  # # jobs that are retried must be run one at a time to prevent stack errors
+  # # This functions the same as `perform_enqueued_jobs(only: MyJob)` but one at a time
+  # def perform_enqueued_jobs_one_at_a_time(only_class:)
+  #   while enqueued_jobs.count >= 1 && enqueued_jobs.first['job_class'] == only_class.name
+  #     # run a single queued job
+  #     currently_queued_job = enqueued_jobs.first
+  #     perform_enqueued_jobs(
+  #       only: lambda { |job|
+  #         job['job_id'] == currently_queued_job['job_id'] && \
+  #         job['job_class'] == only_class.name
+  #       }
+  #     )
+  #   end
+  # end
+
+  # Jobs that are retried must be run one at a time with a short delay to prevent stack errors
+  # Allows use of only/except to exit early like perform_enqueued_jobs does
+  def perform_enqueued_jobs_sequentially(delay_seconds: 1, only: nil, except: nil) # rubocop:disable Metrics/AbcSize
+    class_filter = lambda { |job_class|
+      (only.nil? || job_class == only.name) &&
+        (except.nil? || job_class != except.name)
+    }
+
+    while enqueued_jobs.count >= 1 && class_filter.call(enqueued_jobs.first['job_class'])
       perform_enqueued_jobs(
-        only: lambda { |job|
-          job['job_id'] == currently_queued_job['job_id'] && \
-          job['job_class'] == only_class.name
-        }
+        only: ->(job) { job['job_id'] == enqueued_jobs.first['job_id'] }
       )
+      sleep(delay_seconds)
     end
   end
 
