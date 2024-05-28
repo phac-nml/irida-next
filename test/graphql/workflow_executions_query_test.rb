@@ -27,6 +27,7 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
         ... on WorkflowExecution {
           id
           blobRunDirectory
+          cleaned
           httpErrorCode
           metadata
           runId
