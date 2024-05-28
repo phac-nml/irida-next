@@ -661,3 +661,105 @@ irida_next_example_end_to_end:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   state: "initial"
   cleaned: false
+
+irida_next_example_completed_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "completed"
+  cleaned: true
+
+irida_next_example_error_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "error"
+  cleaned: true
+
+irida_next_example_canceled_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "canceled"
+  cleaned: true
+
+irida_next_example_completed_unclean_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "completed"
+  cleaned: false
+
+irida_next_example_error_unclean_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "error"
+  cleaned: false
+
+irida_next_example_canceled_unclean_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "canceled"
+  cleaned: false

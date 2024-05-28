@@ -219,3 +219,7 @@ user29_project1:
 project_janitor_end_to_end:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+
+project_janitor_DELETE:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>

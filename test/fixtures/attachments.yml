@@ -253,3 +253,39 @@ attachmentEndToEndREV:
     }
   attachable: sampleEndToEnd (Sample)
   puid: INXT_ATT_ABAAAAAAAB
+
+attachmentDELETE:
+  metadata:
+    {
+      "format": "fastq",
+      "compression": "none",
+    }
+  attachable: sampleDELETE (Sample)
+  puid: INXT_ATT_ABAAAAAAAC
+
+attachment_completed_unclean_DELETE:
+  metadata:
+    {
+      "format": "fastq",
+      "compression": "none",
+    }
+  attachable: sample_completed_unclean_DELETE (Sample)
+  puid: INXT_ATT_ABAAAAAAAD
+
+attachment_error_unclean_DELETE:
+  metadata:
+    {
+      "format": "fastq",
+      "compression": "none",
+    }
+  attachable: sample_error_unclean_DELETE (Sample)
+  puid: INXT_ATT_ABAAAAAAAE
+
+attachment_canceled_unclean_DELETE:
+  metadata:
+    {
+      "format": "fastq",
+      "compression": "none",
+    }
+  attachable: sample_canceled_unclean_DELETE (Sample)
+  puid: INXT_ATT_ABAAAAAAAF

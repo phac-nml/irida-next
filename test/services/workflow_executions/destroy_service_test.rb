@@ -6,6 +6,7 @@ module WorkflowExecutions
   class DestroyServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
+      @user_destroyable = users(:janitor_doe)
     end
 
     test 'should not destroy a workflow execution if the user is not the submitter' do
@@ -50,14 +51,14 @@ module WorkflowExecutions
     end
 
     test 'should destroy a completed workflow execution' do
-      workflow_execution = workflow_executions(:irida_next_example_completed)
+      workflow_execution = workflow_executions(:irida_next_example_completed_DELETE)
       assert workflow_execution.completed?
       assert workflow_execution.cleaned?
 
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
       end
     end
 
@@ -73,14 +74,14 @@ module WorkflowExecutions
     end
 
     test 'should destroy an errored workflow execution' do
-      workflow_execution = workflow_executions(:irida_next_example_error)
+      workflow_execution = workflow_executions(:irida_next_example_error_DELETE)
       assert workflow_execution.error?
       assert workflow_execution.cleaned?
 
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
       end
     end
 
@@ -106,14 +107,14 @@ module WorkflowExecutions
     end
 
     test 'should destroy a canceled workflow execution' do
-      workflow_execution = workflow_executions(:irida_next_example_canceled)
+      workflow_execution = workflow_executions(:irida_next_example_canceled_DELETE)
       assert workflow_execution.canceled?
       assert workflow_execution.cleaned?
 
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
       end
     end
 
