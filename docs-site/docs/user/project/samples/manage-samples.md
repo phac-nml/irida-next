@@ -50,7 +50,7 @@ To update sample details:
 6. Enter an optional description for the sample in the **Description** field
 7. Select **Update sample**
 
-## Transfer samples
+## Transfer Samples
 
 Prerequisites:
 
@@ -70,7 +70,7 @@ To transfer samples into another project:
 4. Select **Transfer samples**
 5. From the transfer samples pop-up, select the project to which you would like to transfer the samples to, and select **Submit**
 
-## Clone samples
+## Clone Samples
 
 Prerequisites:
 
