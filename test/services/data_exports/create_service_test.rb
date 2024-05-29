@@ -134,6 +134,25 @@ module DataExports
       end
     end
 
+    test 'analyst authorized to create workflow execution export' do
+      valid_params = { 'export_type' => 'analysis',
+                       'export_parameters' => { 'ids' => [@workflow_execution1.id] } }
+      user = users(:james_doe)
+
+      assert_authorized_to(:export_workflow_execution_data?, @workflow_execution1, with: WorkflowExecutionPolicy,
+                                                                                   context: { user: }) do
+        DataExports::CreateService.new(user, valid_params).execute
+      end
+    end
+
+    test 'guest unauthorized to create workflow execution export' do
+      valid_params = { 'export_type' => 'analysis',
+                       'export_parameters' => { 'ids' => [@workflow_execution1.id] } }
+      user = users(:ryan_doe)
+
+      assert_raises(ActionPolicy::Unauthorized) { DataExports::CreateService.new(user, valid_params).execute }
+    end
+
     test 'data export with valid parameters but unauthorized for workflow execution export' do
       valid_params = { 'export_type' => 'analysis',
                        'export_parameters' => { 'ids' => [@workflow_execution1.id] } }
