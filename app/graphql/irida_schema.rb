@@ -92,4 +92,8 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
       }
     )
   end
+
+  rescue_from(ActionPolicy::AuthorizationContextMissing) do
+    raise GraphQL::ExecutionError, 'Unable to access object while accessing the API in guest mode'
+  end
 end
