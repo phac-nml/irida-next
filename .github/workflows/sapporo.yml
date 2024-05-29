@@ -76,8 +76,3 @@ jobs:
       - name: Run tests
         run: |
           bin/rails test test/integration/sapporo.rb
-      - name: Report coverage
-        if: github.event_name == 'pull_request'
-        uses: aki77/simplecov-report-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
