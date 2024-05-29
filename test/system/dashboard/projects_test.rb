@@ -94,6 +94,7 @@ module Dashboard
     test 'can filter and then sort the list of projects' do
       visit dashboard_projects_url
 
+      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_selector 'tr', count: 20
       within first('tr') do
@@ -101,14 +102,14 @@ module Dashboard
       end
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
 
-      sleep 1
+      assert_text 'Displaying 12 items'
       assert_selector 'tr', count: 12
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
-      sleep 1
+      assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_selector 'tr', count: 12
