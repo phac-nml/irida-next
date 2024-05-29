@@ -157,7 +157,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(
-        personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id),
+        personal_projects: relation.where(namespace: user.namespace&.project_namespaces).select(:id),
         direct_projects: relation.where(
           namespace: user.members.not_expired.joins(:namespace).where(
             namespace: { type: Namespaces::ProjectNamespace.sti_name }
@@ -223,7 +223,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation, :manageable do |relation| # rubocop:disable Metrics/BlockLength
     relation.with(
-      personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id),
+      personal_projects: relation.where(namespace: user.namespace&.project_namespaces).select(:id),
       direct_projects: relation.where(
         namespace: user.members.not_expired.joins(:namespace).where(
           access_level: Member::AccessLevel.manageable,
@@ -267,7 +267,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   scope_for :relation, :personal do |relation|
     relation
       .with(
-        personal_projects: relation.where(namespace: user.namespace.project_namespaces).select(:id)
+        personal_projects: relation.where(namespace: user.namespace&.project_namespaces).select(:id)
       )
       .where(
         Arel.sql(
