@@ -48,7 +48,7 @@ jobs:
         run: pnpm install
       - name: Run tests
         run: |
-          bin/rails test:all --except "/test_integration_sapporo*/"
+          bin/rails test:all --exclude "/test_integration_sapporo*/"
       - name: Report coverage
         if: github.event_name == 'pull_request'
         uses: aki77/simplecov-report-action@v1
