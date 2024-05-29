@@ -4,7 +4,7 @@ module Projects
   module Samples
     # Controller actions for Project Samples Attachments
     class AttachmentsController < Projects::Samples::ApplicationController
-      before_action :attachment, only: %i[destroy download]
+      before_action :attachment, only: %i[destroy]
 
       def new
         authorize! @project, to: :update_sample?

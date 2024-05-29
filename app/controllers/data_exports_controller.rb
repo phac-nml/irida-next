@@ -4,7 +4,7 @@
 class DataExportsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
 
-  before_action :data_export, only: %i[download destroy show]
+  before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[index destroy]
   before_action :current_page
   before_action :set_default_tab, only: :show
