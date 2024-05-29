@@ -62,6 +62,8 @@ Otherwise:
 - You must have at least an **Owner** role in the project you are transferring from
 - You must have at least a **Maintainer** role in the project you are transferring into
 
+To transfer samples into another project:
+
 1. From the left sidebar, select **Projects**, select the project
 2. From the left sidebar, select **Samples**
 3. Select the checkboxes for the samples that you would like to transfer
@@ -75,6 +77,8 @@ Prerequisites:
 - You must have access to the project from which you are cloning samples, and the project into which you are cloning either through membership, or through a namespace share
 - You must have at least a **Maintainer** role in the project you are cloning from
 - You must have at least a **Maintainer** role in the project you are cloning into
+
+To clone samples into another project:
 
 1. From the left sidebar, select **Projects**, select the project
 2. From the left sidebar, select **Samples**
