@@ -518,3 +518,13 @@ user29_project1_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:user29_namespace, :uuid) %>
   metadata_summary: {}
   puid: INXT_PRJ_AAAAAAACBD
+
+project_janitor_namespace:
+  name: Project EndToEnd
+  path: project-end_to_end
+  description: Project EndToEnd description
+  type: Project
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe_group, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  metadata_summary: {}
+  puid: INXT_PRJ_ABAAAAAAAA

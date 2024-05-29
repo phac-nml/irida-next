@@ -139,6 +139,8 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   end
 
   test 'deletable' do
+    # Test cleaned workflow execution
+    @workflow_execution_valid.cleaned = true
     @workflow_execution_valid.state = :completed
     assert @workflow_execution_valid.deletable?
 
@@ -147,6 +149,35 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
 
     @workflow_execution_valid.state = :canceled
     assert @workflow_execution_valid.deletable?
+
+    @workflow_execution_valid.state = :initial
+    assert_not @workflow_execution_valid.deletable?
+
+    @workflow_execution_valid.state = :submitted
+    assert_not @workflow_execution_valid.deletable?
+
+    @workflow_execution_valid.state = :running
+    assert_not @workflow_execution_valid.deletable?
+
+    @workflow_execution_valid.state = :prepared
+    assert_not @workflow_execution_valid.deletable?
+
+    @workflow_execution_valid.state = :completing
+    assert_not @workflow_execution_valid.deletable?
+
+    @workflow_execution_valid.state = :canceling
+    assert_not @workflow_execution_valid.deletable?
+
+    # Test unclean workflow execution
+    @workflow_execution_valid.cleaned = false
+    @workflow_execution_valid.state = :completed
+    assert_not @workflow_execution_valid.deletable?
+
+    @workflow_execution_valid.state = :error
+    assert_not @workflow_execution_valid.deletable?
+
+    @workflow_execution_valid.state = :canceled
+    assert_not @workflow_execution_valid.deletable?
 
     @workflow_execution_valid.state = :initial
     assert_not @workflow_execution_valid.deletable?

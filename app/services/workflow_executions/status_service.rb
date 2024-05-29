@@ -10,7 +10,7 @@ module WorkflowExecutions
       @wes_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: wes_connection)
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    def execute
       return false if @workflow_execution.run_id.nil?
 
       run_status = @wes_client.get_run_status(@workflow_execution.run_id)
@@ -20,7 +20,7 @@ module WorkflowExecutions
       new_state = if state == 'RUNNING'
                     :running
                   elsif state == 'COMPLETE'
-                    :completing if state == 'COMPLETE'
+                    :completing
                   elsif Integrations::Ga4ghWesApi::V1::States::CANCELATION_STATES.include?(state)
                     :canceled
                   elsif Integrations::Ga4ghWesApi::V1::States::ERROR_STATES.include?(state)

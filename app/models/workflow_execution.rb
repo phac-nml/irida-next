@@ -54,7 +54,7 @@ class WorkflowExecution < ApplicationRecord
   end
 
   def deletable?
-    %w[completed error canceled].include?(state)
+    %w[completed error canceled].include?(state) && cleaned?
   end
 
   def sent_to_ga4gh?

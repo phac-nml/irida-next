@@ -294,3 +294,48 @@ sample46:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
+
+sampleEndToEnd:
+  name: Sample EndToEnd
+  description: Sample EndToEnd description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_end_to_end, :uuid) %>
+  puid: INXT_SAM_ABAAAAAAAA
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sampleDELETE:
+  name: Sample EndToEnd
+  description: Sample EndToEnd description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_DELETE, :uuid) %>
+  puid: INXT_SAM_ABAAAAAAAB
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample_completed_unclean_DELETE:
+  name: Sample Completed Unclean
+  description: Sample Completed Unclean description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_DELETE, :uuid) %>
+  puid: INXT_SAM_ABAAAAAAAD
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample_error_unclean_DELETE:
+  name: Sample Error Unclean
+  description: Sample Error Unclean description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_DELETE, :uuid) %>
+  puid: INXT_SAM_ABAAAAAAAE
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample_canceled_unclean_DELETE:
+  name: Sample Canceled Unclean
+  description: Sample Canceled Unclean description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_DELETE, :uuid) %>
+  puid: INXT_SAM_ABAAAAAAAF
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>

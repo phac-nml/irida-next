@@ -31,6 +31,7 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
     end
 
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs 1
     assert @workflow_execution.reload.submitted?
   end
@@ -55,9 +56,10 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionSubmissionJob)
     end
 
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs 6
     assert @workflow_execution.reload.submitted?
   end
@@ -80,9 +82,10 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionSubmissionJob)
     end
 
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs 3
     @workflow_execution.reload
     assert @workflow_execution.error?
@@ -105,9 +108,10 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_one_at_a_time(only_class: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs_sequentially(only: WorkflowExecutionSubmissionJob)
     end
 
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs 2
     assert @workflow_execution.reload.submitted?
   end

@@ -46,6 +46,7 @@ irida_next_example:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   email_notification: true
+  cleaned: false
 
 irida_next_example_prepared:
   <<: *DEFAULTS
@@ -66,6 +67,7 @@ irida_next_example_prepared:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "prepared"
   email_notification: true
+  cleaned: false
 
 irida_next_example_submitted:
   <<: *DEFAULTS
@@ -85,6 +87,7 @@ irida_next_example_submitted:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "submitted"
+  cleaned: false
 
 irida_next_example_completed:
   <<: *DEFAULTS
@@ -105,6 +108,28 @@ irida_next_example_completed:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "completed"
   blob_run_directory: "not a run dir"
+  cleaned: true
+
+irida_next_example_completed_unclean:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "irida_next_example_completed_unclean",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_completed_unclean"
+  run_id: "my_run_id_6a"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "completed"
+  blob_run_directory: "not a run dir"
+  cleaned: false
 
 irida_next_example_error:
   <<: *DEFAULTS
@@ -124,6 +149,27 @@ irida_next_example_error:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "error"
+  cleaned: true
+
+irida_next_example_error_unclean:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "irida_next_example_error_unclean",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_error_unclean"
+  run_id: "my_run_id_7a"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "error"
+  cleaned: false
 
 irida_next_example_canceling:
   <<: *DEFAULTS
@@ -143,6 +189,7 @@ irida_next_example_canceling:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceling"
+  cleaned: false
 
 irida_next_example_canceled:
   <<: *DEFAULTS
@@ -162,6 +209,27 @@ irida_next_example_canceled:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceled"
+  cleaned: true
+
+irida_next_example_canceled_unclean:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "irida_next_example_canceled_unclean",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_canceled_unclean"
+  run_id: "my_run_id_9a"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "canceled"
+  cleaned: false
 
 irida_next_example_running:
   <<: *DEFAULTS
@@ -181,6 +249,7 @@ irida_next_example_running:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "running"
+  cleaned: false
 
 irida_next_example_new:
   <<: *DEFAULTS
@@ -197,6 +266,7 @@ irida_next_example_new:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "initial"
+  cleaned: false
 
 irida_next_example_completing_a:
   <<: *DEFAULTS
@@ -218,6 +288,7 @@ irida_next_example_completing_a:
   state: "completing"
   blob_run_directory: "not a run dir"
   email_notification: true
+  cleaned: false
 
 irida_next_example_completing_b:
   <<: *DEFAULTS
@@ -238,6 +309,7 @@ irida_next_example_completing_b:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
+  cleaned: false
 
 irida_next_example_completing_c:
   <<: *DEFAULTS
@@ -259,6 +331,7 @@ irida_next_example_completing_c:
   state: "completing"
   blob_run_directory: "not a run dir"
   update_samples: true
+  cleaned: false
 
 irida_next_example_completing_d:
   <<: *DEFAULTS
@@ -279,6 +352,7 @@ irida_next_example_completing_d:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
+  cleaned: false
 
 irida_next_example_completing_e:
   <<: *DEFAULTS
@@ -299,6 +373,7 @@ irida_next_example_completing_e:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completing"
   blob_run_directory: "not a run dir"
+  cleaned: false
 
 irida_next_example_completing_f:
   <<: *DEFAULTS
@@ -321,6 +396,7 @@ irida_next_example_completing_f:
   blob_run_directory: "not a run dir"
   update_samples: false
   email_notification: true
+  cleaned: false
 
 irida_next_example_completed_with_output:
   <<: *DEFAULTS
@@ -341,6 +417,7 @@ irida_next_example_completed_with_output:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   state: "completed"
   blob_run_directory: "not a run dir"
+  cleaned: false
 
 automated_workflow_execution:
   <<: *DEFAULTS
@@ -361,6 +438,7 @@ automated_workflow_execution:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "completed"
   blob_run_directory: "not a run dir"
+  cleaned: true
 
 <% (1..25).each do |n| %>
 workflow_execution<%= (n) %>:
@@ -378,6 +456,7 @@ workflow_execution<%= (n) %>:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid) %>
   state: "initial"
+  cleaned: false
 <% end %>
 
 workflow_execution_existing:
@@ -413,6 +492,7 @@ automated_example_prepared:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "prepared"
   email_notification: true
+  cleaned: false
 
 automated_example_submitted:
   <<: *DEFAULTS
@@ -432,6 +512,7 @@ automated_example_submitted:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "submitted"
+  cleaned: false
 
 automated_example_completed:
   <<: *DEFAULTS
@@ -452,6 +533,7 @@ automated_example_completed:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "completed"
   blob_run_directory: "not a run dir"
+  cleaned: true
 
 automated_example_error:
   <<: *DEFAULTS
@@ -471,6 +553,7 @@ automated_example_error:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "error"
+  cleaned: true
 
 automated_example_canceling:
   <<: *DEFAULTS
@@ -490,6 +573,7 @@ automated_example_canceling:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceling"
+  cleaned: false
 
 automated_example_canceled:
   <<: *DEFAULTS
@@ -509,6 +593,7 @@ automated_example_canceled:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceled"
+  cleaned: true
 
 automated_example_running:
   <<: *DEFAULTS
@@ -528,6 +613,7 @@ automated_example_running:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "running"
+  cleaned: false
 
 automated_example_new:
   <<: *DEFAULTS
@@ -544,6 +630,7 @@ automated_example_new:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "initial"
+  cleaned: false
 
 automated_workflow_execution_existing:
   <<: *DEFAULTS
@@ -558,3 +645,121 @@ automated_workflow_execution_existing:
   run_id: "my_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  cleaned: false
+
+irida_next_example_end_to_end:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  state: "initial"
+  cleaned: false
+
+irida_next_example_completed_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "completed"
+  cleaned: true
+
+irida_next_example_error_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "error"
+  cleaned: true
+
+irida_next_example_canceled_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "canceled"
+  cleaned: true
+
+irida_next_example_completed_unclean_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "completed"
+  cleaned: false
+
+irida_next_example_error_unclean_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "error"
+  cleaned: false
+
+irida_next_example_canceled_unclean_DELETE:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  workflow_params: {
+    "assembler": "stub",
+    "random_seed": 1,
+    "project_name": "assembly"
+  }
+  workflow_engine_parameters: { "-r": "1.0.2" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  run_id: "my_run_id_completed_DELETE"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  blob_run_directory: "not a run dir"
+  state: "canceled"
+  cleaned: false
