@@ -117,6 +117,9 @@ gem 'zip_kit'
 gem 'business_time'
 gem 'holidays'
 
+# csv
+gem 'csv'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
@@ -141,6 +144,9 @@ group :development do
   gem 'actioncable'
   gem 'listen'
   gem 'lookbook', '~> 2.1', '>= 2.1.1'
+
+  # Solargraph
+  gem 'solargraph'
 end
 
 group :test do
