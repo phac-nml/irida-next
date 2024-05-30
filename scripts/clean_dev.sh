@@ -1,5 +1,6 @@
 # clean storage
 rm -rf storage/*
+rm -rf tmp/storage/*
 # grab any new gems
 bundle
 # delete, create and migrate databases
