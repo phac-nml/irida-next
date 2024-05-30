@@ -69,13 +69,13 @@ attachmentR_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filena
 
 attachmentS_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "germ_1.fastq", service_name: "test" %>
 
-attachment_attach_files_to_sample_test_blob: <%= ActiveStorage::FixtureSet.blob filename: "afts.fastq", service_name: "test_fixtures" %>
+attachment_attach_files_to_sample_test_blob: <%= ActiveStorage::FixtureSet.blob filename: "afts.fastq", service_name: "test" %>
 
-attachment_attach_files_to_sample_b_test_blob: <%= ActiveStorage::FixtureSet.blob filename: "afts_b.fastq", service_name: "test_fixtures" %>
+attachment_attach_files_to_sample_b_test_blob: <%= ActiveStorage::FixtureSet.blob filename: "afts_b.fastq", service_name: "test" %>
 
-attachment_md5_a_test_blob: <%= ActiveStorage::FixtureSet.blob filename: "md5_a", service_name: "test_fixtures" %>
+attachment_md5_a_test_blob: <%= ActiveStorage::FixtureSet.blob filename: "md5_a", service_name: "test" %>
 
-attachment_md5_b_test_blob: <%= ActiveStorage::FixtureSet.blob filename: "md5_b", service_name: "test_fixtures" %>
+attachment_md5_b_test_blob: <%= ActiveStorage::FixtureSet.blob filename: "md5_b", service_name: "test" %>
 
 data_export_1_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_1.zip", service_name: "test" %>
 

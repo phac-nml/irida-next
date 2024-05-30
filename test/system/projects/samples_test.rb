@@ -203,6 +203,7 @@ module Projects
     test 'should destroy Sample from sample listing page' do
       visit namespace_project_samples_url(@namespace, @project)
 
+      assert_text 'Displaying 3 items'
       table_row = find(:table_row, { 'Sample' => @sample1.name })
 
       within table_row do
@@ -228,6 +229,7 @@ module Projects
     test 'should transfer samples' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
+      assert_text 'Displaying 3 items'
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -242,6 +244,7 @@ module Projects
     test 'should not transfer samples with session storage cleared' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
+      assert_text 'Displaying 3 items'
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -262,6 +265,7 @@ module Projects
     test 'should not transfer samples' do
       project26 = projects(:project26)
       visit namespace_project_samples_url(@namespace, @project)
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       all('input[type=checkbox]').last.click
 
@@ -280,6 +284,7 @@ module Projects
     test 'should transfer some samples' do
       project25 = projects(:project25)
       visit namespace_project_samples_url(@namespace, @project)
+      assert_text 'Displaying 3 items'
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -303,6 +308,7 @@ module Projects
 
       project2 = projects(:project2)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      assert_text 'Displaying 3 items'
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -320,6 +326,7 @@ module Projects
       namespace = groups(:group_hotel)
       project2 = projects(:projectHotel)
       visit namespace_project_samples_url(namespace, project2)
+      assert_text 'Displaying 1 item'
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 1
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -337,6 +344,7 @@ module Projects
       # Project is a part of Group 8 and not a part of the current project hierarchy
       project32 = projects(:project32)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      assert_text 'Displaying 3 items'
       within 'table#samples-table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -401,6 +409,7 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr') do
         assert_selector 'a', text: 'Edit', count: 1
@@ -418,6 +427,7 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 0
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       assert_selector 'a', text: 'Edit', count: 0
       assert_selector 'a', text: 'Remove', count: 0
@@ -428,12 +438,14 @@ module Projects
     test 'can search the list of samples by name' do
       visit namespace_project_samples_url(@namespace, @project)
 
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
+      assert_text 'Displaying 1 item'
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -443,6 +455,7 @@ module Projects
     test 'can sort samples by column' do
       visit namespace_project_samples_url(@namespace, @project)
 
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr td:first-child') do
         assert_text @sample1.puid
@@ -541,6 +554,7 @@ module Projects
     test 'can filter and then sort the list of samples by name' do
       visit namespace_project_samples_url(@namespace, @project)
 
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr td:nth-child(2)') do
         assert_text @sample1.name
@@ -548,6 +562,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
+      assert_text 'Displaying 1 item'
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -565,6 +580,7 @@ module Projects
     test 'can filter and then sort the list of samples by puid' do
       visit namespace_project_samples_url(@namespace, @project)
 
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr td:first-child') do
         assert_text @sample1.puid
@@ -572,6 +588,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
+      assert_text 'Displaying 1 item'
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -589,6 +606,7 @@ module Projects
     test 'can sort and then filter the list of samples by name' do
       visit namespace_project_samples_url(@namespace, @project)
 
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr td:nth-child(2)') do
         assert_text @sample1.name
@@ -608,6 +626,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
+      assert_text 'Displaying 1 item'
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -618,6 +637,7 @@ module Projects
     test 'can sort and then filter the list of samples by puid' do
       visit namespace_project_samples_url(@namespace, @project)
 
+      assert_text 'Displaying 3 items'
       assert_selector 'table#samples-table tbody tr', count: 3
       within first('tbody tr td:first-child') do
         assert_text @sample1.puid
@@ -633,6 +653,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
+      assert_text 'Displaying 1 item'
       assert_selector 'table#samples-table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name

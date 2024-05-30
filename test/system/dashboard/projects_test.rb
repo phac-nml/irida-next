@@ -12,6 +12,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
       assert_text projects(:project1).human_name
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -31,14 +32,17 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying items 1-20 of 22 in total'
       assert_selector 'tr', count: 20
       assert_text projects(:project1).human_name
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
+      assert_text 'Displaying items 21-22 of 22 in total'
       assert_selector 'tr', count: 2
       click_on I18n.t(:'components.pagination.previous')
+      assert_text 'Displaying items 1-20 of 22 in total'
       assert_selector 'tr', count: 20
 
       click_link projects(:project1).human_name
@@ -49,9 +53,9 @@ module Dashboard
       visit dashboard_projects_url
 
       click_on I18n.t(:'dashboard.projects.index.personal')
-      sleep 1
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying 4 items'
       assert_selector 'tr', count: 4
       assert_text projects(:john_doe_project2).human_name
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -62,6 +66,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
@@ -75,6 +80,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
       within first('tr') do
         assert_text projects(:project1).human_name
@@ -82,7 +88,7 @@ module Dashboard
 
       click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
-      sleep 1
+      assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_selector 'tr', count: 20
@@ -94,8 +100,8 @@ module Dashboard
     test 'can filter and then sort the list of projects' do
       visit dashboard_projects_url
 
-      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
       within first('tr') do
         assert_text projects(:project1).human_name
@@ -122,6 +128,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
       within first('tr') do
         assert_text projects(:project1).human_name
@@ -129,7 +136,7 @@ module Dashboard
 
       click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
-      sleep 1
+      assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_selector 'tr', count: 20
@@ -177,6 +184,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying 1 item'
       assert_selector 'tr', count: 1
       assert_text projects(:john_doe_project2).human_name
     end

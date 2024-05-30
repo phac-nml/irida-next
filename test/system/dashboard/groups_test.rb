@@ -16,7 +16,7 @@ module Dashboard
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 20
         [*('z'..'g')].each do |letter|
-          assert_text groups("group_#{letter}".to_sym).name
+          assert_text groups(:"group_#{letter}").name
         end
       end
 
@@ -25,7 +25,7 @@ module Dashboard
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 6
         [*('f'..'a')].each do |letter|
-          assert_text groups("group_#{letter}".to_sym).name
+          assert_text groups(:"group_#{letter}").name
         end
       end
 
@@ -34,7 +34,7 @@ module Dashboard
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 20
         [*('z'..'g')].each do |letter|
-          assert_text groups("group_#{letter}".to_sym).name
+          assert_text groups(:"group_#{letter}").name
         end
       end
     end
@@ -47,13 +47,13 @@ module Dashboard
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 20
         [*('z'..'g')].each do |letter|
-          assert_text groups("group_#{letter}".to_sym).name
+          assert_text groups(:"group_#{letter}").name
         end
       end
 
       click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       click_on I18n.t(:'dashboard.groups.index.sorting.name_desc')
-      sleep 1
+      assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.name_desc')
 
       within 'ul.groups-list.namespace-list-tree' do
@@ -71,13 +71,13 @@ module Dashboard
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 20
         [*('z'..'g')].each do |letter|
-          assert_text groups("group_#{letter}".to_sym).name
+          assert_text groups(:"group_#{letter}").name
         end
       end
 
       click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       click_on I18n.t(:'dashboard.groups.index.sorting.name_asc')
-      sleep 1
+      assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.name_asc')
 
       within 'ul.groups-list.namespace-list-tree' do
@@ -95,13 +95,13 @@ module Dashboard
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 20
         [*('z'..'g')].each do |letter|
-          assert_text groups("group_#{letter}".to_sym).name
+          assert_text groups(:"group_#{letter}").name
         end
       end
 
       click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       click_on I18n.t(:'dashboard.groups.index.sorting.updated_at_desc')
-      sleep 1
+      assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.updated_at_desc')
 
       within 'ul.groups-list.namespace-list-tree' do
@@ -119,13 +119,13 @@ module Dashboard
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 20
         [*('z'..'g')].each do |letter|
-          assert_text groups("group_#{letter}".to_sym).name
+          assert_text groups(:"group_#{letter}").name
         end
       end
 
       click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       click_on I18n.t(:'dashboard.groups.index.sorting.updated_at_asc')
-      sleep 1
+      assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.updated_at_asc')
 
       within 'ul.groups-list.namespace-list-tree' do
@@ -143,13 +143,13 @@ module Dashboard
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 20
         [*('z'..'g')].each do |letter|
-          assert_text groups("group_#{letter}".to_sym).name
+          assert_text groups(:"group_#{letter}").name
         end
       end
 
       click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       click_on I18n.t(:'dashboard.groups.index.sorting.created_at_asc')
-      sleep 1
+      assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.created_at_asc')
 
       within 'ul.groups-list.namespace-list-tree' do
