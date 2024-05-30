@@ -19,8 +19,10 @@ module Dashboard
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
+      assert_text 'Displaying items 21-38 of 38 in total'
       assert_selector 'tr', count: 18
       click_on I18n.t(:'components.pagination.previous')
+      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
 
       click_link projects(:project1).human_name
