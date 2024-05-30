@@ -38,8 +38,19 @@ module Types
     field :project_sample, Types::SampleType, null: true, resolver: Resolvers::ProjectSampleResolver,
                                               description: 'Find a sample within a project.'
 
+    field :is_puid, Boolean, null: false, description: 'Check if id is in puid format' do
+      argument :id, GraphQL::Types::ID, 'ID to compare to puid format'
+    end
+
     def current_user
       context[:current_user]
+    end
+
+    def is_puid(id:)
+      Irida::PersistentUniqueId.valid_puid?(id, Sample) ||
+        Irida::PersistentUniqueId.valid_puid?(id, Attachment) ||
+        Irida::PersistentUniqueId.valid_puid?(id, Group) ||
+        Irida::PersistentUniqueId.valid_puid?(id, Namespaces::ProjectNamespace)
     end
   end
 end
