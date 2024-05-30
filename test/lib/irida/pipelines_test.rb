@@ -5,7 +5,7 @@ require 'webmock/minitest'
 
 class PipelinesTest < ActiveSupport::TestCase
   setup do
-    @pipeline_schema_file_dir = 'tmp/storage/pipelines'
+    @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
 
     # Read in schema file to json
     body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')

@@ -766,6 +766,26 @@ type Query {
   ): Project
 
   """
+  Find a sample within a project.
+  """
+  projectSample(
+    """
+    Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.
+    """
+    projectPuid: ID!
+
+    """
+    Name of the sample.
+    """
+    sampleName: String
+
+    """
+    Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.
+    """
+    samplePuid: ID
+  ): Sample
+
+  """
   Find projects.
   """
   projects(

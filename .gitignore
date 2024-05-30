@@ -63,3 +63,5 @@ __blobstorage__
 !/app/assets/builds/.keep
 
 logfile
+
+/config/credentials/production.key
