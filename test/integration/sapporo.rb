@@ -3,7 +3,7 @@
 require 'test_helper'
 require 'active_job_test_case'
 
-class IntegrationSapporo < ActiveJobTestCase
+class IntegrationSapporoTest < ActiveJobTestCase
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_end_to_end)
     Rails.configuration.ga4gh_wes_server_endpoint = 'http://localhost:1122/'
@@ -14,6 +14,14 @@ class IntegrationSapporo < ActiveJobTestCase
   end
 
   test 'integration sapporo end to end' do
+    # Before starting test, check if Sapporo Integration is running.
+    begin
+      ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new
+      ga4gh_client.service_info
+    rescue Integrations::ApiExceptions::ConnectionError
+      skip 'Sapporo server is not running'
+    end
+
     assert_equal 'initial', @workflow_execution.state
     assert_not @workflow_execution.cleaned?
 
