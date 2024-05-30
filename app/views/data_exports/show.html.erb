@@ -5,14 +5,12 @@
       <% if @data_export.status == 'ready' %>
         <%= link_to(
           t("data_exports.show.download"),
-          download_data_export_path(@data_export),
+          rails_blob_path(@data_export.file),
           class: "button button--state-primary button--size-default"
         ) %>
       <% else %>
-        <%= link_to(
-          t("data_exports.show.download"),
-          download_data_export_path(@data_export),
-          class:"
+        <button
+            class="
             button
             button--size-default
             button--state-default
@@ -25,7 +23,8 @@
             border-slate-100
             dark:border-slate-600
           "
-        ) %>
+          ><%= t("data_exports.show.download")%>
+          </button>
       <% end %>
         <%= link_to(
           t("data_exports.show.remove_button"),

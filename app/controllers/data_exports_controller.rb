@@ -4,7 +4,7 @@
 class DataExportsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
 
-  before_action :data_export, only: %i[download destroy show]
+  before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[index destroy]
   before_action :current_page
   before_action :set_default_tab, only: :show
@@ -36,12 +36,6 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
                                                  workflow_execution_id: params[:workflow_execution_id]
                                                }), status: :ok
     end
-  end
-
-  def download
-    authorize! @data_export, to: :download?
-
-    send_data @data_export.file.download, filename: @data_export.file.filename.to_s
   end
 
   def create

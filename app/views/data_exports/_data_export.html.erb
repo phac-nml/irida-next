@@ -42,7 +42,7 @@
     <% if data_export.status == 'ready' %>
       <%= link_to(
         t(:"data_exports.index.actions.download"),
-        download_data_export_path(data_export),
+        rails_blob_path(data_export.file),
         data: {
           turbo: false,
         },
