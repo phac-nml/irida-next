@@ -64,5 +64,5 @@ To remove a bot account membership from a group:
 
 1. From the left sidebar, select **Groups** and find your group.
 2. From the left sidebar, select **Members**.
-3. On the right hand side of the row for the bot account membership you want to remove, click the `ellipsis` and select **Remove** from the dropdown.
+3. On the right hand side of the row for the bot account membership you want to remove, click the **Remove** link.
 4. Confirm that you would like to remove the bot account membership by clicking the **Confirm** button.
