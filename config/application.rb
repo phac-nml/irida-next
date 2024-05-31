@@ -84,5 +84,12 @@ module Irida
 
     # Omniauth Configuration
     config.auth_config = config_for(Rails.root.join('config/authentication/auth_config.yml'))
+
+    # GA4GH WES Configuration
+    config.ga4gh_wes_server_endpoint = if Rails.application.credentials.ga4gh_wes.nil?
+                                         nil
+                                       else
+                                         Rails.application.credentials.dig(:ga4gh_wes, :server_url_endpoint)
+                                       end
   end
 end

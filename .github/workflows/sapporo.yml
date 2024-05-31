@@ -1,0 +1,78 @@
+name: Sapporo CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14.6
+        env:
+          POSTGRES_DB: irida_next_test
+          POSTGRES_PASSWORD: test
+          POSTGRES_USER: test
+          POSTGRES_HOST: postgres
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+      - name: Use Node.js 19
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Install Sapporo dependencies
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 16
+      - name: Download Sapporo
+        uses: actions/checkout@v3
+        with:
+          repository: phac-nml/sapporo-service
+          ref: irida-next
+          path: ./sapporo
+      - name: Build Sapporo
+        run: |
+          cd sapporo
+          IRIDA_NEXT_PATH=${GITHUB_WORKSPACE}/tmp MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml up -d --build
+          cd ..
+      - name: Run Sapporo
+        uses: JarvusInnovations/background-action@v1
+        with:
+          run: |
+            IRIDA_NEXT_PATH=${GITHUB_WORKSPACE}/tmp MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml exec app bash -c "sapporo"
+          wait-on:
+            http://localhost:1122/service-info
+          wait-for: 2m
+          working-directory: sapporo
+      - name: Update permissions
+        run: sudo chmod -R 777 ${GITHUB_WORKSPACE}
+      - name: Run tests
+        run: |
+          bin/rails test test/integration/sapporo.rb
