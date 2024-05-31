@@ -102,4 +102,14 @@ To remove a sample:
 
 ## View Sample History
 
-<!-- TODO: Add steps for sample history -->
+Prerequisite:
+- You must have at least the Maintainer role for the sample's project.
+
+To view a sample's history:
+
+1. From the left sidebar, select **Projects**, select the project
+2. From the left sidebar, select **Samples**
+3. Select the sample whose history you'd like to view
+4. Click the **History** tab
+
+A new sample version is created each time the sample's information is changed. Clicking a version within the sample's history will display what changes were made to the sample.

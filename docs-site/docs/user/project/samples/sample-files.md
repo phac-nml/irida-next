@@ -14,7 +14,8 @@ Prerequisites:
 
 1. From the left sidebar, select **Projects**, select the project
 2. From the left sidebar, select **Samples**
-3. The table lists all the single-end and paired-end files which have been uploaded to the sample
+3. Select the sample
+4. The table lists all the single-end and paired-end files which have been uploaded to the sample
 
 ## Upload Files to Samples
 
@@ -27,10 +28,11 @@ To upload files to a sample:
 
 1. From the left sidebar, select **Projects**, select the project
 2. From the left sidebar, select **Samples**
-3. Select **Upload Files**
-4. From the dialog, select **Choose files**
-5. Select the files you would like to upload. Multi file selection is enabled
-6. Select **Upload**
+3. Select the sample
+4. Select **Upload Files**
+5. From the dialog, select **Choose files**
+6. Select the files you would like to upload. Multi file selection is enabled
+7. Select **Upload**
 
 ## Concatenate Sample files
 
@@ -42,14 +44,19 @@ Prerequisites:
 
 1. From the left sidebar, select **Projects**, select the project
 2. From the left sidebar, select **Samples**
-3. Select the checkboxes for the files you would like to concatenate, and select **Concatenate files**
-4. In the dialog, the files to be concatenated are listed.
-5. Enter the **Filename**. This will be the base name of the concatenated files.
-6. Select the checkbox **Delete originals** if you would like to remove the original files after concatenation
-7. Select **Concatenate**
+3. Select the sample
+4. Select the checkboxes for the files you would like to concatenate, and select **Concatenate files**
+5. In the dialog, the files to be concatenated are listed.
+6. Enter the **Filename**. This will be the base name of the concatenated files.
+7. Select the checkbox **Delete originals** if you would like to remove the original files after concatenation
+8. Select **Concatenate**
 
 ## Download Sample files
-<!-- TODO: Add steps to download sample files -->
+
+1. From the left sidebar, select **Projects**, select the project
+2. From the left sidebar, select **Samples**
+3. Select the sample
+4. Click the filename you'd like to download
 
 ## Delete Sample files
 
@@ -60,5 +67,6 @@ Prerequisites:
 
 1. From the left sidebar, select **Projects**, select the project
 2. From the left sidebar, select **Samples**
-3. To delete multiple files, select the checkboxes for the files you would like to delete, then click **Delete Files**
-4. To delete individual single end and paired-end reads, select **Delete** for the files you would like to delete.
+3. Select the sample
+4. To delete multiple files, select the checkboxes for the files you would like to delete, then click **Delete Files**
+5. To delete individual single end and paired-end reads, select **Delete** for the files you would like to delete.
