@@ -4,7 +4,7 @@ id: manage-bot-PAT
 title: Manage Bot Account Personal Access Tokens
 ---
 
-Personal Access Tokens (PAT) are needed to use the IRIDA Next API.
+Personal Access Tokens (PAT) are needed to use the IRIDA Next GraphQL API. See [Authentication with Personal Access Tokens](/docs/extend/graphql#authentication-with-personal-access-tokens) for more information.
 
 ## View PAT
 
