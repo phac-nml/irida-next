@@ -16,6 +16,8 @@ module WorkflowExecutions
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
+      assert_text 'Displaying 3 items'
+
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
         find("input[type='checkbox'][value='#{@sample44.id}']").click
@@ -46,6 +48,8 @@ module WorkflowExecutions
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
+      assert_text 'Displaying 3 items'
+
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
         find("input[type='checkbox'][value='#{@sample44.id}']").click
@@ -75,6 +79,8 @@ module WorkflowExecutions
       login_as users(:james_doe)
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      assert_text 'Displaying 3 items'
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -109,6 +115,8 @@ module WorkflowExecutions
       sample = samples(:sample45)
 
       visit namespace_project_samples_url(namespace_id: namespace.path, project_id: project.path)
+
+      assert_text 'Displaying 1 item'
 
       within 'table' do
         find("input[type='checkbox'][value='#{sample.id}']").click
@@ -146,6 +154,8 @@ module WorkflowExecutions
 
       visit group_samples_url(@namespace)
 
+      assert_text 'Displaying 3 items'
+
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
         find("input[type='checkbox'][value='#{@sample44.id}']").click
@@ -176,6 +186,8 @@ module WorkflowExecutions
 
       visit group_samples_url(@namespace)
 
+      assert_text 'Displaying 3 items'
+
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
         find("input[type='checkbox'][value='#{@sample44.id}']").click
@@ -205,6 +217,8 @@ module WorkflowExecutions
       login_as users(:james_doe)
 
       visit group_samples_url(@namespace)
+
+      assert_text 'Displaying 3 items'
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click

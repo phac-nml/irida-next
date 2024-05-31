@@ -107,6 +107,7 @@ en:
         update_automated_workflow_executions?: "You are not authorized to update automated workflow executions for project %{name}"
         view_automated_workflow_executions?: "You are not authorized to view automated workflow executions for project %{name}"
         submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
+        view_workflow_executions?: You are not authorized to view workflow executions for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace

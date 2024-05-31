@@ -27,6 +27,14 @@ module Projects
       assert_response :unauthorized
     end
 
+    test 'should not show a listing of project workflow executions for guests' do
+      sign_in users(:ryan_doe)
+
+      get namespace_project_workflow_executions_path(@namespace, @project, format: :turbo_stream)
+
+      assert_response :unauthorized
+    end
+
     test 'should show workflow execution' do
       workflow_execution = workflow_executions(:automated_workflow_execution)
 
@@ -37,6 +45,15 @@ module Projects
 
     test 'should not show workflow execution for user with incorrect permissions' do
       sign_in users(:micha_doe)
+      workflow_execution = workflow_executions(:automated_workflow_execution)
+
+      get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+
+      assert_response :unauthorized
+    end
+
+    test 'should not show project workflow execution for guests' do
+      sign_in users(:ryan_doe)
       workflow_execution = workflow_executions(:automated_workflow_execution)
 
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
