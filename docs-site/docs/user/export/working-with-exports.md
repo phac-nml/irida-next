@@ -31,7 +31,7 @@ To create a sample export:
   1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) or [group](../organization/groups/manage#view-groups) that contains the samples you would like to export.
   2. From the left sidebar, select **Samples**
   3. Click the checkbox of each sample you'd like to export
-  4. Click the **Create Export** button
+  4. Click **Create Export**
   5. A pop-up will appear asking if you'd like to give the export a name and whether you'd like to receive an e-mail notification when the export is ready to download. Neither of these are required to create the export.
 
 ## Create Analysis Export from a User Workflow Execution
@@ -43,7 +43,7 @@ To create an analysis export from a user workflow execution:
   1. Navigate to the workflow executions page.
     <!-- TODO: Replace navigate with link to workflow executions view steps when available -->
   2. Click the workflow execution you'd like to export
-  3. Click the **Create Export** button
+  3. Click **Create Export**
   4. A pop-up will appear asking if you'd like to give the export a name and whether you'd like to receive an e-mail notification when the export is ready to download. Neither of these are required to create the export.
 
 ## Create Analysis Export from an Automated Workflow Execution
@@ -56,7 +56,7 @@ To create an analysis export from an automated workflow execution:
   1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) containing the workflow execution.
   2. From the left sidebar, click **Workflow Executions**
   3. Click the workflow execution you'd like to export
-  4. Click the **Create Export** button
+  4. Click **Create Export**
   5. A pop-up will appear asking if you'd like to give the export a name and whether you'd like to receive an e-mail notification when the export is ready to download. Neither of these are required to create the export.
 
 ## Download Export
