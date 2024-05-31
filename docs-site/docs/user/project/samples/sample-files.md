@@ -39,7 +39,7 @@ To upload files to a sample:
 Prerequisites:
 
 - You must have access to the project either through membership, or through a namespace share
-- You must have an **Maintainer** role
+- You must have a **Maintainer** role
 - Files of the same type (single-end or paired-end) and compression can be concatenated together
 
 1. From the left sidebar, select **Projects**, select the project
