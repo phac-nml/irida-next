@@ -36,7 +36,7 @@ module Irida
     end
 
     def valid_puid?(puid, object_class = nil)
-      re = /#{app_prefix}_#{object_class.model_prefix}_([A-Z]|[2-7]){10}/
+      re = /\A#{app_prefix}_#{object_class.model_prefix}_([A-Z]|[2-7]){10}\z/
       re.match?(puid)
     end
   end
