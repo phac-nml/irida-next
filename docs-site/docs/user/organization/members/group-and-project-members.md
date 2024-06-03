@@ -79,7 +79,7 @@ To add a user to a group:
 6. Select an optional **Access expiration**
 7. Click the **Add member to group** button
 
-## Edit member for a group or project
+## Edit members for a group or project
 
 Prerequisite:
 
@@ -142,7 +142,7 @@ To remove a member from a project:
 1. From the left sidebar, select **Projects**
 2. Select the project
 3. From the left sidebar, select **Members**
-4. On the right hand side of the row for the member you want to remove, click the `ellipsis` and select **Remove** from the dropdown.
+4. On the right hand side of the row for the member you want to remove, click **Remove**.
 5. Confirm that you would like to remove the member from the project in the popup by clicking the **OK** button
 
 ## Remove a member from a group
@@ -160,7 +160,8 @@ Prerequisites:
 
 To remove a member from a group:
 
-1. From the left sidebar, select **Groups**, and find your group
-2. From the left sidebar, select **Members**
-3. On the right hand side of the row for the member you want to remove, click the `ellipsis` and select **Remove** from the dropdown.
-4. Confirm that you would like to remove the member from the group in the popup by clicking the **OK** button
+1. From the left sidebar, select **Groups**
+2. Select the group
+3. From the left sidebar, select **Members**
+4. On the right hand side of the row for the member you want to remove, click **Remove**.
+5. Confirm that you would like to remove the member from the group in the popup by clicking the **OK** button

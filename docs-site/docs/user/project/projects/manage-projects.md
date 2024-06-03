@@ -81,7 +81,8 @@ Prerequisite:
 
 To view a project's history:
 
-1. Select the project that you want to edit and then on the left sidebar, select **History**
+1. Select the project that you want to edit and then on the left sidebar
+2. Select **History**
 
 A new project version is created each time the project's information is changed. Clicking a version within the project's history will display what changes were made to the project.
 
