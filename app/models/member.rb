@@ -30,6 +30,11 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
 
   class << self
+    DEFAULT_CAN_OPTIONS = {
+      include_group_links: true,
+      token: nil
+    }
+
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -41,7 +46,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
-    def effective_access_level(namespace, user, include_group_links = true) # rubocop:disable Metrics/CyclomaticComplexity, Style/OptionalBooleanParameter
+    def effective_access_level(namespace, user, include_group_links = true) # rubocop:disable Metrics/CyclomaticComplexity,Style/OptionalBooleanParameter
       return AccessLevel::OWNER if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
       access_level = Member.for_namespace_and_ancestors(namespace).not_expired
@@ -64,9 +69,13 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       )
     end
 
-    def can_view?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      effective_access_level = effective_access_level(object_namespace, user, include_group_links)
-      return false if effective_access_level == Member::AccessLevel::UPLOADER
+    def can_view?(user, object_namespace, **options)
+      options = DEFAULT_CAN_OPTIONS.merge(options)
+      effective_access_level = effective_access_level(object_namespace, user, options[:include_group_links])
+      if effective_access_level == Member::AccessLevel::UPLOADER &&
+         (options[:token].nil? || (!options[:token].nil? && !options[:token].active?))
+        return false
+      end
 
       effective_access_level > Member::AccessLevel::NO_ACCESS
     end
@@ -86,7 +95,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def can_transfer_sample?(user, object_namespace)
-      namespace_owners_include_user?(user, object_namespace)
+      Member::AccessLevel.manageable.include?(
+        effective_access_level(object_namespace, user, false)
+      )
     end
 
     def can_transfer_sample_to_project?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
@@ -139,6 +150,34 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def can_create_export?(user, object_namespace)
       effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
+    end
+
+    def can_create_sample?(user, object_namespace, **options)
+      options = DEFAULT_CAN_OPTIONS.merge(options)
+      effective_access_level = effective_access_level(object_namespace, user)
+
+      if effective_access_level == Member::AccessLevel::UPLOADER &&
+         (options[:token].nil? || (!options[:token].nil? && !options[:token].active?))
+        return false
+      end
+
+      Member::AccessLevel.manageable.include?(
+        effective_access_level
+      )
+    end
+
+    def can_modify_sample?(user, object_namespace, **options)
+      options = DEFAULT_CAN_OPTIONS.merge(options)
+      effective_access_level = effective_access_level(object_namespace, user)
+
+      if effective_access_level == Member::AccessLevel::UPLOADER &&
+         (options[:token].nil? || (!options[:token].nil? && !options[:token].active?))
+        return false
+      end
+
+      Member::AccessLevel.manageable.include?(
+        effective_access_level
+      )
     end
 
     def access_level_in_namespace_group_links(user, namespace)

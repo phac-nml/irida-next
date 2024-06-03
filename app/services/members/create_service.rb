@@ -25,7 +25,7 @@ module Members
                                         namespace_type: namespace.class.model_name.human)
       end
 
-      has_previous_access = Member.can_view?(member.user, namespace, true) if member.valid?
+      has_previous_access = Member.can_view?(member.user, namespace) if member.valid?
       send_emails if member.save && @email_notification && !has_previous_access
       member
     rescue Members::CreateService::MemberCreateError => e

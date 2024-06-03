@@ -12,7 +12,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def view_history?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace, false) == true
+    return true if Member.can_view?(user, record.namespace, include_group_links: false) == true
 
     details[:name] = record.name
     false
@@ -44,7 +44,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def read?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace) == true
+    return true if Member.can_view?(user, record.namespace, token:) == true
 
     details[:name] = record.name
     false
@@ -76,7 +76,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def create_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_create?(user, record.namespace) == true
+    return true if Member.can_create_sample?(user, record.namespace, token:) == true
 
     details[:name] = record.name
     false
@@ -100,16 +100,13 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def update_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_modify?(user, record.namespace) == true
+    return true if Member.can_modify_sample?(user, record.namespace, token:) == true
 
     details[:name] = record.name
     false
   end
 
-  def transfer_sample? # rubocop:disable Metrics/AbcSize
-    # Maintainer is allowed to transfer a sample to another namespace which has the same parent or ancestor
-    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false)
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+  def transfer_sample?
     return true if Member.can_transfer_sample?(user, record.namespace) == true
 
     details[:name] = record.name

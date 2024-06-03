@@ -9,5 +9,11 @@ module Mutations
     field_class Types::BaseField
     input_object_class Types::BaseInputObject
     object_class Types::BaseObject
+
+    authorize :token, through: :token
+
+    def token
+      context[:token]
+    end
   end
 end

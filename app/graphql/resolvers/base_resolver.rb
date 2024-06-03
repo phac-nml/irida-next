@@ -6,5 +6,11 @@ module Resolvers
     include ActionPolicy::GraphQL::Behaviour
 
     argument_class ::Types::BaseArgument
+
+    authorize :token, through: :token
+
+    def token
+      context[:token]
+    end
   end
 end
