@@ -62,6 +62,22 @@ class NodesQueryTest < ActiveSupport::TestCase
     assert_equal 1, data.length
   end
 
+  test 'nodes query should work when passed a list of group ids with uploader access level' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+    group = groups(:group_one)
+
+    result = IridaSchema.execute(NODES_QUERY, context: { current_user: user, token: },
+                                              variables: { ids: [group.to_global_id.to_s] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['nodes']
+
+    assert_not_empty data, 'nodes type should work'
+    assert_equal 1, data.length
+  end
+
   test 'nodes query should not return an unauthorized group' do
     user = users(:user_no_access)
     group = groups(:david_doe_group_four)
@@ -95,6 +111,22 @@ class NodesQueryTest < ActiveSupport::TestCase
     project = projects(:project1)
 
     result = IridaSchema.execute(NODES_QUERY, context: { current_user: @user },
+                                              variables: { ids: [project.to_global_id.to_s] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['nodes']
+
+    assert_not_empty data, 'nodes type should work'
+    assert_equal 1, data.length
+  end
+
+  test 'nodes query should work when passed a list of project ids with uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+    project = projects(:project1)
+
+    result = IridaSchema.execute(NODES_QUERY, context: { current_user: user, token: },
                                               variables: { ids: [project.to_global_id.to_s] })
 
     assert_nil result['errors'], 'should work and have no errors.'

@@ -79,6 +79,24 @@ class GroupQueryTest < ActiveSupport::TestCase
     assert_equal group.to_global_id.to_s, data['id'], 'id should be GlobalID'
   end
 
+  test 'group query by puid should work with uploader access level' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+    group = groups(:group_one)
+
+    result = IridaSchema.execute(GROUP_QUERY_BY_PUID, context: { current_user: user, token: },
+                                                      variables: { groupPuid: group.puid })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['group']
+
+    assert_not_empty data, 'group type should work'
+    assert_equal group.name, data['name']
+
+    assert_equal group.to_global_id.to_s, data['id'], 'id should be GlobalID'
+  end
+
   test 'group query by full_path should work when not including parent descendants' do
     group = groups(:group_one)
 

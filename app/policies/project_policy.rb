@@ -92,7 +92,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def read_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace) == true
+    return true if Member.can_view?(user, record.namespace, token:) == true
 
     details[:name] = record.name
     false

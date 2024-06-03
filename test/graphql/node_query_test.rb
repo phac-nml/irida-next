@@ -51,6 +51,22 @@ class NodeQueryTest < ActiveSupport::TestCase
     assert_equal group.to_global_id.to_s, data['id'], 'id should be GlobalID'
   end
 
+  test 'node query should work for group with uploader access level' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+    group = groups(:group_one)
+
+    result = IridaSchema.execute(NODE_QUERY, context: { current_user: user, token: },
+                                             variables: { id: group.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['node']
+
+    assert_not_empty data, 'node type should work'
+    assert_equal group.to_global_id.to_s, data['id'], 'id should be GlobalID'
+  end
+
   test 'node query should not return an unauthorized group' do
     @user = users(:user_no_access)
     group = groups(:david_doe_group_four)
@@ -83,6 +99,22 @@ class NodeQueryTest < ActiveSupport::TestCase
     project = projects(:project1)
 
     result = IridaSchema.execute(NODE_QUERY, context: { current_user: @user },
+                                             variables: { id: project.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['node']
+
+    assert_not_empty data, 'node type should work'
+    assert_equal project.to_global_id.to_s, data['id'], 'id should be GlobalID'
+  end
+
+  test 'node query should work for project with uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+    project = projects(:project1)
+
+    result = IridaSchema.execute(NODE_QUERY, context: { current_user: user, token: },
                                              variables: { id: project.to_global_id.to_s })
 
     assert_nil result['errors'], 'should work and have no errors.'

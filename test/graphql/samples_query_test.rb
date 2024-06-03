@@ -79,6 +79,21 @@ class SamplesQueryTest < ActiveSupport::TestCase
     assert_not_empty data['nodes']
   end
 
+  test 'samples query should work for uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+
+    result = IridaSchema.execute(SAMPLES_QUERY, context: { current_user: user, token: },
+                                                variables: { first: 1 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']
+
+    assert_not_empty data, 'samples type should work'
+    assert_not_empty data['nodes']
+  end
+
   test 'group samples query should work' do
     result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: @user },
                                                       variables:
