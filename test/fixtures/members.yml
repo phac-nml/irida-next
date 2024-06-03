@@ -535,3 +535,9 @@ projectA_member_joan_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
+
+project_jeff_member_user_bot_account:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
+  access_level: <%= Member::AccessLevel::UPLOADER %>

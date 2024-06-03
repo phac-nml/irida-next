@@ -156,10 +156,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       options = DEFAULT_CAN_OPTIONS.merge(options)
       effective_access_level = effective_access_level(object_namespace, user)
 
-      if effective_access_level == Member::AccessLevel::UPLOADER &&
-         (options[:token].nil? || (!options[:token].nil? && !options[:token].active?))
-        return false
-      end
+      return true if effective_access_level == Member::AccessLevel::UPLOADER && options[:token]&.active?
 
       Member::AccessLevel.manageable.include?(
         effective_access_level
@@ -170,10 +167,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       options = DEFAULT_CAN_OPTIONS.merge(options)
       effective_access_level = effective_access_level(object_namespace, user)
 
-      if effective_access_level == Member::AccessLevel::UPLOADER &&
-         (options[:token].nil? || (!options[:token].nil? && !options[:token].active?))
-        return false
-      end
+      return true if effective_access_level == Member::AccessLevel::UPLOADER && options[:token]&.active?
 
       Member::AccessLevel.manageable.include?(
         effective_access_level

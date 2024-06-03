@@ -17,7 +17,8 @@ module Samples
       end
 
       def execute
-        authorize! sample.project, to: :update_sample?
+        authorize! sample.project, to: :update_sample?,
+                                   context: { token: current_user.personal_access_tokens&.active&.write_access&.last }
 
         validate_sample_in_project
 

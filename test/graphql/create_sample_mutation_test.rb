@@ -77,6 +77,29 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
     assert_equal 'New Sample Two Description', data['sample']['description']
   end
 
+  test 'createSample mutation should work with valid params, project puid, and api scope token with uploader access level' do # rubocop:disable Layout/LineLength
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+    project = projects(:project1)
+
+    result = IridaSchema.execute(CREATE_SAMPLE_USING_PROJECT_PUID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { projectPuid: project.puid,
+                                              name: 'New Sample Two',
+                                              description: 'New Sample Two Description' })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['createSample']
+
+    assert_not_empty data, 'createSample should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_not_empty data['sample']
+
+    assert_equal 'New Sample Two', data['sample']['name']
+    assert_equal 'New Sample Two Description', data['sample']['description']
+  end
+
   test 'createSample mutation should not work with invalid params and api scope token' do
     project = projects(:project1)
     sample1 = samples(:sample1)

@@ -20,6 +20,7 @@ class PersonalAccessToken < ApplicationRecord
   scope :not_revoked, -> { where(revoked: [false, nil]) }
   scope :expired, -> { where('expires_at IS NOT NULL AND expires_at <= ?', Time.current) }
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.current) }
+  scope :write_access, -> { where("'api' IN (?)", Irida::Auth.all_available_scopes.map(&:to_s)) }
 
   def revoke!
     update!(revoked: true)

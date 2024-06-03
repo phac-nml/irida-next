@@ -12,7 +12,10 @@ module Samples
     end
 
     def execute
-      authorize! @project, to: :create_sample? unless @project.nil?
+      unless @project.nil?
+        authorize! @project, to: :create_sample?,
+                             context: { token: current_user.personal_access_tokens&.active&.write_access&.last }
+      end
 
       sample.save
       sample

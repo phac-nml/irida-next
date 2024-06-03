@@ -82,6 +82,29 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal 'value1', data['sample']['metadata']['key1']
   end
 
+  test 'updateSampleMetadata mutation should work with valid params, puid, and api scope token with uploader access level' do # rubocop:disable Layout/LineLength
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_PUID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { samplePuid: @sample.puid,
+                                              metadata: { key1: 'value1' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+
+    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_not_empty data['status']
+    assert_not_empty data['status'][:added]
+    assert_equal 'key1', data['status'][:added].first
+    assert_not_empty data['sample']
+    assert_not_empty data['sample']['metadata']
+    assert_not_empty data['sample']['metadata']['key1']
+    assert_equal 'value1', data['sample']['metadata']['key1']
+  end
+
   test 'updateSampleMetadata mutation should error with empty metadata params and api scope token' do
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
