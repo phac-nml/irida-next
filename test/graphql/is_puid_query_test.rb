@@ -20,8 +20,6 @@ class PuidQueryTest < ActiveSupport::TestCase
   end
 
   test 'is puid query should return true' do
-    user = users(:john_doe)
-
     result = IridaSchema.execute(PUID_QUERY_TRUE, context: { current_user: @user }, variables: {})
 
     assert_nil result['errors'], 'should work and have no errors.'
@@ -33,8 +31,6 @@ class PuidQueryTest < ActiveSupport::TestCase
   end
 
   test 'is puid query should return false' do
-    user = users(:john_doe)
-
     result = IridaSchema.execute(PUID_QUERY_FALSE, context: { current_user: @user }, variables: {})
 
     assert_nil result['errors'], 'should work and have no errors.'
