@@ -46,7 +46,7 @@ To create a user workflow execution:
   3. Click the checkbox of each sample you'd like to include in the analysis
   4. Click ![workflow_execution_btn](./assets/rocket_launch.svg)
   5. Select a pipeline in the new pop-up
-  6. The next pop-up contains a list of parameters for you to enter and/or confirm, as well as optional parameters to either give the workflow execution a name and whether you'd like to receive an e-mail notification when analysis is complete.
+  6. The next pop-up contains a list of parameters for you to enter and/or confirm. The parameters contains parameters specific to the selected pipeline as well as optional parameters such as workflow name, e-mail notification, and sample updates upon workflow completion.
 
 ## Set-up Automated Workflow Executions
 
@@ -59,6 +59,6 @@ To set-up automated workflow executions:
   3. In the **Settings** dropdown menu, select **Automated Workflow Executions**
   4. Click **New automated workflow execution**
   5. Select a pipeline in the new pop-up
-  6. The next pop-up contains a list of parameters for you to enter and/or confirm, as well as optional parameters to give the workflow execution a name, whether you'd like to receive an e-mail notification when analysis is complete, and whether you'd like the project's samples to update with analysis results.
+  6. The next pop-up contains a list of parameters for you to enter and/or confirm. The parameters contains parameters specific to the selected pipeline as well as optional parameters such as workflow name, e-mail notification, and sample updates upon workflow completion.
 
 Once set-up, each time paired-end files are uploaded to a sample belonging to this project, a workflow execution with these selected parameters will execute.
