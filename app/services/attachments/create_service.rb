@@ -3,7 +3,7 @@
 module Attachments
   # Service used to Create Attachments
   class CreateService < BaseService # rubocop:disable Metrics/ClassLength
-    attr_accessor :attachable, :attachments, :pe_attachments
+    attr_accessor :attachable, :attachments, :pe_attachments, :token
 
     def initialize(user = nil, attachable = nil, params = {})
       super(user, params)
@@ -11,6 +11,7 @@ module Attachments
       @attachable = attachable
       @attachments = []
       @pe_attachments = []
+      @token = params.delete(:token)
 
       return unless params.key?(:files)
 
@@ -26,7 +27,7 @@ module Attachments
       if @attachable.instance_of?(Sample)
         authorize! @attachable.project, to: :update_sample?,
                                         context: {
-                                          token: current_user.personal_access_tokens&.active&.write_access&.last
+                                          token:
                                         }
       end
 

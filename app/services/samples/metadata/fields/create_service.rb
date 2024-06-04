@@ -7,19 +7,20 @@ module Samples
       # to Samples::Metadata::UpdateService
       class CreateService < BaseService
         SampleMetadataFieldsCreateError = Class.new(StandardError)
-        attr_accessor :project, :sample, :create_fields, :metadata_update_params
+        attr_accessor :project, :sample, :create_fields, :metadata_update_params, :token
 
         def initialize(project, sample, user = nil, create_fields = {})
           super(user, params)
           @project = project
           @sample = sample
           @create_fields = create_fields
+          @token = create_fields.delete(:token)
           @metadata_update_params = { 'metadata' => {}, 'existing_keys' => [] }
         end
 
         def execute
           authorize! @project, to: :update_sample?,
-                               context: { token: current_user.personal_access_tokens&.active&.write_access&.last }
+                               context: { token: }
 
           validate_sample_in_project
 

@@ -5,7 +5,7 @@ module Samples
     # Service used to Update Samples::Metadata
     class UpdateService < BaseService
       SampleMetadataUpdateError = Class.new(StandardError)
-      attr_accessor :sample, :metadata, :analysis_id
+      attr_accessor :sample, :metadata, :analysis_id, :token
 
       def initialize(project, sample, user = nil, params = {})
         super(user, params)
@@ -13,12 +13,13 @@ module Samples
         @sample = sample
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
+        @token = params.delete(:token)
         @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [] }
       end
 
       def execute
         authorize! sample.project, to: :update_sample?,
-                                   context: { token: current_user.personal_access_tokens&.active&.write_access&.last }
+                                   context: { token: }
 
         validate_sample_in_project
 

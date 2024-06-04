@@ -3,18 +3,19 @@
 module Samples
   # Service used to Create Samples
   class CreateService < BaseService
-    attr_accessor :project, :sample
+    attr_accessor :project, :sample, :token
 
     def initialize(user = nil, project = nil, params = {})
       super(user, params)
       @project = project
+      @token = params.delete(:token)
       @sample = Sample.new(params.merge(project_id: project&.id))
     end
 
     def execute
       unless @project.nil?
         authorize! @project, to: :create_sample?,
-                             context: { token: current_user.personal_access_tokens&.active&.write_access&.last }
+                             context: { token: }
       end
 
       sample.save
