@@ -33,7 +33,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     DEFAULT_CAN_OPTIONS = {
       include_group_links: true,
       token: nil
-    }
+    }.freeze
 
     def access_levels(member)
       case member.access_level

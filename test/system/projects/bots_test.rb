@@ -152,6 +152,7 @@ module Projects
 
     test 'can view personal access tokens for bot account' do
       namespace_bot = namespace_bots(:project1_bot0)
+      active_personal_tokens = namespace_bot.user.personal_access_tokens.active
 
       visit namespace_project_bots_path(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
@@ -160,7 +161,7 @@ module Projects
       table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
 
       within table_row do
-        click_link namespace_bot.user.personal_access_tokens.count.to_s
+        click_link active_personal_tokens.count.to_s
       end
 
       within('dialog') do
@@ -173,7 +174,7 @@ module Projects
 
         within('table') do
           assert_selector 'tr', count: 2
-          token = namespace_bot.user.personal_access_tokens.first
+          token = active_personal_tokens.first
 
           table_row = find(:table_row, { 'Token name' => token.name })
 
@@ -235,6 +236,7 @@ module Projects
 
     test 'can revoke a personal access token' do
       namespace_bot = namespace_bots(:project1_bot0)
+      active_personal_tokens = namespace_bot.user.personal_access_tokens.active
       token = nil
 
       visit namespace_project_bots_path(@namespace, @project)
@@ -244,7 +246,7 @@ module Projects
       table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
 
       within table_row do
-        click_link namespace_bot.user.personal_access_tokens.count.to_s
+        click_link active_personal_tokens.count.to_s
       end
 
       within('dialog') do
@@ -257,7 +259,7 @@ module Projects
 
         within('table') do
           assert_selector 'tr', count: 2
-          token = namespace_bot.user.personal_access_tokens.first
+          token = active_personal_tokens.first
 
           table_row = find(:table_row, { 'Token name' => token.name })
 

@@ -93,4 +93,21 @@ class NamespaceQueryTest < ActiveSupport::TestCase
 
     assert_equal I18n.t('action_policy.policy.group.read?', name: namespace.name), error_message
   end
+
+  test 'namespace query should not return a result when unauthorized due to expired token for uploader access level' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_expired_pat)
+    namespace = groups(:group_one)
+
+    result = IridaSchema.execute(NAMESPACE_QUERY, context: { current_user: user, token: },
+                                                  variables: { namespacePath: namespace.full_path })
+
+    assert_nil result['data']['group']
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal I18n.t('action_policy.policy.group.read?', name: namespace.name), error_message
+  end
 end

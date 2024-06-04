@@ -93,7 +93,6 @@ user_bot_account<%= (n) %>_valid_pat:
   last_used_at: nil
 <% end %>
 
-
 <% 21.times do |n| %>
 user_group_bot_account<%= (n) %>_valid_pat:
   user_id: <%= ActiveRecord::FixtureSet.identify(:"user_group_bot_account#{n}", :uuid) %>
@@ -116,4 +115,37 @@ projectJeff_bot_account_valid_pat:
   revoked: false
   expires_at: <%= 10.days.from_now.to_date %>
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "FX3wwK3sWCjn1xdCyZtA") %>
+  last_used_at: nil
+
+user_bot_account0_expired_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid) %>
+  scopes:
+    - read_api
+    - api
+  name: Expired Valid PAT0
+  revoked: false
+  expires_at: <%= 10.days.ago.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "VX3wwK3sWCjn0xdCyZtH") %>
+  last_used_at: nil
+
+user_group_bot_account0_expired_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid) %>
+  scopes:
+    - read_api
+    - api
+  name: Expired PAT 0
+  revoked: false
+  expires_at: <%= 5.days.ago.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "TA3wwK3sWCjn0xdCyZtH") %>
+  last_used_at: nil
+
+projectJeff_bot_account_expired_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid) %>
+  scopes:
+    - read_api
+    - api
+  name: Expired PAT1 %>
+  revoked: false
+  expires_at: <%= 3.days.ago.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "FL3wwK3sWCjn1xdCyZtA") %>
   last_used_at: nil

@@ -97,4 +97,21 @@ class ProjectQueryTest < ActiveSupport::TestCase
 
     assert_equal I18n.t('action_policy.policy.project.read?', name: project.name), error_message
   end
+
+  test 'project query should not return a result when unauthorized due to expired token for uploader access level' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_expired_pat)
+    project = projects(:project1)
+
+    result = IridaSchema.execute(PROJECT_QUERY_BY_FULL_PATH, context: { current_user: user, token: },
+                                                             variables: { projectPath: project.full_path })
+
+    assert_nil result['data']['project']
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal I18n.t('action_policy.policy.project.read?', name: project.name), error_message
+  end
 end

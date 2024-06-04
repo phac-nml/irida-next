@@ -17,7 +17,7 @@ module Bots
 
       assert_difference -> { NamespaceBot.count } => -1,
                         -> { User.count } => -1,
-                        -> { PersonalAccessToken.count } => -1,
+                        -> { PersonalAccessToken.count } => -2,
                         -> { Member.count } => -1 do
         Bots::DestroyService.new(@project_bot, @user).execute
       end
@@ -53,7 +53,7 @@ module Bots
 
       assert_difference -> { NamespaceBot.count } => -1,
                         -> { User.count } => -1,
-                        -> { PersonalAccessToken.count } => -1,
+                        -> { PersonalAccessToken.count } => -2,
                         -> { Member.count } => -1 do
         Bots::DestroyService.new(@group_bot, @user).execute
       end

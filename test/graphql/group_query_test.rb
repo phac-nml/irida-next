@@ -146,11 +146,28 @@ class GroupQueryTest < ActiveSupport::TestCase
     assert_equal I18n.t('action_policy.policy.group.read?', name: group.name), error_message
   end
 
-  test 'group query should not return a result when unauthorized a' do
+  test 'group query should not return a result when user is not authorized to read the group due to no membership' do
     user = users(:user_no_access)
     group = groups(:david_doe_group_four)
 
     result = IridaSchema.execute(GROUP_QUERY_BY_FULL_PATH, context: { current_user: user },
+                                                           variables: { groupPath: group.full_path })
+
+    assert_nil result['data']['group']
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal I18n.t('action_policy.policy.group.read?', name: group.name), error_message
+  end
+
+  test 'group query should not return a result when unauthorized due to expired token for uploader access level' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_expired_pat)
+    group = groups(:group_one)
+
+    result = IridaSchema.execute(GROUP_QUERY_BY_FULL_PATH, context: { current_user: user, token: },
                                                            variables: { groupPath: group.full_path })
 
     assert_nil result['data']['group']

@@ -156,6 +156,19 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_equal file_url2, attachments[1]['node']['attachmentUrl']
   end
 
+  test 'attachment url query should not work due to expired token for uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_expired_pat)
+    result = IridaSchema.execute(ATTACHMENTS_URL_QUERY, context: { current_user: user, token: },
+                                                        variables: { puid: @sample.puid })
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal 'An object of type Sample was hidden due to permissions', error_message
+  end
+
   test 'attachment metadata delimit query should work' do
     result = IridaSchema.execute(ATTACHMENTS_METADATA_QUERY, context: { current_user: @user },
                                                              variables: { puid: @sample.puid })

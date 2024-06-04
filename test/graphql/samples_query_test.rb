@@ -122,6 +122,24 @@ class SamplesQueryTest < ActiveSupport::TestCase
     assert_nil data
   end
 
+  test 'group samples query should throw authorization error due to expired token for uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+    group = groups(:group_one)
+    result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: user, token: },
+                                                      variables:
+                                                      { group_id: group.to_global_id.to_s })
+
+    assert_not_nil result['errors'], 'should not work and have authorization errors.'
+
+    assert_equal "You are not authorized to view samples for group #{group.name} on this server.",
+                 result['errors'].first['message']
+
+    data = result['data']['samples']
+
+    assert_nil data
+  end
+
   test 'sample and metadata fields query should work' do
     result = IridaSchema.execute(SAMPLE_AND_METADATA_QUERY, context: { current_user: @user },
                                                             variables: { sample_id: @sample32.to_global_id.to_s })
@@ -134,6 +152,22 @@ class SamplesQueryTest < ActiveSupport::TestCase
     assert_equal @sample32.metadata, data['metadata']
     assert data['metadata'].key?('metadatafield1')
     assert data['metadata'].key?('metadatafield2')
+  end
+
+  test 'sample and metadata fields query should not work due to expired token for uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_expired_pat)
+    result = IridaSchema.execute(SAMPLE_AND_METADATA_QUERY, context: { current_user: user, token: },
+                                                            variables: { sample_id: @sample.to_global_id.to_s })
+
+    assert_not_nil result['errors'],
+                   'shouldn\'t work and have errors.'
+
+    assert_nil result['data']['sample']
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal 'An object of type Sample was hidden due to permissions', error_message
   end
 
   test 'sample and metadata fields query should be able to limit to a specific set of keys' do

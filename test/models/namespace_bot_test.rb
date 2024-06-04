@@ -29,7 +29,7 @@ class NamespaceBotTest < ActiveSupport::TestCase
     assert_difference(
       -> { NamespaceBot.count } => -1,
       -> { User.count } => -1,
-      -> { PersonalAccessToken.count } => -1,
+      -> { PersonalAccessToken.count } => -2,
       -> { Member.count } => -1
     ) do
       namespace_bot.destroy

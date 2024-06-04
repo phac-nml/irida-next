@@ -153,4 +153,20 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     assert_equal I18n.t(:'action_policy.policy.project.update_sample?', name: @sample.project.name), error_message
   end
+
+  test 'updateSampleMetadata mutation should not work with valid params due to expired token for uploader access level' do # rubocop:disable Layout/LineLength
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_expired_pat)
+
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { sampleId: @sample.to_global_id.to_s,
+                                              metadata: { key1: 'value1' } })
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal 'You are not authorized to perform this action', error_message
+  end
 end

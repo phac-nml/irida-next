@@ -68,4 +68,22 @@ class SampleQueryTest < ActiveSupport::TestCase
 
     assert_equal 'An object of type Sample was hidden due to permissions', error_message
   end
+
+  test 'sample query should not return a result when unauthorized due to expired token for uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_expired_pat)
+    project = projects(:project1)
+    sample = project.samples.first
+
+    result = IridaSchema.execute(SAMPLE_QUERY, context: { current_user: user, token: },
+                                               variables: { samplePuid: sample.puid })
+
+    assert_nil result['data']['sample']
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal 'An object of type Sample was hidden due to permissions', error_message
+  end
 end

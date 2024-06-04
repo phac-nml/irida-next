@@ -80,6 +80,20 @@ class NodeQueryTest < ActiveSupport::TestCase
     assert_equal 'An object of type Group was hidden due to permissions', error_message
   end
 
+  test 'node query should not return an unauthorized group due to expired token for uploader access level' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_expired_pat)
+    group = groups(:group_one)
+
+    result = IridaSchema.execute(NODE_QUERY, context: { current_user: user, token: },
+                                             variables: { id: group.to_global_id.to_s })
+
+    assert_not_nil result['errors'], 'should not work and have errors.'
+
+    error_message = result['errors'][0]['message']
+    assert_equal 'An object of type Group was hidden due to permissions', error_message
+  end
+
   test 'node query for group should be able to return group attributes' do
     group = groups(:group_one)
 
