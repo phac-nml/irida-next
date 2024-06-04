@@ -1,42 +1,64 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 id: working-with-workflow-executions
 title: Working with Workflow Executions
 ---
 
-## Workflow Execution States
+Learn how to use workflow executions in IRIDA Next
 
-While a workflow execution is executing, it will go through numerous states to give you feedback on its progress.
+## View User Workflow Executions
 
-The states and a description of each state is the following:
+There are two ways to navigate and view user workflow executions:
 
-  Successful workflow execution run states:
+  * If you are currently viewing a project or group, click the dropdown on the left sidebar that contains the project or group name, and click **Workflow Executions** in the dropdown menu.
+  * If you are not currently viewing a project or group, click **Workflow Executions** on the left sidebar.
 
-    | State         | Description                                                                                                   |
-    | :------------ | :------------------------------------------------------------------------------------------------------------ |
-    | 1. New        | This is the initial state acknowledging the workflow execution is newly created                               |
-    | 2. Prepared   | IRIDA Next prepares the files to be submitted for analysis                                                    |
-    | 3. Submitted  | The workflow execution is submitted to the selected pipeline for analysis                                     |
-    | 4. Running    | The workflow execution is being analysed by the selected pipeline                                             |
-    | 5. Completing | The analysis was successful and IRIDA Next is finalizing the workflow execution and its contents for the user |
-    | 6. Completed  | The workflow execution is complete and ready for use                                                          |
+This page will list all your workflow executions.
 
-  Error states:
+## View Automated Workflow Executions
 
-    | State     | Description                                                                                |
-    | :-------- | :----------------------------------------------------------------------------------------- |
-    | Error     | An error occurred during analysis and the run is aborted                                   |
-    | Canceling | The workflow execution was cancelled and IRIDA Next is in the process of canceling the run |
-    | Canceled  | The workflow execution has successfully canceled                                           |
+Prerequisites:
+  * You must have at least the Analyst role to the project with workflow executions.
 
-The current state of any workflow execution is shown on the workflow execution listing page.
+To view automated workflow executions:
+  1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) containing the workflow executions
+  2. Click **Workflow Executions**
 
-<!-- TODO: Include the following headers with explanations and/or descriptions:
-- States of Workflow Executions
-- User Workflow Executions
-  - Navigating to the user workflow executions page
-  - Creating a user workflow execution
-- Automated Workflow Executions
-  - Navigating to the automated workflow executions page
-  - Creating an automated workflow execution
--->
+This page will list all of the project's workflow executions.
+
+## View Single Workflow Execution
+
+To view a specific workflow execution:
+  1. Follow the steps to view either the [user](../analysis/working-with-workflow-executions#view-user-workflow-executions) or [automated](../analysis/working-with-workflow-executions#view-automated-workflow-executions) workflow executions listing page
+  2. Click the **ID** of the workflow execution you'd like to view
+
+Each individual workflow execution will contain a summary, the parameters selected during set-up, and the output files once analysis has completed.
+
+## Create A User Workflow Execution
+
+Prerequisites:
+  * A project must contain at least one sample, and that sample must have uploaded paired-end files.
+  * You must have at least the Analyst role to the project or group you will create the workflow execution from.
+
+To create a user workflow execution:
+  1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) or [group](../organization/groups/manage#view-groups) that contains the samples you'd like to analyse
+  2. From the left sidebar, select **Samples**
+  3. Click the checkbox of each sample you'd like to include in the analysis
+  4. Click ![workflow_execution_btn](./assets/rocket_launch.svg)
+  5. Select a pipeline in the new pop-up
+  6. The next pop-up contains a list of parameters for you to enter and/or confirm, as well as optional parameters to either give the workflow execution a name and whether you'd like to receive an e-mail notification when analysis is complete.
+
+## Set-up Automated Workflow Executions
+
+Prerequisites:
+  * A project and at least the Maintainer role for this project.
+
+To set-up automated workflow executions:
+  1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) which you'd like to set up automated workflow executions
+  2. From the left sidebar, select **Settings**
+  3. In the **Settings** dropdown menu, select **Automated Workflow Executions**
+  4. Click **New automated workflow execution**
+  5. Select a pipeline in the new pop-up
+  6. The next pop-up contains a list of parameters for you to enter and/or confirm, as well as optional parameters to give the workflow execution a name, whether you'd like to receive an e-mail notification when analysis is complete, and whether you'd like the project's samples to update with analysis results.
+
+Once set-up, each time paired-end files are uploaded to a sample belonging to this project, a workflow execution with these selected parameters will execute.
