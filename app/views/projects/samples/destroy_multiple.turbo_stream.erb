@@ -1,0 +1,35 @@
+<%= turbo_stream.update(
+  "samples_dialog",
+  partial: "delete_samples_dialog",
+  locals: {
+    open: false,
+  },
+) %>
+
+<% unless message.nil? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+<% end %>
+
+<% unless not_deleted_samples.nil? %>
+  <% not_deleted_samples.each do |sample| %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= viral_flash(type: :error, data: t(".error", sample: sample.name)) %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "project_samples_list",
+                    partial: "table",
+                    locals: {
+                      project: @project,
+                      samples: @samples,
+                    } %>
+
+<%= turbo_stream.update "project_samples_pagination",
+                    partial: "pagination",
+                    locals: {
+                      project: @project,
+                      pagy: @pagy,
+                    } %>

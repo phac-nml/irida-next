@@ -7,12 +7,11 @@ module Projects
 
     before_action :sample, only: %i[show edit update destroy view_history_version]
     before_action :current_page
-    before_action :set_search_params, only: %i[index destroy]
+    before_action :set_search_params, only: %i[index destroy destroy_multiple]
     before_action :set_metadata_fields, only: :index
 
     def index
       authorize! @project, to: :sample_listing?
-
       @q = load_samples.ransack(params[:q])
       set_default_sort
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
@@ -109,6 +108,47 @@ module Projects
       end
     end
 
+    def new_destroy_multiple
+      authorize! @project, to: :destroy_sample?
+      render turbo_stream: turbo_stream.update('samples_dialog',
+                                               partial: 'delete_samples_dialog',
+                                               locals: {
+                                                 open: true
+                                               }), status: :ok
+    end
+
+    def destroy_multiple # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      authorize! @project, to: :destroy_sample?
+
+      samples_to_delete = get_samples(destroy_multiple_params['sample_ids'])
+      samples_to_delete_count = destroy_multiple_params['sample_ids'].count
+
+      samples_to_delete.each do |sample|
+        ::Samples::DestroyService.new(sample, current_user).execute
+        samples_to_delete -= [sample] if sample.deleted?
+      end
+
+      @pagy, @samples = pagy(load_samples)
+      @q = load_samples.ransack(params[:q])
+      fields_for_namespace(
+        namespace: @project.namespace,
+        show_fields: params[:q] && params[:q][:metadata].to_i == 1
+      )
+      # No selected samples deleted
+      if samples_to_delete.count.positive? && samples_to_delete.count == samples_to_delete_count
+        render status: :unprocessable_entity, locals: { message: nil, not_deleted_samples: samples_to_delete }
+      # Partial sample deletion
+      elsif samples_to_delete.count.positive?
+        render status: :multi_status,
+               locals: { message: t('.partial_success'),
+                         not_deleted_samples: samples_to_delete }
+      # All samples deleted successfully
+      else
+        render status: :ok,
+               locals: { type: :success, message: t('.success'), not_deleted_samples: nil }
+      end
+    end
+
     def select
       authorize! @project, to: :sample_listing?
       @samples = []
@@ -182,6 +222,14 @@ module Projects
         namespace: @project.namespace,
         show_fields: params[:q] && params[:q][:metadata].to_i == 1
       )
+    end
+
+    def destroy_multiple_params
+      params.require(:multiple_deletion).permit(sample_ids: [])
+    end
+
+    def get_samples(sample_ids)
+      sample_ids.map { |sample_id| Sample.find(sample_id) }
     end
   end
 end

@@ -1,0 +1,38 @@
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
+  <%= dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_section do %>
+
+    <%= turbo_frame_tag("deletion-alert") %>
+
+    <div class="mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible">
+      <p class="mb-4"><%= t(".description") %></p>
+      <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_path, method: :delete) do |form| %>
+        <div
+          data-controller="sessionstorage-amend-form"
+          data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
+          data-sessionstorage-amend-form-target="field"
+          data-sessionstorage-amend-form-field-name-value="multiple_deletion[sample_ids][]"
+        />
+        <div data-controller="projects--samples--multiple-delete-listing">
+          <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
+            <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+              <tr>
+                <th class="px-6 py-4"><%= t(".id") %></th>
+                <th class="px-6 py-4"><%= t(".name") %></th>
+              </tr>
+            </thead>
+            <tbody data-projects--samples--multiple-delete-listing-target="tableBody"></tbody>
+          </table>
+          <div>
+            <%= form.submit t(".submit_button"),
+                        class: "button button--size-default button--state-destructive",
+                        data: {
+                          action: "click->sessionstorage-amend-form#clear"
+                        } %>
+          </div>
+        </div>
+
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

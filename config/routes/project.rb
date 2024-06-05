@@ -44,11 +44,18 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :clone, only: %i[create new]
             resource :transfer, only: %i[create new]
             resource :file_import, module: :metadata, only: %i[create new]
+            resource :deletion, only: %i[new destroy]
           end
         end
         collection do
           get :select
           post :list
+        end
+        collection do
+          delete :destroy_multiple
+        end
+        collection do
+          get :new_destroy_multiple
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           scope module: :attachments, as: :attachments do
@@ -70,7 +77,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             end
           end
         end
-
         get :view_history_version
       end
 
