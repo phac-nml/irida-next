@@ -139,28 +139,28 @@ module Projects
     end
 
     test 'show sample history listing' do
-      sign_in users(:john_doe)
-      namespace = groups(:group_one)
-      project = projects(:project1)
-      sample = samples(:sample1)
+      @sample1.create_logidze_snapshot!
 
-      sample.create_logidze_snapshot!
-
-      get namespace_project_sample_path(namespace, project, sample, tab: 'history')
+      get namespace_project_sample_path(@namespace, @project, @sample1, tab: 'history')
 
       assert_response :success
     end
 
     test 'view sample history version' do
-      sign_in users(:john_doe)
-      namespace = groups(:group_one)
-      project = projects(:project1)
-      sample = samples(:sample1)
+      @sample1.create_logidze_snapshot!
 
-      sample.create_logidze_snapshot!
+      get namespace_project_sample_view_history_version_path(@namespace, @project, @sample1, version: 1,
+                                                                                             format: :turbo_stream)
 
-      get namespace_project_sample_view_history_version_path(namespace, project, sample, version: 1,
-                                                                                         format: :turbo_stream)
+      assert_response :success
+    end
+
+    test 'test successfully deleting multiple samples' do
+      sample2 = samples(:sample2)
+      sample30 = samples(:sample30)
+      delete destroy_multiple_namespace_project_samples_url(@namespace, @project), params: { multiple_deletion: {
+        sample_ids: [@sample1.id, sample2.id, sample30.id]
+      } }, as: :turbo_stream
 
       assert_response :success
     end

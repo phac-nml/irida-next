@@ -1309,10 +1309,6 @@ en:
         description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
         apply: Apply filter
         remove_tag: Remove
-      deletions:
-
-        destroy:
-          success: Samples were successfully deleted
       delete_samples_dialog:
           description: "Samples selected for deletion:"
           id: ID
@@ -1320,6 +1316,8 @@ en:
           submit_button: Confirm
           title: Delete Samples
       destroy_multiple:
+        error: Sample %{sample_name} was not deleted
+        partial_success: Some samples were successfully deleted
         success: Samples were successfully deleted
     workflow_executions:
       cancel:

@@ -15,7 +15,7 @@
 <% unless not_deleted_samples.nil? %>
   <% not_deleted_samples.each do |sample| %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(type: :error, data: t(".error", sample: sample.name)) %>
+      <%= viral_flash(type: :error, data: t(".error", sample_name: sample.name)) %>
     <% end %>
   <% end %>
 <% end %>

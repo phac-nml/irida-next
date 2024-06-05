@@ -50,12 +50,8 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         collection do
           get :select
           post :list
-        end
-        collection do
-          delete :destroy_multiple
-        end
-        collection do
           get :new_destroy_multiple
+          delete :destroy_multiple
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           scope module: :attachments, as: :attachments do

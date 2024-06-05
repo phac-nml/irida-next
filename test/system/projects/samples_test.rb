@@ -2098,5 +2098,33 @@ module Projects
       end
       puids
     end
+
+    test 'delete multiple samples' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'table#samples-table tbody' do
+        assert_selector 'tr', count: 3
+        assert_text @sample1.name
+        assert_text @sample2.name
+        assert_text @sample3.name
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.delete_samples_dialog.title')
+        assert_text I18n.t('projects.samples.delete_samples_dialog.description')
+        assert_text @sample1.name
+        assert_text @sample2.name
+        assert_text @sample3.name
+        click_on I18n.t('projects.samples.delete_samples_dialog.submit_button')
+      end
+      assert_text I18n.t('projects.samples.destroy_multiple.success')
+
+      within 'table#samples-table tbody' do
+        assert_no_selector 'tr'
+        assert_no_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample3.name
+      end
+    end
   end
 end

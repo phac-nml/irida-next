@@ -12,6 +12,7 @@ module Projects
 
     def index
       authorize! @project, to: :sample_listing?
+
       @q = load_samples.ransack(params[:q])
       set_default_sort
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
@@ -140,8 +141,7 @@ module Projects
       # Partial sample deletion
       elsif samples_to_delete.count.positive?
         render status: :multi_status,
-               locals: { message: t('.partial_success'),
-                         not_deleted_samples: samples_to_delete }
+               locals: { type: :success, message: t('.partial_success'), not_deleted_samples: samples_to_delete }
       # All samples deleted successfully
       else
         render status: :ok,
