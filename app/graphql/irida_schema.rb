@@ -38,6 +38,11 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
   # Stop validating when it encounters this many errors:
   validate_max_errors 100
 
+  def self.execute(query_str = nil, **kwargs)
+    Current.token = kwargs[:context][:token]
+    super
+  end
+
   # Relay-style Object Identification:
 
   # Return a string UUID for `object`

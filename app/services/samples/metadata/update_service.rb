@@ -13,13 +13,11 @@ module Samples
         @sample = sample
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
-        @token = params.delete(:token)
         @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [] }
       end
 
       def execute
-        authorize! sample.project, to: :update_sample?,
-                                   context: { token: }
+        authorize! sample.project, to: :update_sample?
 
         validate_sample_in_project
 

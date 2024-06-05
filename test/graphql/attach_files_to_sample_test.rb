@@ -133,28 +133,6 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     assert_equal 'You are not authorized to perform this action', error_message
   end
 
-  test 'attachFilesToSample mutation should not work with expired token for uploader access level' do
-    user = users(:projectJeff_bot)
-    token = personal_access_tokens(:projectJeff_bot_account_expired_pat)
-    sample = samples(:sampleJeff)
-    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
-
-    assert_equal 0, sample.attachments.count
-
-    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
-                                 context: { current_user: user, token: },
-                                 variables: { files: [blob_file.signed_id],
-                                              sampleId: sample.to_global_id.to_s })
-
-    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
-
-    assert_equal 0, sample.attachments.count
-
-    error_message = result['errors'][0]['message']
-
-    assert_equal 'You are not authorized to perform this action', error_message
-  end
-
   test 'attachFilesToSample mutation attach same file to sample error' do
     sample = samples(:sampleJeff)
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)

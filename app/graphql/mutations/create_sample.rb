@@ -26,8 +26,7 @@ module Mutations
                 end
       sample = Samples::CreateService.new(current_user, project,
                                           { name: args[:name],
-                                            description: args[:description],
-                                            token: context[:token] }).execute
+                                            description: args[:description] }).execute
       if sample.persisted?
         {
           sample:,

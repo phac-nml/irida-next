@@ -2,7 +2,7 @@
 
 module Attachments
   # Service used to Create Attachments
-  class CreateService < BaseService # rubocop:disable Metrics/ClassLength
+  class CreateService < BaseService
     attr_accessor :attachable, :attachments, :pe_attachments, :token
 
     def initialize(user = nil, attachable = nil, params = {})
@@ -11,7 +11,6 @@ module Attachments
       @attachable = attachable
       @attachments = []
       @pe_attachments = []
-      @token = params.delete(:token)
 
       return unless params.key?(:files)
 
@@ -23,13 +22,8 @@ module Attachments
       @attachments
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/MethodLength
-      if @attachable.instance_of?(Sample)
-        authorize! @attachable.project, to: :update_sample?,
-                                        context: {
-                                          token:
-                                        }
-      end
+    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
+      authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
 

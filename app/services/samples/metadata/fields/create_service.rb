@@ -14,13 +14,11 @@ module Samples
           @project = project
           @sample = sample
           @create_fields = create_fields
-          @token = create_fields.delete(:token)
           @metadata_update_params = { 'metadata' => {}, 'existing_keys' => [] }
         end
 
         def execute
-          authorize! @project, to: :update_sample?,
-                               context: { token: }
+          authorize! @project, to: :update_sample?
 
           validate_sample_in_project
 

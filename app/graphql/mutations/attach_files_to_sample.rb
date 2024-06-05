@@ -24,7 +24,7 @@ module Mutations
                  Sample.find_by(puid: args[:sample_puid])
                end
       files_attached = Attachments::CreateService.new(current_user, sample,
-                                                      { files: args[:files], token: context[:token] }).execute
+                                                      { files: args[:files] }).execute
 
       status, errors = attachment_status_and_errors(files_attached)
       errors['query'] = sample.errors.full_messages if sample.errors.count.positive?

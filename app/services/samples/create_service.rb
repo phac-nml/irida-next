@@ -8,15 +8,11 @@ module Samples
     def initialize(user = nil, project = nil, params = {})
       super(user, params)
       @project = project
-      @token = params.delete(:token)
       @sample = Sample.new(params.merge(project_id: project&.id))
     end
 
     def execute
-      unless @project.nil?
-        authorize! @project, to: :create_sample?,
-                             context: { token: }
-      end
+      authorize! @project, to: :create_sample? unless @project.nil?
 
       sample.save
       sample

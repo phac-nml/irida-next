@@ -152,7 +152,7 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
 
     error_message = result['errors'][0]['message']
 
-    assert_equal 'You are not authorized to perform this action', error_message
+    assert_equal 'You are not authorized to create samples for project Project 1 on this server.', error_message
   end
 
   test 'createSample mutation should not work with unauthorized project and valid api scope token' do

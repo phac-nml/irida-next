@@ -24,8 +24,7 @@ module Mutations
                  Sample.find_by(puid: args[:sample_puid])
                end
       metadata_changes = Samples::Metadata::UpdateService.new(sample.project, sample, current_user,
-                                                              { 'metadata' => args[:metadata],
-                                                                token: context[:token] }).execute
+                                                              { 'metadata' => args[:metadata] }).execute
       {
         sample:,
         status: metadata_changes,
