@@ -10,7 +10,7 @@ module WorkflowExecutionActions
     before_action :workflow_execution, only: %i[show cancel destroy]
   end
 
-  TABS = %w[summary params files].freeze
+  TABS = %w[summary params samples files].freeze
 
   def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
@@ -29,7 +29,7 @@ module WorkflowExecutionActions
                                .or(Attachment.where(attachable: @samples_worfklow_executions))
     elsif @tab == 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
-                                                    @workflow_execution.metadata['workflow_version'])
+                                                             @workflow_execution.metadata['workflow_version'])
     end
   end
 
