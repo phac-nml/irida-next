@@ -16,6 +16,6 @@ module Metadata
   end
 
   def fields_for_namespace(namespace: nil, show_fields: false)
-    @fields = !show_fields || namespace.nil? ? [] : namespace.metadata_summary.keys
+    @fields = !show_fields || namespace.nil? ? [] : namespace.metadata_fields
   end
 end

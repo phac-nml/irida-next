@@ -375,7 +375,7 @@ projectBravo_namespace:
   description: Project Bravo description
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_bravo, :uuid) %>
-  metadata_summary: {}
+  metadata_summary: {'metadatafield1': 1, 'metadatafield2': 1}
   puid: INXT_PRJ_AAAAAAAABF
 
 projectCharlie_namespace:
