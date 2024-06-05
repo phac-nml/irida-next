@@ -440,6 +440,7 @@ GEM
     rbs (2.8.4)
       psych (>= 4.0.0)
     rdoc (6.7.0)
+      psych (>= 4.0.0)
     redcarpet (3.6.0)
     regexp_parser (2.9.2)
     reline (0.5.8)
