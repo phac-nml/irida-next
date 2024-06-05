@@ -25,8 +25,7 @@ module Mutations
                   Namespaces::ProjectNamespace.find_by!(puid: args[:project_puid]).project
                 end
       sample = Samples::CreateService.new(current_user, project,
-                                          { name: args[:name],
-                                            description: args[:description] }).execute
+                                          { name: args[:name], description: args[:description] }).execute
       if sample.persisted?
         {
           sample:,
