@@ -245,6 +245,10 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     raise NotImplementedError, 'The underlying class should implement this method to set the model prefix.'
   end
 
+  def metadata_fields
+    metadata_summary.keys
+  end
+
   private
 
   # Method to restore namespace routes when the namespace is restored

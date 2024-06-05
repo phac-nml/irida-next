@@ -194,4 +194,16 @@ class GroupTest < ActiveSupport::TestCase
   test '#model_prefix' do
     assert_equal 'GRP', Group.model_prefix
   end
+
+  test '#metadata_summary' do
+    assert_equal %w[metadatafield1 metadatafield2], @group.metadata_fields
+  end
+
+  test '#metadata_summary incorporates fields from shared groups' do
+    assert_equal %w[metadatafield1 metadatafield2], groups(:david_doe_group_four).metadata_fields
+  end
+
+  test '#metadata_summary incorporates fields from shared projects' do
+    assert_equal %w[metadatafield1 metadatafield2], groups(:group_alpha).metadata_fields
+  end
 end

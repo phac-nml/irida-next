@@ -177,6 +177,10 @@ sampleBravo:
   description: Sample Bravo description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo, :uuid) %>
   puid: INXT_SAM_AAAAAAAABH
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+  'updated_at': <%= DateTime.new(2000,1,1) %> },
+  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> }}
   created_at: <%= 36.week.ago %>
   updated_at: <%= 36.day.ago %>
 
