@@ -45,7 +45,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def read?
-    return true if Member.can_view?(user, record, token:) == true
+    return true if Member.can_view?(user, record) == true
 
     details[:name] = record.name
     false

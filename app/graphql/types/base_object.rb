@@ -9,12 +9,6 @@ module Types
     connection_type_class(Types::BaseConnection)
     field_class Types::BaseField
 
-    authorize :token, through: :token
-
-    def token
-      context[:token]
-    end
-
     # All graphql fields exposing an id, should expose a global id.
     def id
       IridaSchema.id_from_object(object)

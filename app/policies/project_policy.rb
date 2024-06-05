@@ -44,7 +44,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def read?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace, token:) == true
+    return true if Member.can_view?(user, record.namespace) == true
 
     details[:name] = record.name
     false
@@ -76,7 +76,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def create_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_create_sample?(user, record.namespace, token:) == true
+    return true if Member.can_create_sample?(user, record.namespace) == true
 
     details[:name] = record.name
     false
@@ -92,7 +92,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def read_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace, token:) == true
+    return true if Member.can_view?(user, record.namespace) == true
 
     details[:name] = record.name
     false
@@ -100,7 +100,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def update_sample?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_modify_sample?(user, record.namespace, token:) == true
+    return true if Member.can_modify_sample?(user, record.namespace) == true
 
     details[:name] = record.name
     false

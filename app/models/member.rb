@@ -31,8 +31,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   class << self
     DEFAULT_CAN_OPTIONS = {
-      include_group_links: true,
-      token: nil
+      include_group_links: true
     }.freeze
 
     def access_levels(member)
@@ -73,7 +72,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       options = DEFAULT_CAN_OPTIONS.merge(options)
       effective_access_level = effective_access_level(object_namespace, user, options[:include_group_links])
       if effective_access_level == Member::AccessLevel::UPLOADER &&
-         (options[:token].nil? || (!options[:token].nil? && !options[:token].active?))
+         !Current.token&.active?
         return false
       end
 
@@ -152,22 +151,20 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
     end
 
-    def can_create_sample?(user, object_namespace, **options)
-      options = DEFAULT_CAN_OPTIONS.merge(options)
+    def can_create_sample?(user, object_namespace)
       effective_access_level = effective_access_level(object_namespace, user)
 
-      return true if effective_access_level == Member::AccessLevel::UPLOADER && options[:token]&.active?
+      return true if (effective_access_level == Member::AccessLevel::UPLOADER) && Current.token&.active?
 
       Member::AccessLevel.manageable.include?(
         effective_access_level
       )
     end
 
-    def can_modify_sample?(user, object_namespace, **options)
-      options = DEFAULT_CAN_OPTIONS.merge(options)
+    def can_modify_sample?(user, object_namespace)
       effective_access_level = effective_access_level(object_namespace, user)
 
-      return true if effective_access_level == Member::AccessLevel::UPLOADER && options[:token]&.active?
+      return true if (effective_access_level == Member::AccessLevel::UPLOADER) && Current.token&.active?
 
       Member::AccessLevel.manageable.include?(
         effective_access_level
