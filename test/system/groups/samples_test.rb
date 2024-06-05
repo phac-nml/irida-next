@@ -99,6 +99,7 @@ module Groups
     test 'can search the list of samples by name' do
       visit group_samples_url(@group)
 
+      assert_text 'Displaying items 1-20 of 26 in total'
       within '#group_samples_list' do
         assert_selector 'table tbody tr', count: 20
         assert_text @sample1.name
@@ -119,6 +120,7 @@ module Groups
     test 'can sort the list of samples' do
       visit group_samples_url(@group)
 
+      assert_text 'Displaying items 1-20 of 26 in total'
       # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
       # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
       # they are ordered as expected against one another.
@@ -169,6 +171,7 @@ module Groups
     test 'can filter by name and then sort the list of samples' do
       visit group_samples_url(@group)
 
+      assert_text 'Displaying items 1-20 of 26 in total'
       within '#group_samples_list' do
         assert_selector 'table tbody tr', count: 20
         within first('table tbody tr td') do
@@ -207,6 +210,7 @@ module Groups
     test 'can filter by puid and then sort the list of samples' do
       visit group_samples_url(@group)
 
+      assert_text 'Displaying items 1-20 of 26 in total'
       within '#group_samples_list' do
         assert_selector 'table tbody tr', count: 20
         within first('table tbody tr td') do
@@ -328,6 +332,7 @@ module Groups
 
     test 'can sort samples by metadata column' do
       visit group_samples_url(@group)
+      assert_text 'Displaying items 1-20 of 26 in total'
       assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       assert_selector 'table thead tr th', count: 6
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
@@ -368,6 +373,7 @@ module Groups
 
     test 'filtering samples by list of  sample puids' do
       visit group_samples_url(@group)
+      assert_text 'Displaying items 1-20 of 26 in total'
       within 'tbody#group-samples-table-body' do
         assert_selector 'tr', count: 20
         assert_selector 'tr td', text: @sample1.puid
@@ -405,6 +411,7 @@ module Groups
 
     test 'selecting / deselecting all samples' do
       visit group_samples_url(@group)
+      assert_text 'Displaying items 1-20 of 26 in total'
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
