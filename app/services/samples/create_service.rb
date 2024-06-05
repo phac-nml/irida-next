@@ -3,7 +3,7 @@
 module Samples
   # Service used to Create Samples
   class CreateService < BaseService
-    attr_accessor :project, :sample, :token
+    attr_accessor :project, :sample
 
     def initialize(user = nil, project = nil, params = {})
       super(user, params)

@@ -5,7 +5,7 @@ module Samples
     # Service used to Update Samples::Metadata
     class UpdateService < BaseService
       SampleMetadataUpdateError = Class.new(StandardError)
-      attr_accessor :sample, :metadata, :analysis_id, :token
+      attr_accessor :sample, :metadata, :analysis_id
 
       def initialize(project, sample, user = nil, params = {})
         super(user, params)

@@ -3,7 +3,7 @@
 module Attachments
   # Service used to Create Attachments
   class CreateService < BaseService
-    attr_accessor :attachable, :attachments, :pe_attachments, :token
+    attr_accessor :attachable, :attachments, :pe_attachments
 
     def initialize(user = nil, attachable = nil, params = {})
       super(user, params)

@@ -7,7 +7,7 @@ module Samples
       # to Samples::Metadata::UpdateService
       class CreateService < BaseService
         SampleMetadataFieldsCreateError = Class.new(StandardError)
-        attr_accessor :project, :sample, :create_fields, :metadata_update_params, :token
+        attr_accessor :project, :sample, :create_fields, :metadata_update_params
 
         def initialize(project, sample, user = nil, create_fields = {})
           super(user, params)
