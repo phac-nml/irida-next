@@ -33,12 +33,12 @@ module WorkflowExecutionActions
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                              @workflow_execution.metadata['workflow_version'])
     when 'samples'
+      @samples = []
       @properties = workflow_properties
 
       workflow_input_params = CSV.read(@workflow_execution.workflow_params['input'])
       # Samples is everything besides the first row
       input_samples = workflow_input_params.drop(1)
-      @samples = []
       input_samples.each do |input|
         real_sample = @workflow_execution.samples.select { |s| s.puid == input[0] }.first
         item = []
@@ -115,6 +115,8 @@ module WorkflowExecutionActions
   def workflow_properties
     workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                           @workflow_execution.metadata['workflow_version'])
+    return {} if workflow.blank?
+
     workflow.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
   end
 
