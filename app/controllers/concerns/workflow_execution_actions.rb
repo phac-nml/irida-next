@@ -20,18 +20,51 @@ module WorkflowExecutionActions
     @pagy, @workflows = pagy_with_metadata_sort(@q.result)
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def show
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
-    if @tab == 'files'
+    case @tab
+    when 'files'
       @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
       @attachments = Attachment.where(attachable: @workflow_execution)
                                .or(Attachment.where(attachable: @samples_worfklow_executions))
-    elsif @tab == 'params'
+    when 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                              @workflow_execution.metadata['workflow_version'])
+    when 'samples'
+      @properties = workflow_properties
+
+      workflow_input_params = CSV.read(@workflow_execution.workflow_params['input'])
+      # Samples is everything besides the first row
+      input_samples = workflow_input_params.drop(1)
+      @samples = []
+      input_samples.each do |input|
+        real_sample = @workflow_execution.samples.select { |s| s.puid == input[0] }.first
+        item = []
+
+        @properties.keys.each_with_index do |key, index|
+          if key == 'sample'
+            item << {
+              name: real_sample.name,
+              puid: real_sample.puid
+            }
+          elsif key.match(/fastq_\d+/)
+            name = File.basename(input[index])
+            attachment = real_sample.attachments.select { |a| a.file.filename == name }.first
+            item << {
+              name:,
+              puid: attachment.puid
+            }
+          else
+            item << input[index]
+          end
+        end
+        @samples << item
+      end
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 
   def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
@@ -78,6 +111,12 @@ module WorkflowExecutionActions
   end
 
   private
+
+  def workflow_properties
+    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+                                                          @workflow_execution.metadata['workflow_version'])
+    workflow.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
+  end
 
   def set_default_tab
     @tab = 'summary'
