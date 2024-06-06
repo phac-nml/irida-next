@@ -4,6 +4,10 @@ export default class extends Controller {
   static outlets = ["selection"];
   static targets = ["all", "pageForm", "pageFormContent", "scrollable"];
 
+  static values = {
+    fieldName: String
+  }
+
   #page = 1;
 
   connect() {
@@ -41,6 +45,7 @@ export default class extends Controller {
     fragment.appendChild(
       this.#createHiddenInput("format", "turbo_stream"),
     );
+    this.pageFormContentTarget.innerHTML = "";
     this.pageFormContentTarget.appendChild(fragment);
     this.#page++;
   }
@@ -48,7 +53,7 @@ export default class extends Controller {
   #makeAllHiddenInputs() {
     const fragment = document.createDocumentFragment();
     for (const id of this.allIds) {
-      fragment.appendChild(this.#createHiddenInput("transfer[sample_ids][]", id)); //TODO: fix name
+      fragment.appendChild(this.#createHiddenInput(this.fieldNameValue, id));
     }
     this.allTarget.appendChild(fragment);
   }
