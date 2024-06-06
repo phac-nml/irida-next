@@ -86,7 +86,7 @@ module Samples
         @spreadsheet = if extension.eql? '.tsv'
                          Roo::CSV.new(@file, csv_options: { col_sep: "\t" })
                        else
-                         Roo::Spreadsheet.open(@file, extension:)
+                         Roo::Spreadsheet.open(@file)
                        end
 
         @headers = @spreadsheet.row(1).collect(&:strip)
