@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// creates a table listing all selected metadata for deletion
+// populates confirmation dialogue with description containing number of samples and samples selected for deletion
 export default class extends Controller {
   static targets = ["tableBody", "description"];
 

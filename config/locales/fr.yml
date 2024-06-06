@@ -1152,6 +1152,7 @@ fr:
         import_metadata_button: Import metadata
         clone_button: Clone samples
         create_export_button: Create Export
+        delete_samples_button: Delete Samples
         actions:
           button_add_aria_label: Add new sample button
           dropdown_aria_label: Dropdown options for sample %{sample_name}
@@ -1303,6 +1304,20 @@ fr:
         description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
         apply: Apply filter
         remove_tag: Remove
+      delete_multiple_samples_dialog:
+          description:
+            zero: No samples have been selected for deletion
+            singular: 1 sample has been selected for deletion
+            plural: COUNT_PLACEHOLDER samples have been selected for deletion
+          id: ID
+          name: Name
+          submit_button: Confirm
+          title: Delete Samples
+      destroy_multiple:
+        no_deleted_samples: Selected samples could not be deleted
+        partial_error: "%{not_deleted} samples could not be deleted"
+        partial_success: "%{deleted} samples were successfully deleted"
+        success: Samples were successfully deleted
     workflow_executions:
       cancel:
         error: "Could not cancel workflow %{workflow_name}"
