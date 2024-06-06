@@ -38,6 +38,8 @@ To remove an existing bot account from a project:
 3. On the right hand side of the row for the bot account you want to remove, click the **Remove** link.
 4. Confirm that you would like to remove the bot account by clicking the **Confirm** button.
 
+All memberships associated with the removed bot will automatically be removed.
+
 ## Add Membership
 
 Prerequisite:
