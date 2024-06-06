@@ -1316,8 +1316,9 @@ en:
           submit_button: Confirm
           title: Delete Samples
       destroy_multiple:
-        error: Sample %{sample_name} was not deleted
-        partial_success: Some samples were successfully deleted
+        no_deleted_samples: Selected samples could not be deleted
+        partial_error: "%{not_deleted} samples could not be deleted"
+        partial_success: "%{deleted} samples were successfully deleted"
         success: Samples were successfully deleted
     workflow_executions:
       cancel:

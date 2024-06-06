@@ -165,6 +165,24 @@ module Projects
       assert_response :success
     end
 
+    test 'test partially deleting multiple samples' do
+      sample2 = samples(:sample2)
+      sample30 = samples(:sample30)
+      delete destroy_multiple_namespace_project_samples_url(@namespace, @project), params: { multiple_deletion: {
+        sample_ids: [@sample1.id, sample2.id, sample30.id, 'invalid_sample_id']
+      } }, as: :turbo_stream
+
+      assert_response :multi_status
+    end
+
+    test 'test deleting no samples in destroy_multiple ' do
+      delete destroy_multiple_namespace_project_samples_url(@namespace, @project), params: { multiple_deletion: {
+        sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
+      } }, as: :turbo_stream
+
+      assert_response :unprocessable_entity
+    end
+
     test 'should list samples' do
       post list_namespace_project_samples_path(@namespace, @project, format: :turbo_stream), params: {
         page: 1,

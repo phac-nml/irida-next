@@ -123,10 +123,10 @@ module Projects
 
       samples_to_delete = get_samples(destroy_multiple_params['sample_ids'])
       samples_to_delete_count = destroy_multiple_params['sample_ids'].count
-
+      deleted_samples = []
       samples_to_delete.each do |sample|
         ::Samples::DestroyService.new(sample, current_user).execute
-        samples_to_delete -= [sample] if sample.deleted?
+        deleted_samples += [sample] if sample.deleted?
       end
 
       @pagy, @samples = pagy(load_samples)
@@ -135,17 +135,24 @@ module Projects
         namespace: @project.namespace,
         show_fields: params[:q] && params[:q][:metadata].to_i == 1
       )
+
       # No selected samples deleted
-      if samples_to_delete.count.positive? && samples_to_delete.count == samples_to_delete_count
-        render status: :unprocessable_entity, locals: { message: nil, not_deleted_samples: samples_to_delete }
+      if deleted_samples.empty?
+        render status: :unprocessable_entity, locals: { type: :error, message: t('.no_deleted_samples') }
       # Partial sample deletion
-      elsif samples_to_delete.count.positive?
-        render status: :multi_status,
-               locals: { type: :success, message: t('.partial_success'), not_deleted_samples: samples_to_delete }
+      elsif deleted_samples.count.positive? && deleted_samples.count != samples_to_delete_count
+        messages = [
+          { type: :success,
+            message: t('.partial_success',
+                       deleted: "#{deleted_samples.count}/#{samples_to_delete_count}") },
+          { type: :error,
+            message: t('.partial_error',
+                       not_deleted: "#{samples_to_delete_count - deleted_samples.count}/#{samples_to_delete_count}") }
+        ]
+        render status: :multi_status, locals: { messages: }
       # All samples deleted successfully
       else
-        render status: :ok,
-               locals: { type: :success, message: t('.success'), not_deleted_samples: nil }
+        render status: :ok, locals: { type: :success, message: t('.success'), not_deleted_samples: nil }
       end
     end
 
@@ -229,7 +236,12 @@ module Projects
     end
 
     def get_samples(sample_ids)
-      sample_ids.map { |sample_id| Sample.find(sample_id) }
+      samples_to_delete = []
+      sample_ids.each do |sample_id|
+        sample = Sample.find_by(id: sample_id)
+        samples_to_delete << sample unless sample.nil?
+      end
+      samples_to_delete
     end
   end
 end
