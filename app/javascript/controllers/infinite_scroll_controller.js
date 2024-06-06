@@ -3,7 +3,6 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static outlets = ["selection"];
   static targets = ["all", "pageForm", "pageFormContent", "scrollable"];
-
   static values = {
     fieldName: String
   }
@@ -12,7 +11,7 @@ export default class extends Controller {
 
   connect() {
     this.allIds = this.selectionOutlet.getStoredSamples();
-    this.submitForm();
+    this.#makePagedHiddenInputs();
     this.#makeAllHiddenInputs();
   }
 
@@ -21,7 +20,7 @@ export default class extends Controller {
       this.scrollableTarget.scrollHeight - this.scrollableTarget.scrollTop <=
       this.scrollableTarget.clientHeight + 1
     ) {
-      this.submitForm();
+      this.#makePagedHiddenInputs();
     }
   }
 
@@ -30,24 +29,28 @@ export default class extends Controller {
     const start = (this.#page - 1) * itemsPerPage;
     const end = this.#page * itemsPerPage;
     const ids = this.allIds.slice(start, end);
-    const fragment = document.createDocumentFragment();
-    for (const id of ids) {
+
+    if(ids && ids.length){
+      const fragment = document.createDocumentFragment();
+      for (const id of ids) {
+        fragment.appendChild(
+          this.#createHiddenInput("sample_ids[]", id),
+        );
+      }
       fragment.appendChild(
-        this.#createHiddenInput("sample_ids[]", id),
+        this.#createHiddenInput("page", this.#page),
       );
+      fragment.appendChild(
+        this.#createHiddenInput("has_next", ids.length === itemsPerPage),
+      );
+      fragment.appendChild(
+        this.#createHiddenInput("format", "turbo_stream"),
+      );
+      this.pageFormContentTarget.innerHTML = "";
+      this.pageFormContentTarget.appendChild(fragment);
+      this.#page++;
+      this.pageFormTarget.requestSubmit();
     }
-    fragment.appendChild(
-      this.#createHiddenInput("page", this.#page),
-    );
-    fragment.appendChild(
-      this.#createHiddenInput("has_next", ids.length === itemsPerPage),
-    );
-    fragment.appendChild(
-      this.#createHiddenInput("format", "turbo_stream"),
-    );
-    this.pageFormContentTarget.innerHTML = "";
-    this.pageFormContentTarget.appendChild(fragment);
-    this.#page++;
   }
 
   #makeAllHiddenInputs() {
@@ -65,11 +68,6 @@ export default class extends Controller {
     element.name = name;
     element.value = value;
     return element;
-  }
-
-  submitForm() {
-    this.#makePagedHiddenInputs();
-    this.pageFormTarget.requestSubmit();
   }
 
   clear(){
