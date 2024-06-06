@@ -84,27 +84,12 @@ Prerequisites:
 
 To clone samples into another project:
 
-1. From the left sidebar, select **Projects**, select the project
-2. From the left sidebar, select **Samples**
-3. Select the checkboxes for the samples that you would like to transfer
-4. Select **Transfer samples**
-5. From the transfer samples pop-up, select the project to which you would like to transfer the samples to, and select **Submit**
-
-## Clone Samples
-
-Prerequisites:
-
-- You must have access to the project from which you are cloning samples, and the project into which you are cloning either through membership, or through a namespace share
-- You must have at least a **Maintainer** role in the project you are cloning from
-- You must have at least a **Maintainer** role in the project you are cloning into
-
-To clone samples into another project:
-
-1. From the left sidebar, select **Projects**, select the project
-2. From the left sidebar, select **Samples**
-3. Select the checkboxes for the samples that you would like to clone
-4. Select **Clone samples**
-5. From the clone samples pop-up, select the project to which you would like to clone the samples to, and select **Submit**
+1. From the left sidebar, select **Projects**
+2. Select the project
+3. From the left sidebar, select **Samples**
+4. Select the checkboxes for the samples that you would like to clone
+5. Select **Clone samples**
+6. From the clone samples pop-up, select the project to which you would like to clone the samples to, and select **Submit**
 
 ## Delete Sample
 
