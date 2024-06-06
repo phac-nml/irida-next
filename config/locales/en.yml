@@ -1310,7 +1310,10 @@ en:
         apply: Apply filter
         remove_tag: Remove
       delete_multiple_samples_dialog:
-          description: "Samples selected for deletion:"
+          description:
+            zero: No samples have been selected for deletion
+            singular: 1 sample has been selected for deletion
+            plural: COUNT_PLACEHOLDER samples have been selected for deletion
           id: ID
           name: Name
           submit_button: Confirm

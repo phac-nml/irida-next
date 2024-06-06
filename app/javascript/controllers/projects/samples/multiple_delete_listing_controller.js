@@ -2,9 +2,23 @@ import { Controller } from "@hotwired/stimulus";
 
 // creates a table listing all selected metadata for deletion
 export default class extends Controller {
-  static targets = ["tableBody"];
+  static targets = ["tableBody", "description"];
+
+  static values = {
+    storageKey: {
+      type: String,
+      default: location.protocol + "//" + location.host + location.pathname,
+    },
+    singular: {
+      type: String
+    },
+    plural: {
+      type: String
+    }
+  }
 
   connect() {
+    console.log(this.singularValue)
     const body = document.getElementById("samples-table");
 
     for (let row of body.rows) {
@@ -24,6 +38,16 @@ export default class extends Controller {
             newRow.append(clone);
           }
         }
+      }
+    }
+    const storageValues = JSON.parse(
+      sessionStorage.getItem(this.storageKeyValue)
+    )
+    if (storageValues) {
+      if (storageValues.length == 1) {
+        this.descriptionTarget.innerHTML = this.singularValue
+      } else {
+        this.descriptionTarget.innerHTML = this.pluralValue.replace("COUNT_PLACEHOLDER", storageValues.length)
       }
     }
   }

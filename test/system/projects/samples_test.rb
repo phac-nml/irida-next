@@ -2111,7 +2111,9 @@ module Projects
       click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.delete_multiple_samples_dialog.title')
-        assert_text I18n.t('projects.samples.delete_multiple_samples_dialog.description')
+        assert_text I18n.t(
+          'projects.samples.delete_multiple_samples_dialog.description.plural'
+        ).gsub! 'COUNT_PLACEHOLDER', '3'
         assert_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name

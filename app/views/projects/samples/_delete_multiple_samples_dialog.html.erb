@@ -4,8 +4,16 @@
 
     <%= turbo_frame_tag("deletion-alert") %>
 
-    <div class="mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible">
-      <p class="mb-4"><%= t(".description") %></p>
+    <div
+      data-controller="projects--samples--multiple-delete-listing"
+      data-projects--samples--multiple-delete-listing-singular-value="<%= t(".description.singular") %>"
+      data-projects--samples--multiple-delete-listing-plural-value="<%= t(".description.plural") %>"
+      class="mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible">
+      <p
+      class="mb-4"
+      data-projects--samples--multiple-delete-listing-target="description">
+        <%= t(".description.zero") %>
+      </p>
       <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_path, method: :delete) do |form| %>
         <div
           data-controller="sessionstorage-amend-form"
@@ -13,9 +21,9 @@
           data-sessionstorage-amend-form-target="field"
           data-sessionstorage-amend-form-field-name-value="multiple_deletion[sample_ids][]"
         />
-        <div data-controller="projects--samples--multiple-delete-listing">
+        <div class="overflow-y-auto max-h-80 mb-4">
           <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
-            <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+            <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400 sticky top-0 z-10">
               <tr>
                 <th class="px-6 py-4"><%= t(".id") %></th>
                 <th class="px-6 py-4"><%= t(".name") %></th>
@@ -23,13 +31,13 @@
             </thead>
             <tbody data-projects--samples--multiple-delete-listing-target="tableBody"></tbody>
           </table>
-          <div>
-            <%= form.submit t(".submit_button"),
-                        class: "button button--size-default button--state-destructive",
-                        data: {
-                          action: "click->sessionstorage-amend-form#clear"
-                        } %>
-          </div>
+        </div>
+        <div>
+          <%= form.submit t(".submit_button"),
+                      class: "button button--size-default button--state-destructive",
+                      data: {
+                        action: "click->sessionstorage-amend-form#clear"
+                      } %>
         </div>
       <% end %>
     </div>
