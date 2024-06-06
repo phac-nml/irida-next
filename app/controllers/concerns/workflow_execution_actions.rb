@@ -34,34 +34,29 @@ module WorkflowExecutionActions
                                                              @workflow_execution.metadata['workflow_version'])
     when 'samples'
       @samples = []
-      @properties = workflow_properties
+      input_samples = @workflow_execution.samples_workflow_executions.map(&:samplesheet_params)
+      @properties = input_samples.first.keys
 
-      workflow_params_input_file = @workflow_execution.workflow_params['input']
-
-      return unless File.exist?(workflow_params_input_file)
-
-      workflow_input_params = CSV.read(@workflow_execution.workflow_params['input'])
       # Samples is everything besides the first row
-      input_samples = workflow_input_params.drop(1)
       input_samples.each do |input|
-        real_sample = @workflow_execution.samples.select { |s| s.puid == input[0] }.first
+        real_sample = @workflow_execution.samples.select { |s| s.puid == input['sample'] }.first
         item = []
 
-        @properties.keys.each_with_index do |key, index|
+        @properties.each do |key|
           if key == 'sample'
             item << {
               name: real_sample.name,
               puid: real_sample.puid
             }
           elsif key.match(/fastq_\d+/)
-            name = File.basename(input[index])
-            attachment = real_sample.attachments.select { |a| a.file.filename == name }.first
+            id = File.basename(input[key])
+            attachment = real_sample.attachments.select { |a| a.id == id }.first
             item << {
-              name:,
+              name: attachment.file.filename,
               puid: attachment.puid
             }
           else
-            item << input[index]
+            item << input[key]
           end
         end
         @samples << item
