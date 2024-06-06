@@ -112,7 +112,7 @@ module Projects
     def new_destroy_multiple
       authorize! @project, to: :destroy_sample?
       render turbo_stream: turbo_stream.update('samples_dialog',
-                                               partial: 'delete_samples_dialog',
+                                               partial: 'delete_multiple_samples_dialog',
                                                locals: {
                                                  open: true
                                                }), status: :ok
@@ -152,7 +152,7 @@ module Projects
         render status: :multi_status, locals: { messages: }
       # All samples deleted successfully
       else
-        render status: :ok, locals: { type: :success, message: t('.success'), not_deleted_samples: nil }
+        render status: :ok, locals: { type: :success, message: t('.success') }
       end
     end
 

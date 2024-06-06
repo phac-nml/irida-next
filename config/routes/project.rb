@@ -44,7 +44,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :clone, only: %i[create new]
             resource :transfer, only: %i[create new]
             resource :file_import, module: :metadata, only: %i[create new]
-            resource :deletion, only: %i[new destroy]
           end
         end
         collection do
@@ -73,6 +72,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             end
           end
         end
+
         get :view_history_version
       end
 

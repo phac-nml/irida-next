@@ -1309,7 +1309,7 @@ en:
         description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
         apply: Apply filter
         remove_tag: Remove
-      delete_samples_dialog:
+      delete_multiple_samples_dialog:
           description: "Samples selected for deletion:"
           id: ID
           name: Name
