@@ -36,6 +36,10 @@ module WorkflowExecutionActions
       @samples = []
       @properties = workflow_properties
 
+      workflow_params_input_file = @workflow_execution.workflow_params['input']
+
+      return unless File.exist?(workflow_params_input_file)
+
       workflow_input_params = CSV.read(@workflow_execution.workflow_params['input'])
       # Samples is everything besides the first row
       input_samples = workflow_input_params.drop(1)

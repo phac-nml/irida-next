@@ -1,41 +1,49 @@
-<% if @properties.blank? %>
+<% if @properties.blank? || @samples.blank? %>
   <%= viral_alert(message: t(:"workflow_executions.samples.empty"), type: :info) %>
 <% else %>
   <div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-      <tr>
-        <% @properties.keys.each do |header| %>
-          <th scope="col" class="px-6 py-3">
-            <%= header %>
-          </th>
-        <% end %>
+    <table
+      class="
+        w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400
+      "
+    >
+      <thead
+        class="
+          text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400
+        "
+      >
+        <tr>
+          <% @properties.keys.each do |header| %>
+            <th scope="col" class="px-6 py-3">
+              <%= header %>
+            </th>
+          <% end %>
 
-      </tr>
+        </tr>
       </thead>
       <tbody>
-      <% @samples.each do |sample| %>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-          <% sample.each_with_index do |item, index| %>
-            <% if index == 0 %>
-              <th class="px-6 py-4">
-                <div class="font-semibold text-gray-900 dark:text-white"><%= item[:puid] %></div>
-                <div class="font-normal text-gray-500 dark:text-gray-400"><%= item[:name] %></div>
-              </th>
+        <% @samples.each do |sample| %>
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <% sample.each_with_index do |item, index| %>
+              <% if index == 0 %>
+                <th class="px-6 py-4">
+                  <div class="font-semibold text-gray-900 dark:text-white"><%= item[:puid] %></div>
+                  <div class="font-normal text-gray-500 dark:text-gray-400"><%= item[:name] %></div>
+                </th>
 
-            <% elsif @properties.keys[index].match(/fastq_\d+/) %>
-              <td class="px-6 py-4">
-                <div class="font-semibold text-gray-900 dark:text-white"><%= item[:puid] %></div>
-                <div class="font-normal text-gray-500 dark:text-gray-400"><%= item[:name] %></div>
-              </td>
-            <% else %>
-              <td class="px-6 py-4">
-                <%= item %>
-              </td>
+              <% elsif @properties.keys[index].match(/fastq_\d+/) %>
+                <td class="px-6 py-4">
+                  <div class="font-semibold text-gray-900 dark:text-white"><%= item[:puid] %></div>
+                  <div class="font-normal text-gray-500 dark:text-gray-400"><%= item[:name] %></div>
+                </td>
+              <% else %>
+                <td class="px-6 py-4">
+                  <%= item %>
+                </td>
+              <% end %>
             <% end %>
-          <% end %>
-        </tr>
-      <% end %>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
