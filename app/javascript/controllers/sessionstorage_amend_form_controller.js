@@ -48,12 +48,27 @@ export default class extends Controller {
     const storageValues = JSON.parse(
       sessionStorage.getItem(this.storageKeyValue)
     );
+
     if (storageValues) {
-      for (const storageValue of storageValues) {
-        this.fieldTarget.appendChild(this.#createHiddenInput(this.fieldNameValue, storageValue));
-      }
+      const fragment = document.createDocumentFragment();
+      storageValues.forEach((value) => {
+        fragment.appendChild(this.#createHiddenInput(this.fieldNameValue, value));
+      });
+
+      this.fieldTarget.appendChild(fragment);
     }
   }
+
+  // #createAllHiddenFormFields() {
+  //   const storageValues = JSON.parse(
+  //     sessionStorage.getItem(this.storageKeyValue)
+  //   );
+  //   if (storageValues) {
+  //     for (const storageValue of storageValues) {
+  //       this.fieldTarget.appendChild(this.#createHiddenInput(this.fieldNameValue, storageValue));
+  //     }
+  //   }
+  // }
 
   #createHiddenInput(name, value){
     const element = document.createElement("input");
