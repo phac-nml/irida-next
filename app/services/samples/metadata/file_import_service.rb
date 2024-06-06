@@ -43,7 +43,7 @@ module Samples
       def validate_file_extension
         file_extension = File.extname(@file).downcase
 
-        return if %w[.csv .xls .xlsx].include?(file_extension)
+        return file_extension if %w[.csv .tsv .xls .xlsx].include?(file_extension)
 
         raise SampleMetadataFileImportError,
               I18n.t('services.samples.metadata.import_file.invalid_file_extension')
@@ -81,9 +81,14 @@ module Samples
                 I18n.t('services.samples.metadata.import_file.empty_file')
         end
 
-        validate_file_extension
+        extension = validate_file_extension
 
-        @spreadsheet = Roo::Spreadsheet.open(@file)
+        @spreadsheet = if extension.eql? '.tsv'
+                         Roo::CSV.new(@file, csv_options: { col_sep: "\t" })
+                       else
+                         Roo::Spreadsheet.open(@file, extension:)
+                       end
+
         @headers = @spreadsheet.row(1).collect(&:strip)
 
         validate_file_headers
