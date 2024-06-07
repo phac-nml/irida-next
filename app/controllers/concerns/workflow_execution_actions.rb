@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # Common workflow execution actions
+# rubocop:disable Metrics/ModuleLength
 module WorkflowExecutionActions
   extend ActiveSupport::Concern
 
@@ -44,17 +45,11 @@ module WorkflowExecutionActions
 
         @properties.each do |key|
           if key == 'sample'
-            item << {
-              name: real_sample.name,
-              puid: real_sample.puid
-            }
-          elsif key.match(/fastq_\d+/)
+            item << { name: real_sample.name, puid: real_sample.puid }
+          elsif key.match?(/fastq_\d+/)
             id = File.basename(input[key])
-            attachment = real_sample.attachments.select { |a| a.id == id }.first
-            item << {
-              name: attachment.file.filename,
-              puid: attachment.puid
-            }
+            attachment = real_sample.attachments.find { |a| a.id == id }
+            item << { name: attachment.file.filename, puid: attachment.puid }
           else
             item << input[key]
           end
