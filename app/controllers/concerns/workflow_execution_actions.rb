@@ -36,7 +36,7 @@ module WorkflowExecutionActions
     when 'samples'
       @samples = []
       input_samples = @workflow_execution.samples_workflow_executions.map(&:samplesheet_params)
-      @properties = input_samples.first.keys
+      @properties = input_samples.present? ? input_samples.first.keys : []
 
       # Samples is everything besides the first row
       input_samples.each do |input|
@@ -49,7 +49,11 @@ module WorkflowExecutionActions
           elsif key.match?(/fastq_\d+/)
             id = File.basename(input[key])
             attachment = real_sample.attachments.find { |a| a.id == id }
-            item << { name: attachment.file.filename, puid: attachment.puid }
+            item << if attachment.present?
+                      { name: attachment.file.filename, puid: attachment.puid }
+                    else
+                      { name: nil, puid: nil }
+                    end
           else
             item << input[key]
           end

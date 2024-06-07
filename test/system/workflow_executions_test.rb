@@ -342,6 +342,20 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'div.random_seed-param > input[value="1"]'
   end
 
+  test 'can view workflow execution with samples' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    visit workflow_execution_path(workflow_execution)
+
+    click_on I18n.t('workflow_executions.show.tabs.samples')
+
+    assert_selector 'table tbody tr', count: 1
+    assert_text 'INXT_SAM_AAAAAAAAAA'
+    assert_text 'Project 1 Sample 1'
+    assert_text 'INXT_ATT_AAAAAAAAAA'
+    assert_text 'test_file.fastq'
+  end
+
   test 'can remove workflow execution from workflow execution page' do
     workflow_execution = workflow_executions(:irida_next_example_completed)
 
