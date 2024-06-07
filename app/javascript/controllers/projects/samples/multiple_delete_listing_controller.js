@@ -18,7 +18,6 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log(this.singularValue)
     const body = document.getElementById("samples-table");
 
     for (let row of body.rows) {
