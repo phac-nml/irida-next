@@ -134,3 +134,4 @@ module WorkflowExecutionActions
     raise NotImplementedError
   end
 end
+# rubocop:enable Metrics/ModuleLength
