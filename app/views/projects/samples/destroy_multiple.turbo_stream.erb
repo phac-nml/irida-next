@@ -18,16 +18,7 @@
   <% end %>
 <% end %>
 
-<%= turbo_stream.update "project_samples_list",
-                    partial: "table",
-                    locals: {
-                      project: @project,
-                      samples: @samples,
-                    } %>
-
-<%= turbo_stream.update "project_samples_pagination",
-                    partial: "pagination",
-                    locals: {
-                      project: @project,
-                      pagy: @pagy,
-                    } %>
+<%= turbo_stream.replace "project_samples_list" do %>
+  <%= turbo_frame_tag "project_samples_list",
+  src: project_samples_path(@project, format: :turbo_stream) %>
+<% end %>
