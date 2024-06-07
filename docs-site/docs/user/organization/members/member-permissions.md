@@ -35,14 +35,17 @@ The following table lists group permissions available for each role:
 | Create Group and Subgroups   |       |          |         | ✓          | ✓     |
 | Edit Group and Subgroups     |       |          |         | ✓          | ✓     |
 | Delete Group and Subgroups   |       |          |         |            | ✓     |
-| View Group and Subgroups     | ✓     |          | ✓       | ✓          | ✓     |
+| View Group and Subgroups     | ✓     | ✓ (2)    | ✓       | ✓          | ✓     |
 | Transfer Group and Subgroups |       |          |         |            | ✓     |
 | Add Group Member             |       |          |         | ✓(1)       | ✓     |
 | Edit Group Member            |       |          |         | ✓(1)       | ✓     |
 | Remove Group Member          |       |          |         | ✓(1)       | ✓     |
 | View Group Members           | ✓     |          | ✓       | ✓          | ✓     |
-<!-- TODO: Add uploader actions -->
+
+<!-- TODO: Add bot account actions -->
+
 1. A user with the **Maintainer** role can only modify members upto and including their role
+2. A user or bot account with the **Uploader** role can only perform these actions via the api
 
 ## Subgroup permissions
 
@@ -50,21 +53,24 @@ When you add a member to a subgroup where they are also a member of one of the p
 
 ## Project Members Permissions
 
-| Action                | Guest | Analyst | Maintainer | Owner |
-| :-------------------- | :---- | ------- | ---------- | ----- |
-| Create Project        |       |         | ✓          | ✓     |
-| Edit Project          |       |         | ✓          | ✓     |
-| Delete Project        |       |         |            | ✓     |
-| View Project          | ✓     | ✓       | ✓          | ✓     |
-| Transfer Project      |       |         |            | ✓     |
-| Add Project Member    |       |         | ✓(1)       | ✓     |
-| Edit Project Member   |       |         | ✓(1)       | ✓     |
-| Remove Project Member |       |         | ✓(1)       | ✓     |
-| View Project Members  | ✓     | ✓       | ✓          | ✓     |
-| Create Samples        |       |         | ✓          | ✓     |
-| Edit Samples          |       |         | ✓          | ✓     |
-| Delete Samples        |       |         |            | ✓     |
-| Transfer Samples      |       |         | ✓(2)       | ✓     |
+| Action                | Guest | Uploader | Analyst | Maintainer | Owner |
+| :-------------------- | :---- | -------- | ------- | ---------- | ----- |
+| Create Project        |       |          |         | ✓          | ✓     |
+| Edit Project          |       |          |         | ✓          | ✓     |
+| Delete Project        |       |          |         |            | ✓     |
+| View Project          | ✓     | ✓(3)     | ✓       | ✓          | ✓     |
+| Transfer Project      |       |          |         |            | ✓     |
+| Add Project Member    |       |          |         | ✓(1)       | ✓     |
+| Edit Project Member   |       |          |         | ✓(1)       | ✓     |
+| Remove Project Member |       |          |         | ✓(1)       | ✓     |
+| View Project Members  | ✓     |          | ✓       | ✓          | ✓     |
+| Create Samples        |       | ✓(3)     |         | ✓          | ✓     |
+| Edit Samples          |       | ✓(3)     |         | ✓          | ✓     |
+| Delete Samples        |       |          |         |            | ✓     |
+| Transfer Samples      |       |          |         | ✓(2)       | ✓     |
+
 <!-- TODO: Add metadata, files, history, bot account permissions to project members permissions table -->
+
 1. A user with the **Maintainer** role can only modify members upto and including their role
 2. A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project
+3. A user or bot account with the **Uploader** role can only perform these actions via the api

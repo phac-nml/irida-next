@@ -34,7 +34,7 @@ module Members
     private
 
     def send_emails
-      return if Member.can_view?(member.user, namespace, true)
+      return if Member.can_view?(member.user, namespace)
 
       MemberMailer.access_revoked_user_email(member, namespace).deliver_later
 

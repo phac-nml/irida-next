@@ -17,7 +17,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def view_history?
-    return true if Member.can_view?(user, record, false) == true
+    return true if Member.can_view?(user, record, include_group_links: false) == true
 
     details[:name] = record.name
     false

@@ -77,6 +77,29 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
     assert_equal 'New Sample Two Description', data['sample']['description']
   end
 
+  test 'createSample mutation should work with valid params, project puid, and api scope token with uploader access level' do # rubocop:disable Layout/LineLength
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+    project = projects(:project1)
+
+    result = IridaSchema.execute(CREATE_SAMPLE_USING_PROJECT_PUID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { projectPuid: project.puid,
+                                              name: 'New Sample Two',
+                                              description: 'New Sample Two Description' })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['createSample']
+
+    assert_not_empty data, 'createSample should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_not_empty data['sample']
+
+    assert_equal 'New Sample Two', data['sample']['name']
+    assert_equal 'New Sample Two Description', data['sample']['description']
+  end
+
   test 'createSample mutation should not work with invalid params and api scope token' do
     project = projects(:project1)
     sample1 = samples(:sample1)
@@ -112,6 +135,24 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
     error_message = result['errors'][0]['message']
 
     assert_equal 'You are not authorized to perform this action', error_message
+  end
+
+  test 'createSample mutation should not work with valid params due to expired token for uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_expired_pat)
+    project = projects(:project1)
+
+    result = IridaSchema.execute(CREATE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { projectId: project.to_global_id.to_s,
+                                              name: 'New Sample',
+                                              description: 'New Sample Description' })
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal 'You are not authorized to create samples for project Project 1 on this server.', error_message
   end
 
   test 'createSample mutation should not work with unauthorized project and valid api scope token' do

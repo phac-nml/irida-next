@@ -141,6 +141,7 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
+      assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
       within first('tr') do
         assert_text projects(:projectHotel).human_name
@@ -148,6 +149,7 @@ module Dashboard
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
 
+      assert_text 'Displaying 12 items'
       assert_selector 'tr', count: 12
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')

@@ -48,6 +48,29 @@ class CreateDirectUploadTest < ActiveSupport::TestCase
     assert_not_empty data['directUpload']['signedBlobId']
   end
 
+  test 'createDirectUpload mutation should work with valid params and api scope token with uploader access level' do
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+    result = IridaSchema.execute(CREATE_DIRECT_UPLOAD_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { filename: 'dev.to',
+                                              contentType: 'image/jpeg',
+                                              checksum: 'asZ3Yzc2Q5iA5eXIgeTJndf',
+                                              byteSize: 123 })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['createDirectUpload']
+
+    assert_not_empty data, 'createDirectUpload should be populated when no authorization errors'
+    assert_not_empty data['directUpload']
+
+    assert_equal '{"Content-Type":"image/jpeg"}', data['directUpload']['headers']
+    assert_not_empty data['directUpload']['blobId']
+    assert_not_empty data['directUpload']['url']
+    assert_not_empty data['directUpload']['signedBlobId']
+  end
+
   test 'createDirectUpload mutation should not work with read api scope token' do
     result = IridaSchema.execute(CREATE_DIRECT_UPLOAD_MUTATION,
                                  context: { current_user: @user, token: @read_api_scope_token },

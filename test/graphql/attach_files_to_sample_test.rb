@@ -85,6 +85,34 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     assert_equal 'afts.fastq', sample.attachments[0].filename.to_s
   end
 
+  test 'attachFilesToSample mutation should work with valid params, puid, and api scope token for uploader access level' do # rubocop:disable Layout/LineLength
+    user = users(:projectJeff_bot)
+    token = personal_access_tokens(:projectJeff_bot_account_valid_pat)
+    sample = samples(:sampleJeff)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+
+    assert_equal 0, sample.attachments.count
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_PUID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { files: [blob_file.signed_id],
+                                              samplePuid: sample.puid })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['attachFilesToSample']
+
+    assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
+    expected_status = { blob_file.signed_id => :success }
+    assert_equal expected_status, data['status']
+    assert_not_empty data['sample']
+
+    assert_equal 1, sample.attachments.count
+
+    # check that filename matches
+    assert_equal 'afts.fastq', sample.attachments[0].filename.to_s
+  end
+
   test 'attachFilesToSample mutation should not work with read api scope token' do
     sample = samples(:sampleJeff)
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
