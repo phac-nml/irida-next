@@ -237,8 +237,11 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         within %(turbo-frame[id="list_select_samples"]) do
-          sample_names = @project.samples.pluck(:name)
-          sample_names.each { |sample_name| assert_text sample_name }
+          samples = @project.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
         end
         select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -278,8 +281,11 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         within %(turbo-frame[id="list_select_samples"]) do
-          sample_names = @project.samples.pluck(:name)
-          sample_names.each { |sample_name| assert_text sample_name }
+          samples = @project.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
         end
         select project25.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -305,8 +311,11 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         within %(turbo-frame[id="list_select_samples"]) do
-          sample_names = @project.samples.pluck(:name)
-          sample_names.each { |sample_name| assert_text sample_name }
+          samples = @project.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
         end
         select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -327,8 +336,11 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         within %(turbo-frame[id="list_select_samples"]) do
-          sample_names = project2.samples.pluck(:name)
-          sample_names.each { |sample_name| assert_text sample_name }
+          samples = project2.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
         end
         assert_no_selector 'option'
       end
@@ -349,8 +361,11 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         within %(turbo-frame[id="list_select_samples"]) do
-          sample_names = @project.samples.pluck(:name)
-          sample_names.each { |sample_name| assert_text sample_name }
+          samples = @project.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
         end
         assert_no_selector "option[value='#{project32.full_path}']"
       end
