@@ -41,9 +41,6 @@ export default class extends Controller {
         this.#createHiddenInput("page", this.#page),
       );
       fragment.appendChild(
-        this.#createHiddenInput("has_next", ids.length === itemsPerPage),
-      );
-      fragment.appendChild(
         this.#createHiddenInput("format", "turbo_stream"),
       );
       this.pageFormContentTarget.innerHTML = "";

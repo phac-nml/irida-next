@@ -168,7 +168,6 @@ module Projects
     test 'should list samples' do
       post list_namespace_project_samples_path(@namespace, @project, format: :turbo_stream), params: {
         page: 1,
-        has_next: false,
         sample_ids: [@sample1.id]
       }
       assert_response :success

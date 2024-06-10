@@ -130,7 +130,6 @@ module Projects
 
     def list
       @page = params[:page].to_i
-      @has_next = params[:has_next].to_s == 'true'
       @samples = Sample.where(id: params[:sample_ids])
 
       respond_to do |format|
