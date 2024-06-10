@@ -236,6 +236,10 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_select_samples"]) do
+          sample_names = @project.samples.pluck(:name)
+          sample_names.each { |sample_name| assert_text sample_name }
+        end
         select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
@@ -257,25 +261,7 @@ module Projects
       end
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
-        errors = @project.errors.full_messages_for(:samples)
-        errors.each { |error| assert_text error }
-      end
-    end
-
-    test 'should not transfer samples' do
-      project26 = projects(:project26)
-      visit namespace_project_samples_url(@namespace, @project)
-      assert_text 'Displaying 3 items'
-      assert_selector 'table#samples-table tbody tr', count: 3
-      all('input[type=checkbox]').last.click
-
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        select project26.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-      end
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('projects.samples.transfers.create.error')
+        assert_no_selector "turbo-frame[id='list_select_samples']"
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
       end
@@ -289,14 +275,18 @@ module Projects
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_select_samples"]) do
+          sample_names = @project.samples.pluck(:name)
+          sample_names.each { |sample_name| assert_text sample_name }
+        end
         select project25.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.transfers.create.error')
+        assert_no_selector "turbo-frame[id='list_select_samples']"
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
       end
@@ -305,7 +295,6 @@ module Projects
     test 'should transfer samples for maintainer within hierarchy' do
       user = users(:joan_doe)
       login_as user
-
       project2 = projects(:project2)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       assert_text 'Displaying 3 items'
@@ -315,6 +304,10 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_select_samples"]) do
+          sample_names = @project.samples.pluck(:name)
+          sample_names.each { |sample_name| assert_text sample_name }
+        end
         select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
@@ -333,6 +326,10 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_select_samples"]) do
+          sample_names = project2.samples.pluck(:name)
+          sample_names.each { |sample_name| assert_text sample_name }
+        end
         assert_no_selector 'option'
       end
     end
@@ -350,8 +347,11 @@ module Projects
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-
       within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_select_samples"]) do
+          sample_names = @project.samples.pluck(:name)
+          sample_names.each { |sample_name| assert_text sample_name }
+        end
         assert_no_selector "option[value='#{project32.full_path}']"
       end
     end
