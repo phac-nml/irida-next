@@ -1182,6 +1182,7 @@ en:
           title: Transfer Samples
           new_project_id: Project to transfer samples to
           submit_button: Submit
+          loading: Loading...
         create:
           success: Samples were successfully transferred.
           error: "The following list of samples failed to transfer:"
