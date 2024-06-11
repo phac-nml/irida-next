@@ -7,18 +7,17 @@ module Groups
 
     before_action :group, :current_page
     before_action :set_search_params, only: %i[index]
+    before_action :set_metadata_fields, only: %i[index]
 
-    def index # rubocop:disable Metrics/AbcSize
+    def index
       authorize! @group, to: :sample_listing?
 
       @q = authorized_samples.ransack(params[:q])
       set_default_sort
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
-      fields_for_namespace(namespace: @group, show_fields: params[:q] && params[:q][:metadata].to_i == 1)
+      @has_samples = authorized_samples.count.positive?
       respond_to do |format|
-        format.html do
-          @has_samples = @q.result.count.positive?
-        end
+        format.html
         format.turbo_stream
       end
     end
@@ -75,6 +74,10 @@ module Groups
 
     def set_search_params
       @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
+    end
+
+    def set_metadata_fields
+      fields_for_namespace(namespace: @group, show_fields: params[:q] && params[:q][:metadata].to_i == 1)
     end
   end
 end

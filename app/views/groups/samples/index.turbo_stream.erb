@@ -2,10 +2,10 @@
                     partial: "table",
                     locals: {
                       group: @group,
-                      pagy: @pagy
+                      pagy: @pagy,
                       samples: @samples,
                     } %>
 
-  <%= turbo_stream.update "group_samples_hidden_values" do %>
-    <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
-  <% end %>
+<%= turbo_stream.update "group_samples_hidden_values" do %>
+  <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
+<% end %>
