@@ -72,7 +72,6 @@ module Attachments
     end
 
     def identify_paired_end_files(attachments) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
-      # rubocop:disable Metrics/AbcSize
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       pe = Hash.new { |h, k| h[k] = {} }
 
@@ -104,7 +103,7 @@ module Attachments
       assign_metadata(pe, 'pe')
     end
 
-    def assign_metadata(paired_ends, type)
+    def assign_metadata(paired_ends, type) # rubocop:disable Metrics/AbcSize
       paired_ends.each do |key, pe_attachments|
         next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
 
