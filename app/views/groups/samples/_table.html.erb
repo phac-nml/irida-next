@@ -1,150 +1,154 @@
 <%# locals: (group:, pagy:, samples:) -%>
-<div class="table-container relative overflow-x-auto" data-turbo-temporary>
-  <table
-    id="samples-table"
-    class="
-      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-      whitespace-nowrap
-    "
-    data-controller="selection"
-    data-selection-total-value="<%= @pagy.count %>"
-    data-selection-action-link-outlet=".action-link"
-  >
-    <thead
+<div class="table-container" data-turbo-temporary>
+  <div class="relative overflow-x-auto">
+    <table
+      id="samples-table"
       class="
-        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
-        dark:text-slate-400
+        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+        whitespace-nowrap
       "
+      data-controller="selection"
+      data-selection-total-value="<%= @pagy.count %>"
+      data-selection-action-link-outlet=".action-link"
     >
-      <tr>
-        <th
-          scope="col"
-          class="
-            px-6 py-3 text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-10
-          "
-        >
-          <%= search_form_for @q, url: select_group_samples_url(**request.query_parameters), html: { "data-controller": "filters", id: "select-all-form" }, class: "filters flex align-middle" do |f| %>
-            <input type="hidden" name="format" value="turbo_stream"/>
+      <thead
+        class="
+          text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
+          dark:text-slate-400
+        "
+      >
+        <tr>
+          <th
+            scope="col"
+            class="
+              px-6 py-3 text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-10
+            "
+          >
+            <%= search_form_for @q, url: select_group_samples_url(**request.query_parameters), html: { "data-controller": "filters", id: "select-all-form" }, class: "filters flex align-middle" do |f| %>
+              <input type="hidden" name="format" value="turbo_stream"/>
 
-            <% @search_params.each do |key, value| %>
-              <% if value.is_a?(Array) %>
-                <% value.each do |val| %>
-                  <input type="hidden" name="q[<%= key %>][]" value="<%= val %>">
+              <% @search_params.each do |key, value| %>
+                <% if value.is_a?(Array) %>
+                  <% value.each do |val| %>
+                    <input type="hidden" name="q[<%= key %>][]" value="<%= val %>">
+                  <% end %>
+                <% else %>
+                  <input type="hidden" name="q[<%= key %>]" value="<%= value %>">
                 <% end %>
-              <% else %>
-                <input type="hidden" name="q[<%= key %>]" value="<%= value %>">
               <% end %>
-            <% end %>
 
-            <% if allowed_to?(:submit_workflow?, @group) %>
-              <label for="select-all" class="sr-only"><%= t(:".selectAll") %></label>
-              <input
-                type="checkbox"
-                id="select-all"
-                name="select"
-                class="
-                  w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
-                  focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
-                  focus:ring-2 dark:bg-slate-700 dark:border-slate-600
-                "
-                data-selection-target="selectAll"
-                onchange="Turbo.navigator.submitForm(this.form)"
-              />
+              <% if allowed_to?(:submit_workflow?, @group) %>
+                <label for="select-all" class="sr-only"><%= t(:".selectAll") %></label>
+                <input
+                  type="checkbox"
+                  id="select-all"
+                  name="select"
+                  class="
+                    w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
+                    focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
+                    focus:ring-2 dark:bg-slate-700 dark:border-slate-600
+                  "
+                  data-selection-target="selectAll"
+                  onchange="Turbo.navigator.submitForm(this.form)"
+                />
+              <% end %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(".puid"),
+                url: sorting_url(@q, :puid),
+                field: :puid,
+              ) %>
             <% end %>
+          </th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
-              label: t(".puid"),
-              url: sorting_url(@q, :puid),
-              field: :puid,
-            ) %>
-          <% end %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= render Ransack::SortComponent.new(
-            ransack_obj: @q,
-            label: t(".sample"),
-            url: sorting_url(@q, :name),
-            field: :name,
-          ) %>
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 whitespace-nowrap text-left cursor-not-allowed"
-        >
-          <%= t(".project") %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= render Ransack::SortComponent.new(
-            ransack_obj: @q,
-            label: t(".created_at"),
-            url: sorting_url(@q, :created_at),
-            field: :created_at,
-          ) %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= render Ransack::SortComponent.new(
-            ransack_obj: @q,
-            label: t(".updated_at"),
-            url: sorting_url(@q, :updated_at),
-            field: :updated_at,
-          ) %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= render Ransack::SortComponent.new(
-            ransack_obj: @q,
-            label: t(".files_updated_at"),
-            url: sorting_url(@q, :attachments_updated_at_nulls_last),
-            field: :attachments_updated_at_nulls_last,
-          ) %>
-        </th>
-        <% @fields.each do |column| %>
-          <th scope="col" class="px-6 py-3 text-left whitespace-nowrap">
-            <%= render Ransack::SortComponent.new(
-              ransack_obj: @q,
-              label: column,
-              url: sorting_url(@q, URI.encode_www_form_component("metadata_#{column}")),
-              field: "metadata_#{column}",
+              label: t(".sample"),
+              url: sorting_url(@q, :name),
+              field: :name,
             ) %>
           </th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody
-      id="group-samples-table-body"
-      class="
-        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-      "
-    >
-      <%= render partial: "sample",
-      collection: samples,
-      locals: {
-        abilities: {
-          select_sample: allowed_to?(:submit_workflow?, group),
-        },
-      } %>
-    </tbody>
-    <% if @has_samples %>
-      <tfoot>
-        <tr class="border-t dark:border-slate-700 border-slate-200">
-          <td
-            class="px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 z-10"
-            colspan="3"
+          <th
+            scope="col"
+            class="px-6 py-3 whitespace-nowrap text-left cursor-not-allowed"
           >
-
-            <span>
-              <%= t(".counts.samples") %>:
-              <strong data-selection-target="total">0</strong>
-            </span>
-            <span>
-              <%= t(".counts.selected") %>:
-              <strong data-selection-target="selected">0</strong>
-            </span>
-          </td>
-          <td colspan="100%" class="px-6 py-3 bg-slate-50 dark:bg-slate-900"></td>
+            <%= t(".project") %>
+          </th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(".created_at"),
+              url: sorting_url(@q, :created_at),
+              field: :created_at,
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(".updated_at"),
+              url: sorting_url(@q, :updated_at),
+              field: :updated_at,
+            ) %>
+          </th>
+          <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(".files_updated_at"),
+              url: sorting_url(@q, :attachments_updated_at_nulls_last),
+              field: :attachments_updated_at_nulls_last,
+            ) %>
+          </th>
+          <% @fields.each do |column| %>
+            <th scope="col" class="px-6 py-3 text-left whitespace-nowrap">
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: column,
+                url: sorting_url(@q, URI.encode_www_form_component("metadata_#{column}")),
+                field: "metadata_#{column}",
+              ) %>
+            </th>
+          <% end %>
         </tr>
-      </tfoot>
-    <% end %>
-  </table>
+      </thead>
+      <tbody
+        id="group-samples-table-body"
+        class="
+          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+        "
+      >
+        <%= render partial: "sample",
+        collection: samples,
+        locals: {
+          abilities: {
+            select_sample: allowed_to?(:submit_workflow?, group),
+          },
+        } %>
+      </tbody>
+      <% if @has_samples %>
+        <tfoot>
+          <tr class="border-t dark:border-slate-700 border-slate-200">
+            <td
+              class="
+                px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 z-10
+              "
+              colspan="3"
+            >
+
+              <span>
+                <%= t(".counts.samples") %>:
+                <strong data-selection-target="total">0</strong>
+              </span>
+              <span>
+                <%= t(".counts.selected") %>:
+                <strong data-selection-target="selected">0</strong>
+              </span>
+            </td>
+            <td colspan="100%" class="px-6 py-3 bg-slate-50 dark:bg-slate-900"></td>
+          </tr>
+        </tfoot>
+      <% end %>
+    </table>
+  </div>
   <% if @has_samples %>
     <%= render partial: "pagination", locals: { pagy: @pagy } %>
   <% end %>
