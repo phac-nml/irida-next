@@ -1,220 +1,208 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-john_doe:
-  email: john.doe@localhost
+DEFAULTS: &DEFAULTS
   encrypted_password: <%= User.new.send :password_digest, "password1" %>
+  locale: en
+  user_type: human
+
+john_doe:
+  <<: *DEFAULTS
+  email: john.doe@localhost
   first_name: John
   last_name: Doe
-  locale: en
 
 jane_doe:
+  <<: *DEFAULTS
   email: jane.doe@localhost
   first_name: Jane
   last_name: Doe
-  locale: en
 
 jean_doe:
+  <<: *DEFAULTS
   email: jean.doe@localhost
   first_name: Jean
   last_name: Doe
-  locale: en
 
 james_doe:
+  <<: *DEFAULTS
   email: james.doe@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: James
   last_name: Doe
   locale: fr
 
 joan_doe:
+  <<: *DEFAULTS
   email: joan.doe@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Joan
   last_name: Doe
   locale: fr
 
 steve_doe:
+  <<: *DEFAULTS
   email: steve.doe@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Steve
   last_name: Doe
-  locale: en
 
 michelle_doe:
+  <<: *DEFAULTS
   email: michelle.doe@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Michelle
   last_name: Doe
-  locale: en
 
 micha_doe:
+  <<: *DEFAULTS
   email: micha.doe@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Micha
   last_name: Doe
-  locale: en
 
 ryan_doe:
+  <<: *DEFAULTS
   email: ryan.doe@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Ryan
   last_name: Doe
-  locale: en
 
 david_doe:
+  <<: *DEFAULTS
   email: david.doe@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: David
   last_name: Doe
-  locale: en
 
 jeff_doe:
+  <<: *DEFAULTS
   email: jeff.doe@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Jeff
   last_name: Doe
   provider: developer
   uid: jeff.doe@localhost
-  locale: en
 
 alph_abet:
+  <<: *DEFAULTS
   email: alph.abet@localhost
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Alph
   last_name: Abet
-  locale: en
 
 <% 25.times do |n| %>
 user<%= (n) %>:
+  <<: *DEFAULTS
   email: <%= "user#{n}@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: <%= n %>
-  locale: en
 <% end %>
 
 user25:
+  <<: *DEFAULTS
   email: <%= "user25@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "25"
-  locale: en
 
 # Do not link this user to anything
 user_no_access:
+  <<: *DEFAULTS
   email: <%= "user_no_access@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "No Access"
-  locale: en
 
 user_no_access:
+  <<: *DEFAULTS
   email: <%= "user_no_access@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "No Access"
-  locale: en
 
 private_ryan:
+  <<: *DEFAULTS
   email: <%= "private.ryan@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Ryan
-  locale: en
 
 user26:
+  <<: *DEFAULTS
   email: <%= "user26@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "26"
-  locale: en
 
 private_joan:
+  <<: *DEFAULTS
   email: <%= "private.joan@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Joan
-  locale: en
 
 private_micha:
+  <<: *DEFAULTS
   email: <%= "private.micha@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Private
   last_name: Micha
-  locale: en
 
 user27:
+  <<: *DEFAULTS
   email: <%= "user27@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "27"
-  locale: en
 
 user28:
+  <<: *DEFAULTS
   email: <%= "user28@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "28"
-  locale: en
 
 <% 22.times do |n| %>
 user_bot_account<%= (n) %>:
+  <<: *DEFAULTS
   email: <%= "inxt_prj_aaaaaaaaaa_bot_#{format('%03d', (n + 1))}@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Project
   last_name: "Bot #{format('%03d', (n + 1))}"
   user_type: <%= User.user_types[:project_bot] %>
-  locale: en
 <% end %>
 
 user29:
+  <<: *DEFAULTS
   email: <%= "user29@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "29"
-  locale: en
 
 user30:
+  <<: *DEFAULTS
   email: <%= "user30@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: User
   last_name: "30"
-  locale: en
 
 <% 22.times do |n| %>
 user_group_bot_account<%= (n) %>:
+  <<: *DEFAULTS
   email: <%= "inxt_grp_aaaaaaaaaa_bot#{format('%03d', (n + 1))}@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: Group
   last_name: "Bot #{format('%03d', (n + 1))}"
   user_type: <%= User.user_types[:group_bot] %>
-  locale: en
 <% end %>
 
 project1_automation_bot:
+  <<: *DEFAULTS
   email: <%= "inxt_prj_aaaaaaaaaa_automation_bot@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: INXT_PRJ_AAAAAAAAAA
   last_name: Automation Bot
   user_type: <%= User.user_types[:project_automation_bot] %>
 
 projectA_automation_bot:
+  <<: *DEFAULTS
   email: <%= "inxt_prj_aaaaaaaaa5_automation_bot@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: INXT_PRJ_AAAAAAAAA5
   last_name: Automation Bot
   user_type: <%= User.user_types[:project_automation_bot] %>
 
 janitor_doe:
+  <<: *DEFAULTS
   email: <%= "janitor_doe@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: project
   last_name: "end to end user"
-  locale: en
 
 projectJeff_bot:
+  <<: *DEFAULTS
   email: <%= "inxt_prj_aaaaaaaabp_001@localhost" %>
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
   first_name: INXT_PRJ_AAAAAAAABP
   last_name: Bot
   user_type: <%= User.user_types[:project_bot] %>
+
+empty_doe:
+  <<: *DEFAULTS
+  email: <%= "empty_doe@localhost" %>
+  first_name: Empty
+  last_name: Doe

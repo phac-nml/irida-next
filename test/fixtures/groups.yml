@@ -1,232 +1,212 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+DEFAULTS: &DEFAULTS
+  type: Group
+  metadata_summary: {}
+
 group_one:
+  <<: *DEFAULTS
   name: Group 1
   path: group-1
-  type: Group
   description: Group 1 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 633, "metadatafield2": 106 }
   puid: INXT_GRP_AAAAAAAAAA
 
 subgroup1:
+  <<: *DEFAULTS
   name: Subgroup 1
   path: subgroup-1
-  type: Group
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAB
 
 <% (Namespace::MAX_ANCESTORS-1).times do |n| %>
 subgroup<%= (n+2) %>:
+  <<: *DEFAULTS
   name: <%= "Subgroup #{n+2}" %>
   path: <%= "subgroup-#{n+2}" %>
-  type: Group
   description: <%= "Subgroup #{n+2} description" %>
   parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}", :uuid) %>
-  metadata_summary: {}
   puid: <%= "INXT_GRP_AAAAAA#{((n/26).round+66).chr}AA#{((n%26)+65).chr}" %>
 <% end %>
 
 group_two:
+  <<: *DEFAULTS
   name: Group 2
   path: group-2
-  type: Group
   description: Group 2 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAC
 
 group_three:
+  <<: *DEFAULTS
   name: Group 3
   path: group-3
-  type: Group
   description: Group 3 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAD
 
 subgroup_one_group_three:
+  <<: *DEFAULTS
   name: Subgroup 1 Group 3
   path: subgroup-1-group-3
-  type: Group
   description: Subgroup 1 Group 3
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAE
 
 david_doe_group_four:
+  <<: *DEFAULTS
   name: Group 4
   path: group-4
-  type: Group
   description: David's first group
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAF
 
 group_five:
+  <<: *DEFAULTS
   name: Group 5
   path: group-5
-  type: Group
   description: Group 5 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAG
 
 subgroup_one_group_five:
+  <<: *DEFAULTS
   name: Subgroup 1 Group 5
   path: subgroup-1-group-5
-  type: Group
   description: Subgroup 1 Group 5
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAH
 
 group_six:
+  <<: *DEFAULTS
   name: Group 6
   path: group-6
-  type: Group
   description: Group 6 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAI
 
 subgroup_one_group_six:
+  <<: *DEFAULTS
   name: Group 6
   path: group-6
-  type: Group
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAJ
 
 group_seven:
+  <<: *DEFAULTS
   name: Group 7
   path: group-7
-  type: Group
   description: Group 7 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAK
 
 group_eight:
+  <<: *DEFAULTS
   name: Group 8
   path: group-8
-  type: Group
   description: Group 8 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAL
 
 <% [*("a".."z")].each_with_index do |letter, index| %>
 group_<%= letter %>:
+  <<: *DEFAULTS
   name: <%= "Group #{letter.capitalize}" %>
   path: <%= "group-#{letter}" %>
-  type: Group
   description: <%= "Group #{letter} description" %>
   created_at: <%= (index + 1).days.ago %>
   updated_at: <%= (index + 1).days.ago %>
-  metadata_summary: {}
   puid: <%= "INXT_GRP_AAAAAAABA#{letter.capitalize}" %>
 <% end %>
 
 namespace_group_link_group_one:
+  <<: *DEFAULTS
   name: Group One
   path: group-one
-  type: Group
   description: Group One description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAM
 
 namespace_group_link_group_two:
+  <<: *DEFAULTS
   name: Group Two
   path: group-two
-  type: Group
   description: Group Two description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAN
 
 namespace_group_link_group_three:
+  <<: *DEFAULTS
   name: Group Three
   path: group-three
-  type: Group
   description: Group Three description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAO
 
 group_nine:
+  <<: *DEFAULTS
   name: Group 9
   path: group-9
-  type: Group
   description: Group 9 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAP
 
 subgroup_one_group_nine:
+  <<: *DEFAULTS
   name: Subgroup 1 Group 9
   path: subgroup-1-group-9
-  type: Group
   description: Subgroup 1 Group 9 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAQ
 
 group_ten:
+  <<: *DEFAULTS
   name: Group 10
   path: group-10-subgroup-1-group-9
-  type: Group
   description: Group 10 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAR
 
 group_alpha:
+  <<: *DEFAULTS
   name: Group Alpha
   path: group-alpha
-  type: Group
   description: Group Alpha description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAS
 
 group_bravo:
+  <<: *DEFAULTS
   name: Group Bravo
   path: group-bravo
-  type: Group
   description: Group bravo description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAT
 
 group_charlie:
+  <<: *DEFAULTS
   name: Group Charlie
   path: group-charlie
-  type: Group
   description: Group Charlie description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAU
 
 group_alpha_subgroup1:
+  <<: *DEFAULTS
   name: Subgroup 1
   path: group-alpha/subgroup-1
-  type: Group
   description: Subgroup 1 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAV
 
 group_eleven:
+  <<: *DEFAULTS
   name: Group 11
   path: group-11
-  type: Group
   description: Group 11 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAW
 
 group_twelve:
+  <<: *DEFAULTS
   name: Group 12
   path: group-12
-  type: Group
   description: Group 12 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 3, "metadatafield2": 3 }
   puid: INXT_GRP_AAAAAAAAAX
 
 subgroup_twelve_a:
+  <<: *DEFAULTS
   name: Subgroup 12 A
   path: subgroup-12-a
-  type: Group
   description: Subgroup 12 A description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
@@ -234,9 +214,9 @@ subgroup_twelve_a:
   puid: INXT_GRP_AAAAAAAAAY
 
 subgroup_twelve_b:
+  <<: *DEFAULTS
   name: Subgroup 12 B
   path: subgroup-12-b
-  type: Group
   description: Subgroup 12 B description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
@@ -244,9 +224,9 @@ subgroup_twelve_b:
   puid: INXT_GRP_AAAAAAAAAZ
 
 subgroup_twelve_a_a:
+  <<: *DEFAULTS
   name: Subgroup 12 A A
   path: subgroup-12-a-a
-  type: Group
   description: Subgroup 12 A A description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
@@ -254,120 +234,114 @@ subgroup_twelve_a_a:
   puid: INXT_GRP_AAAAAAAAA2
 
 group_delta:
+  <<: *DEFAULTS
   name: Group Delta
   path: group-delta
-  type: Group
   description: Group Delta description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAA3
 
 group_delta_subgroupA:
+  <<: *DEFAULTS
   name: Subgroup A
   path: group-delta/subgroup-a
-  type: Group
   description: Subgroup A description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAA4
 
 group_echo:
+  <<: *DEFAULTS
   name: Group Echo
   path: group-echo
-  type: Group
   description: Group Echo description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAA5
 
 group_echo_subgroupB:
+  <<: *DEFAULTS
   name: Subgroup B
   path: group-echo/subgroup-b
-  type: Group
   description: Subgroup B description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAA6
 
 group_foxtrot:
+  <<: *DEFAULTS
   name: Group Foxtrot
   path: group-foxtrot
-  type: Group
   description: Group Foxtrot description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAA7
 
 group_foxtrot_subgroupA:
+  <<: *DEFAULTS
   name: Subgroup A
   path: group-foxtrot/subgroup-a
-  type: Group
   description: Subgroup A description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABA
 
 group_golf:
+  <<: *DEFAULTS
   name: Group Golf
   path: group-golf
-  type: Group
   description: Group Golf description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABB
 
 group_hotel:
+  <<: *DEFAULTS
   name: Group Hotel
   path: group-hotel
-  type: Group
   description: Group Hotel description
-  metadata_summary: {}
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABC
 
 group_thirteen:
+  <<: *DEFAULTS
   name: Group 13
   path: group-13
-  type: Group
   description: Group 13 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABD
 
 group_fourteen:
+  <<: *DEFAULTS
   name: Group 14
   path: group-14
-  type: Group
   description: Group 14 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABE
 
 group_fifteen:
+  <<: *DEFAULTS
   name: Group 15
   path: group-15
-  type: Group
   description: Group 15 description
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABF
 
 group_sixteen:
+  <<: *DEFAULTS
   name: Group 16
   path: group-16
-  type: Group
   description: Group 16 description
-  metadata_summary: { }
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABG
 
 user30_group_one:
+  <<: *DEFAULTS
   name: User 30 Group 1
   path: user-30-group-1
-  type: Group
   description: Group 1 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABH
 
 janitor_doe_group:
+  <<: *DEFAULTS
   name: Group EndToEnd
   path: group-end_to_end
-  type: Group
   description: Group 1 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_GRP_ABAAAAAAAA
+
+empty_group:
+  <<: *DEFAULTS
+  name: Empty Group
+  path: empty-group
+  description: Group without any Samples
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAABHI

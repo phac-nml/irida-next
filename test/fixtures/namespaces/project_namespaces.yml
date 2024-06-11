@@ -1,375 +1,348 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+DEFAULTS: &DEFAULTS
+  type: Project
+  metadata_summary: {}
+
 project1_namespace:
+  <<: *DEFAULTS
   name: Project 1
   path: project-1
   description: Project 1 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 10, "metadatafield2": 35 }
   puid: INXT_PRJ_AAAAAAAAAA
 
 project2_namespace:
+  <<: *DEFAULTS
   name: Project 2
   path: project-2
   description: Project 2 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAB
 
 john_doe_project2_namespace:
+  <<: *DEFAULTS
   name: Project 2
   path: project-2
   description: Project 2 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAC
 
 john_doe_project3_namespace:
+  <<: *DEFAULTS
   name: Project 3
   path: project-3
   description: Project 3 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAD
 
 project4_namespace:
+  <<: *DEFAULTS
   name: Project 4
   path: project-4
   description: Project 4 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAE
 
 project5_namespace:
+  <<: *DEFAULTS
   name: Project 5
   path: project-5
   description: Project 5 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 623, "metadatafield2": 71 }
   puid: INXT_PRJ_AAAAAAAAAF
 
 project6_namespace:
+  <<: *DEFAULTS
   name: Project 6
   path: project-6
   description: Project 6 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAG
 
 project7_namespace:
+  <<: *DEFAULTS
   name: Project 7
   path: project-7
   description: Project 7 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAH
 
 project8_namespace:
+  <<: *DEFAULTS
   name: Project 8
   path: project-8
   description: Project 8 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAI
 
 project9_namespace:
+  <<: *DEFAULTS
   name: Project 9
   path: project-9
   description: Project 9 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAJ
 
 project10_namespace:
+  <<: *DEFAULTS
   name: Project 10
   path: project-10
   description: Project 10 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAK
 
 project11_namespace:
+  <<: *DEFAULTS
   name: Project 11
   path: project-11
   description: Project 11 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAL
 
 project12_namespace:
+  <<: *DEFAULTS
   name: Project 12
   path: project-12
   description: Project 12 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAM
 
 project13_namespace:
+  <<: *DEFAULTS
   name: Project 13
   path: project-13
   description: Project 13 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAN
 
 project14_namespace:
+  <<: *DEFAULTS
   name: Project 14
   path: project-14
   description: Project 14 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAO
 
 project15_namespace:
+  <<: *DEFAULTS
   name: Project 15
   path: project-15
   description: Project 15 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAP
 
 project16_namespace:
+  <<: *DEFAULTS
   name: Project 16
   path: project-16
   description: Project 16 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAQ
 
 project17_namespace:
+  <<: *DEFAULTS
   name: Project 17
   path: project-17
   description: Project 17 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAR
 
 project18_namespace:
+  <<: *DEFAULTS
   name: Project 18
   path: project-18
   description: Project 18 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAS
 
 project19_namespace:
+  <<: *DEFAULTS
   name: Project 19
   path: project-19
   description: Project 19 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAT
 
 project20_namespace:
+  <<: *DEFAULTS
   name: Project 20
   path: project-20
   description: Project 20 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAU
 
 project21_namespace:
+  <<: *DEFAULTS
   name: Project 21
   path: project-21
   description: Project 21 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAV
 
 project22_namespace:
+  <<: *DEFAULTS
   name: Project 22
   path: project-22
   description: Project 22 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAW
 
 project23_namespace:
+  <<: *DEFAULTS
   name: Project 23
   path: project-23
   description: Project 23 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAX
 
 project24_namespace:
+  <<: *DEFAULTS
   name: Project 24
   path: project-24
   description: Project 24 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAY
 
 john_doe_project4_namespace:
+  <<: *DEFAULTS
   name: Project 4
   path: project-4
   description: Project 4 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAAZ
 
 project25_namespace:
+  <<: *DEFAULTS
   name: Project 25
   path: project-25
   description: Project 25 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAA2
 
 project26_namespace:
+  <<: *DEFAULTS
   name: Project 26
   path: project-26
   description: Project 26 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAA3
 
 project32_namespace:
+  <<: *DEFAULTS
   name: Project 32
   path: project-32
   description: Project 32 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_eight, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAA4
 
 projectA_namespace:
+  <<: *DEFAULTS
   name: Project A
   path: project-a
   description: Project A description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAA5
 
 namespace_group_link_group_one_project1_namespace:
+  <<: *DEFAULTS
   name: Group One Project 1
   path: project-1
   description: Group One Project 1 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAA6
 
 namespace_group_link_group_three_project1_namespace:
+  <<: *DEFAULTS
   name: Group Three Project 1
   path: project-1
   description: Group Three Project 1 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAAA7
 
 project28_namespace:
+  <<: *DEFAULTS
   name: Project 28
   path: project-28
   description: Project 28 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABA
 
 project29_namespace:
+  <<: *DEFAULTS
   name: Project 29
   path: project-29
   description: Project 29 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_PRJ_AAAAAAAABB
 
 project30_namespace:
+  <<: *DEFAULTS
   name: Project 30
   path: project-30
   description: Project 30 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_b, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_PRJ_AAAAAAAABC
 
 project31_namespace:
+  <<: *DEFAULTS
   name: Project 31
   path: project-31
   description: Project 31 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a_a, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_PRJ_AAAAAAAABD
 
 projectAlpha_namespace:
+  <<: *DEFAULTS
   name: Project Alpha
   path: project-alpha
   description: Project Alpha description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABE
 
 projectBravo_namespace:
+  <<: *DEFAULTS
   name: Project Bravo
   path: project-bravo
   description: Project Bravo description
@@ -379,152 +352,144 @@ projectBravo_namespace:
   puid: INXT_PRJ_AAAAAAAABF
 
 projectCharlie_namespace:
+  <<: *DEFAULTS
   name: Project Charlie
   path: project-charlie
   description: Project Charlie description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABG
 
 projectAlpha1_namespace:
+  <<: *DEFAULTS
   name: Project Alpha 1
   path: project-alpha-1
   description: Project Alpha 1 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha_subgroup1, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABH
 
 projectDelta_namespace:
+  <<: *DEFAULTS
   name: Project Delta
   path: project-delta
   description: Project Delta description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABI
 
 projectDeltaSubgroupA_namespace:
+  <<: *DEFAULTS
   name: Project Delta Subgroup A
   path: project-delta-subgroup-a
   description: Project Delta Subgroup A description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta_subgroupA, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABJ
 
 projectEcho_namespace:
+  <<: *DEFAULTS
   name: Project Echo
   path: project-echo
   description: Project Echo description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABK
 
 projectEchoSubgroupB_namespace:
+  <<: *DEFAULTS
   name: Project Echo Subgroup B
   path: project-echo-subgroup-b
   description: Project Echo Subgroup B description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo_subgroupB, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABL
 
 projectFoxtrotSubgroupA_namespace:
+  <<: *DEFAULTS
   name: Project Foxtrot Subgroup A
   path: project-foxtrot-subgroup-a
   description: Project Foxtrot Subgroup A description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot_subgroupA, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABM
 
 user27_project1_namespace:
+  <<: *DEFAULTS
   name: Personal Project 1
   path: personal-project-1
   description: Personal Project 1 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:user27_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABN
 
 projectHotel_namespace:
+  <<: *DEFAULTS
   name: Project Hotel
   path: project-hotel
   description: Project Hotel description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABO
 
 project_jeff_namespace:
+  <<: *DEFAULTS
   name: Project Uncounted
   path: project-uncounted
   description: Project Uncounted description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABP
 
 project33_namespace:
+  <<: *DEFAULTS
   name: Project 33
   path: project-33
   description: Project 33 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABQ
 
 project34_namespace:
+  <<: *DEFAULTS
   name: Project 34
   path: project-34
   description: Project 34 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_fourteen, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABR
 
 project35_namespace:
+  <<: *DEFAULTS
   name: Project 35
   path: project-35
   description: Project 35 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAAABS
 
 project37_namespace:
+  <<: *DEFAULTS
   name: Project 37
   path: project-37
   description: Project 37 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAACBC
 
 user29_project1_namespace:
+  <<: *DEFAULTS
   name: User 29 Project 1
   path: project-1
   description: Project 1 description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:user29_namespace, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_AAAAAAACBD
 
 project_janitor_namespace:
+  <<: *DEFAULTS
   name: Project EndToEnd
   path: project-end_to_end
   description: Project EndToEnd description
-  type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe_group, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  metadata_summary: {}
   puid: INXT_PRJ_ABAAAAAAAA
+
+empty_project_namespace:
+  <<: *DEFAULTS
+  name: Empty Project
+  path: empty-project
+  description: Project that does not contain any samples
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:empty_group, :uuid) %>
+  puid: INXT_PRJ_AAAAAAACBE

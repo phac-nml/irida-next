@@ -541,3 +541,9 @@ project_jeff_member_user_bot_account:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::UPLOADER %>
+
+empty_group_member_empty_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:empty_group, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
