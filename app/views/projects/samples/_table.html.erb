@@ -1,4 +1,5 @@
-<div class="relative overflow-x-auto" data-turbo-temporary>
+<%# locals: (project:, pagy:, samples:) -%>
+<div class="table-container relative overflow-x-auto" data-turbo-temporary>
   <table
     id="samples-table"
     class="
@@ -124,7 +125,7 @@
         },
       } %>
     </tbody>
-    <% if allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project) %>
+    <% if @has_samples && (allowed_to?(:submit_workflow?, project) || allowed_to?(:clone_sample?, project) || allowed_to?(:transfer_sample?, project)) %>
       <tfoot>
         <tr class="border-t dark:border-slate-700 border-slate-200">
           <td
@@ -146,4 +147,14 @@
       </tfoot>
     <% end %>
   </table>
+  <% if @has_samples %>
+    <%= render partial: "pagination", partials: { project:, pagy: } %>
+  <% end %>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: t(:"projects.samples.index.no_samples"),
+      description: t(:"projects.samples.index.no_associated_samples"),
+      icon_name: :beaker,
+    ) %>
+  </div>
 </div>

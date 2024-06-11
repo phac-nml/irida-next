@@ -632,11 +632,9 @@ module Projects
       click_on I18n.t('projects.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
-      within '#project_samples_list' do
-        assert_selector 'table#samples-table tbody tr', count: 3
-        within first('tbody tr td:nth-child(2)') do
-          assert_text @sample3.name
-        end
+      assert_selector 'table#samples-table tbody tr', count: 3
+      within first('tbody tr td:nth-child(2)') do
+        assert_text @sample3.name
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
@@ -1275,9 +1273,7 @@ module Projects
         click_on I18n.t('projects.samples.metadata.file_imports.success.ok_button')
       end
 
-      within '#project_samples_list' do
-        assert_selector 'table thead tr th', count: 9
-      end
+      assert_selector 'table thead tr th', count: 9
     end
 
     test 'should not import metadata via invalid file type' do

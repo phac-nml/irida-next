@@ -1160,6 +1160,8 @@ en:
           remove: Remove sample
         search:
           placeholder: Filter by ID or name
+        no_samples: No Samples
+        no_associated_samples: There are no samples associated with this project.
       update:
         success: Sample was successfully updated.
       edit:

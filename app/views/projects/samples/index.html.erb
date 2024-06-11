@@ -92,10 +92,12 @@
       </div>
     <% end %>
   </div>
-  <%= turbo_frame_tag "project_samples_list" do %>
-    <%= render partial: "table", locals: { project: @project, samples: @samples } %>
-  <% end %>
-  <%= turbo_frame_tag "project_samples_pagination" do %>
-    <%= render partial: "pagination", locals: { project: @project, pagy: @pagy } %>
-  <% end %>
+<% end %>
+<%= turbo_frame_tag "project_samples_table" do %>
+  <%= render partial: "table",
+  locals: {
+    project: @project,
+    samples: @samples,
+    pagy: @pagy,
+  } %>
 <% end %>

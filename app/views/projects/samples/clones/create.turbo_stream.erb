@@ -9,11 +9,11 @@
                        locals: {
                          type: type,
                          message: message,
-                         errors: errors
+                         errors: errors,
                        } %>
 <% end %>
 
-<%= turbo_stream.replace "project_samples_list" do %>
-  <%= turbo_frame_tag "project_samples_list",
+<%= turbo_stream.replace "project_samples_table" do %>
+  <%= turbo_frame_tag "project_samples_table",
   src: project_samples_path(@project, format: :turbo_stream) %>
 <% end %>
