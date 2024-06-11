@@ -30,8 +30,8 @@ RUN apt-get update -qq && \
     python-is-python3
 
 # Install JavaScript dependencies
-ARG NODE_VERSION=19.7.0
-ARG PNPM_VERSION=7.29.1
+ARG NODE_VERSION=20.14.0
+ARG PNPM_VERSION=9.2.0
 ENV PATH=/usr/local/node/bin:$PATH
 RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
     /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \

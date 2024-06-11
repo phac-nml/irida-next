@@ -1,43 +1,44 @@
-lockfileVersion: 5.4
+lockfileVersion: '9.0'
 
-specifiers:
-  axe-core: ^4.6.3
-  flowbite: ^1.7.0
-  prettier: ^3.0.0
-  prettier-plugin-tailwindcss: ^0.3.0
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
-dependencies:
-  flowbite: 1.7.0
+importers:
 
-devDependencies:
-  axe-core: 4.6.3
-  prettier: 3.0.0
-  prettier-plugin-tailwindcss: 0.3.0_prettier@3.0.0
+  .:
+    dependencies:
+      flowbite:
+        specifier: ^1.7.0
+        version: 1.8.1
+    devDependencies:
+      axe-core:
+        specifier: ^4.6.3
+        version: 4.9.1
+      prettier:
+        specifier: ^3.0.0
+        version: 3.3.2
+      prettier-plugin-tailwindcss:
+        specifier: ^0.3.0
+        version: 0.3.0(prettier@3.3.2)
 
 packages:
 
-  /@popperjs/core/2.11.6:
-    resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
-    dev: false
+  '@popperjs/core@2.11.8':
+    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
-  /axe-core/4.6.3:
-    resolution: {integrity: sha512-/BQzOX780JhsxDnPpH4ZiyrJAzcd8AfzFPkv+89veFSr1rcMjuq2JDCwypKaPeB6ljHp9KjXhPpjgCvQlWYuqg==}
+  axe-core@4.9.1:
+    resolution: {integrity: sha512-QbUdXJVTpvUTHU7871ppZkdOLBeGUKBQWHkHrvN2V9IQWGMt61zf3B45BtzjxEJzYuj0JBjBZP/hmYS/R9pmAw==}
     engines: {node: '>=4'}
-    dev: true
 
-  /flowbite/1.7.0:
-    resolution: {integrity: sha512-OTTmnhRgv85Rs+mcMaVU7zB6EvRQs7BaQziyMUsZLRjW9aUpeQyqKjLmxsVMMCdr8isYPCLd6UL7X1IaSVI0WQ==}
-    dependencies:
-      '@popperjs/core': 2.11.6
-      mini-svg-data-uri: 1.4.4
-    dev: false
+  flowbite@1.8.1:
+    resolution: {integrity: sha512-lXTcO8a6dRTPFpINyOLcATCN/pK1Of/jY4PryklPllAiqH64tSDUsOdQpar3TO59ZXWwugm2e92oaqwH6X90Xg==}
 
-  /mini-svg-data-uri/1.4.4:
+  mini-svg-data-uri@1.4.4:
     resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
     hasBin: true
-    dev: false
 
-  /prettier-plugin-tailwindcss/0.3.0_prettier@3.0.0:
+  prettier-plugin-tailwindcss@0.3.0:
     resolution: {integrity: sha512-009/Xqdy7UmkcTBpwlq7jsViDqXAYSOMLDrHAdTMlVZOrKfM2o9Ci7EMWTMZ7SkKBFTG04UM9F9iM2+4i6boDA==}
     engines: {node: '>=12.17.0'}
     peerDependencies:
@@ -88,12 +89,27 @@ packages:
         optional: true
       prettier-plugin-twig-melody:
         optional: true
-    dependencies:
-      prettier: 3.0.0
-    dev: true
 
-  /prettier/3.0.0:
-    resolution: {integrity: sha512-zBf5eHpwHOGPC47h0zrPyNn+eAEIdEzfywMoYn2XPi0P44Zp0tSq64rq0xAREh4auw2cJZHo9QUob+NqCQky4g==}
+  prettier@3.3.2:
+    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: true
+
+snapshots:
+
+  '@popperjs/core@2.11.8': {}
+
+  axe-core@4.9.1: {}
+
+  flowbite@1.8.1:
+    dependencies:
+      '@popperjs/core': 2.11.8
+      mini-svg-data-uri: 1.4.4
+
+  mini-svg-data-uri@1.4.4: {}
+
+  prettier-plugin-tailwindcss@0.3.0(prettier@3.3.2):
+    dependencies:
+      prettier: 3.3.2
+
+  prettier@3.3.2: {}
