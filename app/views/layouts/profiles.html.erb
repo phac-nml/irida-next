@@ -3,39 +3,39 @@
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: true) do |layout| %>
-      <% layout.with_sidebar(label: t(:'profiles.sidebar.header'), icon_name: "user_circle") do |navigation| %>
+      <% layout.with_sidebar(label: t(:'profiles.sidebar.header'), icon_name: "user_circle", pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: profile_path,
             icon: "user",
             label: t(:"profiles.sidebar.profile"),
-            selected: @current_page == t(:"profiles.sidebar.profile").downcase
+            selected: @current_page == t(:"profiles.sidebar.profile").downcase,
           ) %>
           <% if allowed_to?(:edit_password?, @user) %>
             <%= render section.with_item(
               url: edit_profile_password_path,
               icon: "lock_closed",
               label: t(:"profiles.sidebar.password"),
-              selected: @current_page == t(:"profiles.sidebar.password").downcase
+              selected: @current_page == t(:"profiles.sidebar.password").downcase,
             ) %>
           <% end %>
           <%= render section.with_item(
             url: profile_personal_access_tokens_path,
             icon: "ticket",
             label: t(:"profiles.sidebar.access_tokens"),
-            selected: @current_page == t(:"profiles.sidebar.access_tokens").downcase
+            selected: @current_page == t(:"profiles.sidebar.access_tokens").downcase,
           ) %>
           <%= render section.with_item(
             url: profile_preferences_path,
             icon: :adjustment_horizontal,
             label: t(:"profiles.sidebar.preferences"),
-            selected: @current_page == t(:"profiles.sidebar.preferences").downcase
+            selected: @current_page == t(:"profiles.sidebar.preferences").downcase,
           ) %>
           <%= render section.with_item(
             url: profile_account_path,
             icon: "building_library",
             label: t(:"profiles.sidebar.account"),
-            selected: @current_page == t(:"profiles.sidebar.account").downcase
+            selected: @current_page == t(:"profiles.sidebar.account").downcase,
           ) %>
         <% end %>
         <% layout.with_body do %>

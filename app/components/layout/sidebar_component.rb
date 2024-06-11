@@ -9,7 +9,7 @@ module Layout
     renders_many :sections, Sidebar::SectionComponent
     renders_many :items, Sidebar::ItemComponent
 
-    def initialize(label:, icon_name:, pipelines_enabled:, **system_arguments)
+    def initialize(label:, icon_name:, pipelines_enabled: true, **system_arguments)
       @label = label
       @tooltip = label
       @icon_name = icon_name
