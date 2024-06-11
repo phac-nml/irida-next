@@ -3,31 +3,34 @@
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: false) do |layout| %>
-      <% layout.with_sidebar(label: t(:"general.default_sidebar.title"), icon_name: "inbox_stack") do |navigation| %>
+    <% layout.with_sidebar(label: t(:"general.default_sidebar.title"), icon_name: "inbox_stack", pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             icon: "rectangle_stack",
             label: t(:"general.default_sidebar.projects"),
             url: dashboard_projects_path,
-            selected: @current_page == t(:"general.default_sidebar.projects").downcase
+            selected: @current_page == t(:"general.default_sidebar.projects").downcase,
           ) %>
           <%= render section.with_item(
             icon: "squares_2x2",
             label: t(:"general.default_sidebar.groups"),
             url: dashboard_groups_path,
-            selected: @current_page == t(:"general.default_sidebar.groups").downcase
+            selected: @current_page == t(:"general.default_sidebar.groups").downcase,
           ) %>
+        <% if @pipelines_enabled %>
           <%= render section.with_item(
             icon: "command_line",
             label: t(:"general.default_sidebar.workflows"),
             url: workflow_executions_path,
-            selected: @current_page == t(:"general.default_sidebar.workflows").downcase
+            selected: @current_page == t(:"general.default_sidebar.workflows").downcase,
           ) %>
+        <% end %>
           <%= render section.with_item(
             icon: "arrow_up_on_square_stack",
             label: t(:"general.default_sidebar.data_exports"),
             url: data_exports_path,
-            selected: @current_page == t(:"general.default_sidebar.data_exports").downcase
+            selected:
+              @current_page == t(:"general.default_sidebar.data_exports").downcase,
           ) %>
         <% end %>
         <% layout.with_breadcrumb(context_crumbs: @context_crumbs || []) %>
