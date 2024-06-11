@@ -71,7 +71,7 @@ module Attachments
       assign_metadata(illumina_pe, 'illumina_pe')
     end
 
-    def identify_paired_end_files(attachments)
+    def identify_paired_end_files(attachments) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
       # rubocop:disable Metrics/AbcSize
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       pe = Hash.new { |h, k| h[k] = {} }
