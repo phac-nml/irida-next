@@ -6,7 +6,7 @@
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <div class="flex items-center space-x-2">
-      <% if allowed_to?(:submit_workflow?, @project) %>
+      <% if allowed_to?(:submit_workflow?, @project) && @has_workflow_executions %>
         <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @project.namespace.id), data: { turbo_stream: true, controller: "action-link", action_link_required_value: 1 },
                   class: "button button--size-default button--state-default action-link" do %>
           <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>

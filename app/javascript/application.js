@@ -5,6 +5,7 @@ import * as ActiveStorage from "@rails/activestorage";
 ActiveStorage.start();
 
 Turbo.setConfirmMethod((message, element) => {
+  console.log(element);
   const dialog = document.getElementById("turbo-confirm");
   if (!dialog) {
     console.error(
