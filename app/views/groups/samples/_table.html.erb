@@ -2,12 +2,7 @@
   <table
     id="samples-table"
     class="
-      w-full
-      text-sm
-      text-left
-      rtl:text-right
-      text-slate-500
-      dark:text-slate-400
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
       whitespace-nowrap
     "
     data-controller="selection"
@@ -16,11 +11,7 @@
   >
     <thead
       class="
-        text-xs
-        text-slate-700
-        uppercase
-        bg-slate-50
-        dark:bg-slate-700
+        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
         dark:text-slate-400
       "
     >
@@ -28,14 +19,7 @@
         <th
           scope="col"
           class="
-            px-6
-            py-3
-            text-left
-            bg-slate-50
-            dark:bg-slate-700
-            sticky
-            left-0
-            z-10
+            px-6 py-3 text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-10
           "
         >
           <%= search_form_for @q, url: select_group_samples_url(**request.query_parameters), html: { "data-controller": "filters", id: "select-all-form" }, class: "filters flex align-middle" do |f| %>
@@ -58,19 +42,9 @@
                 id="select-all"
                 name="select"
                 class="
-                  w-4
-                  h-4
-                  mr-2.5
-                  text-primary-600
-                  bg-slate-100
-                  border-slate-300
-                  rounded
-                  focus:ring-primary-500
-                  dark:focus:ring-primary-600
-                  dark:ring-offset-slate-800
-                  focus:ring-2
-                  dark:bg-slate-700
-                  dark:border-slate-600
+                  w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
+                  focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
+                  focus:ring-2 dark:bg-slate-700 dark:border-slate-600
                 "
                 data-selection-target="selectAll"
                 onchange="Turbo.navigator.submitForm(this.form)"
@@ -80,7 +54,7 @@
               ransack_obj: @q,
               label: t(".puid"),
               url: sorting_url(@q, :puid),
-              field: :puid
+              field: :puid,
             ) %>
           <% end %>
         </th>
@@ -89,7 +63,7 @@
             ransack_obj: @q,
             label: t(".sample"),
             url: sorting_url(@q, :name),
-            field: :name
+            field: :name,
           ) %>
         </th>
         <th
@@ -103,7 +77,7 @@
             ransack_obj: @q,
             label: t(".created_at"),
             url: sorting_url(@q, :created_at),
-            field: :created_at
+            field: :created_at,
           ) %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
@@ -111,7 +85,7 @@
             ransack_obj: @q,
             label: t(".updated_at"),
             url: sorting_url(@q, :updated_at),
-            field: :updated_at
+            field: :updated_at,
           ) %>
         </th>
         <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
@@ -119,7 +93,7 @@
             ransack_obj: @q,
             label: t(".files_updated_at"),
             url: sorting_url(@q, :attachments_updated_at_nulls_last),
-            field: :attachments_updated_at_nulls_last
+            field: :attachments_updated_at_nulls_last,
           ) %>
         </th>
         <% @fields.each do |column| %>
@@ -128,7 +102,7 @@
               ransack_obj: @q,
               label: column,
               url: sorting_url(@q, URI.encode_www_form_component("metadata_#{column}")),
-              field: "metadata_#{column}"
+              field: "metadata_#{column}",
             ) %>
           </th>
         <% end %>
@@ -137,112 +111,23 @@
     <tbody
       id="group-samples-table-body"
       class="
-        bg-white
-        divide-y
-        divide-slate-200
-        dark:bg-slate-800
-        dark:divide-slate-700
+        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
       "
     >
-      <% samples.each do |sample| %>
-        <tr
-          id="<%= sample.id %>"
-          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
-        >
-          <td class="px-6 py-3 left-0 sticky bg-slate-50 dark:bg-slate-800">
-            <% if allowed_to?(:submit_workflow?, @group) %>
-              <%= check_box_tag "sample_ids[]",
-              sample.id,
-              nil,
-              id: dom_id(sample),
-              "aria-label": sample.name,
-              data: {
-                action: "input->selection#toggle",
-                selection_target: "rowSelection"
-              },
-              class:
-                "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
-            <% end %>
-            <%= link_to namespace_project_sample_path(
-                        id: sample.id,
-                        namespace_id: sample.project.namespace.parent.full_path,
-                        project_id: sample.project.path
-                      ),
-                      data: {
-                        turbo: false
-                      },
-                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
-              <span class="font-semibold">
-                <%= highlight(
-                  sample.puid,
-                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-                ) %>
-              </span>
-            <% end %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= link_to namespace_project_sample_path(
-                        id: sample.id,
-                        namespace_id: sample.project.namespace.parent.full_path,
-                        project_id: sample.project.path
-                      ),
-                      data: {
-                        turbo: false
-                      },
-                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
-              <span class="font-semibold">
-                <%= highlight(
-                  sample.name,
-                  defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
-                ) %>
-              </span>
-            <% end %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= viral_tooltip(title: project_path(sample.project)) do %>
-              <%= link_to sample.project.abbreviated_path,
-              project_path(sample.project),
-              data: {
-                turbo: false
-              },
-              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-            <% end %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= l(sample.created_at.localtime, format: :full_date) %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <%= viral_time_ago(original_time: sample.updated_at) %>
-          </td>
-          <td class="px-6 py-3 whitespace-nowrap">
-            <% if sample.attachments_updated_at.present? %>
-              <%= viral_time_ago(original_time: sample.attachments_updated_at) %>
-            <% end %>
-          </td>
-          <% @fields.each do |column| %>
-            <td class="px-6 py-3 whitespace-nowrap">
-              <%= sample.metadata[column] %>
-            </td>
-          <% end %>
-        </tr>
-      <% end %>
+      <%= render partial: "sample",
+      collection: samples,
+      locals: {
+        abilities: {
+          select_sample: allowed_to?(:submit_workflow?, group),
+        },
+      } %>
     </tbody>
     <tfoot>
       <tr>
         <td
           class="
-            px-6
-            py-3
-            sticky
-            left-0
-            bg-slate-50
-            dark:bg-slate-900
-            border-t
-            dark:border-slate-700
-            border-slate-200
-            z-10
+            px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 border-t
+            dark:border-slate-700 border-slate-200 z-10
           "
           colspan="3"
         >
@@ -259,12 +144,7 @@
         <td
           colspan="100%"
           class="
-            px-6
-            py-3
-            bg-slate-50
-            dark:bg-slate-900
-            broder-t
-            dark:border-slate-700
+            px-6 py-3 bg-slate-50 dark:bg-slate-900 broder-t dark:border-slate-700
             border-slate-200
           "
         ></td>

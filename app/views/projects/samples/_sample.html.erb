@@ -1,0 +1,89 @@
+<tr
+  id="<%= sample.id %>"
+  class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+>
+  <td class=" px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 ">
+    <% if abilities[:select_sample] %>
+      <%= check_box_tag "sample_ids[]",
+      sample.id,
+      nil,
+      id: dom_id(sample),
+      "aria-label": sample.name,
+      data: {
+        action: "input->selection#toggle",
+        selection_target: "rowSelection",
+      },
+      class:
+        "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+    <% end %>
+    <%= link_to namespace_project_sample_path(id: sample.id),
+            data: {
+              turbo: false
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+      <span class="font-semibold">
+        <%= highlight(
+          sample.puid,
+          defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+        ) %>
+      </span>
+    <% end %>
+  </td>
+  <td class="px-6 py-3">
+    <%= link_to namespace_project_sample_path(id: sample.id),
+            data: {
+              turbo: false
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+      <span class="font-semibold">
+        <%= highlight(
+          sample.name,
+          defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+        ) %>
+      </span>
+    <% end %>
+  </td>
+  <td class="px-6 py-3">
+    <%= l(sample.created_at.localtime, format: :full_date) %>
+  </td>
+  <td class="px-6 py-3">
+    <%= viral_time_ago(original_time: sample.updated_at) %>
+  </td>
+  <td class="px-6 py-3">
+    <% if sample.attachments_updated_at.present? %>
+      <%= viral_time_ago(original_time: sample.attachments_updated_at) %>
+    <% end %>
+  </td>
+  <% @fields.each do |column| %>
+    <td class="px-6 py-3">
+      <%= sample.metadata[column] %>
+    </td>
+  <% end %>
+  <% if abilities[:update_sample] %>
+    <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
+      <%= link_to(
+        t(:"projects.samples.index.edit_button"),
+        edit_namespace_project_sample_path(id: sample.id),
+        data: {
+          turbo: false,
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+      ) %>
+      <% if abilities[:destroy_sample] %>
+        <%= link_to(
+          t(:"projects.samples.index.remove_button"),
+          namespace_project_sample_path(id: sample.id),
+          data: {
+            turbo_method: :delete,
+            turbo_confirm: t(:"projects.samples.index.remove_button_confirmation"),
+          },
+          class:
+            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+        ) %>
+      <% end %>
+    </td>
+  <% end %>
+</tr>

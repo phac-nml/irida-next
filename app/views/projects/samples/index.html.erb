@@ -92,9 +92,10 @@
       </div>
     <% end %>
   </div>
-  <%= turbo_frame_tag "project_samples_list",
-                      src: project_samples_path(@project, format: :turbo_stream, **request.query_parameters) do %>
-    <%= render partial: "shared/loading/table" %>
+  <%= turbo_frame_tag "project_samples_list" do %>
+    <%= render partial: "table", locals: { project: @project, samples: @samples } %>
   <% end %>
-  <%= turbo_frame_tag "project_samples_pagination" %>
+  <%= turbo_frame_tag "project_samples_pagination" do %>
+    <%= render partial: "pagination", locals: { project: @project, pagy: @pagy } %>
+  <% end %>
 <% end %>
