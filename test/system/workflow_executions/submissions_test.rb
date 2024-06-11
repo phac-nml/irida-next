@@ -256,7 +256,8 @@ module WorkflowExecutions
     test 'launch pipeline button is disabled when a project does not contain any samples' do
       login_as users(:empty_doe)
 
-      visit namespace_project_samples_url(namespace_id: groups(:empty_group).path, project_id: projects(:empty_project).path)
+      visit namespace_project_samples_url(namespace_id: groups(:empty_group).path,
+                                          project_id: projects(:empty_project).path)
 
       assert_no_button I18n.t(:'projects.samples.index.workflows.button_sr')
     end
