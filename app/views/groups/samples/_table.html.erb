@@ -1,4 +1,5 @@
-<div class="relative overflow-x-auto" data-turbo-temporary>
+<%# locals: (group:, pagy:, samples:) -%>
+<div class="table-container relative overflow-x-auto" data-turbo-temporary>
   <table
     id="samples-table"
     class="
@@ -122,24 +123,36 @@
         },
       } %>
     </tbody>
-    <tfoot>
-      <tr class="border-t dark:border-slate-700 border-slate-200">
-        <td
-          class="px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 z-10"
-          colspan="3"
-        >
+    <% if @has_samples %>
+      <tfoot>
+        <tr class="border-t dark:border-slate-700 border-slate-200">
+          <td
+            class="px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 z-10"
+            colspan="3"
+          >
 
-          <span>
-            <%= t(".counts.samples") %>:
-            <strong data-selection-target="total">0</strong>
-          </span>
-          <span>
-            <%= t(".counts.selected") %>:
-            <strong data-selection-target="selected">0</strong>
-          </span>
-        </td>
-        <td colspan="100%" class="px-6 py-3 bg-slate-50 dark:bg-slate-900"></td>
-      </tr>
-    </tfoot>
+            <span>
+              <%= t(".counts.samples") %>:
+              <strong data-selection-target="total">0</strong>
+            </span>
+            <span>
+              <%= t(".counts.selected") %>:
+              <strong data-selection-target="selected">0</strong>
+            </span>
+          </td>
+          <td colspan="100%" class="px-6 py-3 bg-slate-50 dark:bg-slate-900"></td>
+        </tr>
+      </tfoot>
+    <% end %>
   </table>
+  <% if @has_samples %>
+    <%= render partial: "pagination", locals: { pagy: @pagy } %>
+  <% end %>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: t(:"groups.samples.table.no_samples"),
+      description: t(:"groups.samples.table.no_associated_samples"),
+      icon_name: :beaker,
+    ) %>
+  </div>
 </div>

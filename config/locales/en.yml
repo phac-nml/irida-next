@@ -784,6 +784,8 @@ en:
         counts:
           samples: Samples
           selected: Selected
+        no_samples: No Samples
+        no_associated_samples: There are no samples associated with this group.
   models:
     sample:
       analysis: Analysis
