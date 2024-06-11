@@ -5,10 +5,10 @@ class ApplicationController < ActionController::Base
   include Irida::Auth
   include Pagy::Backend
   include RouteHelper
-  include WorkflowExecutions
 
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
+  before_action :pipelines_enabled?
   around_action :set_current_user
   around_action :use_logidze_responsible, only: %i[create destroy update transfer] # rubocop:disable Rails/LexicallyScopedActionFilter
   around_action :switch_locale
@@ -59,5 +59,9 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
     not_found(exception)
+  end
+
+  def pipelines_enabled?
+    @pipelines_enabled = Irida::Pipelines.instance.available_pipelines.any?
   end
 end

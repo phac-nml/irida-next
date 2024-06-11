@@ -3,7 +3,7 @@
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user) do |layout| %>
-      <% layout.with_sidebar(label: turbo_frame_tag("sidebar_project_name"){ @project.name }, icon_name: "rectangle_stack") do |navigation| %>
+    <% layout.with_sidebar(label: turbo_frame_tag("sidebar_project_name") { @project.name }, icon_name: "rectangle_stack", pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: project_path(@project),
@@ -31,7 +31,7 @@
               selected: @current_page == t(:"projects.sidebar.history").downcase,
             ) %>
           <% end %>
-          <% if allowed_to?(:view_workflow_executions?, @project.namespace) %>
+        <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
             <%= render section.with_item(
               url: project_workflow_executions_path(@project),
               icon: "command_line",
@@ -51,10 +51,12 @@
                 url: project_bots_path(@project),
                 label: t(:"projects.sidebar.bot_accounts"),
               ) %>
+            <% if @pipelines_enabled %>
               <% multi_level_menu.with_menu_item(
                 url: project_automated_workflow_executions_path(@project),
                 label: t(:"projects.sidebar.automated_workflow_executions"),
               ) %>
+            <% end %>
             <% end %>
           <% end %>
         <% end %>

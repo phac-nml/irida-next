@@ -8,7 +8,6 @@ module Projects
     before_action :sample, only: %i[show edit update destroy view_history_version]
     before_action :current_page
     before_action :set_search_params, only: %i[index destroy]
-    before_action :has_workflow_executions?, only: %i[index]
 
     def index # rubocop:disable Metrics/AbcSize
       authorize! @project, to: :sample_listing?

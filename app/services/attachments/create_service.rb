@@ -37,7 +37,9 @@ module Attachments
 
       @attachments.each(&:save)
 
-      if @attachable.instance_of?(Sample) && @attachable.project.namespace.automated_workflow_executions.present?
+      if Irida::Pipelines.instance.available_pipelines.any? &&
+         @attachable.instance_of?(Sample) &&
+         @attachable.project.namespace.automated_workflow_executions.present?
         launch_automated_workflow_executions(@pe_attachments&.last)
       end
 
@@ -69,7 +71,8 @@ module Attachments
       assign_metadata(illumina_pe, 'illumina_pe')
     end
 
-    def identify_paired_end_files(attachments) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
+    def identify_paired_end_files(attachments)
+      # rubocop:disable Metrics/AbcSize
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       pe = Hash.new { |h, k| h[k] = {} }
 
@@ -101,7 +104,7 @@ module Attachments
       assign_metadata(pe, 'pe')
     end
 
-    def assign_metadata(paired_ends, type) # rubocop:disable Metrics/AbcSize
+    def assign_metadata(paired_ends, type)
       paired_ends.each do |key, pe_attachments|
         next unless pe_attachments.key?('forward') && pe_attachments.key?('reverse')
 
