@@ -19,7 +19,7 @@ export default class extends Controller {
   }
 
   submitEnd() {
-    document.addEventListener("turbo:submit-end", preventEscapeListener);
+    document.removeEventListener("keydown", preventEscapeListener, true);
     document.querySelector(".dialog--header").classList.remove("opacity-20");
     document.querySelector(".dialog--section > *:not(:last-child)").classList.remove("opacity-20");
     document.querySelector(".dialog--close").classList.remove("hidden");
