@@ -282,6 +282,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
     # project samples page
     visit group_samples_url(@namespace)
+    assert_text 'Displaying items 1-20 of 26'
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button')
 
