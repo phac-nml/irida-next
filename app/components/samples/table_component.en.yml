@@ -1,0 +1,12 @@
+en:
+  puid: ID
+  name: Sample
+  project: Project
+  created_at: Created
+  updated_at: Last Updated
+  attachments_updated_at: Files Last Updated
+  action: Action
+  counts:
+    samples: Samples
+    selected: Selected
+  select_all: Select All
