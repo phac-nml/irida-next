@@ -64,4 +64,6 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  config.middleware.insert_before 0, Capybara::Lockstep::Middleware
 end
