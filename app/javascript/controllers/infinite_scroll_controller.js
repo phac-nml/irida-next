@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { createHiddenInput } from '../utilities/form';
 
 export default class extends Controller {
   static outlets = ["selection"];
@@ -35,14 +36,14 @@ export default class extends Controller {
       const fragment = document.createDocumentFragment();
       for (const id of ids) {
         fragment.appendChild(
-          this.#createHiddenInput(this.pagedFieldNameValue, id),
+          createHiddenInput(this.pagedFieldNameValue, id),
         );
       }
       fragment.appendChild(
-        this.#createHiddenInput("page", this.#page),
+        createHiddenInput("page", this.#page),
       );
       fragment.appendChild(
-        this.#createHiddenInput("format", "turbo_stream"),
+        createHiddenInput("format", "turbo_stream"),
       );
       this.pageFormContentTarget.innerHTML = "";
       this.pageFormContentTarget.appendChild(fragment);
@@ -54,18 +55,9 @@ export default class extends Controller {
   #makeAllHiddenInputs() {
     const fragment = document.createDocumentFragment();
     for (const id of this.allIds) {
-      fragment.appendChild(this.#createHiddenInput(this.fieldNameValue, id));
+      fragment.appendChild(createHiddenInput(this.fieldNameValue, id));
     }
     this.allTarget.appendChild(fragment);
-  }
-
-  #createHiddenInput(name, value) {
-    const element = document.createElement("input");
-    element.type = "hidden";
-    element.id = name;
-    element.name = name;
-    element.value = value;
-    return element;
   }
 
   clear(){
