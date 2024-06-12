@@ -43,8 +43,7 @@
   <%= turbo_frame_tag "bots",
                       src: group_bots_path(
                                   format: :turbo_stream
-                                ),
-                      loading: :lazy do %>
+                                ) do %>
     <%= render partial: "shared/loading/table" %>
   <% end %>
   <%= turbo_frame_tag "bots_pagination" %>

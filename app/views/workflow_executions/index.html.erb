@@ -1,7 +1,6 @@
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
 <%= turbo_frame_tag "workflow_execution_table",
-                        src: workflow_executions_path(format: :turbo_stream, page: params[:page]),
-                        loading: :lazy do %>
+                        src: workflow_executions_path(format: :turbo_stream, page: params[:page]) do %>
   <%= render partial: "shared/loading/table" %>
 <% end %>
 <% unless @workflows.empty? %>

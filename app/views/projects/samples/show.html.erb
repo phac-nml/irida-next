@@ -9,7 +9,7 @@
         <%= link_to(
           t("projects.samples.show.edit_button"),
           edit_namespace_project_sample_path(id: @sample.id),
-          class: "button button--state-primary button--size-default mr-1"
+          class: "button button--state-primary button--size-default mr-1",
         ) %>
       <% end %>
       <% if allowed_to?(:destroy?, @project) %>
@@ -18,9 +18,9 @@
           namespace_project_sample_path(id: @sample.id, format: :html),
           data: {
             turbo_method: :delete,
-            turbo_confirm: t("projects.samples.show.remove_button_confirmation")
+            turbo_confirm: t("projects.samples.show.remove_button_confirmation"),
           },
-          class: "button button--state-default button--size-default"
+          class: "button button--state-default button--size-default",
         ) %>
       <% end %>
     </div>
@@ -30,15 +30,8 @@
 <div class="bg-white dark:bg-slate-800">
   <div
     class="
-      flex
-      text-sm
-      font-medium
-      text-center
-      border-b
-      text-slate-500
-      border-slate-200
-      dark:text-slate-400
-      dark:border-slate-700
+      flex text-sm font-medium text-center border-b text-slate-500 border-slate-200
+      dark:text-slate-400 dark:border-slate-700
     "
   >
     <ul class="flex flex-wrap -mb-px">
@@ -54,7 +47,7 @@
             end
           ),
         aria: {
-          current: (@tab == "files" || @tab == nil) ? "page" : "false"
+          current: (@tab == "files" || @tab == nil) ? "page" : "false",
         } %>
       </li>
       <li class="mr-2">
@@ -69,7 +62,7 @@
             end
           ),
         aria: {
-          current: @tab == "metadata" ? "page" : "false"
+          current: @tab == "metadata" ? "page" : "false",
         } %>
       </li>
       <li class="mr-2">
@@ -84,7 +77,7 @@
             end
           ),
         aria: {
-          current: @tab == "history" ? "page" : "false"
+          current: @tab == "history" ? "page" : "false",
         } %>
       </li>
     </ul>
@@ -95,18 +88,18 @@
           new_namespace_project_sample_attachment_path(sample_id: @sample.id),
           data: {
             turbo_frame: "sample_modal",
-            turbo_stream: true
+            turbo_stream: true,
           },
           class: "button button--size-default button--state-default" %>
           <%= link_to t(".concatenate_button"),
           new_namespace_project_sample_attachments_concatenation_path(
-            sample_id: @sample.id
+            sample_id: @sample.id,
           ),
           data: {
             turbo_frame: "sample_modal",
             turbo_stream: false,
             controller: "action-link",
-            action_link_required_value: 2
+            action_link_required_value: 2,
           },
           class: "button button--size-default button--state-default action-link" %>
           <%= link_to t(".delete_files_button"),
@@ -115,7 +108,7 @@
             turbo_frame: "sample_modal",
             turbo_stream: false,
             controller: "action-link",
-            action_link_required_value: 1
+            action_link_required_value: 1,
           },
           class: "button button--size-default button--state-destructive action-link" %>
         </div>
@@ -125,18 +118,16 @@
           new_namespace_project_sample_metadata_path(sample_id: @sample.id),
           data: {
             turbo_frame: "sample_modal",
-            turbo_stream: true
+            turbo_stream: true,
           },
           class: "button button--size-default button--state-default" %>
-           <%= link_to t(".delete_metadata_button"),
-          new_namespace_project_sample_metadata_deletion_path(
-            sample_id: @sample.id
-          ),
+          <%= link_to t(".delete_metadata_button"),
+          new_namespace_project_sample_metadata_deletion_path(sample_id: @sample.id),
           data: {
             turbo_frame: "sample_modal",
             turbo_stream: false,
             controller: "action-link",
-            action_link_required_value: 1
+            action_link_required_value: 1,
           },
           class: "button button--size-default button--state-destructive action-link" %>
         </div>
@@ -144,7 +135,7 @@
     <% end %>
   </div>
   <div class="flex flex-col" data-turbo-temporary>
-    <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files'), loading: :lazy do %>
+    <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files') do %>
       <% if @tab == "history" %>
         <%= render partial: "shared/loading/history" %>
       <% elsif @tab == "params" %>

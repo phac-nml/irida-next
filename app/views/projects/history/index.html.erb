@@ -10,8 +10,7 @@
     namespace_project_history_url(
       format: :turbo_stream,
       **request.query_parameters
-    ),
-  loading: :lazy do %>
+    ) do %>
     <%= render partial: "shared/loading/history" %>
   <% end %>
 </div>
