@@ -1949,8 +1949,8 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
-        assert_selector 'tr td', text: @sample1.puid
-        assert_selector 'tr td', text: @sample2.puid
+        assert_selector 'tr th', text: @sample1.puid
+        assert_selector 'tr th', text: @sample2.puid
       end
       click_button I18n.t(:'components.list_filter.title')
       within '#list-filter-dialog' do
