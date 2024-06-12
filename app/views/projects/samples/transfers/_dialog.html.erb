@@ -5,6 +5,7 @@
       data-controller="infinite-scroll"
       data-infinite-scroll-selection-outlet='#samples-table'
       data-infinite-scroll-field-name-value="transfer[sample_ids][]"
+      data-infinite-scroll-paged-field-name-value="sample_ids[]"
     >
       <%= form_with(
         url: list_namespace_project_samples_path,

@@ -4,7 +4,8 @@ export default class extends Controller {
   static outlets = ["selection"];
   static targets = ["all", "pageForm", "pageFormContent", "scrollable"];
   static values = {
-    fieldName: String
+    fieldName: String,
+    pagedFieldName: String
   }
 
   #page = 1;
@@ -34,7 +35,7 @@ export default class extends Controller {
       const fragment = document.createDocumentFragment();
       for (const id of ids) {
         fragment.appendChild(
-          this.#createHiddenInput("sample_ids[]", id),
+          this.#createHiddenInput(this.pagedFieldNameValue, id),
         );
       }
       fragment.appendChild(
