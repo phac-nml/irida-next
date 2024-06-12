@@ -58,32 +58,34 @@ When you add a member to a subgroup where they are also a member of one of the p
     | Create Project                      |       |          |         | ✓          | ✓     |
     | Edit Project                        |       |          |         | ✓          | ✓     |
     | Delete Project                      |       |          |         |            | ✓     |
-    | View Project                        | ✓     | ✓(2)     | ✓       | ✓          | ✓     |
+    | View Project                        | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
     | Transfer Project                    |       |          |         |            | ✓     |
-    | Add Project Member                  |       |          |         | ✓(1)       | ✓     |
-    | Edit Project Member                 |       |          |         | ✓(1)       | ✓     |
-    | Remove Project Member               |       |          |         | ✓(1)       | ✓     |
+    | Add Project Member                  |       |          |         | ✓(2)       | ✓     |
+    | Edit Project Member                 |       |          |         | ✓(2)       | ✓     |
+    | Remove Project Member               |       |          |         | ✓(2)       | ✓     |
     | View Project Members                | ✓     |          | ✓       | ✓          | ✓     |
     | Add Bot Account                     |       |          |         | ✓          | ✓     |
     | Remove Bot Account                  |       |          |         | ✓          | ✓     |
     | Set-up Automated Workflow Execution |       |          |         | ✓          | ✓     |
     | View Project History                |       |          |         | ✓          | ✓     |
 
-  1. A user with the **Maintainer** role can only modify members upto and including their role
-  2. A user or bot account with the **Uploader** role can only perform these actions via the api
+
+  1. A user or bot account with the **Uploader** role can only perform these actions via the api
+  2. A user with the **Maintainer** role can only modify members upto and including their role
 
   - Sample Management:
 
     | Action                | Guest | Uploader | Analyst | Maintainer | Owner |
     | :-------------------- | :---- | -------- | ------- | ---------- | ----- |
-    | Create Samples        |       | ✓(2)     |         | ✓          | ✓     |
-    | Edit Samples          |       | ✓(2)     |         | ✓          | ✓     |
+    | Create Samples        |       | ✓(1)     |         | ✓          | ✓     |
+    | Edit Samples          |       | ✓(1)     |         | ✓          | ✓     |
     | Delete Samples        |       |          |         |            | ✓     |
-    | Transfer Samples      |       |          |         | ✓(1)       | ✓     |
+    | Transfer Samples      |       |          |         | ✓(2)       | ✓     |
+    | Clone Samples         |       |          |         | ✓          | ✓     |
     | View Sample History   |       |          |         | ✓          | ✓     |
 
-  1. A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project
-  2. A user or bot account with the **Uploader** role can only perform these actions via the api
+  1. A user or bot account with the **Uploader** role can only perform these actions via the api
+  2. A user with the **Maintainer** role can only transfer samples to another project under the common ancestor for the current project
 
   - Sample File Management:
 
