@@ -66,7 +66,7 @@ When you add a member to a subgroup where they are also a member of one of the p
     | View Project Members                | ✓     |          | ✓       | ✓          | ✓     |
     | Add Bot Account                     |       |          |         | ✓          | ✓     |
     | Remove Bot Account                  |       |          |         | ✓          | ✓     |
-    | Set-up Automated Workflow Execution |       |          |         | ✓          | ✓     |
+    | Set up Automated Workflow Execution |       |          |         | ✓          | ✓     |
     | View Project History                |       |          |         | ✓          | ✓     |
 
 
