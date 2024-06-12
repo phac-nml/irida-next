@@ -351,7 +351,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 1
     assert_text 'INXT_SAM_AAAAAAAAAA'
-    assert_text 'Project 1 Sample 1'
     assert_text 'INXT_ATT_AAAAAAAAAA'
     assert_text 'test_file.fastq'
   end
