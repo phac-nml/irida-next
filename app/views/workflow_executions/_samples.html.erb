@@ -3,14 +3,10 @@
 <% else %>
   <div class="relative overflow-x-auto">
     <table
-      class="
-        w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400
-      "
+      class="w-full text-sm text-left text-gray-500  rtl:text-right dark:text-gray-400"
     >
       <thead
-        class="
-          text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400
-        "
+        class="text-xs text-gray-700 uppercase  bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
       >
         <tr>
           <% @properties.each do |header| %>
@@ -28,12 +24,10 @@
               <% if index == 0 %>
                 <th class="px-6 py-4">
                   <div class="font-semibold text-gray-900 dark:text-white"><%= item[:puid] %></div>
-                  <div class="font-normal text-gray-500 dark:text-gray-400"><%= item[:name] %></div>
                 </th>
 
               <% elsif @properties[index].match(/fastq_\d+/) %>
                 <td class="px-6 py-4">
-                  <div class="font-semibold text-gray-900 dark:text-white"><%= item[:puid] %></div>
                   <div class="font-normal text-gray-500 dark:text-gray-400"><%= item[:name] %></div>
                 </td>
               <% else %>
