@@ -1183,6 +1183,7 @@ en:
           new_project_id: Project to transfer samples to
           submit_button: Submit
           loading: Loading...
+          spinner: Transferring samples, this might take a while...
         create:
           success: Samples were successfully transferred.
           error: "The following list of samples failed to transfer:"

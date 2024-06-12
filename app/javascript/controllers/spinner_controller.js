@@ -12,16 +12,12 @@ export default class extends Controller {
 
   submitStart() {
     document.addEventListener("keydown", preventEscapeListener, true);
-    document.querySelector(".dialog--header").classList.add("opacity-20");
-    document.querySelector(".dialog--section > *:not(:last-child)").classList.add("opacity-20");
     document.querySelector(".dialog--close").classList.add("hidden");
     document.querySelector("#spinner").classList.remove("hidden");
   }
 
   submitEnd() {
     document.removeEventListener("keydown", preventEscapeListener, true);
-    document.querySelector(".dialog--header").classList.remove("opacity-20");
-    document.querySelector(".dialog--section > *:not(:last-child)").classList.remove("opacity-20");
     document.querySelector(".dialog--close").classList.remove("hidden");
     document.querySelector("#spinner").classList.add("hidden");
   }
