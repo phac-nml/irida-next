@@ -55,15 +55,15 @@ When you add a member to a subgroup where they are also a member of one of the p
 
     | Action                              | Guest | Uploader | Analyst | Maintainer | Owner |
     | :---------------------------------- | :---- | -------- | ------- | ---------- | ----- |
+    | View Project                        | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
     | Create Project                      |       |          |         | ✓          | ✓     |
     | Edit Project                        |       |          |         | ✓          | ✓     |
     | Delete Project                      |       |          |         |            | ✓     |
-    | View Project                        | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
     | Transfer Project                    |       |          |         |            | ✓     |
+    | View Project Members                | ✓     |          | ✓       | ✓          | ✓     |
     | Add Project Member                  |       |          |         | ✓(2)       | ✓     |
     | Edit Project Member                 |       |          |         | ✓(2)       | ✓     |
     | Remove Project Member               |       |          |         | ✓(2)       | ✓     |
-    | View Project Members                | ✓     |          | ✓       | ✓          | ✓     |
     | Add Bot Account                     |       |          |         | ✓          | ✓     |
     | Remove Bot Account                  |       |          |         | ✓          | ✓     |
     | Set up Automated Workflow Execution |       |          |         | ✓          | ✓     |
@@ -77,6 +77,7 @@ When you add a member to a subgroup where they are also a member of one of the p
 
     | Action                | Guest | Uploader | Analyst | Maintainer | Owner |
     | :-------------------- | :---- | -------- | ------- | ---------- | ----- |
+    | View Samples          | ✓     | ✓(1)     | ✓       | ✓          | ✓     |
     | Create Samples        |       | ✓(1)     |         | ✓          | ✓     |
     | Edit Samples          |       | ✓(1)     |         | ✓          | ✓     |
     | Delete Samples        |       |          |         |            | ✓     |
