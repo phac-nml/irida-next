@@ -106,7 +106,7 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
 
-      assert_selector 'tfoot strong[data-selection-target="total"]', text: '13'
+      assert_text 'Samples: 13'
       assert_selector 'table tbody tr', count: 13
 
       assert_text @sample1.name
@@ -175,7 +175,7 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
 
-      assert_selector 'tfoot strong[data-selection-target="total"]', text: '13'
+      assert_text 'Samples: 13'
       assert_selector 'table tbody tr', count: 13
 
       assert_text @sample1.name
@@ -391,7 +391,7 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       find('input[name="select"]').click
@@ -399,14 +399,14 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
       within 'tbody' do
         first('input[name="sample_ids[]"]').click
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '25'
       end
 
@@ -416,7 +416,7 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
       find('input[name="select"]').click
@@ -434,13 +434,13 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '26'
+        assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.name
 
-      assert_selector 'strong[data-selection-target="total"]', text: '1'
+      assert_text 'Samples: 1'
       assert_selector 'table tbody tr', count: 1
 
       within 'tbody' do
@@ -454,13 +454,13 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '1'
+        assert_text 'Samples: 1'
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
 
-      assert_selector 'tfoot strong[data-selection-target="total"]', text: '26'
+      assert_text 'Samples: 26'
       assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
       assert_selector 'table tbody tr', count: 20
     end

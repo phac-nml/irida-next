@@ -1982,7 +1982,7 @@ module Projects
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       find('input[name="select"]').click
@@ -1990,14 +1990,14 @@ module Projects
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       within 'tbody' do
         first('input[name="sample_ids[]"]').click
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '2'
       end
 
@@ -2020,7 +2020,7 @@ module Projects
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
 
@@ -2037,14 +2037,14 @@ module Projects
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '1'
+        assert_text 'Samples: 1'
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
 
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="total"]', text: '3'
+        assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
     end
