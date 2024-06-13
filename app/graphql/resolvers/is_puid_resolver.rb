@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Resolvers
-  # Project Resolver
+  # IsPuid Resolver
   class IsPuidResolver < BaseResolver
     argument :id, GraphQL::Types::ID,
              required: true,
