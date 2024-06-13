@@ -22,7 +22,6 @@ export default class extends Controller {
       storageValues.forEach((value) => {
         fragment.appendChild(createHiddenInput(this.fieldNameValue, value));
       });
-
       this.fieldTarget.appendChild(fragment);
     }
   }
