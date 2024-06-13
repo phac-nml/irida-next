@@ -281,8 +281,10 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         select project26.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        assert_button I18n.t('projects.samples.transfers.dialog.submit_button')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
+      assert_no_button I18n.t('projects.samples.transfers.dialog.submit_button')
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
