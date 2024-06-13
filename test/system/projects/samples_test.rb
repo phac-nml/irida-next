@@ -1900,6 +1900,13 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_select_samples"]) do
+          samples = @project.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
         select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
@@ -1921,6 +1928,7 @@ module Projects
       end
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.clones.create.no_samples_cloned_error')
+        assert_no_selector "turbo-frame[id='list_select_samples']"
         errors = project2.errors.full_messages_for(:base)
         errors.each { |error| assert_text error }
         click_on I18n.t('projects.samples.shared.errors.ok_button')
@@ -1936,6 +1944,13 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_select_samples"]) do
+          samples = @project.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
         select project25.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
