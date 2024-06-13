@@ -85,7 +85,7 @@ The following metadata will be added:
 
 When creating the spreadsheet, you are required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the sample names or IDs.
 
-**An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Ignore empty values**. If this is **selected**, any metadata fields without an associated value will not be added to the sample. However, if this **not selected**, any samples with the metadata key and empty value will be **deleted**.
+**An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Ignore empty values**. If this is **selected**, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this **not selected**, any samples with the metadata key and empty value will be **deleted**.
 
 For example, if the metadata above was imported and added to Sample 1 and Sample 2, and the following spreadsheet was then imported:
 
