@@ -479,3 +479,13 @@ user30_group_one_route:
   name: User 30 Group 1
   path: user-30-group-1
   source: user30_group_one (Namespace)
+
+empty_group_route:
+  name: Empty Group
+  path: empty-group
+  source: empty_group (Namespace)
+
+empty_project_namespace_route:
+  name: Empty Group / Empty Project
+  path: empty-group/empty-project
+  source: empty_project_namespace (Namespace)

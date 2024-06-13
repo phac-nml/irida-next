@@ -35,9 +35,9 @@ export default class extends Controller {
     for (const workflow of this.workflowTargets) {
       if (
         params.workflowname !==
-          workflow.dataset.workflowSelectionWorkflownameParam ||
+        workflow.dataset.workflowSelectionWorkflownameParam ||
         params.workflowversion !==
-          workflow.dataset.workflowSelectionWorkflowversionParam
+        workflow.dataset.workflowSelectionWorkflowversionParam
       ) {
         workflow.classList.add("hidden");
       } else {
@@ -52,7 +52,7 @@ export default class extends Controller {
         const wsLoading = workflow.querySelector(".ws-loading-text");
         wsLoading.textContent = wsLoading.textContent.replace(
           "COUNT_PLACEHOLDER",
-          this.selectionOutlet.getTotal(),
+          this.selectionOutlet.getNumSelected(),
         );
       }
     }

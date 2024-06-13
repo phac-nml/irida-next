@@ -6,7 +6,7 @@
       new_group_group_link_path(@namespace, tab: @tab),
       data: {
         "turbo-frame" => "new_member_modal",
-        :turbo_stream => true
+        :turbo_stream => true,
       },
       class: "button button--state-default button--size-default" %>
     <% end %>
@@ -15,7 +15,7 @@
       new_group_member_path(@namespace, tab: @tab),
       data: {
         turbo_frame: "new_member_modal",
-        turbo_stream: true
+        turbo_stream: true,
       },
       class: "button button--state-primary button--size-default",
       "aria-label": t(:".actions.button_add_aria_label") %>
@@ -48,8 +48,7 @@
                                     format: :turbo_stream
                                   )
                                 end
-                              ),
-                            loading: :lazy do %>
+                              ) do %>
           <%= render partial: "shared/loading/table" %>
         <% end %>
         <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>

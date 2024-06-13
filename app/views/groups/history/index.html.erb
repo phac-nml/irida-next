@@ -6,6 +6,5 @@
   <%= turbo_frame_tag "history_modal" %>
 
   <%= turbo_frame_tag "group_history",
-  src: group_history_url(format: :turbo_stream, **request.query_parameters),
-  loading: :lazy %>
+  src: group_history_url(format: :turbo_stream, **request.query_parameters) %>
 </div>

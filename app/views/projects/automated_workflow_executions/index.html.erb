@@ -20,8 +20,7 @@
   <%= turbo_frame_tag "automated_workflow_executions_table",
                       src: namespace_project_automated_workflow_executions_path(
                                   format: :turbo_stream
-                                ),
-                      loading: :lazy do %>
+                                ) do %>
     <%= render partial: "shared/loading/table" %>
   <% end %>
 </div>

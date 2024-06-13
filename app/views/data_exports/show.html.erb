@@ -72,8 +72,7 @@
   </div>
   <div class="flex flex-col" data-turbo-temporary>
     <%= turbo_frame_tag "data-export-listing",
-      src: data_export_path(format: :turbo_stream, tab: @tab || 'summary'),
-      loading: :lazy do %>
+      src: data_export_path(format: :turbo_stream, tab: @tab || 'summary') do %>
       <% if @tab == "preview" %>
         <%= render partial: "shared/loading/list" %>
       <% else %>

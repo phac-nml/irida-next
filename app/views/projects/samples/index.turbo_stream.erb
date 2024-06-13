@@ -1,15 +1,9 @@
-<%= turbo_stream.update "project_samples_list",
+<%= turbo_stream.update "project_samples_table",
                     partial: "table",
                     locals: {
                       project: @project,
-                      samples: @samples
-                    } %>
-
-<%= turbo_stream.update "project_samples_pagination",
-                    partial: "pagination",
-                    locals: {
-                      project: @project,
-                      pagy: @pagy
+                      samples: @samples,
+                      pagy: @pagy,
                     } %>
 
 <%= turbo_stream.update "project_samples_hidden_values" do %>

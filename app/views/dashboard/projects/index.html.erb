@@ -83,7 +83,7 @@
   </div>
   <div class="flex flex-col" data-turbo-temporary>
     <% if @has_projects %>
-      <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters), loading: :lazy do %>
+      <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters) do %>
         <%= render partial: "shared/loading/table" %>
       <% end %>
       <%= turbo_frame_tag "projects_pagination" %>

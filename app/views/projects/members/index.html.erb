@@ -6,11 +6,11 @@
       new_namespace_project_group_link_path(
         @namespace.parent,
         @namespace.project,
-        tab: @tab
+        tab: @tab,
       ),
       data: {
         "turbo-frame" => "new_member_modal",
-        :turbo_stream => true
+        :turbo_stream => true,
       },
       class: "button button--state-default button--size-default" %>
     <% end %>
@@ -19,11 +19,11 @@
       new_namespace_project_member_path(
         @namespace.parent,
         @namespace.project,
-        tab: @tab
+        tab: @tab,
       ),
       data: {
         turbo_frame: "new_member_modal",
-        turbo_stream: true
+        turbo_stream: true,
       },
       class: "button button--state-primary button--size-default",
       "aria-label": t(:".actions.button_add_aria_label") %>
@@ -58,16 +58,11 @@
                                     format: :turbo_stream
                                   )
                                 end
-                              ),
-                            loading: :lazy do %>
+                              ) do %>
           <table class="min-w-full table-fixed dark:divide-slate-600">
             <tbody
               class="
-                bg-white
-                divide-y
-                divide-slate-200
-                dark:bg-slate-800
-                dark:divide-slate-700
+                bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
               "
             >
               <% 10.times do %>

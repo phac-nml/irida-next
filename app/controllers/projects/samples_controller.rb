@@ -8,23 +8,18 @@ module Projects
     before_action :sample, only: %i[show edit update destroy view_history_version]
     before_action :current_page
     before_action :set_search_params, only: %i[index destroy]
+    before_action :set_metadata_fields, only: :index
 
-    def index # rubocop:disable Metrics/AbcSize
+    def index
       authorize! @project, to: :sample_listing?
 
       @q = load_samples.ransack(params[:q])
       set_default_sort
+      @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      @has_samples = load_samples.count.positive?
       respond_to do |format|
-        format.html do
-          @has_samples = @q.result.count.positive?
-        end
-        format.turbo_stream do
-          @pagy, @samples = pagy_with_metadata_sort(@q.result)
-          fields_for_namespace(
-            namespace: @project.namespace,
-            show_fields: params[:q] && params[:q][:metadata].to_i == 1
-          )
-        end
+        format.html
+        format.turbo_stream
       end
     end
 
@@ -180,6 +175,13 @@ module Projects
 
     def set_search_params
       @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
+    end
+
+    def set_metadata_fields
+      fields_for_namespace(
+        namespace: @project.namespace,
+        show_fields: params[:q] && params[:q][:metadata].to_i == 1
+      )
     end
   end
 end

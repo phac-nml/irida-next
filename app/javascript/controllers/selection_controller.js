@@ -4,9 +4,9 @@ export default class extends Controller {
   // # indicates private attribute or method
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
   #storageKey = null;
-  #total = 0;
+  #numSelected = 0;
 
-  static targets = ["rowSelection", "selectAll", "total", "selected"];
+  static targets = ["rowSelection", "selectAll", "selected"];
   static outlets = ["action-link"];
 
   static values = {
@@ -27,12 +27,12 @@ export default class extends Controller {
 
     if (storageValue) {
       this.#updateUI(storageValue);
-      this.#total = storageValue.length;
+      this.#numSelected = storageValue.length;
     } else {
       this.save([]);
     }
 
-    this.#updatedCounts(storageValue.length);
+    this.#updateCounts(storageValue.length);
   }
 
   actionLinkOutletConnected(outlet) {
@@ -55,7 +55,7 @@ export default class extends Controller {
 
   save(storageValue) {
     sessionStorage.setItem(this.#storageKey, JSON.stringify([...storageValue]));
-    this.#total = storageValue.length;
+    this.#numSelected = storageValue.length;
   }
 
   update(ids) {
@@ -63,8 +63,8 @@ export default class extends Controller {
     this.#updateUI(ids);
   }
 
-  getTotal() {
-    return this.#total;
+  getNumSelected() {
+    return this.#numSelected;
   }
 
   getStoredSamples() {
@@ -86,7 +86,7 @@ export default class extends Controller {
     this.save(newStorageValue);
     this.#updateActionLinks(newStorageValue.length);
     this.#setSelectAllCheckboxValue(newStorageValue.length);
-    this.#updatedCounts(newStorageValue.length);
+    this.#updateCounts(newStorageValue.length);
   }
 
   #updateUI(ids) {
@@ -95,7 +95,7 @@ export default class extends Controller {
     });
     this.#updateActionLinks(ids.length);
     this.#setSelectAllCheckboxValue(ids.length);
-    this.#updatedCounts(ids.length);
+    this.#updateCounts(ids.length);
   }
 
   #updateActionLinks(count) {
@@ -104,15 +104,14 @@ export default class extends Controller {
     });
   }
 
-  #setSelectAllCheckboxValue(total) {
-    if (this.hasSelectAllTarget) {
-      this.selectAllTarget.checked = this.totalValue === total;
+  #setSelectAllCheckboxValue(numSelected) {
+    if (this.hasSelectAllTarget && this.totalValue > 0) {
+      this.selectAllTarget.checked = this.totalValue === numSelected;
     }
   }
 
-  #updatedCounts(selected) {
-    if (this.hasTotalTarget && this.hasSelectedTarget) {
-      this.totalTarget.innerText = this.totalValue;
+  #updateCounts(selected) {
+    if (this.hasSelectedTarget) {
       this.selectedTarget.innerText = selected;
     }
   }

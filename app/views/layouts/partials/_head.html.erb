@@ -1,10 +1,10 @@
 <head>
   <title><%= t(:"layouts.application.site_title") %></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= capybara_lockstep if defined?(Capybara::Lockstep) %>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <%= render "shared/dark_mode_check" %>
-  <%= capybara_lockstep if defined?(Capybara::Lockstep) %>
 </head>
