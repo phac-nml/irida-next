@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { createHiddenInput } from '../../../../utilities/form';
 
 export default class extends Controller {
     static targets = ["field"];
@@ -16,11 +17,9 @@ export default class extends Controller {
         );
         if (storageValues) {
             for (const storageValue of storageValues) {
-                const element = document.createElement("input");
-                element.type = "hidden";
-                element.name = `sample[metadata][${storageValue}]`;
-                element.value = '';
-                this.fieldTarget.appendChild(element);
+                this.fieldTarget.appendChild(
+                    createHiddenInput(`sample[metadata][${storageValue}]`, '')
+                );
             }
         }
     }

@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import _ from "lodash";
+import { createHiddenInput } from '../utilities/form';
 
 export default class extends Controller {
   static targets = ["field"];
@@ -20,7 +20,7 @@ export default class extends Controller {
     if (storageValues) {
       const fragment = document.createDocumentFragment();
       storageValues.forEach((value) => {
-        fragment.appendChild(this.#createHiddenInput(value));
+        fragment.appendChild(createHiddenInput(this.fieldNameValue, value));
       });
       this.fieldTarget.appendChild(fragment);
     }
@@ -28,13 +28,5 @@ export default class extends Controller {
 
   clear() {
     sessionStorage.removeItem(this.storageKeyValue);
-  }
-
-  #createHiddenInput(value) {
-    const element = document.createElement("input");
-    element.type = "hidden";
-    element.name = this.fieldNameValue;
-    element.value = value;
-    return element;
   }
 }
