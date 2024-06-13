@@ -57,13 +57,13 @@ bundle && pnpm install
 
 Generate credentials:
 ```bash
-EDITOR=nano bin/rails credentials::edit
+EDITOR=nano bin/rails credentials:edit
 ```
 
 Initialize the database:
 
 ```bash
-bin/rails db:create db:migrate
+bin/rails db:create db:migrate db:seed
 ```
 
 ## Postgres Setup
