@@ -13,7 +13,7 @@ export default class extends Controller {
     storageKey: {
       type: String,
     },
-    numSelected: Number,
+    total: Number,
   };
 
   connect() {
