@@ -45,8 +45,6 @@ Can be used to set new headers and override existing REST API headers.
 
 This allows for additional authentication or server settings for your specific deployment of GA4GH WES.
 
-By default `{ 'Content-Type': 'application/json' }` is set per the GA4GH WES standard.
-
 ### Data Storage
 
 GA4GH WES and IRIDA Next must have a data directory (or equivalent cloud storage system) which both services can access.
