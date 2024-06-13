@@ -108,6 +108,23 @@ module Samples
                      @sample2.reload.metadata)
       end
 
+      test 'import sample metadata via tsv file' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { file: File.new('test/fixtures/files/metadata/valid.tsv', 'r'),
+                   sample_id_column: 'sample_name' }
+        response = Samples::Metadata::FileImportService.new(@project, @john_doe,
+                                                            params).execute
+        assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [] },
+                       @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
+                     @sample2.reload.metadata)
+      end
+
       test 'import sample metadata via other file' do
         other = File.new('test/fixtures/files/metadata/invalid.txt', 'r')
         params = { file: other, sample_id_column: 'sample_name' }
