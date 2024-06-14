@@ -342,12 +342,12 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'div.random_seed-param > input[value="1"]'
   end
 
-  test 'can view workflow execution with samples' do
+  test 'can view workflow execution with samplesheet' do
     workflow_execution = workflow_executions(:irida_next_example_completed)
 
     visit workflow_execution_path(workflow_execution)
 
-    click_on I18n.t('workflow_executions.show.tabs.samples')
+    click_on I18n.t('workflow_executions.show.tabs.samplesheet')
 
     assert_selector 'table tbody tr', count: 1
     assert_text 'INXT_SAM_AAAAAAAAAA'

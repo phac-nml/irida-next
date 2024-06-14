@@ -11,7 +11,7 @@ module WorkflowExecutionActions
     before_action :workflow_execution, only: %i[show cancel destroy]
   end
 
-  TABS = %w[summary params samples files].freeze
+  TABS = %w[summary params samplesheet files].freeze
 
   def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
@@ -21,7 +21,6 @@ module WorkflowExecutionActions
     @pagy, @workflows = pagy_with_metadata_sort(@q.result)
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def show
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
@@ -33,36 +32,10 @@ module WorkflowExecutionActions
     when 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                              @workflow_execution.metadata['workflow_version'])
-    when 'samples'
-      @samples = []
-      input_samples = @workflow_execution.samples_workflow_executions.map(&:samplesheet_params)
-      @properties = input_samples.present? ? input_samples.first.keys : []
-
-      # Samples is everything besides the first row
-      input_samples.each do |input|
-        real_sample = @workflow_execution.samples.select { |s| s.puid == input['sample'] }.first
-        item = []
-
-        @properties.each do |key|
-          if key == 'sample'
-            item << { name: real_sample.name, puid: real_sample.puid }
-          elsif key.match?(/fastq_\d+/)
-            id = File.basename(input[key])
-            attachment = real_sample.attachments.find { |a| a.id == id }
-            item << if attachment.present?
-                      { name: attachment.file.filename, puid: attachment.puid }
-                    else
-                      { name: nil, puid: nil }
-                    end
-          else
-            item << input[key]
-          end
-        end
-        @samples << item
-      end
+    when 'samplesheet'
+      format_samplesheet_params
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 
   def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
@@ -136,6 +109,32 @@ module WorkflowExecutionActions
 
   def redirect_path
     raise NotImplementedError
+  end
+
+  def format_samplesheet_params
+    @samplesheet_headers = @workflow_execution.samples_workflow_executions.first.samplesheet_params.keys
+    @samplesheet_rows = []
+    @workflow_execution.samples_workflow_executions.each do |swe|
+      item = {}
+      @samplesheet_headers.each do |header|
+        item[header] = if header.match?(/fastq_\d+/)
+                         format_attachment(swe.samplesheet_params[header])
+                       else
+                         swe.samplesheet_params[header]
+                       end
+      end
+      @samplesheet_rows << item
+    end
+  end
+
+  def format_attachment(puid)
+    gid = GlobalID.parse(puid)
+    return {} unless gid && gid.model_class == Attachment
+
+    attachment = GlobalID.find(gid)
+    return {} unless attachment
+
+    { name: attachment.file.filename, puid: attachment.puid }
   end
 end
 # rubocop:enable Metrics/ModuleLength

@@ -1404,7 +1404,7 @@ en:
       tabs:
         summary: Summary
         params: Parameters
-        samples: Samplesheet
+        samplesheet: Samplesheet
         files: Files
       params:
         empty: This pipeline has no parameters.

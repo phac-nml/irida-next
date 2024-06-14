@@ -59,8 +59,8 @@
   <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "params"), selected: @tab == "params", controls: "workflow-execution-tabs") do %>
     <%= t(:"workflow_executions.show.tabs.params") %>
   <% end %>
-  <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "samples"), selected: @tab == "samples", controls: "workflow-execution-tabs") do %>
-    <%= t(:"workflow_executions.show.tabs.samples") %>
+  <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "samplesheet"), selected: @tab == "samplesheet", controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.samplesheet") %>
   <% end %>
   <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "files"), selected: @tab == "files", controls: "workflow-execution-tabs") do %>
     <%= t(:"workflow_executions.show.tabs.files") %>
@@ -72,8 +72,8 @@
       <%= render partial: "summary" %>
     <% elsif @tab == "params" %>
       <%= render partial: "params" %>
-    <% elsif @tab == 'samples' %>
-      <%= render partial: 'samples' %>
+      <% elsif @tab == 'samplesheet' %>
+        <%= render partial: 'samplesheet' %>
     <% elsif @tab == 'files' %>
       <%= render partial: "files" %>
     <% end %>
