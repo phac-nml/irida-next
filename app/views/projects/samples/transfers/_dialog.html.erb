@@ -17,13 +17,11 @@
 
         <div class="grid gap-4">
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-            The samples listed below are about to be transferred. Maintainers
-            can only transfer samples to another project within the same
-            hierarchy.
+            <%= t(".description") %>
           </p>
           <div>
             <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
-              Samples
+              <%= t(".samples") %>
             </div>
             <div
               class="
@@ -34,7 +32,7 @@
               data-infinite-scroll-target="scrollable"
             >
               <%= turbo_frame_tag "list_select_samples" do %>
-                <%= render partial: "projects/samples/shared/skeleton" %>
+                <%= render partial: "shared/loading/default_skeleton" %>
               <% end %>
             </div>
           </div>
@@ -61,12 +59,11 @@
                             } %>
               </div>
             </div>
-
           <% end %>
         </div>
       </div>
 
-      <%= render partial: "projects/samples/shared/spinner",
+      <%= render partial: "shared/loading/spinner",
       locals: {
         spinner_message: t(".spinner_message"),
       } %>

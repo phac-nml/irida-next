@@ -4,7 +4,6 @@
   <% end %>
   <%= turbo_stream.update "samples_dialog", partial: "dialog", locals: { open: false } %>
 <% else %>
-  <%= turbo_stream.remove "list_select_samples" %>
   <%= turbo_stream.replace "clone_samples_dialog_content",
                        partial: "projects/samples/shared/errors",
                        locals: {
