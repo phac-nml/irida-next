@@ -1181,13 +1181,16 @@ en:
           ok_button: OK
         metadata_toggle:
           label: Metadata
+        skeleton:
+          loading: Loading...
+        spinner:
+          loading: Loading...
       transfers:
         dialog:
           title: Transfer Samples
           new_project_id: Project to transfer samples to
           submit_button: Submit
-          loading: Loading...
-          spinner: Transferring samples, this might take a while...
+          spinner_message: Transferring samples, this might take a while...
         create:
           success: Samples were successfully transferred.
           error: "The following list of samples failed to transfer:"
@@ -1201,8 +1204,7 @@ en:
           title: Clone Samples
           new_project_id: Project to clone samples to
           submit_button: Submit
-          loading: Loading...
-          spinner: Cloning samples, this might take a while...
+          spinner_message: Cloning samples, this might take a while...
       metadata:
         deletions:
           destroy:

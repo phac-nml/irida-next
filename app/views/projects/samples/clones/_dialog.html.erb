@@ -19,16 +19,7 @@
         data-infinite-scroll-target="scrollable"
       >
         <%= turbo_frame_tag "list_select_samples" do %>
-          <div role="status" class="max-w-sm animate-pulse">
-            <% 4.times do %>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-            <% end %>
-            <span class="sr-only"><%= t(:".loading") %></span>
-          </div>
+          <%= render partial: "projects/samples/shared/skeleton" %>
         <% end %>
       </div>
 
@@ -52,7 +43,6 @@
                           data: {
                             action: "click->infinite-scroll#clear",
                             "spinner-target": "submit",
-                            "turbo-submits-with": t(:".loading"),
                           } %>
             </div>
           </div>
@@ -60,18 +50,9 @@
       <% end %>
     </div>
 
-    <div
-      role="status"
-      id="spinner"
-      class="
-        hidden backdrop-blur-sm absolute h-full w-full -translate-x-1/2 -translate-y-1/2
-        top-2/4 left-1/2 grid place-items-center
-      "
-    >
-      <div class="grid place-items-center">
-        <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
-        <span class="text-black dark:text-white"><%= t(:".spinner") %>.</span>
-      </div>
-    </div>
+    <%= render partial: "projects/samples/shared/spinner",
+    locals: {
+      spinner_message: t(".spinner_message"),
+    } %>
   <% end %>
 <% end %>
