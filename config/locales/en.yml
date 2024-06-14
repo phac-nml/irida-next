@@ -1309,6 +1309,10 @@ en:
         description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
         apply: Apply filter
         remove_tag: Remove
+      delete_single_sample_dialog:
+        title: Delete Sample
+        description: Are you sure you want to delete sample '%{sample_name}'?
+        submit_button: Remove
       delete_multiple_samples_dialog:
           description:
             zero: No samples have been selected for deletion

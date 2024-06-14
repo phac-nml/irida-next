@@ -1,0 +1,24 @@
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
+  <%= dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_section do %>
+
+    <%= turbo_frame_tag("deletion-alert") %>
+
+    <div
+      data-controller="projects--samples--single-delete"
+      data-projects--samples--single-delete-delete-id-value="<%= @sample.id %>"
+      class="mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible">
+      <p class="mb-4">
+        <%= t(".description", sample_name: @sample.name) %>
+      </p>
+      <%= form_for(:deletion, url: project_sample_path(@sample.project, @sample), method: :delete) do |form| %>
+        <%= form.submit t(".submit_button"),
+                    class: "button button--size-default button--state-destructive",
+                    data: {
+                      action: "click->projects--samples--single-delete#clear"
+                    } %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

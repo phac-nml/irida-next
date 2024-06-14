@@ -18,8 +18,7 @@ export default class extends Controller {
   }
 
   connect() {
-    const body = document.getElementById("samples-table");
-
+    const body = document.getElementById("samples-table").getElementsByTagName("tbody")[0];
     for (let row of body.rows) {
       const isChecked = row.cells[0].children[0].checked;
 

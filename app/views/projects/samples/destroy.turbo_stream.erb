@@ -10,4 +10,11 @@
                         pagy: @pagy,
                         samples: @samples,
                       } %>
+  <%= turbo_stream.update(
+    "samples_dialog",
+    partial: "delete_single_sample_dialog",
+    locals: {
+      open: false,
+    },
+  ) %>
 <% end %>

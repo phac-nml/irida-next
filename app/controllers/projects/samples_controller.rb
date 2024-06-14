@@ -5,7 +5,7 @@ module Projects
   class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
 
-    before_action :sample, only: %i[show edit update destroy view_history_version]
+    before_action :sample, only: %i[show edit update destroy new_destroy view_history_version]
     before_action :current_page
     before_action :set_search_params, only: %i[index destroy destroy_multiple]
     before_action :set_metadata_fields, only: :index
@@ -76,6 +76,15 @@ module Projects
           format.html { render :edit, status: :unprocessable_entity }
         end
       end
+    end
+
+    def new_destroy
+      authorize! @project, to: :destroy_sample?
+      render turbo_stream: turbo_stream.update('samples_dialog',
+                                               partial: 'delete_single_sample_dialog',
+                                               locals: {
+                                                 open: true
+                                               }), status: :ok
     end
 
     def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
