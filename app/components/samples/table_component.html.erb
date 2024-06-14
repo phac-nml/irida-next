@@ -12,213 +12,207 @@
           dark:text-slate-400
         '
       >
-        <tr>
-          <% @columns.each_with_index do |column, index| %>
-            <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
-            ) do %>
-              <% if index.zero? and @abilities[:select_samples] %>
-                <%= search_form_for(
-                  @q,
-                  url: select_samples_url(**request.query_parameters),
-                  html: { "data-controller": "filters", id: "select-all-form" },
-                  class: "filters align-middle"
-                ) do |f| %>
-                  <input type="hidden" name="format" value="turbo_stream"/>
+      <tr>
+        <% @columns.each_with_index do |column, index| %>
+          <%= render_cell(
+                tag: 'th',
+                scope: 'col',
+                classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
+              ) do %>
+            <% if index.zero? and @abilities[:select_samples] %>
+              <%= search_form_for(
+                    @q,
+                    url: select_samples_url(**request.query_parameters),
+                    html: { "data-controller": "filters", id: "select-all-form" },
+                    class: "filters align-middle"
+                  ) do |f| %>
+                <input type="hidden" name="format" value="turbo_stream" />
 
-                  <% @search_params.each do |key, value| %>
-                    <% if value.is_a?(Array) %>
-                      <% value.each do |val| %>
-                        <input type="hidden" name="q[<%= key %>][]" value="<%= val %>">
-                      <% end %>
-                    <% else %>
-                      <input type="hidden" name="q[<%= key %>]" value="<%= value %>">
+                <% @search_params.each do |key, value| %>
+                  <% if value.is_a?(Array) %>
+                    <% value.each do |val| %>
+                      <input type="hidden" name="q[<%= key %>][]" value="<%= val %>">
                     <% end %>
+                  <% else %>
+                    <input type="hidden" name="q[<%= key %>]" value="<%= value %>">
                   <% end %>
+                <% end %>
 
-                  <label for="select-all" class="sr-only"><%= t(:".select_all") %></label>
-                  <input
-                    type="checkbox"
-                    id="select-all"
-                    name="select"
-                    class="
+                <label for="select-all" class="sr-only"><%= t(:".select_all") %></label>
+                <input
+                  type="checkbox"
+                  id="select-all"
+                  name="select"
+                  class="
                       w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
                       focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
                       focus:ring-2 dark:bg-slate-700 dark:border-slate-600
                     "
-                    data-selection-target="selectAll"
-                    onchange="Turbo.navigator.submitForm(this.form)"
+                  data-selection-target="selectAll"
+                  onchange="Turbo.navigator.submitForm(this.form)"
                   />
-                <% end %>
-              <% end %>
-
-              <% if column == :attachments_updated_at %>
-                <%= render Ransack::SortComponent.new(
-                  ransack_obj: @q,
-                  label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, :attachments_updated_at_nulls_last),
-                  field: :attachments_updated_at_nulls_last,
-                ) %>
-              <% else %>
-                <%= render Ransack::SortComponent.new(
-                  ransack_obj: @q,
-                  label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, column),
-                  field: column,
-                ) %>
               <% end %>
             <% end %>
-          <% end %>
-          <% @metadata_fields.each do |field| %>
-            <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              class: class_names('px-6 py-3')
-            ) do %>
+
+            <% if column == :attachments_updated_at %>
               <%= render Ransack::SortComponent.new(
                 ransack_obj: @q,
-                label: field,
-                url:
-                  helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{field}")),
-                field: "metadata_#{field}",
+                label: t(".#{column}"),
+                url: helpers.sorting_url(@q, :attachments_updated_at_nulls_last),
+                field: :attachments_updated_at_nulls_last,
+              ) %>
+            <% else %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(".#{column}"),
+                url: helpers.sorting_url(@q, column),
+                field: column,
               ) %>
             <% end %>
           <% end %>
-          <% if @renders_row_actions %>
-            <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
-            ) do %>
-              <%= t(".action") %>
-            <% end %>
+        <% end %>
+        <% @metadata_fields.each do |field| %>
+          <%= render_cell(
+                tag: 'th',
+                scope: 'col',
+                class: class_names('px-6 py-3')
+              ) do %>
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: field,
+              url:
+                helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{field}")),
+              field: "metadata_#{field}",
+            ) %>
           <% end %>
-        </tr>
+        <% end %>
+        <% if @renders_row_actions %>
+          <%= render_cell(
+                tag: 'th',
+                scope: 'col',
+                classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              ) do %>
+            <%= t(".action") %>
+          <% end %>
+        <% end %>
+      </tr>
       </thead>
       <tbody
         class='
           bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
         '
       >
-        <% @samples.each do |sample| %>
-          <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
-            <% @columns.each_with_index do |column, index| %>
-              <%= render_cell(
-                tag: index.zero? ? 'th' :'td',
-                scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-6 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
-              ) do %>
-                <% if index.zero? && @abilities[:select_samples] %>
-                  <%= check_box_tag "sample_ids[]",
-                  sample.id,
-                  nil,
-                  id: dom_id(sample),
-                  "aria-label": sample.name,
-                  data: {
-                    action: "input->selection#toggle",
-                    selection_target: "rowSelection",
-                  },
-                  class:
-                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
-                <% end %>
-                <% if column == :puid || column == :name %>
-                  <%= link_to(
-                    project_sample_path(sample.project, sample),
-                    data: { turbo: false },
-                    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline"
-                  ) do %>
+      <% @samples.each do |sample| %>
+        <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
+          <% @columns.each_with_index do |column, index| %>
+            <%= render_cell(
+                  tag: index.zero? ? 'th' : 'td',
+                  scope: index.zero? ? 'row' : nil,
+                  classes: class_names('px-6 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
+                ) do %>
+              <% if index.zero? && @abilities[:select_samples] %>
+                <%= check_box_tag "sample_ids[]",
+                                  sample.id,
+                                  nil,
+                                  id: dom_id(sample),
+                                  "aria-label": sample.name,
+                                  data: {
+                                    action: "input->selection#toggle",
+                                    selection_target: "rowSelection",
+                                  },
+                                  class:
+                                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+              <% end %>
+              <% if column == :puid || column == :name %>
+                <%= link_to(
+                      project_sample_path(sample.project, sample),
+                      data: { turbo: false },
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline"
+                    ) do %>
                     <span class="font-semibold">
                       <%= highlight(
-                        sample[column],
-                        defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
-                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                      ) %>
+                            sample[column],
+                            defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+                            highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                          ) %>
                     </span>
-                  <% end %>
-                <% elsif column == :project %>
-                  <%= viral_tooltip(title: project_path(sample.project)) do %>
-                    <%= link_to sample.project.abbreviated_path,
-                    project_path(sample.project),
-                    data: {
-                      turbo: false,
-                    },
-                    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-                  <% end %>
-                <% elsif column == :created_at %>
-                  <%= l(sample[column].localtime, format: :full_date) %>
-                <% elsif column == :updated_at || column == :attachments_updated_at %>
-                  <% if sample[column].present? %>
-                    <%= viral_time_ago(original_time: sample[column]) %>
-                  <% end %>
-                <% else %>
-                  <%= sample[column.to_sym] %>
                 <% end %>
+              <% elsif column == :project %>
+                <%= viral_tooltip(title: project_path(sample.project)) do %>
+                  <%= link_to sample.project.abbreviated_path,
+                              project_path(sample.project),
+                              data: {
+                                turbo: false,
+                              },
+                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                <% end %>
+              <% elsif column == :created_at %>
+                <%= l(sample[column].localtime, format: :full_date) %>
+              <% elsif column == :updated_at || column == :attachments_updated_at %>
+                <% if sample[column].present? %>
+                  <%= viral_time_ago(original_time: sample[column]) %>
+                <% end %>
+              <% else %>
+                <%= sample[column.to_sym] %>
               <% end %>
             <% end %>
-            <% @metadata_fields.each do |field| %>
-              <%= render_cell(
-                tag: 'td',
-                scope: 'col',
-                class: class_names('px-6 py-3')
-              ) do %>
-                <%= sample.metadata[field] %>
-              <% end %>
+          <% end %>
+          <% @metadata_fields.each do |field| %>
+            <%= render_cell(
+                  tag: 'td',
+                  scope: 'col',
+                  class: class_names('px-6 py-3')
+                ) do %>
+              <%= sample.metadata[field] %>
             <% end %>
-            <% if @renders_row_actions %>
-              <%= render_cell(
-                tag: 'td',
-                classes: class_names('px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
-              ) do %>
-                <% if @row_actions[:edit] %>
-                  <%= link_to(
-                    t(:"projects.samples.index.edit_button"),
-                    edit_project_sample_path(sample.project, sample),
-                    data: {
-                      turbo: false,
-                    },
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                  ) %>
-                <% end %>
-                <% if @row_actions[:destroy] %>
-                  <%= link_to(
-                    t(:"projects.samples.index.remove_button"),
-                    project_sample_path(sample.project, sample),
-                    data: {
-                      turbo_method: :delete,
-                      turbo_confirm: t(:"projects.samples.index.remove_button_confirmation"),
-                    },
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                  ) %>
+          <% end %>
+          <% if @renders_row_actions %>
+            <%= render_cell(
+                  tag: 'td',
+                  classes: class_names('px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2 flex')
+                ) do %>
+              <% if @row_actions[:edit] %>
+                <%= link_to(
+                      t(:"projects.samples.index.edit_button"),
+                      edit_project_sample_path(sample.project, sample),
+                      data: {
+                        turbo: false,
+                      },
+                      class:
+                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                    ) %>
+              <% end %>
+              <% if @row_actions[:destroy] %>
+                <%= form_with(url: project_sample_path(sample.project, sample), method: :delete, data: { turbo_confirm: t(:"projects.samples.index.remove_button_confirmation") }) do |form| %>
+                  <%= form.submit t(:"projects.samples.index.remove_button"), class: "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                                  data: { turbo_callback: "alert('Jello')" } %>
                 <% end %>
               <% end %>
             <% end %>
           <% end %>
         <% end %>
+      <% end %>
       </tbody>
       <% if @abilities[:select_samples] && @has_samples %>
         <tfoot>
-          <tr class="border-t dark:border-slate-700 border-slate-200">
-            <td
-              class="
+        <tr class="border-t dark:border-slate-700 border-slate-200">
+          <td
+            class="
                 px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 z-10
               "
-              colspan="3"
-            >
+            colspan="3"
+          >
               <span>
                 <%= t(".counts.samples") %>:
                 <strong><%= @pagy.count %></strong>
               </span>
-              <span>
+            <span>
                 <%= t(".counts.selected") %>:
                 <strong data-selection-target="selected">0</strong>
               </span>
-            </td>
-            <td colspan="100%" class="px-6 py-3 bg-slate-50 dark:bg-slate-900"></td>
-          </tr>
+          </td>
+          <td colspan="100%" class="px-6 py-3 bg-slate-50 dark:bg-slate-900"></td>
+        </tr>
         </tfoot>
       <% end %>
     </table>
@@ -252,9 +246,9 @@
   <% end %>
   <div class="empty_state_message">
     <%= viral_empty(
-      title: @empty[:title],
-      description: @empty[:description],
-      icon_name: :beaker,
-    ) %>
+          title: @empty[:title],
+          description: @empty[:description],
+          icon_name: :beaker,
+        ) %>
   </div>
 <% end %>

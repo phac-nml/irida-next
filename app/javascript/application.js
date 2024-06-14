@@ -5,6 +5,7 @@ import * as ActiveStorage from "@rails/activestorage";
 ActiveStorage.start();
 
 Turbo.setConfirmMethod((message, element) => {
+  console.log(element);
   const dialog = document.getElementById("turbo-confirm");
   if (!dialog) {
     console.error(
@@ -51,6 +52,21 @@ Turbo.setConfirmMethod((message, element) => {
         // Reset the dialog content
         dialog.innerHTML = defaultState;
         resolve(dialog.returnValue === "confirm");
+
+        if (dialog.returnValue === "confirm") {
+          // Check to see if there is a callback to run
+          const callbackEl = element.querySelector("[data-turbo-callback]");
+          if (callbackEl) {
+            const callback = callbackEl.getAttribute("data-turbo-callback");
+            eval(callback);
+          }
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+
+        // remove listeners
+        dialog.removeEventListener("close", () => {});
       },
       { once: true },
     );
