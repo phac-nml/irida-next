@@ -40,6 +40,10 @@ export default class extends Controller {
     });
   }
 
+  disconnect() {
+    document.removeAttribute("remove");
+  }
+
   actionLinkOutletConnected(outlet) {
     const storageValue = this.getStoredSamples();
     outlet.setDisabled(storageValue.length);
