@@ -35,6 +35,7 @@ export default class extends Controller {
     this.#updateCounts(storageValue.length);
 
     document.addEventListener("remove", (event) => {
+      console.log("remove event", event);
       this.remove({ params: { id: event.detail.content } });
     });
   }
@@ -49,7 +50,7 @@ export default class extends Controller {
   }
 
   remove({ params: { id } }) {
-    id = JSON.stringify(id).replaceAll(",", ", ");
+    id = JSON.parse(JSON.stringify(id).replaceAll(",", ", "));
     this.#addOrRemove(false, id);
   }
 
