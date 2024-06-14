@@ -715,6 +715,16 @@ type Query {
   ): GroupConnection!
 
   """
+  Boolean
+  """
+  isPuid(
+    """
+    ID to compare to puid format
+    """
+    id: ID!
+  ): Boolean!
+
+  """
   Find a namespace.
   """
   namespace(

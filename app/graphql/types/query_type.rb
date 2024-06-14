@@ -38,6 +38,9 @@ module Types
     field :project_sample, Types::SampleType, null: true, resolver: Resolvers::ProjectSampleResolver,
                                               description: 'Find a sample within a project.'
 
+    field :is_puid, Boolean, null: false, resolver: Resolvers::IsPuidResolver,
+                             description: 'Check if id is in puid format'
+
     def current_user
       context[:current_user]
     end
