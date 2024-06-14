@@ -1184,7 +1184,7 @@ en:
       transfers:
         dialog:
           title: Transfer Samples
-          description: The samples listed below are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
+          description: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
           samples: Samples
           new_project_id: Project to transfer samples to
           submit_button: Submit
@@ -1200,7 +1200,7 @@ en:
           no_samples_cloned_error: "Samples were not cloned for the following reasons:"
         dialog:
           title: Clone Samples
-          description: The samples listed below are about to be cloned.
+          description: The following COUNT_PLACEHOLDER samples are about to be cloned to another project.
           samples: Samples
           new_project_id: Project to clone samples to
           submit_button: Submit

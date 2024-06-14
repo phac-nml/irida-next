@@ -3,7 +3,7 @@ import { createHiddenInput } from '../utilities/form';
 
 export default class extends Controller {
   static outlets = ["selection"];
-  static targets = ["all", "pageForm", "pageFormContent", "scrollable"];
+  static targets = ["all", "pageForm", "pageFormContent", "scrollable", "summary"];
   static values = {
     fieldName: String,
     pagedFieldName: String
@@ -15,6 +15,7 @@ export default class extends Controller {
     this.allIds = this.selectionOutlet.getStoredSamples();
     this.#makePagedHiddenInputs();
     this.#makeAllHiddenInputs();
+    this.#replaceCountPlaceholder();
   }
 
   scroll() {
@@ -24,6 +25,14 @@ export default class extends Controller {
     ) {
       this.#makePagedHiddenInputs();
     }
+  }
+
+  #replaceCountPlaceholder(){
+    const summary = this.summaryTarget;
+    summary.textContent = summary.textContent.replace(
+      "COUNT_PLACEHOLDER",
+      this.selectionOutlet.getNumSelected(),
+    );
   }
 
   #makePagedHiddenInputs() {
