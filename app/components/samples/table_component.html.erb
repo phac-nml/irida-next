@@ -185,7 +185,7 @@
               <% if @row_actions[:destroy] %>
                 <%= form_with(url: project_sample_path(sample.project, sample), method: :delete, data: { turbo_confirm: t(:"projects.samples.index.remove_button_confirmation") }) do |form| %>
                   <%= form.submit t(:"projects.samples.index.remove_button"), class: "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                                  data: { turbo_callback: "alert('Jello')" } %>
+                                  data: { turbo_callback: "(() => {const e = new CustomEvent('remove', {detail: {content: \"" + sample.puid + "\"}}); document.dispatchEvent(e) })()" } %>
                 <% end %>
               <% end %>
             <% end %>

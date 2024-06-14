@@ -33,6 +33,10 @@ export default class extends Controller {
     }
 
     this.#updateCounts(storageValue.length);
+
+    document.addEventListener("remove", (event) => {
+      this.remove({ params: { id: event.detail.content } });
+    });
   }
 
   actionLinkOutletConnected(outlet) {
