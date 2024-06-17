@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// populates confirmation dialogue with description containing number of samples and samples selected for deletion
+// removes sample from sessionstorage if it was checked/selected then removed using the remove link
 export default class extends Controller {
   static values = {
     storageKey: {
@@ -17,8 +17,8 @@ export default class extends Controller {
       sessionStorage.getItem(this.storageKeyValue)
     )
     if (storageValues.includes(this.deleteIdValue)) {
-      const filteredStorageValues = storageValues.filter(e => e !== this.deleteIdValue)
-      sessionStorage.setItem(this.storageKeyValue, JSON.stringify(filteredStorageValues))
+      const newStorageValues = storageValues.filter(id => id !== this.deleteIdValue)
+      sessionStorage.setItem(this.storageKeyValue, JSON.stringify(newStorageValues))
     }
   }
 }
