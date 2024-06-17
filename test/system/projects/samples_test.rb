@@ -287,6 +287,7 @@ module Projects
       assert_no_button I18n.t('projects.samples.transfers.dialog.submit_button')
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('projects.samples.transfers.create.error')
+        assert_no_selector "turbo-frame[id='list_select_samples']"
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
       end
