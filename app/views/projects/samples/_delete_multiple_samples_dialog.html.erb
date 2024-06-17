@@ -1,45 +1,71 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
-
-    <%= turbo_frame_tag("deletion-alert") %>
-
     <div
-      data-controller="projects--samples--multiple-delete-listing"
-      data-projects--samples--multiple-delete-listing-singular-value="<%= t(".description.singular") %>"
-      data-projects--samples--multiple-delete-listing-plural-value="<%= t(".description.plural") %>"
-      class="mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible">
-      <p
-        class="mb-4"
-        data-projects--samples--multiple-delete-listing-target="description">
-        <%= t(".description.zero") %>
-      </p>
-      <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_path, method: :delete) do |form| %>
-        <div
-          data-controller="sessionstorage-amend-form"
-          data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
-          data-sessionstorage-amend-form-target="field"
-          data-sessionstorage-amend-form-field-name-value="multiple_deletion[sample_ids][]"
-        />
-        <div class="overflow-y-auto max-h-80 mb-4">
-          <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
-            <thead class="text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400 sticky top-0 z-10">
-              <tr>
-                <th class="px-6 py-4"><%= t(".id") %></th>
-                <th class="px-6 py-4"><%= t(".name") %></th>
-              </tr>
-            </thead>
-            <tbody data-projects--samples--multiple-delete-listing-target="tableBody"></tbody>
-          </table>
-        </div>
-        <div>
-          <%= form.submit t(".submit_button"),
-                      class: "button button--size-default button--state-destructive",
-                      data: {
-                        action: "click->sessionstorage-amend-form#clear"
-                      } %>
+      data-controller="infinite-scroll"
+      data-infinite-scroll-selection-outlet='#samples-table'
+      data-infinite-scroll-field-name-value="multiple_deletion[sample_ids][]"
+      data-infinite-scroll-paged-field-name-value="sample_ids[]"
+    >
+      <%= form_with(
+        url: list_namespace_project_samples_path,
+        data: { "infinite-scroll-target": "pageForm" }
+      ) do %>
+        <div data-infinite-scroll-target="pageFormContent"></div>
+      <% end %>
+      <div
+        class="overflow-y-auto max-h-[300px] mb-4"
+        data-action="scroll->infinite-scroll#scroll"
+        data-infinite-scroll-target="scrollable"
+      >
+        <%= turbo_frame_tag "list_select_samples" do %>
+          <div role="status" class="max-w-sm animate-pulse">
+            <% 4.times do %>
+              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
+              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
+              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
+              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
+            <% end %>
+            <span class="sr-only">loading</span>
+          </div>
+        <% end %>
+      </div>
+
+      <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_path, method: :delete,
+            data: {
+              controller: "spinner",
+              action:"turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd"
+            }
+          ) do |form| %>
+        <div class="grid gap-4">
+          <div class="hidden" data-infinite-scroll-target="all"></div>
+          <div>
+            <%= form.submit t(".submit_button"),
+                        class: "button button--size-default button--state-primary",
+                        data: {
+                          action: "click->infinite-scroll#clear",
+                          "spinner-target": "submit",
+                          "turbo-submits-with": 'loading'
+                        } %>
+          </div>
         </div>
       <% end %>
     </div>
+
+    <div
+      role="status"
+      id="spinner"
+      class="
+        hidden backdrop-blur-sm absolute h-full w-full -translate-x-1/2 -translate-y-1/2
+        top-2/4 left-1/2 grid place-items-center
+      "
+    >
+      <div class="grid place-items-center">
+        <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
+        <span class="text-black dark:text-white">spimn.</span>
+      </div>
+    </div>
+
   <% end %>
 <% end %>
