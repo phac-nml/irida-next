@@ -73,7 +73,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           end
         end
 
-
         get :new_destroy
         get :view_history_version
       end

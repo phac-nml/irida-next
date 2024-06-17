@@ -1319,7 +1319,9 @@ en:
             singular: 1 sample has been selected for deletion
             plural: COUNT_PLACEHOLDER samples have been selected for deletion
           id: ID
+          loading: Loading...
           name: Name
+          spinner: Deleting samples. This may take a while...
           submit_button: Confirm
           title: Delete Samples
       destroy_multiple:
