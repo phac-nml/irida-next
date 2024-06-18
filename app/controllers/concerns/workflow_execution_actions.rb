@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 # Common workflow execution actions
-# rubocop:disable Metrics/ModuleLength
-module WorkflowExecutionActions
+module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
@@ -115,26 +114,28 @@ module WorkflowExecutionActions
     @samplesheet_headers = @workflow_execution.samples_workflow_executions.first.samplesheet_params.keys
     @samplesheet_rows = []
     @workflow_execution.samples_workflow_executions.each do |swe|
-      item = {}
-      @samplesheet_headers.each do |header|
-        item[header] = if header.match?(/fastq_\d+/)
-                         format_attachment(swe.samplesheet_params[header])
-                       else
-                         swe.samplesheet_params[header]
-                       end
+      attachments = format_attachment(swe.samplesheet_params)
+      samplesheet_params = swe.samplesheet_params
+
+      attachments.each do |key, value|
+        samplesheet_params[key] = value
       end
-      @samplesheet_rows << item
+
+      @samplesheet_rows << @samplesheet_headers.index_with { |header| samplesheet_params[header] }
     end
   end
 
-  def format_attachment(puid)
-    gid = GlobalID.parse(puid)
-    return {} unless gid && gid.model_class == Attachment
+  def format_attachment(samplesheet)
+    attachments = {}
+    # loop through samplesheet_params to fetch attachments
+    # probably stored as `gid://irida/Attachment/1234`
+    samplesheet.each do |key, value|
+      gid = GlobalID.parse(value)
+      next unless gid && gid.model_class == Attachment
 
-    attachment = GlobalID.find(gid)
-    return {} unless attachment
-
-    { name: attachment.file.filename, puid: attachment.puid }
+      attachment = GlobalID.find(gid)
+      attachments[key] = { name: attachment.file.filename, puid: attachment.puid }
+    end
+    attachments
   end
 end
-# rubocop:enable Metrics/ModuleLength
