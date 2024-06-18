@@ -6,7 +6,9 @@ export default class extends Controller {
   static targets = ["all", "pageForm", "pageFormContent", "scrollable", "summary"];
   static values = {
     fieldName: String,
-    pagedFieldName: String
+    pagedFieldName: String,
+    singular: String,
+    plural: String
   }
 
   #page = 1;
@@ -27,12 +29,18 @@ export default class extends Controller {
     }
   }
 
-  #replaceCountPlaceholder(){
-    const summary = this.summaryTarget;
-    summary.textContent = summary.textContent.replace(
-      "COUNT_PLACEHOLDER",
-      this.selectionOutlet.getNumSelected(),
-    );
+  #replaceCountPlaceholder() {
+    const numSelected = this.selectionOutlet.getNumSelected()
+    let summary = this.summaryTarget;
+
+    if (numSelected == 1) {
+      summary.textContent = this.singularValue
+    } else {
+      summary.textContent = this.pluralValue.replace(
+        "COUNT_PLACEHOLDER",
+        numSelected
+      )
+    }
   }
 
   #makePagedHiddenInputs() {
@@ -41,7 +49,7 @@ export default class extends Controller {
     const end = this.#page * itemsPerPage;
     const ids = this.allIds.slice(start, end);
 
-    if(ids && ids.length){
+    if (ids && ids.length) {
       const fragment = document.createDocumentFragment();
       for (const id of ids) {
         fragment.appendChild(
@@ -69,7 +77,7 @@ export default class extends Controller {
     this.allTarget.appendChild(fragment);
   }
 
-  clear(){
+  clear() {
     this.selectionOutlet.clear();
   }
 }

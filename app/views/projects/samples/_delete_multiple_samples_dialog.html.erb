@@ -6,6 +6,8 @@
       data-infinite-scroll-selection-outlet='#samples-table'
       data-infinite-scroll-field-name-value="multiple_deletion[sample_ids][]"
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
+      data-infinite-scroll-singular-value="<%= t(".description.singular") %>"
+      data-infinite-scroll-plural-value="<%= t(".description.plural") %>"
     >
       <%= form_with(
         url: list_namespace_project_samples_path,
@@ -13,24 +15,31 @@
       ) do %>
         <div data-infinite-scroll-target="pageFormContent"></div>
       <% end %>
-      <div
-        class="overflow-y-auto max-h-[300px] mb-4"
-        data-action="scroll->infinite-scroll#scroll"
-        data-infinite-scroll-target="scrollable"
-      >
-        <%= turbo_frame_tag "list_select_samples" do %>
-          <div role="status" class="max-w-sm animate-pulse">
-            <% 4.times do %>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
-              <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-            <% end %>
-            <span class="sr-only"><%= t(:".loading") %></span>
+
+      <div class="grid gap-4">
+          <p
+            data-infinite-scroll-target="summary"
+            class="
+              text-base leading-relaxed text-slate-500 dark:text-slate-400
+            "
+          ><%= t(".description.zero") %></p>
+          <div>
+            <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
+              <%= t(".samples") %>
+            </div>
+            <div
+              class="
+                overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+                p-2.5 dark:bg-slate-800 dark:border-slate-600
+              "
+              data-action="scroll->infinite-scroll#scroll"
+              data-infinite-scroll-target="scrollable"
+            >
+              <%= turbo_frame_tag "list_select_samples" do %>
+                <%= render partial: "shared/loading/samples_list_skeleton" %>
+              <% end %>
+            </div>
           </div>
-        <% end %>
-      </div>
 
       <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_path, method: :delete,
             data: {

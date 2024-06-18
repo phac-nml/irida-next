@@ -97,8 +97,6 @@ export default class extends Controller {
   }
 
   #updateActionLinks(count) {
-    console.log('this.#updateActionLinks')
-    console.log(count)
     this.actionLinkOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
     });

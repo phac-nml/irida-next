@@ -5,6 +5,7 @@ module Projects
     # Controller actions for Project Samples Attachments
     class AttachmentsController < Projects::Samples::ApplicationController
       before_action :attachment, only: %i[destroy]
+      before_action :new_destroy_params, only: %i[new_destroy]
 
       def new
         authorize! @project, to: :update_sample?
@@ -39,8 +40,7 @@ module Projects
       end
 
       def new_destroy
-        @attachment = Attachment.find_by(id: params[:attachment_id])
-        @sample = @attachment.attachable
+        authorize! @sample, to: :destroy_attachment?
         render turbo_stream: turbo_stream.update('sample_modal',
                                                  partial: 'delete_attachment_modal',
                                                  locals: {
@@ -78,6 +78,11 @@ module Projects
 
       def attachment
         @attachment = @sample.attachments.find_by(id: params[:id]) || not_found
+      end
+
+      def new_destroy_params
+        @attachment = Attachment.find_by(id: params[:attachment_id])
+        @sample = @attachment.attachable
       end
 
       def destroy_status(attachment, count)
