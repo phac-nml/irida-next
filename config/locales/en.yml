@@ -1680,7 +1680,7 @@ en:
       list:
         danger: Danger
     loading:
-      default_skeleton:
+      samples_list_skeleton:
         loading: Loading...
       spinner:
         loading: Loading...
