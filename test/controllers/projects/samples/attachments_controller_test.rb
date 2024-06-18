@@ -113,6 +113,21 @@ module Projects
                  as: :turbo_stream
         end
       end
+
+      test 'new_destroy with proper authorization' do
+        get namespace_project_sample_attachment_new_destroy_path(@namespace, @project, @sample1, @attachment1),
+            as: :turbo_stream
+
+        assert_response :success
+      end
+
+      test 'new_destroy without proper authorization' do
+        sign_in users(:ryan_doe)
+        get namespace_project_sample_attachment_new_destroy_path(@namespace, @project, @sample1, @attachment1),
+            as: :turbo_stream
+
+        assert_response :unauthorized
+      end
     end
   end
 end
