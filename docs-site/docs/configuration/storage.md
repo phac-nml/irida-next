@@ -62,5 +62,4 @@ azure_storage:
 | -------- | ------- | ------- |
 | `AZURE_STORAGE_ACCOUNT_NAME` | Storage Account Name | `your_account_name` |
 | `AZURE_STORAGE_CONTAINER_NAME` | Storage Container Name | `your_container_name-#{Rails.env}` |
-| `` | Optional. Storage  Host | N/A |
 | `AZURE_STORAGE_BLOB_HOST` | Optional. Storage Blob Host | N/A |
