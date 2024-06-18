@@ -263,8 +263,8 @@ module Projects
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
         assert_no_selector "turbo-frame[id='list_select_samples']"
+        assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
       end
@@ -287,8 +287,8 @@ module Projects
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('projects.samples.transfers.create.error')
         assert_no_selector "turbo-frame[id='list_select_samples']"
+        assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
       end
@@ -315,8 +315,8 @@ module Projects
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('projects.samples.transfers.create.error')
         assert_no_selector "turbo-frame[id='list_select_samples']"
+        assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
       end
@@ -1929,8 +1929,8 @@ module Projects
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('projects.samples.clones.create.no_samples_cloned_error')
         assert_no_selector "turbo-frame[id='list_select_samples']"
+        assert_text I18n.t('projects.samples.clones.create.no_samples_cloned_error')
         errors = project2.errors.full_messages_for(:base)
         errors.each { |error| assert_text error }
         click_on I18n.t('projects.samples.shared.errors.ok_button')
