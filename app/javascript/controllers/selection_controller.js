@@ -45,7 +45,6 @@ export default class extends Controller {
   }
 
   remove({ params: { id } }) {
-    id = JSON.stringify(id).replaceAll(",", ", ");
     this.#addOrRemove(false, id);
   }
 
@@ -79,6 +78,7 @@ export default class extends Controller {
     } else {
       const index = newStorageValue.indexOf(storageValue);
       if (index > -1) {
+        console.log('in index')
         newStorageValue.splice(index, 1);
       }
     }
