@@ -2,28 +2,76 @@
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%= turbo_frame_tag "clone_samples_dialog_content" do %>
-      <%= form_for(:clone, url: namespace_project_samples_clone_path, method: :post) do |form| %>
-        <div
-          data-controller="sessionstorage-amend-form"
-          data-sessionstorage-amend-form-storage-key-value=<%=namespace_project_samples_url%>
-          data-sessionstorage-amend-form-target="field"
-          data-sessionstorage-amend-form-field-name-value="clone[sample_ids][]"
-        />
+      <div
+        data-controller="infinite-scroll"
+        data-infinite-scroll-selection-outlet='#samples-table'
+        data-infinite-scroll-field-name-value="clone[sample_ids][]"
+        data-infinite-scroll-paged-field-name-value="sample_ids[]"
+      >
+        <%= form_with(
+        url: list_namespace_project_samples_path,
+        data: { "infinite-scroll-target": "pageForm" }
+      ) do %>
+          <div data-infinite-scroll-target="pageFormContent"></div>
+        <% end %>
+
         <div class="grid gap-4">
-          <div class="form-field">
-            <%= form.label :new_project_id, t(".new_project_id") %>
-            <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
-          </div>
+          <p
+            data-infinite-scroll-target="summary"
+            class="
+              text-base leading-relaxed text-slate-500 dark:text-slate-400
+            "
+          >
+            <%= t(".description") %>
+          </p>
           <div>
-            <%= form.submit t(".submit_button"),
-                        class: "button button--size-default button--state-primary",
-                        disabled: @projects.count.zero?,
-                        data: {
-                          action: "click->sessionstorage-amend-form#clear"
-                        } %>
+            <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
+              <%= t(".samples") %>
+            </div>
+            <div
+              class="
+                overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+                p-2.5 dark:bg-slate-800 dark:border-slate-600
+              "
+              data-action="scroll->infinite-scroll#scroll"
+              data-infinite-scroll-target="scrollable"
+            >
+              <%= turbo_frame_tag "list_select_samples" do %>
+                <%= render partial: "shared/loading/samples_list_skeleton" %>
+              <% end %>
+            </div>
           </div>
+
+          <%= form_for(:clone, url: namespace_project_samples_clone_path, method: :post,
+          data: {
+            controller: "spinner",
+            action:"turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd"
+          }
+        ) do |form| %>
+            <div class="grid gap-4">
+              <div class="form-field">
+                <%= form.label :new_project_id, t(".new_project_id") %>
+                <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
+              </div>
+              <div class="hidden" data-infinite-scroll-target="all"></div>
+              <div>
+                <%= form.submit t(".submit_button"),
+                            class: "button button--size-default button--state-primary",
+                            disabled: @projects.count.zero?,
+                            data: {
+                              action: "click->infinite-scroll#clear",
+                              "spinner-target": "submit",
+                            } %>
+              </div>
+            </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
+
+      <%= render partial: "shared/loading/spinner",
+      locals: {
+        spinner_message: t(".spinner_message"),
+      } %>
     <% end %>
   <% end %>
 <% end %>
