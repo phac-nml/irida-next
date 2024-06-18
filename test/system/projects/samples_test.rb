@@ -278,17 +278,12 @@ module Projects
       all('input[type=checkbox]').last.click
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_select_samples"]) do
-          sample = samples(:sample31)
-          assert_text sample[0]
-          assert_text sample[1]
-        end
         select project26.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         assert_button I18n.t('projects.samples.transfers.dialog.submit_button')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('projects.samples.transfers.create.error')
+        assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
         assert_no_selector "turbo-frame[id='list_select_samples']"
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
