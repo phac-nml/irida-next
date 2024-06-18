@@ -38,6 +38,16 @@ module Projects
         end
       end
 
+      def new_destroy
+        @attachment = Attachment.find_by(id: params[:attachment_id])
+        @sample = @attachment.attachable
+        render turbo_stream: turbo_stream.update('sample_modal',
+                                                 partial: 'delete_attachment_modal',
+                                                 locals: {
+                                                   open: true
+                                                 }), status: :ok
+      end
+
       def destroy # rubocop:disable Metrics/MethodLength
         authorize! @sample, to: :destroy_attachment?
 

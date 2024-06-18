@@ -72,13 +72,11 @@ export default class extends Controller {
 
   #addOrRemove(add, storageValue) {
     const newStorageValue = this.getStoredSamples();
-
     if (add) {
       newStorageValue.push(storageValue);
     } else {
       const index = newStorageValue.indexOf(storageValue);
       if (index > -1) {
-        console.log('in index')
         newStorageValue.splice(index, 1);
       }
     }
@@ -99,6 +97,8 @@ export default class extends Controller {
   }
 
   #updateActionLinks(count) {
+    console.log('this.#updateActionLinks')
+    console.log(count)
     this.actionLinkOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
     });

@@ -61,6 +61,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
               resource :deletion, only: %i[new destroy]
             end
           end
+          get :new_destroy
         end
         resource :metadata, module: :samples, only: %i[new edit destroy] do
           scope module: :metadata, as: :metadata do
