@@ -253,17 +253,17 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_text I18n.t('data_exports.new_export_dialog.name_label')
-      assert_text I18n.t('data_exports.new_export_dialog.email_label')
+      assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
+      assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_export_dialog.summary.sample.singular',
-               processing: I18n.t('data_exports.new_export_dialog.summary.processing'),
-               ready: I18n.t('data_exports.new_export_dialog.summary.ready'))
+        I18n.t('data_exports.new_sample_export_dialog.summary.sample.singular',
+               processing: I18n.t('data_exports.new_sample_export_dialog.summary.processing'),
+               ready: I18n.t('data_exports.new_sample_export_dialog.summary.ready'))
       )
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
     end
 
     within %(#data-export-listing) do
@@ -296,17 +296,17 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_text I18n.t('data_exports.new_export_dialog.name_label')
-      assert_text I18n.t('data_exports.new_export_dialog.email_label')
+      assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
+      assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_export_dialog.summary.sample.plural',
-               processing: I18n.t('data_exports.new_export_dialog.summary.processing'),
-               ready: I18n.t('data_exports.new_export_dialog.summary.ready'))
+        I18n.t('data_exports.new_sample_export_dialog.summary.sample.plural',
+               processing: I18n.t('data_exports.new_sample_export_dialog.summary.processing'),
+               ready: I18n.t('data_exports.new_sample_export_dialog.summary.ready'))
       ).gsub! 'COUNT_PLACEHOLDER', '2'
 
-      fill_in I18n.t('data_exports.new_export_dialog.name_label'), with: 'test data export'
-      check I18n.t('data_exports.new_export_dialog.email_label')
-      click_button I18n.t('data_exports.new_export_dialog.submit_button')
+      fill_in I18n.t('data_exports.new_sample_export_dialog.name_label'), with: 'test data export'
+      check I18n.t('data_exports.new_sample_export_dialog.email_label')
+      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
     end
 
     within %(#data-export-listing) do
@@ -346,9 +346,9 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_export_dialog.summary.sample.singular',
-               processing: I18n.t('data_exports.new_export_dialog.summary.processing'),
-               ready: I18n.t('data_exports.new_export_dialog.summary.ready'))
+        I18n.t('data_exports.new_sample_export_dialog.summary.sample.singular',
+               processing: I18n.t('data_exports.new_sample_export_dialog.summary.processing'),
+               ready: I18n.t('data_exports.new_sample_export_dialog.summary.ready'))
       )
     end
   end
@@ -408,17 +408,17 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_text I18n.t('data_exports.new_export_dialog.name_label')
-      assert_text I18n.t('data_exports.new_export_dialog.email_label')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.name_label')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_export_dialog.summary.analysis_html',
+        I18n.t('data_exports.new_analysis_export_dialog.summary.analysis_html',
                id: @workflow_execution.id,
-               processing: I18n.t('data_exports.new_export_dialog.summary.processing'),
-               ready: I18n.t('data_exports.new_export_dialog.summary.ready'))
+               processing: I18n.t('data_exports.new_analysis_export_dialog.summary.processing'),
+               ready: I18n.t('data_exports.new_analysis_export_dialog.summary.ready'))
       )
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new_analysis_export_dialog.submit_button')
     end
 
     within %(#data-export-listing) do

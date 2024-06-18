@@ -3,6 +3,7 @@
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
+  include SampleActions
 
   before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[index destroy]
@@ -24,13 +25,13 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def new
     if params[:export_type] == 'sample'
       render turbo_stream: turbo_stream.update('samples_dialog',
-                                               partial: 'new_export_dialog',
+                                               partial: 'new_sample_export_dialog',
                                                locals: {
                                                  open: true, export_type: 'sample'
                                                }), status: :ok
     else
       render turbo_stream: turbo_stream.update('export_dialog',
-                                               partial: 'new_export_dialog',
+                                               partial: 'new_analysis_export_dialog',
                                                locals: {
                                                  open: true, export_type: 'analysis',
                                                  workflow_execution_id: params[:workflow_execution_id]

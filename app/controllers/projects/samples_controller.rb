@@ -4,6 +4,7 @@ module Projects
   # Controller actions for Samples
   class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
+    include SampleActions
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
@@ -88,17 +89,6 @@ module Projects
             @q = load_samples.ransack(params[:q])
             @samples = @q.result.select(:id)
           end
-        end
-      end
-    end
-
-    def list
-      @page = params[:page].to_i
-      @samples = Sample.where(id: params[:sample_ids])
-
-      respond_to do |format|
-        format.turbo_stream do
-          render status: :ok
         end
       end
     end
