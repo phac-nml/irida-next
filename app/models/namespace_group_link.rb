@@ -12,6 +12,8 @@ class NamespaceGroupLink < ApplicationRecord
 
   validates :group_id, uniqueness: { scope: [:namespace_id] }
 
+  validates :group_id, comparison: { other_than: :namespace_id }
+
   validates :group_access_level, inclusion: { in: Member::AccessLevel.all_values_with_owner },
                                  presence: true
 
