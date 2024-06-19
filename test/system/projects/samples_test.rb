@@ -2203,5 +2203,90 @@ module Projects
         assert_text @sample3.name
       end
     end
+
+    test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_text @sample1.name
+        assert_text @sample2.name
+        assert_text @sample3.name
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+
+      assert find('input#select-all').checked?
+
+      within '#samples-table table tbody tr:first-child' do
+        click_link I18n.t('projects.samples.index.remove_button')
+      end
+
+      within 'dialog' do
+        click_button I18n.t('projects.samples.delete_single_sample_dialog.submit_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
+        assert_no_text @sample1.name
+        assert all('input[type="checkbox"]')[0].checked?
+        assert all('input[type="checkbox"]')[1].checked?
+      end
+
+      assert find('input#select-all').checked?
+
+      click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.delete_multiple_samples_dialog.title')
+        assert_text I18n.t(
+          'projects.samples.delete_multiple_samples_dialog.description.plural'
+        ).gsub! 'COUNT_PLACEHOLDER', '2'
+        assert_text @sample2.name
+        assert_text @sample3.name
+        assert_no_text @sample1.name
+        click_on I18n.t('projects.samples.delete_multiple_samples_dialog.submit_button')
+      end
+      assert_text I18n.t('projects.samples.destroy_multiple.success')
+
+      within '#project_samples_table' do
+        assert_no_selector 'tr'
+        assert_no_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample3.name
+        assert_text I18n.t('projects.samples.index.no_samples')
+      end
+    end
+
+    test 'delete single attachment with remove link while all attachments selected followed by multiple deletion' do
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+
+      within('#attachments-table-body') do
+        assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      end
+
+      within('dialog') do
+        assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
+        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
+      within('#table-listing') do
+        assert_no_text 'test_file.fastq'
+        assert_text 'test_file_A.fastq'
+      end
+
+      click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
+
+      within('dialog') do
+        assert_text 'test_file_A.fastq'
+        assert_no_text 'test_file.fastq'
+        click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
+      assert_no_text 'test_file_A.fastq'
+      assert_no_text 'test_file.fastq'
+      assert_text I18n.t('projects.samples.show.no_files')
+    end
   end
 end
