@@ -25,6 +25,16 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     )
   end
 
+  test 'cannot create self to self group links' do
+    group_group_link = NamespaceGroupLink.new(group_id: @group_to_share.id, namespace_id: @group_to_share.id,
+                                              group_access_level: Member::AccessLevel::ANALYST)
+
+    assert_not group_group_link.save
+    assert group_group_link.errors.full_messages.include?(
+      "Group must be other than #{@group_to_share.id}"
+    )
+  end
+
   test '#validates access level out of range' do
     group_group_link = NamespaceGroupLink.new(group_id: @group_to_share.id, namespace_id: @group.id,
                                               group_access_level: Member::AccessLevel::ANALYST + 100_000)

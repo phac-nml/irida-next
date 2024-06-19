@@ -31,6 +31,24 @@ class GroupShareActionsConcernTest < ActionDispatch::IntegrationTest
     assert_equal 3, namespace.shared_with_group_links.of_ancestors_and_self.count
   end
 
+  test 'group to self group link error' do
+    sign_in users(:john_doe)
+    namespace = groups(:group_one)
+
+    assert_equal 2, namespace.shared_with_group_links.of_ancestors_and_self.count
+
+    post group_group_links_path(namespace,
+                                params: { namespace_group_link: {
+                                  group_id: namespace.id,
+                                  group_access_level: Member::AccessLevel::ANALYST
+                                }, format: :turbo_stream })
+
+    assert_response :conflict
+
+    # failed, so did not increase
+    assert_equal 2, namespace.shared_with_group_links.of_ancestors_and_self.count
+  end
+
   test 'group to group link destroy' do
     sign_in users(:john_doe)
     namespace_group_link = namespace_group_links(:namespace_group_link2)
