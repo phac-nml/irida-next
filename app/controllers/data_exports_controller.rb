@@ -27,13 +27,13 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       render turbo_stream: turbo_stream.update('samples_dialog',
                                                partial: 'new_sample_export_dialog',
                                                locals: {
-                                                 open: true, export_type: 'sample'
+                                                 open: true
                                                }), status: :ok
     else
       render turbo_stream: turbo_stream.update('export_dialog',
                                                partial: 'new_analysis_export_dialog',
                                                locals: {
-                                                 open: true, export_type: 'analysis',
+                                                 open: true,
                                                  workflow_execution_id: params[:workflow_execution_id]
                                                }), status: :ok
     end
