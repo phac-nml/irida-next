@@ -3,13 +3,6 @@
 <% end %>
 
 <% if @sample.deleted? %>
-  <%= turbo_stream.update "project_samples_table",
-                      partial: "table",
-                      locals: {
-                        project: @project,
-                        pagy: @pagy,
-                        samples: @samples,
-                      } %>
   <%= turbo_stream.update(
     "samples_dialog",
     partial: "delete_single_sample_dialog",
@@ -17,4 +10,9 @@
       open: false,
     },
   ) %>
+
+  <%= turbo_stream.replace "project_samples_table" do %>
+    <%= turbo_frame_tag "project_samples_table",
+    src: project_samples_path(@project, format: :turbo_stream) %>
+  <% end %>
 <% end %>
