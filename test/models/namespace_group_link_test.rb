@@ -41,7 +41,7 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
 
     assert_not group_group_link.save
     assert group_group_link.errors.full_messages.include?(
-      "Group access level #{I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_access_level.inclusion')}"
+      "Group access level #{I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_access_level.inclusion')}" # rubocop:disable Layout/LineLength
     )
   end
 
