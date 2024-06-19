@@ -39,10 +39,10 @@ module GroupLinks
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
       assert_difference -> { NamespaceGroupLink.count } => 0 do
-        assert_raises(ActiveRecord::RecordInvalid) do
-          GroupLinks::GroupLinkService.new(@user, group, params).execute
-        end
+        GroupLinks::GroupLinkService.new(@user, group, params).execute
       end
+
+      assert group.errors.full_messages.include? I18n.t('services.groups.share.group_self_reference')
 
       assert_enqueued_emails 0
     end

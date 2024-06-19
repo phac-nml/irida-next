@@ -20,11 +20,16 @@ module GroupLinks
 
       authorize! namespace, to: :link_namespace_with_group?
 
+      if group_id == namespace.id
+        raise NamespaceGroupLinkError,
+              I18n.t('services.groups.share.group_self_reference', group_id:)
+      end
+
       group = Group.find_by(id: group_id)
 
       raise NamespaceGroupLinkError, I18n.t('services.groups.share.group_not_found', group_id:) if group.nil?
 
-      namespace_group_link.save!
+      namespace_group_link.save
 
       namespace_group_link
     rescue GroupLinks::GroupLinkService::NamespaceGroupLinkError => e

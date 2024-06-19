@@ -1529,6 +1529,7 @@ en:
         namespace_group_exists: A group with the same name/path already exists in the new namespace.
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.
+        group_self_reference: Group cannot be shared with itself.
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
