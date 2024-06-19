@@ -127,38 +127,22 @@ module Projects
                                                }), status: :ok
     end
 
-    def destroy_multiple # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def destroy_multiple
       authorize! @project, to: :destroy_sample?
 
       samples_to_delete = get_samples(destroy_multiple_params['sample_ids'])
       samples_to_delete_count = destroy_multiple_params['sample_ids'].count
-      deleted_samples = []
-      samples_to_delete.each do |sample|
-        ::Samples::DestroyService.new(sample, current_user).execute
-        deleted_samples += [sample] if sample.deleted?
-      end
 
-      @pagy, @samples = pagy(load_samples)
-      @q = load_samples.ransack(params[:q])
-      fields_for_namespace(
-        namespace: @project.namespace,
-        show_fields: params[:q] && params[:q][:metadata].to_i == 1
-      )
+      deleted_samples = delete_multiple_samples(samples_to_delete)
 
       # No selected samples deleted
       if deleted_samples.empty?
         render status: :unprocessable_entity, locals: { type: :error, message: t('.no_deleted_samples') }
       # Partial sample deletion
       elsif deleted_samples.count.positive? && deleted_samples.count != samples_to_delete_count
-        messages = [
-          { type: :success,
-            message: t('.partial_success',
-                       deleted: "#{deleted_samples.count}/#{samples_to_delete_count}") },
-          { type: :error,
-            message: t('.partial_error',
-                       not_deleted: "#{samples_to_delete_count - deleted_samples.count}/#{samples_to_delete_count}") }
-        ]
-        render status: :multi_status, locals: { messages: }
+        render status: :multi_status,
+               locals: { messages: get_multi_status_destroy_multiple_message(deleted_samples,
+                                                                             samples_to_delete_count) }
       # All samples deleted successfully
       else
         render status: :ok, locals: { type: :success, message: t('.success') }
@@ -251,6 +235,27 @@ module Projects
         samples_to_delete << sample unless sample.nil?
       end
       samples_to_delete
+    end
+
+    def delete_multiple_samples(samples)
+      deleted_samples = []
+      samples.each do |sample|
+        ::Samples::DestroyService.new(sample, current_user).execute
+        deleted_samples += [sample] if sample.deleted?
+      end
+
+      deleted_samples
+    end
+
+    def get_multi_status_destroy_multiple_message(deleted_samples, samples_to_delete_count)
+      [
+        { type: :success,
+          message: t('.partial_success',
+                     deleted: "#{deleted_samples.count}/#{samples_to_delete_count}") },
+        { type: :error,
+          message: t('.partial_error',
+                     not_deleted: "#{samples_to_delete_count - deleted_samples.count}/#{samples_to_delete_count}") }
+      ]
     end
   end
 end
