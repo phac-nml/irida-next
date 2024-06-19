@@ -1180,7 +1180,10 @@ fr:
       transfers:
         dialog:
           title: Transfer Samples
-          description: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
+          description:
+            zero: No samples have been selected for transfer
+            singular: The following sample is about to be transferred, which will result in the sample no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
+            plural: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
           samples: Samples
           new_project_id: Project to transfer samples to
           submit_button: Submit
@@ -1197,7 +1200,10 @@ fr:
           no_samples_cloned_error: "Samples were not cloned for the following reasons:"
         dialog:
           title: Clone Samples
-          description: The following COUNT_PLACEHOLDER samples are about to be cloned to another project.
+          description:
+            zero: No samples have been selected for cloning
+            singular: The following sample is about to be cloned to another project.
+            plural: The following COUNT_PLACEHOLDER samples are about to be cloned to another project.
           samples: Samples
           new_project_id: Project to clone samples to
           submit_button: Submit
@@ -1278,7 +1284,6 @@ fr:
             error: "File %{filename} was not removed due to the following errors: %{errors}"
         attachment:
           delete: Delete
-          delete_confirm: Are you sure that you want to delete this file from the sample?
         create:
           success: File %{filename} was successfully uploaded.
           failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
@@ -1286,6 +1291,10 @@ fr:
           success: File %{filename} was successfully removed.
           error: "File %{filename} was not removed due to the following errors: %{errors}"
         error: File %{filename} was not removed.
+        delete_attachment_modal:
+          description: Are you sure that you want to delete this file rom the sample?
+          submit_button: Confirm
+          title: Delete File
       table:
         description: The project samples table contains all samples related to this project
         selectAll: Select / Deselect Samples
@@ -1304,13 +1313,20 @@ fr:
         description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
         apply: Apply filter
         remove_tag: Remove
+      delete_single_sample_dialog:
+        title: Delete Sample
+        description: Are you sure you want to delete sample '%{sample_name}'?
+        submit_button: Remove
       delete_multiple_samples_dialog:
           description:
             zero: No samples have been selected for deletion
-            singular: 1 sample has been selected for deletion
-            plural: COUNT_PLACEHOLDER samples have been selected for deletion
+            singular: "The following sample has been selected for deletion:"
+            plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
           id: ID
+          loading: Loading...
           name: Name
+          samples: Samples
+          spinner: Deleting samples. This may take a while...
           submit_button: Confirm
           title: Delete Samples
       destroy_multiple:
