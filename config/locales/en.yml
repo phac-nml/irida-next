@@ -193,7 +193,7 @@ en:
           attributes:
             group_id:
               blank: Group must exist
-              taken: The group has already been shared with this namespace
+              taken: has already been shared with this namespace
             namespace_id:
               blank: Namespace must exist
               taken: The namespace has already been shared with this group

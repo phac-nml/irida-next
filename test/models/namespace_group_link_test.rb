@@ -20,8 +20,8 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
                                               group_access_level: Member::AccessLevel::ANALYST)
 
     assert_not group_group_link.save
-    group_group_link.errors.full_messages.include?(
-      I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_id.taken')
+    assert group_group_link.errors.full_messages.include?(
+      "Group #{I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_id.taken')}"
     )
   end
 
@@ -40,8 +40,8 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
                                               group_access_level: Member::AccessLevel::ANALYST + 100_000)
 
     assert_not group_group_link.save
-    group_group_link.errors.full_messages.include?(
-      I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_access_level.inclusion')
+    assert group_group_link.errors.full_messages.include?(
+      "Group access level #{I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_access_level.inclusion')}"
     )
   end
 
