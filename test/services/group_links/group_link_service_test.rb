@@ -33,6 +33,20 @@ module GroupLinks
       end
     end
 
+    test 'share group a with group a error' do
+      group = groups(:group_one)
+      # namespace = groups(:group_six)
+      params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
+
+      assert_difference -> { NamespaceGroupLink.count } => 0 do
+        assert_raises(ActiveRecord::RecordInvalid) do
+          GroupLinks::GroupLinkService.new(@user, group, params).execute
+        end
+      end
+
+      assert_enqueued_emails 0
+    end
+
     test 'share group b with group a with incorrect permissions' do
       user = users(:ryan_doe)
       group = groups(:group_one)

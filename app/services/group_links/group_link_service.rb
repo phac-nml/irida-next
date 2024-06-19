@@ -24,7 +24,7 @@ module GroupLinks
 
       raise NamespaceGroupLinkError, I18n.t('services.groups.share.group_not_found', group_id:) if group.nil?
 
-      namespace_group_link.save
+      namespace_group_link.save!
 
       namespace_group_link
     rescue GroupLinks::GroupLinkService::NamespaceGroupLinkError => e
