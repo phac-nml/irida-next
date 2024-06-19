@@ -253,6 +253,10 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
+      within %(turbo-frame[id="list_select_samples"]) do
+        assert_text @sample1.name
+        assert_text @sample1.puid
+      end
       assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
@@ -296,6 +300,12 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
+      within %(turbo-frame[id="list_select_samples"]) do
+        assert_text @sample1.name
+        assert_text @sample1.puid
+        assert_text @sample2.name
+        assert_text @sample2.puid
+      end
       assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
@@ -345,6 +355,10 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('projects.samples.index.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
+      within %(turbo-frame[id="list_select_samples"]) do
+        assert_text @sample1.name
+        assert_text @sample1.puid
+      end
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('data_exports.new_sample_export_dialog.summary.sample.singular',
                processing: I18n.t('data_exports.new_sample_export_dialog.summary.processing'),
@@ -408,6 +422,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
+      assert_no_selector "turbo-frame[id='list_select_samples']"
       assert_text I18n.t('data_exports.new_analysis_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_analysis_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(

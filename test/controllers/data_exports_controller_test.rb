@@ -130,4 +130,12 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     get redirect_from_data_export_path(@data_export1, puid: 'INXT_SAM_AAAAAAAAAA')
     assert_response :redirect
   end
+
+  test 'should list samples' do
+    post list_data_exports_path(format: :turbo_stream), params: {
+      page: 1,
+      sample_ids: [@sample1.id]
+    }
+    assert_response :success
+  end
 end
