@@ -2227,11 +2227,13 @@ module Projects
         click_button I18n.t('projects.samples.delete_single_sample_dialog.submit_button')
       end
 
-      within '#samples-table ' do
+      within '#samples-table' do
         assert_selector 'table tbody tr', count: 2
         assert_no_text @sample1.name
-        assert all('input[type="checkbox"]')[0].checked?
-        assert all('input[type="checkbox"]')[1].checked?
+        within 'table tbody' do
+          assert all('input[type="checkbox"]')[0].checked?
+          assert all('input[type="checkbox"]')[1].checked?
+        end
       end
 
       assert find('input#select-all').checked?
@@ -2256,6 +2258,8 @@ module Projects
         assert_no_text @sample3.name
         assert_text I18n.t('projects.samples.index.no_samples')
       end
+
+      assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 5
     end
 
     test 'delete single attachment with remove link while all attachments selected followed by multiple deletion' do
@@ -2290,6 +2294,7 @@ module Projects
       assert_no_text 'test_file_A.fastq'
       assert_no_text 'test_file.fastq'
       assert_text I18n.t('projects.samples.show.no_files')
+      assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 2
     end
   end
 end
