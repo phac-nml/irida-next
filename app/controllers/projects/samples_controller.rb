@@ -130,7 +130,7 @@ module Projects
     def destroy_multiple
       authorize! @project, to: :destroy_sample?
 
-      samples_to_delete = get_samples(destroy_multiple_params['sample_ids'])
+      samples_to_delete = Sample.where(id: destroy_multiple_params['sample_ids'])
       samples_to_delete_count = destroy_multiple_params['sample_ids'].count
 
       deleted_samples = delete_multiple_samples(samples_to_delete)
@@ -226,15 +226,6 @@ module Projects
 
     def destroy_multiple_params
       params.require(:multiple_deletion).permit(sample_ids: [])
-    end
-
-    def get_samples(sample_ids)
-      samples_to_delete = []
-      sample_ids.each do |sample_id|
-        sample = Sample.find_by(id: sample_id)
-        samples_to_delete << sample unless sample.nil?
-      end
-      samples_to_delete
     end
 
     def delete_multiple_samples(samples)
