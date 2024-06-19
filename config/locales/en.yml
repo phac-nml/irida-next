@@ -1706,7 +1706,6 @@ en:
         processing: processing
         ready: ready
       title: Data Export
-      spinner_message: Exporting samples, this might take a while...
     new_analysis_export_dialog:
       email_label: Receive an email notification when your export is ready to download?
       name_label: "Export Name (Optional):"
@@ -1717,7 +1716,6 @@ en:
         processing: processing
         ready: ready
       title: Data Export
-      spinner_message: Exporting analyses, this might take a while...
     types:
       sample: SAMPLE
       analysis: ANALYSIS
