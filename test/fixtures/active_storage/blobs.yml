@@ -87,3 +87,6 @@ data_export_7_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "da
 
 attachmentEndToEndFWD_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_end_to_end_F.fastq", service_name: "test" %>
 attachmentEndToEndREV_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_end_to_end_R.fastq", service_name: "test" %>
+
+attachment43Sample_file_test_fileA_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R1_001.fastq", service_name: "test" %>
+attachment43Sample_file_test_fileB_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R2_001.fastq", service_name: "test" %>

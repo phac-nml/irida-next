@@ -110,6 +110,27 @@ irida_next_example_completed:
   blob_run_directory: "not a run dir"
   cleaned: true
 
+irida_next_example_completed_2_files:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "irida_next_example_completed",
+      "workflow_version": "1.0dev",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
+  run_id: "my_run_id_6"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "completed"
+  blob_run_directory: "not a run dir"
+  cleaned: true
+
 irida_next_example_completed_unclean:
   <<: *DEFAULTS
   metadata:

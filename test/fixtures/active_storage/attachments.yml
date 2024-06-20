@@ -157,3 +157,13 @@ attachmentEndToEndREV_file_test_file_fastq:
   name: file
   record: attachmentEndToEndREV (Attachment)
   blob: attachmentEndToEndREV_file_test_file_fastq_blob
+
+attachmentSample43_file_test_file_fastq:
+  name: file
+  record: attachmentPEFWD43 (Attachment)
+  blob: attachment43Sample_file_test_fileA_fastq_blob
+
+attachmentSample43_file_test_file_A_fastq:
+  name: file
+  record: attachmentPEREV43 (Attachment)
+  blob: attachment43Sample_file_test_fileB_fastq_blob

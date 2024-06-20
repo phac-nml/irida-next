@@ -355,6 +355,21 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text 'test_file.fastq'
   end
 
+  test 'can view workflow execution with samplesheet with multiple files' do
+    workflow_execution = workflow_executions(:irida_next_example_completed_2_files)
+
+    visit workflow_execution_path(workflow_execution)
+
+    click_on I18n.t('workflow_executions.show.tabs.samplesheet')
+
+    assert_selector 'table tbody tr', count: 1
+    assert_text 'INXT_SAM_AAAAAAAAAA'
+    assert_text 'INXT_ATT_AAAAAAAAAA'
+    assert_text 'test_file.fastq'
+    assert_text 'INXT_ATT_AAAAAAAAAB'
+    assert_text 'test_file_A.fastq'
+  end
+
   test 'can remove workflow execution from workflow execution page' do
     workflow_execution = workflow_executions(:irida_next_example_completed)
 
