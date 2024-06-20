@@ -23,7 +23,7 @@ ga4gh_wes:
   headers: { '<some header key>': '<some header value>' }
 ```
 
-Only `server_url_endpoint` is required by default, but depending on your GA4GH WES server configuration the others might also be needed.
+Only `server_url_endpoint` is required by default, but depending on your GA4GH WES server configuration the other fields may also be required.
 
 #### server_url_endpoint: *Required
 
