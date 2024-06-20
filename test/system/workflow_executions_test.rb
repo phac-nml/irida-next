@@ -3,6 +3,8 @@
 require 'application_system_test_case'
 
 class WorkflowExecutionsTest < ApplicationSystemTestCase
+  WORKFLOW_EXECUTION_COUNT = 18
+
   setup do
     @user = users(:john_doe)
     login_as @user
@@ -21,7 +23,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector 'table#workflow_executions tbody tr', count: 17
+    assert_selector 'table#workflow_executions tbody tr', count: WORKFLOW_EXECUTION_COUNT
   end
 
   test 'should display pages of workflow executions' do
@@ -61,7 +63,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 17
+      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
       assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution10.run_id
       assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
@@ -71,7 +73,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 17
+      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
       assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution9.run_id
       assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
@@ -81,7 +83,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 17
+      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution9.metadata['workflow_name']
       assert_selector "tr:nth-child(3) td:nth-child(#{@workflow_name_col})",
@@ -94,7 +96,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 17
+      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution1.metadata['workflow_name']
       assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
@@ -107,7 +109,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "table#workflow_executions thead th:nth-child(#{@created_at_col}) svg.icon-arrow_up"
 
     within first('table#workflow_executions tbody') do
-      assert_selector 'tr', count: 17
+      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@created_at_col})",
                       text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
       assert_selector "tr:nth-child(2) td:nth-child(#{@created_at_col})",
