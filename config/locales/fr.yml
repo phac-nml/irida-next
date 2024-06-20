@@ -192,7 +192,7 @@ fr:
           attributes:
             group_id:
               blank: Group must exist
-              taken: The group has already been shared with this namespace
+              taken: has already been shared with this namespace
               comparison: "Group must be other than %{group_id}"
             namespace_id:
               blank: Namespace must exist
