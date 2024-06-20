@@ -18,7 +18,10 @@
                       direct_upload: true,
                       required: true,
                       data: {
-                        "attachment-upload-target": "attachmentsInput"
+                        "attachment-upload-target": "attachmentsInput",
+                        "file-upload-ignore-value":
+                          '[".fasta", ".fna", ".fa", ".fastq", ".fq"]',
+                        controller: "file-upload",
                       },
                       class:
                         "block w-full mb-5 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
@@ -28,7 +31,7 @@
       <%= form.submit t("projects.samples.show.upload"),
                   class: "button button--state-primary button--size-default",
                   data: {
-                    "attachment-upload-target": "submitButton"
+                    "attachment-upload-target": "submitButton",
                   } %>
     </div>
   </div>
