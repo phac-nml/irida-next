@@ -194,6 +194,7 @@ en:
             group_id:
               blank: Group must exist
               taken: has already been shared with this namespace
+              comparison: "Group must be other than %{group_id}"
             namespace_id:
               blank: Namespace must exist
               taken: The namespace has already been shared with this group
