@@ -9,6 +9,7 @@ module Projects
       # before_action :set_search_params, only: %i[destroy destroy_multiple]
 
       def new
+        puts hi
         if params['deletion_type'] == 'single'
           @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
           render turbo_stream: turbo_stream.update('samples_dialog',
