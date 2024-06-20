@@ -5,7 +5,7 @@
 <% if @sample.deleted? %>
   <%= turbo_stream.update(
     "samples_dialog",
-    partial: "delete_single_sample_dialog",
+    partial: "new_deletion_dialog",
     locals: {
       open: false,
     },

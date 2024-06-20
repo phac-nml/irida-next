@@ -11,7 +11,7 @@
       <p class="mb-4">
         <%= t(".description", sample_name: @sample.name) %>
       </p>
-      <%= form_for(:deletion, url: namespace_project_samples_deletion_path, method: :delete) do |form| %>
+      <%= form_for(:deletion, url: namespace_project_samples_deletion_path(sample_id: @sample.id), method: :delete) do |form| %>
         <%= form.submit t(".submit_button"),
                     class: "
                       button

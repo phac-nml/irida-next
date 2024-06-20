@@ -1175,9 +1175,6 @@ en:
           title: Name and Description
         submit_button: Update sample
         cancel_button: Cancel
-      destroy:
-        success: Sample %{sample_name} was successfully removed from project %{project_name}.
-        error: The sample does not exist within the project.
       shared:
         errors:
           ok_button: OK
@@ -1340,6 +1337,9 @@ en:
           partial_error: "%{not_deleted} samples could not be deleted"
           partial_success: "%{deleted} samples were successfully deleted"
           success: Samples were successfully deleted
+        destroy:
+          success: Sample %{sample_name} was successfully removed from project %{project_name}.
+          error: The sample does not exist within the project.
     workflow_executions:
       cancel:
         error: "Could not cancel workflow %{workflow_name}"
