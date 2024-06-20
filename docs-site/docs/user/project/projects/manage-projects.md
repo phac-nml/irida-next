@@ -75,7 +75,17 @@ To update the URL of the project:
 3. Select **Change project URL**
 
 ## View Project History
-<!-- TODO: Add steps to view project history -->
+
+Prerequisite:
+- You must have at least the Maintainer role for the project.
+- You must be a direct or inherited member of the project's ancestry. Shared groups and their members cannot see the history.
+
+To view a project's history:
+
+1. Select the project that you want to edit and then on the left sidebar
+2. Select **History**
+
+A new project version is created each time the project's information is changed. Clicking a version within the project's history will display what changes were made to the project.
 
 ## Transfer Project
 

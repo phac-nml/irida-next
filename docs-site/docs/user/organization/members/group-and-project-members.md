@@ -79,15 +79,16 @@ To add a user to a group:
 6. Select an optional **Access expiration**
 7. Click the **Add member to group** button
 
-## Edit member for a group or project
+## Edit members for a group or project
 
 Prerequisite:
 
 You must have at least a **Maintainer** role, or you must be the owner of the group
 
-1. From the left sidebar, select **Projects** or **Groups**, and find your project or group for which you would like to update a member
-2. From the left sidebar, select **Members**
-3. Find the member that you would like to update
+1. From the left sidebar, select **Projects** or **Groups**
+2. Select the project or group
+3. From the left sidebar, select **Members**
+4. Find the member that you would like to update
 
 To update a member's role:
 
@@ -107,13 +108,14 @@ You must have at least a **Maintainer** role, or the project must be under your 
 
 To add a direct user to a project:
 
-1. From the left sidebar, select **Projects**, and find your project
-2. From the left sidebar, select **Members**
-3. Click the **Add Member** button
-4. Select the user you want to add to the project
-5. Select an access level (role)
-6. Select an optional **Access expiration**
-7. Click the **Add member to project** button
+1. From the left sidebar, select **Projects**
+2. Select the project
+3. From the left sidebar, select **Members**
+4. Click the **Add Member** button
+5. Select the user you want to add to the project
+6. Select an access level (role)
+7. Select an optional **Access expiration**
+8. Click the **Add member to project** button
 
 ## Which roles you can assign
 
@@ -137,10 +139,11 @@ Prerequisites:
 
 To remove a member from a project:
 
-1. From the left sidebar, select **Projects**, and find your project
-2. From the left sidebar, select **Members**
-3. On the right hand side of the row for the member you want to remove, click the `ellipsis` and select **Remove** from the dropdown.
-4. Confirm that you would like to remove the member from the project in the popup by clicking the **OK** button
+1. From the left sidebar, select **Projects**
+2. Select the project
+3. From the left sidebar, select **Members**
+4. On the right hand side of the row for the member you want to remove, click **Remove**.
+5. Confirm that you would like to remove the member from the project in the popup by clicking the **OK** button
 
 ## Remove a member from a group
 
@@ -157,7 +160,8 @@ Prerequisites:
 
 To remove a member from a group:
 
-1. From the left sidebar, select **Groups**, and find your group
-2. From the left sidebar, select **Members**
-3. On the right hand side of the row for the member you want to remove, click the `ellipsis` and select **Remove** from the dropdown.
-4. Confirm that you would like to remove the member from the group in the popup by clicking the **OK** button
+1. From the left sidebar, select **Groups**
+2. Select the group
+3. From the left sidebar, select **Members**
+4. On the right hand side of the row for the member you want to remove, click **Remove**.
+5. Confirm that you would like to remove the member from the group in the popup by clicking the **OK** button
