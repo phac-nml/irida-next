@@ -193,7 +193,8 @@ en:
           attributes:
             group_id:
               blank: Group must exist
-              taken: The group has already been shared with this namespace
+              taken: has already been shared with this namespace
+              comparison: "Group must be other than %{group_id}"
             namespace_id:
               blank: Namespace must exist
               taken: The namespace has already been shared with this group
@@ -1529,6 +1530,7 @@ en:
         namespace_group_exists: A group with the same name/path already exists in the new namespace.
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.
+        group_self_reference: Group cannot be shared with itself.
     projects:
       transfer:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.

@@ -20,8 +20,20 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
                                               group_access_level: Member::AccessLevel::ANALYST)
 
     assert_not group_group_link.save
-    group_group_link.errors.full_messages.include?(
+
+    assert group_group_link.errors.full_messages_for(:group_id).first.include?(
       I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_id.taken')
+    )
+  end
+
+  test 'cannot create self to self group links' do
+    group_group_link = NamespaceGroupLink.new(group_id: @group_to_share.id, namespace_id: @group_to_share.id,
+                                              group_access_level: Member::AccessLevel::ANALYST)
+
+    assert_not group_group_link.save
+    assert group_group_link.errors.full_messages_for(:group_id).include?(
+      I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_id.comparison',
+             group_id: @group_to_share.id)
     )
   end
 
@@ -30,7 +42,8 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
                                               group_access_level: Member::AccessLevel::ANALYST + 100_000)
 
     assert_not group_group_link.save
-    group_group_link.errors.full_messages.include?(
+
+    assert group_group_link.errors.full_messages_for(:group_access_level).first.include?(
       I18n.t('activerecord.errors.models.namespace_group_link.attributes.group_access_level.inclusion')
     )
   end

@@ -29,30 +29,26 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
                                                                      group_link_params).execute
     @pagy, @namespace_group_links = pagy(load_namespace_group_links)
 
-    respond_to do |format|
-      if @created_namespace_group_link
-        if @created_namespace_group_link.errors.full_messages.count.positive?
-          format.turbo_stream do
-            render status: :conflict,
-                   locals: { namespace_group_link: @created_namespace_group_link, type: 'alert',
-                             message: @created_namespace_group_link.errors.full_messages.first }
-          end
-        else
-          @group_invited = true
-          format.turbo_stream do
-            render status: :ok, locals: { namespace_group_link: @created_namespace_group_link,
-                                          access_levels: @access_levels,
-                                          type: 'success',
-                                          message: t('.success',
-                                                     namespace_name: @created_namespace_group_link.namespace.human_name,
-                                                     group_name: @created_namespace_group_link.group.human_name) }
-          end
-        end
-      else
+    if @created_namespace_group_link.persisted?
+      respond_to do |format|
+        @group_invited = true
         format.turbo_stream do
-          render status: :bad_request,
-                 locals: { type: 'alert',
-                           message: t('.error') }
+          render status: :ok,
+                 locals: { namespace_group_link: @created_namespace_group_link,
+                           access_levels: @access_levels,
+                           type: 'success',
+                           message: t('.success',
+                                      namespace_name: @created_namespace_group_link.namespace.human_name,
+                                      group_name: @created_namespace_group_link.group.human_name) }
+        end
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :unprocessable_entity,
+                 locals: { namespace_group_link: @created_namespace_group_link,
+                           type: 'alert',
+                           message: @created_namespace_group_link.errors.full_messages.first }
         end
       end
     end
@@ -136,7 +132,9 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def namespace_linkable_groups
-    @namespace_linkable_groups = Group.where.not(id: NamespaceGroupLink.where(namespace:).select(:group_id))
+    @namespace_linkable_groups = Group.where.not(
+      id: NamespaceGroupLink.where(namespace:).select(:group_id) + Group.where(id: namespace.id).select(:id)
+    )
   end
 
   def load_namespace_group_links
