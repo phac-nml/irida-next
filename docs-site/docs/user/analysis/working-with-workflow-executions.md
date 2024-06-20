@@ -26,13 +26,13 @@ To view automated workflow executions:
 
 This page will list all of the project's workflow executions.
 
-## View Single Workflow Execution
+## View A Workflow Execution
 
 To view a specific workflow execution:
   1. Follow the steps to view either the [user](../analysis/working-with-workflow-executions#view-user-workflow-executions) or [automated](../analysis/working-with-workflow-executions#view-automated-workflow-executions) workflow executions listing page
   2. Click the **ID** of the workflow execution you'd like to view
 
-Each individual workflow execution will contain a summary, the parameters selected during set-up, and the output files once analysis has completed.
+Each individual workflow execution will contain a summary, the parameters selected during set-up, a samplesheet that includes input files, and the output files once analysis has completed.
 
 ## Create A User Workflow Execution
 
@@ -45,8 +45,8 @@ To create a user workflow execution:
   2. From the left sidebar, select **Samples**
   3. Click the checkbox of each sample you'd like to include in the analysis
   4. Click ![workflow_execution_btn](./assets/rocket_launch.svg)
-  5. Select a pipeline in the new pop-up
-  6. The next pop-up contains a list of parameters for you to enter and/or confirm. The parameters contains parameters specific to the selected pipeline as well as optional parameters such as workflow name, e-mail notification, and sample updates upon workflow completion.
+  5. Select a pipeline from the dialog
+  6. The next dialog contains a list of parameters for you to enter and/or confirm. This list includes parameters specific to the selected pipeline, along with optional parameters such as workflow name, e-mail notification, and sample updates upon workflow completion.
 
 ## Set-up Automated Workflow Executions
 
@@ -58,7 +58,7 @@ To set-up automated workflow executions:
   2. From the left sidebar, select **Settings**
   3. In the **Settings** dropdown menu, select **Automated Workflow Executions**
   4. Click **New automated workflow execution**
-  5. Select a pipeline in the new pop-up
-  6. The next pop-up contains a list of parameters for you to enter and/or confirm. The parameters contains parameters specific to the selected pipeline as well as optional parameters such as workflow name, e-mail notification, and sample updates upon workflow completion.
+  5. Select a pipeline from the dialog
+  6. The next dialog contains a list of parameters for you to enter and/or confirm. This list includes parameters specific to the selected pipeline, along with optional parameters such as workflow name, e-mail notification, and sample updates upon workflow completion.
 
 Once set-up, each time paired-end files are uploaded to a sample belonging to this project, a workflow execution with these selected parameters will execute.

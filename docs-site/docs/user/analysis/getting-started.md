@@ -38,7 +38,7 @@ While a workflow execution is running, it will go through numerous states to giv
   | Prepared   | Files were successfully prepared and is being submitted to the selected pipeline                                            |
   | Submitted  | The workflow execution was submitted to the selected pipeline                                                               |
   | Running    | The workflow execution is being executed by the selected pipeline                                                           |
-  | Completing | The analysis was successful and IRIDA Next is finalizing the workflow execution  for the user                               |
+  | Completing | The analysis was successful and IRIDA Next is finalizing the workflow execution for the user                                |
   | Completed  | The workflow execution is complete and ready for the user                                                                   |
 
   Error states:
@@ -50,3 +50,9 @@ While a workflow execution is running, it will go through numerous states to giv
   | Canceled  | The workflow execution successfully canceled                                               |
 
 The current state of any workflow execution is shown on the workflow execution [listing page](../analysis/working-with-workflow-executions).
+
+## Workflow Execution Deletions
+
+When deleting a workflow execution, there are a couple points to keep in mind:
+  - Deleted errored and canceled runs have no additional considerations
+  - Deleting completed runs does not delete the associated results that have been propogated to the samples
