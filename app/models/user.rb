@@ -41,6 +41,14 @@ class User < ApplicationRecord
 
   delegate :full_path, to: :namespace
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[first_name last_name email]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[]
+  end
+
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
     user.email = auth.info.email

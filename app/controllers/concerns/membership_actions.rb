@@ -18,7 +18,8 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     respond_to do |format|
       format.html
       format.turbo_stream do
-        @pagy, @members = pagy(load_members)
+        @q = load_members.ransack(params[:q]) # FIX
+        @pagy, @members = pagy(@q.result)
       end
     end
   end
