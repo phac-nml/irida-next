@@ -110,6 +110,7 @@ To remove a sample:
 
 Prerequisite:
 - You must have at least the Maintainer role for the sample's project.
+- You must be a direct or inherited member of the project's ancestry. Shared groups and their members cannot see the history.
 
 To view a sample's history:
 
