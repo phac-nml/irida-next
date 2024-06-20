@@ -43,7 +43,7 @@ class GroupShareActionsConcernTest < ActionDispatch::IntegrationTest
                                   group_access_level: Member::AccessLevel::ANALYST
                                 }, format: :turbo_stream })
 
-    assert_response :conflict
+    assert_response :unprocessable_entity
 
     # failed, so did not increase
     assert_equal 2, namespace.shared_with_group_links.of_ancestors_and_self.count

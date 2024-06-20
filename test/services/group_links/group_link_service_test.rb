@@ -39,10 +39,9 @@ module GroupLinks
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
       assert_difference -> { NamespaceGroupLink.count } => 0 do
-        GroupLinks::GroupLinkService.new(@user, group, params).execute
+        namespace_group_link = GroupLinks::GroupLinkService.new(@user, group, params).execute
+        assert namespace_group_link.errors.full_messages.include? I18n.t('services.groups.share.group_self_reference')
       end
-
-      assert group.errors.full_messages.include? I18n.t('services.groups.share.group_self_reference')
 
       assert_enqueued_emails 0
     end
@@ -60,7 +59,8 @@ module GroupLinks
       assert_equal GroupPolicy, exception.policy
       assert_equal :link_namespace_with_group?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.link_namespace_with_group?', name: namespace.name),
+      assert_equal I18n.t(:'action_policy.policy.group.link_namespace_with_group?',
+                          name: namespace.name),
                    exception.result.message
       assert_no_enqueued_emails
     end
@@ -83,10 +83,10 @@ module GroupLinks
       params = { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST }
 
       assert_no_difference ['NamespaceGroupLink.count'] do
-        GroupLinks::GroupLinkService.new(user, namespace, params).execute
+        namespace_group_link = GroupLinks::GroupLinkService.new(user, namespace, params).execute
+        assert namespace_group_link.errors.full_messages.include?(I18n.t('services.groups.share.invalid_namespace_type'))
       end
 
-      assert namespace.errors.full_messages.include?(I18n.t('services.groups.share.invalid_namespace_type'))
       assert_no_enqueued_emails
     end
 

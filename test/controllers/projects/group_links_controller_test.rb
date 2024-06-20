@@ -32,7 +32,7 @@ module Projects
                                                 group_access_level: Member::AccessLevel::ANALYST
                                               }, format: :turbo_stream })
 
-      assert_response :bad_request
+      assert_response :unprocessable_entity
     end
 
     test 'shouldn\'t share project namespace with group as user doesn\'t have correct permissions' do
@@ -68,7 +68,7 @@ module Projects
                                                 group_access_level: Member::AccessLevel::ANALYST
                                               }, format: :turbo_stream })
 
-      assert_response :conflict
+      assert_response :unprocessable_entity
     end
 
     test 'unshare project' do

@@ -33,8 +33,8 @@ module GroupLinks
 
       namespace_group_link
     rescue GroupLinks::GroupLinkService::NamespaceGroupLinkError => e
-      @namespace.errors.add(:base, e.message)
-      false
+      @namespace_group_link.errors.add(:base, e.message)
+      @namespace_group_link
     end
   end
 end

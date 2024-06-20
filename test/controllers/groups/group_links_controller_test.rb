@@ -31,7 +31,7 @@ module Groups
                                     group_access_level: Member::AccessLevel::ANALYST
                                   }, format: :turbo_stream })
 
-      assert_response :bad_request
+      assert_response :unprocessable_entity
     end
 
     test 'should not share group b with group a as user doesn\'t have correct permissions' do
@@ -67,7 +67,7 @@ module Groups
                                     group_access_level: Member::AccessLevel::ANALYST
                                   }, format: :turbo_stream })
 
-      assert_response :conflict
+      assert_response :unprocessable_entity
     end
 
     test 'unshare group' do
