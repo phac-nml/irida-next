@@ -18,7 +18,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     respond_to do |format|
       format.html
       format.turbo_stream do
-        @q = load_members.ransack(params[:q]) # FIX
+        @q = Member.where(id: load_members.pluck(:id)).ransack(params[:q])
         @pagy, @members = pagy(@q.result)
       end
     end
