@@ -84,7 +84,9 @@ module GroupLinks
 
       assert_no_difference ['NamespaceGroupLink.count'] do
         namespace_group_link = GroupLinks::GroupLinkService.new(user, namespace, params).execute
-        assert namespace_group_link.errors.full_messages.include?(I18n.t('services.groups.share.invalid_namespace_type'))
+        assert namespace_group_link.errors.full_messages.include?(
+          I18n.t('services.groups.share.invalid_namespace_type')
+        )
       end
 
       assert_no_enqueued_emails
