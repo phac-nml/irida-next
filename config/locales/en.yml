@@ -740,6 +740,17 @@ en:
           link_remove_aria_label: "Remove group member %{member} link"
           link_leave_group_aria_label: "Leave group button"
         inherited_from: "Inherited from"
+        search:
+          placeholder: Filter by username or access level
+        sorting:
+          access_level_asc: Access level
+          access_level_desc: Access level, descending
+          created_at_desc: Newest access granted
+          created_at_asc: Oldest access granted
+          namespace_name_asc: Source
+          namespace_name_desc: Source, descending
+          user_email_asc: Username
+          user_email_desc: Username, descending
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         table_header:
@@ -1580,14 +1591,18 @@ en:
   ransack:
     sort_dropdown_component:
       sorting:
-        updated_at_desc: Updated At
+        access_level_asc: Access level
+        access_level_desc: Access level, descending
         created_at_desc: Last created
+        created_at_asc: Oldest created
         name_asc: Name
         name_desc: Name, descending
         namespace_name_asc: Name
         namespace_name_desc: Name, descending
         updated_at_asc: Oldest updated
-        created_at_asc: Oldest created
+        updated_at_desc: Updated At
+        user_email_asc: Username
+        user_email_desc: Username, descending
   mailers:
     email_template:
       automated_message: This email was sent from an automated system. Please do not reply to this email.
