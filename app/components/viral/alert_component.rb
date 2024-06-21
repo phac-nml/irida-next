@@ -19,7 +19,7 @@ module Viral
       @message = message
       @system_arguments = system_arguments
       @system_arguments[:classes] =
-        class_names('flex p-4 border-l-4', classes_for_alert, @system_arguments[:classes])
+        class_names('flex items-center p-4 border-l-4', classes_for_alert, @system_arguments[:classes])
       @system_arguments[:role] = 'alert'
     end
 

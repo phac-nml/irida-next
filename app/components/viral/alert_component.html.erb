@@ -3,7 +3,9 @@
     <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
   </span>
   <div>
-    <div class="font-medium"><%= message %></div>
+    <% if message.present? %>
+      <div class="font-medium"><%= message %></div>
+    <% end %>
     <% if content.present? %>
       <%= content %>
     <% end %>

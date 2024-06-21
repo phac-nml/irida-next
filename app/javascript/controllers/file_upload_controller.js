@@ -1,47 +1,39 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["error"];
+  static targets = ["alert", "error"];
   static values = {
     ignore: [],
   };
+  #ignoreRegex;
 
   connect() {
-    console.log("Ignored", this.ignoreValue);
-    this.ignoreRegex = new RegExp(
+    this.#ignoreRegex = new RegExp(
       this.ignoreValue.map((a) => a.replace(".", "")).join("$|") + "$",
-    );
-    console.log(this.ignoreRegex);
-    this.element.addEventListener("change", this.handleFileChange.bind(this));
-  }
-
-  disconnect() {
-    this.element.removeEventListener(
-      "change",
-      this.handleFileChange.bind(this),
     );
   }
 
   handleFileChange(event) {
     const files = Array.from(event.target.files);
-    // Split the files into ignore and non-ignore files
-    const ignoreFiles = files.filter((file) =>
-      file.name.match(this.ignoreRegex),
-    );
-    const notIgnoredFiles = files.filter(
-      (file) => !file.name.match(this.ignoreRegex),
-    );
+    const dt = new DataTransfer();
+    const ignoreFiles = [];
 
-    // if (ignoreFiles.length > 0) {
-    //   this.errorTarget.classList.remove("hidden");
-    // }
-    const fileList = new FileList();
-    notIgnoredFiles.forEach((file) => {
-      fileList.push(file);
+    files.forEach((file) => {
+      if (!file.name.match(this.#ignoreRegex)) {
+        dt.items.add(file);
+      } else {
+        ignoreFiles.push(file);
+      }
     });
-    this.element.files = fileList;
+    event.target.files = dt.files;
 
-    console.log("Ignored files", ignoreFiles);
-    console.log("Not ignored files", notIgnoredFiles);
+    if (ignoreFiles.length > 0 && this.hasAlertTarget) {
+      this.errorTarget.textContent = ignoreFiles
+        .map((file) => file.name)
+        .join(", ");
+      this.alertTarget.classList.remove("hidden");
+    } else {
+      this.alertTarget.classList.add("hidden");
+    }
   }
 }

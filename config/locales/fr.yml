@@ -1086,6 +1086,7 @@ fr:
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
         error: The sample does not exist within the project.
         files: Files
+        files_ignored: fasta and fastq files must be compressed.
         metadata:
           actions:
             dropdown:
