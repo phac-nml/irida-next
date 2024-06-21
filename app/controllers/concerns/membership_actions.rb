@@ -16,7 +16,9 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @namespace, to: :member_listing?
     respond_to do |format|
-      format.html
+      format.html do
+        @q = Member.ransack(params[:q])
+      end
       format.turbo_stream do
         @q = Member.where(id: load_members.pluck(:id)).ransack(params[:q])
         set_default_sort
@@ -153,7 +155,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   end
 
   def set_default_sort
-    @q.sorts = 'created_at desc' if @q.sorts.empty?
+    @q.sorts = 'user_email asc' if @q.sorts.empty?
   end
 
   protected
