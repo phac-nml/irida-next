@@ -11,8 +11,11 @@
     },
   ) %>
 
-  <%= turbo_stream.replace "project_samples_table" do %>
-    <%= turbo_frame_tag "project_samples_table",
-    src: project_samples_path(@project, format: :turbo_stream) %>
-  <% end %>
+  <%= turbo_stream.update "project_samples_table",
+                      partial: "projects/samples/table",
+                      locals: {
+                        project: @project,
+                        pagy: @pagy,
+                        samples: @samples,
+                      } %>
 <% end %>
