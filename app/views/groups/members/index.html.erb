@@ -30,7 +30,10 @@
   <div class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
     <%= search_form_for @q, url: group_members_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
       <input type="hidden" name="format" value="turbo_stream"/>
-      <%= f.label :user_email_cont, t(".search.placeholder"), class: "sr-only" %>
+
+      <%= f.label :access_level_or_user_email_eq,
+              t(".search.placeholder"),
+              class: "sr-only" %>
       <div class="relative lg:w-72">
         <div
           class="
@@ -40,7 +43,7 @@
           <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
         </div>
         <%= turbo_frame_tag "member_hidden_values" %>
-        <%= f.search_field :user_email_cont,
+        <%= f.search_field :access_level_or_user_email_eq,
                        "data-action": "filters#submit",
                        class:
                          "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
