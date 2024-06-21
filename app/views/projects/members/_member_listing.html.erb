@@ -1,60 +1,72 @@
 <div class="relative overflow-x-auto" data-turbo-temporary>
   <table
     class="
-      w-full
-      text-sm
-      text-left
-      rtl:text-right
-      text-slate-500
-      dark:text-slate-400
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
       whitespace-nowrap
     "
   >
     <thead
       class="
-        text-xs
-        text-slate-700
-        uppercase
-        bg-slate-50
-        dark:bg-slate-700
+        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
         dark:text-slate-400
       "
     >
       <tr>
-        <th
-          scope="col"
-          class="
-            px-6
-            py-3
-            text-left
-            bg-slate-50
-            dark:bg-slate-700
-            sticky
-            left-0
-            z-10
-          "
-        ><%= t(:"projects.members.index.table_header.username") %></th>
-        <th scope="col" class="px-6 py-3 min-w-40"><%= t(:"projects.members.index.table_header.access_level") %></th>
-        <th scope="col" class="px-6 py-3"><%= t(:"projects.members.index.table_header.source") %></th>
-        <th scope="col" class="px-6 py-3"><%= t(:"projects.members.index.table_header.access_granted") %></th>
-        <th scope="col" class="px-6 py-3 min-w-48"><%= t(:"projects.members.index.table_header.expiration") %></th>
-        <th scope="col" class="px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0"><%= t(:"projects.members.index.table_header.action") %></th>
+        <th scope="col" class="px-6 py-3">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(:"projects.members.index.table_header.username"),
+            url: sorting_url(@q, :user_email),
+            field: :user_email,
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 min-w-40">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(:"projects.members.index.table_header.access_level"),
+            url: sorting_url(@q, :access_level),
+            field: :access_level,
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 min-w-40">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(:"projects.members.index.table_header.source"),
+            url: sorting_url(@q, :namespace_name),
+            field: :namespace_name,
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(:"projects.members.index.table_header.access_granted"),
+            url: sorting_url(@q, :created_at),
+            field: :created_at,
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 min-w-48">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(:"projects.members.index.table_header.expiration"),
+            url: sorting_url(@q, :expires_at),
+            field: :expires_at,
+          ) %>
+        </th>
+        <th scope="col" class="px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0">
+          <%= t(:"projects.members.index.table_header.action") %>
+        </th>
       </tr>
     </thead>
     <tbody
       id="members-table-body"
       class="
-        bg-white
-        divide-y
-        divide-slate-200
-        dark:bg-slate-800
-        dark:divide-slate-700
+        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
       "
     >
       <%= render partial: "member",
       collection: @members,
       locals: {
-        access_levels: @access_levels
+        access_levels: @access_levels,
       } %>
     </tbody>
   </table>
