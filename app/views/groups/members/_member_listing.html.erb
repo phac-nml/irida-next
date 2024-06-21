@@ -32,11 +32,18 @@
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,
             label: t(:"groups.members.index.table_header.source"),
-            url: sorting_url(@q, :namespace_id),
-            field: :namespace_id,
+            url: sorting_url(@q, :namespace_name),
+            field: :namespace_name,
           ) %>
         </th>
-        <th scope="col" class="px-6 py-3"><%= t(:"groups.members.index.table_header.access_granted") %></th>
+        <th scope="col" class="px-6 py-3">
+          <%= render Ransack::SortComponent.new(
+            ransack_obj: @q,
+            label: t(:"groups.members.index.table_header.access_granted"),
+            url: sorting_url(@q, :created_at),
+            field: :created_at,
+          ) %>
+        </th>
         <th scope="col" class="px-6 py-3 min-w-48">
           <%= render Ransack::SortComponent.new(
             ransack_obj: @q,

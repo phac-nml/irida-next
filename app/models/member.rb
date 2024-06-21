@@ -209,11 +209,11 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def ransackable_attributes(_auth_object = nil)
-      %w[access_level expires_at]
+      %w[access_level created_at expires_at]
     end
 
     def ransackable_associations(_auth_object = nil)
-      %w[user]
+      %w[user namespace]
     end
   end
 
