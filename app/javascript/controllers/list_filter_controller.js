@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
-import _ from "lodash";
+
+const BACKSPACE = 8;
+const COMMA = 188;
 
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
@@ -8,24 +10,19 @@ export default class extends Controller {
   handleInput(event) {
     const value = event.target.value.trim();
 
-    if (event.keyCode === 8 && value.length === 0) {
-      // Handle backspace event
+    console.log(value);
+
+    if (event.keyCode === BACKSPACE && value.length === 0) {
+      // Handle backspace event when input is empty, otherwise just let
       this.#handleBackspace(event);
-    } else if (value.length === 0 && event.keyCode === 188) {
-      // Handle when a `,` is entered alone
+    } else if (value.length === 0 && event.keyCode === COMMA) {
+      // Handle when a `,` is entered alone, that is do nothing
       event.preventDefault();
-    } else if (event.keyCode === 86 && event.ctrlKey === true) {
-      // Skip handling paste, this gets handled by the paste event
-      return;
-    } else if (event.keyCode === 188) {
+    } else if (event.keyCode === COMMA) {
       // If string ends with a coma, directly add the tag without debounce
       event.preventDefault();
       this.#clearAndFocus();
-      this.#addDelayed.cancel();
       this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
-    } else {
-      // Just text entered so debounce the value incase user adds more text
-      this.#addDelayed();
     }
   }
 
@@ -68,7 +65,6 @@ export default class extends Controller {
     const text = last.querySelector(".label").innerText;
     this.tagsTarget.removeChild(last);
     this.inputTarget.value = text;
-    this.#addDelayed();
   }
 
   #getNamesAndPUID(value) {
@@ -90,14 +86,6 @@ export default class extends Controller {
     clone.querySelector("input").id = Date.now().toString(36);
     return clone;
   }
-
-  #addDelayed = _.debounce(() => {
-    const value = this.inputTarget.value.trim();
-    if (value.length > 0 && value !== ",") {
-      this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
-      this.#clearAndFocus();
-    }
-  }, 1000);
 
   #updateCount() {
     const count = this.tagsTarget.querySelectorAll(".search-tag").length;
