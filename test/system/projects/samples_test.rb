@@ -84,20 +84,20 @@ module Projects
       within('#table-listing') do
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
-        assert_no_text 'test_file.fastq'
+        assert_no_text 'test_file_2.fastq.gz'
       end
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         click_on I18n.t('projects.samples.show.upload')
       end
 
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file_2.fastq.gz')
       within('#table-listing') do
         assert_no_text I18n.t('projects.samples.show.no_files')
         assert_no_text I18n.t('projects.samples.show.no_associated_files')
-        assert_text 'test_file.fastq'
+        assert_text 'test_file_2.fastq.gz'
       end
     end
 
@@ -107,7 +107,13 @@ module Projects
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+        click_on I18n.t('projects.samples.show.upload')
+      end
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      within('dialog') do
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         click_on I18n.t('projects.samples.show.upload')
       end
 
