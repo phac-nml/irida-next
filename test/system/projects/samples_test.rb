@@ -152,18 +152,18 @@ module Projects
       # Attach paired files
       within('dialog') do
         attach_file 'attachment[files][]',
-                    [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq'),
-                     Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq')]
+                    [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
+                     Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz')]
         click_on I18n.t('projects.samples.show.upload')
       end
 
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq')
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
 
       # View paired files
       within('#table-listing') do
-        assert_text 'TestSample_S1_L001_R1_001.fastq'
-        assert_text 'TestSample_S1_L001_R2_001.fastq'
+        assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
         assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
       end
 
@@ -176,11 +176,11 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq')
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq')
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
       within('#table-listing') do
-        assert_no_text 'TestSample_S1_L001_R1_001.fastq'
-        assert_no_text 'TestSample_S1_L001_R2_001.fastq'
+        assert_no_text 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_no_text 'TestSample_S1_L001_R2_001.fastq.gz'
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
       end
