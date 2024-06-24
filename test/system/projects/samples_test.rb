@@ -681,6 +681,7 @@ module Projects
       end
 
       click_on I18n.t('projects.samples.table.sample')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       click_on I18n.t('projects.samples.table.sample')
 
       assert_selector '#samples-table table tbody tr', count: 3
