@@ -115,29 +115,6 @@ module Projects
       assert_response :unprocessable_entity
     end
 
-    test 'should destroy sample' do
-      assert_difference('Sample.count', -1) do
-        delete namespace_project_sample_url(@namespace, @project, @sample1),
-               as: :turbo_stream
-      end
-    end
-
-    test 'should not destroy sample, if it does not belong to the project' do
-      delete namespace_project_sample_url(@namespace, @project, @sample23)
-
-      assert_response :not_found
-    end
-
-    test 'should not destroy sample, if the current user is not allowed to modify the project' do
-      sign_in users(:ryan_doe)
-
-      assert_no_difference('Sample.count') do
-        delete namespace_project_sample_url(@namespace, @project, @sample1)
-      end
-
-      assert_response :unauthorized
-    end
-
     test 'show sample history listing' do
       @sample1.create_logidze_snapshot!
 
@@ -153,47 +130,6 @@ module Projects
                                                                                              format: :turbo_stream)
 
       assert_response :success
-    end
-
-    test 'new_destroy_multiple with proper authorization' do
-      get new_destroy_multiple_namespace_project_samples_path(@namespace, @project)
-
-      assert_response :success
-    end
-
-    test 'new_destroy_multiple without proper authorization' do
-      sign_in users(:jane_doe)
-      get new_destroy_multiple_namespace_project_samples_path(@namespace, @project)
-
-      assert_response :unauthorized
-    end
-
-    test 'successfully deleting multiple samples' do
-      sample2 = samples(:sample2)
-      sample30 = samples(:sample30)
-      delete destroy_multiple_namespace_project_samples_url(@namespace, @project), params: { multiple_deletion: {
-        sample_ids: [@sample1.id, sample2.id, sample30.id]
-      } }, as: :turbo_stream
-
-      assert_response :success
-    end
-
-    test 'partially deleting multiple samples' do
-      sample2 = samples(:sample2)
-      sample30 = samples(:sample30)
-      delete destroy_multiple_namespace_project_samples_url(@namespace, @project), params: { multiple_deletion: {
-        sample_ids: [@sample1.id, sample2.id, sample30.id, 'invalid_sample_id']
-      } }, as: :turbo_stream
-
-      assert_response :multi_status
-    end
-
-    test 'deleting no samples in destroy_multiple ' do
-      delete destroy_multiple_namespace_project_samples_url(@namespace, @project), params: { multiple_deletion: {
-        sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
-      } }, as: :turbo_stream
-
-      assert_response :unprocessable_entity
     end
 
     test 'should list samples' do

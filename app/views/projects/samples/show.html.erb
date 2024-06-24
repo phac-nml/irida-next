@@ -15,10 +15,10 @@
       <% if allowed_to?(:destroy?, @project) %>
         <%= link_to(
           t("projects.samples.show.remove_button"),
-          namespace_project_sample_path(id: @sample.id, format: :html),
+          new_namespace_project_samples_deletion_path(
+            sample_id: @sample.id, deletion_type: 'single', from_page: 'show'),
           data: {
-            turbo_method: :delete,
-            turbo_confirm: t("projects.samples.show.remove_button_confirmation"),
+            "turbo-prefetch": false,
           },
           class: "button button--state-default button--size-default",
         ) %>
