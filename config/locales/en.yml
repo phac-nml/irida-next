@@ -1318,28 +1318,27 @@ en:
         description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
         apply: Apply filter
         remove_tag: Remove
-      deletions:
-        new_deletion_dialog:
-          title: Delete Sample
-          description: Are you sure you want to delete sample '%{sample_name}'?
-          submit_button: Remove
-        new_multiple_deletions_dialog:
-            description:
-              zero: No samples have been selected for deletion
-              singular: "The following sample has been selected for deletion:"
-              plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
-            id: ID
-            loading: Loading...
-            name: Name
-            samples: Samples
-            spinner: Deleting samples. This may take a while...
-            submit_button: Confirm
-            title: Delete Samples
-        destroy_multiple:
-          no_deleted_samples: Selected samples could not be deleted
-          partial_error: "%{not_deleted} samples could not be deleted"
-          partial_success: "%{deleted} samples were successfully deleted"
-          success: Samples were successfully deleted
+      delete_single_sample_dialog:
+        title: Delete Sample
+        description: Are you sure you want to delete sample '%{sample_name}'?
+        submit_button: Remove
+      delete_multiple_samples_dialog:
+          description:
+            zero: No samples have been selected for deletion
+            singular: "The following sample has been selected for deletion:"
+            plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
+          id: ID
+          loading: Loading...
+          name: Name
+          samples: Samples
+          spinner: Deleting samples. This may take a while...
+          submit_button: Confirm
+          title: Delete Samples
+      destroy_multiple:
+        no_deleted_samples: Selected samples could not be deleted
+        partial_error: "%{not_deleted} samples could not be deleted"
+        partial_success: "%{deleted} samples were successfully deleted"
+        success: Samples were successfully deleted
     workflow_executions:
       cancel:
         error: "Could not cancel workflow %{workflow_name}"

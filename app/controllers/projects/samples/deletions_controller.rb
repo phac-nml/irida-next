@@ -4,55 +4,39 @@ module Projects
   module Samples
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::Samples::ApplicationController
-      # before_action :sample, only: %i[destroy]
+      before_action :sample, only: %i[destroy]
       # before_action :current_page
-      # before_action :set_search_params, only: %i[destroy destroy_multiple]
+      before_action :set_search_params, only: %i[destroy destroy_multiple]
 
       def new
+        puts params
         if params['deletion_type'] == 'single'
-          @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
           render turbo_stream: turbo_stream.update('samples_dialog',
-                                                   partial: 'new_deletion_dialog',
+                                                   partial: 'new_deletions_modal',
                                                    locals: {
                                                      open: true
                                                    }), status: :ok
         else
           render turbo_stream: turbo_stream.update('samples_dialog',
-                                                   partial: 'new_multiple_deletions_dialog',
+                                                   partial: 'new_multiple_deletions_modal',
                                                    locals: {
                                                      open: true
                                                    }), status: :ok
         end
       end
 
-      def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-        puts params
-        puts hi
-        ::Samples::DestroyService.new(@sample, current_user).execute
-        @pagy, @samples = pagy(load_samples)
-        @q = load_samples.ransack(params[:q])
-
-        if @sample.deleted?
-          respond_to do |format|
-            format.html do
-              flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
-              redirect_to namespace_project_samples_path(format: :html)
-            end
+      def destroy
+        metadata = ::Samples::Metadata::UpdateService.new(@project, @sample, current_user,
+                                                          deletion_params).execute
+        respond_to do |format|
+          if metadata[:deleted].count.positive?
             format.turbo_stream do
-              fields_for_namespace(
-                namespace: @project.namespace,
-                show_fields: params[:q] && params[:q][:metadata].to_i == 1
-              )
               render status: :ok, locals: { type: 'success',
-                                            message: t('.success', sample_name: @sample.name,
-                                                                   project_name: @project.namespace.human_name) }
+                                            message: t('.success', deleted_key: metadata[:deleted][0]) }
             end
-          end
-        else
-          respond_to do |format|
+          else
             format.turbo_stream do
-              render status: :unprocessable_entity,
-                     locals: { type: 'alert', message: @sample.errors.full_messages.first }
+              render status: :unprocessable_entity, locals: { type: 'error', message: t('.error') }
             end
           end
         end
