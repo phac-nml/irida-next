@@ -185,7 +185,7 @@
                 <% if @row_actions[:destroy] %>
                   <%= link_to(
                     t(:"projects.samples.index.remove_button"),
-                    namespace_project_sample_new_destroy_path(sample_id: sample.id),
+                    namespace_project_samples_deletion_path(sample_id: sample.id, deletion_type: 'single'),
                     data: {
                       "turbo-prefetch": false,
                     },

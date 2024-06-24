@@ -60,9 +60,9 @@
       <% end %>
       <% if allowed_to?(:destroy_sample?, @project) %>
        <%= link_to t(".delete_samples_button"),
-        new_destroy_multiple_namespace_project_samples_path,
+        namespace_project_samples_deletion_path(deletion_type: 'multiple'),
         data: {
-          turbo_stream: true,
+          turbo_stream: false,
           controller: "action-link",
           action_link_required_value: 1,
         },
