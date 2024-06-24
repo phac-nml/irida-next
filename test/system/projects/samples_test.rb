@@ -2197,14 +2197,14 @@ module Projects
         click_on I18n.t('projects.samples.delete_multiple_samples_dialog.submit_button')
       end
 
+      assert_text I18n.t('projects.samples.destroy_multiple.success')
+
       within '#samples-table' do
         assert_selector 'table tbody tr', count: 2
         assert_no_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name
       end
-
-      assert_text I18n.t('projects.samples.destroy_multiple.success')
     end
 
     test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
