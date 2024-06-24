@@ -1975,9 +1975,9 @@ module Projects
       within '#list-filter-dialog' do
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
         fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.puid}, #{@sample2.puid}"
-        assert_selector 'span.label', count: 2
+        assert_selector 'span.label', count: 1
         assert_selector 'span.label', text: @sample1.puid
-        assert_selector 'span.label', text: @sample2.puid
+        find("input[name='q[name_or_puid_in][]']").text @sample2.puid
         click_button I18n.t(:'components.list_filter.apply')
       end
       within '#samples-table table tbody' do

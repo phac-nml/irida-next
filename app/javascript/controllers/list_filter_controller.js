@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 const BACKSPACE = 8;
+const SPACE = 32;
 const COMMA = 188;
 
 export default class extends Controller {
@@ -15,7 +16,7 @@ export default class extends Controller {
     if (event.keyCode === BACKSPACE && value.length === 0) {
       // Handle backspace event when input is empty, otherwise just let
       this.#handleBackspace(event);
-    } else if (value.length === 0 && event.keyCode === COMMA) {
+    } else if (value.length === 0 && (event.keyCode === COMMA || event.keyCode === SPACE)) {
       // Handle when a `,` is entered alone, that is do nothing
       event.preventDefault();
     } else if (event.keyCode === COMMA) {
