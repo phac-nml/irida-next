@@ -41,7 +41,7 @@
             </div>
           </div>
 
-      <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_deletion_path, method: :delete,
+      <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_path, method: :delete,
             data: {
               controller: "spinner",
               action:"turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd"
