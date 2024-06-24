@@ -78,76 +78,6 @@ module Projects
       end
     end
 
-    def new_destroy
-      authorize! @project, to: :destroy_sample?
-      render turbo_stream: turbo_stream.update('samples_dialog',
-                                               partial: 'delete_single_sample_dialog',
-                                               locals: {
-                                                 open: true
-                                               }), status: :ok
-    end
-
-    # def destroy
-    #   ::Samples::DestroyService.new(@sample, current_user).execute
-    #   @pagy, @samples = pagy(load_samples)
-    #   @q = load_samples.ransack(params[:q])
-
-    #   if @sample.deleted?
-    #     respond_to do |format|
-    #       format.html do
-    #         flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
-    #         redirect_to namespace_project_samples_path(format: :html)
-    #       end
-    #       format.turbo_stream do
-    #         fields_for_namespace(
-    #           namespace: @project.namespace,
-    #           show_fields: params[:q] && params[:q][:metadata].to_i == 1
-    #         )
-    #         render status: :ok, locals: { type: 'success',
-    #                                       message: t('.success', sample_name: @sample.name,
-    #                                                              project_name: @project.namespace.human_name) }
-    #       end
-    #     end
-    #   else
-    #     respond_to do |format|
-    #       format.turbo_stream do
-    #         render status: :unprocessable_entity,
-    #                locals: { type: 'alert', message: @sample.errors.full_messages.first }
-    #       end
-    #     end
-    #   end
-    # end
-
-    def new_destroy_multiple
-      authorize! @project, to: :destroy_sample?
-      render turbo_stream: turbo_stream.update('samples_dialog',
-                                               partial: 'delete_multiple_samples_dialog',
-                                               locals: {
-                                                 open: true
-                                               }), status: :ok
-    end
-
-    def destroy_multiple
-      authorize! @project, to: :destroy_sample?
-
-      samples_to_delete_count = destroy_multiple_params['sample_ids'].count + 1
-
-      deleted_samples_count = ::Samples::MultiDestroyService.new(@project, sample_ids, current_user).execute
-
-      # No selected samples deleted
-      if deleted_samples_count.zero?
-        render status: :unprocessable_entity, locals: { type: :error, message: t('.no_deleted_samples') }
-      # Partial sample deletion
-      elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
-        render status: :multi_status,
-               locals: { messages: get_multi_status_destroy_multiple_message(deleted_samples_count,
-                                                                             samples_to_delete_count) }
-      # All samples deleted successfully
-      else
-        render status: :ok, locals: { type: :success, message: t('.success') }
-      end
-    end
-
     def select
       authorize! @project, to: :sample_listing?
       @samples = []
@@ -221,21 +151,6 @@ module Projects
         namespace: @project.namespace,
         show_fields: params[:q] && params[:q][:metadata].to_i == 1
       )
-    end
-
-    def destroy_multiple_params
-      params.require(:multiple_deletion).permit(sample_ids: [])
-    end
-
-    def get_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
-      [
-        { type: :success,
-          message: t('.partial_success',
-                     deleted: "#{deleted_samples_count}/#{samples_to_delete_count}") },
-        { type: :error,
-          message: t('.partial_error',
-                     not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}") }
-      ]
     end
   end
 end
