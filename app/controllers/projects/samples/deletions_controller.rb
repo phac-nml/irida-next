@@ -4,7 +4,6 @@ module Projects
   module Samples
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::ApplicationController
-      include Metadata
       # before_action :sample, only: %i[new destroy]
       # before_action :current_page
       before_action :set_search_params, only: %i[destroy destroy_multiple]
@@ -39,7 +38,6 @@ module Projects
               redirect_to namespace_project_samples_path(format: :html)
             end
             format.turbo_stream do
-              @fields = !(params[:q] && params[:q][:metadata].to_i == 1) || @project.namespace.nil? ? [] : @project.namespace.metadata_fields
               render status: :ok, locals: { type: 'success',
                                             message: t('.success', sample_name: @sample.name,
                                                                    project_name: @project.namespace.human_name) }
