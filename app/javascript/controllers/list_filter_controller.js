@@ -10,9 +10,6 @@ export default class extends Controller {
 
   handleInput(event) {
     const value = event.target.value.trim();
-
-    console.log(value);
-
     if (event.keyCode === BACKSPACE && value.length === 0) {
       // Handle backspace event when input is empty, otherwise just let
       this.#handleBackspace(event);
