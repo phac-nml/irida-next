@@ -21,8 +21,8 @@ module Projects
 
         ::Samples::DestroyService.new(@sample, current_user).execute
 
-        if @sample.deleted?
-          respond_to do |format|
+        respond_to do |format|
+          if @sample.deleted?
             format.html do
               flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
               redirect_to namespace_project_samples_path(format: :html)
@@ -32,9 +32,7 @@ module Projects
                                             message: t('.success', sample_name: @sample.name,
                                                                    project_name: @project.namespace.human_name) }
             end
-          end
-        else
-          respond_to do |format|
+          else
             format.turbo_stream do
               render status: :unprocessable_entity,
                      locals: { type: 'alert', message: @sample.errors.full_messages.first }
@@ -69,7 +67,7 @@ module Projects
 
       def sample
         # Necessary return for new when deletion_type = 'multiple', as has no params[:sample_id] defined
-        return if params[:sample_id].nil?
+        return if params[:deletion_type] == 'multiple'
 
         @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
       end
