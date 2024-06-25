@@ -13,7 +13,7 @@ module Samples
     end
 
     def execute
-      authorize! @project, to: :destroy_sample?
+      authorize! project, to: :destroy_sample?
 
       sample.nil? ? destroy_multiple : destroy_single
     end
