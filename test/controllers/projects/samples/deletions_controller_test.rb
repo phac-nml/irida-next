@@ -41,10 +41,31 @@ module Projects
       assert_response :unauthorized
     end
 
+    test 'new destroy with single type with proper authorization' do
+      get new_namespace_project_samples_deletion_path(@namespace, @project),
+          params: {
+            deletion_type: 'single',
+            sample_id: @sample1.id
+          }
+
+      assert_response :success
+    end
+
+    test 'new destroy with single type without proper authorization' do
+      sign_in users(:jane_doe)
+      get new_namespace_project_samples_deletion_path(@namespace, @project),
+          params: {
+            deletion_type: 'single',
+            sample_id: @sample1.id
+          }
+
+      assert_response :unauthorized
+    end
+
     test 'new destroy with multiple type with proper authorization' do
       get new_namespace_project_samples_deletion_path(@namespace, @project),
           params: {
-            'deletion type' => 'multiple'
+            deletion_type: 'multiple'
           }
 
       assert_response :success
@@ -54,7 +75,7 @@ module Projects
       sign_in users(:jane_doe)
       get new_namespace_project_samples_deletion_path(@namespace, @project),
           params: {
-            'deletion type' => 'multiple'
+            deletion_type: 'multiple'
           }
 
       assert_response :unauthorized
@@ -88,12 +109,28 @@ module Projects
       assert_response :multi_status
     end
 
-    test 'deleting no samples in destroy_multiple ' do
+    test 'deleting no samples in destroy_multiple' do
       assert_no_difference('Sample.count') do
         delete destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
                params: {
                  multiple_deletion: {
                    sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
+                 }
+               }, as: :turbo_stream
+      end
+      assert_response :unprocessable_entity
+    end
+
+    test 'deleting no samples in destroy_multiple with valid sample ids but do not belong to project' do
+      sample4 = samples(:sample4)
+      sample5 = samples(:sample5)
+      sample6 = samples(:sample6)
+
+      assert_no_difference('Sample.count') do
+        delete destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
+               params: {
+                 multiple_deletion: {
+                   sample_ids: [sample4.id, sample5.id, sample6.id]
                  }
                }, as: :turbo_stream
       end

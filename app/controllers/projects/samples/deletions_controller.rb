@@ -55,8 +55,8 @@ module Projects
 
         samples_to_delete_count = destroy_multiple_params['sample_ids'].count
 
-        deleted_samples_count = ::Samples::MultiDestroyService.new(@project, destroy_multiple_params['sample_ids'],
-                                                                   current_user).execute
+        deleted_samples_count = ::Samples::MultipleDestroyService.new(@project, destroy_multiple_params['sample_ids'],
+                                                                      current_user).execute
 
         # No selected samples deleted
         if deleted_samples_count.zero?

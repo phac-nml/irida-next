@@ -2,7 +2,7 @@
 
 module Samples
   # Service used to Delete Multiple Samples
-  class MultiDestroyService < BaseService
+  class MultipleDestroyService < BaseService
     attr_accessor :project, :sample_ids
 
     def initialize(project, sample_ids, user = nil, params = {})
@@ -18,7 +18,7 @@ module Samples
       samples_to_delete_count = samples.count
 
       samples.each do |sample|
-        sample.project.namespace.update_metadata_summary_by_sample_deletion(sample) if sample.deleted?
+        sample.project.namespace.update_metadata_summary_by_sample_deletion(sample)
       end
 
       samples.destroy_all
