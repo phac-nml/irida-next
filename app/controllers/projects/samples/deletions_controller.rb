@@ -64,13 +64,6 @@ module Projects
 
       private
 
-      def sample
-        # Necessary return for new when deletion_type = 'multiple', as has no params[:sample_id] defined
-        return if params[:deletion_type] == 'multiple'
-
-        @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
-      end
-
       def new_dialog_partial
         @partial = params['deletion_type'] == 'single' ? 'new_deletion_dialog' : 'new_multiple_deletions_dialog'
       end
