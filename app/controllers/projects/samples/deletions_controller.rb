@@ -4,11 +4,15 @@ module Projects
   module Samples
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::ApplicationController
-      before_action :sample, only: %i[new destroy]
       before_action :new_dialog_partial, only: :new
 
       def new
         authorize! @project, to: :destroy_sample?
+
+        if params[:deletion_type] == 'single'
+          @sample = Sample.find_by(id: params[:sample_id], project_id: project.id) || not_found
+        end
+
         render turbo_stream: turbo_stream.update('samples_dialog',
                                                  partial: @partial,
                                                  locals: {
@@ -17,10 +21,7 @@ module Projects
       end
 
       def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-        authorize! @project, to: :destroy_sample?
-
-        ::Samples::DestroyService.new(@sample, current_user).execute
-
+        @sample = ::Samples::DestroyService.new(@project, params[:sample_id], current_user).execute
         respond_to do |format|
           if @sample.deleted?
             format.html do
@@ -42,12 +43,10 @@ module Projects
       end
 
       def destroy_multiple
-        authorize! @project, to: :destroy_sample?
-
         samples_to_delete_count = destroy_multiple_params['sample_ids'].count
 
-        deleted_samples_count = ::Samples::MultipleDestroyService.new(@project, destroy_multiple_params['sample_ids'],
-                                                                      current_user).execute
+        deleted_samples_count = ::Samples::DestroyService.new(@project, destroy_multiple_params['sample_ids'],
+                                                              current_user).execute
 
         # No selected samples deleted
         if deleted_samples_count.zero?
