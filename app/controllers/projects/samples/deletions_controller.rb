@@ -5,22 +5,15 @@ module Projects
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::ApplicationController
       before_action :sample, only: %i[new destroy]
+      before_action :new_dialog_partial, only: :new
 
       def new
         authorize! @project, to: :destroy_sample?
-        if params['deletion_type'] == 'single'
-          render turbo_stream: turbo_stream.update('samples_dialog',
-                                                   partial: 'new_deletion_dialog',
-                                                   locals: {
-                                                     open: true
-                                                   }), status: :ok
-        else
-          render turbo_stream: turbo_stream.update('samples_dialog',
-                                                   partial: 'new_multiple_deletions_dialog',
-                                                   locals: {
-                                                     open: true
-                                                   }), status: :ok
-        end
+        render turbo_stream: turbo_stream.update('samples_dialog',
+                                                 partial: @partial,
+                                                 locals: {
+                                                   open: true
+                                                 }), status: :ok
       end
 
       def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
@@ -79,6 +72,10 @@ module Projects
         return if params[:sample_id].nil?
 
         @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
+      end
+
+      def new_dialog_partial
+        @partial = params['deletion_type'] == 'single' ? 'new_deletion_dialog' : 'new_multiple_deletions_dialog'
       end
 
       def destroy_multiple_params
