@@ -62,9 +62,12 @@ module Projects
     test 'successfully deleting multiple samples' do
       sample2 = samples(:sample2)
       sample30 = samples(:sample30)
-      delete destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project), params: { multiple_deletion: {
-        sample_ids: [@sample1.id, sample2.id, sample30.id]
-      } }, as: :turbo_stream
+      delete destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
+             params: {
+               multiple_deletion: {
+                 sample_ids: [@sample1.id, sample2.id, sample30.id]
+               }
+             }, as: :turbo_stream
 
       assert_response :success
     end
