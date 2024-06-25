@@ -741,7 +741,7 @@ en:
           link_leave_group_aria_label: "Leave group button"
         inherited_from: "Inherited from"
         search:
-          placeholder: Filter by username or access level
+          placeholder: Filter by username
         sorting:
           access_level_asc: Access level
           access_level_desc: Access level, descending
