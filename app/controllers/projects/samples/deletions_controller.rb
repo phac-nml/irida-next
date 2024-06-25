@@ -4,15 +4,11 @@ module Projects
   module Samples
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::ApplicationController
+      before_action :sample, only: %i[new destroy]
       before_action :new_dialog_partial, only: :new
 
       def new
         authorize! @project, to: :destroy_sample?
-
-        if params[:deletion_type] == 'single'
-          @sample = Sample.find_by(id: params[:sample_id], project_id: project.id) || not_found
-        end
-
         render turbo_stream: turbo_stream.update('samples_dialog',
                                                  partial: @partial,
                                                  locals: {
@@ -21,7 +17,8 @@ module Projects
       end
 
       def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-        @sample = ::Samples::DestroyService.new(@project, params[:sample_id], current_user).execute
+        ::Samples::DestroyService.new(@project, current_user, { sample: @sample }).execute
+
         respond_to do |format|
           if @sample.deleted?
             format.html do
@@ -45,8 +42,7 @@ module Projects
       def destroy_multiple
         samples_to_delete_count = destroy_multiple_params['sample_ids'].count
 
-        deleted_samples_count = ::Samples::DestroyService.new(@project, destroy_multiple_params['sample_ids'],
-                                                              current_user).execute
+        deleted_samples_count = ::Samples::DestroyService.new(@project, current_user, destroy_multiple_params).execute
 
         # No selected samples deleted
         if deleted_samples_count.zero?
@@ -63,6 +59,13 @@ module Projects
       end
 
       private
+
+      def sample
+        # Necessary return for new when deletion_type = 'multiple', as has no params[:sample_id] defined
+        return if params[:deletion_type] == 'multiple'
+
+        @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
+      end
 
       def new_dialog_partial
         @partial = params['deletion_type'] == 'single' ? 'new_deletion_dialog' : 'new_multiple_deletions_dialog'

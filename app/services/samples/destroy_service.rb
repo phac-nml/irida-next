@@ -3,24 +3,24 @@
 module Samples
   # Service used to Delete Samples
   class DestroyService < BaseService
-    attr_accessor :sample
+    attr_accessor :sample, :sample_ids, :project
 
-    def initialize(project, sample_ids, user = nil, params = {})
-      super(user, params.except(:sample, :id))
+    def initialize(project, user = nil, params = {})
+      super(user, params)
       @project = project
-      @sample_ids = sample_ids
+      @sample = params[:sample] if params[:sample]
+      @sample_ids = params[:sample_ids] if params[:sample_ids]
     end
 
     def execute
       authorize! @project, to: :destroy_sample?
 
-      @sample_ids.is_a?(Array) ? destroy_multiple : destroy_single
+      sample.nil? ? destroy_multiple : destroy_single
     end
 
     private
 
     def destroy_single
-      sample = Sample.find(@sample_ids)
       sample.destroy
 
       update_metadata_summary(sample)
@@ -29,7 +29,7 @@ module Samples
     end
 
     def destroy_multiple
-      samples = Sample.where(id: @sample_ids).where(project_id: @project.id)
+      samples = Sample.where(id: sample_ids).where(project_id: project.id)
       samples_to_delete_count = samples.count
 
       samples = samples.destroy_all
