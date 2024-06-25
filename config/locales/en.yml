@@ -1754,3 +1754,11 @@ en:
         loading: Loading...
       spinner:
         loading: Loading...
+  members:
+    table_component:
+      user_email: Username
+      access_level: Access level
+      namespace_name: Source
+      created_at: Access granted
+      expires_at: Expiration
+      action: Actions
