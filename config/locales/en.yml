@@ -1066,6 +1066,17 @@ en:
           link_remove_aria_label: "Remove project member %{member} link"
           link_leave_project_aria_label: "Leave project link"
         inherited_from: "Inherited from"
+        search:
+          placeholder: Filter by username
+        sorting:
+          access_level_asc: Access level
+          access_level_desc: Access level, descending
+          created_at_desc: Newest access granted
+          created_at_asc: Oldest access granted
+          namespace_name_asc: Source
+          namespace_name_desc: Source, descending
+          user_email_asc: Username
+          user_email_desc: Username, descending
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         table_header:
