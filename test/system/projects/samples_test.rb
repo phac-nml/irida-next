@@ -2154,9 +2154,9 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.delete_multiple_samples_dialog.title')
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
         assert_text I18n.t(
-          'projects.samples.delete_multiple_samples_dialog.description.plural'
+          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '3'
         assert_text @sample1.name
         assert_text @sample1.puid
@@ -2165,7 +2165,7 @@ module Projects
         assert_text @sample3.name
         assert_text @sample3.puid
 
-        click_on I18n.t('projects.samples.delete_multiple_samples_dialog.submit_button')
+        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
       assert_text I18n.t('projects.samples.destroy_multiple.success')
 
@@ -2191,13 +2191,13 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.delete_multiple_samples_dialog.title')
-        assert_text I18n.t('projects.samples.delete_multiple_samples_dialog.description.singular',
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
                            sample_name: @sample1.name)
-        click_on I18n.t('projects.samples.delete_multiple_samples_dialog.submit_button')
+        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.destroy_multiple.success')
+      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
       within '#samples-table' do
         assert_selector 'table tbody tr', count: 2
@@ -2240,16 +2240,16 @@ module Projects
 
       click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.delete_multiple_samples_dialog.title')
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
         assert_text I18n.t(
-          'projects.samples.delete_multiple_samples_dialog.description.plural'
+          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '2'
         assert_text @sample2.name
         assert_text @sample3.name
         assert_no_text @sample1.name
-        click_on I18n.t('projects.samples.delete_multiple_samples_dialog.submit_button')
+        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
-      assert_text I18n.t('projects.samples.destroy_multiple.success')
+      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
       within '#project_samples_table' do
         assert_no_selector 'tr'
