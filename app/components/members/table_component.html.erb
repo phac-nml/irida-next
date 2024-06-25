@@ -1,0 +1,39 @@
+<%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+  <table
+    class="
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+      whitespace-nowrap
+    "
+  >
+    <thead
+      class="
+        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
+        dark:text-slate-400
+      "
+    >
+      <tr>
+        <% @columns.each_with_index do |column, index| %>
+          <%= render_cell(
+              tag: 'th',
+              scope: 'col',
+              classes: class_names('px-6 py-3')
+            ) do %>
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(".#{column}"),
+              url: helpers.sorting_url(@q, column),
+              field: column,
+            ) %>
+          <% end %>
+        <% end %>
+        <%= render_cell(
+              tag: 'th',
+              scope: 'col',
+              classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+            ) do %>
+          <%= t(".action") %>
+        <% end %>
+      </tr>
+    </thead>
+  </table>
+<% end %>
