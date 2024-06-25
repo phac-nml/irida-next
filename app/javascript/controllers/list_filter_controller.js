@@ -13,7 +13,10 @@ export default class extends Controller {
     if (event.keyCode === BACKSPACE && value.length === 0) {
       // Handle backspace event when input is empty, otherwise just let
       this.#handleBackspace(event);
-    } else if (value.length === 0 && (event.keyCode === COMMA || event.keyCode === SPACE)) {
+    } else if (
+      value.length === 0 &&
+      (event.keyCode === COMMA || event.keyCode === SPACE)
+    ) {
       // Handle when a `,` is entered alone, that is do nothing
       event.preventDefault();
     } else if (event.keyCode === COMMA) {
@@ -52,6 +55,14 @@ export default class extends Controller {
   afterSubmit() {
     if (this.hasSelectionOutlet) {
       this.selectionOutlet.clear();
+    }
+    // check to see if there is any text in the input
+    if (this.inputTarget.value.length > 0) {
+      this.tagsTarget.insertBefore(
+        this.#formatTag(this.inputTarget.value),
+        this.inputTarget,
+      );
+      this.inputTarget.value = "";
     }
     this.#updateCount();
   }
