@@ -6,47 +6,47 @@
     <div class="flex flex-row">
       <% if @workflow_execution.completed? %>
         <%= link_to t(".create_export_button"),
-        new_data_export_path(
-          export_type: "analysis",
-          workflow_execution_id: @workflow_execution.id
-        ),
-        data: {
-          turbo_stream: true
-        },
-        class: "button button--size-default button--state-default mr-2" %>
+                    new_data_export_path(
+                      export_type: "analysis",
+                      workflow_execution_id: @workflow_execution.id
+                    ),
+                    data: {
+                      turbo_stream: true
+                    },
+                    class: "button button--size-default button--state-default mr-2" %>
       <% else %>
         <%= link_to t(".create_export_button"),
-        new_data_export_path(
-          export_type: "analysis",
-          workflow_execution_id: @workflow_execution.id
-        ),
-        data: {
-          turbo_stream: true
-        },
-        class:
-          "button button--size-default button--state-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300" %>
+                    new_data_export_path(
+                      export_type: "analysis",
+                      workflow_execution_id: @workflow_execution.id
+                    ),
+                    data: {
+                      turbo_stream: true
+                    },
+                    class:
+                      "button button--size-default button--state-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300" %>
       <% end %>
       <% if @workflow_execution.cancellable? %>
         <%= link_to(
-          t("workflow_executions.show.cancel_button"),
-          cancel_workflow_execution_path(id: @workflow_execution.id),
-          data: {
-            turbo_method: :put,
-            turbo_confirm: t("workflow_executions.show.cancel_button_confirmation")
-          },
-          class: "button button--state-default button--size-default mr-1"
-        ) %>
+              t("workflow_executions.show.cancel_button"),
+              cancel_workflow_execution_path(id: @workflow_execution.id),
+              data: {
+                turbo_method: :put,
+                turbo_confirm: t("workflow_executions.show.cancel_button_confirmation")
+              },
+              class: "button button--state-default button--size-default mr-1"
+            ) %>
       <% end %>
       <% if @workflow_execution.deletable? %>
         <%= link_to(
-          t("workflow_executions.show.remove_button"),
-          workflow_execution_path(@workflow_execution, redirect: true),
-          data: {
-            turbo_method: :delete,
-            turbo_confirm: t("workflow_executions.show.remove_button_confirmation")
-          },
-          class: "button button--state-default button--size-default mr-1"
-        ) %>
+              t("workflow_executions.show.remove_button"),
+              workflow_execution_path(@workflow_execution, redirect: true),
+              data: {
+                turbo_method: :delete,
+                turbo_confirm: t("workflow_executions.show.remove_button_confirmation")
+              },
+              class: "button button--state-default button--size-default mr-1"
+            ) %>
       <% end %>
     </div>
   <% end %>
@@ -59,17 +59,24 @@
   <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "params"), selected: @tab == "params", controls: "workflow-execution-tabs") do %>
     <%= t(:"workflow_executions.show.tabs.params") %>
   <% end %>
+  <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "samplesheet"), selected: @tab == "samplesheet", controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.samplesheet") %>
+  <% end %>
   <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "files"), selected: @tab == "files", controls: "workflow-execution-tabs") do %>
     <%= t(:"workflow_executions.show.tabs.files") %>
   <% end %>
 
   <%= tabs.with_tab_content do %>
+    <section class="mt-4">
     <% if @tab == 'summary' || @tab == nil %>
       <%= render partial: "summary" %>
     <% elsif @tab == "params" %>
       <%= render partial: "params" %>
+      <% elsif @tab == 'samplesheet' %>
+        <%= render partial: 'samplesheet' %>
     <% elsif @tab == 'files' %>
       <%= render partial: "files" %>
     <% end %>
   <% end %>
+  </section>
 <% end %>

@@ -1,11 +1,9 @@
-<section class="mt-4">
-
-  <% @workflow.workflow_params.each do |item, definition| %>
-      <% definition[:properties].each do |name, property| %>
-        <% unless %[input].include? name.to_s %>
-          <div class="mb-4">
-            <p class="mb-1 text-sm font-medium text-slate-900 dark:text-white"><%= text_for(property[:description]) %></p>
-            <div class="flex mb-2 <%= name %>-param">
+<% @workflow.workflow_params.each do |item, definition| %>
+  <% definition[:properties].each do |name, property| %>
+    <% unless %[input].include? name.to_s %>
+      <div class="mb-4">
+        <p class="mb-1 text-sm font-medium text-slate-900 dark:text-white"><%= text_for(property[:description]) %></p>
+        <div class="flex mb-2 <%= name %>-param">
               <span
                 class="
                   font-mono
@@ -27,10 +25,10 @@
               >
                 --<%= name %>
               </span>
-              <input
-                type="text"
-                disabled
-                class="
+          <input
+            type="text"
+            disabled
+            class="
                   rounded-none
                   rounded-e-lg
                   bg-slate-50
@@ -52,11 +50,10 @@
                   dark:focus:ring-primary-500
                   dark:focus:border-primary-500
                 "
-                value="<%= formatted_workflow_param(property, @workflow_execution.workflow_params[name.to_s]) %>"
-              >
-            </div>
-          </div>
-        <% end %>
-      <% end %>
+            value="<%= formatted_workflow_param(property, @workflow_execution.workflow_params[name.to_s]) %>"
+          >
+        </div>
+      </div>
     <% end %>
-</section>
+  <% end %>
+<% end %>

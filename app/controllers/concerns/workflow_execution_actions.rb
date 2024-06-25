@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common workflow execution actions
-module WorkflowExecutionActions
+module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
@@ -10,7 +10,7 @@ module WorkflowExecutionActions
     before_action :workflow_execution, only: %i[show cancel destroy]
   end
 
-  TABS = %w[summary params files].freeze
+  TABS = %w[summary params samplesheet files].freeze
 
   def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
@@ -23,13 +23,16 @@ module WorkflowExecutionActions
   def show
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
-    if @tab == 'files'
+    case @tab
+    when 'files'
       @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
       @attachments = Attachment.where(attachable: @workflow_execution)
                                .or(Attachment.where(attachable: @samples_worfklow_executions))
-    elsif @tab == 'params'
+    when 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
-                                                    @workflow_execution.metadata['workflow_version'])
+                                                             @workflow_execution.metadata['workflow_version'])
+    when 'samplesheet'
+      format_samplesheet_params
     end
   end
 
@@ -79,6 +82,14 @@ module WorkflowExecutionActions
 
   private
 
+  def workflow_properties
+    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+                                                          @workflow_execution.metadata['workflow_version'])
+    return {} if workflow.blank?
+
+    workflow.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
+  end
+
   def set_default_tab
     @tab = 'summary'
 
@@ -97,5 +108,34 @@ module WorkflowExecutionActions
 
   def redirect_path
     raise NotImplementedError
+  end
+
+  def format_samplesheet_params
+    @samplesheet_headers = @workflow_execution.samples_workflow_executions&.first&.samplesheet_params&.keys
+    @samplesheet_rows = []
+    @workflow_execution.samples_workflow_executions.each do |swe|
+      attachments = format_attachment(swe.samplesheet_params)
+      samplesheet_params = swe.samplesheet_params
+
+      attachments.each do |key, value|
+        samplesheet_params[key] = value
+      end
+
+      @samplesheet_rows << @samplesheet_headers.index_with { |header| samplesheet_params[header] }
+    end
+  end
+
+  def format_attachment(samplesheet)
+    attachments = {}
+    # loop through samplesheet_params to fetch attachments
+    # probably stored as `gid://irida/Attachment/1234`
+    samplesheet.each do |key, value|
+      gid = GlobalID.parse(value)
+      next unless gid && gid.model_class == Attachment
+
+      attachment = GlobalID.find(gid)
+      attachments[key] = { name: attachment.file.filename, puid: attachment.puid }
+    end
+    attachments
   end
 end

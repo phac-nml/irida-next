@@ -1405,6 +1405,7 @@ en:
       tabs:
         summary: Summary
         params: Parameters
+        samplesheet: Samplesheet
         files: Files
       params:
         empty: This pipeline has no parameters.
@@ -1415,6 +1416,8 @@ en:
       workflow_version: Workflow Version
       created_at: Created
       updated_at: Last Updated
+    samples:
+      empty: No samples could be found for this workflow execution
     files:
       table_header:
         puid: ID
