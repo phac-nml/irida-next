@@ -35,7 +35,11 @@ module Projects
       sign_in users(:ryan_doe)
 
       assert_no_difference('Sample.count') do
-        delete namespace_project_samples_deletion_path(@namespace, @project, @sample1)
+        delete namespace_project_samples_deletion_path(@namespace, @project),
+               params: {
+                 deletion_type: 'single',
+                 sample_id: @sample1.id
+               }
       end
 
       assert_response :unauthorized
