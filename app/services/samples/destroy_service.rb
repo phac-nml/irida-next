@@ -24,8 +24,6 @@ module Samples
       sample.destroy
 
       update_metadata_summary(sample)
-
-      sample
     end
 
     def destroy_multiple
