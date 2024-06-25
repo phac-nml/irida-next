@@ -190,8 +190,8 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name,
-                                                             project_name: @project.namespace.human_name)
+      assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
+                                                                       project_name: @project.namespace.human_name)
 
       assert_no_selector '#samples-table table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
@@ -212,12 +212,12 @@ module Projects
       end
 
       within('dialog') do
-        assert_text I18n.t('projects.samples.delete_single_sample_dialog.description', sample_name: @sample1.name)
-        click_button I18n.t('projects.samples.delete_single_sample_dialog.submit_button')
+        assert_text I18n.t('projects.samples.deletions.new_deletion_dialog.description', sample_name: @sample1.name)
+        click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name,
-                                                             project_name: @project.namespace.human_name)
+      assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
+                                                                       project_name: @project.namespace.human_name)
 
       assert_no_selector '#samples-table table tbody tr', text: @sample1.puid
       assert_no_selector '#samples-table table tbody tr', text: @sample1.name
@@ -2167,7 +2167,7 @@ module Projects
 
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
-      assert_text I18n.t('projects.samples.destroy_multiple.success')
+      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
       within '#project_samples_table' do
         assert_no_selector 'tr'
@@ -2224,7 +2224,7 @@ module Projects
       end
 
       within 'dialog' do
-        click_button I18n.t('projects.samples.delete_single_sample_dialog.submit_button')
+        click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
 
       within '#samples-table' do
