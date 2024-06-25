@@ -3,6 +3,7 @@
   <%= dialog.with_section do %>
 
     <%= turbo_frame_tag("deletion-alert") %>
+
     <div
       data-controller="selection"
       data-selection-delete-id-param="<%= @sample.id %>"
@@ -10,11 +11,7 @@
       <p class="mb-4">
         <%= t(".description", sample_name: @sample.name) %>
       </p>
-
       <%= form_for(:deletion, url: namespace_project_samples_deletion_path(sample_id: @sample.id), method: :delete) do |form| %>
-        <% if defined?(from_page) %>
-        <%= hidden_field_tag "deletion[from_page]", from_page %>
-        <% end %>
         <%= form.submit t(".submit_button"),
                     class: "
                       button

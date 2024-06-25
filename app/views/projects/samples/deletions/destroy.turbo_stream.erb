@@ -3,24 +3,14 @@
 <% end %>
 
 <% if @sample.deleted? %>
-  <% if from_page == 'index' %>
-    <%= turbo_stream.update(
-      "samples_dialog",
-      partial: "new_deletion_dialog",
-      locals: {
-        open: false,
-      },
-    ) %>
+  <%= turbo_stream.update(
+    "samples_dialog",
+    partial: "new_deletion_dialog",
+    locals: {
+      open: false,
+    },
+  ) %>
 
-  <% else %>
-    <%= turbo_stream.update(
-      "sample_modal",
-      partial: "new_deletion_dialog",
-      locals: {
-        open: false,
-      },
-    ) %>
-  <% end %>
   <%= turbo_stream.replace "project_samples_table" do %>
     <%= turbo_frame_tag "project_samples_table",
     src: project_samples_path(@project, format: :turbo_stream) %>

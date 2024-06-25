@@ -5,19 +5,15 @@ module Projects
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::ApplicationController
       before_action :sample, only: %i[new destroy]
-      before_action :dialog_name, only: %i[new]
 
       def new
         authorize! @project, to: :destroy_sample?
-        puts params
         if params['deletion_type'] == 'single'
-          render turbo_stream: turbo_stream.update(@dialog_name,
+          render turbo_stream: turbo_stream.update('samples_dialog',
                                                    partial: 'new_deletion_dialog',
                                                    locals: {
-                                                     open: true,
-                                                     from_page: params['from_page']
+                                                     open: true
                                                    }), status: :ok
-
         else
           render turbo_stream: turbo_stream.update('samples_dialog',
                                                    partial: 'new_multiple_deletions_dialog',
@@ -29,22 +25,21 @@ module Projects
 
       def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         authorize! @project, to: :destroy_sample?
+
         ::Samples::DestroyService.new(@sample, current_user).execute
         @pagy, @samples = pagy(load_samples)
         @q = load_samples.ransack(params[:q])
 
         if @sample.deleted?
-          if params[:deletion][:from_page] == 'show'
-            flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
-            redirect_to namespace_project_samples_path(format: :html)
-          else
-            respond_to do |format|
-              format.turbo_stream do
-                render status: :ok, locals: { type: 'success',
-                                              message: t('.success', sample_name: @sample.name,
-                                                                     project_name: @project.namespace.human_name),
-                                              from_page: params[:deletion][:from_page] }
-              end
+          respond_to do |format|
+            format.html do
+              flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
+              redirect_to namespace_project_samples_path(format: :html)
+            end
+            format.turbo_stream do
+              render status: :ok, locals: { type: 'success',
+                                            message: t('.success', sample_name: @sample.name,
+                                                                   project_name: @project.namespace.human_name) }
             end
           end
         else
@@ -88,10 +83,8 @@ module Projects
         @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
       end
 
-      def dialog_name
-        return if params[:from_page].nil?
-
-        @dialog_name = params[:from_page] == 'index' ? 'samples_dialog' : 'sample_modal'
+      def set_search_params
+        @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
       end
 
       def destroy_multiple_params
