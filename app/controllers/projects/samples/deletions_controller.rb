@@ -27,8 +27,6 @@ module Projects
         authorize! @project, to: :destroy_sample?
 
         ::Samples::DestroyService.new(@sample, current_user).execute
-        @pagy, @samples = pagy(load_samples)
-        @q = load_samples.ransack(params[:q])
 
         if @sample.deleted?
           respond_to do |format|
@@ -81,10 +79,6 @@ module Projects
         return if params[:sample_id].nil?
 
         @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
-      end
-
-      def set_search_params
-        @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
       end
 
       def destroy_multiple_params

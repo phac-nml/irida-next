@@ -72,6 +72,7 @@ export default class extends Controller {
 
   #addOrRemove(add, storageValue) {
     const newStorageValue = this.getStoredSamples();
+
     if (add) {
       newStorageValue.push(storageValue);
     } else {
