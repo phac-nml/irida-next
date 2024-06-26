@@ -20,7 +20,7 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username').upcase
+      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
       assert_selector 'tr', count: 20 + header_row_count
 
@@ -43,7 +43,7 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username').upcase
+      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
       assert_selector 'tr', count: @members_count + header_row_count
 
