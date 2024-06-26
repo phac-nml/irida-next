@@ -2145,8 +2145,8 @@ module Projects
 
     test 'delete multiple samples' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table' do
-        assert_selector 'table tbody tr', count: 3
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name
@@ -2213,8 +2213,8 @@ module Projects
 
     test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table' do
-        assert_selector 'table tbody tr', count: 3
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name
@@ -2231,8 +2231,8 @@ module Projects
         click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
 
-      within '#samples-table' do
-        assert_selector 'table tbody tr', count: 2
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
         assert_no_text @sample1.name
         within 'table tbody' do
           assert all('input[type="checkbox"]')[0].checked?
