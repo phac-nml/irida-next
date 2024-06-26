@@ -2234,10 +2234,8 @@ module Projects
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 2
         assert_no_text @sample1.name
-        within 'table tbody' do
-          assert all('input[type="checkbox"]')[0].checked?
-          assert all('input[type="checkbox"]')[1].checked?
-        end
+        assert all('input[type="checkbox"]')[0].checked?
+        assert all('input[type="checkbox"]')[1].checked?
       end
 
       assert find('input#select-all').checked?
