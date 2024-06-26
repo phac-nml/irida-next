@@ -9,9 +9,6 @@ class WorkflowExecutionCleanupJob < ApplicationJob
                   workflow_execution.canceled? ||
                   workflow_execution.error?
 
-    # TODO: This is a temporary return to prevent over agressive cleanup until the bug is fixed
-    return
-
     WorkflowExecutions::CleanupService.new(workflow_execution).execute
   end
 end

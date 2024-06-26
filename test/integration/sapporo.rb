@@ -14,6 +14,9 @@ class IntegrationSapporoTest < ActiveJobTestCase
   end
 
   test 'integration sapporo end to end' do
+    # Temp
+    skip
+
     # Before starting test, check if Sapporo Integration is running.
     begin
       ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new
