@@ -33,7 +33,7 @@ module Projects
     end
 
     def current_page
-      @current_page = 'history'
+      @current_page = t(:'projects.sidebar.history').downcase
     end
   end
 end

@@ -120,7 +120,7 @@ module Projects
     end
 
     def current_page
-      @current_page = 'samples'
+      @current_page = t(:'projects.sidebar.samples').downcase
     end
 
     def set_default_sort

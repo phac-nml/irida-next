@@ -14,8 +14,8 @@
           <%= render section.with_item(
             url: group_samples_path(@group),
             icon: "beaker",
-            label: t(:"projects.sidebar.samples"),
-            selected: @current_page == t(:"projects.sidebar.samples").downcase
+            label: t(:"groups.sidebar.samples"),
+            selected: @current_page == t(:"groups.sidebar.samples").downcase
           ) %>
           <%= render section.with_item(
             url: group_members_path(@group),
