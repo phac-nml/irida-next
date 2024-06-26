@@ -24,7 +24,7 @@ module Projects
     end
 
     def current_page
-      @current_page = 'workflow executions'
+      @current_page = t(:'general.default_sidebar.workflows').downcase
     end
 
     def context_crumbs

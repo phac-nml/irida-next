@@ -163,7 +163,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                     when 'show'
                       'details'
                     else
-                      'settings'
+                      'general'
                     end
   end
 
