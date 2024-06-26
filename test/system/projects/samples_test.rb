@@ -120,6 +120,19 @@ module Projects
       assert_text 'checksum matches existing file'
     end
 
+    test 'user with role >= Maintainer not be able to upload uncompressed files to a Sample' do
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      within('dialog') do
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        click_on I18n.t('projects.samples.show.upload')
+        assert_text I18n.t('projects.samples.show.files_ignored')
+        assert_text 'test_file.fastq'
+      end
+    end
+
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do
       visit namespace_project_sample_url(@namespace, @project, @sample1)
 
