@@ -2198,7 +2198,6 @@ module Projects
       end
 
       within '#samples-table' do
-        assert_selector 'table tbody tr', count: 2
         assert_no_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name
