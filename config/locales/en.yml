@@ -753,13 +753,6 @@ en:
           user_email_desc: Username, descending
         shared_inherited: Shared inherited
         shared_direct: Shared direct
-        table_header:
-          username: Username
-          access_level: Access Level
-          source: Source
-          access_granted: Access Granted
-          expiration: Expiration
-          action: Action
         tabs:
           members: Members
           groups: Groups
