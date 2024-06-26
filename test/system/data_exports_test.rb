@@ -260,9 +260,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_sample_export_dialog.summary.sample.singular',
-               processing: I18n.t('data_exports.new_sample_export_dialog.summary.processing'),
-               ready: I18n.t('data_exports.new_sample_export_dialog.summary.ready'))
+        I18n.t('data_exports.new_sample_export_dialog.description.singular')
       )
 
       find('input#data_export_name').fill_in with: 'test data export'
@@ -309,9 +307,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_sample_export_dialog.summary.sample.plural',
-               processing: I18n.t('data_exports.new_sample_export_dialog.summary.processing'),
-               ready: I18n.t('data_exports.new_sample_export_dialog.summary.ready'))
+        I18n.t('data_exports.new_sample_export_dialog.description.plural')
       ).gsub! 'COUNT_PLACEHOLDER', '2'
 
       fill_in I18n.t('data_exports.new_sample_export_dialog.name_label'), with: 'test data export'
@@ -360,9 +356,7 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text @sample1.puid
       end
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_sample_export_dialog.summary.sample.singular',
-               processing: I18n.t('data_exports.new_sample_export_dialog.summary.processing'),
-               ready: I18n.t('data_exports.new_sample_export_dialog.summary.ready'))
+        I18n.t('data_exports.new_sample_export_dialog.description.singular')
       )
     end
   end
@@ -426,10 +420,8 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_analysis_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_analysis_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_analysis_export_dialog.summary.analysis_html',
-               id: @workflow_execution.id,
-               processing: I18n.t('data_exports.new_analysis_export_dialog.summary.processing'),
-               ready: I18n.t('data_exports.new_analysis_export_dialog.summary.ready'))
+        I18n.t('data_exports.new_analysis_export_dialog.description.analysis_html',
+               id: @workflow_execution.id)
       )
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click

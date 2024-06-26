@@ -4,12 +4,7 @@
     <%= form_for(:data_export, url: data_exports_path, method: :post) do |form| %>
       <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
         <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-          <%= t(
-            ".summary.analysis_html",
-            id: workflow_execution_id,
-            processing: t(".summary.processing"),
-            ready: t(".summary.ready"),
-          ) %>
+          <%= t(".description.analysis_html", id: workflow_execution_id) %>
         </p>
         <div class="form-field mb-4 mt-2">
           <%= form.label :name, t(".name_label") %>
@@ -21,18 +16,18 @@
                            checked: false,
                            class:
                              "w-4
-                                     h-4
-                                     mr-2.5
-                                     text-primary-600
-                                     bg-slate-100
-                                     border-slate-300
-                                     rounded
-                                     focus:ring-primary-500
-                                     dark:focus:ring-primary-600
-                                     dark:ring-offset-slate-800
-                                     focus:ring-2
-                                     dark:bg-slate-700
-                                     dark:border-slate-600",
+                                                         h-4
+                                                         mr-2.5
+                                                         text-primary-600
+                                                         bg-slate-100
+                                                         border-slate-300
+                                                         rounded
+                                                         focus:ring-primary-500
+                                                         dark:focus:ring-primary-600
+                                                         dark:ring-offset-slate-800
+                                                         focus:ring-2
+                                                         dark:bg-slate-700
+                                                         dark:border-slate-600",
                          },
                          true,
                          false %>

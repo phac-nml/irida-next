@@ -7,6 +7,8 @@
         data-infinite-scroll-selection-outlet='#samples-table'
         data-infinite-scroll-field-name-value="data_export[export_parameters][ids][]"
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
+        data-infinite-scroll-singular-value="<%= t(".description.singular") %>"
+        data-infinite-scroll-plural-value="<%= t(".description.plural") %>"
         class="font-normal text-slate-500 dark:text-slate-400"
       >
         <%= form_with(
@@ -18,18 +20,12 @@
 
         <div class="grid gap-4">
           <p
-            data-controller="data-export"
-            data-data-export-target="summary"
             data-infinite-scroll-target="summary"
-            data-data-export-singular-value="<%= t(".summary.sample.singular", processing: t(".summary.processing"), ready: t(".summary.ready")) %>"
-            data-data-export-plural-value="<%= t(".summary.sample.plural", processing: t(".summary.processing"), ready: t(".summary.ready")) %>"
-            class="text-base leading-relaxed"
+            class="
+              text-base leading-relaxed text-slate-500 dark:text-slate-400
+            "
           >
-            <%= t(
-              ".summary.sample.zero_html",
-              processing: t(".summary.processing"),
-              ready: t(".summary.ready"),
-            ) %>
+            <%= t(".description.zero_html") %>
           </p>
 
           <div>
@@ -62,10 +58,10 @@
                                  checked: false,
                                  class:
                                    "
-                w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
-                focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
-                focus:ring-2 dark:bg-slate-700 dark:border-slate-600
-                ",
+                                                                                                                                                                                                                                                                w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
+                                                                                                                                                                                                                                                                focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
+                                                                                                                                                                                                                                                                focus:ring-2 dark:bg-slate-700 dark:border-slate-600
+                                                                                                                                                                                                                                                                ",
                                },
                                true,
                                false %>

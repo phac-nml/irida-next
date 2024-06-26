@@ -34,9 +34,9 @@ export default class extends Controller {
     let summary = this.summaryTarget;
 
     if (numSelected == 1) {
-      summary.textContent = this.singularValue
+      summary.innerHTML = this.singularValue
     } else {
-      summary.textContent = this.pluralValue.replace(
+      summary.innerHTML = this.pluralValue.replace(
         "COUNT_PLACEHOLDER",
         numSelected
       )
