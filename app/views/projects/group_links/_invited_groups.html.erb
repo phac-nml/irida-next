@@ -40,6 +40,9 @@
       "
     >
       <%= render partial: "namespace_group_link", collection: @namespace_group_links %>
+      <% if false %>
+        <%= render partial: "table", locals: { namespace_group_links: @namespace_group_links } %>
+      <% end %>
     </tbody>
   </table>
   <div class="empty_state_message">
