@@ -68,7 +68,13 @@
           <td class="px-6 py-4">
             <% if (member.user != @current_user && @abilities[:update_member] &&
 member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-              <!-- TODO -->
+              <turbo-frame id="<%="member-#{member.id}-access-level"%>">
+                <%= render partial: "groups/members/access_level",
+                locals: {
+                  member: member,
+                  access_levels: @access_levels,
+                } %>
+              </turbo-frame>
             <% else %>
               <%= t(:"groups.members.index.access_level.level_#{member.access_level}") %>
             <% end %>
@@ -98,11 +104,15 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
               <% else %>
                 <%= viral_time_ago(original_time: member.created_at) %>
               <% end %>
-              <!-- TODO -->
+              <turbo-frame id="<%="member-#{member.id}-access-level-updated"%>">
+                <% if member.created_at < member.updated_at %>
+                  <%= render UpdatedComponent.new(updated_at: member.updated_at) %>
+                <% end %>
+              </turbo-frame>
             </div>
           </td>
           <td class="px-6 py-4">
-            <% if (member.user != @current_user &&  @abilities[:update_member] &&
+            <% if (member.user != @current_user && @abilities[:update_member] &&
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
               <%= form_with( model: member, url: group_member_path(id: member.id), method: :patch) do |form| %>
                 <div class="form-field datepicker" data-controller="datepicker">
