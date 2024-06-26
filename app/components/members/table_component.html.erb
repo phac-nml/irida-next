@@ -48,7 +48,7 @@
             <div class="text-slate-900 dark:text-slate-100 font-semibold"><%= member.user.email %>
               <% if @current_user == member.user %>
                 <%= viral_pill(
-                  text: t(:"activerecord.models.member.its_you"),
+                  text: t("activerecord.models.member.its_you"),
                   color: :green,
                   border: :green,
                   classes: "ml-2",
@@ -56,7 +56,7 @@
               <% else %>
                 <% if !member.user.human? %>
                   <%= viral_pill(
-                    text: t(:"activerecord.models.member.bot"),
+                    text: t("activerecord.models.member.bot"),
                     color: :transparent,
                     border: :true,
                     classes: "ml-2",
@@ -76,14 +76,14 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                 } %>
               </turbo-frame>
             <% else %>
-              <%= t(:"groups.members.index.access_level.level_#{member.access_level}") %>
+              <%= t("members.access_levels.level_#{member.access_level}") %>
             <% end %>
           </td>
           <td class="px-6 py-4">
             <% if !member_source.key?(:inherited_namespace_path) %>
               <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member_source[:label] %></div>
             <% else %>
-              <%= viral_tooltip(title: t(:"groups.members.index.inherited_from")) do %>
+              <%= viral_tooltip(title: t(".inherited_from")) do %>
                 <%= link_to member_source[:label],
                 member_source[:inherited_namespace_path],
                 data: {
@@ -128,13 +128,13 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                       ) %>
                     </div>
                     <%= form.text_field :expires_at,
-                                    placeholder: I18n.t("date.formats.iso"),
+                                    placeholder: t("date.formats.iso"),
                                     autocomplete: "off",
                                     value: member.expires_at,
                                     id: "group-member-#{member.id}-expiration",
                                     "data-datepicker-target": "datePicker",
                                     "data-datepicker-autosubmit": "true",
-                                    "aria-label": t(:"groups.members.index.aria_labels.expires_at") %>
+                                    "aria-label": t(".aria_labels.expires_at") %>
 
                     <input type="hidden" name="format" value="turbo_stream"/>
                   </div>

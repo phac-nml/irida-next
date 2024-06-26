@@ -673,7 +673,6 @@ en:
           level_30: Analyst
           level_40: Maintainer
           level_50: Owner
-        inherited_from: "Inherited from"
         table_header:
           group: Group
           source: Source
@@ -726,15 +725,6 @@ en:
         title: Members
         subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
         access_granted_by: "Access granted by %{grantor_email}"
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
-        aria_labels:
-          expires_at: Group member expiration
         actions:
           button_add_aria_label: Add new group member link
           link_remove_aria_label: "Remove group member %{member} link"
@@ -1748,6 +1738,13 @@ en:
       spinner:
         loading: Loading...
   members:
+    access_levels:
+      level_0: No Access
+      level_10: Guest
+      level_20: Uploader
+      level_30: Analyst
+      level_40: Maintainer
+      level_50: Owner
     table_component:
       user_email: Username
       access_level: Access level
@@ -1755,3 +1752,6 @@ en:
       created_at: Access granted
       expires_at: Expiration
       action: Action
+      aria_labels:
+        expires_at: Group member expiration
+      inherited_from: Inherited from

@@ -5,9 +5,9 @@
     size: :small,
     colour_string: "#{@namespace.name}-#{@namespace.id}",
     data: {
-      turbo: false
+      turbo: false,
     },
-    url: group_path(@namespace)
+    url: group_path(@namespace),
   ) %>
 <% else %>
   <%= viral_icon(name: :rectangle_stack, classes: "h-5 w-5 text-slate-400 mr-2") %>
@@ -16,9 +16,9 @@
     size: :small,
     colour_string: "#{@namespace.name}-#{@namespace.id}",
     data: {
-      turbo: false
+      turbo: false,
     },
-    url: project_path(@namespace.project)
+    url: project_path(@namespace.project),
   ) %>
 <% end %>
 
@@ -32,17 +32,17 @@
           <%= link_to @namespace.name,
           project_path(@namespace.project),
           data: {
-            turbo: false
+            turbo: false,
           } %>
         <% end %>
         <%= viral_pill(
           text:
             t(
-              :"groups.members.index.access_level.level_#{Member.effective_access_level(@namespace, Current.user)}"
+              :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
             ),
           color: "transparent",
           border: true,
-          classes: "ml-2"
+          classes: "ml-2",
         ) %>
       </div>
       <div class="description">
