@@ -28,12 +28,14 @@ export default class extends Controller {
     event.target.files = dt.files;
 
     if (ignoreFiles.length > 0 && this.hasAlertTarget) {
-      this.errorTarget.textContent = ignoreFiles
-        .map((file) => file.name)
-        .join(", ");
+      this.errorTarget.innerHTML = this.createBulletList(ignoreFiles);
       this.alertTarget.classList.remove("hidden");
     } else {
       this.alertTarget.classList.add("hidden");
     }
+  }
+
+  createBulletList(files) {
+    return files.map((file) => `<li>${file.name}</li>`).join("");
   }
 }
