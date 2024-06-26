@@ -462,7 +462,7 @@ module Projects
       assert_selector 'a', text: I18n.t('projects.samples.index.upload_file'), count: 0
     end
 
-    test 'visiting the index should not allow the current user only edit action' do
+    test 'visiting the index should  not allow the current user only edit action' do
       user = users(:joan_doe)
       login_as user
 
@@ -2180,8 +2180,8 @@ module Projects
 
     test 'delete single sample with checkbox and delete samples button' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table' do
-        assert_selector 'table tbody tr', count: 3
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name
@@ -2194,10 +2194,15 @@ module Projects
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
                            sample_name: @sample1.name)
+        within %(turbo-frame[id="list_select_samples"]) do
+          assert_text @sample1.puid
+        end
+
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
 
-      within '#samples-table' do
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
         assert_no_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name
