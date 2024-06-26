@@ -8,7 +8,12 @@
     data-attachment-upload-button-text-value='<%=t("projects.samples.show.uploading") %>'
   >
 
-    <div class="form-field">
+    <div
+      class="form-field"
+      data-controller="file-upload"
+      data-file-upload-ignore-value='[".fasta", ".fna", ".fa", ".fastq", ".fq"]'
+      data-file-upload-error-value="<%= t(:'projects.samples.show.files_ignored') %>"
+    >
       <%= form.label :files,
                  t("projects.samples.show.files"),
                  class:
@@ -18,17 +23,26 @@
                       direct_upload: true,
                       required: true,
                       data: {
-                        "attachment-upload-target": "attachmentsInput"
+                        "file-input-target": "input",
+                        "attachment-upload-target": "attachmentsInput",
+                        action: "change->file-upload#handleFileChange",
                       },
                       class:
                         "block w-full mb-5 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+
+      <%= viral_alert(message: t(:'projects.samples.show.files_ignored'), type: :info, data: { "file-upload-target": "alert" }, classes: "hidden") do %>
+        <ul
+          class="max-w-md mt-4 space-y-1 list-disc list-inside"
+          data-file-upload-target="error"
+        >REPLACE</ul>
+      <% end %>
     </div>
 
     <div>
       <%= form.submit t("projects.samples.show.upload"),
                   class: "button button--state-primary button--size-default",
                   data: {
-                    "attachment-upload-target": "submitButton"
+                    "attachment-upload-target": "submitButton",
                   } %>
     </div>
   </div>

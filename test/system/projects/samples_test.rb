@@ -84,20 +84,20 @@ module Projects
       within('#table-listing') do
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
-        assert_no_text 'test_file.fastq'
+        assert_no_text 'test_file_2.fastq.gz'
       end
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         click_on I18n.t('projects.samples.show.upload')
       end
 
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file_2.fastq.gz')
       within('#table-listing') do
         assert_no_text I18n.t('projects.samples.show.no_files')
         assert_no_text I18n.t('projects.samples.show.no_associated_files')
-        assert_text 'test_file.fastq'
+        assert_text 'test_file_2.fastq.gz'
       end
     end
 
@@ -107,11 +107,43 @@ module Projects
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+        click_on I18n.t('projects.samples.show.upload')
+      end
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      within('dialog') do
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         click_on I18n.t('projects.samples.show.upload')
       end
 
       assert_text 'checksum matches existing file'
+    end
+
+    test 'user with role >= Maintainer not be able to upload uncompressed files to a Sample' do
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      within('dialog') do
+        attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
+                                            Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
+                                            Rails.root.join('test/fixtures/files/test_file.fastq')]
+        assert_text I18n.t('projects.samples.show.files_ignored')
+        assert_text 'test_file.fastq'
+
+        click_on I18n.t('projects.samples.show.upload')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
+      assert_no_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
+
+      # View paired files
+      within('#table-listing') do
+        assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
+      end
     end
 
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do
@@ -147,18 +179,18 @@ module Projects
       # Attach paired files
       within('dialog') do
         attach_file 'attachment[files][]',
-                    [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq'),
-                     Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq')]
+                    [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
+                     Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz')]
         click_on I18n.t('projects.samples.show.upload')
       end
 
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq')
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
 
       # View paired files
       within('#table-listing') do
-        assert_text 'TestSample_S1_L001_R1_001.fastq'
-        assert_text 'TestSample_S1_L001_R2_001.fastq'
+        assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
         assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
       end
 
@@ -171,11 +203,11 @@ module Projects
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq')
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq')
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
       within('#table-listing') do
-        assert_no_text 'TestSample_S1_L001_R1_001.fastq'
-        assert_no_text 'TestSample_S1_L001_R2_001.fastq'
+        assert_no_text 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_no_text 'TestSample_S1_L001_R2_001.fastq.gz'
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
       end
@@ -703,6 +735,7 @@ module Projects
       end
 
       click_on I18n.t('projects.samples.table.sample')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       click_on I18n.t('projects.samples.table.sample')
 
       assert_selector '#samples-table table tbody tr', count: 3
