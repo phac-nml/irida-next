@@ -126,10 +126,23 @@ module Projects
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file.fastq')
-        click_on I18n.t('projects.samples.show.upload')
+        attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
+                                            Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
+                                            Rails.root.join('test/fixtures/files/test_file.fastq')]
         assert_text I18n.t('projects.samples.show.files_ignored')
         assert_text 'test_file.fastq'
+
+        click_on I18n.t('projects.samples.show.upload')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
+      assert_no_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
+
+      # View paired files
+      within('#table-listing') do
+        assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
       end
     end
 
