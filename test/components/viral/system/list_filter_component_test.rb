@@ -14,9 +14,9 @@ module System
         within 'dialog' do
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
           fill_in I18n.t(:'components.list_filter.description'), with: "#{puid1}, #{puid2}"
-          assert_selector 'span.label', count: 2
+          assert_selector 'span.label', count: 1
           assert_selector 'span.label', text: puid1
-          assert_selector 'span.label', text: puid2
+          find('input').text puid2
           click_button I18n.t(:'components.list_filter.apply')
         end
         assert_selector 'div[data-list-filter-target="count"]', text: '2'
@@ -24,7 +24,11 @@ module System
         click_button I18n.t(:'components.list_filter.title')
         within 'dialog' do
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+          assert_selector 'span.label', count: 2
+          assert_selector 'span.label', text: puid1
+          assert_selector 'span.label', text: puid2
           click_button I18n.t(:'components.list_filter.clear')
+          assert_selector 'span.label', count: 0
           click_button I18n.t(:'components.list_filter.apply')
         end
         assert_no_selector 'div[data-list-filter-target="count"]'
