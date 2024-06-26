@@ -72,4 +72,13 @@
   </table>
 </div>
 
-<%= render Members::TableComponent.new(@q) %>
+<%= render Members::TableComponent.new(
+  @namespace,
+  @members,
+  @q,
+  current_user,
+  abilities: {
+    update_member: allowed_to?(:update_member?, @namespace),
+    destroy_member: allowed_to?(:destroy_member?, @namespace),
+  },
+) %>

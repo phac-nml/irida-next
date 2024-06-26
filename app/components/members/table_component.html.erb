@@ -16,7 +16,7 @@
           <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3')
+              classes: class_names('px-6 py-3', 'min-w-40': index === 1 || index === 2 , 'min-w-48': index === 4)
             ) do %>
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
@@ -35,5 +35,116 @@
         <% end %>
       </tr>
     </thead>
+    <tbody
+      id="members-table-body"
+      class="
+        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+      "
+    >
+      <% @members.each do |member| %>
+        <% member_source = membership_source(@namespace, member) %>
+        <%= render Viral::BaseComponent.new(**row_arguments(member)) do %>
+          <td class="px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900">
+            <div class="text-slate-900 dark:text-slate-100 font-semibold"><%= member.user.email %>
+              <% if @current_user == member.user %>
+                <%= viral_pill(
+                  text: t(:"activerecord.models.member.its_you"),
+                  color: :green,
+                  border: :green,
+                  classes: "ml-2",
+                ) %>
+              <% else %>
+                <% if !member.user.human? %>
+                  <%= viral_pill(
+                    text: t(:"activerecord.models.member.bot"),
+                    color: :transparent,
+                    border: :true,
+                    classes: "ml-2",
+                  ) %>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            <% if (member.user != @current_user && @abilities[:update_member] &&
+member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
+              <!-- TODO -->
+            <% else %>
+              <%= t(:"groups.members.index.access_level.level_#{member.access_level}") %>
+            <% end %>
+          </td>
+          <td class="px-6 py-4">
+            <% if !member_source.key?(:inherited_namespace_path) %>
+              <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member_source[:label] %></div>
+            <% else %>
+              <%= viral_tooltip(title: t(:"groups.members.index.inherited_from")) do %>
+                <%= link_to member_source[:label],
+                member_source[:inherited_namespace_path],
+                data: {
+                  turbo_frame: "_top",
+                },
+                class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+              <% end %>
+            <% end %>
+          </td>
+          <td class="px-6 py-4">
+            <div>
+              <% if member.user.email != member.created_by.email %>
+                <%= viral_time_ago(original_time: member.created_at) %>
+                by
+                <span class="block">
+                  <%= member.created_by.email %>
+                </span>
+              <% else %>
+                <%= viral_time_ago(original_time: member.created_at) %>
+              <% end %>
+              <!-- TODO -->
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            <% if (member.user != @current_user &&  @abilities[:update_member] &&
+     member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
+              <%= form_with( model: member, url: group_member_path(id: member.id), method: :patch) do |form| %>
+                <div class="form-field datepicker" data-controller="datepicker">
+                  <div class="relative max-w-sm">
+                    <div
+                      class="
+                        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+                      "
+                    >
+                      <%= viral_icon(
+                        name: :calendar_days,
+                        classes: "w-5 h-5 text-slate-500 dark:text-slate-400",
+                      ) %>
+                    </div>
+                    <%= form.text_field :expires_at,
+                                    placeholder: I18n.t("date.formats.iso"),
+                                    autocomplete: "off",
+                                    value: member.expires_at,
+                                    id: "group-member-#{member.id}-expiration",
+                                    "data-datepicker-target": "datePicker",
+                                    "data-datepicker-autosubmit": "true",
+                                    "aria-label": t(:"groups.members.index.aria_labels.expires_at") %>
+
+                    <input type="hidden" name="format" value="turbo_stream"/>
+                  </div>
+                </div>
+              <% end %>
+            <% else %>
+              <%= member.expires_at %>
+            <% end %>
+          </td>
+          <% if (@current_user == member.user || @abilities[:destroy_member]) && !member_source.key?(:inherited_namespace_path) %>
+            <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
+              <% if @current_user == member.user %>
+                <%= render partial: "groups/members/current_user_is_member", locals: { member: } %>
+              <% else %>
+                <%= render partial: "groups/members/current_user_is_not_member", locals: { member: } %>
+              <% end %>
+            </td>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
   </table>
 <% end %>
