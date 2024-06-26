@@ -46,7 +46,7 @@ module Dashboard
     end
 
     def current_page
-      @current_page = 'groups'
+      @current_page = t(:'general.default_sidebar.groups').downcase
     end
   end
 end

@@ -38,7 +38,7 @@ module Groups
     end
 
     def current_page
-      @current_page = 'history'
+      @current_page = t(:'groups.sidebar.history').downcase
     end
   end
 end

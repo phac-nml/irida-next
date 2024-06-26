@@ -9,7 +9,7 @@ module Profiles
     end
 
     def current_page
-      @current_page = 'preferences'
+      @current_page = t(:'profiles.sidebar.preferences').downcase
     end
 
     def update
