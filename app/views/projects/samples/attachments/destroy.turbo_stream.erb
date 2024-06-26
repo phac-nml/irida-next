@@ -1,14 +1,27 @@
 <% if destroyed_attachments %>
+  <%= turbo_stream.update "sample_modal",
+                      partial: "delete_attachment_modal",
+                      locals: {
+                        open: false,
+                      } %>
+
   <% destroyed_attachments.each do |attachment| %>
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(
         type: :success,
-        data: t(".success", filename: attachment.file.filename)
+        data: t(".success", filename: attachment.file.filename),
       ) %>
     <% end %>
-
-    <%= turbo_stream.remove dom_id(attachment) %>
   <% end %>
+
+  <%= turbo_stream.update(
+    "table-listing",
+    partial: "projects/samples/attachments/table",
+    locals: {
+      attachments: @sample.attachments,
+    },
+  ) %>
+
 <% else %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type: :error, data: message) %>

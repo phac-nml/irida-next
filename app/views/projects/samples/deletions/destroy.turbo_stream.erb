@@ -1,0 +1,18 @@
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type: type, data: message) %>
+<% end %>
+
+<% if @sample.deleted? %>
+  <%= turbo_stream.update(
+    "samples_dialog",
+    partial: "new_deletion_dialog",
+    locals: {
+      open: false,
+    },
+  ) %>
+
+  <%= turbo_stream.replace "project_samples_table" do %>
+    <%= turbo_frame_tag "project_samples_table",
+    src: project_samples_path(@project, format: :turbo_stream) %>
+  <% end %>
+<% end %>

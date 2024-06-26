@@ -45,7 +45,6 @@ export default class extends Controller {
   }
 
   remove({ params: { id } }) {
-    id = JSON.stringify(id).replaceAll(",", ", ");
     this.#addOrRemove(false, id);
   }
 

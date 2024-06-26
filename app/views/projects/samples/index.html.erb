@@ -58,6 +58,16 @@
         class: "button button--size-default button--state-primary",
         "aria-label": t(".actions.button_add_aria_label") %>
       <% end %>
+      <% if allowed_to?(:destroy_sample?, @project) %>
+       <%= link_to t(".delete_samples_button"),
+        new_namespace_project_samples_deletion_path(deletion_type: 'multiple'),
+        data: {
+          turbo_stream: true,
+          controller: "action-link",
+          action_link_required_value: 1,
+        },
+        class: "button button--size-default button--state-destructive action-link" %>
+      <% end %>
     </div>
   <% end %>
 <% end %>

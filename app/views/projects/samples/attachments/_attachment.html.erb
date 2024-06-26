@@ -101,22 +101,12 @@
     <% if allowed_to?(:destroy_attachment?, @sample) %>
       <%= link_to(
         t(".delete"),
-        namespace_project_sample_attachment_path(
+        namespace_project_sample_attachment_new_destroy_path(
           sample_id: @sample.id,
-          id: attachment.id
+          attachment_id: attachment.id
         ),
         data: {
-          turbo_method: :delete,
-          action: "turbo:submit-end->selection#remove",
-          "selection-id-param":
-            (
-              if attachment.associated_attachment
-                [attachment.id, attachment.associated_attachment.id]
-              else
-                attachment.id
-              end
-            ),
-          turbo_confirm: t(".delete_confirm")
+          "turbo-prefetch": false,
         },
         class:
           "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"

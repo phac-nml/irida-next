@@ -122,8 +122,9 @@ module Projects
         click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
       end
 
-      within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+      within('dialog') do
+        assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
+        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
 
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
@@ -166,8 +167,8 @@ module Projects
         click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
       end
 
-      within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+      within('dialog') do
+        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
 
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq')
@@ -189,8 +190,8 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name,
-                                                             project_name: @project.namespace.human_name)
+      assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
+                                                                       project_name: @project.namespace.human_name)
 
       assert_no_selector '#samples-table table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
@@ -210,12 +211,13 @@ module Projects
         click_link 'Remove'
       end
 
-      within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+      within('dialog') do
+        assert_text I18n.t('projects.samples.deletions.new_deletion_dialog.description', sample_name: @sample1.name)
+        click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.destroy.success', sample_name: @sample1.name,
-                                                             project_name: @project.namespace.human_name)
+      assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
+                                                                       project_name: @project.namespace.human_name)
 
       assert_no_selector '#samples-table table tbody tr', text: @sample1.puid
       assert_no_selector '#samples-table table tbody tr', text: @sample1.name
@@ -226,7 +228,7 @@ module Projects
       end
     end
 
-    test 'should transfer samples' do
+    test 'should transfer multiple samples' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
       assert_text 'Displaying 3 items'
@@ -236,12 +238,32 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.transfers.description.plural').gsub! 'COUNT_PLACEHOLDER', '3'
         within %(turbo-frame[id="list_select_samples"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
             assert_text sample[1]
           end
+        end
+        select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+      end
+    end
+
+    test 'should transfer a single sample' do
+      project2 = projects(:project2)
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text 'Displaying 3 items'
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        all('input[type="checkbox"]')[0].click
+      end
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
+        within %(turbo-frame[id="list_select_samples"]) do
+          assert_text @sample1.name
         end
         select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -440,7 +462,7 @@ module Projects
       assert_selector 'a', text: I18n.t('projects.samples.index.upload_file'), count: 0
     end
 
-    test 'visiting the index should not allow the current user only edit action' do
+    test 'visiting the index should  not allow the current user only edit action' do
       user = users(:joan_doe)
       login_as user
 
@@ -1893,7 +1915,7 @@ module Projects
       assert_selector 'a', text: I18n.t('projects.samples.index.clone_button'), count: 0
     end
 
-    test 'should clone samples' do
+    test 'should clone multiple samples' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
@@ -1902,12 +1924,34 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t(
+          'projects.samples.clones.dialog.description.plural'
+        ).gsub! 'COUNT_PLACEHOLDER', '3'
         within %(turbo-frame[id="list_select_samples"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
             assert_text sample[1]
           end
+        end
+        select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
+        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+      end
+      assert_text I18n.t('projects.samples.clones.create.success')
+    end
+
+    test 'should clone single sample' do
+      project2 = projects(:project2)
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        all('input[type="checkbox"]')[0].click
+      end
+      click_link I18n.t('projects.samples.index.clone_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.clones.dialog.description.singular')
+        within %(turbo-frame[id="list_select_samples"]) do
+          assert_text @sample1.name
         end
         select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
@@ -2097,6 +2141,162 @@ module Projects
         end
       end
       puids
+    end
+
+    test 'delete multiple samples' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_text @sample1.name
+        assert_text @sample2.name
+        assert_text @sample3.name
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
+        assert_text I18n.t(
+          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
+        ).gsub! 'COUNT_PLACEHOLDER', '3'
+        assert_text @sample1.name
+        assert_text @sample1.puid
+        assert_text @sample2.name
+        assert_text @sample2.puid
+        assert_text @sample3.name
+        assert_text @sample3.puid
+
+        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
+      end
+      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
+
+      within '#project_samples_table' do
+        assert_no_selector 'tr'
+        assert_no_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample3.name
+        assert_text I18n.t('projects.samples.index.no_samples')
+      end
+    end
+
+    test 'delete single sample with checkbox and delete samples button' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_text @sample1.name
+        assert_text @sample2.name
+        assert_text @sample3.name
+        within 'table tbody tr:first-child' do
+          all('input[type="checkbox"]')[0].click
+        end
+      end
+      click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
+                           sample_name: @sample1.name)
+        within %(turbo-frame[id="list_select_samples"]) do
+          assert_text @sample1.puid
+        end
+
+        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
+        assert_no_text @sample1.name
+        assert_text @sample2.name
+        assert_text @sample3.name
+      end
+
+      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
+    end
+
+    test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_text @sample1.name
+        assert_text @sample2.name
+        assert_text @sample3.name
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+
+      assert find('input#select-all').checked?
+
+      within '#samples-table table tbody tr:first-child' do
+        click_link I18n.t('projects.samples.index.remove_button')
+      end
+
+      within 'dialog' do
+        click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
+        assert_no_text @sample1.name
+        assert all('input[type="checkbox"]')[0].checked?
+        assert all('input[type="checkbox"]')[1].checked?
+      end
+
+      assert find('input#select-all').checked?
+
+      click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
+        assert_text I18n.t(
+          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
+        ).gsub! 'COUNT_PLACEHOLDER', '2'
+        assert_text @sample2.name
+        assert_text @sample3.name
+        assert_no_text @sample1.name
+        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
+      end
+      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
+
+      within '#project_samples_table' do
+        assert_no_selector 'tr'
+        assert_no_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample3.name
+        assert_text I18n.t('projects.samples.index.no_samples')
+      end
+
+      assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 5
+    end
+
+    test 'delete single attachment with remove link while all attachments selected followed by multiple deletion' do
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+
+      within('#attachments-table-body') do
+        assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      end
+
+      within('dialog') do
+        assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
+        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
+      within('#table-listing') do
+        assert_no_text 'test_file.fastq'
+        assert_text 'test_file_A.fastq'
+      end
+
+      click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
+
+      within('dialog') do
+        assert_text 'test_file_A.fastq'
+        assert_no_text 'test_file.fastq'
+        click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
+      end
+
+      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
+      assert_no_text 'test_file_A.fastq'
+      assert_no_text 'test_file.fastq'
+      assert_text I18n.t('projects.samples.show.no_files')
+      assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 2
     end
   end
 end

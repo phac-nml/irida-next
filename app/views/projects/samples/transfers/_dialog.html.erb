@@ -7,6 +7,8 @@
         data-infinite-scroll-selection-outlet='#samples-table'
         data-infinite-scroll-field-name-value="transfer[sample_ids][]"
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
+        data-infinite-scroll-singular-value="<%= t(".description.singular") %>"
+        data-infinite-scroll-plural-value="<%= t(".description.plural") %>"
       >
         <%= form_with(
         url: list_namespace_project_samples_path,
@@ -22,7 +24,7 @@
               text-base leading-relaxed text-slate-500 dark:text-slate-400
             "
           >
-            <%= t(".description") %>
+            <%= t(".description.zero") %>
           </p>
           <div>
             <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">

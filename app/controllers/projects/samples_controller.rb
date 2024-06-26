@@ -5,9 +5,9 @@ module Projects
   class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
 
-    before_action :sample, only: %i[show edit update destroy view_history_version]
+    before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :set_search_params, only: %i[index destroy]
+    before_action :set_search_params, only: %i[index]
     before_action :set_metadata_fields, only: :index
 
     def index
@@ -74,37 +74,6 @@ module Projects
           format.html { redirect_to namespace_project_sample_path(id: @sample.id) }
         else
           format.html { render :edit, status: :unprocessable_entity }
-        end
-      end
-    end
-
-    def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      ::Samples::DestroyService.new(@sample, current_user).execute
-      @pagy, @samples = pagy(load_samples)
-      @q = load_samples.ransack(params[:q])
-
-      if @sample.deleted?
-        respond_to do |format|
-          format.html do
-            flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
-            redirect_to namespace_project_samples_path(format: :html)
-          end
-          format.turbo_stream do
-            fields_for_namespace(
-              namespace: @project.namespace,
-              show_fields: params[:q] && params[:q][:metadata].to_i == 1
-            )
-            render status: :ok, locals: { type: 'success',
-                                          message: t('.success', sample_name: @sample.name,
-                                                                 project_name: @project.namespace.human_name) }
-          end
-        end
-      else
-        respond_to do |format|
-          format.turbo_stream do
-            render status: :unprocessable_entity,
-                   locals: { type: 'alert', message: @sample.errors.full_messages.first }
-          end
         end
       end
     end

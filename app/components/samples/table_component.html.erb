@@ -185,10 +185,9 @@
                 <% if @row_actions[:destroy] %>
                   <%= link_to(
                     t(:"projects.samples.index.remove_button"),
-                    project_sample_path(sample.project, sample),
+                    new_namespace_project_samples_deletion_path(sample_id: sample.id, deletion_type: 'single'),
                     data: {
-                      turbo_method: :delete,
-                      turbo_confirm: t(:"projects.samples.index.remove_button_confirmation"),
+                      "turbo-prefetch": false,
                     },
                     class:
                       "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",

@@ -115,52 +115,19 @@ module Projects
       assert_response :unprocessable_entity
     end
 
-    test 'should destroy sample' do
-      assert_difference('Sample.count', -1) do
-        delete namespace_project_sample_url(@namespace, @project, @sample1),
-               as: :turbo_stream
-      end
-    end
-
-    test 'should not destroy sample, if it does not belong to the project' do
-      delete namespace_project_sample_url(@namespace, @project, @sample23)
-
-      assert_response :not_found
-    end
-
-    test 'should not destroy sample, if the current user is not allowed to modify the project' do
-      sign_in users(:ryan_doe)
-
-      assert_no_difference('Sample.count') do
-        delete namespace_project_sample_url(@namespace, @project, @sample1)
-      end
-
-      assert_response :unauthorized
-    end
-
     test 'show sample history listing' do
-      sign_in users(:john_doe)
-      namespace = groups(:group_one)
-      project = projects(:project1)
-      sample = samples(:sample1)
+      @sample1.create_logidze_snapshot!
 
-      sample.create_logidze_snapshot!
-
-      get namespace_project_sample_path(namespace, project, sample, tab: 'history')
+      get namespace_project_sample_path(@namespace, @project, @sample1, tab: 'history')
 
       assert_response :success
     end
 
     test 'view sample history version' do
-      sign_in users(:john_doe)
-      namespace = groups(:group_one)
-      project = projects(:project1)
-      sample = samples(:sample1)
+      @sample1.create_logidze_snapshot!
 
-      sample.create_logidze_snapshot!
-
-      get namespace_project_sample_view_history_version_path(namespace, project, sample, version: 1,
-                                                                                         format: :turbo_stream)
+      get namespace_project_sample_view_history_version_path(@namespace, @project, @sample1, version: 1,
+                                                                                             format: :turbo_stream)
 
       assert_response :success
     end

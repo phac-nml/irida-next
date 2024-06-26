@@ -44,6 +44,9 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :clone, only: %i[create new]
             resource :transfer, only: %i[create new]
             resource :file_import, module: :metadata, only: %i[create new]
+            resource :deletion, only: %i[destroy new] do
+              delete :destroy_multiple
+            end
           end
         end
         collection do
@@ -59,6 +62,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
               resource :deletion, only: %i[new destroy]
             end
           end
+          get :new_destroy
         end
         resource :metadata, module: :samples, only: %i[new edit destroy] do
           scope module: :metadata, as: :metadata do
