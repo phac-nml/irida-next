@@ -32,14 +32,24 @@
             ) %>
           <% end %>
           <% if allowed_to?(:update?, @group) %>
-            <%= render section.with_multi_level_menu(title: t(:"groups.sidebar.settings"), icon: "cog_6_tooth") do |multi_level_menu| %>
+            <%= render section.with_multi_level_menu(
+              title: t(:"groups.sidebar.settings"),
+              icon: "cog_6_tooth",
+              selectable_pages: [
+                t(:"groups.sidebar.general").downcase,
+                t(:"groups.sidebar.bot_accounts").downcase,
+              ],
+              current_page: @current_page
+              ) do |multi_level_menu| %>
               <% multi_level_menu.with_menu_item(
                 url: edit_group_path(@group),
-                label: t(:"groups.sidebar.general")
+                label: t(:"groups.sidebar.general"),
+                selected: @current_page == t(:"groups.sidebar.general").downcase,
               ) %>
               <% multi_level_menu.with_menu_item(
                 url: group_bots_path(@group),
-                label: t(:"groups.sidebar.bot_accounts")
+                label: t(:"groups.sidebar.bot_accounts"),
+                selected: @current_page == t(:"groups.sidebar.bot_accounts").downcase,
               ) %>
             <% end %>
           <% end %>

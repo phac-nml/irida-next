@@ -176,7 +176,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
                     when 'history'
                       'history'
                     else
-                      'settings'
+                      'general'
                     end
   end
 end

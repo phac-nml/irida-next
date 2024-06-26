@@ -24,16 +24,24 @@
         "flex-shrink-0 w-5 h-5 ml-1 text-slate-800 transition duration-75 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-white"
     ) %>
     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"><%= title %></span>
-    <%= viral_icon(
-      name: "chevron_down",
-      classes: "mr-0 w-4 h-4",
-      "data-collapsible-target": "icon"
-    ) %>
+    <% if selectable_pages.include? current_page %>
+      <%= viral_icon(
+        name: "chevron_down",
+        classes: "mr-0 w-4 h-4 rotate-180",
+        "data-collapsible-target": "icon"
+      ) %>
+    <% else %>
+      <%= viral_icon(
+        name: "chevron_down",
+        classes: "mr-0 w-4 h-4",
+        "data-collapsible-target": "icon"
+      ) %>
+    <% end %>
   </button>
   <ul
     id="<%= control_id %>"
     data-collapsible-target="item"
-    class="hidden py-2 space-y-2"
+    class="<% unless selectable_pages.include? current_page %> hidden <% end %> py-2 space-y-2"
   >
     <% menu_items.each do |menu_item| %>
       <li class="Layout-Sidebar-MultiLevelMenu__Item">
@@ -54,6 +62,11 @@
             dark:hover:bg-slate-700
           "
         >
+          <% if menu_item.selected %>
+            <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 rounded-lg bg-primary-600"></div>
+          <% else %>
+            <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 bg-transparent"></div>
+          <% end %>
           <span class="ml-2 grow">
             <%= menu_item.label %>
           </span></a>

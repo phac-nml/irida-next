@@ -6,7 +6,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   included do
     before_action :set_default_tab, only: :show
-    before_action :current_page, only: :index
+    before_action :current_page, only: %i[show index]
     before_action :workflow_execution, only: %i[show cancel destroy]
   end
 
