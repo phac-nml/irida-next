@@ -39,10 +39,15 @@
         dark:divide-slate-700
       "
     >
-      <%= render partial: "namespace_group_link", collection: @namespace_group_links %>
-      <% if false %>
-        <%= render partial: "table", locals: { namespace_group_links: @namespace_group_links } %>
-      <% end %>
+      <%#= render partial: "namespace_group_link", collection: @namespace_group_links %>
+      <%# if false %>
+        <%= render partial: "table",
+        locals: {
+          namespace_group_links: @namespace_group_links,
+          namespace: @namespace,
+          access_levels: @access_levels
+        } %>
+      <%# end %>
     </tbody>
   </table>
   <div class="empty_state_message">

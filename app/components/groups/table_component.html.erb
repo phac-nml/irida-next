@@ -1,4 +1,4 @@
-<% @namespace_group_links.each do | key, namespace_group_link | %>
+<% @namespace_group_links.each do | namespace_group_link | %>
   <% namespace_group_link_source =
     helpers.namespace_group_link_source(@namespace, namespace_group_link) %>
   <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
@@ -23,7 +23,7 @@
       <div>
         <%= viral_time_ago(original_time: namespace_group_link.created_at) %>
         <span class="block">
-          <%= turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
+          <%= helpers.turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
             <% if namespace_group_link.created_at < namespace_group_link.updated_at %>
               <%= render UpdatedComponent.new(updated_at: namespace_group_link.updated_at) %>
             <% end %>
@@ -33,7 +33,7 @@
     </td>
     <td class="px-6 py-4">
       <div class="form-field">
-        <% if allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+        <% if helpers.allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
           <%= form_with(model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
             <%= form.select(
               :group_access_level,
@@ -56,7 +56,7 @@
       </div>
     </td>
     <td class="px-6 py-4">
-      <% if allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+      <% if helpers.allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
         <%= form_with( model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
           <div class="form-field datepicker" data-controller="datepicker">
             <div class="relative max-w-sm">
@@ -95,7 +95,7 @@
       <% end %>
     </td>
     <td class="px-6 py-4 space-x-2">
-      <% if allowed_to?(:unlink_namespace_with_group?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+      <% if helpers.allowed_to?(:unlink_namespace_with_group?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
         <%= link_to(
           t(:"projects.group_links.index.unlink"),
           namespace_project_group_link_path(
