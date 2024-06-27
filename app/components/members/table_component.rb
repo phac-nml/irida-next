@@ -36,6 +36,14 @@ module Members
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
+    def select_member_path(id)
+      if @namespace.type == 'Group'
+        group_member_path(id)
+      else
+        namespace_project_member_path(id)
+      end
+    end
+
     private
 
     def columns
