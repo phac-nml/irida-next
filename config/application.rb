@@ -60,7 +60,7 @@ module Irida
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :good_job
     # good_job configuration
-    config.good_job.enable_cron = true
+    config.good_job.enable_cron = ENV.fetch('ENABLE_CRON', 'true') == 'true'
     # Configure cron with a hash that has a unique key for each recurring job
     config.good_job.cron = {
       attachments_cleanup_task: {
