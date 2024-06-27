@@ -1,15 +1,21 @@
 import { Controller } from "@hotwired/stimulus";
-import { createHiddenInput } from '../utilities/form';
+import { createHiddenInput } from "utilities/form";
 
 export default class extends Controller {
   static outlets = ["selection"];
-  static targets = ["all", "pageForm", "pageFormContent", "scrollable", "summary"];
+  static targets = [
+    "all",
+    "pageForm",
+    "pageFormContent",
+    "scrollable",
+    "summary",
+  ];
   static values = {
     fieldName: String,
     pagedFieldName: String,
     singular: String,
-    plural: String
-  }
+    plural: String,
+  };
 
   #page = 1;
 
@@ -30,16 +36,16 @@ export default class extends Controller {
   }
 
   #replaceCountPlaceholder() {
-    const numSelected = this.selectionOutlet.getNumSelected()
+    const numSelected = this.selectionOutlet.getNumSelected();
     let summary = this.summaryTarget;
 
     if (numSelected == 1) {
-      summary.innerHTML = this.singularValue
+      summary.innerHTML = this.singularValue;
     } else {
       summary.innerHTML = this.pluralValue.replace(
         "COUNT_PLACEHOLDER",
         numSelected
-      )
+      );
     }
   }
 
@@ -52,16 +58,10 @@ export default class extends Controller {
     if (ids && ids.length) {
       const fragment = document.createDocumentFragment();
       for (const id of ids) {
-        fragment.appendChild(
-          createHiddenInput(this.pagedFieldNameValue, id),
-        );
+        fragment.appendChild(createHiddenInput(this.pagedFieldNameValue, id));
       }
-      fragment.appendChild(
-        createHiddenInput("page", this.#page),
-      );
-      fragment.appendChild(
-        createHiddenInput("format", "turbo_stream"),
-      );
+      fragment.appendChild(createHiddenInput("page", this.#page));
+      fragment.appendChild(createHiddenInput("format", "turbo_stream"));
       this.pageFormContentTarget.innerHTML = "";
       this.pageFormContentTarget.appendChild(fragment);
       this.#page++;

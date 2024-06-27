@@ -1,6 +1,7 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails";
 import "controllers";
+import "utilities/form";
 import * as ActiveStorage from "@rails/activestorage";
 ActiveStorage.start();
 
@@ -8,7 +9,7 @@ Turbo.setConfirmMethod((message, element) => {
   const dialog = document.getElementById("turbo-confirm");
   if (!dialog) {
     console.error(
-      "Missing #turbo-confirm dialog. Please add it to your layout.",
+      "Missing #turbo-confirm dialog. Please add it to your layout."
     );
   }
 
@@ -52,7 +53,7 @@ Turbo.setConfirmMethod((message, element) => {
         dialog.innerHTML = defaultState;
         resolve(dialog.returnValue === "confirm");
       },
-      { once: true },
+      { once: true }
     );
   });
 });
