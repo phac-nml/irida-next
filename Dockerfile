@@ -54,6 +54,8 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
+RUN ./bin/rails assets:clobber
+
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE=fakekeyforassets ./bin/rails assets:precompile
 
