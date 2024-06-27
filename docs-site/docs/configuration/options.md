@@ -1,0 +1,32 @@
+---
+sidebar_position: 6
+id: options
+title: Advanced Configuration Options
+---
+
+## ENV variables
+
+### IRIDA Next Environment
+
+Primary ENV Variable which sets what type of environment to run
+
+| ENV variable | Description | Default |
+| -------- | ------- | ------- |
+| `RAILS_ENV` | One of [`production`, `development`, `test`]. | `development` |
+
+### Additional Options
+
+| ENV variable | Description | Default |
+| -------- | ------- | ------- |
+| `RAILS_MAX_THREADS` | Number of threads in the thread pool | `5` |
+| `RAILS_HOST` | URL host for the application | `example.com` |
+| `RAILS_PROTOCOL` | Protocol the application uses | `http` |
+| `RAILS_LOG_TO_STDOUT` | Enable logging to stdout | `false` |
+| `REDIS_URL` | Set the Redis URL | `redis://localhost:6379/1` |
+| `DATABASE_URL` | Set the URL for the postgres database | `nil` |
+| `JOBS_DATABASE_URL` | Set the URL for the postgres jobs database | `nil` |
+| `PORT` | Set the port that Puma listens on to receive requests | `3000` |
+| `PIDFILE` | Set the pidfile that Puma will use | `tmp/pids/server.pid` |
+| `RAILS_SERVE_STATIC_FILES` | Set to enable serving static files from `/public` folder. By default this is handled by Apache or NGINX. | `false` |
+| `PUID_APP_PREFIX` | Set the persistent unique ID prefix | `INXT` |
+| `SEED_ATTACHMENT_PER_SAMPLE` | Set number of attachments per sample when seeding the database with test data | `2` |
