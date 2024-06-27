@@ -328,8 +328,8 @@ module Projects
       visit namespace_project_members_url(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      find("#project-member-#{project_member.id}-expiration").click.set(expiry_date)
-                                                             .native.send_keys(:return)
+      find("#member-#{project_member.id}-expiration").click.set(expiry_date)
+                                                     .native.send_keys(:return)
 
       within %(turbo-frame[id="member-update-alert"]) do
         assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)

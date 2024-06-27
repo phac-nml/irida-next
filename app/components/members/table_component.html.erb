@@ -114,7 +114,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
           <td class="px-6 py-4">
             <% if (member.user != @current_user && @abilities[:update_member] &&
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-              <%= form_with( model: member, url: group_member_path(id: member.id), method: :patch) do |form| %>
+              <%= form_with( model: member, url: @namespace.type == "Group" ? group_member_path(id: member.id) : namespace_project_member_path(id: member.id), method: :patch) do |form| %>
                 <div class="form-field datepicker" data-controller="datepicker">
                   <div class="relative max-w-sm">
                     <div
@@ -131,7 +131,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                                     placeholder: t("date.formats.iso"),
                                     autocomplete: "off",
                                     value: member.expires_at,
-                                    id: "group-member-#{member.id}-expiration",
+                                    id: "member-#{member.id}-expiration",
                                     "data-datepicker-target": "datePicker",
                                     "data-datepicker-autosubmit": "true",
                                     "aria-label": t(".aria_labels.expires_at") %>
