@@ -16,6 +16,7 @@ module Members
       @abilities = abilities
       @columns = columns
     end
+    # rubocop:enable Naming/MethodParameterName, Metrics/ParameterLists
 
     def wrapper_arguments
       {
