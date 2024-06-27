@@ -1,10 +1,14 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<%= viral_dialog(open: open, size: :extra_large) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
 
     <%= turbo_frame_tag("deletion-alert") %>
 
-    <div class="mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible">
+    <div
+      class="
+        mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible
+      "
+    >
       <p class="mb-4"><%= t(".description") %></p>
       <div
         data-controller="projects--samples--attachments--files"

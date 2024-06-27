@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { createHiddenInput } from '../../../../utilities/form';
+import { createHiddenInput } from "utilities/form";
 
 //creates hidden fields within a form for selected files
 export default class extends Controller {
@@ -8,7 +8,7 @@ export default class extends Controller {
   static values = {
     fieldName: String,
     storageKey: {
-      type: String
+      type: String,
     },
   };
 
@@ -19,23 +19,29 @@ export default class extends Controller {
 
     if (storageValues) {
       for (let [storageValueIndex, storageValue] of storageValues.entries()) {
-        let value = ''
+        let value = "";
         try {
           // Parse required for array ie: paired attachments
-          value = JSON.parse(storageValue)
+          value = JSON.parse(storageValue);
         } catch {
-          value = storageValue
+          value = storageValue;
         }
 
         if (value instanceof Array) {
           for (let arrayValue of value) {
             this.fieldTarget.appendChild(
-              createHiddenInput(`${this.fieldNameValue}[${storageValueIndex}][]`, arrayValue)
+              createHiddenInput(
+                `${this.fieldNameValue}[${storageValueIndex}][]`,
+                arrayValue
+              )
             );
           }
         } else {
           this.fieldTarget.appendChild(
-            createHiddenInput(`${this.fieldNameValue}[${storageValueIndex}]`, value)
+            createHiddenInput(
+              `${this.fieldNameValue}[${storageValueIndex}]`,
+              value
+            )
           );
         }
       }
