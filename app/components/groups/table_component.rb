@@ -5,8 +5,14 @@ module Groups
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    def initialize(namespace_group_links)
+    def initialize(
+      namespace_group_links,
+      namespace,
+      access_levels
+    )
       @namespace_group_links = namespace_group_links
+      @namespace = namespace
+      @access_levels = access_levels
     end
 
     # def system_arguments
