@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for User
-class User < ApplicationRecord
+class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include HasUserType
 
   attr_accessor :skip_password_validation
