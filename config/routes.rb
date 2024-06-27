@@ -16,6 +16,9 @@ Rails.application.routes.draw do
       member do
         get :redirect_from
       end
+      collection do
+        post :list
+      end
     end
 
     draw :profile
