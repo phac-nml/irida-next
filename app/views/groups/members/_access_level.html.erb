@@ -1,6 +1,6 @@
 <% invalid_access_level = member.errors.include?(:access_level) %>
 <div class="form-field <%= 'invalid' if invalid_access_level %>">
-  <%= form_with(model: member, url: group_member_path(id: member.id), method: :patch) do |form| %>
+  <%= form_with(model: member, url: @namespace.type == "Group" ? group_member_path(id: member.id) : namespace_project_member_path(id: member.id), method: :patch) do |form| %>
     <%= form.select(
       :access_level,
       access_levels,
@@ -9,8 +9,8 @@
         id: "member-#{member.id}-access-level-select",
         value: member.access_level,
         onchange: "this.form.requestSubmit();",
-        "aria-label": "Access Level"
-      }
+        "aria-label": "Access Level",
+      },
     ) %>
     <input type="hidden" name="format" value="turbo_stream"/>
   <% end %>

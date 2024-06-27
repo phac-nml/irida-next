@@ -1,14 +1,40 @@
 <%= link_to(
-  t(:"groups.members.index.leave_group"),
-  group_member_path(@namespace, member),
+  (
+    if @namespace.type == "Group"
+      t(:"groups.members.index.leave_group")
+    else
+      t(:"projects.members.index.leave_project")
+    end
+  ),
+  (
+    if @namespace.type == "Group"
+      group_member_path(id: member.id)
+    else
+      namespace_project_member_path(id: member.id)
+    end
+  ),
   data: {
     turbo_method: :delete,
-    turbo_confirm: (t(:"groups.members.index.leave_confirmation")),
-    turbo_frame: "_top"
+    turbo_confirm:
+      (
+        if @namespace.type == "Group"
+          t(:"groups.members.index.leave_confirmation")
+        else
+          t(:"projects.members.index.leave_confirmation")
+        end
+      ),
+    turbo_frame: "_top",
   },
   aria: {
-    label: (t(:"groups.members.index.actions.link_leave_group_aria_label"))
+    label:
+      (
+        if @namespace.type == "Group"
+          t(:"groups.members.index.actions.link_leave_group_aria_label")
+        else
+          t(:"projects.members.index.actions.link_leave_project_aria_label")
+        end
+      ),
   },
   class:
-    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
 ) %>
