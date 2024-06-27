@@ -23,7 +23,7 @@ module Types
     field :attachment_url, String, null: false, description: 'Attachment download url'
 
     def attachment_url
-      Rails.application.routes.url_helpers.rails_blob_url(object)
+      Rails.application.routes.url_helpers.rails_blob_url(object.file)
     end
 
     def self.authorized?(object, context)
