@@ -59,8 +59,8 @@
         "aria-label": t(".actions.button_add_aria_label") %>
       <% end %>
       <% if allowed_to?(:destroy_sample?, @project) %>
-       <%= link_to t(".delete_samples_button"),
-        new_namespace_project_samples_deletion_path(deletion_type: 'multiple'),
+        <%= link_to t(".delete_samples_button"),
+        new_namespace_project_samples_deletion_path(deletion_type: "multiple"),
         data: {
           turbo_stream: true,
           controller: "action-link",
@@ -72,8 +72,8 @@
   <% end %>
 <% end %>
 <% if @has_samples %>
-  <div class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
-    <%= search_form_for @q, url: namespace_project_samples_url(**request.query_parameters), html: { "data-controller": "filters","data-filters-selection-outlet": "#samples-table" }, class: "filters" do |f| %>
+  <div class="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+    <%= search_form_for @q, url: search_namespace_project_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters","data-filters-selection-outlet": "#samples-table" }, class: "filters" do |f| %>
       <div class="flex flex-row-reverse items-center space-x-2">
         <input type="hidden" name="format" value="turbo_stream"/>
         <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
@@ -84,9 +84,7 @@
         <div class="flex flex-row items-center space-x-2">
           <div class="relative lg:w-72">
             <div
-              class="
-                absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-              "
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
             >
               <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
             </div>

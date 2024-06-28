@@ -8,20 +8,15 @@ module Projects
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :set_search_params, only: %i[index]
-    before_action :set_metadata_fields, only: :index
+    before_action :process_samples, only: %i[index search]
 
     def index
-      authorize! @project, to: :sample_listing?
+      process_samples
+    end
 
-      @q = load_samples.ransack(params[:q])
-      set_default_sort
-      @pagy, @samples = pagy_with_metadata_sort(@q.result)
-      @has_samples = load_samples.count.positive?
-      respond_to do |format|
-        format.html
-        format.turbo_stream
-      end
+    def search
+      process_samples
+      render 'projects/samples/index', formats: :turbo_stream
     end
 
     def show
@@ -141,6 +136,17 @@ module Projects
         namespace: @project.namespace,
         show_fields: params[:q] && params[:q][:metadata].to_i == 1
       )
+    end
+
+    def process_samples
+      authorize! @project, to: :sample_listing?
+
+      set_search_params
+      set_metadata_fields
+      @q = load_samples.ransack(params[:q])
+      set_default_sort
+      @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      @has_samples = load_samples.count.positive?
     end
   end
 end
