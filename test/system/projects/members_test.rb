@@ -12,6 +12,11 @@ module Projects
       @namespace = namespaces_user_namespaces(:john_doe_namespace)
       @project = projects(:john_doe_project2)
       @members_count = members.select { |member| member.namespace == @project.namespace }.count
+      @member_john = members(:project_two_member_john_doe)
+      @member_james = members(:project_two_member_james_doe)
+      @member_joan = members(:project_two_member_joan_doe)
+      @member_jean = members(:project_two_member_jean_doe)
+      @member_ryan = members(:project_two_member_ryan_doe)
     end
 
     test 'can see the list of project members' do
@@ -409,6 +414,117 @@ module Projects
         within('#member_user_id') do
           assert_no_selector "option[value='#{user_to_add.email}']"
         end
+      end
+    end
+
+    test 'can search members by username' do
+      visit namespace_project_members_url(@namespace, @project)
+
+      assert_text 'Displaying 5 items'
+      assert_selector '#project-members table tbody tr', count: 5
+      assert_text @member_james.user.email
+      assert_text @member_jean.user.email
+      assert_text @member_joan.user.email
+      assert_text @member_john.user.email
+      assert_text @member_ryan.user.email
+
+      fill_in placeholder: I18n.t(:'projects.members.index.search.placeholder'), with: @member_james.user.email
+
+      assert_text 'Displaying 1 item'
+      assert_selector '#project-members table tbody tr', count: 1
+      assert_text @member_james.user.email
+      assert_no_text @member_jean.user.email
+      assert_no_text @member_joan.user.email
+      # assert_no_text @member_john.user.email
+      assert_no_text @member_ryan.user.email
+    end
+
+    test 'can sort members by column' do
+      visit namespace_project_members_url(@namespace, @project)
+
+      assert_text 'Displaying 5 items'
+      assert_selector '#project-members table tbody tr', count: 5
+      assert_selector '#project-members table thead th:first-child svg.icon-arrow_up'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_james.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_jean.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_jean.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+      end
+
+      click_on I18n.t('members.table_component.user_email')
+      assert_selector '#project-members table thead th:first-child svg.icon-arrow_down'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_john.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_john.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_james.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+      end
+
+      click_on I18n.t('members.table_component.access_level')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_joan.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_joan.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_james.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+      end
+
+      click_on I18n.t('members.table_component.access_level')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_john.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+      end
+
+      click_on I18n.t('members.table_component.namespace_name')
+      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_jean.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_jean.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_john.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_john.access_level)
+      end
+
+      click_on I18n.t('members.table_component.expires_at')
+      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_john.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
       end
     end
   end
