@@ -34,7 +34,7 @@ module Groups
     end
 
     def current_page
-      @current_page = 'bot accounts'
+      @current_page = t(:'groups.sidebar.bot_accounts').downcase
     end
 
     def bot_type
