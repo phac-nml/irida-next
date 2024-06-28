@@ -52,6 +52,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         collection do
           get :select
           post :list
+          post :search
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           scope module: :attachments, as: :attachments do
