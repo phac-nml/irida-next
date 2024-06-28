@@ -11,11 +11,10 @@ module Projects
     before_action :process_samples, only: %i[index search]
 
     def index
-      process_samples
+      #   Index action is handled in the process_samples method
     end
 
     def search
-      process_samples
       render 'projects/samples/index', formats: :turbo_stream
     end
 
