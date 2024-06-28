@@ -1,8 +1,11 @@
 <%= turbo_stream.update "member-update-alert", viral_alert(type:, message:) %>
 
-<%= turbo_stream.update "member-#{member.id}-access-level" do %>
-  <%= render Members::AccessLevelComponent.new(@namespace, member, @access_levels) %>
-<% end %>
+<%= turbo_stream.update "member-#{member.id}-access-level",
+                    partial: "projects/members/access_level",
+                    locals: {
+                      member:,
+                      access_levels: @access_levels,
+                    } %>
 
 <%= turbo_stream.update "member-#{member.id}-access-level-updated" do %>
   <%= render UpdatedComponent.new(updated_at: member.updated_at) %>

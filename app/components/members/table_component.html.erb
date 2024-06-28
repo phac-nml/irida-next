@@ -69,7 +69,11 @@
             <% if (member.user != @current_user && @abilities[:update_member] &&
 member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
               <turbo-frame id="<%="member-#{member.id}-access-level"%>">
-                <%= render Members::AccessLevelComponent.new(@namespace, member, @access_levels) %>
+                <%= render partial: access_level,
+                locals: {
+                  member: member,
+                  access_levels: @access_levels,
+                } %>
               </turbo-frame>
             <% else %>
               <%= t("members.access_levels.level_#{member.access_level}") %>
@@ -143,60 +147,9 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
           <% if (@current_user == member.user || @abilities[:destroy_member]) && !member_source.key?(:inherited_namespace_path) %>
             <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
               <% if @current_user == member.user %>
-                <%= link_to(
-                  (
-                    if @namespace.type == "Group"
-                      t(:"groups.members.index.leave_group")
-                    else
-                      t(:"projects.members.index.leave_project")
-                    end
-                  ),
-                  select_member_path(id: member.id),
-                  data: {
-                    turbo_method: :delete,
-                    turbo_confirm:
-                      (
-                        if @namespace.type == "Group"
-                          t(:"groups.members.index.leave_confirmation")
-                        else
-                          t(:"projects.members.index.leave_confirmation")
-                        end
-                      ),
-                    turbo_frame: "_top",
-                  },
-                  aria: {
-                    label:
-                      (
-                        if @namespace.type == "Group"
-                          t(:"groups.members.index.actions.link_leave_group_aria_label")
-                        else
-                          t(:"projects.members.index.actions.link_leave_project_aria_label")
-                        end
-                      ),
-                  },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                ) %>
+                <%= render partial: current_user_is_member, locals: { member: } %>
               <% else %>
-                <%= link_to(
-                  t(:"groups.members.index.remove"),
-                  select_member_path(id: member.id),
-                  data: {
-                    turbo_method: :delete,
-                    turbo_confirm: (t(:"groups.members.index.remove_confirmation")),
-                  },
-                  aria: {
-                    label:
-                      (
-                        t(
-                          :"groups.members.index.actions.link_remove_aria_label",
-                          member: member.user.email,
-                        )
-                      ),
-                  },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                ) %>
+                <%= render partial: current_user_is_not_member, locals: { member: } %>
               <% end %>
             </td>
           <% end %>
