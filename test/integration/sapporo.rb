@@ -65,10 +65,10 @@ class IntegrationSapporoTest < ActiveJobTestCase
     samplesheet_file = JSON.parse(@workflow_execution.as_wes_params[:workflow_params])['input']
     assert File.exist?(samplesheet_file)
     csv_file = CSV.read(samplesheet_file)
-    input_file_1 = csv_file[1][1]
-    input_file_2 = csv_file[1][2]
-    assert File.exist?(input_file_1)
-    assert File.exist?(input_file_2)
+    input_file1 = csv_file[1][1]
+    input_file2 = csv_file[1][2]
+    assert File.exist?(input_file1)
+    assert File.exist?(input_file2)
 
     # check that outputs have been saved to appropriate blobs
     outdir = JSON.parse(@workflow_execution.as_wes_params[:workflow_params])['outdir']
@@ -90,8 +90,8 @@ class IntegrationSapporoTest < ActiveJobTestCase
 
     # intermediary blobs destroyed
     assert_not File.exist?(samplesheet_file)
-    assert_not File.exist?(input_file_1)
-    assert_not File.exist?(input_file_2)
+    assert_not File.exist?(input_file1)
+    assert_not File.exist?(input_file2)
     assert_not File.exist?(output_file)
 
     # check that original files exist
