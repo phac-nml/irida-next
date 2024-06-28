@@ -27,7 +27,6 @@
 <% end %>
 
 <div class="flex flex-row-reverse">
-  <div class="ml-2"><%= turbo_frame_tag "member_sort_dropdown" %></div>
   <%= search_form_for @q, url: group_members_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
     <input type="hidden" name="format" value="turbo_stream"/>
     <%= f.label :user_email_cont, t(".search.placeholder"), class: "sr-only" %>

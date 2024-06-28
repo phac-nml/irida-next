@@ -29,10 +29,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
 
-  ransacker :access_level, formatter: proc { |v| Member::AccessLevel.access_level_options_owner[v] } do |parent|
-    parent.table[:access_level]
-  end
-
   class << self
     DEFAULT_CAN_OPTIONS = {
       include_group_links: true
