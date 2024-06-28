@@ -52,6 +52,8 @@ module Irida
       }
     end
 
+    config.disable_workflow_execution_cleanup_job = ENV.fetch('DISABLE_WORKFLOW_EXECUTION_CLEANUP', 'false') == 'true'
+
     # Only enables en and fr locales, avoiding unnecessarily loading other locales
     config.i18n.available_locales = %i[en fr]
     # Set default locale
