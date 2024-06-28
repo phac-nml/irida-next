@@ -15,7 +15,7 @@ module WorkflowExecutions
       @output_base_path = "#{@workflow_execution.blob_run_directory}/output/"
     end
 
-    def execute # rubocop:disable Metrics/MethodLength
+    def execute # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       return false unless @workflow_execution.completing?
 
       run_output_data = download_decompress_parse_gziped_json("#{@output_base_path}iridanext.output.json.gz")
@@ -44,7 +44,9 @@ module WorkflowExecutions
 
       @workflow_execution.save
 
-      WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+      unless Rails.application.config.disable_workflow_execution_cleanup_job
+        WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+      end
 
       @workflow_execution
     end

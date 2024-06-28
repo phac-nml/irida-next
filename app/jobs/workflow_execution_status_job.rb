@@ -14,7 +14,9 @@ class WorkflowExecutionStatusJob < ApplicationJob
     workflow_execution.http_error_code = exception.http_error_code
     workflow_execution.save
 
-    WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+    unless Rails.application.config.disable_workflow_execution_cleanup_job
+      WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+    end
 
     workflow_execution
   end
@@ -28,7 +30,9 @@ class WorkflowExecutionStatusJob < ApplicationJob
 
     case workflow_execution.state.to_sym
     when :canceled, :error
-      WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+      unless Rails.application.config.disable_workflow_execution_cleanup_job
+        WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+      end
     when :completing
       WorkflowExecutionCompletionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
     else
