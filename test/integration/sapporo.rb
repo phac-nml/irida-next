@@ -108,7 +108,7 @@ class IntegrationSapporoTest < ActiveJobTestCase
       skip 'Sapporo server is not running'
     end
 
-    config.disable_workflow_execution_cleanup_job = true
+    Rails.application.config.disable_workflow_execution_cleanup_job = true
 
     assert_equal 'initial', @workflow_execution.state
     assert_not @workflow_execution.cleaned?
@@ -120,6 +120,6 @@ class IntegrationSapporoTest < ActiveJobTestCase
     assert_equal 'completed', @workflow_execution.reload.state
     assert_not @workflow_execution.cleaned?
 
-    config.disable_workflow_execution_cleanup_job = false
+    Rails.application.config.disable_workflow_execution_cleanup_job = false
   end
 end
