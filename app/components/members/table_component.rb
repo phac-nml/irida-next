@@ -45,6 +45,30 @@ module Members
       end
     end
 
+    def access_level
+      if @namespace.type == 'Group'
+        'groups/members/access_level'
+      else
+        'projects/members/access_level'
+      end
+    end
+
+    def current_user_is_member
+      if @namespace.type == 'Group'
+        'groups/members/current_user_is_member'
+      else
+        'projects/members/current_user_is_member'
+      end
+    end
+
+    def current_user_is_not_member
+      if @namespace.type == 'Group'
+        'groups/members/current_user_is_not_member'
+      else
+        'projects/members/current_user_is_not_member'
+      end
+    end
+
     private
 
     def columns

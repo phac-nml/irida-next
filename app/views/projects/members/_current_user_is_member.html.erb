@@ -1,0 +1,14 @@
+<%= link_to(
+  t(:"projects.members.index.leave_project"),
+  namespace_project_member_path(id: member.id),
+  data: {
+    turbo_method: :delete,
+    turbo_confirm: (t(:"projects.members.index.leave_confirmation")),
+    turbo_frame: "_top",
+  },
+  aria: {
+    label: (t(:"projects.members.index.actions.link_leave_project_aria_label")),
+  },
+  class:
+    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+) %>
