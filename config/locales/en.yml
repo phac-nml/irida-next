@@ -732,15 +732,6 @@ en:
         inherited_from: "Inherited from"
         search:
           placeholder: Filter by username
-        sorting:
-          access_level_asc: Access level
-          access_level_desc: Access level, descending
-          created_at_desc: Newest access granted
-          created_at_asc: Oldest access granted
-          namespace_name_asc: Source
-          namespace_name_desc: Source, descending
-          user_email_asc: Username
-          user_email_desc: Username, descending
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         tabs:
@@ -1042,24 +1033,12 @@ en:
           level_30: Analyst
           level_40: Maintainer
           level_50: Owner
-        aria_labels:
-          expires_at: Project member expiration
         actions:
           button_add_aria_label: Add new project member button
           link_remove_aria_label: "Remove project member %{member} link"
           link_leave_project_aria_label: "Leave project link"
-        inherited_from: "Inherited from"
         search:
           placeholder: Filter by username
-        sorting:
-          access_level_asc: Access level
-          access_level_desc: Access level, descending
-          created_at_desc: Newest access granted
-          created_at_asc: Oldest access granted
-          namespace_name_asc: Source
-          namespace_name_desc: Source, descending
-          user_email_asc: Username
-          user_email_desc: Username, descending
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         table_header:
@@ -1585,18 +1564,14 @@ en:
   ransack:
     sort_dropdown_component:
       sorting:
-        access_level_asc: Access level
-        access_level_desc: Access level, descending
+        updated_at_desc: Updated At
         created_at_desc: Last created
-        created_at_asc: Oldest created
         name_asc: Name
         name_desc: Name, descending
         namespace_name_asc: Name
         namespace_name_desc: Name, descending
         updated_at_asc: Oldest updated
-        updated_at_desc: Updated At
-        user_email_asc: Username
-        user_email_desc: Username, descending
+        created_at_asc: Oldest created
   mailers:
     email_template:
       automated_message: This email was sent from an automated system. Please do not reply to this email.
@@ -1753,5 +1728,5 @@ en:
       expires_at: Expiration
       action: Action
       aria_labels:
-        expires_at: Group member expiration
+        expires_at: Member expiration
       inherited_from: Inherited from

@@ -2,23 +2,6 @@
 
 <%= turbo_stream.update "members_pagination", partial: "pagination" %>
 
-<%= turbo_stream.update "member_sort_dropdown" do %>
-  <%= render Ransack::SortDropdownComponent.new(
-    @q,
-    "members",
-    [
-      { name: "access_level", dir: "desc" },
-      { name: "access_level", dir: "asc" },
-      { name: "user_email", dir: "asc" },
-      { name: "user_email", dir: "desc" },
-      { name: "namespace_name", dir: "asc" },
-      { name: "namespace_name", dir: "desc" },
-      { name: "created_at", dir: "asc" },
-      { name: "created_at", dir: "desc" },
-    ],
-  ) %>
-<% end %>
-
 <%= turbo_stream.update "member_hidden_values" do %>
   <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
 <% end %>
