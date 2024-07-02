@@ -15,7 +15,7 @@ module WorkflowExecutions
       @output_base_path = "#{@workflow_execution.blob_run_directory}/output/"
     end
 
-    def execute # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    def execute # rubocop:disable Metrics/MethodLength
       return false unless @workflow_execution.completing?
 
       run_output_data = download_decompress_parse_gziped_json("#{@output_base_path}iridanext.output.json.gz")
