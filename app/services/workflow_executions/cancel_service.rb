@@ -8,33 +8,30 @@ module WorkflowExecutions
       @workflow_execution = workflow_execution
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       return false unless @workflow_execution.cancellable?
 
       authorize! @workflow_execution, to: :cancel?
 
-      # Early exit if workflow execution has not been submitted to ga4gh wes yet
-      unless @workflow_execution.sent_to_ga4gh?
+      if @workflow_execution.sent_to_ga4gh?
+        # Schedule a job to cancel the run on the ga4gh wes server
+        @workflow_execution.state = :canceling
+        @workflow_execution.save
+        WorkflowExecutionCancelationJob.set(
+          wait_until: 30.seconds.from_now
+        ).perform_later(@workflow_execution, current_user)
+      elsif @workflow_execution.initial?
+        # No files to clean up, mark as cleaned and do not create a cleanup job.
         @workflow_execution.state = :canceled
-
-        if @workflow_execution.initial?
-          # No files to clean up, mark as cleaned and do not create a cleanup job.
-          @workflow_execution.cleaned = true
-          @workflow_execution.save
-        else
-          @workflow_execution.save
-          WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
-        end
-
-        return @workflow_execution
+        @workflow_execution.cleaned = true
+        @workflow_execution.save
+      else
+        # Files were generated but not sent to ga4gh, schedule a cleanup job
+        @workflow_execution.state = :canceled
+        @workflow_execution.save
+        WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
       end
 
-      @workflow_execution.state = :canceling
-      @workflow_execution.save
-
-      # Schedule a job to cancel the run on the ga4gh wes server
-      WorkflowExecutionCancelationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution,
-                                                                                         current_user)
       @workflow_execution
     end
   end
