@@ -19,10 +19,7 @@ module WorkflowExecutions
 
       @workflow_execution.save
 
-      # Jobs in the initial state have no file to cleanup
-      unless @workflow_execution.initial?
-        WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
-      end
+      WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
 
       @workflow_execution
     end
