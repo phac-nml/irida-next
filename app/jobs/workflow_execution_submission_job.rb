@@ -14,9 +14,7 @@ class WorkflowExecutionSubmissionJob < ApplicationJob
     workflow_execution.http_error_code = exception.http_error_code
     workflow_execution.save
 
-    unless Rails.application.config.disable_workflow_execution_cleanup_job
-      WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
-    end
+    WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
 
     workflow_execution
   end

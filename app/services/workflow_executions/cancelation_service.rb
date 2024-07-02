@@ -19,7 +19,8 @@ module WorkflowExecutions
 
       @workflow_execution.save
 
-      unless Rails.application.config.disable_workflow_execution_cleanup_job
+      # Jobs in the initial state have no file to cleanup
+      unless @workflow_execution.initial?
         WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
       end
 

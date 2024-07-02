@@ -98,28 +98,4 @@ class IntegrationSapporoTest < ActiveJobTestCase
     assert @workflow_execution.samples_workflow_executions[0].sample.attachments[0].file.blob.present?
     assert @workflow_execution.samples_workflow_executions[0].sample.attachments[1].file.blob.present?
   end
-
-  test 'integration sapporo disable cleaning job' do
-    # Before starting test, check if Sapporo Integration is running.
-    begin
-      ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new
-      ga4gh_client.service_info
-    rescue Integrations::ApiExceptions::ConnectionError
-      skip 'Sapporo server is not running'
-    end
-
-    Rails.application.config.disable_workflow_execution_cleanup_job = true
-
-    assert_equal 'initial', @workflow_execution.state
-    assert_not @workflow_execution.cleaned?
-
-    WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
-
-    perform_enqueued_jobs_sequentially(delay_seconds: 10)
-
-    assert_equal 'completed', @workflow_execution.reload.state
-    assert_not @workflow_execution.cleaned?
-
-    Rails.application.config.disable_workflow_execution_cleanup_job = false
-  end
 end

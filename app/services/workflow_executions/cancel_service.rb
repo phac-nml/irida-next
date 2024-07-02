@@ -16,9 +16,13 @@ module WorkflowExecutions
       # Early exit if workflow execution has not been submitted to ga4gh wes yet
       unless @workflow_execution.sent_to_ga4gh?
         @workflow_execution.state = :canceled
-        @workflow_execution.save
 
-        unless Rails.application.config.disable_workflow_execution_cleanup_job
+        if @workflow_execution.initial?
+          # No files to clean up, mark as cleaned and do not create a cleanup job.
+          @workflow_execution.cleaned = true
+          @workflow_execution.save
+        else
+          @workflow_execution.save
           WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
         end
 
@@ -28,9 +32,9 @@ module WorkflowExecutions
       @workflow_execution.state = :canceling
       @workflow_execution.save
 
+      # Schedule a job to cancel the run on the ga4gh wes server
       WorkflowExecutionCancelationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution,
                                                                                          current_user)
-
       @workflow_execution
     end
   end
