@@ -9,7 +9,7 @@
       <% if icon_name.present? %>
         <%= viral_icon(
           name: icon_name,
-          classes: label.present? ? "w-6 h-6 flex-none mr-3" : "w-6 h-6 flex-none"
+          classes: label.present? ? "w-6 h-6 flex-none mr-3" : "w-6 h-6 flex-none",
         ) %>
       <% end %>
       <% if label.present? %>
@@ -24,14 +24,7 @@
   <div
     data-viral--dropdown-target="menu"
     class="
-      z-10
-      hidden
-      mx-3
-      bg-white
-      divide-y
-      divide-slate-100
-      rounded-lg
-      shadow
+      z-10 hidden mx-3 bg-white divide-y divide-slate-100 rounded-lg shadow
       dark:bg-slate-700
     "
     style="<%= dropdown_styles %>"

@@ -4,7 +4,7 @@
                     partial: "groups/members/access_level",
                     locals: {
                       member:,
-                      access_levels: @access_levels
+                      access_levels: @access_levels,
                     } %>
 
 <%= turbo_stream.update "member-#{member.id}-access-level-updated" do %>

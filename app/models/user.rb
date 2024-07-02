@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for User
-class User < ApplicationRecord
+class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include HasUserType
 
   attr_accessor :skip_password_validation
@@ -40,6 +40,14 @@ class User < ApplicationRecord
   before_save :ensure_namespace
 
   delegate :full_path, to: :namespace
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[first_name last_name email]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[]
+  end
 
   def self.from_omniauth(auth)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
