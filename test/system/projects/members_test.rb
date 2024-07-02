@@ -171,8 +171,6 @@ module Projects
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
-      # click_on I18n.t(:'components.pagination.next')
-
       assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username').upcase
 
       table_row = find(:table_row, { 'Username' => project_member.user.email })
@@ -418,25 +416,26 @@ module Projects
     end
 
     test 'can search members by username' do
+      username_col = 1
       visit namespace_project_members_url(@namespace, @project)
 
       assert_text 'Displaying 5 items'
       assert_selector '#project-members table tbody tr', count: 5
-      assert_text @member_james.user.email
-      assert_text @member_jean.user.email
-      assert_text @member_joan.user.email
-      assert_text @member_john.user.email
-      assert_text @member_ryan.user.email
+      assert_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_james.user.email
+      assert_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_jean.user.email
+      assert_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_joan.user.email
+      assert_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_john.user.email
+      assert_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_ryan.user.email
 
       fill_in placeholder: I18n.t(:'projects.members.index.search.placeholder'), with: @member_james.user.email
 
       assert_text 'Displaying 1 item'
       assert_selector '#project-members table tbody tr', count: 1
-      assert_text @member_james.user.email
-      assert_no_text @member_jean.user.email
-      assert_no_text @member_joan.user.email
-      # assert_no_text @member_john.user.email
-      assert_no_text @member_ryan.user.email
+      assert_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_james.user.email
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_jean.user.email
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_joan.user.email
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_john.user.email
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{username_col})", text: @member_ryan.user.email
     end
 
     test 'can sort members by column' do
