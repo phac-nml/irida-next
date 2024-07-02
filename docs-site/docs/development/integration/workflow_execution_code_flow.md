@@ -135,7 +135,11 @@ block {
 block {
   cancel_run: {
     switch(`WorkflowExecutions::CancelService`){
-      `initial` / `prepared`  **States** => {
+      `initial` **State** => {
+        Set `cleaned` to `true`;
+        goto cleaned;
+      }
+      `prepared`  **State** => {
         `canceled` **State**
         Queue cleanup job;
         goto cleanup_job;
