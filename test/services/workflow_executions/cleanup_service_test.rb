@@ -32,6 +32,13 @@ module WorkflowExecutions
         gzip: false,
         prefix: ''
       )
+      unrelated_file = 'test/fixtures/files/md5_a'
+      @unrelated_file_blob = make_and_upload_blob(
+        filepath: unrelated_file,
+        blob_run_directory: nil,
+        gzip: false,
+        prefix: ''
+      )
     end
 
     test 'clean all workflow execution run directory files' do
@@ -47,6 +54,7 @@ module WorkflowExecutions
         @output_file_blob.download
         @input_file_blob.download
         @samplesheet_file_blob.download
+        @unrelated_file_blob.download
       end
 
       @workflow_execution = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
@@ -54,8 +62,87 @@ module WorkflowExecutions
       assert_raises(ActiveStorage::FileNotFoundError) { @output_file_blob.download }
       assert_raises(ActiveStorage::FileNotFoundError) { @input_file_blob.download }
       assert_raises(ActiveStorage::FileNotFoundError) { @samplesheet_file_blob.download }
+      assert_nothing_raised { @unrelated_file_blob.download }
 
       assert @workflow_execution.cleaned?
+    end
+
+    test 'do not clean an already cleaned workflow execution' do
+      @workflow_execution.cleaned = true
+
+      assert_nothing_raised do
+        @output_file_blob.download
+        @input_file_blob.download
+        @samplesheet_file_blob.download
+        @unrelated_file_blob.download
+      end
+
+      @workflow_execution = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
+
+      assert_nothing_raised do
+        @output_file_blob.download
+        @input_file_blob.download
+        @samplesheet_file_blob.download
+        @unrelated_file_blob.download
+      end
+    end
+
+    test 'do not clean if blob_run_directory is nil' do
+      # This tests a safety added to the code, the service should never get a workflow execution in this state
+      assert_not @workflow_execution.cleaned?
+
+      @workflow_execution.blob_run_directory = nil
+
+      assert_nothing_raised do
+        @output_file_blob.download
+        @input_file_blob.download
+        @samplesheet_file_blob.download
+        @unrelated_file_blob.download
+      end
+
+      @workflow_execution = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
+
+      assert_nothing_raised do
+        @output_file_blob.download
+        @input_file_blob.download
+        @samplesheet_file_blob.download
+        @unrelated_file_blob.download
+      end
+    end
+
+    test 'do not clean if blob_run_directory is an empty string' do
+      # This tests a safety added to the code, the service should never get a workflow execution in this state
+      assert_not @workflow_execution.cleaned?
+
+      @workflow_execution.blob_run_directory = ''
+
+      assert_nothing_raised do
+        @output_file_blob.download
+        @input_file_blob.download
+        @samplesheet_file_blob.download
+        @unrelated_file_blob.download
+      end
+
+      @workflow_execution = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
+
+      assert_nothing_raised do
+        @output_file_blob.download
+        @input_file_blob.download
+        @samplesheet_file_blob.download
+        @unrelated_file_blob.download
+      end
+    end
+
+    test 'do not clean if workflow execution is nil' do
+      # This tests a safety added to the code, the service should never get a workflow execution in this state
+      WorkflowExecutions::CleanupService.new(nil, @user, {}).execute
+
+      assert_nothing_raised do
+        @output_file_blob.download
+        @input_file_blob.download
+        @samplesheet_file_blob.download
+        @unrelated_file_blob.download
+      end
     end
   end
 end
