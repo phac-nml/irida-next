@@ -43,7 +43,7 @@ module Projects
     end
 
     def current_page
-      @current_page = t(:'projects.sidebar.members').downcase
+      @current_page = t(:'projects.sidebar.members')
     end
   end
 end

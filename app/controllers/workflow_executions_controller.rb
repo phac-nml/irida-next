@@ -57,7 +57,7 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def current_page
-    @current_page = I18n.t(:'general.default_sidebar.workflows').downcase
+    @current_page = I18n.t(:'general.default_sidebar.workflows')
   end
 
   def context_crumbs

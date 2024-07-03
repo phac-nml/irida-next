@@ -9,26 +9,26 @@
             url: group_path(@group),
             icon: "squares_2x2",
             label: t(:"groups.sidebar.details"),
-            selected: @current_page == t(:"groups.sidebar.details").downcase
+            selected: @current_page == t(:"groups.sidebar.details")
           ) %>
           <%= render section.with_item(
             url: group_samples_path(@group),
             icon: "beaker",
             label: t(:"groups.sidebar.samples"),
-            selected: @current_page == t(:"groups.sidebar.samples").downcase
+            selected: @current_page == t(:"groups.sidebar.samples")
           ) %>
           <%= render section.with_item(
             url: group_members_path(@group),
             icon: "users",
             label: t(:"groups.sidebar.members"),
-            selected: @current_page == t(:"groups.sidebar.members").downcase
+            selected: @current_page == t(:"groups.sidebar.members")
           ) %>
           <% if allowed_to?(:view_history?, @group) %>
             <%= render section.with_item(
               url: group_history_path(@group),
               icon: "list_bullet",
               label: t(:"groups.sidebar.history"),
-              selected: @current_page == t(:"groups.sidebar.history").downcase
+              selected: @current_page == t(:"groups.sidebar.history")
             ) %>
           <% end %>
           <% if allowed_to?(:update?, @group) %>
@@ -36,20 +36,20 @@
               title: t(:"groups.sidebar.settings"),
               icon: "cog_6_tooth",
               selectable_pages: [
-                t(:"groups.sidebar.general").downcase,
-                t(:"groups.sidebar.bot_accounts").downcase,
+                t(:"groups.sidebar.general"),
+                t(:"groups.sidebar.bot_accounts"),
               ],
               current_page: @current_page
               ) do |multi_level_menu| %>
               <% multi_level_menu.with_menu_item(
                 url: edit_group_path(@group),
                 label: t(:"groups.sidebar.general"),
-                selected: @current_page == t(:"groups.sidebar.general").downcase,
+                selected: @current_page == t(:"groups.sidebar.general"),
               ) %>
               <% multi_level_menu.with_menu_item(
                 url: group_bots_path(@group),
                 label: t(:"groups.sidebar.bot_accounts"),
-                selected: @current_page == t(:"groups.sidebar.bot_accounts").downcase,
+                selected: @current_page == t(:"groups.sidebar.bot_accounts"),
               ) %>
             <% end %>
           <% end %>

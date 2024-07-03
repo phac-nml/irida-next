@@ -34,6 +34,6 @@ class ProfilesController < Profiles::ApplicationController
   end
 
   def current_page
-    @current_page = t(:'profiles.sidebar.profile').downcase
+    @current_page = t(:'profiles.sidebar.profile')
   end
 end

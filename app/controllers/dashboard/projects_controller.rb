@@ -33,7 +33,7 @@ module Dashboard
     end
 
     def current_page
-      @current_page = t(:'general.default_sidebar.projects').downcase
+      @current_page = t(:'general.default_sidebar.projects')
     end
   end
 end

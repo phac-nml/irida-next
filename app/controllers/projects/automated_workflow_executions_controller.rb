@@ -101,7 +101,7 @@ module Projects
     private
 
     def current_page
-      @current_page = t(:'projects.sidebar.automated_workflow_executions').downcase
+      @current_page = t(:'projects.sidebar.automated_workflow_executions')
     end
 
     def automated_workflow_execution_params

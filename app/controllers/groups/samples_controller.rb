@@ -60,7 +60,7 @@ module Groups
     end
 
     def current_page
-      @current_page = t(:'groups.sidebar.samples').downcase
+      @current_page = t(:'groups.sidebar.samples')
     end
 
     def set_default_sort

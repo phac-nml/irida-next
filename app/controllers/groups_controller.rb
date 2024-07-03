@@ -156,14 +156,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @current_page = case action_name
                     when 'new'
                       if @group
-                        t(:'groups.sidebar.details').downcase
+                        t(:'groups.sidebar.details')
                       else
-                        t(:'general.default_sidebar.groups').downcase
+                        t(:'general.default_sidebar.groups')
                       end
                     when 'show'
-                      t(:'groups.sidebar.details').downcase
+                      t(:'groups.sidebar.details')
                     else
-                      t(:'groups.sidebar.general').downcase
+                      t(:'groups.sidebar.general')
                     end
   end
 

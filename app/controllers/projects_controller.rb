@@ -170,13 +170,13 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   def current_page
     @current_page = case action_name
                     when 'show'
-                      t(:'projects.sidebar.details').downcase
+                      t(:'projects.sidebar.details')
                     when 'new'
-                      t(:'general.default_sidebar.projects').downcase
+                      t(:'general.default_sidebar.projects')
                     when 'history'
-                      t(:'projects.sidebar.history').downcase
+                      t(:'projects.sidebar.history')
                     else
-                      t(:'projects.sidebar.general').downcase
+                      t(:'projects.sidebar.general')
                     end
   end
 end

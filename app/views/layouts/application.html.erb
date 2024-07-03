@@ -9,20 +9,20 @@
             icon: "rectangle_stack",
             label: t(:"general.default_sidebar.projects"),
             url: dashboard_projects_path,
-            selected: @current_page == t(:"general.default_sidebar.projects").downcase,
+            selected: @current_page == t(:"general.default_sidebar.projects"),
           ) %>
           <%= render section.with_item(
             icon: "squares_2x2",
             label: t(:"general.default_sidebar.groups"),
             url: dashboard_groups_path,
-            selected: @current_page == t(:"general.default_sidebar.groups").downcase,
+            selected: @current_page == t(:"general.default_sidebar.groups"),
           ) %>
         <% if @pipelines_enabled %>
           <%= render section.with_item(
             icon: "command_line",
             label: t(:"general.default_sidebar.workflows"),
             url: workflow_executions_path,
-            selected: @current_page == t(:"general.default_sidebar.workflows").downcase,
+            selected: @current_page == t(:"general.default_sidebar.workflows"),
           ) %>
         <% end %>
           <%= render section.with_item(
@@ -30,7 +30,7 @@
             label: t(:"general.default_sidebar.data_exports"),
             url: data_exports_path,
             selected:
-              @current_page == t(:"general.default_sidebar.data_exports").downcase,
+              @current_page == t(:"general.default_sidebar.data_exports"),
           ) %>
         <% end %>
         <% layout.with_breadcrumb(context_crumbs: @context_crumbs || []) %>
