@@ -355,7 +355,8 @@ module Groups
                         text: Member::AccessLevel.human_access(@member_ryan.access_level)
       end
 
-      click_on I18n.t('members.table_component.user_email')
+      sort_link = find('table thead th:nth-child(1) a')
+      sort_link.trigger('click')
       assert_selector '#members-tabs table thead th:first-child svg.icon-arrow_down'
       within first('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
@@ -369,7 +370,8 @@ module Groups
                         text: Member::AccessLevel.human_access(@member_bot.access_level)
       end
 
-      click_on I18n.t('members.table_component.access_level')
+      sort_link = find('table thead th:nth-child(2) a')
+      sort_link.trigger('click')
       assert_selector '#members-tabs table thead th:nth-child(2) svg.icon-arrow_up'
       within first('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
@@ -383,7 +385,8 @@ module Groups
                         text: Member::AccessLevel.human_access(@member_james.access_level)
       end
 
-      click_on I18n.t('members.table_component.access_level')
+      sort_link = find('table thead th:nth-child(2) a')
+      sort_link.trigger('click')
       assert_selector '#members-tabs table thead th:nth-child(2) svg.icon-arrow_down'
       within first('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
@@ -397,7 +400,8 @@ module Groups
                         text: Member::AccessLevel.human_access(@member_ryan.access_level)
       end
 
-      click_on I18n.t('members.table_component.namespace_name')
+      sort_link = find('table thead th:nth-child(3) a')
+      sort_link.trigger('click')
       assert_selector '#members-tabs table thead th:nth-child(3) svg.icon-arrow_up'
       within first('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_bot.user.email
@@ -411,19 +415,20 @@ module Groups
                         text: Member::AccessLevel.human_access(@member_john.access_level)
       end
 
-      # click_on I18n.t('members.table_component.expires_at')
-      # assert_selector '#members-tabs table thead th:nth-child(5) svg.icon-arrow_up'
-      # within first('#members-tabs table tbody') do
-      #   assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
-      #   assert_selector 'tr:first-child td:nth-child(2)',
-      #                   text: Member::AccessLevel.human_access(@member_john.access_level)
-      #   assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
-      #   assert_selector 'tr:nth-child(2) td:nth-child(2)',
-      #                   text: Member::AccessLevel.human_access(@member_james.access_level)
-      #   assert_selector 'tr:last-child td:first-child', text: @member_bot.user.email
-      #   assert_selector 'tr:last-child td:nth-child(2)',
-      #                   text: Member::AccessLevel.human_access(@member_bot.access_level)
-      # end
+      sort_link = find('table thead th:nth-child(5) a')
+      sort_link.trigger('click')
+      assert_selector '#members-tabs table thead th:nth-child(5) svg.icon-arrow_up'
+      within first('#members-tabs table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_john.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_bot.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_bot.access_level)
+      end
     end
   end
 end
