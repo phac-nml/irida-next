@@ -1,31 +1,25 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <%= render Viral::BaseComponent.new(**system_arguments) do %>
     <table
-      class='
-        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
-      '
+      class='w-full text-sm text-left  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap'
     >
       <thead
-        class='
-          text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
-          dark:text-slate-400
-        '
+        class='text-xs uppercase  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400'
       >
         <tr>
           <% @columns.each_with_index do |column, index| %>
             <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
-            ) do %>
+                tag: 'th',
+                scope: 'col',
+                classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
+              ) do %>
               <% if index.zero? and @abilities[:select_samples] %>
                 <%= search_form_for(
-                  @q,
-                  url: select_samples_url(**request.query_parameters),
-                  html: { "data-controller": "filters", id: "select-all-form" },
-                  class: "filters align-middle"
-                ) do |f| %>
+                    @q,
+                    url: select_samples_url(**request.query_parameters),
+                    html: { "data-controller": "filters", id: "select-all-form" },
+                    class: "filters align-middle"
+                  ) do |f| %>
                   <input type="hidden" name="format" value="turbo_stream"/>
 
                   <% @search_params.each do |key, value| %>
@@ -49,7 +43,7 @@
                       focus:ring-2 dark:bg-slate-700 dark:border-slate-600
                     "
                     data-selection-target="selectAll"
-                    onchange="Turbo.navigator.submitForm(this.form)"
+                    onchange="this.form.requestSubmit()"
                   />
                 <% end %>
               <% end %>
@@ -73,10 +67,10 @@
           <% end %>
           <% @metadata_fields.each do |field| %>
             <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              class: class_names('px-6 py-3')
-            ) do %>
+                tag: 'th',
+                scope: 'col',
+                class: class_names('px-6 py-3')
+              ) do %>
               <%= render Ransack::SortComponent.new(
                 ransack_obj: @q,
                 label: field,
@@ -88,28 +82,26 @@
           <% end %>
           <% if @renders_row_actions %>
             <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
-            ) do %>
+                tag: 'th',
+                scope: 'col',
+                classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              ) do %>
               <%= t(".action") %>
             <% end %>
           <% end %>
         </tr>
       </thead>
       <tbody
-        class='
-          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-        '
+        class='bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700'
       >
         <% @samples.each do |sample| %>
           <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
-                tag: index.zero? ? 'th' :'td',
-                scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-6 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
-              ) do %>
+                  tag: index.zero? ? 'th' : 'td',
+                  scope: index.zero? ? 'row' : nil,
+                  classes: class_names('px-6 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
+                ) do %>
                 <% if index.zero? && @abilities[:select_samples] %>
                   <%= check_box_tag "sample_ids[]",
                   sample.id,
@@ -125,10 +117,10 @@
                 <% end %>
                 <% if column == :puid || column == :name %>
                   <%= link_to(
-                    project_sample_path(sample.project, sample),
-                    data: { turbo: false },
-                    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline"
-                  ) do %>
+                      project_sample_path(sample.project, sample),
+                      data: { turbo: false },
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline"
+                    ) do %>
                     <span class="font-semibold">
                       <%= highlight(
                         sample[column],
@@ -159,18 +151,18 @@
             <% end %>
             <% @metadata_fields.each do |field| %>
               <%= render_cell(
-                tag: 'td',
-                scope: 'col',
-                class: class_names('px-6 py-3')
-              ) do %>
+                  tag: 'td',
+                  scope: 'col',
+                  class: class_names('px-6 py-3')
+                ) do %>
                 <%= sample.metadata[field] %>
               <% end %>
             <% end %>
             <% if @renders_row_actions %>
               <%= render_cell(
-                tag: 'td',
-                classes: class_names('px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
-              ) do %>
+                  tag: 'td',
+                  classes: class_names('px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+                ) do %>
                 <% if @row_actions[:edit] %>
                   <%= link_to(
                     t(:"projects.samples.index.edit_button"),
@@ -185,7 +177,10 @@
                 <% if @row_actions[:destroy] %>
                   <%= link_to(
                     t(:"projects.samples.index.remove_button"),
-                    new_namespace_project_samples_deletion_path(sample_id: sample.id, deletion_type: 'single'),
+                    new_namespace_project_samples_deletion_path(
+                      sample_id: sample.id,
+                      deletion_type: "single",
+                    ),
                     data: {
                       "turbo-prefetch": false,
                     },
@@ -202,9 +197,7 @@
         <tfoot>
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
-              class="
-                px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 z-10
-              "
+              class="sticky left-0 z-10 px-6 py-3  bg-slate-50 dark:bg-slate-900"
               colspan="3"
             >
               <span>
@@ -222,38 +215,48 @@
       <% end %>
     </table>
   <% end %>
-  <% if @has_samples %>
-    <%= render PaginationComponent.new(
-      info: helpers.pagy_info(@pagy),
-      prev_url:
-        (
-          if @pagy.prev
-            helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
-              "samples.turbo_stream",
-              "samples",
-            )
-          else
-            nil
-          end
-        ),
-      next_url:
-        (
-          if @pagy.next
-            helpers.pagy_url_for(@pagy, @pagy.next).gsub(
-              "samples.turbo_stream",
-              "samples",
-            )
-          else
-            nil
-          end
-        ),
-    ) %>
-  <% end %>
-  <div class="empty_state_message">
-    <%= viral_empty(
-      title: @empty[:title],
-      description: @empty[:description],
-      icon_name: :beaker,
-    ) %>
+  <div class="w-full border-t border-slate-200 dark:border-slate-700">
+    <div class="flex items-center justify-center mt-6 space-x-4">
+      <% if @has_samples %>
+        <% if @pagy.prev.present? %>
+          <button
+            type="submit"
+            class="
+              py-2.5 px-5 me-2 mb-2 text-sm font-medium text-slate-900 focus:outline-none
+              bg-white rounded-lg border border-slate-200 hover:bg-slate-100
+              hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-slate-100
+              dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400
+              dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700
+            "
+            name="page"
+            value="<%= @pagy.prev %>"
+          ><%= t("components.pagination.previous") %></button>
+        <% end %>
+        <% if @pagy.next.present? %>
+          <button
+            type="submit"
+            class="
+              py-2.5 px-5 me-2 mb-2 text-sm font-medium text-slate-900 focus:outline-none
+              bg-white rounded-lg border border-slate-200 hover:bg-slate-100
+              hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-slate-100
+              dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400
+              dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700
+            "
+            name="page"
+            value="<%= @pagy.next %>"
+          ><%= t("components.pagination.next") %></button>
+        <% end %>
+      <% end %>
+    </div>
+    <p class="m-4 text-center text-slate-500"><%== helpers.pagy_info(@pagy) %></p>
   </div>
+  <% unless @has_samples %>
+    <div class="empty_state_message">
+      <%= viral_empty(
+        title: @empty[:title],
+        description: @empty[:description],
+        icon_name: :beaker,
+      ) %>
+    </div>
+  <% end %>
 <% end %>

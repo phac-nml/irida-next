@@ -71,10 +71,9 @@
     </div>
   <% end %>
 <% end %>
-<% if @has_samples %>
   <div class="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">
     <%= search_form_for @q, url: search_namespace_project_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters","data-filters-selection-outlet": "#samples-table" }, class: "filters" do |f| %>
-      <div class="flex flex-row-reverse items-center space-x-2">
+      <div class="flex flex-row-reverse items-center space-x-2 mb-4">
         <input type="hidden" name="format" value="turbo_stream"/>
         <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
         <%= render ListFilterComponent.new(form: f) %>
@@ -98,14 +97,13 @@
 
         </div>
       </div>
+      <%= turbo_frame_tag "project_samples_table" do %>
+        <%= render partial: "table",
+                   locals: {
+                     project: @project,
+                     samples: @samples,
+                     pagy: @pagy,
+                   } %>
+      <% end %>
     <% end %>
   </div>
-<% end %>
-<%= turbo_frame_tag "project_samples_table" do %>
-  <%= render partial: "table",
-  locals: {
-    project: @project,
-    samples: @samples,
-    pagy: @pagy,
-  } %>
-<% end %>
