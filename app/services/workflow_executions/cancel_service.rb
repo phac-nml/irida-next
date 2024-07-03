@@ -8,7 +8,7 @@ module WorkflowExecutions
       @workflow_execution = workflow_execution
     end
 
-    def execute # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def execute # rubocop:disable Metrics/MethodLength
       return false unless @workflow_execution.cancellable?
 
       authorize! @workflow_execution, to: :cancel?
@@ -20,16 +20,18 @@ module WorkflowExecutions
         WorkflowExecutionCancelationJob.set(
           wait_until: 30.seconds.from_now
         ).perform_later(@workflow_execution, current_user)
-      elsif @workflow_execution.initial?
-        # No files to clean up, mark as cleaned and do not create a cleanup job.
-        @workflow_execution.state = :canceled
-        @workflow_execution.cleaned = true
-        @workflow_execution.save
       else
-        # Files were generated but not sent to ga4gh, schedule a cleanup job
         @workflow_execution.state = :canceled
-        @workflow_execution.save
-        WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+
+        if @workflow_execution.initial?
+          # No files to clean up, mark as cleaned and do not create a cleanup job.
+          @workflow_execution.cleaned = true
+          @workflow_execution.save
+        else # state = :prepared
+          # Files were generated but not sent to ga4gh, schedule a cleanup job
+          @workflow_execution.save
+          WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+        end
       end
 
       @workflow_execution

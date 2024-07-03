@@ -85,6 +85,8 @@ module WorkflowExecutions
         @samplesheet_file_blob.download
         @unrelated_file_blob.download
       end
+
+      assert @workflow_execution.cleaned?
     end
 
     test 'do not clean if blob_run_directory is nil' do
@@ -108,6 +110,8 @@ module WorkflowExecutions
         @samplesheet_file_blob.download
         @unrelated_file_blob.download
       end
+
+      assert @workflow_execution.cleaned?
     end
 
     test 'do not clean if blob_run_directory is an empty string' do
@@ -131,6 +135,8 @@ module WorkflowExecutions
         @samplesheet_file_blob.download
         @unrelated_file_blob.download
       end
+
+      assert @workflow_execution.cleaned?
     end
 
     test 'do not clean if workflow execution is nil' do
