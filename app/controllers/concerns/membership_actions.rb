@@ -45,6 +45,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
       respond_to do |format|
         format.turbo_stream do
           @q = Member.where(id: load_members.pluck(:id)).ransack(params[:q])
+          set_default_sort
           @pagy, @members = pagy(@q.result)
           render status: :ok, locals: { member: @new_member, type: 'success',
                                         message: t('.success', user: @new_member.user.email) }
@@ -75,6 +76,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
         respond_to do |format|
           format.turbo_stream do
             @q = Member.where(id: load_members.pluck(:id)).ransack(params[:q])
+            set_default_sort
             @pagy, @members = pagy(@q.result)
             render status: :ok, locals: { member: @member, type: 'success',
                                           message: t('.success', user: @member.user.email) }
