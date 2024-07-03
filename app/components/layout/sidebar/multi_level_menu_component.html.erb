@@ -62,11 +62,7 @@
             dark:hover:bg-slate-700
           "
         >
-          <% if menu_item.selected %>
-            <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 rounded-lg bg-primary-600"></div>
-          <% else %>
-            <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 bg-transparent"></div>
-          <% end %>
+          <%= render Layout::Sidebar::SelectedComponent.new(selected: menu_item.selected) %>
           <span class="ml-2 grow">
             <%= menu_item.label %>
           </span></a>

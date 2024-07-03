@@ -17,11 +17,7 @@
       <%= class_names('Layout-Sidebar__Item--selected bg-slate-200 dark:bg-slate-700': selected)  %>
     "
   >
-    <% if selected %>
-      <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 rounded-lg bg-primary-600"></div>
-    <% else %>
-      <div aria-hidden="true" class="w-1 h-6 my-0 mr-1 bg-transparent"></div>
-    <% end %>
+    <%= render Layout::Sidebar::SelectedComponent.new(selected: selected) %>
     <%= viral_icon(name: icon, style: "width: 27px;", classes: "p-1") %>
     <span class="ml-2 grow">
       <%= label %>
