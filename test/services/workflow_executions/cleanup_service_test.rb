@@ -77,7 +77,7 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      @workflow_execution = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
+      ret_value = WorkflowExecutions::CleanupService.new(@workflow_execution, @user, {}).execute
 
       assert_nothing_raised do
         @output_file_blob.download
@@ -86,7 +86,7 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      assert @workflow_execution.cleaned?
+      assert ret_value.nil?
     end
 
     test 'do not clean if blob_run_directory is nil' do
