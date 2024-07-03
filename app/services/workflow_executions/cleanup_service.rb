@@ -9,9 +9,12 @@ module WorkflowExecutions
     end
 
     def execute
-      return if @workflow_execution.cleaned?
+      return if @workflow_execution.nil? || @workflow_execution.cleaned?
 
-      ActiveStorage::Blob.service.delete_prefixed(@workflow_execution.blob_run_directory)
+      # This check is for safety as passing nil or an empty string into deleted_refixed will delete all blobs
+      if @workflow_execution.blob_run_directory.present?
+        ActiveStorage::Blob.service.delete_prefixed(@workflow_execution.blob_run_directory)
+      end
 
       @workflow_execution.cleaned = true
 
