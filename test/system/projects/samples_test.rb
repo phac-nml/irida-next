@@ -270,7 +270,8 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.transfers.description.plural').gsub! 'COUNT_PLACEHOLDER', '3'
+        assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                                         '3')
         within %(turbo-frame[id="list_select_samples"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
