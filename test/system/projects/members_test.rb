@@ -471,7 +471,7 @@ module Projects
       end
 
       click_on I18n.t('members.table_component.access_level')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_up'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -485,7 +485,7 @@ module Projects
       end
 
       click_on I18n.t('members.table_component.access_level')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_down'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -499,7 +499,7 @@ module Projects
       end
 
       click_on I18n.t('members.table_component.namespace_name')
-      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
+      assert_selector '#project-members table thead th:nth-child(3) svg.icon-arrow_up'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -513,7 +513,7 @@ module Projects
       end
 
       click_on I18n.t('members.table_component.expires_at')
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector '#project-members table thead th:nth-child(5) svg.icon-arrow_up'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
