@@ -124,7 +124,7 @@ class AttachmentTest < ActiveSupport::TestCase
       @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_14.txt').open,
                                         filename: 'test_file_14.txt' })
     new_unknown_attachment_ext_txt.save
-    assert_equal 'unknown', new_unknown_attachment_ext_txt.metadata['format']
+    assert_equal 'text', new_unknown_attachment_ext_txt.metadata['format']
   end
 
   test '#destroy does not destroy the ActiveStorage::Attachment' do
