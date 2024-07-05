@@ -44,7 +44,7 @@ class Attachment < ApplicationRecord
 
   private
 
-  def assign_metadata
+  def assign_metadata # rubocop:disable Metrics/AbcSize
     return if metadata.key? 'format'
 
     case filename.to_s
