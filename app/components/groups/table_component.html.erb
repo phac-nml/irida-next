@@ -18,12 +18,16 @@
             scope: 'col',
             classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
           ) do %>
-            <%= render Ransack::SortComponent.new(
-              ransack_obj: @q,
-              label: t(".#{column}"),
-              url: helpers.sorting_url(@q, column),
-              field: column,
-            ) %>
+            <% if column == :updated_at %>
+              <%= t(".updated_at") %>
+            <% else %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(".#{column}"),
+                url: helpers.sorting_url(@q, column),
+                field: column,
+              ) %>
+            <% end %>
           <% end %>
         <% end %>
         <%= render_cell(
