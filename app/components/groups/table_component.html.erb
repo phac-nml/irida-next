@@ -1,131 +1,185 @@
-<% @namespace_group_links.each do | namespace_group_link | %>
-  <% namespace_group_link_source =
-    helpers.namespace_group_link_source(@namespace, namespace_group_link) %>
-  <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
-    <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
-    <td class="px-6 py-4">
-      <% if namespace_group_link_source.key?(:inherited_namespace_path) %>
-        <%= viral_tooltip(title: t(:"projects.group_links.index.inherited_from")) do %>
-          <%= link_to namespace_group_link_source[:label],
-          namespace_group_link_source[:inherited_namespace_path],
-          data: {
-            turbo_frame: "_top"
-          },
-          class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
-        <% end %>
-      <% else %>
-        <div class="text-sm font-normal text-slate-500 dark:text-slate-400">
-          <%= namespace_group_link_source[:label] %>
-        </div>
-      <% end %>
-    </td>
-    <td class="px-6 py-4">
-      <div>
-        <%= viral_time_ago(original_time: namespace_group_link.created_at) %>
-        <span class="block">
-          <%= helpers.turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
-            <% if namespace_group_link.created_at < namespace_group_link.updated_at %>
-              <%= render UpdatedComponent.new(updated_at: namespace_group_link.updated_at) %>
-            <% end %>
-          <% end %>
-        </span>
-      </div>
-    </td>
-    <td class="px-6 py-4">
-      <div class="form-field">
-        <% if helpers.allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-          <%= form_with(model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
-            <%= form.select(
-              :group_access_level,
-              @access_levels,
-              { selected: namespace_group_link.group_access_level },
-              {
-                id: "invited-group-#{namespace_group_link.group.id}-access-level-select",
-                onchange: "this.form.requestSubmit();",
-                "aria-label":
-                  t(:"projects.group_links.index.aria_labels.group_access_level")
-              }
+<%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+  <table
+    class='
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+      whitespace-nowrap
+    '
+  >
+    <thead
+      class='
+        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
+        dark:text-slate-400
+      '
+    >
+      <tr>
+        <% @columns.each_with_index do |column, index| %>
+          <%= render_cell(
+            tag: 'th',
+            scope: 'col',
+            classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
+          ) do %>
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(".#{column}"),
+              url: helpers.sorting_url(@q, column),
+              field: column,
             ) %>
-            <input type="hidden" name="format" value="turbo_stream"/>
           <% end %>
-        <% else %>
-          <%= t(
-            :"projects.group_links.index.access_level.level_#{namespace_group_link.group_access_level}"
-          ) %>
         <% end %>
-      </div>
-    </td>
-    <td class="px-6 py-4">
-      <% if helpers.allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-        <%= form_with( model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
-          <div class="form-field datepicker" data-controller="datepicker">
-            <div class="relative max-w-sm">
-              <div
-                class="
-                  absolute
-                  inset-y-0
-                  left-0
-                  flex
-                  items-center
-                  pl-3
-                  pointer-events-none
-                "
-              >
-                <%= viral_icon(
-                  name: :calendar_days,
-                  classes: "w-5 h-5 text-slate-500 dark:text-slate-400"
-                ) %>
+        <%= render_cell(
+          tag: 'th',
+          scope: 'col',
+          classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+        ) do %>
+          <%= t(".action") %>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody
+      class='
+        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+      '
+    >
+      <% @namespace_group_links.each do | namespace_group_link | %>
+        <%= render Viral::BaseComponent.new(**row_arguments(namespace_group_link)) do %>
+          <% namespace_group_link_source =
+            helpers.namespace_group_link_source(@namespace, namespace_group_link) %>
+          <tr class="text-sm font-normal text-slate-500 dark:text-slate-400">
+            <td class="px-6 py-4"><%= namespace_group_link.group.name %></td>
+            <td class="px-6 py-4">
+              <% if namespace_group_link_source.key?(:inherited_namespace_path) %>
+                <%= viral_tooltip(title: t(:"projects.group_links.index.inherited_from")) do %>
+                  <%= link_to namespace_group_link_source[:label],
+                  namespace_group_link_source[:inherited_namespace_path],
+                  data: {
+                    turbo_frame: "_top"
+                  },
+                  class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
+                <% end %>
+              <% else %>
+                <div class="text-sm font-normal text-slate-500 dark:text-slate-400">
+                  <%= namespace_group_link_source[:label] %>
+                </div>
+              <% end %>
+            </td>
+            <td class="px-6 py-4">
+              <div>
+                <%= viral_time_ago(original_time: namespace_group_link.created_at) %>
+                <span class="block">
+                  <%= helpers.turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
+                    <% if namespace_group_link.created_at < namespace_group_link.updated_at %>
+                      <%= render UpdatedComponent.new(updated_at: namespace_group_link.updated_at) %>
+                    <% end %>
+                  <% end %>
+                </span>
               </div>
-              <%= form.text_field :expires_at,
-                              placeholder: I18n.t("date.formats.iso"),
-                              autocomplete: "off",
-                              value: namespace_group_link.expires_at,
-                              id: "invited-group-#{namespace_group_link.group.id}-expiration",
-                              "data-datepicker-target": "datePicker",
-                              "data-datepicker-autosubmit": "true",
-                              "aria-label":
-                                t(:"projects.group_links.index.aria_labels.expires_at") %>
+            </td>
+            <td class="px-6 py-4">
+              <div class="form-field">
+                <% if helpers.allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+                  <%= form_with(model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
+                    <%= form.select(
+                      :group_access_level,
+                      @access_levels,
+                      { selected: namespace_group_link.group_access_level },
+                      {
+                        id: "invited-group-#{namespace_group_link.group.id}-access-level-select",
+                        onchange: "this.form.requestSubmit();",
+                        "aria-label":
+                          t(:"projects.group_links.index.aria_labels.group_access_level")
+                      }
+                    ) %>
+                    <input type="hidden" name="format" value="turbo_stream"/>
+                  <% end %>
+                <% else %>
+                  <%= t(
+                    :"projects.group_links.index.access_level.level_#{namespace_group_link.group_access_level}"
+                  ) %>
+                <% end %>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <% if helpers.allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+                <%= form_with( model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
+                  <div class="form-field datepicker" data-controller="datepicker">
+                    <div class="relative max-w-sm">
+                      <div
+                        class="
+                          absolute
+                          inset-y-0
+                          left-0
+                          flex
+                          items-center
+                          pl-3
+                          pointer-events-none
+                        "
+                      >
+                        <%= viral_icon(
+                          name: :calendar_days,
+                          classes: "w-5 h-5 text-slate-500 dark:text-slate-400"
+                        ) %>
+                      </div>
+                      <%= form.text_field :expires_at,
+                                      placeholder: I18n.t("date.formats.iso"),
+                                      autocomplete: "off",
+                                      value: namespace_group_link.expires_at,
+                                      id: "invited-group-#{namespace_group_link.group.id}-expiration",
+                                      "data-datepicker-target": "datePicker",
+                                      "data-datepicker-autosubmit": "true",
+                                      "aria-label":
+                                        t(:"projects.group_links.index.aria_labels.expires_at") %>
 
-              <input type="hidden" name="format" value="turbo_stream"/>
-            </div>
-          </div>
+                      <input type="hidden" name="format" value="turbo_stream"/>
+                    </div>
+                  </div>
+                <% end %>
+              <% else %>
+                <%= namespace_group_link.expires_at %>
+              <% end %>
+            </td>
+            <td class="px-6 py-4 space-x-2">
+              <% if helpers.allowed_to?(:unlink_namespace_with_group?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+                <%= link_to(
+                  t(:"projects.group_links.index.unlink"),
+                  namespace_project_group_link_path(
+                    @namespace.parent,
+                    @namespace.project,
+                    namespace_group_link
+                  ),
+                  data: {
+                    turbo_method: :delete,
+                    turbo_confirm:
+                      t(
+                        :"projects.group_links.index.unlink_confirmation",
+                        namespace_name: namespace_group_link.namespace.human_name,
+                        group_name: namespace_group_link.group.human_name
+                      ),
+                    turbo_stream: true
+                  },
+                  aria: {
+                    label:
+                      (
+                        t(
+                          :"projects.group_links.index.actions.unlink_aria_label",
+                          member: namespace_group_link.group.name
+                        )
+                      )
+                  },
+                  class:
+                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+                ) %>
+              <% end %>
+            </td>
+          </tr>
         <% end %>
-      <% else %>
-        <%= namespace_group_link.expires_at %>
       <% end %>
-    </td>
-    <td class="px-6 py-4 space-x-2">
-      <% if helpers.allowed_to?(:unlink_namespace_with_group?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-        <%= link_to(
-          t(:"projects.group_links.index.unlink"),
-          namespace_project_group_link_path(
-            @namespace.parent,
-            @namespace.project,
-            namespace_group_link
-          ),
-          data: {
-            turbo_method: :delete,
-            turbo_confirm:
-              t(
-                :"projects.group_links.index.unlink_confirmation",
-                namespace_name: namespace_group_link.namespace.human_name,
-                group_name: namespace_group_link.group.human_name
-              ),
-            turbo_stream: true
-          },
-          aria: {
-            label:
-              (
-                t(
-                  :"projects.group_links.index.actions.unlink_aria_label",
-                  member: namespace_group_link.group.name
-                )
-              )
-          },
-          class:
-            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
-        ) %>
-      <% end %>
-    </td>
-  </tr>
+    </tbody>
+  </table>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: t(:"projects.group_links.index.empty_state.title"),
+      description: t(:"projects.group_links.index.empty_state.description"),
+      icon_name: :document_text
+    ) %>
+  </div>
 <% end %>

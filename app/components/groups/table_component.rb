@@ -8,11 +8,24 @@ module Groups
     def initialize(
       namespace_group_links,
       namespace,
-      access_levels
+      access_levels,
+      q,
+      has_groups: true,
+      search_params: {},
+      row_actions: {},
+      **system_arguments
     )
       @namespace_group_links = namespace_group_links
       @namespace = namespace
       @access_levels = access_levels
+      @q = q
+      @has_groups = has_groups
+      @search_params = search_params
+      @row_actions = row_actions
+      @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
+      @system_arguments = system_arguments
+
+      @columns = columns
     end
 
     # def system_arguments
@@ -28,24 +41,24 @@ module Groups
     #   end
     # end
 
-    # def wrapper_arguments
-    #   {
-    #     tag: 'div',
-    #     classes: class_names('table-container'),
-    #     data: { turbo: :temporary }
-    #   }
-    # end
+    def wrapper_arguments
+      {
+        tag: 'div',
+        classes: class_names('table-container relative overflow-x-auto'),
+        data: { turbo: :temporary }
+      }
+    end
 
-    # def row_arguments(sample)
-    #   { tag: 'tr' }.tap do |args|
-    #     args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
-    #     args[:id] = sample.id
-    #   end
-    # end
+    def row_arguments(namespace_group_link)
+      { tag: 'tr' }.tap do |args|
+        args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
+        args[:id] = dom_id(namespace_group_link)
+      end
+    end
 
-    # def render_cell(**arguments, &)
-    #   render(Viral::BaseComponent.new(**arguments), &)
-    # end
+    def render_cell(**arguments, &)
+      render(Viral::BaseComponent.new(**arguments), &)
+    end
 
     # def select_samples_url(**)
     #   if @namespace.type == 'Group'
@@ -55,13 +68,10 @@ module Groups
     #   end
     # end
 
-    # private
+    private
 
-    # def columns
-    #   columns = %i[puid name]
-    #   columns << :project if @namespace.type == 'Group'
-    #   columns += %i[created_at updated_at attachments_updated_at]
-    #   columns
-    # end
+    def columns
+      %i[group_id namespace_id updated_at group_access_level expires_at]
+    end
   end
 end

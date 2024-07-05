@@ -1,5 +1,8 @@
 <%= render Groups::TableComponent.new(
   namespace_group_links,
   namespace,
-  access_levels
+  access_levels,
+  @q,
+  has_groups: @has_groups,
+  search_params: @search_params
 ) %>
