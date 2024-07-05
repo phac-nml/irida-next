@@ -99,18 +99,18 @@ export default class extends Controller {
 	}
 
 	#updateUI(ids) {
-		this.rowSelectionTargets.map((row) => {
+		for (const row of this.rowSelectionTargets) {
 			row.checked = ids.indexOf(row.value) > -1;
-		});
+		}
 		this.#updateActionLinks(ids.length);
 		this.#setSelectAllCheckboxValue(ids.length);
 		this.#updateCounts(ids.length);
 	}
 
 	#updateActionLinks(count) {
-		this.actionLinkOutlets.forEach((outlet) => {
+		for (const outlet of this.actionLinkOutlets) {
 			outlet.setDisabled(count);
-		});
+		}
 	}
 
 	#setSelectAllCheckboxValue(numSelected) {
