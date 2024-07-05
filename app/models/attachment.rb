@@ -56,6 +56,12 @@ class Attachment < ApplicationRecord
     # Assigns fastq to metadata format for following file types: .fastq, .fastq.gz, .fq, .fq.gz
     when /^\S+\.f(ast)?q(\.gz)?$/
       metadata['format'] = 'fastq'
+    # Assigns text to metadata format for following file types: .txt, .csv, .tsv
+    when /^\S+\.(txt|csv|tsv)?$/
+      metadata['format'] = 'text'
+    # Assigns spreadsheet to metadata format for following file types: .xls, .xlsx
+    when /^\S+\.(xls|xlsx)?$/
+      metadata['format'] = 'spreadsheet'
     # Else assigns unknown to metadata format
     else
       metadata['format'] = 'unknown'
