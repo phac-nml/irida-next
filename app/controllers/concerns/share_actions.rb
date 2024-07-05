@@ -20,8 +20,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
         set_default_sort
         @pagy, @namespace_group_links = pagy(@q.result)
         @has_groups = @namespace_group_links.count.positive?
-        puts 'Namespace Project Samples URL'
-        puts namespace_project_samples_url
       end
     end
   end
