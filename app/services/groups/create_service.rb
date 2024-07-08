@@ -6,7 +6,7 @@ module Groups
     attr_accessor :group
 
     def initialize(user = nil, params = {})
-      super(user, params)
+      super
       @group = Group.new(params.merge(owner: current_user))
     end
 

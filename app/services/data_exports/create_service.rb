@@ -5,7 +5,7 @@ module DataExports
   class CreateService < BaseService
     DataExportCreateError = Class.new(StandardError)
     def initialize(user = nil, params = {})
-      super(user, params)
+      super
     end
 
     def execute

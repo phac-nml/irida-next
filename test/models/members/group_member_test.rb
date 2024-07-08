@@ -135,7 +135,7 @@ class GroupMemberTest < ActiveSupport::TestCase
     group_and_ancestors = namespace.self_and_ancestors
     memberships = []
 
-    group_and_ancestors.each do |group|
+    group_and_ancestors.map do |group|
       memberships << group.group_members
     end
 

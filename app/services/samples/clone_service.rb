@@ -56,7 +56,7 @@ module Samples
 
     def clone_attachments(sample, clone)
       files = []
-      sample.attachments.each do |attachment|
+      sample.attachments.map do |attachment|
         files << attachment.file.blob
       end
       Attachments::CreateService.new(current_user, clone, { files: }).execute

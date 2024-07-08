@@ -140,11 +140,11 @@ module Samples
         assert_equal sample.description, clone.description
         assert_equal sample.metadata, clone.metadata
         sample_blobs = []
-        sample.attachments.each do |attachment|
+        sample.attachments.map do |attachment|
           sample_blobs << attachment.file.blob
         end
         clone_blobs = []
-        clone.attachments.each do |attachment|
+        clone.attachments.map do |attachment|
           clone_blobs << attachment.file.blob
         end
         assert_equal sample_blobs.sort, clone_blobs.sort
@@ -169,11 +169,11 @@ module Samples
         assert_equal sample.metadata, clone.metadata
         assert_equal sample.metadata_provenance, clone.metadata_provenance
         sample_blobs = []
-        sample.attachments.each do |attachment|
+        sample.attachments.map do |attachment|
           sample_blobs << attachment.file.blob
         end
         clone_blobs = []
-        clone.attachments.each do |attachment|
+        clone.attachments.map do |attachment|
           clone_blobs << attachment.file.blob
         end
         assert_equal sample_blobs.sort, clone_blobs.sort

@@ -89,7 +89,7 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     group_and_ancestors = namespace.self_and_ancestors
     shared_with_group_links = []
 
-    group_and_ancestors.each do |group|
+    group_and_ancestors.map do |group|
       shared_with_group_links << group.shared_with_group_links
     end
 

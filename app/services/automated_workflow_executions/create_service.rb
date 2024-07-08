@@ -4,7 +4,7 @@ module AutomatedWorkflowExecutions
   # Service used to Create a new AutomatedWorkflowExecution
   class CreateService < BaseService
     def initialize(user = nil, params = {})
-      super(user, params)
+      super
     end
 
     def execute
