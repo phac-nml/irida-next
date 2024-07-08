@@ -24,24 +24,16 @@
         "flex-shrink-0 w-5 h-5 ml-1 text-slate-800 transition duration-75 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-white"
     ) %>
     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"><%= title %></span>
-    <% if selectable_pages.include? current_page %>
-      <%= viral_icon(
-        name: "chevron_down",
-        classes: "mr-0 w-4 h-4 rotate-180",
-        "data-collapsible-target": "icon"
-      ) %>
-    <% else %>
-      <%= viral_icon(
-        name: "chevron_down",
-        classes: "mr-0 w-4 h-4",
-        "data-collapsible-target": "icon"
-      ) %>
-    <% end %>
+    <%= viral_icon(
+      name: "chevron_down",
+      classes: class_names('mr-0 w-4 h-4', { 'rotate-180': selectable_pages.include?(current_page) }),
+      "data-collapsible-target": "icon"
+    ) %>
   </button>
   <ul
     id="<%= control_id %>"
     data-collapsible-target="item"
-    class="<% unless selectable_pages.include? current_page %> hidden <% end %> py-2 space-y-2"
+    class="<%= class_names('py-2 space-y-2', { hidden: selectable_pages.exclude?(current_page) }) %>"
   >
     <% menu_items.each do |menu_item| %>
       <li class="Layout-Sidebar-MultiLevelMenu__Item">
