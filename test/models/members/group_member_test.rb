@@ -133,11 +133,7 @@ class GroupMemberTest < ActiveSupport::TestCase
     members = Member.for_namespace_and_ancestors(namespace)
 
     group_and_ancestors = namespace.self_and_ancestors
-    memberships = []
-
-    group_and_ancestors.each do |group|
-      memberships << group.group_members
-    end
+    memberships = group_and_ancestors.map(&:group_members)
 
     memberships = memberships.flatten
 

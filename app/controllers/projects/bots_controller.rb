@@ -35,7 +35,7 @@ module Projects
     end
 
     def current_page
-      @current_page = 'bot accounts'
+      @current_page = t(:'projects.sidebar.bot_accounts')
     end
 
     def bot_type

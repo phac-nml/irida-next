@@ -16,7 +16,7 @@ module Profiles
     end
 
     def current_page
-      @current_page = 'account'
+      @current_page = t(:'profiles.sidebar.account')
     end
   end
 end

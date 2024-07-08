@@ -26,14 +26,14 @@
     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"><%= title %></span>
     <%= viral_icon(
       name: "chevron_down",
-      classes: "mr-0 w-4 h-4",
+      classes: class_names('mr-0 w-4 h-4', { 'rotate-180': selectable_pages.include?(current_page) }),
       "data-collapsible-target": "icon"
     ) %>
   </button>
   <ul
     id="<%= control_id %>"
     data-collapsible-target="item"
-    class="hidden py-2 space-y-2"
+    class="<%= class_names('py-2 space-y-2', { hidden: selectable_pages.exclude?(current_page) }) %>"
   >
     <% menu_items.each do |menu_item| %>
       <li class="Layout-Sidebar-MultiLevelMenu__Item">
@@ -54,6 +54,7 @@
             dark:hover:bg-slate-700
           "
         >
+          <%= render Layout::Sidebar::SelectedComponent.new(selected: menu_item.selected) %>
           <span class="ml-2 grow">
             <%= menu_item.label %>
           </span></a>

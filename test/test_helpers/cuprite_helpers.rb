@@ -9,7 +9,7 @@ module CupriteHelpers
   end
 
   # Drop #debug anywhere in a test to open a Chrome inspector and pause the execution
-  def debug(*args)
-    page.driver.debug(*args)
+  def debug(*)
+    page.driver.debug(*)
   end
 end

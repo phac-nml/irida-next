@@ -44,7 +44,7 @@ module Groups
     end
 
     def current_page
-      @current_page = 'members'
+      @current_page = t(:'groups.sidebar.members')
     end
   end
 end

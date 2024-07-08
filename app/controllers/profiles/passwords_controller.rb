@@ -31,7 +31,7 @@ module Profiles
     end
 
     def current_page
-      @current_page = 'password'
+      @current_page = t(:'profiles.sidebar.password')
     end
   end
 end

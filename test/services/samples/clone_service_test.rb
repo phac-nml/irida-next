@@ -139,14 +139,8 @@ module Samples
         assert_equal sample.name, clone.name
         assert_equal sample.description, clone.description
         assert_equal sample.metadata, clone.metadata
-        sample_blobs = []
-        sample.attachments.each do |attachment|
-          sample_blobs << attachment.file.blob
-        end
-        clone_blobs = []
-        clone.attachments.each do |attachment|
-          clone_blobs << attachment.file.blob
-        end
+        sample_blobs = sample.attachments.map { |attachment| attachment.file.blob }
+        clone_blobs = clone.attachments.map { |attachment| attachment.file.blob }
         assert_equal sample_blobs.sort, clone_blobs.sort
       end
     end
@@ -168,14 +162,8 @@ module Samples
         assert_equal sample.description, clone.description
         assert_equal sample.metadata, clone.metadata
         assert_equal sample.metadata_provenance, clone.metadata_provenance
-        sample_blobs = []
-        sample.attachments.each do |attachment|
-          sample_blobs << attachment.file.blob
-        end
-        clone_blobs = []
-        clone.attachments.each do |attachment|
-          clone_blobs << attachment.file.blob
-        end
+        sample_blobs = sample.attachments.map { |attachment| attachment.file.blob }
+        clone_blobs = clone.attachments.map { |attachment| attachment.file.blob }
         assert_equal sample_blobs.sort, clone_blobs.sort
       end
       assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 35 }, @project.namespace.metadata_summary)

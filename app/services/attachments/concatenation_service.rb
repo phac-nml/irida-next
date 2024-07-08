@@ -205,11 +205,7 @@ module Attachments
 
     # Gets the blobs for the passed in attachments
     def retrieve_attachment_blobs(attachments)
-      blobs = []
-      attachments.each do |attachment|
-        blobs << attachment.file.blob
-      end
-      blobs
+      attachments.map { |attachment| attachment.file.blob }
     end
   end
 end

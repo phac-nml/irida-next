@@ -9,6 +9,7 @@ module Projects
     before_action :automated_workflow_executions, only: %i[index update]
     before_action :automated_workflow_execution, only: %i[edit update destroy show]
     before_action :available_automated_workflows, only: %i[new edit]
+    before_action :current_page, only: %i[index show]
 
     def index
       authorize! @namespace, to: :view_automated_workflow_executions?
@@ -29,7 +30,7 @@ module Projects
     def edit
       authorize! @namespace, to: :update_automated_workflow_executions?
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['workflow_name'],
-                                                    @automated_workflow_execution.metadata['workflow_version'])
+                                                             @automated_workflow_execution.metadata['workflow_version'])
       render turbo_stream: turbo_stream.update('automated_workflow_execution_modal',
                                                partial: 'edit_dialog',
                                                locals: {
@@ -98,6 +99,10 @@ module Projects
     end
 
     private
+
+    def current_page
+      @current_page = t(:'projects.sidebar.automated_workflow_executions')
+    end
 
     def automated_workflow_execution_params
       params.require(:workflow_execution).permit(

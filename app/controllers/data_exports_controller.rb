@@ -104,7 +104,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def current_page
-    @current_page = 'data exports'
+    @current_page = t(:'general.default_sidebar.data_exports')
   end
 
   def set_default_tab

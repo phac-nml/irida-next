@@ -9,26 +9,26 @@
             url: project_path(@project),
             icon: "clipboard_document",
             label: t(:"projects.sidebar.details"),
-            selected: @current_page == t(:"projects.sidebar.details").downcase,
+            selected: @current_page == t(:"projects.sidebar.details"),
           ) %>
           <%= render section.with_item(
             url: namespace_project_members_path,
             icon: "users",
             label: t(:"projects.sidebar.members"),
-            selected: @current_page == t(:"projects.sidebar.members").downcase,
+            selected: @current_page == t(:"projects.sidebar.members"),
           ) %>
           <%= render section.with_item(
             url: project_samples_path(@project),
             icon: "beaker",
             label: t(:"projects.sidebar.samples"),
-            selected: @current_page == t(:"projects.sidebar.samples").downcase,
+            selected: @current_page == t(:"projects.sidebar.samples"),
           ) %>
           <% if allowed_to?(:view_history?, @project) %>
             <%= render section.with_item(
               url: project_history_path(@project),
               icon: "list_bullet",
               label: t(:"projects.sidebar.history"),
-              selected: @current_page == t(:"projects.sidebar.history").downcase,
+              selected: @current_page == t(:"projects.sidebar.history"),
             ) %>
           <% end %>
         <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
@@ -36,25 +36,35 @@
               url: project_workflow_executions_path(@project),
               icon: "command_line",
               label: t(:"projects.sidebar.workflow_executions"),
-              selected:
-                @current_page == t(:"projects.sidebar.workflow_executions").downcase,
+              selected: @current_page == t(:"projects.sidebar.workflow_executions"),
             ) %>
           <% end %>
           <% if allowed_to?(:update?, @project) %>
-            <%= render section.with_multi_level_menu(title: t(:"projects.sidebar.settings"), icon: "cog_6_tooth") do |multi_level_menu| %>
-
+            <%= render section.with_multi_level_menu(
+              title: t(:"projects.sidebar.settings"),
+              icon: "cog_6_tooth",
+              selectable_pages: [
+                t(:"projects.sidebar.general"),
+                t(:"projects.sidebar.bot_accounts"),
+                t(:"projects.sidebar.automated_workflow_executions")
+              ],
+              current_page: @current_page
+            ) do |multi_level_menu| %>
               <% multi_level_menu.with_menu_item(
                 url: project_edit_path(@project),
                 label: t(:"projects.sidebar.general"),
+                selected: @current_page == t(:"projects.sidebar.general"),
               ) %>
               <% multi_level_menu.with_menu_item(
                 url: project_bots_path(@project),
                 label: t(:"projects.sidebar.bot_accounts"),
+                selected: @current_page == t(:"projects.sidebar.bot_accounts"),
               ) %>
             <% if @pipelines_enabled %>
               <% multi_level_menu.with_menu_item(
                 url: project_automated_workflow_executions_path(@project),
                 label: t(:"projects.sidebar.automated_workflow_executions"),
+                selected: @current_page == t(:"projects.sidebar.automated_workflow_executions"),
               ) %>
             <% end %>
             <% end %>
