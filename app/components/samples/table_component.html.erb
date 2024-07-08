@@ -144,7 +144,6 @@
             <% @metadata_fields.each do |field| %>
               <%= render_cell(
                   tag: 'td',
-                  scope: 'col',
                   class: class_names('px-6 py-3')
                 ) do %>
                 <%= sample.metadata[field] %>

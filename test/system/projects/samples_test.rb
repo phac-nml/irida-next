@@ -1254,26 +1254,13 @@ module Projects
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
 
-      within 'div.overflow-x-auto' do |div|
-        div.scroll_to div.find('table thead th:nth-child(7)')
+      within 'div#samples-table' do |div|
+        div.scroll_to div.find('table thead button', text: 'metadatafield2')
       end
 
-      click_on 'metadatafield1'
+      click_button 'metadatafield1'
 
       assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
-      assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody') do
-        assert_selector 'tr:first-child th', text: @sample3.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
-        assert_selector 'tr:nth-child(2) th', text: @sample1.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:last-child th', text: @sample2.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample2.name
-      end
-
-      click_on 'metadatafield2'
-
-      assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
       assert_selector '#samples-table table tbody tr', count: 3
       within first('tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid

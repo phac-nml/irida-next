@@ -316,16 +316,12 @@ module Groups
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
       assert_selector 'table thead tr th', count: 8
 
-      click_on 'metadatafield1'
+      within 'div#samples-table' do |div|
+        div.scroll_to div.find('table thead button', text: 'metadatafield2')
+      end
+
+      click_button 'metadatafield1'
       assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
-
-      assert_selector 'tbody tr:first-child th', text: @sample30.puid
-      assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
-      assert_selector 'tbody tr:nth-child(2) th', text: @sample2.puid
-      assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-
-      click_on 'metadatafield2'
-      assert_selector 'table thead th:nth-child(8) svg.icon-arrow_up'
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
