@@ -39,14 +39,14 @@
               <% end %>
 
               <% if column == :attachments_updated_at %>
-                <%= render Ransack::SortComponent.new(
+                <%= render Ransack::SortPostComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
                   url: helpers.sorting_url(@q, :attachments_updated_at_nulls_last),
                   field: :attachments_updated_at_nulls_last,
                 ) %>
               <% else %>
-                <%= render Ransack::SortComponent.new(
+                <%= render Ransack::SortPostComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
                   url: helpers.sorting_url(@q, column),
