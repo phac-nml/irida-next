@@ -87,11 +87,7 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
 
     group_and_ancestors = namespace.self_and_ancestors
-    shared_with_group_links = []
-
-    group_and_ancestors.map do |group|
-      shared_with_group_links << group.shared_with_group_links
-    end
+    shared_with_group_links = group_and_ancestors.map(&:shared_with_group_links)
 
     shared_with_group_links = shared_with_group_links.flatten
 
