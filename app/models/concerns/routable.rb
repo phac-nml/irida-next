@@ -46,15 +46,8 @@ module Routable
   end
 
   def abbreviated_path
-    new_path = []
     paths = route&.path&.split('/')
-    paths.map do |path_part|
-      new_path << if path_part == path
-                    path_part
-                  else
-                    path_part[0]
-                  end
-    end
+    new_path = paths.map { |path_part| path_part == path ? path_part : path_part[0] }
     new_path.join('/')
   end
 

@@ -221,16 +221,12 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert scoped_projects_names.include?(namespaces_project_namespaces(:projectDeltaSubgroupA_namespace).name)
     assert scoped_projects_names.include?(namespaces_project_namespaces(:projectEchoSubgroupB_namespace).name)
 
-    expected_projects = []
-
     direct_groups = user.groups.self_and_descendant_ids
 
     # Group Delta and Subgroup A
     assert_equal 2, direct_groups.length
 
-    direct_groups.each do |direct_group|
-      expected_projects << direct_group.project_namespaces.pluck(:name)
-    end
+    expected_projects = direct_groups.map { |direct_group| direct_group.project_namespaces.pluck(:name) }
 
     linked_namespaces = NamespaceGroupLink.where(group: direct_groups)
 

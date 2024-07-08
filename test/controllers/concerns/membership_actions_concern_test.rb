@@ -24,7 +24,7 @@ class TestClassController < ApplicationController
   end
 
   def available_users
-    @available_users = User.where.not(id: Member.where(namespace_id: @namespace.id).pluck(:user_id))
+    @available_users = User.where.not(id: Member.where(namespace_id: @namespace.id).select(:user_id))
     # Remove current user from available users as a user cannot add themselves
     @available_users = @available_users.to_a - [current_user]
   end
