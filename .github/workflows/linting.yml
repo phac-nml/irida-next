@@ -17,7 +17,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
       - name: rubocop
-        uses: reviewdog/action-rubocop@v2.14
+        uses: reviewdog/action-rubocop@v2.15
         with:
           rubocop_version: gemfile
           rubocop_extensions: rubocop-rails:gemfile rubocop-graphql:gemfile
