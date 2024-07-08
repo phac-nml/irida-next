@@ -66,3 +66,11 @@ GraphQL/ObjectDescription:
     - "app/graphql/**/base_*.rb"
     - "app/graphql/resolvers/**/*.rb"
     - "test/**/*.rb"
+
+Rails/DangerousColumnNames:
+  Exclude:
+    - "db/migrate/*.rb"
+
+Rails/BulkChangeTable:
+  Exclude:
+    - "db/migrate/*.rb"

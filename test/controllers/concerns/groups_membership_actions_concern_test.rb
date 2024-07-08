@@ -103,7 +103,7 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                                  access_level: Member::AccessLevel::OWNER + 100_000 },
                                        format: :turbo_stream }
 
-    assert_response 422 # unprocessable entity
+    assert_response :unprocessable_entity
   end
 
   test 'group members destroy invalid' do

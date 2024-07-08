@@ -49,7 +49,7 @@ module Projects
 
         def get_attachments(attachment_ids)
           attachments_to_delete = []
-          attachment_ids.each do |_k, attachment_id|
+          attachment_ids.each_value do |attachment_id|
             if attachment_id.is_a?(Array)
               attachment_id.each do |paired_attachment_id|
                 attachments_to_delete << Attachment.find(paired_attachment_id)

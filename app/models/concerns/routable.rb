@@ -38,11 +38,11 @@ module Routable
   end
 
   def full_name
-    (route&.name || build_full_name)
+    route&.name || build_full_name
   end
 
   def full_path
-    (route&.path || build_full_path)
+    route&.path || build_full_path
   end
 
   def abbreviated_path

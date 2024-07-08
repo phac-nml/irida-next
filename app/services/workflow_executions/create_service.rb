@@ -4,7 +4,7 @@ module WorkflowExecutions
   # Service used to Create a new WorkflowExecution
   class CreateService < BaseService
     def initialize(user = nil, params = {})
-      super(user, params)
+      super
     end
 
     def execute # rubocop:disable Metrics/AbcSize
@@ -31,13 +31,13 @@ module WorkflowExecutions
 
     def sanitized_workflow_params # rubocop:disable Metrics/AbcSize
       workflow = Irida::Pipelines.instance.find_pipeline_by(params[:metadata][:workflow_name],
-                                                   params[:metadata][:workflow_version])
+                                                            params[:metadata][:workflow_version])
       workflow_schema = JSON.parse(workflow.schema_loc.read)
 
       # remove any nil values
       sanitized_params = params[:workflow_params].compact
 
-      workflow_schema['definitions'].each do |_item, definition|
+      workflow_schema['definitions'].each_value do |definition|
         definition['properties'].each do |name, property|
           if sanitized_params.key?(name.to_sym)
             sanitized_params[name.to_sym] = sanitize_workflow_param(property, sanitized_params[name.to_sym])

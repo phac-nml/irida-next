@@ -108,7 +108,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                              created_by_id: users(:john_doe).id,
                              access_level: Member::AccessLevel::OWNER + 100_000 }, format: :turbo_stream }
 
-    assert_response 422 # unprocessable entity
+    assert_response :unprocessable_entity
   end
 
   test 'project members destroy member with owner role when current user has a maintainer role for project' do
