@@ -6,7 +6,7 @@ module PillColorHelper
     format: {
       fasta: 'blue',
       fastq: 'green',
-      text: 'indigo',
+      text: 'orange',
       spreadsheet: 'yellow',
       unknown: 'slate'
     },
