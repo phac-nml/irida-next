@@ -15,15 +15,12 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def index
     authorize! @namespace, to: :member_listing?
+    @q = load_members.ransack(params[:q])
+    set_default_sort
+    @pagy, @members = pagy(@q.result)
     respond_to do |format|
-      format.html do
-        @q = Member.ransack(params[:q])
-      end
-      format.turbo_stream do
-        @q = Member.where(id: load_members.pluck(:id)).ransack(params[:q])
-        set_default_sort
-        @pagy, @members = pagy(@q.result)
-      end
+      format.html
+      format.turbo_stream
     end
   end
 
@@ -38,15 +35,15 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def create # rubocop:disable Metrics/MethodLength
     @new_member = Members::CreateService.new(current_user, @namespace, member_params, true).execute
 
     if @new_member.persisted?
+      @q = load_members.ransack(params[:q])
+      set_default_sort
+      @pagy, @members = pagy(@q.result)
       respond_to do |format|
         format.turbo_stream do
-          @q = Member.where(id: load_members.pluck(:id)).ransack(params[:q])
-          set_default_sort
-          @pagy, @members = pagy(@q.result)
           render status: :ok, locals: { member: @new_member, type: 'success',
                                         message: t('.success', user: @new_member.user.email) }
         end
@@ -73,11 +70,11 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
           redirect_to dashboard_projects_path(format: :html)
         end
       else
+        @q = load_members.ransack(params[:q])
+        set_default_sort
+        @pagy, @members = pagy(@q.result)
         respond_to do |format|
           format.turbo_stream do
-            @q = Member.where(id: load_members.pluck(:id)).ransack(params[:q])
-            set_default_sort
-            @pagy, @members = pagy(@q.result)
             render status: :ok, locals: { member: @member, type: 'success',
                                           message: t('.success', user: @member.user.email) }
           end

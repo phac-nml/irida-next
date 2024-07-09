@@ -501,15 +501,15 @@ module Projects
       click_on I18n.t('members.table_component.namespace_name')
       assert_selector '#project-members table thead th:nth-child(3) svg.icon-arrow_up'
       within first('#project-members table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
-                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
-        assert_selector 'tr:nth-child(2) td:first-child', text: @member_jean.user.email
-        assert_selector 'tr:nth-child(2) td:nth-child(2)',
-                        text: Member::AccessLevel.human_access(@member_jean.access_level)
-        assert_selector 'tr:last-child td:first-child', text: @member_john.user.email
-        assert_selector 'tr:last-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_john.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
       end
 
       click_on I18n.t('members.table_component.expires_at')
