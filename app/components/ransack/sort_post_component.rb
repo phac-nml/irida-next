@@ -10,15 +10,24 @@ module Ransack
       @label = label
       @url = url
       @field = field
-      @value = "#{field} #{@ransack_obj.sorts[0].dir == 'asc' ? 'desc' : 'asc'}"
     end
 
     def icon
-      unless @ransack_obj&.sorts.present? && @ransack_obj.sorts[0].name == URI.encode_www_form_component(@field.to_s)
+      unless @ransack_obj&.sorts.present? &&
+             @ransack_obj.sorts[0].name == URI.encode_www_form_component(@field.to_s)
         return
       end
 
       @ransack_obj.sorts[0].dir == 'asc' ? 'arrow_up' : 'arrow_down'
+    end
+
+    def value
+      q = @ransack_obj.sorts.first
+      if q && q.name == URI.encode_www_form_component(@field.to_s)
+        q.dir == 'asc' ? "#{@field} desc" : "#{@field} asc"
+      else
+        "#{@field} asc"
+      end
     end
   end
 end

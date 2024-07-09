@@ -29,6 +29,7 @@
 
 <% if @has_samples %>
   <%= search_form_for @q, url: group_samples_url(**request.query_parameters), html: { "data-controller": "filters","data-filters-selection-outlet": "#samples-table", class: "mb-2" } do |f| %>
+    <%= turbo_frame_tag "group_samples_hidden_values" %>
     <div class="flex flex-row-reverse items-center mb-4 space-x-2">
       <input type="hidden" name="format" value="turbo_stream"/>
 
