@@ -712,6 +712,8 @@ en:
           cancel: Cancel
           submit: Share
     members:
+      access_level:
+        aria_label: Access Level
       create:
         error: "Error adding member"
         success: "Group member %{user} added successfully"

@@ -9,7 +9,7 @@
         id: "member-#{member.id}-access-level-select",
         value: member.access_level,
         onchange: "this.form.requestSubmit();",
-        "aria-label": "Access Level",
+        "aria-label": t(".aria_label"),
       },
     ) %>
     <input type="hidden" name="format" value="turbo_stream"/>
