@@ -61,7 +61,7 @@
                 scope: 'col',
                 class: class_names('px-6 py-3')
               ) do %>
-              <%= render Ransack::SortComponent.new(
+              <%= render Ransack::SortPostComponent.new(
                 ransack_obj: @q,
                 label: field,
                 url:
