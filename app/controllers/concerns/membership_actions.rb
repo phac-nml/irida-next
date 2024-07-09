@@ -39,9 +39,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     @new_member = Members::CreateService.new(current_user, @namespace, member_params, true).execute
 
     if @new_member.persisted?
-      # @q = load_members.ransack(params[:q])
-      # set_default_sort
-      # @pagy, @members = pagy(@q.result)
       respond_to do |format|
         format.turbo_stream do
           render status: :ok, locals: { member: @new_member, type: 'success',
@@ -70,9 +67,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
           redirect_to dashboard_projects_path(format: :html)
         end
       else
-        # @q = load_members.ransack(params[:q])
-        # set_default_sort
-        # @pagy, @members = pagy(@q.result)
         respond_to do |format|
           format.turbo_stream do
             render status: :ok, locals: { member: @member, type: 'success',
