@@ -3,12 +3,11 @@
 module Ransack
   # Component for ransack sort in table headers
   class SortPostComponent < Component
-    attr_reader :ransack_obj, :label, :url, :value
+    attr_reader :ransack_obj, :label
 
-    def initialize(ransack_obj:, label:, url:, field:)
+    def initialize(ransack_obj:, label:, field:)
       @ransack_obj = ransack_obj
       @label = label
-      @url = url
       @field = field
     end
 

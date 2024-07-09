@@ -42,14 +42,12 @@
                 <%= render Ransack::SortPostComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, :attachments_updated_at_nulls_last),
                   field: :attachments_updated_at_nulls_last,
                 ) %>
               <% else %>
                 <%= render Ransack::SortPostComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, column),
                   field: column,
                 ) %>
               <% end %>
@@ -64,8 +62,6 @@
               <%= render Ransack::SortPostComponent.new(
                 ransack_obj: @q,
                 label: field,
-                url:
-                  helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{field}")),
                 field: "metadata_#{field}",
               ) %>
             <% end %>
