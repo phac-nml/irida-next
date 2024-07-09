@@ -101,6 +101,46 @@ class AttachmentTest < ActiveSupport::TestCase
     assert new_fasta_attachment_ext_fna_gz.fasta?
   end
 
+  test 'metadata text file types' do
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_14.txt').open,
+                                        filename: 'test_file_14.txt' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'text', new_text_attachment_ext_txt.metadata['format']
+
+    new_text_attachment_ext_rtf =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_13.rtf').open,
+                                        filename: 'test_file_13.rtf' })
+    new_text_attachment_ext_rtf.save
+    assert_equal 'text', new_text_attachment_ext_rtf.metadata['format']
+
+    new_text_attachment_ext_csv =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/metadata/valid.csv').open,
+                                        filename: 'valid.csv' })
+    new_text_attachment_ext_csv.save
+    assert_equal 'text', new_text_attachment_ext_csv.metadata['format']
+
+    new_text_attachment_ext_tsv =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/metadata/valid.tsv').open,
+                                        filename: 'valid.tsv' })
+    new_text_attachment_ext_tsv.save
+    assert_equal 'text', new_text_attachment_ext_tsv.metadata['format']
+  end
+
+  test 'metadata spreadsheet file types' do
+    new_spreadsheet_attachment_ext_xls =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/metadata/valid.xls').open,
+                                        filename: 'valid.xls' })
+    new_spreadsheet_attachment_ext_xls.save
+    assert_equal 'spreadsheet', new_spreadsheet_attachment_ext_xls.metadata['format']
+
+    new_spreadsheet_attachment_ext_xlsx =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/metadata/valid.xlsx').open,
+                                        filename: 'valid.xlsx' })
+    new_spreadsheet_attachment_ext_xlsx.save
+    assert_equal 'spreadsheet', new_spreadsheet_attachment_ext_xlsx.metadata['format']
+  end
+
   test 'metadata unknown file types' do
     new_unknown_attachment_ext_docx =
       @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_11.docx').open,
@@ -113,18 +153,6 @@ class AttachmentTest < ActiveSupport::TestCase
                                         filename: 'test_file_12.pdf' })
     new_unknown_attachment_ext_pdf.save
     assert_equal 'unknown', new_unknown_attachment_ext_pdf.metadata['format']
-
-    new_unknown_attachment_ext_rtf =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_13.rtf').open,
-                                        filename: 'test_file_13.rtf' })
-    new_unknown_attachment_ext_rtf.save
-    assert_equal 'unknown', new_unknown_attachment_ext_rtf.metadata['format']
-
-    new_unknown_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_14.txt').open,
-                                        filename: 'test_file_14.txt' })
-    new_unknown_attachment_ext_txt.save
-    assert_equal 'text', new_unknown_attachment_ext_txt.metadata['format']
   end
 
   test '#destroy does not destroy the ActiveStorage::Attachment' do
