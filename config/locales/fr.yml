@@ -673,6 +673,7 @@ fr:
           level_30: Analyst
           level_40: Maintainer
           level_50: Owner
+        inherited_from: "Inherited from"
         table_header:
           group: Group
           source: Source
@@ -712,6 +713,8 @@ fr:
           cancel: Cancel
           submit: Share
     members:
+      access_level:
+        aria_label: Access Level
       create:
         error: "Error adding member"
         success: "Group member %{user} added successfully"

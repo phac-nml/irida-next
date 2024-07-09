@@ -37,6 +37,7 @@
 <div class="flex flex-row-reverse">
   <%= search_form_for @q, url: namespace_project_members_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
     <input type="hidden" name="format" value="turbo_stream"/>
+    <input type="hidden" name="tab" value="<%=@tab%>"/>
     <%= f.label :user_email_cont, t(".search.placeholder"), class: "sr-only" %>
     <div class="relative lg:w-72">
       <div

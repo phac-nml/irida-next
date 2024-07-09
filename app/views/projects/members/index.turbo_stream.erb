@@ -1,7 +1,11 @@
-<%= turbo_stream.update "members", partial: "member_listing" %>
+<% if @tab != "invited_groups" %>
 
-<%= turbo_stream.update "members_pagination", partial: "pagination" %>
+  <%= turbo_stream.update "members", partial: "member_listing" %>
 
-<%= turbo_stream.update "member_hidden_values" do %>
-  <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
+  <%= turbo_stream.update "members_pagination", partial: "pagination" %>
+
+  <%= turbo_stream.update "member_hidden_values" do %>
+    <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
+  <% end %>
+
 <% end %>

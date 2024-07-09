@@ -673,6 +673,7 @@ en:
           level_30: Analyst
           level_40: Maintainer
           level_50: Owner
+        inherited_from: "Inherited from"
         table_header:
           group: Group
           source: Source
