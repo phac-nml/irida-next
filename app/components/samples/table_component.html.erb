@@ -17,7 +17,7 @@
             <%= render_cell(
                 tag: 'th',
                 scope: 'col',
-                classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
+                classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex bg-slate-50 dark:bg-slate-700': index.zero?)
               ) do %>
               <% if index.zero? and @abilities[:select_samples] %>
                 <div id="select-all-form" class="align-middle filters">
