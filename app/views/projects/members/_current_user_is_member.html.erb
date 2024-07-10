@@ -1,6 +1,10 @@
 <%= link_to(
   t(:"projects.members.index.leave_project"),
-  namespace_project_member_path(id: member.id),
+  namespace_project_member_path(
+    namespace.parent,
+    namespace.project,
+    id: member.id,
+  ),
   data: {
     turbo_method: :delete,
     turbo_confirm: (t(:"projects.members.index.leave_confirmation")),

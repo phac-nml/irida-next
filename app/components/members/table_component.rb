@@ -41,7 +41,7 @@ module Members
       if @namespace.type == 'Group'
         group_member_path(id)
       else
-        namespace_project_member_path(id)
+        namespace_project_member_path(@namespace.parent, @namespace.project, id)
       end
     end
 

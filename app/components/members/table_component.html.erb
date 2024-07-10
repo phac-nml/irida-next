@@ -71,6 +71,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
               <turbo-frame id="<%="member-#{member.id}-access-level"%>">
                 <%= render partial: access_level,
                 locals: {
+                  namespace: @namespace,
                   member: member,
                   access_levels: @access_levels,
                 } %>
