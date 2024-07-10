@@ -1160,7 +1160,10 @@ en:
         transfer_button: Transfer samples
         import_metadata_button: Import metadata
         clone_button: Clone samples
-        create_export_button: Create Export
+        create_export_button:
+          label: Create Export
+          data_export: Data Export
+          linelist: Linelist Export
         delete_samples_button: Delete Samples
         actions:
           button_add_aria_label: Add new sample button
