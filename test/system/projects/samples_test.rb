@@ -1255,7 +1255,7 @@ module Projects
       assert_selector '#samples-table table thead tr th', count: 8
 
       within 'div#samples-table' do |div|
-        div.scroll_to div.find('table thead button', text: 'metadatafield2'), offset: [0, 300]
+        div.scroll_to div.find('table thead button', text: 'METADATAFIELD2'), offset: [0, 300]
       end
 
       click_button 'metadatafield1'

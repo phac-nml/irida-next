@@ -317,7 +317,7 @@ module Groups
       assert_selector 'table thead tr th', count: 8
 
       within 'div#samples-table' do |div|
-        div.scroll_to div.find('table thead button', text: 'metadatafield2')
+        div.scroll_to div.find('table thead button', text: 'METADATAFIELD2')
       end
 
       click_button 'metadatafield1'
