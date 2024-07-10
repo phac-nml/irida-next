@@ -1,6 +1,6 @@
 <% invalid_access_level = member.errors.include?(:access_level) %>
 <div class="form-field <%= 'invalid' if invalid_access_level %>">
-  <%= form_with(model: member, url: namespace_project_member_path(namespace.parent, namespace.project, id: member.id), method: :patch) do |form| %>
+  <%= form_with(model: member, url: namespace_project_member_path(namespace.parent, namespace.project, member), method: :patch) do |form| %>
     <%= form.select(
       :access_level,
       access_levels,

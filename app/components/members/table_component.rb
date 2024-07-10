@@ -37,11 +37,11 @@ module Members
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
-    def select_member_path(id)
+    def select_member_path(member)
       if @namespace.type == 'Group'
-        group_member_path(id)
+        group_member_path(@namespace, member)
       else
-        namespace_project_member_path(@namespace.parent, @namespace.project, id)
+        namespace_project_member_path(@namespace.parent, @namespace.project, member)
       end
     end
 
