@@ -9,7 +9,7 @@ module Members
         namespace = groups(:group_one)
         user = users(:john_doe)
         members = Member.for_namespace_and_ancestors(namespace).not_expired
-        q = Member.ransack({ s: 'user_email asc', user_email_cont: 'admin' })
+        q = Member.ransack
 
         render_inline TableComponent.new(
           namespace,
@@ -39,7 +39,7 @@ module Members
         namespace = project.namespace
         user = users(:john_doe)
         members = Member.for_namespace_and_ancestors(namespace).not_expired
-        q = Member.ransack({ s: 'user_email asc', user_email_cont: 'admin' })
+        q = Member.ransack
 
         render_inline TableComponent.new(
           namespace,
