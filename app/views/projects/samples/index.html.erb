@@ -40,6 +40,11 @@
         class: "button button--size-default button--state-default action-link" %>
       <% end %>
       <% if allowed_to?(:export_sample_data?, @project) %>
+        <%= viral_dropdown(label: t(".create_export_button"), aria: { label: "Organism dropdown list" }, caret: true, classes: "button button--size-default button--state-default action-link") do |dropdown| %>
+          <% dropdown.with_item(label: "Aspergillus awamori", url: '#') %>
+          <% dropdown.with_item(label: "Bacillus cereus", url: '#') %>
+          <% dropdown.with_item(label: "Pseudomonas aeruginosa", url: '#') %>
+        <% end %>
         <%= link_to t(".create_export_button"),
         new_data_export_path(
           export_type: "sample",
