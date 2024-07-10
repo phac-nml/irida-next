@@ -3,6 +3,7 @@
 <%= turbo_stream.update "member-#{member.id}-access-level",
                     partial: "projects/members/access_level",
                     locals: {
+                      namespace: @namespace,
                       member:,
                       access_levels: @access_levels,
                     } %>
