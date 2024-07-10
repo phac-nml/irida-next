@@ -147,9 +147,17 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
           <% if (@current_user == member.user || @abilities[:destroy_member]) && !member_source.key?(:inherited_namespace_path) %>
             <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
               <% if @current_user == member.user %>
-                <%= render partial: current_user_is_member, locals: { member: } %>
+                <%= render partial: current_user_is_member,
+                locals: {
+                  namespace: @namespace,
+                  member:,
+                } %>
               <% else %>
-                <%= render partial: current_user_is_not_member, locals: { member: } %>
+                <%= render partial: current_user_is_not_member,
+                locals: {
+                  namespace: @namespace,
+                  member:,
+                } %>
               <% end %>
             </td>
           <% end %>

@@ -1,6 +1,6 @@
 <%= link_to(
   t(:"groups.members.index.remove"),
-  group_member_path(@namespace, member),
+  group_member_path(namespace, id: member.id),
   data: {
     turbo_method: :delete,
     turbo_confirm: (t(:"groups.members.index.remove_confirmation")),

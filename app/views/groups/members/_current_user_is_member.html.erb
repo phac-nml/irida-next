@@ -1,6 +1,6 @@
 <%= link_to(
   t(:"groups.members.index.leave_group"),
-  group_member_path(id: member.id),
+  group_member_path(namespace, id: member.id),
   data: {
     turbo_method: :delete,
     turbo_confirm: t(:"groups.members.index.leave_confirmation"),
