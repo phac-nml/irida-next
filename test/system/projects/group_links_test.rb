@@ -10,7 +10,9 @@ module Projects
       @user = users(:john_doe)
       login_as @user
       @namespace = namespaces_project_namespaces(:project25_namespace)
+      @project = projects(:project25)
       @group_links_count = namespace_group_links.select { |group_link| group_link.namespace == @namespace }.count
+      @group_link3 = namespace_group_links(:namespace_group_link3)
     end
 
     test 'can create a project to group link' do
@@ -274,6 +276,17 @@ module Projects
 
       assert_text I18n.t(:'action_policy.policy.project.read?',
                          name: namespace_group_link.namespace.name)
+    end
+
+    test 'can search group links by group name' do
+      group_name_col = 1
+
+      visit namespace_project_members_url(@namespace.parent, @project, tab: 'invited_groups')
+
+      assert_text 'Displaying 1 items'
+      assert_selector '#project-members table tbody tr', count: 2
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
+                      text: @group_link3.group.name
     end
   end
 end
