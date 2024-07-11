@@ -1,7 +1,5 @@
 <%= turbo_frame_tag "new_member_modal" %>
-<div class="mb-4">
-  <%= turbo_frame_tag "member-update-alert" %>
-</div>
+<%= turbo_frame_tag "member-update-alert" %>
 
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
