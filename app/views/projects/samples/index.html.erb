@@ -71,39 +71,39 @@
     </div>
   <% end %>
 <% end %>
-  <div class="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">
-    <%= search_form_for @q, url: search_namespace_project_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters","data-filters-selection-outlet": "#samples-table" }, class: "filters" do |f| %>
-      <%= turbo_frame_tag "project_samples_hidden_values" %>
-      <div class="flex flex-row-reverse items-center space-x-2 mb-4">
-        <input type="hidden" name="format" value="turbo_stream"/>
-        <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-        <%= render ListFilterComponent.new(form: f) %>
-        <%= f.label :name_or_puid_cont,
-                placeholder: t(".search.placeholder"),
-                class: "sr-only" %>
-        <div class="flex flex-row items-center space-x-2">
-          <div class="relative lg:w-72">
-            <div
-              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
-            >
-              <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-            </div>
-            <%= f.search_field :name_or_puid_cont,
-                           "data-action": "filters#submit",
-                           class:
-                             "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                           placeholder: t(".search.placeholder") %>
+<div class="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+  <%= search_form_for @q, url: search_namespace_project_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters","data-filters-selection-outlet": "#samples-table" }, class: "filters" do |f| %>
+    <%= turbo_frame_tag "project_samples_hidden_values" %>
+    <div class="flex flex-row-reverse items-center mb-4 space-x-2">
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
+      <%= render ListFilterComponent.new(form: f) %>
+      <%= f.label :name_or_puid_cont,
+              placeholder: t(".search.placeholder"),
+              class: "sr-only" %>
+      <div class="flex flex-row items-center space-x-2">
+        <div class="relative lg:w-72">
+          <div
+            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
+          >
+            <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
           </div>
-
+          <%= f.search_field :name_or_puid_cont,
+                         "data-action": "filters#submit",
+                         class:
+                           "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                         placeholder: t(".search.placeholder") %>
         </div>
+
       </div>
-      <%= turbo_frame_tag "project_samples_table" do %>
-        <%= render partial: "table",
-                   locals: {
-                     project: @project,
-                     samples: @samples,
-                     pagy: @pagy,
-                   } %>
-      <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
+  <%= turbo_frame_tag "project_samples_table" do %>
+    <%= render partial: "table",
+    locals: {
+      project: @project,
+      samples: @samples,
+      pagy: @pagy,
+    } %>
+  <% end %>
+</div>

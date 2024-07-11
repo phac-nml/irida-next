@@ -83,7 +83,7 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = load_samples.ransack(params[:q])
+            @q = load_samples.ransack(search_params)
             @samples = @q.result.select(:id)
           end
         end
@@ -122,7 +122,7 @@ module Projects
 
     def set_default_sort
       # remove metadata sort if metadata not visible
-      if !@q.sorts.empty? && @q.sorts[0].name.start_with?('metadata_') && params[:q][:metadata].to_i != 1
+      if !@q.sorts.empty? && @q.sorts[0].name.start_with?('metadata_') && search_params[:metadata].to_i != 1
         @q.sorts.slice!(0)
       end
 
@@ -130,13 +130,13 @@ module Projects
     end
 
     def set_search_params
-      @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
+      @search_params = search_params.nil? ? {} : search_params.to_unsafe_h
     end
 
     def set_metadata_fields
       fields_for_namespace(
         namespace: @project.namespace,
-        show_fields: params[:q] && params[:q][:metadata].to_i == 1
+        show_fields: search_params && search_params[:metadata].to_i == 1
       )
     end
 
@@ -145,7 +145,7 @@ module Projects
 
       set_search_params
       set_metadata_fields
-      @q = load_samples.ransack(params[:q])
+      @q = load_samples.ransack(search_params)
       set_default_sort
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = load_samples.count.positive?

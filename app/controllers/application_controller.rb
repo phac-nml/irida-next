@@ -18,6 +18,19 @@ class ApplicationController < ActionController::Base
     yield
   end
 
+  def search_params
+    if params[:q].nil?
+      params[:q] = session[search_key]
+    else
+      session[search_key] = params[:q]
+    end
+    params[:q]
+  end
+
+  def search_key
+    :"#{controller_name}_search"
+  end
+
   def switch_locale(&)
     locale = current_user.try(:locale) || I18n.default_locale
     I18n.with_locale(locale, &)
