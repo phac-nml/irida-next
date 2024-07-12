@@ -13,12 +13,9 @@ module DataExports
 
       validate_params
 
-      @data_export.export_type == 'sample' ? validate_sample_ids : validate_analysis_id
+      @data_export.export_type == 'analysis' ? validate_analysis_id : validate_sample_ids
 
-      @data_export.user = current_user
-      @data_export.status = 'processing'
-
-      @data_export.save
+      assign_default_export_attributes
 
       DataExports::CreateJob.set(wait_until: 30.seconds.from_now).perform_later(@data_export) if @data_export.valid?
       @data_export
@@ -29,13 +26,24 @@ module DataExports
 
     private
 
-    # export_type and export_parameters[ids] are required for data_exports
     def validate_params
+      # export_type and export_parameters[ids] are required for data_exports
       unless params.key?('export_type') && params.key?('export_parameters') && params['export_parameters'].key?('ids')
         raise DataExportCreateError, I18n.t('services.data_exports.create.missing_required_parameters')
       end
 
-      @data_export.name = nil if params.key?('name') && params['name'].empty?
+      validate_linelist_params if params['export_type'] == 'linelist'
+    end
+
+    # linelist exports requires export_parameters[metadata_fields] and export_parameters[namespace]
+    def validate_linelist_params
+      unless params['export_parameters'].key?('metadata_fields')
+
+        raise DataExportCreateError, I18n.t('services.data_exports.create.missing_metadata_fields')
+      end
+      return if params['export_parameters'].key?('namespace')
+
+      raise DataExportCreateError, I18n.t('services.data_exports.create.missing_namespace')
     end
 
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
@@ -64,6 +72,14 @@ module DataExports
               I18n.t('services.data_exports.create.invalid_workflow_execution_id')
       end
       authorize! workflow_execution, to: :export_workflow_execution_data?
+    end
+
+    def assign_default_export_attributes
+      @data_export.user = current_user
+      @data_export.status = 'processing'
+      @data_export.name = nil if params.key?('name') && params['name'].empty?
+
+      @data_export.save
     end
   end
 end
