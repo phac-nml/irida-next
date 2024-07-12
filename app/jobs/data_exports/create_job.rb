@@ -7,25 +7,41 @@ module DataExports
 
     def perform(data_export)
       @manifest = ''
-      initialize_manifest(data_export.export_type)
+      initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
 
-      zip = data_export.export_type == 'sample' ? create_sample_zip(data_export) : create_analysis_zip(data_export)
+      export = create_export(data_export)
 
-      attach_zip(data_export, zip)
+      attach_export(data_export, export)
 
-      data_export.manifest = @manifest.to_json
+      assign_data_export_attributes(data_export)
+
+      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification?
+    end
+
+    # Functions used by all exports (sample, analysis, linelist)-------------------------------------------------
+    def create_export(data_export)
+      case data_export.export_type
+      when 'sample'
+        create_sample_zip(data_export)
+      when 'analysis'
+        create_analysis_zip(data_export)
+      when 'linelist'
+        create_linelist_spreadsheet(data_export)
+      end
+    end
+
+    def assign_data_export_attributes(data_export)
+      data_export.manifest = @manifest.to_json unless data_export.export_type == 'linelist'
       data_export.expires_at = ApplicationController.helpers.add_business_days(DateTime.current, 3)
       data_export.status = 'ready'
       data_export.save
-
-      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification?
     end
 
     # Functions used by both sample and analysis exports-------------------------------------------------
     def initialize_manifest(export_type)
       @manifest = if export_type == 'sample'
                     { 'type' => 'Samples Export', 'date' => Date.current, 'children' => [] }
-                  else
+                  elsif export_type == 'analysis'
                     { 'type' => 'Analysis Export', 'date' => Date.current, 'children' => [] }
                   end
     end
@@ -45,10 +61,16 @@ module DataExports
       manifest_file.unlink
     end
 
-    def attach_zip(data_export, zip)
-      data_export.file.attach(io: zip.open, filename: "#{data_export.id}.zip")
-      zip.close
-      zip.unlink
+    def attach_export(data_export, export)
+      export_format = if data_export.export_type == 'linelist'
+                        data_export.export_parameters['format']
+                      else
+                        'zip'
+                      end
+
+      data_export.file.attach(io: export.open, filename: "#{data_export.id}.#{export_format}")
+      export.close
+      export.unlink
     end
 
     # Sample export specific functions------------------------------------------------------------------
@@ -168,5 +190,7 @@ module DataExports
 
       @manifest['children'] << sample_directory
     end
+
+    # Linelist export specific functions---------------------------------------------------------------------
   end
 end

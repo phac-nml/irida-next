@@ -38,10 +38,14 @@ module DataExports
     # linelist exports requires export_parameters[metadata_fields] and export_parameters[namespace]
     def validate_linelist_params
       unless params['export_parameters'].key?('metadata_fields')
-
         raise DataExportCreateError, I18n.t('services.data_exports.create.missing_metadata_fields')
       end
-      return if params['export_parameters'].key?('namespace')
+
+      unless params['export_parameters'].key?('format')
+        raise DataExportCreateError, I18n.t('services.data_exports.create.missing_file_format')
+      end
+
+      return if params['export_parameters'].key?('namespace_type')
 
       raise DataExportCreateError, I18n.t('services.data_exports.create.missing_namespace')
     end
