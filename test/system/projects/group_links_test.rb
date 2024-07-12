@@ -12,7 +12,10 @@ module Projects
       @namespace = namespaces_project_namespaces(:project25_namespace)
       @project = projects(:project25)
       @group_links_count = namespace_group_links.select { |group_link| group_link.namespace == @namespace }.count
-      @group_link3 = namespace_group_links(:namespace_group_link3)
+      @group_link2 = namespace_group_links(:namespace_group_link2)
+      @group_link6 = namespace_group_links(:namespace_group_link6)
+      @group_link5 = namespace_group_links(:namespace_group_link5)
+      @group_link14 = namespace_group_links(:namespace_group_link14)
     end
 
     test 'can create a project to group link' do
@@ -283,10 +286,31 @@ module Projects
 
       visit namespace_project_members_url(@namespace.parent, @project, tab: 'invited_groups')
 
-      assert_text 'Displaying 1 items'
-      assert_selector '#project-members table tbody tr', count: 2
-      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
-                      text: @group_link3.group.name
+      assert_text 'Displaying 4 items'
+      assert_selector '#project-members table tbody tr', count: 4
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link6.group.name
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link5.group.name
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link14.group.name
+
+      fill_in placeholder: I18n.t(:'projects.group_links.index.search.placeholder'), with: @group_link2.group.name
+
+      assert_text 'Displaying 1 item'
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
+                         text: @group_link6.group.name
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
+                         text: @group_link5.group.name
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
+                         text: @group_link14.group.name
+    end
+
+    test 'can sort by column' do
+      visit namespace_project_members_url(@namespace.parent, @project, tab: 'invited_groups')
+
+      assert_text 'Displaying 4 items'
+      assert_selector '#project-members table tbody tr', count: 4
+      assert_selector '#project-members table thead th:first-child svg.icon-arrow_up'
     end
   end
 end
