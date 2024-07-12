@@ -192,5 +192,54 @@ module DataExports
     end
 
     # Linelist export specific functions---------------------------------------------------------------------
+    def create_linelist_spreadsheet(data_export)
+      samples = if data_export.export_parameters['namespace_type'] == 'group'
+                  Sample.includes(project: :namespace)
+                        .where(id: data_export.export_parameters['ids'])
+                else
+                  Sample.where(id: data_export.export_parameters['ids'])
+                end
+      if data_export.export_parameters['format'] == 'csv'
+        write_csv_export(data_export, samples)
+      else
+        write_xlsx_export(data_export, samples)
+      end
+    end
+
+    def write_csv_export(data_export, samples)
+      Tempfile.new(binmode: true).tap do |tempfile|
+        CSV.open(tempfile, 'wb') do |csv|
+          csv << create_header(data_export.export_parameters['namespace_type'] == 'group',
+                               data_export.export_parameters['metadata_fields'])
+          samples.each do |sample|
+            csv << write_csv_row(sample, data_export)
+          end
+        end
+      end
+    end
+
+    def create_header(namespace_type, metadata_fields)
+      header = %w[id sample]
+      header += ['project'] if namespace_type == 'group'
+      header += metadata_fields
+      header
+    end
+
+    def write_csv_row(sample, data_export)
+      row = [sample.puid, sample.name]
+      row += [sample.project.full_path] if data_export.export_parameters['namespace_type'] == 'group'
+      row += map_metadata_fields(data_export.export_parameters['metadata_fields'], sample.metadata)
+      row
+    end
+
+    def map_metadata_fields(metadata_fields, sample_metadata)
+      metadata_fields.map do |metadata_field|
+        if sample_metadata.key?(metadata_field)
+          sample_metadata[metadata_field]
+        else
+          ''
+        end
+      end
+    end
   end
 end
