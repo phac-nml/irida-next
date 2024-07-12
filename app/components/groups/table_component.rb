@@ -71,7 +71,7 @@ module Groups
     private
 
     def columns
-      %i[group_id namespace_id updated_at group_access_level expires_at]
+      %i[group_name namespace_name updated_at group_access_level expires_at]
     end
   end
 end

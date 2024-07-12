@@ -31,11 +31,11 @@ class NamespaceGroupLink < ApplicationRecord
                                       }
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[group_id namespace_id updated_at group_access_level expires_at]
+    %w[updated_at group_access_level expires_at]
   end
 
   def self.ransackable_associations(_auth_object = nil)
-    %w[group]
+    %w[group namespace]
   end
 
   def send_access_revoked_emails
