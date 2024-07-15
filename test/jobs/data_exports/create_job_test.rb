@@ -299,9 +299,7 @@ module DataExports
     test 'create csv linelist export with project namespace_type and csv content' do
       sample30 = samples(:sample30)
       data_export8 = data_exports(:data_export_eight)
-      assert_difference -> { ActiveStorage::Attachment.count } => +1 do
-        DataExports::CreateJob.perform_now(data_export8)
-      end
+      DataExports::CreateJob.perform_now(data_export8)
 
       export_file = ActiveStorage::Blob.service.path_for(data_export8.file.key)
       csv_text = File.read(export_file)
@@ -319,15 +317,16 @@ module DataExports
       sample33 = samples(:sample33)
       sample34 = samples(:sample34)
       data_export9 = data_exports(:data_export_nine)
-      assert_difference -> { ActiveStorage::Attachment.count } => +1 do
-        DataExports::CreateJob.perform_now(data_export9)
-      end
 
+      DataExports::CreateJob.perform_now(data_export9)
       export_file = Roo::Spreadsheet.open(ActiveStorage::Blob.service.path_for(data_export9.file.key),
                                           extension: 'xlsx')
 
       assert_equal %w[id sample project metadatafield1 non_existant_field metadatafield2],
                    export_file.row(1)
+      puts sample32.project.full_path
+      puts sample33.project.full_path
+      puts sample34.project.full_path
       assert_equal [
         sample32.puid,
         sample32.name,

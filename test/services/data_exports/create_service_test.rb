@@ -193,7 +193,7 @@ module DataExports
         'export_parameters' => {
           'ids' => [@sample1.id, @sample2.id],
           'format' => 'csv',
-          'namespace_type' => 'group',
+          'namespace_type' => 'Group',
           'metadata_fields' => %w[metadatafield1 metadatafield2]
         }
       }
@@ -209,7 +209,7 @@ module DataExports
         'export_parameters' => {
           'ids' => [@sample1.id, @sample2.id],
           'format' => 'xlsx',
-          'namespace_type' => 'project',
+          'namespace_type' => 'Project',
           'metadata_fields' => %w[metadatafield1 metadatafield2]
         }
       }
@@ -225,7 +225,7 @@ module DataExports
         'export_parameters' => {
           'ids' => [@sample1.id, @sample2.id],
           'format' => 'invalid format',
-          'namespace_type' => 'project',
+          'namespace_type' => 'Project',
           'metadata_fields' => %w[metadatafield1 metadatafield2]
         }
       }
@@ -242,7 +242,7 @@ module DataExports
         'export_type' => 'linelist',
         'export_parameters' => {
           'ids' => [@sample1.id, @sample2.id],
-          'namespace_type' => 'group',
+          'namespace_type' => 'Group',
           'metadata_fields' => %w[metadatafield1 metadatafield2]
         }
       }
@@ -295,7 +295,7 @@ module DataExports
         'export_parameters' => {
           'ids' => [@sample1.id, @sample2.id],
           'format' => 'xlsx',
-          'namespace_type' => 'group'
+          'namespace_type' => 'Group'
         }
       }
 
