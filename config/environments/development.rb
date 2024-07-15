@@ -2,9 +2,6 @@
 
 require 'active_support/core_ext/integer/time'
 
-# Sets default routing host/port, useful for active storage blobs when running locally
-Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
