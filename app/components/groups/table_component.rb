@@ -10,19 +10,20 @@ module Groups
       namespace,
       access_levels,
       q,
+      abilities: {},
       has_groups: true,
       search_params: {},
-      row_actions: {},
       **system_arguments
     )
       @namespace_group_links = namespace_group_links
       @namespace = namespace
       @access_levels = access_levels
       @q = q
+      @abilities = abilities
       @has_groups = has_groups
       @search_params = search_params
-      @row_actions = row_actions
-      @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
+      # @row_actions = row_actions
+      # @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @system_arguments = system_arguments
 
       @columns = columns

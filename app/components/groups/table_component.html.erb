@@ -79,7 +79,7 @@
           </td>
           <td class="px-6 py-4">
             <div class="form-field">
-              <% if helpers.allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+              <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
                 <%= form_with(model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
                   <%= form.select(
                     :group_access_level,
@@ -102,7 +102,7 @@
             </div>
           </td>
           <td class="px-6 py-4">
-            <% if helpers.allowed_to?(:update_namespace_with_group_link?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+            <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
               <%= form_with( model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
                 <div class="form-field datepicker" data-controller="datepicker">
                   <div class="relative max-w-sm">
@@ -141,7 +141,7 @@
             <% end %>
           </td>
           <td class="px-6 py-4 space-x-2">
-            <% if helpers.allowed_to?(:unlink_namespace_with_group?, @namespace) && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+            <% if @abilities[:unlink_group] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
               <%= link_to(
                 t(:"projects.group_links.index.unlink"),
                 namespace_project_group_link_path(
