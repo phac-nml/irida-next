@@ -14,7 +14,6 @@ export default class extends Controller {
       type: String,
     },
     total: Number,
-    url: String,
   };
 
   connect() {
@@ -34,15 +33,6 @@ export default class extends Controller {
     }
 
     this.#updateCounts(storageValue.length);
-  }
-
-  toggleSelectAll(event) {
-    const form = document.querySelector("form#sample_search").cloneNode(true);
-    form.action = event.target.dataset.url;
-    form.classList.add("hidden");
-    document.body.appendChild(form);
-    form.requestSubmit();
-    document.body.removeChild(form);
   }
 
   actionLinkOutletConnected(outlet) {
@@ -99,18 +89,18 @@ export default class extends Controller {
   }
 
   #updateUI(ids) {
-    for (const row of this.rowSelectionTargets) {
+    this.rowSelectionTargets.map((row) => {
       row.checked = ids.indexOf(row.value) > -1;
-    }
+    });
     this.#updateActionLinks(ids.length);
     this.#setSelectAllCheckboxValue(ids.length);
     this.#updateCounts(ids.length);
   }
 
   #updateActionLinks(count) {
-    for (const outlet of this.actionLinkOutlets) {
+    this.actionLinkOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
-    }
+    });
   }
 
   #setSelectAllCheckboxValue(numSelected) {

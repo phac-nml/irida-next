@@ -1,8 +1,9 @@
-<%# locals: (project:, pagy:, samples:) -%>
+<%# locals: (project:, pagy:, samples:, sort_query:) -%>
 <%= render Samples::TableComponent.new(
   samples,
   project.namespace,
   pagy,
+  sort_query,
   @q,
   has_samples: @has_samples,
   abilities: {

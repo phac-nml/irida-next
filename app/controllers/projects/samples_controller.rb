@@ -18,7 +18,7 @@ module Projects
     end
 
     def search
-      render 'projects/samples/index', formats: :turbo_stream
+      redirect_to namespace_project_samples_path
     end
 
     def show
@@ -129,10 +129,6 @@ module Projects
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
     end
 
-    def set_search_params
-      @search_params = search_params.nil? ? {} : search_params.to_unsafe_h
-    end
-
     def set_metadata_fields
       fields_for_namespace(
         namespace: @project.namespace,
@@ -141,14 +137,18 @@ module Projects
     end
 
     def process_samples
+      # IF called from post override logic, if get merge with search_params
       authorize! @project, to: :sample_listing?
 
-      set_search_params
+      @search_params = search_params
+
       set_metadata_fields
-      @q = load_samples.ransack(search_params)
+      @q = load_samples.ransack(@search_params)
       set_default_sort
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = load_samples.count.positive?
+      search = { s: @search_params['s'] }.with_indifferent_access
+      @sorting_q = load_samples.ransack(search)
     end
   end
 end

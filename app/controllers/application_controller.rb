@@ -18,13 +18,10 @@ class ApplicationController < ActionController::Base
     yield
   end
 
-  def search_params
-    if params[:q].nil?
-      params[:q] = session[search_key]
-    else
-      session[search_key] = params[:q]
-    end
-    params[:q]
+  def search_params # rubocop:disable Metrics/AbcSize
+    params[:q] = session[search_key] if params[:q].nil?
+    session[search_key] = params[:q] if params[:q]
+    params[:q].present? ? params[:q].to_unsafe_h : {}
   end
 
   def search_key

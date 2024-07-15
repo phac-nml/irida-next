@@ -25,5 +25,8 @@ module SortingHelper
             sort_url(ransack_obj, format('%<field>s %<dir>s', field:, dir:)).to_s
           end
     url.include?('.turbo_stream') ? url.gsub!('.turbo_stream', '') : url
+
+    # encode field and dir to result in parmas looking like this: "q[s]=field+dir"
+    # "?q%5Bs%5D=#{field}+#{dir}"
   end
 end
