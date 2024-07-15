@@ -70,3 +70,35 @@ data_export_seven:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   expires_at: <%= 5.days.from_now %>
   manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABV","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 44","children":[{"name":"INXT_SAM_AAAAAAAABV.assembly.fa.gz","type":"file"}]}]}'
+
+data_export_eight:
+  name: Data Export 8
+  export_type: linelist
+  status: ready
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sample30, :uuid) %>],
+    format: 'csv',
+    namespace_type: 'Project',
+    metadata_fields: ['metadatafield1', 'metadatafield2']
+  }
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  expires_at: <%= 5.days.from_now %>
+
+data_export_nine:
+  name: Data Export 9
+  export_type: linelist
+  status: ready
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample33, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample34, :uuid) %>],
+    format: 'xlsx',
+    namespace_type: 'Group',
+    metadata_fields: ['metadatafield1', 'non_existant_field', 'metadatafield2']
+  }
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  expires_at: <%= 5.days.from_now %>

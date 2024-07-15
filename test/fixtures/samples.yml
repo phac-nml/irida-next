@@ -103,16 +103,16 @@ sample28:
   updated_at: <%= 31.days.ago %>
 
 sample29:
-  name: Sample 2
-  description: Sample 2 description.
+  name: Sample 29
+  description: Sample 29 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project25, :uuid) %>
   puid: INXT_SAM_AAAAAAAAA7
   created_at: <%= 32.weeks.ago %>
   updated_at: <%= 32.days.ago %>
 
 sample30:
-  name: Sample 2
-  description: Sample 2 description.
+  name: Sample 30
+  description: Sample 30 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
   puid: INXT_SAM_AAAAAAAABA
   created_at: <%= 33.weeks.ago %>
@@ -123,8 +123,8 @@ sample30:
                          'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
 sample31:
-  name: Sample 2
-  description: Sample 2 description.
+  name: Sample 31
+  description: Sample 31 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project26, :uuid) %>
   puid: INXT_SAM_AAAAAAAABB
   created_at: <%= 34.weeks.ago %>

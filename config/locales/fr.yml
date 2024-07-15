@@ -1494,9 +1494,14 @@ fr:
           access_level: Unable to create bot account as an access level must be selected
     data_exports:
       create:
+        invalid_file_format: A linelist export must have either a .xlsx or .csv format.
+        invalid_namespace_type: A linelist export can only have a namespace type of Group or Project.
         invalid_sample_id: A sample selected for export does not exist.
         invalid_workflow_execution_id: A workflow execution selected for export does not exist.
         invalid_workflow_execution_id_count: An analysis export may only contain one workflow execution.
+        missing_file_format: The linelist export is missing the file format.
+        missing_metadata_fields: A linelist export must contain metadata fields.
+        missing_namespace_type: A linelist export requires a namespace type of Group or Project.
         missing_required_parameters: A parameter required to create a valid Data Export is missing.
     members:
       create:

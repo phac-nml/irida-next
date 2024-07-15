@@ -15,9 +15,9 @@ module DataExports
 
       @data_export.export_type == 'analysis' ? validate_analysis_id : validate_sample_ids
 
-      assign_default_export_attributes
+      assign_initial_export_attributes
 
-      DataExports::CreateJob.set(wait_until: 30.seconds.from_now).perform_later(@data_export) if @data_export.valid?
+      DataExports::CreateJob.perform_later(@data_export) if @data_export.valid?
       @data_export
     rescue DataExports::CreateService::DataExportCreateError => e
       @data_export.errors.add(:base, e.message)
@@ -41,13 +41,29 @@ module DataExports
         raise DataExportCreateError, I18n.t('services.data_exports.create.missing_metadata_fields')
       end
 
+      validate_linelist_format
+
+      validate_linelist_namespace_type
+    end
+
+    def validate_linelist_format
       unless params['export_parameters'].key?('format')
         raise DataExportCreateError, I18n.t('services.data_exports.create.missing_file_format')
       end
 
-      return if params['export_parameters'].key?('namespace_type')
+      return if %w[xlsx csv].include?(params['export_parameters']['format'])
 
-      raise DataExportCreateError, I18n.t('services.data_exports.create.missing_namespace')
+      raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_file_format')
+    end
+
+    def validate_linelist_namespace_type
+      unless params['export_parameters'].key?('namespace_type')
+        raise DataExportCreateError, I18n.t('services.data_exports.create.missing_namespace_type')
+      end
+
+      return if %w[Group Project].include?(params['export_parameters']['namespace_type'])
+
+      raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_namespace_type')
     end
 
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
@@ -78,7 +94,7 @@ module DataExports
       authorize! workflow_execution, to: :export_workflow_execution_data?
     end
 
-    def assign_default_export_attributes
+    def assign_initial_export_attributes
       @data_export.user = current_user
       @data_export.status = 'processing'
       @data_export.name = nil if params.key?('name') && params['name'].empty?
