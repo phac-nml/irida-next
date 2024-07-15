@@ -1710,7 +1710,6 @@ en:
     types:
       sample: SAMPLE
       analysis: ANALYSIS
-      linelist: LINELIST
     status:
       processing: PROCESSING
       ready: READY
