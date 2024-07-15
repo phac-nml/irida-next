@@ -5,6 +5,7 @@ module Groups
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
+    # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
     def initialize(
       namespace_group_links,
       namespace,
@@ -22,25 +23,11 @@ module Groups
       @abilities = abilities
       @has_groups = has_groups
       @search_params = search_params
-      # @row_actions = row_actions
-      # @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @system_arguments = system_arguments
 
       @columns = columns
     end
-
-    # def system_arguments
-    #   { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
-    #     args[:id] = 'samples-table'
-    #     args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
-    #     if @abilities[:select_samples]
-    #       args[:data] ||= {}
-    #       args[:data][:controller] = 'selection'
-    #       args[:data][:'selection-total-value'] = @pagy.count
-    #       args[:data][:'selection-action-link-outlet'] = '.action-link'
-    #     end
-    #   end
-    # end
+    # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
 
     def wrapper_arguments
       {
@@ -60,14 +47,6 @@ module Groups
     def render_cell(**arguments, &)
       render(Viral::BaseComponent.new(**arguments), &)
     end
-
-    # def select_samples_url(**)
-    #   if @namespace.type == 'Group'
-    #     select_group_samples_url(@namespace, **)
-    #   else
-    #     select_namespace_project_samples_url(@namespace.parent, @namespace.project, **)
-    #   end
-    # end
 
     private
 
