@@ -22,7 +22,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 4
+      assert_selector 'tr', count: 6
       assert_selector 'tr:first-child td:first-child ', text: @data_export1.id
       assert_selector 'tr:first-child td:nth-child(2)', text: @data_export1.name
 
@@ -72,6 +72,22 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'can delete data exports on listing page' do
     visit data_exports_path
+
+    within %(#data-exports-table-body) do
+      assert_selector 'tr', count: 6
+      click_link I18n.t('data_exports.index.actions.delete'), match: :first
+    end
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
+
+    within %(#data-exports-table-body) do
+      assert_selector 'tr', count: 5
+      click_link I18n.t('data_exports.index.actions.delete'), match: :first
+    end
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
 
     within %(#data-exports-table-body) do
       assert_selector 'tr', count: 4
@@ -189,7 +205,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 4
+      assert_selector 'tr', count: 6
       assert_text @data_export2.id
     end
 
@@ -202,7 +218,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 3
+      assert_selector 'tr', count: 5
       assert_no_text @data_export2.id
     end
   end
@@ -236,7 +252,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_exports_path
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 4
+      assert_selector 'tr', count: 6
       assert_no_text 'test data export'
     end
     # project samples page
@@ -279,7 +295,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_exports_path
     within %(#data-exports-table-body) do
-      assert_selector 'tr', count: 4
+      assert_selector 'tr', count: 6
       assert_no_text 'test data export'
     end
     # project samples page

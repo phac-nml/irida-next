@@ -76,7 +76,7 @@ data_export_eight:
   export_type: linelist
   status: ready
   export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sample30, :uuid) %>],
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>],
     format: 'csv',
     namespace_type: 'Project',
     metadata_fields: ['metadatafield1', 'metadatafield2']

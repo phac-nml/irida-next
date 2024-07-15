@@ -297,7 +297,7 @@ module DataExports
     end
 
     test 'create csv linelist export with project namespace_type and csv content' do
-      sample30 = samples(:sample30)
+      sample32 = samples(:sample32)
       data_export8 = data_exports(:data_export_eight)
       DataExports::CreateJob.perform_now(data_export8)
 
@@ -305,10 +305,10 @@ module DataExports
       csv_text = File.read(export_file)
       csv = CSV.parse(csv_text, headers: true)
       csv.each do |row|
-        assert_equal sample30.puid, row['id']
-        assert_equal sample30.name, row['sample']
-        assert_equal sample30.metadata['metadatafield1'], row['metadatafield1']
-        assert_equal sample30.metadata['metadatafield2'], row['metadatafield2']
+        assert_equal sample32.puid, row['id']
+        assert_equal sample32.name, row['sample']
+        assert_equal sample32.metadata['metadatafield1'], row['metadatafield1']
+        assert_equal sample32.metadata['metadatafield2'], row['metadatafield2']
       end
     end
 
@@ -324,9 +324,6 @@ module DataExports
 
       assert_equal %w[id sample project metadatafield1 non_existant_field metadatafield2],
                    export_file.row(1)
-      puts sample32.project.full_path
-      puts sample33.project.full_path
-      puts sample34.project.full_path
       assert_equal [
         sample32.puid,
         sample32.name,
