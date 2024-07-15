@@ -991,7 +991,7 @@ en:
           group: Group
           source: Source
           access_granted: Access granted
-          access_level: Access level
+          access_level: Access Level
           expiration: Expiration
           action: Action
         actions:
