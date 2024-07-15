@@ -37,7 +37,6 @@ module Groups
       with_request_url '/group-1/project-1/-/members?tab=invited_groups' do
         project = projects(:project1)
         namespace = project.namespace
-        user = users(:john_doe)
         namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(namespace).not_expired
         q = NamespaceGroupLink.ransack
 
