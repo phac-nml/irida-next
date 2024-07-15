@@ -48,6 +48,14 @@ module Groups
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
+    def select_group_link_path(namespace_group_link)
+      if @namespace.type == 'Group'
+        group_group_link_path(@namespace, namespace_group_link)
+      else
+        namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link)
+      end
+    end
+
     private
 
     def columns

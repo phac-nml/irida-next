@@ -80,7 +80,7 @@
           <td class="px-6 py-4">
             <div class="form-field">
               <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-                <%= form_with(model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
+                <%= form_with(model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
                   <%= form.select(
                     :group_access_level,
                     @access_levels,
@@ -103,7 +103,7 @@
           </td>
           <td class="px-6 py-4">
             <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-              <%= form_with( model: namespace_group_link, url: namespace_project_group_link_path(@namespace.parent, @namespace.project, namespace_group_link), method: :patch) do |form| %>
+              <%= form_with( model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
                 <div class="form-field datepicker" data-controller="datepicker">
                   <div class="relative max-w-sm">
                     <div
@@ -144,11 +144,7 @@
             <% if @abilities[:unlink_group] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
               <%= link_to(
                 t(:"projects.group_links.index.unlink"),
-                namespace_project_group_link_path(
-                  @namespace.parent,
-                  @namespace.project,
-                  namespace_group_link
-                ),
+                select_group_link_path(namespace_group_link),
                 data: {
                   turbo_method: :delete,
                   turbo_confirm:

@@ -1,0 +1,12 @@
+<%= render Groups::TableComponent.new(
+  namespace_group_links,
+  namespace,
+  access_levels,
+  @q,
+  abilities: {
+    update_namespace: allowed_to?(:update_namespace_with_group_link?, namespace),
+    unlink_group: allowed_to?(:unlink_namespace_with_group?, namespace),
+  },
+  has_groups: @has_groups,
+  search_params: @search_params,
+) %>

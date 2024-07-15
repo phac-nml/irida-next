@@ -697,6 +697,8 @@ en:
         empty_state:
           title: No groups
           description: There are no groups that have been delegated access to this group
+        search:
+          placeholder: Filter by ID or name
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
