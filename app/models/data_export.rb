@@ -8,7 +8,7 @@ class DataExport < ApplicationRecord
 
   has_one_attached :file, dependent: :purge_later
 
-  validates :status, acceptance: { accept: %w[processing ready] }
+  validates :status, presence: true, acceptance: { accept: %w[processing ready] }
   validates :export_type, presence: true, acceptance: { accept: %w[sample analysis linelist] }
   validates :export_parameters, presence: true
 

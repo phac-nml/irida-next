@@ -42,6 +42,17 @@ class DataExportTest < ActiveSupport::TestCase
     end
   end
 
+  test 'data export with missing export_type' do
+    data_export = DataExport.new(user: @user, status: 'ready',
+                                 export_parameters: { ids: [@sample1.id] })
+    assert_not data_export.valid?
+  end
+
+  test 'data export with missing export_parameters' do
+    data_export = DataExport.new(user: @user, status: 'ready', export_type: 'sample')
+    assert_not data_export.valid?
+  end
+
   test 'export with missing ids' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'analysis',
                                  export_parameters: { not_ids: [@sample1.id] })
