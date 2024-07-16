@@ -630,7 +630,6 @@ DEPENDENCIES
   capybara
   capybara-lockstep
   caxlsx
-  caxlsx_rails
   csv
   cuprite
   debug

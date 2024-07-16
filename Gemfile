@@ -122,7 +122,6 @@ gem 'csv'
 
 # write xlsx
 gem 'caxlsx'
-gem 'caxlsx_rails'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
