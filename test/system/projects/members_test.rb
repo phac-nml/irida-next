@@ -473,26 +473,32 @@ module Projects
       click_on I18n.t('members.table_component.access_level')
       assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_up'
       within first('#project-members table tbody') do
+        # Ryan is a Guest
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_ryan.access_level)
-        assert_selector 'tr:nth-child(2) td:first-child', text: @member_joan.user.email
+        # Jean & Joan are Maintainers
+        assert_selector 'tr:nth-child(2) td:first-child', text: /#{@member_jean.user.email}|#{@member_joan.user.email}/
         assert_selector 'tr:nth-child(2) td:nth-child(2)',
-                        text: Member::AccessLevel.human_access(@member_joan.access_level)
-        assert_selector 'tr:last-child td:first-child', text: @member_james.user.email
+                        text: /#{Member::AccessLevel.human_access(@member_jean.access_level)}|#{Member::AccessLevel.human_access(@member_joan.access_level)}/ # rubocop:disable Layout/LineLength
+        # John & James are Owners
+        assert_selector 'tr:last-child td:first-child', text: /#{@member_james.user.email}|#{@member_john.user.email}/
         assert_selector 'tr:last-child td:nth-child(2)',
-                        text: Member::AccessLevel.human_access(@member_james.access_level)
+                        text: /#{Member::AccessLevel.human_access(@member_james.access_level)}|#{Member::AccessLevel.human_access(@member_john.access_level)}/ # rubocop:disable Layout/LineLength
       end
 
       click_on I18n.t('members.table_component.access_level')
       assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_down'
       within first('#project-members table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
+        # John & James are Owners
+        assert_selector 'tr:first-child td:first-child', text: /#{@member_james.user.email}|#{@member_john.user.email}/
         assert_selector 'tr:first-child td:nth-child(2)',
-                        text: Member::AccessLevel.human_access(@member_john.access_level)
-        assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
-        assert_selector 'tr:nth-child(2) td:nth-child(2)',
-                        text: Member::AccessLevel.human_access(@member_james.access_level)
+                        text: /#{Member::AccessLevel.human_access(@member_james.access_level)}|#{Member::AccessLevel.human_access(@member_john.access_level)}/ # rubocop:disable Layout/LineLength
+        # Jean & Joan are Maintainers
+        assert_selector 'tr:nth-child(4) td:first-child', text: /#{@member_jean.user.email}|#{@member_joan.user.email}/
+        assert_selector 'tr:nth-child(4) td:nth-child(2)',
+                        text: /#{Member::AccessLevel.human_access(@member_jean.access_level)}|#{Member::AccessLevel.human_access(@member_joan.access_level)}/ # rubocop:disable Layout/LineLength
+        # Ryan is a Guest
         assert_selector 'tr:last-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:last-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_ryan.access_level)
