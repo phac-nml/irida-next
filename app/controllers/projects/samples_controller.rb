@@ -5,10 +5,12 @@ module Projects
   class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
     include SampleActions
+    include Storable
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
     before_action :process_samples, only: %i[index search]
+    include FilteredSort
 
     def index
       respond_to do |format|
@@ -120,35 +122,25 @@ module Projects
       @current_page = t(:'projects.sidebar.samples')
     end
 
-    def set_default_sort
-      # remove metadata sort if metadata not visible
-      if !@q.sorts.empty? && @q.sorts[0].name.start_with?('metadata_') && search_params[:metadata].to_i != 1
-        @q.sorts.slice!(0)
-      end
-
-      @q.sorts = 'updated_at desc' if @q.sorts.empty?
-    end
-
     def set_metadata_fields
       fields_for_namespace(
         namespace: @project.namespace,
-        show_fields: search_params && search_params[:metadata].to_i == 1
+        show_fields: @search_params && @search_params[:metadata].to_i == 1
       )
     end
 
+    def search_key
+      :"#{controller_name}_#{@project.id}_search_params"
+    end
+
     def process_samples
-      # IF called from post override logic, if get merge with search_params
       authorize! @project, to: :sample_listing?
 
-      @search_params = search_params
-
+      @search_params = search_params(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
       set_metadata_fields
       @q = load_samples.ransack(@search_params)
-      set_default_sort
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = load_samples.count.positive?
-      search = { s: @search_params['s'] }.with_indifferent_access
-      @sorting_q = load_samples.ransack(search)
     end
   end
 end

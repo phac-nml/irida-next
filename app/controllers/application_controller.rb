@@ -18,16 +18,6 @@ class ApplicationController < ActionController::Base
     yield
   end
 
-  def search_params # rubocop:disable Metrics/AbcSize
-    params[:q] = session[search_key] if params[:q].nil?
-    session[search_key] = params[:q] if params[:q]
-    params[:q].present? ? params[:q].to_unsafe_h : {}
-  end
-
-  def search_key
-    :"#{controller_name}_search"
-  end
-
   def switch_locale(&)
     locale = current_user.try(:locale) || I18n.default_locale
     I18n.with_locale(locale, &)

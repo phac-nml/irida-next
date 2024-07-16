@@ -17,16 +17,18 @@ module SortingHelper
                        })
   end
 
-  def sorting_url(ransack_obj, field, dir: nil)
-    url = if dir.nil?
-            sort_url(ransack_obj,
-                     field).to_s
+  def sorting_url(ransack_obj, field, dir: nil, with_params: true)
+    url = if with_params
+            if dir.nil?
+              sort_url(ransack_obj,
+                       field).to_s
+            else
+              sort_url(ransack_obj, format('%<field>s %<dir>s', field:, dir:)).to_s
+            end
           else
-            sort_url(ransack_obj, format('%<field>s %<dir>s', field:, dir:)).to_s
+            url_for(Ransack::Helpers::FormHelper::SortLink.new(ransack_obj, field, { dir: },
+                                                               params.except(:q)).url_options)
           end
     url.include?('.turbo_stream') ? url.gsub!('.turbo_stream', '') : url
-
-    # encode field and dir to result in parmas looking like this: "q[s]=field+dir"
-    # "?q%5Bs%5D=#{field}+#{dir}"
   end
 end

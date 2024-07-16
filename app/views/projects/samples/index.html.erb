@@ -101,7 +101,7 @@
   <%= turbo_frame_tag "project_samples_table" do %>
     <%= render partial: "table",
     locals: {
-      sort_query: @sorting_q,
+      sort_query: @sort_query,
       project: @project,
       samples: @samples,
       pagy: @pagy,
