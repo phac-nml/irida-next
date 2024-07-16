@@ -172,6 +172,15 @@ en:
           attributes:
             file:
               checksum_uniqueness: checksum matches existing file
+        data_export:
+          attributes:
+            export_parameters:
+              missing_ids: does not contain any ids to export.
+              missing_metadata_fields: must contain metadata fields for linelist exports
+              missing_file_format: must contain a format for linelist exports
+              invalid_file_format: must have either a .xlsx or .csv format for linelist exports
+              missing_namespace_type: must have a namespace type for linelist exports
+              invalid_namespace_type: must have a namespace type of Group or Project for linelist exports
         namespace:
           attributes:
             name:
@@ -1494,15 +1503,9 @@ en:
           access_level: Unable to create bot account as an access level must be selected
     data_exports:
       create:
-        invalid_file_format: A linelist export must have either a .xlsx or .csv format.
-        invalid_namespace_type: A linelist export can only have a namespace type of Group or Project.
         invalid_sample_id: A sample selected for export does not exist.
         invalid_workflow_execution_id: A workflow execution selected for export does not exist.
         invalid_workflow_execution_id_count: An analysis export may only contain one workflow execution.
-        missing_file_format: The linelist export is missing the file format.
-        missing_metadata_fields: A linelist export must contain metadata fields.
-        missing_namespace_type: A linelist export requires a namespace type of Group or Project.
-        missing_required_parameters: A parameter required to create a valid Data Export is missing.
     members:
       create:
         role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"
