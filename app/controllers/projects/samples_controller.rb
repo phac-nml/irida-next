@@ -85,7 +85,7 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = load_samples.ransack(search_params(search_key, params[:q].to_unsafe_h))
+            @q = load_samples.ransack(search_params(search_key, params[:q].present? ? params[:q].to_unsafe_h : {}))
             @samples = @q.result.select(:id)
           end
         end

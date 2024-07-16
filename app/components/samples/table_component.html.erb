@@ -28,16 +28,6 @@
                 ) do |f| %>
                   <input type="hidden" name="format" value="turbo_stream"/>
 
-                  <% @search_params.each do |key, value| %>
-                    <% if value.is_a?(Array) %>
-                      <% value.each do |val| %>
-                        <input type="hidden" name="q[<%= key %>][]" value="<%= val %>">
-                      <% end %>
-                    <% else %>
-                      <input type="hidden" name="q[<%= key %>]" value="<%= value %>">
-                    <% end %>
-                  <% end %>
-
                   <label for="select-all" class="sr-only"><%= t(:".select_all") %></label>
                   <input
                     type="checkbox"
