@@ -7,6 +7,16 @@ const COMMA = 188;
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
   static outlets = ["selection"];
+  static values = { samples: Array };
+
+  connect() {
+    this.samplesValue.forEach((sample) => {
+      if (sample.length === 0) return;
+      this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget);
+    });
+    this.#updateCount();
+    this.samplesValue = [];
+  }
 
   handleInput(event) {
     const value = event.target.value.trim();
