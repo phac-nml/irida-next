@@ -1,8 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
 
-const BACKSPACE = 8;
-const SPACE = 32;
-const COMMA = 188;
+// Key code constants for keyboard events.
+const BACKSPACE = 8; // Represents the backspace key.
+const SPACE = 32;    // Represents the spacebar key.
+const COMMA = 188;   // Represents the comma key.
 
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
@@ -10,8 +11,7 @@ export default class extends Controller {
   static values = { samples: Array };
 
   connect() {
-    this.samplesValue.forEach((sample) => {
-      if (sample.length === 0) return;
+    this.samplesValue.filter(sample => sample.length > 0).forEach(sample => {
       this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget);
     });
     this.#updateCount();
@@ -27,10 +27,10 @@ export default class extends Controller {
       value.length === 0 &&
       (event.keyCode === COMMA || event.keyCode === SPACE)
     ) {
-      // Handle when a `,` is entered alone, that is do nothing
+      // Handle when a `,` is entered alone; that is do nothing
       event.preventDefault();
     } else if (event.keyCode === COMMA) {
-      // If string ends with a coma, directly add the tag without debounce
+      // If a string ends with a coma, directly add the tag
       event.preventDefault();
       this.#clearAndFocus();
       this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
