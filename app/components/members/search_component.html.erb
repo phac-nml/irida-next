@@ -1,5 +1,5 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
-  <%= search_form_for @q, url: group_members_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
+  <%= search_form_for @q, url: members_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
     <input type="hidden" name="format" value="turbo_stream"/>
     <input type="hidden" name="tab" value="<%=@tab%>"/>
     <%= f.label :user_email_cont, t(".search.placeholder"), class: "sr-only" %>
