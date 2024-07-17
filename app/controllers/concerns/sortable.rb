@@ -7,6 +7,7 @@
 module Sortable
   extend ActiveSupport::Concern
 
+  # Sets a before_action hook to apply sorting before the index action is called.
   included do
     before_action :set_sorting, only: %i[index]
   end
@@ -16,19 +17,16 @@ module Sortable
   # Returns the default sorting string for database queries.
   # This method can be overridden in the controller to provide a custom sort order.
   # @return [String] the default sort order in the format 'column_name direction'.
+  # It defaults to sorting records by 'updated_at' in descending order.
   def default_sort
     'updated_at desc'
   end
 
-  # Sets the sorting order for the query object `@q`.
-  # If `@q` does not have any sorts applied, it defaults to the order specified by `default_sort`.
-  # This method is intended to be called within a controller action to apply sorting.
+  # Sets the sorting parameter for the query object `@q`.
+  # This method is intended to be called before the index action to ensure that
+  # records are sorted according to the default sort order if no other sort order is specified.
+  # It checks if the `@q` object's sorts array is empty and sets it to the default sort order if true.
   def set_sorting
-    # remove metadata sort if metadata not visible
-    if !@q.sorts.empty? && @q.sorts.first.name.start_with?('metadata_') && @search_params[:metadata].to_i != 1
-      @q.sorts.slice!(0)
-    end
-
     @q.sorts = default_sort if @q.sorts.empty?
   end
 end
