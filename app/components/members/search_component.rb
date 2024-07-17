@@ -20,11 +20,11 @@ module Members
       }
     end
 
-    def members_url
+    def members_url(**)
       if @namespace.type == 'Group'
-        group_members_url
+        group_members_url(@namespace, **)
       else
-        namespace_project_members_url
+        namespace_project_members_url(@namespace.parent, @namespace.project, **)
       end
     end
   end
