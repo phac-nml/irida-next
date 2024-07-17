@@ -554,7 +554,7 @@ module Projects
         assert_text @sample1.puid
       end
 
-      click_button I18n.t('projects.samples.table.puid')
+      click_on I18n.t('projects.samples.table.puid')
 
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
       puids = retrieve_puids
@@ -562,14 +562,14 @@ module Projects
         assert puids[n] < puids[n + 1]
       end
 
-      click_button I18n.t('projects.samples.table.puid')
+      click_on I18n.t('projects.samples.table.puid')
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] > puids[n + 1]
       end
 
-      click_button I18n.t('projects.samples.table.sample')
+      click_on I18n.t('projects.samples.table.sample')
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       assert_selector '#samples-table table tbody tr', count: 3
@@ -582,7 +582,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
       end
 
-      click_button I18n.t('projects.samples.table.sample')
+      click_on I18n.t('projects.samples.table.sample')
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
       assert_selector '#samples-table table tbody tr', count: 3
@@ -595,7 +595,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
 
-      click_button I18n.t('projects.samples.table.created_at')
+      click_on I18n.t('projects.samples.table.created_at')
 
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
       within first('tbody') do
@@ -607,7 +607,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
 
-      click_button I18n.t('projects.samples.table.created_at')
+      click_on I18n.t('projects.samples.table.created_at')
 
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
       within first('tbody') do
@@ -619,7 +619,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
       end
 
-      click_button I18n.t('projects.samples.table.updated_at')
+      click_on I18n.t('projects.samples.table.updated_at')
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('tbody') do
@@ -631,7 +631,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
 
-      click_button I18n.t('projects.samples.table.updated_at')
+      click_on I18n.t('projects.samples.table.updated_at')
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
       within first('tbody') do
@@ -662,7 +662,7 @@ module Projects
       assert_no_text @sample2.name
       assert_no_text @sample3.name
 
-      click_button I18n.t('projects.samples.table.sample')
+      click_on I18n.t('projects.samples.table.sample')
 
       assert_selector '#samples-table table tbody tr', count: 1
       within first('tbody tr td:nth-child(2)') do
@@ -688,7 +688,7 @@ module Projects
       assert_no_text @sample2.name
       assert_no_text @sample3.name
 
-      click_button I18n.t('projects.samples.table.puid')
+      click_on I18n.t('projects.samples.table.puid')
 
       assert_selector '#samples-table table tbody tr', count: 1
       within first('tbody tr th') do
@@ -705,7 +705,7 @@ module Projects
         assert_text @sample1.name
       end
 
-      click_button I18n.t('projects.samples.table.sample')
+      click_on I18n.t('projects.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       click_on I18n.t('projects.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
@@ -734,9 +734,9 @@ module Projects
         assert_text @sample1.puid
       end
 
-      click_button I18n.t('projects.samples.table.sample')
+      click_on I18n.t('projects.samples.table.sample')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      click_button I18n.t('projects.samples.table.sample')
+      click_on I18n.t('projects.samples.table.sample')
 
       assert_selector '#samples-table table tbody tr', count: 3
       within first('tbody tr th') do
@@ -1254,13 +1254,26 @@ module Projects
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
 
-      within 'div#samples-table' do |div|
-        div.scroll_to div.find('table thead button', text: 'METADATAFIELD2'), offset: [0, 300]
+      within 'div.overflow-x-auto' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
       end
 
-      click_button 'metadatafield1'
+      click_on 'metadatafield1'
 
       assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
+      assert_selector '#samples-table table tbody tr', count: 3
+      within first('tbody') do
+        assert_selector 'tr:first-child th', text: @sample3.puid
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:nth-child(2) th', text: @sample1.puid
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample1.name
+        assert_selector 'tr:last-child th', text: @sample2.puid
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample2.name
+      end
+
+      click_on 'metadatafield2'
+
+      assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
       assert_selector '#samples-table table tbody tr', count: 3
       within first('tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid

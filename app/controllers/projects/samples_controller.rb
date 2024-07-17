@@ -10,7 +10,7 @@ module Projects
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
     before_action :process_samples, only: %i[index search]
-    include FilteredSort
+    include Sortable
 
     def index
       respond_to do |format|
@@ -85,7 +85,7 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = load_samples.ransack(search_params(search_key, params[:q].present? ? params[:q].to_unsafe_h : {}))
+            @q = load_samples.ransack(search_params)
             @samples = @q.result.select(:id)
           end
         end
@@ -136,11 +136,23 @@ module Projects
     def process_samples
       authorize! @project, to: :sample_listing?
 
-      @search_params = search_params(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
+      @search_params = search_params
+
       set_metadata_fields
       @q = load_samples.ransack(@search_params)
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = load_samples.count.positive?
+    end
+
+    def search_params
+      update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
+      updated_params = get_store(search_key)
+
+      if updated_params[:metadata].to_i.zero? && updated_params[:s].present? && updated_params[:s].match?(/metadata_/)
+        updated_params[:s] = default_sort
+        update_store(search_key, updated_params)
+      end
+      updated_params
     end
   end
 end
