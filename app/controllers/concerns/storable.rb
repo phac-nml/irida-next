@@ -18,6 +18,7 @@ module Storable
   # @param value [Hash] the value to merge with the existing value in the session.
   def update_store(search_key, value)
     session[search_key] = (session[search_key] || {}).merge(value)
+    get_store(search_key)
   end
 
   # Retrieves the value stored in the session under the given session_key.

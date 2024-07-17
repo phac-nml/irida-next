@@ -145,8 +145,7 @@ module Projects
     end
 
     def search_params
-      update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
-      updated_params = get_store(search_key)
+      updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
 
       if updated_params[:metadata].to_i.zero? && updated_params[:s].present? && updated_params[:s].match?(/metadata_/)
         updated_params[:s] = default_sort
