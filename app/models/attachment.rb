@@ -44,7 +44,7 @@ class Attachment < ApplicationRecord
 
   private
 
-  def assign_metadata
+  def assign_metadata # rubocop:disable Metrics/AbcSize
     return if metadata.key? 'format'
 
     case filename.to_s
@@ -56,6 +56,12 @@ class Attachment < ApplicationRecord
     # Assigns fastq to metadata format for following file types: .fastq, .fastq.gz, .fq, .fq.gz
     when /^\S+\.f(ast)?q(\.gz)?$/
       metadata['format'] = 'fastq'
+    # Assigns text to metadata format for following file types: .txt, .rtf, .csv, .tsv
+    when /^\S+\.(txt|rtf|csv|tsv)?$/
+      metadata['format'] = 'text'
+    # Assigns spreadsheet to metadata format for following file types: .xls, .xlsx
+    when /^\S+\.(xls|xlsx)?$/
+      metadata['format'] = 'spreadsheet'
     # Else assigns unknown to metadata format
     else
       metadata['format'] = 'unknown'
