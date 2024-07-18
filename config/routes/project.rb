@@ -51,7 +51,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         end
         collection do
           get :select
-          post :select
           post :list
           post :search
         end

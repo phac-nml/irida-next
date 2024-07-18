@@ -8,16 +8,9 @@ module Groups
 
     before_action :group, :current_page
     before_action :process_samples, only: %i[index search]
-    before_action :set_search_params, only: %i[index]
-    before_action :set_metadata_fields, only: %i[index]
     include Sortable
 
     def index
-      authorize! @group, to: :sample_listing?
-
-      @q = authorized_samples.ransack(params[:q])
-      @pagy, @samples = pagy_with_metadata_sort(@q.result)
-      @has_samples = authorized_samples.count.positive?
       respond_to do |format|
         format.html
         format.turbo_stream
@@ -70,12 +63,17 @@ module Groups
     end
 
     def set_metadata_fields
-      fields_for_namespace(namespace: @group, show_fields: params[:q] && params[:q][:metadata].to_i == 1)
+      fields_for_namespace(namespace: @group, show_fields: @search_params && @search_params[:metadata].to_i == 1)
     end
 
     def process_samples
-      authorize! @project, to: :sample_listing?
+      authorize! @group, to: :sample_listing?
       @search_params = search_params
+      set_metadata_fields
+
+      @q = authorized_samples.ransack(@search_params)
+      @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      @has_samples = authorized_samples.count.positive?
     end
 
     def search_params
