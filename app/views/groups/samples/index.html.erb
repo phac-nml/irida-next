@@ -53,6 +53,7 @@
                        placeholder: t(".search.placeholder") %>
       </div>
     </div>
+  <% end %>
 
     <%= turbo_frame_tag "group_samples_table" do %>
       <%= render partial: "table",
@@ -62,5 +63,4 @@
         pagy: @pagy,
       } %>
     <% end %>
-  <% end %>
 <% end %>

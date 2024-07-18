@@ -28,7 +28,7 @@ module Groups
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = authorized_samples.ransack(params[:q])
+            @q = authorized_samples.ransack(search_params)
             @selected_sample_ids = @q.result.select(:id).pluck(:id)
           end
         end

@@ -8,7 +8,7 @@ const COMMA = 188;   // Represents the comma key.
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
   static outlets = ["selection"];
-  static values = { samples: Array };
+  static values = { samples: { type: Array, default: [] } };
 
   connect() {
     this.samplesValue.filter(sample => sample.length > 0).forEach(sample => {
