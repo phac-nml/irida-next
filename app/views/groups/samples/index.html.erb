@@ -34,7 +34,7 @@
       <input type="hidden" name="format" value="turbo_stream"/>
 
       <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-      <%= render ListFilterComponent.new(form: f) %>
+      <%= render ListFilterComponent.new(form: f, samples: @search_params[:name_or_puid_in]) %>
       <%= f.label :name_or_puid_cont,
               placeholder: t(".search.placeholder"),
               class: "sr-only" %>

@@ -4,22 +4,28 @@ module Groups
   # Controller actions for Samples within a Group
   class SamplesController < Groups::ApplicationController
     include Metadata
+    include Storable
 
     before_action :group, :current_page
+    before_action :process_samples, only: %i[index search]
     before_action :set_search_params, only: %i[index]
     before_action :set_metadata_fields, only: %i[index]
+    include Sortable
 
     def index
       authorize! @group, to: :sample_listing?
 
       @q = authorized_samples.ransack(params[:q])
-      set_default_sort
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = authorized_samples.count.positive?
       respond_to do |format|
         format.html
         format.turbo_stream
       end
+    end
+
+    def search
+      redirect_to group_samples_path
     end
 
     def select
@@ -63,21 +69,27 @@ module Groups
       @current_page = t(:'groups.sidebar.samples')
     end
 
-    def set_default_sort
-      # remove metadata sort if metadata not visible
-      if !@q.sorts.empty? && @q.sorts[0].name.start_with?('metadata_') && params[:q][:metadata].to_i != 1
-        @q.sorts.slice!(0)
-      end
-
-      @q.sorts = 'updated_at desc' if @q.sorts.empty?
-    end
-
-    def set_search_params
-      @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
-    end
-
     def set_metadata_fields
       fields_for_namespace(namespace: @group, show_fields: params[:q] && params[:q][:metadata].to_i == 1)
+    end
+
+    def process_samples
+      authorize! @project, to: :sample_listing?
+      @search_params = search_params
+    end
+
+    def search_params
+      updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
+
+      if updated_params[:metadata].to_i.zero? && updated_params[:s].present? && updated_params[:s].match?(/metadata_/)
+        updated_params[:s] = default_sort
+        update_store(search_key, updated_params)
+      end
+      updated_params
+    end
+
+    def search_key
+      :"#{controller_name}_#{group.id}_search_params"
     end
   end
 end

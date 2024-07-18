@@ -10,7 +10,6 @@ module Samples
       samples,
       namespace,
       pagy,
-      sort_query,
       q,
       has_samples: true,
       abilities: {},
@@ -23,7 +22,6 @@ module Samples
       @samples = samples
       @namespace = namespace
       @pagy = pagy
-      @sort_query = sort_query
       @q = q
       @has_samples = has_samples
       @abilities = abilities

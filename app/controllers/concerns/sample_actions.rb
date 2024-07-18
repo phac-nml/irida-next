@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # Common sample actions
-module SampleActions
+module
+SampleActions
   extend ActiveSupport::Concern
 
   def list
