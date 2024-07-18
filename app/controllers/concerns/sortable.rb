@@ -9,7 +9,7 @@ module Sortable
 
   # Sets a before_action hook to apply sorting before the index action is called.
   included do
-    before_action :set_sorting, only: %i[index]
+    before_action :set_sorting, only: %i[index] # rubocop:disable Rails/LexicallyScopedActionFilter
   end
 
   private
