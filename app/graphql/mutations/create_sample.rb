@@ -42,6 +42,11 @@ module Mutations
         sample: nil,
         errors: ['Project not found by provided ID or PUID']
       }
+    rescue RuntimeError => e
+      {
+        sample: nil,
+        errors: [e.message]
+      }
     end
 
     def ready?(**_args)
