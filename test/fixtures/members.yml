@@ -11,18 +11,21 @@ group_one_member_james_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
+  expires_at: <%= 10.days.from_now %>
 
 group_one_member_joan_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
+  expires_at: <%= 8.days.from_now %>
 
 group_one_member_ryan_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   access_level: <%= Member::AccessLevel::GUEST %>
+  expires_at: <%= 12.days.from_now %>
 
 <% (Namespace::MAX_ANCESTORS-1).times do |n| %>
 subgroup<%= (n+1) %>_member_ryan_doe:
@@ -127,24 +130,28 @@ project_two_member_james_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
+  expires_at: <%= 15.days.from_now %>
 
 project_two_member_joan_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
+  expires_at: <%= 8.days.from_now %>
 
 project_two_member_jean_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:jean_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
+  expires_at: <%= 12.days.from_now %>
 
 project_two_member_ryan_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::GUEST %>
+  expires_at: <%= 10.days.from_now %>
 
 project_two_member_james_doe_wo_john_doe_namespace:
   user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
@@ -517,6 +524,7 @@ group_one_member_user_bot_account:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   access_level: <%= Member::AccessLevel::UPLOADER %>
+  expires_at: <%= 20.days.from_now %>
 
 projectA_member_project_automation_bot:
   user_id: <%= ActiveRecord::FixtureSet.identify(:projectA_automation_bot, :uuid) %>
