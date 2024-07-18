@@ -1,16 +1,10 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <%= render Viral::BaseComponent.new(**system_arguments) do %>
     <table
-      class='
-        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
-      '
+      class='w-full text-sm text-left  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap'
     >
       <thead
-        class='
-          text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
-          dark:text-slate-400
-        '
+        class='text-xs uppercase  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400'
       >
         <tr>
           <% @columns.each_with_index do |column, index| %>
@@ -48,7 +42,12 @@
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, :attachments_updated_at_nulls_last, with_params: false),
+                  url:
+                    helpers.sorting_url(
+                      @q,
+                      :attachments_updated_at_nulls_last,
+                      with_params: false,
+                    ),
                   field: :attachments_updated_at_nulls_last,
                 ) %>
               <% else %>
@@ -71,7 +70,11 @@
                 ransack_obj: @q,
                 label: field,
                 url:
-                  helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{field}"), with_params: false),
+                  helpers.sorting_url(
+                    @q,
+                    URI.encode_www_form_component("metadata_#{field}"),
+                    with_params: false,
+                  ),
                 field: "metadata_#{field}",
               ) %>
             <% end %>
@@ -88,9 +91,7 @@
         </tr>
       </thead>
       <tbody
-        class='
-          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-        '
+        class='bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700'
       >
         <% @samples.each do |sample| %>
           <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
@@ -122,7 +123,8 @@
                     <span class="font-semibold">
                       <%= highlight(
                         sample[column],
-                        defined?(params[:q][:name_or_puid_cont]) && params[:q][:name_or_puid_cont],
+                        defined?(@search_params[:name_or_puid_cont]) &&
+                          @search_params[:name_or_puid_cont],
                         highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                       ) %>
                     </span>
@@ -175,7 +177,10 @@
                 <% if @row_actions[:destroy] %>
                   <%= link_to(
                     t(:"projects.samples.index.remove_button"),
-                    new_namespace_project_samples_deletion_path(sample_id: sample.id, deletion_type: 'single'),
+                    new_namespace_project_samples_deletion_path(
+                      sample_id: sample.id,
+                      deletion_type: "single",
+                    ),
                     data: {
                       "turbo-prefetch": false,
                     },
@@ -192,9 +197,7 @@
         <tfoot>
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
-              class="
-                px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900 z-10
-              "
+              class="sticky left-0 z-10 px-6 py-3  bg-slate-50 dark:bg-slate-900"
               colspan="3"
             >
               <span>
