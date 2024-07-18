@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# migration to add sessions table for storing session data
 class AddSessionsTable < ActiveRecord::Migration[7.1]
   def change
     create_table :sessions do |t|
