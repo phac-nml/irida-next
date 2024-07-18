@@ -206,4 +206,21 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
 
     assert_equal 'Project not found by provided ID or PUID', errors[0]
   end
+
+  test 'createSample mutation should not work with incorrectly formatted project id and valid api scope token' do
+    sample1 = samples(:sample1)
+
+    result = IridaSchema.execute(CREATE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user,
+                                            token: @api_scope_token },
+                                 variables: { projectId: 'project_ids_dont_look_like_this',
+                                              name: sample1.name,
+                                              description: sample1.description })
+
+    assert_not_nil result['data']['createSample']['errors'], 'shouldn\'t work and have errors.'
+
+    errors = result['data']['createSample']['errors']
+
+    assert_equal 'project_ids_dont_look_like_this is not a valid IRIDA Next ID.', errors[0]
+  end
 end
