@@ -713,6 +713,8 @@ en:
           cancel: Cancel
           submit: Share
     members:
+      access_level:
+        aria_label: Access Level
       create:
         error: "Error adding member"
         success: "Group member %{user} added successfully"
@@ -726,29 +728,15 @@ en:
         title: Members
         subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
         access_granted_by: "Access granted by %{grantor_email}"
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
-        aria_labels:
-          expires_at: Group member expiration
         actions:
           button_add_aria_label: Add new group member link
           link_remove_aria_label: "Remove group member %{member} link"
           link_leave_group_aria_label: "Leave group button"
         inherited_from: "Inherited from"
+        search:
+          placeholder: Filter by username
         shared_inherited: Shared inherited
         shared_direct: Shared direct
-        table_header:
-          username: Username
-          access_level: Access Level
-          source: Source
-          access_granted: Access Granted
-          expiration: Expiration
-          action: Action
         tabs:
           members: Members
           groups: Groups
@@ -1028,6 +1016,8 @@ en:
           cancel: Cancel
           submit: Share
     members:
+      access_level:
+        aria_label: Access Level
       create:
         error: "Error adding member"
         success: "Project member %{user} added successfully"
@@ -1048,13 +1038,12 @@ en:
           level_30: Analyst
           level_40: Maintainer
           level_50: Owner
-        aria_labels:
-          expires_at: Project member expiration
         actions:
           button_add_aria_label: Add new project member button
           link_remove_aria_label: "Remove project member %{member} link"
           link_leave_project_aria_label: "Leave project link"
-        inherited_from: "Inherited from"
+        search:
+          placeholder: Filter by username
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         table_header:
@@ -1728,3 +1717,21 @@ en:
         loading: Loading...
       spinner:
         loading: Loading...
+  members:
+    access_levels:
+      level_0: No Access
+      level_10: Guest
+      level_20: Uploader
+      level_30: Analyst
+      level_40: Maintainer
+      level_50: Owner
+    table_component:
+      user_email: Username
+      access_level: Access level
+      namespace_name: Source
+      created_at: Access granted
+      expires_at: Expiration
+      action: Action
+      aria_labels:
+        expires_at: Member expiration
+      inherited_from: Inherited from

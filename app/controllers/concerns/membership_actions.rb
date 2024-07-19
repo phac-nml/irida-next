@@ -15,11 +15,12 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def index
     authorize! @namespace, to: :member_listing?
+    @q = load_members.ransack(params[:q])
+    set_default_sort
+    @pagy, @members = pagy(@q.result)
     respond_to do |format|
       format.html
-      format.turbo_stream do
-        @pagy, @members = pagy(load_members)
-      end
+      format.turbo_stream
     end
   end
 
@@ -40,7 +41,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     if @new_member.persisted?
       respond_to do |format|
         format.turbo_stream do
-          @pagy, @members = pagy(load_members)
           render status: :ok, locals: { member: @new_member, type: 'success',
                                         message: t('.success', user: @new_member.user.email) }
         end
@@ -69,7 +69,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
       else
         respond_to do |format|
           format.turbo_stream do
-            @pagy, @members = pagy(load_members)
             render status: :ok, locals: { member: @member, type: 'success',
                                           message: t('.success', user: @member.user.email) }
           end
@@ -146,6 +145,10 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def tab
     @tab = params[:tab]
+  end
+
+  def set_default_sort
+    @q.sorts = 'user_email asc' if @q.sorts.empty?
   end
 
   protected

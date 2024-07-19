@@ -1,7 +1,7 @@
 <%= turbo_stream.update "new_member_modal",
                     partial: "create_modal",
                     locals: {
-                      open: member.errors.any? ? true : false
+                      open: member.errors.any? ? true : false,
                     } %>
 
 <% if @new_member.persisted? %>
@@ -10,8 +10,10 @@
   <% end %>
 
   <% if @tab != "invited_groups" %>
-    <%= turbo_stream.update "members", partial: "member_listing" %>
-
-    <%= turbo_stream.update "members_pagination", partial: "pagination" %>
+    <%= turbo_stream.replace "members" do %>
+      <%= turbo_frame_tag "members", src: namespace_project_members_path(@namespace.parent, @namespace.project, format: :turbo_stream) do %>
+        <%= render partial: "shared/loading/table" %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>

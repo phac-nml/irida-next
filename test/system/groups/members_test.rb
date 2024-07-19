@@ -11,6 +11,11 @@ module Groups
       login_as @user
       @namespace = groups(:group_one)
       @members_count = members.select { |member| member.namespace == @namespace }.count
+      @member_john = members(:group_one_member_john_doe)
+      @member_james = members(:group_one_member_james_doe)
+      @member_joan = members(:group_one_member_joan_doe)
+      @member_ryan = members(:group_one_member_ryan_doe)
+      @member_bot = members(:group_one_member_user_bot_account)
     end
 
     test 'can see the list of group members' do
@@ -20,7 +25,7 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username').upcase
+      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
       assert_selector 'tr', count: 20 + header_row_count
 
@@ -43,7 +48,7 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'groups.members.index.table_header.username').upcase
+      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
       assert_selector 'tr', count: @members_count + header_row_count
 
@@ -227,8 +232,8 @@ module Groups
       within 'div.overflow-x-auto' do |div|
         # scroll to the end of the div
         div.execute_script('this.scrollLeft = this.scrollWidth')
-        find("#group-member-#{group_member.id}-expiration").click.set(expiry_date)
-                                                           .native.send_keys(:return)
+        find("#member-#{group_member.id}-expiration").click.set(expiry_date)
+                                                     .native.send_keys(:return)
       end
 
       within %(turbo-frame[id="member-update-alert"]) do
@@ -306,6 +311,108 @@ module Groups
         within('#member_user_id') do
           assert_no_selector "option[value='#{user_to_add.email}']"
         end
+      end
+    end
+
+    test 'can search members by username' do
+      username_col = 1
+      visit group_members_url(@namespace)
+
+      assert_text 'Displaying 5 items'
+      assert_selector '#members-tabs table tbody tr', count: 5
+      assert_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_john.user.email
+      assert_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_james.user.email
+      assert_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_joan.user.email
+      assert_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_ryan.user.email
+      assert_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_bot.user.email
+
+      fill_in placeholder: I18n.t(:'groups.members.index.search.placeholder'), with: @member_james.user.email
+
+      assert_text 'Displaying 1 item'
+      assert_selector '#members-tabs table tbody tr', count: 1
+      assert_no_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_john.user.email
+      assert_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_james.user.email
+      assert_no_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_joan.user.email
+      assert_no_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_ryan.user.email
+      assert_no_selector "#members-tabs table tbody tr td:nth-child(#{username_col})", text: @member_bot.user.email
+    end
+
+    test 'can sort members by column' do
+      visit group_members_url(@namespace)
+
+      assert_text 'Displaying 5 items'
+      assert_selector '#members-tabs table tbody tr', count: 5
+      assert_selector '#members-tabs table thead th:first-child svg.icon-arrow_up'
+      within first('#members-tabs table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_bot.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_bot.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+      end
+
+      sort_link = find('table thead th:nth-child(1) a')
+      sort_link.trigger('click')
+      assert_selector '#members-tabs table thead th:first-child svg.icon-arrow_down'
+      within first('#members-tabs table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_john.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_john.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_bot.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_bot.access_level)
+      end
+
+      sort_link = find('table thead th:nth-child(2) a')
+      sort_link.trigger('click')
+      assert_selector '#members-tabs table thead th:nth-child(2) svg.icon-arrow_up'
+      within first('#members-tabs table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_bot.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_bot.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_james.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+      end
+
+      sort_link = find('table thead th:nth-child(2) a')
+      sort_link.trigger('click')
+      assert_selector '#members-tabs table thead th:nth-child(2) svg.icon-arrow_down'
+      within first('#members-tabs table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_john.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_ryan.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_ryan.access_level)
+      end
+
+      sort_link = find('table thead th:nth-child(5) a')
+      sort_link.trigger('click')
+      assert_selector '#members-tabs table thead th:nth-child(5) svg.icon-arrow_up'
+      within first('#members-tabs table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @member_joan.user.email
+        assert_selector 'tr:first-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_joan.access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @member_james.user.email
+        assert_selector 'tr:nth-child(2) td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_james.access_level)
+        assert_selector 'tr:last-child td:first-child', text: @member_john.user.email
+        assert_selector 'tr:last-child td:nth-child(2)',
+                        text: Member::AccessLevel.human_access(@member_john.access_level)
       end
     end
   end
