@@ -5,23 +5,24 @@ module Projects
   class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
     include SampleActions
+    include Storable
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :set_search_params, only: %i[index]
-    before_action :set_metadata_fields, only: :index
+    before_action :process_samples, only: %i[index search]
+    include Sortable
 
     def index
-      authorize! @project, to: :sample_listing?
-
-      @q = load_samples.ransack(params[:q])
-      set_default_sort
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = load_samples.count.positive?
       respond_to do |format|
         format.html
         format.turbo_stream
       end
+    end
+
+    def search
+      redirect_to namespace_project_samples_path
     end
 
     def show
@@ -86,7 +87,7 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = load_samples.ransack(params[:q])
+            @q = load_samples.ransack(search_params)
             @samples = @q.result.select(:id)
           end
         end
@@ -123,24 +124,34 @@ module Projects
       @current_page = t(:'projects.sidebar.samples')
     end
 
-    def set_default_sort
-      # remove metadata sort if metadata not visible
-      if !@q.sorts.empty? && @q.sorts[0].name.start_with?('metadata_') && params[:q][:metadata].to_i != 1
-        @q.sorts.slice!(0)
-      end
-
-      @q.sorts = 'updated_at desc' if @q.sorts.empty?
-    end
-
-    def set_search_params
-      @search_params = params[:q].nil? ? {} : params[:q].to_unsafe_h
-    end
-
     def set_metadata_fields
       fields_for_namespace(
         namespace: @project.namespace,
-        show_fields: params[:q] && params[:q][:metadata].to_i == 1
+        show_fields: @search_params && @search_params[:metadata].to_i == 1
       )
+    end
+
+    def search_key
+      :"#{controller_name}_#{@project.id}_search_params"
+    end
+
+    def process_samples
+      authorize! @project, to: :sample_listing?
+
+      @search_params = search_params
+
+      set_metadata_fields
+      @q = load_samples.ransack(@search_params)
+    end
+
+    def search_params
+      updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
+
+      if updated_params[:metadata].to_i.zero? && updated_params[:s].present? && updated_params[:s].match?(/metadata_/)
+        updated_params[:s] = default_sort
+        update_store(search_key, updated_params)
+      end
+      updated_params
     end
   end
 end

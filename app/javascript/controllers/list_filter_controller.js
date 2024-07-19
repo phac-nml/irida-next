@@ -1,12 +1,22 @@
 import { Controller } from "@hotwired/stimulus";
 
-const BACKSPACE = 8;
-const SPACE = 32;
-const COMMA = 188;
+// Key code constants for keyboard events.
+const BACKSPACE = 8; // Represents the backspace key.
+const SPACE = 32;    // Represents the spacebar key.
+const COMMA = 188;   // Represents the comma key.
 
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
   static outlets = ["selection"];
+  static values = { filters: { type: Array, default: [] } };
+
+  connect() {
+    this.filtersValue.filter(sample => sample.length > 0).forEach(sample => {
+      this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget);
+    });
+    this.#updateCount();
+    this.filtersValue = [];
+  }
 
   handleInput(event) {
     const value = event.target.value.trim();
@@ -17,10 +27,10 @@ export default class extends Controller {
       value.length === 0 &&
       (event.keyCode === COMMA || event.keyCode === SPACE)
     ) {
-      // Handle when a `,` is entered alone, that is do nothing
+      // Handle when a `,` is entered alone; that is do nothing
       event.preventDefault();
     } else if (event.keyCode === COMMA) {
-      // If string ends with a coma, directly add the tag without debounce
+      // If a string ends with a coma, directly add the tag
       event.preventDefault();
       this.#clearAndFocus();
       this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget);
@@ -31,9 +41,9 @@ export default class extends Controller {
     event.preventDefault();
     const data = (event.clipboardData || window.clipboardData).getData("text");
     const items = this.#getNamesAndPUID(data);
-    items.forEach((item) =>
-      this.tagsTarget.insertBefore(this.#formatTag(item), event.target),
-    );
+    for (const item of items) {
+      this.tagsTarget.insertBefore(this.#formatTag(item), event.target);
+    }
     this.#clearAndFocus();
   }
 
@@ -44,7 +54,9 @@ export default class extends Controller {
 
   clear() {
     const tags = this.tagsTarget.querySelectorAll(".search-tag");
-    [...tags].forEach((tag) => this.tagsTarget.removeChild(tag));
+    for (const tag of tags) {
+      this.tagsTarget.removeChild(tag);
+    }
     this.inputTarget.value = "";
   }
 

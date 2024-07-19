@@ -92,5 +92,7 @@ module Irida
                                        else
                                          Rails.application.credentials.dig(:ga4gh_wes, :server_url_endpoint)
                                        end
+
+    ActiveRecord::SessionStore::Session.serializer = :json
   end
 end

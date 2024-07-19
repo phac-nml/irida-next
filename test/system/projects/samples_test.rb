@@ -531,17 +531,27 @@ module Projects
 
     test 'can search the list of samples by name' do
       visit namespace_project_samples_url(@namespace, @project)
+      filter_text = samples(:sample1).name[-3..-1]
 
       assert_text 'Displaying 3 items'
       assert_selector '#samples-table table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
 
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
 
       assert_text 'Displaying 1 item'
       assert_selector '#samples-table table tbody tr', count: 1
-      assert_text @sample1.name
+      assert_selector 'mark', text: filter_text
+      assert_no_text @sample2.name
+      assert_no_text @sample3.name
+
+      # Refresh the page to ensure the search is still active
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_text 'Displaying 1 item'
+      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
       assert_no_text @sample3.name
     end
@@ -695,6 +705,13 @@ module Projects
       within first('tbody tr th') do
         assert_text @sample1.puid
       end
+
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector '#samples-table table tbody tr', count: 1
+      within first('tbody tr th') do
+        assert_text @sample1.puid
+      end
     end
 
     test 'can sort and then filter the list of samples by name' do
@@ -717,6 +734,15 @@ module Projects
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+
+      assert_text 'Displaying 1 item'
+      assert_selector '#samples-table table tbody tr', count: 1
+      assert_text @sample1.puid
+      assert_text @sample1.name
+      assert_no_text @sample2.name
+      assert_no_text @sample3.name
+
+      visit namespace_project_samples_url(@namespace, @project)
 
       assert_text 'Displaying 1 item'
       assert_selector '#samples-table table tbody tr', count: 1
@@ -2331,6 +2357,42 @@ module Projects
       assert_no_text 'test_file.fastq'
       assert_text I18n.t('projects.samples.show.no_files')
       assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 2
+    end
+
+    test 'can filter by large list of sample names or ids' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_selector 'tr th', text: @sample1.puid
+        assert_selector 'tr th', text: @sample2.puid
+      end
+      click_button I18n.t(:'components.list_filter.title')
+      within '#list-filter-dialog' do |dialog|
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        fill_in I18n.t(:'components.list_filter.description'), with: long_filter_text
+        assert_selector 'span.label', count: 500
+        dialog.scroll_to(dialog.find('button', text: I18n.t(:'components.list_filter.apply')), align: :bottom)
+        click_button I18n.t(:'components.list_filter.apply')
+      end
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 1
+      end
+      click_button I18n.t(:'components.list_filter.title')
+      within '#list-filter-dialog' do |dialog|
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        dialog.scroll_to dialog.find('button', text: I18n.t(:'components.list_filter.apply'))
+
+        click_button I18n.t(:'components.list_filter.clear')
+        click_button I18n.t(:'components.list_filter.apply')
+      end
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+      end
+    end
+
+    def long_filter_text
+      text = (1..500).map { |n| "sample#{n}" }.join(', ')
+      "#{text}, #{@sample1.puid}" # Need to comma to force the tag to be created
     end
   end
 end

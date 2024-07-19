@@ -29,6 +29,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     resources :samples, only: %i[index] do
       collection do
         get :select
+        post :search
       end
     end
     resources :subgroups, only: %i[index]

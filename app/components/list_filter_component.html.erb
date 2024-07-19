@@ -1,6 +1,7 @@
 <div
   data-controller="list-filter"
   data-list-filter-selection-outlet="#samples-table"
+  data-list-filter-filters-value="<%= filters.present? ? filters.to_s : '[]' %>"
 >
   <%= viral_dialog(id: 'list-filter-dialog', closable: false) do |dialog| %>
     <%= dialog.with_trigger do %>
@@ -9,9 +10,9 @@
         <div
           data-list-filter-target="count"
           class="
-            hidden absolute items-center justify-center w-6 h-6 text-xs font-bold text-white
-            bg-red-500 border-2 border-white rounded-full -top-2 -end-2
-            dark:border-slate-900
+            hidden absolute items-center justify-center h-6 text-xs font-bold text-white
+            bg-red-800 border-2 border-white rounded-full -top-2 -end-2
+            dark:border-slate-900 px-2
           "
         >8</div>
       <% end %>
@@ -54,7 +55,8 @@
           data-list-filter-target="tags"
           data-action="click->list-filter#focus"
         >
-          <input
+
+        <input
             type="text"
             name="q[name_or_puid_in][]"
             class="

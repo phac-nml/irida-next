@@ -2,7 +2,7 @@
   <%= form.check_box(
     :metadata,
     {
-      checked: params[:metadata].to_i == 1,
+      checked: @search_params[:metadata].to_i == 1,
       onchange: "Turbo.navigator.submitForm(this.form)",
       class: "sr-only peer"
     }
