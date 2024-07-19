@@ -11,6 +11,8 @@ module Groups
     include Sortable
 
     def index
+      @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      @has_samples = authorized_samples.count.positive?
       respond_to do |format|
         format.html
         format.turbo_stream
@@ -72,8 +74,6 @@ module Groups
       set_metadata_fields
 
       @q = authorized_samples.ransack(@search_params)
-      @pagy, @samples = pagy_with_metadata_sort(@q.result)
-      @has_samples = authorized_samples.count.positive?
     end
 
     def search_params

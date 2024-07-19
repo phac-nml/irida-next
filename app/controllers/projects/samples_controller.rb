@@ -13,6 +13,8 @@ module Projects
     include Sortable
 
     def index
+      @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      @has_samples = load_samples.count.positive?
       respond_to do |format|
         format.html
         format.turbo_stream
@@ -140,8 +142,6 @@ module Projects
 
       set_metadata_fields
       @q = load_samples.ransack(@search_params)
-      @pagy, @samples = pagy_with_metadata_sort(@q.result)
-      @has_samples = load_samples.count.positive?
     end
 
     def search_params
