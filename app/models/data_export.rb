@@ -48,14 +48,15 @@ class DataExport < ApplicationRecord
   end
 
   def validate_linelist_namespace_type
-    if export_parameters.key?('namespace_type')
-      return if [Namespaces::ProjectNamespace.sti_name, Group.sti_name].include?(export_parameters['namespace_type'])
-
-      errors.add(:export_parameters,
-                 I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_type'))
+    if export_parameters.key?('namespace_id')
+      namespace = Namespace.find(export_parameters['namespace_id'])
+      if namespace.nil?
+        errors.add(:export_parameters,
+                   I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'))
+      end
     else
       errors.add(:export_parameters,
-                 I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_type'))
+                 I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'))
     end
   end
 end

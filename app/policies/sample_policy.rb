@@ -34,4 +34,35 @@ class SamplePolicy < ApplicationPolicy
         )
       )
   end
+
+  scope_for :relation, :namespace_samples do |relation, options| # rubocop:disable Metrics/BlockLength
+    namespace = options[:namespace]
+    sample_ids = options[:sample_ids]
+
+    if namespace.type == Namespaces::ProjectNamespace.sti_name
+      relation.where(project_id: namespace.project.id).where(id: sample_ids)
+    elsif namespace.type == Group.sti_name
+      relation
+        .with(
+          direct_group_projects_samples: relation.joins(project: [:namespace])
+                                .where(namespace: { parent_id: namespace.self_and_descendant_ids }).includes(:project)
+                                .where(id: sample_ids)
+                                .select(:id),
+          linked_group_projects_samples: relation.joins(project: [:namespace]).where(project: { namespace: Namespace
+            .where(
+              id: NamespaceGroupLink
+                      .where(group: namespace.self_and_descendants).not_expired
+                      .where(group_access_level: Member::AccessLevel::ANALYST..)
+                      .select(:namespace_id)
+            ).self_and_descendants })
+            .where(id: sample_ids)
+          .select(:id)
+        ).where(
+          Arel.sql(
+            'samples.id in (select * from direct_group_projects_samples)
+          or samples.id in (select * from linked_group_projects_samples)'
+          )
+        )
+    end
+  end
 end

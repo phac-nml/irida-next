@@ -29,16 +29,16 @@ module DataExports
     # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
     # to export the chosen samples' data
     def validate_sample_ids
-      samples = Sample.where(id: params['export_parameters']['ids'])
+      namespace = Namespace.find(params['export_parameters']['namespace_id'])
 
-      unless samples.count == params['export_parameters']['ids'].count
-        raise DataExportCreateError, I18n.t('services.data_exports.create.invalid_sample_id')
-      end
+      authorize! namespace, to: :export_sample_data?
 
-      projects = Project.where(id: samples.select(:project_id))
-      projects.each do |project|
-        authorize! project, to: :export_sample_data?
-      end
+      samples = authorized_export_samples(namespace, params['export_parameters']['ids'])
+
+      return unless samples.count != params['export_parameters']['ids'].count
+
+      raise DataExportCreateError,
+            I18n.t('services.data_exports.create.unauthorized_samples_selected')
     end
 
     def validate_analysis_id
@@ -58,6 +58,11 @@ module DataExports
       @data_export.user = current_user
       @data_export.status = 'processing'
       @data_export.name = nil if params.key?('name') && params['name'].empty?
+    end
+
+    def authorized_export_samples(namespace, sample_ids)
+      authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                               scope_options: { namespace:, sample_ids: })
     end
   end
 end
