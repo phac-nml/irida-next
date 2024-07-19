@@ -49,7 +49,7 @@ class DataExport < ApplicationRecord
 
   def validate_linelist_namespace_type
     if export_parameters.key?('namespace_id')
-      namespace = Namespace.find(export_parameters['namespace_id'])
+      namespace = Namespace.find_by(id: export_parameters['namespace_id'])
       if namespace.nil?
         errors.add(:export_parameters,
                    I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'))

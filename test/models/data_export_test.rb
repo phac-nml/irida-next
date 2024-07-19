@@ -9,8 +9,29 @@ class DataExportTest < ActiveSupport::TestCase
     @user = users(:john_doe)
   end
 
-  test 'valid data export' do
+  test 'valid sample data export' do
+    assert_equal 'sample', @export1.export_type
     assert @export1.valid?
+  end
+
+  test 'valid analysis data export' do
+    export6 = data_exports(:data_export_six)
+    assert_equal 'analysis', export6.export_type
+    assert export6.valid?
+  end
+
+  test 'valid linelist project data export' do
+    export8 = data_exports(:data_export_eight)
+    assert_equal Namespaces::ProjectNamespace.sti_name, Namespace.find(export8.export_parameters['namespace_id']).type
+    assert_equal 'linelist', export8.export_type
+    assert export8.valid?
+  end
+
+  test 'valid linelist group data export' do
+    export9 = data_exports(:data_export_nine)
+    assert_equal Group.sti_name, Namespace.find(export9.export_parameters['namespace_id']).type
+    assert_equal 'linelist', export9.export_type
+    assert export9.valid?
   end
 
   test 'attach zip to export' do
@@ -70,12 +91,12 @@ class DataExportTest < ActiveSupport::TestCase
                  data_export.errors[:export_parameters].first
   end
 
-  test 'linelist export with missing namespace_type' do
+  test 'linelist export with missing namespace_id' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id], format: 'xlsx',
                                                       metadata_fields: ['a_metadata_field'] })
     assert_not data_export.valid?
-    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_type'),
+    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'),
                  data_export.errors[:export_parameters].first
   end
 
@@ -83,9 +104,9 @@ class DataExportTest < ActiveSupport::TestCase
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id], format: 'csv',
                                                       metadata_fields: ['a_metadata_field'],
-                                                      namespace_type: 'invalid_namespace_type' })
+                                                      namespace_id: 'invalid_namespace_id' })
     assert_not data_export.valid?
-    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_type'),
+    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'),
                  data_export.errors[:export_parameters].first
   end
 

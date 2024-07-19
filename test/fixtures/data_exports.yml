@@ -4,7 +4,10 @@ data_export_one:
   name: Data Export 1
   export_type: sample
   status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>]}
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>],
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+    }
   expires_at : <%= 3.days.from_now %>
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
@@ -14,7 +17,10 @@ data_export_one:
 data_export_two:
   export_type: sample
   status: processing
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>]}
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>],
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+    }
   email_notification: true
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
@@ -24,7 +30,10 @@ data_export_three:
   name: Data Export 3
   export_type: sample
   status: processing
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+    }
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
@@ -33,7 +42,10 @@ data_export_four:
   name: Data Export 4
   export_type: sample
   status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+    }
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   expires_at: <%= 5.days.from_now %>
@@ -42,7 +54,10 @@ data_export_four:
 data_export_five:
   export_type: sample
   status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>]}
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+    }
   email_notification: true
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
@@ -78,7 +93,7 @@ data_export_eight:
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>],
     format: 'csv',
-    namespace_type: 'Project',
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>,
     metadata_fields: ['metadatafield1', 'metadatafield2']
   }
   email_notification: true
@@ -94,7 +109,7 @@ data_export_nine:
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample33, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample34, :uuid) %>],
     format: 'xlsx',
-    namespace_type: 'Group',
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>,
     metadata_fields: ['metadatafield1', 'non_existant_field', 'metadatafield2']
   }
   email_notification: true

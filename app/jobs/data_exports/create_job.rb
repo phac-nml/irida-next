@@ -193,39 +193,40 @@ module DataExports
 
     # Linelist export specific functions---------------------------------------------------------------------
     def create_linelist_spreadsheet(data_export)
-      samples = if data_export.export_parameters['namespace_type'] == 'Group'
+      namespace_type = Namespace.find(data_export.export_parameters['namespace_id']).type
+      samples = if namespace_type == Group.sti_name
                   Sample.includes(project: :namespace)
                         .where(id: data_export.export_parameters['ids'])
                 else
                   Sample.where(id: data_export.export_parameters['ids'])
                 end
       if data_export.export_parameters['format'] == 'csv'
-        write_csv_export(data_export, samples)
+        write_csv_export(data_export, samples, namespace_type)
       else
-        write_xlsx_export(data_export, samples)
+        write_xlsx_export(data_export, samples, namespace_type)
       end
     end
 
-    def write_csv_export(data_export, samples)
+    def write_csv_export(data_export, samples, namespace_type)
       Tempfile.new(binmode: true).tap do |tempfile|
         CSV.open(tempfile, 'wb') do |csv|
-          csv << write_spreadsheet_header(data_export.export_parameters['namespace_type'],
+          csv << write_spreadsheet_header(namespace_type,
                                           data_export.export_parameters['metadata_fields'])
           samples.each do |sample|
-            csv << write_spreadsheet_row(sample, data_export)
+            csv << write_spreadsheet_row(sample, data_export, namespace_type)
           end
         end
       end
     end
 
-    def write_xlsx_export(data_export, samples)
+    def write_xlsx_export(data_export, samples, namespace_type)
       Tempfile.new(binmode: true).tap do |tempfile|
         Axlsx::Package.new do |workbook|
           workbook.workbook.add_worksheet(name: 'linelist') do |sheet|
-            sheet.add_row write_spreadsheet_header(data_export.export_parameters['namespace_type'],
+            sheet.add_row write_spreadsheet_header(namespace_type,
                                                    data_export.export_parameters['metadata_fields'])
             samples.each do |sample|
-              sheet.add_row write_spreadsheet_row(sample, data_export)
+              sheet.add_row write_spreadsheet_row(sample, data_export, namespace_type)
             end
           end
           workbook.serialize(tempfile.path)
@@ -235,14 +236,14 @@ module DataExports
 
     def write_spreadsheet_header(namespace_type, metadata_fields)
       header = %w[id sample]
-      header << 'project' if namespace_type == 'Group'
+      header << 'project' if namespace_type == Group.sti_name
       header += metadata_fields
       header
     end
 
-    def write_spreadsheet_row(sample, data_export)
+    def write_spreadsheet_row(sample, data_export, namespace_type)
       row = [sample.puid, sample.name]
-      row << sample.project.full_path if data_export.export_parameters['namespace_type'] == 'Group'
+      row << sample.project.full_path if namespace_type == Group.sti_name
       row += map_metadata_fields(data_export.export_parameters['metadata_fields'], sample.metadata)
       row
     end
