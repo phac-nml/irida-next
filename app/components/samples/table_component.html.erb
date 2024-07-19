@@ -46,7 +46,7 @@
                     helpers.sorting_url(
                       @q,
                       :attachments_updated_at_nulls_last,
-                      with_params: false,
+                      with_search_params: false,
                     ),
                   field: :attachments_updated_at_nulls_last,
                 ) %>
@@ -54,7 +54,7 @@
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, column, with_params: false),
+                  url: helpers.sorting_url(@q, column, with_search_params: false),
                   field: column,
                 ) %>
               <% end %>
@@ -73,7 +73,7 @@
                   helpers.sorting_url(
                     @q,
                     URI.encode_www_form_component("metadata_#{field}"),
-                    with_params: false,
+                    with_search_params: false,
                   ),
                 field: "metadata_#{field}",
               ) %>

@@ -17,8 +17,8 @@ module SortingHelper
                        })
   end
 
-  def sorting_url(ransack_obj, field, dir: nil, with_params: true)
-    url = if with_params
+  def sorting_url(ransack_obj, field, dir: nil, with_search_params: true)
+    url = if with_search_params
             if dir.nil?
               sort_url(ransack_obj,
                        field).to_s
