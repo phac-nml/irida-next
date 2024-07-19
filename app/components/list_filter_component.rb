@@ -2,10 +2,10 @@
 
 # View component to add a dialog for filter table by a list
 class ListFilterComponent < Component
-  attr_reader :form, :samples
+  attr_reader :form, :filters
 
-  def initialize(form:, samples:)
+  def initialize(form:, filters:)
     @form = form
-    @samples = samples
+    @filters = filters
   end
 end

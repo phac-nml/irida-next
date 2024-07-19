@@ -1,7 +1,7 @@
 <div
   data-controller="list-filter"
   data-list-filter-selection-outlet="#samples-table"
-  data-list-filter-samples-value="<%= samples.present? ? samples.to_s : '[]' %>"
+  data-list-filter-filters-value="<%= filters.present? ? filters.to_s : '[]' %>"
 >
   <%= viral_dialog(id: 'list-filter-dialog', closable: false) do |dialog| %>
     <%= dialog.with_trigger do %>

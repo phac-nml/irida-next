@@ -77,7 +77,7 @@
     <div class="flex flex-row-reverse items-center mb-4 space-x-2">
       <input type="hidden" name="format" value="turbo_stream"/>
       <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-      <%= render ListFilterComponent.new(form: f, samples: @search_params[:name_or_puid_in]) %>
+      <%= render ListFilterComponent.new(form: f, filters: @search_params[:name_or_puid_in]) %>
       <%= f.label :name_or_puid_cont,
               placeholder: t(".search.placeholder"),
               class: "sr-only" %>

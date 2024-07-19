@@ -8,14 +8,14 @@ const COMMA = 188;   // Represents the comma key.
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
   static outlets = ["selection"];
-  static values = { samples: { type: Array, default: [] } };
+  static values = { filters: { type: Array, default: [] } };
 
   connect() {
-    this.samplesValue.filter(sample => sample.length > 0).forEach(sample => {
+    this.filtersValue.filter(sample => sample.length > 0).forEach(sample => {
       this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget);
     });
     this.#updateCount();
-    this.samplesValue = [];
+    this.filtersValue = [];
   }
 
   handleInput(event) {
