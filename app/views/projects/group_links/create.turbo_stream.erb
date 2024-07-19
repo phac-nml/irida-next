@@ -1,7 +1,4 @@
 <% if @group_invited && @tab == 'invited_groups' %>
-  <%#= turbo_stream.update "members", partial: "invited_groups" %>
-
-  <%#= turbo_stream.update "members_pagination", partial: "pagination" %>
   <%= turbo_stream.replace "members" do %>
     <%= turbo_frame_tag "members",
     src: namespace_project_group_links_path(@namespace.parent, @namespace.project, format: :turbo_stream) do %>
