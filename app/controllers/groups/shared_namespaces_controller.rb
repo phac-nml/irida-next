@@ -2,7 +2,7 @@
 
 module Groups
   # Controller actions for projects shared with a group
-  class SharedProjectsController < Groups::ApplicationController
+  class SharedNamespacesController < Groups::ApplicationController
     before_action :group, only: %i[index]
 
     def index
@@ -10,7 +10,7 @@ module Groups
       respond_to do |format|
         format.html { redirect_to group_path(@group) }
         format.turbo_stream do
-          @shared_projects = @group.shared_projects
+          @namespaces = @group.shared_namespaces
         end
       end
     end

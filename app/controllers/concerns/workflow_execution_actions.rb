@@ -111,6 +111,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def format_samplesheet_params
+    # Do what they do in preperations service
     @samplesheet_headers = @workflow_execution.samples_workflow_executions&.first&.samplesheet_params&.keys
     @samplesheet_rows = []
     @workflow_execution.samples_workflow_executions.each do |swe|
