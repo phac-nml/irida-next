@@ -378,8 +378,8 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
     assert_selector 'li.namespace-entry', count: 21
 
-    click_on I18n.t(:'groups.show.tabs.shared_projects')
-    assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.shared_projects')
-    assert_selector 'tbody > tr', count: 1
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+    assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.shared_namespaces')
+    assert_selector 'div.namespace-entry-contents', count: 1
   end
 end
