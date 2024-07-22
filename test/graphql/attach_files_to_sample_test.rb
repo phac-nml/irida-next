@@ -340,7 +340,33 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    expected_error = { 'query' => ['mismatched digest: Invalid blob id'] }
+    expected_error = { 'NAN' => 'Blob id could not be processed. Blob id is invalid or file is missing.',
+                       'query' => ['mismatched digest: Invalid blob id'] }
+    actual_error = result['data']['attachFilesToSample']['errors']
+
+    assert_equal actual_error, expected_error
+  end
+
+  test 'attachFilesToSample mutation should not work with blob missing file' do
+    sample = samples(:sampleJeff)
+    # blob_file_missing = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file_missing = ActiveStorage::Blob.create_before_direct_upload!(
+      filename: 'missing.file', byte_size: 404, checksum: 'Y33CgI35hFoI6p+WBXYl+A=='
+    )
+
+    assert_equal 0, sample.attachments.count
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file_missing.signed_id],
+                                              sampleId: sample.to_global_id.to_s })
+
+    assert_not_nil result['data']['attachFilesToSample']['errors'], 'shouldn\'t work and have errors.'
+
+    assert_equal 0, sample.attachments.count
+
+    expected_error = { blob_file_missing.signed_id => 'Blob id could not be processed. Blob id is invalid or file is missing.',
+                       'query' => ['ActiveStorage::FileNotFoundError: Blob is empty, no file found.'] }
     actual_error = result['data']['attachFilesToSample']['errors']
 
     assert_equal actual_error, expected_error

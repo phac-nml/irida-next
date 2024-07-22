@@ -2,7 +2,7 @@
 
 module Attachments
   # Service used to Create Attachments
-  class CreateService < BaseService
+  class CreateService < BaseService # rubocop:disable Metrics/ClassLength
     attr_accessor :attachable, :attachments, :pe_attachments
 
     def initialize(user = nil, attachable = nil, params = {})
@@ -19,6 +19,9 @@ module Attachments
       end
     rescue ActiveSupport::MessageVerifier::InvalidSignature => e
       @attachable.errors.add(:base, "#{e.message}: Invalid blob id")
+      @attachments
+    rescue ActiveStorage::FileNotFoundError => e
+      @attachable.errors.add(:base, "#{e.message}: Blob is empty, no file found.")
       @attachments
     end
 
