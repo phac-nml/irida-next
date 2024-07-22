@@ -640,7 +640,7 @@ fr:
       tabs:
         label: Group project details navigation
         subgroups_and_projects: Subgroups and projects
-        shared_projects: Shared projects
+        shared_namespaces: Shared groups and projects
       subgroups:
         no_subgroups:
           title: No subgroups
