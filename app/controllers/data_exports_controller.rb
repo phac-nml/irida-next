@@ -23,20 +23,19 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def new
-    if params[:export_type] == 'sample'
-      render turbo_stream: turbo_stream.update('samples_dialog',
-                                               partial: 'new_sample_export_dialog',
-                                               locals: {
-                                                 open: true,
-                                                 namespace_id: params[:namespace_id]
-                                               }), status: :ok
-    else
+    if params[:export_type] == 'analysis'
       render turbo_stream: turbo_stream.update('export_dialog',
                                                partial: 'new_analysis_export_dialog',
                                                locals: {
-                                                 open: true,
-                                                 workflow_execution_id: params[:workflow_execution_id]
+                                                 open: true, workflow_execution_id: params[:workflow_execution_id]
                                                }), status: :ok
+    else
+      render turbo_stream: turbo_stream.update('samples_dialog',
+                                               partial: "new_#{params[:export_type]}_export_dialog",
+                                               locals: {
+                                                 open: true, namespace_id: params[:namespace_id]
+                                               }), status: :ok
+
     end
   end
 
@@ -94,7 +93,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def data_export_params
     params.require(:data_export).permit(:name, :export_type, :email_notification,
-                                        export_parameters: [:namespace_id, { ids: [] }])
+                                        export_parameters: [:metadata_fields, :format, :namespace_id, { ids: [] }])
   end
 
   def data_export
