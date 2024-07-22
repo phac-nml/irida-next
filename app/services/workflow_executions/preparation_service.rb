@@ -11,7 +11,7 @@ module WorkflowExecutions
     def initialize(workflow_execution, user = nil, params = {})
       super(user, params)
       @workflow_execution = workflow_execution
-      @samplesheet_headers = samplesheet_headers
+      @samplesheet_headers = parse_samplesheet_headers
       @samplesheet_rows = []
       @storage_service = ActiveStorage::Blob.service
     end
@@ -51,6 +51,12 @@ module WorkflowExecutions
     end
 
     private
+
+    def parse_samplesheet_headers
+      workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+                                                            @workflow_execution.metadata['workflow_version'])
+      workflow.samplesheet_headers
+    end
 
     def parse_attachments_from_samplesheet(samplesheet)
       attachments = {}
@@ -121,13 +127,6 @@ module WorkflowExecutions
           end
         end
       end
-    end
-
-    def samplesheet_headers
-      workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
-                                                            @workflow_execution.metadata['workflow_version'])
-      sample_sheet = JSON.parse(workflow.schema_input_loc.read)
-      sample_sheet['items']['properties'].keys
     end
   end
 end

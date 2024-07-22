@@ -43,6 +43,11 @@ module Irida
       workflow_params
     end
 
+    def samplesheet_headers
+      sample_sheet = process_samplesheet_schema
+      sample_sheet['items']['properties'].keys
+    end
+
     private
 
     def process_section(key, properties, required)
