@@ -234,15 +234,15 @@ module DataExports
     end
 
     def write_spreadsheet_header(namespace_type, metadata_fields)
-      header = %w[id sample]
-      header << 'project' if namespace_type == Group.sti_name
-      header += metadata_fields
+      header = ['SAMPLE ID', 'SAMPLE NAME']
+      header << 'PROJECT ID' if namespace_type == Group.sti_name
+      header += metadata_fields.map(&:upcase)
       header
     end
 
     def write_spreadsheet_row(sample, data_export, namespace_type)
       row = [sample.puid, sample.name]
-      row << sample.project.full_path if namespace_type == Group.sti_name
+      row << sample.project.puid if namespace_type == Group.sti_name
       row += map_metadata_fields(data_export.export_parameters['metadata_fields'], sample.metadata)
       row
     end

@@ -305,10 +305,10 @@ module DataExports
       csv_text = File.read(export_file)
       csv = CSV.parse(csv_text, headers: true)
       csv.each do |row|
-        assert_equal sample32.puid, row['id']
-        assert_equal sample32.name, row['sample']
-        assert_equal sample32.metadata['metadatafield1'], row['metadatafield1']
-        assert_equal sample32.metadata['metadatafield2'], row['metadatafield2']
+        assert_equal sample32.puid, row['SAMPLE ID']
+        assert_equal sample32.name, row['SAMPLE NAME']
+        assert_equal sample32.metadata['metadatafield1'], row['METADATAFIELD1']
+        assert_equal sample32.metadata['metadatafield2'], row['METADATAFIELD2']
       end
     end
 
@@ -322,12 +322,12 @@ module DataExports
       export_file = Roo::Spreadsheet.open(ActiveStorage::Blob.service.path_for(data_export9.file.key),
                                           extension: 'xlsx')
 
-      assert_equal %w[id sample project metadatafield1 non_existant_field metadatafield2],
+      assert_equal ['SAMPLE ID', 'SAMPLE NAME', 'PROJECT ID', 'METADATAFIELD1', 'NON_EXISTANT_FIELD', 'METADATAFIELD2'],
                    export_file.row(1)
       assert_equal [
         sample32.puid,
         sample32.name,
-        sample32.project.full_path,
+        sample32.project.puid,
         sample32.metadata['metadatafield1'],
         sample32.metadata['non_existant_field'],
         sample32.metadata['metadatafield2']
@@ -336,7 +336,7 @@ module DataExports
       assert_equal [
         sample33.puid,
         sample33.name,
-        sample33.project.full_path,
+        sample33.project.puid,
         sample33.metadata['metadatafield1'],
         sample33.metadata['non_existant_field'],
         sample33.metadata['metadatafield2']
@@ -345,7 +345,7 @@ module DataExports
       assert_equal [
         sample34.puid,
         sample34.name,
-        sample34.project.full_path,
+        sample34.project.puid,
         sample34.metadata['metadatafield1'],
         sample34.metadata['non_existant_field'],
         sample34.metadata['metadatafield2']
