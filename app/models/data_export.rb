@@ -21,7 +21,22 @@ class DataExport < ApplicationRecord
       errors.add(:export_parameters,
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_ids'))
     end
+
+    validate_namespace_id unless export_type == 'analysis'
     validate_linelist_export_parameters if export_type == 'linelist'
+  end
+
+  def validate_namespace_id
+    if export_parameters.key?('namespace_id')
+      namespace = Namespace.find_by(id: export_parameters['namespace_id'])
+      if namespace.nil?
+        errors.add(:export_parameters,
+                   I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'))
+      end
+    else
+      errors.add(:export_parameters,
+                 I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'))
+    end
   end
 
   def validate_linelist_export_parameters
@@ -31,8 +46,6 @@ class DataExport < ApplicationRecord
     end
 
     validate_linelist_format
-
-    validate_linelist_namespace_type
   end
 
   def validate_linelist_format
@@ -44,19 +57,6 @@ class DataExport < ApplicationRecord
     else
       errors.add(:export_parameters,
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_file_format'))
-    end
-  end
-
-  def validate_linelist_namespace_type
-    if export_parameters.key?('namespace_id')
-      namespace = Namespace.find_by(id: export_parameters['namespace_id'])
-      if namespace.nil?
-        errors.add(:export_parameters,
-                   I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'))
-      end
-    else
-      errors.add(:export_parameters,
-                 I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'))
     end
   end
 end

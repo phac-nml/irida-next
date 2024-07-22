@@ -41,7 +41,7 @@ module DataExports
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
-        assert_equal I18n.t('services.data_exports.create.unauthorized_samples_selected'),
+        assert_equal I18n.t('services.data_exports.create.invalid_export_samples'),
                      data_export.errors.full_messages.first
       end
     end
@@ -53,7 +53,7 @@ module DataExports
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
-        assert_equal I18n.t('services.data_exports.create.unauthorized_samples_selected'),
+        assert_equal I18n.t('services.data_exports.create.invalid_export_samples'),
                      data_export.errors.full_messages.first
       end
     end
@@ -215,7 +215,7 @@ module DataExports
       end
     end
 
-    test 'cannot create sample export using samples user is not authorized to export via group links' do
+    test 'cannot create sample export using samples the user is not authorized to export via group links' do
       user = users(:david_doe)
       group4 = groups(:david_doe_group_four)
       invalid_params = {
@@ -228,7 +228,7 @@ module DataExports
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(user, invalid_params).execute
-        assert_equal I18n.t('services.data_exports.create.unauthorized_samples_selected'),
+        assert_equal I18n.t('services.data_exports.create.invalid_export_samples'),
                      data_export.errors.full_messages.first
       end
     end
@@ -248,7 +248,7 @@ module DataExports
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(user, invalid_params).execute
-        assert_equal I18n.t('services.data_exports.create.unauthorized_samples_selected'),
+        assert_equal I18n.t('services.data_exports.create.invalid_export_samples'),
                      data_export.errors.full_messages.first
       end
     end

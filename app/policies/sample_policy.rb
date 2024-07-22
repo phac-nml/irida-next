@@ -35,7 +35,7 @@ class SamplePolicy < ApplicationPolicy
       )
   end
 
-  scope_for :relation, :namespace_samples do |relation, options| # rubocop:disable Metrics/BlockLength
+  scope_for :relation, :exportable_namespace_samples do |relation, options| # rubocop:disable Metrics/BlockLength
     namespace = options[:namespace]
     sample_ids = options[:sample_ids]
 

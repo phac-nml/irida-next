@@ -26,8 +26,8 @@ module DataExports
 
     private
 
-    # Find the project_ids for each sample, and search/validate the unique set of ids to ensure user has authorization
-    # to export the chosen samples' data
+    # sample and linelist exports pass the namespace the user is exporting from and authorize the selected samples
+    # based on the namespace
     def validate_sample_ids
       namespace = Namespace.find(params['export_parameters']['namespace_id'])
 
@@ -38,7 +38,7 @@ module DataExports
       return unless samples.count != params['export_parameters']['ids'].count
 
       raise DataExportCreateError,
-            I18n.t('services.data_exports.create.unauthorized_samples_selected')
+            I18n.t('services.data_exports.create.invalid_export_samples')
     end
 
     def validate_analysis_id
@@ -46,6 +46,7 @@ module DataExports
         raise DataExportCreateError,
               I18n.t('services.data_exports.create.invalid_workflow_execution_id_count')
       end
+
       workflow_execution = WorkflowExecution.find_by(id: params['export_parameters']['ids'][0])
       if workflow_execution.nil?
         raise DataExportCreateError,
@@ -61,7 +62,7 @@ module DataExports
     end
 
     def authorized_export_samples(namespace, sample_ids)
-      authorized_scope(Sample, type: :relation, as: :namespace_samples,
+      authorized_scope(Sample, type: :relation, as: :exportable_namespace_samples,
                                scope_options: { namespace:, sample_ids: })
     end
   end

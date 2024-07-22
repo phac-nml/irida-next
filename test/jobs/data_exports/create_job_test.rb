@@ -296,7 +296,7 @@ module DataExports
       assert_equal 'ready', @data_export6.status
     end
 
-    test 'create csv linelist export with project namespace_type and csv content' do
+    test 'create csv linelist export with project namespace.type and csv content' do
       sample32 = samples(:sample32)
       data_export8 = data_exports(:data_export_eight)
       DataExports::CreateJob.perform_now(data_export8)
@@ -312,7 +312,7 @@ module DataExports
       end
     end
 
-    test 'create xlsx linelist export with group namespace_type, empty metadata field and csv content' do
+    test 'create xlsx linelist export with group namespace.type, empty metadata field and xlsx content' do
       sample32 = samples(:sample32)
       sample33 = samples(:sample33)
       sample34 = samples(:sample34)

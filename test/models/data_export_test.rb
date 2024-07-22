@@ -91,6 +91,25 @@ class DataExportTest < ActiveSupport::TestCase
                  data_export.errors[:export_parameters].first
   end
 
+  test 'sample export with missing namespace_id' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
+                                 export_parameters: { ids: [@sample1.id], format: 'xlsx',
+                                                      metadata_fields: ['a_metadata_field'] })
+    assert_not data_export.valid?
+    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'),
+                 data_export.errors[:export_parameters].first
+  end
+
+  test 'sample export with invalid namespace_type' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
+                                 export_parameters: { ids: [@sample1.id], format: 'csv',
+                                                      metadata_fields: ['a_metadata_field'],
+                                                      namespace_id: 'invalid_namespace_id' })
+    assert_not data_export.valid?
+    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'),
+                 data_export.errors[:export_parameters].first
+  end
+
   test 'linelist export with missing namespace_id' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id], format: 'xlsx',

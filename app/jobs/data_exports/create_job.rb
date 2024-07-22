@@ -6,8 +6,10 @@ module DataExports
     queue_as :default
 
     def perform(data_export)
-      @manifest = ''
-      initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
+      unless data_export.export_type == 'linelist'
+        @manifest = ''
+        initialize_manifest(data_export.export_type)
+      end
 
       export = create_export(data_export)
 
