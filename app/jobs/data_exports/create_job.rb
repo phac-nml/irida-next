@@ -6,10 +6,7 @@ module DataExports
     queue_as :default
 
     def perform(data_export)
-      unless data_export.export_type == 'linelist'
-        @manifest = ''
-        initialize_manifest(data_export.export_type)
-      end
+      initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
 
       export = create_export(data_export)
 
@@ -30,6 +27,18 @@ module DataExports
       when 'linelist'
         create_linelist_spreadsheet(data_export)
       end
+    end
+
+    def attach_export(data_export, export)
+      filename = if data_export.export_type == 'linelist'
+                   "#{data_export.id}.#{data_export.export_parameters['format']}"
+                 else
+                   "#{data_export.id}.zip"
+                 end
+
+      data_export.file.attach(io: export.open, filename:)
+      export.close
+      export.unlink
     end
 
     def assign_data_export_attributes(data_export)
@@ -63,18 +72,6 @@ module DataExports
       manifest_file.unlink
     end
 
-    def attach_export(data_export, export)
-      filename = if data_export.export_type == 'linelist'
-                   "#{data_export.id}.#{data_export.export_parameters['format']}"
-                 else
-                   "#{data_export.id}.zip"
-                 end
-
-      data_export.file.attach(io: export.open, filename:)
-      export.close
-      export.unlink
-    end
-
     # Sample export specific functions------------------------------------------------------------------
     def create_sample_zip(data_export)
       Tempfile.new(binmode: true).tap do |tempfile|
@@ -90,7 +87,7 @@ module DataExports
 
             write_sample_attachments(sample, project, zip)
           end
-          # Write manifest to file 'manifest.json' and add to zip
+
           write_manifest(zip)
         end
       end
@@ -155,8 +152,8 @@ module DataExports
       Tempfile.new(binmode: true).tap do |tempfile|
         ZipKit::Streamer.open(tempfile) do |zip|
           workflow_execution = WorkflowExecution.includes(
-            outputs: { file_attachment: :blob }, samples_workflow_executions: [:sample,
-                                                                               { outputs: { file_attachment: :blob } }]
+            outputs: { file_attachment: :blob },
+            samples_workflow_executions: [:sample, { outputs: { file_attachment: :blob } }]
           ).find(data_export.export_parameters['ids'][0])
 
           write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
@@ -165,7 +162,7 @@ module DataExports
           samples_workflow_executions.each do |swe|
             write_samples_workflow_execution_outputs_and_manifest(swe, zip) unless swe.outputs.empty?
           end
-          # Write manifest to file 'manifest.json' and add to zip
+
           write_manifest(zip)
         end
       end
