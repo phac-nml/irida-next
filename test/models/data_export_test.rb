@@ -5,6 +5,7 @@ require 'test_helper'
 class DataExportTest < ActiveSupport::TestCase
   def setup
     @export1 = data_exports(:data_export_one)
+    @project1 = projects(:project1)
     @sample1 = samples(:sample1)
     @user = users(:john_doe)
   end
@@ -43,7 +44,7 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'data export with invalid status' do
     data_export = DataExport.new(user: @user, status: 'invalid status', export_type: 'sample',
-                                 export_parameters: { ids: [@sample1.id] })
+                                 export_parameters: { ids: [@sample1.id], namespace_id: @project1.namespace.id })
     assert_not data_export.valid?
     data_export.status = 'processing'
     assert data_export.valid?
@@ -85,7 +86,7 @@ class DataExportTest < ActiveSupport::TestCase
   test 'linelist export with missing metadata fields' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id], format: 'xlsx',
-                                                      namespace_type: Namespaces::ProjectNamespace.sti_name })
+                                                      namespace_id: @project1.namespace.id })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_metadata_fields'),
                  data_export.errors[:export_parameters].first
@@ -100,7 +101,7 @@ class DataExportTest < ActiveSupport::TestCase
                  data_export.errors[:export_parameters].first
   end
 
-  test 'sample export with invalid namespace_type' do
+  test 'sample export with invalid namespace_id' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
                                  export_parameters: { ids: [@sample1.id], format: 'csv',
                                                       metadata_fields: ['a_metadata_field'],
@@ -133,7 +134,7 @@ class DataExportTest < ActiveSupport::TestCase
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id],
                                                       metadata_fields: ['a_metadata_field'],
-                                                      namespace_type: Group.sti_name })
+                                                      namespace_id: @project1.namespace.id })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_file_format'),
                  data_export.errors[:export_parameters].first
@@ -143,7 +144,7 @@ class DataExportTest < ActiveSupport::TestCase
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id], format: 'invalid_format',
                                                       metadata_fields: ['a_metadata_field'],
-                                                      namespace_type: Group.sti_name })
+                                                      namespace_id: @project1.namespace.id })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_file_format'),
                  data_export.errors[:export_parameters].first

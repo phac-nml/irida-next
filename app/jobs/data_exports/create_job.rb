@@ -77,23 +77,23 @@ module DataExports
 
     # Sample export specific functions------------------------------------------------------------------
     def create_sample_zip(data_export)
-      new_zip_file = Tempfile.new(binmode: true)
-      ZipKit::Streamer.open(new_zip_file) do |zip|
-        samples = Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
-                        .where(id: data_export.export_parameters['ids'])
-        samples.each do |sample|
-          next if sample.attachments.empty?
+      Tempfile.new(binmode: true).tap do |tempfile|
+        ZipKit::Streamer.open(tempfile) do |zip|
+          samples = Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
+                          .where(id: data_export.export_parameters['ids'])
+          samples.each do |sample|
+            next if sample.attachments.empty?
 
-          project = sample.project
+            project = sample.project
 
-          update_sample_manifest(sample, project)
+            update_sample_manifest(sample, project)
 
-          write_sample_attachments(sample, project, zip)
+            write_sample_attachments(sample, project, zip)
+          end
+          # Write manifest to file 'manifest.json' and add to zip
+          write_manifest(zip)
         end
-        # Write manifest to file 'manifest.json' and add to zip
-        write_manifest(zip)
       end
-      new_zip_file
     end
 
     def update_sample_manifest(sample, project)
@@ -152,23 +152,23 @@ module DataExports
 
     # Analysis export specific functions---------------------------------------------------------------------
     def create_analysis_zip(data_export)
-      new_zip_file = Tempfile.new(binmode: true)
-      ZipKit::Streamer.open(new_zip_file) do |zip|
-        workflow_execution = WorkflowExecution.includes(
-          outputs: { file_attachment: :blob }, samples_workflow_executions: [:sample,
-                                                                             { outputs: { file_attachment: :blob } }]
-        ).find(data_export.export_parameters['ids'][0])
+      Tempfile.new(binmode: true).tap do |tempfile|
+        ZipKit::Streamer.open(tempfile) do |zip|
+          workflow_execution = WorkflowExecution.includes(
+            outputs: { file_attachment: :blob }, samples_workflow_executions: [:sample,
+                                                                               { outputs: { file_attachment: :blob } }]
+          ).find(data_export.export_parameters['ids'][0])
 
-        write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
+          write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
 
-        samples_workflow_executions = workflow_execution.samples_workflow_executions
-        samples_workflow_executions.each do |swe|
-          write_samples_workflow_execution_outputs_and_manifest(swe, zip) unless swe.outputs.empty?
+          samples_workflow_executions = workflow_execution.samples_workflow_executions
+          samples_workflow_executions.each do |swe|
+            write_samples_workflow_execution_outputs_and_manifest(swe, zip) unless swe.outputs.empty?
+          end
+          # Write manifest to file 'manifest.json' and add to zip
+          write_manifest(zip)
         end
-        # Write manifest to file 'manifest.json' and add to zip
-        write_manifest(zip)
       end
-      new_zip_file
     end
 
     def write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
