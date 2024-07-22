@@ -5,6 +5,11 @@ DEFAULTS: &DEFAULTS
   workflow_type_version: "DSL2"
   workflow_engine: "nextflow"
   workflow_engine_version: "23.10.0"
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
 
 workflow_execution_valid:
   <<: *DEFAULTS
@@ -73,8 +78,8 @@ irida_next_example_submitted:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_submitted",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -93,12 +98,12 @@ irida_next_example_completed:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completed",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
-      "input": "/blah/samplesheet.csv",
+      "input": "/nextflow/samplesheet_schema.json",
       "outdir": "/blah/output",
     }
   workflow_engine_parameters: { "-r": "dev" }
@@ -114,8 +119,8 @@ irida_next_example_completed_2_files:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completed",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -135,8 +140,8 @@ irida_next_example_completed_unclean:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completed_unclean",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -156,8 +161,8 @@ irida_next_example_error:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_error",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -176,8 +181,8 @@ irida_next_example_error_unclean:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_error_unclean",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -196,8 +201,8 @@ irida_next_example_canceling:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_canceling",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -236,8 +241,8 @@ irida_next_example_canceled_unclean:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_canceled_unclean",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -256,8 +261,8 @@ irida_next_example_running:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_running",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -275,7 +280,10 @@ irida_next_example_running:
 irida_next_example_new:
   <<: *DEFAULTS
   metadata:
-    { "workflow_name": "irida_next_example_new", "workflow_version": "1.0dev" }
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
   workflow_params:
     {
       "input": "/blah/samplesheet.csv",
@@ -293,8 +301,8 @@ irida_next_example_completing_a:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completing",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -315,8 +323,8 @@ irida_next_example_completing_b:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completing",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -336,8 +344,8 @@ irida_next_example_completing_c:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completing",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -358,8 +366,8 @@ irida_next_example_completing_d:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completing",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -379,8 +387,8 @@ irida_next_example_completing_e:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completing",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -400,8 +408,8 @@ irida_next_example_completing_f:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completing",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -423,8 +431,8 @@ irida_next_example_completed_with_output:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "irida_next_example_completed",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -444,8 +452,8 @@ automated_workflow_execution:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "automated_workflow_execution",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params: {
     "assembler": "stub",
@@ -465,7 +473,10 @@ automated_workflow_execution:
 workflow_execution<%= (n) %>:
   <<: *DEFAULTS
   metadata:
-    { "workflow_name": <%= "Workflow Execution #{n}" %>, "workflow_version": "1.0dev" }
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
   workflow_params:
     {
       "input": "/blah/samplesheet.csv",
@@ -482,7 +493,11 @@ workflow_execution<%= (n) %>:
 
 workflow_execution_existing:
   <<: *DEFAULTS
-  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
   workflow_params: {
     "assembler": "stub",
     "project_name": "assembly",
@@ -498,8 +513,8 @@ automated_example_prepared:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "automated_example_prepared",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -519,8 +534,8 @@ automated_example_submitted:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "automated_example_submitted",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -539,8 +554,8 @@ automated_example_completed:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "automated_example_completed",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -560,8 +575,8 @@ automated_example_error:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "automated_example_error",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -580,8 +595,8 @@ automated_example_canceling:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "automated_example_canceling",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -600,8 +615,8 @@ automated_example_canceled:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "automated_example_canceled",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -620,8 +635,8 @@ automated_example_running:
   <<: *DEFAULTS
   metadata:
     {
-      "workflow_name": "automated_example_running",
-      "workflow_version": "1.0dev",
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
     }
   workflow_params:
     {
@@ -639,7 +654,10 @@ automated_example_running:
 automated_example_new:
   <<: *DEFAULTS
   metadata:
-    { "workflow_name": "automated_example_new", "workflow_version": "1.0dev" }
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
   workflow_params:
     {
       "input": "/blah/samplesheet.csv",
@@ -655,7 +673,11 @@ automated_example_new:
 
 automated_workflow_execution_existing:
   <<: *DEFAULTS
-  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
   workflow_params: {
     "assembler": "stub",
     "project_name": "assembly",
@@ -670,7 +692,11 @@ automated_workflow_execution_existing:
 
 irida_next_example_end_to_end:
   <<: *DEFAULTS
-  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
@@ -685,7 +711,11 @@ irida_next_example_end_to_end:
 
 irida_next_example_completed_DELETE:
   <<: *DEFAULTS
-  metadata: { "workflow_name": "phac-nml/iridanextexample", "workflow_version": "1.0.2" }
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
   workflow_params: {
     "assembler": "stub",
     "random_seed": 1,
