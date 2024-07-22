@@ -3,10 +3,15 @@
 <% else %>
   <div class="relative overflow-x-auto">
     <table
-      class="w-full text-sm text-left text-gray-500  rtl:text-right dark:text-gray-400"
+      class="
+        w-full text-sm text-left text-slate-500 rtl:text-right dark:text-slate-400
+      "
     >
       <thead
-        class="text-xs text-gray-700 uppercase  bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        class="
+          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          dark:text-slate-400
+        "
       >
         <tr>
           <% @samplesheet_headers.each do |header| %>
@@ -19,24 +24,26 @@
       </thead>
       <tbody>
         <% @samplesheet_rows.each do |sample| %>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
             <% @samplesheet_headers.each do |header| %>
               <% if header == "sample" %>
                 <th class="px-6 py-4">
-                  <div class="font-semibold text-gray-900 dark:text-white"><%= sample[header] %></div>
+                  <div class="font-semibold text-slate-900 dark:text-white"><%= sample[header] %></div>
                 </th>
 
-              <% elsif header.match(/fastq_\d+/) %>
-                <td class="px-6 py-4">
-                  <% unless sample[header].blank? %>
-                    <div class="font-semibold text-gray-900 dark:text-white"><%= sample[header][:puid] %></div>
-                    <div class="font-normal text-gray-500 dark:text-gray-400"><%= sample[header][:name] %></div>
-                  <% end %>
-                </td>
               <% else %>
-                <td class="px-6 py-4">
-                  <%= sample[header] %>
-                </td>
+                <% if sample[header].is_a?(Hash) %>
+                  <td class="px-6 py-4">
+                    <% unless sample[header].blank? %>
+                      <div class="font-semibold text-slate-900 dark:text-white"><%= sample[header][:puid] %></div>
+                      <div class="font-normal text-slate-500 dark:text-slate-400"><%= sample[header][:name] %></div>
+                    <% end %>
+                  </td>
+                <% else %>
+                  <td class="px-6 py-4">
+                    <%= sample[header] %>
+                  </td>
+                <% end %>
               <% end %>
             <% end %>
           </tr>
