@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  default_url_options protocol: ENV.fetch('RAILS_PROTOCOL', 'http'),
-                      host: ENV.fetch('RAILS_HOST', 'localhost')
+  if ENV.fetch('RAILS_ENV', 'development') == 'development'
+    default_url_options protocol: ENV.fetch('RAILS_PROTOCOL', 'http'),
+                        host: ENV.fetch('RAILS_HOST', 'localhost'),
+                        port: ENV.fetch('RAILS_PORT', 3000)
+  else
+    default_url_options protocol: ENV.fetch('RAILS_PROTOCOL', 'http'),
+                        host: ENV.fetch('RAILS_HOST', 'localhost')
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

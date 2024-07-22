@@ -20,6 +20,7 @@ Primary ENV Variable which sets what type of environment to run
 | ---------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `RAILS_MAX_THREADS`          | Number of threads in the thread pool                                                                     | `5`                        |
 | `RAILS_HOST`                 | URL host for the application                                                                             | `example.com`              |
+| `RAILS_PORT`                 | Port that the application runs on                                                                        | `3000` *when `RAILS_ENV` is `development`* |
 | `RAILS_PROTOCOL`             | Protocol the application uses                                                                            | `http`                     |
 | `RAILS_DAILY_LOG_ROTATION`   | Rotate the logs daily. For production environment only.                                                  | `false`                    |
 | `RAILS_LOG_TO_STDOUT`        | Enable logging to stdout                                                                                 | `false`                    |
