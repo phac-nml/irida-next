@@ -40,12 +40,12 @@ type AttachFilesToSamplePayload {
   """
   The updated sample.
   """
-  sample: Sample!
+  sample: Sample
 
   """
   The status of the mutation.
   """
-  status: JSON!
+  status: JSON
 }
 
 """
