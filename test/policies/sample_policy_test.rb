@@ -16,8 +16,8 @@ class SamplePolicyTest < ActiveSupport::TestCase
   test 'scope' do
     group_one = groups(:group_one)
     policy = SamplePolicy.new(group_one, user: @user)
-    scoped_samples = policy.apply_scope(Sample, type: :relation, name: :group_samples,
-                                                scope_options: { group: group_one })
+    scoped_samples = policy.apply_scope(Sample, type: :relation, name: :namespace_samples,
+                                                scope_options: { namespace: group_one })
 
     projects_samples_count = 0
     group_self_and_descendants = group_one.self_and_descendants
@@ -54,7 +54,8 @@ class SamplePolicyTest < ActiveSupport::TestCase
     group = groups(:group_alpha)
     policy = SamplePolicy.new(group, user:)
 
-    scoped_samples = policy.apply_scope(Sample, type: :relation, name: :group_samples, scope_options: { group: })
+    scoped_samples = policy.apply_scope(Sample, type: :relation, name: :namespace_samples,
+                                                scope_options: { namespace: group })
 
     assert_equal 4, scoped_samples.count
 
@@ -62,5 +63,26 @@ class SamplePolicyTest < ActiveSupport::TestCase
     assert scoped_samples.include?(samples(:sampleAlpha1))
     assert scoped_samples.include?(samples(:sampleBravo))
     assert scoped_samples.include?(samples(:sampleCharlie))
+  end
+
+  test 'scope excludes samples where user does not have minimum access level' do
+    user = users(:david_doe)
+    group = groups(:david_doe_group_four)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    sample28 = samples(:sample28)
+    sample_ids = [sample1.id, sample2.id, sample28.id]
+    policy = SamplePolicy.new(group, user:)
+
+    scoped_samples = policy.apply_scope(Sample, type: :relation, name: :namespace_samples,
+                                                scope_options: { namespace: group,
+                                                                 minimum_access_level: Member::AccessLevel::ANALYST })
+                           .where(id: sample_ids)
+
+    assert_equal 1, scoped_samples.count
+
+    assert scoped_samples.exclude?(sample1)
+    assert scoped_samples.exclude?(sample2)
+    assert scoped_samples.include?(sample28)
   end
 end

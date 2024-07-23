@@ -62,8 +62,9 @@ module DataExports
     end
 
     def authorized_export_samples(namespace, sample_ids)
-      authorized_scope(Sample, type: :relation, as: :exportable_namespace_samples,
-                               scope_options: { namespace:, sample_ids: })
+      authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                               scope_options: { namespace:, minimum_access_level: Member::AccessLevel::ANALYST })
+        .where(id: sample_ids)
     end
   end
 end

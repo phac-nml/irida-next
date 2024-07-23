@@ -44,9 +44,9 @@ module Groups
     end
 
     def authorized_samples
-      authorized_scope(Sample, type: :relation, as: :group_samples,
-                               scope_options: { group: @group }).includes(project: { namespace: [{ parent: :route },
-                                                                                                 :route] })
+      authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                               scope_options: { namespace: @group }).includes(project: { namespace: [{ parent: :route },
+                                                                                                     :route] })
     end
 
     def context_crumbs
