@@ -17,6 +17,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     authorize! @namespace, to: :member_listing?
     @q = load_members.ransack(params[:q])
     set_default_sort
+    set_url
     @pagy, @members = pagy(@q.result)
     respond_to do |format|
       format.html
@@ -149,6 +150,14 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def set_default_sort
     @q.sorts = 'user_email asc' if @q.sorts.empty?
+  end
+
+  def set_url
+    @search_url = if @tab == 'invited_groups'
+                    namespace_project_group_links_url(**request.query_parameters)
+                  else
+                    namespace_project_members_url(**request.query_parameters)
+                  end
   end
 
   protected
