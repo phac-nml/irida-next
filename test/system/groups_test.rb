@@ -382,4 +382,12 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.shared_namespaces')
     assert_selector 'div.namespace-entry-contents', count: 1
   end
+
+  test 'displays empty shared namespaces' do
+    @group = groups(:group_eight)
+    visit group_url(@group)
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+    assert_selector 'div.namespace-entry-contents', count: 0
+    assert_text I18n.t('groups.show.shared_namespaces.no_shared.title')
+  end
 end
