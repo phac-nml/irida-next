@@ -15,16 +15,46 @@ module Mutations
 
     field :errors, [String], null: false, description: 'A list of errors that prevented the mutation.'
     field :sample, Types::SampleType, null: false, description: 'The updated sample.'
-    field :status, GraphQL::Types::JSON, null: false, description: 'The status of the mutation.'
+    field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
 
-    def resolve(args)
+    def resolve(args) # rubocop:disable Metrics/MethodLength
       sample = if args[:sample_id]
                  IridaSchema.object_from_id(args[:sample_id], { expected_type: Sample })
                else
                  Sample.find_by(puid: args[:sample_puid])
                end
+      if sample.nil?
+        return {
+          sample:,
+          status: nil,
+          errors: ['Sample not found by provided ID or PUID']
+        }
+      end
+
+      metadata = args[:metadata]
+      # convert string to hash if json string as given
+      if metadata.is_a?(String)
+        begin
+          metadata = JSON.parse(metadata)
+        rescue JSON::ParserError => e
+          return {
+            sample:,
+            status: nil,
+            error: "JSON data is not formatted correctly. #{e.message}"
+          }
+        end
+      end
+
+      unless metadata.is_a?(Hash)
+        return {
+          sample:,
+          status: nil,
+          errors: 'Metadata is not JSON data'
+        }
+      end
+
       metadata_changes = Samples::Metadata::UpdateService.new(sample.project, sample, current_user,
-                                                              { 'metadata' => args[:metadata] }).execute
+                                                              { 'metadata' => metadata }).execute
       {
         sample:,
         status: metadata_changes,
