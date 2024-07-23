@@ -111,7 +111,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def format_samplesheet_params
-    @samplesheet_headers = @workflow_execution.samples_workflow_executions&.first&.samplesheet_params&.keys
+    workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+                                                          @workflow_execution.metadata['workflow_version'])
+    @samplesheet_headers = workflow.samplesheet_headers
     @samplesheet_rows = []
     @workflow_execution.samples_workflow_executions.each do |swe|
       attachments = format_attachment(swe.samplesheet_params)
