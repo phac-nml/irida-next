@@ -39,11 +39,11 @@ class SamplePolicy < ApplicationPolicy
     namespace = options[:namespace]
     sample_ids = options[:sample_ids]
 
+    next relation.none unless Member.can_export_data?(user, namespace)
+
     if namespace.type == Namespaces::ProjectNamespace.sti_name
       relation.where(project_id: namespace.project.id).where(id: sample_ids)
     elsif namespace.type == Group.sti_name
-      next relation.none unless Member.can_export_data?(user, namespace)
-
       relation
         .with(
           direct_group_projects_samples: relation.joins(project: [:namespace])
