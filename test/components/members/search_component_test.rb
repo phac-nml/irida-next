@@ -8,6 +8,7 @@ class SearchComponentTest < ViewComponent::TestCase
     search_attribute = :user_email_cont
     placeholder = 'a placeholder'
     url = '/-/groups/group-1/-/members'
+
     render_inline SearchComponent.new(Member.ransack, tab, url, search_attribute, placeholder)
 
     assert_selector "input[type='hidden'][name='tab'][value='#{tab}']", visible: false, count: 1
