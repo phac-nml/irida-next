@@ -1,4 +1,5 @@
 <ul class="groups-list namespace-list-tree flex flex-col">
+  <% if namespaces.length > 0 %>
   <%= render NamespaceTree::RowComponent.with_collection(
     namespaces,
     path: path,
@@ -6,4 +7,14 @@
     type: @type,
     collapsed: collapsed
   ) %>
+  <% else %>
+    <li class="namespace-row">
+      <!-- TODO: Add a proper empty state -->
+      <div class="namespace-row-content">
+        <div class="namespace-row-title">
+          <span class="namespace-title">No namespaces found</span>
+        </div>
+      </div>
+    </li>
+  <% end %>
 </ul>

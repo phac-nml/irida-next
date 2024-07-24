@@ -1,15 +1,25 @@
 <%= turbo_stream.update "group_show_tab_content" do %>
-  <% if @namespaces.length > 0 %>
-    <%= render NamespaceTreeContainerComponent.new(
+  <div class="border-red-300">
+    <%= search_form_for @q, url: search_group_shared_namespaces_url(**request.query_parameters), html: { method: :post, class: "mb-2" } do |f| %>
+      <div class="flex flex-row-reverse items-center mb-4 space-x-2">
+        <input type="hidden" name="format" value="turbo_stream" />
+
+        <%= f.label :name_cont,
+                    placeholder: "SEARCH HERE ...",
+                    class: "sr-only" %>
+        <%= f.search_field :name_cont,
+                           class:
+                             "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                           placeholder: "SEARCH HERE ..." %>
+      </div>
+    <% end %>
+  </div>
+
+
+  <%= render NamespaceTreeContainerComponent.new(
       namespaces: @namespaces,
       path: "group_subgroups_path",
       path_args: { group_id: @group.full_path },
       type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
     ) %>
-  <% else %>
-    <%= viral_empty(
-          title: t(:"groups.show.shared_namespaces.no_shared.title"),
-          description: t(:"groups.show.shared_namespaces.no_shared.description"),
-          icon_name: :squares_2x2) %>
-  <% end %>
 <% end %>

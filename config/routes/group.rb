@@ -33,7 +33,11 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       end
     end
     resources :subgroups, only: %i[index]
-    resources :shared_namespaces, only: %i[index]
+    resources :shared_namespaces, only: %i[index] do
+      collection do
+        post :search
+      end
+    end
 
     get '/history' => 'history#index', as: :history
     get '/history/new' => 'history#new', as: :view_history
