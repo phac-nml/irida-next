@@ -6,6 +6,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:john_doe)
     @sample1 = samples(:sample1)
+    @project1 = projects(:project1)
     @data_export1 = data_exports(:data_export_one)
   end
 
@@ -15,7 +16,10 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create new export with viable params' do
-    params = { 'data_export' => { 'export_type' => 'sample', 'export_parameters' => { 'ids' => [@sample1.id] } },
+    params = { 'data_export' => {
+                 'export_type' => 'sample',
+                 'export_parameters' => { 'ids' => [@sample1.id], 'namespace_id' => @project1.namespace.id }
+               },
                format: :turbo_stream }
     post data_exports_path(params)
     assert_response :redirect
@@ -58,7 +62,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should view new export modal with export_type sample' do
-    get new_data_export_path(export_type: 'sample')
+    get new_data_export_path(export_type: 'sample', 'namespace_id' => @project1.namespace.id)
     assert_response :success
   end
 
@@ -72,7 +76,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     post data_exports_path, params: {
       data_export: {
         export_type: 'sample',
-        export_parameters: { ids: [@sample1.id] }
+        export_parameters: { ids: [@sample1.id], 'namespace_id' => @project1.namespace.id }
       }
     }
     assert_response :redirect
@@ -82,7 +86,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     post data_exports_path, params: {
       data_export: {
         export_type: 'sample',
-        export_parameters: { ids: [@sample1.id] },
+        export_parameters: { ids: [@sample1.id], 'namespace_id' => @project1.namespace.id },
         email_notification: true,
         name: 'export name'
       }

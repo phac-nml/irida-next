@@ -160,5 +160,12 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def export_sample_data?
+      return true if Member.can_export_data?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
   end
 end

@@ -27,7 +27,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       render turbo_stream: turbo_stream.update('samples_dialog',
                                                partial: 'new_sample_export_dialog',
                                                locals: {
-                                                 open: true
+                                                 open: true,
+                                                 namespace_id: params[:namespace_id]
                                                }), status: :ok
     else
       render turbo_stream: turbo_stream.update('export_dialog',
@@ -42,17 +43,17 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def create
     @data_export = DataExports::CreateService.new(current_user, data_export_params).execute
 
-    if @data_export.valid?
-      flash[:success] = t('.success', name: @data_export.name || @data_export.id)
-
-      redirect_to data_export_path(@data_export, format: :html)
-    else
+    if @data_export.errors.any?
       respond_to do |format|
         format.turbo_stream do
           render status: :unprocessable_entity,
                  locals: { type: 'alert', message: @data_export.errors.full_messages.first }
         end
       end
+    else
+      flash[:success] = t('.success', name: @data_export.name || @data_export.id)
+
+      redirect_to data_export_path(@data_export, format: :html)
     end
   end
 
@@ -92,7 +93,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   private
 
   def data_export_params
-    params.require(:data_export).permit(:name, :export_type, :email_notification, export_parameters: { ids: [] })
+    params.require(:data_export).permit(:name, :export_type, :email_notification,
+                                        export_parameters: [:namespace_id, { ids: [] }])
   end
 
   def data_export

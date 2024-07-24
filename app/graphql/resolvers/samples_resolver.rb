@@ -13,7 +13,7 @@ module Resolvers
     def resolve(group_id:)
       if group_id
         group = IridaSchema.object_from_id(group_id, { expected_type: Group })
-        authorized_scope(Sample, type: :relation, as: :group_samples, scope_options: { group: })
+        authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
       else
         scope = authorized_scope Project, type: :relation
         Sample.where(project_id: scope.select(:id))

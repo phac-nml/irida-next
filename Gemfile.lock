@@ -156,6 +156,11 @@ GEM
       capybara (>= 3.0)
       ruby2_keywords
       selenium-webdriver (>= 4.0)
+    caxlsx (4.1.0)
+      htmlentities (~> 4.3, >= 4.3.4)
+      marcel (~> 1.0)
+      nokogiri (~> 1.10, >= 1.10.4)
+      rubyzip (>= 1.3.0, < 3)
     cgi (0.4.1)
     concurrent-ruby (1.3.1)
     connection_pool (2.4.1)
@@ -624,6 +629,7 @@ DEPENDENCIES
   business_time
   capybara
   capybara-lockstep
+  caxlsx
   csv
   cuprite
   debug

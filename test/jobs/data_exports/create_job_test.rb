@@ -295,5 +295,61 @@ module DataExports
       assert_equal expected_manifest.to_json, @data_export6.manifest
       assert_equal 'ready', @data_export6.status
     end
+
+    test 'create csv linelist export with project namespace.type and csv content' do
+      sample32 = samples(:sample32)
+      data_export8 = data_exports(:data_export_eight)
+      DataExports::CreateJob.perform_now(data_export8)
+
+      export_file = ActiveStorage::Blob.service.path_for(data_export8.file.key)
+      csv_text = File.read(export_file)
+      csv = CSV.parse(csv_text, headers: true)
+      csv.each do |row|
+        assert_equal sample32.puid, row['SAMPLE ID']
+        assert_equal sample32.name, row['SAMPLE NAME']
+        assert_equal sample32.metadata['metadatafield1'], row['METADATAFIELD1']
+        assert_equal sample32.metadata['metadatafield2'], row['METADATAFIELD2']
+      end
+    end
+
+    test 'create xlsx linelist export with group namespace.type, empty metadata field and xlsx content' do
+      sample32 = samples(:sample32)
+      sample33 = samples(:sample33)
+      sample34 = samples(:sample34)
+      data_export9 = data_exports(:data_export_nine)
+
+      DataExports::CreateJob.perform_now(data_export9)
+      export_file = Roo::Spreadsheet.open(ActiveStorage::Blob.service.path_for(data_export9.file.key),
+                                          extension: 'xlsx')
+
+      assert_equal ['SAMPLE ID', 'SAMPLE NAME', 'PROJECT ID', 'METADATAFIELD1', 'NON_EXISTANT_FIELD', 'METADATAFIELD2'],
+                   export_file.row(1)
+      assert_equal [
+        sample32.puid,
+        sample32.name,
+        sample32.project.puid,
+        sample32.metadata['metadatafield1'],
+        sample32.metadata['non_existant_field'],
+        sample32.metadata['metadatafield2']
+      ], export_file.row(2)
+
+      assert_equal [
+        sample33.puid,
+        sample33.name,
+        sample33.project.puid,
+        sample33.metadata['metadatafield1'],
+        sample33.metadata['non_existant_field'],
+        sample33.metadata['metadatafield2']
+      ], export_file.row(3)
+
+      assert_equal [
+        sample34.puid,
+        sample34.name,
+        sample34.project.puid,
+        sample34.metadata['metadatafield1'],
+        sample34.metadata['non_existant_field'],
+        sample34.metadata['metadatafield2']
+      ], export_file.row(4)
+    end
   end
 end

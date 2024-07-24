@@ -6,26 +6,53 @@ module DataExports
     queue_as :default
 
     def perform(data_export)
-      @manifest = ''
-      initialize_manifest(data_export.export_type)
+      initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
 
-      zip = data_export.export_type == 'sample' ? create_sample_zip(data_export) : create_analysis_zip(data_export)
+      export = create_export(data_export)
 
-      attach_zip(data_export, zip)
+      attach_export(data_export, export)
 
-      data_export.manifest = @manifest.to_json
+      assign_data_export_attributes(data_export)
+
+      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification?
+    end
+
+    # Functions used by all exports (sample, analysis, linelist)-------------------------------------------------
+    def create_export(data_export)
+      case data_export.export_type
+      when 'sample'
+        create_sample_zip(data_export)
+      when 'analysis'
+        create_analysis_zip(data_export)
+      when 'linelist'
+        create_linelist_spreadsheet(data_export)
+      end
+    end
+
+    def attach_export(data_export, export)
+      filename = if data_export.export_type == 'linelist'
+                   "#{data_export.id}.#{data_export.export_parameters['format']}"
+                 else
+                   "#{data_export.id}.zip"
+                 end
+
+      data_export.file.attach(io: export.open, filename:)
+      export.close
+      export.unlink
+    end
+
+    def assign_data_export_attributes(data_export)
+      data_export.manifest = @manifest.to_json unless data_export.export_type == 'linelist'
       data_export.expires_at = ApplicationController.helpers.add_business_days(DateTime.current, 3)
       data_export.status = 'ready'
       data_export.save
-
-      DataExportMailer.export_ready(data_export).deliver_later if data_export.email_notification?
     end
 
     # Functions used by both sample and analysis exports-------------------------------------------------
     def initialize_manifest(export_type)
       @manifest = if export_type == 'sample'
                     { 'type' => 'Samples Export', 'date' => Date.current, 'children' => [] }
-                  else
+                  elsif export_type == 'analysis'
                     { 'type' => 'Analysis Export', 'date' => Date.current, 'children' => [] }
                   end
     end
@@ -45,31 +72,25 @@ module DataExports
       manifest_file.unlink
     end
 
-    def attach_zip(data_export, zip)
-      data_export.file.attach(io: zip.open, filename: "#{data_export.id}.zip")
-      zip.close
-      zip.unlink
-    end
-
     # Sample export specific functions------------------------------------------------------------------
     def create_sample_zip(data_export)
-      new_zip_file = Tempfile.new(binmode: true)
-      ZipKit::Streamer.open(new_zip_file) do |zip|
-        samples = Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
-                        .where(id: data_export.export_parameters['ids'])
-        samples.each do |sample|
-          next if sample.attachments.empty?
+      Tempfile.new(binmode: true).tap do |tempfile|
+        ZipKit::Streamer.open(tempfile) do |zip|
+          samples = Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
+                          .where(id: data_export.export_parameters['ids'])
+          samples.each do |sample|
+            next if sample.attachments.empty?
 
-          project = sample.project
+            project = sample.project
 
-          update_sample_manifest(sample, project)
+            update_sample_manifest(sample, project)
 
-          write_sample_attachments(sample, project, zip)
+            write_sample_attachments(sample, project, zip)
+          end
+
+          write_manifest(zip)
         end
-        # Write manifest to file 'manifest.json' and add to zip
-        write_manifest(zip)
       end
-      new_zip_file
     end
 
     def update_sample_manifest(sample, project)
@@ -128,23 +149,23 @@ module DataExports
 
     # Analysis export specific functions---------------------------------------------------------------------
     def create_analysis_zip(data_export)
-      new_zip_file = Tempfile.new(binmode: true)
-      ZipKit::Streamer.open(new_zip_file) do |zip|
-        workflow_execution = WorkflowExecution.includes(
-          outputs: { file_attachment: :blob }, samples_workflow_executions: [:sample,
-                                                                             { outputs: { file_attachment: :blob } }]
-        ).find(data_export.export_parameters['ids'][0])
+      Tempfile.new(binmode: true).tap do |tempfile|
+        ZipKit::Streamer.open(tempfile) do |zip|
+          workflow_execution = WorkflowExecution.includes(
+            outputs: { file_attachment: :blob },
+            samples_workflow_executions: [:sample, { outputs: { file_attachment: :blob } }]
+          ).find(data_export.export_parameters['ids'][0])
 
-        write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
+          write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
 
-        samples_workflow_executions = workflow_execution.samples_workflow_executions
-        samples_workflow_executions.each do |swe|
-          write_samples_workflow_execution_outputs_and_manifest(swe, zip) unless swe.outputs.empty?
+          samples_workflow_executions = workflow_execution.samples_workflow_executions
+          samples_workflow_executions.each do |swe|
+            write_samples_workflow_execution_outputs_and_manifest(swe, zip) unless swe.outputs.empty?
+          end
+
+          write_manifest(zip)
         end
-        # Write manifest to file 'manifest.json' and add to zip
-        write_manifest(zip)
       end
-      new_zip_file
     end
 
     def write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
@@ -167,6 +188,73 @@ module DataExports
       end
 
       @manifest['children'] << sample_directory
+    end
+
+    # Linelist export specific functions---------------------------------------------------------------------
+    def create_linelist_spreadsheet(data_export)
+      namespace_type = Namespace.find(data_export.export_parameters['namespace_id']).type
+      samples = if namespace_type == Group.sti_name
+                  Sample.includes(project: :namespace)
+                        .where(id: data_export.export_parameters['ids'])
+                else
+                  Sample.where(id: data_export.export_parameters['ids'])
+                end
+      if data_export.export_parameters['format'] == 'csv'
+        write_csv_export(data_export, samples, namespace_type)
+      else
+        write_xlsx_export(data_export, samples, namespace_type)
+      end
+    end
+
+    def write_csv_export(data_export, samples, namespace_type)
+      Tempfile.new(binmode: true).tap do |tempfile|
+        CSV.open(tempfile, 'wb') do |csv|
+          csv << write_spreadsheet_header(namespace_type,
+                                          data_export.export_parameters['metadata_fields'])
+          samples.each do |sample|
+            csv << write_spreadsheet_row(sample, data_export, namespace_type)
+          end
+        end
+      end
+    end
+
+    def write_xlsx_export(data_export, samples, namespace_type)
+      Tempfile.new(binmode: true).tap do |tempfile|
+        Axlsx::Package.new do |workbook|
+          workbook.workbook.add_worksheet(name: 'linelist') do |sheet|
+            sheet.add_row write_spreadsheet_header(namespace_type,
+                                                   data_export.export_parameters['metadata_fields'])
+            samples.each do |sample|
+              sheet.add_row write_spreadsheet_row(sample, data_export, namespace_type)
+            end
+          end
+          workbook.serialize(tempfile.path)
+        end
+      end
+    end
+
+    def write_spreadsheet_header(namespace_type, metadata_fields)
+      header = ['SAMPLE ID', 'SAMPLE NAME']
+      header << 'PROJECT ID' if namespace_type == Group.sti_name
+      header += metadata_fields.map(&:upcase)
+      header
+    end
+
+    def write_spreadsheet_row(sample, data_export, namespace_type)
+      row = [sample.puid, sample.name]
+      row << sample.project.puid if namespace_type == Group.sti_name
+      row += map_metadata_fields(data_export.export_parameters['metadata_fields'], sample.metadata)
+      row
+    end
+
+    def map_metadata_fields(metadata_fields, sample_metadata)
+      metadata_fields.map do |metadata_field|
+        if sample_metadata.key?(metadata_field)
+          sample_metadata[metadata_field]
+        else
+          ''
+        end
+      end
     end
   end
 end

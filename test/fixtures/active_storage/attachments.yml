@@ -148,6 +148,16 @@ data_export_7_test_export:
   record: data_export_seven (DataExport)
   blob: data_export_7_test_export_blob
 
+data_export_8_test_export:
+  name: file
+  record: data_export_eight (DataExport)
+  blob: data_export_8_test_export_blob
+
+data_export_9_test_export:
+  name: file
+  record: data_export_nine (DataExport)
+  blob: data_export_9_test_export_blob
+
 attachmentEndToEndFWD_file_test_file_fastq:
   name: file
   record: attachmentEndToEndFWD (Attachment)
