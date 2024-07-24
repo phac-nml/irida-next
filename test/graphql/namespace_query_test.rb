@@ -12,6 +12,8 @@ class NamespaceQueryTest < ActiveSupport::TestCase
         id
         fullName
         fullPath
+        createdAt
+        updatedAt
       }
     }
   GRAPHQL

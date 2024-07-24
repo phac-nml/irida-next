@@ -11,6 +11,8 @@ class GroupsQueryTest < ActiveSupport::TestCase
           path
           description
           id
+          createdAt
+          updatedAt
         }
         totalCount
       }

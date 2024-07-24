@@ -13,7 +13,9 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
               id,
               metadata,
               filename,
-              byteSize
+              byteSize,
+              createdAt,
+              updatedAt
             }
           }
         }
@@ -30,7 +32,9 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
             node {
               id,
               filename,
-              attachmentUrl
+              attachmentUrl,
+              createdAt,
+              updatedAt
             }
           }
         }

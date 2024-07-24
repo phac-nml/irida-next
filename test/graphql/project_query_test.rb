@@ -12,6 +12,8 @@ class ProjectQueryTest < ActiveSupport::TestCase
         id
         fullName
         fullPath
+        createdAt
+        updatedAt
       }
     }
   GRAPHQL
@@ -25,6 +27,8 @@ class ProjectQueryTest < ActiveSupport::TestCase
         id
         fullName
         fullPath
+        createdAt
+        updatedAt
       }
     }
   GRAPHQL
