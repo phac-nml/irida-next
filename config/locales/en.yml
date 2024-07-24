@@ -650,15 +650,15 @@ en:
       tabs:
         label: Group project details navigation
         subgroups_and_projects: Subgroups and projects
-        shared_projects: Shared projects
+        shared_namespaces: Shared groups and projects
       subgroups:
         no_subgroups:
           title: No subgroups
           description: Create a subgroup to manage projects and members
-      shared_projects:
+      shared_namespaces:
         no_shared:
-          title: No projects have been shared with this group.
-          description: Other groups can share projects directly with this group through the project settings page.
+          title: No shared groups or projects
+          description: Groups and projects can be shared with other groups through their members page.
     new_subgroup:
       title: Create subgroup
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
