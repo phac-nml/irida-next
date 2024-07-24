@@ -1,7 +1,7 @@
 <% if @tab != "invited_groups" %>
 
   <%= turbo_stream.update "members_search_bar" do %>
-    <%= render Members::SearchComponent.new(
+    <%= render SearchComponent.new(
       @q,
       @tab,
       namespace_project_members_url(**request.query_parameters),
