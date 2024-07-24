@@ -2,7 +2,7 @@
 
 module Types
   # Namespace Type
-  class NamespaceType < Types::BaseObject
+  class NamespaceType < Types::BaseType
     implements GraphQL::Types::Relay::Node
     description 'A namespace'
 

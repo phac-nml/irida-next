@@ -2,7 +2,7 @@
 
 module Types
   # Sample Type
-  class SampleType < Types::BaseObject
+  class SampleType < Types::BaseType
     implements GraphQL::Types::Relay::Node
     description 'A sample'
 
@@ -24,6 +24,10 @@ module Types
           description: 'Attachments on the sample',
           complexity: 5,
           resolver: Resolvers::SampleAttachmentsResolver
+
+    field :attachments_updated_at, GraphQL::Types::ISO8601DateTime,
+          null: true,
+          description: 'Datetime when associated attachments were last updated.'
 
     def self.authorized?(object, context)
       super &&
