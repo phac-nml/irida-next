@@ -15,6 +15,8 @@ export default class extends Controller {
 
   submit() {
     this.element.requestSubmit();
-    this.selectionOutlet.clear();
+    if (this.hasSelectionOutlet) {
+      this.selectionOutlet.clear();
+    }
   }
 }
