@@ -1744,6 +1744,3 @@ en:
       aria_labels:
         expires_at: Member expiration
       inherited_from: Inherited from
-    search_component:
-      search:
-        placeholder: Filter by username

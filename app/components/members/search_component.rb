@@ -6,10 +6,12 @@ module Members
     include Ransack::Helpers::FormHelper
 
     # rubocop:disable Naming/MethodParameterName
-    def initialize(q, tab, namespace)
+    def initialize(q, tab, url, search_attribute, placeholder)
       @q = q
       @tab = tab
-      @namespace = namespace
+      @url = url
+      @search_attribute = search_attribute
+      @placeholder = placeholder
     end
     # rubocop:enable Naming/MethodParameterName
 
@@ -18,14 +20,6 @@ module Members
         tag: 'div',
         classes: class_names('flex', 'flex-row-reverse')
       }
-    end
-
-    def members_url(**)
-      if @namespace.type == 'Group'
-        group_members_url(@namespace, **)
-      else
-        namespace_project_members_url(@namespace.parent, @namespace.project, **)
-      end
     end
   end
 end

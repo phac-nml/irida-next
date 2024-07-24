@@ -4,31 +4,18 @@ require 'test_helper'
 
 module Members
   class SearchComponentTest < ViewComponent::TestCase
-    test 'Should render a searchbox for a table of group members' do
-      with_request_url '/-/groups/group-1/-/members' do
-        q = Member.ransack
-        tab = ''
-        namespace = groups(:group_one)
+    test 'Should render a searchbox for a table of members' do
+      tab = ''
+      search_attribute = :user_email_cont
+      placeholder = 'a placeholder'
+      url = '/-/groups/group-1/-/members'
+      render_inline SearchComponent.new(Member.ransack, tab, url, search_attribute, placeholder)
 
-        render_inline SearchComponent.new(q, tab, namespace)
-
-        assert_selector "form[action='http://test.host/-/groups/group-1/-/members']", count: 1
-        assert_selector "input[type='hidden'][name='tab'][value='#{tab}']", visible: false, count: 1
-      end
-    end
-
-    test 'Should render a searchbox for a table of project members' do
-      with_request_url '/group-1/project-1/-/members' do
-        q = Member.ransack
-        tab = 'invited_groups'
-        project = projects(:project1)
-        namespace = project.namespace
-
-        render_inline SearchComponent.new(q, tab, namespace)
-
-        assert_selector "form[action='http://test.host/group-1/project-1/-/members']", count: 1
-        assert_selector "input[type='hidden'][name='tab'][value='#{tab}']", visible: false, count: 1
-      end
+      assert_selector "input[type='hidden'][name='tab'][value='#{tab}']", visible: false, count: 1
+      assert_selector "form[action='#{url}']", count: 1
+      assert_selector "label[for='q_#{search_attribute}']", count: 1
+      assert_selector "input[id='q_#{search_attribute}']", count: 1
+      assert_text placeholder
     end
   end
 end

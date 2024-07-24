@@ -1,5 +1,15 @@
 <% if @tab != "invited_groups" %>
 
+  <%= turbo_stream.update "members_search_bar" do %>
+    <%= render Members::SearchComponent.new(
+      @q,
+      @tab,
+      group_members_url(**request.query_parameters),
+      :user_email_cont,
+      t(".search.placeholder"),
+    ) %>
+  <% end %>
+
   <%= turbo_stream.update "members", partial: "member_listing" %>
 
   <%= turbo_stream.update "members_pagination", partial: "pagination" %>

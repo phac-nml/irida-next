@@ -34,7 +34,7 @@
   <% end %>
 <% end %>
 
-<%= render Members::SearchComponent.new(@q, @tab, @namespace) %>
+<%= turbo_frame_tag "members_search_bar" %>
 
 <div class="bg-white dark:bg-slate-800">
   <%= viral_tabs(id: "project-members", label: t(:"projects.members.index.tabs.aria_label")) do |tabs| %>
