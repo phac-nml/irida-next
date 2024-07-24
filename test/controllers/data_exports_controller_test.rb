@@ -15,13 +15,62 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should create new export with viable params' do
+  test 'should create new sample export with viable params' do
     params = { 'data_export' => {
                  'export_type' => 'sample',
                  'export_parameters' => { 'ids' => [@sample1.id], 'namespace_id' => @project1.namespace.id }
                },
                format: :turbo_stream }
-    post data_exports_path(params)
+    assert_difference('DataExport.count', 1) do
+      post data_exports_path(params)
+    end
+    assert_response :redirect
+  end
+
+  test 'should create new analysis export with viable params' do
+    workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
+    params = { 'data_export' => {
+                 'export_type' => 'analysis',
+                 'export_parameters' => { 'ids' => [workflow_execution.id] }
+               },
+               format: :turbo_stream }
+    assert_difference('DataExport.count', 1) do
+      post data_exports_path(params)
+    end
+    assert_response :redirect
+  end
+
+  test 'should create new linelist csv export with viable params' do
+    params = { 'data_export' => {
+                 'export_type' => 'linelist',
+                 'export_parameters' => {
+                   'ids' => [@sample1.id],
+                   'namespace_id' => @project1.namespace.id,
+                   'format' => 'csv',
+                   'metadata_fields' => ['metadatafield1']
+                 }
+               },
+               format: :turbo_stream }
+    assert_difference('DataExport.count', 1) do
+      post data_exports_path(params)
+    end
+    assert_response :redirect
+  end
+
+  test 'should create new linelist xlsx export with viable params' do
+    params = { 'data_export' => {
+                 'export_type' => 'linelist',
+                 'export_parameters' => {
+                   'ids' => [@sample1.id],
+                   'namespace_id' => @project1.namespace.id,
+                   'format' => 'xlsx',
+                   'metadata_fields' => ['metadatafield1']
+                 }
+               },
+               format: :turbo_stream }
+    assert_difference('DataExport.count', 1) do
+      post data_exports_path(params)
+    end
     assert_response :redirect
   end
 
@@ -72,6 +121,8 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # TODO: add new linelist modal test when UI added
+
   test 'should create new export with only necessary params' do
     post data_exports_path, params: {
       data_export: {
@@ -82,7 +133,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
-  test 'should create new export with additional params' do
+  test 'should create new export with optional name and email params' do
     post data_exports_path, params: {
       data_export: {
         export_type: 'sample',
@@ -120,6 +171,73 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
            data_export: {
              export_type: 'sample',
              export_parameters: { invalid_ids: ['not valid id'] }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new linelist export without format param' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'linelist',
+             export_parameters: { 'ids' => [@sample1.id],
+                                  'namespace_id' => @project1.namespace.id,
+                                  'metadata_fields' => ['metadatafield1'] }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new linelist export with invalid format param' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'linelist',
+             export_parameters: { 'ids' => [@sample1.id],
+                                  'namespace_id' => @project1.namespace.id,
+                                  'format' => 'invalid_format',
+                                  'metadata_fields' => ['metadatafield1'] }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new linelist export with missing namespace param' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'linelist',
+             export_parameters: { 'ids' => [@sample1.id],
+                                  'format' => 'xlsx',
+                                  'metadata_fields' => ['metadatafield1'] }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new linelist export with invalid namespace param' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'linelist',
+             export_parameters: { 'ids' => [@sample1.id],
+                                  'namespace_id' => 'invalid_id',
+                                  'format' => 'csv',
+                                  'metadata_fields' => ['metadatafield1'] }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new linelist export with missing metadata_fields param' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'linelist',
+             export_parameters: { 'ids' => [@sample1.id],
+                                  'namespace_id' => 'invalid_id',
+                                  'format' => 'csv' }
            }
          }
     assert_response :unprocessable_entity
