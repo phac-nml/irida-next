@@ -5,12 +5,12 @@ class SearchComponent < Component
   include Ransack::Helpers::FormHelper
 
   # rubocop:disable Naming/MethodParameterName
-  def initialize(q, tab, url, search_attribute, placeholder)
+  def initialize(q, url, search_attribute, placeholder, tab = '')
     @q = q
-    @tab = tab
     @url = url
     @search_attribute = search_attribute
     @placeholder = placeholder
+    @tab = tab
   end
   # rubocop:enable Naming/MethodParameterName
 

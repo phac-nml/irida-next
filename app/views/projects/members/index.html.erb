@@ -36,10 +36,10 @@
 
 <%= render SearchComponent.new(
   @q,
-  @tab,
   namespace_project_members_url(**request.query_parameters),
   :user_email_cont,
   t(".search.placeholder"),
+  @tab,
 ) %>
 
 <div class="bg-white dark:bg-slate-800">
