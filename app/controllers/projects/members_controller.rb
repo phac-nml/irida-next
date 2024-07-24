@@ -45,5 +45,13 @@ module Projects
     def current_page
       @current_page = t(:'projects.sidebar.members')
     end
+
+    def set_url
+      @search_url = if @tab == 'invited_groups'
+                      namespace_project_group_links_url(**request.query_parameters)
+                    else
+                      namespace_project_members_url(**request.query_parameters)
+                    end
+    end
   end
 end

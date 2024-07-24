@@ -46,5 +46,13 @@ module Groups
     def current_page
       @current_page = t(:'groups.sidebar.members')
     end
+
+    def set_url
+      @search_url = if @tab == 'invited_groups'
+                      group_group_links_url(**request.query_parameters)
+                    else
+                      group_members_url(**request.query_parameters)
+                    end
+    end
   end
 end
