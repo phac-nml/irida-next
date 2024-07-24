@@ -93,7 +93,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def data_export_params
     params.require(:data_export).permit(:name, :export_type, :email_notification,
-                                        export_parameters: [:metadata_fields, :format, :namespace_id, { ids: [] }])
+                                        export_parameters: [:format, :namespace_id, { ids: [], metadata_fields: [] }])
   end
 
   def data_export
