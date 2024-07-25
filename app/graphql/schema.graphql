@@ -225,7 +225,7 @@ type CreateSamplePayload {
   """
   A list of errors that prevented the mutation.
   """
-  errors: [String!]!
+  errors: [UserError!]!
 
   """
   The newly created sample.
@@ -1058,17 +1058,17 @@ type UpdateSampleMetadataPayload {
   """
   A list of errors that prevented the mutation.
   """
-  errors: [String!]!
+  errors: [String!]
 
   """
   The updated sample.
   """
-  sample: Sample!
+  sample: Sample
 
   """
   The status of the mutation.
   """
-  status: JSON!
+  status: JSON
 }
 
 """
@@ -1094,4 +1094,19 @@ type User implements Node {
   Datetime of last update.
   """
   updatedAt: ISO8601DateTime!
+}
+
+"""
+A user-readable error
+"""
+type UserError {
+  """
+  A description of the error
+  """
+  message: String!
+
+  """
+  Which input value this error came from
+  """
+  path: [String!]
 }

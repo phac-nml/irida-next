@@ -15,10 +15,10 @@ module Mutations
              description: 'Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.'
     validates required: { one_of: %i[project_id project_puid] }
 
-    field :errors, [String], null: false, description: 'A list of errors that prevented the mutation.'
+    field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
     field :sample, Types::SampleType, description: 'The newly created sample.'
 
-    def resolve(args) # rubocop:disable Metrics/MethodLength
+    def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       project = if args[:project_id]
                   IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
                 else
@@ -32,20 +32,34 @@ module Mutations
           errors: []
         }
       else
+        user_errors = sample.errors.map do |error|
+          {
+            path: ['sample', error.attribute.to_s.camelize(:lower)],
+            message: error.message
+          }
+        end
         {
           sample: nil,
-          errors: sample.errors.full_messages
+          errors: user_errors
         }
       end
     rescue ActiveRecord::RecordNotFound
+      user_errors = [{
+        path: ['project'],
+        message: 'Project not found by provided ID or PUID'
+      }]
       {
         sample: nil,
-        errors: ['Project not found by provided ID or PUID']
+        errors: user_errors
       }
     rescue RuntimeError => e
+      user_errors = [{
+        path: ['project'],
+        message: e.message
+      }]
       {
         sample: nil,
-        errors: [e.message]
+        errors: user_errors
       }
     end
 

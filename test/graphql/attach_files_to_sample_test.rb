@@ -365,8 +365,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    expected_error = { blob_file_missing.signed_id => 'Blob id could not be processed. Blob id is invalid or file is missing.',
-                       'query' => ['ActiveStorage::FileNotFoundError: Blob is empty, no file found.'] }
+    expected_error = {
+      blob_file_missing.signed_id => 'Blob id could not be processed. Blob id is invalid or file is missing.',
+      'query' => ['ActiveStorage::FileNotFoundError: Blob is empty, no file found.']
+    }
     actual_error = result['data']['attachFilesToSample']['errors']
 
     assert_equal actual_error, expected_error
