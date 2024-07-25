@@ -6,7 +6,10 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
   CREATE_SAMPLE_USING_PROJECT_ID_MUTATION = <<~GRAPHQL
     mutation($projectId: ID!, $name: String!, $description: String!) {
       createSample(input: { projectId: $projectId, name: $name, description: $description }) {
-        errors
+        errors {
+          path
+          message
+        }
         sample {
           id
           name
@@ -19,7 +22,10 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
   CREATE_SAMPLE_USING_PROJECT_PUID_MUTATION = <<~GRAPHQL
     mutation($projectPuid: ID!, $name: String!, $description: String!) {
       createSample(input: { projectPuid: $projectPuid, name: $name, description: $description }) {
-        errors
+        errors {
+          path
+          message
+        }
         sample {
           id
           name
@@ -118,7 +124,8 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
     assert_not_empty data['errors']
     assert_nil data['sample'], 'sample should not be populated as one was not created.'
 
-    assert_equal 'Name has already been taken', data['errors'][0]
+    assert_equal %w[sample name], data['errors'][0]['path']
+    assert_equal 'has already been taken', data['errors'][0]['message']
   end
 
   test 'createSample mutation should not work with valid params and read api scope token' do
@@ -187,7 +194,7 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
 
     errors = result['data']['createSample']['errors']
 
-    assert_equal 'Project not found by provided ID or PUID', errors[0]
+    assert_equal 'Project not found by provided ID or PUID', errors[0]['message']
   end
 
   test 'createSample mutation should not work with invalid project id and valid api scope token' do
@@ -204,7 +211,7 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
 
     errors = result['data']['createSample']['errors']
 
-    assert_equal 'Project not found by provided ID or PUID', errors[0]
+    assert_equal 'Project not found by provided ID or PUID', errors[0]['message']
   end
 
   test 'createSample mutation should not work with incorrectly formatted project id and valid api scope token' do
@@ -221,6 +228,6 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
 
     errors = result['data']['createSample']['errors']
 
-    assert_equal 'project_ids_dont_look_like_this is not a valid IRIDA Next ID.', errors[0]
+    assert_equal 'project_ids_dont_look_like_this is not a valid IRIDA Next ID.', errors[0]['message']
   end
 end
