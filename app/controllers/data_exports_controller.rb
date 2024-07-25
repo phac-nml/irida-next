@@ -7,6 +7,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[index destroy]
+  before_action :namespace, only: :new
   before_action :current_page
   before_action :set_default_tab, only: :show
 
@@ -102,6 +103,12 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def data_exports
     @data_exports = DataExport.where(user: current_user)
+  end
+
+  def namespace
+    return unless params[:export_type] == 'linelist'
+
+    @namespace = Namespace.find(params[:namespace_id])
   end
 
   def current_page

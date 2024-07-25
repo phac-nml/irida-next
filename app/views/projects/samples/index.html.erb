@@ -41,21 +41,9 @@
       <% end %>
       <% if allowed_to?(:export_sample_data?, @project) %>
         <%= viral_dropdown(label: t(".create_export_button.label"), aria: { label: "Organism dropdown list" }, caret: true, classes: "font-extralight button button--size-default button--state-default action-link") do |dropdown| %>
-          <% dropdown.with_item(label: t(".create_export_button.data_export"), url: new_data_export_path(export_type: "sample"), data: { turbo_stream: true }) %>
-          <% dropdown.with_item(label: t(".create_export_button.linelist"), url: '#') %>
+          <% dropdown.with_item(label: t(".create_export_button.data_export"), url: new_data_export_path(export_type: "sample", namespace_id: @project.namespace.id), data: { turbo_stream: true }) %>
+          <% dropdown.with_item(label: t(".create_export_button.linelist"), url: new_data_export_path(export_type: "linelist", namespace_id: @project.namespace.id), data: { turbo_stream: true }) %>
         <% end %>
-        <%= link_to t(".create_export_button"),
-        new_data_export_path(
-          export_type: "sample",
-          namespace_id: @project.namespace.id,
-        ),
-        data: {
-          action: "turbo:morph-element->action-link#idempotentConnect",
-          turbo_stream: true,
-          controller: "action-link",
-          action_link_required_value: 1,
-        },
-        class: "button button--size-default button--state-default action-link" %>
       <% end %>
       <% if allowed_to?(:update_sample?, @project) && @has_samples %>
         <%= link_to t("projects.samples.index.import_metadata_button"),

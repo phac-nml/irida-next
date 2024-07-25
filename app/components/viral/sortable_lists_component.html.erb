@@ -1,0 +1,34 @@
+
+<div class="flex">
+  <div id="<%= left_id %>" class="basis-1/2 block mb-1 text-sm font-medium text-slate-900 dark:text-white pr-2">
+    <%= left_title %>
+    <ul data-controller="sortable-lists"
+    data-sortable-lists-group-name-value="<%= group %>"
+    class="
+      overflow-y-auto max-h-[200px] min-h-[200px] border border-slate-300 rounded-md block w-full
+      p-2.5 dark:bg-slate-800 dark:border-slate-600
+    ">
+      <% unless left_list_items.empty? %>
+        <% left_list_items.each do |left_item| %>
+          <li class="cursor-move"><%= left_item %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+
+  <div id="<%= right_id %>" class="basis-1/2 block mb-1 text-sm font-medium text-slate-900 dark:text-white pl-2">
+    <%= right_title %>
+    <ul data-controller="sortable-lists"
+      data-sortable-lists-group-name-value="<%= group %>"
+      class="
+        overflow-y-auto max-h-[200px] min-h-[200px] border border-slate-300 rounded-md block w-full
+        p-2.5 dark:bg-slate-800 dark:border-slate-600
+      ">
+      <% unless right_list_items.empty? %>
+        <% right_list_items.each do |right_item| %>
+          <li class="cursor-move"><%= right_item %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>
