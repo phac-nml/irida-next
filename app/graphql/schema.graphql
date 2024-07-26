@@ -1058,7 +1058,7 @@ type UpdateSampleMetadataPayload {
   """
   A list of errors that prevented the mutation.
   """
-  errors: [String!]
+  errors: [UserError!]!
 
   """
   The updated sample.

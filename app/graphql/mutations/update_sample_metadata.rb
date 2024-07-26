@@ -13,52 +13,79 @@ module Mutations
              description: 'Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.'
     validates required: { one_of: %i[sample_id sample_puid] }
 
-    field :errors, [String], null: false, description: 'A list of errors that prevented the mutation.'
-    field :sample, Types::SampleType, null: false, description: 'The updated sample.'
+    field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
+    field :sample, Types::SampleType, null: true, description: 'The updated sample.'
     field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
 
-    def resolve(args) # rubocop:disable Metrics/MethodLength
+    def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       sample = if args[:sample_id]
                  IridaSchema.object_from_id(args[:sample_id], { expected_type: Sample })
                else
                  Sample.find_by(puid: args[:sample_puid])
                end
       if sample.nil?
+        user_errors = {
+          path: ['sample'],
+          message: 'not found by provided ID or PUID'
+        }
         return {
           sample:,
           status: nil,
-          errors: ['Sample not found by provided ID or PUID']
+          errors: user_errors
         }
       end
 
       metadata = args[:metadata]
       # convert string to hash if json string as given
       if metadata.is_a?(String)
-        begin
-          metadata = JSON.parse(metadata)
-        rescue JSON::ParserError => e
-          return {
-            sample:,
-            status: nil,
-            error: "JSON data is not formatted correctly. #{e.message}"
-          }
-        end
+        metadata = JSON.parse(metadata)
       end
 
       unless metadata.is_a?(Hash)
+        user_errors = {
+          path: ['metadata'],
+          message: 'is not JSON data'
+        }
         return {
           sample:,
           status: nil,
-          errors: 'Metadata is not JSON data'
+          errors: user_errors
         }
       end
 
       metadata_changes = Samples::Metadata::UpdateService.new(sample.project, sample, current_user,
                                                               { 'metadata' => metadata }).execute
+
+      user_errors = sample.errors.map do |error|
+        {
+          path: ['sample', error.attribute.to_s.camelize(:lower)],
+          message: error.message
+        }
+      end
       {
         sample:,
         status: metadata_changes,
-        errors: sample.errors.full_messages
+        errors: user_errors
+      }
+    rescue RuntimeError => e
+      user_errors = [{
+        path: ['project'],
+        message: e.message
+      }]
+      {
+        sample: nil,
+        status: nil,
+        errors: user_errors
+      }
+    rescue JSON::ParserError => e
+      user_errors = [{
+        path: ['metadata'],
+        message: "JSON data is not formatted correctly. #{e.message}"
+      }]
+      {
+        sample:,
+        status: nil,
+        error: user_errors
       }
     end
 
