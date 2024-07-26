@@ -5,7 +5,7 @@ class SearchComponent < Component
   include Ransack::Helpers::FormHelper
 
   # rubocop:disable Naming/MethodParameterName
-  def initialize(q, url, search_attribute, placeholder, tab = '')
+  def initialize(q:, url:, search_attribute:, placeholder:, tab: '')
     @q = q
     @url = url
     @search_attribute = search_attribute
@@ -13,11 +13,4 @@ class SearchComponent < Component
     @tab = tab
   end
   # rubocop:enable Naming/MethodParameterName
-
-  def wrapper_arguments
-    {
-      tag: 'div',
-      classes: class_names('flex', 'flex-row-reverse')
-    }
-  end
 end

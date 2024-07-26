@@ -8,7 +8,8 @@ class SearchComponentTest < ViewComponent::TestCase
     search_attribute = :user_email_cont
     placeholder = 'a placeholder'
 
-    render_inline SearchComponent.new(Member.ransack, url, search_attribute, placeholder)
+    render_inline SearchComponent.new(q: Member.ransack, url:, search_attribute:,
+                                      placeholder:)
 
     assert_selector "input[type='hidden'][name='tab'][value='']", visible: false, count: 1
     assert_selector "form[action='#{url}']", count: 1
@@ -23,7 +24,8 @@ class SearchComponentTest < ViewComponent::TestCase
     placeholder = 'a placeholder'
     tab = 'invited_groups'
 
-    render_inline SearchComponent.new(Member.ransack, url, search_attribute, placeholder, tab)
+    render_inline SearchComponent.new(q: Member.ransack, url:, search_attribute:,
+                                      placeholder:, tab:)
 
     assert_selector "input[type='hidden'][name='tab'][value='#{tab}']", visible: false, count: 1
     assert_selector "form[action='#{url}']", count: 1

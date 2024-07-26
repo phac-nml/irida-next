@@ -1,22 +1,20 @@
-<%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
-  <%= search_form_for @q, url: @url, html: {"data-controller": "filters"} do |f| %>
-    <input type="hidden" name="format" value="turbo_stream"/>
-    <input type="hidden" name="tab" value="<%=@tab%>"/>
-    <%= f.label @search_attribute, @placeholder, class: "sr-only" %>
-    <div class="relative lg:w-72">
-      <div
-        class="
-          absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-        "
-      >
-        <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-      </div>
-      <%= helpers.turbo_frame_tag "member_hidden_values" %>
-      <%= f.search_field @search_attribute,
-                     "data-action": "filters#submit",
-                     class:
-                       "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                     placeholder: @placeholder %>
+<%= search_form_for @q, url: @url, html: {"data-controller": "filters"} do |f| %>
+  <input type="hidden" name="format" value="turbo_stream"/>
+  <input type="hidden" name="tab" value="<%=@tab%>"/>
+  <%= f.label @search_attribute, @placeholder, class: "sr-only" %>
+  <div class="relative lg:w-72">
+    <div
+      class="
+        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+      "
+    >
+      <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
     </div>
-  <% end %>
+    <%= helpers.turbo_frame_tag "member_hidden_values" %>
+    <%= f.search_field @search_attribute,
+                   "data-action": "filters#submit",
+                   class:
+                     "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                   placeholder: @placeholder %>
+  </div>
 <% end %>

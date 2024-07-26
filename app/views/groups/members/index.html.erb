@@ -26,14 +26,6 @@
   <% end %>
 <% end %>
 
-<%= render SearchComponent.new(
-  @q,
-  group_members_url(**request.query_parameters),
-  :user_email_cont,
-  t(".search.placeholder"),
-  @tab,
-) %>
-
 <div class="bg-white dark:bg-slate-800">
   <%= viral_tabs(id: "members-tabs", label: t(:"groups.members.index.tabs.aria_label")) do |tabs| %>
     <%= tabs.with_tab(url: group_members_path(), selected: @tab != "invited_groups", controls: "members-tabs") do %>
@@ -42,6 +34,13 @@
     <%= tabs.with_tab(url: group_members_path(tab: "invited_groups"), selected: @tab == "invited_groups", controls: "members-tabs") do %>
       <%= t(:"groups.members.index.tabs.groups") %>
     <% end %>
+    <%= tabs.with_search_bar(
+      q: @q,
+      url: group_members_url(**request.query_parameters),
+      search_attribute: :user_email_cont,
+      placeholder: t(".search.placeholder"),
+      tab: @tab,
+    ) %>
     <%= tabs.with_tab_content do %>
       <div class="flex flex-col">
         <%= turbo_frame_tag "members", "data-turbo-temporary": true,
