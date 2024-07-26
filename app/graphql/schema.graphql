@@ -63,9 +63,9 @@ type Attachment implements Node {
   byteSize: Int!
 
   """
-  Attachment creation date
+  Datetime of creation.
   """
-  createdAt: String!
+  createdAt: ISO8601DateTime!
 
   """
   Attachment file name
@@ -91,6 +91,11 @@ type Attachment implements Node {
   Persistent Unique Identifier of the attachment. For example, `INXT_ATT_AAAAAAAAAAAA`.
   """
   puid: ID!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -258,6 +263,11 @@ A group
 """
 type Group implements Node {
   """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
   List of descendant groups of this group.
   """
   descendantGroups(
@@ -357,6 +367,11 @@ type Group implements Node {
                                     `INXT_GRP_AAAAAAAAAA`.
   """
   puid: ID!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -398,6 +413,11 @@ type GroupEdge {
   """
   node: Group
 }
+
+"""
+An ISO 8601-encoded datetime
+"""
+scalar ISO8601DateTime @specifiedBy(url: "https://tools.ietf.org/html/rfc3339")
 
 """
 Represents untyped JSON
@@ -453,6 +473,11 @@ type Mutation {
 A namespace
 """
 type Namespace implements Node {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
   """
   Description of the namespace.
   """
@@ -518,6 +543,11 @@ type Namespace implements Node {
                                     `INXT_GRP_AAAAAAAAAA`.
   """
   puid: ID!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -559,6 +589,11 @@ type PageInfo {
 A project
 """
 type Project implements Node {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
   """
   Description of the project.
   """
@@ -623,6 +658,11 @@ type Project implements Node {
     """
     last: Int
   ): SampleConnection
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -891,6 +931,16 @@ type Sample implements Node {
   ): AttachmentConnection
 
   """
+  Datetime when associated attachments were last updated.
+  """
+  attachmentsUpdatedAt: ISO8601DateTime
+
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
   Description of the sample.
   """
   description: String
@@ -924,6 +974,11 @@ type Sample implements Node {
   Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAAAA`.
   """
   puid: ID!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -1021,6 +1076,11 @@ A user
 """
 type User {
   """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
   User email.
   """
   email: String!
@@ -1029,4 +1089,9 @@ type User {
   ID of the user.
   """
   id: ID!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
 }

@@ -2,12 +2,11 @@
 
 module Types
   # Attachment Type
-  class AttachmentType < Types::BaseObject
+  class AttachmentType < Types::BaseType
     implements GraphQL::Types::Relay::Node
     description 'An attachment'
 
     field :byte_size, Integer, null: false, description: 'Attachment file size'
-    field :created_at, String, null: false, description: 'Attachment creation date'
     field :filename, String, null: false, description: 'Attachment file name'
     field :puid,
           ID,

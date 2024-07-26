@@ -2,7 +2,7 @@
 
 module Types
   # User Type
-  class UserType < Types::BaseObject
+  class UserType < Types::BaseType
     description 'A user'
 
     field :email, String, null: false, description: 'User email.'

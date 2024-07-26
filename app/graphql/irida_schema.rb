@@ -10,6 +10,7 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
 
   max_depth 15
   max_complexity 550
+  default_page_size 25
   default_max_page_size 100
 
   # GraphQL-Ruby calls this when something goes wrong while running a query:

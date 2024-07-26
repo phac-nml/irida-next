@@ -9,6 +9,9 @@ class SampleQueryTest < ActiveSupport::TestCase
         name
         description
         id
+        createdAt
+        updatedAt
+        attachmentsUpdatedAt
       }
     }
   GRAPHQL

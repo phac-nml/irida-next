@@ -2,7 +2,7 @@
 
 module Types
   # Project Type
-  class ProjectType < Types::BaseObject
+  class ProjectType < Types::BaseType
     implements GraphQL::Types::Relay::Node
     description 'A project'
 

@@ -12,6 +12,8 @@ class GroupQueryTest < ActiveSupport::TestCase
         id
         fullName
         fullPath
+        createdAt
+        updatedAt
         descendantGroups(includeParentDescendants: $includeParentDescendants) {
           nodes {
             name
@@ -32,6 +34,8 @@ class GroupQueryTest < ActiveSupport::TestCase
         id
         fullName
         fullPath
+        createdAt
+        updatedAt
         descendantGroups(includeParentDescendants: $includeParentDescendants) {
           nodes {
             name
