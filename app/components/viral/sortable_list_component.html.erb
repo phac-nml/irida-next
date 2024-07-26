@@ -1,8 +1,8 @@
-<div
-id="<%= id %>"
-class="text-slate-900 dark:text-white <%=  @system_arguments[:container_classes] %>">
+<div class="text-slate-900 dark:text-white <%=  @system_arguments[:container_classes] %>">
   <%= title %>
-  <ul data-controller="sortable-list"
+  <ul
+    id="<%= title %>"
+    data-controller="sortable-list"
     data-sortable-list-group-name-value="<%= group %>"
     class="
     border

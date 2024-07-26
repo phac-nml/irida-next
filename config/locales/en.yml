@@ -1719,16 +1719,24 @@ en:
         analysis_html: This export will contain the contents of workflow execution <strong class="text-slate-900 dark:text-white">%{id}</strong>. After submission, you will be redirected to the export page. While the export is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span> the contents of the export will be added to a downloadable zip file. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, the zip file will be available for download. You will have 3 business days to download the export file before it's deleted.
       title: Analysis Export
     new_linelist_export_dialog:
-      email_label: Receive an email notification when your export is ready to download?
-      select_metadata: Select Metadata
-      name_label: "Export Name (Optional):"
-      samples: Samples
-      submit_button: Submit
+      add_all: Add all
+      available: Available
+      csv: '.csv'
       description:
         zero_html: This export will contain no samples. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span> the contents of the export will be added to a downloadable zip file. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, the zip file will be available for download. You will have 3 business days to download the export file before it's deleted.
         singular: This export will contain 1 sample. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span> the contents of the export will be added to a downloadable zip file. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, the zip file will be available for download. You will have 3 business days to download the export file before it's deleted.
         plural: This export will contain COUNT_PLACEHOLDER samples. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span> the contents of the export will be added to a downloadable zip file. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, the zip file will be available for download. You will have 3 business days to download the export file before it's deleted.
+      email_label: Receive an email notification when your export is ready to download?
+      format: Format
+      metadata: Metadata
+      name_label: "Export Name (Optional):"
+      remove_all: Remove all
+      samples: Samples
+      select_metadata: Select Metadata
+      selected: Selected
+      submit_button: Submit
       title: Linelist Export
+      xlsx: '.xslx'
     types:
       sample: SAMPLE
       analysis: ANALYSIS

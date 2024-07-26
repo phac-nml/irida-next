@@ -6,20 +6,34 @@ export default class extends Controller {
   static targets = ["field"];
 
   static values = {
-    targetList: {
+    selectedList: {
+      type: String,
+    },
+    availableList: {
       type: String,
     }
   };
 
   connect() {
-    console.log(this.targetListValue)
-    let list = document.getElementById(this.targetListValue)
-    console.log(list.getElementsByTagName('ul')[0])
+    this.availableList = document.getElementById(this.availableListValue)
+    this.selectedList = document.getElementById(this.selectedListValue)
+    this.fullListItems = this.availableList.querySelectorAll("li")
   }
 
+  addAll() {
+    for (let item of this.fullListItems) {
+      this.selectedList.append(item)
+    }
+  }
+
+  removeAll() {
+    for (let item of this.fullListItems) {
+      this.availableList.append(item)
+    }
+  }
 
   constructMetadataParams() {
-    const metadata_fields = document.getElementById(this.targetListValue).getElementsByTagName("li")
+    const metadata_fields = document.getElementById(this.selectedListValue).querySelectorAll("li")
 
     for (let metadata_field of metadata_fields) {
       this.fieldTarget.appendChild(

@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
 module Viral
-  # This component is a container for the tabs.
+  # This component creates a sortable list.
   class SortableListComponent < Viral::Component
-    attr_reader :group, :id, :title, :list_items
+    attr_reader :group, :title, :list_items
 
+    # If creating multiple lists to utilize the same values, assign them the same group
     def initialize(group: nil,
-                   id: nil,
                    title: nil,
                    list_items: [],
                    **system_arguments)
       @group = group
-      @id = id
       @title = title
       @list_items = list_items
       @system_arguments = system_arguments
