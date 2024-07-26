@@ -114,17 +114,45 @@ class AttachmentTest < ActiveSupport::TestCase
     new_text_attachment_ext_rtf.save
     assert_equal 'text', new_text_attachment_ext_rtf.metadata['format']
 
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_15.txt.gz').open,
+                                        filename: 'test_file_15.txt.gz' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'text', new_text_attachment_ext_txt.metadata['format']
+
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_16.rtf.gz').open,
+                                        filename: 'test_file_16.rtf.gz' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'text', new_text_attachment_ext_txt.metadata['format']
+  end
+
+  test 'metadata csv file types' do
     new_text_attachment_ext_csv =
       @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/metadata/valid.csv').open,
                                         filename: 'valid.csv' })
     new_text_attachment_ext_csv.save
-    assert_equal 'text', new_text_attachment_ext_csv.metadata['format']
+    assert_equal 'csv', new_text_attachment_ext_csv.metadata['format']
 
+    new_text_attachment_ext_csv =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/metadata/valid.csv.gz').open,
+                                        filename: 'valid.csv.gz' })
+    new_text_attachment_ext_csv.save
+    assert_equal 'csv', new_text_attachment_ext_csv.metadata['format']
+  end
+
+  test 'metadata tsv file types' do
     new_text_attachment_ext_tsv =
       @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/metadata/valid.tsv').open,
                                         filename: 'valid.tsv' })
     new_text_attachment_ext_tsv.save
-    assert_equal 'text', new_text_attachment_ext_tsv.metadata['format']
+    assert_equal 'tsv', new_text_attachment_ext_tsv.metadata['format']
+
+    new_text_attachment_ext_tsv =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/metadata/valid.tsv.gz').open,
+                                        filename: 'valid.tsv.gz' })
+    new_text_attachment_ext_tsv.save
+    assert_equal 'tsv', new_text_attachment_ext_tsv.metadata['format']
   end
 
   test 'metadata spreadsheet file types' do
@@ -139,6 +167,58 @@ class AttachmentTest < ActiveSupport::TestCase
                                         filename: 'valid.xlsx' })
     new_spreadsheet_attachment_ext_xlsx.save
     assert_equal 'spreadsheet', new_spreadsheet_attachment_ext_xlsx.metadata['format']
+  end
+
+  test 'metadata json file types' do
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_17.json').open,
+                                        filename: 'test_file_17.json' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'json', new_text_attachment_ext_txt.metadata['format']
+
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_18.json.gz').open,
+                                        filename: 'test_file_18.json.gz' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'json', new_text_attachment_ext_txt.metadata['format']
+  end
+
+  test 'metadata genbank file types' do
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_19.gbk').open,
+                                        filename: 'test_file_17.gbk' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
+
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_20.gbk.gz').open,
+                                        filename: 'test_file_18.gbk.gz' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
+
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_21.gbf').open,
+                                        filename: 'test_file_17.gbf' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
+
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_22.gbf.gz').open,
+                                        filename: 'test_file_18.gbf.gz' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
+
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_23.genbank').open,
+                                        filename: 'test_file_17.genbank' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
+
+    new_text_attachment_ext_txt =
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_24.genbank.gz').open,
+                                        filename: 'test_file_18.genbank.gz' })
+    new_text_attachment_ext_txt.save
+    assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
   end
 
   test 'metadata unknown file types' do
