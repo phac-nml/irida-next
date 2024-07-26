@@ -13,7 +13,7 @@ module Mutations
              description: 'Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.'
     validates required: { one_of: %i[sample_id sample_puid] }
 
-    field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
+    field :errors, [Types::UserErrorType], description: 'A list of errors that prevented the mutation.'
     field :sample, Types::SampleType, null: true, description: 'The updated sample.'
     field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
 
@@ -24,10 +24,10 @@ module Mutations
                  Sample.find_by(puid: args[:sample_puid])
                end
       if sample.nil?
-        user_errors = {
+        user_errors = [{
           path: ['sample'],
           message: 'not found by provided ID or PUID'
-        }
+        }]
         return {
           sample:,
           status: nil,
@@ -42,10 +42,10 @@ module Mutations
       end
 
       unless metadata.is_a?(Hash)
-        user_errors = {
+        user_errors = [{
           path: ['metadata'],
           message: 'is not JSON data'
-        }
+        }]
         return {
           sample:,
           status: nil,
@@ -69,7 +69,7 @@ module Mutations
       }
     rescue RuntimeError => e
       user_errors = [{
-        path: ['project'],
+        path: ['sample'],
         message: e.message
       }]
       {
@@ -83,9 +83,9 @@ module Mutations
         message: "JSON data is not formatted correctly. #{e.message}"
       }]
       {
-        sample:,
+        sample: nil,
         status: nil,
-        error: user_errors
+        errors: user_errors
       }
     end
 
