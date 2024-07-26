@@ -14,13 +14,15 @@ module Viral
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(label: nil, tooltip: '', icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0,
-                   distance: 10, dropdown_styles: '', **system_arguments)
+                   distance: 10, dropdown_styles: '', action_link: false, action_link_value: nil, **system_arguments)
       @distance = distance
       @dropdown_styles = dropdown_styles
       @label = label
       @icon_name = icon
       @caret = caret
       @skidding = skidding
+      @action_link = action_link
+      @action_link_value = action_link_value
       @trigger = TRIGGER_MAPPINGS[trigger]
 
       @system_arguments = default_system_arguments(system_arguments)
@@ -32,11 +34,19 @@ module Viral
     # rubocop:enable Metrics/ParameterLists
 
     def default_system_arguments(args)
+      data = if @action_link
+               { 'viral--dropdown-target': 'trigger',
+                 turbo_stream: true,
+                 controller: 'action-link',
+                 action_link_required_value: @action_link_value }
+             else
+               {
+                 'viral--dropdown-target': 'trigger'
+               }
+             end
       args.merge({
                    id: "dd-#{SecureRandom.hex(10)}",
-                   data: {
-                     'viral--dropdown-target': 'trigger'
-                   },
+                   data:,
                    tag: :button
                  })
     end

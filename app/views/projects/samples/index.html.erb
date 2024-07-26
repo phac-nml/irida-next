@@ -40,9 +40,26 @@
         class: "button button--size-default button--state-default action-link" %>
       <% end %>
       <% if allowed_to?(:export_sample_data?, @project) %>
-        <%= viral_dropdown(label: t(".create_export_button.label"), aria: { label: "Organism dropdown list" }, caret: true, classes: "font-extralight button button--size-default button--state-default action-link") do |dropdown| %>
-          <% dropdown.with_item(label: t(".create_export_button.data_export"), url: new_data_export_path(export_type: "sample", namespace_id: @project.namespace.id), data: { turbo_stream: true }) %>
-          <% dropdown.with_item(label: t(".create_export_button.linelist"), url: new_data_export_path(export_type: "linelist", namespace_id: @project.namespace.id), data: { turbo_stream: true }) %>
+        <%= viral_dropdown(label: t(".create_export_button.label"), aria: { label: t('.create_export_button.label') }, caret: true, action_link: true, action_link_value: 1, classes: "font-normal button button--size-default button--state-default action-link") do |dropdown| %>
+          <% if @project.namespace.metadata_fields.empty? %>
+            <% dropdown.with_item(
+              label: t(".create_export_button.linelist_export"),
+              url: new_data_export_path(export_type: "linelist", namespace_id: @project.namespace.id),
+              data: {
+                turbo_stream: true
+                },
+              class: "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
+                border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed") %>
+          <% else %>
+            <% dropdown.with_item(
+              label: t(".create_export_button.linelist_export"),
+              url: new_data_export_path(export_type: "linelist", namespace_id: @project.namespace.id),
+              data: {
+                turbo_stream: true
+                }
+              ) %>
+          <% end %>
+          <% dropdown.with_item(label: t(".create_export_button.sample_export"), url: new_data_export_path(export_type: "sample", namespace_id: @project.namespace.id), data: { turbo_stream: true }) %>
         <% end %>
       <% end %>
       <% if allowed_to?(:update_sample?, @project) && @has_samples %>

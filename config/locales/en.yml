@@ -767,7 +767,10 @@ en:
         leave_success: "You have successfully left the group %{name}"
     samples:
       index:
-        create_export_button: Create Export
+        create_export_button:
+          label: Create Export
+          sample_export: Sample Export
+          linelist_export: Linelist Export
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         workflows:
@@ -1162,8 +1165,8 @@ en:
         clone_button: Clone samples
         create_export_button:
           label: Create Export
-          data_export: Data Export
-          linelist: Linelist Export
+          sample_export: Sample Export
+          linelist_export: Linelist Export
         delete_samples_button: Delete Samples
         actions:
           button_add_aria_label: Add new sample button
