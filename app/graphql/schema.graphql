@@ -33,9 +33,9 @@ type AttachFilesToSamplePayload {
   clientMutationId: String
 
   """
-  Errors that prevented the mutation.
+  A list of errors that prevented the mutation.
   """
-  errors: JSON!
+  errors: [UserError!]!
 
   """
   The updated sample.
