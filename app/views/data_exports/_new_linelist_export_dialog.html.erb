@@ -45,13 +45,22 @@
               <% end %>
             </div>
           </div>
-          <%= viral_sortable_lists(
-            left_title: 'available metadata',
-            left_list_items: @namespace.metadata_fields.sort_by{|metadata_field| metadata_field.downcase},
-            right_id: 'export_metadata',
-            right_title: 'metadata to export',
-            group: 'metadata_selection') %>
-
+          <div class="flex">
+            <%= viral_sortable_list(
+              title: 'available metadata',
+              list_items: @namespace.metadata_fields.sort_by{|metadata_field| metadata_field.downcase},
+              group: 'metadata_selection',
+              container_classes: 'basis-1/2 block mb-1 pr-2 text-sm font-medium',
+              list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full p-2.5'
+              ) %>
+            <%= viral_sortable_list(
+              id: 'export_metadata',
+              title: 'metadata to export',
+              group: 'metadata_selection',
+              container_classes: 'basis-1/2 block mb-1 text-sm font-medium',
+              list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full p-2.5'
+              ) %>
+          </div>
           <%= form_for(:data_export, url: data_exports_path, method: :post) do |form| %>
             <div class="grid gap-4">
               <div class="form-field mt-1">

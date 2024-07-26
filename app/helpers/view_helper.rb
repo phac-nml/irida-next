@@ -23,7 +23,7 @@ module ViewHelper
     prefixed_text_input: 'Viral::Form::Prefixed::TextInputComponent',
     pill: 'Viral::PillComponent',
     select: 'Viral::Form::SelectComponent',
-    sortable_lists: 'Viral::SortableListsComponent',
+    sortable_list: 'Viral::SortableListComponent',
     tabs: 'Viral::TabsComponent',
     text_input: 'Viral::Form::TextInputComponent',
     time_ago: 'Viral::TimeAgoComponent',
