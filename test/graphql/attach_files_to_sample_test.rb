@@ -10,7 +10,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
       {
         sample{id},
         status,
-        errors
+        errors{
+          path
+          message
+        }
       }
     }
   GRAPHQL
@@ -22,7 +25,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
       {
         sample{id},
         status,
-        errors
+        errors{
+          path
+          message
+        }
       }
     }
   GRAPHQL
@@ -160,7 +166,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     expected_status = { blob_file.signed_id => :error }
     assert_equal expected_status, data['status']
     assert_equal 1, data['errors'].count, 'shouldn\'t work and have errors.'
-    expected_error = { blob_file.signed_id => ['File checksum matches existing file'] }
+    expected_error = [
+      { 'path' => ['attachment', blob_file.signed_id],
+        'message' => 'checksum matches existing file' }
+    ]
     assert_equal expected_error, data['errors']
     assert_equal :error, data['status'][blob_file.signed_id]
   end
@@ -244,7 +253,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     expected_status = { blob_file_a2.signed_id => :error }
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
-    expected_error = { blob_file_a2.signed_id => ['File checksum matches existing file'] }
+    expected_error = [
+      { 'path' => ['attachment', blob_file_b.signed_id],
+        'message' => 'checksum matches existing file' }
+    ]
     assert_equal expected_error, data['errors']
     assert_equal 1, sample.attachments.count
   end
@@ -340,11 +352,15 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    expected_error = { 'NAN' => 'Blob id could not be processed. Blob id is invalid or file is missing.',
-                       'query' => ['mismatched digest: Invalid blob id'] }
+    expected_error = [
+      { 'path' => %w[blob_id NAN],
+        'message' => 'Blob id could not be processed. Blob id is invalid or file is missing.' },
+      { 'path' => %w[sample base],
+        'message' => 'mismatched digest: Invalid blob id' }
+    ]
     actual_error = result['data']['attachFilesToSample']['errors']
 
-    assert_equal actual_error, expected_error
+    assert_equal expected_error, actual_error
   end
 
   test 'attachFilesToSample mutation should not work with blob missing file' do
@@ -365,13 +381,16 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    expected_error = {
-      blob_file_missing.signed_id => 'Blob id could not be processed. Blob id is invalid or file is missing.',
-      'query' => ['ActiveStorage::FileNotFoundError: Blob is empty, no file found.']
-    }
+    expected_error = [
+      { 'path' => ['blob_id', blob_file_missing.signed_id],
+        'message' => 'Blob id could not be processed. Blob id is invalid or file is missing.' },
+      { 'path' => %w[sample base],
+        'message' => 'ActiveStorage::FileNotFoundError: Blob is empty, no file found.' }
+    ]
+
     actual_error = result['data']['attachFilesToSample']['errors']
 
-    assert_equal actual_error, expected_error
+    assert_equal expected_error, actual_error
   end
 
   test 'attachFilesToSample mutation should not work with invalid sample id' do
