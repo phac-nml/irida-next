@@ -185,38 +185,38 @@ class AttachmentTest < ActiveSupport::TestCase
 
   test 'metadata genbank file types' do
     new_text_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_19.gbk').open,
-                                        filename: 'test_file_17.gbk' })
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.gbk').open,
+                                        filename: 'sequence.gbk' })
     new_text_attachment_ext_txt.save
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
 
     new_text_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_20.gbk.gz').open,
-                                        filename: 'test_file_18.gbk.gz' })
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.gbk.gz').open,
+                                        filename: 'sequence.gbk.gz' })
     new_text_attachment_ext_txt.save
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
 
     new_text_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_21.gbf').open,
-                                        filename: 'test_file_17.gbf' })
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.gbf').open,
+                                        filename: 'sequence.gbf' })
     new_text_attachment_ext_txt.save
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
 
     new_text_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_22.gbf.gz').open,
-                                        filename: 'test_file_18.gbf.gz' })
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.gbf.gz').open,
+                                        filename: 'sequence.gbf.gz' })
     new_text_attachment_ext_txt.save
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
 
     new_text_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_23.genbank').open,
-                                        filename: 'test_file_17.genbank' })
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.gb').open,
+                                        filename: 'sequence.gb' })
     new_text_attachment_ext_txt.save
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
 
     new_text_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_24.genbank.gz').open,
-                                        filename: 'test_file_18.genbank.gz' })
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.gb.gz').open,
+                                        filename: 'sequence.gb.gz' })
     new_text_attachment_ext_txt.save
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
   end
