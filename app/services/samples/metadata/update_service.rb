@@ -57,8 +57,9 @@ module Samples
       end
 
       def transform_metadata_keys
-        # Without transforming keys, issues with overwritting can occur and multiples of the same key can appear
-        @metadata = @metadata.transform_keys(&:to_s)
+        # Without transforming and downcasing keys,
+        # issues with overwritting can occur and multiples of the same key can appear
+        @metadata = @metadata.transform_keys { |key| key.to_s.downcase }
       end
 
       def perform_metadata_update
