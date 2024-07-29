@@ -8,7 +8,7 @@
     >
     <% unless list_items.empty? %>
       <% list_items.each do |list_item| %>
-        <li class="cursor-move"><%= list_item %></li>
+        <li id="<%= list_item %>"class="cursor-move"><%= list_item %></li>
       <% end %>
     <% end %>
   </ul>
