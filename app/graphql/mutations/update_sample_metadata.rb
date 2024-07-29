@@ -37,9 +37,7 @@ module Mutations
 
       metadata = args[:metadata]
       # convert string to hash if json string as given
-      if metadata.is_a?(String)
-        metadata = JSON.parse(metadata)
-      end
+      metadata = JSON.parse(metadata) if metadata.is_a?(String)
 
       unless metadata.is_a?(Hash)
         user_errors = [{
