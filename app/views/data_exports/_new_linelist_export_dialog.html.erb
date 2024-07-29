@@ -84,35 +84,32 @@
               </div>
             </div>
           </div>
-          <div class="flex justify-between block -mb-3 text-sm font-medium text-slate-900 dark:text-white">
-            <%= t(".metadata") %>
-            <div class="flex">
-              <button
-                class="mr-2 underline text-sm hover:no-underline"
-                data-action="click->data-exports--metadata-selection#addAll">
-                <%= t(".add_all") %>
-              </button>
-              <button
-                class="ml-2 underline text-sm hover:no-underline"
-                data-action="click->data-exports--metadata-selection#removeAll">
-                <%= t(".remove_all") %>
-              </button>
-            </div>
-          </div>
-          <div class="flex">
-            <%= viral_sortable_list(
+          <%= viral_sortable_lists(title: t(".metadata"), description: t(".metadata_description", available: t(".available").downcase, selected: t(".selected").downcase)) do |sortable_lists| %>
+            <%= sortable_lists.with_list(
               title: t(".available"),
               list_items: @namespace.metadata_fields.sort_by{|metadata_field| metadata_field.downcase},
               group: 'metadata_selection',
-              container_classes: 'basis-1/2 block mb-1 pr-2 text-sm font-medium',
+              container_classes: 'basis-full block mb-1 pr-2 text-sm font-medium',
               list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full p-2.5'
               ) %>
-            <%= viral_sortable_list(
+            <%= sortable_lists.with_list(
               title: t(".selected"),
               group: 'metadata_selection',
-              container_classes: 'basis-1/2 block mb-1 text-sm font-medium',
+              container_classes: 'basis-full block mb-1 text-sm font-medium',
               list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full p-2.5'
               ) %>
+          <% end %>
+          <div class="flex -mt-3 font-medium text-slate-900 dark:text-white">
+            <button
+              class="mr-2 underline text-sm hover:no-underline"
+              data-action="click->data-exports--metadata-selection#addAll">
+              <%= t(".add_all") %>
+            </button>
+            <button
+              class="ml-2 underline text-sm hover:no-underline"
+              data-action="click->data-exports--metadata-selection#removeAll">
+              <%= t(".remove_all") %>
+            </button>
           </div>
           <%= form_for(:data_export, url: data_exports_path, method: :post) do |form| %>
             <div class="grid gap-4">

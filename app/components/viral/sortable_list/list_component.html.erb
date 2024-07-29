@@ -1,17 +1,10 @@
-<div class="text-slate-900 dark:text-white <%=  @system_arguments[:container_classes] %>">
+<div class="<%= @system_arguments[:container_classes] %>">
   <%= title %>
   <ul
     id="<%= title %>"
     data-controller="sortable-list"
     data-sortable-list-group-name-value="<%= group %>"
-    class="
-    border
-    border-slate-300
-    rounded-md
-    block
-    dark:bg-slate-800
-    dark:border-slate-600
-    <%=  @system_arguments[:list_classes] %>"
+    class="<%= @system_arguments[:list_classes] %>"
     >
     <% unless list_items.empty? %>
       <% list_items.each do |list_item| %>
