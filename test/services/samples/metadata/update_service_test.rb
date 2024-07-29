@@ -67,6 +67,29 @@ module Samples
         assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.reload.metadata_summary)
       end
 
+      test 'add metadata and verify to_s and downcase' do
+        freeze_time
+        params = { 'metadata' => { 'MetaDATAfield1' => 'value1', MetaDATAfield2: 'value2' } }
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+        metadata_changes = Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.metadata)
+        assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
+                       'metadatafield2' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
+                     @sample35.metadata_provenance)
+        assert_equal({ added: %w[metadatafield1 metadatafield2], updated: [], deleted: [],
+                       not_updated: [], unchanged: [] }, metadata_changes)
+
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.namespace.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.reload.metadata_summary)
+        assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.reload.metadata_summary)
+      end
+
       test 'update sample metadata merge with new metadata and analysis overwritting user' do
         freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value4', 'metadatafield3' => 'value3' }, 'analysis_id' => 10 }
