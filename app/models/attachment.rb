@@ -56,12 +56,24 @@ class Attachment < ApplicationRecord
     # Assigns fastq to metadata format for following file types: .fastq, .fastq.gz, .fq, .fq.gz
     when /^\S+\.f(ast)?q(\.gz)?$/
       metadata['format'] = 'fastq'
-    # Assigns text to metadata format for following file types: .txt, .rtf, .csv, .tsv
-    when /^\S+\.(txt|rtf|csv|tsv)?$/
+    # Assigns text to metadata format for following file types: .txt, .txt.gz, .rtf, .rtf.gz
+    when /^\S+\.(txt|rtf)?(\.gz)?$/
       metadata['format'] = 'text'
+    # Assigns text to metadata format for following file types: .csv, .csv.gz
+    when /^\S+\.(csv)?(\.gz)?$/
+      metadata['format'] = 'csv'
+    # Assigns text to metadata format for following file types: .tsv, .tsv.gz
+    when /^\S+\.(tsv)?(\.gz)?$/
+      metadata['format'] = 'tsv'
     # Assigns spreadsheet to metadata format for following file types: .xls, .xlsx
     when /^\S+\.(xls|xlsx)?$/
       metadata['format'] = 'spreadsheet'
+    # Assigns text to metadata format for following file types: .json, json.gz
+    when /^\S+\.(json)?(\.gz)?$/
+      metadata['format'] = 'json'
+    # Assigns text to metadata format for following file types: .gbk, .gbk.gz, .gbf, .gbf.gz, .gb, .gb.gz
+    when /^\S+\.(gbk|gbf|gb)?(\.gz)?$/
+      metadata['format'] = 'genbank'
     # Else assigns unknown to metadata format
     else
       metadata['format'] = 'unknown'
