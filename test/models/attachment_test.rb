@@ -209,14 +209,14 @@ class AttachmentTest < ActiveSupport::TestCase
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
 
     new_text_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.gb').open,
-                                        filename: 'sequence.gb' })
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.genbank').open,
+                                        filename: 'sequence.genbank' })
     new_text_attachment_ext_txt.save
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
 
     new_text_attachment_ext_txt =
-      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.gb.gz').open,
-                                        filename: 'sequence.gb.gz' })
+      @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/sequence.genbank.gz').open,
+                                        filename: 'sequence.genbank.gz' })
     new_text_attachment_ext_txt.save
     assert_equal 'genbank', new_text_attachment_ext_txt.metadata['format']
   end

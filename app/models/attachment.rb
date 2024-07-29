@@ -72,7 +72,7 @@ class Attachment < ApplicationRecord
     when /^\S+\.(json)?(\.gz)?$/
       metadata['format'] = 'json'
     # Assigns text to metadata format for following file types: .gbk, .gbk.gz, .gbf, .gbf.gz, .gb, .gb.gz
-    when /^\S+\.(gbk|gbf|gb)?(\.gz)?$/
+    when /^\S+\.(gbk|gbf|genbank)?(\.gz)?$/
       metadata['format'] = 'genbank'
     # Else assigns unknown to metadata format
     else
