@@ -85,4 +85,34 @@ class CreateDirectUploadTest < ActiveSupport::TestCase
 
     assert_equal 'You are not authorized to perform this action', error_message
   end
+
+  test 'createDirectUpload mutation should not work with negative bytesize' do
+    result = IridaSchema.execute(CREATE_DIRECT_UPLOAD_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { filename: 'dev.to',
+                                              contentType: 'image/jpeg',
+                                              checksum: 'asZ3Yzc2Q5iA5eXIgeTJndf',
+                                              byteSize: -123 })
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal 'byteSize must be greater than 0', error_message
+  end
+
+  test 'createDirectUpload mutation should not work with 0 bytesize' do
+    result = IridaSchema.execute(CREATE_DIRECT_UPLOAD_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { filename: 'dev.to',
+                                              contentType: 'image/jpeg',
+                                              checksum: 'asZ3Yzc2Q5iA5eXIgeTJndf',
+                                              byteSize: 0 })
+
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
+
+    error_message = result['errors'][0]['message']
+
+    assert_equal 'byteSize must be greater than 0', error_message
+  end
 end
