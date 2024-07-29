@@ -2168,7 +2168,8 @@ module Projects
 
       assert_no_button I18n.t(:'projects.samples.index.clone_button')
       assert_no_button I18n.t(:'projects.samples.index.transfer_button')
-      assert_no_button I18n.t(:'projects.samples.index.create_export_button')
+      assert_no_button I18n.t(:'projects.samples.index.create_export_button.sample_export')
+      assert_no_button I18n.t(:'projects.samples.index.create_export_button.linelist_export')
     end
 
     test 'action links are disabled when a group does not contain any projects with samples' do
@@ -2178,7 +2179,8 @@ module Projects
 
       assert_no_button I18n.t(:'projects.samples.index.clone_button')
       assert_no_button I18n.t(:'projects.samples.index.transfer_button')
-      assert_no_button I18n.t(:'projects.samples.index.create_export_button')
+      assert_no_button I18n.t(:'projects.samples.index.create_export_button.sample_export')
+      assert_no_button I18n.t(:'projects.samples.index.create_export_button.linelist_export')
     end
 
     def retrieve_puids
@@ -2309,7 +2311,8 @@ module Projects
         assert_text I18n.t('projects.samples.index.no_samples')
       end
 
-      assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 5
+      assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 4
+      assert_selector 'button.cursor-not-allowed.pointer-events-none', count: 1
     end
 
     test 'delete single attachment with remove link while all attachments selected followed by multiple deletion' do

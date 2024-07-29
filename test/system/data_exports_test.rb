@@ -228,11 +228,11 @@ class DataExportsTest < ApplicationSystemTestCase
 
     # project samples page
     visit namespace_project_samples_url(@namespace, @project)
-    assert_selector 'a', text: I18n.t('projects.samples.index.create_export_button'), count: 1
+    assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label'), count: 1
 
     # group samples page
     visit group_samples_url(@namespace)
-    assert_selector 'a', text: I18n.t('projects.samples.index.create_export_button'), count: 1
+    assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label'), count: 1
   end
 
   test 'user with access level == guest cannot see create export button on sample pages' do
@@ -257,17 +257,17 @@ class DataExportsTest < ApplicationSystemTestCase
     end
     # project samples page
     visit namespace_project_samples_url(@namespace, @project)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
+    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
-
-    click_link I18n.t('projects.samples.index.create_export_button'), match: :first
+    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('projects.samples.index.create_export_button.label')
+    click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
     within 'dialog[open].dialog--size-lg' do
       within %(turbo-frame[id="list_select_samples"]) do
         assert_text @sample1.name
@@ -301,18 +301,18 @@ class DataExportsTest < ApplicationSystemTestCase
     # project samples page
     visit group_samples_url(@namespace)
     assert_text 'Displaying items 1-20 of 26'
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
+    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
       find("input[type='checkbox'][value='#{@sample2.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
-
-    click_link I18n.t('projects.samples.index.create_export_button'), match: :first
+    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('projects.samples.index.create_export_button.label')
+    click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
     within 'dialog[open].dialog--size-lg' do
       within %(turbo-frame[id="list_select_samples"]) do
         assert_text @sample1.name
@@ -344,28 +344,29 @@ class DataExportsTest < ApplicationSystemTestCase
     sample32 = samples(:sample32)
 
     visit namespace_project_samples_url(subgroup12a, project29)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
+    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{sample32.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
+    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t('projects.samples.index.create_export_button.label')
 
     visit namespace_project_samples_url(@namespace, @project)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
+    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
+    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t('projects.samples.index.create_export_button.label')
 
-    click_link I18n.t('projects.samples.index.create_export_button'), match: :first
+    click_button I18n.t('projects.samples.index.create_export_button.label')
+    click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
     within 'dialog[open].dialog--size-lg' do
       within %(turbo-frame[id="list_select_samples"]) do
         assert_text @sample1.name
@@ -456,11 +457,11 @@ class DataExportsTest < ApplicationSystemTestCase
     visit workflow_execution_path(submitted_workflow_execution)
 
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button')
+                    text: I18n.t('projects.samples.index.create_export_button.label')
 
     visit workflow_execution_path(@workflow_execution)
     assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button')
+                       text: I18n.t('projects.samples.index.create_export_button.label')
   end
 
   test 'data export type analysis on summary tab' do
