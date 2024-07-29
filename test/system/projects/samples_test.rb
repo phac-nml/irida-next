@@ -1143,7 +1143,7 @@ module Projects
 
       assert_text I18n.t('projects.samples.metadata.fields.update.success')
       assert_no_text 'metadatafield1'
-      assert_text 'newMetadataKey'
+      assert_text 'newmetadatakey' # NOTE: downcase
       assert_text 'value1'
     end
 
@@ -1199,7 +1199,7 @@ module Projects
       assert_text I18n.t('projects.samples.metadata.fields.update.success')
       assert_no_text 'metadatafield1'
       assert_no_text 'value1'
-      assert_text 'newMetadataKey'
+      assert_text 'newmetadatakey' # NOTE: downcase
       assert_text 'newMetadataValue'
     end
 
