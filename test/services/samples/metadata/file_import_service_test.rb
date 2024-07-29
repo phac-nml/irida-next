@@ -50,9 +50,9 @@ module Samples
         response = Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] },
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] } }, response)
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
@@ -67,9 +67,9 @@ module Samples
         response = Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                             params).execute
         assert_equal({ @sample1.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] },
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
                        @sample2.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] } }, response)
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
@@ -83,9 +83,9 @@ module Samples
         params = { file: xls, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project, @john_doe, params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] },
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] } }, response)
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 20, 'metadatafield3' => 30 },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => 15, 'metadatafield2' => 25, 'metadatafield3' => 35 },
@@ -99,9 +99,9 @@ module Samples
         params = { file: xlsx, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project, @john_doe, params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] },
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] } }, response)
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => 10, 'metadatafield2' => 20, 'metadatafield3' => 30 },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => 15, 'metadatafield2' => 25, 'metadatafield3' => 35 },
@@ -116,9 +116,9 @@ module Samples
         response = Samples::Metadata::FileImportService.new(@project, @john_doe,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] },
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] } }, response)
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
@@ -173,7 +173,7 @@ module Samples
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: true }
         response = Samples::Metadata::FileImportService.new(project29, @john_doe, params).execute
         assert_equal({ sample32.name => { added: ['metadatafield3'], updated: ['metadatafield2'],
-                                          deleted: [], not_updated: [] } }, response)
+                                          deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      sample32.reload.metadata)
       end
@@ -205,7 +205,7 @@ module Samples
         params = { file: csv, sample_id_column: 'sample_name', ignore_empty_values: false }
         response = Samples::Metadata::FileImportService.new(project29, @john_doe, params).execute
         assert_equal({ sample32.name => { added: ['metadatafield3'], updated: ['metadatafield2'],
-                                          deleted: ['metadatafield1'], not_updated: [] } }, response)
+                                          deleted: ['metadatafield1'], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield2' => '20', 'metadatafield3' => '30' }, sample32.reload.metadata)
       end
 
@@ -216,7 +216,7 @@ module Samples
         params = { file: csv, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project, @john_doe, params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] } }, response)
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal("Sample 'Project 2 Sample 1' is not found within this project",
                      @project.errors.messages_for(:sample).first)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
