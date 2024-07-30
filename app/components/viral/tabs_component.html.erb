@@ -1,17 +1,11 @@
 <div
   class="
-    text-sm
-    font-medium
-    text-center
-    text-slate-500
-    border-b
-    border-slate-200
-    dark:text-slate-400
-    dark:border-slate-700
+    flex text-sm font-medium text-center text-slate-500 border-b border-slate-200
+    dark:text-slate-400 dark:border-slate-700
   "
 >
   <ul
-    class="flex flex-wrap -mb-px text-sm font-medium text-center"
+    class="flex flex-wrap -mb-px"
     role="tablist"
     aria-orientation="horizontal"
     aria-label="<%= label %>"
@@ -22,6 +16,11 @@
       </li>
     <% end %>
   </ul>
+  <% if search_bar? %>
+    <div class="flex flex-row ml-auto">
+      <%= search_bar %>
+    </div>
+  <% end %>
 </div>
 <div role="region" id="<%= id %>" aria-live="polite">
   <%= tab_content %>

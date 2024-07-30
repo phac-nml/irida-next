@@ -26,29 +26,6 @@
   <% end %>
 <% end %>
 
-<div class="flex flex-row-reverse">
-  <%= search_form_for @q, url: group_members_url(**request.query_parameters), html: {"data-controller": "filters"} do |f| %>
-    <input type="hidden" name="format" value="turbo_stream"/>
-    <input type="hidden" name="tab" value="<%=@tab%>"/>
-    <%= f.label :user_email_cont, t(".search.placeholder"), class: "sr-only" %>
-    <div class="relative lg:w-72">
-      <div
-        class="
-          absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-        "
-      >
-        <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-      </div>
-      <%= turbo_frame_tag "member_hidden_values" %>
-      <%= f.search_field :user_email_cont,
-                     "data-action": "filters#submit",
-                     class:
-                       "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                     placeholder: t(".search.placeholder") %>
-    </div>
-  <% end %>
-</div>
-
 <div class="bg-white dark:bg-slate-800">
   <%= viral_tabs(id: "members-tabs", label: t(:"groups.members.index.tabs.aria_label")) do |tabs| %>
     <%= tabs.with_tab(url: group_members_path(), selected: @tab != "invited_groups", controls: "members-tabs") do %>
@@ -57,6 +34,13 @@
     <%= tabs.with_tab(url: group_members_path(tab: "invited_groups"), selected: @tab == "invited_groups", controls: "members-tabs") do %>
       <%= t(:"groups.members.index.tabs.groups") %>
     <% end %>
+    <%= tabs.with_search_bar(
+      q: @q,
+      url: group_members_url(**request.query_parameters),
+      search_attribute: :user_email_cont,
+      placeholder: t(".search.placeholder"),
+      tab: @tab,
+    ) %>
     <%= tabs.with_tab_content do %>
       <div class="flex flex-col">
         <%= turbo_frame_tag "members", "data-turbo-temporary": true,
