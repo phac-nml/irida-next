@@ -565,7 +565,7 @@ module Projects
         assert_text @sample1.puid
       end
 
-      click_on I18n.t('projects.samples.table.puid')
+      click_on 'Sample ID'
 
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
       puids = retrieve_puids
@@ -573,14 +573,14 @@ module Projects
         assert puids[n] < puids[n + 1]
       end
 
-      click_on I18n.t('projects.samples.table.puid')
+      click_on 'Sample ID'
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] > puids[n + 1]
       end
 
-      click_on I18n.t('projects.samples.table.sample')
+      click_on 'Sample Name'
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       assert_selector '#samples-table table tbody tr', count: 3
@@ -593,7 +593,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
       end
 
-      click_on I18n.t('projects.samples.table.sample')
+      click_on 'Sample Name'
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
       assert_selector '#samples-table table tbody tr', count: 3
@@ -606,7 +606,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
 
-      click_on I18n.t('projects.samples.table.created_at')
+      click_on 'Created'
 
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
       within first('tbody') do
@@ -618,7 +618,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
 
-      click_on I18n.t('projects.samples.table.created_at')
+      click_on 'Created'
 
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
       within first('tbody') do
@@ -630,7 +630,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
       end
 
-      click_on I18n.t('projects.samples.table.updated_at')
+      click_on 'Last Updated'
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('tbody') do
@@ -642,7 +642,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
 
-      click_on I18n.t('projects.samples.table.updated_at')
+      click_on 'Last Updated'
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
       within first('tbody') do
@@ -673,7 +673,7 @@ module Projects
       assert_no_text @sample2.name
       assert_no_text @sample3.name
 
-      click_on I18n.t('projects.samples.table.sample')
+      click_on 'Sample Name'
 
       assert_selector '#samples-table table tbody tr', count: 1
       within first('tbody tr td:nth-child(2)') do
@@ -699,7 +699,7 @@ module Projects
       assert_no_text @sample2.name
       assert_no_text @sample3.name
 
-      click_on I18n.t('projects.samples.table.puid')
+      click_on 'Sample ID'
 
       assert_selector '#samples-table table tbody tr', count: 1
       within first('tbody tr th') do
@@ -723,9 +723,9 @@ module Projects
         assert_text @sample1.name
       end
 
-      click_on I18n.t('projects.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      click_on I18n.t('projects.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
       assert_selector '#samples-table table tbody tr', count: 3
@@ -761,9 +761,10 @@ module Projects
         assert_text @sample1.puid
       end
 
-      click_on I18n.t('projects.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      click_on I18n.t('projects.samples.table.sample')
+      click_on 'Sample Name'
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
       assert_selector '#samples-table table tbody tr', count: 3
       within first('tbody tr th') do

@@ -22,7 +22,7 @@
     <%= form_for(:deletion, url: namespace_project_sample_metadata_deletion_path,
     data: {
       controller: "projects--samples--metadata--destroy",
-      'data-projects--samples--metadata--destroy-storage-key-value':namespace_project_sample_url(id: @sample.id),
+      'projects--samples--metadata--destroy-storage-key-value': namespace_project_sample_url(id: @sample.id),
       action: 'turbo:submit-end->projects--samples--metadata--destroy#clear'
     }, method: :delete) do |form| %>
       <div data-projects--samples--metadata--destroy-target="field"></div>
