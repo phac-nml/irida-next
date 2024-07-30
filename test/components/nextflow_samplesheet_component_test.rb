@@ -13,6 +13,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
       table.assert_selector '.table-column:last-of-type .table-header', text: 'STRANDEDNESS (REQUIRED)'
       table.assert_selector '.table-column:first-of-type .table-td', count: 2
       table.assert_selector '.table-column:first-of-type .table-td:first-of-type', text: sample1.puid
+      table.assert_selector '.table-column:nth-of-type(2) .table-td:first-of-type', text: sample1.name
       table.assert_selector '.table-column:last-of-type .table-td:first-of-type select option', count: 4
       table.assert_selector '.table-column:last-of-type .table-td:first-of-type select option:nth-of-type(2)',
                             text: 'forward'
