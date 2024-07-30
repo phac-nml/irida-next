@@ -1,4 +1,9 @@
-<a href="<%= url %>" type="button" data-turbo-stream="true" class="flex items-center">
+<a
+  href="<%= url %>"
+  type="button"
+  data-turbo-action="replace"
+  class="flex items-center"
+>
   <%= label %>
   <span class="flex-grow-0 ml-2 flex items-center"><%= viral_icon(name: icon, classes: "w-4 h-4 inline-block") %></span>
 </a>

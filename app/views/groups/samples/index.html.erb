@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= turbo_frame_tag "samples_dialog" %>
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
@@ -28,13 +30,16 @@
 <% end %>
 
 <% if @has_samples %>
-  <%= search_form_for @q, url: search_group_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters","data-filters-selection-outlet": "#samples-table", class: "mb-2" } do |f| %>
+  <%= search_form_for @q, url: search_group_samples_url, html: { method: :post, "data-controller": "filters", "data-turbo-action": "replace", "data-filters-selection-outlet": "#samples-table", class: "filters" } do |f| %>
     <%= turbo_frame_tag "group_samples_hidden_values" %>
     <div class="flex flex-row-reverse items-center mb-4 space-x-2">
       <input type="hidden" name="format" value="turbo_stream"/>
 
       <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-      <%= render ListFilterComponent.new(form: f, filters: @search_params[:name_or_puid_in]) %>
+      <%= render ListFilterComponent.new(
+        form: f,
+        filters: @search_params[:name_or_puid_in],
+      ) %>
       <%= f.label :name_or_puid_cont,
               placeholder: t(".search.placeholder"),
               class: "sr-only" %>
@@ -55,12 +60,10 @@
     </div>
   <% end %>
 
-    <%= turbo_frame_tag "group_samples_table" do %>
-      <%= render partial: "table",
-      locals: {
-        samples: @samples,
-        group: @group,
-        pagy: @pagy,
-      } %>
-    <% end %>
+  <%= render partial: "table",
+  locals: {
+    samples: @samples,
+    group: @group,
+    pagy: @pagy,
+  } %>
 <% end %>

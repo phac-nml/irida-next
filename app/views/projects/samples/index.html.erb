@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= turbo_frame_tag "samples_dialog" %>
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
@@ -36,7 +38,10 @@
       <% end %>
       <% if allowed_to?(:export_sample_data?, @project) %>
         <%= link_to t(".create_export_button"),
-        new_data_export_path(export_type: "sample", namespace_id: @project.namespace.id),
+        new_data_export_path(
+          export_type: "sample",
+          namespace_id: @project.namespace.id,
+        ),
         data: {
           turbo_stream: true,
           controller: "action-link",
@@ -72,19 +77,24 @@
   <% end %>
 <% end %>
 <div class="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">
-  <%= search_form_for @q, url: search_namespace_project_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters","data-filters-selection-outlet": "#samples-table" }, class: "filters" do |f| %>
+  <%= search_form_for @q, url: search_namespace_project_samples_url, html: { method: :post, "data-controller": "filters", "data-turbo-action": "replace", "data-filters-selection-outlet": "#samples-table" }, class: "filters" do |f| %>
     <%= turbo_frame_tag "project_samples_hidden_values" %>
     <div class="flex flex-row-reverse items-center mb-4 space-x-2">
       <input type="hidden" name="format" value="turbo_stream"/>
       <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-      <%= render ListFilterComponent.new(form: f, filters: @search_params[:name_or_puid_in]) %>
+      <%= render ListFilterComponent.new(
+        form: f,
+        filters: @search_params[:name_or_puid_in],
+      ) %>
       <%= f.label :name_or_puid_cont,
               placeholder: t(".search.placeholder"),
               class: "sr-only" %>
       <div class="flex flex-row items-center space-x-2">
         <div class="relative lg:w-72">
           <div
-            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
+            class="
+              absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+            "
           >
             <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
           </div>
@@ -98,12 +108,10 @@
       </div>
     </div>
   <% end %>
-  <%= turbo_frame_tag "project_samples_table" do %>
-    <%= render partial: "table",
-    locals: {
-      project: @project,
-      samples: @samples,
-      pagy: @pagy,
-    } %>
-  <% end %>
+  <%= render partial: "table",
+  locals: {
+    project: @project,
+    samples: @samples,
+    pagy: @pagy,
+  } %>
 </div>

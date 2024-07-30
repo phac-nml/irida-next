@@ -15,10 +15,6 @@ module Projects
     def index
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = load_samples.count.positive?
-      respond_to do |format|
-        format.html
-        format.turbo_stream
-      end
     end
 
     def search

@@ -43,6 +43,7 @@ module Samples
         if @abilities[:select_samples]
           args[:data] ||= {}
           args[:data][:controller] = 'selection'
+          args[:data][:action] = 'turbo:morph-element->selection#idempotentConnect'
           args[:data][:'selection-total-value'] = @pagy.count
           args[:data][:'selection-action-link-outlet'] = '.action-link'
         end
@@ -52,8 +53,7 @@ module Samples
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('table-container'),
-        data: { turbo: :temporary }
+        classes: class_names('table-container')
       }
     end
 
