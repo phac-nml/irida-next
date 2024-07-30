@@ -59,11 +59,12 @@
       </div>
     </div>
   <% end %>
-
-  <%= render partial: "table",
-  locals: {
-    samples: @samples,
-    group: @group,
-    pagy: @pagy,
-  } %>
+  <div id="group_samples_table">
+    <%= render partial: "table",
+    locals: {
+      samples: @samples,
+      group: @group,
+      pagy: @pagy,
+    } %>
+  </div>
 <% end %>

@@ -108,10 +108,12 @@
       </div>
     </div>
   <% end %>
-  <%= render partial: "table",
-  locals: {
-    project: @project,
-    samples: @samples,
-    pagy: @pagy,
-  } %>
+  <div id="project_samples_table">
+    <%= render partial: "table",
+    locals: {
+      project: @project,
+      samples: @samples,
+      pagy: @pagy,
+    } %>
+  </div>
 </div>
