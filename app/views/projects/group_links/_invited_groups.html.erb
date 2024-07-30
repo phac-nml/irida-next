@@ -1,35 +1,6 @@
-<% if false %>
-  <div class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
-    <%= search_form_for @q, url: namespace_project_group_links_url(**request.query_parameters), html: { "data-controller": "filters","data-filters-selection-outlet": "#grouplinks-table" }, class: "filters" do |f| %>
-      <div class="flex flex-row-reverse items-center space-x-2">
-        <input type="hidden" name="format" value="turbo_stream"/>
-        <%= f.label :group_name_cont,
-                placeholder: t("projects.group_links.index.search.placeholder"),
-                class: "sr-only" %>
-        <div class="flex flex-row items-center space-x-2">
-          <div class="relative lg:w-72">
-            <div
-              class="
-                absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-              "
-            >
-              <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-            </div>
-            <%= f.search_field :group_name_cont,
-                           "data-action": "filters#submit",
-                           class:
-                             "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                           placeholder: t("projects.group_links.index.search.placeholder") %>
-          </div>
-
-        </div>
-      </div>
-    <% end %>
-  </div>
-<% end %>
 <%= render partial: "table",
-  locals: {
-    namespace_group_links: @namespace_group_links,
-    namespace: @namespace,
-    access_levels: @access_levels
-  } %>
+locals: {
+  namespace_group_links: @namespace_group_links,
+  namespace: @namespace,
+  access_levels: @access_levels,
+} %>

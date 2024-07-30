@@ -14,14 +14,21 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def index
+    authorize! @namespace, to: :member_listing?
+    @q = load_namespace_group_links.ransack(params[:q])
+    set_default_sort
+    @pagy, @namespace_group_links = pagy(@q.result)
     respond_to do |format|
-      format.turbo_stream do
-        @q = load_namespace_group_links.ransack(params[:q])
-        set_default_sort
-        @pagy, @namespace_group_links = pagy(@q.result)
-        @has_groups = @namespace_group_links.count.positive?
-      end
+      format.turbo_stream
     end
+    # respond_to do |format|
+    #   format.turbo_stream do
+    #     @q = load_namespace_group_links.ransack(params[:q])
+    #     set_default_sort
+    #     @pagy, @namespace_group_links = pagy(@q.result)
+    #     @has_groups = @namespace_group_links.count.positive?
+    #   end
+    # end
   end
 
   def new
@@ -147,6 +154,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def set_default_sort
-    @q.sorts = 'updated_at asc' if @q.sorts.empty?
+    @q.sorts = 'group_name asc' if @q.sorts.empty?
   end
 end

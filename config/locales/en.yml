@@ -697,8 +697,6 @@ en:
         empty_state:
           title: No groups
           description: There are no groups that have been delegated access to this group
-        search:
-          placeholder: Filter by ID or name
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
         error: There was an error linking group with group
@@ -747,6 +745,8 @@ en:
         inherited_from: "Inherited from"
         search:
           placeholder: Filter by username
+          groups:
+            placeholder: Filter by group name
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         tabs:
@@ -1002,8 +1002,6 @@ en:
         empty_state:
           title: No groups
           description: There are no groups that have been delegated access to this project
-        search:
-          placeholder: Filter by ID or name
       create:
         success: Successfully linked project %{namespace_name} with group %{group_name}
         error: There was an error linking project with group
@@ -1058,6 +1056,8 @@ en:
           link_leave_project_aria_label: "Leave project link"
         search:
           placeholder: Filter by username
+          groups:
+            placeholder: Filter by group name
         shared_inherited: Shared inherited
         shared_direct: Shared direct
         table_header:
