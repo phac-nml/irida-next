@@ -16,19 +16,14 @@ module Projects
                                                  }), status: :ok
       end
 
-      def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def destroy
         ::Samples::DestroyService.new(@project, current_user, { sample: @sample }).execute
 
         respond_to do |format|
           if @sample.deleted?
-            format.html do
+            format.any(:html, :turbo_stream) do
               flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
-              redirect_to namespace_project_samples_path(format: :html)
-            end
-            format.turbo_stream do
-              render status: :ok, locals: { type: 'success',
-                                            message: t('.success', sample_name: @sample.name,
-                                                                   project_name: @project.namespace.human_name) }
+              redirect_to namespace_project_samples_path
             end
           else
             format.turbo_stream do
@@ -54,7 +49,8 @@ module Projects
                                                                                samples_to_delete_count) }
         # All samples deleted successfully
         else
-          render status: :ok, locals: { type: :success, message: t('.success') }
+          flash[:success] = t('.success')
+          redirect_to namespace_project_samples_path
         end
       end
 
