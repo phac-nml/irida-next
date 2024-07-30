@@ -18,7 +18,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def show
     authorize! @data_export, to: :read_export?
 
-    return if @data_export.manifest.empty?
+    return if @data_export.manifest.empty? || @data_export.export_type == 'linelist'
 
     @manifest = JSON.parse(@data_export.manifest)
   end

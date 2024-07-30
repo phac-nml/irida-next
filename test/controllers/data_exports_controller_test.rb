@@ -121,7 +121,16 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # TODO: add new linelist modal test when UI added
+  test 'should view new export modal with export_type linelist and namespace.type project' do
+    get new_data_export_path(export_type: 'linelist', 'namespace_id' => @project1.namespace.id)
+    assert_response :success
+  end
+
+  test 'should view new export modal with export_type linelist and namespace.type group' do
+    group = groups(:group_one)
+    get new_data_export_path(export_type: 'linelist', 'namespace_id' => group.id)
+    assert_response :success
+  end
 
   test 'should create new export with only necessary params' do
     post data_exports_path, params: {
