@@ -55,6 +55,9 @@
                       with_search_params: false,
                     ),
                   field: :attachments_updated_at_nulls_last,
+                  data: {
+                    turbo_action: "replace",
+                  },
                 ) %>
               <% else %>
                 <%= render Ransack::SortComponent.new(
@@ -62,6 +65,9 @@
                   label: t(".#{column}"),
                   url: helpers.sorting_url(@q, column, with_search_params: false),
                   field: column,
+                  data: {
+                    turbo_action: "replace",
+                  },
                 ) %>
               <% end %>
             <% end %>
@@ -82,6 +88,9 @@
                     with_search_params: false,
                   ),
                 field: "metadata_#{field}",
+                data: {
+                  turbo_action: "replace",
+                },
               ) %>
             <% end %>
           <% end %>

@@ -19,7 +19,7 @@ module Ransack
           turbo_stream: 'true'
         } }
       else
-        @ystem_arguments
+        @system_arguments
       end
     end
 
