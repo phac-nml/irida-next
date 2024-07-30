@@ -9,6 +9,7 @@ class DataExportsTest < ApplicationSystemTestCase
     @data_export2 = data_exports(:data_export_two)
     @data_export6 = data_exports(:data_export_six)
     @data_export7 = data_exports(:data_export_seven)
+    @data_export9 = data_exports(:data_export_nine)
     @group1 = groups(:group_one)
     @project1 = projects(:project1)
     @sample1 = samples(:sample1)
@@ -703,5 +704,16 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector 'div:nth-child(2) dd', text: 'test xlsx export'
       assert_selector 'div:nth-child(4) dd', text: 'xlsx'
     end
+  end
+
+  test 'linelist export with ready status does not have preview tab' do
+    visit data_export_path(@data_export9)
+
+    within %(#data-export-listing) do
+      assert_selector 'div:nth-child(4) dd', text: 'xlsx'
+    end
+
+    assert_text I18n.t('data_exports.show.tabs.summary')
+    assert_no_text I18n.t('data_exports.show.tabs.preview')
   end
 end

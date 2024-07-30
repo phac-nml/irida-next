@@ -6,4 +6,6 @@ class ViralSortableListsComponentPreview < ViewComponent::Preview
   def two_lists; end
 
   def three_lists; end
+
+  def three_lists_without_grouping; end
 end

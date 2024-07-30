@@ -54,7 +54,6 @@ export default class extends Controller {
     }
   }
 
-
   constructMetadataParams() {
     const metadata_fields = document.getElementById(this.selectedListValue).querySelectorAll("li")
 
