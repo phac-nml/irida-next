@@ -10,7 +10,7 @@
     >
       <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
     </div>
-    <%= helpers.turbo_frame_tag "member_hidden_values" %>
+    <%= helpers.turbo_frame_tag "ransack_hidden_values" %>
     <%= f.search_field @search_attribute,
                    "data-action": "filters#submit",
                    class:
