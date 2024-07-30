@@ -3,7 +3,7 @@
 module Nextflow
   module Samplesheet
     # Renders a column in the sample sheet table
-    class ColumnComponent < Component # ,
+    class ColumnComponent < Component
       attr_reader :namespace_id, :header, :property, :samples
 
       # rubocop:disable Metrics/ParameterLists
