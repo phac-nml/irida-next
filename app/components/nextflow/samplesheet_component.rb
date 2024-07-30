@@ -30,6 +30,8 @@ module Nextflow
     def identify_cell_type(property, entry)
       return 'sample_cell' if property == 'sample'
 
+      return 'sample_name_cell' if property == 'sample_name'
+
       return 'fastq_cell' if property.match(/fastq_\d+/)
 
       return 'file_cell' if check_for_file(entry)

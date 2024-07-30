@@ -3,7 +3,7 @@
 module Nextflow
   module Samplesheet
     # Renders a column in the sample sheet table
-    class ColumnComponent < Component
+    class ColumnComponent < Component # ,
       attr_reader :namespace_id, :header, :property, :samples
 
       # rubocop:disable Metrics/ParameterLists
@@ -18,10 +18,12 @@ module Nextflow
 
       # rubocop:enable Metrics/ParameterLists
 
-      def render_cell_type(property, entry, sample, fields, index)
+      def render_cell_type(property, entry, sample, fields, index) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
         case entry['cell_type']
         when 'sample_cell'
           render_sample_cell(sample, fields)
+        when 'sample_name_cell'
+          render_sample_name_cell(sample, fields)
         when 'fastq_cell'
           render_fastq_cell(sample, property, entry, fields, index)
         when 'file_cell'
@@ -69,6 +71,10 @@ module Nextflow
 
       def render_sample_cell(sample, fields)
         render(Samplesheet::SampleCellComponent.new(sample:, fields:))
+      end
+
+      def render_sample_name_cell(sample, fields)
+        render(Samplesheet::SampleNameCellComponent.new(sample:, fields:))
       end
 
       def render_metadata_cell(sample, name, fields)

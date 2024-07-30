@@ -10,6 +10,12 @@
         "pattern": "^\\S+$",
         "errorMessage": "Sample name must be provided and cannot contain spaces"
       },
+      "sample_name": {
+        "type": "string",
+        "pattern": "^\\S+$",
+        "meta": ["name"],
+        "errorMessage": "Sample name must be provided and cannot contain spaces"
+      },
       "fastq_1": {
         "type": "string",
         "pattern": "^\\S+\\.f(ast)?q\\.gz$",
