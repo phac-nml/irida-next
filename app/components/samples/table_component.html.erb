@@ -17,7 +17,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
+              classes: class_names('px-6 py-3', 'sticky left-0 w-64 z-10 flex bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-64 z-10 bg-slate-50 dark:bg-slate-900': index == 1)
             ) do %>
               <% if index.zero? and @abilities[:select_samples] %>
                 <%= search_form_for(
@@ -107,7 +107,7 @@
               <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-6 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
+                classes: class_names('px-6 py-3', 'sticky left-0 w-64 bg-slate-50 dark:bg-slate-900': index.zero?, 'sticky left-64 bg-slate-50 dark:bg-slate-900': index == 1)
               ) do %>
                 <% if index.zero? && @abilities[:select_samples] %>
                   <%= check_box_tag "sample_ids[]",
@@ -250,6 +250,9 @@
             nil
           end
         ),
+      data: {
+        turbo_action: "replace",
+      },
     ) %>
   <% end %>
   <div class="empty_state_message">
