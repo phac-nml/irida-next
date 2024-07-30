@@ -55,7 +55,7 @@ export default class extends Controller {
   }
 
   constructMetadataParams() {
-    const metadata_fields = document.getElementById(this.selectedListValue).querySelectorAll("li")
+    const metadata_fields = this.selectedList.querySelectorAll("li")
 
     for (const metadata_field of metadata_fields) {
       this.fieldTarget.appendChild(

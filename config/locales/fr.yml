@@ -1742,7 +1742,7 @@ fr:
     types:
       sample: SAMPLE
       analysis: ANALYSIS
-      linelist: Linelist
+      linelist: LINELIST
     status:
       processing: PROCESSING
       ready: READY
