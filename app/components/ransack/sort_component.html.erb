@@ -1,9 +1,4 @@
-<a
-  href="<%= url %>"
-  type="button"
-  data-turbo-action="replace"
-  class="flex items-center"
->
+<%= render Viral::BaseComponent.new(tag: 'a', href: url, type: "button", classes: class_names('flex items-center'), **system_arguments) do %>
   <%= label %>
   <span class="flex-grow-0 ml-2 flex items-center"><%= viral_icon(name: icon, classes: "w-4 h-4 inline-block") %></span>
-</a>
+<% end %>

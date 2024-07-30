@@ -5,11 +5,22 @@ module Ransack
   class SortComponent < Component
     attr_reader :ransack_obj, :label, :field, :url
 
-    def initialize(ransack_obj:, label:, url:, field:)
+    def initialize(ransack_obj:, label:, url:, field:, **system_arguments)
       @ransack_obj = ransack_obj
       @label = label
       @url = url
       @field = field
+      @system_arguments = system_arguments
+    end
+
+    def system_arguments
+      if @system_arguments.empty?
+        { data: {
+          turbo_stream: 'true'
+        } }
+      else
+        @ystem_arguments
+      end
     end
 
     def icon

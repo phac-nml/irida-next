@@ -17,7 +17,6 @@ class PaginationComponent < ViewComponent::Base
         turbo_stream: 'true'
       } }
     else
-      puts @link_arguments
       @link_arguments
     end
   end
