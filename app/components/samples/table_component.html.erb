@@ -17,7 +17,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3', 'sticky left-0 min-w-60 max-w-60 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-60 z-10 bg-slate-50 dark:bg-slate-900': index == 1)
+              classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-50 dark:bg-slate-900': index == 1)
             ) do %>
               <% if index.zero? and @abilities[:select_samples] %>
                 <%= search_form_for(
@@ -34,9 +34,9 @@
                     id="select-all"
                     name="select"
                     class="
-                      w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
-                      focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
-                      focus:ring-2 dark:bg-slate-700 dark:border-slate-600
+                      w-4 h-4 mr-2.5 text-primary-560 bg-slate-100 border-slate-300 rounded
+                      focus:ring-primary-500 dark:focus:ring-primary-560 dark:ring-offset-slate-800
+                      focus:ring-2 dark:bg-slate-700 dark:border-slate-560
                     "
                     data-selection-target="selectAll"
                     onchange="Turbo.navigator.submitForm(this.form)"
@@ -76,7 +76,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              class: class_names('px-6 py-3')
+              classes: class_names('px-3 py-3')
             ) do %>
               <%= render Ransack::SortComponent.new(
                 ransack_obj: @q,
@@ -98,7 +98,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
             ) do %>
               <%= t(".action") %>
             <% end %>
@@ -116,7 +116,7 @@
               <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-6 py-3', 'sticky left-0 min-w-60 max-w-60 bg-slate-50 dark:bg-slate-900': index.zero?, 'sticky left-60 bg-slate-50 dark:bg-slate-900': index == 1)
+                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, 'sticky left-56 bg-slate-50 dark:bg-slate-900': index == 1)
               ) do %>
                 <% if index.zero? && @abilities[:select_samples] %>
                   <%= check_box_tag "sample_ids[]",
@@ -129,7 +129,7 @@
                     selection_target: "rowSelection",
                   },
                   class:
-                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                    "w-4 h-4 mr-2.5 text-primary-560 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-560 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-560" %>
                 <% end %>
                 <% if column == :puid || column == :name %>
                   <%= link_to(
@@ -142,7 +142,7 @@
                         sample[column],
                         defined?(@search_params[:name_or_puid_cont]) &&
                           @search_params[:name_or_puid_cont],
-                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-560">\1</mark>',
                       ) %>
                     </span>
                   <% end %>
@@ -170,7 +170,7 @@
               <%= render_cell(
                 tag: 'td',
                 scope: 'col',
-                class: class_names('px-6 py-3')
+                classes: class_names('px-3 py-3')
               ) do %>
                 <%= sample.metadata[field] %>
               <% end %>
@@ -178,7 +178,7 @@
             <% if @renders_row_actions %>
               <%= render_cell(
                 tag: 'td',
-                classes: class_names('px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
               ) do %>
                 <% if @row_actions[:edit] %>
                   <%= link_to(
@@ -188,7 +188,7 @@
                       turbo: false,
                     },
                     class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                      "font-medium text-blue-560 underline dark:text-blue-500 hover:no-underline cursor-pointer",
                   ) %>
                 <% end %>
                 <% if @row_actions[:destroy] %>
@@ -202,7 +202,7 @@
                       "turbo-stream": true,
                     },
                     class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                      "font-medium text-blue-560 underline dark:text-blue-500 hover:no-underline cursor-pointer",
                   ) %>
                 <% end %>
               <% end %>
@@ -215,7 +215,7 @@
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
               class="
-                sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
+                sticky left-0 z-10 px-3 py-3 bg-slate-50 dark:bg-slate-900
               "
               colspan="3"
             >
@@ -228,7 +228,7 @@
                 <strong data-selection-target="selected">0</strong>
               </span>
             </td>
-            <td colspan="100%" class="px-6 py-3 bg-slate-50 dark:bg-slate-900"></td>
+            <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-900"></td>
           </tr>
         </tfoot>
       <% end %>
