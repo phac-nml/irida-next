@@ -147,6 +147,9 @@ group :development do
   gem 'actioncable'
   gem 'listen'
   gem 'lookbook', '~> 2.1', '>= 2.1.1'
+
+  # Solargraph
+  gem 'solargraph'
 end
 
 group :test do
