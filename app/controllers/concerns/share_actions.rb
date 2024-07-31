@@ -10,7 +10,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     before_action proc { namespace_group_link }, only: %i[destroy update]
     before_action proc { tab }, only: %i[index new create]
     before_action proc { namespace_linkable_groups }, only: %i[new create]
-    # before_action proc { set_search_params }, only: %i[index destroy]
   end
 
   def index
@@ -21,14 +20,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     respond_to do |format|
       format.turbo_stream
     end
-    # respond_to do |format|
-    #   format.turbo_stream do
-    #     @q = load_namespace_group_links.ransack(params[:q])
-    #     set_default_sort
-    #     @pagy, @namespace_group_links = pagy(@q.result)
-    #     @has_groups = @namespace_group_links.count.positive?
-    #   end
-    # end
   end
 
   def new

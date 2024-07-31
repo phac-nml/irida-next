@@ -11,14 +11,12 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     before_action proc { access_levels }
     before_action proc { context_crumbs }, only: %i[index new]
     before_action proc { tab }, only: %i[index new create]
-    before_action proc { set_url }, only: %i[index new create]
   end
 
   def index
     authorize! @namespace, to: :member_listing?
     @q = load_members.ransack(params[:q])
     set_default_sort
-    set_url
     @pagy, @members = pagy(@q.result)
     respond_to do |format|
       format.html

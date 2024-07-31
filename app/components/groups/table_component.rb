@@ -12,8 +12,6 @@ module Groups
       access_levels,
       q,
       abilities: {},
-      has_groups: true,
-      search_params: {},
       **system_arguments
     )
       @namespace_group_links = namespace_group_links
@@ -21,8 +19,6 @@ module Groups
       @access_levels = access_levels
       @q = q
       @abilities = abilities
-      @has_groups = has_groups
-      @search_params = search_params
       @system_arguments = system_arguments
 
       @columns = columns

@@ -7,7 +7,6 @@ module Groups
     test 'Should render a table of invited groups for a group' do
       with_request_url '/-/groups/group-1/-/members?tab=invited_groups' do
         namespace = groups(:group_one)
-        user = users(:john_doe)
         namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(namespace).not_expired
         q = NamespaceGroupLink.ransack
 
