@@ -39,11 +39,6 @@ export default class extends Controller {
     this.#updateCounts(storageValue.length);
   }
 
-  selectAllTargetConnected(target) {
-    console.log("Select all reconnected");
-    this.#setSelectAllCheckboxValue(this.#numSelected);
-  }
-
   toggle(event) {
     this.#addOrRemove(event.target.checked, event.target.value);
   }

@@ -22,7 +22,10 @@
 
       <template data-list-filter-target="template">
         <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1 py-1.5") do %>
-          <%= form.search_field :name_or_puid_in, multiple: true, class: "hidden" %>
+          <%= form.search_field :name_or_puid_in,
+                            multiple: true,
+                            class: "hidden",
+                            data: "turbo-temporary" %>
           <span class="label font-mono text-base font-semibold mr-1"></span>
           <button
             type="button"
@@ -55,8 +58,7 @@
           data-list-filter-target="tags"
           data-action="click->list-filter#focus"
         >
-
-        <input
+          <input
             type="text"
             name="q[name_or_puid_in][]"
             class="
@@ -67,6 +69,7 @@
             data-action='
               keydown->list-filter#handleInput
               paste->list-filter#handlePaste
+              turbo:morph-element->list-filter#idempotentConnect
             '
             data-list-filter-target="input"
           />
