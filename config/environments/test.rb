@@ -64,4 +64,7 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
 
   config.middleware.insert_before 0, Capybara::Lockstep::Middleware
+
+  # Create a new test log file [daily, weekly, monthly,..]
+  # config.logger = ActiveSupport::Logger.new(config.default_log_file, 'daily')
 end

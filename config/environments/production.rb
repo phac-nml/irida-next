@@ -106,4 +106,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Create a new production log file [daily, weekly, monthly,..]
+  config.logger = ActiveSupport::Logger.new(config.default_log_file, 'daily')
 end

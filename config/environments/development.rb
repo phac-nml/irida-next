@@ -91,4 +91,7 @@ Rails.application.configure do
       %w[French fr]
     ]
   }
+
+  # Create a new development log file [daily, weekly, monthly,..]
+  # config.logger = ActiveSupport::Logger.new(config.default_log_file, 'daily')
 end
