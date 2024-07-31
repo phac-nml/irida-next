@@ -163,10 +163,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     authorized_namespaces
   end
 
-  def namespace_path
-    namespace_project_path(@namespace.parent, @project)
-  end
-
   def current_page
     @current_page = case action_name
                     when 'show'

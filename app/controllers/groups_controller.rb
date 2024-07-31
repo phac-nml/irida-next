@@ -173,10 +173,6 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @namespace = group
   end
 
-  def namespace_path
-    group_path(@group)
-  end
-
   def tab
     @tab = params[:tab]
   end
