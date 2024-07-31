@@ -21,7 +21,6 @@ export default class extends Controller {
   }
 
   idempotentConnect() {
-    console.log("reconnecting");
     this.#storageKey =
       this.storageKeyValue ||
       `${location.protocol}//${location.host}${location.pathname}`;
