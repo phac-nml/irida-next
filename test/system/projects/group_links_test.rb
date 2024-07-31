@@ -293,7 +293,7 @@ module Projects
       assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link5.group.name
       assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link14.group.name
 
-      fill_in placeholder: I18n.t(:'projects.group_links.index.search.placeholder'), with: @group_link2.group.name
+      fill_in placeholder: I18n.t(:'projects.members.index.search.groups.placeholder'), with: @group_link2.group.name
 
       assert_text 'Displaying 1 item'
       assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
@@ -310,8 +310,6 @@ module Projects
 
       assert_text 'Displaying 4 items'
       assert_selector '#project-members table tbody tr', count: 4
-
-      click_on I18n.t('projects.group_links.index.table_header.group')
       assert_selector '#project-members table thead th:first-child svg.icon-arrow_up'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
