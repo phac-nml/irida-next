@@ -221,7 +221,7 @@
             >
               <span>
                 <%= t(".counts.samples") %>:
-                <strong><%= @pagy.count %></strong>
+                <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
               </span>
               <span>
                 <%= t(".counts.selected") %>:

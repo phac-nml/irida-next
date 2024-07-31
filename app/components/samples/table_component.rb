@@ -36,15 +36,13 @@ module Samples
     end
     # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
 
-    def system_arguments # rubocop:disable Metrics/AbcSize
+    def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'samples-table'
         args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
         if @abilities[:select_samples]
           args[:data] ||= {}
-          args[:data][:'turbo-temporary'] = true
           args[:data][:controller] = 'selection'
-          args[:data][:action] = 'turbo:morph->selection#idempotentConnect'
           args[:data][:'selection-total-value'] = @pagy.count
           args[:data][:'selection-action-link-outlet'] = '.action-link'
         end
