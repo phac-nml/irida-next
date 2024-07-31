@@ -351,5 +351,10 @@ module DataExports
         sample34.metadata['metadatafield2']
       ], export_file.row(4)
     end
+
+    test 'test of sample export including paired files' do
+      sample_b = samples(:sample22)
+      puts sample_b.attachments.count
+    end
   end
 end

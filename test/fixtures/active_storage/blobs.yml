@@ -94,3 +94,8 @@ attachmentEndToEndREV_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.b
 
 attachment43Sample_file_test_fileA_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R1_001.fastq", service_name: "test" %>
 attachment43Sample_file_test_fileB_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R2_001.fastq", service_name: "test" %>
+
+sample22_test_file_fastq_fwd_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R1_001.fastq", service_name: "test" %>
+sample22_test_file_fastq_rev_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R2_001.fastq", service_name: "test" %>
+sample22_test_file_fasta_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_5.fasta", service_name: "test" %>
+sample22_test_file_text_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_14.txt", service_name: "test" %>

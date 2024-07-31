@@ -177,3 +177,23 @@ attachmentSample43_file_test_file_A_fastq:
   name: file
   record: attachmentPEREV43 (Attachment)
   blob: attachment43Sample_file_test_fileB_fastq_blob
+
+sample22_test_file_fastq_fwd:
+  name: file
+  record: sample22AttachmentFastqFWD (Attachment)
+  blob: sample22_test_file_fastq_fwd_blob
+
+sample22_test_file_fastq_rev:
+  name: file
+  record: sample22AttachmentFastqREV (Attachment)
+  blob: sample22_test_file_fastq_rev_blob
+
+sample22_test_file_fasta:
+  name: file
+  record: sample22AttachmentFasta (Attachment)
+  blob: sample22_test_file_fasta_blob
+
+sample22_test_file_text:
+  name: file
+  record: sample22AttachmentText (Attachment)
+  blob: sample22_test_file_text_blob

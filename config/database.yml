@@ -34,7 +34,7 @@ jobs: &jobs
 development:
   primary:
     <<: *default
-    database: irida_next_development
+    database: irida_next_test
   jobs:
     <<: *jobs
     database: irida_next_jobs_development
