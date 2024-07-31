@@ -15,7 +15,7 @@ module DataExports
       if @data_export.valid?
         @data_export.export_type == 'analysis' ? validate_analysis_id : validate_sample_ids
         @data_export.save
-        DataExports::CreateJob.set(wait_until: 30.seconds.from_now).perform_later(@data_export)
+        DataExports::CreateJob.perform_later(@data_export)
       end
 
       @data_export
