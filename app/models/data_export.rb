@@ -22,8 +22,18 @@ class DataExport < ApplicationRecord
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_ids'))
     end
 
+    validate_attachment_formats if export_type == 'sample' && export_parameters.key?('attachment_formats')
     validate_namespace_id unless export_type == 'analysis'
     validate_linelist_export_parameters if export_type == 'linelist'
+  end
+
+  def validate_attachment_formats
+    return if (export_parameters['attachment_formats'] - Attachment.valid_formats).empty?
+
+    errors.add(:export_parameters,
+               I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
+                      invalid_formats:
+                      (export_parameters['attachment_formats'] - Attachment.valid_formats).join(', ')))
   end
 
   def validate_namespace_id

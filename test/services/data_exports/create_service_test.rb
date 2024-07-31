@@ -252,5 +252,16 @@ module DataExports
                      data_export.errors.full_messages.first
       end
     end
+
+    test 'create sample data export with valid attachment_formats' do
+      valid_params = { 'export_type' => 'sample',
+                       'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                'namespace_id' => @project1.namespace.id,
+                                                'attachment_formats' => %w[fastq fasta text] } }
+
+      assert_difference -> { DataExport.count } => 1 do
+        DataExports::CreateService.new(@user, valid_params).execute
+      end
+    end
   end
 end

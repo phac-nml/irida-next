@@ -81,7 +81,7 @@ module DataExports
             next if sample.attachments.empty?
 
             project = sample.project
-            attachments = attachment_query(sample)
+            attachments = attachment_query(sample, data_export)
 
             next if attachments.empty?
 
@@ -265,9 +265,13 @@ module DataExports
             .where(id: data_export.export_parameters['ids'])
     end
 
-    def attachment_query(sample)
-      sample.attachments.where("metadata->'format' ?| array[:formats]",
-                               formats: data_export.export_parameters['attachment_formats'])
+    def attachment_query(sample, data_export)
+      if data_export.export_parameters.key?('attachment_formats')
+        sample.attachments.where("metadata->'format' ?| array[:formats]",
+                                 formats: data_export.export_parameters['attachment_formats'])
+      else
+        sample.attachments
+      end
     end
   end
 end

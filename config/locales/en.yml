@@ -182,6 +182,7 @@ en:
               invalid_file_format: must have either a .xlsx or .csv format for linelist exports
               missing_namespace_id: must have a namespace id for linelist exports
               invalid_namespace_id: must have valid namespace for linelist exports
+              invalid_attachment_formats: "%{invalid_formats} are not valid attachment formats"
         namespace:
           attributes:
             name:

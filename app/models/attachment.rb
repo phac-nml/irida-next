@@ -37,6 +37,10 @@ class Attachment < ApplicationRecord
     'ATT'
   end
 
+  def self.valid_formats
+    %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
+  end
+
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment
   def destroy
     update(deleted_at: Time.current)
