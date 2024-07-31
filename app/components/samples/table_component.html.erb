@@ -35,8 +35,8 @@
                     name="select"
                     class="
                       w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
-                      focus:ring-primary-500 dark:focus:ring-primary-560 dark:ring-offset-slate-800
-                      focus:ring-2 dark:bg-slate-700 dark:border-slate-560
+                      focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
+                      focus:ring-2 dark:bg-slate-700 dark:border-slate-600
                     "
                     data-selection-target="selectAll"
                     onchange="Turbo.navigator.submitForm(this.form)"
@@ -129,7 +129,7 @@
                     selection_target: "rowSelection",
                   },
                   class:
-                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-560 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-560" %>
+                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
                 <% end %>
                 <% if column == :puid || column == :name %>
                   <%= link_to(
@@ -142,7 +142,7 @@
                         sample[column],
                         defined?(@search_params[:name_or_puid_cont]) &&
                           @search_params[:name_or_puid_cont],
-                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-560">\1</mark>',
+                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                       ) %>
                     </span>
                   <% end %>
@@ -188,7 +188,7 @@
                       turbo: false,
                     },
                     class:
-                      "font-medium text-blue-560 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
                   ) %>
                 <% end %>
                 <% if @row_actions[:destroy] %>
@@ -202,7 +202,7 @@
                       "turbo-stream": true,
                     },
                     class:
-                      "font-medium text-blue-560 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
                   ) %>
                 <% end %>
               <% end %>
