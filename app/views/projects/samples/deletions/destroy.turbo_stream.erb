@@ -10,9 +10,4 @@
       open: false,
     },
   ) %>
-
-  <%= turbo_stream.replace "project_samples_table" do %>
-    <%= turbo_frame_tag "project_samples_table",
-    src: project_samples_path(@project, format: :turbo_stream) %>
-  <% end %>
 <% end %>

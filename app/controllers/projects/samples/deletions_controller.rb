@@ -41,17 +41,16 @@ module Projects
 
         # No selected samples deleted
         if deleted_samples_count.zero?
-          render status: :unprocessable_entity, locals: { type: :error, message: t('.no_deleted_samples') }
+          flash[:error] = t('.no_deleted_samples')
         # Partial sample deletion
         elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
-          render status: :multi_status,
-                 locals: { messages: get_multi_status_destroy_multiple_message(deleted_samples_count,
-                                                                               samples_to_delete_count) }
+          set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
         # All samples deleted successfully
         else
           flash[:success] = t('.success')
-          redirect_to namespace_project_samples_path
         end
+
+        redirect_to namespace_project_samples_path
       end
 
       private
@@ -71,15 +70,11 @@ module Projects
         params.require(:multiple_deletion).permit(sample_ids: [])
       end
 
-      def get_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
-        [
-          { type: :success,
-            message: t('.partial_success',
-                       deleted: "#{deleted_samples_count}/#{samples_to_delete_count}") },
-          { type: :error,
-            message: t('.partial_error',
-                       not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}") }
-        ]
+      def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
+        flash[:success] = t('.partial_success',
+                            deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
+        flash[:error] = t('.partial_error',
+                          not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
       end
     end
   end
