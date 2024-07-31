@@ -18,16 +18,12 @@
             scope: 'col',
             classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
           ) do %>
-            <% if column == :updated_at %>
-              <%= t(".updated_at") %>
-            <% else %>
-              <%= render Ransack::SortComponent.new(
-                ransack_obj: @q,
-                label: t(".#{column}"),
-                url: helpers.sorting_url(@q, column),
-                field: column,
-              ) %>
-            <% end %>
+            <%= render Ransack::SortComponent.new(
+              ransack_obj: @q,
+              label: t(".#{column}"),
+              url: helpers.sorting_url(@q, column),
+              field: column,
+            ) %>
           <% end %>
         <% end %>
         <%= render_cell(
@@ -55,7 +51,7 @@
                 <%= link_to namespace_group_link_source[:label],
                 namespace_group_link_source[:inherited_namespace_path],
                 data: {
-                  turbo_frame: "_top"
+                  turbo_frame: "_top",
                 },
                 class: "text-grey-900 dark:text-grey-100 font-semibold hover:underline" %>
               <% end %>
@@ -89,14 +85,14 @@
                       id: "invited-group-#{namespace_group_link.group.id}-access-level-select",
                       onchange: "this.form.requestSubmit();",
                       "aria-label":
-                        t(:"projects.group_links.index.aria_labels.group_access_level")
-                    }
+                        t(:"projects.group_links.index.aria_labels.group_access_level"),
+                    },
                   ) %>
                   <input type="hidden" name="format" value="turbo_stream"/>
                 <% end %>
               <% else %>
                 <%= t(
-                  :"projects.group_links.index.access_level.level_#{namespace_group_link.group_access_level}"
+                  :"projects.group_links.index.access_level.level_#{namespace_group_link.group_access_level}",
                 ) %>
               <% end %>
             </div>
@@ -108,18 +104,12 @@
                   <div class="relative max-w-sm">
                     <div
                       class="
-                        absolute
-                        inset-y-0
-                        left-0
-                        flex
-                        items-center
-                        pl-3
-                        pointer-events-none
+                        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
                       "
                     >
                       <%= viral_icon(
                         name: :calendar_days,
-                        classes: "w-5 h-5 text-slate-500 dark:text-slate-400"
+                        classes: "w-5 h-5 text-slate-500 dark:text-slate-400",
                       ) %>
                     </div>
                     <%= form.text_field :expires_at,
@@ -151,21 +141,21 @@
                     t(
                       :"projects.group_links.index.unlink_confirmation",
                       namespace_name: namespace_group_link.namespace.human_name,
-                      group_name: namespace_group_link.group.human_name
+                      group_name: namespace_group_link.group.human_name,
                     ),
-                  turbo_stream: true
+                  turbo_stream: true,
                 },
                 aria: {
                   label:
                     (
                       t(
                         :"projects.group_links.index.actions.unlink_aria_label",
-                        member: namespace_group_link.group.name
+                        member: namespace_group_link.group.name,
                       )
-                    )
+                    ),
                 },
                 class:
-                  "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+                  "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
               ) %>
             <% end %>
           </td>
@@ -177,7 +167,7 @@
     <%= viral_empty(
       title: t(:"projects.group_links.index.empty_state.title"),
       description: t(:"projects.group_links.index.empty_state.description"),
-      icon_name: :document_text
+      icon_name: :document_text,
     ) %>
   </div>
 <% end %>
