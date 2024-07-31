@@ -1,52 +1,11 @@
-<div class="table-container relative overflow-x-auto" data-turbo-temporary>
-  <table
-    class="
-      w-full
-      text-sm
-      text-left
-      rtl:text-right
-      text-slate-500
-      dark:text-slate-400
-      dark:divide-slate-600
-      whitespace-nowrap
-    "
-  >
-    <thead
-      class="
-        text-xs
-        text-slate-700
-        uppercase
-        bg-slate-50
-        dark:bg-slate-700
-        dark:text-slate-400
-      "
-    >
-      <tr>
-        <th scope="col" class="px-6 py-3"><%= t(:"projects.group_links.index.table_header.group") %></th>
-        <th scope="col" class="px-6 py-3"><%= t(:"projects.group_links.index.table_header.source") %></th>
-        <th scope="col" class="px-6 py-3"><%= t(:"projects.group_links.index.table_header.access_granted") %></th>
-        <th scope="col" class="px-6 py-3 min-w-40"><%= t(:"projects.group_links.index.table_header.access_level") %></th>
-        <th scope="col" class="px-6 py-3 min-w-48"><%= t(:"projects.group_links.index.table_header.expiration") %></th>
-        <th scope="col" class="px-6 py-3"><%= t(:"projects.group_links.index.table_header.action") %></th>
-      </tr>
-    </thead>
-    <tbody
-      class="
-        bg-white
-        divide-y
-        divide-slate-200
-        dark:bg-slate-800
-        dark:divide-slate-700
-      "
-    >
-      <%= render partial: "namespace_group_link", collection: @namespace_group_links %>
-    </tbody>
-  </table>
-  <div class="empty_state_message">
-    <%= viral_empty(
-      title: t(:"projects.group_links.index.empty_state.title"),
-      description: t(:"projects.group_links.index.empty_state.description"),
-      icon_name: :document_text
-    ) %>
-  </div>
-</div>
+<%= render Groups::TableComponent.new(
+  @namespace_group_links,
+  @namespace,
+  @access_levels,
+  @q,
+  abilities: {
+    update_namespace:
+      allowed_to?(:update_namespace_with_group_link?, @namespace),
+    unlink_group: allowed_to?(:unlink_namespace_with_group?, @namespace),
+  },
+) %>

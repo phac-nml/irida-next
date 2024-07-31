@@ -213,7 +213,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def ransackable_associations(_auth_object = nil)
-      %w[user namespace]
+      %w[user namespace group]
     end
   end
 

@@ -1,0 +1,7 @@
+en:
+  group_name: Group
+  namespace_name: Source
+  updated_at: Access Granted
+  group_access_level: Access Level
+  expires_at: Expiration
+  action: Action

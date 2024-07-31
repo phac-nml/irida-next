@@ -13,10 +13,12 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def index
+    authorize! @namespace, to: :member_listing?
+    @q = load_namespace_group_links.ransack(params[:q])
+    set_default_sort
+    @pagy, @namespace_group_links = pagy(@q.result)
     respond_to do |format|
-      format.turbo_stream do
-        @pagy, @namespace_group_links = pagy(load_namespace_group_links)
-      end
+      format.turbo_stream
     end
   end
 
@@ -140,5 +142,9 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   def load_namespace_group_links
     authorized_scope(NamespaceGroupLink, type: :relation,
                                          scope_options: { namespace: @namespace })
+  end
+
+  def set_default_sort
+    @q.sorts = 'group_name asc' if @q.sorts.empty?
   end
 end

@@ -34,13 +34,23 @@
     <%= tabs.with_tab(url: group_members_path(tab: "invited_groups"), selected: @tab == "invited_groups", controls: "members-tabs") do %>
       <%= t(:"groups.members.index.tabs.groups") %>
     <% end %>
-    <%= tabs.with_search_bar(
-      q: @q,
-      url: group_members_url(**request.query_parameters),
-      search_attribute: :user_email_cont,
-      placeholder: t(".search.placeholder"),
-      tab: @tab,
-    ) %>
+    <% if @tab == "invited_groups" %>
+      <%= tabs.with_search_bar(
+        q: @q,
+        url: group_group_links_url(**request.query_parameters),
+        search_attribute: :group_name_cont,
+        placeholder: t(".search.groups.placeholder"),
+        tab: @tab,
+      ) %>
+    <% else %>
+      <%= tabs.with_search_bar(
+        q: @q,
+        url: group_members_url(**request.query_parameters),
+        search_attribute: :user_email_cont,
+        placeholder: t(".search.placeholder"),
+        tab: @tab,
+      ) %>
+    <% end %>
     <%= tabs.with_tab_content do %>
       <div class="flex flex-col">
         <%= turbo_frame_tag "members", "data-turbo-temporary": true,

@@ -10,7 +10,12 @@ module Projects
       @user = users(:john_doe)
       login_as @user
       @namespace = namespaces_project_namespaces(:project25_namespace)
+      @project = projects(:project25)
       @group_links_count = namespace_group_links.select { |group_link| group_link.namespace == @namespace }.count
+      @group_link2 = namespace_group_links(:namespace_group_link2)
+      @group_link6 = namespace_group_links(:namespace_group_link6)
+      @group_link5 = namespace_group_links(:namespace_group_link5)
+      @group_link14 = namespace_group_links(:namespace_group_link14)
     end
 
     test 'can create a project to group link' do
@@ -274,6 +279,154 @@ module Projects
 
       assert_text I18n.t(:'action_policy.policy.project.read?',
                          name: namespace_group_link.namespace.name)
+    end
+
+    test 'can search group links by group name' do
+      group_name_col = 1
+
+      visit namespace_project_members_url(@namespace.parent, @project, tab: 'invited_groups')
+
+      assert_text 'Displaying 4 items'
+      assert_selector '#project-members table tbody tr', count: 4
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link6.group.name
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link5.group.name
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link14.group.name
+
+      fill_in placeholder: I18n.t(:'projects.members.index.search.groups.placeholder'), with: @group_link2.group.name
+
+      assert_text 'Displaying 1 item'
+      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
+                         text: @group_link6.group.name
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
+                         text: @group_link5.group.name
+      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
+                         text: @group_link14.group.name
+    end
+
+    test 'can sort by column' do
+      visit namespace_project_members_url(@namespace.parent, @project, tab: 'invited_groups')
+
+      assert_text 'Displaying 4 items'
+      assert_selector '#project-members table tbody tr', count: 4
+      assert_selector '#project-members table thead th:first-child svg.icon-arrow_up'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:first-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link14.group_access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @group_link2.group.name
+        assert_selector 'tr:nth-child(2) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link2.group_access_level)
+        assert_selector 'tr:nth-child(3) td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:nth-child(3) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link5.group_access_level)
+        assert_selector 'tr:last-child td:first-child', text: @group_link6.group.name
+        assert_selector 'tr:last-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link6.group_access_level)
+      end
+
+      click_on I18n.t('projects.group_links.index.table_header.group')
+      assert_selector '#project-members table thead th:first-child svg.icon-arrow_down'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
+        assert_selector 'tr:first-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link6.group_access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:nth-child(2) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link5.group_access_level)
+        assert_selector 'tr:nth-child(3) td:first-child', text: @group_link2.group.name
+        assert_selector 'tr:nth-child(3) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link2.group_access_level)
+        assert_selector 'tr:last-child td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:last-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link14.group_access_level)
+      end
+
+      click_on I18n.t('projects.group_links.index.table_header.source')
+      assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_up'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:first-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link5.group_access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:nth-child(2) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link14.group_access_level)
+        assert_selector 'tr:nth-child(3) td:first-child', text: @group_link6.group.name
+        assert_selector 'tr:nth-child(3) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link6.group_access_level)
+        assert_selector 'tr:last-child td:first-child', text: @group_link2.group.name
+        assert_selector 'tr:last-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link2.group_access_level)
+      end
+
+      click_on I18n.t('projects.group_links.index.table_header.source')
+      assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_down'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
+        assert_selector 'tr:first-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link2.group_access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @group_link6.group.name
+        assert_selector 'tr:nth-child(2) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link6.group_access_level)
+        assert_selector 'tr:nth-child(3) td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:nth-child(3) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link5.group_access_level)
+        assert_selector 'tr:last-child td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:last-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link14.group_access_level)
+      end
+
+      click_on I18n.t('projects.group_links.index.table_header.access_level')
+      assert_selector '#project-members table thead th:nth-child(4) svg.icon-arrow_up'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:first-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link5.group_access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @group_link2.group.name
+        assert_selector 'tr:nth-child(2) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link2.group_access_level)
+        assert_selector 'tr:nth-child(3) td:first-child', text: @group_link6.group.name
+        assert_selector 'tr:nth-child(3) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link6.group_access_level)
+        assert_selector 'tr:last-child td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:last-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link14.group_access_level)
+      end
+
+      click_on I18n.t('projects.group_links.index.table_header.access_level')
+      assert_selector '#project-members table thead th:nth-child(4) svg.icon-arrow_down'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
+        assert_selector 'tr:first-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link6.group_access_level)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:nth-child(2) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link14.group_access_level)
+        assert_selector 'tr:nth-child(3) td:first-child', text: @group_link2.group.name
+        assert_selector 'tr:nth-child(3) td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link2.group_access_level)
+        assert_selector 'tr:last-child td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:last-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link5.group_access_level)
+      end
+
+      click_on I18n.t('projects.group_links.index.table_header.expiration')
+      assert_selector '#project-members table thead th:nth-child(5) svg.icon-arrow_up'
+      within first('#project-members table tbody') do
+        assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
+        assert_selector 'tr:first-child td:nth-child(5)',
+                        text: Member::AccessLevel.human_access(@group_link2.expires_at)
+        assert_selector 'tr:nth-child(2) td:first-child', text: @group_link6.group.name
+        assert_selector 'tr:nth-child(2) td:nth-child(5)',
+                        text: Member::AccessLevel.human_access(@group_link6.expires_at)
+        assert_selector 'tr:nth-child(3) td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:nth-child(3) td:nth-child(5)',
+                        text: Member::AccessLevel.human_access(@group_link5.expires_at)
+        assert_selector 'tr:last-child td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:last-child td:nth-child(5)',
+                        text: Member::AccessLevel.human_access(@group_link14.expires_at)
+      end
     end
   end
 end

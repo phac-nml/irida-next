@@ -30,6 +30,14 @@ class NamespaceGroupLink < ApplicationRecord
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[updated_at group_access_level expires_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[group namespace]
+  end
+
   def send_access_revoked_emails
     I18n.available_locales.each do |locale|
       user_emails = Member.user_emails(group, locale)
