@@ -3,9 +3,8 @@
 # migration to update all metadata keys to be downcased
 # outputs a list of sample puid's which could not be downcased because of duplicate keys
 class MetadataKeysDowncase < ActiveRecord::Migration[7.1]
-  @fail_list = []
-
   def up
+    @fail_list = []
     migrate_sample_metadata
     put_failed_migration_list
   end
