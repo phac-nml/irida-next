@@ -10,7 +10,7 @@
     <div class="flex items-center space-x-2">
       <% if allowed_to?(:submit_workflow?, @group) && @pipelines_enabled %>
         <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @group.id),
-        data: { turbo_stream: true, controller: "action-link", action_link_required_value: 1, action: "turbo:morph-element->action-link#setDisabled", },
+        data: { turbo_stream: true, controller: "action-link", action_link_required_value: 1, action: "turbo:morph-element->action-link#idempotentConnect", },
                   class: "button button--size-default button--state-default action-link" do %>
           <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
           <span class="sr-only"><%= t(".workflows.button_sr") %></span>
@@ -20,7 +20,7 @@
         <%= link_to t(".create_export_button"),
         new_data_export_path(export_type: "sample", namespace_id: @group.id),
         data: {
-          action: "turbo:morph-element->action-link#setDisabled",
+          action: "turbo:morph-element->action-link#idempotentConnect",
           turbo_stream: true,
           controller: "action-link",
           action_link_required_value: 1,
