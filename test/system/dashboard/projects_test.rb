@@ -26,7 +26,7 @@ module Dashboard
       assert_selector 'tr', count: 20
 
       click_link projects(:project1).human_name
-      assert_selector 'h1', text: projects(:project1).name
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
     end
 
     test 'can see the list of projects in user\'s groups and namespace group links' do
@@ -48,7 +48,7 @@ module Dashboard
       assert_selector 'tr', count: 20
 
       click_link projects(:project1).human_name
-      assert_selector 'h1', text: projects(:project1).name
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
     end
 
     test 'can filter the list of projects to only see personal ones' do
