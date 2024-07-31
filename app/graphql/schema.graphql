@@ -195,7 +195,7 @@ input CreateSampleInput {
   """
   The description to give the sample.
   """
-  description: String!
+  description: String
 
   """
   The name to give the sample.
