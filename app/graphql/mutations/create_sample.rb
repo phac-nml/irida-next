@@ -5,7 +5,7 @@ module Mutations
   class CreateSample < BaseMutation
     null true
     description 'Create a new sample within an existing project.'
-    argument :description, String, description: 'The description to give the sample.'
+    argument :description, String, required: false, description: 'The description to give the sample.'
     argument :name, String, required: true, description: 'The name to give the sample.'
     argument :project_id, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
