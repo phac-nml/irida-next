@@ -15,6 +15,11 @@ module Viral
       indigo: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300',
       purple: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
       pink: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300',
+      fuchsia: 'bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-900 dark:text-fuchsia-300',
+      lime: 'bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-300',
+      teal: 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-300',
+      sky: 'bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300',
+      amber: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300',
       primary: 'bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400',
       transparent: 'text-slate-500 dark:text-slate-400'
     }.freeze
@@ -29,6 +34,11 @@ module Viral
       indigo: 'border border-indigo-800 dark:border-indigo-300',
       purple: 'border border-purple-800 dark:border-purple-300',
       pink: 'border border-pink-800 dark:border-pink-300',
+      fuchsia: 'border border-fuchsia-800 dark:border-fuchsia-300',
+      lime: 'border border-lime-800 dark:border-lime-300',
+      teal: 'border border-teal-800 dark:border-teal-300',
+      sky: 'border border-sky-800 dark:border-sky-300',
+      amber: 'border border-amber-800 dark:border-amber-300',
       primary: 'border border-primary-800 dark:border-primary-400',
       transparent: 'border border-slate-500 dark:border-slate-400'
     }.freeze
