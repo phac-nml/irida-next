@@ -65,16 +65,6 @@ module Mutations
         status: metadata_changes,
         errors: user_errors
       }
-    rescue RuntimeError => e
-      user_errors = [{
-        path: ['sample'],
-        message: e.message
-      }]
-      {
-        sample: nil,
-        status: nil,
-        errors: user_errors
-      }
     rescue JSON::ParserError => e
       user_errors = [{
         path: ['metadata'],

@@ -224,10 +224,9 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
                                               name: sample1.name,
                                               description: sample1.description })
 
-    assert_not_nil result['data']['createSample']['errors'], 'shouldn\'t work and have errors.'
+    expected_error = { 'message' => 'project_ids_dont_look_like_this is not a valid IRIDA Next ID.',
+                       'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['createSample'] }
 
-    errors = result['data']['createSample']['errors']
-
-    assert_equal 'project_ids_dont_look_like_this is not a valid IRIDA Next ID.', errors[0]['message']
+    assert_equal expected_error, result['errors'][0]
   end
 end
