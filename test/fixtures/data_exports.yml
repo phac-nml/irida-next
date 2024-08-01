@@ -92,7 +92,7 @@ data_export_eight:
   status: ready
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>],
-    format: 'csv',
+    linelist_format: 'csv',
     namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>,
     metadata_fields: ['metadatafield1', 'metadatafield2']
   }
@@ -108,7 +108,7 @@ data_export_nine:
   status: ready
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample33, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample34, :uuid) %>],
-    format: 'xlsx',
+    linelist_format: 'xlsx',
     namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>,
     metadata_fields: ['metadatafield1', 'non_existant_field', 'metadatafield2']
   }

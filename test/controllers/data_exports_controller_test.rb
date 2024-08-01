@@ -46,7 +46,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                  'export_parameters' => {
                    'ids' => [@sample1.id],
                    'namespace_id' => @project1.namespace.id,
-                   'format' => 'csv',
+                   'linelist_format' => 'csv',
                    'metadata_fields' => ['metadatafield1']
                  }
                },
@@ -63,7 +63,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                  'export_parameters' => {
                    'ids' => [@sample1.id],
                    'namespace_id' => @project1.namespace.id,
-                   'format' => 'xlsx',
+                   'linelist_format' => 'xlsx',
                    'metadata_fields' => ['metadatafield1']
                  }
                },
@@ -198,14 +198,14 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test 'should not create new linelist export with invalid format param' do
+  test 'should not create new linelist export with invalid linelist_format param' do
     post data_exports_path(format: :turbo_stream),
          params: {
            data_export: {
              export_type: 'linelist',
              export_parameters: { 'ids' => [@sample1.id],
                                   'namespace_id' => @project1.namespace.id,
-                                  'format' => 'invalid_format',
+                                  'linelist_format' => 'invalid_format',
                                   'metadata_fields' => ['metadatafield1'] }
            }
          }
@@ -218,7 +218,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
            data_export: {
              export_type: 'linelist',
              export_parameters: { 'ids' => [@sample1.id],
-                                  'format' => 'xlsx',
+                                  'linelist_format' => 'xlsx',
                                   'metadata_fields' => ['metadatafield1'] }
            }
          }
@@ -232,7 +232,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
              export_type: 'linelist',
              export_parameters: { 'ids' => [@sample1.id],
                                   'namespace_id' => 'invalid_id',
-                                  'format' => 'csv',
+                                  'linelist_format' => 'csv',
                                   'metadata_fields' => ['metadatafield1'] }
            }
          }
@@ -246,7 +246,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
              export_type: 'linelist',
              export_parameters: { 'ids' => [@sample1.id],
                                   'namespace_id' => 'invalid_id',
-                                  'format' => 'csv' }
+                                  'linelist_format' => 'csv' }
            }
          }
     assert_response :unprocessable_entity

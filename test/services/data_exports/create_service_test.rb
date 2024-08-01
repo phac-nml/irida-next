@@ -188,7 +188,7 @@ module DataExports
         'export_type' => 'linelist',
         'export_parameters' => {
           'ids' => [sample32.id, sample33.id],
-          'format' => 'csv',
+          'linelist_format' => 'csv',
           'namespace_id' => group12.id,
           'metadata_fields' => %w[metadatafield1 metadatafield2]
         }
@@ -204,7 +204,7 @@ module DataExports
         'export_type' => 'linelist',
         'export_parameters' => {
           'ids' => [@sample1.id, @sample2.id],
-          'format' => 'xlsx',
+          'linelist_format' => 'xlsx',
           'namespace_id' => @project1.namespace.id,
           'metadata_fields' => %w[metadatafield1 metadatafield2]
         }
@@ -241,7 +241,7 @@ module DataExports
         'export_parameters' => {
           'ids' => [@sample1.id, @sample2.id],
           'namespace_id' => group4.id,
-          'format' => 'xlsx',
+          'linelist_format' => 'xlsx',
           'metadata_fields' => %w[metadatafield1 metadatafield2]
         }
       }

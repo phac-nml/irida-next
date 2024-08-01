@@ -119,12 +119,12 @@
                 <%= form.label :name, t(".format") %>
                 <div class="flex">
                   <div class="flex items-center">
-                    <input id="csv-format" type="radio" value="csv" name="data_export[export_parameters][format]"
+                    <input id="csv-format" type="radio" value="csv" name="data_export[export_parameters][linelist_format]"
                           checked="true" class="w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600">
                     <label for="csv-format" class="ml-1 mr-2 text-sm font-medium text-slate-900 dark:text-slate-300"><%= t(".csv") %></label>
                   </div>
                   <div class="flex items-center">
-                    <input id="xlsx-format" type="radio" value="xlsx" name="data_export[export_parameters][format]"
+                    <input id="xlsx-format" type="radio" value="xlsx" name="data_export[export_parameters][linelist_format]"
                           class="w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600">
                     <label for="xlsx-format" class="ml-1 text-sm font-medium text-slate-900 dark:text-slate-300"><%= t(".xlsx") %></label>
                   </div>

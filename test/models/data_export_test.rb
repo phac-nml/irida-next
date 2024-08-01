@@ -85,7 +85,7 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'linelist export with missing metadata fields' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
-                                 export_parameters: { ids: [@sample1.id], format: 'xlsx',
+                                 export_parameters: { ids: [@sample1.id], linelist_format: 'xlsx',
                                                       namespace_id: @project1.namespace.id })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_metadata_fields'),
@@ -94,7 +94,7 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'sample export with missing namespace_id' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
-                                 export_parameters: { ids: [@sample1.id], format: 'xlsx',
+                                 export_parameters: { ids: [@sample1.id], linelist_format: 'xlsx',
                                                       metadata_fields: ['a_metadata_field'] })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'),
@@ -103,7 +103,7 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'sample export with invalid namespace_id' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
-                                 export_parameters: { ids: [@sample1.id], format: 'csv',
+                                 export_parameters: { ids: [@sample1.id], linelist_format: 'csv',
                                                       metadata_fields: ['a_metadata_field'],
                                                       namespace_id: 'invalid_namespace_id' })
     assert_not data_export.valid?
@@ -113,7 +113,7 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'linelist export with missing namespace_id' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
-                                 export_parameters: { ids: [@sample1.id], format: 'xlsx',
+                                 export_parameters: { ids: [@sample1.id], linelist_format: 'xlsx',
                                                       metadata_fields: ['a_metadata_field'] })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'),
@@ -122,7 +122,7 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'linelist export with invalid namespace_type' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
-                                 export_parameters: { ids: [@sample1.id], format: 'csv',
+                                 export_parameters: { ids: [@sample1.id], linelist_format: 'csv',
                                                       metadata_fields: ['a_metadata_field'],
                                                       namespace_id: 'invalid_namespace_id' })
     assert_not data_export.valid?
@@ -130,7 +130,7 @@ class DataExportTest < ActiveSupport::TestCase
                  data_export.errors[:export_parameters].first
   end
 
-  test 'linelist export with missing format' do
+  test 'linelist export with missing linelist_format' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id],
                                                       metadata_fields: ['a_metadata_field'],
@@ -140,9 +140,9 @@ class DataExportTest < ActiveSupport::TestCase
                  data_export.errors[:export_parameters].first
   end
 
-  test 'linelist export with invalid format' do
+  test 'linelist export with invalid linelist_format' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
-                                 export_parameters: { ids: [@sample1.id], format: 'invalid_format',
+                                 export_parameters: { ids: [@sample1.id], linelist_format: 'invalid_format',
                                                       metadata_fields: ['a_metadata_field'],
                                                       namespace_id: @project1.namespace.id })
     assert_not data_export.valid?

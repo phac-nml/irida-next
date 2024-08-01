@@ -31,7 +31,7 @@ module DataExports
 
     def attach_export(data_export, export)
       filename = if data_export.export_type == 'linelist'
-                   "#{data_export.id}.#{data_export.export_parameters['format']}"
+                   "#{data_export.id}.#{data_export.export_parameters['linelist_format']}"
                  else
                    "#{data_export.id}.zip"
                  end
@@ -199,7 +199,7 @@ module DataExports
                 else
                   Sample.where(id: data_export.export_parameters['ids'])
                 end
-      if data_export.export_parameters['format'] == 'csv'
+      if data_export.export_parameters['linelist_format'] == 'csv'
         write_csv_export(data_export, samples, namespace_type)
       else
         write_xlsx_export(data_export, samples, namespace_type)
