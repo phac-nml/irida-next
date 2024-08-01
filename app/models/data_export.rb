@@ -28,7 +28,7 @@ class DataExport < ApplicationRecord
   end
 
   def validate_attachment_formats
-    invalid_formats = export_parameters['attachment_formats'] - Attachment::FORMAT_REGEX.keys.map(&:to_s)
+    invalid_formats = export_parameters['attachment_formats'] - Attachment::FORMAT_REGEX.keys
 
     return if invalid_formats.empty?
 
