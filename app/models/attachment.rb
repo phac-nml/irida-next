@@ -55,8 +55,7 @@ class Attachment < ApplicationRecord
 
   private
 
-  # rubocop:disable Metrics/AbcSize
-  def assign_metadata
+  def assign_metadata # rubocop:disable Metrics/AbcSize
     return if metadata.key? 'format'
 
     found_format = FORMAT_REGEX.find { |key, value| filename.to_s =~ value }
@@ -70,6 +69,4 @@ class Attachment < ApplicationRecord
 
     metadata['compression'] = filename.to_s.match?(/^\S+(.gz)+$/) ? 'gzip' : 'none'
   end
-
-  # rubocop:enable Metrics/AbcSize
 end
