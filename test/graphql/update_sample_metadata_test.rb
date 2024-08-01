@@ -207,18 +207,11 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                                  variables: { sampleId: 'not a sample id',
                                               metadata: { key1: 'value1' } })
 
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['updateSampleMetadata']
-
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
-    assert_not_empty data['errors']
-
     expected_error = [
-      'path' => ['sample'],
-      'message' => 'not a sample id is not a valid IRIDA Next ID.'
+      { 'message' => 'not a sample id is not a valid IRIDA Next ID.', 'locations' => [{ 'line' => 2, 'column' => 3 }],
+        'path' => ['updateSampleMetadata'] }
     ]
-    assert_equal expected_error, data['errors']
+    assert_equal expected_error, result['errors']
   end
 
   test 'updateSampleMetadata mutation should not work with invalid sample puid' do

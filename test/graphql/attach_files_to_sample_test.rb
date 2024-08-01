@@ -396,11 +396,12 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
   test 'attachFilesToSample mutation should not work with invalid sample id' do
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
-    assert_raises RuntimeError do
-      IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
-                          context: { current_user: @user, token: @api_scope_token },
-                          variables: { files: [blob_file.signed_id],
-                                       sampleId: 'this is not a valid sample id' })
-    end
+    sample = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file.signed_id],
+                                              sampleId: 'this is not a valid sample id' })
+    expected_error = { 'message' => 'this is not a valid sample id is not a valid IRIDA Next ID.',
+                       'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['attachFilesToSample'] }
+    assert_equal expected_error, sample['errors'][0]
   end
 end

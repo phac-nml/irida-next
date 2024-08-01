@@ -34,7 +34,7 @@ class IridaSchemaTest < ActiveSupport::TestCase
   end
 
   test '#object_from_id fails if the type does not match' do
-    assert_raises RuntimeError do
+    assert_raises GraphQL::CoercionError do
       IridaSchema.object_from_id(groups(:group_one).to_global_id.to_s, expected_type: Project)
     end
   end
@@ -50,7 +50,7 @@ class IridaSchemaTest < ActiveSupport::TestCase
   test '#parse_gid when gid is malformed raises an error' do
     global_id = 'malformed://irida/Group/12345'
 
-    assert_raises RuntimeError do
+    assert_raises GraphQL::CoercionError do
       IridaSchema.parse_gid(global_id)
     end
   end
@@ -72,7 +72,7 @@ class IridaSchemaTest < ActiveSupport::TestCase
   test '#parse_gid when using expected_type rejects an unknown type' do
     global_id = 'gid://irida/Group/12345'
 
-    assert_raises RuntimeError do
+    assert_raises GraphQL::CoercionError do
       IridaSchema.parse_gid(global_id, expected_type: Project)
     end
   end
@@ -87,7 +87,7 @@ class IridaSchemaTest < ActiveSupport::TestCase
   test '#parse_gid when using expected_type rejects an unknown type not present in an array of types' do
     global_id = 'gid://irida/Group/12345'
 
-    assert_raises RuntimeError do
+    assert_raises GraphQL::CoercionError do
       IridaSchema.parse_gid(global_id, expected_type: [User, Project])
     end
   end

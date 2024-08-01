@@ -18,12 +18,30 @@ module Mutations
     field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
     field :sample, Types::SampleType, description: 'The newly created sample.'
 
-    def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    # TODO: refactor this
+    def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
       project = if args[:project_id]
                   IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
                 else
-                  Namespaces::ProjectNamespace.find_by!(puid: args[:project_puid]).project
+                  # TODO: can this be a simple search by Project instead?
+                  project_namespace = Namespaces::ProjectNamespace.find_by(puid: args[:project_puid])
+                  if project_namespace.nil?
+                    nil
+                  else
+                    project_namespace.project
+                  end
                 end
+      if project.nil? || !project.persisted?
+        user_errors = [{
+          path: ['project'],
+          message: 'Project not found by provided ID or PUID'
+        }]
+        return {
+          sample: nil,
+          errors: user_errors
+        }
+      end
+
       sample = Samples::CreateService.new(current_user, project,
                                           { name: args[:name], description: args[:description] }).execute
       if sample.persisted?
@@ -47,15 +65,6 @@ module Mutations
       user_errors = [{
         path: ['project'],
         message: 'Project not found by provided ID or PUID'
-      }]
-      {
-        sample: nil,
-        errors: user_errors
-      }
-    rescue RuntimeError => e
-      user_errors = [{
-        path: ['project'],
-        message: e.message
       }]
       {
         sample: nil,
