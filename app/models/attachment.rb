@@ -5,14 +5,15 @@ class Attachment < ApplicationRecord
   include HasPuid
 
   FORMAT_REGEX = {
-    fasta: /^\S+\.fn?a(sta)?(\.gz)?$/,
-    fastq: /^\S+\.f(ast)?q(\.gz)?$/,
-    text: /^\S+\.(txt|rtf)?(\.gz)?$/,
-    csv: /^\S+\.(csv)?(\.gz)?$/,
-    tsv: /^\S+\.(tsv)?(\.gz)?$/,
-    spreadsheet: /^\S+\.(xls|xlsx)?$/,
-    json: /^\S+\.(json)?(\.gz)?$/,
-    genbank: /^\S+\.(gbk|gbf|genbank)?(\.gz)?$/
+    'fasta' => /^\S+\.fn?a(sta)?(\.gz)?$/,
+    'fastq' => /^\S+\.f(ast)?q(\.gz)?$/,
+    'text' => /^\S+\.(txt|rtf)?(\.gz)?$/,
+    'csv' => /^\S+\.(csv)?(\.gz)?$/,
+    'tsv' => /^\S+\.(tsv)?(\.gz)?$/,
+    'spreadsheet' => /^\S+\.(xls|xlsx)?$/,
+    'json' => /^\S+\.(json)?(\.gz)?$/,
+    'genbank' => /^\S+\.(gbk|gbf|genbank)?(\.gz)?$/,
+    'unknown' => nil
   }.freeze
 
   has_logidze
@@ -58,12 +59,12 @@ class Attachment < ApplicationRecord
   def assign_metadata # rubocop:disable Metrics/AbcSize
     return if metadata.key? 'format'
 
-    found_format = FORMAT_REGEX.find { |key, value| filename.to_s =~ value }
+    found_format = FORMAT_REGEX.find { |_key, value| filename.to_s =~ value }
 
     if found_format.nil?
       metadata['format'] = 'unknown'
     else
-      metadata['format'] = found_format[0].to_s
+      metadata['format'] = found_format[0]
       metadata['type'] = 'assembly' if metadata['format'] == 'fasta'
     end
 
