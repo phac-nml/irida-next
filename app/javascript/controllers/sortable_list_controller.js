@@ -7,8 +7,7 @@ export default class extends Controller {
   connect() {
     this.sortable = new Sortable(this.element, {
       group: this.groupNameValue,
-      animation: 100,
-      ghostClass: 'dark:bg-slate-600'
+      animation: 100
     })
   }
 }
