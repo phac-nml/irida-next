@@ -14,15 +14,11 @@ module Viral
         @list_items = list_items
         @system_arguments = system_arguments
         @system_arguments[:list_classes] =
-          class_names(
-            'border border-slate-300 rounded-md block dark:bg-slate-800 dark:border-slate-600 max-h-[400px] min-h-[200px]',
-            system_arguments[:list_classes]
-          )
+          class_names(system_arguments[:list_classes],
+                      'border border-slate-300 rounded-md block
+                      dark:bg-slate-800 dark:border-slate-600 max-h-[300px] min-h-[200px]')
         @system_arguments[:container_classes] =
-          class_names(
-            'text-slate-900 dark:text-white',
-            system_arguments[:container_classes]
-          )
+          class_names(system_arguments[:container_classes], 'text-slate-900 dark:text-white')
       end
     end
   end
