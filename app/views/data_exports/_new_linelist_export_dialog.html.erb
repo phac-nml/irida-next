@@ -90,15 +90,15 @@
               title: t(".available"),
               list_items: @namespace.metadata_fields.sort_by{|metadata_field| metadata_field.downcase},
               group: 'metadata_selection',
-              container_classes: 'basis-full block mb-1 pr-2 text-sm font-medium',
-              list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full'
+              container_classes: 'block mb-1 pr-2 text-sm font-medium',
+              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] !max-h-[200px] w-full'
               ) %>
             <%= sortable_lists.with_list(
               id: t(".selected"),
               title: t(".selected"),
               group: 'metadata_selection',
-              container_classes: 'basis-full block mb-1 text-sm font-medium',
-              list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full'
+              container_classes: 'block mb-1 text-sm font-medium',
+              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] !max-h-[200px] w-full'
               ) %>
           <% end %>
           <div class="flex -mt-3 font-medium text-slate-900 dark:text-white">

@@ -15,7 +15,7 @@ module Viral
         @system_arguments = system_arguments
         @system_arguments[:list_classes] =
           class_names(
-            'border border-slate-300 rounded-md block dark:bg-slate-800 dark:border-slate-600',
+            'border border-slate-300 rounded-md block dark:bg-slate-800 dark:border-slate-600 max-h-[400px] min-h-[200px]',
             system_arguments[:list_classes]
           )
         @system_arguments[:container_classes] =
