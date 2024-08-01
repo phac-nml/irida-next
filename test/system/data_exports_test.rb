@@ -76,6 +76,14 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within first('tbody') do
+      assert_selector 'tr', count: 7
+      click_link I18n.t('data_exports.index.actions.delete'), match: :first
+    end
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
+
+    within first('tbody') do
       assert_selector 'tr', count: 6
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
@@ -197,7 +205,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within first('tbody') do
-      assert_selector 'tr', count: 6
+      assert_selector 'tr', count: 7
       assert_text @data_export2.id
     end
 
@@ -210,7 +218,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     within first('tbody') do
-      assert_selector 'tr', count: 5
+      assert_selector 'tr', count: 6
       assert_no_text @data_export2.id
     end
   end
@@ -240,7 +248,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create export from project samples page' do
     visit data_exports_path
     within first('tbody') do
-      assert_selector 'tr', count: 6
+      assert_selector 'tr', count: 7
       assert_no_text 'test data export'
     end
     # project samples page
@@ -279,7 +287,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create export from group samples page' do
     visit data_exports_path
     within first('tbody') do
-      assert_selector 'tr', count: 6
+      assert_selector 'tr', count: 7
       assert_no_text 'test data export'
     end
     # project samples page

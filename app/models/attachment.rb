@@ -55,14 +55,14 @@ class Attachment < ApplicationRecord
   end
 
   FORMAT_REGEX = {
-    fasta: /^\S+\.fn?a(sta)?(\.gz)?$/,
-    fastq: /^\S+\.f(ast)?q(\.gz)?$/,
-    text: /^\S+\.(txt|rtf)?(\.gz)?$/,
-    csv: /^\S+\.(csv)?(\.gz)?$/,
-    tsv: /^\S+\.(tsv)?(\.gz)?$/,
-    spreadsheet: /^\S+\.(xls|xlsx)?$/,
-    json: /^\S+\.(json)?(\.gz)?$/,
-    genbank: /^\S+\.(gbk|gbf|genbank)?(\.gz)?$/
+    'fasta' => /^\S+\.fn?a(sta)?(\.gz)?$/,
+    'fastq' => /^\S+\.f(ast)?q(\.gz)?$/,
+    'text' => /^\S+\.(txt|rtf)?(\.gz)?$/,
+    'csv' => /^\S+\.(csv)?(\.gz)?$/,
+    'tsv' => /^\S+\.(tsv)?(\.gz)?$/,
+    'spreadsheet' => /^\S+\.(xls|xlsx)?$/,
+    'json' => /^\S+\.(json)?(\.gz)?$/,
+    'genbank' => /^\S+\.(gbk|gbf|genbank)?(\.gz)?$/
   }.freeze
 
   private
