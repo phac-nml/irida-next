@@ -4,19 +4,19 @@
     list_items: ['List 1 Item 1', 'List 1 Item 2', 'List 1 Item 3', 'Move us around!'],
     group: 'preview_group',
     container_classes: 'basis-full block mb-1 pr-2 text-sm font-medium mt-2',
-    list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full p-2.5'
+    list_classes: 'overflow-y-auto !max-h-[200px] w-full'
     ) %>
   <%= sortable_lists.with_list(
     title: 'This is a title for List 2',
     list_items: ['List 2 Item 1', 'List 2 Item 2', 'List 2 Item 3'],
     group: 'preview_group',
     container_classes: 'basis-full block mb-1 pr-2 text-sm font-medium mt-2',
-    list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full p-2.5'
+    list_classes: 'overflow-y-auto !max-h-[200px] w-full'
     ) %>
   <%= sortable_lists.with_list(
     title: 'This is a title for List 3 and this list is empty',
     group: 'preview_group',
     container_classes: 'basis-full block mb-1 pr-2 text-sm font-medium mt-2',
-    list_classes: 'overflow-y-auto max-h-[200px] min-h-[200px] w-full p-2.5'
+    list_classes: 'overflow-y-auto !max-h-[200px] w-full'
     ) %>
 <% end %>
