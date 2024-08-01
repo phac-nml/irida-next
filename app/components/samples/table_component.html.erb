@@ -5,8 +5,16 @@
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
         whitespace-nowrap
       '
+      class='
+        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+        whitespace-nowrap
+      '
     >
       <thead
+        class='
+          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          dark:text-slate-400
+        '
         class='
           text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
           dark:text-slate-400
@@ -109,6 +117,9 @@
         class='
           bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
         '
+        class='
+          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+        '
       >
         <% @samples.each do |sample| %>
           <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
@@ -149,7 +160,7 @@
                 <% elsif column == :project %>
                   <%= viral_tooltip(title: project_path(sample.project)) do %>
                     <%= link_to sample.project.abbreviated_path,
-                    project_path(sample.project),
+                    project_samples_path(sample.project),
                     data: {
                       turbo: false,
                     },
@@ -215,7 +226,7 @@
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
               class="
-                sticky left-0 z-10 px-3 py-3 bg-slate-50 dark:bg-slate-900
+                sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
               "
               colspan="3"
             >
