@@ -7,12 +7,17 @@ module PillColorHelper
       fasta: 'blue',
       fastq: 'green',
       text: 'orange',
+      csv: 'fuchsia',
+      tsv: 'lime',
+      json: 'sky',
+      genbank: 'teal',
       spreadsheet: 'yellow',
       unknown: 'slate'
     },
     type: {
       assembly: 'pink',
-      illumina_pe: 'purple'
+      illumina_pe: 'purple',
+      pe: 'amber'
     }
   }.freeze
 
