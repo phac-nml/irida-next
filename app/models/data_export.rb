@@ -28,12 +28,12 @@ class DataExport < ApplicationRecord
   end
 
   def validate_attachment_formats
-    return if (export_parameters['attachment_formats'] - Attachment.valid_formats).empty?
+    return if (export_parameters['attachment_formats'] - Attachment::FORMAT_REGEX.keys).empty?
 
     errors.add(:export_parameters,
                I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
                       invalid_formats:
-                      (export_parameters['attachment_formats'] - Attachment.valid_formats).join(', ')))
+                      (export_parameters['attachment_formats'] - Attachment::FORMAT_REGEX.keys).join(', ')))
   end
 
   def validate_namespace_id

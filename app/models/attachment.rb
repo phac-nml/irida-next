@@ -37,10 +37,6 @@ class Attachment < ApplicationRecord
     'ATT'
   end
 
-  def self.valid_formats
-    %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
-  end
-
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment
   def destroy
     update(deleted_at: Time.current)
@@ -57,6 +53,17 @@ class Attachment < ApplicationRecord
   def associated_attachment
     Attachment.find_by(attachable:, id: metadata['associated_attachment_id'])
   end
+
+  FORMAT_REGEX = {
+    fasta: /^\S+\.fn?a(sta)?(\.gz)?$/,
+    fastq: /^\S+\.f(ast)?q(\.gz)?$/,
+    text: /^\S+\.(txt|rtf)?(\.gz)?$/,
+    csv: /^\S+\.(csv)?(\.gz)?$/,
+    tsv: /^\S+\.(tsv)?(\.gz)?$/,
+    spreadsheet: /^\S+\.(xls|xlsx)?$/,
+    json: /^\S+\.(json)?(\.gz)?$/,
+    genbank: /^\S+\.(gbk|gbf|genbank)?(\.gz)?$/
+  }.freeze
 
   private
 

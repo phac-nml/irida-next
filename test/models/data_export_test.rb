@@ -176,7 +176,7 @@ class DataExportTest < ActiveSupport::TestCase
                                                       attachment_formats: formats })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
-                        invalid_fomats: (formats - Attachment.valid_formats).join(', ')),
+                        invalid_fomats: (formats - Attachment::FORMAT_REGEX.keys).join(', ')),
                  data_export.errors[:export_parameters].first
   end
 end
