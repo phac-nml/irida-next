@@ -32,8 +32,8 @@ sample22:
   description: Sample 22 description.
   project_id: <%= ActiveRecord::FixtureSet.identify(:project2, :uuid) %>
   puid: INXT_SAM_AAAAAAAAAV
-  created_at: <%= 1.weeks.ago %>
-  updated_at: <%= 1.days.ago %>
+  created_at: <%= 22.weeks.ago %>
+  updated_at: <%= 22.days.ago %>
 
 sample23:
   name: Project 4 Sample 23
