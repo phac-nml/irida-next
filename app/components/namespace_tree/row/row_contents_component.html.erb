@@ -18,7 +18,7 @@
     data: {
       turbo: false,
     },
-    url: project_path(@namespace.project),
+    url: project_samples_path(@namespace.project),
   ) %>
 <% end %>
 
@@ -30,7 +30,7 @@
           <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
         <% else %>
           <%= link_to @namespace.name,
-          project_path(@namespace.project),
+          project_samples_path(@namespace.project),
           data: {
             turbo: false,
           } %>
