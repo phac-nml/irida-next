@@ -64,4 +64,11 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
 
   config.middleware.insert_before 0, Capybara::Lockstep::Middleware
+
+  # Create a new production log file [daily, weekly, monthly,..]
+  # if ENV['RAILS_DAILY_LOG_ROTATION'].present?
+  #   logger           = ActiveSupport::Logger.new(config.default_log_file, 'daily')
+  #   logger.formatter = config.log_formatter
+  #   config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  # end
 end
