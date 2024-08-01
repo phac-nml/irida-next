@@ -92,6 +92,10 @@ Rails.application.configure do
     ]
   }
 
-  # Create a new development log file [daily, weekly, monthly,..]
-  # config.logger = ActiveSupport::Logger.new(config.default_log_file, 'daily')
+  # Create a new production log file [daily, weekly, monthly,..]
+  # if ENV['RAILS_DAILY_LOG_ROTATION'].present?
+  #   logger           = ActiveSupport::Logger.new(config.default_log_file, 'daily')
+  #   logger.formatter = config.log_formatter
+  #   config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  # end
 end
