@@ -33,18 +33,17 @@ module Viral
     end
     # rubocop:enable Metrics/ParameterLists
 
-    def default_system_arguments(args) # rubocop:disable Metrics/MethodLength
-      data = if @action_link
-               { 'viral--dropdown-target': 'trigger',
-                 action: 'turbo:morph-element->action-link#idempotentConnect',
-                 turbo_stream: true,
-                 controller: 'action-link',
-                 action_link_required_value: @action_link_value }
-             else
-               {
-                 'viral--dropdown-target': 'trigger'
-               }
-             end
+    def default_system_arguments(args)
+      data = { 'viral--dropdown-target': 'trigger' }
+
+      if @action_link
+        data = data.merge({
+                            action: 'turbo:morph-element->action-link#idempotentConnect',
+                            turbo_stream: true,
+                            controller: 'action-link',
+                            action_link_required_value: @action_link_value
+                          })
+      end
       args.merge({
                    id: "dd-#{SecureRandom.hex(10)}",
                    data:,
