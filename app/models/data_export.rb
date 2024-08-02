@@ -30,7 +30,7 @@ class DataExport < ApplicationRecord
   def validate_attachment_formats
     invalid_formats = export_parameters['attachment_formats'] - Attachment::FORMAT_REGEX.keys
 
-    return if invalid_formats.empty?
+    return nil if invalid_formats.empty?
 
     errors.add(:export_parameters,
                I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
