@@ -44,41 +44,74 @@
 <% end %>
 
 <% if @has_samples %>
-  <%= search_form_for @q, url: search_group_samples_url, html: { method: :post, "data-controller": "filters", "data-turbo-action": "replace", "data-filters-selection-outlet": "#samples-table", class: "filters" } do |f| %>
-    <%= turbo_frame_tag "group_samples_hidden_values" %>
-    <div class="flex flex-row-reverse items-center mb-4 space-x-2">
-      <input type="hidden" name="format" value="turbo_stream"/>
+  <div class="flow-root">
+    <div class="float-left inline-flex space-x-2">
+      <% if allowed_to?(:submit_workflow?, @group) || allowed_to?(:export_sample_data?, @group) %>
+        <%= search_form_for(
+                  @q,
+                  url: select_group_samples_url(**request.query_parameters),
+                  html: { "data-controller": "filters", id: "select-all-form" },
+                  class: "filters align-middle"
+                ) do |f| %>
+          <input type="hidden" name="format" value="turbo_stream"/>
+          <input type="hidden" name="select" value="on"/>
+          <%= f.submit "Select All",
+                   class: "button button--state-default button--size-default",
+                   "data-selection-target": "selectAll" %>
+        <% end %>
 
-      <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-      <%= render ListFilterComponent.new(
-        form: f,
-        filters: @search_params[:name_or_puid_in],
-      ) %>
-      <%= f.label :name_or_puid_cont,
-              placeholder: t(".search.placeholder"),
-              class: "sr-only" %>
-      <div class="relative lg:w-72">
-        <div
-          class="
-            absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-          "
-        >
-          <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-        </div>
-        <%= f.search_field :name_or_puid_cont,
-                       "data-action": "filters#submit",
-                       class:
-                         "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                       placeholder: t(".search.placeholder") %>
-      </div>
+        <%= search_form_for(
+                  @q,
+                  url: select_group_samples_url(**request.query_parameters),
+                  html: { "data-controller": "filters", id: "select-all-form" },
+                  class: "filters align-middle"
+                ) do |f| %>
+          <input type="hidden" name="format" value="turbo_stream"/>
+          <%= f.submit "Deselect All",
+                   class: "button button--state-default button--size-default",
+                   "data-selection-target": "selectAll" %>
+        <% end %>
+      <% end %>
     </div>
-  <% end %>
-  <div id="group_samples_table">
+    <div class="float-right">
+      <%= search_form_for @q, url: search_group_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters", "data-turbo-action": "replace", "data-filters-selection-outlet": "#samples-table", class: "mb-2" } do |f| %>
+        <%= turbo_frame_tag "group_samples_hidden_values" %>
+        <div class="flex flex-row-reverse items-center mb-4 space-x-2">
+          <input type="hidden" name="format" value="turbo_stream"/>
+
+          <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
+          <%= render ListFilterComponent.new(
+            form: f,
+            filters: @search_params[:name_or_puid_in],
+          ) %>
+          <%= f.label :name_or_puid_cont,
+                  placeholder: t(".search.placeholder"),
+                  class: "sr-only" %>
+          <div class="relative lg:w-72">
+            <div
+              class="
+                absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+              "
+            >
+              <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
+            </div>
+            <%= f.search_field :name_or_puid_cont,
+                           "data-action": "filters#submit",
+                           class:
+                             "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                           placeholder: t(".search.placeholder") %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= turbo_frame_tag "group_samples_table" do %>
     <%= render partial: "table",
     locals: {
       samples: @samples,
       group: @group,
       pagy: @pagy,
     } %>
-  </div>
+  <% end %>
 <% end %>
