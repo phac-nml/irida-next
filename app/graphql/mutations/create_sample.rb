@@ -18,19 +18,20 @@ module Mutations
     field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
     field :sample, Types::SampleType, description: 'The newly created sample.'
 
-    # TODO: refactor this
-    def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
-      project = if args[:project_id]
-                  IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
-                else
-                  # TODO: can this be a simple search by Project instead?
-                  project_namespace = Namespaces::ProjectNamespace.find_by(puid: args[:project_puid])
-                  if project_namespace.nil?
-                    nil
-                  else
-                    project_namespace.project
-                  end
-                end
+    def resolve(args) # rubocop:disable Metrics/MethodLength
+      begin
+        project = get_project(args)
+      rescue ActiveRecord::RecordNotFound
+        user_errors = [{
+          path: ['project'],
+          message: 'Project not found by provided ID or PUID'
+        }]
+        return {
+          sample: nil,
+          errors: user_errors
+        }
+      end
+
       if project.nil? || !project.persisted?
         user_errors = [{
           path: ['project'],
@@ -42,8 +43,29 @@ module Mutations
         }
       end
 
-      sample = Samples::CreateService.new(current_user, project,
-                                          { name: args[:name], description: args[:description] }).execute
+      create_sample(project, args)
+    end
+
+    def ready?(**_args)
+      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
+    end
+
+    private
+
+    def get_project(args)
+      if args[:project_id]
+        IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
+      else
+        project_namespace = Namespaces::ProjectNamespace.find_by(puid: args[:project_puid])
+        project_namespace&.project
+      end
+    end
+
+    def create_sample(project, args) # rubocop:disable Metrics/MethodLength
+      sample = Samples::CreateService.new(
+        current_user, project, { name: args[:name], description: args[:description] }
+      ).execute
+
       if sample.persisted?
         {
           sample:,
@@ -61,19 +83,6 @@ module Mutations
           errors: user_errors
         }
       end
-    rescue ActiveRecord::RecordNotFound
-      user_errors = [{
-        path: ['project'],
-        message: 'Project not found by provided ID or PUID'
-      }]
-      {
-        sample: nil,
-        errors: user_errors
-      }
-    end
-
-    def ready?(**_args)
-      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
     end
   end
 end
