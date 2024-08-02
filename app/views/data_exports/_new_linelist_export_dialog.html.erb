@@ -84,32 +84,42 @@
               </div>
             </div>
           </div>
-          <%= viral_sortable_lists(title: t(".metadata"), description: t(".metadata_description", available: t(".available").downcase, selected: t(".selected").downcase)) do |sortable_lists| %>
+          <%= viral_sortable_lists(
+            title: t(".metadata"),
+            description: t(".metadata_description",
+            available: t(".available").downcase,
+            selected: t(".selected").downcase
+            )) do |sortable_lists| %>
             <%= sortable_lists.with_list(
               id: t(".available"),
               title: t(".available"),
               list_items: @namespace.metadata_fields.sort_by{|metadata_field| metadata_field.downcase},
               group: 'metadata_selection',
               container_classes: 'block mb-1 pr-2 text-sm font-medium',
-              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] !max-h-[200px] w-full'
+              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] w-full'
               ) %>
             <%= sortable_lists.with_list(
               id: t(".selected"),
               title: t(".selected"),
               group: 'metadata_selection',
               container_classes: 'block mb-1 text-sm font-medium',
-              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] !max-h-[200px] w-full'
+              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] w-full'
               ) %>
           <% end %>
           <div class="flex -mt-3 font-medium text-slate-900 dark:text-white">
             <button
               class="mr-2 underline text-sm hover:no-underline"
-              data-action="click->data-exports--metadata-selection#addAll">
+              data-action="click->data-exports--metadata-selection#addAll"
+              data-data-exports--metadata-selection-target="addAll"
+              >
               <%= t(".add_all") %>
             </button>
             <button
-              class="ml-2 underline text-sm hover:no-underline"
-              data-action="click->data-exports--metadata-selection#removeAll">
+              aria-disabled="true"
+              class="ml-2 text-sm text-slate-300 dark:text-slate-700 pointer-events-none cursor-not-allowed"
+              data-action="click->data-exports--metadata-selection#removeAll"
+              data-data-exports--metadata-selection-target="removeAll"
+              >
               <%= t(".remove_all") %>
             </button>
           </div>

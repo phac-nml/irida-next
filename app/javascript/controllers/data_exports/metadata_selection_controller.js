@@ -3,7 +3,7 @@ import { createHiddenInput } from "utilities/form";
 
 export default class extends Controller {
 
-  static targets = ["field", "submitBtn"];
+  static targets = ["field", "submitBtn", "addAll", "removeAll"];
 
   static values = {
     selectedList: {
@@ -14,35 +14,46 @@ export default class extends Controller {
     }
   };
 
+  #disabledClasses = ["pointer-events-none", "cursor-not-allowed", "text-slate-300", "dark:text-slate-700"];
+  #enabledClasses = ["underline", "hover:no-underline"]
+
   connect() {
     this.availableList = document.getElementById(this.availableListValue)
     this.selectedList = document.getElementById(this.selectedListValue)
     this.fullListItems = this.availableList.querySelectorAll("li")
-    this.selectedList.addEventListener("mouseover", () => { this.#checkSubmitState() })
+    this.selectedList.addEventListener("mouseover", () => { this.#checkButtonStates() })
+    this.availableList.addEventListener("mouseover", () => { this.#checkButtonStates() })
   }
 
   addAll() {
     for (const item of this.fullListItems) {
       this.selectedList.append(item)
     }
-
-    this.#setSubmitButtonDisableState(false)
+    this.#checkButtonStates()
   }
 
   removeAll() {
     for (const item of this.fullListItems) {
       this.availableList.append(item)
     }
-
-    this.#setSubmitButtonDisableState(true)
+    this.#checkButtonStates()
   }
 
-  #checkSubmitState() {
+  #checkButtonStates() {
     const selected_metadata = this.selectedList.querySelectorAll("li")
-    if (selected_metadata.length > 0) {
-      this.#setSubmitButtonDisableState(false)
-    } else {
+    const available_metadata = this.availableList.querySelectorAll("li")
+    if (selected_metadata.length == 0) {
       this.#setSubmitButtonDisableState(true)
+      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, true)
+      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false)
+    } else if (available_metadata.length == 0) {
+      this.#setSubmitButtonDisableState(false)
+      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false)
+      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, true)
+    } else {
+      this.#setSubmitButtonDisableState(false)
+      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false)
+      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false)
     }
   }
 
@@ -51,6 +62,18 @@ export default class extends Controller {
       this.submitBtnTarget.disabled = false
     } else {
       this.submitBtnTarget.disabled = true
+    }
+  }
+
+  #setAddOrRemoveButtonDisableState(button, disableState) {
+    if (disableState && !button.classList.contains("pointer-events-none")) {
+      button.classList.remove(...this.#enabledClasses)
+      button.classList.add(...this.#disabledClasses)
+      button.setAttribute("aria-disabled", "true")
+    } else if (!disableState && button.classList.contains("pointer-events-none")) {
+      button.classList.remove(...this.#disabledClasses)
+      button.classList.add(...this.#enabledClasses)
+      button.removeAttribute("aria-disabled")
     }
   }
 

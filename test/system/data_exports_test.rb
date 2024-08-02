@@ -556,8 +556,10 @@ class DataExportsTest < ApplicationSystemTestCase
                          selected: I18n.t('data_exports.new_linelist_export_dialog.selected').downcase)
       assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
-      assert_button I18n.t('data_exports.new_linelist_export_dialog.add_all')
-      assert_button I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+                      text: I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+                         text: I18n.t('data_exports.new_linelist_export_dialog.add_all')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.format')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.csv')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.xlsx')
@@ -616,6 +618,10 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_selector 'input[disabled]'
+      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+                      text: I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+                         text: I18n.t('data_exports.new_linelist_export_dialog.add_all')
 
       click_button I18n.t('data_exports.new_linelist_export_dialog.add_all')
 
@@ -632,6 +638,10 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_no_selector 'input[disabled]'
+      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+                      text: I18n.t('data_exports.new_linelist_export_dialog.add_all')
+      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+                         text: I18n.t('data_exports.new_linelist_export_dialog.remove_all')
 
       click_button I18n.t('data_exports.new_linelist_export_dialog.remove_all')
 
@@ -648,6 +658,10 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_selector 'input[disabled]'
+      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+                      text: I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+                         text: I18n.t('data_exports.new_linelist_export_dialog.add_all')
     end
   end
 
