@@ -96,7 +96,9 @@ module Projects
                  }
                }, as: :turbo_stream
       end
-      assert_response :success
+      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.success'), flash[:success]
+      assert_response :redirect
+      assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
 
     test 'partially deleting multiple samples' do
@@ -110,7 +112,12 @@ module Projects
                  }
                }, as: :turbo_stream
       end
-      assert_response :multi_status
+      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.partial_success', deleted: '3/4'),
+                   flash[:success]
+      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.partial_error', not_deleted: '1/4'),
+                   flash[:error]
+      assert_response :redirect
+      assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
 
     test 'deleting no samples in destroy_multiple' do
@@ -122,7 +129,9 @@ module Projects
                  }
                }, as: :turbo_stream
       end
-      assert_response :unprocessable_entity
+      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.no_deleted_samples'), flash[:error]
+      assert_response :redirect
+      assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
 
     test 'deleting no samples in destroy_multiple with valid sample ids but do not belong to project' do
@@ -138,7 +147,9 @@ module Projects
                  }
                }, as: :turbo_stream
       end
-      assert_response :unprocessable_entity
+      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.no_deleted_samples'), flash[:error]
+      assert_response :redirect
+      assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
   end
 end

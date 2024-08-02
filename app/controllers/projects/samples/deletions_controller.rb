@@ -16,19 +16,14 @@ module Projects
                                                  }), status: :ok
       end
 
-      def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def destroy
         ::Samples::DestroyService.new(@project, current_user, { sample: @sample }).execute
 
         respond_to do |format|
           if @sample.deleted?
-            format.html do
+            format.any(:html, :turbo_stream) do
               flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
-              redirect_to namespace_project_samples_path(format: :html)
-            end
-            format.turbo_stream do
-              render status: :ok, locals: { type: 'success',
-                                            message: t('.success', sample_name: @sample.name,
-                                                                   project_name: @project.namespace.human_name) }
+              redirect_to namespace_project_samples_path
             end
           else
             format.turbo_stream do
@@ -46,16 +41,16 @@ module Projects
 
         # No selected samples deleted
         if deleted_samples_count.zero?
-          render status: :unprocessable_entity, locals: { type: :error, message: t('.no_deleted_samples') }
+          flash[:error] = t('.no_deleted_samples')
         # Partial sample deletion
         elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
-          render status: :multi_status,
-                 locals: { messages: get_multi_status_destroy_multiple_message(deleted_samples_count,
-                                                                               samples_to_delete_count) }
+          set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
         # All samples deleted successfully
         else
-          render status: :ok, locals: { type: :success, message: t('.success') }
+          flash[:success] = t('.success')
         end
+
+        redirect_to namespace_project_samples_path
       end
 
       private
@@ -75,15 +70,11 @@ module Projects
         params.require(:multiple_deletion).permit(sample_ids: [])
       end
 
-      def get_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
-        [
-          { type: :success,
-            message: t('.partial_success',
-                       deleted: "#{deleted_samples_count}/#{samples_to_delete_count}") },
-          { type: :error,
-            message: t('.partial_error',
-                       not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}") }
-        ]
+      def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
+        flash[:success] = t('.partial_success',
+                            deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
+        flash[:error] = t('.partial_error',
+                          not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
       end
     end
   end

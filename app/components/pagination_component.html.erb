@@ -3,17 +3,13 @@
     <% if prev_url %>
       <%= link_to t("components.pagination.previous"),
       prev_url,
-      data: {
-        turbo_stream: true
-      },
+      **link_arguments,
       class: "button button--state-default button--size-default" %>
     <% end %>
     <% if next_url %>
       <%= link_to t("components.pagination.next"),
       next_url,
-      data: {
-        turbo_stream: true
-      },
+      **link_arguments,
       class: "button button--state-default button--size-default" %>
     <% end %>
   </div>

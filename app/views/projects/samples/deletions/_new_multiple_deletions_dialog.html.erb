@@ -44,7 +44,8 @@
       <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_deletion_path, method: :delete,
             data: {
               controller: "spinner",
-              action:"turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd"
+              action:"turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd",
+              turbo_frame: "_top"
             }
           ) do |form| %>
         <div class="grid gap-4">

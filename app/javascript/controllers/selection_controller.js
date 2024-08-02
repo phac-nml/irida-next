@@ -17,9 +17,13 @@ export default class extends Controller {
   };
 
   connect() {
+    this.idempotentConnect();
+  }
+
+  idempotentConnect() {
     this.#storageKey =
       this.storageKeyValue ||
-      `${location.protocol}//${location.host}${location.pathname}${location.search}`;
+      `${location.protocol}//${location.host}${location.pathname}`;
 
     this.element.setAttribute("data-controller-connected", "true");
 
@@ -33,11 +37,6 @@ export default class extends Controller {
     }
 
     this.#updateCounts(storageValue.length);
-  }
-
-  actionLinkOutletConnected(outlet) {
-    const storageValue = this.getStoredSamples();
-    outlet.setDisabled(storageValue.length);
   }
 
   toggle(event) {

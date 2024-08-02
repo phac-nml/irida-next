@@ -1,24 +1,30 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <%= render Viral::BaseComponent.new(**system_arguments) do %>
     <table
-      class='w-full text-sm text-left  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap'
+      class='
+        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+        whitespace-nowrap
+      '
     >
       <thead
-        class='text-xs uppercase  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400'
+        class='
+          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          dark:text-slate-400
+        '
       >
         <tr>
           <% @columns.each_with_index do |column, index| %>
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3', 'sticky left-0 z-10 flex': index.zero?)
+              classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-50 dark:bg-slate-700': index == 1)
             ) do %>
               <% if index.zero? and @abilities[:select_samples] %>
                 <%= search_form_for(
                   @q,
                   url: select_samples_url(**request.query_parameters),
                   html: { "data-controller": "filters", id: "select-all-form" },
-                  class: "filters align-middle"
+                  class: "filters align-middle float-left"
                 ) do |f| %>
                   <input type="hidden" name="format" value="turbo_stream"/>
 
@@ -49,6 +55,9 @@
                       with_search_params: false,
                     ),
                   field: :attachments_updated_at_nulls_last,
+                  data: {
+                    turbo_action: "replace",
+                  },
                 ) %>
               <% else %>
                 <%= render Ransack::SortComponent.new(
@@ -56,6 +65,9 @@
                   label: t(".#{column}"),
                   url: helpers.sorting_url(@q, column, with_search_params: false),
                   field: column,
+                  data: {
+                    turbo_action: "replace",
+                  },
                 ) %>
               <% end %>
             <% end %>
@@ -64,7 +76,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              class: class_names('px-6 py-3')
+              classes: class_names('px-3 py-3')
             ) do %>
               <%= render Ransack::SortComponent.new(
                 ransack_obj: @q,
@@ -76,6 +88,9 @@
                     with_search_params: false,
                   ),
                 field: "metadata_#{field}",
+                data: {
+                  turbo_action: "replace",
+                },
               ) %>
             <% end %>
           <% end %>
@@ -83,7 +98,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
             ) do %>
               <%= t(".action") %>
             <% end %>
@@ -91,7 +106,9 @@
         </tr>
       </thead>
       <tbody
-        class='bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700'
+        class='
+          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+        '
       >
         <% @samples.each do |sample| %>
           <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
@@ -99,7 +116,7 @@
               <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-6 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
+                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, 'sticky left-56 bg-slate-50 dark:bg-slate-900': index == 1)
               ) do %>
                 <% if index.zero? && @abilities[:select_samples] %>
                   <%= check_box_tag "sample_ids[]",
@@ -153,7 +170,7 @@
               <%= render_cell(
                 tag: 'td',
                 scope: 'col',
-                class: class_names('px-6 py-3')
+                classes: class_names('px-3 py-3')
               ) do %>
                 <%= sample.metadata[field] %>
               <% end %>
@@ -161,7 +178,7 @@
             <% if @renders_row_actions %>
               <%= render_cell(
                 tag: 'td',
-                classes: class_names('px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
               ) do %>
                 <% if @row_actions[:edit] %>
                   <%= link_to(
@@ -182,7 +199,7 @@
                       deletion_type: "single",
                     ),
                     data: {
-                      "turbo-prefetch": false,
+                      "turbo-stream": true,
                     },
                     class:
                       "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
@@ -197,19 +214,21 @@
         <tfoot>
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
-              class="sticky left-0 z-10 px-6 py-3  bg-slate-50 dark:bg-slate-900"
+              class="
+                sticky left-0 z-10 px-3 py-3 bg-slate-50 dark:bg-slate-900
+              "
               colspan="3"
             >
               <span>
                 <%= t(".counts.samples") %>:
-                <strong><%= @pagy.count %></strong>
+                <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
               </span>
               <span>
                 <%= t(".counts.selected") %>:
                 <strong data-selection-target="selected">0</strong>
               </span>
             </td>
-            <td colspan="100%" class="px-6 py-3 bg-slate-50 dark:bg-slate-900"></td>
+            <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-900"></td>
           </tr>
         </tfoot>
       <% end %>
@@ -240,6 +259,9 @@
             nil
           end
         ),
+      data: {
+        turbo_action: "replace",
+      },
     ) %>
   <% end %>
   <div class="empty_state_message">

@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= turbo_frame_tag "samples_dialog" %>
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
@@ -7,7 +9,8 @@
   <%= component.with_buttons do %>
     <div class="flex items-center space-x-2">
       <% if allowed_to?(:submit_workflow?, @group) && @pipelines_enabled %>
-        <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @group.id), data: { turbo_stream: true, controller: "action-link", action_link_required_value: 1 },
+        <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @group.id),
+        data: { turbo_stream: true, controller: "action-link", action_link_required_value: 1, action: "turbo:morph-element->action-link#idempotentConnect", },
                   class: "button button--size-default button--state-default action-link" do %>
           <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
           <span class="sr-only"><%= t(".workflows.button_sr") %></span>
@@ -17,6 +20,7 @@
         <%= link_to t(".create_export_button"),
         new_data_export_path(export_type: "sample", namespace_id: @group.id),
         data: {
+          action: "turbo:morph-element->action-link#idempotentConnect",
           turbo_stream: true,
           controller: "action-link",
           action_link_required_value: 1,
@@ -28,13 +32,16 @@
 <% end %>
 
 <% if @has_samples %>
-  <%= search_form_for @q, url: search_group_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters","data-filters-selection-outlet": "#samples-table", class: "mb-2" } do |f| %>
+  <%= search_form_for @q, url: search_group_samples_url, html: { method: :post, "data-controller": "filters", "data-turbo-action": "replace", "data-filters-selection-outlet": "#samples-table", class: "filters" } do |f| %>
     <%= turbo_frame_tag "group_samples_hidden_values" %>
     <div class="flex flex-row-reverse items-center mb-4 space-x-2">
       <input type="hidden" name="format" value="turbo_stream"/>
 
       <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-      <%= render ListFilterComponent.new(form: f, filters: @search_params[:name_or_puid_in]) %>
+      <%= render ListFilterComponent.new(
+        form: f,
+        filters: @search_params[:name_or_puid_in],
+      ) %>
       <%= f.label :name_or_puid_cont,
               placeholder: t(".search.placeholder"),
               class: "sr-only" %>
@@ -54,13 +61,12 @@
       </div>
     </div>
   <% end %>
-
-    <%= turbo_frame_tag "group_samples_table" do %>
-      <%= render partial: "table",
-      locals: {
-        samples: @samples,
-        group: @group,
-        pagy: @pagy,
-      } %>
-    <% end %>
+  <div id="group_samples_table">
+    <%= render partial: "table",
+    locals: {
+      samples: @samples,
+      group: @group,
+      pagy: @pagy,
+    } %>
+  </div>
 <% end %>

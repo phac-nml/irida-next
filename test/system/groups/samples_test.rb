@@ -122,21 +122,21 @@ module Groups
       # they are ordered as expected against one another.
       assert_selector 'table tbody tr', count: 20
 
-      click_on I18n.t('groups.samples.table.puid')
+      click_on 'Sample ID'
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] < puids[n + 1]
       end
 
-      click_on I18n.t('groups.samples.table.puid')
+      click_on 'Sample ID'
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] > puids[n + 1]
       end
 
-      click_on I18n.t('groups.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within first('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
@@ -145,7 +145,7 @@ module Groups
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
 
-      click_on I18n.t('groups.samples.table.created_at')
+      click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
@@ -154,7 +154,7 @@ module Groups
         assert_selector 'tr:nth-child(4) td:nth-child(2)', text: @sample25.name
       end
 
-      click_on I18n.t('groups.samples.table.created_at')
+      click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
       within first('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
@@ -182,13 +182,13 @@ module Groups
       assert_no_text @sample2.name
 
       assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      click_on I18n.t('groups.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       assert_selector 'tbody tr:first-child th', text: @sample1.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample1.name
 
-      click_on I18n.t('groups.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
       assert_selector 'tbody tr:last-child th', text: @sample1.puid
@@ -211,7 +211,7 @@ module Groups
       assert_text @sample1.name
       assert_no_text @sample2.name
 
-      click_on I18n.t('groups.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       assert_selector 'table tbody tr', count: 1
@@ -228,7 +228,7 @@ module Groups
         assert_text @sample1.puid
       end
 
-      click_on I18n.t('groups.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within first('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
@@ -237,7 +237,7 @@ module Groups
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
 
-      click_on I18n.t('groups.samples.table.created_at')
+      click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
@@ -264,7 +264,7 @@ module Groups
         assert_text @sample1.puid
       end
 
-      click_on I18n.t('groups.samples.table.sample')
+      click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within first('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
@@ -273,7 +273,7 @@ module Groups
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
 
-      click_on I18n.t('groups.samples.table.created_at')
+      click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
@@ -294,7 +294,7 @@ module Groups
     test 'should be able to toggle metadata' do
       visit group_samples_url(@group)
       assert_text 'Displaying items 1-20 of 26 in total'
-      click_on I18n.t('groups.samples.table.updated_at')
+      click_on 'Last Updated'
       assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       assert_selector 'table thead tr th', count: 6
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click

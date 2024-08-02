@@ -1,6 +1,6 @@
 fr:
-  puid: ID
-  name: Sample
+  puid: Sample ID
+  name: Sample Name
   project: Project
   created_at: Created
   updated_at: Last Updated

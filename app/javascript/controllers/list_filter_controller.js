@@ -11,11 +11,14 @@ export default class extends Controller {
   static values = { filters: { type: Array, default: [] } };
 
   connect() {
+    this.idempotentConnect();
+  }
+
+  idempotentConnect() {
     this.filtersValue.filter(sample => sample.length > 0).forEach(sample => {
       this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget);
     });
     this.#updateCount();
-    this.filtersValue = [];
   }
 
   handleInput(event) {
