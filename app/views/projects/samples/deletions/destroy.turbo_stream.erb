@@ -1,13 +1,3 @@
 <%= turbo_stream.append "flashes" do %>
   <%= viral_flash(type: type, data: message) %>
 <% end %>
-
-<% if @sample.deleted? %>
-  <%= turbo_stream.update(
-    "samples_dialog",
-    partial: "new_deletion_dialog",
-    locals: {
-      open: false,
-    },
-  ) %>
-<% end %>
