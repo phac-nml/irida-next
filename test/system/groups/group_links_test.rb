@@ -308,7 +308,7 @@ module Groups
       assert_text 'Displaying 2 items'
       assert_selector '#members-tabs table tbody tr', count: 2
       assert_selector '#members-tabs table thead th:first-child svg.icon-arrow_up'
-      within first('#members-tabs table tbody') do
+      within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
@@ -319,7 +319,7 @@ module Groups
 
       click_on 'Group'
       assert_selector '#members-tabs table thead th:first-child svg.icon-arrow_down'
-      within first('#members-tabs table tbody') do
+      within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
@@ -330,7 +330,7 @@ module Groups
 
       click_on 'Source'
       assert_selector '#members-tabs table thead th:nth-child(2) svg.icon-arrow_up'
-      within first('#members-tabs table tbody') do
+      within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
@@ -341,7 +341,7 @@ module Groups
 
       click_on 'Source'
       assert_selector '#members-tabs table thead th:nth-child(2) svg.icon-arrow_down'
-      within first('#members-tabs table tbody') do
+      within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
@@ -352,7 +352,7 @@ module Groups
 
       click_on 'Access Level'
       assert_selector '#members-tabs table thead th:nth-child(4) svg.icon-arrow_up'
-      within first('#members-tabs table tbody') do
+      within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
@@ -363,7 +363,7 @@ module Groups
 
       click_on 'Access Level'
       assert_selector '#members-tabs table thead th:nth-child(4) svg.icon-arrow_down'
-      within first('#members-tabs table tbody') do
+      within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
@@ -374,7 +374,7 @@ module Groups
 
       click_on 'Expiration'
       assert_selector '#members-tabs table thead th:nth-child(5) svg.icon-arrow_up'
-      within first('#members-tabs table tbody') do
+      within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(5)',
                         text: Member::AccessLevel.human_access(@group_link5.expires_at)
