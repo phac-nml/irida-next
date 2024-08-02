@@ -16,7 +16,6 @@ export default class extends Controller {
   connect() {
     this.sortable = new Sortable(this.element, {
       scroll: true,
-      forceFallback: true,
       scrollSensitivity: this.scrollSensitivityValue, // The number of px from div edge where scroll begins
       scrollSpeed: this.scrollSpeedValue,
       bubbleScroll: true,
