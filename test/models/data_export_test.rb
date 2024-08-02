@@ -165,7 +165,7 @@ class DataExportTest < ActiveSupport::TestCase
                                                       attachment_formats: invalid_formats })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
-                        invalid_fomats: invalid_formats.join(', ')),
+                        invalid_formats: invalid_formats.join(', ')),
                  data_export.errors[:export_parameters].first
   end
 
@@ -177,7 +177,7 @@ class DataExportTest < ActiveSupport::TestCase
                                                       attachment_formats: formats })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
-                        invalid_fomats: (formats - Attachment::FORMAT_REGEX.keys).join(', ')),
+                        invalid_formats: (formats - Attachment::FORMAT_REGEX.keys).join(', ')),
                  data_export.errors[:export_parameters].first
   end
 end
