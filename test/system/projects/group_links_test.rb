@@ -326,7 +326,7 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link6.group_access_level)
       end
 
-      click_on I18n.t('projects.group_links.index.table_header.group')
+      click_on 'Group'
       assert_selector '#project-members table thead th:first-child svg.icon-arrow_down'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
@@ -343,7 +343,7 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      click_on I18n.t('projects.group_links.index.table_header.source')
+      click_on 'Source'
       assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_up'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -360,7 +360,7 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link2.group_access_level)
       end
 
-      click_on I18n.t('projects.group_links.index.table_header.source')
+      click_on 'Source'
       assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_down'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
@@ -377,7 +377,7 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      click_on I18n.t('projects.group_links.index.table_header.access_level')
+      click_on 'Access Level'
       assert_selector '#project-members table thead th:nth-child(4) svg.icon-arrow_up'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -394,7 +394,7 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      click_on I18n.t('projects.group_links.index.table_header.access_level')
+      click_on 'Access Level'
       assert_selector '#project-members table thead th:nth-child(4) svg.icon-arrow_down'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
@@ -411,7 +411,7 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
       end
 
-      click_on I18n.t('projects.group_links.index.table_header.expiration')
+      click_on 'Expiration'
       assert_selector '#project-members table thead th:nth-child(5) svg.icon-arrow_up'
       within first('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
