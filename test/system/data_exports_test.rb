@@ -24,7 +24,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within first('tbody') do
-      assert_selector 'tr', count: 6
+      assert_selector 'tr', count: 7
       assert_selector 'tr:first-child td:first-child ', text: @data_export1.id
       assert_selector 'tr:first-child td:nth-child(2)', text: @data_export1.name
 
