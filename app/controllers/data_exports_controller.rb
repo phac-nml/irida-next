@@ -7,6 +7,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[index destroy]
+  before_action :namespace, only: :new
   before_action :current_page
   before_action :set_default_tab, only: :show
 
@@ -17,7 +18,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def show
     authorize! @data_export, to: :read_export?
 
-    return if @data_export.manifest.empty?
+    return if @data_export.manifest.empty? || @data_export.export_type == 'linelist'
 
     @manifest = JSON.parse(@data_export.manifest)
   end
@@ -93,7 +94,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def data_export_params
     params.require(:data_export).permit(:name, :export_type, :email_notification,
-                                        export_parameters: [:format, :namespace_id, { ids: [], metadata_fields: [] }])
+                                        export_parameters: [:linelist_format, :namespace_id,
+                                                            { ids: [], metadata_fields: [] }])
   end
 
   def data_export
@@ -102,6 +104,12 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def data_exports
     @data_exports = DataExport.where(user: current_user)
+  end
+
+  def namespace
+    return unless params[:export_type] == 'linelist'
+
+    @namespace = Namespace.find(params[:namespace_id])
   end
 
   def current_page

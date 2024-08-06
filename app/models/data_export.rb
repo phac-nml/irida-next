@@ -49,8 +49,8 @@ class DataExport < ApplicationRecord
   end
 
   def validate_linelist_format
-    if export_parameters.key?('format')
-      return if %w[xlsx csv].include?(export_parameters['format'])
+    if export_parameters.key?('linelist_format')
+      return if %w[xlsx csv].include?(export_parameters['linelist_format'])
 
       errors.add(:export_parameters,
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_file_format'))

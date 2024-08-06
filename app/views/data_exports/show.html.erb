@@ -60,7 +60,7 @@
         controls: "data-export-tabs") do %>
         <%= t(:"data_exports.show.tabs.summary")%>
       <% end %>
-      <% if @data_export.status == 'ready' %>
+      <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
         <%= tabs.with_tab(
           url: data_export_path(@data_export, tab: "preview"),
           selected: @tab == "preview",

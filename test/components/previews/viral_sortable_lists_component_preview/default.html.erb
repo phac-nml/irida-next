@@ -1,0 +1,8 @@
+<%= viral_sortable_lists(title: 'A title', description: 'This is a description') do |sortable_lists| %>
+  <%= sortable_lists.with_list(
+    title: 'This is a title',
+    list_items: ['First List Item', 'Second List Item', 'Third List Item', 'Move us around!'],
+    container_classes: 'basis-full block mb-1 pr-2 text-sm font-medium mt-2',
+    list_classes: 'overflow-y-auto !max-h-[200px] w-full'
+    ) %>
+<% end %>
