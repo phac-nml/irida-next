@@ -264,6 +264,105 @@ module DataExports
       end
     end
 
+    test 'sample data export with missing namespace_id' do
+      invalid_params = { 'export_type' => 'sample',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'attachment_formats' => %w[genbank tsv csv] } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'sample data export with invalid namespace_id' do
+      invalid_params = { 'export_type' => 'sample',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'namespace_id' => 'invalid_id',
+                                                  'attachment_formats' => %w[unknown json spreadsheet] } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'linelist data export with missing namespace_id' do
+      invalid_params = { 'export_type' => 'linelist',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'linelist_format' => 'csv',
+                                                  'metadata_fields' => %w[metadatafield1 metadatafield2] } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'linelist data export with invalid namespace_id' do
+      invalid_params = { 'export_type' => 'linelist',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'namespace_id' => 'invalid_id',
+                                                  'linelist_format' => 'xlsx',
+                                                  'metadata_fields' => %w[metadatafield1 metadatafield2] } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'linelist data export with missing metadata_fields' do
+      invalid_params = { 'export_type' => 'linelist',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'namespace_id' => @project1.namespace.id,
+                                                  'linelist_format' => 'xlsx' } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.missing_metadata_fields'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'linelist data export with missing format' do
+      invalid_params = { 'export_type' => 'linelist',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'namespace_id' => @project1.namespace.id,
+                                                  'metadata_fields' => %w[metadatafield1 metadatafield2] } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.missing_file_format'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'linelist data export with invalid format' do
+      invalid_params = { 'export_type' => 'linelist',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'namespace_id' => @project1.namespace.id,
+                                                  'linelist_format' => 'invalid_format',
+                                                  'metadata_fields' => %w[metadatafield1 metadatafield2] } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.invalid_file_format'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
     test 'sample data export with invalid attachment_formats' do
       invalid_formats = %w[invalid_format_a invalid_format_b]
       invalid_params = { 'export_type' => 'sample',
