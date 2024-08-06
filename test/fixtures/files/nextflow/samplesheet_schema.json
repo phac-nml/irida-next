@@ -12,9 +12,8 @@
       },
       "sample_name": {
         "type": "string",
-        "pattern": "^\\S+$",
         "meta": ["name"],
-        "errorMessage": "Sample name must be provided and cannot contain spaces"
+        "errorMessage": "Sample name must be provided"
       },
       "fastq_1": {
         "type": "string",
