@@ -6,8 +6,8 @@ module Viral
     include LocalTimeHelper
     attr_reader :time_ago, :formatted_tooltip_time
 
-    def initialize(original_time:)
-      @time_ago = distance_of_time_in_words(local_time(Time.current), local_time(original_time))
+    def initialize(original_time:, current_time: Time.current)
+      @time_ago = distance_of_time_in_words(local_time(current_time), local_time(original_time))
       @formatted_tooltip_time = local_time(original_time, :long)
     end
   end
