@@ -263,5 +263,37 @@ module DataExports
         DataExports::CreateService.new(@user, valid_params).execute
       end
     end
+
+    test 'sample data export with invalid attachment_formats' do
+      invalid_formats = %w[invalid_format_a invalid_format_b]
+      invalid_params = { 'export_type' => 'sample',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'namespace_id' => @project1.namespace.id,
+                                                  'attachment_formats' => invalid_formats } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
+          invalid_formats: invalid_formats.join(', ')
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'sample data export with valid and invalid attachment_formats' do
+      formats = %w[invalid_format_a invalid_format_b text fasta fastq]
+      invalid_params = { 'export_type' => 'sample',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'namespace_id' => @project1.namespace.id,
+                                                  'attachment_formats' => formats } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
+          invalid_formats: (formats - Attachment::FORMAT_REGEX.keys).join(', ')
+        ), data_export.errors[:export_parameters].first
+      end
+    end
   end
 end
