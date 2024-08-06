@@ -6,20 +6,18 @@
     data-sortable-list-group-name-value="<%= group %>"
     class="<%= @system_arguments[:list_classes] %>"
     >
-    <% unless list_items.empty? %>
-      <% list_items.each do |list_item| %>
-        <li
-        id="<%= list_item %>"
-        class="
-        block
-        w-full
-        px-4
-        py-2
-        border-b
-        border-slate-200
-        cursor-move
-        dark:border-slate-600"><%= list_item %></li>
-      <% end %>
+    <% list_items.each do |list_item| %>
+      <li
+      id="<%= list_item %>"
+      class="
+      block
+      w-full
+      px-4
+      py-2
+      border-b
+      border-slate-200
+      cursor-move
+      dark:border-slate-600"><%= list_item %></li>
     <% end %>
   </ul>
 </div>

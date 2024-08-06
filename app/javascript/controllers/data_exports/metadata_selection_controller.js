@@ -58,11 +58,7 @@ export default class extends Controller {
   }
 
   #setSubmitButtonDisableState(disableState) {
-    if (!disableState && this.selectedList.querySelectorAll("li").length > 0) {
-      this.submitBtnTarget.disabled = false
-    } else {
-      this.submitBtnTarget.disabled = true
-    }
+    this.submitBtnTarget.disabled = !(!disableState && this.selectedList.querySelectorAll("li").length > 0);
   }
 
   #setAddOrRemoveButtonDisableState(button, disableState) {
