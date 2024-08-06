@@ -1074,7 +1074,7 @@ type UpdateSampleMetadataPayload {
 """
 A user
 """
-type User {
+type User implements Node {
   """
   Datetime of creation.
   """

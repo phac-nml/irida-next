@@ -31,8 +31,12 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
       Types::ProjectType
     when Sample
       Types::SampleType
+    when Attachment
+      Types::AttachmentType
+    when User
+      Types::UserType
     else
-      raise("Unexpected object: #{obj}")
+      raise(GraphQL::RequiredImplementationMissingError)
     end
   end
 

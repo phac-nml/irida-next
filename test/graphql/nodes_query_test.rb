@@ -44,6 +44,28 @@ class NodesQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  NODES_USERS_QUERY = <<~GRAPHQL
+    query($ids: [ID!]!) {
+      nodes(ids: $ids) {
+        id
+        ... on User {
+          email
+        }
+      }
+    }
+  GRAPHQL
+
+  NODES_ATTACHMENTS_QUERY = <<~GRAPHQL
+    query($ids: [ID!]!) {
+      nodes(ids: $ids) {
+        id
+        ... on Attachment {
+          attachmentUrl
+        }
+      }
+    }
+  GRAPHQL
+
   def setup
     @user = users(:john_doe)
   end
@@ -233,5 +255,56 @@ class NodesQueryTest < ActiveSupport::TestCase
     assert_equal 1, data.length
 
     assert_equal sample.name, data[0]['name']
+  end
+
+  test 'nodes query for user should be able to return user attributes' do
+    result = IridaSchema.execute(NODES_USERS_QUERY, context: { current_user: @user },
+                                                    variables: { ids: [@user.to_global_id.to_s] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['nodes']
+
+    assert_not_empty data, 'nodes type should work'
+    assert_equal 1, data.length
+    assert_not_nil data[0]['email']
+  end
+
+  test 'nodes query should not allow querying unauthorized users' do
+    jane_doe = users(:jane_doe)
+    result = IridaSchema.execute(NODES_USERS_QUERY, context: { current_user: @user },
+                                                    variables: { ids: [jane_doe.to_global_id.to_s] })
+
+    assert_not_nil result['errors'], 'should not work and have errors.'
+
+    error_message = result['errors'][0]['message']
+    assert_equal 'An object of type User was hidden due to permissions', error_message
+  end
+
+  test 'nodes query should work when passed a list of attachment ids' do
+    attachment = attachments(:attachment1)
+
+    result = IridaSchema.execute(NODES_ATTACHMENTS_QUERY, context: { current_user: @user },
+                                                          variables: { ids: [attachment.to_global_id.to_s] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['nodes']
+
+    assert_not_empty data, 'nodes type should work'
+    assert_equal 1, data.length
+    assert_not_nil data[0]['attachmentUrl']
+  end
+
+  test 'nodes query should not allow querying unauthorized attachments' do
+    attachment = attachments(:attachmentI)
+
+    result = IridaSchema.execute(NODES_ATTACHMENTS_QUERY, context: { current_user: @user },
+                                                          variables: { ids: [attachment.to_global_id.to_s] })
+
+    assert_not_nil result['errors'], 'should not work and have errors.'
+
+    error_message = result['errors'][0]['message']
+    assert_equal 'An object of type Attachment was hidden due to permissions', error_message
   end
 end

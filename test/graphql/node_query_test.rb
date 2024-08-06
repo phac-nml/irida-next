@@ -33,6 +33,28 @@ class NodeQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  NODE_USER_QUERY = <<~GRAPHQL
+    query($id: ID!) {
+      node(id: $id) {
+        id
+        ... on User {
+          email
+        }
+      }
+    }
+  GRAPHQL
+
+  NODE_ATTACHMENT_QUERY = <<~GRAPHQL
+    query($id: ID!) {
+      node(id: $id) {
+        id
+        ... on Attachment {
+          attachmentUrl
+        }
+      }
+    }
+  GRAPHQL
+
   def setup
     @user = users(:john_doe)
   end
@@ -164,5 +186,33 @@ class NodeQueryTest < ActiveSupport::TestCase
     assert_not_empty data, 'node type should work'
     assert_equal project.to_global_id.to_s, data['id'], 'id should be GlobalID'
     assert_equal project.name, data['name']
+  end
+
+  test 'node query for user should be able to return user attributes' do
+    result = IridaSchema.execute(NODE_USER_QUERY, context: { current_user: @user },
+                                                  variables: { id: @user.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['node']
+
+    assert_not_empty data, 'node type should work'
+    assert_equal @user.to_global_id.to_s, data['id'], 'id should be GlobalID'
+    assert_equal @user.email, data['email']
+  end
+
+  test 'node query for attachment should be able to return attachment attributes' do
+    attachment = attachments(:attachment1)
+
+    result = IridaSchema.execute(NODE_ATTACHMENT_QUERY, context: { current_user: @user },
+                                                        variables: { id: attachment.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['node']
+
+    assert_not_empty data, 'node type should work'
+    assert_equal attachment.to_global_id.to_s, data['id'], 'id should be GlobalID'
+    assert_not_nil data['attachmentUrl']
   end
 end
