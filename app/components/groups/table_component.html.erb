@@ -63,7 +63,7 @@
           </td>
           <td class="px-6 py-4">
             <div>
-              <%= viral_time_ago(original_time: namespace_group_link.created_at) %>
+              <%= viral_time_ago(original_time: local_time(namespace_group_link.created_at)) %>
               <span class="block">
                 <%= helpers.turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
                   <% if namespace_group_link.created_at < namespace_group_link.updated_at %>
