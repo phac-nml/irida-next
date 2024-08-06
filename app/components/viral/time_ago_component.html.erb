@@ -1,3 +1,3 @@
-<%= viral_tooltip(title: l(original_time, format: :long)) do %>
-  <%= time_ago %>
+<%= viral_tooltip(title: helpers.local_time(@original_time)) do %>
+  <%= distance_of_time_in_words(helpers.local_time(Time.now), helpers.local_time(@original_time)) %>
 <% end %>

@@ -159,8 +159,7 @@
                   <%= l(sample[column].localtime, format: :full_date) %>
                 <% elsif column == :updated_at || column == :attachments_updated_at %>
                   <% if sample[column].present? %>
-                    <%= helpers.local_time(sample[column])  %>
-                    <%= viral_time_ago(original_time: helpers.local_time(sample[column]), current_time: helpers.local_time(Time.current) ) %>
+                    <%= viral_time_ago(original_time: sample[column]) %>
                   <% end %>
                 <% else %>
                   <%= sample[column.to_sym] %>
