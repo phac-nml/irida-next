@@ -385,7 +385,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link @project1.namespace.puid
 
     assert_current_path(namespace_project_samples_path(@project1.parent, @project1))
-    assert_selector 'h1', text: I18n.t(:'project1s.samples.index.title')
+    assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
 
     visit data_export_path(@data_export1, tab: 'preview')
 
