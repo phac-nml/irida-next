@@ -19,7 +19,9 @@ class ProjectsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t(:'projects.create.success', project_name: new_project_name)
-    assert_selector 'h1', text: new_project_name
+    new_project = Project.last
+    assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
+    assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
   end
 
   test 'show error when creating a project with a short name' do
