@@ -65,7 +65,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       redirect_to namespace_project_sample_path(namespace, project, sample, tab: 'files')
     else
       project = Namespace.find_by(puid: params['puid']).project
-      redirect_to namespace_project_path(project.parent, project)
+      redirect_to namespace_project_samples_path(project.parent, project)
     end
   end
 

@@ -32,7 +32,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     if @project.persisted?
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
-        project_path(@project)
+        project_samples_path(@project)
       )
     else
       render :new, status: :unprocessable_entity
@@ -161,10 +161,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     @namespace = @project.namespace
 
     authorized_namespaces
-  end
-
-  def namespace_path
-    namespace_project_path(@namespace.parent, @project)
   end
 
   def current_page

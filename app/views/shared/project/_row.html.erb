@@ -7,14 +7,14 @@
       name: project.name,
       colour_string: "#{project.name}-#{project.id}",
       data: {
-        turbo: false
+        turbo: false,
       },
-      url: namespace_project_path(project.namespace.parent, project)
+      url: namespace_project_samples_path(project.namespace.parent, project),
     ) %>
 
   </td>
   <td class="p-4 whitespace-nowrap">
-    <%= link_to namespace_project_path(project.namespace.parent, project),
+    <%= link_to namespace_project_samples_path(project.namespace.parent, project),
                 data: {
                   turbo: false
                 },
@@ -27,18 +27,18 @@
           project.namespace.name,
           defined?(params[:q][:namespace_name_cont]) &&
             params[:q][:namespace_name_cont],
-          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
         ) %>
       </span>
     <% end %>
     <%= viral_pill(
       text:
         t(
-          :"projects.members.index.access_level.level_#{Member.effective_access_level(project.namespace, current_user)}"
+          :"projects.members.index.access_level.level_#{Member.effective_access_level(project.namespace, current_user)}",
         ),
       color: "transparent",
       border: true,
-      classes: "ml-2"
+      classes: "ml-2",
     ) %>
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>

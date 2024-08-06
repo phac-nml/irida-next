@@ -147,14 +147,12 @@
                     </span>
                   <% end %>
                 <% elsif column == :project %>
-                  <%= viral_tooltip(title: project_path(sample.project)) do %>
-                    <%= link_to sample.project.abbreviated_path,
-                    project_path(sample.project),
-                    data: {
-                      turbo: false,
-                    },
-                    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-                  <% end %>
+                  <%= link_to sample.project.puid,
+                  project_samples_path(sample.project),
+                  data: {
+                    turbo: false,
+                  },
+                  class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
                 <% elsif column == :created_at %>
                   <%= l(sample[column].localtime, format: :full_date) %>
                 <% elsif column == :updated_at || column == :attachments_updated_at %>
@@ -215,7 +213,7 @@
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
               class="
-                sticky left-0 z-10 px-3 py-3 bg-slate-50 dark:bg-slate-900
+                sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
               "
               colspan="3"
             >

@@ -6,6 +6,7 @@ module Dashboard
   class ProjectsTest < ApplicationSystemTestCase
     def setup
       login_as users(:john_doe)
+      @project = projects(:project1)
     end
 
     test 'can see the list of projects' do
@@ -14,7 +15,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
-      assert_text projects(:project1).human_name
+      assert_text @project.human_name
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
@@ -25,8 +26,9 @@ module Dashboard
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
 
-      click_link projects(:project1).human_name
-      assert_selector 'h1', text: projects(:project1).name
+      click_link @project.human_name
+      assert_current_path(namespace_project_samples_path(@project.parent, @project))
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
     end
 
     test 'can see the list of projects in user\'s groups and namespace group links' do
@@ -36,7 +38,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_text 'Displaying items 1-20 of 22 in total'
       assert_selector 'tr', count: 20
-      assert_text projects(:project1).human_name
+      assert_text @project.human_name
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
@@ -47,8 +49,9 @@ module Dashboard
       assert_text 'Displaying items 1-20 of 22 in total'
       assert_selector 'tr', count: 20
 
-      click_link projects(:project1).human_name
-      assert_selector 'h1', text: projects(:project1).name
+      click_link @project.human_name
+      assert_current_path(namespace_project_samples_path(@project.parent, @project))
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
     end
 
     test 'can filter the list of projects to only see personal ones' do
@@ -71,7 +74,7 @@ module Dashboard
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
+      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
 
       assert_selector 'tr', count: 12
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -85,7 +88,7 @@ module Dashboard
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
       within first('tr') do
-        assert_text projects(:project1).human_name
+        assert_text @project.human_name
       end
 
       click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
@@ -106,9 +109,9 @@ module Dashboard
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
       within first('tr') do
-        assert_text projects(:project1).human_name
+        assert_text @project.human_name
       end
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
+      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
 
       assert_text 'Displaying 12 items'
       assert_selector 'tr', count: 12
@@ -133,7 +136,7 @@ module Dashboard
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
       within first('tr') do
-        assert_text projects(:project1).human_name
+        assert_text @project.human_name
       end
 
       click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
@@ -147,7 +150,7 @@ module Dashboard
         assert_text projects(:projectHotel).human_name
       end
 
-      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: projects(:project1).name
+      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
 
       assert_text 'Displaying 12 items'
       assert_selector 'tr', count: 12
@@ -178,8 +181,9 @@ module Dashboard
         click_on I18n.t(:'projects.new.submit')
       end
 
-      assert_selector 'h1', text: project_name
-      assert_text project_description
+      new_project = Project.last
+      assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
     end
 
     test 'can see projects that the user has been added to as a member' do
