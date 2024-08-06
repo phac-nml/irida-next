@@ -4,7 +4,7 @@ module Viral
   # Card component for rendering sections of pages.
   class TimeAgoComponent < Viral::Component
     include LocalTimeHelper
-    attr_reader :original_time
+    attr_reader :time_ago, :formatted_tooltip_time
 
     def initialize(original_time:)
       @time_ago = distance_of_time_in_words(local_time(Time.current), local_time(original_time))
