@@ -18,19 +18,17 @@ module Projects
                                                  }), status: :ok
       end
 
-      def create # rubocop:disable Metrics/MethodLength
+      def create
         authorize! @project, to: :update_sample?
 
         @attachments = ::Attachments::CreateService.new(current_user, @sample, attachment_params).execute
 
-        status = if @attachments.count.positive?
-                   if @attachments.count(&:persisted?) == @attachments.count
-                     :ok
-                   else
-                     :multi_status
-                   end
-                 else
+        status = if !@attachments.count.positive?
                    :unprocessable_entity
+                 elsif @attachments.count(&:persisted?) == @attachments.count
+                   :ok
+                 else
+                   :multi_status
                  end
 
         respond_to do |format|
