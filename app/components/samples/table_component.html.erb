@@ -23,15 +23,15 @@
                 <%= search_form_for(
                   @q,
                   url: select_samples_url(**request.query_parameters),
-                  html: { "data-controller": "filters", id: "select-all-form" },
+                  html: { "data-controller": "filters", id: "select-page-form" },
                   class: "filters align-middle float-left"
                 ) do |f| %>
                   <input type="hidden" name="format" value="turbo_stream"/>
 
-                  <label for="select-all" class="sr-only"><%= t(:".select_all") %></label>
+                  <label for="select-page" class="sr-only"><%= t(:".select_all") %></label>
                   <input
                     type="checkbox"
-                    id="select-all"
+                    id="select-page"
                     name="select"
                     class="
                       w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
