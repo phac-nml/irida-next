@@ -16,6 +16,12 @@
         "unique": true,
         "errorMessage": "Sample name must be provided and cannot contain spaces"
       },
+      "pfge_pattern": {
+        "type": "string",
+        "pattern": "^\\S+$",
+        "errorMessage": "Metadata thing must be provided and cannot contain spaces",
+        "meta": true
+      },
       "country": {
         "type": "string",
         "meta": [
@@ -33,7 +39,8 @@
     },
     "required": [
       "sample",
-      "insdc_accession"
+      "insdc_accession",
+      "pfge_pattern"
     ]
   }
 }

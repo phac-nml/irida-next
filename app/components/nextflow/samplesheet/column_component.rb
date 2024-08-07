@@ -72,7 +72,7 @@ module Nextflow
       end
 
       def render_metadata_cell(sample, name, fields)
-        render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields))
+        render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields, required: @required))
       end
 
       # rubocop:disable Metrics/ParameterLists
@@ -108,7 +108,8 @@ module Nextflow
       def render_input_cell(property, fields)
         render(Samplesheet::TextCellComponent.new(
                  property,
-                 fields:
+                 fields:,
+                 required: @required
                ))
       end
 
