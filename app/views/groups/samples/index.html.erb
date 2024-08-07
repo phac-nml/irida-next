@@ -27,7 +27,7 @@
               },
               class:
                 "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                        border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                        border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
             ) %>
           <% else %>
             <% dropdown.with_item(
@@ -58,7 +58,7 @@
         <%= search_form_for(
                   @q,
                   url: select_group_samples_url(**request.query_parameters),
-                  html: { "data-controller": "filters", id: "select-all-form" },
+                  html: { id: "select-all-form" },
                   class: "filters align-middle"
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
@@ -67,11 +67,10 @@
                    class: "button button--state-default button--size-default",
                    "data-selection-target": "selectAll" %>
         <% end %>
-
         <%= search_form_for(
                   @q,
                   url: select_group_samples_url(**request.query_parameters),
-                  html: { "data-controller": "filters", id: "select-all-form" },
+                  html: { id: "deselect-all-form" },
                   class: "filters align-middle"
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
@@ -82,7 +81,7 @@
       <% end %>
     </div>
     <div class="float-right">
-      <%= search_form_for @q, url: search_group_samples_url(**request.query_parameters), html: { method: :post, "data-controller": "filters", "data-turbo-action": "replace", "data-filters-selection-outlet": "#samples-table", class: "mb-2" } do |f| %>
+      <%= search_form_for @q, url: search_group_samples_url, html: { method: :post, "data-controller": "filters", "data-turbo-action": "replace", "data-filters-selection-outlet": "#samples-table", class: "filters" } do |f| %>
         <%= turbo_frame_tag "group_samples_hidden_values" %>
         <div class="flex flex-row-reverse items-center mb-4 space-x-2">
           <input type="hidden" name="format" value="turbo_stream"/>
@@ -114,12 +113,12 @@
     </div>
   </div>
 
-  <%= turbo_frame_tag "group_samples_table" do %>
+  <div id="group_samples_table">
     <%= render partial: "table",
     locals: {
       samples: @samples,
       group: @group,
       pagy: @pagy,
     } %>
-  <% end %>
+  </div>
 <% end %>
