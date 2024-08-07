@@ -74,8 +74,8 @@
           <%= viral_sortable_lists(
             title: t(".metadata"),
             description: t(".metadata_description",
-            avaiable: t(".available"),
-            selected: t(".selected"),
+              available: t(".available").downcase,
+              selected: t(".selected").downcase
             ),
             select_all_buttons: select_all
             ) do |sortable_lists| %>
