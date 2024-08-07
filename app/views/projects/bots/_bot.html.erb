@@ -30,7 +30,7 @@
   </td>
   <td class="px-6 py-3">
     <% if !bot_account_membership&.expires_at.nil? %>
-      <%= bot_account_membership.expires_at.strftime(I18n.t("time.formats.full_date")) %>
+      <%= local_time(bot_account_membership.expires_at, :full_date) %>
     <% else %>
       <%= t("projects.bots.index.bot.never") %>
     <% end %>

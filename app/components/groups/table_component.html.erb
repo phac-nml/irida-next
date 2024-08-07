@@ -126,8 +126,8 @@
                   </div>
                 </div>
               <% end %>
-            <% else %>
-              <%= namespace_group_link.expires_at %>
+            <% elsif !namespace_group_link.expires_at.nil? %>
+              <%= helpers.local_time(namespace_group_link.expires_at, :full_date) %>
             <% end %>
           </td>
           <td class="px-6 py-4 space-x-2">

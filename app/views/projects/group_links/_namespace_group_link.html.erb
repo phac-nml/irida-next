@@ -90,7 +90,7 @@
         </div>
       <% end %>
     <% else %>
-      <%= namespace_group_link.expires_at %>
+      <%= local_time(namespace_group_link.expires_at, :full_date) %>
     <% end %>
   </td>
   <td class="px-6 py-4 space-x-2">
