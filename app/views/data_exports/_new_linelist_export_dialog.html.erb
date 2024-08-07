@@ -9,8 +9,8 @@
         data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
         data-infinite-scroll-selection-outlet='#samples-table'
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
-        data-infinite-scroll-singular-value="<%= t(".description.singular") %>"
-        data-infinite-scroll-plural-value="<%= t(".description.plural") %>"
+        data-infinite-scroll-singular-value="<%= t(:"data_exports.new.sample_description.singular") %>"
+        data-infinite-scroll-plural-value="<%= t(:"data_exports.new.sample_description.plural") %>"
         class="font-normal text-slate-500 dark:text-slate-400"
       >
         <%= form_with(
@@ -55,7 +55,7 @@
                   text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300
                 "
               >
-                <%= t(".description.zero_html") %>
+                <%= t(:"data_exports.new.sample_description.zero_html") %>
               </p>
               <div
                 class="
