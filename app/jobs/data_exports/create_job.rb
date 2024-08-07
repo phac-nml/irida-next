@@ -268,8 +268,9 @@ module DataExports
 
     def attachments_query(sample, data_export)
       if data_export.export_parameters.key?('attachment_formats')
-        sample.attachments.where("metadata->'format' ?| array[:formats]",
-                                 formats: data_export.export_parameters['attachment_formats'])
+        sample.attachments.select do |attachment|
+          data_export.export_parameters['attachment_formats'].include?(attachment.metadata['format'])
+        end
       else
         sample.attachments
       end
