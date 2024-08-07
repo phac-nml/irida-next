@@ -76,15 +76,18 @@ module Projects
       end
     end
 
-    def select
+    def select # rubocop:disable Metrics/AbcSize
       authorize! @project, to: :sample_listing?
       @samples = []
 
       respond_to do |format|
         format.turbo_stream do
-          if params[:select].present?
+          if params[:selectAll].present?
             @q = load_samples.ransack(search_params)
             @samples = @q.result.select(:id)
+          elsif params[:selectPage].present?
+            @q = load_samples.ransack(search_params)
+            @pagy, @samples = pagy(@q.result)
           end
         end
       end

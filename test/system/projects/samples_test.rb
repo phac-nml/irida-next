@@ -2096,7 +2096,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
-      find('input[name="select"]').click
+      click_button 'Select All'
+      # find('input[name="selectPage"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2111,13 +2112,14 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '2'
       end
-
-      find('input[name="select"]').click
+      click_button 'Select All'
+      # find('input[name="selectPage"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
-      find('input[name="select"]').click
+      click_button 'Deselect All'
+      # find('input[name="selectPage"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -2142,7 +2144,8 @@ module Projects
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
 
-      find('input[name="select"]').click
+      click_button 'Select All'
+      # find('input[name="selectPage"]').click
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
