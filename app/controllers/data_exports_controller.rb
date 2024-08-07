@@ -24,20 +24,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def new
-    if params[:export_type] == 'analysis'
-      render turbo_stream: turbo_stream.update('export_dialog',
-                                               partial: 'new_analysis_export_dialog',
-                                               locals: {
-                                                 open: true, workflow_execution_id: params[:workflow_execution_id]
-                                               }), status: :ok
-    else
-      render turbo_stream: turbo_stream.update('samples_dialog',
-                                               partial: "new_#{params[:export_type]}_export_dialog",
-                                               locals: {
-                                                 open: true, namespace_id: params[:namespace_id]
-                                               }), status: :ok
-
-    end
+    render turbo_stream: turbo_stream.update(params[:export_type] == 'analysis' ? 'export_dialog' : 'samples_dialog',
+                                             partial: "new_#{params[:export_type]}_export_dialog",
+                                             locals:), status: :ok
   end
 
   def create
@@ -139,5 +128,16 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
         name: @data_export.id,
         path: data_export_path(@data_export)
       }]
+  end
+
+  def locals
+    case params[:export_type]
+    when 'analysis'
+      { open: true, workflow_execution_id: params[:workflow_execution_id] }
+    when 'sample'
+      { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort, select_all: true }
+    when 'linelist'
+      { open: true, namespace_id: params[:namespace_id], select_all: true }
+    end
   end
 end

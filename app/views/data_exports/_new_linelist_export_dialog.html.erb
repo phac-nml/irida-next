@@ -3,9 +3,10 @@
   <%= dialog.with_section do %>
     <%= turbo_frame_tag "sample_export_dialog_content" do %>
       <div
-        data-controller="infinite-scroll data-exports--metadata-selection"
-        data-data-exports--metadata-selection-selected-list-value="<%= t(".selected") %>"
-        data-data-exports--metadata-selection-available-list-value="<%= t(".available") %>"
+        data-controller="infinite-scroll viral--sortable-lists--two-lists-selection"
+        data-viral--sortable-lists--two-lists-selection-selected-list-value=<%= t(".selected") %>
+        data-viral--sortable-lists--two-lists-selection-available-list-value=<%= t(".available") %>
+        data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
         data-infinite-scroll-selection-outlet='#samples-table'
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
         data-infinite-scroll-singular-value="<%= t(".description.singular") %>"
@@ -20,14 +21,6 @@
         <% end %>
 
         <div class="grid gap-4">
-          <p
-            data-infinite-scroll-target="summary"
-            class="
-              text-base leading-relaxed text-slate-500 dark:text-slate-400
-            "
-          >
-            <%= t(".description.zero_html") %>
-          </p>
           <div data-controller="collapsible">
             <h2 id="<%= "accordion-collapse-heading-samples" %>">
               <button
@@ -56,6 +49,14 @@
               class="hidden"
               aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
             >
+              <p
+                data-infinite-scroll-target="summary"
+                class="
+                  text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300
+                "
+              >
+                <%= t(".description.zero_html") %>
+              </p>
               <div
                 class="
                   overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block
@@ -73,9 +74,11 @@
           <%= viral_sortable_lists(
             title: t(".metadata"),
             description: t(".metadata_description",
-            available: t(".available").downcase,
-            selected: t(".selected").downcase
-            )) do |sortable_lists| %>
+            avaiable: t(".available"),
+            selected: t(".selected"),
+            ),
+            select_all_buttons: select_all
+            ) do |sortable_lists| %>
             <%= sortable_lists.with_list(
               id: t(".available"),
               title: t(".available"),
@@ -95,26 +98,6 @@
               list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
             ) %>
           <% end %>
-          <div class="flex -mt-3 font-medium text-slate-900 dark:text-white">
-            <button
-              class="mr-2 underline text-sm hover:no-underline"
-              data-action="click->data-exports--metadata-selection#addAll"
-              data-data-exports--metadata-selection-target="addAll"
-            >
-              <%= t(".add_all") %>
-            </button>
-            <button
-              aria-disabled="true"
-              class="
-                ml-2 text-sm text-slate-300 dark:text-slate-700 pointer-events-none
-                cursor-not-allowed
-              "
-              data-action="click->data-exports--metadata-selection#removeAll"
-              data-data-exports--metadata-selection-target="removeAll"
-            >
-              <%= t(".remove_all") %>
-            </button>
-          </div>
           <%= form_for(:data_export, url: data_exports_path, method: :post,
               data: {
                 controller: "spinner form--hidden-inputs",
@@ -193,14 +176,14 @@
                 <input type="hidden" aria-hidden="true"
                 name="data_export[export_parameters][namespace_id]", value=<%= namespace_id %>>
               </div>
-              <div class="hidden" data-data-exports--metadata-selection-target="field"></div>
+              <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
               <div>
                 <%= form.submit t(".submit_button"),
                             data: {
                               turbo_frame: "_top",
                               action:
-                                "click->form--hidden-inputs#clearSelection click->data-exports--metadata-selection#constructMetadataParams",
-                              "data-exports--metadata-selection-target": "submitBtn",
+                                "click->form--hidden-inputs#clearSelection click->viral--sortable-lists--two-lists-selection#constructParams",
+                              "viral--sortable-lists--two-lists-selection-target": "submitBtn",
                               "spinner-target": "submit",
                             },
                             class: "button button--state-primary button--size-default",
