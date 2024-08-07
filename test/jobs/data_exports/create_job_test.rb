@@ -351,5 +351,83 @@ module DataExports
         sample34.metadata['metadatafield2']
       ], export_file.row(4)
     end
+
+    test 'sample export with specified attachment_formats' do
+      sample22 = samples(:sample22)
+      project = projects(:project2)
+      text_attachment = attachments(:sample22AttachmentText)
+      fasta_attachment = attachments(:sample22AttachmentFasta)
+      data_export = data_exports(:data_export_ten)
+
+      # sample22 contains fastq, fasta and text files, but export specifies only text and fasta files
+      assert_equal 4, sample22.attachments.count
+
+      expected_files_in_zip =
+        [
+          "#{project.puid}/#{sample22.puid}/#{text_attachment.puid}/#{text_attachment.file.filename}",
+          "#{project.puid}/#{sample22.puid}/#{fasta_attachment.puid}/#{fasta_attachment.file.filename}",
+          'manifest.json'
+        ]
+
+      expected_manifest = {
+        'type' => 'Samples Export',
+        'date' => Date.current.strftime('%Y-%m-%d'),
+        'children' =>
+        [{
+          'name' => project.puid,
+          'type' => 'folder',
+          'irida-next-type' => 'project',
+          'irida-next-name' => 'Project 2',
+          'children' =>
+          [{
+            'name' => sample22.puid,
+            'type' => 'folder',
+            'irida-next-type' => 'sample',
+            'irida-next-name' => 'Project 2 Sample 22',
+            'children' =>
+            [{
+              'name' => fasta_attachment.puid,
+              'type' => 'folder',
+              'irida-next-type' => 'attachment',
+              'children' =>
+              [{
+                'name' => fasta_attachment.file.filename,
+                'type' => 'file',
+                'metadata' =>
+                {
+                  'format' => 'fasta',
+                  'type' => 'assembly'
+                }
+              }]
+            }, {
+              'name' => text_attachment.puid,
+              'type' => 'folder',
+              'irida-next-type' => 'attachment',
+              'children' =>
+              [{
+                'name' => text_attachment.file.filename,
+                'type' => 'file',
+                'metadata' =>
+                {
+                  'format' => 'text'
+                }
+              }]
+            }]
+          }]
+        }]
+      }
+
+      DataExports::CreateJob.perform_now(data_export)
+
+      export_file = ActiveStorage::Blob.service.path_for(data_export.file.key)
+      Zip::File.open(export_file) do |zip_file|
+        zip_file.each do |entry|
+          assert expected_files_in_zip.include?(entry.to_s)
+          expected_files_in_zip.delete(entry.to_s)
+        end
+      end
+      assert expected_files_in_zip.empty?
+      assert_equal expected_manifest.to_json, data_export.manifest
+    end
   end
 end

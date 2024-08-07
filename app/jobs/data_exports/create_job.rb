@@ -76,16 +76,19 @@ module DataExports
     def create_sample_zip(data_export)
       Tempfile.new(binmode: true).tap do |tempfile|
         ZipKit::Streamer.open(tempfile) do |zip|
-          samples = Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
-                          .where(id: data_export.export_parameters['ids'])
+          samples = sample_query(data_export)
           samples.each do |sample|
             next if sample.attachments.empty?
 
+            attachments = attachments_query(sample, data_export)
+
+            next if attachments.empty?
+
             project = sample.project
 
-            update_sample_manifest(sample, project)
+            update_sample_manifest(sample, project, attachments)
 
-            write_sample_attachments(sample, project, zip)
+            write_sample_attachments(sample, project, zip, attachments)
           end
 
           write_manifest(zip)
@@ -93,7 +96,7 @@ module DataExports
       end
     end
 
-    def update_sample_manifest(sample, project)
+    def update_sample_manifest(sample, project, attachments)
       project_directory = ''
       # Check if project directory already exists in manifest, else create it
       if @manifest['children'].any? { |h| h['name'] == project.puid }
@@ -108,14 +111,14 @@ module DataExports
                            'type' => 'folder',
                            'irida-next-type' => 'sample',
                            'irida-next-name' => sample.name,
-                           'children' => create_attachment_manifest_directories(sample) }
+                           'children' => create_attachment_manifest_directories(attachments) }
 
       project_directory['children'] << sample_directory
     end
 
-    def create_attachment_manifest_directories(sample)
+    def create_attachment_manifest_directories(attachments)
       attachment_directories = {}
-      sample.attachments.each do |attachment|
+      attachments.each do |attachment|
         unless attachment_directories.key?(attachment.puid)
           attachment_directories[attachment.puid] = { 'name' => attachment.puid,
                                                       'type' => 'folder',
@@ -140,8 +143,8 @@ module DataExports
       attachment_manifest_file
     end
 
-    def write_sample_attachments(sample, project, zip)
-      sample.attachments.each do |attachment|
+    def write_sample_attachments(sample, project, zip, attachments)
+      attachments.each do |attachment|
         directory = "#{project.puid}/#{sample.puid}/#{attachment.puid}/#{attachment.file.filename}"
         write_attachment(directory, zip, attachment)
       end
@@ -254,6 +257,22 @@ module DataExports
         else
           ''
         end
+      end
+    end
+
+    # Queries---------------------------------------------------------------------
+    def sample_query(data_export)
+      Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
+            .where(id: data_export.export_parameters['ids'])
+    end
+
+    def attachments_query(sample, data_export)
+      if data_export.export_parameters.key?('attachment_formats')
+        sample.attachments.select do |attachment|
+          data_export.export_parameters['attachment_formats'].include?(attachment.metadata['format'])
+        end
+      else
+        sample.attachments
       end
     end
   end

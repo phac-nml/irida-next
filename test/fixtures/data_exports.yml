@@ -117,3 +117,20 @@ data_export_nine:
   updated_at: <%= 1.day.ago %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   expires_at: <%= 5.days.from_now %>
+
+data_export_ten:
+  name: Data Export 10
+  export_type: sample
+  status: processing
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sample22, :uuid) %>],
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>,
+    attachment_formats: ['text', 'fasta']
+  }
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  expires_at: <%= 5.days.from_now %>
+  manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAB","type":"folder","irida-next-type":"project","irida-next-name":"Project 2","children":[{"name":"INXT_SAM_AAAAAAAAAV","type":"folder","irida-next-type":"sample","irida-next-name":"Project 2 Sample 22","children":[{"name":"INXT_ATT_ABAAAAAAAI","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_14.txt","type":"file","metadata":{"format":"text"}}]},{"name":"INXT_ATT_ABAAAAAAAH","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_5.fasta","type":"file","metadata":{"format":"fasta","type":"assembly"}}]}]}]}]}'
+

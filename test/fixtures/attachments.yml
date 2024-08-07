@@ -312,4 +312,38 @@ attachmentPEFWD43:
       "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV43, :uuid) %>,
     }
   attachable: sample43 (Sample)
-  puid: INXT_ATT_AXDGAAAAAG
+  puid: INXT_ATT_AXDGAAAAAF
+
+sample22AttachmentFastqFWD:
+  metadata:
+    {
+      "type": "pe",
+      "format": "fastq",
+      "direction": "forward",
+      "compression": "none",
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqREV, :uuid) %>,
+    }
+  attachable: sample22 (Sample)
+  puid: INXT_ATT_ABAAAAAAAG
+
+sample22AttachmentFastqREV:
+  metadata:
+    {
+      "type": "pe",
+      "format": "fastq",
+      "direction": "reverse",
+      "compression": "none",
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqFWD, :uuid) %>,
+    }
+  attachable: sample22 (Sample)
+  puid: INXT_ATT_ABAAAAAAAG
+
+sample22AttachmentFasta:
+  metadata: {"type": "assembly", "format": "fasta", "compression": "none"}
+  attachable: sample22 (Sample)
+  puid: INXT_ATT_ABAAAAAAAH
+
+sample22AttachmentText:
+  metadata: {"format": "text", "compression": "none"}
+  attachable: sample22 (Sample)
+  puid: INXT_ATT_ABAAAAAAAI

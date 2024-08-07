@@ -17,7 +17,7 @@ sample2:
   created_at: <%= 2.weeks.ago %>
   updated_at: <%= 2.days.ago %>
 
-<% (3..22).each do |n| %>
+<% (3..21).each do |n| %>
 sample<%= (n) %>:
   name: <%= "Project 2 Sample #{n}" %>
   description: <%= "Sample #{n} description." %>
@@ -26,6 +26,14 @@ sample<%= (n) %>:
   created_at: <%= n.weeks.ago %>
   updated_at: <%= n.days.ago %>
 <% end %>
+
+sample22:
+  name: Project 2 Sample 22
+  description: Sample 22 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project2, :uuid) %>
+  puid: INXT_SAM_AAAAAAAAAV
+  created_at: <%= 22.weeks.ago %>
+  updated_at: <%= 22.days.ago %>
 
 sample23:
   name: Project 4 Sample 23
