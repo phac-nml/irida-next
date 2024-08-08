@@ -97,13 +97,13 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
           <td class="px-6 py-4">
             <div>
               <% if member.user.email != member.created_by.email %>
-                <%= viral_time_ago(original_time: member.created_at) %>
+                <%= helpers.local_time_ago(member.created_at) %>
                 by
                 <span class="block">
                   <%= member.created_by.email %>
                 </span>
               <% else %>
-                <%= viral_time_ago(original_time: member.created_at) %>
+                <%= helpers.local_time_ago(member.created_at) %>
               <% end %>
               <turbo-frame id="<%="member-#{member.id}-access-level-updated"%>">
                 <% if member.created_at < member.updated_at %>

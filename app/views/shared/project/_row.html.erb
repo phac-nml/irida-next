@@ -43,6 +43,6 @@
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 whitespace-nowrap">
-    <%= viral_time_ago(original_time: project.updated_at) %>
+    <%= local_time_ago(project.updated_at) %>
   </td>
 </tr>

@@ -19,7 +19,7 @@
     <% end %>
   </td>
   <td class="px-6 py-3">
-    <%= viral_time_ago(original_time: bot_account.user.created_at) %>
+    <%= local_time_ago(bot_account.user.created_at) %>
   </td>
   <td class="px-6 py-3">
     <% unless bot_account_membership.nil? %>
