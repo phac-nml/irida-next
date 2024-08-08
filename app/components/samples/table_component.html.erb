@@ -256,6 +256,9 @@
         turbo_action: "replace",
       },
     ) %>
+    <% Pagy::DEFAULT[:gearbox_limit].each do |size| %>
+      <%= link_to size, url_for(limit: size), class: "dropdown-item" %>
+    <% end %>
   <% end %>
   <div class="empty_state_message">
     <%= viral_empty(
