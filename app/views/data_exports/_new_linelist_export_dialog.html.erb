@@ -9,8 +9,10 @@
         data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
         data-infinite-scroll-selection-outlet='#samples-table'
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
-        data-infinite-scroll-singular-value="<%= t(:"data_exports.new.sample_description.singular") %>"
-        data-infinite-scroll-plural-value="<%= t(:"data_exports.new.sample_description.plural") %>"
+        data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
+        data-infinite-scroll-plural-description-value="<%= t(:"data_exports.new.sample_description.plural") %>"
+        data-infinite-scroll-singular-count-value="<%= t(:"data_exports.new.samples_count.singular") %>"
+        data-infinite-scroll-plural-count-value="<%= t(:"data_exports.new.samples_count.plural") %>"
         class="font-normal text-slate-500 dark:text-slate-400"
       >
         <%= form_with(
@@ -34,7 +36,7 @@
                 aria-expanded="true"
                 aria-controls="<%= "accordion-collapse-body-samples" %>"
               >
-                <span><%= t(".samples") %></span>
+                <span data-infinite-scroll-target="sampleCount"><%= t(:"data_exports.new.samples_count.zero") %></span>
                 <%= viral_icon(
                   name: "chevron_down",
                   classes: "mr-0 w-4 h-4 rotate-0",
