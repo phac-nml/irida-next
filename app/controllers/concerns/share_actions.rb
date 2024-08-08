@@ -33,12 +33,6 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
     if @created_namespace_group_link.persisted?
       respond_to do |format|
-        generate_activity(@namespace,
-                          :namespace_group_link_create, {
-                            namespace_type: @namespace.type.downcase,
-                            namespace_name: @namespace.human_name,
-                            invited_group_name: @created_namespace_group_link.group.name
-                          })
         @group_invited = true
         format.turbo_stream do
           render status: :ok,
