@@ -8,8 +8,7 @@ export default class extends Controller {
   static values = {
     selectedList: String,
     availableList: String,
-    fieldName: String,
-    selectAllEnabled: Boolean
+    fieldName: String
   };
 
   #disabledClasses = ["pointer-events-none", "cursor-not-allowed", "text-slate-300", "dark:text-slate-700"];
@@ -60,22 +59,16 @@ export default class extends Controller {
     const available_values = this.availableList.querySelectorAll("li")
     if (selected_values.length == 0) {
       this.#setSubmitButtonDisableState(true)
-      if (this.selectAllEnabledValue) {
-        this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, true)
-        this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false)
-      }
+      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, true)
+      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false)
     } else if (available_values.length == 0) {
       this.#setSubmitButtonDisableState(false)
-      if (this.selectAllEnabledValue) {
-        this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false)
-        this.#setAddOrRemoveButtonDisableState(this.addAllTarget, true)
-      }
+      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false)
+      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, true)
     } else {
       this.#setSubmitButtonDisableState(false)
-      if (this.selectAllEnabledValue) {
-        this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false)
-        this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false)
-      }
+      this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false)
+      this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false)
     }
   }
 

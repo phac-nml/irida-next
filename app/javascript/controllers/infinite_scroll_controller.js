@@ -24,7 +24,10 @@ export default class extends Controller {
   connect() {
     this.allIds = this.selectionOutlet.getStoredItems();
     this.#makePagedHiddenInputs();
-    this.#replaceCountPlaceholder();
+    this.#replaceCountPlaceholder(this.summaryTarget, this.singularDescriptionValue, this.pluralDescriptionValue);
+    if (this.hasSampleCountTarget) {
+      this.#replaceCountPlaceholder(this.sampleCountTarget, this.singularCountValue, this.pluralCountValue);
+    }
   }
 
   scroll() {
@@ -36,19 +39,12 @@ export default class extends Controller {
     }
   }
 
-  #replaceCountPlaceholder() {
+  #replaceCountPlaceholder(textNode, singular, plural) {
     const numSelected = this.selectionOutlet.getNumSelected();
-    let summary = this.summaryTarget;
-    let sampleCount = this.sampleCountTarget;
     if (numSelected == 1) {
-      summary.innerHTML = this.singularDescriptionValue;
-      sampleCount.innerHTML = this.singularCountValue;
+      textNode.innerHTML = singular;
     } else {
-      summary.innerHTML = this.pluralDescriptionValue.replace(
-        "COUNT_PLACEHOLDER",
-        numSelected
-      );
-      sampleCount.innerHTML = this.pluralCountValue.replace(
+      textNode.innerHTML = plural.replace(
         "COUNT_PLACEHOLDER",
         numSelected
       );

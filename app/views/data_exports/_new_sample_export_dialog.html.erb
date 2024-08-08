@@ -89,8 +89,7 @@
           </div>
           <%= viral_sortable_lists(
             title: t(".select_formats"),
-            description: t(".format_description", selected: t(".selected").downcase),
-            select_all_buttons: select_all
+            description: t(".format_description", selected: t(".selected").downcase)
             ) do |sortable_lists| %>
             <%= sortable_lists.with_list(
               id: t(".available"),
