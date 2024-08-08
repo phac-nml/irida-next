@@ -13,7 +13,7 @@ module Projects
     include Sortable
 
     def index
-      @pagy, @samples = pagy_with_metadata_sort(@q.result.limit(5))
+      @pagy, @samples = pagy_with_metadata_sort(@q.result, limit: params[:limit])
       @has_samples = load_samples.count.positive?
     end
 
