@@ -267,12 +267,12 @@ module DataExports
     end
 
     def attachments_query(sample, data_export)
-      if data_export.export_parameters.key?('attachment_formats')
+      if (Attachment::FORMAT_REGEX.keys - data_export.export_parameters['attachment_formats']).empty?
+        sample.attachments
+      else
         sample.attachments.select do |attachment|
           data_export.export_parameters['attachment_formats'].include?(attachment.metadata['format'])
         end
-      else
-        sample.attachments
       end
     end
   end

@@ -183,6 +183,7 @@ en:
               missing_namespace_id: must have a namespace id for linelist exports
               invalid_namespace_id: must have valid namespace for linelist exports
               invalid_attachment_format: "%{invalid_formats} are not valid attachment formats"
+              missing_attachment_formats: must have attachment formats for sample exports
         namespace:
           attributes:
             name:
