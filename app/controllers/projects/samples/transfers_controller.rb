@@ -17,19 +17,11 @@ module Projects
         end
       end
 
-      def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def create
         new_project_id = transfer_params[:new_project_id]
         sample_ids = transfer_params[:sample_ids]
         @transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
                                                                                                   sample_ids)
-
-        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer', owner: current_user,
-                                           parameters:
-                                         {
-                                           project_name: @project.name,
-                                           new_project_name: Project.find(new_project_id).namespace.name,
-                                           transferred_samples_ids: @transferred_samples_ids.join
-                                         }
 
         if @project.errors.empty?
           render status: :ok, locals: { type: :success, message: t('.success') }
