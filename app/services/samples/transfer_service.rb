@@ -49,6 +49,9 @@ module Samples
     def transfer(new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       transferred_samples_ids = []
       not_found_sample_ids = []
+
+      Sample.public_activity_off
+
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
@@ -62,6 +65,9 @@ module Samples
         end
         next
       end
+
+      Sample.public_activity_on
+
       unless not_found_sample_ids.empty?
         @project.errors.add(:samples,
                             I18n.t('services.samples.transfer.samples_not_found',
@@ -69,6 +75,22 @@ module Samples
       end
 
       if transferred_samples_ids.count.positive?
+        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer', owner: current_user,
+                                           parameters:
+                                           {
+                                             project_name: @project.name,
+                                             new_project_name: @new_project.namespace.name,
+                                             transferred_samples_ids: transferred_samples_ids.join
+                                           }
+
+        @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from', owner: current_user,
+                                               parameters:
+                                               {
+                                                 project_name: @project.name,
+                                                 new_project_name: @new_project.namespace.name,
+                                                 transferred_samples_ids: transferred_samples_ids.join
+                                               }
+
         @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
                                                                       new_project_id)
       end

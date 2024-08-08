@@ -37,8 +37,10 @@ module TrackActivity
       ),
       description: I18n.t("activity.#{activity.key}",
                           user: activity_creator(activity), name: activity_trackable.name,
+                          project_name: activity.parameters[:project_name],
                           new_project_name: activity.parameters[:new_project_name],
-                          transferred_samples_ids: activity.parameters[:transferred_samples_ids])
+                          transferred_samples_ids: activity.parameters[:transferred_samples_ids],
+                          cloned_sample_ids: activity.parameters[:cloned_sample_ids])
     }
   end
 

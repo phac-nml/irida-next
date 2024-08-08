@@ -229,7 +229,10 @@ en:
       destroy: "%{user} removed project %{name}"
       update: "%{user} updated project %{name}"
       samples:
+        clone: "%{user} cloned samples %{cloned_sample_ids} to project %{new_project_name}"
+        cloned_from: "%{user} cloned samples %{cloned_sample_ids} from project %{project_name}"
         transfer: "%{user} transferred samples %{transferred_samples_ids} to project %{new_project_name}"
+        transferred_from: "%{user} transferred samples %{transferred_samples_ids} from project %{project_name}"
     namespaces_user_namespace:
       create: "%{user} created new user %{new_user_name}"
       destroy: "%{user} removed user %{user_name}"

@@ -12,6 +12,8 @@ module Attachments
       @attachments = []
       @pe_attachments = []
 
+      @include_activity = params.key?(:include_activity) ? params[:include_activity] : true
+
       return unless params.key?(:files)
 
       params[:files].each do |file|
@@ -25,7 +27,7 @@ module Attachments
       @attachments
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
+    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/MethodLength
       authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
@@ -40,7 +42,7 @@ module Attachments
 
       @attachments.each(&:save)
 
-      if @attachable.instance_of?(Sample)
+      if @attachable.instance_of?(Sample) && @include_activity
         @attachable.create_activity key: 'sample.attachment.create', owner: current_user, trackable_id: @attachable.id
       end
 
