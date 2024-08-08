@@ -105,11 +105,6 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
               <% else %>
                 <%= helpers.local_time_ago(member.created_at) %>
               <% end %>
-              <turbo-frame id="<%="member-#{member.id}-access-level-updated"%>">
-                <% if member.created_at < member.updated_at %>
-                  <%= render UpdatedComponent.new(updated_at: member.updated_at) %>
-                <% end %>
-              </turbo-frame>
             </div>
           </td>
           <td class="px-6 py-4">

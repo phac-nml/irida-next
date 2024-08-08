@@ -143,13 +143,6 @@ module Projects
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name,
                            param_name: 'group access level')
-
-        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
-
-        within namespace_group_link_row do
-          assert_text 'Updated', count: 1
-          assert_text 'less than a minute ago'
-        end
       end
     end
 
@@ -179,13 +172,6 @@ module Projects
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name,
                            param_name: 'expiration')
-
-        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
-
-        within namespace_group_link_row do
-          assert_text 'Updated', count: 1
-          assert_text 'less than a minute ago'
-        end
       end
     end
 

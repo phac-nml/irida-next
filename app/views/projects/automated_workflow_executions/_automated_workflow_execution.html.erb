@@ -35,11 +35,6 @@
   <td class="px-6 py-4 whitespace-nowrap">
     <%= local_time(automated_workflow_execution["created_at"], :full_date) %>
   </td>
-  <td class="px-6 py-4 whitespace-nowrap">
-    <%= render UpdatedComponent.new(
-      updated_at: automated_workflow_execution["updated_at"]
-    ) %>
-  </td>
   <td
     class="
       px-6

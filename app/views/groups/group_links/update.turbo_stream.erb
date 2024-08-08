@@ -1,9 +1,3 @@
 <%= turbo_stream.append "flashes" do %>
   <%= viral_flash(type:, data: message) %>
 <% end %>
-
-<% if @updated %>
-  <%= turbo_stream.update "invited-group-#{namespace_group_link.group.id}-updated" do %>
-    <%= render UpdatedComponent.new(updated_at: namespace_group_link.updated_at) %>
-  <% end %>
-<% end %>
