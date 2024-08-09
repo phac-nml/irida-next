@@ -8,7 +8,6 @@ export default class extends Controller {
     };
 
     connect() {
-        this.allIds = this.selectionOutlet.getStoredItems();
         this.#appendHiddenInputs();
     }
 
@@ -18,7 +17,7 @@ export default class extends Controller {
 
     #appendHiddenInputs() {
         const fragment = document.createDocumentFragment();
-        for (const id of this.allIds) {
+        for (const id of this.selectionOutlet.getStoredItems()) {
             fragment.appendChild(createHiddenInput(this.fieldNameValue, id));
         }
         this.element.appendChild(fragment);
