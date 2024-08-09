@@ -27,7 +27,7 @@ export default class extends Controller {
 
     this.element.setAttribute("data-controller-connected", "true");
 
-    const storageValue = this.getStoredSamples();
+    const storageValue = this.getStoredItems();
 
     if (storageValue) {
       this.#updateUI(storageValue);
@@ -49,6 +49,7 @@ export default class extends Controller {
 
   clear() {
     sessionStorage.removeItem(this.#storageKey);
+    this.#updateUI([]);
   }
 
   save(storageValue) {
@@ -65,12 +66,12 @@ export default class extends Controller {
     return this.#numSelected;
   }
 
-  getStoredSamples() {
+  getStoredItems() {
     return JSON.parse(sessionStorage.getItem(this.#storageKey)) || [];
   }
 
   #addOrRemove(add, storageValue) {
-    const newStorageValue = this.getStoredSamples();
+    const newStorageValue = this.getStoredItems();
 
     if (add) {
       newStorageValue.push(storageValue);
@@ -82,9 +83,7 @@ export default class extends Controller {
     }
 
     this.save(newStorageValue);
-    this.#updateActionLinks(newStorageValue.length);
-    this.#setSelectAllCheckboxValue(newStorageValue.length);
-    this.#updateCounts(newStorageValue.length);
+    this.#updateUI(newStorageValue);
   }
 
   #updateUI(ids) {

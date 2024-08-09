@@ -3,15 +3,15 @@
 # entity class for Sample
 class Sample < ApplicationRecord
   include MetadataSortable
-
+  include HasPuid
   include History
 
   has_logidze
   acts_as_paranoid
 
-  include HasPuid
-
   belongs_to :project
+
+  broadcasts_refreshes_to :project
 
   has_many :attachments, as: :attachable, dependent: :destroy
 

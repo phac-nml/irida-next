@@ -4,7 +4,6 @@
     <div
       data-controller="infinite-scroll"
       data-infinite-scroll-selection-outlet='#samples-table'
-      data-infinite-scroll-field-name-value="multiple_deletion[sample_ids][]"
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-value="<%= t(".description.singular") %>"
       data-infinite-scroll-plural-value="<%= t(".description.plural") %>"
@@ -43,13 +42,14 @@
 
       <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_deletion_path, method: :delete,
             data: {
-              controller: "spinner",
+              controller: "spinner form--hidden-inputs",
+              "form--hidden-inputs-selection-outlet": '#samples-table',
+              "form--hidden-inputs-field-name-value": "multiple_deletion[sample_ids][]",
               action:"turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd",
               turbo_frame: "_top"
             }
           ) do |form| %>
         <div class="grid gap-4">
-          <div class="hidden" data-infinite-scroll-target="all"></div>
           <div>
             <%= form.submit t(".submit_button"),
                         class: "
@@ -69,7 +69,7 @@
                         dark:border-red-600
                         dark:hover:bg-red-700",
                         data: {
-                          action: "click->infinite-scroll#clear",
+                          action: "click->form--hidden-inputs#clearSelection",
                           "spinner-target": "submit",
                           "turbo-submits-with": t(:".loading"),
                         } %>

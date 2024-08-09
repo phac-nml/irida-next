@@ -33,8 +33,7 @@ module Samples
 
       return unless @project.id == new_project_id
 
-      raise TransferError,
-            I18n.t('services.samples.transfer.same_project')
+      raise TransferError, I18n.t('services.samples.transfer.same_project')
     end
 
     def validate_maintainer_sample_transfer
