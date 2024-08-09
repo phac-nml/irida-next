@@ -38,22 +38,19 @@ export default class extends Controller {
   }
 
   togglePage(event) {
-    const newStorageValue = this.getStoredSamples();
+    const newStorageValue = this.getStoredItems();
     this.rowSelectionTargets.map((row) => {
       row.checked = event.target.checked;
-      if (row.checked) {
+      const index = newStorageValue.indexOf(row.value);
+      if(event.target.checked && index === -1){
         newStorageValue.push(row.value);
-      } else {
-        const index = newStorageValue.indexOf(row.value);
-        if (index > -1) {
-          newStorageValue.splice(index, 1);
-        }
+      }
+      if(!event.target.checked && index > -1){
+        newStorageValue.splice(index, 1);
       }
     });
     this.save(newStorageValue);
-    this.#updateActionLinks(newStorageValue.length);
-    this.#updateCounts(newStorageValue.length);
-    this.#setSelectPageCheckboxValue();
+    this.#updateUI(newStorageValue);
   }
 
   toggle(event) {
@@ -89,7 +86,6 @@ export default class extends Controller {
 
   #addOrRemove(add, storageValue) {
     const newStorageValue = this.getStoredItems();
-
     if (add) {
       newStorageValue.push(storageValue);
     } else {
@@ -98,7 +94,6 @@ export default class extends Controller {
         newStorageValue.splice(index, 1);
       }
     }
-
     this.save(newStorageValue);
     this.#updateUI(newStorageValue);
   }

@@ -772,6 +772,8 @@ en:
           label: Create Export
           sample_export: Sample Export
           linelist_export: Linelist Export
+        deselect_all_button: Deselect All
+        select_all_button: Select All
         title: Samples
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         workflows:
@@ -1177,6 +1179,8 @@ en:
           placeholder: Filter by ID or name
         no_samples: No Samples
         no_associated_samples: There are no samples associated with this project.
+        deselect_all_button: Deselect All
+        select_all_button: Select All
       update:
         success: Sample was successfully updated.
       edit:

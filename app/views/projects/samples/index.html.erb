@@ -56,7 +56,7 @@
               },
               class:
                 "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                            border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
             ) %>
           <% else %>
             <% dropdown.with_item(
@@ -125,7 +125,7 @@
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
           <input type="hidden" name="select" value="on"/>
-          <%= f.submit "Select All",
+          <%= f.submit t(".select_all_button"),
                    class: "button button--state-default button--size-default" %>
         <% end %>
         <%= search_form_for(
@@ -135,7 +135,7 @@
                   class: "filters align-middle"
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
-          <%= f.submit "Deselect All",
+          <%= f.submit t(".deselect_all_button"),
                    class: "button button--state-default button--size-default" %>
         <% end %>
       </div>

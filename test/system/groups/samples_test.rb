@@ -345,7 +345,7 @@ module Groups
       end
     end
 
-    test 'filtering samples by list of  sample puids' do
+    test 'filtering samples by list of sample puids' do
       visit group_samples_url(@group)
       assert_text 'Displaying items 1-20 of 26 in total'
       within 'tbody' do
@@ -394,8 +394,7 @@ module Groups
         assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
-      click_button 'Select All'
-      # find('input[name="selectPage"]').click
+      click_button I18n.t(:'groups.samples.index.select_all_button')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -410,8 +409,7 @@ module Groups
         assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '25'
       end
-      click_button 'Select All'
-      # find('input[name="selectPage"]').click
+      click_button I18n.t(:'groups.samples.index.select_all_button')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
@@ -420,8 +418,49 @@ module Groups
         assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
-      click_button 'Deselect All'
-      # find('input[name="selectPage"]').click
+      click_button I18n.t(:'groups.samples.index.deselect_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 20
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+    end
+
+    test 'selecting / deselecting a page of samples' do
+      visit group_samples_url(@group)
+      assert_text 'Displaying items 1-20 of 26 in total'
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 20
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+      find('input[name="selectPage"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '20'
+      end
+      within 'tbody' do
+        first('input[name="sample_ids[]"]').click
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '19'
+      end
+      find('input[name="selectPage"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 20
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '20'
+      end
+      find('input[name="selectPage"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -450,8 +489,7 @@ module Groups
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
 
-      click_button 'Select All'
-      # find('input[name="selectPage"]').click
+      click_button I18n.t(:'groups.samples.index.select_all_button')
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
