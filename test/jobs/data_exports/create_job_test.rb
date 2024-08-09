@@ -307,6 +307,7 @@ module DataExports
       csv.each do |row|
         assert_equal sample32.puid, row['SAMPLE ID']
         assert_equal sample32.name, row['SAMPLE NAME']
+        assert_equal sample32.project.puid, row['PROJECT ID']
         assert_equal sample32.metadata['metadatafield1'], row['METADATAFIELD1']
         assert_equal sample32.metadata['metadatafield2'], row['METADATAFIELD2']
       end
