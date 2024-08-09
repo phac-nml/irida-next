@@ -5,7 +5,8 @@ module Mutations
   class CreateDirectUpload < BaseMutation
     description 'Create blob to upload data to.'
 
-    argument :byte_size, Int, 'File size (bytes)', required: true
+    argument :byte_size, Int, 'File size (bytes)', required: true,
+                                                   validates: { numericality: { greater_than: 0 } }
     argument :checksum, String, 'MD5 file checksum as base64', required: true
     argument :content_type, String, 'File content type', required: true # rubocop:disable GraphQL/ExtractInputType
     argument :filename, String, 'Original file name', required: true # rubocop:disable GraphQL/ExtractInputType

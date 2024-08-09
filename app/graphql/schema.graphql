@@ -33,19 +33,19 @@ type AttachFilesToSamplePayload {
   clientMutationId: String
 
   """
-  Errors that prevented the mutation.
+  A list of errors that prevented the mutation.
   """
-  errors: JSON!
+  errors: [UserError!]!
 
   """
   The updated sample.
   """
-  sample: Sample!
+  sample: Sample
 
   """
   The status of the mutation.
   """
-  status: JSON!
+  status: JSON
 }
 
 """
@@ -195,7 +195,7 @@ input CreateSampleInput {
   """
   The description to give the sample.
   """
-  description: String!
+  description: String
 
   """
   The name to give the sample.
@@ -225,7 +225,7 @@ type CreateSamplePayload {
   """
   A list of errors that prevented the mutation.
   """
-  errors: [String!]!
+  errors: [UserError!]!
 
   """
   The newly created sample.
@@ -1058,17 +1058,17 @@ type UpdateSampleMetadataPayload {
   """
   A list of errors that prevented the mutation.
   """
-  errors: [String!]!
+  errors: [UserError!]
 
   """
   The updated sample.
   """
-  sample: Sample!
+  sample: Sample
 
   """
   The status of the mutation.
   """
-  status: JSON!
+  status: JSON
 }
 
 """
@@ -1094,4 +1094,19 @@ type User implements Node {
   Datetime of last update.
   """
   updatedAt: ISO8601DateTime!
+}
+
+"""
+A user-readable error
+"""
+type UserError {
+  """
+  A description of the error
+  """
+  message: String!
+
+  """
+  Which input value this error came from
+  """
+  path: [String!]
 }
