@@ -780,7 +780,6 @@ en:
           placeholder: Filter by ID or name
           metadata: Metadata
       table:
-        selectAll: Select / Deselect Samples
         sample: Sample
         project: Project
         puid: ID
@@ -1311,7 +1310,6 @@ en:
           title: Delete File
       table:
         description: The project samples table contains all samples related to this project
-        selectAll: Select / Deselect Samples
         sample: Sample
         puid: ID
         created_at: Created
