@@ -4,7 +4,7 @@
 >
   <td class="px-6 py-4"><%= personal_access_token.name %></td>
   <td class="px-6 py-4"><%= personal_access_token.scopes.join(", ") %></td>
-  <td class="px-6 py-4"><%= l(personal_access_token.created_at.to_date) %></td>
+  <td class="px-6 py-4"><%= local_time(personal_access_token.created_at, :full_date)%></td>
   <td class="px-6 py-4">
     <%= if personal_access_token.last_used_at
       local_time(personal_access_token.last_used_at, :full_date)
