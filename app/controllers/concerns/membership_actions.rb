@@ -92,7 +92,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   end
 
   def update
-    puts params
     updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
     respond_to do |format|
       if updated

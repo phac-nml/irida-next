@@ -111,7 +111,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             <% if (member.user != @current_user && @abilities[:update_member] &&
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
               <%= form_with(model: member, url: select_member_path(member), method: :patch) do |form| %>
-                <div class="form-field datepicker" data-controller="datepicker" data-datepicker-current-date-value="<%= member.expires_at %>">
+                <div class="form-field datepicker" data-controller="datepicker">
                   <div class="relative max-w-sm">
                     <div
                       class="
@@ -126,6 +126,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                     <%= form.text_field :expires_at,
                                     placeholder: t("date.formats.iso"),
                                     autocomplete: "off",
+                                    value: member.expires_at,
                                     id: "member-#{member.id}-expiration",
                                     "data-datepicker-target": "datePicker",
                                     "data-datepicker-autosubmit": "true",
