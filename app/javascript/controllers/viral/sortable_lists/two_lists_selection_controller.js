@@ -17,7 +17,7 @@ export default class extends Controller {
   connect() {
     this.availableList = document.getElementById(this.availableListValue)
     this.selectedList = document.getElementById(this.selectedListValue)
-    this.fullListItems = this.#constructFullListItems(this.availableList, this.selectedList)
+    this.allListItems = this.#constructAllListItems(this.availableList, this.selectedList)
     this.#setInitialSelectAllState(this.availableList, this.addAllTarget)
     this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget)
     this.selectedList.addEventListener("mouseover", () => { this.#checkButtonStates() })
@@ -25,20 +25,20 @@ export default class extends Controller {
   }
 
   addAll() {
-    for (const item of this.fullListItems) {
+    for (const item of this.allListItems) {
       this.selectedList.append(item)
     }
     this.#checkButtonStates()
   }
 
   removeAll() {
-    for (const item of this.fullListItems) {
+    for (const item of this.allListItems) {
       this.availableList.append(item)
     }
     this.#checkButtonStates()
   }
 
-  #constructFullListItems(listOne, listTwo) {
+  #constructAllListItems(listOne, listTwo) {
     const listOneItems = Array.prototype.slice.call(listOne.querySelectorAll('li'))
     const listTwoItems = Array.prototype.slice.call(listTwo.querySelectorAll('li'))
     return listOneItems.concat(listTwoItems)
