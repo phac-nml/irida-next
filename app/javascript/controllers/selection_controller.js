@@ -39,6 +39,23 @@ export default class extends Controller {
     this.#updateCounts(storageValue.length);
   }
 
+  togglePage(event) {
+    const newStorageValue = this.getStoredSamples();
+    this.rowSelectionTargets.map((row) => {
+      row.checked = event.target.checked;
+      if (row.checked) {
+        newStorageValue.push(row.value);
+      } else {
+        const index = newStorageValue.indexOf(row.value);
+        if (index > -1) {
+          newStorageValue.splice(index, 1);
+        }
+      }
+    });
+    this.save(newStorageValue);
+    this.#updateCounts(newStorageValue.length);
+  }
+
   toggle(event) {
     this.#addOrRemove(event.target.checked, event.target.value);
   }

@@ -19,19 +19,15 @@ module Groups
       redirect_to group_samples_path
     end
 
-    def select # rubocop:disable Metrics/AbcSize
+    def select
       authorize! @group, to: :sample_listing?
       @selected_sample_ids = []
 
       respond_to do |format|
         format.turbo_stream do
-          if params[:selectAll].present?
+          if params[:select].present?
             @q = authorized_samples.ransack(search_params)
             @selected_sample_ids = @q.result.select(:id).pluck(:id)
-          elsif params[:selectPage].present?
-            @q = authorized_samples.ransack(search_params)
-            @pagy, @samples = pagy(@q.result)
-            @selected_sample_ids = @samples.select(:id).pluck(:id)
           end
         end
       end

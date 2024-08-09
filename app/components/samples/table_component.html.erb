@@ -20,14 +20,11 @@
               classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-50 dark:bg-slate-700': index == 1)
             ) do %>
               <% if index.zero? and @abilities[:select_samples] %>
-                <%= search_form_for(
-                  @q,
-                  url: select_samples_url(**request.query_parameters),
-                  html: { "data-controller": "filters", id: "select-page-form" },
-                  class: "filters align-middle float-left"
-                ) do |f| %>
-                  <input type="hidden" name="format" value="turbo_stream"/>
-
+                <div
+                  id="select-page-form"
+                  data-controller="filters"
+                  class="filters align-middle float-left"
+                >
                   <label for="select-page" class="sr-only"><%= t(:".select_all") %></label>
                   <input
                     type="checkbox"
@@ -38,10 +35,10 @@
                       focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
                       focus:ring-2 dark:bg-slate-700 dark:border-slate-600
                     "
-                    data-selection-target="selectAll"
-                    onchange="Turbo.navigator.submitForm(this.form)"
+                    data-selection-target="selectPage"
+                    data-action="input->selection#togglePage"
                   />
-                <% end %>
+                </div>
               <% end %>
 
               <% if column == :attachments_updated_at %>
