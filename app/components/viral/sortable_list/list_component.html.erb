@@ -2,9 +2,10 @@
   <%= title %>
   <ul
     id="<%= id %>"
-    data-controller="sortable-list"
-    data-sortable-list-group-name-value="<%= group %>"
+    data-controller="viral--sortable-lists--list"
+    data-viral--sortable-lists--list-group-name-value="<%= group %>"
     class="<%= @system_arguments[:list_classes] %>"
+    tabindex="0"
     >
     <% list_items.each do |list_item| %>
       <li

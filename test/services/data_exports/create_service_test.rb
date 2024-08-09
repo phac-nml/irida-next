@@ -16,7 +16,9 @@ module DataExports
     test 'create data export with valid sample export params' do
       valid_params = { 'export_type' => 'sample',
                        'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
-                                                'namespace_id' => @project1.namespace.id } }
+                                                'namespace_id' => @project1.namespace.id,
+                                                'attachment_formats' =>
+                               Attachment::FORMAT_REGEX.keys } }
 
       assert_difference -> { DataExport.count } => 1 do
         DataExports::CreateService.new(@user, valid_params).execute
@@ -26,7 +28,9 @@ module DataExports
     test 'cannot create data export with incorrect export_type param' do
       invalid_params = { 'export_type' => 'invalid',
                          'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
-                                                  'namespace_id' => @project1.namespace.id } }
+                                                  'namespace_id' => @project1.namespace.id,
+                                                  'attachment_formats' =>
+                               Attachment::FORMAT_REGEX.keys } }
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
@@ -37,7 +41,9 @@ module DataExports
     test 'cannot create data export with invalid sample id' do
       invalid_params = { 'export_type' => 'sample',
                          'export_parameters' => { 'ids' => [99_999_999_999_999],
-                                                  'namespace_id' => @project1.namespace.id } }
+                                                  'namespace_id' => @project1.namespace.id,
+                                                  'attachment_formats' =>
+                               Attachment::FORMAT_REGEX.keys } }
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
@@ -49,7 +55,9 @@ module DataExports
     test 'cannot create data export with both valid and invalid sample ids' do
       invalid_params = { 'export_type' => 'sample',
                          'export_parameters' => { 'ids' => [@sample1.id, @sample2.id, 99_999_999_999_999],
-                                                  'namespace_id' => @project1.namespace.id } }
+                                                  'namespace_id' => @project1.namespace.id,
+                                                  'attachment_formats' =>
+                               Attachment::FORMAT_REGEX.keys } }
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
@@ -61,7 +69,9 @@ module DataExports
     test 'valid authorization to create sample export' do
       valid_params = { 'export_type' => 'sample',
                        'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
-                                                'namespace_id' => @project1.namespace.id } }
+                                                'namespace_id' => @project1.namespace.id,
+                                                'attachment_formats' =>
+                               Attachment::FORMAT_REGEX.keys } }
 
       assert_authorized_to(:export_sample_data?, @project1.namespace, with: Namespaces::ProjectNamespacePolicy,
                                                                       context: { user: @user }) do
@@ -72,7 +82,9 @@ module DataExports
     test 'data export with valid parameters but unauthorized for sample project' do
       valid_params = { 'export_type' => 'sample',
                        'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
-                                                'namespace_id' => @project1.namespace.id } }
+                                                'namespace_id' => @project1.namespace.id,
+                                                'attachment_formats' =>
+                               Attachment::FORMAT_REGEX.keys } }
       user = users(:steve_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { DataExports::CreateService.new(user, valid_params).execute }
@@ -222,7 +234,8 @@ module DataExports
         'export_type' => 'sample',
         'export_parameters' => {
           'ids' => [@sample1.id, @sample2.id],
-          'namespace_id' => group4.id
+          'namespace_id' => group4.id,
+          'attachment_formats' => Attachment::FORMAT_REGEX.keys
         }
       }
 
@@ -391,6 +404,19 @@ module DataExports
         assert_equal I18n.t(
           'activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
           invalid_formats: (formats - Attachment::FORMAT_REGEX.keys).join(', ')
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'cannot create sample data export with missing attachment_formats param' do
+      invalid_params = { 'export_type' => 'sample',
+                         'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
+                                                  'namespace_id' => @project1.namespace.id } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.missing_attachment_formats'
         ), data_export.errors[:export_parameters].first
       end
     end

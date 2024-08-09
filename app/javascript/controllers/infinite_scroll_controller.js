@@ -9,11 +9,14 @@ export default class extends Controller {
     "pageFormContent",
     "scrollable",
     "summary",
+    "sampleCount"
   ];
   static values = {
     pagedFieldName: String,
-    singular: String,
-    plural: String,
+    singularDescription: String,
+    pluralDescription: String,
+    singularCount: String,
+    pluralCount: String
   };
 
   #page = 1;
@@ -21,7 +24,10 @@ export default class extends Controller {
   connect() {
     this.allIds = this.selectionOutlet.getStoredItems();
     this.#makePagedHiddenInputs();
-    this.#replaceCountPlaceholder();
+    this.#replaceCountPlaceholder(this.summaryTarget, this.singularDescriptionValue, this.pluralDescriptionValue);
+    if (this.hasSampleCountTarget) {
+      this.#replaceCountPlaceholder(this.sampleCountTarget, this.singularCountValue, this.pluralCountValue);
+    }
   }
 
   scroll() {
@@ -33,14 +39,12 @@ export default class extends Controller {
     }
   }
 
-  #replaceCountPlaceholder() {
+  #replaceCountPlaceholder(textNode, singular, plural) {
     const numSelected = this.selectionOutlet.getNumSelected();
-    let summary = this.summaryTarget;
-
     if (numSelected == 1) {
-      summary.innerHTML = this.singularValue;
+      textNode.innerHTML = singular;
     } else {
-      summary.innerHTML = this.pluralValue.replace(
+      textNode.innerHTML = plural.replace(
         "COUNT_PLACEHOLDER",
         numSelected
       );

@@ -6,8 +6,8 @@
         data-controller="infinite-scroll"
         data-infinite-scroll-selection-outlet='#samples-table'
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
-        data-infinite-scroll-singular-value="<%= t(".description.singular") %>"
-        data-infinite-scroll-plural-value="<%= t(".description.plural") %>"
+        data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
+        data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
       >
         <%= form_with(
         url: list_namespace_project_samples_path,
