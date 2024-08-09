@@ -4,6 +4,8 @@
 class Project < ApplicationRecord
   acts_as_paranoid
 
+  broadcasts_refreshes
+
   before_restore :restore_namespace
   after_destroy :destroy_namespace
 

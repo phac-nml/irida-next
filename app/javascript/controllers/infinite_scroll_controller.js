@@ -11,7 +11,6 @@ export default class extends Controller {
     "summary",
   ];
   static values = {
-    fieldName: String,
     pagedFieldName: String,
     singular: String,
     plural: String,
@@ -20,9 +19,8 @@ export default class extends Controller {
   #page = 1;
 
   connect() {
-    this.allIds = this.selectionOutlet.getStoredSamples();
+    this.allIds = this.selectionOutlet.getStoredItems();
     this.#makePagedHiddenInputs();
-    this.#makeAllHiddenInputs();
     this.#replaceCountPlaceholder();
   }
 
@@ -61,23 +59,10 @@ export default class extends Controller {
         fragment.appendChild(createHiddenInput(this.pagedFieldNameValue, id));
       }
       fragment.appendChild(createHiddenInput("page", this.#page));
-      fragment.appendChild(createHiddenInput("format", "turbo_stream"));
       this.pageFormContentTarget.innerHTML = "";
       this.pageFormContentTarget.appendChild(fragment);
       this.#page++;
       this.pageFormTarget.requestSubmit();
     }
-  }
-
-  #makeAllHiddenInputs() {
-    const fragment = document.createDocumentFragment();
-    for (const id of this.allIds) {
-      fragment.appendChild(createHiddenInput(this.fieldNameValue, id));
-    }
-    this.allTarget.appendChild(fragment);
-  }
-
-  clear() {
-    this.selectionOutlet.clear();
   }
 }

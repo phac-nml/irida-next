@@ -4,10 +4,9 @@
     <%= turbo_frame_tag "sample_export_dialog_content" do %>
       <div
         data-controller="infinite-scroll data-exports--metadata-selection"
-        data-data-exports--metadata-selection-selected-list-value=<%= t(".selected") %>
-        data-data-exports--metadata-selection-available-list-value=<%= t(".available") %>
+        data-data-exports--metadata-selection-selected-list-value="<%= t(".selected") %>"
+        data-data-exports--metadata-selection-available-list-value="<%= t(".available") %>"
         data-infinite-scroll-selection-outlet='#samples-table'
-        data-infinite-scroll-field-name-value="data_export[export_parameters][ids][]"
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
         data-infinite-scroll-singular-value="<%= t(".description.singular") %>"
         data-infinite-scroll-plural-value="<%= t(".description.plural") %>"
@@ -34,22 +33,9 @@
               <button
                 type="button"
                 class="
-                  flex
-                  items-center
-                  justify-between
-                  w-full
-                  p-3
-                  font-medium
-                  rtl:text-right
-                  text-black
-                  dark:text-white
-                  border
-                  border-slate-200
-                  dark:border-slate-700
-                  hover:bg-slate-100
-                  dark:hover:bg-slate-800
-                  gap-3
-                  rounded-t
+                  flex items-center justify-between w-full p-3 font-medium rtl:text-right
+                  text-black dark:text-white border border-slate-200 dark:border-slate-700
+                  hover:bg-slate-100 dark:hover:bg-slate-800 gap-3 rounded-t
                 "
                 data-action="collapsible#toggle"
                 aria-expanded="true"
@@ -59,7 +45,7 @@
                 <%= viral_icon(
                   name: "chevron_down",
                   classes: "mr-0 w-4 h-4 rotate-0",
-                  "data-collapsible-target": "icon"
+                  "data-collapsible-target": "icon",
                 ) %>
               </button>
             </h2>
@@ -71,12 +57,12 @@
               aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
             >
               <div
-              class="
-                overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block w-full
-                p-2.5 dark:bg-slate-800 dark:border-slate-600
-              "
-              data-action="scroll->infinite-scroll#scroll"
-              data-infinite-scroll-target="scrollable"
+                class="
+                  overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block
+                  w-full p-2.5 dark:bg-slate-800 dark:border-slate-600
+                "
+                data-action="scroll->infinite-scroll#scroll"
+                data-infinite-scroll-target="scrollable"
               >
                 <%= turbo_frame_tag "list_select_samples" do %>
                   <%= render partial: "shared/loading/samples_list_skeleton" %>
@@ -93,50 +79,92 @@
             <%= sortable_lists.with_list(
               id: t(".available"),
               title: t(".available"),
-              list_items: @namespace.metadata_fields.sort_by{|metadata_field| metadata_field.downcase},
-              group: 'metadata_selection',
-              container_classes: 'block mb-1 pr-2 text-sm font-medium',
-              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] w-full'
-              ) %>
+              list_items:
+                @namespace.metadata_fields.sort_by do |metadata_field|
+                  metadata_field.downcase
+                end,
+              group: "metadata_selection",
+              container_classes: "block mb-1 pr-2 text-sm font-medium",
+              list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+            ) %>
             <%= sortable_lists.with_list(
               id: t(".selected"),
               title: t(".selected"),
-              group: 'metadata_selection',
-              container_classes: 'block mb-1 text-sm font-medium',
-              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] w-full'
-              ) %>
+              group: "metadata_selection",
+              container_classes: "block mb-1 text-sm font-medium",
+              list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+            ) %>
           <% end %>
           <div class="flex -mt-3 font-medium text-slate-900 dark:text-white">
             <button
               class="mr-2 underline text-sm hover:no-underline"
               data-action="click->data-exports--metadata-selection#addAll"
               data-data-exports--metadata-selection-target="addAll"
-              >
+            >
               <%= t(".add_all") %>
             </button>
             <button
               aria-disabled="true"
-              class="ml-2 text-sm text-slate-300 dark:text-slate-700 pointer-events-none cursor-not-allowed"
+              class="
+                ml-2 text-sm text-slate-300 dark:text-slate-700 pointer-events-none
+                cursor-not-allowed
+              "
               data-action="click->data-exports--metadata-selection#removeAll"
               data-data-exports--metadata-selection-target="removeAll"
-              >
+            >
               <%= t(".remove_all") %>
             </button>
           </div>
-          <%= form_for(:data_export, url: data_exports_path, method: :post) do |form| %>
+          <%= form_for(:data_export, url: data_exports_path, method: :post,
+              data: {
+                controller: "spinner form--hidden-inputs",
+                "form--hidden-inputs-selection-outlet": '#samples-table',
+                "form--hidden-inputs-field-name-value": "data_export[export_parameters][ids][]",
+                action: "turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd"
+              }
+            ) do |form| %>
             <div class="grid gap-4">
               <div class="form-field mt-1">
                 <%= form.label :name, t(".format") %>
                 <div class="flex">
                   <div class="flex items-center">
-                    <input id="csv-format" type="radio" value="csv" name="data_export[export_parameters][linelist_format]"
-                          checked="true" class="w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600">
-                    <label for="csv-format" class="ml-1 mr-2 text-sm font-medium text-slate-900 dark:text-slate-300"><%= t(".csv") %></label>
+                    <input
+                      id="csv-format"
+                      type="radio"
+                      value="csv"
+                      name="data_export[export_parameters][linelist_format]"
+                      checked="true"
+                      class="
+                        w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500
+                        dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2
+                        dark:bg-slate-700 dark:border-slate-600
+                      "
+                    >
+                    <label
+                      for="csv-format"
+                      class="
+                        ml-1 mr-2 text-sm font-medium text-slate-900 dark:text-slate-300
+                      "
+                    ><%= t(".csv") %></label>
                   </div>
                   <div class="flex items-center">
-                    <input id="xlsx-format" type="radio" value="xlsx" name="data_export[export_parameters][linelist_format]"
-                          class="w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600">
-                    <label for="xlsx-format" class="ml-1 text-sm font-medium text-slate-900 dark:text-slate-300"><%= t(".xlsx") %></label>
+                    <input
+                      id="xlsx-format"
+                      type="radio"
+                      value="xlsx"
+                      name="data_export[export_parameters][linelist_format]"
+                      class="
+                        w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500
+                        dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2
+                        dark:bg-slate-700 dark:border-slate-600
+                      "
+                    >
+                    <label
+                      for="xlsx-format"
+                      class="
+                        ml-1 text-sm font-medium text-slate-900 dark:text-slate-300
+                      "
+                    ><%= t(".xlsx") %></label>
                   </div>
                 </div>
               </div>
@@ -150,9 +178,9 @@
                                  checked: false,
                                  class:
                                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
-                                    focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
-                                    focus:ring-2 dark:bg-slate-700 dark:border-slate-600
-                                    ",
+                                                                                                    focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
+                                                                                                    focus:ring-2 dark:bg-slate-700 dark:border-slate-600
+                                                                                                    ",
                                },
                                true,
                                false %>
@@ -162,16 +190,18 @@
               </div>
               <div>
                 <%= form.hidden_field :export_type, value: "linelist" %>
-                <input type="hidden" aria-hidden="true" name="data_export[export_parameters][namespace_id]", value=<%= namespace_id %>>
+                <input type="hidden" aria-hidden="true"
+                name="data_export[export_parameters][namespace_id]", value=<%= namespace_id %>>
               </div>
-              <div class="hidden" data-infinite-scroll-target="all"></div>
               <div class="hidden" data-data-exports--metadata-selection-target="field"></div>
               <div>
                 <%= form.submit t(".submit_button"),
                             data: {
                               turbo_frame: "_top",
-                              action: %(click->infinite-scroll#clear click->data-exports--metadata-selection#constructMetadataParams),
-                              "data-exports--metadata-selection-target": "submitBtn"
+                              action:
+                                "click->form--hidden-inputs#clearSelection click->data-exports--metadata-selection#constructMetadataParams",
+                              "data-exports--metadata-selection-target": "submitBtn",
+                              "spinner-target": "submit",
                             },
                             class: "button button--state-primary button--size-default",
                             disabled: true %>

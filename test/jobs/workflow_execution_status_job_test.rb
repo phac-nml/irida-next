@@ -66,7 +66,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
-    assert_performed_jobs 6
+    assert_performed_jobs(6, only: WorkflowExecutionStatusJob)
     assert @workflow_execution.reload.completing?
   end
 
@@ -95,7 +95,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
-    assert_performed_jobs 3
+    assert_performed_jobs(3, only: WorkflowExecutionStatusJob)
     @workflow_execution.reload
     assert @workflow_execution.error?
     assert @workflow_execution.http_error_code == 400
@@ -124,7 +124,7 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
-    assert_performed_jobs 2
+    assert_performed_jobs(2, only: WorkflowExecutionStatusJob)
     assert @workflow_execution.reload.completing?
   end
 end

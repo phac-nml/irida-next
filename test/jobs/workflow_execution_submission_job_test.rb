@@ -32,7 +32,7 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_performed_jobs 1
+    assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
     assert @workflow_execution.reload.submitted?
   end
 
@@ -60,7 +60,7 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_performed_jobs 6
+    assert_performed_jobs(6, only: WorkflowExecutionSubmissionJob)
     assert @workflow_execution.reload.submitted?
   end
 
@@ -86,7 +86,7 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
-    assert_performed_jobs 3
+    assert_performed_jobs(3, only: WorkflowExecutionSubmissionJob)
     @workflow_execution.reload
     assert @workflow_execution.error?
     assert @workflow_execution.http_error_code == 400
@@ -112,7 +112,7 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_performed_jobs 2
+    assert_performed_jobs(2, only: WorkflowExecutionSubmissionJob)
     assert @workflow_execution.reload.submitted?
   end
 end

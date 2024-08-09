@@ -4,6 +4,8 @@
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
 
+<%= turbo_stream_from @project %>
+
 <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
@@ -44,22 +46,42 @@
           <% if @project.namespace.metadata_fields.empty? %>
             <% dropdown.with_item(
               label: t(".create_export_button.linelist_export"),
-              url: new_data_export_path(export_type: "linelist", namespace_id: @project.namespace.id),
+              url:
+                new_data_export_path(
+                  export_type: "linelist",
+                  namespace_id: @project.namespace.id,
+                ),
               data: {
-                turbo_stream: true
-                },
-              class: "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed") %>
+                turbo_stream: true,
+              },
+              class:
+                "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
+                            border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+            ) %>
           <% else %>
             <% dropdown.with_item(
               label: t(".create_export_button.linelist_export"),
-              url: new_data_export_path(export_type: "linelist", namespace_id: @project.namespace.id),
+              url:
+                new_data_export_path(
+                  export_type: "linelist",
+                  namespace_id: @project.namespace.id,
+                ),
               data: {
-                turbo_stream: true
-                }
-              ) %>
+                turbo_stream: true,
+              },
+            ) %>
           <% end %>
-          <% dropdown.with_item(label: t(".create_export_button.sample_export"), url: new_data_export_path(export_type: "sample", namespace_id: @project.namespace.id), data: { turbo_stream: true }) %>
+          <% dropdown.with_item(
+            label: t(".create_export_button.sample_export"),
+            url:
+              new_data_export_path(
+                export_type: "sample",
+                namespace_id: @project.namespace.id,
+              ),
+            data: {
+              turbo_stream: true,
+            },
+          ) %>
         <% end %>
       <% end %>
       <% if allowed_to?(:update_sample?, @project) && @has_samples %>
