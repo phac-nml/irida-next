@@ -16,66 +16,66 @@
       <% end %>
 
       <div class="grid gap-4">
-          <p
-            data-infinite-scroll-target="summary"
-            class="
-              text-base leading-relaxed text-slate-500 dark:text-slate-400
-            "
-          ><%= t(".description.zero") %></p>
-          <div>
-            <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
-              <%= t(".samples") %>
-            </div>
-            <div
-              class="
-                overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
-                p-2.5 dark:bg-slate-800 dark:border-slate-600
-              "
-              data-action="scroll->infinite-scroll#scroll"
-              data-infinite-scroll-target="scrollable"
-            >
-              <%= turbo_frame_tag "list_select_samples" do %>
-                <%= render partial: "shared/loading/samples_list_skeleton" %>
-              <% end %>
-            </div>
+        <p
+          data-infinite-scroll-target="summary"
+          class="text-base leading-relaxed text-slate-500 dark:text-slate-400"
+        ><%= t(".description.zero") %></p>
+        <div>
+          <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
+            <%= t(".samples") %>
           </div>
+          <div
+            class="
+              overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+              p-2.5 dark:bg-slate-800 dark:border-slate-600
+            "
+            data-action="scroll->infinite-scroll#scroll"
+            data-infinite-scroll-target="scrollable"
+          >
+            <%= turbo_frame_tag "list_select_samples" do %>
+              <%= render partial: "shared/loading/samples_list_skeleton" %>
+            <% end %>
+          </div>
+        </div>
 
-      <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_deletion_path, method: :delete,
+        <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_deletion_path, method: :delete,
             data: {
               controller: "spinner form--hidden-inputs",
               "form--hidden-inputs-selection-outlet": '#samples-table',
               "form--hidden-inputs-field-name-value": "multiple_deletion[sample_ids][]",
-              action:"turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd",
+              action:"turbo:submit-start->spinner#submitStart turbo:submit-end->viral--dialog#close",
               turbo_frame: "_top"
             }
           ) do |form| %>
-        <div class="grid gap-4">
-          <div>
-            <%= form.submit t(".submit_button"),
-                        class: "
-                        button
-                        text-sm
-                        px-5
-                        py-2.5
-                        text-white
-                        bg-red-700
-                        border-red-800
-                        focus:outline-none
-                        hover:bg-red-800
-                        focus:ring-red-300
-                        dark:focus:ring-red-700
-                        dark:bg-red-600
-                        dark:text-white
-                        dark:border-red-600
-                        dark:hover:bg-red-700",
-                        data: {
-                          action: "click->form--hidden-inputs#clearSelection",
-                          "spinner-target": "submit",
-                          "turbo-submits-with": t(:".loading"),
-                        } %>
+          <div class="grid gap-4">
+            <div>
+              <%= form.submit t(".submit_button"),
+                          class:
+                            "
+                                                                button
+                                                                text-sm
+                                                                px-5
+                                                                py-2.5
+                                                                text-white
+                                                                bg-red-700
+                                                                border-red-800
+                                                                focus:outline-none
+                                                                hover:bg-red-800
+                                                                focus:ring-red-300
+                                                                dark:focus:ring-red-700
+                                                                dark:bg-red-600
+                                                                dark:text-white
+                                                                dark:border-red-600
+                                                                dark:hover:bg-red-700",
+                          data: {
+                            action: "click->form--hidden-inputs#clearSelection",
+                            "spinner-target": "submit",
+                            "turbo-submits-with": t(:".loading"),
+                          } %>
+            </div>
           </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     </div>
 
     <div
