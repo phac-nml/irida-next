@@ -2096,7 +2096,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
-      find('input[name="select"]').click
+      click_button 'Select All'
+      # find('input[name="selectPage"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2111,13 +2112,14 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '2'
       end
-
-      find('input[name="select"]').click
+      click_button 'Select All'
+      # find('input[name="selectPage"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
-      find('input[name="select"]').click
+      click_button 'Deselect All'
+      # find('input[name="selectPage"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -2142,7 +2144,8 @@ module Projects
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
 
-      find('input[name="select"]').click
+      click_button 'Select All'
+      # find('input[name="selectPage"]').click
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
@@ -2273,7 +2276,7 @@ module Projects
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
 
-      assert find('input#select-all').checked?
+      assert find('input#select-page').checked?
 
       within '#samples-table table tbody tr:first-child' do
         click_link I18n.t('projects.samples.index.remove_button')
@@ -2290,7 +2293,7 @@ module Projects
         assert all('input[type="checkbox"]')[1].checked?
       end
 
-      assert find('input#select-all').checked?
+      assert find('input#select-page').checked?
 
       click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
