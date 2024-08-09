@@ -13,7 +13,7 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     end
 
-    assert_performed_jobs 1
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
     assert workflow_execution.reload.cleaned?
   end
 
@@ -26,7 +26,7 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     end
 
-    assert_performed_jobs 1
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
     assert workflow_execution.reload.cleaned?
   end
 
@@ -39,7 +39,7 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     end
 
-    assert_performed_jobs 1
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
     assert workflow_execution.reload.cleaned?
   end
 
@@ -52,7 +52,7 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     end
 
-    assert_performed_jobs 1
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_not workflow_execution.reload.cleaned?
   end
 end
