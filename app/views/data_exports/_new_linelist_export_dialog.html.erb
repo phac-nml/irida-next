@@ -4,8 +4,8 @@
     <%= turbo_frame_tag "sample_export_dialog_content" do %>
       <div
         data-controller="infinite-scroll viral--sortable-lists--two-lists-selection"
-        data-viral--sortable-lists--two-lists-selection-selected-list-value=<%= t(".selected") %>
-        data-viral--sortable-lists--two-lists-selection-available-list-value=<%= t(".available") %>
+        data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
+        data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
         data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
         data-infinite-scroll-selection-outlet='#samples-table'
         data-infinite-scroll-paged-field-name-value="sample_ids[]"

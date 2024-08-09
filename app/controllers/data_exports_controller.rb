@@ -135,9 +135,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     when 'analysis'
       { open: true, workflow_execution_id: params[:workflow_execution_id] }
     when 'sample'
-      { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort, select_all: true }
+      { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort }
     when 'linelist'
-      { open: true, namespace_id: params[:namespace_id], select_all: true }
+      { open: true, namespace_id: params[:namespace_id] }
     end
   end
 end
