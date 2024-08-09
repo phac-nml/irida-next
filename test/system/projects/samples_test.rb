@@ -2123,6 +2123,43 @@ module Projects
       end
     end
 
+    test 'selecting / deselecting a page of samples' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+      find('input[name="selectPage"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
+      within 'tbody' do
+        first('input[name="sample_ids[]"]').click
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '2'
+      end
+      find('input[name="selectPage"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      find('input[name="selectPage"]').click
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+    end
+
     test 'selecting samples while filtering' do
       visit namespace_project_samples_url(@namespace, @project)
       within 'tbody' do
