@@ -2,10 +2,7 @@ development:
   adapter: postgresql
 
 test:
-  adapter: postgresql
-
-staging:
-  adapter: postgresql
+  adapter: test
 
 production:
   adapter: postgresql
