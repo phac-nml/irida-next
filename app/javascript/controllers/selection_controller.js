@@ -6,7 +6,7 @@ export default class extends Controller {
   #storageKey = null;
   #numSelected = 0;
 
-  static targets = ["rowSelection", "selectAll", "selected"];
+  static targets = ["rowSelection", "selectPage", "selected"];
   static outlets = ["action-link"];
 
   static values = {
@@ -30,13 +30,11 @@ export default class extends Controller {
     const storageValue = this.getStoredItems();
 
     if (storageValue) {
-      this.#updateUI(storageValue);
       this.#numSelected = storageValue.length;
+      this.#updateUI(storageValue);
     } else {
       this.save([]);
     }
-
-    this.#updateCounts(storageValue.length);
   }
 
   togglePage(event) {
@@ -53,7 +51,9 @@ export default class extends Controller {
       }
     });
     this.save(newStorageValue);
+    this.#updateActionLinks(newStorageValue.length);
     this.#updateCounts(newStorageValue.length);
+    this.#setSelectPageCheckboxValue();
   }
 
   toggle(event) {
@@ -108,8 +108,8 @@ export default class extends Controller {
       row.checked = ids.indexOf(row.value) > -1;
     });
     this.#updateActionLinks(ids.length);
-    this.#setSelectAllCheckboxValue(ids.length);
     this.#updateCounts(ids.length);
+    this.#setSelectPageCheckboxValue();
   }
 
   #updateActionLinks(count) {
@@ -118,9 +118,10 @@ export default class extends Controller {
     });
   }
 
-  #setSelectAllCheckboxValue(numSelected) {
-    if (this.hasSelectAllTarget && this.totalValue > 0) {
-      this.selectAllTarget.checked = this.totalValue === numSelected;
+  #setSelectPageCheckboxValue() {
+    if (this.hasSelectPageTarget) {
+      const uncheckedBoxes = this.rowSelectionTargets.filter(row => row.checked === false)
+      this.selectPageTarget.checked = uncheckedBoxes.length === 0
     }
   }
 
