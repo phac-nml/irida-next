@@ -32,7 +32,7 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
     end
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
-    assert_performed_jobs(1, only: WorklowExecutionSubmissionJob)
+    assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
     assert @workflow_execution.reload.submitted?
   end
 
