@@ -3,13 +3,13 @@
     <table
       class='
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
+        whitespace-nowrap relative
       '
     >
       <thead
         class='
           text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-          dark:text-slate-400
+          dark:text-slate-400 z-10
         '
       >
         <tr>
@@ -17,7 +17,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-50 dark:bg-slate-700': index == 1)
+              classes: class_names('px-3 py-3 sticky top-0', 'left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'left-56 z-10 bg-slate-50 dark:bg-slate-700': index == 1)
             ) do %>
               <% if index.zero? and @abilities[:select_samples] %>
                 <%= check_box_tag "select-page",
@@ -256,9 +256,37 @@
         turbo_action: "replace",
       },
     ) %>
-    <% PAGE_SIZES.each do |size| %>
-      <%= link_to size, url_for(limit: size), class: "dropdown-item" %>
-    <% end %>
+    <% a = helpers.pagy_anchor(@pagy) %>
+    <nav class="pagy nav" aria-label="Pages">
+      <ul class="flex font-semibold text-sm text-gray-500">
+        <%# Previous page link %>
+        <li>
+          <% if @pagy.prev %>
+            <%== a.(@pagy.prev, '&lt;', aria_label: 'Previous', classes: "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white") %>
+          <% else %>
+            <a role="link" aria-disabled="true" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight border border-gray-300 rounded-s-lg text-gray-300 bg-gray-100 cursor-default" aria-label="Previous">&lt;</a>
+          <% end %>
+        </li>
+        <%# Page links (series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36]) %>
+        <% @pagy.series.each do |item| %>
+          <li>
+            <% if item.is_a?(Integer) %>
+              <%== a.(item, classes: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white") %>
+            <% elsif item.is_a?(String) %>
+              <a role="link" aria-disabled="true" aria-current="page" class="flex items-center justify-center px-3 h-8 text-primary-600 border border-gray-300 bg-primary-50 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><%== item %></a>
+            <% elsif item == :gap %>
+              <a role="link" aria-disabled="true" class="gap">&hellip;</a>
+            <% end %>
+          </li>
+        <% end %>
+        <%# Next page link %>
+        <% if @pagy.next %>
+          <%== a.(@pagy.next, '&gt;', aria_label: 'Next', classes: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white") %>
+        <% else %>
+          <a role="link" aria-disabled="true" aria-label="Next" class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 rounded-e-lg text-gray-300 bg-gray-100 cursor-default">&gt;</a>
+        <% end %>
+      </ul>
+    </nav>
   <% end %>
   <div class="empty_state_message">
     <%= viral_empty(
