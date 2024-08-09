@@ -60,7 +60,7 @@
           <td class="px-6 py-4"><%= metadata[:key] %></td>
           <td class="px-6 py-4"><%= metadata[:value] %></td>
           <td class="px-6 py-4"><%= metadata[:source] %></td>
-          <td class="px-6 py-4"><%= viral_time_ago(original_time: metadata[:last_updated]) %></td>
+          <td class="px-6 py-4"><%= local_time_ago(metadata[:last_updated]) %></td>
           <% if allowed_to?(:update_sample?, @project) %>
             <td class="px-6 py-4 space-x-2">
               <% unless metadata[:source_type] == 'analysis' %>

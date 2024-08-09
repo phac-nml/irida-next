@@ -26,7 +26,6 @@ module ViewHelper
     sortable_lists: 'Viral::SortableListsComponent',
     tabs: 'Viral::TabsComponent',
     text_input: 'Viral::Form::TextInputComponent',
-    time_ago: 'Viral::TimeAgoComponent',
     tooltip: 'Viral::TooltipComponent'
   }.freeze
 

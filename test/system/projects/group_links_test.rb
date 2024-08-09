@@ -143,13 +143,6 @@ module Projects
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name,
                            param_name: 'group access level')
-
-        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
-
-        within namespace_group_link_row do
-          assert_text 'Updated', count: 1
-          assert_text 'less than a minute ago'
-        end
       end
     end
 
@@ -179,13 +172,6 @@ module Projects
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name,
                            param_name: 'expiration')
-
-        namespace_group_link_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
-
-        within namespace_group_link_row do
-          assert_text 'Updated', count: 1
-          assert_text 'less than a minute ago'
-        end
       end
     end
 
@@ -326,7 +312,8 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link6.group_access_level)
       end
 
-      click_on 'Group'
+      sort_link = find('table thead th:nth-child(1) a')
+      sort_link.trigger('click')
       assert_selector '#project-members table thead th:first-child svg.icon-arrow_down'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
@@ -343,7 +330,8 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      click_on 'Source'
+      sort_link = find('table thead th:nth-child(2) a')
+      sort_link.trigger('click')
       assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -360,7 +348,8 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link2.group_access_level)
       end
 
-      click_on 'Source'
+      sort_link = find('table thead th:nth-child(2) a')
+      sort_link.trigger('click')
       assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_down'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
@@ -377,7 +366,8 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      click_on 'Access Level'
+      sort_link = find('table thead th:nth-child(4) a')
+      sort_link.trigger('click')
       assert_selector '#project-members table thead th:nth-child(4) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -394,7 +384,8 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      click_on 'Access Level'
+      sort_link = find('table thead th:nth-child(4) a')
+      sort_link.trigger('click')
       assert_selector '#project-members table thead th:nth-child(4) svg.icon-arrow_down'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
@@ -411,7 +402,8 @@ module Projects
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
       end
 
-      click_on 'Expiration'
+      sort_link = find('table thead th:nth-child(5) a')
+      sort_link.trigger('click')
       assert_selector '#project-members table thead th:nth-child(5) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name

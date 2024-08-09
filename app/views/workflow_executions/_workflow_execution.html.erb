@@ -60,10 +60,10 @@
     <%= workflow_execution.metadata["workflow_version"] %>
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
-    <%= l(workflow_execution["created_at"].localtime, format: :full_date) %>
+    <%= local_time(workflow_execution["created_at"], :full_date) %>
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
-    <%= viral_time_ago(original_time: workflow_execution["updated_at"]) %>
+    <%= local_time_ago(workflow_execution["updated_at"]) %>
   </td>
   <td
     class="

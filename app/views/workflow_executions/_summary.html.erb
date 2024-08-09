@@ -28,10 +28,10 @@
   </div>
   <div class="flex flex-col py-3">
     <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".created_at") %></dt>
-    <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= time_tag(@workflow_execution.created_at) %></dd>
+    <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= local_time(@workflow_execution.created_at, :full_date) %></dd>
   </div>
   <div class="flex flex-col pt-3">
     <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".updated_at") %></dt>
-    <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= time_tag(@workflow_execution.updated_at) %></dd>
+    <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= local_time(@workflow_execution.updated_at, :long) %></dd>
   </div>
 </dl>

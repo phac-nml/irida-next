@@ -31,11 +31,11 @@
     <% end %>
   </td>
   <td class="px-6 py-3">
-    <%= l(data_export.created_at.localtime, format: :full_date) %>
+    <%= local_time(data_export.created_at, :full_date) %>
   </td>
   <td class="px-6 py-3">
     <% unless data_export.expires_at.nil? %>
-      <%= l(data_export.expires_at.localtime, format: :full_date) %>
+      <%= local_time(data_export.expires_at, :full_date) %>
     <% end %>
   </td>
   <td class="px-6 py-3 space-x-2">

@@ -48,7 +48,7 @@
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".created_at") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
-        <%= l(@data_export.created_at.localtime, format: :full_date) %>
+         <%= local_time(@data_export.created_at, :full_date) %>
       </dd>
     </div>
     <div class="flex flex-col pt-3">
@@ -57,7 +57,7 @@
         <% if @data_export.expires_at.nil? %>
           <%= t(:".once_ready") %>
         <% else %>
-          <%= l(@data_export.expires_at.localtime, format: :full_date) %>
+          <%= local_time(@data_export.expires_at, :full_date) %>
         <% end %>
       </dd>
     </div>

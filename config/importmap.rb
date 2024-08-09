@@ -19,3 +19,4 @@ pin 'xlsx', to: 'https://ga.jspm.io/npm:xlsx@0.18.5/xlsx.mjs'
 pin 'validator', to: 'https://ga.jspm.io/npm:validator@13.11.0/index.js'
 pin_all_from 'app/javascript/utilities', under: 'utilities'
 pin 'sortablejs', to: 'https://ga.jspm.io/npm:sortablejs@1.15.2/modular/sortable.esm.js'
+pin 'local-time' # @3.0.2

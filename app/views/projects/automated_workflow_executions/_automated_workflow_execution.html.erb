@@ -33,12 +33,7 @@
     <%= automated_workflow_execution.metadata["workflow_version"] %>
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
-    <%= l(automated_workflow_execution["created_at"].localtime, format: :full_date) %>
-  </td>
-  <td class="px-6 py-4 whitespace-nowrap">
-    <%= render UpdatedComponent.new(
-      updated_at: automated_workflow_execution["updated_at"].localtime
-    ) %>
+    <%= local_time(automated_workflow_execution["created_at"], :full_date) %>
   </td>
   <td
     class="

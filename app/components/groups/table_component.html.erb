@@ -63,14 +63,7 @@
           </td>
           <td class="px-6 py-4">
             <div>
-              <%= viral_time_ago(original_time: namespace_group_link.created_at) %>
-              <span class="block">
-                <%= helpers.turbo_frame_tag("invited-group-#{namespace_group_link.group.id}-updated") do %>
-                  <% if namespace_group_link.created_at < namespace_group_link.updated_at %>
-                    <%= render UpdatedComponent.new(updated_at: namespace_group_link.updated_at) %>
-                  <% end %>
-                <% end %>
-              </span>
+              <%= helpers.local_time_ago(namespace_group_link.created_at) %>
             </div>
           </td>
           <td class="px-6 py-4">
@@ -126,8 +119,8 @@
                   </div>
                 </div>
               <% end %>
-            <% else %>
-              <%= namespace_group_link.expires_at %>
+            <% elsif !namespace_group_link.expires_at.nil? %>
+              <%= helpers.local_time(namespace_group_link.expires_at, :full_date) %>
             <% end %>
           </td>
           <td class="px-6 py-4 space-x-2">
