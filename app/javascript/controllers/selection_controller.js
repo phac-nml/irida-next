@@ -40,13 +40,16 @@ export default class extends Controller {
   togglePage(event) {
     const newStorageValue = this.getStoredItems();
     this.rowSelectionTargets.map((row) => {
-      row.checked = event.target.checked;
-      const index = newStorageValue.indexOf(row.value);
-      if(event.target.checked && index === -1){
-        newStorageValue.push(row.value);
-      }
-      if(!event.target.checked && index > -1){
-        newStorageValue.splice(index, 1);
+      if (row.checked !== event.target.checked) {
+        row.checked = event.target.checked;
+        if (row.checked) {
+          newStorageValue.push(row.value);
+        } else {
+          const index = newStorageValue.indexOf(row.value);
+          if (index > -1) {
+            newStorageValue.splice(index, 1);
+          }
+        }
       }
     });
     this.save(newStorageValue);
