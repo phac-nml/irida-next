@@ -14,7 +14,7 @@ module Irida
 
     class_attribute :instance
 
-    attr_reader :available_pipelines, :automatable_pipelines
+    attr_reader :available_pipelines, :automatable_pipelines, :executable_pipelines
 
     def initialize(**params)
       @pipeline_config_dir =
@@ -27,13 +27,14 @@ module Irida
         params.key?(:pipeline_schema_status_file) ? params[:pipeline_schema_status_file] : 'status.json'
       @available_pipelines = {}
       @automatable_pipelines = {}
+      @executable_pipelines = {}
 
       register_pipelines
     end
 
     # Registers the available pipelines. This method is called
     # by an initializer which runs when the server is started up
-    def register_pipelines
+    def register_pipelines # rubocop:disable Metrics/AbcSize
       data = read_json_config
 
       data.each do |entry|
@@ -46,6 +47,7 @@ module Irida
           pipeline = Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
           @available_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
           @automatable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline if version['automatable']
+          @executable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline unless version['executable'] == false
         end
       end
     end
