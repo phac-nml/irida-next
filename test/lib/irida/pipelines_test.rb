@@ -56,4 +56,12 @@ class PipelinesTest < ActiveSupport::TestCase
     assert_not @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.1']
     assert_not @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.0']
   end
+
+  test 'executable pipelines' do
+    assert_not @pipelines.executable_pipelines.empty?
+
+    assert @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.2']
+    assert @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.1']
+    assert_not @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.0']
+  end
 end
