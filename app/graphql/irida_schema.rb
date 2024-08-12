@@ -71,7 +71,7 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
     expected_types = Array(ctx[:expected_type])
     gid = GlobalID.parse(global_id)
 
-    raise GraphQL::CoercionError, "#{global_id} is not a valid IRIDA Next ID." unless gid
+    raise GraphQL::CoercionError, "#{global_id} is not a valid IRIDA Next ID." if !gid || gid.app != GlobalID.app
 
     if expected_types.any? && expected_types.none? { |type| gid.model_class.ancestors.include?(type) }
       raise GraphQL::CoercionError, "#{global_id} is not a valid ID for #{expected_types.join(', ')}"

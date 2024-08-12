@@ -55,6 +55,14 @@ class IridaSchemaTest < ActiveSupport::TestCase
     end
   end
 
+  test '#parse_gid when gid is wrongapp raises an error' do
+    global_id = 'gid://wrongapp/Sample/asdfqwerty'
+
+    assert_raises GraphQL::CoercionError do
+      IridaSchema.parse_gid(global_id)
+    end
+  end
+
   test '#parse_gid when using expected_type accepts a single type' do
     global_id = 'gid://irida/Group/12345'
     gid = IridaSchema.parse_gid(global_id, expected_type: Group)

@@ -22,14 +22,7 @@ module Mutations
       begin
         project = get_project(args)
       rescue ActiveRecord::RecordNotFound
-        user_errors = [{
-          path: ['project'],
-          message: 'Project not found by provided ID or PUID'
-        }]
-        return {
-          sample: nil,
-          errors: user_errors
-        }
+        project = nil
       end
 
       if project.nil? || !project.persisted?
