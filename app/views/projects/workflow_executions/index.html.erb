@@ -2,7 +2,10 @@
 
 <%= turbo_stream_from @namespace.automation_bot, :workflow_executions %>
 
-<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t(".title"),
+  subtitle: t(".subtitle"),
+) %>
 
 <%= render partial: "table",
 locals: {
