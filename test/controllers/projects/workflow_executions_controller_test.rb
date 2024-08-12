@@ -14,7 +14,7 @@ module Projects
     end
 
     test 'should show a listing of workflow executions for the project' do
-      get namespace_project_workflow_executions_path(@namespace, @project, format: :turbo_stream)
+      get namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_response :success
     end
@@ -22,7 +22,7 @@ module Projects
     test 'should not show a listing of workflow executions for the project' do
       sign_in users(:micha_doe)
 
-      get namespace_project_workflow_executions_path(@namespace, @project, format: :turbo_stream)
+      get namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_response :unauthorized
     end
@@ -30,7 +30,7 @@ module Projects
     test 'should not show a listing of project workflow executions for guests' do
       sign_in users(:ryan_doe)
 
-      get namespace_project_workflow_executions_path(@namespace, @project, format: :turbo_stream)
+      get namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_response :unauthorized
     end
@@ -133,7 +133,8 @@ module Projects
         delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                          format: :turbo_stream)
       end
-      assert_response :success
+      assert_response :redirect
+      assert_redirected_to namespace_project_workflow_executions_path
     end
 
     test 'should delete an errored workflow' do
@@ -144,7 +145,8 @@ module Projects
         delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                          format: :turbo_stream)
       end
-      assert_response :success
+      assert_response :redirect
+      assert_redirected_to namespace_project_workflow_executions_path
     end
 
     test 'should not delete a canceling workflow' do
@@ -166,7 +168,8 @@ module Projects
         delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
                                                          format: :turbo_stream)
       end
-      assert_response :success
+      assert_response :redirect
+      assert_redirected_to namespace_project_workflow_executions_path
     end
 
     test 'should not delete a running workflow' do
@@ -209,7 +212,7 @@ module Projects
                                                                                                  format: :turbo_stream)
       assert_response :redirect
 
-      assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project, format: :html)
+      assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project)
     end
   end
 end

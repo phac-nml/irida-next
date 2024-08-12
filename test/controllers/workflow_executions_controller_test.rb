@@ -116,7 +116,8 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
                       -> { SamplesWorkflowExecution.count } => -1 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_response :success
+    assert_response :redirect
+    assert_redirected_to workflow_executions_path
   end
 
   test 'should delete an errored workflow' do
@@ -126,7 +127,8 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
                       -> { SamplesWorkflowExecution.count } => -1 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_response :success
+    assert_response :redirect
+    assert_redirected_to workflow_executions_path
   end
 
   test 'should not delete a canceling workflow' do
@@ -146,7 +148,8 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
                       -> { SamplesWorkflowExecution.count } => -1 do
       delete workflow_execution_path(workflow_execution, format: :turbo_stream)
     end
-    assert_response :success
+    assert_response :redirect
+    assert_redirected_to workflow_executions_path
   end
 
   test 'should not delete a running workflow' do
@@ -207,6 +210,6 @@ class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
                                                        format: :turbo_stream)
     assert_response :redirect
 
-    assert_redirected_to workflow_executions_path(format: :html)
+    assert_redirected_to workflow_executions_path
   end
 end
