@@ -1,12 +1,13 @@
-<%= render Viral::PageHeaderComponent.new(
-  title: t(".title"),
-  subtitle: t(".subtitle")
-) %>
-<%= turbo_frame_tag "workflow_execution_table",
-                        src: namespace_project_workflow_executions_path(format: :turbo_stream, page: params[:page]),
-                        loading: :lazy do %>
-  <%= render partial: "shared/loading/table" %>
-<% end %>
-<% unless @workflows.empty? %>
-  <%= turbo_frame_tag "workflow_execution_pagination" %>
-<% end %>
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
+<%= turbo_stream_from @namespace.automation_bot, :workflow_executions %>
+
+<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+
+<%= render partial: "table",
+locals: {
+  workflow_executions: @workflow_executions,
+  pagy: @pagy,
+  q: @q,
+  namespace: @namespace,
+} %>

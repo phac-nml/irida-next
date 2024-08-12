@@ -2,9 +2,4 @@
   <%= viral_flash(type:, data: message) %>
 <% end %>
 
-<% if @workflow_execution.deleted? %>
-  <%= turbo_stream.replace "workflow_execution_table" do %>
-    <%= turbo_frame_tag "workflow_execution_table",
-    src: namespace_project_workflow_executions_path(format: :turbo_stream) %>
-  <% end %>
-<% end %>
+<turbo-stream action="refresh"></turbo-stream>
