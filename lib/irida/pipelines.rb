@@ -46,8 +46,10 @@ module Irida
 
           pipeline = Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
           @available_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
+          next unless version['executable'] != false
+
+          @executable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
           @automatable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline if version['automatable']
-          @executable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline unless version['executable'] == false
         end
       end
     end

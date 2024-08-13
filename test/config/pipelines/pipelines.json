@@ -14,7 +14,8 @@
       },
       {
         "name": "1.0.0",
-        "executable": false
+        "executable": false,
+        "automatable": true
       }
     ]
   }
