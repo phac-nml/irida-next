@@ -163,8 +163,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
          params: {
            data_export: {
              export_parameters: { ids: [@sample1.id],
-                                  'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank
-                                                             unknown] }
+                                  'attachment_formats' => Attachment::FORMAT_REGEX.keys }
            }
          }
     assert_response :unprocessable_entity
@@ -186,8 +185,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
            data_export: {
              export_type: 'sample',
              export_parameters: { invalid_ids: ['not valid id'],
-                                  'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank
-                                                             unknown] }
+                                  'attachment_formats' => Attachment::FORMAT_REGEX.keys }
            }
          }
     assert_response :unprocessable_entity
