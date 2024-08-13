@@ -15,16 +15,16 @@ class AttachmentChecksumValidator < ActiveModel::Validator
             .exists?(attachable_id: record.attachable_id,
                      attachable_type: record.attachable_type,
                      deleted_at: nil,
-                     file_blob: { checksum: record.file.checksum, filename: record.file.filename.to_s })
-            #  checks for same filename
-            .or(
-              klass.joins(:file_blob)
-                   .where.not(id: record.id)
-                   .exists?(attachable_id: record.attachable_id,
-                            attachable_type: record.attachable_type,
-                            deleted_at: nil,
-                            file_blob: { filename: record.file.filename.to_s })
-            )
+                     file_blob: { checksum: record.file.checksum, filename: record.file.filename.to_s }) ||
+       #  checks for same filename
+
+       klass.joins(:file_blob)
+            .where.not(id: record.id)
+            .exists?(attachable_id: record.attachable_id,
+                     attachable_type: record.attachable_type,
+                     deleted_at: nil,
+                     file_blob: { filename: record.file.filename.to_s })
+
       record.errors.add(:file, :checksum_uniqueness)
     end
   end
