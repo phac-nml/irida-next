@@ -47,8 +47,8 @@ export default class extends Controller {
     }
   }
 
-  #replaceCountPlaceholder(textNode, plural) {
-    textNode.innerHTML = plural.replace(
+  #replaceCountPlaceholder(textNode, countPlaceholderText) {
+    textNode.innerHTML = countPlaceholderText.replace(
       "COUNT_PLACEHOLDER",
       this.numSelected
     );
