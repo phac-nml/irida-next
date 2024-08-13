@@ -26,7 +26,7 @@ export default class extends Controller {
     this.#makePagedHiddenInputs();
     this.#replaceDescriptionPlaceholder();
     if (this.hasSampleCountTarget) {
-      this.#replaceCountPlaceholder(this.numSelected, this.sampleCountTarget, this.nonZeroHeaderValue);
+      this.#replaceCountPlaceholder(this.sampleCountTarget, this.nonZeroHeaderValue);
     }
   }
 
@@ -43,14 +43,14 @@ export default class extends Controller {
     if (this.numSelected === 1) {
       this.summaryTarget.innerHTML = this.singularDescriptionValue;
     } else {
-      this.#replaceCountPlaceholder(this.numSelected, this.summaryTarget, this.pluralDescriptionValue);
+      this.#replaceCountPlaceholder(this.summaryTarget, this.pluralDescriptionValue);
     }
   }
 
-  #replaceCountPlaceholder(numSelected, textNode, plural) {
+  #replaceCountPlaceholder(textNode, plural) {
     textNode.innerHTML = plural.replace(
       "COUNT_PLACEHOLDER",
-      numSelected
+      this.numSelected
     );
   }
 
