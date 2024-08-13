@@ -165,12 +165,100 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     assert_equal :error, data['status'][blob_file.signed_id]
   end
 
-  test 'attachFilesToSample mutation attach file with same checksum' do
+  test 'attachFilesToSample mutation attach file with same content but different names' do
     sample = samples(:sampleJeff)
     # These files have the same md5 sum
     blob_file_a = active_storage_blobs(:attachment_md5_a_test_blob)
     blob_file_b = active_storage_blobs(:attachment_md5_b_test_blob)
 
+    assert_equal 0, sample.attachments.count
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file_a.signed_id],
+                                              sampleId: sample.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['attachFilesToSample']
+
+    assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
+    expected_status = { blob_file_a.signed_id => :success }
+    assert_equal expected_status, data['status']
+    assert_not_empty data['sample']
+    assert_equal 1, sample.attachments.count
+    assert_equal 'md5_a', sample.attachments[0].filename.to_s
+
+    # Second file
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file_b.signed_id],
+                                              sampleId: sample.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['attachFilesToSample']
+
+    assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
+    expected_status = { blob_file_b.signed_id => :success }
+    assert_equal expected_status, data['status']
+    assert_not_empty data['sample']
+    sample.reload
+    assert_equal 2, sample.attachments.count
+    assert_equal 'md5_b', sample.attachments[1].filename.to_s
+  end
+
+  test 'attachFilesToSample mutation attach file with same checksum and same names' do
+    sample = samples(:sampleJeff)
+    # These files have the same md5 sum
+    blob_file_a = active_storage_blobs(:attachment_md5_a_test_blob)
+    blob_file_a2 = active_storage_blobs(:attachment_md5_a_test_blob)
+
+    assert_equal 0, sample.attachments.count
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file_a.signed_id],
+                                              sampleId: sample.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['attachFilesToSample']
+
+    assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
+    expected_status = { blob_file_a.signed_id => :success }
+    assert_equal expected_status, data['status']
+    assert_not_empty data['sample']
+    assert_equal 1, sample.attachments.count
+    assert_equal 'md5_a', sample.attachments[0].filename.to_s
+
+    # Second file
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file_a2.signed_id],
+                                              sampleId: sample.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['attachFilesToSample']
+
+    assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
+    expected_status = { blob_file_a2.signed_id => :error }
+    assert_equal expected_status, data['status']
+    assert_not_empty data['sample']
+    expected_error = { blob_file_a2.signed_id => ['File checksum matches existing file'] }
+    assert_equal expected_error, data['errors']
+    assert_equal 1, sample.attachments.count
+  end
+
+  test 'attachFilesToSample mutation attach file with different checksum and same names' do
+    sample = samples(:sampleJeff)
+    # These files have the same md5 sum
+    blob_file_a = active_storage_blobs(:attachment_md5_a_test_blob)
+    blob_file_b = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+
+    blob_file_b.filename = 'md5_a'
+    blob_file_b.save
     assert_equal 0, sample.attachments.count
 
     result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
