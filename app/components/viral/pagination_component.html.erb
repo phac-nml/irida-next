@@ -1,0 +1,80 @@
+<% a = helpers.pagy_anchor(@pagy) %>
+<nav class="pagy nav" aria-label="Pages">
+  <ul class="flex text-sm font-semibold text-gray-500">
+    <%# Previous page link %>
+    <li>
+      <% if @pagy.prev %>
+        <%== a.(
+               @pagy.prev,
+                 "&lt;",
+                 aria_label: "Previous",
+                 classes:
+                   "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+             ) %>
+      <% else %>
+        <a
+          role="link"
+          aria-disabled="true"
+          class="
+                flex items-center justify-center h-8 px-3 leading-tight text-gray-300
+                bg-gray-100 border border-gray-300 cursor-default ms-0 rounded-s-lg
+              "
+          aria-label="Previous"
+        >&lt;</a>
+      <% end %>
+    </li>
+    <%# Page links (series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36]) %>
+    <% @pagy.series.each do |item| %>
+      <li>
+        <% if item.is_a?(Integer) %>
+          <%== a.(
+                 item,
+                   classes:
+                     "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+               ) %>
+        <% elsif item.is_a?(String) %>
+          <a
+            role="link"
+            aria-disabled="true"
+            aria-current="page"
+            class="
+                  flex items-center justify-center h-8 px-3 border border-gray-300
+                  text-primary-600 bg-primary-50 hover:bg-primary-100 hover:text-primary-700
+                  dark:border-gray-700 dark:bg-gray-700 dark:text-white
+                "
+          ><%== item %></a>
+        <% elsif item == :gap %>
+          <a
+            role="link"
+            aria-disabled="true"
+            class="
+                  flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white
+                  border border-gray-300 ms-0 border-e-0 dark:bg-gray-800 dark:border-gray-700
+                  dark:text-gray-400
+                "
+          >&hellip;</a>
+        <% end %>
+      </li>
+    <% end %>
+    <%# Next page link %>
+    <% if @pagy.next %>
+      <%== a.(
+             @pagy.next,
+               "&gt;",
+               aria_label: "Next",
+               classes:
+                 "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+           ) %>
+    <% else %>
+      <a
+        role="link"
+        aria-disabled="true"
+        aria-label="Next"
+        class="
+              flex items-center justify-center px-3 h-8 leading-tight border border-gray-300
+              rounded-e-lg text-gray-300 bg-gray-100 cursor-default
+            "
+      >&gt;</a>
+    <% end %>
+  </ul>
+</nav>
