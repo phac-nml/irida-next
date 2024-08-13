@@ -11,8 +11,7 @@
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
         data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
         data-infinite-scroll-plural-description-value="<%= t(:"data_exports.new.sample_description.plural") %>"
-        data-infinite-scroll-singular-count-value="<%= t(:"data_exports.new.samples_count.singular") %>"
-        data-infinite-scroll-plural-count-value="<%= t(:"data_exports.new.samples_count.plural") %>"
+        data-infinite-scroll-non-zero-header-value="<%= t(:"data_exports.new.samples_count.non_zero") %>"
         class="font-normal text-slate-500 dark:text-slate-400"
       >
         <%= form_with(
@@ -108,10 +107,9 @@
           <% end %>
           <%= form_for(:data_export, url: data_exports_path, method: :post,
               data: {
-                controller: "spinner form--hidden-inputs",
+                controller: "form--hidden-inputs",
                 "form--hidden-inputs-selection-outlet": '#samples-table',
-                "form--hidden-inputs-field-name-value": "data_export[export_parameters][ids][]",
-                action: "turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd"
+                "form--hidden-inputs-field-name-value": "data_export[export_parameters][ids][]"
               }
             ) do |form| %>
             <div class="grid gap-4">

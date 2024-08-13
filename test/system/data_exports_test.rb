@@ -266,7 +266,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
 
     within 'dialog[open].dialog--size-lg' do
-      click_button I18n.t('data_exports.new.samples_count.singular')
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('data_exports.new.sample_description.singular')
       )
@@ -321,7 +321,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
 
     within 'dialog[open].dialog--size-lg' do
-      click_button I18n.t('data_exports.new.samples_count.plural').gsub! 'COUNT_PLACEHOLDER', '2'
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '2'
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('data_exports.new.sample_description.plural')
       ).gsub! 'COUNT_PLACEHOLDER', '2'
@@ -385,7 +385,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      click_button I18n.t('data_exports.new.samples_count.singular')
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       within %(turbo-frame[id="list_select_samples"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
@@ -558,7 +558,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within 'dialog[open].dialog--size-lg' do
       assert_text I18n.t('data_exports.new_linelist_export_dialog.title')
-      assert_text I18n.t('data_exports.new.samples_count.singular')
+      assert_text I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       assert_text I18n.t('data_exports.new_linelist_export_dialog.metadata')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.metadata_description',
                          available: I18n.t('data_exports.new_linelist_export_dialog.available').downcase,
@@ -582,7 +582,7 @@ class DataExportsTest < ApplicationSystemTestCase
         I18n.t('data_exports.new.sample_description.singular')
       )
 
-      click_button I18n.t('data_exports.new.samples_count.singular')
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('data_exports.new.sample_description.singular')
       )

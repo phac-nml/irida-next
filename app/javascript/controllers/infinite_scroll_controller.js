@@ -15,18 +15,18 @@ export default class extends Controller {
     pagedFieldName: String,
     singularDescription: String,
     pluralDescription: String,
-    singularCount: String,
-    pluralCount: String
+    nonZeroHeader: String,
   };
 
   #page = 1;
 
   connect() {
     this.allIds = this.selectionOutlet.getStoredItems();
+    this.numSelected = this.selectionOutlet.getNumSelected()
     this.#makePagedHiddenInputs();
-    this.#replaceCountPlaceholder(this.summaryTarget, this.singularDescriptionValue, this.pluralDescriptionValue);
+    this.#replaceDescriptionPlaceholder();
     if (this.hasSampleCountTarget) {
-      this.#replaceCountPlaceholder(this.sampleCountTarget, this.singularCountValue, this.pluralCountValue);
+      this.#replaceCountPlaceholder(this.numSelected, this.sampleCountTarget, this.nonZeroHeaderValue);
     }
   }
 
@@ -39,16 +39,19 @@ export default class extends Controller {
     }
   }
 
-  #replaceCountPlaceholder(textNode, singular, plural) {
-    const numSelected = this.selectionOutlet.getNumSelected();
-    if (numSelected == 1) {
-      textNode.innerHTML = singular;
+  #replaceDescriptionPlaceholder() {
+    if (this.numSelected === 1) {
+      this.summaryTarget.innerHTML = this.singularDescriptionValue;
     } else {
-      textNode.innerHTML = plural.replace(
-        "COUNT_PLACEHOLDER",
-        numSelected
-      );
+      this.#replaceCountPlaceholder(this.numSelected, this.summaryTarget, this.pluralDescriptionValue);
     }
+  }
+
+  #replaceCountPlaceholder(numSelected, textNode, plural) {
+    textNode.innerHTML = plural.replace(
+      "COUNT_PLACEHOLDER",
+      numSelected
+    );
   }
 
   #makePagedHiddenInputs() {

@@ -46,7 +46,7 @@ export default class extends Controller {
 
   #setInitialSelectAllState(list, button) {
     const list_values = list.querySelectorAll("li")
-    if (list_values.length == 0) {
+    if (list_values.length === 0) {
       button.classList.add(...this.#disabledClasses)
       button.setAttribute("aria-disabled", "true")
     } else {
@@ -57,11 +57,11 @@ export default class extends Controller {
   #checkButtonStates() {
     const selected_values = this.selectedList.querySelectorAll("li")
     const available_values = this.availableList.querySelectorAll("li")
-    if (selected_values.length == 0) {
+    if (selected_values.length === 0) {
       this.#setSubmitButtonDisableState(true)
       this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, true)
       this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false)
-    } else if (available_values.length == 0) {
+    } else if (available_values.length === 0) {
       this.#setSubmitButtonDisableState(false)
       this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false)
       this.#setAddOrRemoveButtonDisableState(this.addAllTarget, true)
@@ -99,5 +99,10 @@ export default class extends Controller {
         )
       );
     }
+  }
+
+  disconnect() {
+    this.selectedList.removeEventListener("mouseover", () => { this.#checkButtonStates() })
+    this.availableList.removeEventListener("mouseover", () => { this.#checkButtonStates() })
   }
 }
