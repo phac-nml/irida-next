@@ -80,7 +80,7 @@ module WorkflowExecutions
     private
 
     def columns
-      %i[puid name state run_id workflow_name workflow_version created_at updated_at]
+      %i[id name state run_id workflow_name workflow_version created_at updated_at]
     end
   end
 end

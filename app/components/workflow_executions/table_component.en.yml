@@ -1,5 +1,5 @@
 en:
-  puid: ID
+  id: ID
   name: Name
   state: State
   run_id: Run ID
