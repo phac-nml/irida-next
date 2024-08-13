@@ -64,6 +64,8 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
     gid = parse_gid(global_id, ctx)
 
     GlobalID.find(gid)
+  rescue ActiveRecord::RecordNotFound
+    raise GraphQL::CoercionError, "#{global_id} could not be found"
   end
 
   # Parse a string to a GlobalID, raising if there are problems with it.

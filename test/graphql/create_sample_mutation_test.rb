@@ -207,11 +207,12 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
                                               name: sample1.name,
                                               description: sample1.description })
 
-    assert_not_nil result['data']['createSample']['errors'], 'shouldn\'t work and have errors.'
+    assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
 
-    errors = result['data']['createSample']['errors']
+    expected_error = { 'message' => 'gid://irida/Project/not-a-valid-uuid could not be found',
+                       'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['createSample'] }
 
-    assert_equal 'Project not found by provided ID or PUID', errors[0]['message']
+    assert_equal expected_error, result['errors'][0]
   end
 
   test 'createSample mutation should not work with incorrectly formatted project id and valid api scope token' do

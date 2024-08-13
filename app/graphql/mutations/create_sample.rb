@@ -18,12 +18,8 @@ module Mutations
     field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
     field :sample, Types::SampleType, description: 'The newly created sample.'
 
-    def resolve(args) # rubocop:disable Metrics/MethodLength
-      begin
-        project = get_project(args)
-      rescue ActiveRecord::RecordNotFound
-        project = nil
-      end
+    def resolve(args)
+      project = get_project(args)
 
       if project.nil? || !project.persisted?
         user_errors = [{

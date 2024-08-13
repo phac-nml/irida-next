@@ -18,15 +18,11 @@ module Mutations
     field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
 
     def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-      begin
-        sample = if args[:sample_id]
-                   IridaSchema.object_from_id(args[:sample_id], { expected_type: Sample })
-                 else
-                   Sample.find_by(puid: args[:sample_puid])
-                 end
-      rescue ActiveRecord::RecordNotFound
-        sample = nil
-      end
+      sample = if args[:sample_id]
+                 IridaSchema.object_from_id(args[:sample_id], { expected_type: Sample })
+               else
+                 Sample.find_by(puid: args[:sample_puid])
+               end
 
       if sample.nil?
         return {

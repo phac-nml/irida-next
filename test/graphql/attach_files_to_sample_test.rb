@@ -412,7 +412,8 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file.signed_id],
                                               sampleId: 'gid://irida/Sample/doesnotexist' })
-    expected_error = { 'path' => ['sample'], 'message' => 'not found by provided ID or PUID' }
-    assert_equal expected_error, sample['data']['attachFilesToSample']['errors'][0]
+    expected_error = { 'message' => 'gid://irida/Sample/doesnotexist could not be found',
+                       'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['attachFilesToSample'] }
+    assert_equal expected_error, sample['errors'][0]
   end
 end

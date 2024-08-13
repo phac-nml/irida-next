@@ -39,6 +39,12 @@ class IridaSchemaTest < ActiveSupport::TestCase
     end
   end
 
+  test '#object_from_id fails if the record does not exist' do
+    assert_raises GraphQL::CoercionError do
+      IridaSchema.object_from_id('gid://irida/Sample/doesnotexist', expected_type: Sample)
+    end
+  end
+
   test '#parse_gid parses the gid' do
     global_id = 'gid://irida/Group/12345'
     gid = IridaSchema.parse_gid(global_id)
