@@ -214,6 +214,19 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal expected_error, result['errors']
   end
 
+  test 'updateSampleMetadata mutation should not work with non existing sample id' do
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { sampleId: 'gid://irida/Sample/doesnotexist',
+                                              metadata: { key1: 'value1' } })
+
+    expected_error = [
+      { 'message' => 'gid://irida/Sample/doesnotexist could not be found', 'locations' => [{ 'line' => 2, 'column' => 3 }],
+        'path' => ['updateSampleMetadata'] }
+    ]
+    assert_equal expected_error, result['errors']
+  end
+
   test 'updateSampleMetadata mutation should not work with invalid sample puid' do
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_PUID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
