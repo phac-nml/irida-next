@@ -1775,6 +1775,3 @@ fr:
       aria_labels:
         expires_at: Member expiration
       inherited_from: Inherited from
-  samples:
-    table_component:
-      select_page: Select / Deselect Samples
