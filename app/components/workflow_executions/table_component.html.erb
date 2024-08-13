@@ -71,7 +71,7 @@
                 scope: index.zero? ? 'row' : nil,
                 classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
-                <% if column == :puid %>
+                <% if column == :id %>
                   <%= link_to(
                     workflow_execution.id,
                     individual_path(workflow_execution),
