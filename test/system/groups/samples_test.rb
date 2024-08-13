@@ -436,7 +436,7 @@ module Groups
         assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
-      find('input[name="selectPage"]').click
+      find('input[name="select-page"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -451,7 +451,7 @@ module Groups
         assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '19'
       end
-      find('input[name="selectPage"]').click
+      find('input[name="select-page"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
@@ -460,7 +460,7 @@ module Groups
         assert_text 'Samples: 26'
         assert_selector 'strong[data-selection-target="selected"]', text: '20'
       end
-      find('input[name="selectPage"]').click
+      find('input[name="select-page"]').click
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0

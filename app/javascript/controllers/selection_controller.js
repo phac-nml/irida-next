@@ -118,7 +118,7 @@ export default class extends Controller {
 
   #setSelectPageCheckboxValue() {
     if (this.hasSelectPageTarget) {
-      const uncheckedBoxes = this.rowSelectionTargets.filter(row => row.checked === false)
+      const uncheckedBoxes = this.rowSelectionTargets.filter(row => !row.checked)
       this.selectPageTarget.checked = uncheckedBoxes.length === 0
     }
   }
