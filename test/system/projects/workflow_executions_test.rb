@@ -40,7 +40,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
-      click_on I18n.t('projects.workflow_executions.table.headers.run_id')
+      click_on 'Run ID'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
       within first('#workflow-executions-table table tbody') do
@@ -50,7 +50,7 @@ module Projects
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
       end
 
-      click_on I18n.t('workflow_executions.table.headers.run_id')
+      click_on 'Run ID'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
       within first('#workflow-executions-table table tbody') do
@@ -60,7 +60,7 @@ module Projects
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
       end
 
-      click_on I18n.t('workflow_executions.table.headers.workflow_name')
+      click_on 'Workflow Name'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
       within first('#workflow-executions-table table tbody') do
@@ -73,7 +73,7 @@ module Projects
                         text: workflow_execution4.metadata['workflow_name']
       end
 
-      click_on I18n.t('workflow_executions.table.headers.workflow_name')
+      click_on 'Workflow Name'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
       within first('#workflow-executions-table table tbody') do
@@ -86,7 +86,7 @@ module Projects
                         text: workflow_execution3.metadata['workflow_name']
       end
 
-      click_on I18n.t('workflow_executions.table.headers.created_at')
+      click_on 'Created'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@created_at_col}) svg.icon-arrow_up"
 
       within first('#workflow-executions-table table tbody') do
