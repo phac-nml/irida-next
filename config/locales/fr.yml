@@ -863,14 +863,6 @@ fr:
         empty:
           title: No automated workflow executions
           description: No automated workflow executions have been configured for this project
-        headers:
-          id: ID
-          name: Name
-          workflow_name: Workflow Name
-          workflow_version: Workflow Version
-          created_at: Created
-          updated_at: Updated
-          actions: Actions
       create:
         error: "Could not create an automated workflow execution for %{workflow_name}"
         success: "Automated workflow execution for %{workflow_name} was successfully created"
@@ -1367,16 +1359,6 @@ fr:
         empty:
           title: No automated workflow executions.
           description: There are no automated workflow executions associated with this project.
-        headers:
-          id: ID
-          run_id: Run ID
-          name: Name
-          workflow_name: Workflow Name
-          workflow_version: Workflow Version
-          state: State
-          created_at: Created
-          updated_at: Last Updated
-          actions: Actions
       show:
         create_export_button: Create Export
         remove_button: Remove
