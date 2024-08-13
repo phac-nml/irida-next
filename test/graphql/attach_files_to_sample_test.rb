@@ -167,7 +167,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation attach file with same content but different names' do
     sample = samples(:sampleJeff)
-    # These files have the same md5 sum
+
     blob_file_a = active_storage_blobs(:attachment_md5_a_test_blob)
     blob_file_b = active_storage_blobs(:attachment_md5_b_test_blob)
 
@@ -210,7 +210,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation attach file with same checksum and same names' do
     sample = samples(:sampleJeff)
-    # These files have the same md5 sum
+
     blob_file_a = active_storage_blobs(:attachment_md5_a_test_blob)
     blob_file_a2 = active_storage_blobs(:attachment_md5_a_test_blob)
 
@@ -253,10 +253,11 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation attach file with different checksum and same names' do
     sample = samples(:sampleJeff)
-    # These files have the same md5 sum
+
     blob_file_a = active_storage_blobs(:attachment_md5_a_test_blob)
     blob_file_b = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
+    # match blob_file_b.filename to blob_file_a.filename
     blob_file_b.filename = 'md5_a'
     blob_file_b.save
     assert_equal 0, sample.attachments.count

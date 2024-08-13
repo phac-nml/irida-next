@@ -17,7 +17,6 @@ class AttachmentChecksumValidator < ActiveModel::Validator
                      deleted_at: nil,
                      file_blob: { checksum: record.file.checksum, filename: record.file.filename.to_s }) ||
        #  checks for same filename
-
        klass.joins(:file_blob)
             .where.not(id: record.id)
             .exists?(attachable_id: record.attachable_id,
