@@ -1373,16 +1373,6 @@ en:
         empty:
           title: No automated workflow executions.
           description: There are no automated workflow executions associated with this project.
-        headers:
-          id: ID
-          run_id: Run ID
-          name: Name
-          workflow_name: Workflow Name
-          workflow_version: Workflow Version
-          state: State
-          created_at: Created
-          updated_at: Last Updated
-          actions: Actions
       show:
         create_export_button: Create Export
         remove_button: Remove
@@ -1432,16 +1422,6 @@ en:
       empty:
         title: No workflow executions.
         description: There are no workflow executions associated with this submitter.
-      headers:
-        id: ID
-        run_id: Run ID
-        name: Name
-        workflow_name: Workflow Name
-        workflow_version: Workflow Version
-        state: State
-        created_at: Created
-        updated_at: Last Updated
-        actions: Actions
     show:
       create_export_button: Create Export
       remove_button: Remove

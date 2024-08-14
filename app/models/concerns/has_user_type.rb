@@ -33,6 +33,10 @@ module HasUserType
     validates :user_type, presence: true
   end
 
+  def human?
+    (USER_TYPES.keys - BOT_USER_TYPE).include?(user_type)
+  end
+
   def bot?
     BOT_USER_TYPES.include?(user_type)
   end

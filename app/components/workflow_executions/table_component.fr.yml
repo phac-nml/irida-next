@@ -1,0 +1,10 @@
+fr:
+  id: ID
+  name: Name
+  state: State
+  run_id: Run ID
+  workflow_name: Workflow Name
+  workflow_version: Workflow Version
+  created_at: Created
+  updated_at: Last Updated
+  actions: Actions

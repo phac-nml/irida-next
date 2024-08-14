@@ -17,7 +17,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     @q = load_workflows.ransack(params[:q])
     set_default_sort
-    @pagy, @workflows = pagy_with_metadata_sort(@q.result)
+    @pagy, @workflow_executions = pagy_with_metadata_sort(@q.result)
   end
 
   def show
@@ -25,9 +25,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     case @tab
     when 'files'
-      @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
+      @samples_workflow_executions = @workflow_execution.samples_workflow_executions
       @attachments = Attachment.where(attachable: @workflow_execution)
-                               .or(Attachment.where(attachable: @samples_worfklow_executions))
+                               .or(Attachment.where(attachable: @samples_workflow_executions))
     when 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                              @workflow_execution.metadata['workflow_version'])
@@ -36,26 +36,18 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def destroy
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
 
-    if @workflow_execution.deleted? && params[:redirect]
-      flash[:success] = t('.success', workflow_name: @workflow_execution.metadata['workflow_name'])
-      redirect_to redirect_path
-    else
-      respond_to do |format|
-        format.turbo_stream do
-          if @workflow_execution.deleted?
-            render status: :ok,
-                   locals: { type: 'success',
-                             message: t('.success',
-                                        workflow_name: @workflow_execution.metadata['workflow_name']) }
-
-          else
-            render status: :unprocessable_entity, locals: {
-              type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
-            }
-          end
+    respond_to do |format|
+      format.turbo_stream do
+        if @workflow_execution.deleted?
+          flash[:success] = t('.success', workflow_name: @workflow_execution.metadata['workflow_name'])
+          redirect_to redirect_path
+        else
+          render status: :unprocessable_entity, locals: {
+            type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
+          }
         end
       end
     end
@@ -70,7 +62,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :ok,
                  locals: { type: 'success',
                            message: t('.success', workflow_name: @workflow_execution.metadata['workflow_name']) }
-
         else
           render status: :unprocessable_entity, locals: {
             type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])

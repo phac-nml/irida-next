@@ -46,7 +46,7 @@ module Projects
     protected
 
     def redirect_path
-      namespace_project_workflow_executions_path(format: :html)
+      namespace_project_workflow_executions_path
     end
   end
 end

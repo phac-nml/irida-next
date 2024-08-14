@@ -1,5 +1,5 @@
-<%= turbo_stream.replace dom_id(@workflow_execution), @workflow_execution %>
-
 <%= turbo_stream.append "flashes" do %>
   <%= viral_flash(type:, data: message) %>
 <% end %>
+
+<turbo-stream action="refresh"></turbo-stream>

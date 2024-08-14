@@ -1,3 +1,7 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
+<%= turbo_stream_from @workflow_execution %>
+
 <%= turbo_frame_tag "export_dialog" %>
 
 <%= render Viral::PageHeaderComponent.new(title: @workflow_execution.id, id: t("workflow_executions.state.#{@workflow_execution.state}"), id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
@@ -9,20 +13,20 @@
           <%= link_to t("projects.workflow_executions.show.create_export_button"),
           new_data_export_path(
             export_type: "analysis",
-            workflow_execution_id: @workflow_execution.id
+            workflow_execution_id: @workflow_execution.id,
           ),
           data: {
-            turbo_stream: true
+            turbo_stream: true,
           },
           class: "button button--size-default button--state-default mr-2" %>
         <% else %>
           <%= link_to t("projects.workflow_executions.show.create_export_button"),
           new_data_export_path(
             export_type: "analysis",
-            workflow_execution_id: @workflow_execution.id
+            workflow_execution_id: @workflow_execution.id,
           ),
           data: {
-            turbo_stream: true
+            turbo_stream: true,
           },
           class:
             "button button--size-default button--state-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300" %>
@@ -35,14 +39,14 @@
           cancel_namespace_project_workflow_execution_path(
             @namespace.parent,
             @namespace.project,
-            @workflow_execution.id
+            @workflow_execution.id,
           ),
           data: {
             turbo_method: :put,
             turbo_confirm:
-              t("projects.workflow_executions.show.cancel_button_confirmation")
+              t("projects.workflow_executions.show.cancel_button_confirmation"),
           },
-          class: "button button--state-default button--size-default mr-1"
+          class: "button button--state-default button--size-default mr-1",
         ) %>
       <% end %>
       <% if @workflow_execution.deletable? && allowed_to?(:destroy?, @workflow_execution) %>
@@ -52,14 +56,14 @@
             @namespace.parent,
             @namespace.project,
             @workflow_execution,
-            redirect: true
+            redirect: true,
           ),
           data: {
             turbo_method: :delete,
             turbo_confirm:
-              t("projects.workflow_executions.show.remove_button_confirmation")
+              t("projects.workflow_executions.show.remove_button_confirmation"),
           },
-          class: "button button--state-default button--size-default mr-1"
+          class: "button button--state-default button--size-default mr-1",
         ) %>
       <% end %>
     </div>
