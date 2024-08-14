@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Migration to create good job execution duration column
 class CreateGoodJobExecutionDuration < ActiveRecord::Migration[7.1]
   def change
     reversible do |dir|
