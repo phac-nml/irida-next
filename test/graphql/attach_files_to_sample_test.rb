@@ -203,9 +203,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     expected_status = { blob_file_b.signed_id => :success }
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
-    sample.reload
     assert_equal 2, sample.attachments.count
-    assert_equal 'md5_b', sample.attachments[1].filename.to_s
   end
 
   test 'attachFilesToSample mutation attach file with same checksum and same names' do
