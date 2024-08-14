@@ -115,10 +115,10 @@ module DataExports
         child_prefix = "#{prefix}│  "
       end
 
-      if cursor['type'] == 'folder'
-        line += "(#{cursor['irida-next-name']})" if cursor.key?('irida-next-name')
-        output.append(line)
+      line += "(#{cursor['irida-next-name']})" if cursor.key?('irida-next-name')
+      output.append(line)
 
+      if cursor['type'] == 'folder'
         child_count = cursor['children'].count
         (cursor['children']).each_with_index do |child, index|
           # push with * is used to flatten array without creating a new array
@@ -126,8 +126,6 @@ module DataExports
             cursor: child, prefix: child_prefix, final_child: child_count == index + 1
           ))
         end
-      else # cursor['type'] == 'file'
-        output.append(line)
       end
 
       output # array of lines
