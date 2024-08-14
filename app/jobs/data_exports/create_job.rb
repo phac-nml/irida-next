@@ -73,15 +73,17 @@ module DataExports
     end
 
     def write_simple_manifest(data_export_id:, zip:)
-      output_lines = start_simple_manifest(data_export_id:)
+      output_lines = simple_manifest_begin(data_export_id:)
+
       simple_manifest_file = Tempfile.new
       File.open(simple_manifest_file, 'a+') { |f| f.puts(output_lines) }
       zip.write_file('manifest.txt') { |writer_for_file| IO.copy_stream(simple_manifest_file.open, writer_for_file) }
+
       simple_manifest_file.close
       simple_manifest_file.unlink
     end
 
-    def start_simple_manifest(data_export_id:)
+    def simple_manifest_begin(data_export_id:)
       output_lines = [
         @manifest['type'],
         @manifest['date'],
@@ -92,7 +94,8 @@ module DataExports
 
       child_count = @manifest['children'].count
       (@manifest['children']).each_with_index do |child, index|
-        output_lines.push(*simple_manifest_generate_lines(
+        # push with * is used to flatten array without creating a new array
+        output_lines.push(*simple_manifest_gen_lines_recursive(
           cursor: child, prefix: '', final_child: child_count == index + 1
         ))
       end
@@ -100,9 +103,10 @@ module DataExports
       output_lines
     end
 
-    def simple_manifest_generate_lines(cursor:, prefix: '', final_child: false) # rubocop:disable Metrics/MethodLength
+    def simple_manifest_gen_lines_recursive(cursor:, prefix: '', final_child: false) # rubocop:disable Metrics/MethodLength
       output = []
 
+      # when the current cursor is the final child of the parent, we change which symbols are used to generate the lines
       if final_child
         line = "#{prefix}└─ #{cursor['name']}"
         child_prefix = "#{prefix}   "
@@ -118,15 +122,15 @@ module DataExports
         child_count = cursor['children'].count
         (cursor['children']).each_with_index do |child, index|
           # push with * is used to flatten array without creating a new array
-          output.push(*simple_manifest_generate_lines(
+          output.push(*simple_manifest_gen_lines_recursive(
             cursor: child, prefix: child_prefix, final_child: child_count == index + 1
           ))
         end
-      else
+      else # cursor['type'] == 'file'
         output.append(line)
       end
 
-      output
+      output # array of lines
     end
 
     # Sample export specific functions------------------------------------------------------------------

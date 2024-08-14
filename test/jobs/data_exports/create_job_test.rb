@@ -28,7 +28,8 @@ module DataExports
       attachment2 = attachments(:attachment2)
       expected_files_in_zip = ["#{project.puid}/#{sample.puid}/#{attachment1.puid}/#{attachment1.file.filename}",
                                "#{project.puid}/#{sample.puid}/#{attachment2.puid}/#{attachment2.file.filename}",
-                               'manifest.json']
+                               'manifest.json',
+                               'manifest.txt']
       DataExports::CreateJob.perform_now(@data_export2)
       export_file = ActiveStorage::Blob.service.path_for(@data_export2.file.key)
       Zip::File.open(export_file) do |zip_file|
@@ -108,7 +109,8 @@ module DataExports
           "#{project.puid}/#{sample_b.puid}/#{attachment_d.puid}/#{attachment_d.file.filename}",
           "#{project.puid}/#{sample_b.puid}/#{attachment_e.puid}/#{attachment_e.file.filename}",
           "#{project.puid}/#{sample_b.puid}/#{attachment_f.puid}/#{attachment_f.file.filename}",
-          'manifest.json'
+          'manifest.json',
+          'manifest.txt'
         ]
 
       expected_manifest = {
@@ -257,6 +259,7 @@ module DataExports
 
       expected_files_in_zip = ["#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
                                'manifest.json',
+                               'manifest.txt',
                                workflow_execution.outputs[0].filename.to_s]
       DataExports::CreateJob.perform_now(@data_export6)
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
@@ -367,7 +370,8 @@ module DataExports
         [
           "#{project.puid}/#{sample22.puid}/#{text_attachment.puid}/#{text_attachment.file.filename}",
           "#{project.puid}/#{sample22.puid}/#{fasta_attachment.puid}/#{fasta_attachment.file.filename}",
-          'manifest.json'
+          'manifest.json',
+          'manifest.txt'
         ]
 
       expected_manifest = {
