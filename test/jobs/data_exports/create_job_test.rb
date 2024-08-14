@@ -83,6 +83,46 @@ module DataExports
       assert_equal expected_manifest.to_json, @data_export2.manifest
     end
 
+    test 'content of sample export simple manifest' do
+      sample = samples(:sample1)
+      project = projects(:project1)
+      attachment1 = attachments(:attachment1)
+      attachment2 = attachments(:attachment2)
+      expected_files_in_zip = ["#{project.puid}/#{sample.puid}/#{attachment1.puid}/#{attachment1.file.filename}",
+                               "#{project.puid}/#{sample.puid}/#{attachment2.puid}/#{attachment2.file.filename}",
+                               'manifest.json',
+                               'manifest.txt']
+      actual_simple_manifest = ''
+
+      DataExports::CreateJob.perform_now(@data_export2)
+      export_file = ActiveStorage::Blob.service.path_for(@data_export2.file.key)
+      Zip::File.open(export_file) do |zip_file|
+        zip_file.each do |entry|
+          assert expected_files_in_zip.include?(entry.to_s)
+          actual_simple_manifest = entry.get_input_stream.read.force_encoding('utf-8') if entry.to_s == 'manifest.txt'
+          expected_files_in_zip.delete(entry.to_s)
+        end
+      end
+      assert expected_files_in_zip.empty?
+
+      expected_simple_manifest = [
+        'Samples Export',
+        '2024-08-14',
+        '',
+        'contents:',
+        '9eb3e2b7-6e20-5324-b6a3-49f44dc33fd8/',
+        '└─ INXT_PRJ_AAAAAAAAAA/ (Project 1)',
+        '   └─ INXT_SAM_AAAAAAAAAA/ (Project 1 Sample 1)',
+        '      ├─ INXT_ATT_AAAAAAAAAA/',
+        '      │  └─ test_file.fastq',
+        '      └─ INXT_ATT_AAAAAAAAAB/',
+        '         └─ test_file_A.fastq',
+        ''
+      ].join("\n")
+
+      assert_equal expected_simple_manifest, actual_simple_manifest
+    end
+
     test 'content of sample export including paired files' do
       sample_b = samples(:sampleB)
 
