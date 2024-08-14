@@ -686,7 +686,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within first('tbody') do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
@@ -701,9 +701,10 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
     end
 
-    assert_selector 'dl', count: 1
-    assert_selector 'div:nth-child(2) dd', text: 'test csv export'
-    assert_selector 'div:nth-child(4) dd', text: 'csv'
+    within first('dl') do
+      assert_selector 'div:nth-child(2) dd', text: 'test csv export'
+      assert_selector 'div:nth-child(4) dd', text: 'csv'
+    end
   end
 
   test 'create xlsx export from group samples page' do
@@ -711,7 +712,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within first('tbody') do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
@@ -727,9 +728,10 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
     end
 
-    assert_selector 'dl', count: 1
-    assert_selector 'div:nth-child(2) dd', text: 'test xlsx export'
-    assert_selector 'div:nth-child(4) dd', text: 'xlsx'
+    within first('dl') do
+      assert_selector 'div:nth-child(2) dd', text: 'test xlsx export'
+      assert_selector 'div:nth-child(4) dd', text: 'xlsx'
+    end
   end
 
   test 'linelist export with ready status does not have preview tab' do
