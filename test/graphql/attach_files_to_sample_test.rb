@@ -165,7 +165,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     assert_equal :error, data['status'][blob_file.signed_id]
   end
 
-  test 'attachFilesToSample mutation attach file with same content but different names' do
+  test 'attachFilesToSample mutation attach file with same checksum but different names' do
     sample = samples(:sampleJeff)
 
     blob_file_a = active_storage_blobs(:attachment_md5_a_test_blob)
@@ -289,12 +289,12 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     data = result['data']['attachFilesToSample']
 
     assert_not_empty data, 'attachFilesToSample should be populated when no authorization errors'
-    expected_status = { blob_file_b.signed_id => :error }
+    expected_status = { blob_file_b.signed_id => :success }
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
-    expected_error = { blob_file_b.signed_id => ['File checksum matches existing file'] }
-    assert_equal expected_error, data['errors']
-    assert_equal 1, sample.attachments.count
+    sample.reload
+    assert_equal 2, sample.attachments.count
+    assert_equal 'md5_a', sample.attachments[1].filename.to_s
   end
 
   test 'attachFilesToSample mutation attach 2 files at once' do

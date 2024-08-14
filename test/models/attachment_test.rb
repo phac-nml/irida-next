@@ -25,7 +25,7 @@ class AttachmentTest < ActiveSupport::TestCase
     assert new_attachment.errors.added?(:file, :checksum_uniqueness)
   end
 
-  test 'file contents matches another Attachment associated with the Attachable but with different filename' do
+  test 'file checksum matches another Attachment associated with the Attachable but with different filename' do
     assert_equal 2, @sample.attachments.count
     new_attachment = @sample.attachments.build(file:
       { io: Rails.root.join('test/fixtures/files/test_file.fastq').open,
@@ -35,12 +35,13 @@ class AttachmentTest < ActiveSupport::TestCase
     assert_equal 3, @sample.attachments.count
   end
 
-  test 'file contents differ from another Attachment associated with the Attachable but with same filename' do
+  test 'file checksum differs from another Attachment associated with the Attachable but with same filename' do
     new_attachment = @sample.attachments.build(file:
       { io: Rails.root.join('test/fixtures/files/test_file_C.fastq').open,
         filename: 'test_file.fastq' })
-    assert_not new_attachment.valid?
-    assert new_attachment.errors.added?(:file, :checksum_uniqueness)
+    assert new_attachment.valid?
+    @sample.save
+    assert_equal 3, @sample.attachments.count
   end
 
   test 'metadata fastq file types' do
