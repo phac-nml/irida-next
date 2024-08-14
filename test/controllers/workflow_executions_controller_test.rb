@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class workflowExecutionsControllerTest < ActionDispatch::IntegrationTest
+class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:john_doe)
     @sample1 = samples(:sample1)
