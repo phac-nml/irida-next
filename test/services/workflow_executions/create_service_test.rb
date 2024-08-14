@@ -59,12 +59,12 @@ module WorkflowExecutions
                             'application/json' })
 
       # do not perform completion job as this tests scope does not contain blob storage files
-      assert_performed_jobs 3, except: WorkflowExecutionCompletionJob do
+      assert_performed_jobs(3, except: [WorkflowExecutionCompletionJob, Turbo::Streams::BroadcastStreamJob]) do
         @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
       end
 
       # don't perform the preparation job as we want to check that the workflow execution is new
-      assert_performed_jobs 0, except: WorkflowExecutionPreparationJob do
+      assert_performed_jobs(0, except: [WorkflowExecutionPreparationJob, Turbo::Streams::BroadcastStreamJob]) do
         @workflow_execution2 = WorkflowExecutions::CreateService.new(@user, workflow_params2).execute
       end
 
