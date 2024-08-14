@@ -20,8 +20,10 @@ export default class extends Controller {
     this.allListItems = this.#constructAllListItems(this.availableList, this.selectedList)
     this.#setInitialSelectAllState(this.availableList, this.addAllTarget)
     this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget)
-    this.selectedList.addEventListener("mouseover", () => { this.#checkButtonStates() })
-    this.availableList.addEventListener("mouseover", () => { this.#checkButtonStates() })
+
+    this.buttonStateListener = this.#checkButtonStates.bind(this)
+    this.selectedList.addEventListener("mouseover", this.buttonStateListener)
+    this.availableList.addEventListener("mouseover", this.buttonStateListener)
   }
 
   addAll() {
@@ -102,7 +104,7 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.selectedList.removeEventListener("mouseover", () => { this.#checkButtonStates() })
-    this.availableList.removeEventListener("mouseover", () => { this.#checkButtonStates() })
+    this.selectedList.removeEventListener("mouseover", this.buttonStateListener)
+    this.availableList.removeEventListener("mouseover", this.buttonStateListener)
   }
 }
