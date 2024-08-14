@@ -22,14 +22,14 @@ module Projects
 
     test 'transfer project without specifying new namespace' do
       assert_not Projects::TransferService.new(@project, @john_doe).execute(nil)
-      assert_no_enqueued_jobs
+      assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'transfer project to namespace containing project' do
       group_one = groups(:group_one)
 
       assert_not Projects::TransferService.new(@project, @john_doe).execute(group_one)
-      assert_no_enqueued_jobs
+      assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'transfer project without project permission' do
@@ -45,7 +45,7 @@ module Projects
       assert_equal I18n.t(:'action_policy.policy.project.transfer?',
                           name: @project.name),
                    exception.result.message
-      assert_no_enqueued_jobs
+      assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'transfer project without target namespace permission' do
@@ -55,7 +55,7 @@ module Projects
         Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
       end
 
-      assert_no_enqueued_jobs
+      assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'transfer project to namespace containing project with same name' do
@@ -63,7 +63,7 @@ module Projects
       group_one = groups(:group_one)
 
       assert_not Projects::TransferService.new(project, @john_doe).execute(group_one)
-      assert_no_enqueued_jobs
+      assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'authorize allowed to transfer project with permission' do

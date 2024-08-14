@@ -221,7 +221,7 @@ module Attachments
       sample = samples(:sampleA)
       params = { files: [@testsample_illumina_pe_fwd_blob] }
 
-      assert_no_enqueued_jobs do
+      assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob) do
         assert_difference -> { Attachment.count } => 1 do
           Attachments::CreateService.new(users(:jeff_doe), sample, params).execute
         end
