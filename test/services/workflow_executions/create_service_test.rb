@@ -145,7 +145,7 @@ module WorkflowExecutions
       assert @workflow_execution.errors.full_messages.include?(
         'Metadata object at root is missing required properties: workflow_name'
       )
-      assert_enqueued_jobs 0
+      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'test create new workflow execution with missing required workflow version' do
@@ -171,7 +171,7 @@ module WorkflowExecutions
 
       assert @workflow_execution.errors.full_messages
                                 .include?('Metadata object at root is missing required properties: workflow_version')
-      assert_enqueued_jobs 0
+      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'test workflow execution canceled' do
@@ -284,7 +284,7 @@ module WorkflowExecutions
       assert_equal 0, @workflow_execution.workflow_params['random_seed']
       expected_tags = { 'createdBy' => @user.email }
       assert_equal expected_tags, @workflow_execution.tags
-      assert_enqueued_jobs 1
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'test create new workflow execution with workflow name' do
@@ -313,7 +313,7 @@ module WorkflowExecutions
       assert_equal test_name, @workflow_execution.name
       expected_tags = { 'createdBy' => @user.email }
       assert_equal expected_tags, @workflow_execution.tags
-      assert_enqueued_jobs 1
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'create workflow execution with incorrect permissions' do
