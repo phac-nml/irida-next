@@ -86,7 +86,7 @@
                     color: helpers.find_pill_color_for_state(workflow_execution[column]),
                     border: true,
                   ) %>
-                <% elsif column == :workflow_name || column == :worfklow_version %>
+                <% elsif column == :workflow_name || column == :workflow_version %>
                   <%= workflow_execution.metadata[column.to_s] %>
                 <% elsif column == :created_at %>
                   <%= helpers.local_time(workflow_execution[column], :full_date) %>

@@ -25,9 +25,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     case @tab
     when 'files'
-      @samples_worfklow_executions = @workflow_execution.samples_workflow_executions
+      @samples_workflow_executions = @workflow_execution.samples_workflow_executions
       @attachments = Attachment.where(attachable: @workflow_execution)
-                               .or(Attachment.where(attachable: @samples_worfklow_executions))
+                               .or(Attachment.where(attachable: @samples_workflow_executions))
     when 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                              @workflow_execution.metadata['workflow_version'])

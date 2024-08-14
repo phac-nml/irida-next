@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Projects
-  class WorfklowExecutionsControllerTest < ActionDispatch::IntegrationTest
+  class workflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     setup do
       sign_in users(:john_doe)
       @sample1 = samples(:sample1)
