@@ -29,8 +29,10 @@ jobs:
           --health-retries 5
 
     steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -48,7 +50,14 @@ jobs:
         run: pnpm install
       - name: Run tests
         run: |
-          bin/rails test:all
+          bin/rails test test:system
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
       - name: Report coverage
         if: github.event_name == 'pull_request'
         uses: aki77/simplecov-report-action@v1
