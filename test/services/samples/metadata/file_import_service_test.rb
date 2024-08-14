@@ -8,13 +8,14 @@ module Samples
       def setup
         @john_doe = users(:john_doe)
         @jane_doe = users(:jane_doe)
+        @group = groups(:group_one)
         @project = projects(:project1)
         @sample1 = samples(:sample1)
         @sample2 = samples(:sample2)
         @csv = File.new('test/fixtures/files/metadata/valid.csv', 'r')
       end
 
-      test 'import sample metadata with permission' do
+      test 'import sample metadata with permission for project namespace' do
         assert_authorized_to(:update_sample_metadata?, @project.namespace,
                              with: Namespaces::ProjectNamespacePolicy,
                              context: { user: @john_doe }) do
@@ -23,10 +24,26 @@ module Samples
         end
       end
 
-      test 'import sample metadata without permission' do
+      test 'import sample metadata with permission for group' do
+        assert_authorized_to(:update_sample_metadata?, @group,
+                             with: GroupPolicy,
+                             context: { user: @john_doe }) do
+          params = { file: @csv, sample_id_column: 'sample_puid' }
+          Samples::Metadata::FileImportService.new(@group, @john_doe, params).execute
+        end
+      end
+
+      test 'import sample metadata without permission for project namespace' do
         assert_raises(ActionPolicy::Unauthorized) do
           params = { file: @csv, sample_id_column: 'sample_name' }
           Samples::Metadata::FileImportService.new(@project.namespace, @jane_doe, params).execute
+        end
+      end
+
+      test 'import sample metadata without permission for group' do
+        assert_raises(ActionPolicy::Unauthorized) do
+          params = { file: @csv, sample_id_column: 'sample_puid' }
+          Samples::Metadata::FileImportService.new(@group, @jane_doe, params).execute
         end
       end
 
@@ -43,7 +60,7 @@ module Samples
                      I18n.t('services.samples.metadata.import_file.empty_file'))
       end
 
-      test 'import sample metadata via csv file using sample names' do
+      test 'import sample metadata via csv file using sample names for project namespace' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
         params = { file: @csv, sample_id_column: 'sample_name' }
@@ -59,12 +76,39 @@ module Samples
                      @sample2.reload.metadata)
       end
 
-      test 'import sample metadata via csv file using sample puids' do
+      test 'import sample metadata via csv file using sample puids for project namespace' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
         params = { file: File.new('test/fixtures/files/metadata/valid_with_puid.csv', 'r'),
                    sample_id_column: 'sample_puid' }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe,
+                                                            params).execute
+        assert_equal({ @sample1.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [] },
+                       @sample2.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
+                     @sample2.reload.metadata)
+      end
+
+      test 'import sample metadata via csv file using sample names for group' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { file: @csv, sample_id_column: 'sample_name' }
+        assert_empty Samples::Metadata::FileImportService.new(@group, @john_doe,
+                                                              params).execute
+        assert_equal(@group.errors.messages_for(:sample).first,
+                     I18n.t('services.samples.metadata.import_file.sample_not_found', sample_name: @sample1.name))
+      end
+
+      test 'import sample metadata via csv file using sample puids for group' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { file: File.new('test/fixtures/files/metadata/valid_with_puid.csv', 'r'),
+                   sample_id_column: 'sample_puid' }
+        response = Samples::Metadata::FileImportService.new(@group, @john_doe,
                                                             params).execute
         assert_equal({ @sample1.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [] },

@@ -81,6 +81,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.submit_workflow?
   end
 
+  test '#update_sample_metadata?' do
+    assert @policy.update_sample_metadata?
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

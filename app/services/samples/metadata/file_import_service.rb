@@ -134,7 +134,9 @@ module Samples
       def find_sample(sample_id)
         if @namespace.type == 'Group'
           authorized_scope(Sample, type: :relation, as: :namespace_samples,
-                                   scope_options: { namespace: @namespace }).where(id: sample_ids)
+                                   scope_options: { namespace: @namespace,
+                                                    minimum_access_level: Member::AccessLevel::MAINTAINER })
+            .find_by!(puid: sample_id)
         else
           project = @namespace.project
           if Irida::PersistentUniqueId.valid_puid?(sample_id, Sample)

@@ -61,5 +61,9 @@ module Namespaces
     test '#view_workflow_executions?' do
       assert @policy.view_automated_workflow_executions?
     end
+
+    test '#update_sample_metadata?' do
+      assert @policy.update_sample_metadata?
+    end
   end
 end
