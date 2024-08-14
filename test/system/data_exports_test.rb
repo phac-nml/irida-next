@@ -264,16 +264,30 @@ class DataExportsTest < ApplicationSystemTestCase
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
+
     within 'dialog[open].dialog--size-lg' do
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.sample_description.singular')
+      )
       within %(turbo-frame[id="list_select_samples"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
       end
+      assert_text I18n.t('data_exports.new_sample_export_dialog.select_formats')
+      assert_text I18n.t('data_exports.new_sample_export_dialog.format_description',
+                         selected: I18n.t('data_exports.new_sample_export_dialog.selected').downcase)
+      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+        assert_no_selector 'li'
+      end
+      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+        assert_selector 'li', count: 9
+        Attachment::FORMAT_REGEX.each_key do |format|
+          assert_text format
+        end
+      end
       assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
-      assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_sample_export_dialog.description.singular')
-      )
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
@@ -305,18 +319,32 @@ class DataExportsTest < ApplicationSystemTestCase
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
+
     within 'dialog[open].dialog--size-lg' do
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '2'
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.sample_description.plural')
+      ).gsub! 'COUNT_PLACEHOLDER', '2'
       within %(turbo-frame[id="list_select_samples"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
         assert_text @sample2.name
         assert_text @sample2.puid
       end
+      assert_text I18n.t('data_exports.new_sample_export_dialog.select_formats')
+      assert_text I18n.t('data_exports.new_sample_export_dialog.format_description',
+                         selected: I18n.t('data_exports.new_sample_export_dialog.selected').downcase)
+      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+        assert_no_selector 'li'
+      end
+      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+        assert_selector 'li', count: 9
+        Attachment::FORMAT_REGEX.each_key do |format|
+          assert_text format
+        end
+      end
       assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
-      assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_sample_export_dialog.description.plural')
-      ).gsub! 'COUNT_PLACEHOLDER', '2'
 
       fill_in I18n.t('data_exports.new_sample_export_dialog.name_label'), with: 'test data export'
       check I18n.t('data_exports.new_sample_export_dialog.email_label')
@@ -357,12 +385,13 @@ class DataExportsTest < ApplicationSystemTestCase
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
     within 'dialog[open].dialog--size-lg' do
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       within %(turbo-frame[id="list_select_samples"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
       end
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_sample_export_dialog.description.singular')
+        I18n.t('data_exports.new.sample_description.singular')
       )
     end
   end
@@ -529,9 +558,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within 'dialog[open].dialog--size-lg' do
       assert_text I18n.t('data_exports.new_linelist_export_dialog.title')
-      assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_linelist_export_dialog.description.singular')
-      )
+      assert_text I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       assert_text I18n.t('data_exports.new_linelist_export_dialog.metadata')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.metadata_description',
                          available: I18n.t('data_exports.new_linelist_export_dialog.available').downcase,
@@ -539,9 +566,9 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
       assert_selector 'button.pointer-events-none.cursor-not-allowed',
-                      text: I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+                      text: I18n.t('viral.sortable_lists_component.remove_all')
       assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
-                         text: I18n.t('data_exports.new_linelist_export_dialog.add_all')
+                         text: I18n.t('viral.sortable_lists_component.add_all')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.format')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.csv')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.xlsx')
@@ -551,7 +578,14 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_no_selector 'turbo-frame[id="list_select_samples"]'
       assert_no_text @sample30.name
       assert_no_text @sample30.puid
-      click_button I18n.t('data_exports.new_linelist_export_dialog.samples')
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.sample_description.singular')
+      )
+
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.sample_description.singular')
+      )
       assert_selector 'turbo-frame[id="list_select_samples"]'
       within %(turbo-frame[id="list_select_samples"]) do
         assert_text @sample30.name
@@ -601,11 +635,11 @@ class DataExportsTest < ApplicationSystemTestCase
 
       assert_selector 'input[disabled]'
       assert_selector 'button.pointer-events-none.cursor-not-allowed',
-                      text: I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+                      text: I18n.t('viral.sortable_lists_component.remove_all')
       assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
-                         text: I18n.t('data_exports.new_linelist_export_dialog.add_all')
+                         text: I18n.t('viral.sortable_lists_component.add_all')
 
-      click_button I18n.t('data_exports.new_linelist_export_dialog.add_all')
+      click_button I18n.t('viral.sortable_lists_component.add_all')
 
       within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.selected')}']" do
         assert_text 'metadatafield1'
@@ -621,11 +655,11 @@ class DataExportsTest < ApplicationSystemTestCase
 
       assert_no_selector 'input[disabled]'
       assert_selector 'button.pointer-events-none.cursor-not-allowed',
-                      text: I18n.t('data_exports.new_linelist_export_dialog.add_all')
+                      text: I18n.t('viral.sortable_lists_component.add_all')
       assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
-                         text: I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+                         text: I18n.t('viral.sortable_lists_component.remove_all')
 
-      click_button I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+      click_button I18n.t('viral.sortable_lists_component.remove_all')
 
       within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
         assert_text 'metadatafield1'
@@ -641,9 +675,9 @@ class DataExportsTest < ApplicationSystemTestCase
 
       assert_selector 'input[disabled]'
       assert_selector 'button.pointer-events-none.cursor-not-allowed',
-                      text: I18n.t('data_exports.new_linelist_export_dialog.remove_all')
+                      text: I18n.t('viral.sortable_lists_component.remove_all')
       assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
-                         text: I18n.t('data_exports.new_linelist_export_dialog.add_all')
+                         text: I18n.t('viral.sortable_lists_component.add_all')
     end
   end
 
@@ -662,7 +696,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
-      click_button I18n.t('data_exports.new_linelist_export_dialog.add_all')
+      click_button I18n.t('viral.sortable_lists_component.add_all')
       find('input#data_export_name').fill_in with: 'test csv export'
       click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
     end
@@ -687,7 +721,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
-      click_button I18n.t('data_exports.new_linelist_export_dialog.add_all')
+      click_button I18n.t('viral.sortable_lists_component.add_all')
       find('input#data_export_name').fill_in with: 'test xlsx export'
       find('input#xlsx-format').click
       click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
@@ -705,5 +739,70 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_text I18n.t('data_exports.show.tabs.summary')
     assert_no_text I18n.t('data_exports.show.tabs.preview')
+  end
+
+  test 'add all, remove all and submit buttons in new_sample_export_dialog' do
+    visit namespace_project_samples_url(@group1, @project1)
+
+    within %(#samples-table) do
+      find("input[type='checkbox'][value='#{@sample1.id}']").click
+    end
+
+    click_button I18n.t('projects.samples.index.create_export_button.label')
+    click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
+
+    within 'dialog[open].dialog--size-lg' do
+      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+        assert_no_selector 'li'
+      end
+      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+        assert_selector 'li', count: 9
+        Attachment::FORMAT_REGEX.each_key do |format|
+          assert_text format
+        end
+      end
+
+      assert_no_selector 'input[disabled]'
+      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+                      text: I18n.t('viral.sortable_lists_component.add_all')
+      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+                         text: I18n.t('viral.sortable_lists_component.remove_all')
+
+      click_button I18n.t('viral.sortable_lists_component.remove_all')
+
+      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+        assert_no_selector 'li'
+      end
+      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+        assert_selector 'li', count: 9
+        Attachment::FORMAT_REGEX.each_key do |format|
+          assert_text format
+        end
+      end
+
+      assert_selector 'input[disabled]'
+      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+                      text: I18n.t('viral.sortable_lists_component.remove_all')
+      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+                         text: I18n.t('viral.sortable_lists_component.add_all')
+
+      click_button I18n.t('viral.sortable_lists_component.add_all')
+
+      within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
+        assert_no_selector 'li'
+      end
+      within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
+        assert_selector 'li', count: 9
+        Attachment::FORMAT_REGEX.each_key do |format|
+          assert_text format
+        end
+      end
+
+      assert_no_selector 'input[disabled]'
+      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+                      text: I18n.t('viral.sortable_lists_component.add_all')
+      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+                         text: I18n.t('viral.sortable_lists_component.remove_all')
+    end
   end
 end

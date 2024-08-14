@@ -18,7 +18,9 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   test 'should create new sample export with viable params' do
     params = { 'data_export' => {
                  'export_type' => 'sample',
-                 'export_parameters' => { 'ids' => [@sample1.id], 'namespace_id' => @project1.namespace.id }
+                 'export_parameters' => { 'ids' => [@sample1.id], 'namespace_id' => @project1.namespace.id,
+                                          'attachment_formats' =>
+                                          Attachment::FORMAT_REGEX.keys }
                },
                format: :turbo_stream }
     assert_difference('DataExport.count', 1) do
@@ -136,7 +138,8 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     post data_exports_path, params: {
       data_export: {
         export_type: 'sample',
-        export_parameters: { ids: [@sample1.id], 'namespace_id' => @project1.namespace.id }
+        export_parameters: { ids: [@sample1.id], 'namespace_id' => @project1.namespace.id,
+                             'attachment_formats' => Attachment::FORMAT_REGEX.keys }
       }
     }
     assert_response :redirect
@@ -146,7 +149,8 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     post data_exports_path, params: {
       data_export: {
         export_type: 'sample',
-        export_parameters: { ids: [@sample1.id], 'namespace_id' => @project1.namespace.id },
+        export_parameters: { ids: [@sample1.id], 'namespace_id' => @project1.namespace.id,
+                             'attachment_formats' => Attachment::FORMAT_REGEX.keys },
         email_notification: true,
         name: 'export name'
       }
@@ -158,7 +162,8 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     post data_exports_path(format: :turbo_stream),
          params: {
            data_export: {
-             export_parameters: { ids: [@sample1.id] }
+             export_parameters: { ids: [@sample1.id],
+                                  'attachment_formats' => Attachment::FORMAT_REGEX.keys }
            }
          }
     assert_response :unprocessable_entity
@@ -179,7 +184,8 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
          params: {
            data_export: {
              export_type: 'sample',
-             export_parameters: { invalid_ids: ['not valid id'] }
+             export_parameters: { invalid_ids: ['not valid id'],
+                                  'attachment_formats' => Attachment::FORMAT_REGEX.keys }
            }
          }
     assert_response :unprocessable_entity
@@ -249,6 +255,19 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'linelist_format' => 'csv' }
            }
          }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create sample export without attachment_formats param' do
+    params = { 'data_export' => {
+                 'export_type' => 'sample',
+                 'export_parameters' => { 'ids' => [@sample1.id],
+                                          'namespace_id' => @project1.namespace.id }
+               },
+               format: :turbo_stream }
+    assert_no_difference('DataExport.count') do
+      post data_exports_path(params)
+    end
     assert_response :unprocessable_entity
   end
 

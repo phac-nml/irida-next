@@ -9,19 +9,25 @@ export default class extends Controller {
     "pageFormContent",
     "scrollable",
     "summary",
+    "sampleCount"
   ];
   static values = {
     pagedFieldName: String,
-    singular: String,
-    plural: String,
+    singularDescription: String,
+    pluralDescription: String,
+    nonZeroHeader: String,
   };
 
   #page = 1;
 
   connect() {
     this.allIds = this.selectionOutlet.getStoredItems();
+    this.numSelected = this.selectionOutlet.getNumSelected()
     this.#makePagedHiddenInputs();
-    this.#replaceCountPlaceholder();
+    this.#replaceDescriptionPlaceholder();
+    if (this.hasSampleCountTarget) {
+      this.#replaceCountPlaceholder(this.sampleCountTarget, this.nonZeroHeaderValue);
+    }
   }
 
   scroll() {
@@ -33,18 +39,19 @@ export default class extends Controller {
     }
   }
 
-  #replaceCountPlaceholder() {
-    const numSelected = this.selectionOutlet.getNumSelected();
-    let summary = this.summaryTarget;
-
-    if (numSelected == 1) {
-      summary.innerHTML = this.singularValue;
+  #replaceDescriptionPlaceholder() {
+    if (this.numSelected === 1) {
+      this.summaryTarget.innerHTML = this.singularDescriptionValue;
     } else {
-      summary.innerHTML = this.pluralValue.replace(
-        "COUNT_PLACEHOLDER",
-        numSelected
-      );
+      this.#replaceCountPlaceholder(this.summaryTarget, this.pluralDescriptionValue);
     }
+  }
+
+  #replaceCountPlaceholder(textNode, countPlaceholderText) {
+    textNode.innerHTML = countPlaceholderText.replace(
+      "COUNT_PLACEHOLDER",
+      this.numSelected
+    );
   }
 
   #makePagedHiddenInputs() {

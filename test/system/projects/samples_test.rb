@@ -2268,12 +2268,12 @@ module Projects
 
     test 'delete single sample with checkbox and delete samples button' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within first('tbody') do
         assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name
-        within 'table tbody tr:first-child' do
+        within 'tr:first-child' do
           all('input[type="checkbox"]')[0].click
         end
       end
@@ -2289,7 +2289,7 @@ module Projects
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
 
-      within '#samples-table table tbody' do
+      within 'tbody' do
         assert_selector 'tr', count: 2
         assert_no_text @sample1.name
         assert_text @sample2.name

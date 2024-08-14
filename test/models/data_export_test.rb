@@ -44,7 +44,8 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'data export with invalid status' do
     data_export = DataExport.new(user: @user, status: 'invalid status', export_type: 'sample',
-                                 export_parameters: { ids: [@sample1.id], namespace_id: @project1.namespace.id })
+                                 export_parameters: { ids: [@sample1.id], namespace_id: @project1.namespace.id,
+                                                      attachment_formats: Attachment::FORMAT_REGEX.keys })
     assert_not data_export.valid?
     data_export.status = 'processing'
     assert data_export.valid?
@@ -94,7 +95,8 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'sample export with missing namespace_id' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
-                                 export_parameters: { ids: [@sample1.id] })
+                                 export_parameters: { ids: [@sample1.id],
+                                                      attachment_formats: Attachment::FORMAT_REGEX.keys })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_namespace_id'),
                  data_export.errors[:export_parameters].first
@@ -102,7 +104,8 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'sample export with invalid namespace_id' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
-                                 export_parameters: { ids: [@sample1.id], namespace_id: 'invalid_namespace_id' })
+                                 export_parameters: { ids: [@sample1.id], namespace_id: 'invalid_namespace_id',
+                                                      attachment_formats: Attachment::FORMAT_REGEX.keys })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_namespace_id'),
                  data_export.errors[:export_parameters].first
@@ -151,8 +154,7 @@ class DataExportTest < ActiveSupport::TestCase
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
                                  export_parameters: { ids: [@sample1.id],
                                                       namespace_id: @project1.namespace.id,
-                                                      attachment_formats: %w[fasta fastq text csv tsv spreadsheet json
-                                                                             genbank] })
+                                                      attachment_formats: Attachment::FORMAT_REGEX.keys })
 
     assert data_export.valid?
   end
@@ -179,5 +181,15 @@ class DataExportTest < ActiveSupport::TestCase
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_attachment_format',
                         invalid_formats: (formats - Attachment::FORMAT_REGEX.keys).join(', ')),
                  data_export.errors[:export_parameters].first
+  end
+
+  test 'sample export without attachment_formats param' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
+                                 export_parameters: { ids: [@sample1.id],
+                                                      namespace_id: @project1.namespace.id })
+    assert_not data_export.valid?
+    assert_equal I18n.t(
+      'activerecord.errors.models.data_export.attributes.export_parameters.missing_attachment_formats'
+    ), data_export.errors[:export_parameters].first
   end
 end

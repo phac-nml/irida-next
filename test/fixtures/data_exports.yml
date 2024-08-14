@@ -6,7 +6,8 @@ data_export_one:
   status: ready
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>,
+    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
     }
   expires_at : <%= 3.days.from_now %>
   created_at: <%= 1.week.ago %>
@@ -19,7 +20,8 @@ data_export_two:
   status: processing
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>,
+    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
     }
   email_notification: true
   created_at: <%= 1.week.ago %>
@@ -32,7 +34,8 @@ data_export_three:
   status: processing
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>,
+    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
     }
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
@@ -44,7 +47,8 @@ data_export_four:
   status: ready
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>,
+    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
     }
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
@@ -56,7 +60,8 @@ data_export_five:
   status: ready
   export_parameters: {
     ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>,
+    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
     }
   email_notification: true
   created_at: <%= 1.week.ago %>

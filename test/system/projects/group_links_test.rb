@@ -295,8 +295,8 @@ module Projects
       visit namespace_project_members_url(@namespace.parent, @project, tab: 'invited_groups')
 
       assert_text 'Displaying 4 items'
-      assert_selector '#project-members table tbody tr', count: 4
-      assert_selector '#project-members table thead th:first-child svg.icon-arrow_up'
+      assert_selector 'table tbody tr', count: 4
+      assert_selector 'table thead th:first-child svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -314,7 +314,7 @@ module Projects
 
       sort_link = find('table thead th:nth-child(1) a')
       sort_link.trigger('click')
-      assert_selector '#project-members table thead th:first-child svg.icon-arrow_down'
+      assert_selector 'table thead th:first-child svg.icon-arrow_down'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -332,7 +332,7 @@ module Projects
 
       sort_link = find('table thead th:nth-child(2) a')
       sort_link.trigger('click')
-      assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -350,7 +350,7 @@ module Projects
 
       sort_link = find('table thead th:nth-child(2) a')
       sort_link.trigger('click')
-      assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -368,7 +368,7 @@ module Projects
 
       sort_link = find('table thead th:nth-child(4) a')
       sort_link.trigger('click')
-      assert_selector '#project-members table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -386,7 +386,7 @@ module Projects
 
       sort_link = find('table thead th:nth-child(4) a')
       sort_link.trigger('click')
-      assert_selector '#project-members table thead th:nth-child(4) svg.icon-arrow_down'
+      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -404,7 +404,7 @@ module Projects
 
       sort_link = find('table thead th:nth-child(5) a')
       sort_link.trigger('click')
-      assert_selector '#project-members table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
         assert_selector 'tr:first-child td:nth-child(5)',
