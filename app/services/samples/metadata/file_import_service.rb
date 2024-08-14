@@ -5,12 +5,12 @@ require 'roo'
 module Samples
   module Metadata
     # Service used to import sample metadata via a file
-    class FileImportService < BaseService
+    class FileImportService < BaseService # rubocop:disable Metrics/ClassLength
       SampleMetadataFileImportError = Class.new(StandardError)
 
-      def initialize(project, user = nil, params = {})
+      def initialize(namespace, user = nil, params = {})
         super(user, params)
-        @project = project
+        @namespace = namespace
         @file = params[:file]
         @sample_id_column = params[:sample_id_column]
         @ignore_empty_values = params[:ignore_empty_values]
@@ -19,7 +19,7 @@ module Samples
       end
 
       def execute
-        authorize! @project, to: :update_sample?
+        # authorize! @project, to: :update_sample?
 
         validate_sample_id_column
 
@@ -27,7 +27,7 @@ module Samples
 
         perform_file_import
       rescue Samples::Metadata::FileImportService::SampleMetadataFileImportError => e
-        @project.errors.add(:base, e.message)
+        @namespace.errors.add(:base, e.message)
         {}
       end
 
@@ -111,29 +111,38 @@ module Samples
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
           response[sample_id] = metadata_changes if metadata_changes
         rescue ActiveRecord::RecordNotFound
-          @project.errors.add(:sample,
-                              I18n.t('services.samples.metadata.import_file.sample_not_found',
-                                     sample_name: sample_id))
+          @namespace.errors.add(:sample,
+                                I18n.t('services.samples.metadata.import_file.sample_not_found',
+                                       sample_name: sample_id))
         end
         response
       end
 
       def process_sample_metadata_row(sample_id, metadata)
-        sample = if Irida::PersistentUniqueId.valid_puid?(sample_id, Sample)
-                   Sample.find_by!(puid: sample_id, project_id: @project.id)
-                 else
-                   Sample.find_by!(name: sample_id, project_id: @project.id)
-                 end
-
-        metadata_changes = UpdateService.new(@project, sample, current_user, { 'metadata' => metadata }).execute
+        sample = find_sample(sample_id)
+        metadata_changes = UpdateService.new(sample.project, sample, current_user, { 'metadata' => metadata }).execute
         not_updated_metadata_changes = metadata_changes[:not_updated]
         return metadata_changes if not_updated_metadata_changes.empty?
 
-        @project.errors.add(:sample,
-                            I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                                   sample_name: sample_id,
-                                   metadata_fields: not_updated_metadata_changes.join(', ')))
+        @namespace.errors.add(:sample,
+                              I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+                                     sample_name: sample_id,
+                                     metadata_fields: not_updated_metadata_changes.join(', ')))
         nil
+      end
+
+      def find_sample(sample_id)
+        if @namespace.type == 'Group'
+          authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                                   scope_options: { namespace: @namespace }).where(id: sample_ids)
+        else
+          project = @namespace.project
+          if Irida::PersistentUniqueId.valid_puid?(sample_id, Sample)
+            Sample.find_by!(puid: sample_id, project_id: project.id)
+          else
+            Sample.find_by!(name: sample_id, project_id: project.id)
+          end
+        end
       end
     end
   end
