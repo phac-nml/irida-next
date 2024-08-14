@@ -9,4 +9,4 @@ en:
   counts:
     samples: Samples
     selected: Selected
-  select_all: Select All
+  select_page: Select / Deselect visible samples
