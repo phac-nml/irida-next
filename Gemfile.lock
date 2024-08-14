@@ -223,7 +223,7 @@ GEM
       railties (>= 6.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    good_job (3.29.2)
+    good_job (3.99.1)
       activejob (>= 6.0.0)
       activerecord (>= 6.0.0)
       concurrent-ruby (>= 1.0.2)
@@ -640,7 +640,7 @@ DEPENDENCIES
   faraday-multipart
   faraday-net_http_persistent (~> 2.0)
   fx
-  good_job (~> 3.21)
+  good_job (~> 3.99)
   google-cloud-storage (~> 1.11)
   graphiql-rails
   graphql

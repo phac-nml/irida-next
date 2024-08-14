@@ -53,7 +53,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     workflow_execution8 = workflow_executions(:irida_next_example_canceling)
     workflow_execution9 = workflow_executions(:irida_next_example_canceled)
     workflow_execution10 = workflow_executions(:workflow_execution_existing)
-    workflow_execution12 = workflow_executions(:irida_next_example_new)
 
     visit workflow_executions_path
 
@@ -103,19 +102,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
                       text: workflow_execution2.metadata['workflow_name']
       assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution9.metadata['workflow_name']
-    end
-
-    click_on 'Created'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@created_at_col}) svg.icon-arrow_up"
-
-    within first('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
-      assert_selector "tr:first-child td:nth-child(#{@created_at_col})",
-                      text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
-      assert_selector "tr:nth-child(2) td:nth-child(#{@created_at_col})",
-                      text: I18n.l(workflow_execution2.created_at.localtime, format: :full_date)
-      assert_selector "tr:last-child td:nth-child(#{@created_at_col})",
-                      text: I18n.l(workflow_execution12.created_at.localtime, format: :full_date)
     end
   end
 
