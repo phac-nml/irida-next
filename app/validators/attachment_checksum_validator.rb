@@ -2,7 +2,7 @@
 
 # Validator for Attachment checksum
 class AttachmentChecksumValidator < ActiveModel::Validator
-  def validate(record) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def validate(record)
     return if record.file.checksum.blank?
 
     klass = record.class
