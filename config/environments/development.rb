@@ -56,6 +56,8 @@ Rails.application.configure do
 
   config.action_mailer.default_options = { from: 'from@example.com' }
 
+  config.active_job.queue_adapter = :good_job
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
