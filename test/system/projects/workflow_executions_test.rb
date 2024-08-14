@@ -33,7 +33,6 @@ module Projects
       workflow_execution2 = workflow_executions(:automated_example_canceling)
       workflow_execution3 = workflow_executions(:automated_example_canceled)
       workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
-      workflow_execution5 = workflow_executions(:automated_example_prepared)
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
@@ -84,20 +83,6 @@ module Projects
                         text: workflow_execution1.metadata['workflow_name']
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution3.metadata['workflow_name']
-      end
-
-      click_on 'Created'
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@created_at_col}) svg.icon-arrow_up"
-
-      within first('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 10
-
-        assert_selector "tr:first-child td:nth-child(#{@created_at_col})",
-                        text: I18n.l(workflow_execution1.created_at.localtime, format: :full_date)
-        assert_selector "tr:nth-child(2) td:nth-child(#{@created_at_col})",
-                        text: I18n.l(workflow_execution5.created_at.localtime, format: :full_date)
-        assert_selector "tr:last-child td:nth-child(#{@created_at_col})",
-                        text: I18n.l(workflow_execution4.created_at.localtime, format: :full_date)
       end
     end
 

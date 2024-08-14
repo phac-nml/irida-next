@@ -1023,6 +1023,7 @@ module Projects
         click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
         assert_html5_inputs_valid
       end
+      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
       within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 0
         assert_no_text 'test_file.fastq'
@@ -1030,7 +1031,6 @@ module Projects
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
       end
-      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
     end
 
     test 'should be able to delete multiple attachments including paired files' do
@@ -1057,6 +1057,7 @@ module Projects
         assert_text 'test_file_D.fastq'
         click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
       end
+      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
       within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
         assert_no_text 'test_file_fwd_1.fastq'
@@ -1067,7 +1068,6 @@ module Projects
         assert_no_text 'test_file_rev_3.fastq'
         assert_no_text 'test_file_D.fastq'
       end
-      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
     end
 
     test 'user can see delete buttons as owner' do
@@ -2289,14 +2289,14 @@ module Projects
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
 
+      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
+
       within 'tbody' do
         assert_selector 'tr', count: 2
         assert_no_text @sample1.name
         assert_text @sample2.name
         assert_text @sample3.name
       end
-
-      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
     end
 
     test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
