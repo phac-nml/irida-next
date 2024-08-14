@@ -8,8 +8,8 @@ module Projects
         respond_to :turbo_stream
 
         def create # rubocop:disable Metrics/AbcSize
-          authorize! @project, to: :update_sample?
           @namespace = @project.namespace
+          authorize! @namespace, to: :update_sample_metadata?
           @imported_metadata = ::Samples::Metadata::FileImportService.new(@namespace, current_user,
                                                                           file_import_params).execute
           if @namespace.errors.empty?

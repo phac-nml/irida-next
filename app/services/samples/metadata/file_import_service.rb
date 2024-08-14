@@ -19,7 +19,7 @@ module Samples
       end
 
       def execute
-        # authorize! @project, to: :update_sample?
+        authorize! @namespace, to: :update_sample_metadata?
 
         validate_sample_id_column
 

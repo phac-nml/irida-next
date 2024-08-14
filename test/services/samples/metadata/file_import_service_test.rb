@@ -15,8 +15,8 @@ module Samples
       end
 
       test 'import sample metadata with permission' do
-        assert_authorized_to(:update_sample?, @project,
-                             with: ProjectPolicy,
+        assert_authorized_to(:update_sample_metadata?, @project.namespace,
+                             with: Namespaces::ProjectNamespacePolicy,
                              context: { user: @john_doe }) do
           params = { file: @csv, sample_id_column: 'sample_name' }
           Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, params).execute
