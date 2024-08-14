@@ -115,7 +115,8 @@ module DataExports
         child_prefix = "#{prefix}│  "
       end
 
-      line += "(#{cursor['irida-next-name']})" if cursor.key?('irida-next-name')
+      line += '/' if cursor['type'] == 'folder'
+      line += " (#{cursor['irida-next-name']})" if cursor.key?('irida-next-name')
       output.append(line)
 
       if cursor['type'] == 'folder'
