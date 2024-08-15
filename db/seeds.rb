@@ -254,7 +254,7 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       export_parameters: { ids: [export_param[:sample].id],
                            namespace_id:,
                            metadata_fields:,
-                           linelist_format: index.even? ? 'csv' : 'xlsx' },
+                           linelist_format: index.even? ? 'xlsx' : 'csv' },
       status: 'processing',
       export_type: 'linelist',
       email_notification: index.even? || true
