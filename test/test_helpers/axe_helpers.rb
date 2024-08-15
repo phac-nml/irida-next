@@ -108,6 +108,7 @@ module AxeHelpers
   end
 
   def visit(path, **attributes)
+    page.driver.clear_network_traffic
     super
 
     assert_accessible
