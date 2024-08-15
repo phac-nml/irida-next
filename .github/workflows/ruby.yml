@@ -49,6 +49,8 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
+      - name: Install playwright
+        run: pnpx playwright install
       - name: Precompile assets
         run: |
           bin/rails assets:precompile
