@@ -220,11 +220,8 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                                  variables: { sampleId: 'gid://irida/Sample/doesnotexist',
                                               metadata: { key1: 'value1' } })
 
-    expected_error = [
-      { 'message' => "Couldn't find Sample with 'id'=doesnotexist", 'locations' => [{ 'line' => 2, 'column' => 3 }],
-        'path' => ['updateSampleMetadata'] }
-    ]
-    assert_equal expected_error, result['errors']
+    expected_error = [{ 'message' => 'not found by provided ID or PUID', 'path' => ['sample'] }]
+    assert_equal expected_error, result['data']['updateSampleMetadata']['errors']
   end
 
   test 'updateSampleMetadata mutation should not work with invalid sample puid' do

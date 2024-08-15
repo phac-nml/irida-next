@@ -45,9 +45,11 @@ module Mutations
       if args[:project_id]
         IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
       else
-        project_namespace = Namespaces::ProjectNamespace.find_by(puid: args[:project_puid])
+        project_namespace = Namespaces::ProjectNamespace.find_by!(puid: args[:project_puid])
         project_namespace&.project
       end
+    rescue ActiveRecord::RecordNotFound
+      nil
     end
 
     def create_sample(project, args) # rubocop:disable Metrics/MethodLength

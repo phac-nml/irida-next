@@ -408,12 +408,11 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
   test 'attachFilesToSample mutation should not work with invalid sample gid' do
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
-    sample = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file.signed_id],
                                               sampleId: 'gid://irida/Sample/doesnotexist' })
-    expected_error = { 'message' => "Couldn't find Sample with 'id'=doesnotexist",
-                       'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['attachFilesToSample'] }
-    assert_equal expected_error, sample['errors'][0]
+    expected_error = { 'message' => 'not found by provided ID or PUID', 'path' => ['sample'] }
+    assert_equal expected_error, result['data']['attachFilesToSample']['errors'][0]
   end
 end
