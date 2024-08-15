@@ -5,7 +5,8 @@ require 'application_system_test_case'
 module Dashboard
   class ProjectsTest < ApplicationSystemTestCase
     def setup
-      login_as users(:john_doe)
+      @user = users(:john_doe)
+      login_as @user
       @project = projects(:project1)
     end
 
@@ -176,14 +177,14 @@ module Dashboard
       within %(div[data-controller="slugify"][data-controller-connected="true"]) do
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
         assert_equal 'new-project',
-                     find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
+                    find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
         click_on I18n.t(:'projects.new.submit')
       end
 
-      new_project = Project.last
-      assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
+      new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
+      assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
     end
 
     test 'can see projects that the user has been added to as a member' do
