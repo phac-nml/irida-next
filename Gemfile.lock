@@ -154,6 +154,10 @@ GEM
       capybara (>= 3.0)
       ruby2_keywords
       selenium-webdriver (>= 4.0)
+    capybara-playwright-driver (0.5.2)
+      addressable
+      capybara
+      playwright-ruby-client (>= 1.16.0)
     caxlsx (4.1.0)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
@@ -333,6 +337,9 @@ GEM
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
+    mime-types (3.5.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2024.0806)
     mini_mime (1.1.5)
     minitest (5.24.1)
     msgpack (1.7.2)
@@ -394,6 +401,9 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.6)
+    playwright-ruby-client (1.45.0)
+      concurrent-ruby (>= 1.1.6)
+      mime-types (>= 3.0)
     prettier_print (1.2.1)
     psych (5.1.2)
       stringio
@@ -630,6 +640,7 @@ DEPENDENCIES
   business_time
   capybara
   capybara-lockstep
+  capybara-playwright-driver
   caxlsx
   csv
   cuprite
@@ -659,6 +670,7 @@ DEPENDENCIES
   pagy (~> 6.1)
   paranoia
   pg
+  playwright-ruby-client
   puma (~> 6.4)
   rails (~> 7.2.0)
   ransack (~> 4.2.1)

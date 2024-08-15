@@ -164,6 +164,9 @@ group :test do
   gem 'capybara-lockstep'
   gem 'cuprite'
 
+  gem 'capybara-playwright-driver'
+  gem 'playwright-ruby-client'
+
   gem 'simplecov', require: false
   gem 'timecop'
 
