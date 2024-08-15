@@ -38,6 +38,7 @@
       </li>
     <% end %>
     <%# Next page link %>
+    <li>
     <% if @pagy.next %>
       <%== a.(@pagy.next, t(".next"), classes: "#{active_link_classes} rounded-e-lg") %>
     <% else %>
@@ -48,5 +49,6 @@
         "aria-disabled": true,
       } %>
     <% end %>
+    </li>
   </ul>
 </nav>
