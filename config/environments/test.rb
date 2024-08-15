@@ -28,6 +28,12 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
 
+  # In CI use precompiled assets
+  if ENV['CI']
+    # Do not fallback to assets pipeline if a precompiled asset is missed.
+    config.assets.compile = false
+  end
+
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable
 

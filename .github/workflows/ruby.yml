@@ -48,6 +48,9 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
+      - name: Precompile assets
+        run: |
+          bin/rails assets:precompile
       - name: Run tests
         run: |
           bin/rails test:all
