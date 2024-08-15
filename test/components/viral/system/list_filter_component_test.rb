@@ -13,7 +13,7 @@ module System
         click_button I18n.t(:'components.list_filter.title')
         within 'dialog' do
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-          fill_in I18n.t(:'components.list_filter.description'), with: "#{puid1}, #{puid2}"
+          find(:fillable_field, I18n.t(:'components.list_filter.description')).send_keys("#{puid1}, #{puid2}")
           assert_selector 'span.label', count: 1
           assert_selector 'span.label', text: puid1
           find('input').text puid2

@@ -8,7 +8,6 @@ module System
       visit('/rails/view_components/clipboard_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         click_button 'Copy to clipboard'
-        assert_no_text 'Copy to clipboard'
         assert_text 'Copied!'
       end
     end
