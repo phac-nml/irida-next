@@ -11,13 +11,13 @@ importers:
       flowbite:
         specifier: ^1.7.0
         version: 1.8.1
-      playwright:
-        specifier: 1.45.0
-        version: 1.45.0
     devDependencies:
       axe-core:
         specifier: ^4.6.3
         version: 4.9.1
+      playwright:
+        specifier: 1.45.0
+        version: 1.45.0
       prettier:
         specifier: ^3.0.0
         version: 3.3.2
