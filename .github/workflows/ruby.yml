@@ -19,7 +19,7 @@ jobs:
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
           POSTGRES_HOST: postgres
-          FERRUM_GOTO_WAIT: 0.5 # wait 0.5 seconds before checking is network traffic is still pending
+          FERRUM_GOTO_WAIT: 0.8 # wait 0.8 seconds before checking if network traffic is still pending
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
