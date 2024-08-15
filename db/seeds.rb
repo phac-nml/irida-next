@@ -250,7 +250,7 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
 
     DataExport.create(
       user: export_param[:user],
-      name: index.even? ?  "Seeded sample export #{index + 1}" : nil,
+      name: index.even? ?  "Seeded linelist export #{index + 1}" : nil,
       export_parameters: { ids: [export_param[:sample].id],
                            namespace_id:,
                            metadata_fields:,
