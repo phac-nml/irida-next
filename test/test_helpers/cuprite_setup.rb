@@ -5,11 +5,14 @@ require 'capybara/cuprite'
 # Then, we need to register our driver to be able to use it later
 # with #driven_by method.
 Capybara.register_driver(:irida_next_cuprite) do |app|
+  options = {}
+  options['no-sandbox'] = nil if ENV['CI']
+  options['disable-smooth-scrolling'] = true
   Capybara::Cuprite::Driver.new(
     app,
     window_size: [1400, 1400],
     # See additional options for Dockerized environment in the respective section of this article
-    browser_options: { 'no-sandbox': nil },
+    browser_options: options,
     # Increase Chrome startup wait time (required for stable CI builds)
     process_timeout: 60,
     # Page load timeout, default is 5

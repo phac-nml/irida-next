@@ -2,6 +2,8 @@
 
 # Capybara settings (not covered by Rails system tests)
 
+Capybara.server = :puma, { Silent: true }
+
 # Make server listening on all hosts
 Capybara.server_host = '0.0.0.0'
 # Use a hostname accessible from the outside world
