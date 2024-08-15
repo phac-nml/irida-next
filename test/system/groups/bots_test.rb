@@ -132,10 +132,8 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
-      within('table') do
-        within('table tbody tr:first-child td:last-child') do
-          click_link 'Remove'
-        end
+      within('table tbody tr:first-child td:last-child') do
+        click_link 'Remove'
       end
 
       within('#turbo-confirm[open]') do
