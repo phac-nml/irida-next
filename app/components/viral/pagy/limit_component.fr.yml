@@ -1,0 +1,2 @@
+en:
+  count: '<span class="font-bold">%{from}-%{to}</span> of <span class="font-bold">%{count}</span>'
