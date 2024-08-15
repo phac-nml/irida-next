@@ -15,7 +15,7 @@ Capybara.register_driver(:irida_next_cuprite) do |app|
     # Page load timeout, default is 5
     timeout: 60,
     # Enable debugging capabilities
-    inspector: true,
+    inspector: false,
     # Allow running Chrome in a headful mode by setting HEADLESS env
     # var to a falsey value
     headless: !ENV['HEADLESS'].in?(%w[n 0 no false])
