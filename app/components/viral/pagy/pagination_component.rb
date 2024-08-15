@@ -17,7 +17,7 @@ module Viral
       end
 
       def current_link_classes
-        "#{default_link_classes} text-primary-600 bg-primary-50 hover:bg-primary-100 hover:text-primary-700 dark:bg-slate-700 dark:text-white" # rubocop:disable Layout/LineLength
+        "#{default_link_classes} text-primary-800 bg-primary-50 hover:bg-primary-100 hover:text-primary-700 dark:bg-slate-700 dark:text-white" # rubocop:disable Layout/LineLength
       end
 
       private
