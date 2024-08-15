@@ -230,27 +230,60 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       sample: Sample.find_by(name: 'Vibrio cholerae/Outbreak 2023 Sample 10')
     }
   ]
-  export_params.each_with_index do |export_param, index|
+  export_params.each_with_index do |export_param, index| # rubocop:disable Metrics/BlockLength
     namespace_id = index.even? ? export_param[:sample].project.namespace.id : export_param[:sample].project.parent.id
+    metadata_fields = if index.even?
+                        export_param[:sample].project.namespace.metadata_fields
+                      else
+                        export_param[:sample].project.parent.metadata_fields
+                      end
     # export with status=processing and no attachment
     DataExport.create(
       user: export_param[:user],
-      name: index.even? ? "Seeded export #{index + 1}" : nil,
-      export_parameters: { ids: [export_param[:sample].id], namespace_id: },
+      name: index.even? ? "Seeded sample export #{index + 1}" : nil,
+      export_parameters: { ids: [export_param[:sample].id], namespace_id:,
+                           attachment_formats: Attachment::FORMAT_REGEX.keys },
       status: 'processing',
       export_type: 'sample',
       email_notification: index.even? && true
     )
-    # export with status=ready with zip attachment
-    data_export = DataExport.create(
+
+    DataExport.create(
       user: export_param[:user],
-      name: index.even? ?  nil : "Seeded export #{index + 1}",
-      export_parameters: { ids: [export_param[:sample].id], namespace_id: },
+      name: index.even? ?  "Seeded sample export #{index + 1}" : nil,
+      export_parameters: { ids: [export_param[:sample].id],
+                           namespace_id:,
+                           metadata_fields:,
+                           linelist_format: index.even? ? 'csv' : 'xlsx' },
+      status: 'processing',
+      export_type: 'linelist',
+      email_notification: index.even? || true
+    )
+
+    # export with status=ready with zip attachment
+    sample_export = DataExport.create(
+      user: export_param[:user],
+      name: index.even? ?  nil : "Seeded sample export #{index + 1}",
+      export_parameters: { ids: [export_param[:sample].id], namespace_id:,
+                           attachment_formats: Attachment::FORMAT_REGEX.keys },
       status: 'processing',
       export_type: 'sample',
       email_notification: index.even? || true
     )
-    DataExports::CreateJob.perform_now(data_export)
+    DataExports::CreateJob.perform_now(sample_export)
+
+    linelist_export = DataExport.create(
+      user: export_param[:user],
+      name: index.even? ?  nil : "Seeded linelist export #{index + 1}",
+      export_parameters: { ids: [export_param[:sample].id],
+                           namespace_id:,
+                           metadata_fields:,
+                           linelist_format: index.even? ? 'csv' : 'xlsx' },
+      status: 'processing',
+      export_type: 'linelist',
+      email_notification: index.even? || true
+    )
+    DataExports::CreateJob.perform_now(linelist_export)
   end
 end
 
