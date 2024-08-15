@@ -10,3 +10,5 @@ fr:
     samples: Samples
     selected: Selected
   select_page: Select / Deselect visible samples
+  limit:
+￼    item: Sample
