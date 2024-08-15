@@ -195,7 +195,7 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
   )
 end
 
-def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   export_params = [
     {
       user: User.find_by(email: 'admin@email.com'),
