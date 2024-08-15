@@ -162,7 +162,7 @@ module Groups
         assert_selector 'tr', count: @group_links_count + header_row_count
 
         find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
-                                                                          .native.send_keys(:return)
+                                                                          .send_keys(:return)
 
         assert_text I18n.t(:'groups.group_links.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
@@ -192,7 +192,7 @@ module Groups
       namespace_group_link.destroy
 
       find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
-                                                                        .native.send_keys(:return)
+                                                                        .send_keys(:return)
 
       assert_text 'Resource not found'
     end

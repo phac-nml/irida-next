@@ -226,10 +226,8 @@ module Groups
         # scroll to the end of the div
         div.execute_script('this.scrollLeft = this.scrollWidth')
 
-        find("#member-#{group_member.id}-expiration").with_playwright_element_handle do |handle|
-          handle.type(expiry_date)
-          handle.press('Enter')
-        end
+        find("#member-#{group_member.id}-expiration").click.set(expiry_date)
+                                                     .send_keys(:return)
       end
 
       within %(turbo-frame[id="member-update-alert"]) do

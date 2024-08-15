@@ -61,7 +61,7 @@ module Projects
       within('dialog') do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
         assert_link text: 'phac-nml/iridanextexample', count: 1
-        click 'phac-nml/iridanextexample'
+        click_on 'phac-nml/iridanextexample'
       end
 
       within('dialog[open].dialog--size-xl') do

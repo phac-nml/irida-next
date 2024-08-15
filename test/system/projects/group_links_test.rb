@@ -166,7 +166,7 @@ module Projects
         assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
         find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
-                                                                          .native.send_keys(:return)
+                                                                          .send_keys(:return)
 
         assert_text I18n.t(:'projects.group_links.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
@@ -196,7 +196,7 @@ module Projects
       namespace_group_link.destroy
 
       find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
-                                                                        .native.send_keys(:return)
+                                                                        .send_keys(:return)
 
       assert_text 'Resource not found'
     end
