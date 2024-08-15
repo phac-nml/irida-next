@@ -11,14 +11,15 @@ module DataExports
       @project1 = projects(:project1)
       @workflow_execution1 = workflow_executions(:workflow_execution_valid)
       @workflow_execution2 = workflow_executions(:irida_next_example_completed)
+      @workflow_execution3 = workflow_executions(:automated_workflow_execution)
+      @workflow_execution4 = workflow_executions(:automated_example_completed)
     end
 
     test 'create data export with valid sample export params' do
       valid_params = { 'export_type' => 'sample',
                        'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
                                                 'namespace_id' => @project1.namespace.id,
-                                                'attachment_formats' =>
-                               Attachment::FORMAT_REGEX.keys } }
+                                                'attachment_formats' => Attachment::FORMAT_REGEX.keys } }
 
       assert_difference -> { DataExport.count } => 1 do
         DataExports::CreateService.new(@user, valid_params).execute
@@ -29,8 +30,7 @@ module DataExports
       invalid_params = { 'export_type' => 'invalid',
                          'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
                                                   'namespace_id' => @project1.namespace.id,
-                                                  'attachment_formats' =>
-                               Attachment::FORMAT_REGEX.keys } }
+                                                  'attachment_formats' => Attachment::FORMAT_REGEX.keys } }
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
@@ -42,8 +42,7 @@ module DataExports
       invalid_params = { 'export_type' => 'sample',
                          'export_parameters' => { 'ids' => [99_999_999_999_999],
                                                   'namespace_id' => @project1.namespace.id,
-                                                  'attachment_formats' =>
-                               Attachment::FORMAT_REGEX.keys } }
+                                                  'attachment_formats' => Attachment::FORMAT_REGEX.keys } }
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
@@ -83,8 +82,7 @@ module DataExports
       valid_params = { 'export_type' => 'sample',
                        'export_parameters' => { 'ids' => [@sample1.id, @sample2.id],
                                                 'namespace_id' => @project1.namespace.id,
-                                                'attachment_formats' =>
-                               Attachment::FORMAT_REGEX.keys } }
+                                                'attachment_formats' => Attachment::FORMAT_REGEX.keys } }
       user = users(:steve_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { DataExports::CreateService.new(user, valid_params).execute }
@@ -103,7 +101,7 @@ module DataExports
 
     test 'create data export with valid workflow execution export params' do
       valid_params = { 'export_type' => 'analysis',
-                       'export_parameters' => { 'ids' => [@workflow_execution1.id] } }
+                       'export_parameters' => { 'ids' => [@workflow_execution1.id], 'analysis_type' => 'user' } }
 
       assert_difference -> { DataExport.count } => 1 do
         DataExports::CreateService.new(@user, valid_params).execute
@@ -112,11 +110,11 @@ module DataExports
 
     test 'cannot create data export with invalid workflow execution id' do
       invalid_params = { 'export_type' => 'analysis',
-                         'export_parameters' => { 'ids' => [99_999_999_999_999] } }
+                         'export_parameters' => { 'ids' => [99_999_999_999_999], 'analysis_type' => 'user' } }
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
-        assert_equal I18n.t('services.data_exports.create.invalid_workflow_execution_id'),
+        assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
                      data_export.errors.full_messages.first
       end
     end
@@ -131,41 +129,59 @@ module DataExports
       end
     end
 
-    test 'cannot create analysis export with no ids' do
+    test 'cannot create export with no ids' do
       invalid_params = { 'export_type' => 'analysis',
-                         'export_parameters' => { 'ids' => [] } }
+                         'export_parameters' => { 'ids' => [], 'analysis_type' => 'user' } }
 
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
-        assert_equal I18n.t('services.data_exports.create.invalid_workflow_execution_id_count'),
-                     data_export.errors.full_messages.first
+        assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_ids'),
+                     data_export.errors[:export_parameters].first
       end
     end
 
-    test 'valid authorization to create workflow execution export' do
-      valid_params = { 'export_type' => 'analysis',
-                       'export_parameters' => { 'ids' => [@workflow_execution1.id] } }
+    test 'cannot create export with missing ids param' do
+      invalid_params = { 'export_type' => 'sample',
+                         'export_parameters' => { 'namespace_id' => @project1.namespace.id,
+                                                  'attachment_formats' => Attachment::FORMAT_REGEX.keys } }
 
-      assert_authorized_to(:export_workflow_execution_data?, @workflow_execution1, with: WorkflowExecutionPolicy,
-                                                                                   context: { user: @user }) do
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_ids'),
+                     data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'valid authorization to create workflow execution export with analysis_type project' do
+      valid_params = { 'export_type' => 'analysis',
+                       'export_parameters' => { 'ids' => [@workflow_execution3.id, @workflow_execution4.id],
+                                                'analysis_type' => 'project',
+                                                'namespace_id' => @project1.namespace.id } }
+
+      assert_authorized_to(:export_data?, @project1.namespace, with: Namespaces::ProjectNamespacePolicy,
+                                                               context: { user: @user }) do
         DataExports::CreateService.new(@user, valid_params).execute
       end
     end
 
     test 'analyst authorized to create workflow execution export' do
       valid_params = { 'export_type' => 'analysis',
-                       'export_parameters' => { 'ids' => [@workflow_execution1.id] } }
+                       'export_parameters' => { 'ids' => [@workflow_execution3.id, @workflow_execution4.id],
+                                                'analysis_type' => 'project',
+                                                'namespace_id' => @project1.namespace.id } }
       user = users(:james_doe)
 
-      assert_authorized_to(:export_workflow_execution_data?, @workflow_execution1, with: WorkflowExecutionPolicy,
-                                                                                   context: { user: }) do
+      assert_authorized_to(:export_data?, @project1.namespace, with: Namespaces::ProjectNamespacePolicy,
+                                                               context: { user: }) do
         DataExports::CreateService.new(user, valid_params).execute
       end
     end
 
     test 'guest unauthorized to create workflow execution export' do
       valid_params = { 'export_type' => 'analysis',
-                       'export_parameters' => { 'ids' => [@workflow_execution1.id] } }
+                       'export_parameters' => { 'ids' => [@workflow_execution3.id, @workflow_execution4.id],
+                                                'analysis_type' => 'project',
+                                                'namespace_id' => @project1.namespace.id } }
       user = users(:ryan_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { DataExports::CreateService.new(user, valid_params).execute }
@@ -173,7 +189,9 @@ module DataExports
 
     test 'data export with valid parameters but unauthorized for workflow execution export' do
       valid_params = { 'export_type' => 'analysis',
-                       'export_parameters' => { 'ids' => [@workflow_execution1.id] } }
+                       'export_parameters' => { 'ids' => [@workflow_execution3.id, @workflow_execution4.id],
+                                                'analysis_type' => 'project',
+                                                'namespace_id' => @project1.namespace.id } }
       user = users(:steve_doe)
 
       assert_raises(ActionPolicy::Unauthorized) { DataExports::CreateService.new(user, valid_params).execute }
@@ -182,12 +200,24 @@ module DataExports
         DataExports::CreateService.new(user, valid_params).execute
       end
 
-      assert_equal WorkflowExecutionPolicy, exception.policy
-      assert_equal :export_workflow_execution_data?, exception.rule
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :export_data?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.workflow_execution.export_workflow_execution_data?',
-                          id: @workflow_execution1.id),
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.export_data?',
+                          name: @project1.name),
                    exception.result.message
+    end
+
+    test 'cannot create analysis data export of analysis_type user without proper authorization' do
+      valid_params = { 'export_type' => 'analysis',
+                       'export_parameters' => { 'ids' => [@workflow_execution1.id, @workflow_execution2.id],
+                                                'analysis_type' => 'user' } }
+      user = users(:empty_doe)
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(user, valid_params).execute
+        assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
+                     data_export.errors.full_messages.first
+      end
     end
 
     test 'create valid csv linelist data export and namespace_type group' do

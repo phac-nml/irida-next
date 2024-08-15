@@ -17,7 +17,7 @@ class DataExport < ApplicationRecord
   private
 
   def validate_export_parameters
-    unless export_parameters.key?('ids')
+    if !export_parameters.key?('ids') || (export_parameters.key?('ids') && export_parameters['ids'].empty?)
       errors.add(:export_parameters,
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_ids'))
     end

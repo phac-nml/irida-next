@@ -43,6 +43,18 @@
           name="data_export[export_parameters][ids][]"
           value="<%= workflow_execution_id %>"
         >
+        <input
+          type="hidden"
+          name="data_export[export_parameters][analysis_type]"
+          value="<%= analysis_type %>"
+        >
+        <% unless namespace_id.nil? %>
+          <input
+            type="hidden"
+            name="data_export[export_parameters][namespace_id]"
+            value="<%= namespace_id %>"
+          >
+        <% end %>
         <div>
           <%= form.submit t(".submit_button"),
                       data: {

@@ -8,11 +8,13 @@
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <div class="flex flex-row">
-      <% if allowed_to?(:export_workflow_execution_data?, @workflow_execution) %>
+      <% if allowed_to?(:export_data?, @namespace.project) %>
         <% if @workflow_execution.completed? %>
           <%= link_to t("projects.workflow_executions.show.create_export_button"),
           new_data_export_path(
             export_type: "analysis",
+            analysis_type: "project",
+            namespace_id: @namespace.id,
             workflow_execution_id: @workflow_execution.id,
           ),
           data: {
@@ -23,6 +25,8 @@
           <%= link_to t("projects.workflow_executions.show.create_export_button"),
           new_data_export_path(
             export_type: "analysis",
+            analysis_type: "project",
+            namespace_id: @namespace.id,
             workflow_execution_id: @workflow_execution.id,
           ),
           data: {

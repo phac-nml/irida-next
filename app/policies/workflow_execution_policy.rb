@@ -2,14 +2,6 @@
 
 # Policy for workflow execution authorization
 class WorkflowExecutionPolicy < ApplicationPolicy
-  def export_workflow_execution_data?
-    return true if record.submitter.id == user.id
-    return true if Member.can_create_export?(user, record.namespace) == true
-
-    details[:id] = record.id
-    false
-  end
-
   def destroy? # rubocop:disable Metrics/AbcSize
     return true if record.submitter.id == user.id
     return true if Member.can_modify?(user, record.namespace) == true

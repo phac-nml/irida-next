@@ -292,7 +292,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should create new analysis export withmultiple ids' do
+  test 'should create new analysis export with multiple ids' do
     post data_exports_path(format: :turbo_stream),
          params: {
            data_export: {

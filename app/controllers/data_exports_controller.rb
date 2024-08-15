@@ -133,7 +133,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def locals
     case params[:export_type]
     when 'analysis'
-      { open: true, workflow_execution_id: params[:workflow_execution_id] }
+      { open: true, workflow_execution_id: params[:workflow_execution_id], analysis_type: params['analysis_type'],
+        namespace_id: params['analysis_type'] == 'project' ? params[:namespace_id] : nil }
     when 'sample'
       { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort }
     when 'linelist'
