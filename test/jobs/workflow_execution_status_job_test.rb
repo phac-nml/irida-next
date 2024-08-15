@@ -65,8 +65,8 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
     end
 
-    assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
     assert_performed_jobs(6, only: WorkflowExecutionStatusJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
     assert @workflow_execution.reload.completing?
   end
 
