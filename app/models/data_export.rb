@@ -21,9 +21,9 @@ class DataExport < ApplicationRecord
       errors.add(:export_parameters,
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_ids'))
     end
-
+    puts 'in validate start'
     validate_attachment_formats if export_type == 'sample'
-    validate_namespace_id unless export_type == 'analysis'
+    validate_namespace_id unless export_type == 'analysis' && export_parameters['analysis_type'] == 'user'
     validate_linelist_export_parameters if export_type == 'linelist'
   end
 

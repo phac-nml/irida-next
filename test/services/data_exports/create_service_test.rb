@@ -73,8 +73,8 @@ module DataExports
                                                 'attachment_formats' =>
                                Attachment::FORMAT_REGEX.keys } }
 
-      assert_authorized_to(:export_sample_data?, @project1.namespace, with: Namespaces::ProjectNamespacePolicy,
-                                                                      context: { user: @user }) do
+      assert_authorized_to(:export_data?, @project1.namespace, with: Namespaces::ProjectNamespacePolicy,
+                                                               context: { user: @user }) do
         DataExports::CreateService.new(@user, valid_params).execute
       end
     end
@@ -94,9 +94,9 @@ module DataExports
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :export_sample_data?, exception.rule
+      assert_equal :export_data?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.export_sample_data?',
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.export_data?',
                           name: @project1.name),
                    exception.result.message
     end

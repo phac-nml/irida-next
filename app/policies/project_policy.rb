@@ -136,7 +136,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def export_sample_data?
+  def export_data?
     return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     return true if Member.can_export_data?(user, record.namespace) == true
 

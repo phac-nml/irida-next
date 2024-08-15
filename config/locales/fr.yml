@@ -72,7 +72,7 @@ fr:
         submit_workflow?: You are not authorized to submit workflows for samples within group %{name} on this server.
         create_bot_accounts?: You are not authorized to create bot accounts for group %{name} on this server.
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
-        export_sample_data?: You are not authorized to export samples from project %{name} on this server.
+        export_data?: You are not authorized to export data from project %{name} on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for group %{name} on this server.
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
@@ -109,7 +109,7 @@ fr:
         view_automated_workflow_executions?: "You are not authorized to view automated workflow executions for project %{name}"
         submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
         view_workflow_executions?: You are not authorized to view workflow executions for project %{name} on this server.
-        export_sample_data?: You are not authorized to export samples from project %{name} on this server.
+        export_data?: You are not authorized to export data from project %{name} on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
@@ -182,8 +182,8 @@ fr:
               missing_metadata_fields: must contain metadata fields for linelist exports
               missing_file_format: must contain a format for linelist exports
               invalid_file_format: must have either a .xlsx or .csv format for linelist exports
-              missing_namespace_type: must have a namespace type for linelist exports
-              invalid_namespace_type: must have a namespace type of Group or Project for linelist exports
+              missing_namespace_id: must have a namespace id
+              invalid_namespace_id: must have valid namespace
               invalid_attachment_format: "%{invalid_formats} are not valid attachment formats"
               missing_attachment_formats: must have attachment formats for sample exports
         namespace:
@@ -1504,8 +1504,7 @@ fr:
     data_exports:
       create:
         invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
-        invalid_workflow_execution_id: A workflow execution selected for export does not exist.
-        invalid_workflow_execution_id_count: An analysis export may only contain one workflow execution.
+        invalid_export_workflow_executions: Unable to create export due to either workflow execution permissions or not found workflow executions.
     members:
       create:
         role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"

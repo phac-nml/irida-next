@@ -73,8 +73,8 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   test '#clone_sample_into_project?' do
     assert @policy.clone_sample_into_project?
   end
-  test '#export_sample_data?' do
-    assert @policy.export_sample_data?
+  test '#export_data?' do
+    assert @policy.export_data?
   end
 
   test '#submit_workflow?' do
