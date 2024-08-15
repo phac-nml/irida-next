@@ -209,7 +209,7 @@ class CreateSampleMutationTest < ActiveSupport::TestCase
 
     assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
 
-    expected_error = { 'message' => 'gid://irida/Project/not-a-valid-uuid could not be found',
+    expected_error = { 'message' => "Couldn't find Project with 'id'=not-a-valid-uuid",
                        'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['createSample'] }
 
     assert_equal expected_error, result['errors'][0]

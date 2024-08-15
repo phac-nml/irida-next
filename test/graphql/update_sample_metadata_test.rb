@@ -221,7 +221,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                                               metadata: { key1: 'value1' } })
 
     expected_error = [
-      { 'message' => 'gid://irida/Sample/doesnotexist could not be found', 'locations' => [{ 'line' => 2, 'column' => 3 }],
+      { 'message' => "Couldn't find Sample with 'id'=doesnotexist", 'locations' => [{ 'line' => 2, 'column' => 3 }],
         'path' => ['updateSampleMetadata'] }
     ]
     assert_equal expected_error, result['errors']

@@ -254,7 +254,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
     expected_error = [
-      { 'path' => ['attachment', blob_file_b.signed_id],
+      { 'path' => ['attachment', blob_file_a2.signed_id],
         'message' => 'checksum matches existing file' }
     ]
     assert_equal expected_error, data['errors']
@@ -412,7 +412,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { files: [blob_file.signed_id],
                                               sampleId: 'gid://irida/Sample/doesnotexist' })
-    expected_error = { 'message' => 'gid://irida/Sample/doesnotexist could not be found',
+    expected_error = { 'message' => "Couldn't find Sample with 'id'=doesnotexist",
                        'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['attachFilesToSample'] }
     assert_equal expected_error, sample['errors'][0]
   end
