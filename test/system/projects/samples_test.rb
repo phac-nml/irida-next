@@ -1936,6 +1936,7 @@ module Projects
       click_on I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.files')
       within %(turbo-frame[id="table-listing"]) do
+        assert_selector 'table #attachments-table-body tr', count: 6
         assert all('input[type="checkbox"]')[0].checked?
         assert all('input[type="checkbox"]')[2].checked?
         assert all('input[type="checkbox"]')[4].checked?
