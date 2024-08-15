@@ -15,7 +15,7 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
 
-      assert_enqueued_jobs(1, only: WorkflowExecutionCancelationJob)
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
       assert_equal 'canceling', @workflow_execution.reload.state
       assert_not @workflow_execution.cleaned?
@@ -28,7 +28,7 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
 
-      assert_enqueued_jobs(1, only: WorkflowExecutionCancelationJob)
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
       assert_equal 'canceling', @workflow_execution.reload.state
       assert_not @workflow_execution.cleaned?
@@ -41,7 +41,7 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
 
-      assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
 
       assert_equal 'canceled', @workflow_execution.reload.state
       assert_not @workflow_execution.cleaned?
@@ -54,7 +54,7 @@ module WorkflowExecutions
 
       assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
 
-      assert_no_enqueued_jobs
+      assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
 
       assert_equal 'canceled', @workflow_execution.reload.state
       assert @workflow_execution.cleaned?

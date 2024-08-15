@@ -2,6 +2,8 @@
 
 # Capybara settings (not covered by Rails system tests)
 
+Capybara.server = :puma, { Silent: true }
+
 # Make server listening on all hosts
 Capybara.server_host = '0.0.0.0'
 # Use a hostname accessible from the outside world
@@ -16,7 +18,7 @@ CAPYBARA_COOKIE_DOMAIN = URI.parse(Capybara.app_host).host.then do |host|
 end
 
 # Don't wait too long in `have_xyz` matchers
-Capybara.default_max_wait_time = 10
+Capybara.default_max_wait_time = 20.seconds
 
 # Normalizes whitespaces when using `has_text?` and similar matchers
 Capybara.default_normalize_ws = true

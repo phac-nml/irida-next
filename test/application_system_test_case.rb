@@ -7,8 +7,6 @@ require 'test_helpers/capybara_setup'
 require 'test_helpers/cuprite_helpers'
 require 'test_helpers/cuprite_setup'
 require 'test_helpers/html5_helpers'
-require 'action_dispatch/system_testing/server'
-ActionDispatch::SystemTesting::Server.silence_puma = true
 require 'action_dispatch/system_test_case'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase

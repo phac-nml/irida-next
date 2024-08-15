@@ -15,13 +15,18 @@ module Irida
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
-    config.eager_load_paths << Rails.root.join('lib')
+    # config.eager_load_paths << Rails.root.join("extras")
 
     # Skip adding routes when generating a controller since we have broken
     # our routes into separate files.
@@ -56,32 +61,6 @@ module Irida
     config.i18n.available_locales = %i[en fr]
     # Set default locale
     config.i18n.default_locale = :en
-
-    # Set ActiveJob adapter
-    config.active_job.queue_adapter = :good_job
-    # good_job configuration
-    config.good_job.enable_cron = ENV.fetch('ENABLE_CRON', 'true') == 'true'
-    cron_cleanup_after_days = ENV.fetch('CRON_CLEANUP_AFTER_DAYS', '7')
-    # Configure cron with a hash that has a unique key for each recurring job
-    config.good_job.cron = {
-      attachments_cleanup_task: {
-        cron: '0 1 * * *', # Daily, 1 AM
-        class: 'AttachmentsCleanupJob', # job class as a String, must be an ActiveJob job
-        kwargs: { days_old: cron_cleanup_after_days.to_i }, # number of days old an attachment must be for deletion
-        description: 'Permanently deletes attachments that have been soft-deleted some time ago.'
-      },
-      samples_cleanup_task: {
-        cron: '0 2 * * *', # Daily, 2 AM
-        class: 'SamplesCleanupJob', # job class as a String, must be an ActiveJob job
-        kwargs: { days_old: cron_cleanup_after_days.to_i }, # number of days old a sample must be for deletion
-        description: 'Permanently deletes samples that have been soft-deleted some time ago.'
-      },
-      data_exports_cleanup_task: {
-        cron: '0 3 * * *', # Daily, 3 AM
-        class: 'DataExports::CleanupJob', # job class as a String, must be an ActiveJob job
-        description: 'Permanently deletes expired data exports.'
-      }
-    }
 
     # Omniauth Configuration
     config.auth_config = config_for(Rails.root.join('config/authentication/auth_config.yml'))

@@ -1,14 +1,6 @@
 {
-  "name": "irida-next-core",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "name": "irida-next",
+  "private": true,
   "devDependencies": {
     "axe-core": "^4.6.3",
     "prettier": "^3.0.0",
