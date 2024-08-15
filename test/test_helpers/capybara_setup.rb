@@ -18,7 +18,7 @@ CAPYBARA_COOKIE_DOMAIN = URI.parse(Capybara.app_host).host.then do |host|
 end
 
 # Don't wait too long in `have_xyz` matchers
-Capybara.default_max_wait_time = 20
+Capybara.default_max_wait_time = 15
 
 # Normalizes whitespaces when using `has_text?` and similar matchers
 Capybara.default_normalize_ws = true

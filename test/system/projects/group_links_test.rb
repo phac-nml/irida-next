@@ -165,7 +165,7 @@ module Projects
         visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
         assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
-        find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
+        find("#invited-group-#{namespace_group_link.group.id}-expiration").click.send_keys(expiry_date)
                                                                           .send_keys(:return)
 
         assert_text I18n.t(:'projects.group_links.update.success',
@@ -195,7 +195,7 @@ module Projects
 
       namespace_group_link.destroy
 
-      find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
+      find("#invited-group-#{namespace_group_link.group.id}-expiration").click.send_keys(expiry_date)
                                                                         .send_keys(:return)
 
       assert_text 'Resource not found'

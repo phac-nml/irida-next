@@ -222,7 +222,7 @@ module Projects
         click_on I18n.t(:'projects.new.submit')
       end
 
-      new_project = Project.last
+      new_project = @user.namespace.project_namespaces.last.project
       assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
 
@@ -325,7 +325,7 @@ module Projects
       visit namespace_project_members_url(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      find("#member-#{project_member.id}-expiration").click.set(expiry_date)
+      find("#member-#{project_member.id}-expiration").click.send_keys(expiry_date)
                                                      .send_keys(:return)
 
       within %(turbo-frame[id="member-update-alert"]) do

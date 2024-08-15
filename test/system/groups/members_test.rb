@@ -216,7 +216,7 @@ module Groups
 
     test 'can update member expiration' do
       group_member = members(:group_one_member_joan_doe)
-      expiry_date = (Time.zone.today + 1).strftime('%Y-%m-%d')
+      expiry_date = (Time.zone.today + 2).strftime('%Y-%m-%d')
 
       visit group_members_url(@namespace)
 
@@ -226,15 +226,13 @@ module Groups
         # scroll to the end of the div
         div.execute_script('this.scrollLeft = this.scrollWidth')
 
-        find("#member-#{group_member.id}-expiration").click.set(expiry_date)
+        find("#member-#{group_member.id}-expiration").click.send_keys(expiry_date)
                                                      .send_keys(:return)
       end
 
       within %(turbo-frame[id="member-update-alert"]) do
         assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)
       end
-
-      group_member_row = find(:table_row, [group_member.user.email])
     end
 
     test 'cannot update member expiration' do

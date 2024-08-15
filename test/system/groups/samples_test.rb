@@ -355,7 +355,7 @@ module Groups
         assert_selector 'tr th', text: @sample9.puid
       end
 
-      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}'").click
+      click_button I18n.t(:'components.list_filter.title')
       within 'dialog' do
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
         find("input[name='q[name_or_puid_in][]']").send_keys "#{@sample1.puid}, #{@sample2.puid}"
@@ -372,7 +372,7 @@ module Groups
         assert_no_selector 'tr th', text: @sample9.puid
       end
 
-      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
+      click_button I18n.t(:'components.list_filter.title')
       within 'dialog' do
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
         click_button I18n.t(:'components.list_filter.clear')

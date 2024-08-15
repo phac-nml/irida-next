@@ -2066,7 +2066,9 @@ module Projects
       click_button I18n.t(:'components.list_filter.title')
       within '#list-filter-dialog' do
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.puid}, #{@sample2.puid}"
+        find(:fillable_field, I18n.t(:'components.list_filter.description')).send_keys(
+          "#{@sample1.puid}, #{@sample2.puid}"
+        )
         assert_selector 'span.label', count: 1
         assert_selector 'span.label', text: @sample1.puid
         find("input[name='q[name_or_puid_in][]']").text @sample2.puid
@@ -2398,7 +2400,9 @@ module Projects
       click_button I18n.t(:'components.list_filter.title')
       within '#list-filter-dialog' do |dialog|
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        fill_in I18n.t(:'components.list_filter.description'), with: long_filter_text
+        find(:fillable_field, I18n.t(:'components.list_filter.description')).send_keys(
+          long_filter_text
+        )
         assert_selector 'span.label', count: 500
         dialog.scroll_to(dialog.find('button', text: I18n.t(:'components.list_filter.apply')), align: :bottom)
         click_button I18n.t(:'components.list_filter.apply')

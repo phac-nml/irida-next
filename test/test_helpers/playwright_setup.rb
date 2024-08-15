@@ -12,8 +12,7 @@ Capybara.register_driver(:irida_next_playwright) do |app|
     window_size: [1400, 1400],
     # Allow running Chrome in a headful mode by setting HEADLESS env
     # var to a falsey value
-    headless: !ENV['HEADLESS'].in?(%w[n 0 no false]),
-    slowMo: 60
+    headless: !ENV['HEADLESS'].in?(%w[n 0 no false])
   )
 end
 
