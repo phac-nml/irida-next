@@ -1,0 +1,52 @@
+<% a = helpers.pagy_anchor(@pagy, anchor_string: 'data-turbo-action="replace"') %>
+<nav class="pagy nav" aria-label="Pages">
+  <ul class="inline-flex h-10 -space-x-px text-base">
+    <%# Previous page link %>
+    <li>
+      <% if @pagy.prev %>
+        <%== a.(
+          @pagy.prev,
+          t(".previous"),
+          aria_label: t(".previous"),
+          classes: "#{active_link_classes} border-e-0 rounded-s-lg",
+        ) %>
+      <% else %>
+        <%= link_to t(".previous"),
+        nil,
+        class: "#{disabled_link_classes} border-e-0 rounded-s-lg",
+        data: {
+          "aria-disabled": true,
+        } %>
+      <% end %>
+    </li>
+    <%# Page links (series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36]) %>
+    <% @pagy.series.each do |item| %>
+      <li>
+        <% if item.is_a?(Integer) %>
+          <%== a.(item, classes: active_link_classes) %>
+        <% elsif item.is_a?(String) %>
+          <%= link_to item, nil, class: current_link_classes, data: { "aria-disabled": true } %>
+
+        <% elsif item == :gap %>
+          <%= link_to "...",
+          nil,
+          class: disabled_link_classes,
+          data: {
+            "aria-disabled": true,
+          } %>
+        <% end %>
+      </li>
+    <% end %>
+    <%# Next page link %>
+    <% if @pagy.next %>
+      <%== a.(@pagy.next, t(".next"), classes: "#{active_link_classes} rounded-e-lg") %>
+    <% else %>
+      <%= link_to t(".next"),
+      nil,
+      class: "#{disabled_link_classes} rounded-e-lg cursor-default",
+      data: {
+        "aria-disabled": true,
+      } %>
+    <% end %>
+  </ul>
+</nav>
