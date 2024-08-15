@@ -42,12 +42,14 @@ module DataExports
     end
 
     def validate_analysis_ids
-      workflow_executions = if params['export_parameters']['analysis_type'] == 'automated'
-                              authorized_export_automated_workflows
+      puts params
+      workflow_executions = if params['export_parameters']['analysis_type'] == 'project'
+                              authorized_export_project_workflows
                             else
                               authorized_export_user_workflows
                             end
-
+      puts 'after scope'
+      puts workflow_executions.count
       return unless workflow_executions.count != params['export_parameters']['ids'].count
 
       raise DataExportCreateError,
@@ -66,7 +68,8 @@ module DataExports
         .where(id: sample_ids)
     end
 
-    def authorized_export_automated_workflows
+    def authorized_export_project_workflows
+      puts 'in project workflow'
       project_namespace = Namespace.find(params['export_parameters']['namespace_id'])
       authorize! project_namespace, to: :export_data?
       authorized_scope(WorkflowExecution, type: :relation, as: :automated,

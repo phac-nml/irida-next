@@ -121,14 +121,13 @@ module DataExports
       end
     end
 
-    test 'cannot create data export with more than 1 id' do
-      invalid_params = { 'export_type' => 'analysis',
-                         'export_parameters' => { 'ids' => [@workflow_execution1.id, @workflow_execution2.id] } }
+    test 'create data export with more than 1 id' do
+      params = { 'export_type' => 'analysis',
+                 'export_parameters' => { 'ids' => [@workflow_execution1.id, @workflow_execution2.id],
+                                          'analysis_type' => 'user' } }
 
-      assert_no_difference -> { DataExport.count } do
-        data_export = DataExports::CreateService.new(@user, invalid_params).execute
-        assert_equal I18n.t('services.data_exports.create.invalid_workflow_execution_id_count'),
-                     data_export.errors.full_messages.first
+      assert_difference -> { DataExport.count } => 1 do
+        DataExports::CreateService.new(@user, params).execute
       end
     end
 
@@ -418,6 +417,44 @@ module DataExports
         assert_equal I18n.t(
           'activerecord.errors.models.data_export.attributes.export_parameters.missing_attachment_formats'
         ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'cannot create analysis data export with missing analysis_type param' do
+      invalid_params = { 'export_type' => 'analysis',
+                         'export_parameters' => { 'ids' => [@workflow_execution1.id, @workflow_execution2.id] } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.missing_analysis_type'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'cannot create analysis data export with invalid analysis_type param' do
+      invalid_params = { 'export_type' => 'analysis',
+                         'export_parameters' => { 'ids' => [@workflow_execution1.id, @workflow_execution2.id],
+                                                  'analysis_type' => 'invalid_type' } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, invalid_params).execute
+        assert_equal I18n.t(
+          'activerecord.errors.models.data_export.attributes.export_parameters.invalid_analysis_type'
+        ), data_export.errors[:export_parameters].first
+      end
+    end
+
+    test 'create analysis export with analysis_type project' do
+      workflow3 = workflow_executions(:automated_workflow_execution)
+      workflow4 = workflow_executions(:automated_example_completed)
+      params = { 'export_type' => 'analysis',
+                 'export_parameters' => { 'ids' => [workflow3.id, workflow4.id],
+                                          'analysis_type' => 'project',
+                                          'namespace_id' => @project1.namespace.id } }
+
+      assert_difference -> { DataExport.count } => 1 do
+        DataExports::CreateService.new(@user, params).execute
       end
     end
   end
