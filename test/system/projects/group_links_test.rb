@@ -315,6 +315,7 @@ module Projects
       within first('thead') do
         click_on 'Group'
       end
+      assert_no_selector 'table thead th:first-child svg.icon-arrow_up'
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
@@ -334,6 +335,8 @@ module Projects
       within first('thead') do
         click_on 'Source'
       end
+      assert_no_selector 'table thead th:first-child svg.icon-arrow_down'
+      assert_no_selector 'table thead th:first-child svg.icon-arrow_up'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -353,6 +356,8 @@ module Projects
       within first('thead') do
         click_on 'Access Level'
       end
+      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -372,6 +377,8 @@ module Projects
       within first('thead') do
         click_on 'Expiration'
       end
+      assert_no_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_no_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name
