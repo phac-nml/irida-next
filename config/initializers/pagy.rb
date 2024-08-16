@@ -172,7 +172,7 @@ require 'pagy/extras/limit'
 
 # With the asset pipeline
 # Sprockets need to look into the pagy javascripts dir, so add it to the assets paths
-Rails.application.config.assets.paths << Pagy.root.join('javascripts')
+# Rails.application.config.assets.paths << Pagy.root.join('javascripts')
 
 # I18n
 
