@@ -19,7 +19,7 @@ module Mutations
     field :sample, Types::SampleType, description: 'The newly created sample.'
 
     def resolve(args)
-      project = get_project(args)
+      project = get_project_from_id_or_puid_args(args)
 
       if project.nil? || !project.persisted?
         user_errors = [{
@@ -40,17 +40,6 @@ module Mutations
     end
 
     private
-
-    def get_project(args)
-      if args[:project_id]
-        IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
-      else
-        project_namespace = Namespaces::ProjectNamespace.find_by!(puid: args[:project_puid])
-        project_namespace&.project
-      end
-    rescue ActiveRecord::RecordNotFound
-      nil
-    end
 
     def create_sample(project, args) # rubocop:disable Metrics/MethodLength
       sample = Samples::CreateService.new(

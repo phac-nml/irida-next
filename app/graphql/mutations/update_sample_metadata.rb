@@ -18,7 +18,7 @@ module Mutations
     field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
 
     def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-      sample = get_sample(args)
+      sample = get_sample_from_id_or_puid_args(args)
 
       if sample.nil?
         user_errors = [{
@@ -76,18 +76,6 @@ module Mutations
 
     def ready?(**_args)
       authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
-    end
-
-    private
-
-    def get_sample(args)
-      if args[:sample_id]
-        IridaSchema.object_from_id(args[:sample_id], { expected_type: Sample })
-      else
-        Sample.find_by!(puid: args[:sample_puid])
-      end
-    rescue ActiveRecord::RecordNotFound
-      nil
     end
   end
 end
