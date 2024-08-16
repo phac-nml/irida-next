@@ -29,17 +29,17 @@ module Groups
       visit group_samples_url(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       assert_selector 'tbody > tr', count: 20
       assert_text samples(:sample3).name
-      assert_selector 'a', text: I18n.t(:'components.pagination.next')
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_selector 'a', text: 'Next'
+      assert_selector 'a[data-aria-disabled="true"]', text: 'Previous'
 
-      click_on I18n.t(:'components.pagination.next')
-      assert_text 'Displaying items 21-26 of 26 in total'
+      click_on 'Next'
+      assert_text '21-26 of 26'
       assert_selector 'tbody > tr', count: 6
-      click_on I18n.t(:'components.pagination.previous')
-      assert_text 'Displaying items 1-20 of 26 in total'
+      click_on 'Previous'
+      assert_text '1-20 of 26'
       assert_selector 'tbody > tr', count: 20
 
       click_link samples(:sample3).name
@@ -53,19 +53,19 @@ module Groups
       visit group_samples_url(group)
 
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       assert_selector 'tbody > tr', count: 20
       assert_text samples(:sample1).name
       assert_text samples(:sample3).name
-      assert_selector 'a', text: I18n.t(:'components.pagination.next')
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_selector 'a', text: 'Next'
+      assert_selector 'a[data-aria-disabled="true"]', text: 'Previous'
 
-      click_on I18n.t(:'components.pagination.next')
-      assert_text 'Displaying items 21-26 of 26 in total'
+      click_on 'Next'
+      assert_text '21-26 of 26'
       assert_selector 'tbody > tr', count: 6
       assert_text samples(:sample28).name
-      click_on I18n.t(:'components.pagination.previous')
-      assert_text 'Displaying items 1-20 of 26 in total'
+      click_on 'Previous'
+      assert_text '1-20 of 26'
       assert_selector 'tbody > tr', count: 20
 
       click_link samples(:sample1).name
@@ -78,11 +78,11 @@ module Groups
 
       visit group_samples_url(group)
 
-      assert_selector 'a', text: I18n.t(:'components.pagination.next')
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_selector 'a', text: 'Next'
+      assert_selector 'a[data-aria-disabled="true"]', text: 'Previous'
 
-      click_on I18n.t(:'components.pagination.next')
-      assert_text 'Displaying items 21-26 of 26 in total'
+      click_on 'Next'
+      assert_text '21-26 of 26'
 
       click_link samples(:sample28).name
       assert_selector 'h1', text: samples(:sample28).name
@@ -99,7 +99,7 @@ module Groups
     test 'can search the list of samples by name' do
       visit group_samples_url(@group)
 
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       assert_selector 'table tbody tr', count: 20
       assert_text @sample1.name
       assert_text @sample2.name
@@ -116,7 +116,7 @@ module Groups
     test 'can sort the list of samples' do
       visit group_samples_url(@group)
 
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
       # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
       # they are ordered as expected against one another.
@@ -167,7 +167,7 @@ module Groups
     test 'can filter by name and then sort the list of samples' do
       visit group_samples_url(@group)
 
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -198,7 +198,7 @@ module Groups
     test 'can filter by puid and then sort the list of samples' do
       visit group_samples_url(@group)
 
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -206,7 +206,7 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 1'
       assert_selector 'table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -222,7 +222,7 @@ module Groups
     test 'can sort and then filter the list of samples by name' do
       visit group_samples_url(@group)
 
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -248,7 +248,7 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
 
-      assert_text 'Displaying 13 items'
+      assert_text '1-13 of 13'
       assert_selector 'table tbody tr', count: 13
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -258,7 +258,7 @@ module Groups
     test 'can sort and then filter the list of samples by puid' do
       visit group_samples_url(@group)
 
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -284,7 +284,7 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 1'
       assert_selector 'table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -293,7 +293,7 @@ module Groups
 
     test 'should be able to toggle metadata' do
       visit group_samples_url(@group)
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       click_on 'Last Updated'
       assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       assert_selector 'table thead tr th', count: 6
@@ -311,7 +311,7 @@ module Groups
 
     test 'can sort samples by metadata column' do
       visit group_samples_url(@group)
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       assert_selector 'table thead tr th', count: 6
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
@@ -348,7 +348,7 @@ module Groups
 
     test 'filtering samples by list of sample puids' do
       visit group_samples_url(@group)
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       within 'tbody' do
         assert_selector 'tr', count: 20
         assert_selector 'tr th', text: @sample1.puid
@@ -386,7 +386,7 @@ module Groups
 
     test 'selecting / deselecting all samples' do
       visit group_samples_url(@group)
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -428,7 +428,7 @@ module Groups
 
     test 'selecting / deselecting a page of samples' do
       visit group_samples_url(@group)
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -470,7 +470,7 @@ module Groups
 
     test 'selecting samples while filtering' do
       visit group_samples_url(@group)
-      assert_text 'Displaying items 1-20 of 26 in total'
+      assert_text '1-20 of 26'
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
