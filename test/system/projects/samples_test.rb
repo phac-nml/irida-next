@@ -408,7 +408,7 @@ module Projects
       namespace = groups(:group_hotel)
       project2 = projects(:projectHotel)
       visit namespace_project_samples_url(namespace, project2)
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 3'
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -541,7 +541,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 3'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
@@ -550,7 +550,7 @@ module Projects
       # Refresh the page to ensure the search is still active
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 3'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
@@ -667,7 +667,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 3'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -694,7 +694,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 1'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -738,7 +738,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 3'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -747,7 +747,7 @@ module Projects
 
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 3'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -776,7 +776,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_text 'Displaying 1 item'
+      assert_text '1-1 of 3'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
