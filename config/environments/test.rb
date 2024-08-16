@@ -77,8 +77,6 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = false
 
-  config.middleware.insert_before 0, Capybara::Lockstep::Middleware
-
   # Create a new production log file [daily, weekly, monthly,..]
   # if ENV['RAILS_DAILY_LOG_ROTATION'].present?
   #   logger           = ActiveSupport::Logger.new(config.default_log_file, 'daily')
