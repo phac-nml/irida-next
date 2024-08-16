@@ -92,10 +92,15 @@ module Namespaces
       users.find_by(user_type: User.user_types[:project_automation_bot])
     end
 
-    def retrieve_project_activity # rubocop:disable Metrics/MethodLength
+    def retrieve_project_activity # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       PublicActivity::Activity.where(
         trackable_id: id,
         trackable_type: 'Namespace'
+      ).or(
+        PublicActivity::Activity.where(
+          trackable_id: WorkflowExecution.with_deleted.where(namespace: self),
+          trackable_type: 'WorkflowExecution'
+        )
       ).or(
         PublicActivity::Activity.where(
           trackable_id: Sample.with_deleted.where(project:),
@@ -103,7 +108,8 @@ module Namespaces
         )
       ).or(
         PublicActivity::Activity.where(
-          trackable_id: Member.with_deleted.where(namespace: self).select(:id), trackable_type: 'Member'
+          trackable_id: Member.joins(:user).with_deleted.where(namespace: self).select(:id).where.not(user:
+          { user_type: User.user_types[:project_automation_bot] }), trackable_type: 'Member'
         )
       ).or(
         PublicActivity::Activity.where(

@@ -1,0 +1,16 @@
+<%= t(
+  @activity[:key],
+  user: @activity[:user],
+  href:
+    link_to(
+      @activity[:member].user.email,
+      namespace_project_members_path(
+        @activity[:member].namespace.project.parent,
+        @activity[:member].namespace.project,
+      ),
+      class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+    ),
+  namespace_type: @activity[:namespace_type],
+  name: @activity[:name],
+  member: @activity[:member].user.email,
+) %>

@@ -21,6 +21,16 @@ module WorkflowExecutions
 
       @workflow_execution.save
 
+      if @workflow_execution.submitter.automation_bot?
+        @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow.launch',
+                                                      owner: current_user,
+                                                      parameters:
+                                                      {
+                                                        workflow_id: @workflow_execution.id,
+                                                        workflow_name: @workflow_execution.name
+                                                      }
+      end
+
       @workflow_execution
     end
   end

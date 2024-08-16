@@ -1,0 +1,15 @@
+<%= t(
+  "#{@activity[:key]}",
+  user: @activity[:user],
+  sample_name: @activity[:sample].name,
+  href:
+    link_to(
+      @activity[:sample].puid,
+      namespace_project_sample_path(
+        @activity[:sample].project.parent,
+        @activity[:sample].project,
+        @activity[:sample],
+      ),
+      class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+    ),
+) %>

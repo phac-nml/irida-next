@@ -39,12 +39,6 @@
               selected: @current_page == t(:"projects.sidebar.workflow_executions"),
             ) %>
           <% end %>
-          <%= render section.with_item(
-            url: project_activity_path(@project),
-            icon: "beaker",
-            label: t(:"projects.sidebar.activity"),
-            selected: @current_page == t(:"projects.sidebar.activity").downcase
-          ) %>
           <% if allowed_to?(:update?, @project) %>
             <%= render section.with_multi_level_menu(
               title: t(:"projects.sidebar.settings"),
@@ -52,7 +46,8 @@
               selectable_pages: [
                 t(:"projects.sidebar.general"),
                 t(:"projects.sidebar.bot_accounts"),
-                t(:"projects.sidebar.automated_workflow_executions")
+                t(:"projects.sidebar.automated_workflow_executions"),
+                t(:"projects.sidebar.activity")
               ],
               current_page: @current_page
             ) do |multi_level_menu| %>
@@ -74,6 +69,11 @@
                     @current_page == t(:"projects.sidebar.automated_workflow_executions"),
                 ) %>
               <% end %>
+              <% multi_level_menu.with_menu_item(
+                url: project_activity_path(@project),
+                label: t(:"projects.sidebar.activity"),
+                selected: @current_page == t(:"projects.sidebar.activity"),
+              ) %>
             <% end %>
           <% end %>
         <% end %>

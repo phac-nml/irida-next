@@ -83,7 +83,8 @@ module Samples
                                              transferred_samples_ids: transferred_samples_ids.join
                                            }
 
-        @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from', owner: current_user,
+        @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from',
+                                               owner: current_user,
                                                parameters:
                                                {
                                                  project_name: @project.name,

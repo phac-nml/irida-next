@@ -45,15 +45,19 @@ module Projects
       new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace)
                                        .where(user_id: project_ancestor_member_user_ids).select(&:id)
 
+      Namespaces::ProjectNamespace.public_activity_off
+
       project.namespace.update(parent_id: new_namespace.id)
 
-      project.namespace.create_activity key: 'namespaces_project_namespace.transfer', owner: current_user,
+      Namespaces::ProjectNamespace.public_activity_on
+
+      project.namespace.create_activity action: :transfer, owner: current_user,
                                         parameters:
-                                        {
-                                          project_name: project.name,
-                                          old_namespace: old_namespace.name,
-                                          new_namespace: new_namespace.name
-                                        }
+      {
+        project_name: project.name,
+        old_namespace: @old_namespace.name,
+        new_namespace: @new_namespace.name
+      }
 
       UpdateMembershipsJob.perform_later(new_namespace_member_ids)
     end
