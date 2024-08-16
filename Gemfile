@@ -113,9 +113,6 @@ gem 'roo-xls'
 # activity tracking
 gem 'public_activity'
 
-# activity tracking
-gem 'public_activity'
-
 # create zip file for data exports
 gem 'zip_kit'
 
