@@ -308,7 +308,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
     # project samples page
     visit group_samples_url(@group1)
-    assert_text 'Displaying items 1-20 of 26'
+    assert_text '1-20 of 26'
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
