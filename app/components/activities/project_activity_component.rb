@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Activities
-  # Component for rendering a table of Samples
+  # Component for rendering an activity of type Namespace for Projects
   class ProjectActivityComponent < Component
     def initialize(activity: nil, **system_arguments)
       @activity = activity
