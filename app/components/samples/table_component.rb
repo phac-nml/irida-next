@@ -41,7 +41,7 @@ module Samples
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'samples-table'
-        args[:classes] = class_names(args[:classes], 'overflow-x-auto')
+        args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
         if @abilities[:select_samples]
           args[:data] ||= {}
           args[:data][:controller] = 'selection'
