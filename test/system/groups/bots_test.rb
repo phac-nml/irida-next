@@ -81,6 +81,8 @@ module Groups
         click_button I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.submit')
       end
 
+      assert_no_selector 'dialog[open]'
+
       within('#access-token-section') do
         bot_account_name = namespace.bots.last.email
 

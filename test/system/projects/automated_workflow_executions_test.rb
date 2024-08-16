@@ -108,7 +108,7 @@ module Projects
         click_button I18n.t(:'workflow_executions.submissions.create.update')
       end
 
-      wait_for_network_idle
+      assert_no_selector 'dialog[open]'
 
       # check the first item in the table for the new name
       within(first('table tbody tr')) do
