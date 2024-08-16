@@ -62,6 +62,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
   scope_for :relation, :user do |relation, options|
     user = options[:user]
+
     relation.where(submitter_id: user.id)
   end
 end

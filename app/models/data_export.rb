@@ -22,10 +22,20 @@ class DataExport < ApplicationRecord
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_ids'))
     end
 
-    validate_attachment_formats if export_type == 'sample'
-    validate_analysis_type if export_type == 'analysis'
+    validate_export_type_specific_params
+
     validate_namespace_id unless export_type == 'analysis' && export_parameters['analysis_type'] == 'user'
-    validate_linelist_export_parameters if export_type == 'linelist'
+  end
+
+  def validate_export_type_specific_params
+    case export_type
+    when 'sample'
+      validate_attachment_formats
+    when 'analysis'
+      validate_analysis_type
+    when 'linelist'
+      validate_linelist_export_parameters
+    end
   end
 
   def validate_attachment_formats
