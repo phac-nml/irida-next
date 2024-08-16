@@ -675,6 +675,7 @@ module Projects
       assert_no_text @sample3.name
 
       click_on 'Sample Name'
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       assert_selector '#samples-table table tbody tr', count: 1
       within first('tbody tr td:nth-child(2)') do
@@ -701,6 +702,7 @@ module Projects
       assert_no_text @sample3.name
 
       click_on 'Sample ID'
+      assert_selector 'table thead th:first-child svg.icon-arrow_up'
 
       assert_selector '#samples-table table tbody tr', count: 1
       within first('tbody tr th') do

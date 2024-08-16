@@ -5,7 +5,8 @@ require 'application_system_test_case'
 module Dashboard
   class ProjectsTest < ApplicationSystemTestCase
     def setup
-      login_as users(:john_doe)
+      @user = users(:john_doe)
+      login_as @user
       @project = projects(:project1)
     end
 
@@ -181,7 +182,7 @@ module Dashboard
         click_on I18n.t(:'projects.new.submit')
       end
 
-      new_project = Project.last
+      new_project = @user.namespace.project_namespaces.find_by(name: new_project_name)
       assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
     end

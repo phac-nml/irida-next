@@ -102,10 +102,13 @@ module Projects
       end
 
       within('dialog[open].dialog--size-xl') do
+        assert_accessible
         # update input[name="workflow_execution[name]"] with the value 'Updated Name'
         fill_in 'workflow_execution[name]', with: 'Updated Name'
         click_button I18n.t(:'workflow_executions.submissions.create.update')
       end
+
+      wait_for_network_idle
 
       # check the first item in the table for the new name
       within(first('table tbody tr')) do

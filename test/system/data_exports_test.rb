@@ -75,56 +75,56 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'can delete data exports on listing page' do
     visit data_exports_path
 
+    assert_selector 'table tbody tr', count: 7
     within first('tbody') do
-      assert_selector 'tr', count: 7
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
+    assert_selector 'table tbody tr', count: 6
     within first('tbody') do
-      assert_selector 'tr', count: 6
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
+    assert_selector 'table tbody tr', count: 5
     within first('tbody') do
-      assert_selector 'tr', count: 5
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
+    assert_selector 'table tbody tr', count: 4
     within first('tbody') do
-      assert_selector 'tr', count: 4
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
+    assert_selector 'table tbody tr', count: 3
     within first('tbody') do
-      assert_selector 'tr', count: 3
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
+    assert_selector 'table tbody tr', count: 2
     within first('tbody') do
-      assert_selector 'tr', count: 2
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
+    assert_selector 'table tbody tr', count: 1
     within first('tbody') do
-      assert_selector 'tr', count: 1
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do

@@ -298,6 +298,7 @@ module Groups
       assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       assert_selector 'table thead tr th', count: 6
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
+      wait_for_network_idle
       assert_selector 'table thead tr th', count: 8
       within first('table tbody tr:first-child') do
         assert_text @sample30.name
