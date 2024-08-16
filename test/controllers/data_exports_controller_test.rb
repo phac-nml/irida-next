@@ -328,4 +328,31 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
          }
     assert_response :unprocessable_entity
   end
+
+  test 'should not create new analysis export with both user and project workflow ids and analysis_type project' do
+    user_workflow = workflow_executions(:workflow_execution_valid)
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow1.id, @workflow2.id, user_workflow.id],
+                                  'namespace_id' => @namespace.id,
+                                  'analysis_type' => 'project' }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new analysis export with both user and project workflow ids and analysis_type user' do
+    user_workflow = workflow_executions(:workflow_execution_valid)
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow1.id, @workflow2.id, user_workflow.id],
+                                  'analysis_type' => 'user' }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
 end

@@ -476,15 +476,40 @@ module DataExports
     end
 
     test 'create analysis export with analysis_type project' do
-      workflow3 = workflow_executions(:automated_workflow_execution)
-      workflow4 = workflow_executions(:automated_example_completed)
       params = { 'export_type' => 'analysis',
-                 'export_parameters' => { 'ids' => [workflow3.id, workflow4.id],
+                 'export_parameters' => { 'ids' => [@workflow_execution3.id, @workflow_execution4.id],
                                           'analysis_type' => 'project',
                                           'namespace_id' => @project1.namespace.id } }
 
       assert_difference -> { DataExport.count } => 1 do
         DataExports::CreateService.new(@user, params).execute
+      end
+    end
+
+    test 'cannot create analysis export with workflows from both project and user and analysis_type project' do
+      params = { 'export_type' => 'analysis',
+                 'export_parameters' => { 'ids' =>
+                  [@workflow_execution1.id, @workflow_execution3.id, @workflow_execution4.id],
+                                          'analysis_type' => 'project',
+                                          'namespace_id' => @project1.namespace.id } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, params).execute
+        assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
+                     data_export.errors.full_messages.first
+      end
+    end
+
+    test 'cannot create analysis export with workflows from both project and user and analysis_type user' do
+      params = { 'export_type' => 'analysis',
+                 'export_parameters' => { 'ids' =>
+                  [@workflow_execution1.id, @workflow_execution3.id, @workflow_execution4.id],
+                                          'analysis_type' => 'user' } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, params).execute
+        assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
+                     data_export.errors.full_messages.first
       end
     end
   end
