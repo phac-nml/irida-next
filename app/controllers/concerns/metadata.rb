@@ -4,7 +4,7 @@
 module Metadata
   extend ActiveSupport::Concern
 
-  def pagy_with_metadata_sort(result)
+  def pagy_with_metadata_sort(result) # rubocop:disable Metrics/AbcSize
     model = controller_name.classify.constantize
     if !@q.sorts.empty? && model.ransackable_attributes.exclude?(@q.sorts.first.name)
       field = @q.sorts.first.name.gsub('metadata_', '')
