@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ransack/helpers/form_helper'
+
 # Ransack Sorting Helper
 module SortingHelper
   def active_sort(ransack_obj, field, dir)

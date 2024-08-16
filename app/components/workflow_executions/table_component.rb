@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ransack/helpers/form_helper'
+
 module WorkflowExecutions
   # Component for rendering a table of Samples
   class TableComponent < Component
