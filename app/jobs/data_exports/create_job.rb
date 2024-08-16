@@ -72,6 +72,66 @@ module DataExports
       manifest_file.unlink
     end
 
+    def write_simple_manifest(data_export_id:, zip:)
+      output_lines = simple_manifest_begin(data_export_id:)
+
+      simple_manifest_file = Tempfile.new
+      File.open(simple_manifest_file, 'a+') { |f| f.puts(output_lines) }
+      zip.write_file('manifest.txt') { |writer_for_file| IO.copy_stream(simple_manifest_file.open, writer_for_file) }
+
+      simple_manifest_file.close
+      simple_manifest_file.unlink
+    end
+
+    def simple_manifest_begin(data_export_id:)
+      output_lines = [
+        @manifest['type'],
+        @manifest['date'],
+        '',
+        'contents:',
+        "#{data_export_id}/"
+      ]
+
+      child_count = @manifest['children'].count
+      (@manifest['children']).each_with_index do |child, index|
+        # push with * is used to flatten array without creating a new array
+        output_lines.push(*simple_manifest_gen_lines_recursive(
+          cursor: child, prefix: '', final_child: child_count == index + 1
+        ))
+      end
+
+      output_lines
+    end
+
+    def simple_manifest_gen_lines_recursive(cursor:, prefix: '', final_child: false) # rubocop:disable Metrics/MethodLength
+      output = []
+
+      # when the current cursor is the final child of the parent, we change which symbols are used to generate the lines
+      if final_child
+        line = "#{prefix}└─ #{cursor['name']}"
+        child_prefix = "#{prefix}   "
+      else
+        line = "#{prefix}├─ #{cursor['name']}"
+        child_prefix = "#{prefix}│  "
+      end
+
+      line += '/' if cursor['type'] == 'folder'
+      line += " (#{cursor['irida-next-name']})" if cursor.key?('irida-next-name')
+      output.append(line)
+
+      if cursor['type'] == 'folder'
+        child_count = cursor['children'].count
+        (cursor['children']).each_with_index do |child, index|
+          # push with * is used to flatten array without creating a new array
+          output.push(*simple_manifest_gen_lines_recursive(
+            cursor: child, prefix: child_prefix, final_child: child_count == index + 1
+          ))
+        end
+      end
+
+      output # array of lines
+    end
+
     # Sample export specific functions------------------------------------------------------------------
     def create_sample_zip(data_export)
       Tempfile.new(binmode: true).tap do |tempfile|
@@ -92,6 +152,7 @@ module DataExports
           end
 
           write_manifest(zip)
+          write_simple_manifest(data_export_id: data_export.id.to_s, zip:)
         end
       end
     end
@@ -167,6 +228,7 @@ module DataExports
           end
 
           write_manifest(zip)
+          write_simple_manifest(data_export_id: data_export.id.to_s, zip:)
         end
       end
     end

@@ -28,7 +28,8 @@ module DataExports
       attachment2 = attachments(:attachment2)
       expected_files_in_zip = ["#{project.puid}/#{sample.puid}/#{attachment1.puid}/#{attachment1.file.filename}",
                                "#{project.puid}/#{sample.puid}/#{attachment2.puid}/#{attachment2.file.filename}",
-                               'manifest.json']
+                               'manifest.json',
+                               'manifest.txt']
       DataExports::CreateJob.perform_now(@data_export2)
       export_file = ActiveStorage::Blob.service.path_for(@data_export2.file.key)
       Zip::File.open(export_file) do |zip_file|
@@ -82,6 +83,46 @@ module DataExports
       assert_equal expected_manifest.to_json, @data_export2.manifest
     end
 
+    test 'content of sample export simple manifest' do
+      sample = samples(:sample1)
+      project = projects(:project1)
+      attachment1 = attachments(:attachment1)
+      attachment2 = attachments(:attachment2)
+      expected_files_in_zip = ["#{project.puid}/#{sample.puid}/#{attachment1.puid}/#{attachment1.file.filename}",
+                               "#{project.puid}/#{sample.puid}/#{attachment2.puid}/#{attachment2.file.filename}",
+                               'manifest.json',
+                               'manifest.txt']
+      actual_simple_manifest = ''
+
+      DataExports::CreateJob.perform_now(@data_export2)
+      export_file = ActiveStorage::Blob.service.path_for(@data_export2.file.key)
+      Zip::File.open(export_file) do |zip_file|
+        zip_file.each do |entry|
+          assert expected_files_in_zip.include?(entry.to_s)
+          actual_simple_manifest = entry.get_input_stream.read.force_encoding('utf-8') if entry.to_s == 'manifest.txt'
+          expected_files_in_zip.delete(entry.to_s)
+        end
+      end
+      assert expected_files_in_zip.empty?
+
+      expected_simple_manifest = [
+        'Samples Export',
+        Date.current.strftime('%Y-%m-%d').to_s,
+        '',
+        'contents:',
+        '9eb3e2b7-6e20-5324-b6a3-49f44dc33fd8/',
+        '└─ INXT_PRJ_AAAAAAAAAA/ (Project 1)',
+        '   └─ INXT_SAM_AAAAAAAAAA/ (Project 1 Sample 1)',
+        '      ├─ INXT_ATT_AAAAAAAAAA/',
+        '      │  └─ test_file.fastq',
+        '      └─ INXT_ATT_AAAAAAAAAB/',
+        '         └─ test_file_A.fastq',
+        ''
+      ].join("\n")
+
+      assert_equal expected_simple_manifest, actual_simple_manifest
+    end
+
     test 'content of sample export including paired files' do
       sample_b = samples(:sampleB)
 
@@ -108,7 +149,8 @@ module DataExports
           "#{project.puid}/#{sample_b.puid}/#{attachment_d.puid}/#{attachment_d.file.filename}",
           "#{project.puid}/#{sample_b.puid}/#{attachment_e.puid}/#{attachment_e.file.filename}",
           "#{project.puid}/#{sample_b.puid}/#{attachment_f.puid}/#{attachment_f.file.filename}",
-          'manifest.json'
+          'manifest.json',
+          'manifest.txt'
         ]
 
       expected_manifest = {
@@ -257,6 +299,7 @@ module DataExports
 
       expected_files_in_zip = ["#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
                                'manifest.json',
+                               'manifest.txt',
                                workflow_execution.outputs[0].filename.to_s]
       DataExports::CreateJob.perform_now(@data_export6)
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
@@ -367,7 +410,8 @@ module DataExports
         [
           "#{project.puid}/#{sample22.puid}/#{text_attachment.puid}/#{text_attachment.file.filename}",
           "#{project.puid}/#{sample22.puid}/#{fasta_attachment.puid}/#{fasta_attachment.file.filename}",
-          'manifest.json'
+          'manifest.json',
+          'manifest.txt'
         ]
 
       expected_manifest = {
