@@ -263,9 +263,11 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
+    assert_accessible
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
 
     within 'dialog[open].dialog--size-lg' do
+      assert_accessible
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('data_exports.new.sample_description.singular')
@@ -557,6 +559,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
+      assert_accessible
       assert_text I18n.t('data_exports.new_linelist_export_dialog.title')
       assert_text I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       assert_text I18n.t('data_exports.new_linelist_export_dialog.metadata')

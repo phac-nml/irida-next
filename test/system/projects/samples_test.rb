@@ -155,6 +155,7 @@ module Projects
       end
 
       within('dialog') do
+        assert_accessible
         assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
