@@ -28,7 +28,7 @@ james_doe:
   email: james.doe@localhost
   first_name: James
   last_name: Doe
-  locale: fr
+  locale: en
 
 joan_doe:
   <<: *DEFAULTS
