@@ -290,7 +290,7 @@ module Groups
       assert_text 'Displaying 2 items'
       assert_selector 'table tbody tr', count: 2
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
@@ -299,12 +299,12 @@ module Groups
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
       end
 
-      within first('thead') do
+      within('thead') do
         click_on 'Group'
       end
       wait_for_network_idle
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
@@ -313,12 +313,12 @@ module Groups
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      within first('thead') do
+      within('thead') do
         click_on 'Source'
       end
       wait_for_network_idle
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
@@ -327,12 +327,12 @@ module Groups
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      within first('thead') do
+      within('thead') do
         click_on 'Access Level'
       end
       wait_for_network_idle
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
@@ -341,12 +341,12 @@ module Groups
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
-      within first('thead') do
+      within('thead') do
         click_on 'Expiration'
       end
       wait_for_network_idle
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(5)',
                         text: Member::AccessLevel.human_access(@group_link5.expires_at)

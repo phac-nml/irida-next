@@ -23,7 +23,7 @@ class DataExportsTest < ApplicationSystemTestCase
     freeze_time
     visit data_exports_path
 
-    within first('tbody') do
+    within('tbody') do
       assert_selector 'tr', count: 7
       assert_selector 'tr:first-child td:first-child ', text: @data_export1.id
       assert_selector 'tr:first-child td:nth-child(2)', text: @data_export1.name
@@ -60,7 +60,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'data exports with status ready will have download in action dropdown' do
     visit data_exports_path
 
-    within first('tbody') do
+    within('tbody') do
       within %(tr:nth-child(2) td:last-child) do
         assert_text I18n.t('data_exports.index.actions.delete')
       end
@@ -76,7 +76,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     assert_selector 'table tbody tr', count: 7
-    within first('tbody') do
+    within('tbody') do
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
@@ -84,7 +84,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     assert_selector 'table tbody tr', count: 6
-    within first('tbody') do
+    within('tbody') do
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
@@ -92,7 +92,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     assert_selector 'table tbody tr', count: 5
-    within first('tbody') do
+    within('tbody') do
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
@@ -100,7 +100,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     assert_selector 'table tbody tr', count: 4
-    within first('tbody') do
+    within('tbody') do
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
@@ -108,7 +108,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     assert_selector 'table tbody tr', count: 3
-    within first('tbody') do
+    within('tbody') do
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
@@ -116,7 +116,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     assert_selector 'table tbody tr', count: 2
-    within first('tbody') do
+    within('tbody') do
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
@@ -124,7 +124,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     assert_selector 'table tbody tr', count: 1
-    within first('tbody') do
+    within('tbody') do
       click_link I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
@@ -140,7 +140,7 @@ class DataExportsTest < ApplicationSystemTestCase
     freeze_time
     visit data_exports_path
 
-    within first('tbody') do
+    within('tbody') do
       within %(tr:first-child td:first-child) do
         click_link @data_export1.id
       end
@@ -204,7 +204,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'can remove export from export page' do
     visit data_exports_path
 
-    within first('tbody') do
+    within('tbody') do
       assert_selector 'tr', count: 7
       assert_text @data_export2.id
     end
@@ -217,7 +217,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
-    within first('tbody') do
+    within('tbody') do
       assert_selector 'tr', count: 6
       assert_no_text @data_export2.id
     end
@@ -247,7 +247,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'create export from project samples page' do
     visit data_exports_path
-    within first('tbody') do
+    within('tbody') do
       assert_selector 'tr', count: 7
       assert_no_text 'test data export'
     end
@@ -302,7 +302,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'create export from group samples page' do
     visit data_exports_path
-    within first('tbody') do
+    within('tbody') do
       assert_selector 'tr', count: 7
       assert_no_text 'test data export'
     end
@@ -689,7 +689,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within first('tbody') do
+    within('tbody') do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
@@ -704,7 +704,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
     end
 
-    within first('dl') do
+    within('dl') do
       assert_selector 'div:nth-child(2) dd', text: 'test csv export'
       assert_selector 'div:nth-child(4) dd', text: 'csv'
     end
@@ -715,7 +715,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within first('tbody') do
+    within('tbody') do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
@@ -731,7 +731,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
     end
 
-    within first('dl') do
+    within('dl') do
       assert_selector 'div:nth-child(2) dd', text: 'test xlsx export'
       assert_selector 'div:nth-child(4) dd', text: 'xlsx'
     end

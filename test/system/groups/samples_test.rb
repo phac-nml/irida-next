@@ -18,7 +18,7 @@ module Groups
 
     def retrieve_puids
       puids = []
-      within first('table tbody') do
+      within('table tbody') do
         (1..4).each do |n|
           puids << first("tr:nth-child(#{n}) th").text
         end
@@ -138,7 +138,7 @@ module Groups
 
       click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      within first('table tbody') do
+      within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -147,7 +147,7 @@ module Groups
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-      within first('table tbody') do
+      within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
         assert_selector 'tr:nth-child(4) th', text: @sample25.puid
@@ -156,7 +156,7 @@ module Groups
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
-      within first('table tbody') do
+      within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -169,7 +169,7 @@ module Groups
 
       assert_text 'Displaying items 1-20 of 26 in total'
       assert_selector 'table tbody tr', count: 20
-      within first('table tbody tr th') do
+      within('table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
@@ -200,7 +200,7 @@ module Groups
 
       assert_text 'Displaying items 1-20 of 26 in total'
       assert_selector 'table tbody tr', count: 20
-      within first('table tbody tr th') do
+      within('table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
@@ -224,13 +224,13 @@ module Groups
 
       assert_text 'Displaying items 1-20 of 26 in total'
       assert_selector 'table tbody tr', count: 20
-      within first('table tbody tr th') do
+      within('table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
       click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      within first('table tbody') do
+      within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -239,7 +239,7 @@ module Groups
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-      within first('table tbody') do
+      within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
         assert_selector 'tr:nth-child(4) th', text: @sample25.puid
@@ -260,13 +260,13 @@ module Groups
 
       assert_text 'Displaying items 1-20 of 26 in total'
       assert_selector 'table tbody tr', count: 20
-      within first('table tbody tr th') do
+      within('table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
       click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      within first('table tbody') do
+      within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -275,7 +275,7 @@ module Groups
 
       click_on 'Created'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-      within first('table tbody') do
+      within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
         assert_selector 'tr:nth-child(4) th', text: @sample25.puid
@@ -300,7 +300,7 @@ module Groups
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
       wait_for_network_idle
       assert_selector 'table thead tr th', count: 8
-      within first('table tbody tr:first-child') do
+      within('table tbody tr:first-child') do
         assert_text @sample30.name
         assert_selector 'td:nth-child(7)', text: 'value1'
         assert_selector 'td:nth-child(8)', text: 'value2'
@@ -338,7 +338,7 @@ module Groups
       assert_selector 'table thead tr th', count: 6
 
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid

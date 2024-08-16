@@ -331,7 +331,7 @@ module Groups
       assert_text 'Displaying 5 items'
       assert_selector '#members-tabs table tbody tr', count: 5
       assert_selector '#members-tabs table thead th:first-child svg.icon-arrow_up'
-      within first('#members-tabs table tbody') do
+      within('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_bot.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_bot.access_level)
@@ -346,7 +346,7 @@ module Groups
       sort_link = find('table thead th:nth-child(1) a')
       sort_link.trigger('click')
       assert_selector '#members-tabs table thead th:first-child svg.icon-arrow_down'
-      within first('#members-tabs table tbody') do
+      within('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_ryan.access_level)
@@ -361,7 +361,7 @@ module Groups
       sort_link = find('table thead th:nth-child(2) a')
       sort_link.trigger('click')
       assert_selector '#members-tabs table thead th:nth-child(2) svg.icon-arrow_up'
-      within first('#members-tabs table tbody') do
+      within('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_ryan.access_level)
@@ -376,7 +376,7 @@ module Groups
       sort_link = find('table thead th:nth-child(2) a')
       sort_link.trigger('click')
       assert_selector '#members-tabs table thead th:nth-child(2) svg.icon-arrow_down'
-      within first('#members-tabs table tbody') do
+      within('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_john.access_level)
@@ -391,7 +391,7 @@ module Groups
       sort_link = find('table thead th:nth-child(5) a')
       sort_link.trigger('click')
       assert_selector '#members-tabs table thead th:nth-child(5) svg.icon-arrow_up'
-      within first('#members-tabs table tbody') do
+      within('#members-tabs table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_joan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_joan.access_level)

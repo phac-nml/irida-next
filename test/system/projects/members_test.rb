@@ -432,7 +432,7 @@ module Projects
       assert_text 'Displaying 5 items'
       assert_selector '#project-members table tbody tr', count: 5
       assert_selector '#project-members table thead th:first-child svg.icon-arrow_up'
-      within first('#project-members table tbody') do
+      within('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_james.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_james.access_level)
@@ -446,7 +446,7 @@ module Projects
 
       click_on I18n.t('members.table_component.user_email')
       assert_selector '#project-members table thead th:first-child svg.icon-arrow_down'
-      within first('#project-members table tbody') do
+      within('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_ryan.access_level)
@@ -460,7 +460,7 @@ module Projects
 
       click_on I18n.t('members.table_component.access_level')
       assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_up'
-      within first('#project-members table tbody') do
+      within('#project-members table tbody') do
         # Ryan is a Guest
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -477,7 +477,7 @@ module Projects
 
       click_on I18n.t('members.table_component.access_level')
       assert_selector '#project-members table thead th:nth-child(2) svg.icon-arrow_down'
-      within first('#project-members table tbody') do
+      within('#project-members table tbody') do
         # John & James are Owners
         assert_selector 'tr:first-child td:first-child', text: /#{@member_james.user.email}|#{@member_john.user.email}/
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -494,7 +494,7 @@ module Projects
 
       click_on I18n.t('members.table_component.expires_at')
       assert_selector '#project-members table thead th:nth-child(5) svg.icon-arrow_up'
-      within first('#project-members table tbody') do
+      within('#project-members table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_joan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
                         text: Member::AccessLevel.human_access(@member_joan.access_level)
