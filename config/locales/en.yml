@@ -243,19 +243,19 @@ en:
         launch_html: "Project automation bot launched workflow %{href}"
     sample:
       create_html: "%{user} created sample %{href}"
-      destroy_html: "%{user} removed sample %{sample_name}"
+      destroy_html: "%{user} removed sample <span class='font-medium'>%{sample_name}</span>"
       update_html: "%{user} updated sample %{href}"
       attachment:
         create_html: "%{user} uploaded sequencing data to sample %{href}"
         destroy: "%{user} removed sequencing data from sample %{sample_name}"
     member:
-      create_html: "%{user} added member %{href} to %{namespace_type} %{name}"
-      destroy_html: "%{user} removed member %{member} from %{namespace_type} %{name}"
-      update_html: "%{user} updated %{namespace_type} %{name} member %{member}"
+      create_html: "%{user} added member %{href} to %{namespace_type}"
+      destroy_html: "%{user} removed member %{member} from %{namespace_type}"
+      update_html: "%{user} updated %{namespace_type} member %{member}"
     namespace_group_link:
       create_html: "%{user} shared %{namespace_type} %{name} with group %{href}"
       destroy_html: "%{user} unshared %{namespace_type} %{name} with group %{group_name}"
-      update_html: "%{user} updated share between %{namespace_type} %{name} and group %{href}"
+      update_html: "%{user} updated share between %{namespace_type} and group %{href}"
   datetime:
     distance_in_words:
       updated:
