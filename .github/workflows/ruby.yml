@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      FERRUM_GOTO_WAIT: 0.2 # wait 0.2 seconds before checking is network traffic is still pending
+      FERRUM_GOTO_WAIT: 0.4 # wait 0.4 seconds before checking is network traffic is still pending
       #PARALLEL_WORKERS: 1 # disable test parallelization
 
     services:
