@@ -10,6 +10,8 @@ module System
         click_button 'Copy to clipboard'
         assert_no_text 'Copy to clipboard'
         assert_text 'Copied!'
+
+        assert_accessible
       end
     end
   end

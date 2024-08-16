@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ransack/helpers/form_helper'
+
 module Members
   # Component for rendering a table of members
   class TableComponent < Component

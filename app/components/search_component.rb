@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ransack/helpers/form_helper'
+
 # Component for rendering the search box
 class SearchComponent < Component
   include Ransack::Helpers::FormHelper

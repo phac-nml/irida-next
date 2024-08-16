@@ -83,6 +83,8 @@ module Projects
         click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
       end
 
+      assert_no_selector 'dialog[open]'
+
       within('#access-token-section') do
         bot_account_name = project.namespace.bots.last.email
         assert_selector 'h2', text: I18n.t('projects.bots.index.access_token_section.label', bot_name: bot_account_name)

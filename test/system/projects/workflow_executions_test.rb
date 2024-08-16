@@ -42,7 +42,7 @@ module Projects
       click_on 'Run ID'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
-      within first('#workflow-executions-table table tbody') do
+      within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
         assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
@@ -52,7 +52,7 @@ module Projects
       click_on 'Run ID'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
-      within first('#workflow-executions-table table tbody') do
+      within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
         assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution2.run_id
@@ -62,7 +62,7 @@ module Projects
       click_on 'Workflow Name'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
-      within first('#workflow-executions-table table tbody') do
+      within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution3.metadata['workflow_name']
@@ -75,7 +75,7 @@ module Projects
       click_on 'Workflow Name'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
-      within first('#workflow-executions-table table tbody') do
+      within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution4.metadata['workflow_name']

@@ -161,7 +161,6 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
-  gem 'capybara-lockstep'
   gem 'cuprite'
 
   gem 'simplecov', require: false
@@ -171,3 +170,6 @@ group :test do
 end
 
 gem 'activerecord-session_store', '~> 2.1'
+
+# TODO: upgrade to 5.25.1 once released: https://github.com/minitest/minitest/issues/1007
+gem 'minitest', '5.24.1'

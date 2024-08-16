@@ -155,6 +155,7 @@ module Projects
       end
 
       within('dialog') do
+        assert_accessible
         assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
@@ -228,7 +229,7 @@ module Projects
       assert_no_selector '#samples-table table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       assert_selector '#samples-table table tbody tr', count: 2
-      within first('tbody tr th') do
+      within('tbody tr:first-child th') do
         assert_text @sample2.puid
       end
     end
@@ -255,7 +256,7 @@ module Projects
       assert_no_selector '#samples-table table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       assert_selector '#samples-table table tbody tr', count: 2
-      within first('tbody tr th') do
+      within('#samples-table table tbody tr:first-child th') do
         assert_text @sample2.puid
       end
     end
@@ -505,7 +506,7 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
       assert_text 'Displaying 3 items'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody tr') do
+      within('tbody tr:first-child') do
         assert_selector 'a', text: 'Edit', count: 1
         assert_selector 'a', text: 'Remove', count: 0
       end
@@ -561,7 +562,7 @@ module Projects
 
       assert_text 'Displaying 3 items'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody tr th') do
+      within('tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
@@ -584,7 +585,7 @@ module Projects
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody') do
+      within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -597,7 +598,7 @@ module Projects
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody') do
+      within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -609,7 +610,7 @@ module Projects
       click_on 'Created'
 
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
-      within first('tbody') do
+      within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -621,7 +622,7 @@ module Projects
       click_on 'Created'
 
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
-      within first('tbody') do
+      within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -633,7 +634,7 @@ module Projects
       click_on 'Last Updated'
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-      within first('tbody') do
+      within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -645,7 +646,7 @@ module Projects
       click_on 'Last Updated'
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
-      within first('tbody') do
+      within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -660,7 +661,7 @@ module Projects
 
       assert_text 'Displaying 3 items'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
+      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
         assert_text @sample1.name
       end
 
@@ -674,9 +675,10 @@ module Projects
       assert_no_text @sample3.name
 
       click_on 'Sample Name'
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       assert_selector '#samples-table table tbody tr', count: 1
-      within first('tbody tr td:nth-child(2)') do
+      within('#samples-table table tbody tr td:nth-child(2)') do
         assert_text @sample1.name
       end
     end
@@ -686,7 +688,7 @@ module Projects
 
       assert_text 'Displaying 3 items'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody tr th') do
+      within('#samples-table table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
@@ -700,16 +702,17 @@ module Projects
       assert_no_text @sample3.name
 
       click_on 'Sample ID'
+      assert_selector 'table thead th:first-child svg.icon-arrow_up'
 
       assert_selector '#samples-table table tbody tr', count: 1
-      within first('tbody tr th') do
+      within('#samples-table table tbody tr th') do
         assert_text @sample1.puid
       end
 
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector '#samples-table table tbody tr', count: 1
-      within first('tbody tr th') do
+      within('tbody tr th') do
         assert_text @sample1.puid
       end
     end
@@ -719,7 +722,7 @@ module Projects
 
       assert_text 'Displaying 3 items'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
+      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
         assert_text @sample1.name
       end
 
@@ -729,7 +732,7 @@ module Projects
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody tr td:nth-child(2)') do
+      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
         assert_text @sample3.name
       end
 
@@ -757,7 +760,7 @@ module Projects
 
       assert_text 'Displaying 3 items'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody tr th') do
+      within('#samples-table table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
@@ -767,7 +770,7 @@ module Projects
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody tr th') do
+      within('#samples-table table tbody tr:first-child th') do
         assert_text @sample3.puid
       end
 
@@ -1266,7 +1269,7 @@ module Projects
       assert_selector '#samples-table table thead tr th', count: 6
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
-      within first('#samples-table table tbody tr:nth-child(3)') do
+      within('#samples-table table tbody tr:nth-child(3)') do
         assert_text @sample3.name
         assert_selector 'td:nth-child(6)', text: 'value1'
         assert_selector 'td:nth-child(7)', text: 'value2'
@@ -1290,7 +1293,7 @@ module Projects
 
       assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
         assert_selector 'tr:nth-child(2) th', text: @sample1.puid
@@ -1305,7 +1308,7 @@ module Projects
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
       assert_selector '#samples-table table tbody tr', count: 3
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -1405,10 +1408,10 @@ module Projects
       within %(turbo-frame[id="table-listing"]) do
         assert_text I18n.t('projects.samples.show.table_header.key').upcase
         assert_selector 'table#metadata-table tbody tr', count: 3
-        within first('tbody tr td:nth-child(2)') do
+        within('table#metadata-table tbody tr:first-child td:nth-child(2)') do
           assert_text 'metadatafield1'
         end
-        within first('tbody tr td:nth-child(3)') do
+        within('table#metadata-table tbody tr:first-child td:nth-child(3)') do
           assert_text 'value1'
         end
       end
@@ -2223,7 +2226,7 @@ module Projects
 
     def retrieve_puids
       puids = []
-      within first('#samples-table table tbody') do
+      within('#samples-table table tbody') do
         (1..3).each do |n|
           puids << first("tr:nth-child(#{n}) th").text
         end
@@ -2268,7 +2271,7 @@ module Projects
 
     test 'delete single sample with checkbox and delete samples button' do
       visit namespace_project_samples_url(@namespace, @project)
-      within first('tbody') do
+      within('tbody') do
         assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name

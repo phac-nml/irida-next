@@ -13,8 +13,9 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     end
 
-    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
     assert workflow_execution.reload.cleaned?
+
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
   end
 
   test 'successful job on canceled workflow execution' do
@@ -26,8 +27,9 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     end
 
-    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
     assert workflow_execution.reload.cleaned?
+
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
   end
 
   test 'successful job on error workflow execution' do
@@ -39,8 +41,9 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     end
 
-    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
     assert workflow_execution.reload.cleaned?
+
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
   end
 
   test 'failed job on running workflow execution' do
@@ -52,7 +55,8 @@ class WorkflowExecutionCleanupJobTest < ActiveJobTestCase
       WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     end
 
-    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_not workflow_execution.reload.cleaned?
+
+    assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
   end
 end

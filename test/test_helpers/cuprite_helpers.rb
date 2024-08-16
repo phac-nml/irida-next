@@ -12,4 +12,8 @@ module CupriteHelpers
   def debug(*)
     page.driver.debug(*)
   end
+
+  def wait_for_network_idle
+    page.driver.wait_for_network_idle
+  end
 end

@@ -19,7 +19,6 @@ jobs:
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
           POSTGRES_HOST: postgres
-          FERRUM_GOTO_WAIT: 0.8 # wait 0.8 seconds before checking if network traffic is still pending
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -60,7 +59,7 @@ jobs:
         if: failure()
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
+          path: ${{ github.workspace }}/tmp/capybara/screenshots
           if-no-files-found: ignore
       - name: Report coverage
         if: github.event_name == 'pull_request'

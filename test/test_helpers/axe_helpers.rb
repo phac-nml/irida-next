@@ -101,12 +101,6 @@ module AxeHelpers
     assert_accessible
   end
 
-  def click_button(locator = nil, **kwargs)
-    super
-
-    assert_accessible
-  end
-
   def visit(path, **attributes)
     super
 

@@ -9,4 +9,4 @@ Accessibility is important for users who use screen readers or rely on keyboard-
 
 ## Testing
 
-We use [axe-core](https://github.com/dequelabs/axe-core) for accessibility testing in our system test cases. You can call `assert_accessible` at any point which will run `axe-core` and report any accesibility errors found. Note: This is automatically called when `fill_in` or `click_button` helpers are called in the tests.
+We use [axe-core](https://github.com/dequelabs/axe-core) for accessibility testing in our system test cases. You can call `assert_accessible` at any point which will run `axe-core` and report any accesibility errors found. Note: This is automatically called when `fill_in` or `visit` helpers are called in the tests.

@@ -12,6 +12,7 @@ module System
       within 'span[data-controller-connected="true"]' do
         click_button I18n.t(:'components.list_filter.title')
         within 'dialog' do
+          assert_accessible
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
           fill_in I18n.t(:'components.list_filter.description'), with: "#{puid1}, #{puid2}"
           assert_selector 'span.label', count: 1
@@ -23,6 +24,7 @@ module System
 
         click_button I18n.t(:'components.list_filter.title')
         within 'dialog' do
+          assert_accessible
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
           assert_selector 'span.label', count: 2
           assert_selector 'span.label', text: puid1

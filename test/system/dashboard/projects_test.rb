@@ -5,7 +5,8 @@ require 'application_system_test_case'
 module Dashboard
   class ProjectsTest < ApplicationSystemTestCase
     def setup
-      login_as users(:john_doe)
+      @user = users(:john_doe)
+      login_as @user
       @project = projects(:project1)
     end
 
@@ -87,7 +88,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
-      within first('tr') do
+      within('tbody tr:first-child') do
         assert_text @project.human_name
       end
 
@@ -97,7 +98,7 @@ module Dashboard
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_selector 'tr', count: 20
-      within first('tr') do
+      within('tbody tr:first-child') do
         assert_text projects(:projectHotel).human_name
       end
     end
@@ -108,7 +109,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
-      within first('tr') do
+      within('tbody tr:first-child') do
         assert_text @project.human_name
       end
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
@@ -124,7 +125,7 @@ module Dashboard
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_selector 'tr', count: 12
-      within first('tr') do
+      within('tbody tr:first-child') do
         assert_text projects(:project19).human_name
       end
     end
@@ -135,7 +136,7 @@ module Dashboard
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_text 'Displaying items 1-20 of 38 in total'
       assert_selector 'tr', count: 20
-      within first('tr') do
+      within('tbody tr:first-child') do
         assert_text @project.human_name
       end
 
@@ -145,8 +146,8 @@ module Dashboard
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
       assert_text 'Displaying items 1-20 of 38 in total'
-      assert_selector 'tr', count: 20
-      within first('tr') do
+      assert_selector 'tbody tr', count: 20
+      within('tbody tr:first-child') do
         assert_text projects(:projectHotel).human_name
       end
 
@@ -157,7 +158,7 @@ module Dashboard
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
-      within first('tr') do
+      within('tbody tr:first-child') do
         assert_text projects(:project19).human_name
       end
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
@@ -181,7 +182,7 @@ module Dashboard
         click_on I18n.t(:'projects.new.submit')
       end
 
-      new_project = Project.last
+      new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
       assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
     end

@@ -80,7 +80,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
-      within(first('table tbody tr')) do
+      within('table tbody tr:first-child') do
         click_link I18n.t(:'projects.automated_workflow_executions.actions.delete_button')
       end
 
@@ -97,18 +97,21 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
-      within(first('table tbody tr')) do
+      within('table tbody tr:first-child') do
         click_link I18n.t(:'projects.automated_workflow_executions.actions.edit_button')
       end
 
       within('dialog[open].dialog--size-xl') do
+        assert_accessible
         # update input[name="workflow_execution[name]"] with the value 'Updated Name'
         fill_in 'workflow_execution[name]', with: 'Updated Name'
         click_button I18n.t(:'workflow_executions.submissions.create.update')
       end
 
+      assert_no_selector 'dialog[open]'
+
       # check the first item in the table for the new name
-      within(first('table tbody tr')) do
+      within('table tbody tr:first-child') do
         assert_text 'Updated Name'
       end
     end

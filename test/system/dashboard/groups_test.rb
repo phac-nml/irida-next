@@ -56,10 +56,8 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.name_desc')
 
-      within 'ul.groups-list.namespace-list-tree' do
-        within first('li') do
-          assert_text groups(:group_z).name
-        end
+      within 'ul.groups-list.namespace-list-tree li:first-child' do
+        assert_text groups(:group_z).name
       end
     end
 
@@ -80,10 +78,8 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.name_asc')
 
-      within 'ul.groups-list.namespace-list-tree' do
-        within first('li') do
-          assert_text groups(:group_a).name
-        end
+      within 'ul.groups-list.namespace-list-tree li:first-child' do
+        assert_text groups(:group_a).name
       end
     end
 
@@ -104,10 +100,8 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.updated_at_desc')
 
-      within 'ul.groups-list.namespace-list-tree' do
-        within first('li') do
-          assert_text groups(:group_a).name
-        end
+      within 'ul.groups-list.namespace-list-tree li:first-child' do
+        assert_text groups(:group_a).name
       end
     end
 
@@ -128,10 +122,8 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.updated_at_asc')
 
-      within 'ul.groups-list.namespace-list-tree' do
-        within first('li') do
-          assert_text groups(:group_z).name
-        end
+      within 'ul.groups-list.namespace-list-tree li:first-child' do
+        assert_text groups(:group_z).name
       end
     end
 
@@ -152,10 +144,8 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.created_at_asc')
 
-      within 'ul.groups-list.namespace-list-tree' do
-        within first('li') do
-          assert_text groups(:group_z).name
-        end
+      within 'ul.groups-list.namespace-list-tree li:first-child' do
+        assert_text groups(:group_z).name
       end
     end
 
@@ -171,7 +161,7 @@ module Dashboard
         end
       end
 
-      within first('ul.groups-list.namespace-list-tree') do
+      within('ul.groups-list.namespace-list-tree:first-child > li:first-child') do
         assert_text groups(:group_one).name
         assert_text groups(:subgroup1).name
       end
