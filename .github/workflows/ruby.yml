@@ -13,7 +13,7 @@ jobs:
 
     env:
       FERRUM_GOTO_WAIT: 0.2 # wait 0.2 seconds before checking is network traffic is still pending
-      PARALLEL_WORKERS: 1 # disable test parallelization
+      #PARALLEL_WORKERS: 1 # disable test parallelization
 
     services:
       postgres:
@@ -57,7 +57,7 @@ jobs:
           bin/rails assets:precompile
       - name: Run tests
         run: |
-          PARALLEL_WORKERS=1 bin/rails test:all
+          bin/rails test:all
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
