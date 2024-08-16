@@ -107,7 +107,7 @@ module DataExports
 
       expected_simple_manifest = [
         'Samples Export',
-        '2024-08-14',
+        Date.current.strftime('%Y-%m-%d').to_s,
         '',
         'contents:',
         '9eb3e2b7-6e20-5324-b6a3-49f44dc33fd8/',
