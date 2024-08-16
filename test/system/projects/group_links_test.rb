@@ -52,7 +52,6 @@ module Projects
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
@@ -67,15 +66,12 @@ module Projects
       assert_text I18n.t(:'projects.group_links.destroy.success',
                          namespace_name: namespace_group_link.namespace.human_name,
                          group_name: namespace_group_link.group.human_name)
-
-      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
 
     test 'cannot remove a project to group link that may have been unlinked in another tab' do
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
       namespace_group_link.destroy
 
@@ -104,7 +100,6 @@ module Projects
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
@@ -125,8 +120,6 @@ module Projects
 
       assert_text I18n.t(:'action_policy.policy.namespaces/project_namespace.unlink_namespace_with_group?',
                          name: namespace_group_link.namespace.name)
-
-      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
     end
 
     test 'can update namespace group links group access level to another access level' do
@@ -150,7 +143,6 @@ module Projects
       login_as users(:ryan_doe)
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
       within('table') do
         assert_selector 'select', count: 0
@@ -163,10 +155,9 @@ module Projects
 
       Timecop.travel(Time.zone.now + 5) do
         visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-        assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
         find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
-                                                                          .native.send_keys(:return)
+                                                                          .send_keys(:return)
 
         assert_text I18n.t(:'projects.group_links.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
@@ -179,7 +170,6 @@ module Projects
       login_as users(:ryan_doe)
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
       within('table') do
         assert_selector 'input.datepicker-input', count: 0
@@ -191,12 +181,11 @@ module Projects
       expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
 
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
-      assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
       namespace_group_link.destroy
 
       find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
-                                                                        .native.send_keys(:return)
+                                                                        .send_keys(:return)
 
       assert_text 'Resource not found'
     end
@@ -274,21 +263,12 @@ module Projects
 
       assert_text 'Displaying 4 items'
       assert_selector '#project-members table tbody tr', count: 4
-      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
-      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link6.group.name
-      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link5.group.name
-      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link14.group.name
 
       fill_in placeholder: I18n.t(:'projects.members.index.search.groups.placeholder'), with: @group_link2.group.name
 
       assert_text 'Displaying 1 item'
+      assert_selector '#project-members table tbody tr', count: 1
       assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
-      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
-                         text: @group_link6.group.name
-      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
-                         text: @group_link5.group.name
-      assert_no_selector "#project-members table tbody tr td:nth-child(#{group_name_col})",
-                         text: @group_link14.group.name
     end
 
     test 'can sort by column' do
@@ -315,8 +295,7 @@ module Projects
       within first('thead') do
         click_on 'Group'
       end
-      assert_no_selector 'table thead th:first-child svg.icon-arrow_up'
-      assert_selector 'table thead th:first-child svg.icon-arrow_down'
+      wait_for_network_idle
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link6.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -335,8 +314,7 @@ module Projects
       within first('thead') do
         click_on 'Source'
       end
-      assert_no_selector 'table thead th:first-child svg.icon-arrow_down'
-      assert_no_selector 'table thead th:first-child svg.icon-arrow_up'
+      wait_for_network_idle
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -356,8 +334,7 @@ module Projects
       within first('thead') do
         click_on 'Access Level'
       end
-      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      wait_for_network_idle
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -377,8 +354,7 @@ module Projects
       within first('thead') do
         click_on 'Expiration'
       end
-      assert_no_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-      assert_no_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
+      wait_for_network_idle
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name

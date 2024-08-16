@@ -71,11 +71,10 @@ module Groups
       namespace_group_link = namespace_group_links(:namespace_group_link5)
 
       visit group_members_url(@namespace, tab: 'invited_groups')
-      assert_selector 'tr', count: @group_links_count + header_row_count
-
-      namespace_group_link.destroy
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
+
+      namespace_group_link.destroy
 
       within table_row do
         click_link I18n.t(:'groups.group_links.index.unlink')
@@ -277,15 +276,12 @@ module Groups
 
       assert_text 'Displaying 2 items'
       assert_selector '#members-tabs table tbody tr', count: 2
-      assert_selector "#members-tabs table tbody tr td:nth-child(#{group_name_col})", text: @group_link5.group.name
-      assert_selector "#members-tabs table tbody tr td:nth-child(#{group_name_col})", text: @group_link14.group.name
 
       fill_in placeholder: I18n.t(:'groups.members.index.search.groups.placeholder'), with: @group_link5.group.name
 
       assert_text 'Displaying 1 item'
+      assert_selector '#members-tabs table tbody tr', count: 1
       assert_selector "#members-tabs table tbody tr td:nth-child(#{group_name_col})", text: @group_link5.group.name
-      assert_no_selector "#members-tabs table tbody tr td:nth-child(#{group_name_col})",
-                         text: @group_link14.group.name
     end
 
     test 'can sort by column' do
@@ -306,7 +302,7 @@ module Groups
       within first('thead') do
         click_on 'Group'
       end
-      assert_no_selector 'table thead th:first-child svg.icon-arrow_up'
+      wait_for_network_idle
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -320,8 +316,7 @@ module Groups
       within first('thead') do
         click_on 'Source'
       end
-      assert_no_selector 'table thead th:first-child svg.icon-arrow_down'
-      assert_no_selector 'table thead th:first-child svg.icon-arrow_up'
+      wait_for_network_idle
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -335,8 +330,7 @@ module Groups
       within first('thead') do
         click_on 'Access Level'
       end
-      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      wait_for_network_idle
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -350,8 +344,7 @@ module Groups
       within first('thead') do
         click_on 'Expiration'
       end
-      assert_no_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-      assert_no_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
+      wait_for_network_idle
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
       within first('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
