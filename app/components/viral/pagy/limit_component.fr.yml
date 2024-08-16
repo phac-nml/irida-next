@@ -1,2 +1,3 @@
-en:
-  count: '<span class="font-bold">%{from}-%{to}</span> of <span class="font-bold">%{count}</span>'
+fr:
+  items: "%{items} par page:"
+  count: "<span class='font-bold'>%{from}-%{to}</span> sur <span class='font-bold'>%{count}</span>"

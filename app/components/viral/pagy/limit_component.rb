@@ -8,10 +8,6 @@ module Viral
         @pagy = pagy
         @item = item
       end
-
-      def link_classes
-        'flex items-center h-8 px-3'
-      end
     end
   end
 end
