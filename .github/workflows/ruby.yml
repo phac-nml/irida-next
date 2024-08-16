@@ -11,10 +11,6 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
-    env:
-      FERRUM_GOTO_WAIT: 0.8 # wait 0.8 seconds before checking is network traffic is still pending
-      #PARALLEL_WORKERS: 1 # disable test parallelization
-
     services:
       postgres:
         image: postgres:14.6
