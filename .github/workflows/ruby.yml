@@ -11,6 +11,10 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
+    env:
+      FERRUM_GOTO_WAIT: 0.2 # wait 0.2 seconds before checking is network traffic is still pending
+      PARALLEL_WORKERS: 1 # disable test parallelization
+
     services:
       postgres:
         image: postgres:14.6
@@ -19,7 +23,6 @@ jobs:
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
           POSTGRES_HOST: postgres
-          FERRUM_GOTO_WAIT: 0.8 # wait 0.8 seconds before checking if network traffic is still pending
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -54,13 +57,13 @@ jobs:
           bin/rails assets:precompile
       - name: Run tests
         run: |
-          bin/rails test:all
+          PARALLEL_WORKERS=1 bin/rails test:all
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
+          path: ${{ github.workspace }}/tmp/capybara/screenshots
           if-no-files-found: ignore
       - name: Report coverage
         if: github.event_name == 'pull_request'
