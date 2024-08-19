@@ -1,9 +1,23 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
+<%= turbo_frame_tag "export_dialog" %>
+
 <%= turbo_stream_from current_user, :workflow_executions %>
 
-<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
-
+<%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
+  <%= component.with_buttons do %>
+   <%= link_to t(".create_export_button"),
+      new_data_export_path(
+        export_type: "analysis",
+        analysis_type: "user",
+        workflow_execution_id: 'test',
+      ),
+      data: {
+        turbo_stream: true,
+      },
+      class: "button button--size-default button--state-default" %>
+  <% end %>
+<% end %>
 <%= render partial: "table",
 locals: {
   workflow_executions: @workflow_executions,

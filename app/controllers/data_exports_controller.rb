@@ -3,7 +3,7 @@
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
-  include SampleActions
+  include ListActions
 
   before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[index destroy]

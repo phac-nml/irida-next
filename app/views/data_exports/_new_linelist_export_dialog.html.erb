@@ -15,7 +15,7 @@
         class="font-normal text-slate-500 dark:text-slate-400"
       >
         <%= form_with(
-        url: list_data_exports_path,
+        url: list_data_exports_path(type: 'sample'),
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
           <div data-infinite-scroll-target="pageFormContent"></div>
@@ -35,7 +35,7 @@
                 aria-expanded="true"
                 aria-controls="<%= "accordion-collapse-body-samples" %>"
               >
-                <span data-infinite-scroll-target="sampleCount"><%= t(:"data_exports.new.samples_count.zero") %></span>
+                <span data-infinite-scroll-target="selectionCount"><%= t(:"data_exports.new.samples_count.zero") %></span>
                 <%= viral_icon(
                   name: "chevron_down",
                   classes: "mr-0 w-4 h-4 rotate-0",
@@ -150,7 +150,7 @@
                 </div>
               </div>
               <div class="form-field mt-1">
-                <%= form.label :name, t(".name_label") %>
+                <%= form.label :name, t(:"data_exports.new.name_label") %>
                 <%= form.text_field :name, class: "form-control" %>
               </div>
               <div class="flex items-center h-5">
@@ -166,7 +166,7 @@
                                true,
                                false %>
                 <%= form.label :email_notification,
-                           t(".email_label"),
+                           t(:"data_exports.new.email_label"),
                            class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
               </div>
               <div>

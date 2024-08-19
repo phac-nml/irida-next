@@ -14,6 +14,7 @@ module WorkflowExecutions
       q,
       namespace: nil,
       row_actions: false,
+      abilities: {},
       empty: {},
       **system_arguments
     )
@@ -21,6 +22,7 @@ module WorkflowExecutions
       @pagy = pagy
       @q = q
       @namespace = namespace
+      @abilities = abilities
       @row_actions = row_actions
       @empty = empty
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
@@ -34,6 +36,12 @@ module WorkflowExecutions
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'workflow-executions-table'
         args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
+        if @abilities[:select_workflow_executions]
+          args[:data] ||= {}
+          args[:data][:controller] = 'selection'
+          args[:data][:'selection-total-value'] = @pagy.count
+          args[:data][:'selection-action-link-outlet'] = '.action-link'
+        end
       end
     end
 

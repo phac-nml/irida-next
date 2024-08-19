@@ -287,7 +287,8 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   test 'should list samples' do
     post list_data_exports_path(format: :turbo_stream), params: {
       page: 1,
-      sample_ids: [@sample1.id]
+      sample_ids: [@sample1.id],
+      type: 'sample'
     }
     assert_response :success
   end

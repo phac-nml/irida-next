@@ -19,7 +19,18 @@
               scope: 'col',
               classes: class_names('px-3 py-3', 'sticky left-0 z-10 bg-slate-50 dark:bg-slate-700': index.zero?)
             ) do %>
-
+              <% if index.zero? and @abilities[:select_workflow_executions] %>
+                <%= check_box_tag "select-page",
+                title: t(:".select_page"),
+                "aria-label": t(:".select_page"),
+                data: {
+                  action: "input->selection#togglePage",
+                  controller: "filters",
+                  selection_target: "selectPage",
+                },
+                class:
+                  "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+              <% end %>
               <% if column == :workflow_name || column == :workflow_version %>
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
@@ -71,16 +82,20 @@
                 scope: index.zero? ? 'row' : nil,
                 classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
-                <% if column == :id %>
-                  <%= link_to(
-                    workflow_execution.id,
-                    individual_path(workflow_execution),
-                    data: {
-                      turbo: false,
-                    },
-                    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline",
-                  ) %>
-                <% elsif column == :state %>
+                <% if index.zero? && @abilities[:select_workflow_executions] %>
+                  <%= check_box_tag "workflow_execution_ids[]",
+                  workflow_execution.id,
+                  nil,
+                  id: dom_id(workflow_execution),
+                  "aria-label": workflow_execution.name || workflow_execution.id,
+                  data: {
+                    action: "input->selection#toggle",
+                    selection_target: "rowSelection",
+                  },
+                  class:
+                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                <% end %>
+                <% if column == :state %>
                   <%= viral_pill(
                     text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
                     color: helpers.find_pill_color_for_state(workflow_execution[column]),
@@ -135,6 +150,33 @@
           <% end %>
         <% end %>
       </tbody>
+      <% if @abilities[:select_workflow_executions] %>
+        <tfoot>
+          <tr class="border-t dark:border-slate-700 border-slate-200">
+            <td
+              class="
+                sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
+              "
+              colspan="3"
+            >
+              <span>
+                <%= t(".counts.workflow_executions") %>:
+                <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
+              </span>
+              <span>
+                <%= t(".counts.selected") %>:
+                <strong
+                  data-selection-target="selected"
+                  data-action="
+                    turbo:morph-element->selection#idempotentConnect
+                  "
+                >0</strong>
+              </span>
+            </td>
+            <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-900"></td>
+          </tr>
+        </tfoot>
+      <% end %>
     </table>
   <% end %>
   <% unless @workflow_executions.empty? %>
