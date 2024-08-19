@@ -4,6 +4,8 @@ require 'application_system_test_case'
 
 module WorkflowExecutions
   class SubmissionsTest < ApplicationSystemTestCase
+    include ActionView::Helpers::SanitizeHelper
+
     setup do
       @sample43 = samples(:sample43)
       @sample44 = samples(:sample44)
@@ -12,11 +14,13 @@ module WorkflowExecutions
     end
 
     test 'should display a pipeline selection modal for project samples as owner' do
-      login_as users(:john_doe)
+      user = users(:john_doe)
+      login_as user
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_text '1-3 of 3'
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
+                                                                             locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -44,11 +48,13 @@ module WorkflowExecutions
     end
 
     test 'should display a pipeline selection modal for project samples as maintainer' do
-      login_as users(:joan_doe)
+      user = users(:joan_doe)
+      login_as user
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_text '1-3 sur 3'
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
+                                                                             locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -76,11 +82,13 @@ module WorkflowExecutions
     end
 
     test 'should display a pipeline selection modal for project samples as analyst' do
-      login_as users(:james_doe)
+      user = users(:james_doe)
+      login_as user
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_text '1-3 of 3'
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
+                                                                             locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -108,7 +116,8 @@ module WorkflowExecutions
     end
 
     test 'should display a pipeline selection modal for project samples as analyst through namespace group link' do
-      login_as users(:user30)
+      user = users(:user30)
+      login_as user
 
       namespace = namespaces_user_namespaces(:user29_namespace)
       project = projects(:user29_project1)
@@ -116,7 +125,8 @@ module WorkflowExecutions
 
       visit namespace_project_samples_url(namespace_id: namespace.path, project_id: project.path)
 
-      assert_text '1-1 of 1'
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 1, count: 1,
+                                                                             locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{sample.id}']").click
@@ -150,11 +160,13 @@ module WorkflowExecutions
     end
 
     test 'should display a pipeline selection modal for group samples as owner' do
-      login_as users(:john_doe)
+      user = users(:john_doe)
+      login_as user
 
       visit group_samples_url(@namespace)
 
-      assert_text '1-3 of 3'
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
+                                                                             locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -182,11 +194,13 @@ module WorkflowExecutions
     end
 
     test 'should display a pipeline selection modal for group samples as maintainer' do
-      login_as users(:joan_doe)
+      user = users(:joan_doe)
+      login_as user
 
       visit group_samples_url(@namespace)
 
-      assert_text '1-3 sur 3'
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
+                                                                             locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -214,11 +228,13 @@ module WorkflowExecutions
     end
 
     test 'should display a pipeline selection modal for group samples as analyst' do
-      login_as users(:james_doe)
+      user = users(:james_doe)
+      login_as user
 
       visit group_samples_url(@namespace)
 
-      assert_text '1-3 sur 3'
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
+                                                                             locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
