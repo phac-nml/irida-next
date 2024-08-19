@@ -153,15 +153,13 @@ module Dashboard
       login_as users(:john_doe)
       visit dashboard_groups_url
 
-      within 'ul.groups-list.namespace-list-tree' do
-        within :xpath, "li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:group_one).name}']]" do
-          assert_text groups(:group_one).name
-          assert_no_selector 'ul.groups-list.namespace-list-tree'
-          find('a.folder-toggle-wrap').click
-        end
+      within :xpath, "//li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:group_one).name}']]" do
+        assert_text groups(:group_one).name
+        assert_no_selector 'ul.groups-list.namespace-list-tree'
+        find('a.folder-toggle-wrap').click
       end
 
-      within('ul.groups-list.namespace-list-tree:first-child > li:first-child') do
+      within(:xpath, "//li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:group_one).name}']]") do
         assert_text groups(:group_one).name
         assert_text groups(:subgroup1).name
       end
