@@ -31,7 +31,7 @@ module Samples
       raise CloneError, I18n.t('services.samples.clone.same_project')
     end
 
-    def clone_samples(sample_ids) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def clone_samples(sample_ids) # rubocop:disable Metrics/MethodLength
       cloned_sample_ids = {}
 
       Sample.public_activity_off
@@ -47,19 +47,18 @@ module Samples
       if cloned_sample_ids.count.positive?
         @project.namespace.create_activity key: 'namespaces_project_namespace.samples.clone', owner: current_user,
                                            parameters:
-                                           {
-                                             project_name: @project.name,
-                                             new_project_name: @new_project.namespace.name,
-                                             cloned_sample_ids: cloned_sample_ids.values.join
-                                           }
+                                            {
+                                              target_project: @new_project.id,
+                                              action: 'sample_clone'
+                                            }
+
         @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.cloned_from',
                                                owner: current_user,
                                                parameters:
-                                               {
-                                                 project_name: @project.name,
-                                                 new_project_name: @new_project.namespace.name,
-                                                 cloned_sample_ids: cloned_sample_ids.values.join
-                                               }
+                                                {
+                                                  source_project: @project.id,
+                                                  action: 'sample_clone'
+                                                }
       end
 
       cloned_sample_ids

@@ -6,7 +6,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   included do
     include PublicActivity::Model
-    tracked owner: Current.user
+    tracked owner: proc { Current.user }
   end
 
   def human_readable_activity(public_activities) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -31,23 +31,38 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def project_activity(activity)
+  def project_activity(activity) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Project)
 
-    {
+    base = {
       created_at: activity.created_at.strftime(
         I18n.t('time.formats.abbreviated')
       ),
-      key: "activity.#{activity.key}",
-      user: activity_creator(activity), name: activity_trackable.name,
-      project_name: activity.parameters[:project_name],
-      new_project_name: activity.parameters[:new_project_name],
-      transferred_samples_ids: activity.parameters[:transferred_samples_ids],
-      cloned_sample_ids: activity.parameters[:cloned_sample_ids],
-      old_namespace: activity.parameters[:old_namespace],
-      new_namespace: activity.parameters[:new_namespace],
-      type: 'Namespace'
+      key: "activity.#{activity.key}_html",
+      user: activity_creator(activity),
+      name: activity_trackable.name,
+      type: 'Namespace',
+      action: activity.parameters[:action].presence || 'default'
     }
+
+    return base if activity.parameters[:action].blank?
+
+    if activity.parameters[:action] == 'project_namespace_transfer'
+      base.merge!({
+                    old_namespace: activity.parameters[:old_namespace]
+                  })
+    end
+
+    unless activity.parameters[:action] == 'sample_transfer' || activity.parameters[:action] == 'sample_clone'
+      return base
+    end
+
+    base.merge!({
+                  source_project: get_object_by_id(activity.parameters[:source_project], Project),
+                  target_project: get_object_by_id(activity.parameters[:target_project], Project)
+                })
+
+    base
   end
 
   def workflow_execution_activity(activity)
@@ -118,6 +133,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def activity_trackable(activity, relation)
-    activity.trackable.nil? ? relation.with_deleted.find(activity.trackable_id) : activity.trackable
+    activity.trackable.nil? ? get_object_by_id(activity.trackable_id, relation) : activity.trackable
+  end
+
+  def get_object_by_id(identifier, relation)
+    relation.with_deleted.find_by(id: identifier)
   end
 end

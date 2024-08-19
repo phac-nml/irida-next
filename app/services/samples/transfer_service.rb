@@ -78,18 +78,16 @@ module Samples
         @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer', owner: current_user,
                                            parameters:
                                            {
-                                             project_name: @project.name,
-                                             new_project_name: @new_project.namespace.name,
-                                             transferred_samples_ids: transferred_samples_ids.join
+                                             target_project: @new_project.id,
+                                             action: 'sample_transfer'
                                            }
 
         @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from',
                                                owner: current_user,
                                                parameters:
                                                {
-                                                 project_name: @project.name,
-                                                 new_project_name: @new_project.namespace.name,
-                                                 transferred_samples_ids: transferred_samples_ids.join
+                                                 source_project: @project.id,
+                                                 action: 'sample_transfer'
                                                }
 
         @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,

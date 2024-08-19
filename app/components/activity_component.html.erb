@@ -12,7 +12,7 @@
           class="
             mb-1 text-sm font-normal leading-none text-slate-400 dark:text-slate-500
           "
-        ><%= activity[:created_at] %></time>
+        ><%= helpers.local_time(activity[:created_at], :long) %></time>
         <h3 class="text-lg font-semibold text-slate-900 dark:text-white"></h3>
         <p class="text-base font-normal text-slate-500 dark:text-slate-400">
           <% if activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>

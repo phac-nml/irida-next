@@ -219,25 +219,16 @@ en:
         other: Namespace Group Links
         direct: Direct shared
   activity:
-    group:
-      create: "%{user} created group %{name}"
-      destroy: "%{user} removed group %{name}"
-      update: "%{user} updated group %{name}"
-      transfer: "%{user} transferred group %{name} to group %{new_namespace}"
     namespaces_project_namespace:
-      create: "%{user} created project %{name}"
-      destroy: "%{user} removed project %{name}"
-      update: "%{user} updated project %{name}"
+      create_html: "%{user} created project"
+      destroy_html: "%{user} removed project"
+      update_html: "%{user} updated project"
       samples:
-        clone: "%{user} cloned samples %{cloned_sample_ids} to project %{new_project_name}"
-        cloned_from: "%{user} cloned samples %{cloned_sample_ids} from project %{project_name}"
-        transfer: "%{user} transferred samples %{transferred_samples_ids} to project %{new_project_name}"
-        transferred_from: "%{user} transferred samples %{transferred_samples_ids} from project %{project_name}"
-      transfer: "%{user} transferred project %{project_name} from namespace %{old_namespace} to %{new_namespace}"
-    namespaces_user_namespace:
-      create: "%{user} created new user %{new_user_name}"
-      destroy: "%{user} removed user %{user_name}"
-      update: "%{user} updated user %{user_name}"
+        clone_html: "%{user} cloned samples to project %{href}"
+        cloned_from_html: "%{user} cloned samples from project %{href}"
+        transfer_html: "%{user} transferred samples to project %{href}"
+        transferred_from_html: "%{user} transferred samples from project %{href}"
+      transfer_html: "%{user} transferred project from namespace <span class='font-medium'>%{old_namespace}</span>"
     workflow_execution:
       automated_workflow:
         launch_html: "Project automation bot launched workflow %{href}"
@@ -250,11 +241,11 @@ en:
         destroy: "%{user} removed sequencing data from sample %{sample_name}"
     member:
       create_html: "%{user} added member %{href} to %{namespace_type}"
-      destroy_html: "%{user} removed member %{member} from %{namespace_type}"
+      destroy_html: "%{user} removed member <span class='font-medium'>%{member}</span> from %{namespace_type}"
       update_html: "%{user} updated %{namespace_type} member %{member}"
     namespace_group_link:
-      create_html: "%{user} shared %{namespace_type} %{name} with group %{href}"
-      destroy_html: "%{user} unshared %{namespace_type} %{name} with group %{group_name}"
+      create_html: "%{user} shared %{namespace_type} with group %{href}"
+      destroy_html: "%{user} unshared %{namespace_type} with group %{group_name}"
       update_html: "%{user} updated share between %{namespace_type} and group %{href}"
   datetime:
     distance_in_words:

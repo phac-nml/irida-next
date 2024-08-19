@@ -56,7 +56,8 @@ module Projects
       {
         project_name: project.name,
         old_namespace: @old_namespace.name,
-        new_namespace: @new_namespace.name
+        new_namespace: @new_namespace.name,
+        action: 'project_namespace_transfer'
       }
 
       UpdateMembershipsJob.perform_later(new_namespace_member_ids)

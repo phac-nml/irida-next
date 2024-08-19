@@ -23,6 +23,15 @@ module WorkflowExecutions
       end
 
       if @workflow_execution.save
+        if @workflow_execution.submitter.automation_bot?
+          @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow.launch',
+                                                        owner: current_user,
+                                                        parameters:
+                                                        {
+                                                          workflow_id: @workflow_execution.id,
+                                                          workflow_name: @workflow_execution.name
+                                                        }
+        end
         WorkflowExecutionPreparationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
       end
 
