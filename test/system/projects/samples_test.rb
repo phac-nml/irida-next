@@ -776,7 +776,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_text '1-1 of 3'
+      assert_text '1-1 of 1'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
