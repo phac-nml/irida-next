@@ -383,7 +383,7 @@ module Projects
       login_as user
       project2 = projects(:project2)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_text '1-3 of 3'
+      assert_text '1-3 sur 3'
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -408,7 +408,7 @@ module Projects
       namespace = groups(:group_hotel)
       project2 = projects(:projectHotel)
       visit namespace_project_samples_url(namespace, project2)
-      assert_text '1-1 of 3'
+      assert_text '1-1 of 1'
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -433,7 +433,7 @@ module Projects
       # Project is a part of Group 8 and not a part of the current project hierarchy
       project32 = projects(:project32)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_text '1-3 of 3'
+      assert_text '1-3 sur 3'
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -504,7 +504,7 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_text '1-3 of 3'
+      assert_text '1-3 sur 3'
       assert_selector '#samples-table table tbody tr', count: 3
       within('tbody tr:first-child') do
         assert_selector 'a', text: 'Edit', count: 1
@@ -541,7 +541,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
 
-      assert_text '1-1 of 3'
+      assert_text '1-1 of 1'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
@@ -550,7 +550,7 @@ module Projects
       # Refresh the page to ensure the search is still active
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text '1-1 of 3'
+      assert_text '1-1 of 1'
       assert_selector '#samples-table table tbody tr', count: 1
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
