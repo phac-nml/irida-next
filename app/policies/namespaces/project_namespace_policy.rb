@@ -167,5 +167,12 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def update_sample_metadata?
+      return true if Member.can_modify?(user, record) == true
+
+      details[:name] = record.name
+      false
+    end
   end
 end

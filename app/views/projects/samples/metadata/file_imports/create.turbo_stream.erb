@@ -1,11 +1,11 @@
-<% if @project.errors.empty? %>
+<% if @project.namespace.errors.empty? %>
   <%= turbo_stream.replace "import_metadata_dialog_content", partial: "success" %>
-<% elsif @project.errors.include?(:sample) %>
+<% elsif @project.namespace.errors.include?(:sample) %>
   <%= turbo_stream.replace "import_metadata_dialog_content",
                        partial: "errors",
                        locals: {
                          type: type,
-                         errors: errors
+                         errors: errors,
                        } %>
 <% else %>
   <%= turbo_stream.update "import_metadata_dialog_alert", viral_alert(type:, message:) %>
