@@ -94,9 +94,9 @@ module Samples
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe,
                                                             params).execute
         assert_equal({ @sample1.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] },
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
                        @sample2.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
-                                          updated: [], deleted: [], not_updated: [] } }, response)
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
