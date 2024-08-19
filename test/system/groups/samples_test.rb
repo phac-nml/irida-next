@@ -28,12 +28,13 @@ module Groups
       end
       puids
     end
+
     test 'visiting the index' do
       visit group_samples_url(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'tbody > tr', count: 20
       assert_text samples(:sample3).name
       assert_selector 'a', text: Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
@@ -42,11 +43,11 @@ module Groups
 
       click_on Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 21, to: 26, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'tbody > tr', count: 6
       click_on Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'tbody > tr', count: 20
 
       click_link samples(:sample3).name
@@ -61,21 +62,22 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'tbody > tr', count: 20
       assert_text samples(:sample1).name
       assert_text samples(:sample3).name
       assert_selector 'a', text: Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
-      assert_selector 'a[data-aria-disabled="true"]', text: Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
+      assert_selector 'a[data-aria-disabled="true"]',
+                      text: Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
 
       click_on Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 21, to: 26, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'tbody > tr', count: 6
       assert_text samples(:sample28).name
       click_on Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'tbody > tr', count: 20
 
       click_link samples(:sample1).name
@@ -89,11 +91,12 @@ module Groups
       visit group_samples_url(group)
 
       assert_selector 'a', text: Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
-      assert_selector 'a[data-aria-disabled="true"]', text: Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
+      assert_selector 'a[data-aria-disabled="true"]',
+                      text: Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
 
       click_on Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 21, to: 26, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
 
       click_link samples(:sample28).name
       assert_selector 'h1', text: samples(:sample28).name
@@ -111,7 +114,7 @@ module Groups
       visit group_samples_url(@group)
 
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'table tbody tr', count: 20
       assert_text @sample1.name
       assert_text @sample2.name
@@ -129,7 +132,7 @@ module Groups
       visit group_samples_url(@group)
 
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
       # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
       # they are ordered as expected against one another.
@@ -181,7 +184,7 @@ module Groups
       visit group_samples_url(@group)
 
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -213,7 +216,7 @@ module Groups
       visit group_samples_url(@group)
 
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -238,7 +241,7 @@ module Groups
       visit group_samples_url(@group)
 
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -275,7 +278,7 @@ module Groups
       visit group_samples_url(@group)
 
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'table tbody tr', count: 20
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -311,7 +314,7 @@ module Groups
     test 'should be able to toggle metadata' do
       visit group_samples_url(@group)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       click_on 'Last Updated'
       assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       assert_selector 'table thead tr th', count: 6
@@ -330,7 +333,7 @@ module Groups
     test 'can sort samples by metadata column' do
       visit group_samples_url(@group)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       assert_selector 'table thead tr th', count: 6
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
@@ -368,7 +371,7 @@ module Groups
     test 'filtering samples by list of sample puids' do
       visit group_samples_url(@group)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       within 'tbody' do
         assert_selector 'tr', count: 20
         assert_selector 'tr th', text: @sample1.puid
@@ -407,7 +410,7 @@ module Groups
     test 'selecting / deselecting all samples' do
       visit group_samples_url(@group)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -450,7 +453,7 @@ module Groups
     test 'selecting / deselecting a page of samples' do
       visit group_samples_url(@group)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -493,7 +496,7 @@ module Groups
     test 'selecting samples while filtering' do
       visit group_samples_url(@group)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 20, count: 26,
-                                                                   locale: @user.locale))
+                                                                             locale: @user.locale))
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
