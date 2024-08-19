@@ -52,7 +52,9 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
 
   # Return a string UUID for `object`
   def self.id_from_object(object, _type = nil, _ctx = nil)
-    raise "#{object} does not implement `to_global_id`." unless object.respond_to?(:to_global_id)
+    unless object.respond_to?(:to_global_id)
+      raise GraphQL::CoercionError, "#{object} does not implement `to_global_id`."
+    end
 
     object.to_global_id
   end
@@ -69,10 +71,10 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
     expected_types = Array(ctx[:expected_type])
     gid = GlobalID.parse(global_id)
 
-    raise "#{global_id} is not a valid IRIDA Next ID." unless gid
+    raise GraphQL::CoercionError, "#{global_id} is not a valid IRIDA Next ID." if !gid || gid.app != GlobalID.app
 
     if expected_types.any? && expected_types.none? { |type| gid.model_class.ancestors.include?(type) }
-      raise "#{global_id} is not a valid ID for #{expected_types.join(', ')}"
+      raise GraphQL::CoercionError, "#{global_id} is not a valid ID for #{expected_types.join(', ')}"
     end
 
     gid
@@ -105,5 +107,9 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
 
   rescue_from(ActionPolicy::AuthorizationContextMissing) do
     raise GraphQL::ExecutionError, 'Unable to access object while accessing the API in guest mode'
+  end
+
+  rescue_from(ActiveRecord::RecordNotFound) do |exception|
+    raise GraphQL::CoercionError, exception
   end
 end

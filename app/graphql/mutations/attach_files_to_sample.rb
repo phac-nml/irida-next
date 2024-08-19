@@ -13,31 +13,52 @@ module Mutations
              description: 'Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.'
     validates required: { one_of: %i[sample_id sample_puid] }
 
-    field :errors, GraphQL::Types::JSON, null: false, description: 'Errors that prevented the mutation.'
-    field :sample, Types::SampleType, null: false, description: 'The updated sample.'
-    field :status, GraphQL::Types::JSON, null: false, description: 'The status of the mutation.'
+    field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
+    field :sample, Types::SampleType, null: true, description: 'The updated sample.'
+    field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
 
-    def resolve(args)
-      sample = if args[:sample_id]
-                 IridaSchema.object_from_id(args[:sample_id], { expected_type: Sample })
-               else
-                 Sample.find_by(puid: args[:sample_puid])
-               end
+    def resolve(args) # rubocop:disable Metrics/MethodLength
+      sample = get_sample_from_id_or_puid_args(args)
+
+      if sample.nil?
+        return {
+          sample:,
+          status: nil,
+          errors: [{ path: ['sample'], message: 'not found by provided ID or PUID' }]
+        }
+      end
+
       files_attached = Attachments::CreateService.new(current_user, sample, { files: args[:files] }).execute
 
-      status, errors = attachment_status_and_errors(files_attached)
-      errors['query'] = sample.errors.full_messages if sample.errors.count.positive?
+      status, user_errors = attachment_status_and_errors(files_attached:, file_blob_id_list: args[:files])
+
+      # query level errors
+      sample.errors.each do |error|
+        user_errors.append(
+          {
+            path: ['sample', error.attribute.to_s.camelize(:lower)],
+            message: error.message
+          }
+        )
+      end
 
       {
         sample:,
         status:,
-        errors:
+        errors: user_errors
       }
     end
 
-    def attachment_status_and_errors(files_attached)
-      status = {}
-      errors = {}
+    def ready?(**_args)
+      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
+    end
+
+    private
+
+    def attachment_status_and_errors(files_attached:, file_blob_id_list:)
+      # initialize status hash such that all blob ids given by user are included
+      status = Hash[*file_blob_id_list.collect { |v| [v, nil] }.flatten]
+      user_errors = []
 
       files_attached.each do |attachment|
         id = attachment.file.blob.signed_id
@@ -45,15 +66,26 @@ module Mutations
           status[id] = :success
         else
           status[id] = :error
-          errors[id] = attachment.errors.full_messages
+          attachment.errors.each do |error|
+            user_errors.append({ path: ['attachment', id], message: error.message })
+          end
         end
       end
 
-      [status, errors]
+      add_missing_blob_id_error(status:, user_errors:)
     end
 
-    def ready?(**_args)
-      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
+    def add_missing_blob_id_error(status:, user_errors:)
+      # any nil status is an error
+      status.each do |id, value|
+        next unless value.nil?
+
+        status[id] = :error
+        user_errors.append({ path: ['blob_id', id],
+                             message: 'Blob id could not be processed. Blob id is invalid or file is missing.' })
+      end
+
+      [status, user_errors]
     end
   end
 end

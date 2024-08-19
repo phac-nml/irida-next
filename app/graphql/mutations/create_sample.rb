@@ -5,7 +5,7 @@ module Mutations
   class CreateSample < BaseMutation
     null true
     description 'Create a new sample within an existing project.'
-    argument :description, String, description: 'The description to give the sample.'
+    argument :description, String, required: false, description: 'The description to give the sample.'
     argument :name, String, required: true, description: 'The name to give the sample.'
     argument :project_id, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
@@ -15,37 +15,54 @@ module Mutations
              description: 'Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.'
     validates required: { one_of: %i[project_id project_puid] }
 
-    field :errors, [String], null: false, description: 'A list of errors that prevented the mutation.'
+    field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
     field :sample, Types::SampleType, description: 'The newly created sample.'
 
-    def resolve(args) # rubocop:disable Metrics/MethodLength
-      project = if args[:project_id]
-                  IridaSchema.object_from_id(args[:project_id], { expected_type: Project })
-                else
-                  Namespaces::ProjectNamespace.find_by!(puid: args[:project_puid]).project
-                end
-      sample = Samples::CreateService.new(current_user, project,
-                                          { name: args[:name], description: args[:description] }).execute
+    def resolve(args)
+      project = get_project_from_id_or_puid_args(args)
+
+      if project.nil? || !project.persisted?
+        user_errors = [{
+          path: ['project'],
+          message: 'Project not found by provided ID or PUID'
+        }]
+        return {
+          sample: nil,
+          errors: user_errors
+        }
+      end
+
+      create_sample(project, args)
+    end
+
+    def ready?(**_args)
+      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
+    end
+
+    private
+
+    def create_sample(project, args) # rubocop:disable Metrics/MethodLength
+      sample = Samples::CreateService.new(
+        current_user, project, { name: args[:name], description: args[:description] }
+      ).execute
+
       if sample.persisted?
         {
           sample:,
           errors: []
         }
       else
+        user_errors = sample.errors.map do |error|
+          {
+            path: ['sample', error.attribute.to_s.camelize(:lower)],
+            message: error.message
+          }
+        end
         {
           sample: nil,
-          errors: sample.errors.full_messages
+          errors: user_errors
         }
       end
-    rescue ActiveRecord::RecordNotFound
-      {
-        sample: nil,
-        errors: ['Project not found by provided ID or PUID']
-      }
-    end
-
-    def ready?(**_args)
-      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
     end
   end
 end

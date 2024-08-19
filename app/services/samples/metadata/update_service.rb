@@ -13,7 +13,7 @@ module Samples
         @sample = sample
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
-        @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [] }
+        @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
       end
 
       def execute
@@ -57,8 +57,9 @@ module Samples
       end
 
       def transform_metadata_keys
-        # Without transforming keys, issues with overwritting can occur and multiples of the same key can appear
-        @metadata = @metadata.transform_keys(&:to_s)
+        # Without transforming and downcasing keys,
+        # issues with overwritting can occur and multiples of the same key can appear
+        @metadata = @metadata.transform_keys { |key| key.to_s.downcase }
       end
 
       def perform_metadata_update
@@ -75,12 +76,15 @@ module Samples
         end
       end
 
-      def assign_metadata_to_sample(key, value) # rubocop:disable Metrics/AbcSize
+      def assign_metadata_to_sample(key, value) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
         # We don't overwrite existing @sample.metadata_provenance or @sample.metadata
         # that has a {source: 'analysis'} with a user
         if @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
            @sample.metadata_provenance[key]['source'] == 'analysis'
           @metadata_changes[:not_updated] << key
+        elsif @sample.metadata.key?(key) && @sample.metadata[key] == value
+          # Do not update if the current value matches the given value
+          @metadata_changes[:unchanged] << key
         else
           @sample.metadata.key?(key) ? @metadata_changes[:updated] << key : @metadata_changes[:added] << key
           @sample.metadata_provenance[key] =

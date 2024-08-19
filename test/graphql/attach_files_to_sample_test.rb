@@ -10,7 +10,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
       {
         sample{id},
         status,
-        errors
+        errors{
+          path
+          message
+        }
       }
     }
   GRAPHQL
@@ -22,7 +25,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
       {
         sample{id},
         status,
-        errors
+        errors{
+          path
+          message
+        }
       }
     }
   GRAPHQL
@@ -160,7 +166,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     expected_status = { blob_file.signed_id => :error }
     assert_equal expected_status, data['status']
     assert_equal 1, data['errors'].count, 'shouldn\'t work and have errors.'
-    expected_error = { blob_file.signed_id => ['File checksum matches existing file'] }
+    expected_error = [
+      { 'path' => ['attachment', blob_file.signed_id],
+        'message' => 'checksum matches existing file' }
+    ]
     assert_equal expected_error, data['errors']
     assert_equal :error, data['status'][blob_file.signed_id]
   end
@@ -244,7 +253,10 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     expected_status = { blob_file_a2.signed_id => :error }
     assert_equal expected_status, data['status']
     assert_not_empty data['sample']
-    expected_error = { blob_file_a2.signed_id => ['File checksum matches existing file'] }
+    expected_error = [
+      { 'path' => ['attachment', blob_file_a2.signed_id],
+        'message' => 'checksum matches existing file' }
+    ]
     assert_equal expected_error, data['errors']
     assert_equal 1, sample.attachments.count
   end
@@ -340,20 +352,67 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
     assert_equal 0, sample.attachments.count
 
-    expected_error = { 'query' => ['mismatched digest: Invalid blob id'] }
+    expected_error = [
+      { 'path' => %w[blob_id NAN],
+        'message' => 'Blob id could not be processed. Blob id is invalid or file is missing.' },
+      { 'path' => %w[sample base],
+        'message' => 'mismatched digest: Invalid blob id' }
+    ]
     actual_error = result['data']['attachFilesToSample']['errors']
 
-    assert_equal actual_error, expected_error
+    assert_equal expected_error, actual_error
+  end
+
+  test 'attachFilesToSample mutation should not work with blob missing file' do
+    sample = samples(:sampleJeff)
+    # blob_file_missing = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file_missing = ActiveStorage::Blob.create_before_direct_upload!(
+      filename: 'missing.file', byte_size: 404, checksum: 'Y33CgI35hFoI6p+WBXYl+A=='
+    )
+
+    assert_equal 0, sample.attachments.count
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file_missing.signed_id],
+                                              sampleId: sample.to_global_id.to_s })
+
+    assert_not_nil result['data']['attachFilesToSample']['errors'], 'shouldn\'t work and have errors.'
+
+    assert_equal 0, sample.attachments.count
+
+    expected_error = [
+      { 'path' => ['blob_id', blob_file_missing.signed_id],
+        'message' => 'Blob id could not be processed. Blob id is invalid or file is missing.' },
+      { 'path' => %w[sample base],
+        'message' => 'ActiveStorage::FileNotFoundError: Blob is empty, no file found.' }
+    ]
+
+    actual_error = result['data']['attachFilesToSample']['errors']
+
+    assert_equal expected_error, actual_error
   end
 
   test 'attachFilesToSample mutation should not work with invalid sample id' do
     blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
 
-    assert_raises RuntimeError do
-      IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
-                          context: { current_user: @user, token: @api_scope_token },
-                          variables: { files: [blob_file.signed_id],
-                                       sampleId: 'this is not a valid sample id' })
-    end
+    sample = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file.signed_id],
+                                              sampleId: 'this is not a valid sample id' })
+    expected_error = { 'message' => 'this is not a valid sample id is not a valid IRIDA Next ID.',
+                       'locations' => [{ 'line' => 2, 'column' => 3 }], 'path' => ['attachFilesToSample'] }
+    assert_equal expected_error, sample['errors'][0]
+  end
+
+  test 'attachFilesToSample mutation should not work with invalid sample gid' do
+    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+
+    result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { files: [blob_file.signed_id],
+                                              sampleId: 'gid://irida/Sample/doesnotexist' })
+    expected_error = { 'message' => 'not found by provided ID or PUID', 'path' => ['sample'] }
+    assert_equal expected_error, result['data']['attachFilesToSample']['errors'][0]
   end
 end
