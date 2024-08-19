@@ -48,7 +48,7 @@ module WorkflowExecutions
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_text '1-3 of 3'
+      assert_text '1-3 sur 3'
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -186,7 +186,7 @@ module WorkflowExecutions
 
       visit group_samples_url(@namespace)
 
-      assert_text '1-3 of 3'
+      assert_text '1-3 sur 3'
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -218,7 +218,7 @@ module WorkflowExecutions
 
       visit group_samples_url(@namespace)
 
-      assert_text '1-3 of 3'
+      assert_text '1-3 sur 3'
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
