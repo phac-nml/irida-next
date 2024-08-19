@@ -30,7 +30,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
                                .or(Attachment.where(attachable: @samples_workflow_executions))
     when 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
-                                                             @workflow_execution.metadata['workflow_version'])
+                                                             @workflow_execution.metadata['workflow_version'],
+                                                             'available')
     when 'samplesheet'
       format_samplesheet_params
     end
@@ -94,7 +95,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def workflow_properties
     workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
-                                                          @workflow_execution.metadata['workflow_version'])
+                                                          @workflow_execution.metadata['workflow_version'],
+                                                          'available')
     return {} if workflow.blank?
 
     workflow.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
@@ -122,7 +124,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def format_samplesheet_params
     workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
-                                                          @workflow_execution.metadata['workflow_version'])
+                                                          @workflow_execution.metadata['workflow_version'],
+                                                          'available')
     @samplesheet_headers = workflow.samplesheet_headers
     @samplesheet_rows = []
     @workflow_execution.samples_workflow_executions.each do |swe|

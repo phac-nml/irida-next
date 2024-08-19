@@ -148,8 +148,15 @@ module Irida
       end
     end
 
-    def find_pipeline_by(name, version)
-      @available_pipelines["#{name}_#{version}"]
+    def find_pipeline_by(name, version, type = 'executable')
+      case type
+      when 'available'
+        @available_pipelines["#{name}_#{version}"]
+      when 'automatable'
+        @automatable_pipelines["#{name}_#{version}"]
+      else
+        @executable_pipelines["#{name}_#{version}"]
+      end
     end
   end
 end

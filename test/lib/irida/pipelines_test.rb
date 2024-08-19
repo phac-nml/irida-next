@@ -39,13 +39,13 @@ class PipelinesTest < ActiveSupport::TestCase
   test 'registers pipelines' do
     assert_not @pipelines.available_pipelines.empty?
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2', 'available')
     assert_not_nil workflow
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1', 'available')
     assert_not_nil workflow
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0', 'available')
     assert_not_nil workflow
   end
 
