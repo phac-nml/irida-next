@@ -5,7 +5,6 @@ class Sample < ApplicationRecord
   include MetadataSortable
   include HasPuid
   include History
-  include TrackActivity
   include HasPuid
 
   has_logidze

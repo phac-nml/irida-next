@@ -21,7 +21,17 @@ module Samples
     private
 
     def destroy_single
-      sample.destroy
+      sample_destroyed = sample.destroy
+
+      if sample_destroyed
+        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy',
+                                           owner: current_user,
+                                           parameters:
+                                            {
+                                              sample_name: sample.name,
+                                              action: 'sample_destroy'
+                                            }
+      end
 
       update_metadata_summary(sample)
     end
@@ -35,6 +45,14 @@ module Samples
       samples.each do |sample|
         update_metadata_summary(sample)
       end
+
+      @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
+                                         owner: current_user,
+                                         parameters:
+                                         {
+                                           deleted_count: samples_to_delete_count,
+                                           action: 'sample_destroy_multiple'
+                                         }
 
       samples_to_delete_count
     end

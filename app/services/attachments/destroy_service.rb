@@ -28,7 +28,18 @@ module Attachments
         destroyed_attachments.append(associated_attachment)
       end
 
-      @attachment.destroy
+      attachment_destroyed = @attachment.destroy
+
+      if attachment_destroyed
+        @attachable.project.namespace.create_activity key: 'namespaces_project_namespace.samples.attachment.destroy',
+                                                      owner: current_user,
+                                                      trackable_id: @attachable.id,
+                                                      parameters: {
+                                                        sample_name: @attachable.name,
+                                                        sample_id: @attachable.id,
+                                                        action: 'attachment_destroy'
+                                                      }
+      end
 
       if @attachable.instance_of?(Sample)
         @attachable.create_activity key: 'sample.attachment.destroy', owner: current_user, trackable_id: @attachable.id

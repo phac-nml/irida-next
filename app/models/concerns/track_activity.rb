@@ -9,19 +9,18 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     tracked owner: proc { Current.user }
   end
 
-  def human_readable_activity(public_activities) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def human_readable_activity(public_activities) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     activities = []
     public_activities.each do |activity|
-      if activity.trackable_type == 'Namespace' && activity.key.include?('project_namespace')
+      trackable_type = activity.trackable_type
+
+      if trackable_type == 'Namespace' && activity.key.include?('project_namespace')
         activities << project_activity(activity)
-      elsif activity.trackable_type == 'Namespace' &&
-            activity.key.include?('workflow_execution')
+      elsif trackable_type == 'Namespace' && activity.key.include?('workflow_execution')
         activities << workflow_execution_activity(activity)
-      elsif activity.trackable_type == 'Sample'
-        activities << sample_activity(activity)
-      elsif activity.trackable_type == 'Member'
+      elsif trackable_type == 'Member'
         activities << member_activity(activity)
-      elsif activity.trackable_type == 'NamespaceGroupLink'
+      elsif trackable_type == 'NamespaceGroupLink'
         activities << namespace_group_link_activity(activity)
       end
     end
@@ -31,38 +30,26 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def project_activity(activity) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def project_activity(activity)
     activity_trackable = activity_trackable(activity, Project)
 
-    base = {
+    base_params = {
       created_at: activity.created_at.strftime(
         I18n.t('time.formats.abbreviated')
       ),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
+      current_project: activity_trackable,
       name: activity_trackable.name,
       type: 'Namespace',
       action: activity.parameters[:action].presence || 'default'
     }
 
-    return base if activity.parameters[:action].blank?
+    return base_params if activity.parameters[:action].blank?
 
-    if activity.parameters[:action] == 'project_namespace_transfer'
-      base.merge!({
-                    old_namespace: activity.parameters[:old_namespace]
-                  })
-    end
+    params = transfer_activity_parameters(base_params, activity)
 
-    unless activity.parameters[:action] == 'sample_transfer' || activity.parameters[:action] == 'sample_clone'
-      return base
-    end
-
-    base.merge!({
-                  source_project: get_object_by_id(activity.parameters[:source_project], Project),
-                  target_project: get_object_by_id(activity.parameters[:target_project], Project)
-                })
-
-    base
+    namespace_project_sample_activity_parameters(params, activity)
   end
 
   def workflow_execution_activity(activity)
@@ -77,20 +64,6 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       namespace: activity_trackable,
       workflow_id: activity.parameters[:workflow_id],
       type: 'WorkflowExecution'
-    }
-  end
-
-  def sample_activity(activity)
-    activity_trackable = activity_trackable(activity, Sample)
-
-    {
-      created_at: activity.created_at.strftime(
-        I18n.t('time.formats.abbreviated')
-      ),
-      key: "activity.#{activity.key}_html",
-      user: activity_creator(activity),
-      sample: activity_trackable,
-      type: 'Sample'
     }
   end
 
@@ -138,5 +111,41 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   def get_object_by_id(identifier, relation)
     relation.with_deleted.find_by(id: identifier)
+  end
+
+  def transfer_activity_parameters(params, activity)
+    if activity.parameters[:action] == 'project_namespace_transfer'
+      params.merge!({
+                      old_namespace: activity.parameters[:old_namespace]
+                    })
+    end
+
+    if activity.parameters[:action] == 'sample_transfer' || activity.parameters[:action] == 'sample_clone'
+      params.merge!({
+                      source_project: get_object_by_id(activity.parameters[:source_project], Project),
+                      target_project: get_object_by_id(activity.parameters[:target_project], Project)
+                    })
+    end
+
+    params
+  end
+
+  def namespace_project_sample_activity_parameters(params, activity)
+    sample_activity_action_types = %w[sample_create sample_update sample_destroy attachment_create attachment_destroy]
+
+    if sample_activity_action_types.include?(activity.parameters[:action])
+      params.merge!({
+                      sample_id: activity.parameters[:sample_id],
+                      sample_name: activity.parameters[:sample_name]
+                    })
+    end
+
+    if activity.parameters[:action] == 'sample_destroy_multiple'
+      params.merge!({
+                      deleted_count: activity.parameters[:deleted_count]
+                    })
+    end
+
+    params
   end
 end

@@ -103,11 +103,6 @@ module Namespaces
         )
       ).or(
         PublicActivity::Activity.where(
-          trackable_id: Sample.with_deleted.where(project:),
-          trackable_type: 'Sample'
-        )
-      ).or(
-        PublicActivity::Activity.where(
           trackable_id: Member.joins(:user).with_deleted.where(namespace: self).select(:id).where.not(user:
           { user_type: User.user_types[:project_automation_bot] }), trackable_type: 'Member'
         )
