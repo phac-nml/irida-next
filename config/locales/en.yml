@@ -1373,6 +1373,7 @@ en:
         error: "Could not delete workflow %{workflow_name}"
         success: "Workflow %{workflow_name} was successfully deleted"
       index:
+        create_export_button: Create Export
         title: Workflow Executions
         subtitle: These are the automated workflow executions that have been launched for this project
         actions:

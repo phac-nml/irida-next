@@ -95,7 +95,16 @@
                   class:
                     "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
                 <% end %>
-                <% if column == :state %>
+                <% if column == :id %>
+                  <%= link_to(
+                    workflow_execution.id,
+                    individual_path(workflow_execution),
+                    data: {
+                      turbo: false,
+                    },
+                    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline",
+                  ) %>
+                <% elsif column == :state %>
                   <%= viral_pill(
                     text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
                     color: helpers.find_pill_color_for_state(workflow_execution[column]),

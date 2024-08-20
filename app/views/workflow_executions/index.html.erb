@@ -9,8 +9,7 @@
    <%= link_to t(".create_export_button"),
       new_data_export_path(
         export_type: "analysis",
-        analysis_type: "user",
-        workflow_execution_id: 'test',
+        analysis_type: "user"
       ),
       data: {
         action: "turbo:morph-element->action-link#idempotentConnect",

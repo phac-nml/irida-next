@@ -5,9 +5,8 @@
   q,
   namespace: namespace,
   abilities: {
-    select_samples:
-      allowed_to?(:export_data?, group),
-  }
+    select_workflow_executions: allowed_to?(:export_data?, namespace)
+  },
   row_actions: {
     cancel: allowed_to?(:update?, namespace),
     destroy: allowed_to?(:update?, namespace),
