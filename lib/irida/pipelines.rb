@@ -8,7 +8,7 @@ require 'irida/pipeline'
 
 module Irida
   # Class that reads a workflow config file and registers the available pipelines
-  class Pipelines
+  class Pipelines # rubocop:disable Metrics/ClassLength
     PipelinesJsonFormatException = Class.new StandardError
     PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
 
