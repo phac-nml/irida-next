@@ -1,8 +1,9 @@
-<% if @project.namespace.errors.empty? %>
-  <%= turbo_stream.replace "import_metadata_dialog_content", partial: "success" %>
-<% elsif @project.namespace.errors.include?(:sample) %>
+<% if @namespace.errors.empty? %>
   <%= turbo_stream.replace "import_metadata_dialog_content",
-                       partial: "errors",
+                       partial: "shared/samples/metadata/file_imports/success" %>
+<% elsif @namespace.errors.include?(:sample) %>
+  <%= turbo_stream.replace "import_metadata_dialog_content",
+                       partial: "shared/samples/metadata/file_imports/errors",
                        locals: {
                          type: type,
                          errors: errors,

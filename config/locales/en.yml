@@ -778,6 +778,7 @@ en:
           label: Create Export
           sample_export: Sample Export
           linelist_export: Linelist Export
+        import_metadata_button: Import metadata
         deselect_all_button: Deselect All
         select_all_button: Select All
         title: Samples
@@ -1269,20 +1270,6 @@ en:
           create:
             success: Sample metadata was successfully imported.
             error: "Metadata was not successfully imported for the following samples:"
-          dialog:
-            title: Upload Sample Metadata
-            file: File
-            file_help: CSV, TSV, XLS or XLSX.
-            sample_id_column: Sample ID Column
-            select_sample_id_column: Select a Sample ID Column
-            submit_button: Import Metadata
-            ignore_empty_values: Ignore empty values
-          errors:
-            description: "The sample metadata import completed with the following errors:"
-            ok_button: OK
-          success:
-            description: The metadata was imported successfully!
-            ok_button: OK
         form:
           create_field_button: Add another metadata field
           field: Field
@@ -1753,6 +1740,23 @@ en:
         loading: Loading...
       spinner:
         loading: Loading...
+    samples:
+      metadata:
+        file_imports:
+          dialog:
+            title: Upload Sample Metadata
+            file: File
+            file_help: CSV, TSV, XLS or XLSX.
+            sample_id_column: Sample ID Column
+            select_sample_id_column: Select a Sample ID Column
+            submit_button: Import Metadata
+            ignore_empty_values: Ignore empty values
+          errors:
+            description: "The sample metadata import completed with the following errors:"
+            ok_button: OK
+          success:
+            description: The metadata was imported successfully!
+            ok_button: OK
   members:
     access_levels:
       level_0: No Access

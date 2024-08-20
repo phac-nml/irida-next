@@ -57,7 +57,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                              border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -85,7 +85,7 @@
             ) %>
           <% end %>
         <% end %>
-        <% if allowed_to?(:update_sample?, @project) && @has_samples %>
+        <% if allowed_to?(:update_sample_metadata?, @project.namespace) && @has_samples %>
           <%= link_to t("projects.samples.index.import_metadata_button"),
           new_namespace_project_samples_file_import_path,
           data: {
