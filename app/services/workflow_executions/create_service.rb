@@ -7,7 +7,7 @@ module WorkflowExecutions
       super
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       return false if params.empty?
 
       @workflow_execution = WorkflowExecution.new(params)

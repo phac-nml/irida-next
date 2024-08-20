@@ -8,5 +8,4 @@ class ActivityComponent < Component
     @activities = activities
     @system_arguments = system_arguments
   end
-
 end
