@@ -159,7 +159,7 @@
           <% end %>
         <% end %>
       </tbody>
-      <% if @abilities[:select_workflow_executions] %>
+      <% if @abilities[:select_workflow_executions] && !@workflow_executions.empty? %>
         <tfoot>
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td

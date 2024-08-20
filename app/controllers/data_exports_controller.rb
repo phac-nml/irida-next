@@ -47,14 +47,12 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def redirect_from
-    if params['puid'].include?('INXT_SAM')
-      sample = Sample.find_by(puid: params['puid'])
-      project = Project.find(sample.project_id)
-      namespace = project.namespace.parent
-      redirect_to namespace_project_sample_path(namespace, project, sample, tab: 'files')
+    if params['id'].include?('INXT_SAM')
+      redirect_to_sample
+    elsif params['id'].include?('INXT_PRJ')
+      redirect_to_project
     else
-      project = Namespace.find_by(puid: params['puid']).project
-      redirect_to namespace_project_samples_path(project.parent, project)
+      redirect_to_workflow_execution
     end
   end
 
@@ -139,6 +137,29 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort }
     when 'linelist'
       { open: true, namespace_id: params[:namespace_id] }
+    end
+  end
+
+  def redirect_to_sample
+    sample = Sample.find_by(puid: params['id'])
+    project = Project.find(sample.project_id)
+    namespace = project.namespace.parent
+    redirect_to namespace_project_sample_path(namespace, project, sample, tab: 'files')
+  end
+
+  def redirect_to_project
+    project = Namespace.find_by(puid: params['id']).project
+    redirect_to namespace_project_samples_path(project.parent, project)
+  end
+
+  def redirect_to_workflow_execution
+    workflow_execution = WorkflowExecution.find_by(id: params['id'])
+    submitter = workflow_execution.submitter
+    if submitter.user_type == 'human'
+      redirect_to workflow_execution_path(workflow_execution)
+    else
+      namespace = Namespace.find_by(puid: submitter.first_name)
+      redirect_to namespace_project_workflow_execution_path(namespace.parent, namespace.project, workflow_execution)
     end
   end
 end
