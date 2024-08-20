@@ -799,6 +799,11 @@ en:
           selected: Selected
         no_samples: No Samples
         no_associated_samples: There are no samples associated with this group.
+      metadata:
+        file_imports:
+          create:
+            success: Sample metadata was successfully imported.
+            error: "Metadata was not successfully imported for the following samples:"
   models:
     sample:
       analysis: Analysis
