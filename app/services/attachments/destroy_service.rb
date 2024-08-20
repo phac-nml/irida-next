@@ -41,10 +41,6 @@ module Attachments
                                                       }
       end
 
-      if @attachable.instance_of?(Sample)
-        @attachable.create_activity key: 'sample.attachment.destroy', owner: current_user, trackable_id: @attachable.id
-      end
-
       destroyed_attachments.append(@attachment)
       destroyed_attachments
     rescue Attachments::DestroyService::AttachmentsDestroyError => e

@@ -50,8 +50,6 @@ module Samples
       transferred_samples_ids = []
       not_found_sample_ids = []
 
-      Sample.public_activity_off
-
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
@@ -65,8 +63,6 @@ module Samples
         end
         next
       end
-
-      Sample.public_activity_on
 
       unless not_found_sample_ids.empty?
         @project.errors.add(:samples,

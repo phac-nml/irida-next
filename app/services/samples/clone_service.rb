@@ -34,15 +34,11 @@ module Samples
     def clone_samples(sample_ids) # rubocop:disable Metrics/MethodLength
       cloned_sample_ids = {}
 
-      Sample.public_activity_off
-
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         cloned_sample_id = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample_id unless cloned_sample_id.nil?
       end
-
-      Sample.public_activity_on
 
       if cloned_sample_ids.count.positive?
         @project.namespace.create_activity key: 'namespaces_project_namespace.samples.clone', owner: current_user,
