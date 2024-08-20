@@ -95,7 +95,7 @@ module Groups
           assert_response :unprocessable_entity
         end
 
-        test 'import sample metadata with a sample that does not belong to project' do
+        test 'import sample metadata with a sample that does not belong to group' do
           csv = fixture_file_upload('test/fixtures/files/metadata/mixed_project_samples.csv')
           post group_samples_file_import_path(@group, format: :turbo_stream),
                params: {
