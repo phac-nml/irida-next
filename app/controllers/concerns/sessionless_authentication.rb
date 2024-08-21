@@ -3,16 +3,15 @@
 # Authentication methods for sessionless access (e.g. Graphql)
 module SessionlessAuthentication
   def authenticate_sessionless_user!
-    access_token = token_from_basic_authorization(request)
-    username = username_from_basic_authorization(request)
+    (username, access_token) = username_and_token_from_basic_authorization(request)
 
-    user = User.find_by(email: username)
+    user = username && User.find_by(email: username)
     return unless user
 
     @token = user.personal_access_tokens.find_by_token(access_token) # rubocop:disable Rails/DynamicFindBy
-    return unless token&.active?
+    return unless @token&.active?
 
-    token.touch(:last_used_at) # rubocop:disable Rails/SkipsModelValidations
+    @token.touch(:last_used_at) # rubocop:disable Rails/SkipsModelValidations
 
     sessionless_sign_in(user)
   end
@@ -27,34 +26,14 @@ module SessionlessAuthentication
 
   private
 
-  def token_from_basic_authorization(request)
+  def username_and_token_from_basic_authorization(request)
     pattern = /^Basic /i
     header = request.authorization&.strip
-    token_from_basic_header(header, pattern) if header&.match(pattern)
-  end
 
-  def username_from_basic_authorization(request)
-    pattern = /^Basic /i
-    header = request.authorization&.strip
-    username_from_basic_header(header, pattern) if header&.match(pattern)
-  end
+    return unless header&.match(pattern)
 
-  def token_from_basic_header(header, pattern)
     encoded_header = header.gsub(pattern, '')
-    decode_basic_credentials_token(encoded_header) if base64?(encoded_header)
-  end
-
-  def decode_basic_credentials_token(encoded_header)
-    Base64.decode64(encoded_header).split(':', 2).last
-  end
-
-  def username_from_basic_header(header, pattern)
-    encoded_header = header.gsub(pattern, '')
-    decode_basic_credentials_username(encoded_header) if base64?(encoded_header)
-  end
-
-  def decode_basic_credentials_username(encoded_header)
-    Base64.decode64(encoded_header).split(':', 2).first
+    Base64.decode64(encoded_header).split(':', 2) if base64?(encoded_header)
   end
 
   def base64?(value)

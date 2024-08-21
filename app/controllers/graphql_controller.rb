@@ -1,19 +1,16 @@
 # frozen_string_literal: true
 
 # Graphql Controller
-class GraphqlController < ApplicationController
+class GraphqlController < ActionController::Base # rubocop:disable Rails/ApplicationController
   include SessionlessAuthentication
-
-  # Unauthenticated users have access to the API for public data
-  skip_before_action :authenticate_user!
 
   # If accessing from outside this domain, nullify the session
   # This allows for outside API access while preventing CSRF attacks,
   # but you'll have to authenticate your user separately
-  protect_from_forgery with: :null_session, only: :execute
+  skip_forgery_protection with: :null_session
 
   # must come first: current_user is set up here
-  before_action(only: [:execute]) { authenticate_sessionless_user! }
+  before_action :authenticate_sessionless_user!
 
   def execute
     variables = prepare_variables(params[:variables])

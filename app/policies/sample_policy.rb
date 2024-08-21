@@ -25,21 +25,20 @@ class SamplePolicy < ApplicationPolicy
     elsif namespace.type == Group.sti_name
       relation
         .with(
-          direct_group_projects_samples: relation.joins(project: [:namespace])
-                                .where(namespace: { parent_id: namespace.self_and_descendant_ids }).includes(:project)
-                                .select(:id),
-          linked_group_projects_samples: relation.joins(project: [:namespace]).where(project: { namespace: Namespace
+          direct_group_projects: Project.joins(:namespace)
+                                .where(namespace: { parent_id: namespace.self_and_descendants.select(:id) }).select(:id),
+          linked_group_projects: Project.where(namespace_id: Namespace
             .where(
               id: NamespaceGroupLink
-                      .where(group: namespace.self_and_descendants).not_expired
-                      .where(group_access_level: minimum_access_level..)
+                      .not_expired
+                      .where(group_id: namespace.self_and_descendant_ids, group_access_level: minimum_access_level..)
                       .select(:namespace_id)
-            ).self_and_descendants })
+            ).self_and_descendants.select(:id))
           .select(:id)
         ).where(
           Arel.sql(
-            'samples.id in (select * from direct_group_projects_samples)
-          or samples.id in (select * from linked_group_projects_samples)'
+            'samples.project_id in (select id from direct_group_projects)
+          or samples.project_id in (select id from linked_group_projects)'
           )
         )
     end
