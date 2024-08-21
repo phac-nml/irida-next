@@ -173,7 +173,7 @@ class DataExportsTest < ApplicationSystemTestCase
     # processing
     visit data_export_path(@data_export2)
 
-    within %(div:nth-child(3) dd) do
+    within %(dl div:nth-child(3) dd) do
       assert_selector 'span.bg-slate-100.text-slate-800.text-xs.font-medium.rounded-full',
                       text: I18n.t(:"data_exports.status.#{@data_export2.status}")
     end
@@ -181,7 +181,7 @@ class DataExportsTest < ApplicationSystemTestCase
     # ready
     visit data_export_path(@data_export1)
 
-    within %(div:nth-child(4) dd) do
+    within %(dl div:nth-child(4) dd) do
       assert_selector 'span.bg-green-100.text-green-800.text-xs.font-medium.rounded-full',
                       text: I18n.t(:"data_exports.status.#{@data_export1.status}")
     end
