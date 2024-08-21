@@ -13,7 +13,7 @@
     <%= text_for(@workflow.description) %>
   </p>
   <%= form_with url: url, method: (instance.nil? ? :post : :patch),
-                data: { turbo_frame: "_top", action: "turbo:submit-end->viral--dialog#close" } do |form| %>
+                data: { turbo_frame: "_top" } do |form| %>
     <input id="submission_turbo" type="hidden" name="format" value="turbo_stream"/>
 
     <%= fields_for :workflow_execution do |workflow| %>
@@ -94,18 +94,18 @@
                                checked: instance.present? && instance["update_samples"],
                                class:
                                  "w-4
-                                                                                                                            h-4
-                                                                                                                            mr-2.5
-                                                                                                                            text-primary-600
-                                                                                                                            bg-slate-100
-                                                                                                                            border-slate-300
-                                                                                                                            rounded
-                                                                                                                            focus:ring-primary-500
-                                                                                                                            dark:focus:ring-primary-600
-                                                                                                                            dark:ring-offset-slate-800
-                                                                                                                            focus:ring-2
-                                                                                                                            dark:bg-slate-700
-                                                                                                                            dark:border-slate-600",
+                                                                                                                                                h-4
+                                                                                                                                                mr-2.5
+                                                                                                                                                text-primary-600
+                                                                                                                                                bg-slate-100
+                                                                                                                                                border-slate-300
+                                                                                                                                                rounded
+                                                                                                                                                focus:ring-primary-500
+                                                                                                                                                dark:focus:ring-primary-600
+                                                                                                                                                dark:ring-offset-slate-800
+                                                                                                                                                focus:ring-2
+                                                                                                                                                dark:bg-slate-700
+                                                                                                                                                dark:border-slate-600",
                              } %>
           <%= workflow.label :update_samples,
                          t(:"components.nextflow.update_samples"),
@@ -119,18 +119,18 @@
                                instance.present? && instance["email_notification"],
                              class:
                                "w-4
-                                                                                                        h-4
-                                                                                                        mr-2.5
-                                                                                                        text-primary-600
-                                                                                                        bg-slate-100
-                                                                                                        border-slate-300
-                                                                                                        rounded
-                                                                                                        focus:ring-primary-500
-                                                                                                        dark:focus:ring-primary-600
-                                                                                                        dark:ring-offset-slate-800
-                                                                                                        focus:ring-2
-                                                                                                        dark:bg-slate-700
-                                                                                                        dark:border-slate-600",
+                                                                                                                        h-4
+                                                                                                                        mr-2.5
+                                                                                                                        text-primary-600
+                                                                                                                        bg-slate-100
+                                                                                                                        border-slate-300
+                                                                                                                        rounded
+                                                                                                                        focus:ring-primary-500
+                                                                                                                        dark:focus:ring-primary-600
+                                                                                                                        dark:ring-offset-slate-800
+                                                                                                                        focus:ring-2
+                                                                                                                        dark:bg-slate-700
+                                                                                                                        dark:border-slate-600",
                            } %>
         <%= workflow.label :email_notification,
                        t(:"components.nextflow.email_notification"),
