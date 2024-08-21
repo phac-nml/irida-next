@@ -5,16 +5,15 @@
         <div
           class="
             absolute w-3 h-3 bg-slate-200 rounded-full mt-1.5 -start-1.5 border border-white
-            dark:border-slate-900 dark:bg-slate-700
+            dark:border-slate-700 dark:bg-slate-700
           "
         ></div>
         <time
           class="
-            mb-1 text-sm font-normal leading-none text-slate-400 dark:text-slate-500
+            mb-1 text-sm font-normal leading-none text-slate-500 dark:text-slate-400
           "
         ><%= helpers.local_time(activity[:created_at], :long) %></time>
-        <h3 class="text-lg font-semibold text-slate-900 dark:text-white"></h3>
-        <p class="text-base font-normal text-slate-500 dark:text-slate-400">
+        <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
           <% if activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
             <%= render Activities::ProjectActivityComponent.new(activity: activity) %>
           <% elsif activity[:type] == 'WorkflowExecution' %>
