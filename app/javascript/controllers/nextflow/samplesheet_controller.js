@@ -6,12 +6,16 @@ export default class extends Controller {
   connect() {
     this.element.addEventListener("turbo:submit-start", (event) => {
       this.submitTarget.disabled = true;
-      this.tableTarget.appendChild(this.loadingTarget.content.cloneNode(true));
+      if (this.hasTableTarget) {
+        this.tableTarget.appendChild(this.loadingTarget.content.cloneNode(true));
+      }
     });
 
     this.element.addEventListener("turbo:submit-end", (event) => {
       this.submitTarget.disabled = false;
-      this.tableTarget.removeChild(this.tableTarget.lastElementChild);
+      if (this.hasTableTarget) {
+        this.tableTarget.removeChild(this.tableTarget.lastElementChild);
+      }
     });
   }
 
