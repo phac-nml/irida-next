@@ -229,19 +229,19 @@ en:
         transfer_html: "%{user} transferred samples to project %{href}"
         transferred_from_html: "%{user} transferred samples from project %{href}"
         create_html: "%{user} created sample %{href}"
-        destroy_html: "%{user} removed sample <span class='font-medium'>%{sample_name}</span>"
-        destroy_multiple_html: "%{user} removed <span class='font-medium'>%{deleted_count}</span> samples from project"
+        destroy_html: "%{user} removed sample <span class='text-slate-800 dark:text-slate-300 font-medium'>%{sample_name}</span>"
+        destroy_multiple_html: "%{user} removed <span class='text-slate-800 dark:text-slate-300 font-medium'>%{deleted_count}</span> samples from project"
         update_html: "%{user} updated sample %{href}"
         attachment:
           create_html: "%{user} uploaded sequencing data to sample %{href}"
-          destroy_html: "%{user} removed sequencing data from sample <span class='font-medium'>%{href}</span>"
-      transfer_html: "%{user} transferred project from namespace <span class='font-medium'>%{old_namespace}</span>"
+          destroy_html: "%{user} removed sequencing data from sample %{href}"
+      transfer_html: "%{user} transferred project from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span>"
     workflow_execution:
       automated_workflow:
         launch_html: "Project automation bot launched workflow %{href}"
     member:
       create_html: "%{user} added member %{href} to %{namespace_type}"
-      destroy_html: "%{user} removed member <span class='font-medium'>%{member}</span> from %{namespace_type}"
+      destroy_html: "%{user} removed member <span class='text-slate-800 dark:text-slate-300 font-medium'>%{member}</span> from %{namespace_type}"
       update_html: "%{user} updated %{namespace_type} member %{member}"
     namespace_group_link:
       create_html: "%{user} shared %{namespace_type} with group %{href}"
