@@ -10,7 +10,9 @@ module SessionlessAuthentication
 
     @token = user.personal_access_tokens.active.find_by_token(access_token) # rubocop:disable Rails/DynamicFindBy
 
-    # @token.touch(:last_used_at)
+    return unless @token
+
+    @token.touch(:last_used_at) # rubocop:disable Rails/SkipsModelValidations
 
     sessionless_sign_in(user)
   end
