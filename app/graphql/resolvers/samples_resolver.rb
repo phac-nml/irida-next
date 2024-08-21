@@ -13,6 +13,7 @@ module Resolvers
     def resolve(group_id:)
       if group_id
         group = IridaSchema.object_from_id(group_id, { expected_type: Group })
+        authorize!(group, to: :sample_listing?, with: GroupPolicy)
         authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
       else
         scope = authorized_scope Project, type: :relation
