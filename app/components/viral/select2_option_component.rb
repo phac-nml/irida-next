@@ -12,8 +12,8 @@ module Viral
             data-viral--select2-value-param="<%= @value %>"
             data-action="click->viral--select2#select"
             class="
-              flex-col min-w-0 border-2 border-transparent text-left p-2.5 hover:bg-slate-100
-              dark:hover:bg-slate-600 focus:outline-none focus:border-primary-500
+              flex-col w-full border-2 border-transparent text-left p-2.5 hover:bg-slate-100
+              dark:hover:bg-slate-600 focus:outline-none focus:bg-slate-100
             "
           >
             <span

@@ -11,6 +11,9 @@ export default class extends Controller {
       offsetSkidding: 0,
       offsetDistance: 0,
       placement: "bottom-start",
+      onShow: () => {
+        this.dropdownTarget.style.width = `${this.inputTarget.offsetWidth}px`;
+      },
       onHide: () => {
         if (!this.#found) {
           this.inputTarget.value = "";
