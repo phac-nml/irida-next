@@ -1,0 +1,53 @@
+<div data-controller="viral--search" data-action="keyup->viral--search#keydown">
+  <input
+    data-viral--search-target="input"
+    data-action="focus->viral--search#focus"
+    type="text"
+    autocomplete="off"
+    placeholder="Search"
+    class="
+      bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg
+      focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
+      dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+      dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500
+    "
+  >
+  <div
+    data-viral--search-target="dropdown"
+    class="z-10 hidden bg-white divide-y rounded-lg shadow  divide-slate-100 dark:bg-slate-700"
+  >
+    <ul
+      data-viral--search-target="scroller"
+      class="
+        max-h-[300px] py-2 overflow-y-auto divide-y divide-slate-200
+        dark:divide-slate-700
+      "
+    >
+
+      <% (1..20).to_a.each do |num| %>
+        <li class="w-full">
+          <button
+            data-viral--search-target="item"
+            data-viral--search-primary-param="Item <%= num %>"
+            data-viral--search-secondary-param="123-12312-21312312-123<%= num %>"
+            data-action="click->viral--search#select"
+            class="
+              flex-col min-w-0 border-2 border-transparent text-left p-2.5 hover:bg-slate-100
+              dark:hover:bg-slate-600 focus:outline-none focus:border-primary-500
+            "
+          >
+            <span
+              class="block text-base font-medium truncate  text-slate-900 dark:text-white"
+            >
+              Item
+              <%= num %>
+            </span>
+            <span class="text-sm truncate text-slate-500 dark:text-slate-400">
+              123-12312-21312312-123<%= num %>
+            </span>
+          </button>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
