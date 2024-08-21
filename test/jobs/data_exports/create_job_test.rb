@@ -297,10 +297,12 @@ module DataExports
       samples_workflow_execution = samples_workflow_executions(:sample46_irida_next_example_completed_with_output)
       sample = samples(:sample46)
 
-      expected_files_in_zip = ["#{workflow_execution.id}/#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
-                               'manifest.json',
-                               'manifest.txt',
-                               "#{workflow_execution.id}/#{workflow_execution.outputs[0].filename}"]
+      expected_files_in_zip = [
+        "#{workflow_execution.id}/#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
+        'manifest.json',
+        'manifest.txt',
+        "#{workflow_execution.id}/#{workflow_execution.outputs[0].filename}"
+      ]
       DataExports::CreateJob.perform_now(@data_export6)
       export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
       Zip::File.open(export_file) do |zip_file|
