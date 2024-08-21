@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { Dropdown } from "flowbite";
 
 export default class extends Controller {
-  static targets = ["input", "dropdown", "scroller", "item"];
+  static targets = ["input", "hidden", "dropdown", "scroller", "item"];
   #found = false;
 
   connect() {
@@ -27,8 +27,10 @@ export default class extends Controller {
   }
 
   select(event) {
+    console.log(event);
     this.#found = true;
     this.inputTarget.value = event.params.primary;
+    this.hiddenTarget.value = event.params.value;
     this.dropdown.hide();
   }
 

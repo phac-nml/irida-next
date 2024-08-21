@@ -10,8 +10,11 @@
       <div class="grid gap-4">
         <div class="form-field">
           <%= form.label :user_id %>
-          <%= viral_select2(form:, name: :user_id) %>
-
+          <%= viral_select2(form:, name: :user_id) do |select| %>
+            <% @available_users.each do |user| %>
+              <% select.with_option(primary: user.email, value: user.id) %>
+            <% end %>
+          <% end %>
         </div>
 
         <% invalid_access_level = @new_member.errors.include?(:access_level) %>

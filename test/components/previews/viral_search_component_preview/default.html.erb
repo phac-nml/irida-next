@@ -1,3 +1,11 @@
 <%= form_with  url: "" do |form| %>
-  <%= viral_select2(form:, name: :user) %>
+  <%= viral_select2(form:, name: :user) do |select| %>
+    <% (1..50).each do |num| %>
+      <% select.with_option(
+        primary: "User #{num}",
+        secondary: "Another fact goes here",
+        value: num,
+      ) %>
+    <% end %>
+  <% end %>
 <% end %>
