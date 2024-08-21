@@ -1,1 +1,3 @@
-<%= viral_search() %>
+<%= form_with  url: "" do |form| %>
+  <%= viral_select2(form:, name: :user) %>
+<% end %>

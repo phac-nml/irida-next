@@ -78,8 +78,8 @@ export default class extends Controller {
     this.itemTargets.forEach((item) => {
       const value = item.dataset;
       if (
-        value["viral-SearchPrimaryParam"].toLowerCase().includes(query) ||
-        value["viral-SearchSecondaryParam"].toLowerCase().includes(query)
+        value["viral-Select2PrimaryParam"].toLowerCase().includes(query) ||
+        value["viral-Select2SecondaryParam"].toLowerCase().includes(query)
       ) {
         item.parentNode.classList.remove("hidden");
         count++;

@@ -1,0 +1,56 @@
+<div
+  data-controller="viral--select2"
+  data-action="keyup->viral--select2#keydown"
+>
+  <%= form.text_field name,
+                  data: {
+                    "viral--select2-target": "input",
+                    action: "focus->viral--select2#focus",
+                  },
+                  autocomplete: "off",
+                  class:
+                    "bg-slate-50
+        border border-slate-300 text-slate-900 text-sm rounded-lg
+        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
+        dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %>
+
+  <div
+    data-viral--select2-target="dropdown"
+    class="z-10 hidden bg-white divide-y rounded-lg shadow  divide-slate-100 dark:bg-slate-700"
+  >
+    <ul
+      data-viral--select2-target="scroller"
+      class="
+        max-h-[300px] py-2 overflow-y-auto divide-y divide-slate-200
+        dark:divide-slate-700
+      "
+    >
+
+      <% (1..20).to_a.each do |num| %>
+        <li class="w-full">
+          <button
+            data-viral--select2-target="item"
+            data-viral--select2-primary-param="Item <%= num %>"
+            data-viral--select2-secondary-param="123-12312-21312312-123<%= num %>"
+            data-action="click->viral--select2#select"
+            class="
+              flex-col min-w-0 border-2 border-transparent text-left p-2.5 hover:bg-slate-100
+              dark:hover:bg-slate-600 focus:outline-none focus:border-primary-500
+            "
+          >
+            <span
+              class="block text-base font-medium truncate  text-slate-900 dark:text-white"
+            >
+              Item
+              <%= num %>
+            </span>
+            <span class="text-sm truncate text-slate-500 dark:text-slate-400">
+              123-12312-21312312-123<%= num %>
+            </span>
+          </button>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
