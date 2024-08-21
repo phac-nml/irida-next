@@ -11,7 +11,7 @@ class PersonalAccessToken < ApplicationRecord
 
   belongs_to :user
 
-  before_save :ensure_token
+  before_create :ensure_token
 
   validates :scopes, presence: true
   validate :validate_scopes

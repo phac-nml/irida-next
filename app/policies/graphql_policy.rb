@@ -6,7 +6,7 @@ class GraphqlPolicy < ApplicationPolicy
   authorize :token, allow_nil: true
 
   def query?
-    return true if token&.scopes&.any? { |scope| %w[api read_api].include? scope }
+    return true if token.present? && token.scopes.to_set.intersect?(%w[api read_api].to_set)
     return true if token.nil? && !user.nil? # allow users with a session to query the api
 
     false

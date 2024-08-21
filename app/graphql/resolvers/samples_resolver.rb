@@ -21,15 +21,7 @@ module Resolvers
     end
 
     def ready?(**args)
-      if args[:group_id].nil?
-        authorize!(to: :query?, with: GraphqlPolicy, context: { token: context[:token] })
-      else
-        group = IridaSchema.object_from_id(args[:group_id], { expected_type: Group })
-
-        authorize!(to: :query?, with: GraphqlPolicy,
-                   context: { token: context[:token] }) && authorize!(group, to: :sample_listing?,
-                                                                             with: GroupPolicy)
-      end
+      authorize!(to: :query?, with: GraphqlPolicy, context: { token: context[:token] })
     end
   end
 end
