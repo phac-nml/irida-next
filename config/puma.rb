@@ -25,6 +25,15 @@
 threads_count = ENV.fetch('RAILS_MAX_THREADS', 3)
 threads threads_count, threads_count
 
+# Specified that the workfer count should equal the number of processors in produciton.
+if ENV['RAILS_ENV'] == 'production'
+  worker_count = Integer(ENV.fetch('WEB_CONCURRENCY') { Concurrent.physical_processor_count })
+
+  workers worker_count if worker_count > 1
+
+  preload_app!
+end
+
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 port ENV.fetch('PORT', 3000)
 
@@ -32,4 +41,8 @@ port ENV.fetch('PORT', 3000)
 plugin :tmp_restart
 
 # Only use a pidfile when requested
-pidfile ENV['PIDFILE'] if ENV['PIDFILE']
+if ENV['PIDFILE']
+  pidfile ENV['PIDFILE']
+elsif ENV.fetch('RAILS_ENV', 'development') == 'development'
+  pidfile 'tmp/pids/server.pid'
+end
