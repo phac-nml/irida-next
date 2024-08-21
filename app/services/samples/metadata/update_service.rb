@@ -25,6 +25,7 @@ module Samples
 
         transform_metadata_keys
 
+        Namespaces::ProjectNamespace.public_activity_off
         @sample.with_lock do
           perform_metadata_update
           @sample.save
@@ -33,6 +34,7 @@ module Samples
         update_metadata_summary
 
         handle_not_updated_fields
+        Namespaces::ProjectNamespace.public_activity_on
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
