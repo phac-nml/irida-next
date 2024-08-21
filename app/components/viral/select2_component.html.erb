@@ -30,6 +30,15 @@
       <% options.each do |option| %>
         <%= option %>
       <% end %>
+      <% if empty_state? %>
+        <li
+          class="hidden p-4 text-blue-800 border border-blue-300  bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
+          data-viral--select2-target="empty"
+          role="alert"
+        >
+          <%= empty_state %>
+        </li>
+      <% end %>
     </ul>
   </div>
 </div>

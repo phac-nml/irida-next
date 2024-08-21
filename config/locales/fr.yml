@@ -1087,6 +1087,7 @@ fr:
         description: You are adding a new member to project %{name}
         select_user: Select a User
         select_access_level: Select Access Level
+        empty_state: There are no users with the provided email or id
       destroy:
         error: "There was an error removing the project member"
         success: "Project member %{user} successfully removed"

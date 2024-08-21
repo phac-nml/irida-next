@@ -6,6 +6,7 @@ module Viral
     attr_reader :form, :name
 
     renders_many :options, Viral::Select2OptionComponent
+    renders_one  :empty_state
 
     def initialize(form:, name:)
       @form = form
