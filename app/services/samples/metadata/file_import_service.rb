@@ -113,7 +113,7 @@ module Samples
         rescue ActiveRecord::RecordNotFound
           @namespace.errors.add(:sample,
                                 I18n.t('services.samples.metadata.import_file.sample_not_found',
-                                       sample_name: sample_id))
+                                       sample_name: sample_id, namespace_type: @namespace.type.downcase))
         end
         response
       end

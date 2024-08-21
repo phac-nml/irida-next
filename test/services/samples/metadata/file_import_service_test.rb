@@ -110,7 +110,8 @@ module Samples
         assert_empty Samples::Metadata::FileImportService.new(@group, @john_doe,
                                                               params).execute
         assert_equal(@group.errors.messages_for(:sample).first,
-                     I18n.t('services.samples.metadata.import_file.sample_not_found', sample_name: @sample1.name))
+                     I18n.t('services.samples.metadata.import_file.sample_not_found',
+                            sample_name: @sample1.name, namespace_type: @group.type.downcase))
       end
 
       test 'import sample metadata via csv file using sample puids for group' do

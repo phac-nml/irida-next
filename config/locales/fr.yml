@@ -1537,7 +1537,7 @@ fr:
           missing_sample_id_column: The file is missing the sample id column.  Please make sure the sample id column exists and retry uploading.
           missing_metadata_column: The file does not have any metadata columns. Please add some columns of metadata to the file and retry uploading.
           missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
-          sample_not_found: "Sample '%{sample_name}' is not found within this project"
+          sample_not_found: "Sample '%{sample_name}' is not found within this %{namespace_type}"
           sample_metadata_fields_not_updated: "Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated."
     personal_access_tokens:
       create:
