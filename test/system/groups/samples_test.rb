@@ -542,7 +542,7 @@ module Groups
     test 'should import metadata via csv' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -556,7 +556,7 @@ module Groups
     test 'should not import metadata via invalid file type' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -572,7 +572,7 @@ module Groups
       sample = samples(:sample32)
       visit group_samples_url(group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
@@ -604,7 +604,7 @@ module Groups
       sample = samples(:sample32)
       visit group_samples_url(group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
@@ -628,7 +628,7 @@ module Groups
     test 'should not import metadata with duplicate header errors' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -641,7 +641,7 @@ module Groups
     test 'should not import metadata with missing metadata row errors' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -654,7 +654,7 @@ module Groups
     test 'should not import metadata with missing metadata column errors' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -670,7 +670,7 @@ module Groups
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
@@ -687,7 +687,7 @@ module Groups
       group = groups(:group_twelve)
       visit group_samples_url(group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option

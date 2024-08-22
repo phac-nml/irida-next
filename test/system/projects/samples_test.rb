@@ -1361,7 +1361,7 @@ module Projects
     test 'should import metadata via csv' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1375,7 +1375,7 @@ module Projects
     test 'should import metadata via xls' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1394,7 +1394,7 @@ module Projects
 
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
 
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 2).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1410,7 +1410,7 @@ module Projects
     test 'should not import metadata via invalid file type' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1426,7 +1426,7 @@ module Projects
       sample = samples(:sample32)
       visit namespace_project_samples_url(namespace, project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         check 'Ignore empty values'
@@ -1457,7 +1457,7 @@ module Projects
       sample = samples(:sample32)
       visit namespace_project_samples_url(namespace, project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         assert_not find_field('Ignore empty values').checked?
@@ -1480,7 +1480,7 @@ module Projects
     test 'should not import metadata with duplicate header errors' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1493,7 +1493,7 @@ module Projects
     test 'should not import metadata with missing metadata row errors' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1506,7 +1506,7 @@ module Projects
     test 'should not import metadata with missing metadata column errors' do
       visit namespace_project_samples_url(@namespace, @project)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1523,7 +1523,7 @@ module Projects
       assert_selector '#samples-table table thead tr th', count: 8
 
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
@@ -1540,7 +1540,7 @@ module Projects
       project31 = projects(:project31)
       visit namespace_project_samples_url(subgroup12aa, project31)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
-      within('div[data-projects--samples--metadata--file-import-loaded-value="true"]') do
+      within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
