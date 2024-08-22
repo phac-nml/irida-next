@@ -38,7 +38,7 @@ module Groups
       assert_selector 'tbody > tr', count: 20
       assert_text samples(:sample3).name
       assert_selector 'a', text: Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
-      assert_selector 'a[data-aria-disabled="true"]',
+      assert_selector 'button[disabled="disabled"]',
                       text: Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
 
       click_on Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
@@ -67,7 +67,7 @@ module Groups
       assert_text samples(:sample1).name
       assert_text samples(:sample3).name
       assert_selector 'a', text: Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
-      assert_selector 'a[data-aria-disabled="true"]',
+      assert_selector 'button[disabled="disabled"]',
                       text: Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
 
       click_on Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
@@ -91,7 +91,7 @@ module Groups
       visit group_samples_url(group)
 
       assert_selector 'a', text: Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
-      assert_selector 'a[data-aria-disabled="true"]',
+      assert_selector 'button[disabled="disabled"]',
                       text: Viral::Pagy::PaginationComponent.translate('.previous', locale: @user.locale)
 
       click_on Viral::Pagy::PaginationComponent.translate('.next', locale: @user.locale)
