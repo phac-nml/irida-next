@@ -1,9 +1,13 @@
-<div class="inline-flex items-center text-slate-500 dark:text-slate-400 space-x-2 mt-4">
-  <span><%= t(".items", :items => @item.pluralize(@pagy.count)) %></span>
+<div
+  class="
+    inline-flex items-center mt-4 space-x-2 text-slate-500 dark:text-slate-400
+  "
+>
+  <span><%= @item %></span>
   <%= viral_dropdown(label: @pagy.limit) do |dropdown| %>
     <% Pagy::DEFAULT[:limits].each do |limit| %>
       <% dropdown.with_item(label: limit, url: "?limit=#{limit}") %>
     <% end %>
   <% end %>
-  <span><%== t(".count", :to => @pagy.to, :from => @pagy.from, :count => @pagy.count) %></span>
+  <span><%== t(".count", to: @pagy.to, from: @pagy.from, count: @pagy.count) %></span>
 </div>
