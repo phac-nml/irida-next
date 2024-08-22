@@ -1,5 +1,5 @@
 <% a = helpers.pagy_anchor(@pagy, anchor_string: 'data-turbo-action="replace"') %>
-<nav class="pagy nav" aria-label="Pages">
+<nav class="pagy nav" aria-label="<%= t(".aria-label")%>">
   <ul class="inline-flex h-10 -space-x-px text-base">
     <%# Previous page link %>
     <li>
@@ -39,16 +39,16 @@
     <% end %>
     <%# Next page link %>
     <li>
-    <% if @pagy.next %>
-      <%== a.(@pagy.next, t(".next"), classes: "#{active_link_classes} rounded-e-lg") %>
-    <% else %>
-      <%= link_to t(".next"),
-      nil,
-      class: "#{disabled_link_classes} rounded-e-lg cursor-default",
-      data: {
-        "aria-disabled": true,
-      } %>
-    <% end %>
+      <% if @pagy.next %>
+        <%== a.(@pagy.next, t(".next"), classes: "#{active_link_classes} rounded-e-lg") %>
+      <% else %>
+        <%= link_to t(".next"),
+        nil,
+        class: "#{disabled_link_classes} rounded-e-lg cursor-default",
+        data: {
+          "aria-disabled": true,
+        } %>
+      <% end %>
     </li>
   </ul>
 </nav>
