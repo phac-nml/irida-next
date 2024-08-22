@@ -2,13 +2,19 @@
   data-controller="viral--select2"
   data-action="keyup->viral--select2#keydown"
 >
-  <input type="text" data-action="focus->viral--select2#focus"
-  data-viral--select2-target="input" required="<%= required %>
-  autocomplete="off" class=" bg-slate-50 border border-slate-300 text-slate-900
-  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block
-  w-full p-2.5 dark:bg-slate-700 dark:border-slate-600
-  dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500
-  dark:focus:border-primary-500 " >
+  <input
+    type="text"
+    data-action="focus->viral--select2#focus"
+    data-viral--select2-target="input"
+    required="<%= required %>"
+    autocomplete="off"
+    class="
+      bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg
+      focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
+      dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+      dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500
+    "
+  >
   <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
   <div
@@ -29,7 +35,6 @@
         <li
           class="hidden p-4 text-blue-800 border border-blue-300  bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
           data-viral--select2-target="empty"
-          role="alert"
         >
           <%= empty_state %>
         </li>
