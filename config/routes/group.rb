@@ -27,6 +27,11 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
 
     resources :group_links, only: %i[create destroy update index new]
     resources :samples, only: %i[index] do
+      scope module: :samples, as: :samples do
+        collection do
+          resource :file_import, module: :metadata, only: %i[create new]
+        end
+      end
       collection do
         get :select
         post :search
