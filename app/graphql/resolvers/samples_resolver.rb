@@ -13,6 +13,8 @@ module Resolvers
     argument :filter, Types::SampleFilterType, required: false, description: 'Ransack filter'
 
     def resolve(group_id:, filter:)
+      # todo, include both group_id and filter together
+      # todo, filter should respect authorized scope
       if filter
         Sample.ransack(filter.to_h).result
       elsif group_id
