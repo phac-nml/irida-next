@@ -42,7 +42,7 @@ jobs:
         with:
           version: 9
       - name: Use Node.js 20
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
@@ -63,6 +63,4 @@ jobs:
           if-no-files-found: ignore
       - name: Report coverage
         if: github.event_name == 'pull_request'
-        uses: aki77/simplecov-report-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        uses: k1LoW/octocov-action@v1

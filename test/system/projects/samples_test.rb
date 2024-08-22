@@ -392,7 +392,7 @@ module Projects
       project2 = projects(:project2)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: user.locale))
+                                                                               locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -535,7 +535,7 @@ module Projects
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 0
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+                                                                               locale: user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       assert_selector 'a', text: 'Edit', count: 0
       assert_selector 'a', text: 'Remove', count: 0
@@ -1291,11 +1291,19 @@ module Projects
 
     test 'should be able to toggle metadata' do
       visit namespace_project_samples_url(@namespace, @project)
-      assert_selector 'label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label'), count: 1
+
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
+                                                                               locale: @user.locale))
       assert_selector '#samples-table table thead tr th', count: 6
+
+      click_on 'Last Updated'
+      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+
+      assert_selector 'label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
       assert_selector '#samples-table table thead tr th', count: 8
-      within('#samples-table table tbody tr:nth-child(3)') do
+      within('#samples-table table tbody tr:first-child') do
         assert_text @sample3.name
         assert_selector 'td:nth-child(6)', text: 'value1'
         assert_selector 'td:nth-child(7)', text: 'value2'

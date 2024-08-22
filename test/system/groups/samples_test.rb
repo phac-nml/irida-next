@@ -315,13 +315,17 @@ module Groups
 
     test 'should be able to toggle metadata' do
       visit group_samples_url(@group)
+
       assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 20, count: 26,
                                                                                locale: @user.locale))
-      click_on 'Last Updated'
-      assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       assert_selector 'table thead tr th', count: 6
+
+      click_on 'Last Updated'
+      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+
+      assert_selector 'label', text: I18n.t('groups.samples.index.search.metadata'), count: 1
       find('label', text: I18n.t('groups.samples.index.search.metadata')).click
-      wait_for_network_idle
+
       assert_selector 'table thead tr th', count: 8
       within('table tbody tr:first-child') do
         assert_text @sample30.name

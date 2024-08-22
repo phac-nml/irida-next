@@ -7,6 +7,10 @@ import LocalTime from "local-time"
 LocalTime.start()
 ActiveStorage.start();
 
+document.addEventListener("turbo:morph", () => {
+  LocalTime.run()
+})
+
 Turbo.setConfirmMethod((message, element) => {
   const dialog = document.getElementById("turbo-confirm");
   if (!dialog) {
