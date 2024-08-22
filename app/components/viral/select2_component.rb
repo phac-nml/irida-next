@@ -3,14 +3,15 @@
 module Viral
   # Search component for rendering a searchable dropdown
   class Select2Component < Viral::Component
-    attr_reader :form, :name
+    attr_reader :form, :name, :required
 
     renders_many :options, Viral::Select2OptionComponent
     renders_one  :empty_state
 
-    def initialize(form:, name:)
+    def initialize(form:, name:, required: true)
       @form = form
       @name = name
+      @required = required
     end
   end
 end

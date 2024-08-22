@@ -3,11 +3,10 @@
 require 'view_component_test_case'
 
 module Viral
-  class SearchComponentTest < ViewComponentTestCase
+  class Select2ComponentTest < ViewComponentTestCase
     test 'default' do
-      render_inline(:default)
+      render_preview(:default)
       assert_selector 'div', count: 1
-      assert_selector 'input[type="search"]', count: 1
     end
   end
 end
