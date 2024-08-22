@@ -19,8 +19,8 @@ module WorkflowExecutions
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
-                                                                             locale: user.locale))
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
+                                                                               locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -53,8 +53,8 @@ module WorkflowExecutions
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
-                                                                             locale: user.locale))
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
+                                                                               locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -87,8 +87,8 @@ module WorkflowExecutions
 
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
-                                                                             locale: user.locale))
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
+                                                                               locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -125,8 +125,8 @@ module WorkflowExecutions
 
       visit namespace_project_samples_url(namespace_id: namespace.path, project_id: project.path)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 1, count: 1,
-                                                                             locale: user.locale))
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
+                                                                               locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{sample.id}']").click
@@ -165,8 +165,8 @@ module WorkflowExecutions
 
       visit group_samples_url(@namespace)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
-                                                                             locale: user.locale))
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
+                                                                               locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -199,8 +199,8 @@ module WorkflowExecutions
 
       visit group_samples_url(@namespace)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
-                                                                             locale: user.locale))
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
+                                                                               locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
@@ -233,8 +233,8 @@ module WorkflowExecutions
 
       visit group_samples_url(@namespace)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.count', from: 1, to: 3, count: 3,
-                                                                             locale: user.locale))
+      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
+                                                                               locale: user.locale))
 
       within 'table' do
         find("input[type='checkbox'][value='#{@sample43.id}']").click
