@@ -1,0 +1,5 @@
+en:
+  summary:
+    one: "Displaying <span class='font-bold'>%{count}</span> item"
+    other: "Displaying <span class='font-bold'>%{from}-%{to}</span> of <span class='font-bold'>%{count}</span> items"
+  items: "%{items} per page:"

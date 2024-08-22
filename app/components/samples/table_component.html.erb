@@ -18,7 +18,7 @@
               tag: 'th',
               scope: 'col',
               classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-50 dark:bg-slate-700': index == 1)
-            ) do %>
+                ) do %>
               <% if index.zero? and @abilities[:select_samples] %>
                 <%= check_box_tag "select-page",
                 title: t(:".select_page"),
@@ -36,12 +36,7 @@
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
-                  url:
-                    helpers.sorting_url(
-                      @q,
-                      :attachments_updated_at_nulls_last,
-                      with_search_params: false,
-                    ),
+                  url: helpers.sorting_url(@q, :attachments_updated_at_nulls_last),
                   field: :attachments_updated_at_nulls_last,
                   data: {
                     turbo_action: "replace",
@@ -51,7 +46,7 @@
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, column, with_search_params: false),
+                  url: helpers.sorting_url(@q, column),
                   field: column,
                   data: {
                     turbo_action: "replace",
@@ -70,11 +65,7 @@
                 ransack_obj: @q,
                 label: field,
                 url:
-                  helpers.sorting_url(
-                    @q,
-                    URI.encode_www_form_component("metadata_#{field}"),
-                    with_search_params: false,
-                  ),
+                  helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{field}")),
                 field: "metadata_#{field}",
                 data: {
                   turbo_action: "replace",
@@ -228,34 +219,10 @@
     </table>
   <% end %>
   <% if @has_samples %>
-    <%= render PaginationComponent.new(
-      info: helpers.pagy_info(@pagy),
-      prev_url:
-        (
-          if @pagy.prev
-            helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
-              "samples.turbo_stream",
-              "samples",
-            )
-          else
-            nil
-          end
-        ),
-      next_url:
-        (
-          if @pagy.next
-            helpers.pagy_url_for(@pagy, @pagy.next).gsub(
-              "samples.turbo_stream",
-              "samples",
-            )
-          else
-            nil
-          end
-        ),
-      data: {
-        turbo_action: "replace",
-      },
-    ) %>
+    <div class="flex items-center justify-between">
+      <%= render Viral::Pagy::LimitComponent.new(@pagy, item: t(".limit.item")) %>
+      <%= render Viral::Pagy::PaginationComponent.new(@pagy) %>
+    </div>
   <% end %>
   <div class="empty_state_message">
     <%= viral_empty(

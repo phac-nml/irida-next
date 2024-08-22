@@ -63,7 +63,7 @@ gem 'tailwindcss-rails', '~> 2.6'
 gem 'view_component', '~> 3.12'
 
 # Pagy
-gem 'pagy', '~> 6.1' # omit patch digit
+gem 'pagy', '~> 9.0.5' # omit patch digit
 
 # Ransack
 gem 'ransack', '~> 4.2.1'

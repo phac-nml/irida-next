@@ -10,3 +10,5 @@ en:
     samples: Samples
     selected: Selected
   select_page: Select / Deselect visible samples
+  limit:
+    item: Samples

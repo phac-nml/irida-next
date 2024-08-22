@@ -54,7 +54,8 @@ module Samples
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('table-container')
+        classes: class_names('table-container'),
+        data: { 'turbo-prefetch': false }
       }
     end
 
