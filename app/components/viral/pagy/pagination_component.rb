@@ -13,7 +13,7 @@ module Viral
       end
 
       def disabled_link_classes
-        "#{default_link_classes} cursor-default text-slate-600 bg-slate-50"
+        "#{default_link_classes} cursor-default text-slate-600 bg-slate-50 dark:bg-slate-700 dark:text-slate-400"
       end
 
       def current_link_classes
