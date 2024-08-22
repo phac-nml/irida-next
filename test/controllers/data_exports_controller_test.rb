@@ -84,7 +84,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
       delete data_export_path(@data_export1),
              as: :turbo_stream
     end
-    assert_response :success
+    assert_response :redirect
   end
 
   test 'should delete export and redirect through destroy action if redirect param present' do
